@@ -53,6 +53,7 @@ class EventCodes(typing.NamedTuple):
     e118: EventCode
     e119: EventCode
     e120: EventCode
+    e121: EventCode
 
 
 event_codes = EventCodes(
@@ -109,6 +110,8 @@ event_codes = EventCodes(
     e120=EventCode(event_type=event_types.error, code='e120',
                    message='coerce_transformation_builder: The argument could not be coerced to a '
                            'transformation-builder.'),
+    e121=EventCode(event_type=event_types.error, code='e121',
+                   message='coerce_inference: The argument could not be coerced to an inference.'),
 
 )
 
@@ -764,34 +767,31 @@ class Connectives(typing.NamedTuple):
     implies: BinaryConnective
     inference: BinaryConnective
     is_a: BinaryConnective
-    is_justified_by: BinaryConnective
+    follows_from: BinaryConnective
     map: BinaryConnective
-    pair: BinaryConnective
     f: TernaryConnective
     """The transformation connective, cf. the Transformation class.
     """
-
+    transformation: TernaryConnective
     tupl: FreeArityConnective
 
 
 connectives: Connectives = Connectives(
-    postulation=let_x_be_a_unary_connective(rep='postulation'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
+    f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
+    follows_from=let_x_be_a_binary_connective(rep='follows-from'),
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference=let_x_be_a_binary_connective(rep='inference-rule'),
     is_a=let_x_be_a_binary_connective(rep='is-a'),
-    is_justified_by=let_x_be_a_binary_connective(rep='is_justified-by'),
     map=let_x_be_a_binary_connective(rep='map'),
-    pair=let_x_be_a_binary_connective(rep='pair'),  # TODO: Implement pair
-    f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
-    tupl=let_x_be_a_free_arity_connective(rep='tuple')
+    postulation=let_x_be_a_unary_connective(rep='postulation'),
+    transformation=let_x_be_a_ternary_connective(rep='-->'),  # duplicate with f?
+    tupl=let_x_be_a_free_arity_connective(rep='tuple'),
 )
 
 
 # TODO: Rename Enumeration to HorizontalEnumeration, then implement VerticalEnumeration and parent class Enumeration.
 # TODO: Implement EnumerationAccretor.
-# TODO: Implement Axiom.
-# TODO: Implement Theory and Theorem.
 
 def is_symbol_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
     """Two formulas phi and psi are symbol-equivalent, noted phi ~symbol psi, if and only if they are the same symbol.
@@ -1199,35 +1199,51 @@ class EnumerationBuilder(FormulaBuilder):
 
 
 class Enumeration(Formula):
-    """In axiomatic-system-1, an enumeration is a formula c(t0, t1, ..., tn) where:
-     - c is a node with the 'enumeration' connective.
-     - ti is a formula.
+    """An enumeration is formula whose terms, called elements, are unique over the ~formula operator.
+
+    Syntactic definition:
+    A well-formed enumeration is a formula of the form:
+        e(phi_0, phi_1, ..., phi_n)
+    where:
+     - e is some connective,
+     - phi_i is a term of the formula called an element of the enumeration,
+     - for all formula phi_a element of the formula terms,
+       and for all formula phi_b element of the formula terms such that a ≠ b,
+       ¬(phi_a ~formula phi_b).
+
+    Shortcut: e
+
+    Note: by default, enumerations are denoted with the e enumeration connective, but this is not necessary.
+
+    Note: by definition, formula terms are not unique over the ~formula operator, but enumeration elements are.
+
+    Note: by definition, both formula terms and enumeration elements are ordered.
+
+    Note: see the enumeration-equivalence-class and the  ~enumeration operator for the canonical equivalence class
+    over enumerations, which makes enumerations equivalent to finite or computable sets.
 
     Distinctive objects:
      - The empty-enumeration is the formula c(). See EmptyEnumeration for a specialized class.
 
-    Shortcut: e
-
-    Note: by definition, the sub-formulas of a formula phi are ordered and can repeat themselves. The justification for
-    enumeration is the intention of considering the sub-formulas without their ordering, and without repetitions.
-    Enumerations are equivalent to computable sets.
-
-    Attention point: operators may have distinct properties when applied to enumerations,
-    depending on the equivalence-class considered, such as formula-equivalence and enumeration-equivalence.
-    See union_enumeration() for a practical example.
+    See also:
+     - ~enumeration operator
+     - enumeration-equivalence-class
+     - union-enumeration
 
     """
 
-    def __new__(cls, elements: FlexibleEnumeration = None):
+    def __new__(cls, elements: FlexibleEnumeration = None, c: Connective = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
+        c = connectives.e if c is None else c
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
         o: tuple = super().__new__(cls, c=connectives.e, terms=eb)
         return o
 
-    def __init__(self, elements: FlexibleEnumeration = None):
+    def __init__(self, elements: FlexibleEnumeration = None, c: Connective = None):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
+        c = connectives.e if c is None else c
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
         super().__init__(c=connectives.e, terms=eb)
 
@@ -1388,6 +1404,7 @@ class TransformationBuilder(FormulaBuilder):
 class Transformation(Formula):
     """A formula-transformation, or transformation, is a map from the class of formulas to itself.
 
+    Mathematical definition:
     f:  Phi --> Phi
         phi |-> psi
     Where:
@@ -1420,7 +1437,7 @@ class Transformation(Formula):
         premises: Tupl = coerce_tupl(elements=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(elements=variables)
-        o: tuple = super().__new__(cls, c=connectives.tupl,
+        o: tuple = super().__new__(cls, c=connectives.transformation,
                                    terms=(premises, conclusion, variables,))
         return o
 
@@ -1429,7 +1446,7 @@ class Transformation(Formula):
         premises: Tupl = coerce_tupl(elements=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(elements=variables)
-        super().__init__(c=connectives.inference, terms=(premises, conclusion, variables,))
+        super().__init__(c=connectives.transformation, terms=(premises, conclusion, variables,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1480,22 +1497,35 @@ class Transformation(Formula):
 FlexibleTransformation = typing.Optional[typing.Union[Transformation, TransformationBuilder]]
 
 
-def coerce_transformation(t: FlexibleTransformation):
-    if isinstance(t, Transformation):
-        return t
-    elif isinstance(t, TransformationBuilder):
-        return t.to_transformation()
+def coerce_transformation(f: FlexibleTransformation):
+    if isinstance(f, Transformation):
+        return f
+    elif isinstance(f, TransformationBuilder):
+        return f.to_transformation()
     else:
-        raise_event(event_code=event_codes.e119, phi_type=type(t), phi=t)
+        raise_event(event_code=event_codes.e119, phi_type=type(f), phi=f)
 
 
-def coerce_transformation_builder(t: FlexibleTransformation):
-    if isinstance(t, TransformationBuilder):
-        return t
-    elif isinstance(t, Transformation):
-        return t.to_transformation_builder()
+def coerce_transformation_builder(f: FlexibleTransformation):
+    if isinstance(f, TransformationBuilder):
+        return f
+    elif isinstance(f, Transformation):
+        return f.to_transformation_builder()
     else:
-        raise_event(event_code=event_codes.e120, phi_type=type(t), phi=t)
+        raise_event(event_code=event_codes.e120, phi_type=type(f), phi=f)
+
+
+def coerce_inference(i: FlexibleInference):
+    if isinstance(i, Inference):
+        return i
+    # Idea: implement with isinstance(i, FlexiblePair)
+    else:
+        raise_event(event_code=event_codes.e121, phi_type=type(i), phi=i)
+
+
+def coerce_proof():
+    # TODO: IMPLEMENT THIS
+    raise NotImplementedError('oops')
 
 
 class TheoryState(Enumeration):
@@ -1511,110 +1541,138 @@ class TheoryState(Enumeration):
         super().__init__(elements=elements)
 
 
-class Justification(Formula):
-    """A theorem-justification, or justification, is a formula that is an explanation for the existence
-    of a theorem in a well-formed theory. There are two types of justifications:
-     - Axiom justification.
-     - Inference justification."""
+class Proof(Formula):
+    """A proof is a formula that justifies the existence of a theorem in a well-formed theory.
 
-    def __new__(cls, c: Connective, terms: FlexibleTupl = None):
-        o: tuple = super().__new__(cls, c=c, terms=terms)
+    There are two types of proofs:
+     - postulation,
+     - inference.
+     """
+
+    def __new__(cls, phi: FlexibleFormula, argument: FlexibleFormula):
+        phi = coerce_formula(phi=phi)
+        argument = coerce_formula(phi=argument)
+        c: Connective = connectives.follows_from
+        o: tuple = super().__new__(cls, c=c, terms=(phi, argument,))
         return o
 
-    def __init__(self, c: Connective, terms: FlexibleTupl = None):
-        super().__init__(c=c, terms=terms)
+    def __init__(self, phi: FlexibleFormula, argument: FlexibleFormula):
+        phi = coerce_formula(phi=phi)
+        argument = coerce_formula(phi=argument)
+        c: Connective = connectives.follows_from
+        super().__init__(c=c, terms=(phi, argument,))
 
 
-class Postulation(Formula):
-    """Syntactically, a postulation is a formula of the form:
-    phi is-justified-by postulation
+class ProofByPostulation(Proof):
+    """A proof-by-postulation is a proof by stating an axiom.
+
+    Syntactic definition:
+    A proof-by-postulation is a formula of the form:
+        phi is-justified-by postulation
     Where:
-     - phi is a well-formed formula,
-     - is-justified-by is the is-justified-by connective,
-     - postulation is the postulation constant.
+        - phi is a well-formed formula,
+        - is-justified-by is the is-justified-by connective,
+        - postulation is the postulation constant.
 
-    Semantically, a postulation is a statement that justifies the validity of phi by assuming that phi is true."""
+    Semantic definition:
+    A proof-by-postulation is the statement that a formula phi is an axiom, i.e.: phi is assumed to be true."""
 
     def __new__(cls, phi: FlexibleFormula = None):
         phi: Formula = coerce_formula(phi=phi)
-        o: Formula = super().__new__(cls, c=connectives.is_justified_by, terms=(phi, connectives.postulation,))
+        o: tuple = super().__new__(cls, phi=phi, argument=connectives.postulation)
         return o
 
     def __init__(self, phi: FlexibleFormula):
         phi: Formula = coerce_formula(phi=phi)
-        super().__init__(c=connectives.is_justified_by, terms=(phi, connectives.postulation,))
+        super().__init__(phi=phi, argument=connectives.postulation)
 
 
 class Inference(Formula):
-    """Syntactically, an inference is a formula of the form:
-    phi is-justified-by inference(P, f)
-    Where:
-     - phi is a well-formed formula,
-     - is-justified-by is the is-justified-by connective,
-     - inference is the inference connective,
-     - P is a tuple of well-formed formulas called the premises,
-     - f is a transformation.
+    """An inference is the description of the usage of an inference-rule.
 
-    Semantically, an inference is a statement that justifies the validity of phi by providing the premises and
+    Syntactic definition:
+    An inference is a formula of the form:
+        inference(P, f)
+    Where:
+        - inference is the inference connective,
+        - P is an enumeration called the premises,
+        - f is a transformation called the inference-rule.
+
+    Semantic definition:
+    An inference is a formal description of one usage of an inference-rule."""
+
+    def __new__(cls, p: FlexibleTupl, f: FlexibleTransformation):
+        p: Tupl = coerce_tupl(elements=p)
+        f: Transformation = coerce_transformation(f=f)
+        c: Connective = connectives.inference
+        o: tuple = super().__new__(cls, c=c, terms=(p, f,))
+        return o
+
+    def __init__(self, p: FlexibleTupl, f: FlexibleTransformation):
+        p: Tupl = coerce_tupl(elements=p)
+        f: Transformation = coerce_transformation(f=f)
+        c: Connective = connectives.inference
+        super().__init__(c=c, terms=(p, f,))
+
+
+FlexibleInference = typing.Optional[typing.Union[Inference]]
+
+
+class ProofByInference(Proof):
+    """A proof-by-inference is a proof by the usage of an inference-rule.
+
+    Syntactic definition:
+    A proof-by-inference is a formula of the form:
+        phi is-justified-by inference(P, f)
+    Where:
+        - phi is a well-formed formula,
+        - is-justified-by is the is-justified-by connective,
+        - inference is the inference connective,
+        - P is a tuple of well-formed formulas called the premises,
+        - f is a transformation.
+
+    Semantic definition:
+    A proof-by-inference is a statement that justifies the validity of phi by providing the premises and
     the transformation-rule that yield phi, i.e.:
     t(P) ~formula phi
     """
 
-    def __new__(cls, phi: FlexibleFormula, p: FlexibleEnumeration, f: FlexibleTransformation):
+    def __new__(cls, phi: FlexibleFormula, i: FlexibleInference):
         phi: Formula = coerce_formula(phi=phi)
-        f: Transformation = coerce_transformation(t=f)
-        p: FlexibleTupl = coerce_tupl(elements=p)
-        i: Formula = Formula(c=connectives.inference, terms=(p, f,))
-        o: Formula = super().__new__(cls, c=connectives.inference, terms=(phi, i,))
+        i: Inference = coerce_inference(i=i)
+        o: tuple = super().__new__(cls, phi=phi, argument=i)
         return o
 
-    def __init__(self, phi: FlexibleFormula, p: FlexibleEnumeration, f: FlexibleTransformation):
+    def __init__(self, phi: FlexibleFormula, i: FlexibleInference):
         phi: Formula = coerce_formula(phi=phi)
-        f: Transformation = coerce_transformation(t=f)
-        p: FlexibleTupl = coerce_tupl(elements=p)
-        i: Formula = Formula(c=connectives.inference, terms=(p, f,))
-        super().__init__(c=connectives.inference, terms=(phi, i,))
-
-
-class WellFormedTheoryState(TheoryState):
-    """A well-formed theory if a theory with the following properties:
-    - It is an empty-theory (cf. empty-theory)
-    Or:
-    - It is an enumeration of formulas.
-    - Its first n theorems are axioms, n being a natural number.
-    - All its subsequent theorems after n are derived from predecessor theorems."""
-
-    def __new__(cls, theorems: FlexibleEnumeration = None, justifications=None):
-        o: tuple = super().__new__(cls, elements=theorems)
-        return o
-
-    def __init__(self, theorems: FlexibleEnumeration = None, justifications=None):
-        self._justifications: Enumeration = Enumeration(elements=justifications)
-        super().__init__(elements=theorems)
-
-    @property
-    def axioms(self) -> Enumeration:
-        return self._axioms
-
-
-class EmptyTheory(WellFormedTheoryState):
-    """An empty-theory is a well-formed theory that contains no element."""
-
-    def __new__(cls):
-        o: tuple = super().__new__(cls, theorems=None)
-        return o
-
-    def __init__(self):
-        super().__init__(theorems=None)
-
-
-def postulate_axion(t: WellFormedTheoryState, phi: FlexibleFormula):
-    pass
-
-
-def derive_theory(t: WellFormedTheoryState) -> WellFormedTheoryState:
-    pass
+        i: Inference = coerce_inference(i=i)
+        super().__init__(phi=phi, argument=i)
 
 
 class TheoryAccretor(EnumerationAccretor):
     pass
+
+
+class ProofEnumeration(Enumeration):
+    """A proof-enumeration is an enumeration of proofs.
+
+    Syntactic definition:
+    A proof-enumeration is an enumeration such that:
+     - every element phi of the enumeration is a well-formed proof.
+
+    """
+
+    def __new__(cls, e: FlexibleEnumeration = None):
+        # coerce to enumeration
+        e: Enumeration = coerce_enumeration(elements=e)
+        # coerce all elements of the enumeration to proof
+        e: Enumeration = Enumeration(elements=(coerce_proof(p=p) for p in e))
+        o: tuple = super().__new__(cls, elements=e)
+        return o
+
+    def __init__(self, e: FlexibleEnumeration = None):
+        # coerce to enumeration
+        e: Enumeration = coerce_enumeration(elements=e)
+        # coerce all elements of the enumeration to proof
+        e: Enumeration = Enumeration(elements=(coerce_proof(p=p) for p in e))
+        super().__init__(elements=e)

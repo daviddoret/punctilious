@@ -250,6 +250,28 @@
     </key>
   </component>
   <component name="RunManager" selected="Python tests.pytest in test_axiomatic_system_1.py">
+    <configuration name="axiomatic_system_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -461,7 +483,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestConnective.test_call" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestFormulaToTuple.test_formula_to_tuple" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -474,24 +496,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestConnective.test_call&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormulaToTuple.test_formula_to_tuple&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -552,12 +557,12 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
+      <item itemvalue="Python.axiomatic_system_1" />
       <item itemvalue="Python.propositional_logic_1" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnective.test_call" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaToTuple.test_formula_to_tuple" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference" />
       <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -567,10 +572,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
+        <item itemvalue="Python.axiomatic_system_1" />
         <item itemvalue="Python.propositional_logic_1" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaToTuple.test_formula_to_tuple" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestConnective.test_call" />
       </list>
     </recent_temporary>
   </component>
@@ -589,14 +594,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00512" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1707773687943</created>
-      <option name="number" value="00512" />
-      <option name="presentableId" value="LOCAL-00512" />
-      <option name="project" value="LOCAL" />
-      <updated>1707773687943</updated>
     </task>
     <task id="LOCAL-00513" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -982,7 +979,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714816941963</updated>
     </task>
-    <option name="localTasksCounter" value="561" />
+    <task id="LOCAL-00561" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1714817974228</created>
+      <option name="number" value="00561" />
+      <option name="presentableId" value="LOCAL-00561" />
+      <option name="project" value="LOCAL" />
+      <updated>1714817974228</updated>
+    </task>
+    <option name="localTasksCounter" value="562" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -594,21 +594,15 @@ class TestEnumerationBuilder:
         pass
 
 
-class TestEmptyTheory:
-    def test_empty_theory(self):
-        t = as1.EmptyTheory()
-        assert len(t) == 0
-
-
 class TestPostulation:
     def test_postulation(self):
         a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
         f = as1.let_x_be_a_binary_connective(rep='f')
         phi = a | f | b
-        a = as1.Postulation(phi=phi)
+        a = as1.ProofByPostulation(phi=phi)
         assert as1.is_formula_equivalent(
             phi=a,
-            psi=phi | as1.connectives.is_justified_by | as1.connectives.postulation)
+            psi=phi | as1.connectives.follows_from | as1.connectives.postulation)
 
 
 class TestInference:
@@ -621,13 +615,13 @@ class TestInference:
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        i = as1.Inference(phi=theorem, p=p, f=t)
+        i = as1.ProofByInference(phi=theorem, i=as1.Inference(p=p, f=t))
         as1.is_formula_equivalent(phi=i,
-                                  psi=theorem | as1.connectives.is_justified_by | as1.connectives.inference(p, t))
+                                  psi=theorem | as1.connectives.follows_from | as1.connectives.inference(p, t))
 
 
-class TestFormulaToEnumeration:
-    def test_formula_to_enumeration(self):
+class TestFormulaToTuple:
+    def test_formula_to_tuple(self):
         a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
         f = as1.let_x_be_a_unary_connective(rep='f')
         g = as1.let_x_be_a_binary_connective(rep='g')
