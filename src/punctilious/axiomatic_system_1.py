@@ -1504,7 +1504,7 @@ class Transformation(Formula):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        if phi.c is not connectives.transformation or phi.arity != 3 or not is_well_formed_tuple(
+        if phi.c is not connectives.transformation or phi.arity != 3 or not is_well_formed_tupl(
                 phi=phi.term_0) or not is_well_formed_formula(phi=phi.term_1) or not is_well_formed_enumeration(
             phi=phi.term_2):
             return False
