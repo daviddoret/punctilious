@@ -55,6 +55,7 @@ class EventCodes(typing.NamedTuple):
     e120: EventCode
     e121: EventCode
     e122: EventCode
+    e123: EventCode
 
 
 event_codes = EventCodes(
@@ -72,21 +73,21 @@ event_codes = EventCodes(
                    message='EnumerationBuilder.__init__: Attempt to add duplicate formula-equivalent formulas as '
                            'elements of the enumeration. The new element / term is ignored.'),
     e105=EventCode(event_type=event_types.error, code='e105',
-                   message='coerce_formula: The argument could not be coerced to a formula.'),
+                   message='REUSE'),
     e106=EventCode(event_type=event_types.error, code='e106',
-                   message='coerce_tupl: The argument could not be coerced to a tuple.'),
+                   message='REUSE'),
     e107=EventCode(event_type=event_types.error, code='e107',
                    message='coerce_enumeration: The argument could not be coerced to a enumeration.'),
     e108=EventCode(event_type=event_types.error, code='e108',
-                   message='coerce_map: The argument could not be coerced to a map.'),
+                   message='REUSE'),
     e109=EventCode(event_type=event_types.error, code='e109',
-                   message='coerce_formula_builder: The argument could not be coerced to a formula-builder.'),
+                   message='REUSE'),
     e110=EventCode(event_type=event_types.error, code='e110',
-                   message='coerce_tupl_builder: The argument could not be coerced to a tuple-builder.'),
+                   message='REUSE'),
     e111=EventCode(event_type=event_types.error, code='e111',
-                   message='coerce_enumeration_builder: The argument could not be coerced to a enumeration-builder.'),
+                   message='REUSE'),
     e112=EventCode(event_type=event_types.error, code='e112',
-                   message='coerce_map_builder: The argument could not be coerced to a map-builder.'),
+                   message='REUSE'),
     e113=EventCode(event_type=event_types.error, code='e113',
                    message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to '
                            'elaborate formulas.'),
@@ -107,14 +108,15 @@ event_codes = EventCodes(
                    message='is_formula_equivalent_with_variables: There exists a phi''sub-formula of phi that is an '
                            'element of variables.'),
     e119=EventCode(event_type=event_types.error, code='e119',
-                   message='coerce_transformation: The argument could not be coerced to a transformation.'),
+                   message='REUSE'),
     e120=EventCode(event_type=event_types.error, code='e120',
-                   message='coerce_transformation_builder: The argument could not be coerced to a '
-                           'transformation-builder.'),
+                   message='REUSE'),
     e121=EventCode(event_type=event_types.error, code='e121',
-                   message='coerce_inference: The argument could not be coerced to an inference.'),
+                   message='REUSE'),
     e122=EventCode(event_type=event_types.error, code='e122',
-                   message='coerce_proof: The argument could not be coerced to a proof.'),
+                   message='REUSE'),
+    e123=EventCode(event_type=event_types.error, code='e123',
+                   message='Coercion failure: phi of phi_type could not be coerced to coerced_type.'),
 
 )
 
@@ -466,7 +468,7 @@ def coerce_formula_builder(phi: FlexibleFormula = None):
     elif phi is None:
         return FormulaBuilder(c=None, terms=None)
     else:
-        raise_event(event_code=event_codes.e108, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=FormulaBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_formula(phi: FlexibleFormula):
@@ -481,7 +483,7 @@ def coerce_formula(phi: FlexibleFormula):
         # This allows the usage of the natural python syntax (a,b,c,) which coerces to Tuple(elements=(a,b,c,)).
         return Tupl(elements=phi)
     else:
-        raise_event(event_code=event_codes.e105, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
 def coerce_enumeration(phi: FlexibleEnumeration):
@@ -501,7 +503,7 @@ def coerce_enumeration(phi: FlexibleEnumeration):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Enumeration(elements=phi)
     else:
-        raise_event(event_code=event_codes.e107, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=Enumeration, phi_type=type(phi), phi=phi)
 
 
 def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enumeration:
@@ -534,76 +536,77 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
     return e
 
 
-def coerce_enumeration_builder(elements: FlexibleEnumeration):
-    if isinstance(elements, EnumerationBuilder):
-        return elements
-    elif isinstance(elements, Enumeration):
-        return elements.to_enumeration_builder()
-    elif elements is None:
+def coerce_enumeration_builder(phi: FlexibleEnumeration):
+    if isinstance(phi, EnumerationBuilder):
+        return phi
+    elif isinstance(phi, Enumeration):
+        return phi.to_enumeration_builder()
+    elif phi is None:
         return EnumerationBuilder(elements=None)
-    elif isinstance(elements, typing.Iterable):
+    elif isinstance(phi, typing.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return EnumerationBuilder(elements=elements)
+        return EnumerationBuilder(elements=phi)
     else:
-        raise_event(event_code=event_codes.e110, phi_type=type(elements), phi=elements)
+        raise_event(event_code=event_codes.e123, coerced_type=EnumerationBuilder, phi_type=type(phi), phi=phi)
 
 
-def coerce_map(m: FlexibleMap):
-    if isinstance(m, Map):
-        return m
-    elif isinstance(m, MapBuilder):
-        return m.to_map()
-    elif m is None:
+def coerce_map(phi: FlexibleMap):
+    if isinstance(phi, Map):
+        return phi
+    elif isinstance(phi, MapBuilder):
+        return phi.to_map()
+    elif phi is None:
         return Map(domain=None, codomain=None)
-    elif isinstance(m, dict):
-        domain: Enumeration = coerce_enumeration(phi=m.keys())
-        codomain: Tupl = coerce_tupl(elements=m.values())
+    # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
+    elif isinstance(phi, dict):
+        domain: Enumeration = coerce_enumeration(phi=phi.keys())
+        codomain: Tupl = coerce_tupl(phi=phi.values())
         return Map(domain=domain, codomain=codomain)
     else:
-        raise_event(event_code=event_codes.e108, phi_type=type(m), phi=m)
+        raise_event(event_code=event_codes.e123, coerced_type=Map, phi_type=type(phi), phi=phi)
 
 
-def coerce_map_builder(m: FlexibleMap):
-    if isinstance(m, MapBuilder):
-        return m
-    elif isinstance(m, Map):
-        return m.to_map_builder()
-    elif m is None:
+def coerce_map_builder(phi: FlexibleMap):
+    if isinstance(phi, MapBuilder):
+        return phi
+    elif isinstance(phi, Map):
+        return phi.to_map_builder()
+    elif phi is None:
         return MapBuilder(domain=None, codomain=None)
-    elif isinstance(m, dict):
-        domain: EnumerationBuilder = coerce_enumeration_builder(elements=m.keys())
-        codomain: TuplBuilder = coerce_tupl_builder(elements=m.values())
+    elif isinstance(phi, dict):
+        domain: EnumerationBuilder = coerce_enumeration_builder(phi=phi.keys())
+        codomain: TuplBuilder = coerce_tupl_builder(phi=phi.values())
         return MapBuilder(domain=domain, codomain=codomain)
     else:
-        raise_event(event_code=event_codes.e109, phi_type=type(m), phi=m)
+        raise_event(event_code=event_codes.e123, coerced_type=MapBuilder, phi_type=type(phi), phi=phi)
 
 
-def coerce_tupl(elements: FlexibleTupl):
-    if isinstance(elements, Tupl):
-        return elements
-    elif isinstance(elements, TuplBuilder):
-        return elements.to_tupl()
-    elif elements is None:
+def coerce_tupl(phi: FlexibleTupl):
+    if isinstance(phi, Tupl):
+        return phi
+    elif isinstance(phi, TuplBuilder):
+        return phi.to_tupl()
+    elif phi is None:
         return Tupl(elements=None)
-    elif isinstance(elements, collections.abc.Iterable):
+    elif isinstance(phi, collections.abc.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return Tupl(elements=elements)
+        return Tupl(elements=phi)
     else:
-        raise_event(event_code=event_codes.e106, phi_type=type(elements), phi=elements)
+        raise_event(event_code=event_codes.e123, coerced_type=Tupl, phi_type=type(phi), phi=phi)
 
 
-def coerce_tupl_builder(elements: FlexibleTupl):
-    if isinstance(elements, TuplBuilder):
-        return elements
-    elif isinstance(elements, Tupl):
-        return elements.to_tupl_builder()
-    elif elements is None:
+def coerce_tupl_builder(phi: FlexibleTupl):
+    if isinstance(phi, TuplBuilder):
+        return phi
+    elif isinstance(phi, Tupl):
+        return phi.to_tupl_builder()
+    elif phi is None:
         return TuplBuilder(elements=None)
-    elif isinstance(elements, collections.abc.Iterable):
+    elif isinstance(phi, collections.abc.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return TuplBuilder(elements=elements)
+        return TuplBuilder(elements=phi)
     else:
-        raise_event(event_code=event_codes.e109, phi_type=type(elements), phi=elements)
+        raise_event(event_code=event_codes.e123, coerced_type=TuplBuilder, phi_type=type(phi), phi=phi)
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula, FormulaBuilder]]
@@ -907,11 +910,11 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
       leave it to None.
     :return:
     """
-    m: MapBuilder = coerce_map_builder(m=m)
+    m: MapBuilder = coerce_map_builder(phi=m)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula = psi
-    v: Tupl = coerce_tupl(elements=v)
+    v: Tupl = coerce_tupl(phi=v)
     # print(f'phi:{phi}, psi:{psi}, v:{v}, m:{m}')
     if v.has_element(phi=phi):
         # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
@@ -971,7 +974,7 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
 def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     """Performs a top-down, left-to-right replacement of formulas in formula phi."""
     phi: Formula = coerce_formula(phi=phi)
-    m: Map = coerce_map(m=m)
+    m: Map = coerce_map(phi=m)
     if m.is_defined_in(phi=phi):
         # phi must be replaced at its root.
         # the replacement algorithm stops right there (i.e.: no more recursion).
@@ -1041,8 +1044,8 @@ class MapBuilder(FormulaBuilder):
     """A utility class to help build maps. It is mutable and thus allows edition."""
 
     def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
-        domain: EnumerationBuilder = coerce_enumeration_builder(elements=domain)
-        codomain: TuplBuilder = coerce_tupl_builder(elements=codomain)
+        domain: EnumerationBuilder = coerce_enumeration_builder(phi=domain)
+        codomain: TuplBuilder = coerce_tupl_builder(phi=codomain)
         super().__init__(c=connectives.map, terms=(domain, codomain,))
 
     def set_pair(self, phi: FlexibleFormula, psi: FlexibleFormula) -> None:
@@ -1066,12 +1069,12 @@ class MapBuilder(FormulaBuilder):
     @property
     def codomain(self) -> TuplBuilder:
         """The co-domain of the map is its second formula term."""
-        return coerce_tupl_builder(elements=self.term_1)
+        return coerce_tupl_builder(phi=self.term_1)
 
     @property
     def domain(self) -> EnumerationBuilder:
         """The domain of the map is its first formula term."""
-        return coerce_enumeration_builder(elements=self.term_0)
+        return coerce_enumeration_builder(phi=self.term_0)
 
     def get_assigned_value(self, phi: FlexibleFormula) -> FlexibleFormula:
         """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
@@ -1087,8 +1090,8 @@ class MapBuilder(FormulaBuilder):
 
     def to_map(self) -> Map:
         """Convert this map-builder to a map."""
-        keys: Tupl = coerce_tupl(elements=self.term_0)
-        values: Tupl = coerce_tupl(elements=self.term_1)
+        keys: Tupl = coerce_tupl(phi=self.term_0)
+        values: Tupl = coerce_tupl(phi=self.term_1)
         phi: Map = Map(domain=keys, codomain=values)
         return phi
 
@@ -1112,7 +1115,7 @@ class Map(Formula):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         domain: Enumeration = coerce_enumeration(phi=domain)
-        codomain: Tupl = coerce_tupl(elements=codomain)
+        codomain: Tupl = coerce_tupl(phi=codomain)
         if len(domain) != len(codomain):
             raise ValueError('Map: |keys| != |values|')
         o: tuple = super().__new__(cls, c=connectives.map, terms=(domain, codomain,))
@@ -1120,12 +1123,12 @@ class Map(Formula):
 
     def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
         domain: Enumeration = coerce_enumeration(phi=domain)
-        codomain: Tupl = coerce_tupl(elements=codomain)
+        codomain: Tupl = coerce_tupl(phi=codomain)
         super().__init__(c=connectives.map, terms=(domain, codomain,))
 
     @property
     def codomain(self) -> Tupl:
-        return coerce_tupl(elements=self.term_1)
+        return coerce_tupl(phi=self.term_1)
 
     @property
     def domain(self) -> Enumeration:
@@ -1462,7 +1465,7 @@ class Transformation(Formula):
                 variables: FlexibleEnumeration):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        premises: Tupl = coerce_tupl(elements=premises)
+        premises: Tupl = coerce_tupl(phi=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(phi=variables)
         o: tuple = super().__new__(cls, c=connectives.transformation,
@@ -1471,7 +1474,7 @@ class Transformation(Formula):
 
     def __init__(self, premises: FlexibleTupl, conclusion: FlexibleFormula,
                  variables: FlexibleEnumeration):
-        premises: Tupl = coerce_tupl(elements=premises)
+        premises: Tupl = coerce_tupl(phi=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(phi=variables)
         super().__init__(c=connectives.transformation, terms=(premises, conclusion, variables,))
@@ -1486,7 +1489,7 @@ class Transformation(Formula):
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
         :return:
         """
-        arguments = coerce_tupl(elements=arguments)
+        arguments = coerce_tupl(phi=arguments)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         variables_map: MapBuilder = MapBuilder()
@@ -1525,30 +1528,31 @@ class Transformation(Formula):
 FlexibleTransformation = typing.Optional[typing.Union[Transformation, TransformationBuilder]]
 
 
-def coerce_transformation(f: FlexibleTransformation):
-    if isinstance(f, Transformation):
-        return f
-    elif isinstance(f, TransformationBuilder):
-        return f.to_transformation()
+def coerce_transformation(phi: FlexibleTransformation):
+    if isinstance(phi, Transformation):
+        return phi
+    elif isinstance(phi, TransformationBuilder):
+        return phi.to_transformation()
+    # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
     else:
-        raise_event(event_code=event_codes.e119, phi_type=type(f), phi=f)
+        raise_event(event_code=event_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
 
 
-def coerce_transformation_builder(f: FlexibleTransformation):
-    if isinstance(f, TransformationBuilder):
-        return f
-    elif isinstance(f, Transformation):
-        return f.to_transformation_builder()
+def coerce_transformation_builder(phi: FlexibleTransformation):
+    if isinstance(phi, TransformationBuilder):
+        return phi
+    elif isinstance(phi, Transformation):
+        return phi.to_transformation_builder()
     else:
-        raise_event(event_code=event_codes.e120, phi_type=type(f), phi=f)
+        raise_event(event_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
-def coerce_inference(i: FlexibleInference):
-    if isinstance(i, Inference):
-        return i
-    # Idea: implement with isinstance(i, FlexiblePair)
+def coerce_inference(phi: FlexibleInference):
+    if isinstance(phi, Inference):
+        return phi
+    # Implement with isinstance(i, FlexibleFormula) and is_of_the_form...
     else:
-        raise_event(event_code=event_codes.e121, phi_type=type(i), phi=i)
+        raise_event(event_code=event_codes.e123, coerced_type=Inference, phi_type=type(phi), phi=phi)
 
 
 def is_of_the_form_enumeration(phi: FlexibleFormula) -> bool:
@@ -1561,16 +1565,43 @@ def is_of_the_form_proof_by_postulation(phi: FlexibleFormula) -> bool:
     return ProofByPostulation.is_of_the_form(phi=phi)
 
 
-def coerce_proof(p: FlexibleProof):
-    """Validate that p is a well-formed proof and returns that proof properly typed as Proof, or raise exception e122.
+def coerce_proof(phi: FlexibleFormula):
+    """Validate that p is a well-formed proof and returns it properly typed as Proof, or raise exception e123.
 
-    :param p:
+    :param phi:
     :return:
     """
-    if isinstance(p, Proof):
-        return p
+    if isinstance(phi, Proof):
+        return phi
+    # TODO: coerce_proof: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
     else:
-        raise_event(event_code=event_codes.e122, phi_type=type(p), phi=p)
+        raise_event(event_code=event_codes.e123, coerced_type=Proof, phi_type=type(phi), phi=phi)
+
+
+def coerce_proof_by_postulation(phi: FlexibleFormula):
+    """Validate that p is a well-formed proof-by-postulation and returns it properly typed as ProofByPostulation, or raise exception e123.
+
+    :param phi:
+    :return:
+    """
+    if isinstance(phi, ProofByPostulation):
+        return phi
+    # TODO: coerce_proof_by_postulation: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
+    else:
+        raise_event(event_code=event_codes.e123, coerced_type=ProofByPostulation, phi_type=type(phi), phi=phi)
+
+
+def coerce_proof_by_inference(phi: FlexibleFormula):
+    """Validate that p is a well-formed proof-by-inference and returns it properly typed as ProofByInference, or raise exception e123.
+
+    :param phi:
+    :return:
+    """
+    if isinstance(phi, ProofByInference):
+        return phi
+    # TODO: coerce_proof_by_inference: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
+    else:
+        raise_event(event_code=event_codes.e123, coerced_type=ProofByInference, phi_type=type(phi), phi=phi)
 
 
 class TheoryState(Enumeration):
@@ -1661,15 +1692,15 @@ class Inference(Formula):
     An inference is a formal description of one usage of an inference-rule."""
 
     def __new__(cls, p: FlexibleTupl, f: FlexibleTransformation):
-        p: Tupl = coerce_tupl(elements=p)
-        f: Transformation = coerce_transformation(f=f)
+        p: Tupl = coerce_tupl(phi=p)
+        f: Transformation = coerce_transformation(phi=f)
         c: Connective = connectives.inference
         o: tuple = super().__new__(cls, c=c, terms=(p, f,))
         return o
 
     def __init__(self, p: FlexibleTupl, f: FlexibleTransformation):
-        p: Tupl = coerce_tupl(elements=p)
-        f: Transformation = coerce_transformation(f=f)
+        p: Tupl = coerce_tupl(phi=p)
+        f: Transformation = coerce_transformation(phi=f)
         c: Connective = connectives.inference
         super().__init__(c=c, terms=(p, f,))
 
@@ -1698,13 +1729,13 @@ class ProofByInference(Proof):
 
     def __new__(cls, phi: FlexibleFormula, i: FlexibleInference):
         phi: Formula = coerce_formula(phi=phi)
-        i: Inference = coerce_inference(i=i)
+        i: Inference = coerce_inference(phi=i)
         o: tuple = super().__new__(cls, phi=phi, argument=i)
         return o
 
     def __init__(self, phi: FlexibleFormula, i: FlexibleInference):
         phi: Formula = coerce_formula(phi=phi)
-        i: Inference = coerce_inference(i=i)
+        i: Inference = coerce_inference(phi=i)
         super().__init__(phi=phi, argument=i)
 
 
@@ -1728,7 +1759,7 @@ class ProofEnumeration(Enumeration):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = Enumeration(elements=(coerce_proof(p=p) for p in e))
+        e: Enumeration = Enumeration(elements=(coerce_proof(phi=p) for p in e))
         o: tuple = super().__new__(cls, elements=e)
         return o
 
@@ -1736,5 +1767,5 @@ class ProofEnumeration(Enumeration):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = Enumeration(elements=(coerce_proof(p=p) for p in e))
+        e: Enumeration = Enumeration(elements=(coerce_proof(phi=p) for p in e))
         super().__init__(elements=e)
