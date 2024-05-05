@@ -103,6 +103,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_has_element.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_in.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_of_the_form_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_tupl.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_warning.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumerationAccretor.executor": "Run",
@@ -127,6 +128,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas_two_variables.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestSingletonEnumeration.test_singleton_enumeration.executor": "Run",
@@ -250,7 +252,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_axiomatic_system_1.py">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation">
     <configuration name="axiomatic_system_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -484,7 +486,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestEnumeration.test_is_of_the_form_enumeration" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -497,11 +499,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestEnumeration.test_is_of_the_form_enumeration&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestFormulaToTuple.test_formula_to_tuple" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -514,7 +516,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormulaToTuple.test_formula_to_tuple&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -563,8 +565,8 @@
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_of_the_form_enumeration" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaToTuple.test_formula_to_tuple" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation" />
       <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -572,11 +574,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
         <item itemvalue="Python.propositional_logic_1" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_of_the_form_enumeration" />
         <item itemvalue="Python.axiomatic_system_1" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaToTuple.test_formula_to_tuple" />
       </list>
     </recent_temporary>
   </component>
@@ -595,14 +597,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00516" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1708345171830</created>
-      <option name="number" value="00516" />
-      <option name="presentableId" value="LOCAL-00516" />
-      <option name="project" value="LOCAL" />
-      <updated>1708345171831</updated>
     </task>
     <task id="LOCAL-00517" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -988,7 +982,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714887344571</updated>
     </task>
-    <option name="localTasksCounter" value="565" />
+    <task id="LOCAL-00565" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1714891269924</created>
+      <option name="number" value="00565" />
+      <option name="presentableId" value="LOCAL-00565" />
+      <option name="project" value="LOCAL" />
+      <updated>1714891269924</updated>
+    </task>
+    <option name="localTasksCounter" value="566" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

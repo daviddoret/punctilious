@@ -366,7 +366,7 @@ class TestEnumeration:
         assert as1.is_enumeration_equivalent(phi=baczx, psi=bbaccczx)
         assert as1.is_formula_equivalent(phi=baczx, psi=bbaccczx)
 
-    def test_is_of_the_form_enumeration(self):
+    def test_is_well_formed_enumeration(self):
         a, b, c = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c',))
         star = as1.FreeArityConnective(rep='*')
         phi1 = as1.Formula(c=star, terms=(a, b, c,))
@@ -617,6 +617,16 @@ class TestPostulation:
         assert as1.is_formula_equivalent(
             phi=a,
             psi=phi | as1.connectives.follows_from | as1.connectives.postulation)
+
+    def test_is_well_formed_postulation(self):
+        a, b = as1.let_x_be_a_simple_object(rep=('a', 'b',))
+        f = as1.let_x_be_a_binary_connective(rep='f')
+        phi1 = (a | f | b) | as1.connectives.follows_from | as1.connectives.postulation
+        assert as1.is_well_formed_proof_by_postulation(phi=phi1)
+        phi2 = (a | f | b) | as1.connectives.inference | as1.connectives.postulation
+        assert not as1.is_well_formed_proof_by_postulation(phi=phi2)
+        phi3 = (a | f | b) | as1.connectives.follows_from | as1.connectives.e
+        assert not as1.is_well_formed_proof_by_postulation(phi=phi3)
 
 
 class TestInference:

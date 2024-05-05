@@ -1667,25 +1667,25 @@ class Proof(Formula):
 
 
 class ProofByPostulation(Proof):
-    """A proof-by-postulation is a proof by stating an axiom.
+    """A well-formed proof-by-postulation is a proof made by stating an axiom.
 
     Syntactic definition:
-    A proof-by-postulation is a formula of the form:
-        phi is-justified-by postulation
+    A formula is a well-formed proof-by-postulation if and only if it is of the form:
+        phi follows-from postulation
     Where:
         - phi is a well-formed formula,
-        - is-justified-by is the is-justified-by connective,
+        - follows-from is the follows-from binary connective,
         - postulation is the postulation constant.
 
     Semantic definition:
     A proof-by-postulation is the statement that a formula phi is an axiom, i.e.: phi is assumed to be true."""
 
     _form_variables = (v(rep='phi'),)
-    _form: Formula = Formula(c=connectives.follows_from, terms=(_form_variables, connectives.postulation,))
+    _form: Formula = Formula(c=connectives.follows_from, terms=(_form_variables[0], connectives.postulation,))
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed proof-by-postulation, False otherwise.
+        """Return True if and only if phi is a well-formed proof-by-postulation, False otherwise.
 
         :param phi: A formula.
         :return: bool.
@@ -1746,14 +1746,14 @@ FlexibleInference = typing.Optional[typing.Union[Inference]]
 
 
 class ProofByInference(Proof):
-    """A proof-by-inference is a proof by the usage of an inference-rule.
+    """A proof-by-inference is a proof that uses an inference-rule.
 
     Syntactic definition:
     A proof-by-inference is a formula of the form:
-        phi is-justified-by inference(P, f)
+        phi follows-from inference(P, f)
     Where:
         - phi is a well-formed formula,
-        - is-justified-by is the is-justified-by connective,
+        - follows-from is the follows-from connective,
         - inference is the inference connective,
         - P is a tuple of well-formed formulas called the premises,
         - f is a transformation.
