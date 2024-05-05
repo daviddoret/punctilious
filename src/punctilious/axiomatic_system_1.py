@@ -366,6 +366,20 @@ class FormulaBuilder(list):
 class Formula(tuple):
     """An immutable formula modeled as an edge-ordered, node-colored tree."""
 
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if and only if phi is a well-formed formula, False otherwise.
+
+        Note: the Formula python class assures the well-formedness of formulas. Hence, this function is trivial: if
+        phi coerces to Formula, it is a well-formed formula.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        # TODO: Formula.is_well_formed: review this to avoid raising an exception, but return False instead.
+        phi: Formula = coerce_formula(phi=phi)
+        return True
+
     def __new__(cls, c: Connective, terms: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
@@ -449,6 +463,12 @@ class Formula(tuple):
         if len(self) < 2:
             raise_event(event_code=event_codes.e104, c=self.c)
         return self[1]
+
+    @property
+    def term_2(self) -> Formula:
+        if len(self) < 3:
+            raise_event(event_code=event_codes.e104, c=self.c)
+        return self[2]
 
     def to_formula_builder(self) -> FormulaBuilder:
         """Returns a formula-builder that is equivalent to this formula.
@@ -1018,6 +1038,19 @@ class Tupl(Formula):
      Python implementation: in python, the word 'tuple' is reserved. For this reason, the word 'tupl' is used instead
      to implement this object."""
 
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if and only if phi is a well-formed tuple, False otherwise.
+
+        Note: by definition, all formulas are also tuple. Hence, if phi is a formula, phi is a tuple.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        # TODO: Tupl.is_well_formed: review this to avoid raising an exception, but return False instead.
+        phi: Formula = coerce_formula(phi=phi)
+        return True
+
     def __new__(cls, elements: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
@@ -1463,6 +1496,21 @@ class Transformation(Formula):
     # TODO: Transformation: rewrite the above clearly
     """
 
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if and only if phi is a well-formed transformation, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi = coerce_formula(phi=phi)
+        if phi.c is not connectives.transformation or phi.arity != 3 or not is_well_formed_tuple(
+                phi=phi.term_0) or not is_well_formed_formula(phi=phi.term_1) or not is_well_formed_enumeration(
+            phi=phi.term_2):
+            return False
+        else:
+            return True
+
     def __new__(cls, premises: FlexibleTupl, conclusion: FlexibleFormula,
                 variables: FlexibleEnumeration):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
@@ -1552,9 +1600,43 @@ def coerce_transformation_builder(phi: FlexibleTransformation):
 def coerce_inference(phi: FlexibleInference):
     if isinstance(phi, Inference):
         return phi
-    # Implement with isinstance(i, FlexibleFormula) and is_well_formed...
+    elif isinstance(phi, Formula) and is_well_formed_inference(phi=phi):
+        return Inference(p=phi.term_0, f=phi.term_1)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Inference, phi_type=type(phi), phi=phi)
+
+
+def is_well_formed_formula(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed formula, False otherwise.
+
+    Note: the Formula python class assures the well-formedness of formulas.
+
+    :param phi:
+    :return: bool
+    """
+    return Formula.is_well_formed(phi=phi)
+
+
+def is_well_formed_tupl(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed tuple, False otherwise.
+
+    Note: by definition, all formulas are also tuples. Hence, return True if phi converts smoothly to a well-formed
+    formula.
+
+    :param phi:
+    :return: bool
+    """
+    return Tupl.is_well_formed(phi=phi)
+
+
+def is_well_formed_inference(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed inference, False otherwise."""
+    return Inference.is_well_formed(phi=phi)
+
+
+def is_well_formed_transformation(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed transformation, False otherwise."""
+    return Transformation.is_well_formed(phi=phi)
 
 
 def is_well_formed_enumeration(phi: FlexibleFormula) -> bool:
@@ -1582,9 +1664,9 @@ def is_well_formed_demonstration(phi: FlexibleFormula) -> bool:
     return Demonstration.is_well_formed(phi=phi)
 
 
-def is_well_formed_axiomatisation(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed axiomatisation, False otherwise."""
-    return Axiomatisation.is_well_formed(phi=phi)
+def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed axiomatization, False otherwise."""
+    return Axiomatization.is_well_formed(phi=phi)
 
 
 def coerce_proof(phi: FlexibleFormula):
@@ -1640,18 +1722,18 @@ def coerce_demonstration(phi: FlexibleFormula):
         raise_event(event_code=event_codes.e123, coerced_type=Demonstration, phi_type=type(phi), phi=phi)
 
 
-def coerce_axiomatisation(phi: FlexibleFormula):
-    """Validate that phi is a well-formed axiomatisation and returns it properly typed as Axiomatisation, or raise exception e123.
+def coerce_axiomatization(phi: FlexibleFormula):
+    """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatisation, or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, Axiomatisation):
+    if isinstance(phi, Axiomatization):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_axiomatisation(phi=phi):
-        return Axiomatisation(e=phi)
+    elif isinstance(phi, Formula) and is_well_formed_axiomatization(phi=phi):
+        return Axiomatization(e=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Axiomatisation, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=Axiomatization, phi_type=type(phi), phi=phi)
 
 
 class TheoryState(Enumeration):
@@ -1750,6 +1832,20 @@ class Inference(Formula):
 
     Semantic definition:
     An inference is a formal description of one usage of an inference-rule."""
+
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if and only if phi is a well-formed inference, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi = coerce_formula(phi=phi)
+        if phi.c is not connectives.inference or not is_well_formed_enumeration(
+                phi=phi.term_0) or not is_well_formed_transformation(phi=phi.term_1):
+            return False
+        else:
+            return True
 
     def __new__(cls, p: FlexibleTupl, f: FlexibleTransformation):
         p: Tupl = coerce_tupl(phi=p)
@@ -1883,18 +1979,18 @@ class Demonstration(Enumeration):
         super().__init__(elements=e)
 
 
-class Axiomatisation(Demonstration):
-    """An axiomatisation is a demonstration only composed of axioms.
+class Axiomatization(Demonstration):
+    """An axiomatization is a demonstration that is only composed of axioms.
 
     Syntactic definition:
-    A well-formed axiomatisation is an enumeration such that:
+    A well-formed axiomatization is an enumeration such that:
      - all element phi of the enumeration is a well-formed proof-by-postulation.
 
     """
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed axiomatisation, False otherwise.
+        """Return True if phi is a well-formed axiomatization, False otherwise.
 
         :param phi: A formula.
         :return: bool.
