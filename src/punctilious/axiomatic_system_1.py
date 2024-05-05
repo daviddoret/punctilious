@@ -1583,7 +1583,10 @@ def coerce_transformation(phi: FlexibleTransformation):
         return phi
     elif isinstance(phi, TransformationBuilder):
         return phi.to_transformation()
-    # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
+    elif isinstance(phi, Formula) and is_well_formed_transformation(phi=phi):
+        # phi is a well-formed transformation,
+        # it can be safely re-instantiated as an Transformation and returned.
+        return Transformation(premises=phi.term_0, conclusion=phi.term_1, variables=phi.term_2)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
 

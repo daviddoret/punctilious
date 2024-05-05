@@ -469,6 +469,25 @@ class TestTransformation:
         output = f.apply_transformation(arguments=arguments)
         as1.is_formula_equivalent(phi=aristotle | is_a | mortal, psi=output)
 
+    def test_is_well_formed_transformation(self):
+        x = as1.let_x_be_a_variable(rep='x')
+        y = as1.let_x_be_a_variable(rep='y')
+        is_a = as1.let_x_be_a_binary_connective(rep='is-a')
+        human = as1.let_x_be_a_simple_object(rep='human')
+        platypus = as1.let_x_be_a_simple_object(rep='platypus')
+        mortal = as1.let_x_be_a_simple_object(rep='mortal')
+        aristotle = as1.let_x_be_a_simple_object(rep='aristotle')
+        p1 = x | is_a | human
+        p2 = aristotle | is_a | human
+        premises = as1.Enumeration(elements=(p1,))
+        conclusion = x | is_a | mortal
+        variables = as1.Enumeration(elements=(x,))
+        phi1 = as1.connectives.transformation(premises, conclusion, variables)
+        assert as1.is_well_formed_transformation(phi=phi1)
+        t = as1.Tupl(elements=(platypus, platypus,))
+        phi2 = as1.connectives.transformation(premises, conclusion, t)
+        assert not as1.is_well_formed_transformation(phi=phi2)
+
 
 class TestReplaceFormulas:
     def test_replace_formulas(self):
