@@ -370,15 +370,15 @@ class TestEnumeration:
         a, b, c = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c',))
         star = as1.FreeArityConnective(rep='*')
         phi1 = as1.Formula(c=star, terms=(a, b, c,))
-        assert as1.is_of_the_form_enumeration(phi=phi1)
+        assert as1.is_well_formed_enumeration(phi=phi1)
         phi2 = as1.Formula(c=star, terms=None)
-        assert as1.is_of_the_form_enumeration(phi=phi2)
+        assert as1.is_well_formed_enumeration(phi=phi2)
         phi3 = as1.Formula(c=star, terms=(a, a, b, c,))
-        assert not as1.is_of_the_form_enumeration(phi=phi3)
+        assert not as1.is_well_formed_enumeration(phi=phi3)
         phi4 = as1.Formula(c=star, terms=(a, b, b, c,))
-        assert not as1.is_of_the_form_enumeration(phi=phi4)
+        assert not as1.is_well_formed_enumeration(phi=phi4)
         phi5 = as1.Formula(c=star, terms=(a, b, c, c,))
-        assert not as1.is_of_the_form_enumeration(phi=phi5)
+        assert not as1.is_well_formed_enumeration(phi=phi5)
 
 
 class TestFormulaEquivalenceWithVariables:

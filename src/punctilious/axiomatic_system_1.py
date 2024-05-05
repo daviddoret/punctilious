@@ -493,8 +493,8 @@ def coerce_enumeration(phi: FlexibleEnumeration):
         return phi
     elif isinstance(phi, EnumerationBuilder):
         return phi.to_enumeration()
-    elif isinstance(phi, Formula) and is_of_the_form_enumeration(phi=phi):
-        # phi is of the form enumeration,
+    elif isinstance(phi, Formula) and is_well_formed_enumeration(phi=phi):
+        # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
         return Enumeration(elements=phi, c=phi.c)
     elif phi is None:
@@ -557,7 +557,7 @@ def coerce_map(phi: FlexibleMap):
         return phi.to_map()
     elif phi is None:
         return Map(domain=None, codomain=None)
-    # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
+    # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
     elif isinstance(phi, dict):
         domain: Enumeration = coerce_enumeration(phi=phi.keys())
         codomain: Tupl = coerce_tupl(phi=phi.values())
@@ -775,6 +775,7 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 
 class Connectives(typing.NamedTuple):
+    derivation: FreeArityConnective
     postulation: UnaryConnective
     e: FreeArityConnective
     """The enumeration connective, cf. the Enumeration class.
@@ -793,6 +794,7 @@ class Connectives(typing.NamedTuple):
 
 
 connectives: Connectives = Connectives(
+    derivation=let_x_be_a_binary_connective(rep='derivation'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
     f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
     follows_from=let_x_be_a_binary_connective(rep='follows-from'),
@@ -1249,8 +1251,8 @@ class Enumeration(Formula):
     """
 
     @staticmethod
-    def is_of_the_form(phi: FlexibleFormula) -> bool:
-        """Return True if phi is of the form proof-by-postulation, False otherwise.
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if phi is a well-formed proof-by-postulation, False otherwise.
 
         :param phi: A formula.
         :return: bool.
@@ -1533,7 +1535,7 @@ def coerce_transformation(phi: FlexibleTransformation):
         return phi
     elif isinstance(phi, TransformationBuilder):
         return phi.to_transformation()
-    # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
+    # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
 
@@ -1550,19 +1552,34 @@ def coerce_transformation_builder(phi: FlexibleTransformation):
 def coerce_inference(phi: FlexibleInference):
     if isinstance(phi, Inference):
         return phi
-    # Implement with isinstance(i, FlexibleFormula) and is_of_the_form...
+    # Implement with isinstance(i, FlexibleFormula) and is_well_formed...
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Inference, phi_type=type(phi), phi=phi)
 
 
-def is_of_the_form_enumeration(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is of the form enumeration, False otherwise."""
-    return Enumeration.is_of_the_form(phi=phi)
+def is_well_formed_enumeration(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed enumeration, False otherwise."""
+    return Enumeration.is_well_formed(phi=phi)
 
 
-def is_of_the_form_proof_by_postulation(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is of the form proof-by-postulation, False otherwise."""
-    return ProofByPostulation.is_of_the_form(phi=phi)
+def is_well_formed_proof_by_postulation(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed proof-by-postulation, False otherwise."""
+    return ProofByPostulation.is_well_formed(phi=phi)
+
+
+def is_well_formed_proof_by_inference(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed proof-by-inference, False otherwise."""
+    return ProofByInference.is_well_formed(phi=phi)
+
+
+def is_well_formed_proof(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed proof, False otherwise."""
+    return Proof.is_well_formed(phi=phi)
+
+
+def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed derivation, False otherwise."""
+    return Derivation.is_well_formed(phi=phi)
 
 
 def coerce_proof(phi: FlexibleFormula):
@@ -1573,7 +1590,7 @@ def coerce_proof(phi: FlexibleFormula):
     """
     if isinstance(phi, Proof):
         return phi
-    # TODO: coerce_proof: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
+    # TODO: coerce_proof: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Proof, phi_type=type(phi), phi=phi)
 
@@ -1586,7 +1603,7 @@ def coerce_proof_by_postulation(phi: FlexibleFormula):
     """
     if isinstance(phi, ProofByPostulation):
         return phi
-    # TODO: coerce_proof_by_postulation: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
+    # TODO: coerce_proof_by_postulation: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
     else:
         raise_event(event_code=event_codes.e123, coerced_type=ProofByPostulation, phi_type=type(phi), phi=phi)
 
@@ -1599,7 +1616,7 @@ def coerce_proof_by_inference(phi: FlexibleFormula):
     """
     if isinstance(phi, ProofByInference):
         return phi
-    # TODO: coerce_proof_by_inference: Implement with isinstance(phi, FlexibleFormula) and is_of_the_form...
+    # TODO: coerce_proof_by_inference: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
     else:
         raise_event(event_code=event_codes.e123, coerced_type=ProofByInference, phi_type=type(phi), phi=phi)
 
@@ -1624,6 +1641,16 @@ class Proof(Formula):
      - postulation,
      - inference.
      """
+
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if phi is a well-formed proof, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        # TODO: Implement Proof.is_well_formed
+        return True
 
     def __new__(cls, phi: FlexibleFormula, argument: FlexibleFormula):
         phi = coerce_formula(phi=phi)
@@ -1657,8 +1684,8 @@ class ProofByPostulation(Proof):
     _form: Formula = Formula(c=connectives.follows_from, terms=(_form_variables, connectives.postulation,))
 
     @staticmethod
-    def is_of_the_form(phi: FlexibleFormula) -> bool:
-        """Return True if phi is of the form proof-by-postulation, False otherwise.
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if phi is a well-formed proof-by-postulation, False otherwise.
 
         :param phi: A formula.
         :return: bool.
@@ -1699,10 +1726,20 @@ class Inference(Formula):
         return o
 
     def __init__(self, p: FlexibleTupl, f: FlexibleTransformation):
-        p: Tupl = coerce_tupl(phi=p)
-        f: Transformation = coerce_transformation(phi=f)
+        self._p: Tupl = coerce_tupl(phi=p)
+        self._f: Transformation = coerce_transformation(phi=f)
         c: Connective = connectives.inference
-        super().__init__(c=c, terms=(p, f,))
+        super().__init__(c=c, terms=(self._p, self._f,))
+
+    @property
+    def f(self) -> Transformation:
+        """The inference-rule of the inference."""
+        return self._f
+
+    @property
+    def p(self) -> Tupl:
+        """The premises of the inference."""
+        return self._p
 
 
 FlexibleInference = typing.Optional[typing.Union[Inference]]
@@ -1734,9 +1771,19 @@ class ProofByInference(Proof):
         return o
 
     def __init__(self, phi: FlexibleFormula, i: FlexibleInference):
-        phi: Formula = coerce_formula(phi=phi)
-        i: Inference = coerce_inference(phi=i)
+        self._phi: Formula = coerce_formula(phi=phi)
+        self._i: Inference = coerce_inference(phi=i)
         super().__init__(phi=phi, argument=i)
+
+    @property
+    def i(self) -> Inference:
+        """The inference of the proof."""
+        return self._i
+
+    @property
+    def phi(self) -> Formula:
+        """The proven formula."""
+        return self._phi
 
 
 FlexibleProof = typing.Optional[typing.Union[Formula, ProofByInference, ProofByPostulation]]
@@ -1746,14 +1793,42 @@ class TheoryAccretor(EnumerationAccretor):
     pass
 
 
-class ProofEnumeration(Enumeration):
-    """A proof-enumeration is an enumeration of proofs.
+class Derivation(Enumeration):
+    """A derivation is an enumeration of proofs.
 
     Syntactic definition:
-    A proof-enumeration is an enumeration such that:
-     - every element phi of the enumeration is a well-formed proof.
+    A well-formed derivation is an enumeration such that:
+     - all element phi of the enumeration is a well-formed proof,
+     - all premises of all proof-by-inferences are predecessors of their parent proof-by-inference.
 
     """
+
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if phi is a well-formed derivation, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi = coerce_enumeration(phi=phi)
+        for i in range(0, phi.arity):
+            psi = phi[i]
+            if is_well_formed_proof_by_postulation(phi=psi):
+                # This is an axiom.
+                pass
+            elif is_well_formed_proof_by_inference(phi=psi):
+                proof_by_inference: ProofByInference = coerce_proof_by_inference(phi=psi)
+                inference: Inference = proof_by_inference.i
+                for premise in inference.p:
+                    premise_index = phi.get_element_index(phi=premise)
+                    if premise_index >= i:
+                        # The premise is not positioned before the conclusion.
+                        return False
+            else:
+                # Incorrect form.
+                return False
+        # All tests were successful.
+        return True
 
     def __new__(cls, e: FlexibleEnumeration = None):
         # coerce to enumeration
