@@ -775,7 +775,7 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 
 class Connectives(typing.NamedTuple):
-    derivation: FreeArityConnective
+    demonstration: FreeArityConnective
     postulation: UnaryConnective
     e: FreeArityConnective
     """The enumeration connective, cf. the Enumeration class.
@@ -794,7 +794,7 @@ class Connectives(typing.NamedTuple):
 
 
 connectives: Connectives = Connectives(
-    derivation=let_x_be_a_binary_connective(rep='derivation'),
+    demonstration=let_x_be_a_binary_connective(rep='demonstration'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
     f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
     follows_from=let_x_be_a_binary_connective(rep='follows-from'),
@@ -1577,9 +1577,14 @@ def is_well_formed_proof(phi: FlexibleFormula) -> bool:
     return Proof.is_well_formed(phi=phi)
 
 
-def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed derivation, False otherwise."""
-    return Derivation.is_well_formed(phi=phi)
+def is_well_formed_demonstration(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed demonstration, False otherwise."""
+    return Demonstration.is_well_formed(phi=phi)
+
+
+def is_well_formed_axiomatisation(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed axiomatisation, False otherwise."""
+    return Axiomatisation.is_well_formed(phi=phi)
 
 
 def coerce_proof(phi: FlexibleFormula):
@@ -1619,6 +1624,34 @@ def coerce_proof_by_inference(phi: FlexibleFormula):
     # TODO: coerce_proof_by_inference: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
     else:
         raise_event(event_code=event_codes.e123, coerced_type=ProofByInference, phi_type=type(phi), phi=phi)
+
+
+def coerce_demonstration(phi: FlexibleFormula):
+    """Validate that phi is a well-formed demonstration and returns it properly typed as Demonstration, or raise exception e123.
+
+    :param phi:
+    :return:
+    """
+    if isinstance(phi, Demonstration):
+        return phi
+    elif isinstance(phi, Formula) and is_well_formed_demonstration(phi=phi):
+        return Demonstration(e=phi)
+    else:
+        raise_event(event_code=event_codes.e123, coerced_type=Demonstration, phi_type=type(phi), phi=phi)
+
+
+def coerce_axiomatisation(phi: FlexibleFormula):
+    """Validate that phi is a well-formed axiomatisation and returns it properly typed as Axiomatisation, or raise exception e123.
+
+    :param phi:
+    :return:
+    """
+    if isinstance(phi, Axiomatisation):
+        return phi
+    elif isinstance(phi, Formula) and is_well_formed_axiomatisation(phi=phi):
+        return Axiomatisation(e=phi)
+    else:
+        raise_event(event_code=event_codes.e123, coerced_type=Axiomatisation, phi_type=type(phi), phi=phi)
 
 
 class TheoryState(Enumeration):
@@ -1793,11 +1826,11 @@ class TheoryAccretor(EnumerationAccretor):
     pass
 
 
-class Derivation(Enumeration):
-    """A derivation is an enumeration of proofs.
+class Demonstration(Enumeration):
+    """A demonstration is an enumeration of proofs.
 
     Syntactic definition:
-    A well-formed derivation is an enumeration such that:
+    A well-formed demonstration is an enumeration such that:
      - all element phi of the enumeration is a well-formed proof,
      - all premises of all proof-by-inferences are predecessors of their parent proof-by-inference.
 
@@ -1805,7 +1838,7 @@ class Derivation(Enumeration):
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed derivation, False otherwise.
+        """Return True if phi is a well-formed demonstration, False otherwise.
 
         :param phi: A formula.
         :return: bool.
@@ -1824,6 +1857,10 @@ class Derivation(Enumeration):
                     if premise_index >= i:
                         # The premise is not positioned before the conclusion.
                         return False
+                # And finally, confirm that the inference effectively yields phi.
+                phi_prime = inference.f.apply_transformation(arguments=inference.p)
+                if not is_formula_equivalent(phi=phi, psi=phi_prime):
+                    return False
             else:
                 # Incorrect form.
                 return False
@@ -1843,4 +1880,48 @@ class Derivation(Enumeration):
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
         e: Enumeration = Enumeration(elements=(coerce_proof(phi=p) for p in e))
+        super().__init__(elements=e)
+
+
+class Axiomatisation(Demonstration):
+    """An axiomatisation is a demonstration only composed of axioms.
+
+    Syntactic definition:
+    A well-formed axiomatisation is an enumeration such that:
+     - all element phi of the enumeration is a well-formed proof-by-postulation.
+
+    """
+
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if phi is a well-formed axiomatisation, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi = coerce_enumeration(phi=phi)
+        for i in range(0, phi.arity):
+            psi = phi[i]
+            if is_well_formed_proof_by_postulation(phi=psi):
+                # This is an axiom.
+                pass
+            else:
+                # Incorrect form.
+                return False
+        # All tests were successful.
+        return True
+
+    def __new__(cls, e: FlexibleEnumeration = None):
+        # coerce to enumeration
+        e: Enumeration = coerce_enumeration(phi=e)
+        # coerce all elements of the enumeration to proof
+        e: Enumeration = Enumeration(elements=(coerce_proof_by_postulation(phi=p) for p in e))
+        o: tuple = super().__new__(cls, elements=e)
+        return o
+
+    def __init__(self, e: FlexibleEnumeration = None):
+        # coerce to enumeration
+        e: Enumeration = coerce_enumeration(phi=e)
+        # coerce all elements of the enumeration to proof
+        e: Enumeration = Enumeration(elements=(coerce_proof_by_postulation(phi=p) for p in e))
         super().__init__(elements=e)
