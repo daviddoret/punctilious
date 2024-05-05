@@ -121,6 +121,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas_two_variables.executor": "Run",
@@ -246,7 +247,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed">
+  <component name="RunManager" selected="Python tests.pytest in test_axiomatic_system_1.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -453,7 +454,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -466,7 +467,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestProofByInference.test_is_well_formed&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -548,9 +549,9 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation" />
       <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -558,11 +559,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation" />
       </list>
     </recent_temporary>
   </component>
@@ -581,14 +582,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00522" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1708557023574</created>
-      <option name="number" value="00522" />
-      <option name="presentableId" value="LOCAL-00522" />
-      <option name="project" value="LOCAL" />
-      <updated>1708557023574</updated>
     </task>
     <task id="LOCAL-00523" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -974,7 +967,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714928004389</updated>
     </task>
-    <option name="localTasksCounter" value="571" />
+    <task id="LOCAL-00571" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1714928997908</created>
+      <option name="number" value="00571" />
+      <option name="presentableId" value="LOCAL-00571" />
+      <option name="project" value="LOCAL" />
+      <updated>1714928997908</updated>
+    </task>
+    <option name="localTasksCounter" value="572" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

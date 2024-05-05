@@ -648,35 +648,6 @@ class TestPostulation:
         assert not as1.is_well_formed_proof_by_postulation(phi=phi3)
 
 
-class TestInference:
-    def test_inference(self):
-        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
-        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
-        f = as1.let_x_be_a_binary_connective(rep='f')
-        t = as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
-        p = (a | f | b, b | f | c,)
-        theorem = a | f | c
-        as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        i = as1.ProofByInference(phi=theorem, i=as1.Inference(p=p, f=t))
-        as1.is_formula_equivalent(phi=i,
-                                  psi=theorem | as1.connectives.follows_from | as1.connectives.inference(p, t))
-
-    def test_is_well_formed_inference(self):
-        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
-        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
-        f = as1.let_x_be_a_binary_connective(rep='f')
-        t = as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
-        p = (a | f | b, b | f | c,)
-        phi1 = p | as1.connectives.inference | t
-        assert as1.is_well_formed_inference(phi=phi1)
-        phi2 = p | as1.connectives.inference | a
-        assert not as1.is_well_formed_inference(phi=phi2)
-        phi3 = p | as1.connectives.follows_from | t
-        assert not as1.is_well_formed_inference(phi=phi3)
-        phi4 = f(a, a, b, b) | as1.connectives.follows_from | t
-        assert not as1.is_well_formed_inference(phi=phi4)
-
-
 class TestFormulaToTuple:
     def test_formula_to_tuple(self):
         a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
@@ -703,3 +674,51 @@ class TestProofByPostulation:
         assert not as1.is_well_formed_proof_by_postulation(phi=phi2)
         phi3 = star3(e, b, d) | as1.connectives.follows_from | b
         assert not as1.is_well_formed_proof_by_postulation(phi=phi3)
+
+
+class TestInference:
+    def test_inference(self):
+        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        f = as1.let_x_be_a_binary_connective(rep='f')
+        t = as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
+        p = (a | f | b, b | f | c,)
+        theorem = a | f | c
+        as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
+        i = as1.ProofByInference(phi=theorem, i=as1.Inference(p=p, f=t))
+        as1.is_formula_equivalent(
+            phi=i,
+            psi=theorem | as1.connectives.follows_from | as1.connectives.inference(p, t))
+
+    def test_is_well_formed_inference(self):
+        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        f = as1.let_x_be_a_binary_connective(rep='f')
+        t = as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
+        p = (a | f | b, b | f | c,)
+        phi1 = p | as1.connectives.inference | t
+        assert as1.is_well_formed_inference(phi=phi1)
+        phi2 = p | as1.connectives.inference | a
+        assert not as1.is_well_formed_inference(phi=phi2)
+        phi3 = p | as1.connectives.follows_from | t
+        assert not as1.is_well_formed_inference(phi=phi3)
+        phi4 = f(a, a, b, b) | as1.connectives.follows_from | t
+        assert not as1.is_well_formed_inference(phi=phi4)
+
+
+class TestProofByInference:
+    def test_is_well_formed(self):
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
+        star = as1.let_x_be_a_binary_connective(rep='*')
+        premises = as1.Enumeration(elements=(x | star | y, y | star | z,))
+        conclusion = x | star | z
+        variables = as1.Enumeration(elements=(x, y, z,))
+        f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
+        i = as1.Inference(p=(a | star | b, b | star | c,), f=f)
+        assert as1.is_well_formed_proof_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i)
+        proof1 = as1.ProofByInference(phi=a | star | c, i=i)
+        assert not as1.is_well_formed_proof_by_inference(phi=(a | star | d) | as1.connectives.follows_from | i)
+        i2 = as1.Inference(p=(a | star | b, b | star | a,), f=f)
+        assert not as1.is_well_formed_proof_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i2)
+        pass

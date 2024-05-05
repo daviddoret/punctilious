@@ -73,9 +73,13 @@ event_codes = EventCodes(
                    message='EnumerationBuilder.__init__: Attempt to add duplicate formula-equivalent formulas as '
                            'elements of the enumeration. The new element / term is ignored.'),
     e105=EventCode(event_type=event_types.error, code='e105',
-                   message='REUSE'),
-    e106=EventCode(event_type=event_types.error, code='e106',
-                   message='REUSE'),
+                   message='ProofByInference.__new__: attempt to create an ill-formed proof-by-inference because '
+                           'phi_expected ~formula phi_inferred, '
+                           'where phi_inferred = f(p), f the inference transformation, and p the inference premises.'),
+    e106=EventCode(event_type=event_types.warning, code='e106',
+                   message='is_well_formed_proof_by_inference: phi is an ill-formed proof-by-inference because '
+                           'psi_expected ~formula psi_inferred, '
+                           'where psi_inferred = f(p), f the inference transformation, and p the inference premises.'),
     e107=EventCode(event_type=event_types.error, code='e107',
                    message='coerce_enumeration: The argument could not be coerced to a enumeration.'),
     e108=EventCode(event_type=event_types.error, code='e108',
@@ -1881,14 +1885,15 @@ class ProofByInference(Proof):
     """A proof-by-inference is a proof that uses an inference-rule.
 
     Syntactic definition:
-    A proof-by-inference is a formula of the form:
+    A formula is a well-formed proof-by-inference if and only if it is a formula of the form:
         phi follows-from inference(P, f)
     Where:
         - phi is a well-formed formula,
         - follows-from is the follows-from connective,
-        - inference is the inference connective,
+        - inference is the inference binary connective,
         - P is a tuple of well-formed formulas called the premises,
-        - f is a transformation.
+        - f is a transformation,
+        - f(P) = phi.
 
     Semantic definition:
     A proof-by-inference is a statement that justifies the validity of phi by providing the premises and
@@ -1896,9 +1901,38 @@ class ProofByInference(Proof):
     t(P) ~formula phi
     """
 
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if and only if phi is a well-formed proof-by-inference, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi = coerce_formula(phi=phi)
+        if not phi.c is connectives.follows_from or not phi.arity == 2 or not is_well_formed_formula(
+                phi=phi.term_0) or not is_well_formed_inference(phi=phi.term_1):
+            return False
+        else:
+            i: Inference = coerce_inference(phi=phi.term_1)
+            f_of_p: Formula = i.f(i.p)
+            if not is_formula_equivalent(phi=phi.term_0, psi=f_of_p):
+                # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
+                # issue a warning to facilitate troubleshooting and analysis.
+                raise_event(event_code=event_codes.e106, phi=phi, psi_expected=phi.term_0, psi_inferred=f_of_p,
+                            inference_rule=i)
+                return False
+            return True
+
     def __new__(cls, phi: FlexibleFormula, i: FlexibleInference):
         phi: Formula = coerce_formula(phi=phi)
         i: Inference = coerce_inference(phi=i)
+        # check the validity of the proof
+        f_of_p: Formula = i.f(i.p)
+        if not is_formula_equivalent(phi=phi, psi=f_of_p):
+            # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
+            # raise an exception to prevent the creation of this ill-formed proof-by-inference.
+            raise_event(event_code=event_codes.e105, phi_expected=phi, phi_inferred=f_of_p,
+                        inference_rule=i)
         o: tuple = super().__new__(cls, phi=phi, argument=i)
         return o
 
