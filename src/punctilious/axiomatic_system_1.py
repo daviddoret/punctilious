@@ -54,6 +54,7 @@ class EventCodes(typing.NamedTuple):
     e119: EventCode
     e120: EventCode
     e121: EventCode
+    e122: EventCode
 
 
 event_codes = EventCodes(
@@ -112,6 +113,8 @@ event_codes = EventCodes(
                            'transformation-builder.'),
     e121=EventCode(event_type=event_types.error, code='e121',
                    message='coerce_inference: The argument could not be coerced to an inference.'),
+    e122=EventCode(event_type=event_types.error, code='e122',
+                   message='coerce_proof: The argument could not be coerced to a proof.'),
 
 )
 
@@ -481,20 +484,24 @@ def coerce_formula(phi: FlexibleFormula):
         raise_event(event_code=event_codes.e105, phi_type=type(phi), phi=phi)
 
 
-def coerce_enumeration(elements: FlexibleEnumeration):
+def coerce_enumeration(phi: FlexibleEnumeration):
     """Coerce elements to an enumeration.
     If elements is None, coerce it to an empty enumeration."""
-    if isinstance(elements, Enumeration):
-        return elements
-    elif isinstance(elements, EnumerationBuilder):
-        return elements.to_enumeration()
-    elif elements is None:
+    if isinstance(phi, Enumeration):
+        return phi
+    elif isinstance(phi, EnumerationBuilder):
+        return phi.to_enumeration()
+    elif isinstance(phi, Formula) and is_of_the_form_enumeration(phi=phi):
+        # phi is of the form enumeration,
+        # it can be safely re-instantiated as an Enumeration and returned.
+        return Enumeration(elements=phi, c=phi.c)
+    elif phi is None:
         return Enumeration(elements=None)
-    elif isinstance(elements, typing.Iterable):
+    elif isinstance(phi, typing.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return Enumeration(elements=elements)
+        return Enumeration(elements=phi)
     else:
-        raise_event(event_code=event_codes.e107, phi_type=type(elements), phi=elements)
+        raise_event(event_code=event_codes.e107, phi_type=type(phi), phi=phi)
 
 
 def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enumeration:
@@ -516,8 +523,8 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
      - Idempotent: (phi ∪-formula phi) ~formula phi.
      - Not symmetric if some element of psi are elements of phi: because of order.
     """
-    phi: Enumeration = coerce_enumeration(elements=phi)
-    psi: Enumeration = coerce_enumeration(elements=psi)
+    phi: Enumeration = coerce_enumeration(phi=phi)
+    psi: Enumeration = coerce_enumeration(phi=psi)
     eb: EnumerationBuilder = EnumerationBuilder(elements=None)
     for phi_prime in phi:
         eb.append(term=phi_prime)
@@ -549,7 +556,7 @@ def coerce_map(m: FlexibleMap):
     elif m is None:
         return Map(domain=None, codomain=None)
     elif isinstance(m, dict):
-        domain: Enumeration = coerce_enumeration(elements=m.keys())
+        domain: Enumeration = coerce_enumeration(phi=m.keys())
         codomain: Tupl = coerce_tupl(elements=m.values())
         return Map(domain=domain, codomain=codomain)
     else:
@@ -702,6 +709,12 @@ def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
         return (NullaryConnective(rep=r) for r in rep)
     else:
         raise TypeError  # TODO: Implement event code.
+
+
+def v(rep: FlexibleRepresentation) -> typing.Union[
+    NullaryConnective, typing.Generator[NullaryConnective, typing.Any, None]]:
+    """A shortcut for let_x_be_a_variable."""
+    return let_x_be_a_variable(rep=rep)
 
 
 FlexibleRepresentation = typing.Optional[typing.Union[str, typing.Iterable[str]]]
@@ -946,8 +959,8 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
     :param psi: An enumeration.
     :return: True if phi ~enumeration psi, False otherwise.
     """
-    phi: Formula = coerce_enumeration(elements=phi)
-    psi: Formula = coerce_enumeration(elements=psi)
+    phi: Formula = coerce_enumeration(phi=phi)
+    psi: Formula = coerce_enumeration(phi=psi)
 
     test_1 = all(any(is_formula_equivalent(phi=phi_prime, psi=psi_prime) for psi_prime in psi) for phi_prime in phi)
     test_2 = all(any(is_formula_equivalent(phi=psi_prime, psi=phi_prime) for phi_prime in phi) for psi_prime in psi)
@@ -1098,7 +1111,7 @@ class Map(Formula):
     def __new__(cls, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        domain: Enumeration = coerce_enumeration(elements=domain)
+        domain: Enumeration = coerce_enumeration(phi=domain)
         codomain: Tupl = coerce_tupl(elements=codomain)
         if len(domain) != len(codomain):
             raise ValueError('Map: |keys| != |values|')
@@ -1106,7 +1119,7 @@ class Map(Formula):
         return o
 
     def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
-        domain: Enumeration = coerce_enumeration(elements=domain)
+        domain: Enumeration = coerce_enumeration(phi=domain)
         codomain: Tupl = coerce_tupl(elements=codomain)
         super().__init__(c=connectives.map, terms=(domain, codomain,))
 
@@ -1116,7 +1129,7 @@ class Map(Formula):
 
     @property
     def domain(self) -> Enumeration:
-        return coerce_enumeration(elements=self.term_0)
+        return coerce_enumeration(phi=self.term_0)
 
     def get_assigned_value(self, phi: Formula) -> Formula:
         """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
@@ -1231,6 +1244,21 @@ class Enumeration(Formula):
      - union-enumeration
 
     """
+
+    @staticmethod
+    def is_of_the_form(phi: FlexibleFormula) -> bool:
+        """Return True if phi is of the form proof-by-postulation, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi = coerce_formula(phi=phi)
+        for i in range(0, phi.arity):
+            if i != phi.arity - 1:
+                for j in range(i + 1, phi.arity):
+                    if is_formula_equivalent(phi=phi[i], psi=phi[j]):
+                        return False
+        return True
 
     def __new__(cls, elements: FlexibleEnumeration = None, c: Connective = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
@@ -1436,7 +1464,7 @@ class Transformation(Formula):
         # because tuple is immutable.
         premises: Tupl = coerce_tupl(elements=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
-        variables: Enumeration = coerce_enumeration(elements=variables)
+        variables: Enumeration = coerce_enumeration(phi=variables)
         o: tuple = super().__new__(cls, c=connectives.transformation,
                                    terms=(premises, conclusion, variables,))
         return o
@@ -1445,7 +1473,7 @@ class Transformation(Formula):
                  variables: FlexibleEnumeration):
         premises: Tupl = coerce_tupl(elements=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
-        variables: Enumeration = coerce_enumeration(elements=variables)
+        variables: Enumeration = coerce_enumeration(phi=variables)
         super().__init__(c=connectives.transformation, terms=(premises, conclusion, variables,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
@@ -1523,9 +1551,26 @@ def coerce_inference(i: FlexibleInference):
         raise_event(event_code=event_codes.e121, phi_type=type(i), phi=i)
 
 
-def coerce_proof():
-    # TODO: IMPLEMENT THIS
-    raise NotImplementedError('oops')
+def is_of_the_form_enumeration(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is of the form enumeration, False otherwise."""
+    return Enumeration.is_of_the_form(phi=phi)
+
+
+def is_of_the_form_proof_by_postulation(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is of the form proof-by-postulation, False otherwise."""
+    return ProofByPostulation.is_of_the_form(phi=phi)
+
+
+def coerce_proof(p: FlexibleProof):
+    """Validate that p is a well-formed proof and returns that proof properly typed as Proof, or raise exception e122.
+
+    :param p:
+    :return:
+    """
+    if isinstance(p, Proof):
+        return p
+    else:
+        raise_event(event_code=event_codes.e122, phi_type=type(p), phi=p)
 
 
 class TheoryState(Enumeration):
@@ -1576,6 +1621,20 @@ class ProofByPostulation(Proof):
 
     Semantic definition:
     A proof-by-postulation is the statement that a formula phi is an axiom, i.e.: phi is assumed to be true."""
+
+    _form_variables = (v(rep='phi'),)
+    _form: Formula = Formula(c=connectives.follows_from, terms=(_form_variables, connectives.postulation,))
+
+    @staticmethod
+    def is_of_the_form(phi: FlexibleFormula) -> bool:
+        """Return True if phi is of the form proof-by-postulation, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi = coerce_formula(phi=phi)
+        return is_formula_equivalent_with_variables(phi=phi, psi=ProofByPostulation._form,
+                                                    v=ProofByPostulation._form_variables)
 
     def __new__(cls, phi: FlexibleFormula = None):
         phi: Formula = coerce_formula(phi=phi)
@@ -1649,6 +1708,9 @@ class ProofByInference(Proof):
         super().__init__(phi=phi, argument=i)
 
 
+FlexibleProof = typing.Optional[typing.Union[Formula, ProofByInference, ProofByPostulation]]
+
+
 class TheoryAccretor(EnumerationAccretor):
     pass
 
@@ -1664,7 +1726,7 @@ class ProofEnumeration(Enumeration):
 
     def __new__(cls, e: FlexibleEnumeration = None):
         # coerce to enumeration
-        e: Enumeration = coerce_enumeration(elements=e)
+        e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
         e: Enumeration = Enumeration(elements=(coerce_proof(p=p) for p in e))
         o: tuple = super().__new__(cls, elements=e)
@@ -1672,7 +1734,7 @@ class ProofEnumeration(Enumeration):
 
     def __init__(self, e: FlexibleEnumeration = None):
         # coerce to enumeration
-        e: Enumeration = coerce_enumeration(elements=e)
+        e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
         e: Enumeration = Enumeration(elements=(coerce_proof(p=p) for p in e))
         super().__init__(elements=e)

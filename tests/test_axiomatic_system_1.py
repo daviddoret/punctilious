@@ -366,6 +366,20 @@ class TestEnumeration:
         assert as1.is_enumeration_equivalent(phi=baczx, psi=bbaccczx)
         assert as1.is_formula_equivalent(phi=baczx, psi=bbaccczx)
 
+    def test_is_of_the_form_enumeration(self):
+        a, b, c = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c',))
+        star = as1.FreeArityConnective(rep='*')
+        phi1 = as1.Formula(c=star, terms=(a, b, c,))
+        assert as1.is_of_the_form_enumeration(phi=phi1)
+        phi2 = as1.Formula(c=star, terms=None)
+        assert as1.is_of_the_form_enumeration(phi=phi2)
+        phi3 = as1.Formula(c=star, terms=(a, a, b, c,))
+        assert not as1.is_of_the_form_enumeration(phi=phi3)
+        phi4 = as1.Formula(c=star, terms=(a, b, b, c,))
+        assert not as1.is_of_the_form_enumeration(phi=phi4)
+        phi5 = as1.Formula(c=star, terms=(a, b, c, c,))
+        assert not as1.is_of_the_form_enumeration(phi=phi5)
+
 
 class TestFormulaEquivalenceWithVariables:
     def test_is_formula_equivalent_with_variables(self):
