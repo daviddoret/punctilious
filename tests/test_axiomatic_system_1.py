@@ -691,3 +691,15 @@ class TestFormulaToTuple:
         e2_result = as1.formula_to_tuple(phi=phi2)
         e2_expected = as1.e(elements=(phi1, b, g(a, f(b)),))
         assert as1.is_formula_equivalent(phi=e2_result, psi=e2_expected)
+
+
+class TestProofByPostulation:
+    def test_is_well_formed(self):
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        star3 = as1.let_x_be_a_ternary_connective(rep='*3')
+        phi1 = star3(e, b, d) | as1.connectives.follows_from | as1.connectives.postulation
+        assert as1.is_well_formed_proof_by_postulation(phi=phi1)
+        phi2 = star3(e, b, d) | as1.connectives.map | as1.connectives.postulation
+        assert not as1.is_well_formed_proof_by_postulation(phi=phi2)
+        phi3 = star3(e, b, d) | as1.connectives.follows_from | b
+        assert not as1.is_well_formed_proof_by_postulation(phi=phi3)

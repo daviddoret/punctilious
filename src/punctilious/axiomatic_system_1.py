@@ -1798,9 +1798,6 @@ class ProofByPostulation(Proof):
     Semantic definition:
     A proof-by-postulation is the statement that a formula phi is an axiom, i.e.: phi is assumed to be true."""
 
-    _form_variables = (v(rep='phi'),)
-    _form: Formula = Formula(c=connectives.follows_from, terms=(_form_variables[0], connectives.postulation,))
-
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
         """Return True if and only if phi is a well-formed proof-by-postulation, False otherwise.
@@ -1809,8 +1806,11 @@ class ProofByPostulation(Proof):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        return is_formula_equivalent_with_variables(phi=phi, psi=ProofByPostulation._form,
-                                                    v=ProofByPostulation._form_variables)
+        if not phi.c is connectives.follows_from or not phi.arity == 2 or not is_well_formed_formula(
+                phi=phi.term_0) or phi.term_1.c is not connectives.postulation:
+            return False
+        else:
+            return True
 
     def __new__(cls, phi: FlexibleFormula = None):
         phi: Formula = coerce_formula(phi=phi)
