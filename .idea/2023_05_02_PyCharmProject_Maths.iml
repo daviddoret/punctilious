@@ -15,6 +15,9 @@
       <excludeFolder url="file://$MODULE_DIR$/trashcan/project" />
       <excludeFolder url="file://$MODULE_DIR$/trashcan/tests_old" />
       <excludeFolder url="file://$MODULE_DIR$/trashcan/theory" />
+      <excludeFolder url="file://$MODULE_DIR$/docs/source.old" />
+      <excludeFolder url="file://$MODULE_DIR$/docs/source.old/math/inference_rule" />
+      <excludeFolder url="file://$MODULE_DIR$/docs/source.old/math/theory" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.12 (punctilious)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -717,8 +717,33 @@ class TestProofByInference:
         f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         i = as1.Inference(p=(a | star | b, b | star | c,), f=f)
         assert as1.is_well_formed_proof_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i)
-        proof1 = as1.ProofByInference(phi=a | star | c, i=i)
+        proof1 = as1.ProofByInference(phi=a | star | c, i=i)  # would raise an exception if it was unsuccessful
         assert not as1.is_well_formed_proof_by_inference(phi=(a | star | d) | as1.connectives.follows_from | i)
         i2 = as1.Inference(p=(a | star | b, b | star | a,), f=f)
         assert not as1.is_well_formed_proof_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i2)
         pass
+
+
+class TestAxiomatization:
+    def test_is_well_formed(self):
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
+        star1 = as1.let_x_be_a_unary_connective(rep='*1')
+        star2 = as1.let_x_be_a_binary_connective(rep='*2')
+        star3 = as1.let_x_be_a_ternary_connective(rep='*3')
+        axiom_ok_1 = as1.ProofByPostulation(phi=a | star2 | b)
+        axiom_ok_2 = as1.ProofByPostulation(star1(c))
+        # simple case
+        e1 = as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
+        assert as1.is_well_formed_axiomatization(phi=e1)
+        # extreme case: the empty enumeration
+        e2 = as1.Enumeration()
+        assert as1.is_well_formed_axiomatization(phi=e2)
+        # bad case: an enumeration with a non-axiom
+        e3 = as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e)))
+        assert not as1.is_well_formed_axiomatization(phi=e3)
+
+
+class TestDemonstration:
+    def test_is_well_formed(self):
+        assert False

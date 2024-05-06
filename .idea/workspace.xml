@@ -5,8 +5,295 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
+      <change afterPath="$PROJECT_DIR$/docs/source.old/bibliography_bibtex.bib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/source.old/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/absorption.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/absorption.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/axiom-interpretation.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/axiom-interpretation.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/axiom.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/axiom.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/biconditional-elimination-1.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/biconditional-elimination-1.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/biconditional-elimination-2.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/biconditional-elimination-2.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/biconditional-introduction.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/biconditional-introduction.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/bound-variable.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/bound-variable.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/collection.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/collection.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/conjunction-elimination-1.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/conjunction-elimination-1.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/conjunction-elimination-2.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/conjunction-elimination-2.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/conjunction-introduction.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/conjunction-introduction.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/constructive-dilemma.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/constructive-dilemma.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/data-model.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/data-model.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/declaration.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/declaration.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/definition-interpretation.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/definition-interpretation.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/destructive-dilemma.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/destructive-dilemma.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/disjunction-introduction-1.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/disjunction-introduction-1.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/disjunction-introduction-2.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/disjunction-introduction-2.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/disjunctive-resolution.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/disjunctive-resolution.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/disjunctive-syllogism-1.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/disjunctive-syllogism-1.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/disjunctive-syllogism-2.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/disjunctive-syllogism-2.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/double-negation-elimination.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/double-negation-elimination.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/double-negation-introduction.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/double-negation-introduction.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/equal-terms-substitution.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/equal-terms-substitution.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/equality-commutativity.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/equality-commutativity.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/equivalence.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/equivalence.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/formula.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/formula.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/free-variable.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/free-variable.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/hypothetical-syllogism.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/hypothetical-syllogism.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inclusion.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/inclusion.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inconsistency-introduction-1.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/inconsistency-introduction-1.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inconsistency-introduction-2.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/inconsistency-introduction-2.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inconsistency-introduction-3.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/inconsistency-introduction-3.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inference-rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/inference-rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/inferred-statement.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/inferred-statement.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/math.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/math.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/modus-ponens.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/modus-ponens.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/modus-tollens.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/modus-tollens.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/proof-by-contradiction-1.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/proof-by-contradiction-1.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/proof-by-contradiction-2.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/proof-by-contradiction-2.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/proof-by-refutation-1.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/proof-by-refutation-1.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/proof-by-refutation-2.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/proof-by-refutation-2.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/python.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/statement.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/statement.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/tagsindex.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/tagsindex.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/universe-of-discourse.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/universe-of-discourse.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/variable-substitution.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/variable-substitution.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/_tags/variable.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/_tags/variable.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/back_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/back_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/back_matter/bibliography_back_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/back_matter/bibliography_back_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/back_matter_reference_table.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/back_matter_reference_table.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/front_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/front_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/front_matter/about_front_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/front_matter/about_front_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/front_matter/contributing_front_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/front_matter/contributing_front_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/front_matter/project_front_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/front_matter/project_front_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/front_matter/roadmap_front_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/front_matter/roadmap_front_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/front_matter/support_front_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/front_matter/support_front_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/front_matter/title_front_matter.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/front_matter/title_front_matter.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/check_premises_validity_python_method.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/include/check_premises_validity_python_method.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/compose_report_python_method.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/include/compose_report_python_method.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/construct_formula_python_method.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/include/construct_formula_python_method.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/construct_formula_vs_infer_formula_statement_note.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/include/construct_formula_vs_infer_formula_statement_note.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/infer_formula_statement_python_method.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/include/infer_formula_statement_python_method.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/include/interpretative_inference_rule_warning.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/include/interpretative_inference_rule_warning.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/alpha_equivalence_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/alpha_equivalence_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/atomic_formula_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/atomic_formula_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/axiom_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/axiom_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/axiomatic_method_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/axiomatic_method_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/bound_variable_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/bound_variable_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/compound_formula_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/compound_formula_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/connective_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/connective_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/definition_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/definition_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/elimination_rule_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/elimination_rule_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/formula_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/formula_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/formula_statement_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/formula_statement_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/free_variable_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/free_variable_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/hypothesis_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/hypothesis_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/inference_rule_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/inference_rule_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/inferred_statement_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/inferred_statement_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/introduction_rule_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/introduction_rule_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/is_a_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/is_a_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/meta_object_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/meta_object_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/notation_form_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/notation_form_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/object_creation_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/object_creation_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/object_declaration_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/object_declaration_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/object_inclusion_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/object_inclusion_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/object_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/object_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/paragraph_proof_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/paragraph_proof_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/statement_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/statement_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/theory_derivation_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/theory_derivation_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/universe_of_discourse_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/universe_of_discourse_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/validity_of_formula_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/validity_of_formula_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/concept/variable_math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/concept/variable_math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/absorption_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/absorption_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/absorption_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/absorption_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/axiom_interpretation_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/axiom_interpretation_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/axiom_interpretation_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/axiom_interpretation_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_elimination_1_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/biconditional_elimination_1_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_elimination_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/biconditional_elimination_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_elimination_2_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/biconditional_elimination_2_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_elimination_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/biconditional_elimination_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_introduction_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/biconditional_introduction_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/biconditional_introduction_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/biconditional_introduction_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_elimination_1_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/conjunction_elimination_1_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_elimination_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/conjunction_elimination_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_elimination_2_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/conjunction_elimination_2_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_elimination_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/conjunction_elimination_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_introduction_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/conjunction_introduction_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/conjunction_introduction_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/conjunction_introduction_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemma_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/constructive_dilemma_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/constructive_dilemma_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/constructive_dilemma_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/definition_interpretation_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/definition_interpretation_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/definition_interpretation_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/definition_interpretation_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemma_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/destructive_dilemma_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/destructive_dilemma_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/destructive_dilemma_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunction_introduction_1_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunction_introduction_1_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunction_introduction_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunction_introduction_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunction_introduction_2_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunction_introduction_2_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunction_introduction_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunction_introduction_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_resolution_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunctive_resolution_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_resolution_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunctive_resolution_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_syllogism_1_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunctive_syllogism_1_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_syllogism_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunctive_syllogism_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_syllogism_2_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunctive_syllogism_2_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/disjunctive_syllogism_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/disjunctive_syllogism_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/double_negation_elimination_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/double_negation_elimination_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/double_negation_elimination_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/double_negation_elimination_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/double_negation_introduction_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/double_negation_introduction_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/double_negation_introduction_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/double_negation_introduction_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/equal_terms_substitution_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/equal_terms_substitution_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/equal_terms_substitution_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/equal_terms_substitution_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/equality_commutativity_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/equality_commutativity_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/equality_commutativity_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/equality_commutativity_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/hypothetical_syllogism_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/hypothetical_syllogism_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/hypothetical_syllogism_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/hypothetical_syllogism_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_1_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/inconsistency_introduction_1_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/inconsistency_introduction_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_2_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/inconsistency_introduction_2_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/inconsistency_introduction_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_3_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/inconsistency_introduction_3_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/inconsistency_introduction_3_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/inconsistency_introduction_3_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/modus_ponens_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/modus_ponens_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/modus_ponens_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/modus_ponens_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/modus_tollens_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/modus_tollens_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/modus_tollens_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/modus_tollens_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_1_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/proof_by_contradiction_1_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/proof_by_contradiction_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_2_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/proof_by_contradiction_2_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_contradiction_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/proof_by_contradiction_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_1_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/proof_by_refutation_1_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_1_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/proof_by_refutation_1_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_2_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/proof_by_refutation_2_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/proof_by_refutation_2_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/proof_by_refutation_2_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/variable_substitution_math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/variable_substitution_math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/inference_rule/variable_substitution_math_inference_rule_definition.rstinc" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/inference_rule/variable_substitution_math_inference_rule_definition.rstinc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/theory/mgz_2021/classical_logic_k0.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/theory/mgz_2021/classical_logic_k0.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/theory/mgz_2021/intuitionistic_logic_j0.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/theory/mgz_2021/intuitionistic_logic_j0.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/theory/mgz_2021/minimal_logic_m0.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/theory/mgz_2021/minimal_logic_m0.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math/theory/tao_2006/the_peano_axioms.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math/theory/tao_2006/the_peano_axioms.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math_concept.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math_concept.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math_inference_rule.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math_inference_rule.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/math_theory.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/math_theory.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/absorption_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/absorption_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/absorption_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/absorption_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/axiom_interpretation_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/axiom_interpretation_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/axiom_interpretation_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/axiom_interpretation_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/biconditional_elimination_1_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/biconditional_elimination_1_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/biconditional_elimination_1_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/biconditional_elimination_1_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/biconditional_elimination_2_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/biconditional_elimination_2_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/biconditional_elimination_2_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/biconditional_elimination_2_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/biconditional_introduction_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/biconditional_introduction_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/biconditional_introduction_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/biconditional_introduction_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/class_diagram.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/class_diagram.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/conjunction_elimination_1_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/conjunction_elimination_1_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/conjunction_elimination_1_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/conjunction_elimination_1_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/conjunction_elimination_2_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/conjunction_elimination_2_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/conjunction_elimination_2_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/conjunction_elimination_2_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/conjunction_introduction_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/conjunction_introduction_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/conjunction_introduction_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/conjunction_introduction_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemma_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/constructive_dilemma_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/constructive_dilemma_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/constructive_dilemma_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/definition_interpretation_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/definition_interpretation_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/definition_interpretation_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/definition_interpretation_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemma_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/destructive_dilemma_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/destructive_dilemma_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/destructive_dilemma_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunction_introduction_1_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunction_introduction_1_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunction_introduction_1_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunction_introduction_1_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunction_introduction_2_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunction_introduction_2_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunction_introduction_2_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunction_introduction_2_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunctive_resolution_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunctive_resolution_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunctive_resolution_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunctive_resolution_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunctive_syllogism_1_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunctive_syllogism_1_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunctive_syllogism_1_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunctive_syllogism_1_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunctive_syllogism_2_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunctive_syllogism_2_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/disjunctive_syllogism_2_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/disjunctive_syllogism_2_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/double_negation_elimination_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/double_negation_elimination_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/double_negation_elimination_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/double_negation_elimination_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/double_negation_introduction_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/double_negation_introduction_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/double_negation_introduction_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/double_negation_introduction_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/equal_terms_substitution_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/equal_terms_substitution_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/equal_terms_substitution_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/equal_terms_substitution_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/equality_commutativity_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/equality_commutativity_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/equality_commutativity_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/equality_commutativity_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/free_variable_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/free_variable_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/hypothetical_syllogism_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/hypothetical_syllogism_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/hypothetical_syllogism_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/hypothetical_syllogism_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inconsistency_introduction_1_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inconsistency_introduction_1_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inconsistency_introduction_1_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inconsistency_introduction_1_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inconsistency_introduction_2_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inconsistency_introduction_2_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inconsistency_introduction_2_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inconsistency_introduction_2_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inconsistency_introduction_3_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inconsistency_introduction_3_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inconsistency_introduction_3_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inconsistency_introduction_3_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inference_rule_declaration_collection_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inference_rule_declaration_collection_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inference_rule_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inference_rule_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inference_rule_inclusion_collection_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inference_rule_inclusion_collection_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inference_rule_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inference_rule_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/inferred_statement_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/inferred_statement_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/modus_ponens_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/modus_ponens_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/modus_ponens_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/modus_ponens_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/modus_tollens_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/modus_tollens_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/modus_tollens_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/modus_tollens_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/proof_by_contradiction_1_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/proof_by_contradiction_1_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/proof_by_contradiction_1_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/proof_by_contradiction_1_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/proof_by_contradiction_2_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/proof_by_contradiction_2_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/proof_by_contradiction_2_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/proof_by_contradiction_2_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/proof_by_refutation_1_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/proof_by_refutation_1_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/proof_by_refutation_1_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/proof_by_refutation_1_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/proof_by_refutation_2_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/proof_by_refutation_2_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/proof_by_refutation_2_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/proof_by_refutation_2_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/universe_of_discourse_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/universe_of_discourse_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/variable_substitution_declaration_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/variable_substitution_declaration_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/class/variable_substitution_inclusion_python_class.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/class/variable_substitution_inclusion_python_class.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/function/create_universe_of_discourse.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/function/create_universe_of_discourse.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/installation_python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/installation_python.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/prerequisites_python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/prerequisites_python.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/absorption_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/absorption_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/axiom_interpretation_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/axiom_interpretation_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/biconditional_elimination_1_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/biconditional_elimination_1_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/biconditional_elimination_2_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/biconditional_elimination_2_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/biconditional_introduction_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/biconditional_introduction_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/conjunction_elimination_1_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/conjunction_elimination_1_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/conjunction_elimination_2_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/conjunction_elimination_2_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/conjunction_introduction_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/conjunction_introduction_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/constructive_dilemma_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/constructive_dilemma_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/definition_interpretation_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/definition_interpretation_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/destructive_dilemma_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/destructive_dilemma_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/disjunction_introduction_1_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/disjunction_introduction_1_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/disjunction_introduction_2_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/disjunction_introduction_2_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/disjunctive_resolution_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/disjunctive_resolution_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/disjunctive_syllogism_1_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/disjunctive_syllogism_1_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/disjunctive_syllogism_2_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/disjunctive_syllogism_2_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/double_negation_elimination_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/double_negation_elimination_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/double_negation_introduction_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/double_negation_introduction_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/equal_terms_substitution_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/equal_terms_substitution_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/equality_commutativity_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/equality_commutativity_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/free_variable_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/free_variable_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/hypothetical_syllogism_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/hypothetical_syllogism_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/inconsistency_introduction_1_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/inconsistency_introduction_1_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/inconsistency_introduction_2_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/inconsistency_introduction_2_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/inconsistency_introduction_3_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/inconsistency_introduction_3_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/modus_ponens_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/modus_ponens_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/modus_tollens_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/modus_tollens_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/proof_by_contradiction_1_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/proof_by_contradiction_1_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/proof_by_contradiction_2_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/proof_by_contradiction_2_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/proof_by_refutation_1_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/proof_by_refutation_1_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/proof_by_refutation_2_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/proof_by_refutation_2_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/sample/variable_substitution_python_sample.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/sample/variable_substitution_python_sample.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python/source_code_repository_python.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python/source_code_repository_python.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python_class_index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python_class_index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python_function_index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python_function_index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/python_sample_index.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/python_sample_index.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/quote/mgz_2021_introductionprooftheory_viii.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/quote/mgz_2021_introductionprooftheory_viii.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/quote/moller_2013_modellingcomputingsystems_p55.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/quote/moller_2013_modellingcomputingsystems_p55.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/reference_table/inference_rule_reference_table.csv" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/reference_table/inference_rule_reference_table.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/reference_table/inference_rule_reference_table.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/reference_table/inference_rule_reference_table.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/syntactic_entailment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/syntactic_entailment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/theory_mgz_2021.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/theory_mgz_2021.rst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/theory_tao_2006.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source.old/theory_tao_2006.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,6 +370,7 @@
     "PowerShell.release_patch.ps1.executor": "Run",
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestCollection.test_collection.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestCollection.test_in.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestConnective.test_call.executor": "Run",
@@ -194,7 +482,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/tests",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/docs/source",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -233,11 +521,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/docs/source" />
       <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/sandbox" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\src\punctilious" />
       <recent name="C:\Users\David\PycharmProjects\punctilious\tests" />
-      <recent name="C:\Users\David\PycharmProjects\punctilious\src\theory" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/trashcan" />
@@ -247,7 +535,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_axiomatic_system_1.py">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -437,7 +725,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -450,7 +738,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestInference.test_is_well_formed_inference&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestAxiomatization.test_is_well_formed&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -548,7 +836,7 @@
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation" />
@@ -559,11 +847,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference" />
       </list>
     </recent_temporary>
   </component>
@@ -582,14 +870,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00523" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1708723267070</created>
-      <option name="number" value="00523" />
-      <option name="presentableId" value="LOCAL-00523" />
-      <option name="project" value="LOCAL" />
-      <updated>1708723267070</updated>
     </task>
     <task id="LOCAL-00524" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -975,7 +1255,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714928997908</updated>
     </task>
-    <option name="localTasksCounter" value="572" />
+    <task id="LOCAL-00572" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1714937455485</created>
+      <option name="number" value="00572" />
+      <option name="presentableId" value="LOCAL-00572" />
+      <option name="project" value="LOCAL" />
+      <updated>1714937455485</updated>
+    </task>
+    <option name="localTasksCounter" value="573" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
