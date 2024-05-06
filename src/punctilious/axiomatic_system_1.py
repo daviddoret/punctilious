@@ -1998,6 +1998,10 @@ class Demonstration(Enumeration):
                     if premise_index >= i:
                         # The premise is not positioned before the conclusion.
                         return False
+                transformation_index = phi.get_element_index(phi=inference.f)
+                if transformation_index >= i:
+                    # The transformation is not positioned before the conclusion.
+                    return False
                 # And finally, confirm that the inference effectively yields phi.
                 phi_prime = inference.f.apply_transformation(arguments=inference.p)
                 if not is_formula_equivalent(phi=phi, psi=phi_prime):
