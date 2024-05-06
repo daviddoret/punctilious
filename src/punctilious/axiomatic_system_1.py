@@ -1684,7 +1684,10 @@ def coerce_proof(phi: FlexibleFormula):
     """
     if isinstance(phi, Proof):
         return phi
-    # TODO: coerce_proof: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
+    elif isinstance(phi, Formula) and is_well_formed_proof_by_postulation(phi=phi):
+        return coerce_proof_by_postulation(phi=phi)
+    elif isinstance(phi, Formula) and is_well_formed_proof_by_inference(phi=phi):
+        return coerce_proof_by_inference(phi=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Proof, phi_type=type(phi), phi=phi)
 
@@ -1697,7 +1700,9 @@ def coerce_proof_by_postulation(phi: FlexibleFormula):
     """
     if isinstance(phi, ProofByPostulation):
         return phi
-    # TODO: coerce_proof_by_postulation: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
+    elif isinstance(phi, Formula) and is_well_formed_proof_by_postulation(phi=phi):
+        proved_formula: Formula = phi.term_0
+        return ProofByPostulation(phi=proved_formula)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=ProofByPostulation, phi_type=type(phi), phi=phi)
 
@@ -1710,7 +1715,10 @@ def coerce_proof_by_inference(phi: FlexibleFormula):
     """
     if isinstance(phi, ProofByInference):
         return phi
-    # TODO: coerce_proof_by_inference: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
+    elif isinstance(phi, Formula) and is_well_formed_proof_by_inference(phi=phi):
+        proved_formula: Formula = coerce_formula(phi=phi.term_0)
+        inference: Inference = coerce_inference(phi=phi.term_1)
+        return ProofByInference(phi=proved_formula, i=inference)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=ProofByInference, phi_type=type(phi), phi=phi)
 
@@ -2049,7 +2057,7 @@ class Axiomatization(Demonstration):
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
         e: Enumeration = Enumeration(elements=(coerce_proof_by_postulation(phi=p) for p in e))
-        o: tuple = super().__new__(cls, elements=e)
+        o: tuple = super().__new__(cls, e=e)
         return o
 
     def __init__(self, e: FlexibleEnumeration = None):
@@ -2057,4 +2065,4 @@ class Axiomatization(Demonstration):
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
         e: Enumeration = Enumeration(elements=(coerce_proof_by_postulation(phi=p) for p in e))
-        super().__init__(elements=e)
+        super().__init__(e=e)

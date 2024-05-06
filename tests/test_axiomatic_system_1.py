@@ -739,11 +739,32 @@ class TestAxiomatization:
         # extreme case: the empty enumeration
         e2 = as1.Enumeration()
         assert as1.is_well_formed_axiomatization(phi=e2)
+        a1 = as1.Axiomatization(e=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
         # bad case: an enumeration with a non-axiom
         e3 = as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e)))
         assert not as1.is_well_formed_axiomatization(phi=e3)
+        with pytest.raises(as1.CustomException, match='e123'):
+            a2 = as1.Axiomatization(e=e3)  # raise an e123 exception
 
 
 class TestDemonstration:
     def test_is_well_formed(self):
-        assert False
+        a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
+        x, y, z = as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
+        star1 = as1.let_x_be_a_unary_connective(rep='*1')
+        star2 = as1.let_x_be_a_binary_connective(rep='*2')
+        star3 = as1.let_x_be_a_ternary_connective(rep='*3')
+        axiom_1 = as1.ProofByPostulation(phi=a | star2 | b)
+        axiom_2 = as1.ProofByPostulation(phi=b | star2 | c)
+        premises = as1.Enumeration(elements=(x | star2 | y, y | star2 | z,))
+        conclusion = x | star2 | z
+        variables = as1.Enumeration(elements=(x, y, z,))
+        f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
+        axiom_3 = as1.ProofByPostulation(phi=f)
+        axiomatization = as1.Axiomatization(e=(axiom_1,))
+        i = as1.Inference(p=(a | star2 | b, b | star2 | c,), f=f)
+        inference_1 = as1.ProofByInference(phi=a | star2 | c, i=i)
+        u = as1.union_enumeration(phi=axiomatization, psi=(inference_1,))
+        t = as1.TheoryState(elements=u)
+        # TODO: CORRECT CHECK IN PROOF-STATE TO ASSURE THAT TRANSFORMATIONS ARE ALSO
+        # INCLUDED IN THE PREDECESSORS OF THE INFERENCE
