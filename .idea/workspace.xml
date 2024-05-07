@@ -89,7 +89,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestConnective.test_call.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestDemonstration.test_is_well_formed.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestDemonstration.test_is_well_formed.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestEmptyEnumeration.test_empty_enumeration.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEmptyTheory.test_empty_theory.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_enumeration.executor": "Run",
@@ -585,14 +585,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00526" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1713587990666</created>
-      <option name="number" value="00526" />
-      <option name="presentableId" value="LOCAL-00526" />
-      <option name="project" value="LOCAL" />
-      <updated>1713587990667</updated>
-    </task>
     <task id="LOCAL-00527" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1713720723790</created>
@@ -977,7 +969,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715027174400</updated>
     </task>
-    <option name="localTasksCounter" value="575" />
+    <task id="LOCAL-00575" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1715027849426</created>
+      <option name="number" value="00575" />
+      <option name="presentableId" value="LOCAL-00575" />
+      <option name="project" value="LOCAL" />
+      <updated>1715027849426</updated>
+    </task>
+    <option name="localTasksCounter" value="576" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1095,9 +1095,14 @@
           <option name="timeStamp" value="180" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2060</line>
-          <option name="timeStamp" value="181" />
+          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
+          <line>774</line>
+          <option name="timeStamp" value="184" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
+          <line>763</line>
+          <option name="timeStamp" value="185" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

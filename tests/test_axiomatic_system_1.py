@@ -762,36 +762,14 @@ class TestDemonstration:
         f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         axiom_3 = as1.ProofByPostulation(phi=f)
         axiomatization = as1.Axiomatization(e=(axiom_1,))
+        demo1 = as1.Axiomatization(e=axiomatization)  # this must not raise an exception and will just change the type
         i = as1.Inference(p=(a | star2 | b, b | star2 | c,), f=f)
-        inference_1 = as1.ProofByInference(phi=a | star2 | c, i=i)
-        u = as1.union_enumeration(phi=axiomatization, psi=(inference_1,))
-        t = as1.Demonstration(e=u)  # Does not raise exception because it is valid
+        pbi1 = as1.ProofByInference(phi=a | star2 | c, i=i)
+        u = as1.union_enumeration(phi=axiomatization, psi=(pbi1,))
+        demo2 = as1.Demonstration(e=u)  # Does not raise exception because it is valid
         with pytest.raises(as1.CustomException, match='e123'):
             # invalid proof raise exception
-            a2 = as1.Demonstration(e=(axiom_1, axiom_2, a | star2 | e))
-        # with pytest.raises(as1.CustomException, match='e123'):
-        # invalid proof sequence exception
-        a3 = as1.Demonstration(e=(axiom_1, axiom_2, inference_1, axiom_3,))
-        CA
-        MARCHE
-        PAS, IL
-        FAUT
-        CONFIRMER
-        PAR
-        UN
-        TEST
-        QUE
-        LES
-        MAUVAISES
-        SEQUENCES
-        DE
-        PREMISSES
-        ET
-        DE
-        TRANSFORMATIONS
-        DEBOUCHENT
-        TOUTES
-        DEUX
-        SUR
-        DES
-        EXCEPTIONS
+            demo3 = as1.Demonstration(e=(axiom_1, axiom_2, a | star2 | e))
+        with pytest.raises(as1.CustomException, match='e108'):
+            # invalid proof sequence exception
+            demo4 = as1.Demonstration(e=(axiom_1, axiom_2, pbi1, axiom_3,))

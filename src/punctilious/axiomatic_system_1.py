@@ -83,7 +83,7 @@ event_codes = EventCodes(
     e107=EventCode(event_type=event_types.error, code='e107',
                    message='coerce_enumeration: The argument could not be coerced to a enumeration.'),
     e108=EventCode(event_type=event_types.error, code='e108',
-                   message='REUSE'),
+                   message='Ill-formed formula: Formula phi is ill-formed, because of reason.'),
     e109=EventCode(event_type=event_types.error, code='e109',
                    message='REUSE'),
     e110=EventCode(event_type=event_types.error, code='e110',
@@ -1994,14 +1994,22 @@ class Demonstration(Enumeration):
                 proof_by_inference: ProofByInference = coerce_proof_by_inference(phi=psi)
                 inference: Inference = proof_by_inference.i
                 for premise in inference.p:
-                    premise_index = phi.get_element_index(phi=premise)
-                    if premise_index >= i:
-                        # The premise is not positioned before the conclusion.
+                    if not phi.has_element(phi=premise):
+                        # The premise is absent from the demonstration.
                         return False
-                transformation_index = phi.get_element_index(phi=inference.f)
-                if transformation_index >= i:
-                    # The transformation is not positioned before the conclusion.
+                    else:
+                        premise_index = phi.get_element_index(phi=premise)
+                        if premise_index >= i:
+                            # The premise is not positioned before the conclusion.
+                            return False
+                if not phi.has_element(phi=inference.f):
+                    # The inference transformation-rule is absent from the demonstration.
                     return False
+                else:
+                    transformation_index = phi.get_element_index(phi=inference.f)
+                    if transformation_index >= i:
+                        # The transformation is not positioned before the conclusion.
+                        return False
                 # And finally, confirm that the inference effectively yields phi.
                 phi_prime = inference.f.apply_transformation(arguments=inference.p)
                 if not is_formula_equivalent(phi=phi, psi=phi_prime):
@@ -2015,8 +2023,12 @@ class Demonstration(Enumeration):
     def __new__(cls, e: FlexibleEnumeration = None):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
-        # coerce all elements of the enumeration to proof
+        # coerce all elements of the enumeration to proofs
         e: Enumeration = Enumeration(elements=(coerce_proof(phi=p) for p in e))
+        if not is_well_formed_demonstration(phi=e):
+            # well-formedness check failed,
+            # the proof is most certainly invalid.
+            raise_event(event_code=event_codes.e108, phi=e, expected_class='demonstration')
         o: tuple = super().__new__(cls, elements=e)
         return o
 
