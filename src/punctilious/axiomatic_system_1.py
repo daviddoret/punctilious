@@ -1067,6 +1067,10 @@ class Tupl(Formula):
     def get_first_element_index(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
 
+        Note: not to be confused with get_element_index on enumerations.
+
+        TODO: Tuples are equivalent to Formulas. Consider moving these methods to the formula class instead.
+
         :param phi: A formula.
         :return:
         """
@@ -1338,8 +1342,11 @@ class Enumeration(Formula):
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
 
+        Note: not to be confused with get_first_element_index on formulas and tuples.
+
         This method is not available on formulas because duplicate elements are possible on formulas,
-        but are not possible on enumerations."""
+        but are not possible on enumerations. The two methods are algorithmically equivalent but their
+        intent is distinct."""
         phi = coerce_formula(phi=phi)
         if self.has_element(phi=phi):
             # two formulas that are formula-equivalent may not be equal.
