@@ -22,9 +22,9 @@ a = as1.let_x_be_a_variable(rep='A')
 b = as1.let_x_be_a_variable(rep='B')
 c = as1.let_x_be_a_variable(rep='C')
 
-pl01 = as1.ProofByPostulation(phi=a | implies | (a | land | a))
-pl02 = as1.ProofByPostulation(phi=(a | land | b) | implies | (b | land | a))
-pl03 = as1.ProofByPostulation(phi=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
+pl01 = as1.ProofByPostulation(claim=a | implies | (a | land | a))
+pl02 = as1.ProofByPostulation(claim=(a | land | b) | implies | (b | land | a))
+pl03 = as1.ProofByPostulation(claim=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
 pl04 = a | implies | (a | land | a)
 pl05 = a | implies | (a | land | a)
 pl06 = a | implies | (a | land | a)
@@ -35,3 +35,8 @@ pl10 = a | implies | (a | land | a)
 
 axioms = as1.Axiomatization(e=(pl01, pl02, pl03,))
 print(axioms)
+
+axioms = as1.Demonstration(e=(pl01, pl02, pl03,))
+print(axioms)
+
+pass

@@ -323,32 +323,16 @@ class TestEnumeration:
         assert e1.get_element_index(phi=phi2) == 1
         assert e1.get_element_index(phi=phi3) == 2
 
-    def test_warning(self):
+    def test_exception(self):
         a = as1.let_x_be_a_simple_object(rep='a')
         b = as1.let_x_be_a_simple_object(rep='b')
         c = as1.let_x_be_a_simple_object(rep='c')
-        with pytest.warns(Warning) as record:
-            # duplicate formula-equivalent formulas are ignored and raise a warning.
+        with pytest.raises(as1.CustomException, match='e110'):
+            # duplicate formula-equivalent formulas are forbidden in enumerations.
             e1 = as1.Enumeration(elements=(a, b, c, b,))
-            if not record:
-                pytest.fail(f'Warning {as1.EventCodes.e104} not issued.')
 
     def test_enumeration(self):
         a, b, c, x, y, z = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'x', 'y', 'z',))
-        bbaccczx = as1.Enumeration(elements=(b, b, a, c, c, c, z, x))
-        assert as1.is_formula_equivalent(phi=bbaccczx, psi=bbaccczx)
-        assert as1.is_enumeration_equivalent(phi=bbaccczx, psi=bbaccczx)
-        assert bbaccczx.has_element(phi=a)
-        assert bbaccczx.has_element(phi=b)
-        assert bbaccczx.has_element(phi=c)
-        assert bbaccczx.has_element(phi=x)
-        assert bbaccczx.has_element(phi=z)
-        assert bbaccczx.get_element_index(phi=b) == 0
-        assert bbaccczx.get_element_index(phi=a) == 1
-        assert bbaccczx.get_element_index(phi=c) == 2
-        assert bbaccczx.get_element_index(phi=z) == 3
-        assert bbaccczx.get_element_index(phi=x) == 4
-        assert not bbaccczx.has_element(phi=y)
         baczx = as1.Enumeration(elements=(b, a, c, z, x))
         assert as1.is_formula_equivalent(phi=baczx, psi=baczx)
         assert as1.is_enumeration_equivalent(phi=baczx, psi=baczx)
@@ -363,8 +347,9 @@ class TestEnumeration:
         assert baczx.get_element_index(phi=z) == 3
         assert baczx.get_element_index(phi=x) == 4
         assert not baczx.has_element(phi=y)
-        assert as1.is_enumeration_equivalent(phi=baczx, psi=bbaccczx)
-        assert as1.is_formula_equivalent(phi=baczx, psi=bbaccczx)
+        baczx2 = as1.Enumeration(elements=(b, a, c, z, x))
+        assert as1.is_formula_equivalent(phi=baczx, psi=baczx2)
+        assert as1.is_enumeration_equivalent(phi=baczx, psi=baczx2)
 
     def test_is_well_formed_enumeration(self):
         a, b, c = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c',))
@@ -632,7 +617,7 @@ class TestPostulation:
         a, b, c, d, e = as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
         f = as1.let_x_be_a_binary_connective(rep='f')
         phi = a | f | b
-        a = as1.ProofByPostulation(phi=phi)
+        a = as1.ProofByPostulation(claim=phi)
         assert as1.is_formula_equivalent(
             phi=a,
             psi=phi | as1.connectives.follows_from | as1.connectives.postulation)
@@ -685,7 +670,7 @@ class TestInference:
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        i = as1.ProofByInference(phi=theorem, i=as1.Inference(p=p, f=t))
+        i = as1.ProofByInference(claim=theorem, i=as1.Inference(p=p, f=t))
         as1.is_formula_equivalent(
             phi=i,
             psi=theorem | as1.connectives.follows_from | as1.connectives.inference(p, t))
@@ -717,7 +702,7 @@ class TestProofByInference:
         f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         i = as1.Inference(p=(a | star | b, b | star | c,), f=f)
         assert as1.is_well_formed_proof_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i)
-        proof1 = as1.ProofByInference(phi=a | star | c, i=i)  # would raise an exception if it was unsuccessful
+        proof1 = as1.ProofByInference(claim=a | star | c, i=i)  # would raise an exception if it was unsuccessful
         assert not as1.is_well_formed_proof_by_inference(phi=(a | star | d) | as1.connectives.follows_from | i)
         i2 = as1.Inference(p=(a | star | b, b | star | a,), f=f)
         assert not as1.is_well_formed_proof_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i2)
@@ -731,7 +716,7 @@ class TestAxiomatization:
         star1 = as1.let_x_be_a_unary_connective(rep='*1')
         star2 = as1.let_x_be_a_binary_connective(rep='*2')
         star3 = as1.let_x_be_a_ternary_connective(rep='*3')
-        axiom_ok_1 = as1.ProofByPostulation(phi=a | star2 | b)
+        axiom_ok_1 = as1.ProofByPostulation(claim=a | star2 | b)
         axiom_ok_2 = as1.ProofByPostulation(star1(c))
         # simple case
         e1 = as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
@@ -754,17 +739,17 @@ class TestDemonstration:
         star1 = as1.let_x_be_a_unary_connective(rep='*1')
         star2 = as1.let_x_be_a_binary_connective(rep='*2')
         star3 = as1.let_x_be_a_ternary_connective(rep='*3')
-        axiom_1 = as1.ProofByPostulation(phi=a | star2 | b)
-        axiom_2 = as1.ProofByPostulation(phi=b | star2 | c)
+        axiom_1 = as1.ProofByPostulation(claim=a | star2 | b)
+        axiom_2 = as1.ProofByPostulation(claim=b | star2 | c)
         premises = as1.Enumeration(elements=(x | star2 | y, y | star2 | z,))
         conclusion = x | star2 | z
         variables = as1.Enumeration(elements=(x, y, z,))
         f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
-        axiom_3 = as1.ProofByPostulation(phi=f)
+        axiom_3 = as1.ProofByPostulation(claim=f)
         axiomatization = as1.Axiomatization(e=(axiom_1, axiom_2, axiom_3))
         demo1 = as1.Demonstration(e=axiomatization)  # this must not raise an exception and will just change the type
         i = as1.Inference(p=(a | star2 | b, b | star2 | c,), f=f)
-        pbi1 = as1.ProofByInference(phi=a | star2 | c, i=i)
+        pbi1 = as1.ProofByInference(claim=a | star2 | c, i=i)
         u = as1.union_enumeration(phi=demo1, psi=(pbi1,))
         demo2 = as1.Demonstration(e=u)  # Does not raise exception because it is valid
         with pytest.raises(as1.CustomException, match='e123'):
@@ -773,3 +758,4 @@ class TestDemonstration:
         with pytest.raises(as1.CustomException, match='e108'):
             # invalid proof sequence exception
             demo4 = as1.Demonstration(e=(axiom_1, axiom_2, pbi1, axiom_3,))
+            pass

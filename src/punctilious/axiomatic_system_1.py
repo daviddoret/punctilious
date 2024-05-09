@@ -87,7 +87,8 @@ event_codes = EventCodes(
     e109=EventCode(event_type=event_types.error, code='e109',
                    message='get_index_of_first_term_in_formula: formula psi is not a term of formula phi.'),
     e110=EventCode(event_type=event_types.error, code='e110',
-                   message='REUSE'),
+                   message='Enumeration.__new__: Attempt to create enumeration from invalid elements. Often this is '
+                           'caused by a paid of elements that are formula-equivalent.'),
     e111=EventCode(event_type=event_types.error, code='e111',
                    message='REUSE'),
     e112=EventCode(event_type=event_types.error, code='e112',
@@ -519,9 +520,11 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
         return phi.to_formula()
     elif isinstance(phi, FormulaBuilder):
         return phi.to_formula()
-    elif isinstance(phi, tuple):
-        # This is a shortcut. Python tuples are automatically coerced to Tupl formulas.
-        # This allows the usage of the natural python syntax (a,b,c,) which coerces to Tuple(elements=(a,b,c,)).
+    elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
+        # Implicit conversion of generators to tuple formulas.
+        return Tupl(elements=(element for element in phi))
+    elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
+        # Implicit conversion of iterators to tuple formulas.
         return Tupl(elements=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
@@ -540,8 +543,16 @@ def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
         return Enumeration(elements=phi, c=phi.c)
     elif phi is None:
         return Enumeration(elements=None)
-    elif isinstance(phi, typing.Iterable):
-        """This may be ambiguous when we pass a single formula (that is natively iterable)."""
+    elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitely convert this to an enumeration
+        whose elements are the elements of the iterable."""
+        return Enumeration(elements=tuple(element for element in phi))
+    elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitely convert this to an enumeration
+        whose elements are the elements of the iterable."""
+        # phi: Formula = Formula(c=connectives.e, terms=phi)
         return Enumeration(elements=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Enumeration, phi_type=type(phi), phi=phi)
@@ -1194,7 +1205,7 @@ class MapBuilder(FormulaBuilder):
         """
         if self.is_defined_in(phi=phi):
             # phi is already defined in the map, we consequently overwrite it.
-            index_position: int = self.domain.get_element_index(phi=phi)
+            index_position: int = self.domain.get_index_of_equivalent_term(phi=phi)
             self.codomain[index_position] = psi
         else:
             # phi is not already defined in the map, we can append it.
@@ -1216,7 +1227,7 @@ class MapBuilder(FormulaBuilder):
     def get_assigned_value(self, phi: FlexibleFormula) -> FlexibleFormula:
         """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
         if self.is_defined_in(phi=phi):
-            index_position: int = self.domain.get_element_index(phi=phi)
+            index_position: int = self.domain.get_index_of_equivalent_term(phi=phi)
             return self.codomain[index_position]
         else:
             raise IndexError('Map domain does not contain this element')
@@ -1295,7 +1306,9 @@ FlexibleMap = typing.Optional[typing.Union[Map, MapBuilder, typing.Dict[Formula,
 
 
 class EnumerationBuilder(FormulaBuilder):
-    """A utility class to help build enumerations. It is mutable and thus allows edition."""
+    """A utility class to help build enumerations. It is mutable and thus allows edition.
+
+    Note: """
 
     def __init__(self, elements: FlexibleEnumeration):
         super().__init__(c=connectives.e, terms=None)
@@ -1303,7 +1316,7 @@ class EnumerationBuilder(FormulaBuilder):
             for element in elements:
                 self.append(term=element)
 
-    def append(self, term: FlexibleFormula) -> FormulaBuilder:
+    def append(self, term: FlexibleFormula) -> None:
         """
 
         Override the append method to assure the unicity of newly added elements.
@@ -1311,35 +1324,23 @@ class EnumerationBuilder(FormulaBuilder):
         :param term:
         :return:
         """
-        term = coerce_formula_builder(phi=term)
+        term = coerce_formula(phi=term)
         if any(is_formula_equivalent(phi=term, psi=element) for element in self):
             raise_event(event_code=event_codes.e104, enumeration=self, term=term)
         else:
             super().append(term=term)
-        return term
 
-    def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
+    def get_index_of_equivalent_term(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
 
         This method is not available on formulas because duplicate elements are possible on formulas,
         but are not possible on enumerations."""
-        phi = coerce_formula(phi=phi)
-        if self.has_element(phi=phi):
-            # two formulas that are formula-equivalent may not be equal.
-            # for this reason we must first find the first formula-equivalent element in the enumeration.
-            n: int = 0
-            for phi_prime in self:
-                if is_formula_equivalent(phi=phi, psi=phi_prime):
-                    return n
-                n = n + 1
-        else:
-            return None
+        return get_index_of_first_equivalent_term_in_formula(phi=phi, psi=self)
 
     def has_element(self, phi: FlexibleFormula) -> bool:
         """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
         phi ∼formula psi. False otherwise."""
-        phi: Formula = coerce_formula(phi=phi)
-        return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
+        return is_term_of_formula(phi=phi, psi=self)
 
     def rep(self, **kwargs) -> str:
         parenthesis = kwargs.get('parenthesis', False)
@@ -1393,26 +1394,32 @@ class Enumeration(Formula):
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed proof-by-postulation, False otherwise.
+        """Return True if phi is a well-formed enumeration, False otherwise.
 
         :param phi: A formula.
         :return: bool.
         """
-        phi = coerce_formula(phi=phi)
-        for i in range(0, phi.arity):
-            if i != phi.arity - 1:
-                for j in range(i + 1, phi.arity):
-                    if is_formula_equivalent(phi=phi[i], psi=phi[j]):
-                        return False
-        return True
+        if phi is None:
+            # Implicit conversion of None to the empty enumeration.
+            return True
+        else:
+            phi = coerce_formula(phi=phi)
+            for i in range(0, phi.arity):
+                if i != phi.arity - 1:
+                    for j in range(i + 1, phi.arity):
+                        if is_formula_equivalent(phi=phi[i], psi=phi[j]):
+                            # We found a pair of duplicates, i.e.: phi_i ~formula phi_j.
+                            return False
+            return True
 
     def __new__(cls, elements: FlexibleEnumeration = None, c: Connective = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         c = connectives.e if c is None else c
-        eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
-        o: tuple = super().__new__(cls, c=connectives.e, terms=eb)
+        if not is_well_formed_enumeration(phi=elements):
+            raise_event(event_code=event_codes.e110, elements_type=type(elements), elements=elements)
+        o: tuple = super().__new__(cls, c=connectives.e, terms=elements)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None, c: Connective = None):
@@ -1822,7 +1829,7 @@ def coerce_proof_by_postulation(phi: FlexibleFormula) -> ProofByPostulation:
         return phi
     elif isinstance(phi, Formula) and is_well_formed_proof_by_postulation(phi=phi):
         proved_formula: Formula = phi.term_0
-        return ProofByPostulation(phi=proved_formula)
+        return ProofByPostulation(claim=proved_formula)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=ProofByPostulation, phi_type=type(phi), phi=phi)
 
@@ -1838,7 +1845,7 @@ def coerce_proof_by_inference(phi: FlexibleFormula) -> ProofByInference:
     elif isinstance(phi, Formula) and is_well_formed_proof_by_inference(phi=phi):
         proved_formula: Formula = coerce_formula(phi=phi.term_0)
         inference: Inference = coerce_inference(phi=phi.term_1)
-        return ProofByInference(phi=proved_formula, i=inference)
+        return ProofByInference(claim=proved_formula, i=inference)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=ProofByInference, phi_type=type(phi), phi=phi)
 
@@ -1902,19 +1909,18 @@ class Proof(Formula):
         # TODO: Implement Proof.is_well_formed
         return True
 
-    def __new__(cls, phi: FlexibleFormula, argument: FlexibleFormula):
-        phi = coerce_formula(phi=phi)
-        argument = coerce_formula(phi=argument)
+    def __new__(cls, claim: FlexibleFormula, justification: FlexibleFormula):
+        claim = coerce_formula(phi=claim)
+        justification = coerce_formula(phi=justification)
         c: Connective = connectives.follows_from
-        o: tuple = super().__new__(cls, c=c, terms=(phi, argument,))
+        o: tuple = super().__new__(cls, c=c, terms=(claim, justification,))
         return o
 
-    def __init__(self, phi: FlexibleFormula, argument: FlexibleFormula):
-        phi = coerce_formula(phi=phi)
-        argument = coerce_formula(phi=argument)
-        self._claim = phi
+    def __init__(self, claim: FlexibleFormula, justification: FlexibleFormula):
+        self._claim = coerce_formula(phi=claim)
+        self._justification = coerce_formula(phi=justification)
         c: Connective = connectives.follows_from
-        super().__init__(c=c, terms=(phi, argument,))
+        super().__init__(c=c, terms=(self._claim, self._justification,))
 
     @property
     def claim(self) -> Formula:
@@ -1925,6 +1931,10 @@ class Proof(Formula):
         :return: A formula.
         """
         return self._claim
+
+    @property
+    def justification(self) -> Formula:
+        return self._justification
 
 
 class ProofByPostulation(Proof):
@@ -1955,14 +1965,14 @@ class ProofByPostulation(Proof):
         else:
             return True
 
-    def __new__(cls, phi: FlexibleFormula = None):
-        phi: Formula = coerce_formula(phi=phi)
-        o: tuple = super().__new__(cls, phi=phi, argument=connectives.postulation)
+    def __new__(cls, claim: FlexibleFormula = None):
+        claim: Formula = coerce_formula(phi=claim)
+        o: tuple = super().__new__(cls, claim=claim, justification=connectives.postulation)
         return o
 
-    def __init__(self, phi: FlexibleFormula):
-        phi: Formula = coerce_formula(phi=phi)
-        super().__init__(phi=phi, argument=connectives.postulation)
+    def __init__(self, claim: FlexibleFormula):
+        claim: Formula = coerce_formula(phi=claim)
+        super().__init__(claim=claim, justification=connectives.postulation)
 
     def rep(self, **kwargs) -> str:
         return f'({self.claim.rep(**kwargs)}) is an axiom.'
@@ -2065,23 +2075,23 @@ class ProofByInference(Proof):
                 return False
             return True
 
-    def __new__(cls, phi: FlexibleFormula, i: FlexibleInference):
-        phi: Formula = coerce_formula(phi=phi)
+    def __new__(cls, claim: FlexibleFormula, i: FlexibleInference):
+        claim: Formula = coerce_formula(phi=claim)
         i: Inference = coerce_inference(phi=i)
         # check the validity of the proof
         f_of_p: Formula = i.f(i.p)
-        if not is_formula_equivalent(phi=phi, psi=f_of_p):
+        if not is_formula_equivalent(phi=claim, psi=f_of_p):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             # raise an exception to prevent the creation of this ill-formed proof-by-inference.
-            raise_event(event_code=event_codes.e105, phi_expected=phi, phi_inferred=f_of_p,
+            raise_event(event_code=event_codes.e105, phi_expected=claim, phi_inferred=f_of_p,
                         inference_rule=i)
-        o: tuple = super().__new__(cls, phi=phi, argument=i)
+        o: tuple = super().__new__(cls, claim=claim, justification=i)
         return o
 
-    def __init__(self, phi: FlexibleFormula, i: FlexibleInference):
-        self._phi: Formula = coerce_formula(phi=phi)
+    def __init__(self, claim: FlexibleFormula, i: FlexibleInference):
+        self._phi: Formula = coerce_formula(phi=claim)
         self._i: Inference = coerce_inference(phi=i)
-        super().__init__(phi=phi, argument=i)
+        super().__init__(claim=claim, justification=i)
 
     @property
     def i(self) -> Inference:
@@ -2194,10 +2204,9 @@ class Demonstration(Enumeration):
         super().__init__(elements=e)
 
     def rep(self, **kwargs) -> str:
-        parenthesis = kwargs.get('parenthesis', False)
-        kwargs['parenthesis'] = True
-        proofs: str = '\n\t '.join(proof.rep(**kwargs) for proof in self)
-        return f'{"(" if parenthesis else ""}Demonstration:\n\t{proofs}{")" if parenthesis else ""}'
+        header: str = 'Demonstration:\n\t'
+        proofs: str = '\n\t'.join(proof.rep(**kwargs) for proof in self)
+        return f'{header}{proofs}'
 
 
 class Axiomatization(Demonstration):
