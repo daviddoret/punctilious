@@ -1727,8 +1727,15 @@ class Transformation(Formula):
         parenthesis = kwargs.get('parenthesis', False)
         kwargs['parenthesis'] = True
         premises: str = ', '.join(premise.rep(**kwargs) for premise in self.premises)
-        variables: str = ', '.join(variable.rep(**kwargs) for variable in self.variables)
-        return f'{"(" if parenthesis else ""}({premises})[{variables}] --> {self.conclusion}{")" if parenthesis else ""}'
+        variables: str
+        if self.variables.arity == 0:
+            variables = ''
+        elif self.variables.arity == 1:
+            variables = f' where {self.variables.term_0} is a variable'
+        else:
+            variables = ', '.join(variable.rep(**kwargs) for variable in self.variables)
+            variables = f'where {variables} are variables'
+        return f'({premises}) --> ({self.conclusion}){variables}'
 
     def to_transformation_builder(self) -> TransformationBuilder:
         premises: TuplBuilder = self.premises.to_tupl_builder()

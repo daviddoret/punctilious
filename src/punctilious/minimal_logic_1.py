@@ -18,11 +18,14 @@ implies = connectives.implies
 land = connectives.land
 lnot = connectives.lnot
 
+# move this to a different module
 with as1.Variable(rep='a') as a, as1.Variable(rep='b') as b:
     modus_ponens = as1.let_x_be_a_transformation(premises=(a, a | implies | b,), conclusion=b, variables=(a, b,))
     pl0 = as1.let_x_be_an_axiom(claim=modus_ponens)
+
 with as1.Variable(rep='a') as a:
-    pl01 = as1.let_x_be_an_axiom(claim=a | implies | (a | land | a))
+    pl01_claim = as1.let_x_be_a_transformation(premises=(a,), conclusion=a | land | a, variables=(a,))
+    pl01 = as1.let_x_be_an_axiom(claim=pl01_claim)
 with as1.Variable(rep='a') as a, as1.Variable(rep='b') as b:
     pl02 = as1.let_x_be_an_axiom(claim=(a | land | b) | implies | (b | land | a))
 with as1.Variable(rep='a') as a, as1.Variable(rep='b') as b, as1.Variable(rep='c') as c:
@@ -48,7 +51,14 @@ blue = as1.let_x_be_a_simple_object(rep='blue')
 t1 = as1.let_x_be_an_axiom(claim=red)
 test2 = red | implies | green
 t2 = as1.let_x_be_an_axiom(claim=test2)
-axioms = as1.union_enumeration(phi=axioms, psi=(t1, t2,))
 pbi = as1.ProofByInference(claim=green, i=as1.Inference(p=(red, red | implies | green,), f=modus_ponens))
 print(pbi)
+
+red = as1.let_x_be_a_simple_object(rep='red')
+green = as1.let_x_be_a_simple_object(rep='green')
+blue = as1.let_x_be_a_simple_object(rep='blue')
+t1 = as1.let_x_be_an_axiom(claim=red)
+pbi = as1.ProofByInference(claim=red | land | red, i=as1.Inference(p=(red,), f=pl01.claim))
+print(pbi)
+
 pass
