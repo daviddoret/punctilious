@@ -85,7 +85,7 @@ event_codes = EventCodes(
     e108=EventCode(event_type=event_types.error, code='e108',
                    message='Ill-formed formula: Formula phi is ill-formed, because of reason.'),
     e109=EventCode(event_type=event_types.error, code='e109',
-                   message='REUSE'),
+                   message='get_index_of_first_term_in_formula: formula psi is not a term of formula phi.'),
     e110=EventCode(event_type=event_types.error, code='e110',
                    message='REUSE'),
     e111=EventCode(event_type=event_types.error, code='e111',
@@ -410,7 +410,7 @@ class Formula(tuple):
         :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
           otherwise.
         """
-        return self.contain_formula(phi=phi)
+        return self.has_term(phi=phi)
 
     def __eq__(self, other):
         """python-equality of formulas is not formula-equivalence."""
@@ -435,15 +435,32 @@ class Formula(tuple):
     def c(self) -> Connective:
         return self._c
 
-    def contain_formula(self, phi: FlexibleFormula) -> bool:
-        """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
-          otherwise.
+    def get_index_of_first_equivalent_term(self, phi: FlexibleFormula) -> int:
+        """Returns the o-based index of the first occurrence of a formula psi among the terms of the current formula,
+         such that psi ~formula phi.
+
+        :param phi: The formula being searched.
+        :type phi: FlexibleFormula
+        ...
+        :raises CustomException: Raise exception e109 if psi is not a term of the current formula.
+        ...
+        :return: the 0 based-based index of the first occurrence of phi in the current formula terms.
+        :rtype: int
+        """
+        return get_index_of_first_equivalent_term_in_formula(phi=phi, psi=self)
+
+    def has_term(self, phi: FlexibleFormula) -> bool:
+        """Return True if there exists a term psi of the current formula terms,
+        such that phi ~formula psi', False otherwise.
 
         :param phi: A formula.
+        :type phi: FlexibleFormula
+        ...
         :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
           otherwise.
+        :rtype: bool
         """
-        return any(is_formula_equivalent(phi=phi, psi=psi_prime) for psi_prime in self)
+        return is_term_of_formula(phi=phi, psi=self)
 
     def rep(self, **kwargs) -> str:
         parenthesis = kwargs.get('parenthesis', False)
@@ -720,6 +737,49 @@ class BinaryConnective(FixedArityConnective):
     def __ror__(self, other: FlexibleFormula):
         """Pseudo math notation. x | p | ?."""
         return InfixPartialFormula(c=self, term_1=other)
+
+
+def is_term_of_formula(phi: Formula, psi: Formula) -> bool:
+    """Returns True if phi is a term of psi, False otherwise.
+
+    :param phi: A formula.
+    :type phi: FlexibleFormula
+    :param psi: A formula.
+    :type psi: FlexibleFormula
+    ...
+    :return: True if phi is a term of psi, False otherwise.
+    :rtype: bool
+    """
+    phi = coerce_formula(phi=phi)
+    psi = coerce_formula(phi=psi)
+    return any(is_formula_equivalent(phi=phi, psi=psi_term) for psi_term in psi)
+
+
+def get_index_of_first_equivalent_term_in_formula(phi: FlexibleFormula, psi: FlexibleFormula) -> int:
+    """Returns the o-based index of the first occurrence of a formula phi in the terms of a formula psi,
+     such that psi ~formula phi.
+
+    :param phi: The formula being searched.
+    :type phi: FlexibleFormula
+    :param psi: The formula whose terms are being searched.
+    :type psi: FlexibleFormula
+    ...
+    :raises CustomException: Raise exception e109 if phi is not a term of psi.
+    ...
+    :return: the 0 based-based index of the first occurrence of phi in psi terms, such that they are equivalent.
+    :rtype: int
+    """
+    phi = coerce_formula(phi=phi)
+    psi = coerce_formula(phi=psi)
+    if is_term_of_formula(phi=phi, psi=psi):
+        # two formulas that are formula-equivalent may not be equal.
+        # for this reason we must first find the first formula-equivalent element in the tuple.
+        n: int = 0
+        for psi_term in psi:
+            if is_formula_equivalent(phi=phi, psi=psi_term):
+                return n
+            n = n + 1
+    raise_event(event_code=event_codes.e109, phi=phi, psi=psi)
 
 
 class TernaryConnective(FixedArityConnective):
@@ -1064,31 +1124,17 @@ class Tupl(Formula):
     def __init__(self, elements: FlexibleTupl = None):
         super().__init__(c=connectives.tupl, terms=elements)
 
-    def get_first_element_index(self, phi: Formula) -> typing.Optional[int]:
+    def get_index_of_first_equivalent_element(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
-
-        Note: not to be confused with get_element_index on enumerations.
-
-        TODO: Tuples are equivalent to Formulas. Consider moving these methods to the formula class instead.
 
         :param phi: A formula.
         :return:
         """
-        phi = coerce_formula(phi=phi)
-        if self.has_element(phi=phi):
-            # two formulas that are formula-equivalent may not be equal.
-            # for this reason we must first find the first formula-equivalent element in the tuple.
-            n: int = 0
-            for phi_prime in self:
-                if is_formula_equivalent(phi=phi, psi=phi_prime):
-                    return n
-                n = n + 1
-        else:
-            return None
+        return self.get_index_of_first_equivalent_term(phi=phi)
 
     def has_element(self, phi: Formula) -> bool:
         """Return True if the tuple has phi as one of its elements."""
-        return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
+        return is_term_of_formula(phi=phi, psi=self)
 
     def to_tupl_builder(self) -> TuplBuilder:
         return TuplBuilder(elements=self)
@@ -2067,7 +2113,7 @@ class Demonstration(Enumeration):
                         # The premise is absent from the demonstration.
                         return False
                     else:
-                        premise_index = claims.get_first_element_index(phi=premise)
+                        premise_index = claims.get_index_of_first_equivalent_element(phi=premise)
                         if premise_index >= i:
                             # The premise is not positioned before the conclusion.
                             return False
@@ -2075,7 +2121,7 @@ class Demonstration(Enumeration):
                     # The inference transformation-rule is absent from the demonstration.
                     return False
                 else:
-                    transformation_index = claims.get_first_element_index(phi=inference.f)
+                    transformation_index = claims.get_index_of_first_equivalent_element(phi=inference.f)
                     if transformation_index >= i:
                         # The transformation is not positioned before the conclusion.
                         return False
