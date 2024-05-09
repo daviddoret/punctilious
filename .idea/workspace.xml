@@ -584,14 +584,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00530" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1713844680108</created>
-      <option name="number" value="00530" />
-      <option name="presentableId" value="LOCAL-00530" />
-      <option name="project" value="LOCAL" />
-      <updated>1713844680108</updated>
-    </task>
     <task id="LOCAL-00531" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1713852618946</created>
@@ -976,7 +968,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715239191027</updated>
     </task>
-    <option name="localTasksCounter" value="579" />
+    <task id="LOCAL-00579" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1715251640072</created>
+      <option name="number" value="00579" />
+      <option name="presentableId" value="LOCAL-00579" />
+      <option name="project" value="LOCAL" />
+      <updated>1715251640072</updated>
+    </task>
+    <option name="localTasksCounter" value="580" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

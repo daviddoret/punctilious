@@ -1082,6 +1082,12 @@ class TuplBuilder(FormulaBuilder):
     def __init__(self, elements: FlexibleTupl):
         super().__init__(c=connectives.tupl, terms=elements)
 
+    def rep(self, **kwargs) -> str:
+        parenthesis = kwargs.get('parenthesis', False)
+        kwargs['parenthesis'] = True
+        elements: str = ', '.join(element.rep(**kwargs) for element in self)
+        return f'({elements})'
+
     def to_tupl(self) -> Tupl:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
         phi: Tupl = Tupl(elements=elements)
@@ -1093,11 +1099,13 @@ class TuplBuilder(FormulaBuilder):
 
 
 class Tupl(Formula):
-    """A tuple is a formula c(t0, t1, ..., tn) where:
-     - c is a node with the collection connective.
-     - ti is a formula.
+    """A tuple is a synonym for formula.
 
-     The empty-tuple is the tuple c().
+    The rationale for a dedicated class is semantic. When considering tuples, we do not take into account the
+    root connective. Also, formula terms are called elements. Finally, notation is distinct: a formula is
+    typically denoted as f(t0, t1, ..., tn) while a tuple is denoted as (t0, t1, ..., tn).
+
+     The empty-tuple is the tuple ().
 
      Python implementation: in python, the word 'tuple' is reserved. For this reason, the word 'tupl' is used instead
      to implement this object."""
@@ -1135,6 +1143,12 @@ class Tupl(Formula):
     def has_element(self, phi: Formula) -> bool:
         """Return True if the tuple has phi as one of its elements."""
         return is_term_of_formula(phi=phi, psi=self)
+
+    def rep(self, **kwargs) -> str:
+        parenthesis = kwargs.get('parenthesis', False)
+        kwargs['parenthesis'] = True
+        elements: str = ', '.join(element.rep(**kwargs) for element in self)
+        return f'({elements})'
 
     def to_tupl_builder(self) -> TuplBuilder:
         return TuplBuilder(elements=self)
@@ -1310,6 +1324,12 @@ class EnumerationBuilder(FormulaBuilder):
         phi ∼formula psi. False otherwise."""
         phi: Formula = coerce_formula(phi=phi)
         return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
+
+    def rep(self, **kwargs) -> str:
+        parenthesis = kwargs.get('parenthesis', False)
+        kwargs['parenthesis'] = True
+        elements: str = ', '.join(element.rep(**kwargs) for element in self)
+        return f'{{{elements}}}'
 
     def to_enumeration(self) -> Enumeration:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
