@@ -759,3 +759,13 @@ class TestDemonstration:
             # invalid proof sequence exception
             demo4 = as1.Demonstration(e=(axiom_1, axiom_2, pbi1, axiom_3,))
             pass
+
+
+class TestVariable:
+    def test_variable(self):
+        with as1.Variable(rep='x') as x:
+            print(x)
+        with as1.Variable(rep='x') as x, as1.Variable(rep='y') as y:
+            print(x)
+            print(y)
+            pass

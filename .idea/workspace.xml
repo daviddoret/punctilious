@@ -135,6 +135,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_transformation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTupl.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestUnionEnumeration.test_union_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable.executor": "Debug",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Debug",
@@ -497,7 +498,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestVariable.test_variable" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -510,7 +511,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestProofByInference.test_is_well_formed&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestVariable.test_variable&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -559,8 +560,8 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestDemonstration.test_is_well_formed" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" />
       <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -569,10 +570,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.minimal_logic_1" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestDemonstration.test_is_well_formed" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" />
       </list>
     </recent_temporary>
   </component>
@@ -591,14 +592,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00535" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1714226203719</created>
-      <option name="number" value="00535" />
-      <option name="presentableId" value="LOCAL-00535" />
-      <option name="project" value="LOCAL" />
-      <updated>1714226203719</updated>
     </task>
     <task id="LOCAL-00536" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -984,7 +977,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715283216564</updated>
     </task>
-    <option name="localTasksCounter" value="584" />
+    <task id="LOCAL-00584" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1715286236200</created>
+      <option name="number" value="00584" />
+      <option name="presentableId" value="LOCAL-00584" />
+      <option name="project" value="LOCAL" />
+      <updated>1715286236200</updated>
+    </task>
+    <option name="localTasksCounter" value="585" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1102,29 +1103,14 @@
           <option name="timeStamp" value="180" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2255</line>
-          <option name="timeStamp" value="198" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>759</line>
-          <option name="timeStamp" value="204" />
+          <line>770</line>
+          <option name="timeStamp" value="208" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2241</line>
-          <option name="timeStamp" value="205" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2249</line>
-          <option name="timeStamp" value="206" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>748</line>
-          <option name="timeStamp" value="207" />
+          <url>file://$PROJECT_DIR$/src/punctilious/minimal_logic_1.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="210" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

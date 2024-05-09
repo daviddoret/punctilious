@@ -4,6 +4,7 @@ import collections
 import logging
 import typing
 import warnings
+import threading
 
 
 class EventType(str):
@@ -799,6 +800,34 @@ class TernaryConnective(FixedArityConnective):
         super().__init__(rep=rep, fixed_arity_constraint=3)
 
 
+class Variable(Formula):
+
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if and only if phi is a well-formed variable, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi: Formula = coerce_formula(phi=phi)
+        return True
+
+    def __new__(cls, rep: str):
+        o: tuple = super().__new__(cls, c=None, terms=None)
+        return o
+
+    def __init__(self, rep: str):
+        c: NullaryConnective = NullaryConnective(rep=rep)
+        super().__init__(c=c, terms=None)
+
+    def __enter__(self) -> Variable:
+        return self
+
+    def __exit__(self, exc_type: typing.Optional[type], exc: typing.Optional[BaseException],
+                 exc_tb: typing.Any) -> None:
+        return
+
+
 def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
     NullaryConnective, typing.Generator[NullaryConnective, typing.Any, None]]:
     if isinstance(rep, str):
@@ -867,6 +896,15 @@ def let_x_be_a_unary_connective(rep: str):
 
 def let_x_be_a_free_arity_connective(rep: str):
     return FreeArityConnective(rep=rep)
+
+
+def let_x_be_an_axiom(claim: FlexibleFormula):
+    return Axiom(claim=claim)
+
+
+def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormula,
+                              variables: FlexibleEnumeration):
+    return Transformation(premises=premises, conclusion=conclusion, variables=variables)
 
 
 class Connectives(typing.NamedTuple):
@@ -2102,6 +2140,9 @@ class ProofByInference(Proof):
     def phi(self) -> Formula:
         """The proven formula."""
         return self._phi
+
+    def rep(self, **kwargs) -> str:
+        return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.p} and inference-rule {self.i.f}.'
 
 
 FlexibleProof = typing.Optional[typing.Union[Formula, ProofByInference, Axiom]]
