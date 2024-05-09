@@ -499,7 +499,7 @@ class Formula(tuple):
         return phi
 
 
-def coerce_formula_builder(phi: FlexibleFormula = None):
+def coerce_formula_builder(phi: FlexibleFormula = None) -> FormulaBuilder:
     if isinstance(phi, FormulaBuilder):
         return phi
     elif isinstance(phi, Connective):
@@ -512,7 +512,7 @@ def coerce_formula_builder(phi: FlexibleFormula = None):
         raise_event(event_code=event_codes.e123, coerced_type=FormulaBuilder, phi_type=type(phi), phi=phi)
 
 
-def coerce_formula(phi: FlexibleFormula):
+def coerce_formula(phi: FlexibleFormula) -> Formula:
     if isinstance(phi, Formula):
         return phi
     elif isinstance(phi, Connective):
@@ -527,7 +527,7 @@ def coerce_formula(phi: FlexibleFormula):
         raise_event(event_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
-def coerce_enumeration(phi: FlexibleEnumeration):
+def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
     """Coerce elements to an enumeration.
     If elements is None, coerce it to an empty enumeration."""
     if isinstance(phi, Enumeration):
@@ -577,7 +577,7 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
     return e
 
 
-def coerce_enumeration_builder(phi: FlexibleEnumeration):
+def coerce_enumeration_builder(phi: FlexibleEnumeration) -> EnumerationBuilder:
     if isinstance(phi, EnumerationBuilder):
         return phi
     elif isinstance(phi, Enumeration):
@@ -591,7 +591,7 @@ def coerce_enumeration_builder(phi: FlexibleEnumeration):
         raise_event(event_code=event_codes.e123, coerced_type=EnumerationBuilder, phi_type=type(phi), phi=phi)
 
 
-def coerce_map(phi: FlexibleMap):
+def coerce_map(phi: FlexibleMap) -> Map:
     if isinstance(phi, Map):
         return phi
     elif isinstance(phi, MapBuilder):
@@ -607,7 +607,7 @@ def coerce_map(phi: FlexibleMap):
         raise_event(event_code=event_codes.e123, coerced_type=Map, phi_type=type(phi), phi=phi)
 
 
-def coerce_map_builder(phi: FlexibleMap):
+def coerce_map_builder(phi: FlexibleMap) -> MapBuilder:
     if isinstance(phi, MapBuilder):
         return phi
     elif isinstance(phi, Map):
@@ -622,7 +622,7 @@ def coerce_map_builder(phi: FlexibleMap):
         raise_event(event_code=event_codes.e123, coerced_type=MapBuilder, phi_type=type(phi), phi=phi)
 
 
-def coerce_tupl(phi: FlexibleTupl):
+def coerce_tupl(phi: FlexibleTupl) -> Tupl:
     if isinstance(phi, Tupl):
         return phi
     elif isinstance(phi, TuplBuilder):
@@ -636,7 +636,7 @@ def coerce_tupl(phi: FlexibleTupl):
         raise_event(event_code=event_codes.e123, coerced_type=Tupl, phi_type=type(phi), phi=phi)
 
 
-def coerce_tupl_builder(phi: FlexibleTupl):
+def coerce_tupl_builder(phi: FlexibleTupl) -> TuplBuilder:
     if isinstance(phi, TuplBuilder):
         return phi
     elif isinstance(phi, Tupl):
@@ -1037,6 +1037,22 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     else:
         # Extreme case
         return False
+
+
+def is_tuple_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
+    """Two formula or tuples phi and psi is tuple-equivalent, denoted phi ~tuple psi, if and only if:
+     - |phi| = |psi|
+     - for n = 0 to |phi|: the n-th element of phi is formula-equivalent with the n-th element of psi.
+
+    Question #1: with the definition above, elements of phi and psi must be formula-equivalent,
+    which is stricter than tuple-equivalence. We may wish to distinguish superficial-tuple-equivalence
+    from recursive-tuple-equivalence.
+
+    :param phi: A tuple.
+    :param psi: A tuple.
+    :return: True if phi ~enumeration psi, False otherwise.
+    """
+    raise NotImplementedError('To be analysed further.')
 
 
 def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
@@ -1686,7 +1702,7 @@ class Transformation(Formula):
 FlexibleTransformation = typing.Optional[typing.Union[Transformation, TransformationBuilder]]
 
 
-def coerce_transformation(phi: FlexibleTransformation):
+def coerce_transformation(phi: FlexibleTransformation) -> Transformation:
     if isinstance(phi, Transformation):
         return phi
     elif isinstance(phi, TransformationBuilder):
@@ -1699,7 +1715,7 @@ def coerce_transformation(phi: FlexibleTransformation):
         raise_event(event_code=event_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
 
 
-def coerce_transformation_builder(phi: FlexibleTransformation):
+def coerce_transformation_builder(phi: FlexibleTransformation) -> TransformationBuilder:
     if isinstance(phi, TransformationBuilder):
         return phi
     elif isinstance(phi, Transformation):
@@ -1708,7 +1724,7 @@ def coerce_transformation_builder(phi: FlexibleTransformation):
         raise_event(event_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
-def coerce_inference(phi: FlexibleInference):
+def coerce_inference(phi: FlexibleInference) -> Inference:
     if isinstance(phi, Inference):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_inference(phi=phi):
@@ -1780,7 +1796,7 @@ def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
     return Axiomatization.is_well_formed(phi=phi)
 
 
-def coerce_proof(phi: FlexibleFormula):
+def coerce_proof(phi: FlexibleFormula) -> Proof:
     """Validate that p is a well-formed proof and returns it properly typed as Proof, or raise exception e123.
 
     :param phi:
@@ -1796,7 +1812,7 @@ def coerce_proof(phi: FlexibleFormula):
         raise_event(event_code=event_codes.e123, coerced_type=Proof, phi_type=type(phi), phi=phi)
 
 
-def coerce_proof_by_postulation(phi: FlexibleFormula):
+def coerce_proof_by_postulation(phi: FlexibleFormula) -> ProofByPostulation:
     """Validate that p is a well-formed proof-by-postulation and returns it properly typed as ProofByPostulation, or raise exception e123.
 
     :param phi:
@@ -1811,7 +1827,7 @@ def coerce_proof_by_postulation(phi: FlexibleFormula):
         raise_event(event_code=event_codes.e123, coerced_type=ProofByPostulation, phi_type=type(phi), phi=phi)
 
 
-def coerce_proof_by_inference(phi: FlexibleFormula):
+def coerce_proof_by_inference(phi: FlexibleFormula) -> ProofByInference:
     """Validate that p is a well-formed proof-by-inference and returns it properly typed as ProofByInference, or raise exception e123.
 
     :param phi:
@@ -1827,7 +1843,7 @@ def coerce_proof_by_inference(phi: FlexibleFormula):
         raise_event(event_code=event_codes.e123, coerced_type=ProofByInference, phi_type=type(phi), phi=phi)
 
 
-def coerce_demonstration(phi: FlexibleFormula):
+def coerce_demonstration(phi: FlexibleFormula) -> Demonstration:
     """Validate that phi is a well-formed demonstration and returns it properly typed as Demonstration, or raise exception e123.
 
     :param phi:
@@ -1841,7 +1857,7 @@ def coerce_demonstration(phi: FlexibleFormula):
         raise_event(event_code=event_codes.e123, coerced_type=Demonstration, phi_type=type(phi), phi=phi)
 
 
-def coerce_axiomatization(phi: FlexibleFormula):
+def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
     """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatisation, or raise exception e123.
 
     :param phi:
@@ -1947,6 +1963,9 @@ class ProofByPostulation(Proof):
     def __init__(self, phi: FlexibleFormula):
         phi: Formula = coerce_formula(phi=phi)
         super().__init__(phi=phi, argument=connectives.postulation)
+
+    def rep(self, **kwargs) -> str:
+        return f'({self.claim.rep(**kwargs)}) is an axiom.'
 
 
 class Inference(Formula):
@@ -2223,3 +2242,8 @@ class Axiomatization(Demonstration):
         # coerce all elements of the enumeration to proof
         e: Enumeration = Enumeration(elements=(coerce_proof_by_postulation(phi=p) for p in e))
         super().__init__(e=e)
+
+    def rep(self, **kwargs) -> str:
+        header: str = 'Axioms:\n\t'
+        axioms: str = '\n\t'.join(axiom.rep(**kwargs) for axiom in self)
+        return f'{header}{axioms}'
