@@ -2188,7 +2188,7 @@ class Demonstration(Enumeration):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proofs
-        e: Enumeration = Enumeration(elements=(coerce_proof(phi=p) for p in e))
+        e: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in e))
         if not is_well_formed_demonstration(phi=e):
             # well-formedness check failed,
             # the proof is most certainly invalid.
@@ -2200,7 +2200,7 @@ class Demonstration(Enumeration):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = Enumeration(elements=(coerce_proof(phi=p) for p in e))
+        e: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in e))
         super().__init__(elements=e)
 
     def rep(self, **kwargs) -> str:
@@ -2241,7 +2241,7 @@ class Axiomatization(Demonstration):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = Enumeration(elements=(coerce_proof_by_postulation(phi=p) for p in e))
+        e: Enumeration = coerce_enumeration(phi=(coerce_proof_by_postulation(phi=p) for p in e))
         o: tuple = super().__new__(cls, e=e)
         return o
 
@@ -2249,7 +2249,7 @@ class Axiomatization(Demonstration):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = Enumeration(elements=(coerce_proof_by_postulation(phi=p) for p in e))
+        e: Enumeration = coerce_enumeration(phi=(coerce_proof_by_postulation(phi=p) for p in e))
         super().__init__(e=e)
 
     def rep(self, **kwargs) -> str:
