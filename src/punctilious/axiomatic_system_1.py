@@ -1778,9 +1778,9 @@ def is_well_formed_enumeration(phi: FlexibleFormula) -> bool:
     return Enumeration.is_well_formed(phi=phi)
 
 
-def is_well_formed_proof_by_postulation(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed proof-by-postulation, False otherwise."""
-    return ProofByPostulation.is_well_formed(phi=phi)
+def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed axiom, False otherwise."""
+    return Axiom.is_well_formed(phi=phi)
 
 
 def is_well_formed_proof_by_inference(phi: FlexibleFormula) -> bool:
@@ -1811,27 +1811,27 @@ def coerce_proof(phi: FlexibleFormula) -> Proof:
     """
     if isinstance(phi, Proof):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_proof_by_postulation(phi=phi):
-        return coerce_proof_by_postulation(phi=phi)
+    elif isinstance(phi, Formula) and is_well_formed_axiom(phi=phi):
+        return coerce_axiom(phi=phi)
     elif isinstance(phi, Formula) and is_well_formed_proof_by_inference(phi=phi):
         return coerce_proof_by_inference(phi=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Proof, phi_type=type(phi), phi=phi)
 
 
-def coerce_proof_by_postulation(phi: FlexibleFormula) -> ProofByPostulation:
-    """Validate that p is a well-formed proof-by-postulation and returns it properly typed as ProofByPostulation, or raise exception e123.
+def coerce_axiom(phi: FlexibleFormula) -> Axiom:
+    """Validate that p is a well-formed axiom and returns it properly typed as ProofByPostulation, or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, ProofByPostulation):
+    if isinstance(phi, Axiom):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_proof_by_postulation(phi=phi):
+    elif isinstance(phi, Formula) and is_well_formed_axiom(phi=phi):
         proved_formula: Formula = phi.term_0
-        return ProofByPostulation(claim=proved_formula)
+        return Axiom(claim=proved_formula)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=ProofByPostulation, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=Axiom, phi_type=type(phi), phi=phi)
 
 
 def coerce_proof_by_inference(phi: FlexibleFormula) -> ProofByInference:
@@ -1937,11 +1937,11 @@ class Proof(Formula):
         return self._justification
 
 
-class ProofByPostulation(Proof):
-    """A well-formed proof-by-postulation is a proof made by stating an axiom.
+class Axiom(Proof):
+    """A well-formed axiom is a "magical" proof made by stating that a formula is true.
 
     Syntactic definition:
-    A formula is a well-formed proof-by-postulation if and only if it is of the form:
+    A formula is a well-formed axiom if and only if it is of the form:
         phi follows-from postulation
     Where:
         - phi is a well-formed formula,
@@ -1949,11 +1949,11 @@ class ProofByPostulation(Proof):
         - postulation is the postulation constant.
 
     Semantic definition:
-    A proof-by-postulation is the statement that a formula phi is an axiom, i.e.: phi is assumed to be true."""
+    A axiom is the statement that a formula phi is an axiom, i.e.: phi is assumed to be true."""
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed proof-by-postulation, False otherwise.
+        """Return True if and only if phi is a well-formed axiom, False otherwise.
 
         :param phi: A formula.
         :return: bool.
@@ -2104,7 +2104,7 @@ class ProofByInference(Proof):
         return self._phi
 
 
-FlexibleProof = typing.Optional[typing.Union[Formula, ProofByInference, ProofByPostulation]]
+FlexibleProof = typing.Optional[typing.Union[Formula, ProofByInference, Axiom]]
 
 
 class TheoryAccretor(EnumerationAccretor):
@@ -2150,7 +2150,7 @@ class Demonstration(Enumeration):
         for i in range(0, proofs.arity):
             proof = proofs[i]
             claim = claims[i]
-            if is_well_formed_proof_by_postulation(phi=proof):
+            if is_well_formed_axiom(phi=proof):
                 # This is an axiom.
                 pass
             elif is_well_formed_proof_by_inference(phi=proof):
@@ -2214,7 +2214,7 @@ class Axiomatization(Demonstration):
 
     Syntactic definition:
     A well-formed axiomatization is an enumeration such that:
-     - all element phi of the enumeration is a well-formed proof-by-postulation.
+     - all element phi of the enumeration is a well-formed axiom.
 
     """
 
@@ -2228,7 +2228,7 @@ class Axiomatization(Demonstration):
         phi = coerce_enumeration(phi=phi)
         for i in range(0, phi.arity):
             psi = phi[i]
-            if is_well_formed_proof_by_postulation(phi=psi):
+            if is_well_formed_axiom(phi=psi):
                 # This is an axiom.
                 pass
             else:
@@ -2241,7 +2241,7 @@ class Axiomatization(Demonstration):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = coerce_enumeration(phi=(coerce_proof_by_postulation(phi=p) for p in e))
+        e: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in e))
         o: tuple = super().__new__(cls, e=e)
         return o
 
@@ -2249,7 +2249,7 @@ class Axiomatization(Demonstration):
         # coerce to enumeration
         e: Enumeration = coerce_enumeration(phi=e)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = coerce_enumeration(phi=(coerce_proof_by_postulation(phi=p) for p in e))
+        e: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in e))
         super().__init__(e=e)
 
     def rep(self, **kwargs) -> str:
