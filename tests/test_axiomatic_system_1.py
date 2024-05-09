@@ -761,11 +761,11 @@ class TestDemonstration:
         variables = as1.Enumeration(elements=(x, y, z,))
         f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         axiom_3 = as1.ProofByPostulation(phi=f)
-        axiomatization = as1.Axiomatization(e=(axiom_1,))
-        demo1 = as1.Axiomatization(e=axiomatization)  # this must not raise an exception and will just change the type
+        axiomatization = as1.Axiomatization(e=(axiom_1, axiom_2, axiom_3))
+        demo1 = as1.Demonstration(e=axiomatization)  # this must not raise an exception and will just change the type
         i = as1.Inference(p=(a | star2 | b, b | star2 | c,), f=f)
         pbi1 = as1.ProofByInference(phi=a | star2 | c, i=i)
-        u = as1.union_enumeration(phi=axiomatization, psi=(pbi1,))
+        u = as1.union_enumeration(phi=demo1, psi=(pbi1,))
         demo2 = as1.Demonstration(e=u)  # Does not raise exception because it is valid
         with pytest.raises(as1.CustomException, match='e123'):
             # invalid proof raise exception

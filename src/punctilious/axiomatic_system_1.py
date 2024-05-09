@@ -1064,6 +1064,24 @@ class Tupl(Formula):
     def __init__(self, elements: FlexibleTupl = None):
         super().__init__(c=connectives.tupl, terms=elements)
 
+    def get_first_element_index(self, phi: Formula) -> typing.Optional[int]:
+        """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
+
+        :param phi: A formula.
+        :return:
+        """
+        phi = coerce_formula(phi=phi)
+        if self.has_element(phi=phi):
+            # two formulas that are formula-equivalent may not be equal.
+            # for this reason we must first find the first formula-equivalent element in the tuple.
+            n: int = 0
+            for phi_prime in self:
+                if is_formula_equivalent(phi=phi, psi=phi_prime):
+                    return n
+                n = n + 1
+        else:
+            return None
+
     def has_element(self, phi: Formula) -> bool:
         """Return True if the tuple has phi as one of its elements."""
         return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
@@ -1340,6 +1358,12 @@ class Enumeration(Formula):
         phi = coerce_formula(phi=phi)
         return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
 
+    def rep(self, **kwargs) -> str:
+        parenthesis = kwargs.get('parenthesis', False)
+        kwargs['parenthesis'] = True
+        elements: str = ', '.join(element.rep(**kwargs) for element in self)
+        return f'{{{elements}}}'
+
     def to_enumeration_builder(self) -> EnumerationBuilder:
         return EnumerationBuilder(elements=self)
 
@@ -1564,6 +1588,13 @@ class Transformation(Formula):
     @property
     def premises(self) -> Tupl:
         return self[0]
+
+    def rep(self, **kwargs) -> str:
+        parenthesis = kwargs.get('parenthesis', False)
+        kwargs['parenthesis'] = True
+        premises: str = ', '.join(premise.rep(**kwargs) for premise in self.premises)
+        variables: str = ', '.join(variable.rep(**kwargs) for variable in self.variables)
+        return f'{"(" if parenthesis else ""}({premises})[{variables}] --> {self.conclusion}{")" if parenthesis else ""}'
 
     def to_transformation_builder(self) -> TransformationBuilder:
         premises: TuplBuilder = self.premises.to_tupl_builder()
@@ -1792,8 +1823,19 @@ class Proof(Formula):
     def __init__(self, phi: FlexibleFormula, argument: FlexibleFormula):
         phi = coerce_formula(phi=phi)
         argument = coerce_formula(phi=argument)
+        self._claim = phi
         c: Connective = connectives.follows_from
         super().__init__(c=c, terms=(phi, argument,))
+
+    @property
+    def claim(self) -> Formula:
+        """Return the formula claimed as valid by the proof.
+
+        This is equivalent to phi.term_0.
+
+        :return: A formula.
+        """
+        return self._claim
 
 
 class ProofByPostulation(Proof):
@@ -1985,34 +2027,54 @@ class Demonstration(Enumeration):
         :return: bool.
         """
         phi = coerce_enumeration(phi=phi)
-        for i in range(0, phi.arity):
-            psi = phi[i]
-            if is_well_formed_proof_by_postulation(phi=psi):
+        # check the well-formedness of the individual proofs.
+        # and retrieve the terms claimed as proven in the demonstration, preserving order.
+        # by the definition of a demonstration, these are the left term (term_0) of the formulas.
+        claims: TuplBuilder = TuplBuilder(elements=None)
+        proofs: TuplBuilder = TuplBuilder(elements=None)
+        for proof in phi:
+            if not is_well_formed_proof(phi=proof):
+                return False
+            else:
+                proof: FlexibleProof = coerce_proof(phi=proof)
+                proofs.append(term=proof)
+                # retrieve the formula claimed as valid from the proof
+                claim: Formula = proof.claim
+                claims.append(term=claim)
+        # now that the proofs and claims have been retrieved, and proved well-formed individually,
+        # make the python objects immutable.
+        proofs: Tupl = proofs.to_tupl()
+        claims: Tupl = claims.to_tupl()
+        for i in range(0, proofs.arity):
+            proof = proofs[i]
+            claim = claims[i]
+            if is_well_formed_proof_by_postulation(phi=proof):
                 # This is an axiom.
                 pass
-            elif is_well_formed_proof_by_inference(phi=psi):
-                proof_by_inference: ProofByInference = coerce_proof_by_inference(phi=psi)
+            elif is_well_formed_proof_by_inference(phi=proof):
+                proof_by_inference: ProofByInference = coerce_proof_by_inference(phi=proof)
                 inference: Inference = proof_by_inference.i
                 for premise in inference.p:
-                    if not phi.has_element(phi=premise):
+                    # check that premise is a proven-formula (term_0) of a predecessor
+                    if not claims.has_element(phi=premise):
                         # The premise is absent from the demonstration.
                         return False
                     else:
-                        premise_index = phi.get_element_index(phi=premise)
+                        premise_index = claims.get_first_element_index(phi=premise)
                         if premise_index >= i:
                             # The premise is not positioned before the conclusion.
                             return False
-                if not phi.has_element(phi=inference.f):
+                if not claims.has_element(phi=inference.f):
                     # The inference transformation-rule is absent from the demonstration.
                     return False
                 else:
-                    transformation_index = phi.get_element_index(phi=inference.f)
+                    transformation_index = claims.get_first_element_index(phi=inference.f)
                     if transformation_index >= i:
                         # The transformation is not positioned before the conclusion.
                         return False
                 # And finally, confirm that the inference effectively yields phi.
                 phi_prime = inference.f.apply_transformation(arguments=inference.p)
-                if not is_formula_equivalent(phi=phi, psi=phi_prime):
+                if not is_formula_equivalent(phi=claim, psi=phi_prime):
                     return False
             else:
                 # Incorrect form.
@@ -2038,6 +2100,12 @@ class Demonstration(Enumeration):
         # coerce all elements of the enumeration to proof
         e: Enumeration = Enumeration(elements=(coerce_proof(phi=p) for p in e))
         super().__init__(elements=e)
+
+    def rep(self, **kwargs) -> str:
+        parenthesis = kwargs.get('parenthesis', False)
+        kwargs['parenthesis'] = True
+        proofs: str = '\n\t '.join(proof.rep(**kwargs) for proof in self)
+        return f'{"(" if parenthesis else ""}Demonstration:\n\t{proofs}{")" if parenthesis else ""}'
 
 
 class Axiomatization(Demonstration):
