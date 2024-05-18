@@ -19,21 +19,26 @@ connectives: Connectives = Connectives(
     proposition=as1.let_x_be_a_binary_connective(rep='proposition'),
 )
 
-implies = connectives.implies
+# retrieve vocabulary from axiomatic-system-1
 is_a = as1.connectives.is_a
-land = connectives.land
-lnot = connectives.lnot
-proposition = connectives.proposition
+
+# retrieve vocabulary from inference-rules-1
+implies = ir1.connectives.implies
+land = ir1.connectives.land
+lnot = ir1.connectives.lnot
+proposition = ir1.connectives.proposition
 
 # PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
-with as1.Variable(rep='a') as a:
-    pl01_claim = as1.let_x_be_a_transformation(premises=(a,), conclusion=a | land | a, variables=(a,))
+with as1.let_x_be_a_variable(rep='a') as a:
+    pl01_claim = a | implies | (a | land | a)
     pl01 = as1.let_x_be_an_axiom(claim=pl01_claim)
-with as1.Variable(rep='a') as a, as1.Variable(rep='b') as b:
+with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b:
     pl02 = as1.let_x_be_an_axiom(claim=(a | land | b) | implies | (b | land | a))
-with as1.Variable(rep='a') as a, as1.Variable(rep='b') as b, as1.Variable(rep='c') as c:
+with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
+        rep='c') as c:
     pl03 = as1.let_x_be_an_axiom(claim=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
-with as1.Variable(rep='a') as a, as1.Variable(rep='b') as b, as1.Variable(rep='c') as c:
+with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
+        rep='c') as c:
     pl04 = as1.let_x_be_an_axiom(claim=((a | implies | b) | land | (b | implies | c)) | implies | (a | implies | b))
 # pl05 = as1.let_x_be_an_axiom(claim=𝐵 ⊃ (𝐴 ⊃ 𝐵))
 # pl06 = (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵
@@ -42,26 +47,8 @@ with as1.Variable(rep='a') as a, as1.Variable(rep='b') as b, as1.Variable(rep='c
 # pl09 = [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
 # pl10 = [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
 
-axioms = as1.Axiomatization(e=(pl01, pl02, pl03, pl04,))
-print(axioms)
+axioms = as1.Axiomatization(axioms=(pl01, pl02, pl03, pl04,))
 
-axioms = as1.Demonstration(e=(pl01, pl02, pl03, pl04,))
-print(axioms)
-
-red = as1.let_x_be_a_simple_object(rep='red')
-green = as1.let_x_be_a_simple_object(rep='green')
-blue = as1.let_x_be_a_simple_object(rep='blue')
-t1 = as1.let_x_be_an_axiom(claim=red)
-test2 = red | implies | green
-t2 = as1.let_x_be_an_axiom(claim=test2)
-pbi = as1.TheoremByInference(claim=green, i=as1.Inference(p=(red, red | implies | green,), f=modus_ponens))
-print(pbi)
-
-red = as1.let_x_be_a_simple_object(rep='red')
-green = as1.let_x_be_a_simple_object(rep='green')
-blue = as1.let_x_be_a_simple_object(rep='blue')
-t1 = as1.let_x_be_an_axiom(claim=red)
-pbi = as1.TheoremByInference(claim=red | land | red, i=as1.Inference(p=(red,), f=pl01.claim))
-print(pbi)
+extended_theory = as1.Demonstration(theorems=(pl01, pl02, pl03, pl04,))
 
 pass

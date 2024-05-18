@@ -898,6 +898,34 @@ def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
         raise TypeError  # TODO: Implement event code.
 
 
+def let_x_be_a_propositional_variable(rep: FlexibleRepresentation, db: FlexibleDemonstrationBuilder = None) -> \
+        typing.Union[
+            Variable, typing.Generator[Variable, typing.Any, None]]:
+    """
+
+    :param rep:
+    :param db: If a demonstration-builder is provided, append the axiom (x is-a proposition) where x is the new variable.
+    :return:
+    """
+    # TODO: RESUME IMPLEMENTATION OF PARAMTETER DB HERE.
+    # TODO: EITHER MOVE THIS FUNCTION TO INFERENCE_RULES_1 OR MOVE FUNDAMENTAL LOGIC CONNECTIVES HERE
+    if db is not None:
+        db = coerce_demonstration_builder(phi=db)
+    if isinstance(rep, str):
+        x = Variable(c=NullaryConnective(rep=rep))
+        db.append(theorem=Axiom(claim=x | connectives.is_a | connectives.proposition))
+        return x
+    elif isinstance(rep, typing.Iterable):
+        t = tuple()
+        for r in rep:
+            x = Variable(c=NullaryConnective(rep=r))
+            db.append(theorem=Axiom(claim=x | connectives.is_a | connectives.proposition))
+            t = t + (x,)
+        return t
+    else:
+        raise TypeError  # TODO: Implement event code.
+
+
 def v(rep: FlexibleRepresentation) -> typing.Union[
     NullaryConnective, typing.Generator[NullaryConnective, typing.Any, None]]:
     """A shortcut for let_x_be_a_variable."""
