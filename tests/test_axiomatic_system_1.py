@@ -670,7 +670,7 @@ class TestInference:
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        i = as1.ProofByInference(claim=theorem, i=as1.Inference(p=p, f=t))
+        i = as1.TheoremByInference(claim=theorem, i=as1.Inference(p=p, f=t))
         as1.is_formula_equivalent(
             phi=i,
             psi=theorem | as1.connectives.follows_from | as1.connectives.inference(p, t))
@@ -701,11 +701,11 @@ class TestProofByInference:
         variables = as1.Enumeration(elements=(x, y, z,))
         f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         i = as1.Inference(p=(a | star | b, b | star | c,), f=f)
-        assert as1.is_well_formed_proof_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i)
-        proof1 = as1.ProofByInference(claim=a | star | c, i=i)  # would raise an exception if it was unsuccessful
-        assert not as1.is_well_formed_proof_by_inference(phi=(a | star | d) | as1.connectives.follows_from | i)
+        assert as1.is_well_formed_theorem_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i)
+        proof1 = as1.TheoremByInference(claim=a | star | c, i=i)  # would raise an exception if it was unsuccessful
+        assert not as1.is_well_formed_theorem_by_inference(phi=(a | star | d) | as1.connectives.follows_from | i)
         i2 = as1.Inference(p=(a | star | b, b | star | a,), f=f)
-        assert not as1.is_well_formed_proof_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i2)
+        assert not as1.is_well_formed_theorem_by_inference(phi=(a | star | c) | as1.connectives.follows_from | i2)
         pass
 
 
@@ -748,17 +748,17 @@ class TestDemonstration:
         axiom_3 = as1.Axiom(claim=f)
         axiomatization = as1.Axiomatization(axioms=(axiom_1, axiom_2, axiom_3))
         demo1 = as1.Demonstration(
-            proofs=axiomatization)  # this must not raise an exception and will just change the type
+            theorems=axiomatization)  # this must not raise an exception and will just change the type
         i = as1.Inference(p=(a | star2 | b, b | star2 | c,), f=f)
-        pbi1 = as1.ProofByInference(claim=a | star2 | c, i=i)
+        pbi1 = as1.TheoremByInference(claim=a | star2 | c, i=i)
         u = as1.union_enumeration(phi=demo1, psi=(pbi1,))
-        demo2 = as1.Demonstration(proofs=u)  # Does not raise exception because it is valid
+        demo2 = as1.Demonstration(theorems=u)  # Does not raise exception because it is valid
         with pytest.raises(as1.CustomException, match='e123'):
             # invalid proof raise exception
-            demo3 = as1.Demonstration(proofs=(axiom_1, axiom_2, a | star2 | e))
+            demo3 = as1.Demonstration(theorems=(axiom_1, axiom_2, a | star2 | e))
         with pytest.raises(as1.CustomException, match='e108'):
             # invalid proof sequence exception
-            demo4 = as1.Demonstration(proofs=(axiom_1, axiom_2, pbi1, axiom_3,))
+            demo4 = as1.Demonstration(theorems=(axiom_1, axiom_2, pbi1, axiom_3,))
             pass
 
 

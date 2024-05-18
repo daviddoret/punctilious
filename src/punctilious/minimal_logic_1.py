@@ -54,14 +54,14 @@ blue = as1.let_x_be_a_simple_object(rep='blue')
 t1 = as1.let_x_be_an_axiom(claim=red)
 test2 = red | implies | green
 t2 = as1.let_x_be_an_axiom(claim=test2)
-pbi = as1.ProofByInference(claim=green, i=as1.Inference(p=(red, red | implies | green,), f=modus_ponens))
+pbi = as1.TheoremByInference(claim=green, i=as1.Inference(p=(red, red | implies | green,), f=modus_ponens))
 print(pbi)
 
 red = as1.let_x_be_a_simple_object(rep='red')
 green = as1.let_x_be_a_simple_object(rep='green')
 blue = as1.let_x_be_a_simple_object(rep='blue')
 t1 = as1.let_x_be_an_axiom(claim=red)
-pbi = as1.ProofByInference(claim=red | land | red, i=as1.Inference(p=(red,), f=pl01.claim))
+pbi = as1.TheoremByInference(claim=red | land | red, i=as1.Inference(p=(red,), f=pl01.claim))
 print(pbi)
 
 pass

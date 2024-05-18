@@ -81,11 +81,11 @@ event_codes = EventCodes(
                    message='EnumerationBuilder.__init__: Attempt to add duplicate formula-equivalent formulas as '
                            'elements of the enumeration. The new element / term is ignored.'),
     e105=EventCode(event_type=event_types.error, code='e105',
-                   message='ProofByInference.__new__: attempt to create an ill-formed proof-by-inference because '
+                   message='ProofByInference.__new__: attempt to create an ill-formed theorem-by-inference because '
                            'phi_expected ~formula phi_inferred, '
                            'where phi_inferred = f(p), f the inference transformation, and p the inference premises.'),
     e106=EventCode(event_type=event_types.warning, code='e106',
-                   message='is_well_formed_proof_by_inference: phi is an ill-formed proof-by-inference because '
+                   message='is_well_formed_theorem_by_inference: phi is an ill-formed theorem-by-inference because '
                            'psi_expected ~formula psi_inferred, '
                            'where psi_inferred = f(p), f the inference transformation, and p the inference premises.'),
     e107=EventCode(event_type=event_types.error, code='e107',
@@ -599,12 +599,12 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
 def union_demonstration(phi: FlexibleDemonstration, psi: FlexibleDemonstration) -> Demonstration:
     """Given two demonstrations phi, and psi, the union-demonstration operator, noted phi ∪-demonstration psi,
     returns a new demonstration omega such that:
-    - all proofs of phi are elements of omega,
-    - all proofs of psi are elements of omega,
-    - no other proofs are proofs of omega.
+    - all theorems of phi are elements of omega,
+    - all theorems of psi are elements of omega,
+    - no other theorems are theorems of omega.
     Order is preserved, that is:
-    - the proofs from phi keep their original order in omega
-    - the proofs from psi keep their original order in omega providing they are not already present in phi,
+    - the theorems from phi keep their original order in omega
+    - the theorems from psi keep their original order in omega providing they are not already present in phi,
         in which case they are skipped
 
     Under demonstration-equivalence, the union-demonstration operator is:
@@ -617,7 +617,7 @@ def union_demonstration(phi: FlexibleDemonstration, psi: FlexibleDemonstration) 
     """
     phi: Demonstration = coerce_demonstration(phi=phi)
     psi: Demonstration = coerce_demonstration(phi=psi)
-    db: DemonstrationBuilder = DemonstrationBuilder(proofs=None)
+    db: DemonstrationBuilder = DemonstrationBuilder(theorems=None)
     for phi_prime in phi:
         db.append(term=phi_prime)
     for psi_prime in psi:
@@ -1888,14 +1888,14 @@ def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
     return Axiom.is_well_formed(phi=phi)
 
 
-def is_well_formed_proof_by_inference(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed proof-by-inference, False otherwise."""
-    return ProofByInference.is_well_formed(phi=phi)
+def is_well_formed_theorem_by_inference(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed theorem-by-inference, False otherwise."""
+    return TheoremByInference.is_well_formed(phi=phi)
 
 
-def is_well_formed_proof(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed proof, False otherwise."""
-    return Proof.is_well_formed(phi=phi)
+def is_well_formed_theorem(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed theorem, False otherwise."""
+    return Theorem.is_well_formed(phi=phi)
 
 
 def is_well_formed_demonstration(phi: FlexibleFormula) -> bool:
@@ -1908,20 +1908,20 @@ def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
     return Axiomatization.is_well_formed(phi=phi)
 
 
-def coerce_proof(phi: FlexibleFormula) -> Proof:
-    """Validate that p is a well-formed proof and returns it properly typed as Proof, or raise exception e123.
+def coerce_theorem(phi: FlexibleFormula) -> Theorem:
+    """Validate that p is a well-formed theorem and returns it properly typed as Proof, or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, Proof):
+    if isinstance(phi, Theorem):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_axiom(phi=phi):
         return coerce_axiom(phi=phi)
-    elif isinstance(phi, Formula) and is_well_formed_proof_by_inference(phi=phi):
-        return coerce_proof_by_inference(phi=phi)
+    elif isinstance(phi, Formula) and is_well_formed_theorem_by_inference(phi=phi):
+        return coerce_theorem_by_inference(phi=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Proof, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
 
 
 def coerce_axiom(phi: FlexibleFormula) -> Axiom:
@@ -1939,20 +1939,20 @@ def coerce_axiom(phi: FlexibleFormula) -> Axiom:
         raise_event(event_code=event_codes.e123, coerced_type=Axiom, phi_type=type(phi), phi=phi)
 
 
-def coerce_proof_by_inference(phi: FlexibleFormula) -> ProofByInference:
-    """Validate that p is a well-formed proof-by-inference and returns it properly typed as ProofByInference, or raise exception e123.
+def coerce_theorem_by_inference(phi: FlexibleFormula) -> TheoremByInference:
+    """Validate that p is a well-formed theorem-by-inference and returns it properly typed as ProofByInference, or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, ProofByInference):
+    if isinstance(phi, TheoremByInference):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_proof_by_inference(phi=phi):
+    elif isinstance(phi, Formula) and is_well_formed_theorem_by_inference(phi=phi):
         proved_formula: Formula = coerce_formula(phi=phi.term_0)
         inference: Inference = coerce_inference(phi=phi.term_1)
-        return ProofByInference(claim=proved_formula, i=inference)
+        return TheoremByInference(claim=proved_formula, i=inference)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=ProofByInference, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=TheoremByInference, phi_type=type(phi), phi=phi)
 
 
 def coerce_demonstration(phi: FlexibleFormula) -> Demonstration:
@@ -1966,18 +1966,18 @@ def coerce_demonstration(phi: FlexibleFormula) -> Demonstration:
     elif isinstance(phi, Formula) and is_well_formed_demonstration(phi=phi):
         return Demonstration(e=phi)
     elif phi is None:
-        return Demonstration(proofs=None)
+        return Demonstration(theorems=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Demonstration(proofs=tuple(element for element in phi))
+        return Demonstration(theorems=tuple(element for element in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
         # phi: Formula = Formula(c=connectives.e, terms=phi)
-        return Demonstration(proofs=phi)
+        return Demonstration(theorems=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Demonstration, phi_type=type(phi), phi=phi)
 
@@ -2009,17 +2009,17 @@ class TheoryState(Enumeration):
         super().__init__(elements=elements)
 
 
-class Proof(Formula):
-    """A proof is a formula that justifies the existence of a theorem in a well-formed theory.
+class Theorem(Formula):
+    """A theorem a formula that justifies the existence of a theorem in a well-formed theory.
 
-    There are two types of proofs:
+    There are two types of theorems:
      - postulation,
      - inference.
      """
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed proof, False otherwise.
+        """Return True if phi is a well-formed theorem, False otherwise.
 
         :param phi: A formula.
         :return: bool.
@@ -2042,7 +2042,7 @@ class Proof(Formula):
 
     @property
     def claim(self) -> Formula:
-        """Return the formula claimed as valid by the proof.
+        """Return the formula claimed as valid by the theorem.
 
         This is equivalent to phi.term_0.
 
@@ -2055,8 +2055,8 @@ class Proof(Formula):
         return self._justification
 
 
-class Axiom(Proof):
-    """A well-formed axiom is a "magical" proof made by stating that a formula is true.
+class Axiom(Theorem):
+    """A well-formed axiom is a "magical" theorem made by stating that a formula is true.
 
     Syntactic definition:
     A formula is a well-formed axiom if and only if it is of the form:
@@ -2151,11 +2151,11 @@ class Inference(Formula):
 FlexibleInference = typing.Optional[typing.Union[Inference]]
 
 
-class ProofByInference(Proof):
-    """A proof-by-inference is a proof that uses an inference-rule.
+class TheoremByInference(Theorem):
+    """A theorem-by-inference is a theorem that is proven by inference.
 
     Syntactic definition:
-    A formula is a well-formed proof-by-inference if and only if it is a formula of the form:
+    A formula is a well-formed theorem-by-inference if and only if it is a formula of the form:
         phi follows-from inference(P, f)
     Where:
         - phi is a well-formed formula,
@@ -2166,14 +2166,14 @@ class ProofByInference(Proof):
         - f(P) = phi.
 
     Semantic definition:
-    A proof-by-inference is a statement that justifies the validity of phi by providing the premises and
+    A theorem-by-inference is a statement that justifies the validity of phi by providing the premises and
     the transformation-rule that yield phi, i.e.:
     t(P) ~formula phi
     """
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed proof-by-inference, False otherwise.
+        """Return True if and only if phi is a well-formed theorem-by-inference, False otherwise.
 
         :param phi: A formula.
         :return: bool.
@@ -2196,11 +2196,11 @@ class ProofByInference(Proof):
     def __new__(cls, claim: FlexibleFormula, i: FlexibleInference):
         claim: Formula = coerce_formula(phi=claim)
         i: Inference = coerce_inference(phi=i)
-        # check the validity of the proof
+        # check the validity of the theorem
         f_of_p: Formula = i.f(i.p)
         if not is_formula_equivalent(phi=claim, psi=f_of_p):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
-            # raise an exception to prevent the creation of this ill-formed proof-by-inference.
+            # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
             raise_event(event_code=event_codes.e105, phi_expected=claim, phi_inferred=f_of_p,
                         inference_rule=i)
         o: tuple = super().__new__(cls, claim=claim, justification=i)
@@ -2213,7 +2213,7 @@ class ProofByInference(Proof):
 
     @property
     def i(self) -> Inference:
-        """The inference of the proof."""
+        """The inference of the theorem."""
         return self._i
 
     @property
@@ -2225,7 +2225,7 @@ class ProofByInference(Proof):
         return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.p} and inference-rule {self.i.f}.'
 
 
-FlexibleProof = typing.Optional[typing.Union[Formula, ProofByInference, Axiom]]
+FlexibleProof = typing.Optional[typing.Union[Formula, TheoremByInference, Axiom]]
 
 
 class TheoryAccretor(EnumerationAccretor):
@@ -2237,13 +2237,13 @@ class DemonstrationBuilder(EnumerationBuilder):
 
     Note: """
 
-    def __init__(self, proofs: FlexibleEnumeration):
+    def __init__(self, theorems: FlexibleEnumeration):
         super().__init__(elements=None)
-        if isinstance(proofs, typing.Iterable):
-            for element in proofs:
+        if isinstance(theorems, typing.Iterable):
+            for element in theorems:
                 self.append(term=element)
 
-    def append(self, term: Proof) -> None:
+    def append(self, term: Theorem) -> None:
         """
 
         Override the append method to assure the unicity of newly added elements.
@@ -2251,17 +2251,17 @@ class DemonstrationBuilder(EnumerationBuilder):
         :param term:
         :return:
         """
-        term = coerce_proof(phi=term)
+        term = coerce_theorem(phi=term)
         super().append(term=term)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Demonstration (elaborating):\n\t'
-        proofs: str = '\n\t'.join(proof.rep(**kwargs) for proof in self)
-        return f'{header}{proofs}'
+        theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
+        return f'{header}{theorems}'
 
     def to_demonstration(self) -> Enumeration:
         """If the demonstration-builder is well-formed, return a demonstration."""
-        elements: tuple[Formula, ...] = tuple(coerce_proof(phi=element) for element in self)
+        elements: tuple[Formula, ...] = tuple(coerce_theorem(phi=element) for element in self)
         phi: Demonstration = Demonstration(e=elements)
         return phi
 
@@ -2271,12 +2271,12 @@ class DemonstrationBuilder(EnumerationBuilder):
 
 
 class Demonstration(Enumeration):
-    """A demonstration is an enumeration of proofs.
+    """A demonstration is an enumeration of theorems.
 
     Syntactic definition:
     A well-formed demonstration is an enumeration such that:
-     - all element phi of the enumeration is a well-formed proof,
-     - all premises of all proof-by-inferences are predecessors of their parent proof-by-inference.
+     - all element phi of the enumeration is a well-formed theorem,
+     - all premises of all theorem-by-inferences are predecessors of their parent theorem-by-inference.
 
     """
 
@@ -2288,33 +2288,33 @@ class Demonstration(Enumeration):
         :return: bool.
         """
         phi = coerce_enumeration(phi=phi)
-        # check the well-formedness of the individual proofs.
+        # check the well-formedness of the individual theorems.
         # and retrieve the terms claimed as proven in the demonstration, preserving order.
         # by the definition of a demonstration, these are the left term (term_0) of the formulas.
         claims: TuplBuilder = TuplBuilder(elements=None)
-        proofs: TuplBuilder = TuplBuilder(elements=None)
-        for proof in phi:
-            if not is_well_formed_proof(phi=proof):
+        theorems: TuplBuilder = TuplBuilder(elements=None)
+        for theorem in phi:
+            if not is_well_formed_theorem(phi=theorem):
                 return False
             else:
-                proof: FlexibleProof = coerce_proof(phi=proof)
-                proofs.append(term=proof)
-                # retrieve the formula claimed as valid from the proof
-                claim: Formula = proof.claim
+                theorem: FlexibleProof = coerce_theorem(phi=theorem)
+                theorems.append(term=theorem)
+                # retrieve the formula claimed as valid from the theorem
+                claim: Formula = theorem.claim
                 claims.append(term=claim)
-        # now that the proofs and claims have been retrieved, and proved well-formed individually,
+        # now that the theorems and claims have been retrieved, and proved well-formed individually,
         # make the python objects immutable.
-        proofs: Tupl = proofs.to_tupl()
+        theorems: Tupl = theorems.to_tupl()
         claims: Tupl = claims.to_tupl()
-        for i in range(0, proofs.arity):
-            proof = proofs[i]
+        for i in range(0, theorems.arity):
+            theorem = theorems[i]
             claim = claims[i]
-            if is_well_formed_axiom(phi=proof):
+            if is_well_formed_axiom(phi=theorem):
                 # This is an axiom.
                 pass
-            elif is_well_formed_proof_by_inference(phi=proof):
-                proof_by_inference: ProofByInference = coerce_proof_by_inference(phi=proof)
-                inference: Inference = proof_by_inference.i
+            elif is_well_formed_theorem_by_inference(phi=theorem):
+                theorem_by_inference: TheoremByInference = coerce_theorem_by_inference(phi=theorem)
+                inference: Inference = theorem_by_inference.i
                 for premise in inference.p:
                     # check that premise is a proven-formula (term_0) of a predecessor
                     if not claims.has_element(phi=premise):
@@ -2343,39 +2343,39 @@ class Demonstration(Enumeration):
         # All tests were successful.
         return True
 
-    def __new__(cls, proofs: FlexibleEnumeration = None):
+    def __new__(cls, theorems: FlexibleEnumeration = None):
         # coerce to enumeration
-        proofs: Enumeration = coerce_enumeration(phi=proofs)
-        # coerce all elements of the enumeration to proofs
-        proofs: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in proofs))
-        if not is_well_formed_demonstration(phi=proofs):
+        theorems: Enumeration = coerce_enumeration(phi=theorems)
+        # coerce all elements of the enumeration to theorems
+        theorems: Enumeration = coerce_enumeration(phi=(coerce_theorem(phi=p) for p in theorems))
+        if not is_well_formed_demonstration(phi=theorems):
             # well-formedness check failed,
-            # the proof is most certainly invalid.
-            raise_event(event_code=event_codes.e108, proofs=proofs, expected_class='demonstration')
-        o: tuple = super().__new__(cls, elements=proofs)
+            # the theorem is most certainly invalid.
+            raise_event(event_code=event_codes.e108, theorems=theorems, expected_class='demonstration')
+        o: tuple = super().__new__(cls, elements=theorems)
         return o
 
-    def __init__(self, proofs: FlexibleEnumeration = None):
+    def __init__(self, theorems: FlexibleEnumeration = None):
         # coerce to enumeration
-        proofs: Enumeration = coerce_enumeration(phi=proofs)
-        # coerce all elements of the enumeration to proof
-        proofs: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in proofs))
-        super().__init__(elements=proofs)
+        theorems: Enumeration = coerce_enumeration(phi=theorems)
+        # coerce all elements of the enumeration to theorem
+        theorems: Enumeration = coerce_enumeration(phi=(coerce_theorem(phi=p) for p in theorems))
+        super().__init__(elements=theorems)
 
     def has_theorem(self, phi: FlexibleFormula) -> bool:
         """Return True if phi is a theorem of this demonstration, False otherwise."""
         phi = coerce_formula(phi=phi)
-        for proof in self:
-            proof: Proof = coerce_proof(phi=proof)
-            if is_formula_equivalent(phi=phi, psi=proof.claim):
+        for theorem in self:
+            theorem: Theorem = coerce_theorem(phi=theorem)
+            if is_formula_equivalent(phi=phi, psi=theorem.claim):
                 return True
         return False
         # return any(is_formula_equivalent(phi=phi, psi=theorem) for theorem in self)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Demonstration:\n\t'
-        proofs: str = '\n\t'.join(proof.rep(**kwargs) for proof in self)
-        return f'{header}{proofs}'
+        theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
+        return f'{header}{theorems}'
 
 
 FlexibleDemonstration = typing.Optional[
@@ -2415,17 +2415,17 @@ class Axiomatization(Demonstration):
     def __new__(cls, axioms: FlexibleEnumeration = None):
         # coerce to enumeration
         axioms: Enumeration = coerce_enumeration(phi=axioms)
-        # coerce all elements of the enumeration to proof
+        # coerce all elements of the enumeration to theorem
         axioms: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in axioms))
-        o: tuple = super().__new__(cls, proofs=axioms)
+        o: tuple = super().__new__(cls, theorems=axioms)
         return o
 
     def __init__(self, axioms: FlexibleEnumeration = None):
         # coerce to enumeration
         axioms: Enumeration = coerce_enumeration(phi=axioms)
-        # coerce all elements of the enumeration to proof
+        # coerce all elements of the enumeration to theorem
         axioms: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in axioms))
-        super().__init__(proofs=axioms)
+        super().__init__(theorems=axioms)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Axioms:\n\t'
