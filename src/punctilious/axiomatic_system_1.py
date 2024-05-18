@@ -2178,6 +2178,45 @@ class TheoryAccretor(EnumerationAccretor):
     pass
 
 
+class DemonstrationBuilder(EnumerationBuilder):
+    """A utility class to help build demonstrations. It is mutable and thus allows edition.
+
+    Note: """
+
+    def __init__(self, elements: FlexibleEnumeration):
+        super().__init__(elements=None)
+        if isinstance(elements, typing.Iterable):
+            for element in elements:
+                self.append(term=element)
+
+    def append(self, term: Proof) -> None:
+        """
+
+        Override the append method to assure the unicity of newly added elements.
+
+        :param term:
+        :return:
+        """
+        term = coerce_proof(phi=term)
+        super().append(term=term)
+
+    def rep(self, **kwargs) -> str:
+        parenthesis = kwargs.get('parenthesis', False)
+        kwargs['parenthesis'] = True
+        elements: str = ', '.join(element.rep(**kwargs) for element in self)
+        return f'{{{elements}}}'
+
+    def to_demonstration(self) -> Enumeration:
+        """If the demonstration-builder is well-formed, return a demonstration."""
+        elements: tuple[Formula, ...] = tuple(coerce_proof(phi=element) for element in self)
+        phi: Demonstration = Demonstration(e=elements)
+        return phi
+
+    def to_formula(self) -> Formula:
+        """If the demonstration-builder is well-formed, return a demonstration, which is a formula."""
+        return self.to_demonstration()
+
+
 class Demonstration(Enumeration):
     """A demonstration is an enumeration of proofs.
 

@@ -52,7 +52,7 @@ adjunction_axiom: as1.Axiom = as1.let_x_be_an_axiom(claim=adjunction_rule)
 #
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
-with as1.Variable(rep='phi') as phi, as1.Variable(rep='psi') as psi:
+with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     simplification_1_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
             phi | is_a | proposition,
@@ -69,7 +69,7 @@ simplification_1_axiom: as1.Axiom = as1.let_x_be_an_axiom(claim=simplification_1
 #
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
-with as1.Variable(rep='phi') as phi, as1.Variable(rep='psi') as psi:
+with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     simplification_2_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
             phi | is_a | proposition,
@@ -87,7 +87,7 @@ simplification_2_axiom: as1.Axiom = as1.let_x_be_an_axiom(claim=simplification_2
 #
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
-with as1.Variable(rep='phi') as phi, as1.Variable(rep='psi') as psi:
+with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     modus_ponens_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
             phi | is_a | proposition,
