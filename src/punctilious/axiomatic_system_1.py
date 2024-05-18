@@ -5,6 +5,9 @@ import logging
 import typing
 import warnings
 import threading
+import sys
+
+module_state = sys.modules[__name__]
 
 
 class EventType(str):
@@ -18,12 +21,16 @@ class EventTypes(typing.NamedTuple):
     debug: EventType
 
 
-event_types = EventTypes(
-    error=EventType('error'),
-    warning=EventType('warning'),
-    info=EventType('info'),
-    debug=EventType('debug')
-)
+# TODO: module_state: Extend this approach to all global variables
+if hasattr(module_state, 'event_types'):
+    event_types: EventTypes = module_state.event_types
+else:
+    event_types: EventTypes = EventTypes(
+        error=EventType('error'),
+        warning=EventType('warning'),
+        info=EventType('info'),
+        debug=EventType('debug')
+    )
 
 
 class EventCode(typing.NamedTuple):
@@ -980,12 +987,12 @@ class Connectives(typing.NamedTuple):
 
 
 connectives: Connectives = Connectives(
-    demonstration=let_x_be_a_binary_connective(rep='demonstration'),
+    demonstration=let_x_be_a_free_arity_connective(rep='demonstration'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
     f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
     follows_from=let_x_be_a_binary_connective(rep='follows-from'),
     implies=let_x_be_a_binary_connective(rep='implies'),
-    inference=let_x_be_a_binary_connective(rep='inference-rule'),
+    inference=let_x_be_a_binary_connective(rep='inference'),
     is_a=let_x_be_a_binary_connective(rep='is-a'),
     map=let_x_be_a_binary_connective(rep='map'),
     postulation=let_x_be_a_unary_connective(rep='postulation'),
@@ -2230,10 +2237,10 @@ class DemonstrationBuilder(EnumerationBuilder):
 
     Note: """
 
-    def __init__(self, elements: FlexibleEnumeration):
+    def __init__(self, proofs: FlexibleEnumeration):
         super().__init__(elements=None)
-        if isinstance(elements, typing.Iterable):
-            for element in elements:
+        if isinstance(proofs, typing.Iterable):
+            for element in proofs:
                 self.append(term=element)
 
     def append(self, term: Proof) -> None:
@@ -2354,6 +2361,16 @@ class Demonstration(Enumeration):
         # coerce all elements of the enumeration to proof
         proofs: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in proofs))
         super().__init__(elements=proofs)
+
+    def has_theorem(self, phi: FlexibleFormula) -> bool:
+        """Return True if phi is a theorem of this demonstration, False otherwise."""
+        phi = coerce_formula(phi=phi)
+        for proof in self:
+            proof: Proof = coerce_proof(phi=proof)
+            if is_formula_equivalent(phi=phi, psi=proof.claim):
+                return True
+        return False
+        # return any(is_formula_equivalent(phi=phi, psi=theorem) for theorem in self)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Demonstration:\n\t'
