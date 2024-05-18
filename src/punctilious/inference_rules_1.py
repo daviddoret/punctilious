@@ -104,7 +104,7 @@ with pu.as1.let_x_be_a_variable(rep='phi') as phi, pu.as1.let_x_be_a_variable(re
         premises=(
             phi | is_a | proposition,
             psi | is_a | proposition,
-            phi | land | psi,
+            phi | implies | psi,
             phi),
         conclusion=psi,
         variables=(phi, psi,))

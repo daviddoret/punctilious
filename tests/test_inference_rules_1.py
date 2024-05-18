@@ -102,3 +102,38 @@ class TestSimplification2:
             wrong_axiomatization = pu.as1.Axiomatization(axioms=(
                 pu.ir1.adjunction_axiom, pu.ir1.simplification_1_axiom, pu.ir1.modus_ponens_axiom, a1, a2, a3,))
             wrong_theory = pu.as1.Demonstration(theorems=(*wrong_axiomatization, isolated_theorem))
+
+
+class TestModusPonens:
+    def test_modus_ponens(self):
+        # retrieve some basic vocabulary
+        is_a = pu.as1.connectives.is_a
+        proposition = pu.ir1.connectives.proposition
+        implies = pu.ir1.implies
+        land = pu.ir1.connectives.land
+
+        # elaborate a theory
+        a = pu.as1.let_x_be_a_simple_object(rep='A')
+        b = pu.as1.let_x_be_a_simple_object(rep='B')
+        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
+        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | proposition)
+        a3 = pu.as1.let_x_be_an_axiom(claim=a | implies | b)
+        a4 = pu.as1.let_x_be_an_axiom(claim=a)
+        r: pu.as1.Transformation = pu.as1.coerce_transformation(phi=pu.ir1.modus_ponens_axiom.claim)
+        axioms = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, a1, a2, a3, a4,))
+
+        # derive a new theorem
+        inference = pu.as1.Inference(
+            p=(a1.claim, a2.claim, a3.claim, a4.claim),
+            f=r)
+        isolated_theorem = pu.as1.TheoremByInference(claim=b, i=inference)
+        assert pu.as1.is_formula_equivalent(phi=b, psi=isolated_theorem.claim)
+        extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem))
+        assert extended_theory.has_theorem(phi=b)
+
+        # show that wrong axiomatization fails to derive the theorems
+        with pytest.raises(pu.as1.CustomException, match='e108'):
+            # wrong theory
+            wrong_axiomatization = pu.as1.Axiomatization(axioms=(
+                pu.ir1.adjunction_axiom, pu.ir1.simplification_1_axiom, pu.ir1.simplification_2_axiom, a1, a2, a3,))
+            wrong_theory = pu.as1.Demonstration(theorems=(*wrong_axiomatization, isolated_theorem))
