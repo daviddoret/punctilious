@@ -1,28 +1,31 @@
 import typing
 import axiomatic_system_1 as as1
+import inference_rules_1 as ir1
 
+
+# Propositional logic vocabulary
 
 class Connectives(typing.NamedTuple):
     implies: as1.BinaryConnective
-    land: as1.SimpleObject
-    lnot: as1.SimpleObject
+    land: as1.BinaryConnective
+    lnot: as1.BinaryConnective
+    proposition: as1.SimpleObject
 
 
 connectives: Connectives = Connectives(
     implies=as1.let_x_be_a_binary_connective(rep='⊃'),
     land=as1.let_x_be_a_binary_connective(rep='∧'),
-    lnot=as1.let_x_be_a_unary_connective(rep='¬')
+    lnot=as1.let_x_be_a_unary_connective(rep='¬'),
+    proposition=as1.let_x_be_a_binary_connective(rep='proposition'),
 )
 
 implies = connectives.implies
+is_a = as1.connectives.is_a
 land = connectives.land
 lnot = connectives.lnot
+proposition = connectives.proposition
 
-# move this to a different module
-with as1.Variable(rep='a') as a, as1.Variable(rep='b') as b:
-    modus_ponens = as1.let_x_be_a_transformation(premises=(a, a | implies | b,), conclusion=b, variables=(a, b,))
-    pl0 = as1.let_x_be_an_axiom(claim=modus_ponens)
-
+# PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 with as1.Variable(rep='a') as a:
     pl01_claim = as1.let_x_be_a_transformation(premises=(a,), conclusion=a | land | a, variables=(a,))
     pl01 = as1.let_x_be_an_axiom(claim=pl01_claim)

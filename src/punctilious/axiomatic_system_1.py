@@ -692,9 +692,18 @@ class NullaryConnective(FixedArityConnective):
         super().__init__(rep=rep, fixed_arity_constraint=0)
 
 
-class SimpleObject(NullaryConnective):
-    """An alias for nullary-connective."""
-    pass
+class SimpleObject(Formula):
+    """A simple-object is a formula composed of a nullary-connective."""
+
+    def __new__(cls, c: NullaryConnective):
+        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
+        # because tuple is immutable.
+        o: tuple
+        o = super().__new__(cls, c=c, terms=None)
+        return o
+
+    def __init__(self, c: NullaryConnective):
+        super().__init__(c=c, terms=None)
 
 
 class UnaryConnective(FixedArityConnective):
@@ -800,7 +809,14 @@ class TernaryConnective(FixedArityConnective):
         super().__init__(rep=rep, fixed_arity_constraint=3)
 
 
-class Variable(Formula):
+class Variable(SimpleObject):
+    """A variable is defined as a simple-object.
+
+    Question: a variable could be alternatively defined as any arbitrary formula, but using simple-objects look
+    sufficient and much more readable.
+
+    The justification for a dedicated python class is the implementation of the __enter__ and __exit__ methods,
+    which allow the usage of variables with the python with statement."""
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
@@ -809,16 +825,19 @@ class Variable(Formula):
         :param phi: A formula.
         :return: bool.
         """
+        # TODO: Reimplement this properly
         phi: Formula = coerce_formula(phi=phi)
+        if phi.arity != 0:
+            return False
         return True
 
-    def __new__(cls, rep: str):
-        o: tuple = super().__new__(cls, c=None, terms=None)
+    def __new__(cls, c: NullaryConnective):
+        o: tuple
+        o = super().__new__(cls, c=c)
         return o
 
-    def __init__(self, rep: str):
-        c: NullaryConnective = NullaryConnective(rep=rep)
-        super().__init__(c=c, terms=None)
+    def __init__(self, c: NullaryConnective):
+        super().__init__(c=c)
 
     def __enter__(self) -> Variable:
         return self
@@ -829,11 +848,11 @@ class Variable(Formula):
 
 
 def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
-    NullaryConnective, typing.Generator[NullaryConnective, typing.Any, None]]:
+    Variable, typing.Generator[Variable, typing.Any, None]]:
     if isinstance(rep, str):
-        return NullaryConnective(rep=rep)
+        return Variable(c=NullaryConnective(rep=rep))
     elif isinstance(rep, typing.Iterable):
-        return (NullaryConnective(rep=r) for r in rep)
+        return (Variable(c=NullaryConnective(rep=r)) for r in rep)
     else:
         raise TypeError  # TODO: Implement event code.
 
@@ -856,9 +875,9 @@ def let_x_be_a_simple_object(rep: FlexibleRepresentation) -> typing.Union[
     :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
     """
     if isinstance(rep, str):
-        return SimpleObject(rep=rep)
+        return SimpleObject(c=NullaryConnective(rep=rep))
     elif isinstance(rep, typing.Iterable):
-        return (SimpleObject(rep=r) for r in rep)
+        return (SimpleObject(c=NullaryConnective(rep=r)) for r in rep)
     else:
         raise TypeError  # TODO: Implement event code.
 

@@ -763,9 +763,9 @@ class TestDemonstration:
 
 class TestVariable:
     def test_variable(self):
-        with as1.Variable(rep='x') as x:
+        with as1.let_x_be_a_variable(rep='x') as x:
             print(x)
-        with as1.Variable(rep='x') as x, as1.Variable(rep='y') as y:
+        with as1.let_x_be_a_variable(rep='x') as x, as1.let_x_be_a_variable(rep='y') as y:
             print(x)
             print(y)
             pass
