@@ -724,12 +724,12 @@ class TestAxiomatization:
         # extreme case: the empty enumeration
         e2 = as1.Enumeration()
         assert as1.is_well_formed_axiomatization(phi=e2)
-        a1 = as1.Axiomatization(e=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
+        a1 = as1.Axiomatization(axioms=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
         # bad case: an enumeration with a non-axiom
         e3 = as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e)))
         assert not as1.is_well_formed_axiomatization(phi=e3)
         with pytest.raises(as1.CustomException, match='e123'):
-            a2 = as1.Axiomatization(e=e3)  # raise an e123 exception
+            a2 = as1.Axiomatization(axioms=e3)  # raise an e123 exception
 
 
 class TestDemonstration:
@@ -746,18 +746,19 @@ class TestDemonstration:
         variables = as1.Enumeration(elements=(x, y, z,))
         f = as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         axiom_3 = as1.Axiom(claim=f)
-        axiomatization = as1.Axiomatization(e=(axiom_1, axiom_2, axiom_3))
-        demo1 = as1.Demonstration(e=axiomatization)  # this must not raise an exception and will just change the type
+        axiomatization = as1.Axiomatization(axioms=(axiom_1, axiom_2, axiom_3))
+        demo1 = as1.Demonstration(
+            proofs=axiomatization)  # this must not raise an exception and will just change the type
         i = as1.Inference(p=(a | star2 | b, b | star2 | c,), f=f)
         pbi1 = as1.ProofByInference(claim=a | star2 | c, i=i)
         u = as1.union_enumeration(phi=demo1, psi=(pbi1,))
-        demo2 = as1.Demonstration(e=u)  # Does not raise exception because it is valid
+        demo2 = as1.Demonstration(proofs=u)  # Does not raise exception because it is valid
         with pytest.raises(as1.CustomException, match='e123'):
             # invalid proof raise exception
-            demo3 = as1.Demonstration(e=(axiom_1, axiom_2, a | star2 | e))
+            demo3 = as1.Demonstration(proofs=(axiom_1, axiom_2, a | star2 | e))
         with pytest.raises(as1.CustomException, match='e108'):
             # invalid proof sequence exception
-            demo4 = as1.Demonstration(e=(axiom_1, axiom_2, pbi1, axiom_3,))
+            demo4 = as1.Demonstration(proofs=(axiom_1, axiom_2, pbi1, axiom_3,))
             pass
 
 

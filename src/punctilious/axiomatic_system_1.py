@@ -735,6 +735,10 @@ class SimpleObject(Formula):
     def __init__(self, c: NullaryConnective):
         super().__init__(c=c, terms=None)
 
+    def rep(self, **kwargs) -> str:
+        kwargs['parenthesis'] = True
+        return f'{self.c.rep(**kwargs)}'
+
 
 class UnaryConnective(FixedArityConnective):
 
@@ -759,7 +763,7 @@ class InfixPartialFormula:
         overloading the __or__() method that is called when | is used,
         and glueing all this together with the InfixPartialFormula class.
         """
-        return Formula(c=self._c, terms=[self.term_1, term_2])
+        return Formula(c=self._c, terms=(self.term_1, term_2,))
 
     def __repr__(self):
         return self.rep()
@@ -1561,11 +1565,6 @@ FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, EnumerationBuild
 """FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration or a 
 EnumerationBuilder."""
 
-FlexibleDemonstration = typing.Optional[
-    typing.Union[Demonstration, DemonstrationBuilder, typing.Iterable[FlexibleProof]]]
-"""FlexibleDemonstration is a flexible python type that may be safely coerced into a Demonstration or a 
-DemonstrationBuilder."""
-
 
 class EmptyEnumeration(Enumeration):
     """An empty-enumeration is an enumeration that has no element.
@@ -1788,7 +1787,7 @@ class Transformation(Formula):
             variables = f' where {self.variables.term_0} is a variable'
         else:
             variables = ', '.join(variable.rep(**kwargs) for variable in self.variables)
-            variables = f'where {variables} are variables'
+            variables = f' where {variables} are variables'
         return f'({premises}) --> ({self.conclusion}){variables}'
 
     def to_transformation_builder(self) -> TransformationBuilder:
@@ -1959,6 +1958,19 @@ def coerce_demonstration(phi: FlexibleFormula) -> Demonstration:
         return phi
     elif isinstance(phi, Formula) and is_well_formed_demonstration(phi=phi):
         return Demonstration(e=phi)
+    elif phi is None:
+        return Demonstration(proofs=None)
+    elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitly convert this to an enumeration
+        whose elements are the elements of the iterable."""
+        return Demonstration(proofs=tuple(element for element in phi))
+    elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitly convert this to an enumeration
+        whose elements are the elements of the iterable."""
+        # phi: Formula = Formula(c=connectives.e, terms=phi)
+        return Demonstration(proofs=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Demonstration, phi_type=type(phi), phi=phi)
 
@@ -2236,10 +2248,9 @@ class DemonstrationBuilder(EnumerationBuilder):
         super().append(term=term)
 
     def rep(self, **kwargs) -> str:
-        parenthesis = kwargs.get('parenthesis', False)
-        kwargs['parenthesis'] = True
-        elements: str = ', '.join(element.rep(**kwargs) for element in self)
-        return f'{{{elements}}}'
+        header: str = 'Demonstration (elaborating):\n\t'
+        proofs: str = '\n\t'.join(proof.rep(**kwargs) for proof in self)
+        return f'{header}{proofs}'
 
     def to_demonstration(self) -> Enumeration:
         """If the demonstration-builder is well-formed, return a demonstration."""
@@ -2325,29 +2336,35 @@ class Demonstration(Enumeration):
         # All tests were successful.
         return True
 
-    def __new__(cls, e: FlexibleEnumeration = None):
+    def __new__(cls, proofs: FlexibleEnumeration = None):
         # coerce to enumeration
-        e: Enumeration = coerce_enumeration(phi=e)
+        proofs: Enumeration = coerce_enumeration(phi=proofs)
         # coerce all elements of the enumeration to proofs
-        e: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in e))
-        if not is_well_formed_demonstration(phi=e):
+        proofs: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in proofs))
+        if not is_well_formed_demonstration(phi=proofs):
             # well-formedness check failed,
             # the proof is most certainly invalid.
-            raise_event(event_code=event_codes.e108, phi=e, expected_class='demonstration')
-        o: tuple = super().__new__(cls, elements=e)
+            raise_event(event_code=event_codes.e108, proofs=proofs, expected_class='demonstration')
+        o: tuple = super().__new__(cls, elements=proofs)
         return o
 
-    def __init__(self, e: FlexibleEnumeration = None):
+    def __init__(self, proofs: FlexibleEnumeration = None):
         # coerce to enumeration
-        e: Enumeration = coerce_enumeration(phi=e)
+        proofs: Enumeration = coerce_enumeration(phi=proofs)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in e))
-        super().__init__(elements=e)
+        proofs: Enumeration = coerce_enumeration(phi=(coerce_proof(phi=p) for p in proofs))
+        super().__init__(elements=proofs)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Demonstration:\n\t'
         proofs: str = '\n\t'.join(proof.rep(**kwargs) for proof in self)
         return f'{header}{proofs}'
+
+
+FlexibleDemonstration = typing.Optional[
+    typing.Union[Demonstration, DemonstrationBuilder, typing.Iterable[FlexibleProof]]]
+"""FlexibleDemonstration is a flexible python type that may be safely coerced into a Demonstration or a 
+DemonstrationBuilder."""
 
 
 class Axiomatization(Demonstration):
@@ -2378,20 +2395,20 @@ class Axiomatization(Demonstration):
         # All tests were successful.
         return True
 
-    def __new__(cls, e: FlexibleEnumeration = None):
+    def __new__(cls, axioms: FlexibleEnumeration = None):
         # coerce to enumeration
-        e: Enumeration = coerce_enumeration(phi=e)
+        axioms: Enumeration = coerce_enumeration(phi=axioms)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in e))
-        o: tuple = super().__new__(cls, e=e)
+        axioms: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in axioms))
+        o: tuple = super().__new__(cls, proofs=axioms)
         return o
 
-    def __init__(self, e: FlexibleEnumeration = None):
+    def __init__(self, axioms: FlexibleEnumeration = None):
         # coerce to enumeration
-        e: Enumeration = coerce_enumeration(phi=e)
+        axioms: Enumeration = coerce_enumeration(phi=axioms)
         # coerce all elements of the enumeration to proof
-        e: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in e))
-        super().__init__(e=e)
+        axioms: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in axioms))
+        super().__init__(proofs=axioms)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Axioms:\n\t'

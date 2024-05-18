@@ -98,7 +98,7 @@ with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi
         variables=(phi, psi,))
 modus_ponens_axiom: as1.Axiom = as1.let_x_be_an_axiom(claim=modus_ponens_rule)
 
-inference_rules = as1.Axiomatization(e=(
+inference_rules = as1.Axiomatization(axioms=(
     adjunction_axiom,
     simplification_1_axiom,
     simplification_2_axiom,
