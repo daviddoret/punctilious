@@ -589,6 +589,36 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
     return e
 
 
+def union_demonstration(phi: FlexibleDemonstration, psi: FlexibleDemonstration) -> Demonstration:
+    """Given two demonstrations phi, and psi, the union-demonstration operator, noted phi ∪-demonstration psi,
+    returns a new demonstration omega such that:
+    - all proofs of phi are elements of omega,
+    - all proofs of psi are elements of omega,
+    - no other proofs are proofs of omega.
+    Order is preserved, that is:
+    - the proofs from phi keep their original order in omega
+    - the proofs from psi keep their original order in omega providing they are not already present in phi,
+        in which case they are skipped
+
+    Under demonstration-equivalence, the union-demonstration operator is:
+     - Idempotent: (phi ∪-demonstration phi) ~demonstration phi.
+     - Symmetric: (phi ∪-demonstration psi) ~demonstration (psi ∪-demonstration phi).
+
+    Under formula-equivalence, the union-demonstration operator is:
+     - Idempotent: (phi ∪-demonstration phi) ~formula phi.
+     - Not symmetric if some element of psi are elements of phi: because of order.
+    """
+    phi: Demonstration = coerce_demonstration(phi=phi)
+    psi: Demonstration = coerce_demonstration(phi=psi)
+    db: DemonstrationBuilder = DemonstrationBuilder(proofs=None)
+    for phi_prime in phi:
+        db.append(term=phi_prime)
+    for psi_prime in psi:
+        db.append(term=psi_prime)
+    d: Demonstration = db.to_demonstration()
+    return d
+
+
 def coerce_enumeration_builder(phi: FlexibleEnumeration) -> EnumerationBuilder:
     if isinstance(phi, EnumerationBuilder):
         return phi
@@ -1530,6 +1560,11 @@ e = Enumeration
 FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, EnumerationBuilder, typing.Iterable[FlexibleFormula]]]
 """FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration or a 
 EnumerationBuilder."""
+
+FlexibleDemonstration = typing.Optional[
+    typing.Union[Demonstration, DemonstrationBuilder, typing.Iterable[FlexibleProof]]]
+"""FlexibleDemonstration is a flexible python type that may be safely coerced into a Demonstration or a 
+DemonstrationBuilder."""
 
 
 class EmptyEnumeration(Enumeration):
