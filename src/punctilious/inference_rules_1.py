@@ -3,7 +3,22 @@ import sys
 
 import axiomatic_system_1 as as1
 
-module_state = sys.modules[__name__]
+_current_module = sys.modules[__name__]
+if __name__ == '__main__':
+    raise ImportError(
+        'This module does not support being directly executed as a script. Please use the import statement.')
+_state = dict() if not hasattr(_current_module, '_state') else getattr(_current_module, '_state')
+
+
+def _set_state(key: str, value: object):
+    """An internal utility function to store module state and avoid
+    issues with global variables being re-instanciated if modules are re-loaded."""
+    global _state
+    if key in _state.items():
+        value = _state.get(key)
+    else:
+        _state[key] = value
+    return value
 
 
 # Propositional logic vocabulary
@@ -11,31 +26,22 @@ module_state = sys.modules[__name__]
 class Connectives(typing.NamedTuple):
     implies: as1.BinaryConnective
     land: as1.BinaryConnective
-    lnot: as1.BinaryConnective
+    lnot: as1.UnaryConnective
     proposition: as1.SimpleObject
 
 
-# TODO: module_state: Extend this approach to all global variables
-if hasattr(module_state, 'connectives'):
-    connectives: Connectives = module_state.connectives
-else:
-    connectives: Connectives = Connectives(
-        implies=as1.let_x_be_a_binary_connective(rep='⊃'),
-        land=as1.let_x_be_a_binary_connective(rep='∧'),
-        lnot=as1.let_x_be_a_unary_connective(rep='¬'),
-        proposition=as1.let_x_be_a_simple_object(rep='proposition'),
-    )
+connectives: Connectives = _set_state(key='connectives', value=Connectives(
+    implies=as1.connectives.implies,
+    land=as1.connectives.land,
+    lnot=as1.connectives.lnot,
+    proposition=as1.connectives.proposition,
+))
 
-is_a = as1.connectives.is_a
-
-implies = connectives.implies
-land = connectives.land
-lnot = connectives.lnot
-
-if hasattr(module_state, 'proposition'):
-    proposition = module_state.event_types
-else:
-    proposition = connectives.proposition
+is_a: as1.BinaryConnective = _set_state(key='is_a', value=as1.connectives.is_a)
+implies: as1.BinaryConnective = _set_state(key='implies', value=as1.connectives.implies)
+land: as1.BinaryConnective = _set_state(key='land', value=as1.connectives.land)
+lnot: as1.UnaryConnective = _set_state(key='lnot', value=as1.connectives.lnot)
+proposition: as1.SimpleObject = _set_state(key='proposition', value=as1.connectives.proposition)
 
 # Basic inference rules
 

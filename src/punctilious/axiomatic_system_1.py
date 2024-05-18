@@ -7,7 +7,22 @@ import warnings
 import threading
 import sys
 
-module_state = sys.modules[__name__]
+_current_module = sys.modules[__name__]
+if __name__ == '__main__':
+    raise ImportError(
+        'This module does not support being directly executed as a script. Please use the import statement.')
+_state = dict() if not hasattr(_current_module, '_state') else getattr(_current_module, '_state')
+
+
+def _set_state(key: str, value: object):
+    """An internal utility function to store module state and avoid
+    issues with global variables being re-instanciated if modules are re-loaded."""
+    global _state
+    if key in _state.items():
+        value = _state.get(key)
+    else:
+        _state[key] = value
+    return value
 
 
 class EventType(str):
@@ -21,16 +36,12 @@ class EventTypes(typing.NamedTuple):
     debug: EventType
 
 
-# TODO: module_state: Extend this approach to all global variables
-if hasattr(module_state, 'event_types'):
-    event_types: EventTypes = module_state.event_types
-else:
-    event_types: EventTypes = EventTypes(
-        error=EventType('error'),
-        warning=EventType('warning'),
-        info=EventType('info'),
-        debug=EventType('debug')
-    )
+event_types: EventTypes = _set_state(key='event_types', value=EventTypes(
+    error=EventType('error'),
+    warning=EventType('warning'),
+    info=EventType('info'),
+    debug=EventType('debug')
+))
 
 
 class EventCode(typing.NamedTuple):
@@ -66,7 +77,7 @@ class EventCodes(typing.NamedTuple):
     e123: EventCode
 
 
-event_codes = EventCodes(
+event_codes: EventCodes = _set_state(key='event_codes', value=EventCodes(
     e100=EventCode(event_type=event_types.error, code='e100',
                    message='FormulaBuilder.__init__: Unsupported type for the terms argument.'),
     e101=EventCode(event_type=event_types.error, code='e101',
@@ -130,8 +141,7 @@ event_codes = EventCodes(
                    message='REUSE'),
     e123=EventCode(event_type=event_types.error, code='e123',
                    message='Coercion failure: phi of phi_type could not be coerced to coerced_type.'),
-
-)
+))
 
 
 class CustomException(Exception):
@@ -898,9 +908,10 @@ def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
         raise TypeError  # TODO: Implement event code.
 
 
-def let_x_be_a_propositional_variable(rep: FlexibleRepresentation, db: FlexibleDemonstrationBuilder = None) -> \
-        typing.Union[
-            Variable, typing.Generator[Variable, typing.Any, None]]:
+def let_x_be_a_propositional_variable(
+        rep: FlexibleRepresentation,
+        db: FlexibleDemonstrationBuilder = None) -> \
+        typing.Union[Variable, typing.Generator[Variable, typing.Any, None]]:
     """
 
     :param rep:
@@ -913,13 +924,15 @@ def let_x_be_a_propositional_variable(rep: FlexibleRepresentation, db: FlexibleD
         db = coerce_demonstration_builder(phi=db)
     if isinstance(rep, str):
         x = Variable(c=NullaryConnective(rep=rep))
-        db.append(theorem=Axiom(claim=x | connectives.is_a | connectives.proposition))
+        if db is not None:
+            db.append(term=Axiom(claim=x | connectives.is_a | connectives.proposition))
         return x
     elif isinstance(rep, typing.Iterable):
         t = tuple()
         for r in rep:
             x = Variable(c=NullaryConnective(rep=r))
-            db.append(theorem=Axiom(claim=x | connectives.is_a | connectives.proposition))
+            if db is not None:
+                db.append(term=Axiom(claim=x | connectives.is_a | connectives.proposition))
             t = t + (x,)
         return t
     else:
@@ -1005,8 +1018,11 @@ class Connectives(typing.NamedTuple):
     implies: BinaryConnective
     inference: BinaryConnective
     is_a: BinaryConnective
+    land: BinaryConnective
+    lnot: UnaryConnective
     follows_from: BinaryConnective
     map: BinaryConnective
+    proposition: SimpleObject
     f: TernaryConnective
     """The transformation connective, cf. the Transformation class.
     """
@@ -1014,7 +1030,7 @@ class Connectives(typing.NamedTuple):
     tupl: FreeArityConnective
 
 
-connectives: Connectives = Connectives(
+connectives: Connectives = _set_state(key='connectives', value=Connectives(
     demonstration=let_x_be_a_free_arity_connective(rep='demonstration'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
     f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
@@ -1022,11 +1038,15 @@ connectives: Connectives = Connectives(
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference=let_x_be_a_binary_connective(rep='inference'),
     is_a=let_x_be_a_binary_connective(rep='is-a'),
+    land=let_x_be_a_binary_connective(rep='∧'),
+    lnot=let_x_be_a_unary_connective(rep='¬'),
     map=let_x_be_a_binary_connective(rep='map'),
     postulation=let_x_be_a_unary_connective(rep='postulation'),
+    proposition=let_x_be_a_simple_object(rep='proposition'),
     transformation=let_x_be_a_ternary_connective(rep='-->'),  # duplicate with f?
     tupl=let_x_be_a_free_arity_connective(rep='tuple'),
-)
+
+))
 
 
 # TODO: Rename Enumeration to HorizontalEnumeration, then implement VerticalEnumeration and parent class Enumeration.
@@ -2010,6 +2030,33 @@ def coerce_demonstration(phi: FlexibleFormula) -> Demonstration:
         raise_event(event_code=event_codes.e123, coerced_type=Demonstration, phi_type=type(phi), phi=phi)
 
 
+def coerce_demonstration_builder(phi: FlexibleFormula) -> DemonstrationBuilder:
+    """Validate that phi is a well-formed demonstration-builder and returns it properly typed as
+    DemonstrationBuilder, or raise exception e123.
+
+    :param phi:
+    :return:
+    """
+    if isinstance(phi, DemonstrationBuilder):
+        return phi
+    elif isinstance(phi, Demonstration):
+        return phi.to_demonstration_builder()
+    elif phi is None:
+        return DemonstrationBuilder(theorems=None)
+    elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitly convert this to an demonstration-builder
+        whose theorems are the elements of the iterable."""
+        return DemonstrationBuilder(theorems=tuple(theorem for theorem in phi))
+    elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitly convert this to an demonstration-builder
+        whose theorems are the elements of the iterable."""
+        return DemonstrationBuilder(theorems=phi)
+    else:
+        raise_event(event_code=event_codes.e123, coerced_type=DemonstrationBuilder, phi_type=type(phi), phi=phi)
+
+
 def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
     """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatisation, or raise exception e123.
 
@@ -2253,7 +2300,7 @@ class TheoremByInference(Theorem):
         return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.p} and inference-rule {self.i.f}.'
 
 
-FlexibleProof = typing.Optional[typing.Union[Formula, TheoremByInference, Axiom]]
+FlexibleTheorem = typing.Optional[typing.Union[Formula, TheoremByInference, Axiom]]
 
 
 class TheoryAccretor(EnumerationAccretor):
@@ -2325,7 +2372,7 @@ class Demonstration(Enumeration):
             if not is_well_formed_theorem(phi=theorem):
                 return False
             else:
-                theorem: FlexibleProof = coerce_theorem(phi=theorem)
+                theorem: FlexibleTheorem = coerce_theorem(phi=theorem)
                 theorems.append(term=theorem)
                 # retrieve the formula claimed as valid from the theorem
                 claim: Formula = theorem.claim
@@ -2405,11 +2452,17 @@ class Demonstration(Enumeration):
         theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
         return f'{header}{theorems}'
 
+    def to_demonstration_builder(self) -> DemonstrationBuilder:
+        return DemonstrationBuilder(theorems=self)
+
 
 FlexibleDemonstration = typing.Optional[
-    typing.Union[Demonstration, DemonstrationBuilder, typing.Iterable[FlexibleProof]]]
+    typing.Union[Demonstration, DemonstrationBuilder, typing.Iterable[FlexibleTheorem]]]
 """FlexibleDemonstration is a flexible python type that may be safely coerced into a Demonstration or a 
 DemonstrationBuilder."""
+
+FlexibleDemonstrationBuilder = typing.Optional[
+    typing.Union[Demonstration, DemonstrationBuilder, typing.Iterable[FlexibleTheorem]]]
 
 
 class Axiomatization(Demonstration):

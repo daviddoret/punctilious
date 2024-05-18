@@ -2,15 +2,19 @@ import pytest
 import punctilious as pu
 
 
-class TestAdjunction:
-    def test_adjunction(self):
+class TestPL1:
+    def test_pl1(self):
+        # PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
+
         # retrieve some basic vocabulary
         is_a = pu.as1.connectives.is_a
         proposition = pu.ir1.connectives.proposition
         land = pu.ir1.connectives.land
 
+        db = pu.as1.DemonstrationBuilder(theorems=None)
+
         # elaborate a theory
-        a = pu.as1.let_x_be_a_simple_object(rep='A')
+        a = pu.as1.let_x_be_a_propositional_variable(rep='A', db=db)
         a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
         a3 = pu.as1.let_x_be_an_axiom(claim=a)
         a4 = pu.as1.let_x_be_an_axiom(claim=b)
