@@ -34,14 +34,14 @@ connectives: Connectives = _set_state(key='connectives', value=Connectives(
     implies=as1.connectives.implies,
     land=as1.connectives.land,
     lnot=as1.connectives.lnot,
-    proposition=as1.connectives.proposition,
+    proposition=as1.connectives.propositional_variable,
 ))
 
 is_a: as1.BinaryConnective = _set_state(key='is_a', value=as1.connectives.is_a)
 implies: as1.BinaryConnective = _set_state(key='implies', value=as1.connectives.implies)
 land: as1.BinaryConnective = _set_state(key='land', value=as1.connectives.land)
 lnot: as1.UnaryConnective = _set_state(key='lnot', value=as1.connectives.lnot)
-proposition: as1.SimpleObject = _set_state(key='proposition', value=as1.connectives.proposition)
+proposition: as1.SimpleObject = _set_state(key='proposition', value=as1.connectives.propositional_variable)
 
 # Basic inference rules
 

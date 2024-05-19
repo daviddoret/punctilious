@@ -4,7 +4,7 @@ import collections
 import logging
 import typing
 import warnings
-import threading
+# import threading
 import sys
 
 _current_module = sys.modules[__name__]
@@ -16,7 +16,7 @@ _state = dict() if not hasattr(_current_module, '_state') else getattr(_current_
 
 def _set_state(key: str, value: object):
     """An internal utility function to store module state and avoid
-    issues with global variables being re-instanciated if modules are re-loaded."""
+    issues with global variables being re-instantiated if modules are re-loaded."""
     global _state
     if key in _state.items():
         value = _state.get(key)
@@ -145,7 +145,7 @@ event_codes: EventCodes = _set_state(key='event_codes', value=EventCodes(
 
 
 class CustomException(Exception):
-    """A generic exception type for application custom exceptionss."""
+    """A generic exception type for application custom exceptions."""
 
     def __init__(self, error_code: EventCode, **kwargs):
         self.error_code = error_code
@@ -410,11 +410,12 @@ class Formula(tuple):
         if isinstance(terms, collections.abc.Iterable):
             elements = tuple(coerce_formula(phi=term) for term in terms)
             o = super().__new__(cls, elements)
+            return o
         elif terms is None:
             o = super().__new__(cls)
+            return o
         else:
             raise_event(event_code=event_codes.e101, c=c, terms_type=type(terms), terms=terms)
-        return o
 
     def __init__(self, c: Connective, terms: FlexibleTupl = None):
         self._c = c
@@ -563,12 +564,12 @@ def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
         return Enumeration(elements=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
-        We assume here that the intention was to implicitely convert this to an enumeration
+        We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
         return Enumeration(elements=tuple(element for element in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
-        We assume here that the intention was to implicitely convert this to an enumeration
+        We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
         # phi: Formula = Formula(c=connectives.e, terms=phi)
         return Enumeration(elements=phi)
@@ -767,7 +768,7 @@ class InfixPartialFormula:
     """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
     This is accomplished by re-purposing the | operator,
     overloading the __or__() method that is called when | is used,
-    and glueing all this together with the InfixPartialFormula class.
+    and gluing all this together with the InfixPartialFormula class.
     """
 
     def __init__(self, c: Connective, term_1: FlexibleFormula):
@@ -778,7 +779,7 @@ class InfixPartialFormula:
         """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
         This is accomplished by re-purposing the | operator,
         overloading the __or__() method that is called when | is used,
-        and glueing all this together with the InfixPartialFormula class.
+        and gluing all this together with the InfixPartialFormula class.
         """
         return Formula(c=self._c, terms=(self.term_1, term_2,))
 
@@ -918,21 +919,21 @@ def let_x_be_a_propositional_variable(
     :param db: If a demonstration-builder is provided, append the axiom (x is-a proposition) where x is the new variable.
     :return:
     """
-    # TODO: RESUME IMPLEMENTATION OF PARAMTETER DB HERE.
+    # TODO: RESUME IMPLEMENTATION OF PARAMETER DB HERE.
     # TODO: EITHER MOVE THIS FUNCTION TO INFERENCE_RULES_1 OR MOVE FUNDAMENTAL LOGIC CONNECTIVES HERE
     if db is not None:
         db = coerce_demonstration_builder(phi=db)
     if isinstance(rep, str):
         x = Variable(c=NullaryConnective(rep=rep))
         if db is not None:
-            db.append(term=Axiom(claim=x | connectives.is_a | connectives.proposition))
+            db.append(term=Axiom(claim=x | connectives.is_a | connectives.propositional_variable))
         return x
     elif isinstance(rep, typing.Iterable):
         t = tuple()
         for r in rep:
             x = Variable(c=NullaryConnective(rep=r))
             if db is not None:
-                db.append(term=Axiom(claim=x | connectives.is_a | connectives.proposition))
+                db.append(term=Axiom(claim=x | connectives.is_a | connectives.propositional_variable))
             t = t + (x,)
         return t
     else:
@@ -1027,7 +1028,7 @@ class Connectives(typing.NamedTuple):
     lnot: UnaryConnective
     follows_from: BinaryConnective
     map: BinaryConnective
-    proposition: SimpleObject
+    propositional_variable: SimpleObject
     f: TernaryConnective
     """The transformation connective, cf. the Transformation class.
     """
@@ -1048,7 +1049,7 @@ connectives: Connectives = _set_state(key='connectives', value=Connectives(
     land=let_x_be_a_binary_connective(rep='∧'),
     lnot=let_x_be_a_unary_connective(rep='¬'),
     map=let_x_be_a_binary_connective(rep='map'),
-    proposition=let_x_be_a_simple_object(rep='proposition'),
+    propositional_variable=let_x_be_a_simple_object(rep='propositional-variable'),
     transformation=let_x_be_a_ternary_connective(rep='-->'),  # duplicate with f?
     tupl=let_x_be_a_free_arity_connective(rep='tuple'),
 
@@ -1144,7 +1145,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 
 def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, v: FlexibleEnumeration,
                                          m: FlexibleMap = None) -> bool:
-    """Two formulas phi and psi are formula-equivalent-with-variables with regards to variables V if and only if:
+    """Two formulas phi and psi are formula-equivalent-with-variables in regard to variables V if and only if:
      - All formulas in V are not sub-formula of phi,
      - We declare a new formula psi' where every sub-formula that is an element of V,
        is substituted by the formula that is at the exact same position in the tree.
@@ -1164,7 +1165,6 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula = psi
     v: Tupl = coerce_tupl(phi=v)
-    # print(f'phi:{phi}, psi:{psi}, v:{v}, m:{m}')
     if v.has_element(phi=phi):
         # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
         raise_event(event_code=event_codes.e118, phi=phi, psi=psi, v=v)
@@ -1403,7 +1403,7 @@ class MapBuilder(FormulaBuilder):
 class Map(Formula):
     """A map is a formula m(t0(k0, k1, ..., kn), t1(l0, l1, ..., ln)) where:
      - m is a node with the map connective.
-     - t0 is an enumaration named the keys enumaration.
+     - t0 is an enumeration named the keys' enumeration.
      - t1 is a tuple named the values tuple.
      - the cardinality of t0 is equal to the cardinality of 1.
 
@@ -1492,7 +1492,8 @@ class EnumerationBuilder(FormulaBuilder):
     def has_element(self, phi: FlexibleFormula) -> bool:
         """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
         phi ∼formula psi. False otherwise."""
-        return is_term_of_formula(phi=phi, psi=self)
+        e: Enumeration = self.to_enumeration()
+        return is_term_of_formula(phi=phi, psi=e)
 
     def rep(self, **kwargs) -> str:
         parenthesis = kwargs.get('parenthesis', False)
@@ -1886,7 +1887,7 @@ def coerce_transformation(phi: FlexibleTransformation) -> Transformation:
         return phi.to_transformation()
     elif isinstance(phi, Formula) and is_well_formed_transformation(phi=phi):
         # phi is a well-formed transformation,
-        # it can be safely re-instantiated as an Transformation and returned.
+        # it can be safely re-instantiated as a Transformation and returned.
         return Transformation(premises=phi.term_0, conclusion=phi.term_1, variables=phi.term_2)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
@@ -2052,7 +2053,7 @@ def coerce_demonstration(phi: FlexibleFormula) -> Demonstration:
     if isinstance(phi, Demonstration):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_demonstration(phi=phi):
-        return Demonstration(e=phi)
+        return Demonstration(theorems=phi)
     elif phi is None:
         return Demonstration(theorems=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
@@ -2098,7 +2099,7 @@ def coerce_demonstration_builder(phi: FlexibleFormula) -> DemonstrationBuilder:
 
 
 def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
-    """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatisation, or raise exception e123.
+    """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatization, or raise exception e123.
 
     :param phi:
     :return:
@@ -2106,7 +2107,7 @@ def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
     if isinstance(phi, Axiomatization):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_axiomatization(phi=phi):
-        return Axiomatization(e=phi)
+        return Axiomatization(axioms=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Axiomatization, phi_type=type(phi), phi=phi)
 
@@ -2225,6 +2226,9 @@ class Axiom(Theorem):
         return f'({self.claim.rep(**kwargs)}) is an axiom.'
 
 
+FlexibleAxiom = typing.Union[Axiom, Formula]
+
+
 class InferenceRule(Theorem):
     """A well-formed inference-rule is a theorem that justifies the derivation of other theorems in a theory,
     under certain conditions called premises.
@@ -2275,6 +2279,9 @@ class InferenceRule(Theorem):
 
     def rep(self, **kwargs) -> str:
         return f'({self.claim.rep(**kwargs)}) is an inference rule.'
+
+
+FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
 
 
 class Inference(Formula):
@@ -2406,7 +2413,8 @@ class TheoremByInference(Theorem):
         return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.p} and inference-rule {self.i.f}.'
 
 
-FlexibleTheorem = typing.Optional[typing.Union[Formula, TheoremByInference, InferenceRule]]
+FlexibleTheoremByInference = typing.Union[TheoremByInference, Formula]
+FlexibleTheorem = typing.Union[FlexibleAxiom, FlexibleTheoremByInference, FlexibleInferenceRule]
 
 
 class TheoryAccretor(EnumerationAccretor):
@@ -2416,6 +2424,11 @@ class TheoryAccretor(EnumerationAccretor):
 class DemonstrationBuilder(EnumerationBuilder):
     """A utility class to help build demonstrations. It is mutable and thus allows edition.
 
+    The allowed operations on an enumeration-builder are:
+     - appending axiom,
+     - appending inference-rule,
+     - appending theorem-from-inference.
+
     Note: """
 
     def __init__(self, theorems: FlexibleEnumeration):
@@ -2424,26 +2437,37 @@ class DemonstrationBuilder(EnumerationBuilder):
             for element in theorems:
                 self.append(term=element)
 
-    def append(self, term: Theorem) -> None:
+    def append(self, term: FlexibleTheorem) -> None:
         """
-
-        Override the append method to assure the unicity of newly added elements.
+        Override the append method to assure the consistency of newly added elements.
 
         :param term:
         :return:
         """
-        term = coerce_theorem(phi=term)
+        term: Theorem = coerce_theorem(phi=term)
         super().append(term=term)
+
+    def append_axiom(self, axiom: FlexibleAxiom) -> None:
+        axiom: Axiom = coerce_axiom(phi=axiom)
+        self.append(term=axiom)
+
+    def append_inference_rule(self, inference_rule: FlexibleInferenceRule) -> None:
+        inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
+        self.append(term=inference_rule)
+
+    def append_theorem_by_inference(self, theorem: FlexibleTheoremByInference) -> None:
+        theorem: TheoremByInference = coerce_theorem_by_inference(phi=theorem)
+        self.append(term=theorem)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Demonstration (elaborating):\n\t'
         theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
         return f'{header}{theorems}'
 
-    def to_demonstration(self) -> Enumeration:
+    def to_demonstration(self) -> Demonstration:
         """If the demonstration-builder is well-formed, return a demonstration."""
         elements: tuple[Formula, ...] = tuple(coerce_theorem(phi=element) for element in self)
-        phi: Demonstration = Demonstration(e=elements)
+        phi: Demonstration = Demonstration(theorems=elements)
         return phi
 
     def to_formula(self) -> Formula:
@@ -2653,6 +2677,43 @@ class Axiomatization(Demonstration):
         return f'{header}{axioms}'
 
 
+def is_leaf_formula(phi: FlexibleFormula) -> bool:
+    """Return True if phi is a leaf formula, False otherwise.
+
+    A formula phi is a leaf-formula if and only if phi has arity 0,
+    or equivalently if it has no terms.
+
+    :param phi:
+    :return: True if phi is a leaf formula, False otherwise.
+    :rtype: bool
+    """
+    phi = coerce_formula(phi=phi)
+    return phi.arity == 0
+
+
+def get_leaf_formulas(phi: FlexibleFormula, eb: EnumerationBuilder = None) -> Enumeration:
+    """Return the enumeration of leaf-formulas in phi.
+
+    Note: if phi is a leaf-formula, return phi.
+
+    :param phi:
+    :param eb: (conditional) An enumeration-builder for recursive call.
+    :return:
+    """
+    phi: Formula = coerce_formula(phi=phi)
+    if eb is None:
+        eb: EnumerationBuilder = EnumerationBuilder(elements=None)
+    if not eb.has_element(phi=phi) and is_leaf_formula(phi=phi):
+        eb.append(term=phi)
+    else:
+        for term in phi:
+            # Recursively call get_leaf_formulas,
+            # which complete eb with any remaining leaf formulas.
+            get_leaf_formulas(phi=term, eb=eb)
+    e: Enumeration = eb.to_enumeration()
+    return e
+
+
 def translate_implication_to_axiom(phi: FlexibleFormula):
     """Given a formula phi that is an implication in propositional logic,
     translates phi to an equivalent axiomatic-system-1 axiom.
@@ -2670,11 +2731,11 @@ def translate_implication_to_axiom(phi: FlexibleFormula):
     # Now we have the assurance that phi is a well-formed propositional formula.
     # Retrieve the list of propositional-variables in phi:
     propositional_variables: Enumeration = get_leaf_formulas(phi=phi)
-    db: TransformationBuilder = TransformationBuilder(premise=None)
+    db: TransformationBuilder = TransformationBuilder(premises=None, conclusion=None, variables=None)
     for x in propositional_variables:
         db.append_variable(variable=x)
         # Append the x is-a propositional-variable axiom
-        db.append_premise(premise=InferenceRule(transformation=x | is_a | propositional_variable))
+        db.append_premise(premise=Axiom(claim=x | connectives.is_a | connectives.propositional_variable))
     # Append the premise
     db.append_premise(premise=phi.term_0)
     db.set_conclusion(conclusion=phi.term_1)
