@@ -88,14 +88,14 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
     """Original axiom: PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
 
-with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
-        rep='c') as c:
-    pl03 = as1.let_x_be_an_inference_rule(
-        claim=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
-with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
-        rep='c') as c:
-    pl04 = as1.let_x_be_an_inference_rule(
-        claim=((a | implies | b) | land | (b | implies | c)) | implies | (a | implies | b))
+# with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
+#        rep='c') as c:
+#    pl03 = as1.let_x_be_an_inference_rule(
+#        claim=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
+# with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
+#        rep='c') as c:
+#    pl04 = as1.let_x_be_an_inference_rule(
+#        claim=((a | implies | b) | land | (b | implies | c)) | implies | (a | implies | b))
 # pl05 = as1.let_x_be_an_axiom(claim=𝐵 ⊃ (𝐴 ⊃ 𝐵))
 # pl06 = (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵
 # pl07 = 𝐴 ⊃ (𝐴 ∨ 𝐵)

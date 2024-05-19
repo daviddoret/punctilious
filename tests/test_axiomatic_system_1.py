@@ -619,7 +619,7 @@ class TestInferenceRule:
         f = pu.as1.let_x_be_a_binary_connective(rep='f')
         phi = a | f | b
         rule = pu.as1.Transformation(premises=None, conclusion=phi, variables=None)
-        ir = pu.as1.InferenceRule(claim=rule)
+        ir = pu.as1.InferenceRule(transformation=rule)
         axiomatization = pu.as1.Axiomatization(axioms=(ir,))
 
         # derivation from the axiom
@@ -726,22 +726,24 @@ class TestProofByInference:
 
 class TestAxiomatization:
     def test_is_well_formed(self):
+        # elaborate a theory
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
         x, y, z = pu.as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
         star1 = pu.as1.let_x_be_a_unary_connective(rep='*1')
         star2 = pu.as1.let_x_be_a_binary_connective(rep='*2')
         star3 = pu.as1.let_x_be_a_ternary_connective(rep='*3')
-        axiom_ok_1 = pu.as1.InferenceRule(
-            claim=pu.as1.Transformation(premises=None, conclusion=a | star2 | b, variables=None))
-        axiom_ok_2 = pu.as1.InferenceRule(
-            claim=pu.as1.Transformation(premises=None, conclusion=star1(c), variables=None))
+        axiom_ok_1 = pu.as1.Axiom(claim=a | star2 | b)
+        axiom_ok_2 = pu.as1.Axiom(claim=star1(c))
+
         # simple case
         e1 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
         assert pu.as1.is_well_formed_axiomatization(phi=e1)
+
         # extreme case: the empty enumeration
         e2 = pu.as1.Enumeration()
         assert pu.as1.is_well_formed_axiomatization(phi=e2)
         a1 = pu.as1.Axiomatization(axioms=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
+
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e)))
         assert not pu.as1.is_well_formed_axiomatization(phi=e3)
@@ -757,15 +759,13 @@ class TestDemonstration:
         star1 = pu.as1.let_x_be_a_unary_connective(rep='*1')
         star2 = pu.as1.let_x_be_a_binary_connective(rep='*2')
         star3 = pu.as1.let_x_be_a_ternary_connective(rep='*3')
-        axiom_1 = pu.as1.InferenceRule(
-            claim=pu.as1.Transformation(premises=None, conclusion=a | star2 | b, variables=None))
-        axiom_2 = pu.as1.InferenceRule(
-            claim=pu.as1.Transformation(premises=None, conclusion=b | star2 | c, variables=None))
+        axiom_1 = pu.as1.Axiom(claim=a | star2 | b)
+        axiom_2 = pu.as1.Axiom(claim=b | star2 | c)
         rule = pu.as1.Transformation(
             premises=(x | star2 | y, y | star2 | z,),
             conclusion=x | star2 | z,
             variables=(x, y, z,))
-        axiom_3 = pu.as1.InferenceRule(claim=rule)
+        axiom_3 = pu.as1.InferenceRule(transformation=rule)
         axiomatization = pu.as1.Axiomatization(axioms=(axiom_1, axiom_2, axiom_3,))
         demo1 = pu.as1.Demonstration(
             theorems=axiomatization)  # this must not raise an exception and will just change the type

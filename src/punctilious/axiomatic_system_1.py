@@ -925,14 +925,14 @@ def let_x_be_a_propositional_variable(
     if isinstance(rep, str):
         x = Variable(c=NullaryConnective(rep=rep))
         if db is not None:
-            db.append(term=InferenceRule(claim=x | connectives.is_a | connectives.proposition))
+            db.append(term=Axiom(claim=x | connectives.is_a | connectives.proposition))
         return x
     elif isinstance(rep, typing.Iterable):
         t = tuple()
         for r in rep:
             x = Variable(c=NullaryConnective(rep=r))
             if db is not None:
-                db.append(term=InferenceRule(claim=x | connectives.is_a | connectives.proposition))
+                db.append(term=Axiom(claim=x | connectives.is_a | connectives.proposition))
             t = t + (x,)
         return t
     else:
@@ -1000,7 +1000,7 @@ def let_x_be_a_free_arity_connective(rep: str):
 
 
 def let_x_be_an_inference_rule(claim: FlexibleTransformation):
-    return InferenceRule(claim=claim)
+    return InferenceRule(transformation=claim)
 
 
 def let_x_be_an_axiom(claim: FlexibleFormula):
@@ -1984,14 +1984,31 @@ def coerce_theorem(phi: FlexibleFormula) -> Theorem:
     :param phi:
     :return:
     """
-    if isinstance(phi, Theorem):
-        return phi
-    elif isinstance(phi, Formula) and is_well_formed_inference_rule(phi=phi):
-        return coerce_inference_rule(phi=phi)
-    elif isinstance(phi, Formula) and is_well_formed_theorem_by_inference(phi=phi):
+    phi = coerce_formula(phi=phi)
+    if is_well_formed_theorem_by_inference(phi=phi):
         return coerce_theorem_by_inference(phi=phi)
+    elif is_well_formed_inference_rule(phi=phi):
+        return coerce_inference_rule(phi=phi)
+    elif is_well_formed_axiom(phi=phi):
+        return coerce_axiom(phi=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
+
+
+def coerce_axiom(phi: FlexibleFormula) -> Axiom:
+    """Validate that p is a well-formed axiom and returns it properly typed as an instance of Axiom,
+    or raise exception e123.
+
+    :param phi:
+    :return:
+    """
+    if isinstance(phi, Axiom):
+        return phi
+    elif isinstance(phi, Formula) and is_well_formed_axiom(phi=phi):
+        proved_formula: Formula = phi.term_0
+        return Axiom(claim=proved_formula)
+    else:
+        raise_event(event_code=event_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
 
 
 def coerce_inference_rule(phi: FlexibleFormula) -> InferenceRule:
@@ -2005,7 +2022,7 @@ def coerce_inference_rule(phi: FlexibleFormula) -> InferenceRule:
         return phi
     elif isinstance(phi, Formula) and is_well_formed_inference_rule(phi=phi):
         proved_formula: Formula = phi.term_0
-        return InferenceRule(claim=proved_formula)
+        return InferenceRule(transformation=proved_formula)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
 
@@ -2122,8 +2139,15 @@ class Theorem(Formula):
         :param phi: A formula.
         :return: bool.
         """
-        # TODO: Implement Proof.is_well_formed
-        return True
+        phi: Formula = coerce_formula(phi=phi)
+        if is_well_formed_theorem_by_inference(phi=phi):
+            return True
+        elif is_well_formed_inference_rule(phi=phi):
+            return True
+        elif is_well_formed_axiom(phi=phi):
+            return True
+        else:
+            return False
 
     def __new__(cls, claim: FlexibleFormula, justification: FlexibleFormula):
         claim = coerce_formula(phi=claim)
@@ -2177,10 +2201,13 @@ class Axiom(Theorem):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        if (not phi.c is connectives.follows_from or
-                not phi.arity == 2 or
-                not is_well_formed_transformation(phi=phi.term_0) or
-                phi.term_1.c is not connectives.axiom):
+        if isinstance(phi, Axiom):
+            # Shortcut: the class assures the well-formedness of the formula.
+            return True
+        elif (not phi.c is connectives.follows_from or
+              not phi.arity == 2 or
+              not is_well_formed_formula(phi=phi.term_0) or
+              phi.term_1.c is not connectives.axiom):
             return False
         else:
             return True
@@ -2226,29 +2253,32 @@ class InferenceRule(Theorem):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        if (not phi.c is connectives.follows_from or
-                not phi.arity == 2 or
-                not is_well_formed_transformation(phi=phi.term_0) or
-                phi.term_1.c is not connectives.inference_rule):
+        if isinstance(phi, InferenceRule):
+            # Shortcut: the class assures the well-formedness of the formula.
+            return True
+        elif (not phi.c is connectives.follows_from or
+              not phi.arity == 2 or
+              not is_well_formed_transformation(phi=phi.term_0) or
+              phi.term_1.c is not connectives.inference_rule):
             return False
         else:
             return True
 
-    def __new__(cls, claim: FlexibleTransformation = None):
-        claim: Formula = coerce_transformation(phi=claim)
-        o: tuple = super().__new__(cls, claim=claim, justification=connectives.inference_rule)
+    def __new__(cls, transformation: FlexibleTransformation = None):
+        transformation: Formula = coerce_transformation(phi=transformation)
+        o: tuple = super().__new__(cls, claim=transformation, justification=connectives.inference_rule)
         return o
 
-    def __init__(self, claim: FlexibleTransformation):
-        claim: Formula = coerce_transformation(phi=claim)
-        super().__init__(claim=claim, justification=connectives.inference_rule)
+    def __init__(self, transformation: FlexibleTransformation):
+        transformation: Formula = coerce_transformation(phi=transformation)
+        super().__init__(claim=transformation, justification=connectives.inference_rule)
 
     def rep(self, **kwargs) -> str:
         return f'({self.claim.rep(**kwargs)}) is an inference rule.'
 
 
 class Inference(Formula):
-    """An inference is the description of the usage of an inference-rule.
+    """An inference is the description of a usage of an inference-rule.
 
     Syntactic definition:
     An inference is a formula of the form:
@@ -2448,7 +2478,7 @@ class Demonstration(Enumeration):
             if not is_well_formed_theorem(phi=theorem):
                 return False
             else:
-                theorem: FlexibleTheorem = coerce_theorem(phi=theorem)
+                theorem: Theorem = coerce_theorem(phi=theorem)
                 theorems.append(term=theorem)
                 # retrieve the formula claimed as valid from the theorem
                 claim: Formula = theorem.claim
@@ -2460,8 +2490,11 @@ class Demonstration(Enumeration):
         for i in range(0, theorems.arity):
             theorem = theorems[i]
             claim = claims[i]
-            if is_well_formed_inference_rule(phi=theorem):
+            if is_well_formed_axiom(phi=theorem):
                 # This is an axiom.
+                pass
+            elif is_well_formed_inference_rule(phi=theorem):
+                # This is an inference-rule.
                 pass
             elif is_well_formed_theorem_by_inference(phi=theorem):
                 theorem_by_inference: TheoremByInference = coerce_theorem_by_inference(phi=theorem)
@@ -2562,6 +2595,9 @@ class Axiomatization(Demonstration):
         for i in range(0, phi.arity):
             psi = phi[i]
             if is_well_formed_inference_rule(phi=psi):
+                # This is an inference-rule.
+                pass
+            elif is_well_formed_axiom(phi=psi):
                 # This is an axiom.
                 pass
             else:
@@ -2573,17 +2609,43 @@ class Axiomatization(Demonstration):
     def __new__(cls, axioms: FlexibleEnumeration = None):
         # coerce to enumeration
         axioms: Enumeration = coerce_enumeration(phi=axioms)
-        # coerce all elements of the enumeration to theorem
-        axioms: Enumeration = coerce_enumeration(phi=(coerce_inference_rule(phi=p) for p in axioms))
-        o: tuple = super().__new__(cls, theorems=axioms)
+        # coerce all elements of the enumeration to axioms or inference-rules.
+        eb: EnumerationBuilder = EnumerationBuilder(elements=None)
+        for theorem in axioms:
+            if is_well_formed_inference_rule(phi=theorem):
+                # This is an inference-rule.
+                inference_rule: InferenceRule = coerce_inference_rule(phi=theorem)
+                eb.append(term=theorem)
+            elif is_well_formed_axiom(phi=theorem):
+                # This is an axiom.
+                axiom: Axiom = coerce_axiom(phi=theorem)
+                eb.append(term=theorem)
+            else:
+                # Incorrect form.
+                raise_event(event_code=event_codes.e123, phi=theorem, phi_type_1=InferenceRule, phi_type_2=Axiom)
+        e: Enumeration = eb.to_enumeration()
+        o: tuple = super().__new__(cls, theorems=e)
         return o
 
     def __init__(self, axioms: FlexibleEnumeration = None):
         # coerce to enumeration
         axioms: Enumeration = coerce_enumeration(phi=axioms)
-        # coerce all elements of the enumeration to theorem
-        axioms: Enumeration = coerce_enumeration(phi=(coerce_inference_rule(phi=p) for p in axioms))
-        super().__init__(theorems=axioms)
+        # coerce all elements of the enumeration to axioms or inference-rules.
+        eb: EnumerationBuilder = EnumerationBuilder(elements=None)
+        for theorem in axioms:
+            if is_well_formed_inference_rule(phi=theorem):
+                # This is an inference-rule.
+                inference_rule: InferenceRule = coerce_inference_rule(phi=theorem)
+                eb.append(term=theorem)
+            elif is_well_formed_axiom(phi=theorem):
+                # This is an axiom.
+                axiom: Axiom = coerce_axiom(phi=theorem)
+                eb.append(term=theorem)
+            else:
+                # Incorrect form.
+                raise Exception('invalid theorem')
+        e: Enumeration = eb.to_enumeration()
+        super().__init__(theorems=e)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Axioms:\n\t'
@@ -2612,7 +2674,7 @@ def translate_implication_to_axiom(phi: FlexibleFormula):
     for x in propositional_variables:
         db.append_variable(variable=x)
         # Append the x is-a propositional-variable axiom
-        db.append_premise(premise=InferenceRule(claim=x | is_a | propositional_variable))
+        db.append_premise(premise=InferenceRule(transformation=x | is_a | propositional_variable))
     # Append the premise
     db.append_premise(premise=phi.term_0)
     db.set_conclusion(conclusion=phi.term_1)
