@@ -43,29 +43,29 @@ import inference_rules_1 as ir1
 class Connectives(typing.NamedTuple):
     implies: as1.BinaryConnective
     land: as1.BinaryConnective
-    lnot: as1.BinaryConnective
-    proposition: as1.SimpleObject
+    lnot: as1.UnaryConnective
+    propositional_variable: as1.SimpleObject
 
 
 connectives: Connectives = Connectives(
-    implies=as1.let_x_be_a_binary_connective(rep='⊃'),
-    land=as1.let_x_be_a_binary_connective(rep='∧'),
-    lnot=as1.let_x_be_a_unary_connective(rep='¬'),
-    proposition=as1.let_x_be_a_binary_connective(rep='proposition'),
+    implies=as1.connectives.implies,
+    land=as1.connectives.land,
+    lnot=as1.connectives.lnot,
+    propositional_variable=as1.connectives.propositional_variable,
 )
 
 # retrieve vocabulary from axiomatic-system-1
 is_a = as1.connectives.is_a
 
 # retrieve vocabulary from inference-rules-1
-implies = ir1.connectives.implies
-land = ir1.connectives.land
-lnot = ir1.connectives.lnot
-proposition = ir1.connectives.proposition
+implies = as1.connectives.implies
+land = as1.connectives.land
+lnot = as1.connectives.lnot
+propositional_variable = as1.connectives.propositional_variable
 
 with as1.let_x_be_a_variable(rep='a') as a:
     pl01_rule: as1.Transformation = as1.Transformation(premises=(
-        a | is_a | proposition,
+        a | is_a | propositional_variable,
         a,
     ), conclusion=a | land | a,
         variables=(a,))
@@ -77,8 +77,8 @@ with as1.let_x_be_a_variable(rep='a') as a:
 
 with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b:
     pl02_rule: as1.Transformation = as1.Transformation(premises=(
-        a | is_a | proposition,
-        b | is_a | proposition,
+        a | is_a | propositional_variable,
+        b | is_a | propositional_variable,
         a | land | b,
     ), conclusion=b | land | a,
         variables=(a, b,))
