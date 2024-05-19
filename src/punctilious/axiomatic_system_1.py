@@ -1764,6 +1764,17 @@ class Transformation(Formula):
     map all variables with their respective formulas
     return the conclusion by substituting variables with formulas
     # TODO: Transformation: rewrite the above clearly
+
+    Note 1: when a transformation is a theorem, it becomes an inference-rule for that theory.
+
+    Note 2: when a transformation is a theorem, it is very similar to an intuitionistic sequent (cf. Mancosu et al,
+    2021, p. 170), i.e.: "In intuitionistic-sequent, there may be at most one formula to the right of ⇒ .", with
+    some distinctive properties:
+        - a transformation comprises an explicit and finite set of variables,
+          while an intuitionistic-sequent uses only formula variables.
+        - the order of the premises in a transformation does not matter a priori because it is an enumeration,
+          while the order of the formulas in the antecedent of an intuitionistic-sequent matter a priori,
+          even though this constraint is immediately relieved by the interchange structural rule.
     """
 
     @staticmethod
