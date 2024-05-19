@@ -22,8 +22,8 @@ class TestPL1:
 
         # derive a new theorem
         inference = pu.as1.Inference(
-            p=(a1.claim, a2.claim,),
-            f=pu.ml1.pl01_rule)
+            premises=(a1.claim, a2.claim,),
+            transformation_rule=pu.ml1.pl01_rule)
         isolated_theorem = pu.as1.TheoremByInference(claim=a | land | a, i=inference)
         assert pu.as1.is_formula_equivalent(phi=a | land | a, psi=isolated_theorem.claim)
         extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem,))
@@ -58,8 +58,8 @@ class TestPL2:
 
         # derive a new theorem
         inference = pu.as1.Inference(
-            p=(a1.claim, a2.claim, a3.claim,),
-            f=pu.ml1.pl02_rule)
+            premises=(a1.claim, a2.claim, a3.claim,),
+            transformation_rule=pu.ml1.pl02_rule)
         isolated_theorem = pu.as1.TheoremByInference(claim=b | land | a, i=inference)
         assert pu.as1.is_formula_equivalent(phi=b | land | a, psi=isolated_theorem.claim)
 

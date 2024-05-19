@@ -191,7 +191,7 @@ class Connective:
 
     def __call__(self, *args):
         """Allows pseudo formal language in python."""
-        return Formula(c=self, terms=args)
+        return Formula(connective=self, terms=args)
 
     def __repr__(self):
         return self.rep()
@@ -203,7 +203,7 @@ class Connective:
         return self._rep
 
     def to_formula(self) -> Formula:
-        return Formula(c=self)
+        return Formula(connective=self)
 
     def to_formula_builder(self) -> FormulaBuilder:
         return FormulaBuilder(c=self)
@@ -376,7 +376,7 @@ class FormulaBuilder(list):
         if self.c is None:
             raise_event(event_code=event_codes.e113, formula_builder=self, c=self.c)
         terms: tuple[Formula, ...] = tuple(coerce_formula(phi=term) for term in self)
-        phi: Formula = Formula(c=self.c, terms=terms)
+        phi: Formula = Formula(connective=self.c, terms=terms)
         return phi
 
     def validate_formula_builder(self) -> bool:
@@ -403,7 +403,7 @@ class Formula(tuple):
         phi: Formula = coerce_formula(phi=phi)
         return True
 
-    def __new__(cls, c: Connective, terms: FlexibleTupl = None):
+    def __new__(cls, connective: Connective, terms: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
@@ -415,10 +415,10 @@ class Formula(tuple):
             o = super().__new__(cls)
             return o
         else:
-            raise_event(event_code=event_codes.e101, c=c, terms_type=type(terms), terms=terms)
+            raise_event(event_code=event_codes.e101, c=connective, terms_type=type(terms), terms=terms)
 
-    def __init__(self, c: Connective, terms: FlexibleTupl = None):
-        self._c = c
+    def __init__(self, connective: Connective, terms: FlexibleTupl = None):
+        self._connective = connective
         # TODO: Question: should __init__ be called in classes that implement __new__?
         # super().__init__()
 
@@ -453,7 +453,7 @@ class Formula(tuple):
 
     @property
     def c(self) -> Connective:
-        return self._c
+        return self._connective
 
     def get_index_of_first_equivalent_term(self, phi: FlexibleFormula) -> int:
         """Returns the o-based index of the first occurrence of a formula psi among the terms of the current formula,
@@ -559,7 +559,7 @@ def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
     elif isinstance(phi, Formula) and is_well_formed_enumeration(phi=phi):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(elements=phi, c=phi.c)
+        return Enumeration(elements=phi, connective=phi.c)
     elif phi is None:
         return Enumeration(elements=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
@@ -743,15 +743,15 @@ class NullaryConnective(FixedArityConnective):
 class SimpleObject(Formula):
     """A simple-object is a formula composed of a nullary-connective."""
 
-    def __new__(cls, c: NullaryConnective):
+    def __new__(cls, connective: NullaryConnective):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
-        o = super().__new__(cls, c=c, terms=None)
+        o = super().__new__(cls, connective=connective, terms=None)
         return o
 
-    def __init__(self, c: NullaryConnective):
-        super().__init__(c=c, terms=None)
+    def __init__(self, connective: NullaryConnective):
+        super().__init__(connective=connective, terms=None)
 
     def rep(self, **kwargs) -> str:
         kwargs['parenthesis'] = True
@@ -781,7 +781,7 @@ class InfixPartialFormula:
         overloading the __or__() method that is called when | is used,
         and gluing all this together with the InfixPartialFormula class.
         """
-        return Formula(c=self._c, terms=(self.term_1, term_2,))
+        return Formula(connective=self._c, terms=(self.term_1, term_2,))
 
     def __repr__(self):
         return self.rep()
@@ -883,13 +883,13 @@ class Variable(SimpleObject):
             return False
         return True
 
-    def __new__(cls, c: NullaryConnective):
+    def __new__(cls, connective: NullaryConnective):
         o: tuple
-        o = super().__new__(cls, c=c)
+        o = super().__new__(cls, connective=connective)
         return o
 
-    def __init__(self, c: NullaryConnective):
-        super().__init__(c=c)
+    def __init__(self, connective: NullaryConnective):
+        super().__init__(connective=connective)
 
     def __enter__(self) -> Variable:
         return self
@@ -902,9 +902,9 @@ class Variable(SimpleObject):
 def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
     Variable, typing.Generator[Variable, typing.Any, None]]:
     if isinstance(rep, str):
-        return Variable(c=NullaryConnective(rep=rep))
+        return Variable(connective=NullaryConnective(rep=rep))
     elif isinstance(rep, typing.Iterable):
-        return (Variable(c=NullaryConnective(rep=r)) for r in rep)
+        return (Variable(connective=NullaryConnective(rep=r)) for r in rep)
     else:
         raise TypeError  # TODO: Implement event code.
 
@@ -924,14 +924,14 @@ def let_x_be_a_propositional_variable(
     if db is not None:
         db = coerce_demonstration_builder(phi=db)
     if isinstance(rep, str):
-        x = Variable(c=NullaryConnective(rep=rep))
+        x = Variable(connective=NullaryConnective(rep=rep))
         if db is not None:
             db.append(term=Axiom(claim=x | connectives.is_a | connectives.propositional_variable))
         return x
     elif isinstance(rep, typing.Iterable):
         t = tuple()
         for r in rep:
-            x = Variable(c=NullaryConnective(rep=r))
+            x = Variable(connective=NullaryConnective(rep=r))
             if db is not None:
                 db.append(term=Axiom(claim=x | connectives.is_a | connectives.propositional_variable))
             t = t + (x,)
@@ -958,9 +958,9 @@ def let_x_be_a_simple_object(rep: FlexibleRepresentation) -> typing.Union[
     :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
     """
     if isinstance(rep, str):
-        return SimpleObject(c=NullaryConnective(rep=rep))
+        return SimpleObject(connective=NullaryConnective(rep=rep))
     elif isinstance(rep, typing.Iterable):
-        return (SimpleObject(c=NullaryConnective(rep=r)) for r in rep)
+        return (SimpleObject(connective=NullaryConnective(rep=r)) for r in rep)
     else:
         raise TypeError  # TODO: Implement event code.
 
@@ -1305,11 +1305,11 @@ class Tupl(Formula):
     def __new__(cls, elements: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple = super().__new__(cls, c=connectives.tupl, terms=elements)
+        o: tuple = super().__new__(cls, connective=connectives.tupl, terms=elements)
         return o
 
     def __init__(self, elements: FlexibleTupl = None):
-        super().__init__(c=connectives.tupl, terms=elements)
+        super().__init__(connective=connectives.tupl, terms=elements)
 
     def get_index_of_first_equivalent_element(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
@@ -1418,13 +1418,13 @@ class Map(Formula):
         codomain: Tupl = coerce_tupl(phi=codomain)
         if len(domain) != len(codomain):
             raise ValueError('Map: |keys| != |values|')
-        o: tuple = super().__new__(cls, c=connectives.map, terms=(domain, codomain,))
+        o: tuple = super().__new__(cls, connective=connectives.map, terms=(domain, codomain,))
         return o
 
     def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
         domain: Enumeration = coerce_enumeration(phi=domain)
         codomain: Tupl = coerce_tupl(phi=codomain)
-        super().__init__(c=connectives.map, terms=(domain, codomain,))
+        super().__init__(connective=connectives.map, terms=(domain, codomain,))
 
     @property
     def codomain(self) -> Tupl:
@@ -1492,8 +1492,8 @@ class EnumerationBuilder(FormulaBuilder):
     def has_element(self, phi: FlexibleFormula) -> bool:
         """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
         phi ∼formula psi. False otherwise."""
-        e: Enumeration = self.to_enumeration()
-        return is_term_of_formula(phi=phi, psi=e)
+        enumeration: Enumeration = self.to_enumeration()
+        return is_term_of_formula(phi=phi, psi=enumeration)
 
     def rep(self, **kwargs) -> str:
         parenthesis = kwargs.get('parenthesis', False)
@@ -1565,21 +1565,21 @@ class Enumeration(Formula):
                             return False
             return True
 
-    def __new__(cls, elements: FlexibleEnumeration = None, c: Connective = None):
+    def __new__(cls, elements: FlexibleEnumeration = None, connective: Connective = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        c = connectives.e if c is None else c
+        connective: Connective = connectives.e if connective is None else connective
         if not is_well_formed_enumeration(phi=elements):
             raise_event(event_code=event_codes.e110, elements_type=type(elements), elements=elements)
-        o: tuple = super().__new__(cls, c=connectives.e, terms=elements)
+        o: tuple = super().__new__(cls, connective=connectives.e, terms=elements)
         return o
 
-    def __init__(self, elements: FlexibleEnumeration = None, c: Connective = None):
+    def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        c = connectives.e if c is None else c
+        connective = connectives.e if connective is None else connective
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
-        super().__init__(c=connectives.e, terms=eb)
+        super().__init__(connective=connectives.e, terms=eb)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
@@ -1806,7 +1806,7 @@ class Transformation(Formula):
         premises: Tupl = coerce_tupl(phi=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(phi=variables)
-        o: tuple = super().__new__(cls, c=connectives.transformation,
+        o: tuple = super().__new__(cls, connective=connectives.transformation,
                                    terms=(premises, conclusion, variables,))
         return o
 
@@ -1815,7 +1815,7 @@ class Transformation(Formula):
         premises: Tupl = coerce_tupl(phi=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(phi=variables)
-        super().__init__(c=connectives.transformation, terms=(premises, conclusion, variables,))
+        super().__init__(connective=connectives.transformation, terms=(premises, conclusion, variables,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1906,7 +1906,8 @@ def coerce_inference(phi: FlexibleInference) -> Inference:
     if isinstance(phi, Inference):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_inference(phi=phi):
-        return Inference(p=phi.term_0, f=phi.term_1)
+        transformation: Transformation = coerce_transformation(phi=phi.term_1)
+        return Inference(premises=phi.term_0, transformation_rule=transformation)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Inference, phi_type=type(phi), phi=phi)
 
@@ -2154,14 +2155,14 @@ class Theorem(Formula):
         claim = coerce_formula(phi=claim)
         justification = coerce_formula(phi=justification)
         c: Connective = connectives.follows_from
-        o: tuple = super().__new__(cls, c=c, terms=(claim, justification,))
+        o: tuple = super().__new__(cls, connective=c, terms=(claim, justification,))
         return o
 
     def __init__(self, claim: FlexibleFormula, justification: FlexibleFormula):
         self._claim = coerce_formula(phi=claim)
         self._justification = coerce_formula(phi=justification)
         c: Connective = connectives.follows_from
-        super().__init__(c=c, terms=(self._claim, self._justification,))
+        super().__init__(connective=c, terms=(self._claim, self._justification,))
 
     @property
     def claim(self) -> Formula:
@@ -2312,28 +2313,28 @@ class Inference(Formula):
         else:
             return True
 
-    def __new__(cls, p: FlexibleTupl, f: FlexibleTransformation):
-        p: Tupl = coerce_tupl(phi=p)
-        f: Transformation = coerce_transformation(phi=f)
+    def __new__(cls, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
+        premises: Tupl = coerce_tupl(phi=premises)
+        transformation_rule: Transformation = coerce_transformation(phi=transformation_rule)
         c: Connective = connectives.inference
-        o: tuple = super().__new__(cls, c=c, terms=(p, f,))
+        o: tuple = super().__new__(cls, connective=c, terms=(premises, transformation_rule,))
         return o
 
-    def __init__(self, p: FlexibleTupl, f: FlexibleTransformation):
-        self._p: Tupl = coerce_tupl(phi=p)
-        self._f: Transformation = coerce_transformation(phi=f)
+    def __init__(self, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
+        self._premises: Tupl = coerce_tupl(phi=premises)
+        self._transformation_rule: Transformation = coerce_transformation(phi=transformation_rule)
         c: Connective = connectives.inference
-        super().__init__(c=c, terms=(self._p, self._f,))
+        super().__init__(connective=c, terms=(self._premises, self._transformation_rule,))
 
     @property
     def f(self) -> Transformation:
         """The inference-rule of the inference."""
-        return self._f
+        return self._transformation_rule
 
     @property
     def p(self) -> Tupl:
         """The premises of the inference."""
-        return self._p
+        return self._premises
 
 
 FlexibleInference = typing.Optional[typing.Union[Inference]]
@@ -2647,8 +2648,8 @@ class Axiomatization(Demonstration):
             else:
                 # Incorrect form.
                 raise_event(event_code=event_codes.e123, phi=theorem, phi_type_1=InferenceRule, phi_type_2=Axiom)
-        e: Enumeration = eb.to_enumeration()
-        o: tuple = super().__new__(cls, theorems=e)
+        theorems: Enumeration = eb.to_enumeration()
+        o: tuple = super().__new__(cls, theorems=theorems)
         return o
 
     def __init__(self, axioms: FlexibleEnumeration = None):

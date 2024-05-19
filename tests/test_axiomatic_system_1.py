@@ -135,9 +135,9 @@ class TestConnective:
         f = pu.as1.let_x_be_a_unary_connective(rep='f')
         g = pu.as1.let_x_be_a_binary_connective(rep='g')
         h = pu.as1.let_x_be_a_ternary_connective(rep='h')
-        assert pu.as1.is_formula_equivalent(phi=f(), psi=pu.as1.Formula(c=f, terms=None))
-        assert pu.as1.is_formula_equivalent(phi=g(x), psi=pu.as1.Formula(c=g, terms=(x,)))
-        assert pu.as1.is_formula_equivalent(phi=h(x, y), psi=pu.as1.Formula(c=h, terms=(x, y,)))
+        assert pu.as1.is_formula_equivalent(phi=f(), psi=pu.as1.Formula(connective=f, terms=None))
+        assert pu.as1.is_formula_equivalent(phi=g(x), psi=pu.as1.Formula(connective=g, terms=(x,)))
+        assert pu.as1.is_formula_equivalent(phi=h(x, y), psi=pu.as1.Formula(connective=h, terms=(x, y,)))
 
 
 class TestFormulaBuilder:
@@ -215,13 +215,13 @@ class TestFormula:
         assert phi[0].c is c1
 
     def test_terms(self, c1, phi1, phi2, phi3):
-        terms1 = pu.as1.Formula(c=c1)
+        terms1 = pu.as1.Formula(connective=c1)
         assert len(terms1) == 0
-        terms2 = pu.as1.Formula(c=c1, terms=(phi1,))
+        terms2 = pu.as1.Formula(connective=c1, terms=(phi1,))
         assert len(terms2) == 1
         assert terms2[0].c is phi1.c
         assert terms2.term_0.c is phi1.c
-        terms3 = pu.as1.Formula(c=c1, terms=(phi1, phi2, phi1, phi1, phi3))
+        terms3 = pu.as1.Formula(connective=c1, terms=(phi1, phi2, phi1, phi1, phi3))
         assert len(terms3) == 5
         assert terms3[0].c is phi1.c
         assert terms3.term_0.c is phi1.c
@@ -354,15 +354,15 @@ class TestEnumeration:
     def test_is_well_formed_enumeration(self):
         a, b, c = pu.as1.let_x_be_a_simple_object(rep=('a', 'b', 'c',))
         star = pu.as1.FreeArityConnective(rep='*')
-        phi1 = pu.as1.Formula(c=star, terms=(a, b, c,))
+        phi1 = pu.as1.Formula(connective=star, terms=(a, b, c,))
         assert pu.as1.is_well_formed_enumeration(phi=phi1)
-        phi2 = pu.as1.Formula(c=star, terms=None)
+        phi2 = pu.as1.Formula(connective=star, terms=None)
         assert pu.as1.is_well_formed_enumeration(phi=phi2)
-        phi3 = pu.as1.Formula(c=star, terms=(a, a, b, c,))
+        phi3 = pu.as1.Formula(connective=star, terms=(a, a, b, c,))
         assert not pu.as1.is_well_formed_enumeration(phi=phi3)
-        phi4 = pu.as1.Formula(c=star, terms=(a, b, b, c,))
+        phi4 = pu.as1.Formula(connective=star, terms=(a, b, b, c,))
         assert not pu.as1.is_well_formed_enumeration(phi=phi4)
-        phi5 = pu.as1.Formula(c=star, terms=(a, b, c, c,))
+        phi5 = pu.as1.Formula(connective=star, terms=(a, b, c, c,))
         assert not pu.as1.is_well_formed_enumeration(phi=phi5)
 
 
@@ -623,7 +623,7 @@ class TestInferenceRule:
         axiomatization = pu.as1.Axiomatization(axioms=(ir,))
 
         # derivation from the axiom
-        i = pu.as1.Inference(p=None, f=rule)
+        i = pu.as1.Inference(premises=None, transformation_rule=rule)
         isolated_theorem = pu.as1.Theorem(claim=phi, justification=i)
         demo = pu.as1.Demonstration(theorems=(*axiomatization, isolated_theorem))
         assert pu.as1.is_formula_equivalent(
@@ -685,7 +685,7 @@ class TestInference:
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        i = pu.as1.TheoremByInference(claim=theorem, i=pu.as1.Inference(p=p, f=t))
+        i = pu.as1.TheoremByInference(claim=theorem, i=pu.as1.Inference(premises=p, transformation_rule=t))
         pu.as1.is_formula_equivalent(
             phi=i,
             psi=theorem | pu.as1.connectives.follows_from | pu.as1.connectives.inference(p, t))
@@ -715,11 +715,11 @@ class TestProofByInference:
         conclusion = x | star | z
         variables = pu.as1.Enumeration(elements=(x, y, z,))
         f = pu.as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
-        i = pu.as1.Inference(p=(a | star | b, b | star | c,), f=f)
+        i = pu.as1.Inference(premises=(a | star | b, b | star | c,), transformation_rule=f)
         assert pu.as1.is_well_formed_theorem_by_inference(phi=(a | star | c) | pu.as1.connectives.follows_from | i)
         proof1 = pu.as1.TheoremByInference(claim=a | star | c, i=i)  # would raise an exception if it was unsuccessful
         assert not pu.as1.is_well_formed_theorem_by_inference(phi=(a | star | d) | pu.as1.connectives.follows_from | i)
-        i2 = pu.as1.Inference(p=(a | star | b, b | star | a,), f=f)
+        i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), transformation_rule=f)
         assert not pu.as1.is_well_formed_theorem_by_inference(phi=(a | star | c) | pu.as1.connectives.follows_from | i2)
         pass
 
@@ -771,7 +771,7 @@ class TestDemonstration:
             theorems=axiomatization)  # this must not raise an exception and will just change the type
 
         # derive a theorem
-        i = pu.as1.Inference(p=(a | star2 | b, b | star2 | c,), f=rule)
+        i = pu.as1.Inference(premises=(a | star2 | b, b | star2 | c,), transformation_rule=rule)
         isolated_theorem = pu.as1.TheoremByInference(claim=a | star2 | c, i=i)
         demo2 = pu.as1.Demonstration(
             theorems=(*demo1, isolated_theorem,))  # Does not raise exception because it is valid

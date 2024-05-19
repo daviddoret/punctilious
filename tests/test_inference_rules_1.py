@@ -22,8 +22,8 @@ class TestAdjunction:
 
         # derive a new theorem
         inference = pu.as1.Inference(
-            p=(a1.claim, a2.claim, a3.claim, a4.claim,),
-            f=r)
+            premises=(a1.claim, a2.claim, a3.claim, a4.claim,),
+            transformation_rule=r)
         isolated_theorem = pu.as1.TheoremByInference(claim=a | land | b, i=inference)
         assert pu.as1.is_formula_equivalent(phi=a | land | b, psi=isolated_theorem.claim)
         extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem,))
@@ -56,8 +56,8 @@ class TestSimplification1:
 
         # derive a new theorem
         inference = pu.as1.Inference(
-            p=(a1.claim, a2.claim, a3.claim,),
-            f=r)
+            premises=(a1.claim, a2.claim, a3.claim,),
+            transformation_rule=r)
         isolated_theorem = pu.as1.TheoremByInference(claim=a, i=inference)
         assert pu.as1.is_formula_equivalent(phi=a, psi=isolated_theorem.claim)
         extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem))
@@ -89,8 +89,8 @@ class TestSimplification2:
 
         # derive a new theorem
         inference = pu.as1.Inference(
-            p=(a1.claim, a2.claim, a3.claim,),
-            f=r)
+            premises=(a1.claim, a2.claim, a3.claim,),
+            transformation_rule=r)
         isolated_theorem = pu.as1.TheoremByInference(claim=b, i=inference)
         assert pu.as1.is_formula_equivalent(phi=b, psi=isolated_theorem.claim)
         extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem))
@@ -124,8 +124,8 @@ class TestModusPonens:
 
         # derive a new theorem
         inference = pu.as1.Inference(
-            p=(a1.claim, a2.claim, a3.claim, a4.claim),
-            f=r)
+            premises=(a1.claim, a2.claim, a3.claim, a4.claim),
+            transformation_rule=r)
         isolated_theorem = pu.as1.TheoremByInference(claim=b, i=inference)
         assert pu.as1.is_formula_equivalent(phi=b, psi=isolated_theorem.claim)
         extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem))
