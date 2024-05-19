@@ -925,14 +925,14 @@ def let_x_be_a_propositional_variable(
     if isinstance(rep, str):
         x = Variable(c=NullaryConnective(rep=rep))
         if db is not None:
-            db.append(term=Axiom(claim=x | connectives.is_a | connectives.proposition))
+            db.append(term=InferenceRule(claim=x | connectives.is_a | connectives.proposition))
         return x
     elif isinstance(rep, typing.Iterable):
         t = tuple()
         for r in rep:
             x = Variable(c=NullaryConnective(rep=r))
             if db is not None:
-                db.append(term=Axiom(claim=x | connectives.is_a | connectives.proposition))
+                db.append(term=InferenceRule(claim=x | connectives.is_a | connectives.proposition))
             t = t + (x,)
         return t
     else:
@@ -999,6 +999,10 @@ def let_x_be_a_free_arity_connective(rep: str):
     return FreeArityConnective(rep=rep)
 
 
+def let_x_be_an_inference_rule(claim: FlexibleTransformation):
+    return InferenceRule(claim=claim)
+
+
 def let_x_be_an_axiom(claim: FlexibleFormula):
     return Axiom(claim=claim)
 
@@ -1009,14 +1013,15 @@ def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormul
 
 
 class Connectives(typing.NamedTuple):
+    axiom: UnaryConnective
     demonstration: FreeArityConnective
-    postulation: UnaryConnective
     e: FreeArityConnective
     """The enumeration connective, cf. the Enumeration class.
     """
 
     implies: BinaryConnective
     inference: BinaryConnective
+    inference_rule: UnaryConnective
     is_a: BinaryConnective
     land: BinaryConnective
     lnot: UnaryConnective
@@ -1031,17 +1036,18 @@ class Connectives(typing.NamedTuple):
 
 
 connectives: Connectives = _set_state(key='connectives', value=Connectives(
+    axiom=let_x_be_a_unary_connective(rep='axiom'),
     demonstration=let_x_be_a_free_arity_connective(rep='demonstration'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
     f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
     follows_from=let_x_be_a_binary_connective(rep='follows-from'),
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference=let_x_be_a_binary_connective(rep='inference'),
+    inference_rule=let_x_be_a_unary_connective(rep='inference-rule'),
     is_a=let_x_be_a_binary_connective(rep='is-a'),
     land=let_x_be_a_binary_connective(rep='∧'),
     lnot=let_x_be_a_unary_connective(rep='¬'),
     map=let_x_be_a_binary_connective(rep='map'),
-    postulation=let_x_be_a_unary_connective(rep='postulation'),
     proposition=let_x_be_a_simple_object(rep='proposition'),
     transformation=let_x_be_a_ternary_connective(rep='-->'),  # duplicate with f?
     tupl=let_x_be_a_free_arity_connective(rep='tuple'),
@@ -1942,6 +1948,11 @@ def is_well_formed_enumeration(phi: FlexibleFormula) -> bool:
     return Enumeration.is_well_formed(phi=phi)
 
 
+def is_well_formed_inference_rule(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed inference-rule, False otherwise."""
+    return InferenceRule.is_well_formed(phi=phi)
+
+
 def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
     """Returns True if phi is a well-formed axiom, False otherwise."""
     return Axiom.is_well_formed(phi=phi)
@@ -1975,27 +1986,28 @@ def coerce_theorem(phi: FlexibleFormula) -> Theorem:
     """
     if isinstance(phi, Theorem):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_axiom(phi=phi):
-        return coerce_axiom(phi=phi)
+    elif isinstance(phi, Formula) and is_well_formed_inference_rule(phi=phi):
+        return coerce_inference_rule(phi=phi)
     elif isinstance(phi, Formula) and is_well_formed_theorem_by_inference(phi=phi):
         return coerce_theorem_by_inference(phi=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
 
 
-def coerce_axiom(phi: FlexibleFormula) -> Axiom:
-    """Validate that p is a well-formed axiom and returns it properly typed as ProofByPostulation, or raise exception e123.
+def coerce_inference_rule(phi: FlexibleFormula) -> InferenceRule:
+    """Validate that p is a well-formed inference-rule and returns it properly typed as an instance of InferenceRule,
+    or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, Axiom):
+    if isinstance(phi, InferenceRule):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_axiom(phi=phi):
+    elif isinstance(phi, Formula) and is_well_formed_inference_rule(phi=phi):
         proved_formula: Formula = phi.term_0
-        return Axiom(claim=proved_formula)
+        return InferenceRule(claim=proved_formula)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Axiom, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
 
 
 def coerce_theorem_by_inference(phi: FlexibleFormula) -> TheoremByInference:
@@ -2142,18 +2154,20 @@ class Theorem(Formula):
 
 
 class Axiom(Theorem):
-    """A well-formed axiom is a "magical" theorem made by stating that a formula is true.
+    """A well-formed axiom is a theorem that unconditionally justifies a statement.
 
     Syntactic definition:
     A formula is a well-formed axiom if and only if it is of the form:
-        phi follows-from postulation
+        phi follows-from psi
     Where:
-        - phi is a well-formed formula,
-        - follows-from is the follows-from binary connective,
-        - postulation is the postulation constant.
+        - phi is a well-formed transformation, called the inference-rule,
+        - psi is the axiomatic-postulation urelement,
+        - follows-from is the follows-from binary connective.
 
     Semantic definition:
-    A axiom is the statement that a formula phi is an axiom, i.e.: phi is assumed to be true."""
+    An axiom is the statement that a formula is postulated as true in a theory.
+
+    """
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
@@ -2163,23 +2177,74 @@ class Axiom(Theorem):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        if not phi.c is connectives.follows_from or not phi.arity == 2 or not is_well_formed_formula(
-                phi=phi.term_0) or phi.term_1.c is not connectives.postulation:
+        if (not phi.c is connectives.follows_from or
+                not phi.arity == 2 or
+                not is_well_formed_transformation(phi=phi.term_0) or
+                phi.term_1.c is not connectives.axiom):
             return False
         else:
             return True
 
     def __new__(cls, claim: FlexibleFormula = None):
         claim: Formula = coerce_formula(phi=claim)
-        o: tuple = super().__new__(cls, claim=claim, justification=connectives.postulation)
+        o: tuple = super().__new__(cls, claim=claim, justification=connectives.axiom)
         return o
 
     def __init__(self, claim: FlexibleFormula):
         claim: Formula = coerce_formula(phi=claim)
-        super().__init__(claim=claim, justification=connectives.postulation)
+        super().__init__(claim=claim, justification=connectives.axiom)
 
     def rep(self, **kwargs) -> str:
         return f'({self.claim.rep(**kwargs)}) is an axiom.'
+
+
+class InferenceRule(Theorem):
+    """A well-formed inference-rule is a theorem that justifies the derivation of other theorems in a theory,
+    under certain conditions called premises.
+
+    Syntactic definition:
+    A formula is a well-formed inference-rule if and only if it is of the form:
+        phi follows-from psi
+    Where:
+        - phi is a well-formed transformation, called the inference-rule,
+        - psi is the inference-rule urelement,
+        - follows-from is the follows-from binary connective.
+
+    Semantic definition:
+    An inference-rule is the statement that a transformation is a valid inference-rule in a theory,
+    i.e.: all formulas derived from that inference-rule are valid in the theory.
+
+    Note: if an inference-rule has no premises, it is equivalent to an axiom.
+
+    """
+
+    @staticmethod
+    def is_well_formed(phi: FlexibleFormula) -> bool:
+        """Return True if and only if phi is a well-formed axiom, False otherwise.
+
+        :param phi: A formula.
+        :return: bool.
+        """
+        phi = coerce_formula(phi=phi)
+        if (not phi.c is connectives.follows_from or
+                not phi.arity == 2 or
+                not is_well_formed_transformation(phi=phi.term_0) or
+                phi.term_1.c is not connectives.inference_rule):
+            return False
+        else:
+            return True
+
+    def __new__(cls, claim: FlexibleTransformation = None):
+        claim: Formula = coerce_transformation(phi=claim)
+        o: tuple = super().__new__(cls, claim=claim, justification=connectives.inference_rule)
+        return o
+
+    def __init__(self, claim: FlexibleTransformation):
+        claim: Formula = coerce_transformation(phi=claim)
+        super().__init__(claim=claim, justification=connectives.inference_rule)
+
+    def rep(self, **kwargs) -> str:
+        return f'({self.claim.rep(**kwargs)}) is an inference rule.'
 
 
 class Inference(Formula):
@@ -2311,7 +2376,7 @@ class TheoremByInference(Theorem):
         return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.p} and inference-rule {self.i.f}.'
 
 
-FlexibleTheorem = typing.Optional[typing.Union[Formula, TheoremByInference, Axiom]]
+FlexibleTheorem = typing.Optional[typing.Union[Formula, TheoremByInference, InferenceRule]]
 
 
 class TheoryAccretor(EnumerationAccretor):
@@ -2395,7 +2460,7 @@ class Demonstration(Enumeration):
         for i in range(0, theorems.arity):
             theorem = theorems[i]
             claim = claims[i]
-            if is_well_formed_axiom(phi=theorem):
+            if is_well_formed_inference_rule(phi=theorem):
                 # This is an axiom.
                 pass
             elif is_well_formed_theorem_by_inference(phi=theorem):
@@ -2477,11 +2542,12 @@ FlexibleDemonstrationBuilder = typing.Optional[
 
 
 class Axiomatization(Demonstration):
-    """An axiomatization is a demonstration that is only composed of axioms.
+    """An axiomatization is a demonstration that is only composed of axioms,
+    and/or inference-rules.
 
     Syntactic definition:
     A well-formed axiomatization is an enumeration such that:
-     - all element phi of the enumeration is a well-formed axiom.
+     - all element phi of the enumeration is a well-formed axiom or an inference-rule.
 
     """
 
@@ -2495,7 +2561,7 @@ class Axiomatization(Demonstration):
         phi = coerce_enumeration(phi=phi)
         for i in range(0, phi.arity):
             psi = phi[i]
-            if is_well_formed_axiom(phi=psi):
+            if is_well_formed_inference_rule(phi=psi):
                 # This is an axiom.
                 pass
             else:
@@ -2508,7 +2574,7 @@ class Axiomatization(Demonstration):
         # coerce to enumeration
         axioms: Enumeration = coerce_enumeration(phi=axioms)
         # coerce all elements of the enumeration to theorem
-        axioms: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in axioms))
+        axioms: Enumeration = coerce_enumeration(phi=(coerce_inference_rule(phi=p) for p in axioms))
         o: tuple = super().__new__(cls, theorems=axioms)
         return o
 
@@ -2516,10 +2582,39 @@ class Axiomatization(Demonstration):
         # coerce to enumeration
         axioms: Enumeration = coerce_enumeration(phi=axioms)
         # coerce all elements of the enumeration to theorem
-        axioms: Enumeration = coerce_enumeration(phi=(coerce_axiom(phi=p) for p in axioms))
+        axioms: Enumeration = coerce_enumeration(phi=(coerce_inference_rule(phi=p) for p in axioms))
         super().__init__(theorems=axioms)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Axioms:\n\t'
         axioms: str = '\n\t'.join(axiom.rep(**kwargs) for axiom in self)
         return f'{header}{axioms}'
+
+
+def translate_implication_to_axiom(phi: FlexibleFormula):
+    """Given a formula phi that is an implication in propositional logic,
+    translates phi to an equivalent axiomatic-system-1 axiom.
+
+    :param phi:
+    :return:
+    """
+    phi = coerce_formula(phi=phi)
+    if not phi.c is connectives.implies:
+        raise Exception('this is not an implication')
+    # TODO: translate_implication_to_axiom: check that all sub-formulas in phi are either:
+    # - valid propositional formulas (negation, conjunction, etc.)
+    # - atomic elements that can be mapped to propositional variables
+
+    # Now we have the assurance that phi is a well-formed propositional formula.
+    # Retrieve the list of propositional-variables in phi:
+    propositional_variables: Enumeration = get_leaf_formulas(phi=phi)
+    db: TransformationBuilder = TransformationBuilder(premise=None)
+    for x in propositional_variables:
+        db.append_variable(variable=x)
+        # Append the x is-a propositional-variable axiom
+        db.append_premise(premise=InferenceRule(claim=x | is_a | propositional_variable))
+    # Append the premise
+    db.append_premise(premise=phi.term_0)
+    db.set_conclusion(conclusion=phi.term_1)
+    t = db.to_transformation()
+    return t

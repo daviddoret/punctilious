@@ -15,8 +15,8 @@ class TestPL1:
 
         # elaborate a theory
         a = pu.as1.let_x_be_a_propositional_variable(rep='A', db=db)
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
-        a2 = pu.as1.let_x_be_an_axiom(claim=a)
+        a1 = pu.as1.let_x_be_an_inference_rule(claim=a | is_a | proposition)
+        a2 = pu.as1.let_x_be_an_inference_rule(claim=a)
         axioms = pu.as1.Axiomatization(axioms=(*pu.ml1.axioms, a1, a2,))
         # theory = pu.as1.union_demonstration(phi=pu.ir1.inference_rules, psi=(a1, a2, a3, a4,))
 
@@ -50,9 +50,9 @@ class TestPL2:
 
         # elaborate a theory
         a, b = pu.as1.let_x_be_a_propositional_variable(rep=('A', 'B',), db=db)
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
-        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | proposition)
-        a3 = pu.as1.let_x_be_an_axiom(claim=a | land | b)
+        a1 = pu.as1.let_x_be_an_inference_rule(claim=a | is_a | proposition)
+        a2 = pu.as1.let_x_be_an_inference_rule(claim=b | is_a | proposition)
+        a3 = pu.as1.let_x_be_an_inference_rule(claim=a | land | b)
         axioms = pu.as1.Axiomatization(axioms=(*pu.ml1.axioms, a1, a2, a3,))
         # theory = pu.as1.union_demonstration(phi=pu.ir1.inference_rules, psi=(a1, a2, a3, a4,))
 

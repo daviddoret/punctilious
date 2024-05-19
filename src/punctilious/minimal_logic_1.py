@@ -25,7 +25,7 @@ follows:
 
 TODO: The translation of propositional implications such as the above axioms may be automated
   with a transformation. This would be interesting to facilitate the integration of other
-  axiomatizations from different sources.
+  axiomatizations from various sources.
 
 Bibliography:
  - Mancosu et al., 2021, p. 19.
@@ -71,7 +71,7 @@ with as1.let_x_be_a_variable(rep='a') as a:
         variables=(a,))
     """Original axiom: PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
-    pl01_axiom: as1.Axiom = as1.let_x_be_an_axiom(claim=pl01_rule)
+    pl01_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim=pl01_rule)
     """Original axiom: PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
 
@@ -84,16 +84,18 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
         variables=(a, b,))
     """Original axiom: PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
-    pl02_axiom: as1.Axiom = as1.let_x_be_an_axiom(claim=pl02_rule)
+    pl02_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim=pl02_rule)
     """Original axiom: PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
 
 with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
         rep='c') as c:
-    pl03 = as1.let_x_be_an_axiom(claim=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
+    pl03 = as1.let_x_be_an_inference_rule(
+        claim=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
 with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
         rep='c') as c:
-    pl04 = as1.let_x_be_an_axiom(claim=((a | implies | b) | land | (b | implies | c)) | implies | (a | implies | b))
+    pl04 = as1.let_x_be_an_inference_rule(
+        claim=((a | implies | b) | land | (b | implies | c)) | implies | (a | implies | b))
 # pl05 = as1.let_x_be_an_axiom(claim=𝐵 ⊃ (𝐴 ⊃ 𝐵))
 # pl06 = (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵
 # pl07 = 𝐴 ⊃ (𝐴 ∨ 𝐵)
@@ -101,7 +103,7 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
 # pl09 = [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
 # pl10 = [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
 
-axioms = as1.Axiomatization(axioms=(pl01_axiom, pl02_axiom, pl03, pl04,))
+axioms = as1.Axiomatization(axioms=(pl01_axiom, pl02_axiom,))
 
 extended_theory = as1.Demonstration(theorems=(*axioms,))
 
