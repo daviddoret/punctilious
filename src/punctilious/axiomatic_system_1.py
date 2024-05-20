@@ -1021,18 +1021,20 @@ class Connectives(typing.NamedTuple):
     """The enumeration connective, cf. the Enumeration class.
     """
 
+    f: TernaryConnective
+    """The transformation connective, cf. the Transformation class.
+    """
+    follows_from: BinaryConnective
     implies: BinaryConnective
     inference: BinaryConnective
     inference_rule: UnaryConnective
     is_a: BinaryConnective
     land: BinaryConnective
     lnot: UnaryConnective
-    follows_from: BinaryConnective
+    lor: BinaryConnective
     map: BinaryConnective
+    proposition: SimpleObject
     propositional_variable: SimpleObject
-    f: TernaryConnective
-    """The transformation connective, cf. the Transformation class.
-    """
     transformation: TernaryConnective
     tupl: FreeArityConnective
 
@@ -1041,7 +1043,7 @@ connectives: Connectives = _set_state(key='connectives', value=Connectives(
     axiom=let_x_be_a_unary_connective(rep='axiom'),
     demonstration=let_x_be_a_free_arity_connective(rep='demonstration'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
-    f=let_x_be_a_ternary_connective(rep='f'),  # Transformation
+    f=let_x_be_a_ternary_connective(rep='f'),  # Transformation, # duplicate with transformation?
     follows_from=let_x_be_a_binary_connective(rep='follows-from'),
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference=let_x_be_a_binary_connective(rep='inference'),
@@ -1049,7 +1051,9 @@ connectives: Connectives = _set_state(key='connectives', value=Connectives(
     is_a=let_x_be_a_binary_connective(rep='is-a'),
     land=let_x_be_a_binary_connective(rep='∧'),
     lnot=let_x_be_a_unary_connective(rep='¬'),
+    lor=let_x_be_a_binary_connective(rep='∨'),
     map=let_x_be_a_binary_connective(rep='map'),
+    proposition=let_x_be_a_simple_object(rep='proposition'),
     propositional_variable=let_x_be_a_simple_object(rep='propositional-variable'),
     transformation=let_x_be_a_ternary_connective(rep='-->'),  # duplicate with f?
     tupl=let_x_be_a_free_arity_connective(rep='tuple'),
