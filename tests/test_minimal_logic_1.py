@@ -71,3 +71,42 @@ class TestPL2:
             incomplete_axioms = pu.as1.Axiomatization(axioms=(
                 *pu.ir1.axioms, a1, a2,))
             pu.as1.Demonstration(theorems=(*incomplete_axioms, isolated_theorem))
+
+
+class TestPL3:
+    def test_pl3(self):
+        # PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]
+
+        # retrieve some basic vocabulary
+        is_a = pu.as1.connectives.is_a
+        propositional_variable = pu.as1.connectives.propositional_variable
+        land = pu.as1.connectives.land
+        implies = pu.as1.connectives.implies
+
+        # elaborate a theory
+        a, b, c = pu.as1.let_x_be_a_propositional_variable(rep=('A', 'B', 'C',))
+        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | propositional_variable)
+        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | propositional_variable)
+        a3 = pu.as1.let_x_be_an_axiom(claim=c | is_a | propositional_variable)
+        a4 = pu.as1.let_x_be_an_axiom(claim=a | implies | b)
+        axioms = pu.as1.Axiomatization(axioms=(*pu.ml1.axioms, a1, a2, a3, a4,))
+
+        # derive a new theorem
+        inference = pu.as1.Inference(
+            premises=(a1.claim, a2.claim, a3.claim, a4.claim,),
+            transformation_rule=pu.ml1.pl03.transformation)
+        isolated_theorem = pu.as1.TheoremByInference(claim=(a | land | c) | implies | (b | land | c), i=inference)
+        assert pu.as1.is_formula_equivalent(phi=(a | land | c) | implies | (b | land | c), psi=isolated_theorem.claim)
+
+        # extend the original theory with that new theorem
+        extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem,))
+        assert extended_theory.has_theorem(phi=(a | land | c) | implies | (b | land | c))
+
+        # show that wrong axiomatization fails to derive the theorems
+        with pytest.raises(pu.as1.CustomException, match='e108'):
+            # wrong theory
+            incomplete_axioms = pu.as1.Axiomatization(axioms=(
+                *pu.ir1.axioms, a1, a2, a3,))
+            pu.as1.Demonstration(theorems=(*incomplete_axioms, isolated_theorem))
+
+        pass

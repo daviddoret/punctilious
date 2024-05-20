@@ -14,8 +14,11 @@ The following are the original axioms from Mancosu et al., 2021, p. 19:
  - PL10. [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
 
 Implementation in axiomatic-system-1:
-The axioms above are translated to equivalent axiomatic-system-1 transformations. This transformation is performed as
-follows:
+The axioms above are more specifically axiom-schemas rather than axioms. In axiomatic-system-1, axiom-schemas are
+expressed as inference-rules. The axioms above are thus translated to equivalent axiomatic-system-1 transformations,
+which are then included in inference-rules.
+
+This translation is performed as follows:
  - for all propositional variable X in the original axiom, a premise X is-a propositional-variable is elaborated,
    this prevents the usage of the transformation with inadequate variables (e.g.: natural numbers instead of
    propositional-variables),
@@ -23,9 +26,10 @@ follows:
  - for all propositional variable X in the original axiom, a variable is appended in the transformation variables
    enumeration.
 
-TODO: The translation of propositional implications such as the above axioms may be automated
-  with a transformation. This would be interesting to facilitate the integration of other
-  axiomatizations from various sources.
+The above has been implemented as an algorithm: the function translate_implication_to_axiom().
+
+It would be technically possible to implement that as a native transformation, allowing to infer
+the inference-rules from the original axioms. This is left as an exercise for later.
 
 Bibliography:
  - Mancosu et al., 2021, p. 19.
@@ -76,6 +80,14 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
     """
     pass
 
+with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
+        rep='c') as c:
+    pl03: as1.InferenceRule = as1.translate_implication_to_axiom(
+        phi=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
+    """Original axiom: PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]. Source: (Mancosu et al., p. 19).
+    """
+    pass
+
 # with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
 #        rep='c') as c:
 #    pl03 = as1.let_x_be_an_inference_rule(
@@ -91,7 +103,7 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
 # pl09 = [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
 # pl10 = [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
 
-axioms = as1.Axiomatization(axioms=(pl01, pl02,))
+axioms = as1.Axiomatization(axioms=(pl01, pl02, pl03,))
 
 extended_theory = as1.Demonstration(theorems=(*axioms,))
 
