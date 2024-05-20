@@ -8,42 +8,61 @@ class TestPL1:
 
         # retrieve some basic vocabulary
         is_a = pu.as1.connectives.is_a
+        proposition = pu.as1.connectives.proposition
         propositional_variable = pu.as1.connectives.propositional_variable
         land = pu.as1.connectives.land
         implies = pu.as1.connectives.implies
 
-        # elaborate a theory
+        # elaborate a theory with basic axioms
+        # and the declaration of p as a propositional-variable
         p = pu.as1.let_x_be_a_propositional_variable(rep='P')
         a1 = pu.as1.let_x_be_an_axiom(claim=p | is_a | propositional_variable)
-        axioms = pu.as1.Axiomatization(axioms=(pu.ir1.modus_ponens_axiom, pu.ml1.pl01, a1,))
-        # theory = pu.as1.union_demonstration(phi=pu.ir1.inference_rules, psi=(a1, a2, a3, a4,))
+        theory = pu.as1.Axiomatization(axioms=(pu.pls1.i1, a1,))
+
+        # derive: p is-a proposition
+        inference = pu.as1.Inference(
+            premises=(a1.claim,),
+            transformation_rule=pu.pls1.i1.transformation)
+        claim = p | is_a | proposition
+        isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
+        theory = pu.as1.Demonstration(theorems=(*theory, isolated_theorem,))
 
         # derive a new theorem
+        theory = pu.as1.Demonstration(theorems=(*theory, pu.ml1.pl01,))
         inference = pu.as1.Inference(
             premises=(a1.claim,),
             transformation_rule=pu.ml1.pl01.transformation)
         claim = p | implies | (p | land | p)
         isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=p | implies | (p | land | p), psi=isolated_theorem.claim)
-        extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem,))
-        assert extended_theory.has_theorem(phi=p | implies | (p | land | p))
+        theory = pu.as1.Demonstration(theorems=(*theory, isolated_theorem,))
+        assert theory.has_theorem(phi=p | implies | (p | land | p))
+
+        # derive: p and p is-a proposition
+        theory = pu.as1.Demonstration(theorems=(*theory, pu.pls1.i3,))
+        inference = pu.as1.Inference(
+            premises=(p | is_a | proposition, p | is_a | proposition,),
+            transformation_rule=pu.pls1.i3.transformation)
+        claim = (p | land | p) | is_a | proposition
+        isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
+        theory = pu.as1.Demonstration(theorems=(*theory, isolated_theorem,))
 
         # because the derived theorem is an implication, we can further apply modus ponens
         # make the premises true:
         a2 = pu.as1.let_x_be_an_axiom(claim=p)
-        extended_theory = pu.as1.Demonstration(theorems=(*extended_theory, a2,))
+        theory = pu.as1.Demonstration(theorems=(*theory, a2, pu.ir1.modus_ponens_axiom,))
         inference = pu.as1.Inference(
-            # TODO: REPRENDRE ICI: IL FAUT QUE LES FORMULES PROPOSITIONNELLES
-            #   SOIENT RECONNUES COMME TELLES. CELA PASSE PROBABLEMENT PAR UN MECANISME
-            #   D'INFERENCE IMPLICITE, OU ALORS PAR LA GENERATION D'AXIOMES AUTOMATIQUES.
-            #   IL FAUT PENSER A L'AJOUT ENSUITE D'AUTRES CLASSES, LES NATURELS, ETC.
-            premises=(a2,),
+            premises=(
+                p | is_a | proposition,
+                (p | land | p) | is_a | proposition,
+                p | implies | (p | land | p),
+                p,),
             transformation_rule=pu.ir1.modus_ponens_rule)
         claim = p | land | p
         isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=p | land | p, psi=isolated_theorem.claim)
-        extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem,))
-        assert extended_theory.has_theorem(phi=p | land | p)
+        theory = pu.as1.Demonstration(theorems=(*theory, isolated_theorem,))
+        assert theory.has_theorem(phi=p | land | p)
 
         # show that wrong axiomatization fails to derive the theorems
         with pytest.raises(pu.as1.CustomException, match='e108'):

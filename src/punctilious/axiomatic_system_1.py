@@ -2383,6 +2383,9 @@ class TheoremByInference(Theorem):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
+        if isinstance(phi, TheoremByInference):
+            # the type assure the well-formedness of the formula
+            return True
         if not phi.c is connectives.follows_from or not phi.arity == 2 or not is_well_formed_formula(
                 phi=phi.term_0) or not is_well_formed_inference(phi=phi.term_1):
             return False
@@ -2400,6 +2403,12 @@ class TheoremByInference(Theorem):
     def __new__(cls, claim: FlexibleFormula, i: FlexibleInference):
         claim: Formula = coerce_formula(phi=claim)
         i: Inference = coerce_inference(phi=i)
+        o: tuple = super().__new__(cls, claim=claim, justification=i)
+        return o
+
+    def __init__(self, claim: FlexibleFormula, i: FlexibleInference):
+        self._phi: Formula = coerce_formula(phi=claim)
+        self._i: Inference = coerce_inference(phi=i)
         # check the validity of the theorem
         f_of_p: Formula = i.transformation_rule(i.premises)
         if not is_formula_equivalent(phi=claim, psi=f_of_p):
@@ -2407,12 +2416,6 @@ class TheoremByInference(Theorem):
             # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
             raise_event(event_code=event_codes.e105, phi_expected=claim, phi_inferred=f_of_p,
                         inference_rule=i)
-        o: tuple = super().__new__(cls, claim=claim, justification=i)
-        return o
-
-    def __init__(self, claim: FlexibleFormula, i: FlexibleInference):
-        self._phi: Formula = coerce_formula(phi=claim)
-        self._i: Inference = coerce_inference(phi=i)
         super().__init__(claim=claim, justification=i)
 
     @property

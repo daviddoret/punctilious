@@ -26,6 +26,7 @@ is_a = as1.connectives.is_a
 implies = as1.connectives.implies
 land = as1.connectives.land
 lnot = as1.connectives.lnot
+proposition = as1.connectives.proposition
 propositional_variable = as1.connectives.propositional_variable
 
 # Basic inference rules
@@ -41,8 +42,8 @@ propositional_variable = as1.connectives.propositional_variable
 with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     adjunction_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
-            phi | is_a | propositional_variable,
-            psi | is_a | propositional_variable,
+            phi | is_a | proposition,
+            psi | is_a | proposition,
             phi,
             psi,),
         conclusion=phi | land | psi,
@@ -59,8 +60,8 @@ adjunction_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim=adjun
 with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     simplification_1_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
-            phi | is_a | propositional_variable,
-            psi | is_a | propositional_variable,
+            phi | is_a | proposition,
+            psi | is_a | proposition,
             phi | land | psi,),
         conclusion=phi,
         variables=(phi, psi,))
@@ -76,8 +77,8 @@ simplification_1_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim
 with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     simplification_2_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
-            phi | is_a | propositional_variable,
-            psi | is_a | propositional_variable,
+            phi | is_a | proposition,
+            psi | is_a | proposition,
             phi | land | psi,),
         conclusion=psi,
         variables=(phi, psi,))
@@ -94,13 +95,23 @@ simplification_2_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim
 with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     modus_ponens_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
-            phi | is_a | propositional_variable,
-            psi | is_a | propositional_variable,
+            phi | is_a | proposition,
+            psi | is_a | proposition,
             phi | implies | psi,
             phi),
         conclusion=psi,
         variables=(phi, psi,))
 modus_ponens_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim=modus_ponens_rule)
+"""Premises:
+ - phi | is_a | proposition,
+ - psi | is_a | proposition,
+ - phi | implies | psi,
+ - phi
+
+Conclusion: psi
+
+Variables: phi, psi
+"""
 
 axioms = as1.Axiomatization(axioms=(
     adjunction_axiom,

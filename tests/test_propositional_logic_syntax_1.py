@@ -46,6 +46,7 @@ class TestPropositionalLogicMetaTheory:
         with pu.as1.let_x_be_a_propositional_variable(rep='Q') as q:
             a2 = pu.as1.Axiom(claim=q | is_a | propositional_variable)
         theory = pu.as1.Demonstration(theorems=(*theory, a2,))
+
         # derive q is-a proposition
         inference = pu.as1.Inference(
             premises=(a2.claim,),
