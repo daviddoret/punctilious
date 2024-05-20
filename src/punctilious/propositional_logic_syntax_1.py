@@ -35,7 +35,9 @@ with as1.let_x_be_a_variable(rep='A') as a:
             (a | is_a | propositional_variable,),
             conclusion=a | is_a | proposition,
             variables=(a,)))
-    """Original definition: 
+    """A is-a propositional-variable ⊃ A is a proposition
+    
+    Original definition: 
     "Each propositional variable is a formula" (Mancosu et al., 2021)
     """
     pass
@@ -47,7 +49,9 @@ with as1.let_x_be_a_variable(rep='A') as a:
             (a | is_a | proposition,),
             conclusion=lnot(a) | is_a | proposition,
             variables=(a,)))
-    """Original definition: 
+    """A is-a proposition ⊃ ¬A is a proposition
+    
+    Original definition: 
     "If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵)" (Mancosu et al., 2021)
     """
     pass
@@ -59,7 +63,12 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
             (a | is_a | proposition,
              b | is_a | proposition),
             conclusion=(a | land | b) | is_a | proposition,
-            variables=(a,)))
+            variables=(a, b,)))
+    """(A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition)
+
+    Original definition: 
+    "If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵)" (Mancosu et al., 2021)
+    """
     pass
 
 with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as b:
