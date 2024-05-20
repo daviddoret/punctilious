@@ -10,20 +10,35 @@ class TestPL1:
         is_a = pu.as1.connectives.is_a
         propositional_variable = pu.as1.connectives.propositional_variable
         land = pu.as1.connectives.land
-
-        db = pu.as1.DemonstrationBuilder(theorems=None)
+        implies = pu.as1.connectives.implies
 
         # elaborate a theory
-        p = pu.as1.let_x_be_a_propositional_variable(rep='P', db=db)
+        p = pu.as1.let_x_be_a_propositional_variable(rep='P')
         a1 = pu.as1.let_x_be_an_axiom(claim=p | is_a | propositional_variable)
-        a2 = pu.as1.let_x_be_an_axiom(claim=p)
-        axioms = pu.as1.Axiomatization(axioms=(*pu.ml1.axioms, a1, a2,))
+        axioms = pu.as1.Axiomatization(axioms=(pu.ir1.modus_ponens_axiom, pu.ml1.pl01, a1,))
         # theory = pu.as1.union_demonstration(phi=pu.ir1.inference_rules, psi=(a1, a2, a3, a4,))
 
         # derive a new theorem
         inference = pu.as1.Inference(
-            premises=(a1.claim, a2.claim,),
+            premises=(a1.claim,),
             transformation_rule=pu.ml1.pl01.transformation)
+        claim = p | implies | (p | land | p)
+        isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
+        assert pu.as1.is_formula_equivalent(phi=p | implies | (p | land | p), psi=isolated_theorem.claim)
+        extended_theory = pu.as1.Demonstration(theorems=(*axioms, isolated_theorem,))
+        assert extended_theory.has_theorem(phi=p | implies | (p | land | p))
+
+        # because the derived theorem is an implication, we can further apply modus ponens
+        # make the premises true:
+        a2 = pu.as1.let_x_be_an_axiom(claim=p)
+        extended_theory = pu.as1.Demonstration(theorems=(*extended_theory, a2,))
+        inference = pu.as1.Inference(
+            # TODO: REPRENDRE ICI: IL FAUT QUE LES FORMULES PROPOSITIONNELLES
+            #   SOIENT RECONNUES COMME TELLES. CELA PASSE PROBABLEMENT PAR UN MECANISME
+            #   D'INFERENCE IMPLICITE, OU ALORS PAR LA GENERATION D'AXIOMES AUTOMATIQUES.
+            #   IL FAUT PENSER A L'AJOUT ENSUITE D'AUTRES CLASSES, LES NATURELS, ETC.
+            premises=(a2,),
+            transformation_rule=pu.ir1.modus_ponens_rule)
         claim = p | land | p
         isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=p | land | p, psi=isolated_theorem.claim)

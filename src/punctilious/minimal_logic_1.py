@@ -66,11 +66,14 @@ lnot = as1.connectives.lnot
 propositional_variable = as1.connectives.propositional_variable
 
 with as1.let_x_be_a_propositional_variable(rep='A') as a:
-    pl01: as1.InferenceRule = as1.translate_implication_to_axiom(
-        phi=a | implies | (a | land | a))
+    pl01: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | propositional_variable,),
+            conclusion=a | implies | (a | land | a),
+            variables=(a,)))
     """Original axiom: PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
-    test = as1.get_leaf_formulas(phi=pl01)
     pass
 
 with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b:
