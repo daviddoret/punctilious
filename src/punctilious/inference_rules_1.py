@@ -22,26 +22,11 @@ def _set_state(key: str, value: object):
 
 
 # Propositional logic vocabulary
-
-class Connectives(typing.NamedTuple):
-    implies: as1.BinaryConnective
-    land: as1.BinaryConnective
-    lnot: as1.UnaryConnective
-    proposition: as1.SimpleObject
-
-
-connectives: Connectives = _set_state(key='connectives', value=Connectives(
-    implies=as1.connectives.implies,
-    land=as1.connectives.land,
-    lnot=as1.connectives.lnot,
-    proposition=as1.connectives.propositional_variable,
-))
-
-is_a: as1.BinaryConnective = _set_state(key='is_a', value=as1.connectives.is_a)
-implies: as1.BinaryConnective = _set_state(key='implies', value=as1.connectives.implies)
-land: as1.BinaryConnective = _set_state(key='land', value=as1.connectives.land)
-lnot: as1.UnaryConnective = _set_state(key='lnot', value=as1.connectives.lnot)
-proposition: as1.SimpleObject = _set_state(key='proposition', value=as1.connectives.propositional_variable)
+is_a = as1.connectives.is_a
+implies = as1.connectives.implies
+land = as1.connectives.land
+lnot = as1.connectives.lnot
+propositional_variable = as1.connectives.propositional_variable
 
 # Basic inference rules
 
@@ -56,8 +41,8 @@ proposition: as1.SimpleObject = _set_state(key='proposition', value=as1.connecti
 with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     adjunction_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
-            phi | is_a | proposition,
-            psi | is_a | proposition,
+            phi | is_a | propositional_variable,
+            psi | is_a | propositional_variable,
             phi,
             psi,),
         conclusion=phi | land | psi,
@@ -74,8 +59,8 @@ adjunction_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim=adjun
 with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     simplification_1_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
-            phi | is_a | proposition,
-            psi | is_a | proposition,
+            phi | is_a | propositional_variable,
+            psi | is_a | propositional_variable,
             phi | land | psi,),
         conclusion=phi,
         variables=(phi, psi,))
@@ -91,8 +76,8 @@ simplification_1_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim
 with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     simplification_2_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
-            phi | is_a | proposition,
-            psi | is_a | proposition,
+            phi | is_a | propositional_variable,
+            psi | is_a | propositional_variable,
             phi | land | psi,),
         conclusion=psi,
         variables=(phi, psi,))
@@ -109,8 +94,8 @@ simplification_2_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim
 with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi') as psi:
     modus_ponens_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
-            phi | is_a | proposition,
-            psi | is_a | proposition,
+            phi | is_a | propositional_variable,
+            psi | is_a | propositional_variable,
             phi | implies | psi,
             phi),
         conclusion=psi,

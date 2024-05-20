@@ -56,35 +56,20 @@ connectives: Connectives = Connectives(
 
 # retrieve vocabulary from axiomatic-system-1
 is_a = as1.connectives.is_a
-
-# retrieve vocabulary from inference-rules-1
 implies = as1.connectives.implies
 land = as1.connectives.land
 lnot = as1.connectives.lnot
 propositional_variable = as1.connectives.propositional_variable
 
-with as1.let_x_be_a_variable(rep='a') as a:
-    pl01_rule: as1.Transformation = as1.Transformation(premises=(
-        a | is_a | propositional_variable,
-        a,
-    ), conclusion=a | land | a,
-        variables=(a,))
-    """Original axiom: PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). Source: (Mancosu et al., p. 19).
-    """
-    pl01_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim=pl01_rule)
+with as1.let_x_be_a_propositional_variable(rep='A') as a:
+    pl01: as1.InferenceRule = as1.translate_implication_to_axiom(
+        phi=a | implies | (a | land | a))
     """Original axiom: PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
 
 with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b:
-    pl02_rule: as1.Transformation = as1.Transformation(premises=(
-        a | is_a | propositional_variable,
-        b | is_a | propositional_variable,
-        a | land | b,
-    ), conclusion=b | land | a,
-        variables=(a, b,))
-    """Original axiom: PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). Source: (Mancosu et al., p. 19).
-    """
-    pl02_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule(claim=pl02_rule)
+    pl02: as1.InferenceRule = as1.translate_implication_to_axiom(
+        phi=(a | implies | b) | implies | (b | land | a))
     """Original axiom: PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
 
@@ -103,7 +88,7 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
 # pl09 = [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
 # pl10 = [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
 
-axioms = as1.Axiomatization(axioms=(pl01_axiom, pl02_axiom,))
+axioms = as1.Axiomatization(axioms=(pl01, pl02,))
 
 extended_theory = as1.Demonstration(theorems=(*axioms,))
 

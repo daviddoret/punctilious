@@ -911,12 +911,13 @@ def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
 
 def let_x_be_a_propositional_variable(
         rep: FlexibleRepresentation,
-        db: FlexibleDemonstrationBuilder = None) -> \
+        db: typing.Union[FlexibleDemonstrationBuilder, EnumerationBuilder] = None) -> \
         typing.Union[Variable, typing.Generator[Variable, typing.Any, None]]:
     """
 
     :param rep:
-    :param db: If a demonstration-builder is provided, append the axiom (x is-a proposition) where x is the new variable.
+    :param db: If a demonstration-builder is provided, append the axiom (x is-a proposition) where x is the new
+        variable. Alternatively, an enumeration-builder may be provided.
     :return:
     """
     # TODO: RESUME IMPLEMENTATION OF PARAMETER DB HERE.
@@ -1355,6 +1356,8 @@ class MapBuilder(FormulaBuilder):
         :param psi: a formula that will become an element of the codomain mapped with phi.
         :return: None.
         """
+        phi: Formula = coerce_formula(phi=phi)
+        psi: Formula = coerce_formula(phi=psi)
         if self.is_defined_in(phi=phi):
             # phi is already defined in the map, we consequently overwrite it.
             index_position: int = self.domain.get_index_of_equivalent_term(phi=phi)
@@ -2715,9 +2718,11 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: EnumerationBuilder = None) -> En
     return e
 
 
-def translate_implication_to_axiom(phi: FlexibleFormula):
-    """Given a formula phi that is an implication in propositional logic,
-    translates phi to an equivalent axiomatic-system-1 axiom.
+def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
+    """Given a propositional formula phi that is an implication,
+    translates phi to an equivalent axiomatic-system-1 inference-rule.
+
+    Note: the initial need was to translate the original axioms of minimal-logic-1.
 
     :param phi:
     :return:
@@ -2732,13 +2737,33 @@ def translate_implication_to_axiom(phi: FlexibleFormula):
     # Now we have the assurance that phi is a well-formed propositional formula.
     # Retrieve the list of propositional-variables in phi:
     propositional_variables: Enumeration = get_leaf_formulas(phi=phi)
-    db: TransformationBuilder = TransformationBuilder(premises=None, conclusion=None, variables=None)
+    premises: EnumerationBuilder = EnumerationBuilder(elements=None)
+    variables_map: MapBuilder = MapBuilder(domain=None, codomain=None)
     for x in propositional_variables:
-        db.append_variable(variable=x)
-        # Append the x is-a propositional-variable axiom
-        db.append_premise(premise=Axiom(claim=x | connectives.is_a | connectives.propositional_variable))
-    # Append the premise
-    db.append_premise(premise=phi.term_0)
-    db.set_conclusion(conclusion=phi.term_1)
-    t = db.to_transformation()
-    return t
+        rep: str = x.rep()
+        # automatically append the axiom: x is-a propositional-variable
+        with let_x_be_a_propositional_variable(rep=rep) as x2:
+            premises.append(term=x | connectives.is_a | connectives.propositional_variable)
+            variables_map.set_pair(phi=x, psi=x2)
+    variables_map: Map = variables_map.to_map()
+    variables: Enumeration = Enumeration(elements=variables_map.codomain)
+
+    # elaborate a new formula psi where all variables have been replaced with the new variables
+    psi = replace_formulas(phi=phi, m=variables_map)
+
+    # translate the antecedent of the implication to the main premises
+    # note: we could further split conjunctions into multiple premises
+    antecedent: Formula = psi.term_0
+    premises.append(term=antecedent)
+
+    # retrieve the conclusion
+    conclusion: Formula = psi.term_1
+
+    # build the rule
+    rule: TransformationBuilder = TransformationBuilder(premises=premises, conclusion=conclusion,
+                                                        variables=variables)
+
+    # build the inference-rule
+    inference_rule: InferenceRule = InferenceRule(transformation=rule)
+
+    return inference_rule

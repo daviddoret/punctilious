@@ -6,14 +6,14 @@ class TestAdjunction:
     def test_adjunction(self):
         # retrieve some basic vocabulary
         is_a = pu.as1.connectives.is_a
-        proposition = pu.ir1.connectives.proposition
-        land = pu.ir1.connectives.land
+        propositional_variable = pu.as1.connectives.propositional_variable
+        land = pu.as1.connectives.land
 
         # elaborate a theory
         a = pu.as1.let_x_be_a_simple_object(rep='A')
         b = pu.as1.let_x_be_a_simple_object(rep='B')
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
-        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | proposition)
+        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | propositional_variable)
+        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | propositional_variable)
         a3 = pu.as1.let_x_be_an_axiom(claim=a)
         a4 = pu.as1.let_x_be_an_axiom(claim=b)
         r: pu.as1.Transformation = pu.as1.coerce_transformation(phi=pu.ir1.adjunction_axiom.claim)
@@ -42,14 +42,14 @@ class TestSimplification1:
     def test_simplification_1(self):
         # retrieve some basic vocabulary
         is_a = pu.as1.connectives.is_a
-        proposition = pu.ir1.connectives.proposition
-        land = pu.ir1.connectives.land
+        propositional_variable = pu.as1.connectives.propositional_variable
+        land = pu.as1.connectives.land
 
         # elaborate a theory
         a = pu.as1.let_x_be_a_simple_object(rep='A')
         b = pu.as1.let_x_be_a_simple_object(rep='B')
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
-        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | proposition)
+        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | propositional_variable)
+        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | propositional_variable)
         a3 = pu.as1.let_x_be_an_axiom(claim=a | land | b)
         r: pu.as1.Transformation = pu.as1.coerce_transformation(phi=pu.ir1.simplification_1_axiom.claim)
         axioms = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, a1, a2, a3,))
@@ -75,14 +75,14 @@ class TestSimplification2:
     def test_simplification_2(self):
         # retrieve some basic vocabulary
         is_a = pu.as1.connectives.is_a
-        proposition = pu.ir1.connectives.proposition
-        land = pu.ir1.connectives.land
+        propositional_variable = pu.as1.connectives.propositional_variable
+        land = pu.as1.connectives.land
 
         # elaborate a theory
         a = pu.as1.let_x_be_a_simple_object(rep='A')
         b = pu.as1.let_x_be_a_simple_object(rep='B')
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
-        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | proposition)
+        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | propositional_variable)
+        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | propositional_variable)
         a3 = pu.as1.let_x_be_an_axiom(claim=a | land | b)
         r: pu.as1.Transformation = pu.as1.coerce_transformation(phi=pu.ir1.simplification_2_axiom.claim)
         axioms = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, a1, a2, a3,))
@@ -108,15 +108,15 @@ class TestModusPonens:
     def test_modus_ponens(self):
         # retrieve some basic vocabulary
         is_a = pu.as1.connectives.is_a
-        proposition = pu.ir1.connectives.proposition
-        implies = pu.ir1.implies
-        land = pu.ir1.connectives.land
+        propositional_variable = pu.as1.connectives.propositional_variable
+        implies = pu.as1.connectives.implies
+        land = pu.as1.connectives.land
 
         # elaborate a theory
         a = pu.as1.let_x_be_a_simple_object(rep='A')
         b = pu.as1.let_x_be_a_simple_object(rep='B')
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
-        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | proposition)
+        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | propositional_variable)
+        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | propositional_variable)
         a3 = pu.as1.let_x_be_an_axiom(claim=a | implies | b)
         a4 = pu.as1.let_x_be_an_axiom(claim=a)
         r: pu.as1.Transformation = pu.as1.coerce_transformation(phi=pu.ir1.modus_ponens_axiom.claim)
