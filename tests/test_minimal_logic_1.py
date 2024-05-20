@@ -23,7 +23,7 @@ class TestPL1:
         # derive a new theorem
         inference = pu.as1.Inference(
             premises=(a1.claim, a2.claim,),
-            transformation_rule=pu.ml1.pl01.claim)
+            transformation_rule=pu.ml1.pl01.transformation)
         claim = p | land | p
         isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=p | land | p, psi=isolated_theorem.claim)
@@ -44,23 +44,20 @@ class TestPL2:
 
         # retrieve some basic vocabulary
         is_a = pu.as1.connectives.is_a
-        proposition = pu.ir1.connectives.proposition
-        land = pu.ir1.connectives.land
-
-        db = pu.as1.DemonstrationBuilder(theorems=None)
+        propositional_variable = pu.as1.connectives.propositional_variable
+        land = pu.as1.connectives.land
 
         # elaborate a theory
-        a, b = pu.as1.let_x_be_a_propositional_variable(rep=('A', 'B',), db=db)
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | proposition)
-        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | proposition)
+        a, b = pu.as1.let_x_be_a_propositional_variable(rep=('A', 'B',))
+        a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | propositional_variable)
+        a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | propositional_variable)
         a3 = pu.as1.let_x_be_an_axiom(claim=a | land | b)
         axioms = pu.as1.Axiomatization(axioms=(*pu.ml1.axioms, a1, a2, a3,))
-        # theory = pu.as1.union_demonstration(phi=pu.ir1.inference_rules, psi=(a1, a2, a3, a4,))
 
         # derive a new theorem
         inference = pu.as1.Inference(
             premises=(a1.claim, a2.claim, a3.claim,),
-            transformation_rule=pu.ml1.pl02.claim)
+            transformation_rule=pu.ml1.pl02.transformation)
         isolated_theorem = pu.as1.TheoremByInference(claim=b | land | a, i=inference)
         assert pu.as1.is_formula_equivalent(phi=b | land | a, psi=isolated_theorem.claim)
 

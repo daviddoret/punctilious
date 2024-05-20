@@ -66,12 +66,15 @@ with as1.let_x_be_a_propositional_variable(rep='A') as a:
         phi=a | implies | (a | land | a))
     """Original axiom: PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
+    test = as1.get_leaf_formulas(phi=pl01)
+    pass
 
 with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b:
     pl02: as1.InferenceRule = as1.translate_implication_to_axiom(
-        phi=(a | implies | b) | implies | (b | land | a))
+        phi=(a | land | b) | implies | (b | land | a))
     """Original axiom: PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
+    pass
 
 # with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
 #        rep='c') as c:

@@ -2278,11 +2278,15 @@ class InferenceRule(Theorem):
         return o
 
     def __init__(self, transformation: FlexibleTransformation):
-        transformation: Formula = coerce_transformation(phi=transformation)
-        super().__init__(claim=transformation, justification=connectives.inference_rule)
+        self._transformation: Formula = coerce_transformation(phi=transformation)
+        super().__init__(claim=self._transformation, justification=connectives.inference_rule)
 
     def rep(self, **kwargs) -> str:
-        return f'({self.claim.rep(**kwargs)}) is an inference rule.'
+        return f'Inference rule:\n\t{self.claim.rep(**kwargs)}'
+
+    @property
+    def transformation(self) -> Transformation:
+        return self._transformation
 
 
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
@@ -2329,13 +2333,17 @@ class Inference(Formula):
         c: Connective = connectives.inference
         super().__init__(connective=c, terms=(self._premises, self._transformation_rule,))
 
+    def rep(self, **kwargs) -> str:
+        premises: str = '\n\t\t\t'.join(theorem.rep(**kwargs) for theorem in self.premises)
+        return f'Inference:\n\tPremises:\n\t\t\t{premises}\n\tTransformation-rule:\n\t\t{self.transformation_rule.rep(**kwargs)}'
+
     @property
-    def f(self) -> Transformation:
+    def transformation_rule(self) -> Transformation:
         """The inference-rule of the inference."""
         return self._transformation_rule
 
     @property
-    def p(self) -> Tupl:
+    def premises(self) -> Tupl:
         """The premises of the inference."""
         return self._premises
 
@@ -2376,7 +2384,7 @@ class TheoremByInference(Theorem):
             return False
         else:
             i: Inference = coerce_inference(phi=phi.term_1)
-            f_of_p: Formula = i.f(i.p)
+            f_of_p: Formula = i.transformation_rule(i.premises)
             if not is_formula_equivalent(phi=phi.term_0, psi=f_of_p):
                 # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
                 # issue a warning to facilitate troubleshooting and analysis.
@@ -2389,7 +2397,7 @@ class TheoremByInference(Theorem):
         claim: Formula = coerce_formula(phi=claim)
         i: Inference = coerce_inference(phi=i)
         # check the validity of the theorem
-        f_of_p: Formula = i.f(i.p)
+        f_of_p: Formula = i.transformation_rule(i.premises)
         if not is_formula_equivalent(phi=claim, psi=f_of_p):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
@@ -2414,7 +2422,7 @@ class TheoremByInference(Theorem):
         return self._phi
 
     def rep(self, **kwargs) -> str:
-        return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.p} and inference-rule {self.i.f}.'
+        return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.premises} and inference-rule {self.i.transformation_rule}.'
 
 
 FlexibleTheoremByInference = typing.Union[TheoremByInference, Formula]
@@ -2527,7 +2535,7 @@ class Demonstration(Enumeration):
             elif is_well_formed_theorem_by_inference(phi=theorem):
                 theorem_by_inference: TheoremByInference = coerce_theorem_by_inference(phi=theorem)
                 inference: Inference = theorem_by_inference.i
-                for premise in inference.p:
+                for premise in inference.premises:
                     # check that premise is a proven-formula (term_0) of a predecessor
                     if not claims.has_element(phi=premise):
                         # The premise is absent from the demonstration.
@@ -2537,16 +2545,17 @@ class Demonstration(Enumeration):
                         if premise_index >= i:
                             # The premise is not positioned before the conclusion.
                             return False
-                if not claims.has_element(phi=inference.f):
+                if not claims.has_element(phi=inference.transformation_rule):
                     # The inference transformation-rule is absent from the demonstration.
                     return False
                 else:
-                    transformation_index = claims.get_index_of_first_equivalent_element(phi=inference.f)
+                    transformation_index = claims.get_index_of_first_equivalent_element(
+                        phi=inference.transformation_rule)
                     if transformation_index >= i:
                         # The transformation is not positioned before the conclusion.
                         return False
                 # And finally, confirm that the inference effectively yields phi.
-                phi_prime = inference.f.apply_transformation(arguments=inference.p)
+                phi_prime = inference.transformation_rule.apply_transformation(arguments=inference.premises)
                 if not is_formula_equivalent(phi=claim, psi=phi_prime):
                     return False
             else:
@@ -2740,10 +2749,10 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     premises: EnumerationBuilder = EnumerationBuilder(elements=None)
     variables_map: MapBuilder = MapBuilder(domain=None, codomain=None)
     for x in propositional_variables:
-        rep: str = x.rep()
+        rep: str = x.rep() + '\''
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable(rep=rep) as x2:
-            premises.append(term=x | connectives.is_a | connectives.propositional_variable)
+            premises.append(term=x2 | connectives.is_a | connectives.propositional_variable)
             variables_map.set_pair(phi=x, psi=x2)
     variables_map: Map = variables_map.to_map()
     variables: Enumeration = Enumeration(elements=variables_map.codomain)
