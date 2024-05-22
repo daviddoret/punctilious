@@ -64,12 +64,13 @@ implies = as1.connectives.implies
 land = as1.connectives.land
 lnot = as1.connectives.lnot
 propositional_variable = as1.connectives.propositional_variable
+proposition = as1.connectives.proposition
 
-with as1.let_x_be_a_propositional_variable(rep='A') as a:
+with as1.let_x_be_a_variable(rep='A') as a:
     pl01: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
-            (a | is_a | propositional_variable,),
+            (a | is_a | proposition,),
             conclusion=a | implies | (a | land | a),
             variables=(a,)))
     """Original axiom: PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). Source: (Mancosu et al., p. 19).

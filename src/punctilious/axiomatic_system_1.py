@@ -2339,7 +2339,7 @@ class Inference(Formula):
 
     def rep(self, **kwargs) -> str:
         premises: str = '\n\t\t\t'.join(theorem.rep(**kwargs) for theorem in self.premises)
-        return f'Inference:\n\tPremises:\n\t\t\t{premises}\n\tTransformation-rule:\n\t\t{self.transformation_rule.rep(**kwargs)}'
+        return f'Inference-rule:\n\tPremises:\n\t\t\t{premises}\n\tTransformation-rule:\n\t\t{self.transformation_rule.rep(**kwargs)}'
 
     @property
     def transformation_rule(self) -> Transformation:
@@ -2512,6 +2512,11 @@ class Derivation(Enumeration):
         :return: bool.
         """
         phi = coerce_enumeration(phi=phi)
+
+        if isinstance(phi, Derivation):
+            # the Derivation class assure the well-formedness of the derivation.
+            return True
+
         # check the well-formedness of the individual theorems.
         # and retrieve the terms claimed as proven in the derivation, preserving order.
         # by the definition of a derivation, these are the left term (term_0) of the formulas.
@@ -2601,7 +2606,7 @@ class Derivation(Enumeration):
         # return any(is_formula_equivalent(phi=phi, psi=theorem) for theorem in self)
 
     def rep(self, **kwargs) -> str:
-        header: str = 'Demonstration:\n\t'
+        header: str = 'Derivation:\n\t'
         theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
         return f'{header}{theorems}'
 
