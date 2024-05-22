@@ -27,25 +27,25 @@ class TestPropositionalLogicMetaTheory:
         claim = p | is_a | proposition
         isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=p | is_a | proposition, psi=isolated_theorem.claim)
-        theory = pu.as1.Demonstration(theorems=(*theory, isolated_theorem,))
+        theory = pu.as1.Derivation(theorems=(*theory, isolated_theorem,))
         assert theory.has_theorem(phi=p | is_a | proposition)
 
         # add i2: A is-a proposition ⊃ ¬A is a proposition
         # note that it is not necessary that either A or ¬A be valid
-        theory = pu.as1.Demonstration(theorems=(*theory, pu.pls1.i2,))
+        theory = pu.as1.Derivation(theorems=(*theory, pu.pls1.i2,))
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition,),
             transformation_rule=pu.pls1.i2.transformation)
         claim = lnot(p) | is_a | proposition
         isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=lnot(p) | is_a | proposition, psi=isolated_theorem.claim)
-        theory = pu.as1.Demonstration(theorems=(*theory, isolated_theorem,))
+        theory = pu.as1.Derivation(theorems=(*theory, isolated_theorem,))
         assert theory.has_theorem(phi=lnot(p) | is_a | proposition)
 
         # declare 1 as a propositional-variable
         with pu.as1.let_x_be_a_propositional_variable(rep='Q') as q:
             a2 = pu.as1.Axiom(claim=q | is_a | propositional_variable)
-        theory = pu.as1.Demonstration(theorems=(*theory, a2,))
+        theory = pu.as1.Derivation(theorems=(*theory, a2,))
 
         # derive q is-a proposition
         inference = pu.as1.Inference(
@@ -53,17 +53,17 @@ class TestPropositionalLogicMetaTheory:
             transformation_rule=pu.pls1.i1.transformation)
         claim = q | is_a | proposition
         isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
-        theory = pu.as1.Demonstration(theorems=(*theory, isolated_theorem,))
+        theory = pu.as1.Derivation(theorems=(*theory, isolated_theorem,))
 
         # add i3: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition)
-        theory = pu.as1.Demonstration(theorems=(*theory, pu.pls1.i3,))
+        theory = pu.as1.Derivation(theorems=(*theory, pu.pls1.i3,))
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition, q | is_a | proposition,),
             transformation_rule=pu.pls1.i3.transformation)
         claim = (p | land | q) | is_a | proposition
         isolated_theorem = pu.as1.TheoremByInference(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.claim)
-        theory = pu.as1.Demonstration(theorems=(*theory, isolated_theorem,))
+        theory = pu.as1.Derivation(theorems=(*theory, isolated_theorem,))
         assert theory.has_theorem(phi=claim)
 
         pass

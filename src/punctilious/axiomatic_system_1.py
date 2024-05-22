@@ -607,9 +607,9 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
     return e
 
 
-def union_demonstration(phi: FlexibleDemonstration, psi: FlexibleDemonstration) -> Demonstration:
-    """Given two demonstrations phi, and psi, the union-demonstration operator, noted phi ∪-demonstration psi,
-    returns a new demonstration omega such that:
+def union_derivation(phi: FlexibleDerivation, psi: FlexibleDerivation) -> Derivation:
+    """Given two derivations phi, and psi, the union-derivation operator, noted phi ∪-derivation psi,
+    returns a new derivation omega such that:
     - all theorems of phi are elements of omega,
     - all theorems of psi are elements of omega,
     - no other theorems are theorems of omega.
@@ -618,22 +618,22 @@ def union_demonstration(phi: FlexibleDemonstration, psi: FlexibleDemonstration) 
     - the theorems from psi keep their original order in omega providing they are not already present in phi,
         in which case they are skipped
 
-    Under demonstration-equivalence, the union-demonstration operator is:
-     - Idempotent: (phi ∪-demonstration phi) ~demonstration phi.
-     - Symmetric: (phi ∪-demonstration psi) ~demonstration (psi ∪-demonstration phi).
+    Under derivation-equivalence, the union-derivation operator is:
+     - Idempotent: (phi ∪-derivation phi) ~derivation phi.
+     - Symmetric: (phi ∪-derivation psi) ~derivation (psi ∪-derivation phi).
 
-    Under formula-equivalence, the union-demonstration operator is:
-     - Idempotent: (phi ∪-demonstration phi) ~formula phi.
+    Under formula-equivalence, the union-derivation operator is:
+     - Idempotent: (phi ∪-derivation phi) ~formula phi.
      - Not symmetric if some element of psi are elements of phi: because of order.
     """
-    phi: Demonstration = coerce_demonstration(phi=phi)
-    psi: Demonstration = coerce_demonstration(phi=psi)
-    db: DemonstrationBuilder = DemonstrationBuilder(theorems=None)
+    phi: Derivation = coerce_derivation(phi=phi)
+    psi: Derivation = coerce_derivation(phi=psi)
+    db: DerivationBuilder = DerivationBuilder(theorems=None)
     for phi_prime in phi:
         db.append(term=phi_prime)
     for psi_prime in psi:
         db.append(term=psi_prime)
-    d: Demonstration = db.to_demonstration()
+    d: Derivation = db.to_derivation()
     return d
 
 
@@ -911,19 +911,19 @@ def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
 
 def let_x_be_a_propositional_variable(
         rep: FlexibleRepresentation,
-        db: typing.Union[FlexibleDemonstrationBuilder, EnumerationBuilder] = None) -> \
+        db: typing.Union[FlexibleDerivationBuilder, EnumerationBuilder] = None) -> \
         typing.Union[Variable, typing.Generator[Variable, typing.Any, None]]:
     """
 
     :param rep:
-    :param db: If a demonstration-builder is provided, append the axiom (x is-a proposition) where x is the new
+    :param db: If a derivation-builder is provided, append the axiom (x is-a proposition) where x is the new
         variable. Alternatively, an enumeration-builder may be provided.
     :return:
     """
     # TODO: RESUME IMPLEMENTATION OF PARAMETER DB HERE.
     # TODO: EITHER MOVE THIS FUNCTION TO INFERENCE_RULES_1 OR MOVE FUNDAMENTAL LOGIC CONNECTIVES HERE
     if db is not None:
-        db = coerce_demonstration_builder(phi=db)
+        db = coerce_derivation_builder(phi=db)
     if isinstance(rep, str):
         x = Variable(connective=NullaryConnective(rep=rep))
         if db is not None:
@@ -1016,7 +1016,7 @@ def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormul
 
 class Connectives(typing.NamedTuple):
     axiom: UnaryConnective
-    demonstration: FreeArityConnective
+    derivation: FreeArityConnective
     e: FreeArityConnective
     """The enumeration connective, cf. the Enumeration class.
     """
@@ -1041,7 +1041,7 @@ class Connectives(typing.NamedTuple):
 
 connectives: Connectives = _set_state(key='connectives', value=Connectives(
     axiom=let_x_be_a_unary_connective(rep='axiom'),
-    demonstration=let_x_be_a_free_arity_connective(rep='demonstration'),
+    derivation=let_x_be_a_free_arity_connective(rep='derivation'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
     f=let_x_be_a_ternary_connective(rep='f'),  # Transformation, # duplicate with transformation?
     follows_from=let_x_be_a_binary_connective(rep='follows-from'),
@@ -1977,9 +1977,9 @@ def is_well_formed_theorem(phi: FlexibleFormula) -> bool:
     return Theorem.is_well_formed(phi=phi)
 
 
-def is_well_formed_demonstration(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed demonstration, False otherwise."""
-    return Demonstration.is_well_formed(phi=phi)
+def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed derivation, False otherwise."""
+    return Derivation.is_well_formed(phi=phi)
 
 
 def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
@@ -2052,58 +2052,58 @@ def coerce_theorem_by_inference(phi: FlexibleFormula) -> TheoremByInference:
         raise_event(event_code=event_codes.e123, coerced_type=TheoremByInference, phi_type=type(phi), phi=phi)
 
 
-def coerce_demonstration(phi: FlexibleFormula) -> Demonstration:
-    """Validate that phi is a well-formed demonstration and returns it properly typed as Demonstration, or raise exception e123.
+def coerce_derivation(phi: FlexibleDerivation) -> Derivation:
+    """Validate that phi is a well-formed derivation and returns it properly typed as Demonstration, or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, Demonstration):
+    if isinstance(phi, Derivation):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_demonstration(phi=phi):
-        return Demonstration(theorems=phi)
+    elif isinstance(phi, Formula) and is_well_formed_derivation(phi=phi):
+        return Derivation(theorems=phi)
     elif phi is None:
-        return Demonstration(theorems=None)
+        return Derivation(theorems=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Demonstration(theorems=tuple(element for element in phi))
+        return Derivation(theorems=tuple(element for element in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
         # phi: Formula = Formula(c=connectives.e, terms=phi)
-        return Demonstration(theorems=phi)
+        return Derivation(theorems=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Demonstration, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=Derivation, phi_type=type(phi), phi=phi)
 
 
-def coerce_demonstration_builder(phi: FlexibleFormula) -> DemonstrationBuilder:
-    """Validate that phi is a well-formed demonstration-builder and returns it properly typed as
+def coerce_derivation_builder(phi: FlexibleFormula) -> DerivationBuilder:
+    """Validate that phi is a well-formed derivation-builder and returns it properly typed as
     DemonstrationBuilder, or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, DemonstrationBuilder):
+    if isinstance(phi, DerivationBuilder):
         return phi
-    elif isinstance(phi, Demonstration):
-        return phi.to_demonstration_builder()
+    elif isinstance(phi, Derivation):
+        return phi.to_derivation_builder()
     elif phi is None:
-        return DemonstrationBuilder(theorems=None)
+        return DerivationBuilder(theorems=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
-        We assume here that the intention was to implicitly convert this to an demonstration-builder
+        We assume here that the intention was to implicitly convert this to an derivation-builder
         whose theorems are the elements of the iterable."""
-        return DemonstrationBuilder(theorems=tuple(theorem for theorem in phi))
+        return DerivationBuilder(theorems=tuple(theorem for theorem in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
-        We assume here that the intention was to implicitly convert this to an demonstration-builder
+        We assume here that the intention was to implicitly convert this to an derivation-builder
         whose theorems are the elements of the iterable."""
-        return DemonstrationBuilder(theorems=phi)
+        return DerivationBuilder(theorems=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=DemonstrationBuilder, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=DerivationBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
@@ -2440,8 +2440,8 @@ class TheoryAccretor(EnumerationAccretor):
     pass
 
 
-class DemonstrationBuilder(EnumerationBuilder):
-    """A utility class to help build demonstrations. It is mutable and thus allows edition.
+class DerivationBuilder(EnumerationBuilder):
+    """A utility class to help build derivations. It is mutable and thus allows edition.
 
     The allowed operations on an enumeration-builder are:
      - appending axiom,
@@ -2483,22 +2483,22 @@ class DemonstrationBuilder(EnumerationBuilder):
         theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
         return f'{header}{theorems}'
 
-    def to_demonstration(self) -> Demonstration:
-        """If the demonstration-builder is well-formed, return a demonstration."""
+    def to_derivation(self) -> Derivation:
+        """If the derivation-builder is well-formed, return a derivation."""
         elements: tuple[Formula, ...] = tuple(coerce_theorem(phi=element) for element in self)
-        phi: Demonstration = Demonstration(theorems=elements)
+        phi: Derivation = Derivation(theorems=elements)
         return phi
 
     def to_formula(self) -> Formula:
-        """If the demonstration-builder is well-formed, return a demonstration, which is a formula."""
-        return self.to_demonstration()
+        """If the derivation-builder is well-formed, return a derivation, which is a formula."""
+        return self.to_derivation()
 
 
-class Demonstration(Enumeration):
-    """A demonstration is an enumeration of theorems.
+class Derivation(Enumeration):
+    """A derivation is an enumeration of theorems.
 
     Syntactic definition:
-    A well-formed demonstration is an enumeration such that:
+    A well-formed derivation is an enumeration such that:
      - all element phi of the enumeration is a well-formed theorem,
      - all premises of all theorem-by-inferences are predecessors of their parent theorem-by-inference.
 
@@ -2506,15 +2506,15 @@ class Demonstration(Enumeration):
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed demonstration, False otherwise.
+        """Return True if phi is a well-formed derivation, False otherwise.
 
         :param phi: A formula.
         :return: bool.
         """
         phi = coerce_enumeration(phi=phi)
         # check the well-formedness of the individual theorems.
-        # and retrieve the terms claimed as proven in the demonstration, preserving order.
-        # by the definition of a demonstration, these are the left term (term_0) of the formulas.
+        # and retrieve the terms claimed as proven in the derivation, preserving order.
+        # by the definition of a derivation, these are the left term (term_0) of the formulas.
         claims: TuplBuilder = TuplBuilder(elements=None)
         theorems: TuplBuilder = TuplBuilder(elements=None)
         for theorem in phi:
@@ -2545,7 +2545,7 @@ class Demonstration(Enumeration):
                 for premise in inference.premises:
                     # check that premise is a proven-formula (term_0) of a predecessor
                     if not claims.has_element(phi=premise):
-                        # The premise is absent from the demonstration.
+                        # The premise is absent from the derivation.
                         return False
                     else:
                         premise_index = claims.get_index_of_first_equivalent_element(phi=premise)
@@ -2553,7 +2553,7 @@ class Demonstration(Enumeration):
                             # The premise is not positioned before the conclusion.
                             return False
                 if not claims.has_element(phi=inference.transformation_rule):
-                    # The inference transformation-rule is absent from the demonstration.
+                    # The inference transformation-rule is absent from the derivation.
                     return False
                 else:
                     transformation_index = claims.get_index_of_first_equivalent_element(
@@ -2576,10 +2576,10 @@ class Demonstration(Enumeration):
         theorems: Enumeration = coerce_enumeration(phi=theorems)
         # coerce all elements of the enumeration to theorems
         theorems: Enumeration = coerce_enumeration(phi=(coerce_theorem(phi=p) for p in theorems))
-        if not is_well_formed_demonstration(phi=theorems):
+        if not is_well_formed_derivation(phi=theorems):
             # well-formedness check failed,
             # the theorem is most certainly invalid.
-            raise_event(event_code=event_codes.e108, theorems=theorems, expected_class='demonstration')
+            raise_event(event_code=event_codes.e108, theorems=theorems, expected_class='derivation')
         o: tuple = super().__new__(cls, elements=theorems)
         return o
 
@@ -2591,7 +2591,7 @@ class Demonstration(Enumeration):
         super().__init__(elements=theorems)
 
     def has_theorem(self, phi: FlexibleFormula) -> bool:
-        """Return True if phi is a theorem of this demonstration, False otherwise."""
+        """Return True if phi is a theorem of this derivation, False otherwise."""
         phi = coerce_formula(phi=phi)
         for theorem in self:
             theorem: Theorem = coerce_theorem(phi=theorem)
@@ -2605,21 +2605,21 @@ class Demonstration(Enumeration):
         theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
         return f'{header}{theorems}'
 
-    def to_demonstration_builder(self) -> DemonstrationBuilder:
-        return DemonstrationBuilder(theorems=self)
+    def to_derivation_builder(self) -> DerivationBuilder:
+        return DerivationBuilder(theorems=self)
 
 
-FlexibleDemonstration = typing.Optional[
-    typing.Union[Demonstration, DemonstrationBuilder, typing.Iterable[FlexibleTheorem]]]
+FlexibleDerivation = typing.Optional[
+    typing.Union[Derivation, DerivationBuilder, typing.Iterable[FlexibleTheorem]]]
 """FlexibleDemonstration is a flexible python type that may be safely coerced into a Demonstration or a 
 DemonstrationBuilder."""
 
-FlexibleDemonstrationBuilder = typing.Optional[
-    typing.Union[Demonstration, DemonstrationBuilder, typing.Iterable[FlexibleTheorem]]]
+FlexibleDerivationBuilder = typing.Optional[
+    typing.Union[Derivation, DerivationBuilder, typing.Iterable[FlexibleTheorem]]]
 
 
-class Axiomatization(Demonstration):
-    """An axiomatization is a demonstration that is only composed of axioms,
+class Axiomatization(Derivation):
+    """An axiomatization is a derivation that is only composed of axioms,
     and/or inference-rules.
 
     Syntactic definition:
@@ -2783,3 +2783,30 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     inference_rule: InferenceRule = InferenceRule(transformation=rule)
 
     return inference_rule
+
+
+def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: FlexibleTupl,
+           inference_rule: FlexibleInferenceRule):
+    """Given a derivation t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
+
+    :param theory:
+    :param premises:
+    :param inference_rule:
+    :return:
+    """
+    # parameters validation
+    theory: Derivation = coerce_derivation(phi=theory)
+    claim: Formula = coerce_formula(phi=claim)
+    premises: Tupl = coerce_tupl(phi=premises)
+    inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
+
+    # configure the inference
+    inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
+
+    # derive the new theorem
+    theorem: Theorem = TheoremByInference(claim=claim, i=inference)
+
+    # extends the derivation
+    derivation: Derivation = Derivation(theorems=(*theory, theorem,))
+
+    return derivation

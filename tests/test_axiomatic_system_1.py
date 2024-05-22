@@ -625,7 +625,7 @@ class TestInferenceRule:
         # derivation from the axiom
         i = pu.as1.Inference(premises=None, transformation_rule=rule)
         isolated_theorem = pu.as1.Theorem(claim=phi, justification=i)
-        demo = pu.as1.Demonstration(theorems=(*axiomatization, isolated_theorem))
+        demo = pu.as1.Derivation(theorems=(*axiomatization, isolated_theorem))
         assert pu.as1.is_formula_equivalent(
             phi=isolated_theorem.claim,
             psi=phi)
@@ -767,22 +767,22 @@ class TestDemonstration:
             variables=(x, y, z,))
         axiom_3 = pu.as1.InferenceRule(transformation=rule)
         axiomatization = pu.as1.Axiomatization(axioms=(axiom_1, axiom_2, axiom_3,))
-        demo1 = pu.as1.Demonstration(
+        demo1 = pu.as1.Derivation(
             theorems=axiomatization)  # this must not raise an exception and will just change the type
 
         # derive a theorem
         i = pu.as1.Inference(premises=(a | star2 | b, b | star2 | c,), transformation_rule=rule)
         isolated_theorem = pu.as1.TheoremByInference(claim=a | star2 | c, i=i)
-        demo2 = pu.as1.Demonstration(
+        demo2 = pu.as1.Derivation(
             theorems=(*demo1, isolated_theorem,))  # Does not raise exception because it is valid
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # invalid proof raise exception
-            demo3 = pu.as1.Demonstration(theorems=(axiom_1, axiom_2, a | star2 | e))
+            demo3 = pu.as1.Derivation(theorems=(axiom_1, axiom_2, a | star2 | e))
 
         with pytest.raises(pu.as1.CustomException, match='e108'):
             # invalid proof sequence exception
-            demo4 = pu.as1.Demonstration(theorems=(axiom_1, axiom_2, isolated_theorem, axiom_3,))
+            demo4 = pu.as1.Derivation(theorems=(axiom_1, axiom_2, isolated_theorem, axiom_3,))
             pass
 
 
