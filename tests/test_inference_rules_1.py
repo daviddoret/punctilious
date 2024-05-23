@@ -163,6 +163,8 @@ class TestModusPonens:
                                inference_rule=pu.ir1.modus_ponens_axiom)
         assert theory.has_theorem(phi=b)
 
+        # extend the theory to perform a second test
+        # using a single propositional-variable
         a3 = pu.as1.Axiom(claim=a | implies | (a | land | a))
         a4 = pu.as1.Axiom(claim=(a | land | a) | is_a | proposition)
         theory = pu.as1.Derivation(valid_statements=(*theory, a3, a4,))
