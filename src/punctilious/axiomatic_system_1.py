@@ -92,9 +92,12 @@ event_codes: EventCodes = _set_state(key='event_codes', value=EventCodes(
                    message='EnumerationBuilder.__init__: Attempt to add duplicate formula-equivalent formulas as '
                            'elements of the enumeration. The new element / term is ignored.'),
     e105=EventCode(event_type=event_types.error, code='e105',
-                   message='ProofByInference.__new__: attempt to create an ill-formed theorem-by-inference because '
-                           'phi_expected ~formula phi_inferred, '
-                           'where phi_inferred = f(p), f the inference transformation, and p the inference premises.'),
+                   message='During the initialization of a theorem (methods __init__ or __new__ of the Theorem class), '
+                           'the well-formedness of the theorem is checked. One well-formedness rule is that applying '
+                           'the transformation of the inference on the premises must effectively yield the claimed '
+                           'formula. Here, the claimed formula is not formula-equivalent to the algorithm output. In '
+                           'consequence, the theorem would be ill-formed. The error parameter provides more detailed '
+                           'information.'),
     e106=EventCode(event_type=event_types.warning, code='e106',
                    message='is_well_formed_theorem_by_inference: phi is an ill-formed theorem-by-inference because '
                            'psi_expected ~formula psi_inferred, '
@@ -109,9 +112,11 @@ event_codes: EventCodes = _set_state(key='event_codes', value=EventCodes(
                    message='Enumeration.__new__: Attempt to create enumeration from invalid elements. Often this is '
                            'caused by a paid of elements that are formula-equivalent.'),
     e111=EventCode(event_type=event_types.error, code='e111',
-                   message='REUSE'),
+                   message='While checking the well-formedness of a derivation, a premise is necessary to derive a '
+                           'theorem, but it is absent from the derivation.'),
     e112=EventCode(event_type=event_types.error, code='e112',
-                   message='REUSE'),
+                   message='While checking the well-formedness of a derivation, a premise is necessary to derive a '
+                           'theorem, but its position in the derivation is posterior to the theorem.'),
     e113=EventCode(event_type=event_types.error, code='e113',
                    message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to '
                            'elaborate formulas.'),
@@ -126,19 +131,26 @@ event_codes: EventCodes = _set_state(key='event_codes', value=EventCodes(
                    message='EnumerationAccretor.insert: The insert-element operation is forbidden on '
                            'enumeration-accretors.'),
     e117=EventCode(event_type=event_types.error, code='e117',
-                   message='Transformation.apply_transformation: The arguments are not '
-                           'formula-equivalent-with-variables with the premises, with regards to the variables.'),
+                   message='Before applying a transformation (method apply_transformation of the Transformation class), the arguments passed to the transformation algorithm are verified to check that they are formula-equivalent-with-variables with the premises of the transformation, and with regards to the variables. The error parameter provides more detailed information on the issue.'),
     e118=EventCode(event_type=event_types.error, code='e118',
                    message='is_formula_equivalent_with_variables: There exists a phi''sub-formula of phi that is an '
                            'element of variables.'),
     e119=EventCode(event_type=event_types.error, code='e119',
-                   message='REUSE'),
+                   message='While checking the well-formedness of a derivation, a transformation-rule is necessary '
+                           'to derive a theorem, but it is absent from the derivation.'),
     e120=EventCode(event_type=event_types.error, code='e120',
-                   message='REUSE'),
+                   message='During the initialization of a derivation (in the __new__ or __init__ methods of the '
+                           'Derivation class), the well-formedness of the derivation is verified. This '
+                           'verification failed, in consequence the derivation would be ill-formed. The error '
+                           'parameter explains why.'),
     e121=EventCode(event_type=event_types.error, code='e121',
-                   message='REUSE'),
+                   message='While checking if two formulas are formula-equivalent-with-variables, formulas are '
+                           'automatically mapped to values. Of course, if a variable appears multiple times, '
+                           'every instance must be mapped to the same value. Here, this verification failed. Some '
+                           'variable was already mapped to a value, and then a distinct mapped value was found.'),
     e122=EventCode(event_type=event_types.error, code='e122',
-                   message='REUSE'),
+                   message='While checking if two formulas are formula-equivalent, a difference was found. The '
+                           'parameters phi and psi show two formulas or sub-formulas that are distinct.'),
     e123=EventCode(event_type=event_types.error, code='e123',
                    message='Coercion failure: phi of phi_type could not be coerced to coerced_type.'),
 ))
@@ -1111,7 +1123,7 @@ def is_connective_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool
     return phi.c is psi.c
 
 
-def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
+def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
     """Two formulas phi and psi are formula-equivalent, noted phi ~formula psi, if and only if:
     Base case:
      - phi ~connective psi
@@ -1145,11 +1157,13 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
         return True
     else:
         # Extreme case
+        if raise_event_if_false:
+            raise_event(event_code=event_codes.e122, phi=phi, psi=psi)
         return False
 
 
-def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, v: FlexibleEnumeration,
-                                         m: FlexibleMap = None) -> bool:
+def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
+                                         m: FlexibleMap = None, raise_event_if_false: bool = False) -> bool:
     """Two formulas phi and psi are formula-equivalent-with-variables in regard to variables V if and only if:
      - All formulas in V are not sub-formula of phi,
      - We declare a new formula psi' where every sub-formula that is an element of V,
@@ -1160,7 +1174,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
 
     :param phi: a formula that does not contain any element of variables.
     :param psi: a formula that may contain some elements of variables.
-    :param v: an enumeration of formulas called variables.
+    :param variables: an enumeration of formulas called variables.
     :param m: (conditional) a mapping between variables and their assigned values. used internally for recursive calls.
       leave it to None.
     :return:
@@ -1169,11 +1183,11 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula = psi
-    v: Tupl = coerce_tupl(phi=v)
-    if v.has_element(phi=phi):
+    variables: Tupl = coerce_tupl(phi=variables)
+    if variables.has_element(phi=phi):
         # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
-        raise_event(event_code=event_codes.e118, phi=phi, psi=psi, v=v)
-    if v.has_element(phi=psi):
+        raise_event(event_code=event_codes.e118, phi=phi, psi=psi, v=variables)
+    if variables.has_element(phi=psi):
         # psi is a variable.
         if m.is_defined_in(phi=psi):
             # psi's value is already mapped.
@@ -1186,6 +1200,9 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
             else:
                 # psi is not consistent with its already mapped value.
                 # it follows that phi and psi are not formula-equivalent-with-variables.
+                if raise_event_if_false:
+                    raise_event(event_code=event_codes.e121, variable=psi,
+                                already_mapped_value=already_mapped_value, distinct_value=phi)
                 return False
         else:
             # psi's value has not been mapped yet.
@@ -1198,7 +1215,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
         # Base case
         return True
     elif (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == psi_value.arity) and all(
-            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, v=v, m=m) for
+            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, variables=variables, m=m) for
             phi_prime, psi_prime in zip(phi, psi_value)):
         # Inductive step
         return True
@@ -1838,9 +1855,11 @@ class Transformation(Formula):
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         variables_map: MapBuilder = MapBuilder()
-        if not is_formula_equivalent_with_variables(phi=arguments, psi=self.premises, v=self.variables,
-                                                    m=variables_map):
-            raise_event(event_code=event_codes.e117, arguments=arguments, premises=self.premises,
+        try:
+            is_formula_equivalent_with_variables(phi=arguments, psi=self.premises, variables=self.variables,
+                                                 m=variables_map, raise_event_if_false=True)
+        except Exception as error:
+            raise_event(event_code=event_codes.e117, error=error, arguments=arguments, premises=self.premises,
                         variables=self.variables)
 
         # step 2:
@@ -1977,9 +1996,9 @@ def is_well_formed_valid_statement(phi: FlexibleFormula) -> bool:
     return ValidStatement.is_well_formed(phi=phi)
 
 
-def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
+def is_well_formed_derivation(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
     """Returns True if phi is a well-formed derivation, False otherwise."""
-    return Derivation.is_well_formed(phi=phi)
+    return Derivation.is_well_formed(phi=phi, raise_event_if_false=raise_event_if_false)
 
 
 def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
@@ -2412,11 +2431,13 @@ class Theorem(ValidStatement):
         self._i: Inference = coerce_inference(phi=i)
         # check the validity of the theorem
         f_of_p: Formula = i.transformation_rule(i.premises)
-        if not is_formula_equivalent(phi=claim, psi=f_of_p):
+        try:
+            is_formula_equivalent(phi=claim, psi=f_of_p, raise_event_if_false=True)
+        except CustomException as error:
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
-            raise_event(event_code=event_codes.e105, phi_expected=claim, phi_inferred=f_of_p,
-                        inference_rule=i)
+            raise_event(event_code=event_codes.e105, error=error, theorem_claim=claim, algorithm_output=f_of_p,
+                        inference=i)
         super().__init__(claim=claim, justification=i)
 
     @property
@@ -2506,10 +2527,11 @@ class Derivation(Enumeration):
     """
 
     @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
+    def is_well_formed(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
         """Return True if phi is a well-formed derivation, False otherwise.
 
         :param phi: A formula.
+        :param raise_event_if_false:
         :return: bool.
         """
         phi = coerce_enumeration(phi=phi)
@@ -2555,18 +2577,26 @@ class Derivation(Enumeration):
                 for premise in inference.premises:
                     # check that premise is a proven-formula (term_0) of a predecessor
                     if not claims.has_element(phi=premise):
-                        # The premise is absent from the derivation.
-                        print(f'PREMISE IS NOT VALID: {premise}')
+                        # The premise is absent from the derivation
+                        if raise_event_if_false:
+                            raise_event(event_code=event_codes.e111, premise=premise, premise_index=i, theorem=theorem,
+                                        claim=claim)
                         return False
                     else:
                         premise_index = claims.get_index_of_first_equivalent_element(phi=premise)
                         if premise_index >= i:
                             # The premise is not positioned before the conclusion.
-                            print(f'PREMISE IS POSTERIOR TO CONSEQUENCE: {premise}')
+                            if raise_event_if_false:
+                                raise_event(event_code=event_codes.e112, premise=premise, premise_index=i,
+                                            theorem=theorem,
+                                            claim=claim)
                             return False
                 if not claims.has_element(phi=inference.transformation_rule):
                     # The inference transformation-rule is absent from the derivation.
-                    print(f'MISSING INFERENCE-RULE: {inference}')
+                    if raise_event_if_false:
+                        raise_event(event_code=event_codes.e119, transformation_rule=inference.transformation_rule,
+                                    inference=inference, premise_index=i, theorem=theorem,
+                                    claim=claim)
                     return False
                 else:
                     transformation_index = claims.get_index_of_first_equivalent_element(
@@ -2597,10 +2627,11 @@ class Derivation(Enumeration):
         # coerce all elements of the enumeration to valid-statements
         valid_statements: Enumeration = coerce_enumeration(
             phi=(coerce_valid_statement(phi=p) for p in valid_statements))
-        if not is_well_formed_derivation(phi=valid_statements):
-            # well-formedness check failed,
-            # the theorem is most certainly invalid.
-            raise_event(event_code=event_codes.e108, valid_statements=valid_statements, expected_class='derivation')
+        try:
+            is_well_formed_derivation(phi=valid_statements, raise_event_if_false=True)
+        except Exception as error:
+            # well-formedness verification failure, the theorem is ill-formed.
+            raise_event(event_code=event_codes.e120, error=error, valid_statements=valid_statements)
         o: tuple = super().__new__(cls, elements=valid_statements)
         return o
 
