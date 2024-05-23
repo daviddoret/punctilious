@@ -60,21 +60,58 @@ def theory(a, b, c):
 
 
 class TestPL1:
-    def test_pl1(self, theory, a, b, c):
-        # PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
+    def test_pl1(self):
+        # Test PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 
-        assert theory.has_theorem(phi=a | is_a | proposition)
-        # derive a new theorem from the target inference-rule
+        # Elaborate a basic theory with P as a propositional-variable
+        p = pu.as1.let_x_be_a_simple_object(rep='P')
+        axiom = pu.as1.Axiom(claim=p | is_a | propositional_variable)
+        theory = pu.as1.Axiomatization(axioms=(pu.pls1.i1, axiom,))
+
+        # Derive: P is-a proposition
         theory = pu.as1.derive(theory=theory,
-                               claim=a | implies | (a | land | a),
+                               claim=p | is_a | proposition,
                                premises=(
-                                   a | is_a | proposition,),
-                               inference_rule=pu.ml1.pl01)
-        assert theory.has_theorem(phi=a | implies | (a | land | a))
+                                   p | is_a | propositional_variable,),
+                               inference_rule=pu.pls1.i1)
+        assert theory.has_theorem(phi=p | is_a | proposition)
 
-        # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom(claim=a)
-        theory = pu.as1.Derivation(theorems=(*theory, a1,))
+        # Add axiom PL01 to the theory
+        theory = pu.as1.Derivation(valid_statements=(*theory, pu.ml1.pl01,))
+
+        # Derive: P ⊃ (P ∧ P)
+        theory = pu.as1.derive(theory=theory,
+                               claim=p | implies | (p | land | p),
+                               premises=(
+                                   p | is_a | proposition,),
+                               inference_rule=pu.ml1.pl01)
+        assert theory.has_theorem(phi=p | implies | (p | land | p))
+        pass
+
+        # Derive: (P ∧ P) is-a proposition
+        theory = pu.as1.derive(theory=theory,
+                               claim=(p | land | p) | is_a | proposition,
+                               premises=(
+                                   p | is_a | proposition,
+                                   p | is_a | proposition,),
+                               inference_rule=pu.pls1.i3)
+        assert theory.has_theorem(phi=(p | land | p) | is_a | proposition)
+
+        # make P valid and add modus-ponens to the theory
+        axiom = pu.as1.Axiom(claim=p)
+        theory = pu.as1.Derivation(valid_statements=(*theory, pu.ir1.modus_ponens_axiom, axiom))
+
+        # Derive: P ∧ P from P by modus-ponens
+        theory = pu.as1.derive(theory=theory,
+                               claim=p | land | p,
+                               premises=(
+                                   p | is_a | proposition,
+                                   p | is_a | proposition,
+                                   p | implies | (p | land | p),
+                                   p,),
+                               inference_rule=pu.ir1.modus_ponens_axiom)
+        assert theory.has_theorem(phi=p | land | p)
+        pass
 
 
 class TestPL2:
@@ -97,11 +134,11 @@ class TestPL2:
         inference = pu.as1.Inference(
             premises=(a1.claim, a2.claim, a3.claim,),
             transformation_rule=pu.ml1.pl02.transformation)
-        isolated_theorem = pu.as1.TheoremByInference(claim=b | land | a, i=inference)
+        isolated_theorem = pu.as1.Theorem(claim=b | land | a, i=inference)
         assert pu.as1.is_formula_equivalent(phi=b | land | a, psi=isolated_theorem.claim)
 
         # extend the original theory with that new theorem
-        extended_theory = pu.as1.Derivation(theorems=(*axioms, isolated_theorem,))
+        extended_theory = pu.as1.Derivation(valid_statements=(*axioms, isolated_theorem,))
         assert extended_theory.has_theorem(phi=b | land | a)
 
         # show that wrong axiomatization fails to derive the theorems
@@ -109,7 +146,7 @@ class TestPL2:
             # wrong theory
             incomplete_axioms = pu.as1.Axiomatization(axioms=(
                 *pu.ir1.axioms, a1, a2,))
-            pu.as1.Derivation(theorems=(*incomplete_axioms, isolated_theorem))
+            pu.as1.Derivation(valid_statements=(*incomplete_axioms, isolated_theorem))
 
 
 class TestPL3:
@@ -134,11 +171,11 @@ class TestPL3:
         inference = pu.as1.Inference(
             premises=(a1.claim, a2.claim, a3.claim, a4.claim,),
             transformation_rule=pu.ml1.pl03.transformation)
-        isolated_theorem = pu.as1.TheoremByInference(claim=(a | land | c) | implies | (b | land | c), i=inference)
+        isolated_theorem = pu.as1.Theorem(claim=(a | land | c) | implies | (b | land | c), i=inference)
         assert pu.as1.is_formula_equivalent(phi=(a | land | c) | implies | (b | land | c), psi=isolated_theorem.claim)
 
         # extend the original theory with that new theorem
-        extended_theory = pu.as1.Derivation(theorems=(*axioms, isolated_theorem,))
+        extended_theory = pu.as1.Derivation(valid_statements=(*axioms, isolated_theorem,))
         assert extended_theory.has_theorem(phi=(a | land | c) | implies | (b | land | c))
 
         # show that wrong axiomatization fails to derive the theorems
@@ -146,6 +183,6 @@ class TestPL3:
             # wrong theory
             incomplete_axioms = pu.as1.Axiomatization(axioms=(
                 *pu.ir1.axioms, a1, a2, a3,))
-            pu.as1.Derivation(theorems=(*incomplete_axioms, isolated_theorem))
+            pu.as1.Derivation(valid_statements=(*incomplete_axioms, isolated_theorem))
 
         pass

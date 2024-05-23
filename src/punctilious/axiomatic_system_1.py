@@ -610,12 +610,12 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
 def union_derivation(phi: FlexibleDerivation, psi: FlexibleDerivation) -> Derivation:
     """Given two derivations phi, and psi, the union-derivation operator, noted phi ∪-derivation psi,
     returns a new derivation omega such that:
-    - all theorems of phi are elements of omega,
-    - all theorems of psi are elements of omega,
-    - no other theorems are theorems of omega.
+    - all valid-statements of phi are elements of omega,
+    - all valid-statements of psi are elements of omega,
+    - no other valid-statements are valid-statements of omega.
     Order is preserved, that is:
-    - the theorems from phi keep their original order in omega
-    - the theorems from psi keep their original order in omega providing they are not already present in phi,
+    - the valid-statements from phi keep their original order in omega
+    - the valid-statements from psi keep their original order in omega providing they are not already present in phi,
         in which case they are skipped
 
     Under derivation-equivalence, the union-derivation operator is:
@@ -628,7 +628,7 @@ def union_derivation(phi: FlexibleDerivation, psi: FlexibleDerivation) -> Deriva
     """
     phi: Derivation = coerce_derivation(phi=phi)
     psi: Derivation = coerce_derivation(phi=psi)
-    db: DerivationBuilder = DerivationBuilder(theorems=None)
+    db: DerivationBuilder = DerivationBuilder(valid_statements=None)
     for phi_prime in phi:
         db.append(term=phi_prime)
     for psi_prime in psi:
@@ -1967,14 +1967,14 @@ def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
     return Axiom.is_well_formed(phi=phi)
 
 
-def is_well_formed_theorem_by_inference(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed theorem-by-inference, False otherwise."""
-    return TheoremByInference.is_well_formed(phi=phi)
-
-
 def is_well_formed_theorem(phi: FlexibleFormula) -> bool:
     """Returns True if phi is a well-formed theorem, False otherwise."""
     return Theorem.is_well_formed(phi=phi)
+
+
+def is_well_formed_valid_statement(phi: FlexibleFormula) -> bool:
+    """Returns True if phi is a well-formed valid-statement, False otherwise."""
+    return ValidStatement.is_well_formed(phi=phi)
 
 
 def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
@@ -1987,21 +1987,21 @@ def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
     return Axiomatization.is_well_formed(phi=phi)
 
 
-def coerce_theorem(phi: FlexibleFormula) -> Theorem:
+def coerce_valid_statement(phi: FlexibleFormula) -> ValidStatement:
     """Validate that p is a well-formed theorem and returns it properly typed as Proof, or raise exception e123.
 
     :param phi:
     :return:
     """
     phi = coerce_formula(phi=phi)
-    if is_well_formed_theorem_by_inference(phi=phi):
-        return coerce_theorem_by_inference(phi=phi)
+    if is_well_formed_theorem(phi=phi):
+        return coerce_theorem(phi=phi)
     elif is_well_formed_inference_rule(phi=phi):
         return coerce_inference_rule(phi=phi)
     elif is_well_formed_axiom(phi=phi):
         return coerce_axiom(phi=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=ValidStatement, phi_type=type(phi), phi=phi)
 
 
 def coerce_axiom(phi: FlexibleFormula) -> Axiom:
@@ -2036,20 +2036,20 @@ def coerce_inference_rule(phi: FlexibleFormula) -> InferenceRule:
         raise_event(event_code=event_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
 
 
-def coerce_theorem_by_inference(phi: FlexibleFormula) -> TheoremByInference:
+def coerce_theorem(phi: FlexibleFormula) -> Theorem:
     """Validate that p is a well-formed theorem-by-inference and returns it properly typed as ProofByInference, or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, TheoremByInference):
+    if isinstance(phi, Theorem):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_theorem_by_inference(phi=phi):
+    elif isinstance(phi, Formula) and is_well_formed_theorem(phi=phi):
         proved_formula: Formula = coerce_formula(phi=phi.term_0)
         inference: Inference = coerce_inference(phi=phi.term_1)
-        return TheoremByInference(claim=proved_formula, i=inference)
+        return Theorem(claim=proved_formula, i=inference)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=TheoremByInference, phi_type=type(phi), phi=phi)
+        raise_event(event_code=event_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
 
 
 def coerce_derivation(phi: FlexibleDerivation) -> Derivation:
@@ -2061,20 +2061,20 @@ def coerce_derivation(phi: FlexibleDerivation) -> Derivation:
     if isinstance(phi, Derivation):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_derivation(phi=phi):
-        return Derivation(theorems=phi)
+        return Derivation(valid_statements=phi)
     elif phi is None:
-        return Derivation(theorems=None)
+        return Derivation(valid_statements=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Derivation(theorems=tuple(element for element in phi))
+        return Derivation(valid_statements=tuple(element for element in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
         # phi: Formula = Formula(c=connectives.e, terms=phi)
-        return Derivation(theorems=phi)
+        return Derivation(valid_statements=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=Derivation, phi_type=type(phi), phi=phi)
 
@@ -2091,17 +2091,17 @@ def coerce_derivation_builder(phi: FlexibleFormula) -> DerivationBuilder:
     elif isinstance(phi, Derivation):
         return phi.to_derivation_builder()
     elif phi is None:
-        return DerivationBuilder(theorems=None)
+        return DerivationBuilder(valid_statements=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an derivation-builder
-        whose theorems are the elements of the iterable."""
-        return DerivationBuilder(theorems=tuple(theorem for theorem in phi))
+        whose valid-statements are the elements of the iterable."""
+        return DerivationBuilder(valid_statements=tuple(theorem for theorem in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an derivation-builder
-        whose theorems are the elements of the iterable."""
-        return DerivationBuilder(theorems=phi)
+        whose valid-statements are the elements of the iterable."""
+        return DerivationBuilder(valid_statements=phi)
     else:
         raise_event(event_code=event_codes.e123, coerced_type=DerivationBuilder, phi_type=type(phi), phi=phi)
 
@@ -2133,12 +2133,13 @@ class TheoryState(Enumeration):
         super().__init__(elements=elements)
 
 
-class Theorem(Formula):
-    """A theorem a formula that justifies the existence of a theorem in a well-formed theory.
+class ValidStatement(Formula):
+    """A valid-statement is a formula that justifies the existence of a statement in a well-formed theory.
 
-    There are two types of theorems:
-     - postulation,
-     - inference.
+    There are three types of valid-statements:
+     - axioms,
+     - inference-rules,
+     - theorems.
      """
 
     @staticmethod
@@ -2149,7 +2150,7 @@ class Theorem(Formula):
         :return: bool.
         """
         phi: Formula = coerce_formula(phi=phi)
-        if is_well_formed_theorem_by_inference(phi=phi):
+        if is_well_formed_theorem(phi=phi):
             return True
         elif is_well_formed_inference_rule(phi=phi):
             return True
@@ -2186,7 +2187,7 @@ class Theorem(Formula):
         return self._justification
 
 
-class Axiom(Theorem):
+class Axiom(ValidStatement):
     """A well-formed axiom is a theorem that unconditionally justifies a statement.
 
     Syntactic definition:
@@ -2237,8 +2238,8 @@ class Axiom(Theorem):
 FlexibleAxiom = typing.Union[Axiom, Formula]
 
 
-class InferenceRule(Theorem):
-    """A well-formed inference-rule is a theorem that justifies the derivation of other theorems in a theory,
+class InferenceRule(ValidStatement):
+    """A well-formed inference-rule is a theorem that justifies the derivation of theorems in a theory,
     under certain conditions called premises.
 
     Syntactic definition:
@@ -2355,7 +2356,7 @@ class Inference(Formula):
 FlexibleInference = typing.Optional[typing.Union[Inference]]
 
 
-class TheoremByInference(Theorem):
+class Theorem(ValidStatement):
     """A theorem-by-inference is a theorem that is proven by inference.
 
     Syntactic definition:
@@ -2383,7 +2384,7 @@ class TheoremByInference(Theorem):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        if isinstance(phi, TheoremByInference):
+        if isinstance(phi, Theorem):
             # the type assure the well-formedness of the formula
             return True
         if not phi.c is connectives.follows_from or not phi.arity == 2 or not is_well_formed_formula(
@@ -2432,8 +2433,8 @@ class TheoremByInference(Theorem):
         return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.premises} and inference-rule {self.i.transformation_rule}.'
 
 
-FlexibleTheoremByInference = typing.Union[TheoremByInference, Formula]
-FlexibleTheorem = typing.Union[FlexibleAxiom, FlexibleTheoremByInference, FlexibleInferenceRule]
+FlexibleTheorem = typing.Union[Theorem, Formula]
+FlexibleValidStatement = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRule]
 
 
 class TheoryAccretor(EnumerationAccretor):
@@ -2450,20 +2451,20 @@ class DerivationBuilder(EnumerationBuilder):
 
     Note: """
 
-    def __init__(self, theorems: FlexibleEnumeration):
+    def __init__(self, valid_statements: FlexibleEnumeration):
         super().__init__(elements=None)
-        if isinstance(theorems, typing.Iterable):
-            for element in theorems:
+        if isinstance(valid_statements, typing.Iterable):
+            for element in valid_statements:
                 self.append(term=element)
 
-    def append(self, term: FlexibleTheorem) -> None:
+    def append(self, term: FlexibleValidStatement) -> None:
         """
         Override the append method to assure the consistency of newly added elements.
 
         :param term:
         :return:
         """
-        term: Theorem = coerce_theorem(phi=term)
+        term: ValidStatement = coerce_valid_statement(phi=term)
         super().append(term=term)
 
     def append_axiom(self, axiom: FlexibleAxiom) -> None:
@@ -2474,19 +2475,19 @@ class DerivationBuilder(EnumerationBuilder):
         inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
         self.append(term=inference_rule)
 
-    def append_theorem_by_inference(self, theorem: FlexibleTheoremByInference) -> None:
-        theorem: TheoremByInference = coerce_theorem_by_inference(phi=theorem)
+    def append_theorem_by_inference(self, theorem: FlexibleTheorem) -> None:
+        theorem: Theorem = coerce_theorem(phi=theorem)
         self.append(term=theorem)
 
     def rep(self, **kwargs) -> str:
-        header: str = 'Demonstration (elaborating):\n\t'
-        theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
-        return f'{header}{theorems}'
+        header: str = 'Derivation (elaborating):\n\t'
+        valid_statements: str = '\n\t'.join(valid_statement.rep(**kwargs) for valid_statement in self)
+        return f'{header}{valid_statements}'
 
     def to_derivation(self) -> Derivation:
         """If the derivation-builder is well-formed, return a derivation."""
-        elements: tuple[Formula, ...] = tuple(coerce_theorem(phi=element) for element in self)
-        phi: Derivation = Derivation(theorems=elements)
+        elements: tuple[Formula, ...] = tuple(coerce_valid_statement(phi=element) for element in self)
+        phi: Derivation = Derivation(valid_statements=elements)
         return phi
 
     def to_formula(self) -> Formula:
@@ -2495,7 +2496,7 @@ class DerivationBuilder(EnumerationBuilder):
 
 
 class Derivation(Enumeration):
-    """A derivation is an enumeration of theorems.
+    """A derivation is an enumeration of valid-statements.
 
     Syntactic definition:
     A well-formed derivation is an enumeration such that:
@@ -2517,89 +2518,105 @@ class Derivation(Enumeration):
             # the Derivation class assure the well-formedness of the derivation.
             return True
 
-        # check the well-formedness of the individual theorems.
+        # check the well-formedness of the individual valid-statements.
         # and retrieve the terms claimed as proven in the derivation, preserving order.
         # by the definition of a derivation, these are the left term (term_0) of the formulas.
         claims: TuplBuilder = TuplBuilder(elements=None)
-        theorems: TuplBuilder = TuplBuilder(elements=None)
+        valid_statements: TuplBuilder = TuplBuilder(elements=None)
         for theorem in phi:
-            if not is_well_formed_theorem(phi=theorem):
+            if not is_well_formed_valid_statement(phi=theorem):
+                print(f'THEOREM PHI IS NOT WELL-FORMED: {phi}')
                 return False
             else:
-                theorem: Theorem = coerce_theorem(phi=theorem)
-                theorems.append(term=theorem)
+                theorem: ValidStatement = coerce_valid_statement(phi=theorem)
+                valid_statements.append(term=theorem)
                 # retrieve the formula claimed as valid from the theorem
                 claim: Formula = theorem.claim
                 claims.append(term=claim)
-        # now that the theorems and claims have been retrieved, and proved well-formed individually,
+        # now that the valid-statements and claims have been retrieved, and proved well-formed individually,
         # make the python objects immutable.
-        theorems: Tupl = theorems.to_tupl()
+        valid_statements: Tupl = valid_statements.to_tupl()
         claims: Tupl = claims.to_tupl()
-        for i in range(0, theorems.arity):
-            theorem = theorems[i]
+        for i in range(0, valid_statements.arity):
+            theorem = valid_statements[i]
             claim = claims[i]
             if is_well_formed_axiom(phi=theorem):
                 # This is an axiom.
+                print(f'AXIOM OK: {theorem}')
                 pass
             elif is_well_formed_inference_rule(phi=theorem):
                 # This is an inference-rule.
+                print(f'INFERENCE-RULE OK: {theorem}')
                 pass
-            elif is_well_formed_theorem_by_inference(phi=theorem):
-                theorem_by_inference: TheoremByInference = coerce_theorem_by_inference(phi=theorem)
+            elif is_well_formed_theorem(phi=theorem):
+                theorem_by_inference: Theorem = coerce_theorem(phi=theorem)
                 inference: Inference = theorem_by_inference.i
+                print(f'CHECKING TBI: {theorem_by_inference}')
                 for premise in inference.premises:
                     # check that premise is a proven-formula (term_0) of a predecessor
                     if not claims.has_element(phi=premise):
                         # The premise is absent from the derivation.
+                        print(f'PREMISE IS NOT VALID: {premise}')
                         return False
                     else:
                         premise_index = claims.get_index_of_first_equivalent_element(phi=premise)
                         if premise_index >= i:
                             # The premise is not positioned before the conclusion.
+                            print(f'PREMISE IS POSTERIOR TO CONSEQUENCE: {premise}')
                             return False
                 if not claims.has_element(phi=inference.transformation_rule):
                     # The inference transformation-rule is absent from the derivation.
+                    print(f'MISSING INFERENCE-RULE: {inference}')
                     return False
                 else:
                     transformation_index = claims.get_index_of_first_equivalent_element(
                         phi=inference.transformation_rule)
                     if transformation_index >= i:
                         # The transformation is not positioned before the conclusion.
+                        print(f'INFERENCE-RULE IS POSTERIOR: INDEX:{transformation_index}: {inference}')
                         return False
                 # And finally, confirm that the inference effectively yields phi.
                 phi_prime = inference.transformation_rule.apply_transformation(arguments=inference.premises)
                 if not is_formula_equivalent(phi=claim, psi=phi_prime):
+                    print(f'EFFECTIVE TRANSFORMATION IS NOT EQUIVALENT TO CLAIMED TRANSFORMATION')
+                    print(f'claim:{claim}')
+                    print(f'effective:{phi_prime}')
                     return False
             else:
                 # Incorrect form.
+                print(f'The theorem is not of a supported form: {theorem}')
+                print(
+                    'The theorem must be either a well-formed axiom, a well-formed inference-rule, or a well-formed theorem-by-inference.')
                 return False
         # All tests were successful.
         return True
 
-    def __new__(cls, theorems: FlexibleEnumeration = None):
+    def __new__(cls, valid_statements: FlexibleEnumeration = None):
         # coerce to enumeration
-        theorems: Enumeration = coerce_enumeration(phi=theorems)
-        # coerce all elements of the enumeration to theorems
-        theorems: Enumeration = coerce_enumeration(phi=(coerce_theorem(phi=p) for p in theorems))
-        if not is_well_formed_derivation(phi=theorems):
+        valid_statements: Enumeration = coerce_enumeration(phi=valid_statements)
+        # coerce all elements of the enumeration to valid-statements
+        valid_statements: Enumeration = coerce_enumeration(
+            phi=(coerce_valid_statement(phi=p) for p in valid_statements))
+        if not is_well_formed_derivation(phi=valid_statements):
             # well-formedness check failed,
             # the theorem is most certainly invalid.
-            raise_event(event_code=event_codes.e108, theorems=theorems, expected_class='derivation')
-        o: tuple = super().__new__(cls, elements=theorems)
+            raise_event(event_code=event_codes.e108, valid_statements=valid_statements, expected_class='derivation')
+        o: tuple = super().__new__(cls, elements=valid_statements)
         return o
 
-    def __init__(self, theorems: FlexibleEnumeration = None):
+    def __init__(self, valid_statements: FlexibleEnumeration = None):
         # coerce to enumeration
-        theorems: Enumeration = coerce_enumeration(phi=theorems)
+        valid_statements: Enumeration = coerce_enumeration(phi=valid_statements)
         # coerce all elements of the enumeration to theorem
-        theorems: Enumeration = coerce_enumeration(phi=(coerce_theorem(phi=p) for p in theorems))
-        super().__init__(elements=theorems)
+        valid_statements: Enumeration = coerce_enumeration(
+            phi=(coerce_valid_statement(phi=p) for p in valid_statements))
+        super().__init__(elements=valid_statements)
 
     def has_theorem(self, phi: FlexibleFormula) -> bool:
         """Return True if phi is a theorem of this derivation, False otherwise."""
         phi = coerce_formula(phi=phi)
         for theorem in self:
-            theorem: Theorem = coerce_theorem(phi=theorem)
+            theorem: ValidStatement = coerce_valid_statement(phi=theorem)
             if is_formula_equivalent(phi=phi, psi=theorem.claim):
                 return True
         return False
@@ -2607,20 +2624,20 @@ class Derivation(Enumeration):
 
     def rep(self, **kwargs) -> str:
         header: str = 'Derivation:\n\t'
-        theorems: str = '\n\t'.join(theorem.rep(**kwargs) for theorem in self)
-        return f'{header}{theorems}'
+        valid_statements: str = '\n\t'.join(valid_statement.rep(**kwargs) for valid_statement in self)
+        return f'{header}{valid_statements}'
 
     def to_derivation_builder(self) -> DerivationBuilder:
-        return DerivationBuilder(theorems=self)
+        return DerivationBuilder(valid_statements=self)
 
 
 FlexibleDerivation = typing.Optional[
-    typing.Union[Derivation, DerivationBuilder, typing.Iterable[FlexibleTheorem]]]
+    typing.Union[Derivation, DerivationBuilder, typing.Iterable[FlexibleValidStatement]]]
 """FlexibleDemonstration is a flexible python type that may be safely coerced into a Demonstration or a 
 DemonstrationBuilder."""
 
 FlexibleDerivationBuilder = typing.Optional[
-    typing.Union[Derivation, DerivationBuilder, typing.Iterable[FlexibleTheorem]]]
+    typing.Union[Derivation, DerivationBuilder, typing.Iterable[FlexibleValidStatement]]]
 
 
 class Axiomatization(Derivation):
@@ -2660,20 +2677,21 @@ class Axiomatization(Derivation):
         axioms: Enumeration = coerce_enumeration(phi=axioms)
         # coerce all elements of the enumeration to axioms or inference-rules.
         eb: EnumerationBuilder = EnumerationBuilder(elements=None)
-        for theorem in axioms:
-            if is_well_formed_inference_rule(phi=theorem):
+        for valid_statement in axioms:
+            if is_well_formed_inference_rule(phi=valid_statement):
                 # This is an inference-rule.
-                inference_rule: InferenceRule = coerce_inference_rule(phi=theorem)
-                eb.append(term=theorem)
-            elif is_well_formed_axiom(phi=theorem):
+                inference_rule: InferenceRule = coerce_inference_rule(phi=valid_statement)
+                eb.append(term=valid_statement)
+            elif is_well_formed_axiom(phi=valid_statement):
                 # This is an axiom.
-                axiom: Axiom = coerce_axiom(phi=theorem)
-                eb.append(term=theorem)
+                axiom: Axiom = coerce_axiom(phi=valid_statement)
+                eb.append(term=valid_statement)
             else:
                 # Incorrect form.
-                raise_event(event_code=event_codes.e123, phi=theorem, phi_type_1=InferenceRule, phi_type_2=Axiom)
-        theorems: Enumeration = eb.to_enumeration()
-        o: tuple = super().__new__(cls, theorems=theorems)
+                raise_event(event_code=event_codes.e123, phi=valid_statement, phi_type_1=InferenceRule,
+                            phi_type_2=Axiom)
+        valid_statements: Enumeration = eb.to_enumeration()
+        o: tuple = super().__new__(cls, valid_statements=valid_statements)
         return o
 
     def __init__(self, axioms: FlexibleEnumeration = None):
@@ -2694,7 +2712,7 @@ class Axiomatization(Derivation):
                 # Incorrect form.
                 raise Exception('invalid theorem')
         e: Enumeration = eb.to_enumeration()
-        super().__init__(theorems=e)
+        super().__init__(valid_statements=e)
 
     def rep(self, **kwargs) -> str:
         header: str = 'Axioms:\n\t'
@@ -2809,9 +2827,9 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
     inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
 
     # derive the new theorem
-    theorem: Theorem = TheoremByInference(claim=claim, i=inference)
+    theorem: ValidStatement = Theorem(claim=claim, i=inference)
 
     # extends the derivation
-    derivation: Derivation = Derivation(theorems=(*theory, theorem,))
+    derivation: Derivation = Derivation(valid_statements=(*theory, theorem,))
 
     return derivation

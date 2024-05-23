@@ -109,6 +109,6 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
 
 axioms = as1.Axiomatization(axioms=(pl01, pl02, pl03,))
 
-extended_theory = as1.Derivation(theorems=(*axioms,))
+extended_theory = as1.Derivation(valid_statements=(*axioms,))
 
 pass

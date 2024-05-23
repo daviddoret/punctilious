@@ -64,7 +64,7 @@ class TestAdjunction:
         # adapt the base theory
         a1 = pu.as1.let_x_be_an_axiom(claim=a)
         a2 = pu.as1.let_x_be_an_axiom(claim=b)
-        theory = pu.as1.Derivation(theorems=(*theory, a1, a2,))
+        theory = pu.as1.Derivation(valid_statements=(*theory, a1, a2,))
 
         # derive a new theorem from the target inference-rule
         theory = pu.as1.derive(theory=theory,
@@ -93,7 +93,7 @@ class TestSimplification1:
     def test_simplification_1(self, theory, a, b, c):
         # adapt the base theory
         a1 = pu.as1.let_x_be_an_axiom(claim=a | land | b)
-        theory = pu.as1.Derivation(theorems=(*theory, a1,))
+        theory = pu.as1.Derivation(valid_statements=(*theory, a1,))
 
         # derive a new theorem from the target inference-rule
         theory = pu.as1.derive(theory=theory,
@@ -121,7 +121,7 @@ class TestSimplification2:
     def test_simplification_2(self, theory, a, b, c):
         # adapt the base theory
         a1 = pu.as1.let_x_be_an_axiom(claim=a | land | b)
-        theory = pu.as1.Derivation(theorems=(*theory, a1,))
+        theory = pu.as1.Derivation(valid_statements=(*theory, a1,))
 
         # derive a new theorem from the target inference-rule
         theory = pu.as1.derive(theory=theory,
@@ -150,7 +150,7 @@ class TestModusPonens:
         # adapt the base theory
         a1 = pu.as1.let_x_be_an_axiom(claim=a | implies | b)
         a2 = pu.as1.let_x_be_an_axiom(claim=a)
-        theory = pu.as1.Derivation(theorems=(*theory, a1, a2,))
+        theory = pu.as1.Derivation(valid_statements=(*theory, a1, a2,))
 
         # derive a new theorem from the target inference-rule
         theory = pu.as1.derive(theory=theory,
