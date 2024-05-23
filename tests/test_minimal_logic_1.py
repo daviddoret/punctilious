@@ -106,7 +106,7 @@ class TestPL1:
                                claim=p | land | p,
                                premises=(
                                    p | is_a | proposition,
-                                   p | is_a | proposition,
+                                   (p | land | p) | is_a | proposition,
                                    p | implies | (p | land | p),
                                    p,),
                                inference_rule=pu.ir1.modus_ponens_axiom)

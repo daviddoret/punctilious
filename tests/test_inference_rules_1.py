@@ -163,6 +163,21 @@ class TestModusPonens:
                                inference_rule=pu.ir1.modus_ponens_axiom)
         assert theory.has_theorem(phi=b)
 
+        a3 = pu.as1.Axiom(claim=a | implies | (a | land | a))
+        a4 = pu.as1.Axiom(claim=(a | land | a) | is_a | proposition)
+        theory = pu.as1.Derivation(valid_statements=(*theory, a3, a4,))
+
+        # derive a new theorem from the target inference-rule
+        theory = pu.as1.derive(theory=theory,
+                               claim=a | land | a,
+                               premises=(
+                                   a | is_a | proposition,
+                                   (a | land | a) | is_a | proposition,
+                                   a | implies | (a | land | a),
+                                   a),
+                               inference_rule=pu.ir1.modus_ponens_axiom)
+        assert theory.has_theorem(phi=a | land | a)
+
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # wrong theory
