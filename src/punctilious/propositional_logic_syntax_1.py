@@ -35,10 +35,19 @@ with as1.let_x_be_a_variable(rep='A') as a:
             (a | is_a | propositional_variable,),
             conclusion=a | is_a | proposition,
             variables=(a,)))
-    """A is-a propositional-variable ⊃ A is a proposition
+    """Axiom schema: A is-a propositional-variable ⊃ A is-a proposition.
     
-    Original definition: 
-    "Each propositional variable is a formula" (Mancosu et al., 2021)
+    Premises:
+     - A is-a propositional-variable
+
+    Conclusion: 
+    A is-a proposition
+
+    Variables:
+    {A}
+
+    Original axiom: 
+    "Each propositional variable is a formula" (Mancosu et al., 2021).
     """
     pass
 
@@ -49,10 +58,19 @@ with as1.let_x_be_a_variable(rep='A') as a:
             (a | is_a | proposition,),
             conclusion=lnot(a) | is_a | proposition,
             variables=(a,)))
-    """A is-a proposition ⊃ ¬A is a proposition
-    
-    Original definition: 
-    "If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵)" (Mancosu et al., 2021)
+    """Axiom schema: A is-a proposition ⊃ ¬A is a proposition.
+
+    Premises:
+     - A is-a proposition
+
+    Conclusion: 
+    ¬A is a proposition
+
+    Variables:
+    {A}
+
+    Original axiom: 
+    "If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵)" (Mancosu et al., 2021).
     """
     pass
 
@@ -64,10 +82,20 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
              b | is_a | proposition),
             conclusion=(a | land | b) | is_a | proposition,
             variables=(a, b,)))
-    """(A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition)
+    """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition).
 
-    Original definition: 
-    "If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵)" (Mancosu et al., 2021)
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+
+    Conclusion: 
+    (A ∧ B) is a proposition
+
+    Variables:
+    {A, B}
+
+    Original axiom: 
+    "If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵)" (Mancosu et al., 2021).
     """
     pass
 
@@ -79,6 +107,21 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
              b | is_a | proposition),
             conclusion=(a | implies | b) | is_a | proposition,
             variables=(a, b,)))
+    """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ⊃ B) is a proposition).
+
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+
+    Conclusion: 
+    (A ⊃ B) is a proposition
+
+    Variables:
+    {A, B}
+
+    Original axiom: 
+    "If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵)" (Mancosu et al., 2021).
+    """
     pass
 
 with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as b:
@@ -89,6 +132,21 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
              b | is_a | proposition),
             conclusion=(a | lor | b) | is_a | proposition,
             variables=(a, b,)))
+    """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∨ B) is a proposition).
+
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+
+    Conclusion: 
+    (A ∨ B) is a proposition
+
+    Variables:
+    {A, B}
+
+    Original axiom: 
+    "If 𝐴 and 𝐵 are formulas so are ¬𝐴, (𝐴 ∧ 𝐵), (𝐴 ∨ 𝐵), and (𝐴 ⊃ 𝐵)" (Mancosu et al., 2021).
+    """
     pass
 
 axioms = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))

@@ -97,14 +97,14 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
              b | is_a | proposition,),
             conclusion=(a | land | b) | implies | (b | land | a),
             variables=(a, b,)))
-    """The PL02 axiom schema: (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴).
+    """The PL02 axiom schema: (A ∧ B) ⊃ (B ∧ A).
 
         Premises:
          - A is-a proposition
          - B is-a proposition
 
         Conclusion: 
-        (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴)
+        (A ∧ B) ⊃ (B ∧ A)
 
         Variables:
         {A, B}
@@ -124,7 +124,7 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
              c | is_a | proposition),
             conclusion=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)),
             variables=(a, b, c,)))
-    """The PL03 axiom schema: (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)].
+    """The PL03 axiom schema: (A ⊃ B) ⊃ [(A ∧ C) ⊃ (B ∧ C)].
     
     Premises:
      - A is-a proposition
@@ -132,7 +132,7 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
      - C is-a proposition
     
     Conclusion: 
-    (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]
+    (A ⊃ B) ⊃ [(A ∧ C) ⊃ (B ∧ C)]
     
     Variables:
     {A, B, C}

@@ -2667,20 +2667,13 @@ class Derivation(Enumeration):
                         phi=inference.transformation_rule)
                     if transformation_index >= i:
                         # The transformation is not positioned before the conclusion.
-                        print(f'INFERENCE-RULE IS POSTERIOR: INDEX:{transformation_index}: {inference}')
                         return False
                 # And finally, confirm that the inference effectively yields phi.
                 phi_prime = inference.transformation_rule.apply_transformation(arguments=inference.premises)
                 if not is_formula_equivalent(phi=claim, psi=phi_prime):
-                    print(f'EFFECTIVE TRANSFORMATION IS NOT EQUIVALENT TO CLAIMED TRANSFORMATION')
-                    print(f'claim:{claim}')
-                    print(f'effective:{phi_prime}')
                     return False
             else:
                 # Incorrect form.
-                print(f'The theorem is not of a supported form: {theorem}')
-                print(
-                    'The theorem must be either a well-formed axiom, a well-formed inference-rule, or a well-formed theorem-by-inference.')
                 return False
         # All tests were successful.
         return True
