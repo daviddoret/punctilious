@@ -754,35 +754,37 @@ class TestAxiomatization:
 class TestDemonstration:
     def test_is_well_formed(self):
         # elaborate a theory
+        theory = pu.as1.let_x_be_a_collection_of_axioms(axioms=None)
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
         x, y, z = pu.as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
-        star1 = pu.as1.let_x_be_a_unary_connective(rep='*1')
-        star2 = pu.as1.let_x_be_a_binary_connective(rep='*2')
-        star3 = pu.as1.let_x_be_a_ternary_connective(rep='*3')
-        axiom_1 = pu.as1.Axiom(claim=a | star2 | b)
-        axiom_2 = pu.as1.Axiom(claim=b | star2 | c)
+        star = pu.as1.let_x_be_a_binary_connective(rep='*')
+        theory, axiom_1, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | star | b)
+        theory, axiom_2, = pu.as1.let_x_be_an_axiom(theory=theory, claim=b | star | c)
         rule = pu.as1.Transformation(
-            premises=(x | star2 | y, y | star2 | z,),
-            conclusion=x | star2 | z,
+            premises=(x | star | y, y | star | z,),
+            conclusion=x | star | z,
             variables=(x, y, z,))
-        axiom_3 = pu.as1.InferenceRule(transformation=rule)
-        axiomatization = pu.as1.Axiomatization(axioms=(axiom_1, axiom_2, axiom_3,))
+        ir1 = pu.as1.InferenceRule(transformation=rule)
+        theory = pu.as1.Axiomatization(axioms=(axiom_1, axiom_2, ir1,))
         demo1 = pu.as1.Derivation(
-            valid_statements=axiomatization)  # this must not raise an exception and will just change the type
+            valid_statements=theory)  # this must not raise an exception and will just change the type
 
         # derive a theorem
-        i = pu.as1.Inference(premises=(a | star2 | b, b | star2 | c,), transformation_rule=rule)
-        isolated_theorem = pu.as1.Theorem(claim=a | star2 | c, i=i)
-        demo2 = pu.as1.Derivation(
-            valid_statements=(*demo1, isolated_theorem,))  # Does not raise exception because it is valid
+        demo2 = pu.as1.derive(theory=demo1,
+                              claim=a | star | c,
+                              premises=(
+                                  a | star | b,
+                                  b | star | c,),
+                              inference_rule=ir1)
+        assert demo2.is_valid_statement(phi=a | star | c)
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # invalid proof raise exception
-            demo3 = pu.as1.Derivation(valid_statements=(axiom_1, axiom_2, a | star2 | e))
+            demo3 = pu.as1.Derivation(valid_statements=(axiom_1, axiom_2, a | star | e))
 
-        with pytest.raises(pu.as1.CustomException, match='e108'):
+        with pytest.raises(pu.as1.CustomException, match='e123'):
             # invalid proof sequence exception
-            demo4 = pu.as1.Derivation(valid_statements=(axiom_1, axiom_2, isolated_theorem, axiom_3,))
+            demo4 = pu.as1.Derivation(valid_statements=(axiom_1, axiom_2, a | star | c, ir1,))
             pass
 
 

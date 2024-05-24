@@ -17,7 +17,7 @@ class TestPropositionalLogicMetaTheory:
 
         # elaborate a theory
         p = pu.as1.let_x_be_a_propositional_variable(rep='P')
-        a1 = pu.as1.let_x_be_an_axiom(claim=p | is_a | propositional_variable)
+        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=p | is_a | propositional_variable)
         theory = pu.as1.Axiomatization(axioms=(pu.pls1.i1, a1,))
 
         # derive: p is-a proposition
@@ -26,7 +26,7 @@ class TestPropositionalLogicMetaTheory:
                                premises=(
                                    p | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
-        assert theory.has_theorem(phi=p | is_a | proposition)
+        assert theory.is_valid_statement(phi=p | is_a | proposition)
 
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition
         # note that it is not necessary that either A or ¬A be valid
@@ -38,7 +38,7 @@ class TestPropositionalLogicMetaTheory:
         isolated_theorem = pu.as1.Theorem(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=lnot(p) | is_a | proposition, psi=isolated_theorem.claim)
         theory = pu.as1.Derivation(valid_statements=(*theory, isolated_theorem,))
-        assert theory.has_theorem(phi=lnot(p) | is_a | proposition)
+        assert theory.is_valid_statement(phi=lnot(p) | is_a | proposition)
 
         # declare 1 as a propositional-variable
         with pu.as1.let_x_be_a_propositional_variable(rep='Q') as q:
@@ -62,6 +62,6 @@ class TestPropositionalLogicMetaTheory:
         isolated_theorem = pu.as1.Theorem(claim=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.claim)
         theory = pu.as1.Derivation(valid_statements=(*theory, isolated_theorem,))
-        assert theory.has_theorem(phi=claim)
+        assert theory.is_valid_statement(phi=claim)
 
         pass

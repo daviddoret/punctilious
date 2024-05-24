@@ -1017,8 +1017,38 @@ def let_x_be_an_inference_rule(claim: FlexibleTransformation):
     return InferenceRule(transformation=claim)
 
 
-def let_x_be_an_axiom(claim: FlexibleFormula):
+def let_x_be_an_axiom_OLD(claim: FlexibleFormula):
     return Axiom(claim=claim)
+
+
+def let_x_be_an_axiom(theory: FlexibleDerivation, claim: FlexibleFormula):
+    """
+
+    :param theory: An axiom-collection or a derivation. If None, the empty axiom-collection is implicitly used.
+    :param claim: The statement claimed by the new axiom.
+    :return: a pair (t, a,) where t is an extension of parameter theory with the axiom, and a is the new axiom.
+    """
+    if theory is None:
+        theory = Axiomatization(axioms=None)
+    else:
+        theory: FlexibleDerivation = coerce_derivation(phi=theory)
+    axiom: Axiom = Axiom(claim=claim)
+    if isinstance(theory, Axiomatization):
+        theory = Axiomatization(axioms=(*theory, axiom,))
+        return theory, axiom
+    elif isinstance(theory, Derivation):
+        theory = Derivation(valid_statements=(*theory, axiom,))
+        return theory, axiom
+    else:
+        raise Exception('oops')
+
+
+def let_x_be_a_theory(valid_statements: FlexibleEnumeration):
+    return Derivation(valid_statements=valid_statements)
+
+
+def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
+    return Axiomatization(axioms=axioms)
 
 
 def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormula,
@@ -2643,8 +2673,8 @@ class Derivation(Enumeration):
             phi=(coerce_valid_statement(phi=p) for p in valid_statements))
         super().__init__(elements=valid_statements)
 
-    def has_theorem(self, phi: FlexibleFormula) -> bool:
-        """Return True if phi is a theorem of this derivation, False otherwise."""
+    def is_valid_statement(self, phi: FlexibleFormula) -> bool:
+        """Return True if phi is demonstrated as a valid-statement in this derivation, False otherwise."""
         phi = coerce_formula(phi=phi)
         for theorem in self:
             theorem: ValidStatement = coerce_valid_statement(phi=theorem)

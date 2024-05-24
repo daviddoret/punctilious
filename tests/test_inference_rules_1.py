@@ -30,9 +30,9 @@ def c():
 @pytest.fixture
 def theory(a, b, c):
     # elaborate a theory with 3 propositions: a, b, and c
-    a1 = pu.as1.let_x_be_an_axiom(claim=a | is_a | propositional_variable)
-    a2 = pu.as1.let_x_be_an_axiom(claim=b | is_a | propositional_variable)
-    a3 = pu.as1.let_x_be_an_axiom(claim=c | is_a | propositional_variable)
+    a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a | is_a | propositional_variable)
+    a2 = pu.as1.let_x_be_an_axiom_OLD(claim=b | is_a | propositional_variable)
+    a3 = pu.as1.let_x_be_an_axiom_OLD(claim=c | is_a | propositional_variable)
     theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms, a1, a2, a3,))
 
     # derive: a is-a proposition
@@ -40,21 +40,21 @@ def theory(a, b, c):
                            claim=a | is_a | proposition,
                            premises=(a | is_a | propositional_variable,),
                            inference_rule=pu.pls1.i1)
-    assert theory.has_theorem(phi=a | is_a | proposition)
+    assert theory.is_valid_statement(phi=a | is_a | proposition)
 
     # derive: b is-a proposition
     theory = pu.as1.derive(theory=theory,
                            claim=b | is_a | proposition,
                            premises=(b | is_a | propositional_variable,),
                            inference_rule=pu.pls1.i1)
-    assert theory.has_theorem(phi=b | is_a | proposition)
+    assert theory.is_valid_statement(phi=b | is_a | proposition)
 
     # derive: c is-a proposition
     theory = pu.as1.derive(theory=theory,
                            claim=c | is_a | proposition,
                            premises=(c | is_a | propositional_variable,),
                            inference_rule=pu.pls1.i1)
-    assert theory.has_theorem(phi=c | is_a | proposition)
+    assert theory.is_valid_statement(phi=c | is_a | proposition)
 
     return theory
 
@@ -62,8 +62,8 @@ def theory(a, b, c):
 class TestAdjunction:
     def test_adjunction(self, theory, a, b, c):
         # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom(claim=a)
-        a2 = pu.as1.let_x_be_an_axiom(claim=b)
+        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a)
+        a2 = pu.as1.let_x_be_an_axiom_OLD(claim=b)
         theory = pu.as1.Derivation(valid_statements=(*theory, a1, a2,))
 
         # derive a new theorem from the target inference-rule
@@ -75,10 +75,10 @@ class TestAdjunction:
                                    a,
                                    b,),
                                inference_rule=pu.ir1.adjunction_axiom)
-        assert theory.has_theorem(phi=a | land | b)
+        assert theory.is_valid_statement(phi=a | land | b)
 
         # show that wrong premises fail to derive a theorem
-        with pytest.raises(pu.as1.CustomException, match='e117'):
+        with pytest.raises(pu.as1.CustomException, match='e105'):
             # wrong theory
             pu.as1.derive(theory=theory,
                           claim=a | land | c,
@@ -92,7 +92,7 @@ class TestAdjunction:
 class TestSimplification1:
     def test_simplification_1(self, theory, a, b, c):
         # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | land | b)
+        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a | land | b)
         theory = pu.as1.Derivation(valid_statements=(*theory, a1,))
 
         # derive a new theorem from the target inference-rule
@@ -103,7 +103,7 @@ class TestSimplification1:
                                    b | is_a | proposition,
                                    a | land | b,),
                                inference_rule=pu.ir1.simplification_1_axiom)
-        assert theory.has_theorem(phi=a)
+        assert theory.is_valid_statement(phi=a)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e105'):
@@ -120,7 +120,7 @@ class TestSimplification1:
 class TestSimplification2:
     def test_simplification_2(self, theory, a, b, c):
         # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | land | b)
+        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a | land | b)
         theory = pu.as1.Derivation(valid_statements=(*theory, a1,))
 
         # derive a new theorem from the target inference-rule
@@ -131,10 +131,10 @@ class TestSimplification2:
                                    b | is_a | proposition,
                                    a | land | b,),
                                inference_rule=pu.ir1.simplification_2_axiom)
-        assert theory.has_theorem(phi=b)
+        assert theory.is_valid_statement(phi=b)
 
         # show that wrong premises fail to derive a theorem
-        with pytest.raises(pu.as1.CustomException, match='e108'):
+        with pytest.raises(pu.as1.CustomException, match='e120'):
             # wrong theory
             pu.as1.derive(theory=theory,
                           claim=c,
@@ -148,8 +148,8 @@ class TestSimplification2:
 class TestModusPonens:
     def test_modus_ponens(self, theory, a, b, c):
         # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom(claim=a | implies | b)
-        a2 = pu.as1.let_x_be_an_axiom(claim=a)
+        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a | implies | b)
+        a2 = pu.as1.let_x_be_an_axiom_OLD(claim=a)
         theory = pu.as1.Derivation(valid_statements=(*theory, a1, a2,))
 
         # derive a new theorem from the target inference-rule
@@ -161,7 +161,7 @@ class TestModusPonens:
                                    a | implies | b,
                                    a),
                                inference_rule=pu.ir1.modus_ponens_axiom)
-        assert theory.has_theorem(phi=b)
+        assert theory.is_valid_statement(phi=b)
 
         # extend the theory to perform a second test
         # using a single propositional-variable
@@ -178,7 +178,7 @@ class TestModusPonens:
                                    a | implies | (a | land | a),
                                    a),
                                inference_rule=pu.ir1.modus_ponens_axiom)
-        assert theory.has_theorem(phi=a | land | a)
+        assert theory.is_valid_statement(phi=a | land | a)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e123'):
