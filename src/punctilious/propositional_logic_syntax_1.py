@@ -95,4 +95,62 @@ axioms = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))
 
 extended_theory = as1.Derivation(valid_statements=(*axioms,))
 
+
+def let_x_be_a_propositional_variable(
+        theory: as1.FlexibleDerivation,
+        rep: as1.FlexibleRepresentation) -> \
+        typing.Tuple[as1.Derivation, as1.Variable | typing.Tuple[as1.Variable, ...]]:
+    """Declare one or multiple propositional-variables in the input theory.
+
+    If they are not already present, all axioms of propositional-logic-syntax-1 are appended to
+    the theory.
+
+    For every propositional-variable, the following axiom is automatically postulated in the theory:
+     - x is-a propositional-variable
+    ...and the following theorem is derived:
+     - x is-a propositional
+
+    The following
+
+    :param theory:
+    :param rep:
+    :return:
+    """
+    global axioms
+    global i1
+    theory: as1.FlexibleDerivation = as1.coerce_derivation(phi=theory)
+
+    # Include all propositional-logic-syntax-1 axioms if they are not already present
+    # in the theory.
+    for inference_rule in axioms:
+        if not theory.has_element(inference_rule):
+            theory, _ = as1.let_x_be_an_inference_rule(theory=theory, inference_rule=inference_rule)
+
+    if isinstance(rep, str):
+        # declare a single propositional variable
+        x = as1.Variable(connective=as1.NullaryConnective(rep=rep))
+        theory, _ = as1.let_x_be_an_axiom(theory=theory,
+                                          claim=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+        theory, _ = as1.derive(theory=theory,
+                               claim=x | is_a | proposition,
+                               premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
+                               inference_rule=i1)
+        return theory, x
+    elif isinstance(rep, typing.Iterable):
+        # declare multiple propositional variables
+        propositional_variables = tuple()
+        for r in rep:
+            x = as1.Variable(connective=as1.NullaryConnective(rep=r))
+            propositional_variables = propositional_variables + (x,)
+            theory, _ = as1.let_x_be_an_axiom(theory=theory,
+                                              claim=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+            theory, _ = as1.derive(theory=theory,
+                                   claim=x | is_a | proposition,
+                                   premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
+                                   inference_rule=i1)
+        return theory, *propositional_variables
+    else:
+        raise TypeError  # TODO: Implement event code.
+
+
 pass

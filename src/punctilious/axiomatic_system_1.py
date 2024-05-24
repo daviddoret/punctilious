@@ -921,7 +921,7 @@ def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
         raise TypeError  # TODO: Implement event code.
 
 
-def let_x_be_a_propositional_variable(
+def let_x_be_a_propositional_variable_OBSOLETE(
         rep: FlexibleRepresentation,
         db: typing.Union[FlexibleDerivationBuilder, EnumerationBuilder] = None) -> \
         typing.Union[Variable, typing.Generator[Variable, typing.Any, None]]:
@@ -2880,7 +2880,7 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     for x in propositional_variables:
         rep: str = x.rep() + '\''
         # automatically append the axiom: x is-a propositional-variable
-        with let_x_be_a_propositional_variable(rep=rep) as x2:
+        with let_x_be_a_propositional_variable_OBSOLETE(rep=rep) as x2:
             premises.append(term=x2 | connectives.is_a | connectives.propositional_variable)
             variables_map.set_pair(phi=x, psi=x2)
     variables_map: Map = variables_map.to_map()

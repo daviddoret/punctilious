@@ -16,7 +16,7 @@ class TestPropositionalLogicMetaTheory:
         implies = pu.as1.connectives.implies
 
         # elaborate a theory
-        p = pu.as1.let_x_be_a_propositional_variable(rep='P')
+        p = pu.as1.let_x_be_a_propositional_variable_OBSOLETE(rep='P')
         a1 = pu.as1.let_x_be_an_axiom_OLD(claim=p | is_a | propositional_variable)
         theory = pu.as1.Axiomatization(axioms=(pu.pls1.i1, a1,))
 
@@ -41,7 +41,7 @@ class TestPropositionalLogicMetaTheory:
         assert theory.is_valid_statement(phi=lnot(p) | is_a | proposition)
 
         # declare 1 as a propositional-variable
-        with pu.as1.let_x_be_a_propositional_variable(rep='Q') as q:
+        with pu.as1.let_x_be_a_propositional_variable_OBSOLETE(rep='Q') as q:
             a2 = pu.as1.Axiom(claim=q | is_a | propositional_variable)
         theory = pu.as1.Derivation(valid_statements=(*theory, a2,))
 
