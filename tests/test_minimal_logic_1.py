@@ -161,6 +161,7 @@ class TestPL2:
 class TestPL3:
     def test_pl3(self):
         # PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]
+        # TODO: REIMPLEMENT FROM ABOVE EXAMPLES
 
         # retrieve some basic vocabulary
         is_a = pu.as1.connectives.is_a
