@@ -97,15 +97,48 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
              b | is_a | proposition,),
             conclusion=(a | land | b) | implies | (b | land | a),
             variables=(a, b,)))
-    """Original axiom: PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). Source: (Mancosu et al., p. 19).
-    """
+    """The PL02 axiom schema: (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴).
+
+        Premises:
+         - A is-a proposition
+         - B is-a proposition
+
+        Conclusion: 
+        (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴)
+
+        Variables:
+        {A, B}
+
+        Original axiom: 
+        PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). (Mancosu et al., p. 19).
+        """
     pass
 
 with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
         rep='c') as c:
-    pl03: as1.InferenceRule = as1.translate_implication_to_axiom(
-        phi=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
-    """Original axiom: PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]. Source: (Mancosu et al., p. 19).
+    pl03: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition,
+             c | is_a | proposition),
+            conclusion=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)),
+            variables=(a, b, c,)))
+    """The PL03 axiom schema: (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)].
+    
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+     - C is-a proposition
+    
+    Conclusion: 
+    (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]
+    
+    Variables:
+    {A, B, C}
+    
+    Original axiom: 
+    PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]. (Mancosu et al., p. 19).
     """
     pass
 

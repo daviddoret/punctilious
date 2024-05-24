@@ -2615,7 +2615,6 @@ class Derivation(Enumeration):
         valid_statements: TuplBuilder = TuplBuilder(elements=None)
         for theorem in phi:
             if not is_well_formed_valid_statement(phi=theorem):
-                print(f'THEOREM PHI IS NOT WELL-FORMED: {phi}')
                 return False
             else:
                 theorem: ValidStatement = coerce_valid_statement(phi=theorem)
@@ -2632,16 +2631,13 @@ class Derivation(Enumeration):
             claim = claims[i]
             if is_well_formed_axiom(phi=theorem):
                 # This is an axiom.
-                print(f'AXIOM OK: {theorem}')
                 pass
             elif is_well_formed_inference_rule(phi=theorem):
                 # This is an inference-rule.
-                print(f'INFERENCE-RULE OK: {theorem}')
                 pass
             elif is_well_formed_theorem(phi=theorem):
                 theorem_by_inference: Theorem = coerce_theorem(phi=theorem)
                 inference: Inference = theorem_by_inference.i
-                print(f'CHECKING TBI: {theorem_by_inference}')
                 for premise in inference.premises:
                     # check that premise is a proven-formula (term_0) of a predecessor
                     if not claims.has_element(phi=premise):

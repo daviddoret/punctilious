@@ -78,7 +78,7 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
             (a | is_a | proposition,
              b | is_a | proposition),
             conclusion=(a | implies | b) | is_a | proposition,
-            variables=(a,)))
+            variables=(a, b,)))
     pass
 
 with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as b:
@@ -88,7 +88,7 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
             (a | is_a | proposition,
              b | is_a | proposition),
             conclusion=(a | lor | b) | is_a | proposition,
-            variables=(a,)))
+            variables=(a, b,)))
     pass
 
 axioms = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))
