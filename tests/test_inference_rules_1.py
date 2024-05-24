@@ -36,24 +36,24 @@ def theory(a, b, c):
     theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms, a1, a2, a3,))
 
     # derive: a is-a proposition
-    theory = pu.as1.derive(theory=theory,
-                           claim=a | is_a | proposition,
-                           premises=(a | is_a | propositional_variable,),
-                           inference_rule=pu.pls1.i1)
+    theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                    claim=a | is_a | proposition,
+                                    premises=(a | is_a | propositional_variable,),
+                                    inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=a | is_a | proposition)
 
     # derive: b is-a proposition
-    theory = pu.as1.derive(theory=theory,
-                           claim=b | is_a | proposition,
-                           premises=(b | is_a | propositional_variable,),
-                           inference_rule=pu.pls1.i1)
+    theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                    claim=b | is_a | proposition,
+                                    premises=(b | is_a | propositional_variable,),
+                                    inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=b | is_a | proposition)
 
     # derive: c is-a proposition
-    theory = pu.as1.derive(theory=theory,
-                           claim=c | is_a | proposition,
-                           premises=(c | is_a | propositional_variable,),
-                           inference_rule=pu.pls1.i1)
+    theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                    claim=c | is_a | proposition,
+                                    premises=(c | is_a | propositional_variable,),
+                                    inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=c | is_a | proposition)
 
     return theory
@@ -62,122 +62,117 @@ def theory(a, b, c):
 class TestAdjunction:
     def test_adjunction(self, theory, a, b, c):
         # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a)
-        a2 = pu.as1.let_x_be_an_axiom_OLD(claim=b)
-        theory = pu.as1.Derivation(valid_statements=(*theory, a1, a2,))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=b)
 
         # derive a new theorem from the target inference-rule
-        theory = pu.as1.derive(theory=theory,
-                               claim=a | land | b,
-                               premises=(
-                                   a | is_a | proposition,
-                                   b | is_a | proposition,
-                                   a,
-                                   b,),
-                               inference_rule=pu.ir1.adjunction_axiom)
+        theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                        claim=a | land | b,
+                                        premises=(
+                                            a | is_a | proposition,
+                                            b | is_a | proposition,
+                                            a,
+                                            b,),
+                                        inference_rule=pu.ir1.adjunction_axiom)
         assert theory.is_valid_statement(phi=a | land | b)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e105'):
             # wrong theory
-            pu.as1.derive(theory=theory,
-                          claim=a | land | c,
-                          premises=(
-                              a | is_a | proposition,
-                              c | is_a | proposition,
-                              a | land | c,),
-                          inference_rule=pu.ir1.adjunction_axiom)
+            pu.as1.derive_OBSOLETE(theory=theory,
+                                   claim=a | land | c,
+                                   premises=(
+                                       a | is_a | proposition,
+                                       c | is_a | proposition,
+                                       a | land | c,),
+                                   inference_rule=pu.ir1.adjunction_axiom)
 
 
 class TestSimplification1:
     def test_simplification_1(self, theory, a, b, c):
         # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a | land | b)
-        theory = pu.as1.Derivation(valid_statements=(*theory, a1,))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | land | b)
 
         # derive a new theorem from the target inference-rule
-        theory = pu.as1.derive(theory=theory,
-                               claim=a,
-                               premises=(
-                                   a | is_a | proposition,
-                                   b | is_a | proposition,
-                                   a | land | b,),
-                               inference_rule=pu.ir1.simplification_1_axiom)
+        theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                        claim=a,
+                                        premises=(
+                                            a | is_a | proposition,
+                                            b | is_a | proposition,
+                                            a | land | b,),
+                                        inference_rule=pu.ir1.simplification_1_axiom)
         assert theory.is_valid_statement(phi=a)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e105'):
             # wrong theory
-            pu.as1.derive(theory=theory,
-                          claim=c,
-                          premises=(
-                              a | is_a | proposition,
-                              c | is_a | proposition,
-                              a | land | c,),
-                          inference_rule=pu.ir1.simplification_1_axiom)
+            pu.as1.derive_OBSOLETE(theory=theory,
+                                   claim=c,
+                                   premises=(
+                                       a | is_a | proposition,
+                                       c | is_a | proposition,
+                                       a | land | c,),
+                                   inference_rule=pu.ir1.simplification_1_axiom)
 
 
 class TestSimplification2:
     def test_simplification_2(self, theory, a, b, c):
         # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a | land | b)
-        theory = pu.as1.Derivation(valid_statements=(*theory, a1,))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | land | b)
 
         # derive a new theorem from the target inference-rule
-        theory = pu.as1.derive(theory=theory,
-                               claim=b,
-                               premises=(
-                                   a | is_a | proposition,
-                                   b | is_a | proposition,
-                                   a | land | b,),
-                               inference_rule=pu.ir1.simplification_2_axiom)
+        theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                        claim=b,
+                                        premises=(
+                                            a | is_a | proposition,
+                                            b | is_a | proposition,
+                                            a | land | b,),
+                                        inference_rule=pu.ir1.simplification_2_axiom)
         assert theory.is_valid_statement(phi=b)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e120'):
             # wrong theory
-            pu.as1.derive(theory=theory,
-                          claim=c,
-                          premises=(
-                              a | is_a | proposition,
-                              c | is_a | proposition,
-                              a | land | c,),
-                          inference_rule=pu.ir1.simplification_2_axiom)
+            pu.as1.derive_OBSOLETE(theory=theory,
+                                   claim=c,
+                                   premises=(
+                                       a | is_a | proposition,
+                                       c | is_a | proposition,
+                                       a | land | c,),
+                                   inference_rule=pu.ir1.simplification_2_axiom)
 
 
 class TestModusPonens:
     def test_modus_ponens(self, theory, a, b, c):
         # adapt the base theory
-        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a | implies | b)
-        a2 = pu.as1.let_x_be_an_axiom_OLD(claim=a)
-        theory = pu.as1.Derivation(valid_statements=(*theory, a1, a2,))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | implies | b)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a)
 
         # derive a new theorem from the target inference-rule
-        theory = pu.as1.derive(theory=theory,
-                               claim=b,
-                               premises=(
-                                   a | is_a | proposition,
-                                   b | is_a | proposition,
-                                   a | implies | b,
-                                   a),
-                               inference_rule=pu.ir1.modus_ponens_axiom)
+        theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                        claim=b,
+                                        premises=(
+                                            a | is_a | proposition,
+                                            b | is_a | proposition,
+                                            a | implies | b,
+                                            a),
+                                        inference_rule=pu.ir1.modus_ponens_axiom)
         assert theory.is_valid_statement(phi=b)
 
         # extend the theory to perform a second test
         # using a single propositional-variable
-        a3 = pu.as1.Axiom(claim=a | implies | (a | land | a))
-        a4 = pu.as1.Axiom(claim=(a | land | a) | is_a | proposition)
-        theory = pu.as1.Derivation(valid_statements=(*theory, a3, a4,))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | implies | (a | land | a))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=(a | land | a) | is_a | proposition)
 
         # derive a new theorem from the target inference-rule
-        theory = pu.as1.derive(theory=theory,
-                               claim=a | land | a,
-                               premises=(
-                                   a | is_a | proposition,
-                                   (a | land | a) | is_a | proposition,
-                                   a | implies | (a | land | a),
-                                   a),
-                               inference_rule=pu.ir1.modus_ponens_axiom)
+        theory, _ = pu.as1.derive(theory=theory,
+                                  claim=a | land | a,
+                                  premises=(
+                                      a | is_a | proposition,
+                                      (a | land | a) | is_a | proposition,
+                                      a | implies | (a | land | a),
+                                      a),
+                                  inference_rule=pu.ir1.modus_ponens_axiom)
         assert theory.is_valid_statement(phi=a | land | a)
 
         # show that wrong premises fail to derive a theorem

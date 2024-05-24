@@ -36,24 +36,24 @@ def theory(a, b, c):
     theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms, a1, a2, a3,))
 
     # derive: a is-a proposition
-    theory = pu.as1.derive(theory=theory,
-                           claim=a | is_a | proposition,
-                           premises=(a | is_a | propositional_variable,),
-                           inference_rule=pu.pls1.i1)
+    theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                    claim=a | is_a | proposition,
+                                    premises=(a | is_a | propositional_variable,),
+                                    inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=a | is_a | proposition)
 
     # derive: b is-a proposition
-    theory = pu.as1.derive(theory=theory,
-                           claim=b | is_a | proposition,
-                           premises=(b | is_a | propositional_variable,),
-                           inference_rule=pu.pls1.i1)
+    theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                    claim=b | is_a | proposition,
+                                    premises=(b | is_a | propositional_variable,),
+                                    inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=b | is_a | proposition)
 
     # derive: c is-a proposition
-    theory = pu.as1.derive(theory=theory,
-                           claim=c | is_a | proposition,
-                           premises=(c | is_a | propositional_variable,),
-                           inference_rule=pu.pls1.i1)
+    theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                    claim=c | is_a | proposition,
+                                    premises=(c | is_a | propositional_variable,),
+                                    inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=c | is_a | proposition)
 
     return theory
@@ -64,52 +64,53 @@ class TestPL1:
         # Test PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 
         # Elaborate a basic theory with P as a propositional-variable
+        theory = pu.as1.let_x_be_a_theory()
         p = pu.as1.let_x_be_a_simple_object(rep='P')
-        axiom = pu.as1.Axiom(claim=p | is_a | propositional_variable)
-        theory = pu.as1.Axiomatization(axioms=(pu.pls1.i1, axiom,))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=p | is_a | propositional_variable)
+        theory, _, = pu.as1.let_x_be_an_inference_rule(theory=theory, inference_rule=pu.pls1.i1)
 
         # Derive: P is-a proposition
-        theory = pu.as1.derive(theory=theory,
-                               claim=p | is_a | proposition,
-                               premises=(
-                                   p | is_a | propositional_variable,),
-                               inference_rule=pu.pls1.i1)
+        theory, _ = pu.as1.derive(theory=theory,
+                                  claim=p | is_a | proposition,
+                                  premises=(
+                                      p | is_a | propositional_variable,),
+                                  inference_rule=pu.pls1.i1)
         assert theory.is_valid_statement(phi=p | is_a | proposition)
 
         # Add axiom PL01 to the theory
-        theory = pu.as1.Derivation(valid_statements=(*theory, pu.ml1.pl01,))
+        theory, _ = pu.as1.let_x_be_an_inference_rule(theory=theory, inference_rule=pu.ml1.pl01, )
 
         # Derive: P ⊃ (P ∧ P)
-        theory = pu.as1.derive(theory=theory,
-                               claim=p | implies | (p | land | p),
-                               premises=(
-                                   p | is_a | proposition,),
-                               inference_rule=pu.ml1.pl01)
+        theory, _ = pu.as1.derive(theory=theory,
+                                  claim=p | implies | (p | land | p),
+                                  premises=(
+                                      p | is_a | proposition,),
+                                  inference_rule=pu.ml1.pl01)
         assert theory.is_valid_statement(phi=p | implies | (p | land | p))
         pass
 
         # Derive: (P ∧ P) is-a proposition
-        theory = pu.as1.derive(theory=theory,
-                               claim=(p | land | p) | is_a | proposition,
-                               premises=(
-                                   p | is_a | proposition,
-                                   p | is_a | proposition,),
-                               inference_rule=pu.pls1.i3)
+        theory, _ = pu.as1.derive(theory=theory,
+                                  claim=(p | land | p) | is_a | proposition,
+                                  premises=(
+                                      p | is_a | proposition,
+                                      p | is_a | proposition,),
+                                  inference_rule=pu.pls1.i3)
         assert theory.is_valid_statement(phi=(p | land | p) | is_a | proposition)
 
         # make P valid and add modus-ponens to the theory
-        axiom = pu.as1.Axiom(claim=p)
-        theory = pu.as1.Derivation(valid_statements=(*theory, pu.ir1.modus_ponens_axiom, axiom))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=p)
+        theory, _, = pu.as1.let_x_be_an_inference_rule(theory=theory, inference_rule=pu.ir1.modus_ponens_axiom)
 
         # Derive: P ∧ P from P by modus-ponens
-        theory = pu.as1.derive(theory=theory,
-                               claim=p | land | p,
-                               premises=(
-                                   p | is_a | proposition,
-                                   (p | land | p) | is_a | proposition,
-                                   p | implies | (p | land | p),
-                                   p,),
-                               inference_rule=pu.ir1.modus_ponens_axiom)
+        theory = pu.as1.derive_OBSOLETE(theory=theory,
+                                        claim=p | land | p,
+                                        premises=(
+                                            p | is_a | proposition,
+                                            (p | land | p) | is_a | proposition,
+                                            p | implies | (p | land | p),
+                                            p,),
+                                        inference_rule=pu.ir1.modus_ponens_axiom)
         assert theory.is_valid_statement(phi=p | land | p)
         pass
 

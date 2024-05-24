@@ -760,22 +760,19 @@ class TestDemonstration:
         star = pu.as1.let_x_be_a_binary_connective(rep='*')
         theory, axiom_1, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | star | b)
         theory, axiom_2, = pu.as1.let_x_be_an_axiom(theory=theory, claim=b | star | c)
-        rule = pu.as1.Transformation(
-            premises=(x | star | y, y | star | z,),
-            conclusion=x | star | z,
-            variables=(x, y, z,))
-        ir1 = pu.as1.InferenceRule(transformation=rule)
-        theory = pu.as1.Axiomatization(axioms=(axiom_1, axiom_2, ir1,))
-        demo1 = pu.as1.Derivation(
-            valid_statements=theory)  # this must not raise an exception and will just change the type
+        theory, ir1, = pu.as1.let_x_be_an_inference_rule(theory=theory,
+                                                         premises=(x | star | y,
+                                                                   y | star | z,),
+                                                         conclusion=x | star | z,
+                                                         variables=(x, y, z,))
 
         # derive a theorem
-        demo2 = pu.as1.derive(theory=demo1,
-                              claim=a | star | c,
-                              premises=(
-                                  a | star | b,
-                                  b | star | c,),
-                              inference_rule=ir1)
+        demo2 = pu.as1.derive_OBSOLETE(theory=theory,
+                                       claim=a | star | c,
+                                       premises=(
+                                           a | star | b,
+                                           b | star | c,),
+                                       inference_rule=ir1)
         assert demo2.is_valid_statement(phi=a | star | c)
 
         with pytest.raises(pu.as1.CustomException, match='e123'):

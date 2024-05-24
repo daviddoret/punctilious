@@ -73,13 +73,30 @@ with as1.let_x_be_a_variable(rep='A') as a:
             (a | is_a | proposition,),
             conclusion=a | implies | (a | land | a),
             variables=(a,)))
-    """Original axiom: PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). Source: (Mancosu et al., p. 19).
+    """The PL01 axiom schema: A ⊃ (A ∧ A).
+    
+    Premises:
+     - A is-a proposition
+    
+    Conclusion: 
+    A implies (A ∧ A)
+    
+    Variables:
+    {A}
+    
+    Original axiom: 
+    PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴). (Mancosu et al., p. 19).
     """
     pass
 
 with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b:
-    pl02: as1.InferenceRule = as1.translate_implication_to_axiom(
-        phi=(a | land | b) | implies | (b | land | a))
+    pl02: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition,),
+            conclusion=(a | land | b) | implies | (b | land | a),
+            variables=(a, b,)))
     """Original axiom: PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴). Source: (Mancosu et al., p. 19).
     """
     pass

@@ -1013,26 +1013,59 @@ def let_x_be_a_free_arity_connective(rep: str):
     return FreeArityConnective(rep=rep)
 
 
-def let_x_be_an_inference_rule(claim: FlexibleTransformation):
+def let_x_be_an_inference_rule_OLD(claim: FlexibleTransformation):
     return InferenceRule(transformation=claim)
+
+
+def let_x_be_an_inference_rule(theory: FlexibleDerivation,
+                               inference_rule: typing.Optional[FlexibleInferenceRule] = None,
+                               premises: typing.Optional[FlexibleTupl] = None,
+                               conclusion: typing.Optional[FlexibleFormula] = None,
+                               variables: typing.Optional[FlexibleEnumeration] = None):
+    if theory is None:
+        theory = Axiomatization(axioms=None)
+    else:
+        theory: FlexibleDerivation = coerce_derivation(phi=theory)
+
+    if inference_rule is None and premises is not None and conclusion is not None and variables is not None:
+        transformation: Transformation = Transformation(premises=premises, conclusion=conclusion, variables=variables)
+        inference_rule: InferenceRule = InferenceRule(transformation=transformation)
+
+    if isinstance(theory, Axiomatization):
+        theory = Axiomatization(axioms=(*theory, inference_rule,))
+        return theory, inference_rule
+    elif isinstance(theory, Derivation):
+        theory = Derivation(valid_statements=(*theory, inference_rule,))
+        return theory, inference_rule
+    else:
+        raise Exception('oops')
 
 
 def let_x_be_an_axiom_OLD(claim: FlexibleFormula):
     return Axiom(claim=claim)
 
 
-def let_x_be_an_axiom(theory: FlexibleDerivation, claim: FlexibleFormula):
+def let_x_be_an_axiom(theory: FlexibleDerivation, claim: typing.Optional[FlexibleFormula] = None,
+                      axiom: typing.Optional[FlexibleAxiom] = None):
     """
 
     :param theory: An axiom-collection or a derivation. If None, the empty axiom-collection is implicitly used.
-    :param claim: The statement claimed by the new axiom.
-    :return: a pair (t, a,) where t is an extension of parameter theory with the axiom, and a is the new axiom.
+    :param claim: The statement claimed by the new axiom. Either the claim or axiom parameter must be provided, and not both.
+    :param axiom: An existing axiom. Either the claim or axiom parameter must be provided, and not both.
+    :return: a pair (t, a,) where t is an extension of the input theory, with a new axiom claiming the input statement,
+    and a is the new axiom.
     """
     if theory is None:
         theory = Axiomatization(axioms=None)
     else:
         theory: FlexibleDerivation = coerce_derivation(phi=theory)
-    axiom: Axiom = Axiom(claim=claim)
+    if claim is not None and axiom is not None:
+        raise Exception('ooops 1')
+    elif claim is None and axiom is None:
+        raise Exception('oops 2')
+    elif claim is not None:
+        axiom: Axiom = Axiom(claim=claim)
+
     if isinstance(theory, Axiomatization):
         theory = Axiomatization(axioms=(*theory, axiom,))
         return theory, axiom
@@ -1040,10 +1073,15 @@ def let_x_be_an_axiom(theory: FlexibleDerivation, claim: FlexibleFormula):
         theory = Derivation(valid_statements=(*theory, axiom,))
         return theory, axiom
     else:
-        raise Exception('oops')
+        raise Exception('oops 3')
 
 
-def let_x_be_a_theory(valid_statements: FlexibleEnumeration):
+def let_x_be_a_theory(valid_statements: typing.Optional[FlexibleEnumeration] = None):
+    """
+
+    :param valid_statements: an enumeration of valid-statements. If None, the empty theory is implicitly assumed.
+    :return:
+    """
     return Derivation(valid_statements=valid_statements)
 
 
@@ -2655,8 +2693,8 @@ class Derivation(Enumeration):
         # coerce to enumeration
         valid_statements: Enumeration = coerce_enumeration(phi=valid_statements)
         # coerce all elements of the enumeration to valid-statements
-        valid_statements: Enumeration = coerce_enumeration(
-            phi=(coerce_valid_statement(phi=p) for p in valid_statements))
+        # valid_statements: Enumeration = coerce_enumeration(
+        #    phi=(coerce_valid_statement(phi=p) for p in valid_statements))
         try:
             is_well_formed_derivation(phi=valid_statements, raise_event_if_false=True)
         except Exception as error:
@@ -2869,6 +2907,33 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     return inference_rule
 
 
+def derive_OBSOLETE(theory: FlexibleDerivation, claim: FlexibleFormula, premises: FlexibleTupl,
+                    inference_rule: FlexibleInferenceRule):
+    """Given a derivation t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
+
+    :param theory:
+    :param premises:
+    :param inference_rule:
+    :return:
+    """
+    # parameters validation
+    theory: Derivation = coerce_derivation(phi=theory)
+    claim: Formula = coerce_formula(phi=claim)
+    premises: Tupl = coerce_tupl(phi=premises)
+    inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
+
+    # configure the inference
+    inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
+
+    # derive the new theorem
+    theorem: ValidStatement = Theorem(claim=claim, i=inference)
+
+    # extends the derivation
+    derivation: Derivation = Derivation(valid_statements=(*theory, theorem,))
+
+    return derivation
+
+
 def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: FlexibleTupl,
            inference_rule: FlexibleInferenceRule):
     """Given a derivation t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
@@ -2893,4 +2958,4 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
     # extends the derivation
     derivation: Derivation = Derivation(valid_statements=(*theory, theorem,))
 
-    return derivation
+    return derivation, theorem
