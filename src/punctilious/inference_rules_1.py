@@ -48,7 +48,7 @@ with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi
             psi,),
         conclusion=phi | land | psi,
         variables=(phi, psi,))
-adjunction_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_OLD(claim=adjunction_rule)
+adjunction_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_deprecated(claim=adjunction_rule)
 
 # Simplification inference rule, aka conjunction elimination:
 #   phi ∧ psi
@@ -65,7 +65,7 @@ with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi
             phi | land | psi,),
         conclusion=phi,
         variables=(phi, psi,))
-simplification_1_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_OLD(claim=simplification_1_rule)
+simplification_1_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_deprecated(claim=simplification_1_rule)
 
 # Simplification inference rule, aka conjunction elimination:
 #   phi ∧ psi
@@ -82,7 +82,7 @@ with as1.let_x_be_a_variable(rep='phi') as phi, as1.let_x_be_a_variable(rep='psi
             phi | land | psi,),
         conclusion=psi,
         variables=(phi, psi,))
-simplification_2_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_OLD(claim=simplification_2_rule)
+simplification_2_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_deprecated(claim=simplification_2_rule)
 
 # Modus ponens inference rule:
 #   phi --> psi
@@ -101,7 +101,7 @@ with as1.let_x_be_a_variable(rep='P') as phi, as1.let_x_be_a_variable(rep='Q') a
             phi),
         conclusion=psi,
         variables=(phi, psi,))
-modus_ponens_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_OLD(claim=modus_ponens_rule)
+modus_ponens_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_deprecated(claim=modus_ponens_rule)
 """Premises:
  - phi | is_a | proposition,
  - psi | is_a | proposition,

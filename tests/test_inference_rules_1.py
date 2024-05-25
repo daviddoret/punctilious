@@ -30,9 +30,9 @@ def c():
 @pytest.fixture
 def theory(a, b, c):
     # elaborate a theory with 3 propositions: a, b, and c
-    a1 = pu.as1.let_x_be_an_axiom_OLD(claim=a | is_a | propositional_variable)
-    a2 = pu.as1.let_x_be_an_axiom_OLD(claim=b | is_a | propositional_variable)
-    a3 = pu.as1.let_x_be_an_axiom_OLD(claim=c | is_a | propositional_variable)
+    a1 = pu.as1.let_x_be_an_axiom_deprecated(claim=a | is_a | propositional_variable)
+    a2 = pu.as1.let_x_be_an_axiom_deprecated(claim=b | is_a | propositional_variable)
+    a3 = pu.as1.let_x_be_an_axiom_deprecated(claim=c | is_a | propositional_variable)
     theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms, a1, a2, a3,))
 
     # derive: a is-a proposition

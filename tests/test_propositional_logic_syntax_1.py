@@ -17,7 +17,7 @@ class TestPropositionalLogicMetaTheory:
 
         # elaborate a theory
         p = pu.as1.let_x_be_a_propositional_variable_OBSOLETE(rep='P')
-        a1 = pu.as1.let_x_be_an_axiom_OLD(claim=p | is_a | propositional_variable)
+        a1 = pu.as1.let_x_be_an_axiom_deprecated(claim=p | is_a | propositional_variable)
         theory = pu.as1.Axiomatization(axioms=(pu.pls1.i1, a1,))
 
         # derive: p is-a proposition

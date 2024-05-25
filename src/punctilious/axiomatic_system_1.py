@@ -131,7 +131,11 @@ event_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
                    message='EnumerationAccretor.insert: The insert-element operation is forbidden on '
                            'enumeration-accretors.'),
     e117=ErrorCode(event_type=event_types.error, code='e117',
-                   message='Before applying a transformation (method apply_transformation of the Transformation class), the arguments passed to the transformation algorithm are verified to check that they are formula-equivalent-with-variables with the premises of the transformation, and with regards to the variables. The error parameter provides more detailed information on the issue.'),
+                   message='Before applying a transformation (method apply_transformation of the Transformation '
+                           'class), the arguments passed to the transformation algorithm are verified to check that '
+                           'they are formula-equivalent-with-variables with the premises of the transformation, '
+                           'and with regards to the variables. The error parameter provides more detailed information '
+                           'on the issue.'),
     e118=ErrorCode(event_type=event_types.error, code='e118',
                    message='is_formula_equivalent_with_variables: There exists a phi''sub-formula of phi that is an '
                            'element of variables.'),
@@ -500,7 +504,9 @@ class Formula(tuple):
         if isinstance(self.c, NullaryConnective):
             return f'{self.c.rep()}'
         elif isinstance(self.c, BinaryConnective):
-            return f'{'(' if parenthesis else ''}{self.term_0.rep(**kwargs)} {self.c.rep()} {self.term_1.rep(**kwargs)}{')' if parenthesis else ''}'
+            return (f'{'(' if parenthesis else ''}'
+                    f'{self.term_0.rep(**kwargs)} {self.c.rep()} {self.term_1.rep(**kwargs)}'
+                    f'{')' if parenthesis else ''}')
         else:
             terms: str = ', '.join(term.rep(**kwargs) for term in self)
             return f'{'(' if parenthesis else ''}{self.c.rep(**kwargs)}({terms}){')' if parenthesis else ''}'
@@ -960,7 +966,8 @@ def v(rep: FlexibleRepresentation) -> typing.Union[
 
 
 FlexibleRepresentation = typing.Optional[typing.Union[str, typing.Iterable[str]]]
-"""FlexibleRepresentation is a flexible python type that may be safely coerced into an Enumeration or a EnumerationBuilder."""
+"""FlexibleRepresentation is a flexible python type that may be safely coerced into an Enumeration or a 
+EnumerationBuilder."""
 
 
 def let_x_be_a_simple_object(rep: FlexibleRepresentation) -> typing.Union[
@@ -1013,7 +1020,7 @@ def let_x_be_a_free_arity_connective(rep: str):
     return FreeArityConnective(rep=rep)
 
 
-def let_x_be_an_inference_rule_OLD(claim: FlexibleTransformation):
+def let_x_be_an_inference_rule_deprecated(claim: FlexibleTransformation):
     return InferenceRule(transformation=claim)
 
 
@@ -1041,7 +1048,7 @@ def let_x_be_an_inference_rule(theory: FlexibleDerivation,
         raise Exception('oops')
 
 
-def let_x_be_an_axiom_OLD(claim: FlexibleFormula):
+def let_x_be_an_axiom_deprecated(claim: FlexibleFormula):
     return Axiom(claim=claim)
 
 
@@ -1050,10 +1057,12 @@ def let_x_be_an_axiom(theory: FlexibleDerivation, claim: typing.Optional[Flexibl
     """
 
     :param theory: An axiom-collection or a derivation. If None, the empty axiom-collection is implicitly used.
-    :param claim: The statement claimed by the new axiom. Either the claim or axiom parameter must be provided, and not both.
-    :param axiom: An existing axiom. Either the claim or axiom parameter must be provided, and not both.
-    :return: a pair (t, a,) where t is an extension of the input theory, with a new axiom claiming the input statement,
-    and a is the new axiom.
+    :param claim: The statement claimed by the new axiom. Either the claim or axiom parameter must be provided,
+    and not both.
+    :param axiom: An existing axiom. Either the claim or axiom parameter must be provided,
+    and not both.
+    :return: a pair (t, a,) where t is an extension of the input theory, with a new axiom claiming the
+    input statement, and a is the new axiom.
     """
     if theory is None:
         theory = Axiomatization(axioms=None)
@@ -1212,6 +1221,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_even
 
     :param phi: A formula.
     :param psi: A formula.
+    :param raise_event_if_false:
     :return: True if phi ~formula psi. False otherwise.
     """
     phi: Formula = coerce_formula(phi=phi)
@@ -1245,6 +1255,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     :param variables: an enumeration of formulas called variables.
     :param m: (conditional) a mapping between variables and their assigned values. used internally for recursive calls.
       leave it to None.
+    :param raise_event_if_false:
     :return:
     """
     m: MapBuilder = coerce_map_builder(phi=m)
@@ -1884,9 +1895,11 @@ class Transformation(Formula):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        if phi.c is not connectives.transformation or phi.arity != 3 or not is_well_formed_tupl(
-                phi=phi.term_0) or not is_well_formed_formula(phi=phi.term_1) or not is_well_formed_enumeration(
-            phi=phi.term_2):
+        if (phi.c is not connectives.transformation or
+                phi.arity != 3 or
+                not is_well_formed_tupl(phi=phi.term_0) or
+                not is_well_formed_formula(phi=phi.term_1) or
+                not is_well_formed_enumeration(phi=phi.term_2)):
             return False
         else:
             return True
@@ -2124,7 +2137,8 @@ def coerce_inference_rule(phi: FlexibleFormula) -> InferenceRule:
 
 
 def coerce_theorem(phi: FlexibleFormula) -> Theorem:
-    """Validate that p is a well-formed theorem-by-inference and returns it properly typed as ProofByInference, or raise exception e123.
+    """Validate that p is a well-formed theorem-by-inference and returns it properly typed as ProofByInference,
+    or raise exception e123.
 
     :param phi:
     :return:
@@ -2140,7 +2154,8 @@ def coerce_theorem(phi: FlexibleFormula) -> Theorem:
 
 
 def coerce_derivation(phi: FlexibleDerivation) -> Derivation:
-    """Validate that phi is a well-formed derivation and returns it properly typed as Demonstration, or raise exception e123.
+    """Validate that phi is a well-formed derivation and returns it properly typed as Demonstration,
+    or raise exception e123.
 
     :param phi:
     :return:
@@ -2194,7 +2209,8 @@ def coerce_derivation_builder(phi: FlexibleFormula) -> DerivationBuilder:
 
 
 def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
-    """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatization, or raise exception e123.
+    """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatization,
+    or raise exception e123.
 
     :param phi:
     :return:
@@ -2301,7 +2317,7 @@ class Axiom(ValidStatement):
         if isinstance(phi, Axiom):
             # Shortcut: the class assures the well-formedness of the formula.
             return True
-        elif (not phi.c is connectives.follows_from or
+        elif (phi.c is not connectives.follows_from or
               not phi.arity == 2 or
               not is_well_formed_formula(phi=phi.term_0) or
               phi.term_1.c is not connectives.axiom):
@@ -2427,7 +2443,11 @@ class Inference(Formula):
 
     def rep(self, **kwargs) -> str:
         premises: str = '\n\t\t\t'.join(theorem.rep(**kwargs) for theorem in self.premises)
-        return f'Inference-rule:\n\tPremises:\n\t\t\t{premises}\n\tTransformation-rule:\n\t\t{self.transformation_rule.rep(**kwargs)}'
+        return (f'Inference-rule:'
+                f'\n\tPremises:'
+                f'\n\t\t\t{premises}'
+                f'\n\tTransformation-rule:'
+                f'\n\t\t{self.transformation_rule.rep(**kwargs)}')
 
     @property
     def transformation_rule(self) -> Transformation:
@@ -2474,8 +2494,10 @@ class Theorem(ValidStatement):
         if isinstance(phi, Theorem):
             # the type assure the well-formedness of the formula
             return True
-        if not phi.c is connectives.follows_from or not phi.arity == 2 or not is_well_formed_formula(
-                phi=phi.term_0) or not is_well_formed_inference(phi=phi.term_1):
+        if (phi.c is not connectives.follows_from or
+                not phi.arity == 2 or
+                not is_well_formed_formula(phi=phi.term_0) or
+                not is_well_formed_inference(phi=phi.term_1)):
             return False
         else:
             i: Inference = coerce_inference(phi=phi.term_1)
@@ -2519,7 +2541,9 @@ class Theorem(ValidStatement):
         return self._phi
 
     def rep(self, **kwargs) -> str:
-        return f'({self.claim.rep(**kwargs)})\t| follows from premises {self.i.premises} and inference-rule {self.i.transformation_rule}.'
+        return (f'({self.claim.rep(**kwargs)})'
+                f'\t| follows from premises {self.i.premises}'
+                f' and inference-rule {self.i.transformation_rule}.')
 
 
 FlexibleTheorem = typing.Union[Theorem, Formula]
@@ -2585,12 +2609,15 @@ class DerivationBuilder(EnumerationBuilder):
 
 
 class Derivation(Enumeration):
-    """A derivation is an enumeration of valid-statements and inference-rules.
+    """A derivation is a justified enumeration of axioms, inference-rules, and theorems.
 
     Syntactic definition:
     A well-formed derivation is an enumeration such that:
      - all element phi of the enumeration is a well-formed theorem,
      - all premises of all theorem-by-inferences are predecessors of their parent theorem-by-inference.
+
+    TODO: Consider the following data-model change: a valid-statement is only an axiom or an inference-rule. In
+    effect, stating that in inference-rule is a valid-statement seems to be a bit of a semantic stretch.
 
     """
 
@@ -2891,7 +2918,7 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     :return:
     """
     phi = coerce_formula(phi=phi)
-    if not phi.c is connectives.implies:
+    if phi.c is not connectives.implies:
         raise Exception('this is not an implication')
     # TODO: translate_implication_to_axiom: check that all sub-formulas in phi are either:
     # - valid propositional formulas (negation, conjunction, etc.)
