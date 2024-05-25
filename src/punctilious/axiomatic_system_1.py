@@ -44,114 +44,114 @@ event_types: EventTypes = _set_state(key='event_types', value=EventTypes(
 ))
 
 
-class EventCode(typing.NamedTuple):
+class ErrorCode(typing.NamedTuple):
     event_type: EventType
     code: str
     message: str
 
 
-class EventCodes(typing.NamedTuple):
-    e100: EventCode
-    e101: EventCode
-    e102: EventCode
-    e103: EventCode
-    e104: EventCode
-    e105: EventCode
-    e106: EventCode
-    e107: EventCode
-    e108: EventCode
-    e109: EventCode
-    e110: EventCode
-    e111: EventCode
-    e112: EventCode
-    e113: EventCode
-    e114: EventCode
-    e115: EventCode
-    e116: EventCode
-    e117: EventCode
-    e118: EventCode
-    e119: EventCode
-    e120: EventCode
-    e121: EventCode
-    e122: EventCode
-    e123: EventCode
+class ErrorCodes(typing.NamedTuple):
+    e100: ErrorCode
+    e101: ErrorCode
+    e102: ErrorCode
+    e103: ErrorCode
+    e104: ErrorCode
+    e105: ErrorCode
+    e106: ErrorCode
+    e107: ErrorCode
+    e108: ErrorCode
+    e109: ErrorCode
+    e110: ErrorCode
+    e111: ErrorCode
+    e112: ErrorCode
+    e113: ErrorCode
+    e114: ErrorCode
+    e115: ErrorCode
+    e116: ErrorCode
+    e117: ErrorCode
+    e118: ErrorCode
+    e119: ErrorCode
+    e120: ErrorCode
+    e121: ErrorCode
+    e122: ErrorCode
+    e123: ErrorCode
 
 
-event_codes: EventCodes = _set_state(key='event_codes', value=EventCodes(
-    e100=EventCode(event_type=event_types.error, code='e100',
+event_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
+    e100=ErrorCode(event_type=event_types.error, code='e100',
                    message='FormulaBuilder.__init__: Unsupported type for the terms argument.'),
-    e101=EventCode(event_type=event_types.error, code='e101',
+    e101=ErrorCode(event_type=event_types.error, code='e101',
                    message='Formula.__new__: Unsupported type for the terms argument.'),
-    e102=EventCode(event_type=event_types.error, code='e102',
+    e102=ErrorCode(event_type=event_types.error, code='e102',
                    message='Formula.term_0: Attempt to access property term_0 but formula does not contain a term at '
                            'index 0.'),
-    e103=EventCode(event_type=event_types.error, code='e103',
+    e103=ErrorCode(event_type=event_types.error, code='e103',
                    message='Formula.term_1: Attempt to access property term_1 but formula does not contain a term at '
                            'index 0.'),
-    e104=EventCode(event_type=event_types.warning, code='e104',
+    e104=ErrorCode(event_type=event_types.warning, code='e104',
                    message='EnumerationBuilder.__init__: Attempt to add duplicate formula-equivalent formulas as '
                            'elements of the enumeration. The new element / term is ignored.'),
-    e105=EventCode(event_type=event_types.error, code='e105',
+    e105=ErrorCode(event_type=event_types.error, code='e105',
                    message='During the initialization of a theorem (methods __init__ or __new__ of the Theorem class), '
                            'the well-formedness of the theorem is checked. One well-formedness rule is that applying '
                            'the transformation of the inference on the premises must effectively yield the claimed '
                            'formula. Here, the claimed formula is not formula-equivalent to the algorithm output. In '
                            'consequence, the theorem would be ill-formed. The error parameter provides more detailed '
                            'information.'),
-    e106=EventCode(event_type=event_types.warning, code='e106',
+    e106=ErrorCode(event_type=event_types.warning, code='e106',
                    message='is_well_formed_theorem_by_inference: phi is an ill-formed theorem-by-inference because '
                            'psi_expected ~formula psi_inferred, '
                            'where psi_inferred = f(p), f the inference transformation, and p the inference premises.'),
-    e107=EventCode(event_type=event_types.error, code='e107',
+    e107=ErrorCode(event_type=event_types.error, code='e107',
                    message='coerce_enumeration: The argument could not be coerced to a enumeration.'),
-    e108=EventCode(event_type=event_types.error, code='e108',
+    e108=ErrorCode(event_type=event_types.error, code='e108',
                    message='Ill-formed formula: Formula phi is ill-formed, because of reason.'),
-    e109=EventCode(event_type=event_types.error, code='e109',
+    e109=ErrorCode(event_type=event_types.error, code='e109',
                    message='get_index_of_first_term_in_formula: formula psi is not a term of formula phi.'),
-    e110=EventCode(event_type=event_types.error, code='e110',
+    e110=ErrorCode(event_type=event_types.error, code='e110',
                    message='Enumeration.__new__: Attempt to create enumeration from invalid elements. Often this is '
                            'caused by a paid of elements that are formula-equivalent.'),
-    e111=EventCode(event_type=event_types.error, code='e111',
+    e111=ErrorCode(event_type=event_types.error, code='e111',
                    message='While checking the well-formedness of a derivation, a premise is necessary to derive a '
                            'theorem, but it is absent from the derivation.'),
-    e112=EventCode(event_type=event_types.error, code='e112',
+    e112=ErrorCode(event_type=event_types.error, code='e112',
                    message='While checking the well-formedness of a derivation, a premise is necessary to derive a '
                            'theorem, but its position in the derivation is posterior to the theorem.'),
-    e113=EventCode(event_type=event_types.error, code='e113',
+    e113=ErrorCode(event_type=event_types.error, code='e113',
                    message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to '
                            'elaborate formulas.'),
-    e114=EventCode(event_type=event_types.error, code='e114',
+    e114=ErrorCode(event_type=event_types.error, code='e114',
                    message='EnumerationAccretor.__del_item__,pop,remove,remove_formula: The remove-formula operation '
                            'is forbidden on'
                            'enumeration-accretors.'),
-    e115=EventCode(event_type=event_types.error, code='e115',
+    e115=ErrorCode(event_type=event_types.error, code='e115',
                    message='EnumerationAccretor.__set_item__: The set-element operation is forbidden on '
                            'enumeration-accretors.'),
-    e116=EventCode(event_type=event_types.error, code='e116',
+    e116=ErrorCode(event_type=event_types.error, code='e116',
                    message='EnumerationAccretor.insert: The insert-element operation is forbidden on '
                            'enumeration-accretors.'),
-    e117=EventCode(event_type=event_types.error, code='e117',
+    e117=ErrorCode(event_type=event_types.error, code='e117',
                    message='Before applying a transformation (method apply_transformation of the Transformation class), the arguments passed to the transformation algorithm are verified to check that they are formula-equivalent-with-variables with the premises of the transformation, and with regards to the variables. The error parameter provides more detailed information on the issue.'),
-    e118=EventCode(event_type=event_types.error, code='e118',
+    e118=ErrorCode(event_type=event_types.error, code='e118',
                    message='is_formula_equivalent_with_variables: There exists a phi''sub-formula of phi that is an '
                            'element of variables.'),
-    e119=EventCode(event_type=event_types.error, code='e119',
+    e119=ErrorCode(event_type=event_types.error, code='e119',
                    message='While checking the well-formedness of a derivation, a transformation-rule is necessary '
                            'to derive a theorem, but it is absent from the derivation.'),
-    e120=EventCode(event_type=event_types.error, code='e120',
+    e120=ErrorCode(event_type=event_types.error, code='e120',
                    message='During the initialization of a derivation (in the __new__ or __init__ methods of the '
                            'Derivation class), the well-formedness of the derivation is verified. This '
                            'verification failed, in consequence the derivation would be ill-formed. The error '
                            'parameter explains why.'),
-    e121=EventCode(event_type=event_types.error, code='e121',
+    e121=ErrorCode(event_type=event_types.error, code='e121',
                    message='While checking if two formulas are formula-equivalent-with-variables, formulas are '
                            'automatically mapped to values. Of course, if a variable appears multiple times, '
                            'every instance must be mapped to the same value. Here, this verification failed. Some '
                            'variable was already mapped to a value, and then a distinct mapped value was found.'),
-    e122=EventCode(event_type=event_types.error, code='e122',
+    e122=ErrorCode(event_type=event_types.error, code='e122',
                    message='While checking if two formulas are formula-equivalent, a difference was found. The '
                            'parameters phi and psi show two formulas or sub-formulas that are distinct.'),
-    e123=EventCode(event_type=event_types.error, code='e123',
+    e123=ErrorCode(event_type=event_types.error, code='e123',
                    message='Coercion failure: phi of phi_type could not be coerced to coerced_type.'),
 ))
 
@@ -159,7 +159,7 @@ event_codes: EventCodes = _set_state(key='event_codes', value=EventCodes(
 class CustomException(Exception):
     """A generic exception type for application custom exceptions."""
 
-    def __init__(self, error_code: EventCode, **kwargs):
+    def __init__(self, error_code: ErrorCode, **kwargs):
         self.error_code = error_code
         self.kwargs = kwargs
         super().__init__()
@@ -175,18 +175,18 @@ class CustomException(Exception):
         return f'{self.error_code.event_type} {self.error_code.code}\n\t{self.error_code.message}\n\t{kwargs}'
 
 
-def raise_event(event_code: EventCode, **kwargs):
+def raise_error(error_code: ErrorCode, **kwargs):
     """Raise a technical event.
 
-    :param event_code:
+    :param error_code:
     :param kwargs:
     :return:
     """
-    exception: CustomException = CustomException(error_code=event_code, **kwargs)
-    if event_code.event_type == event_types.error:
+    exception: CustomException = CustomException(error_code=error_code, **kwargs)
+    if error_code.event_type == event_types.error:
         logging.exception(msg=exception.rep())
         raise exception
-    elif event_code.event_type == event_types.warning:
+    elif error_code.event_type == event_types.warning:
         logging.warning(msg=exception.rep())
         warnings.warn(message=exception.rep())
 
@@ -238,7 +238,7 @@ class FormulaBuilder(list):
             for term in coerced_tuple:
                 self.append(term=term)
         elif terms is not None:
-            raise_event(event_code=event_codes.e100, c=c, terms_type=type(terms), terms=terms)
+            raise_error(error_code=event_codes.e100, c=c, terms_type=type(terms), terms=terms)
 
     def __contains__(self, phi: FlexibleFormula):
         """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
@@ -386,7 +386,7 @@ class FormulaBuilder(list):
 
     def to_formula(self) -> Formula:
         if self.c is None:
-            raise_event(event_code=event_codes.e113, formula_builder=self, c=self.c)
+            raise_error(error_code=event_codes.e113, formula_builder=self, c=self.c)
         terms: tuple[Formula, ...] = tuple(coerce_formula(phi=term) for term in self)
         phi: Formula = Formula(connective=self.c, terms=terms)
         return phi
@@ -427,7 +427,7 @@ class Formula(tuple):
             o = super().__new__(cls)
             return o
         else:
-            raise_event(event_code=event_codes.e101, c=connective, terms_type=type(terms), terms=terms)
+            raise_error(error_code=event_codes.e101, c=connective, terms_type=type(terms), terms=terms)
 
     def __init__(self, connective: Connective, terms: FlexibleTupl = None):
         self._connective = connective
@@ -508,19 +508,19 @@ class Formula(tuple):
     @property
     def term_0(self) -> Formula:
         if len(self) < 1:
-            raise_event(event_code=event_codes.e103, c=self.c)
+            raise_error(error_code=event_codes.e103, c=self.c)
         return self[0]
 
     @property
     def term_1(self) -> Formula:
         if len(self) < 2:
-            raise_event(event_code=event_codes.e104, c=self.c)
+            raise_error(error_code=event_codes.e104, c=self.c)
         return self[1]
 
     @property
     def term_2(self) -> Formula:
         if len(self) < 3:
-            raise_event(event_code=event_codes.e104, c=self.c)
+            raise_error(error_code=event_codes.e104, c=self.c)
         return self[2]
 
     def to_formula_builder(self) -> FormulaBuilder:
@@ -541,7 +541,7 @@ def coerce_formula_builder(phi: FlexibleFormula = None) -> FormulaBuilder:
     elif phi is None:
         return FormulaBuilder(c=None, terms=None)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=FormulaBuilder, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=FormulaBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_formula(phi: FlexibleFormula) -> Formula:
@@ -558,7 +558,7 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
         # Implicit conversion of iterators to tuple formulas.
         return Tupl(elements=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
 def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
@@ -586,7 +586,7 @@ def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
         # phi: Formula = Formula(c=connectives.e, terms=phi)
         return Enumeration(elements=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Enumeration, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Enumeration, phi_type=type(phi), phi=phi)
 
 
 def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enumeration:
@@ -660,7 +660,7 @@ def coerce_enumeration_builder(phi: FlexibleEnumeration) -> EnumerationBuilder:
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return EnumerationBuilder(elements=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=EnumerationBuilder, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=EnumerationBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_map(phi: FlexibleMap) -> Map:
@@ -676,7 +676,7 @@ def coerce_map(phi: FlexibleMap) -> Map:
         codomain: Tupl = coerce_tupl(phi=phi.values())
         return Map(domain=domain, codomain=codomain)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Map, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Map, phi_type=type(phi), phi=phi)
 
 
 def coerce_map_builder(phi: FlexibleMap) -> MapBuilder:
@@ -691,7 +691,7 @@ def coerce_map_builder(phi: FlexibleMap) -> MapBuilder:
         codomain: TuplBuilder = coerce_tupl_builder(phi=phi.values())
         return MapBuilder(domain=domain, codomain=codomain)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=MapBuilder, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=MapBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_tupl(phi: FlexibleTupl) -> Tupl:
@@ -705,7 +705,7 @@ def coerce_tupl(phi: FlexibleTupl) -> Tupl:
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Tupl(elements=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Tupl, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Tupl, phi_type=type(phi), phi=phi)
 
 
 def coerce_tupl_builder(phi: FlexibleTupl) -> TuplBuilder:
@@ -719,7 +719,7 @@ def coerce_tupl_builder(phi: FlexibleTupl) -> TuplBuilder:
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return TuplBuilder(elements=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=TuplBuilder, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=TuplBuilder, phi_type=type(phi), phi=phi)
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula, FormulaBuilder]]
@@ -864,7 +864,7 @@ def get_index_of_first_equivalent_term_in_formula(phi: FlexibleFormula, psi: Fle
             if is_formula_equivalent(phi=phi, psi=psi_term):
                 return n
             n = n + 1
-    raise_event(event_code=event_codes.e109, phi=phi, psi=psi)
+    raise_error(error_code=event_codes.e109, phi=phi, psi=psi)
 
 
 class TernaryConnective(FixedArityConnective):
@@ -1226,7 +1226,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_even
     else:
         # Extreme case
         if raise_event_if_false:
-            raise_event(event_code=event_codes.e122, phi=phi, psi=psi)
+            raise_error(error_code=event_codes.e122, phi=phi, psi=psi)
         return False
 
 
@@ -1254,7 +1254,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     variables: Tupl = coerce_tupl(phi=variables)
     if variables.has_element(phi=phi):
         # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
-        raise_event(event_code=event_codes.e118, phi=phi, psi=psi, v=variables)
+        raise_error(error_code=event_codes.e118, phi=phi, psi=psi, v=variables)
     if variables.has_element(phi=psi):
         # psi is a variable.
         if m.is_defined_in(phi=psi):
@@ -1269,7 +1269,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
                 # psi is not consistent with its already mapped value.
                 # it follows that phi and psi are not formula-equivalent-with-variables.
                 if raise_event_if_false:
-                    raise_event(event_code=event_codes.e121, variable=psi,
+                    raise_error(error_code=event_codes.e121, variable=psi,
                                 already_mapped_value=already_mapped_value, distinct_value=phi)
                 return False
         else:
@@ -1570,7 +1570,7 @@ class EnumerationBuilder(FormulaBuilder):
         """
         term = coerce_formula(phi=term)
         if any(is_formula_equivalent(phi=term, psi=element) for element in self):
-            raise_event(event_code=event_codes.e104, enumeration=self, term=term)
+            raise_error(error_code=event_codes.e104, enumeration=self, term=term)
         else:
             super().append(term=term)
 
@@ -1663,7 +1663,7 @@ class Enumeration(Formula):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         connective: Connective = connectives.e if connective is None else connective
         if not is_well_formed_enumeration(phi=elements):
-            raise_event(event_code=event_codes.e110, elements_type=type(elements), elements=elements)
+            raise_error(error_code=event_codes.e110, elements_type=type(elements), elements=elements)
         o: tuple = super().__new__(cls, connective=connectives.e, terms=elements)
         return o
 
@@ -1761,17 +1761,17 @@ class EnumerationAccretor(EnumerationBuilder):
     def __delitem__(self, phi: FlexibleFormula):
         """By definition, the delete-element operation is forbidden on enumeration-accretors.
         Calling this method raises exception e114."""
-        raise_event(event_code=event_codes.e114, enumeration_accretor=self, phi=phi)
+        raise_error(error_code=event_codes.e114, enumeration_accretor=self, phi=phi)
 
     def __setitem__(self, i, element):
         """By definition, the set-element operation is forbidden on enumeration-accretors.
         Calling this method raises exception e115."""
-        raise_event(event_code=event_codes.e115, enumeration_accretor=self, index=i, element=element)
+        raise_error(error_code=event_codes.e115, enumeration_accretor=self, index=i, element=element)
 
     def insert(self, index, element):
         """By definition, the insert-element operation is forbidden on enumeration-accretors.
         Calling this method raises exception e116."""
-        raise_event(event_code=event_codes.e116, enumeration_accretor=self, index=index, element=element)
+        raise_error(error_code=event_codes.e116, enumeration_accretor=self, index=index, element=element)
 
     def append(self, element: FlexibleFormula):
         """The append-element is the only operation allowed on enumeration-accretors that has the capability to
@@ -1791,17 +1791,17 @@ class EnumerationAccretor(EnumerationBuilder):
     def pop(self, __index=-1):
         """By definition, the delete-element operation is forbidden on enumeration-accretors.
         Calling this method raises exception e114."""
-        raise_event(event_code=event_codes.e114, enumeration_accretor=self, __index=__index)
+        raise_error(error_code=event_codes.e114, enumeration_accretor=self, __index=__index)
 
     def remove(self, phi: FlexibleFormula) -> None:
         """By definition, the delete-element operation is forbidden on enumeration-accretors.
         Calling this method raises exception e114."""
-        raise_event(event_code=event_codes.e114, enumeration_accretor=self, phi=phi)
+        raise_error(error_code=event_codes.e114, enumeration_accretor=self, phi=phi)
 
     def remove_formula(self, phi: FlexibleFormula) -> None:
         """By definition, the delete-element operation is forbidden on enumeration-accretors.
         Calling this method raises exception e114."""
-        raise_event(event_code=event_codes.e114, enumeration_accretor=self, phi=phi)
+        raise_error(error_code=event_codes.e114, enumeration_accretor=self, phi=phi)
 
 
 class TransformationBuilder(FormulaBuilder):
@@ -1927,7 +1927,7 @@ class Transformation(Formula):
             is_formula_equivalent_with_variables(phi=arguments, psi=self.premises, variables=self.variables,
                                                  m=variables_map, raise_event_if_false=True)
         except Exception as error:
-            raise_event(event_code=event_codes.e117, error=error, arguments=arguments, premises=self.premises,
+            raise_error(error_code=event_codes.e117, error=error, arguments=arguments, premises=self.premises,
                         variables=self.variables)
 
         # step 2:
@@ -1984,7 +1984,7 @@ def coerce_transformation(phi: FlexibleTransformation) -> Transformation:
         # it can be safely re-instantiated as a Transformation and returned.
         return Transformation(premises=phi.term_0, conclusion=phi.term_1, variables=phi.term_2)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
 
 
 def coerce_transformation_builder(phi: FlexibleTransformation) -> TransformationBuilder:
@@ -1993,7 +1993,7 @@ def coerce_transformation_builder(phi: FlexibleTransformation) -> Transformation
     elif isinstance(phi, Transformation):
         return phi.to_transformation_builder()
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
 def coerce_inference(phi: FlexibleInference) -> Inference:
@@ -2003,7 +2003,7 @@ def coerce_inference(phi: FlexibleInference) -> Inference:
         transformation: Transformation = coerce_transformation(phi=phi.term_1)
         return Inference(premises=phi.term_0, transformation_rule=transformation)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Inference, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Inference, phi_type=type(phi), phi=phi)
 
 
 def is_well_formed_formula(phi: FlexibleFormula) -> bool:
@@ -2088,7 +2088,7 @@ def coerce_valid_statement(phi: FlexibleFormula) -> ValidStatement:
     elif is_well_formed_axiom(phi=phi):
         return coerce_axiom(phi=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=ValidStatement, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=ValidStatement, phi_type=type(phi), phi=phi)
 
 
 def coerce_axiom(phi: FlexibleFormula) -> Axiom:
@@ -2104,7 +2104,7 @@ def coerce_axiom(phi: FlexibleFormula) -> Axiom:
         proved_formula: Formula = phi.term_0
         return Axiom(claim=proved_formula)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
 
 
 def coerce_inference_rule(phi: FlexibleFormula) -> InferenceRule:
@@ -2120,7 +2120,7 @@ def coerce_inference_rule(phi: FlexibleFormula) -> InferenceRule:
         proved_formula: Formula = phi.term_0
         return InferenceRule(transformation=proved_formula)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
 
 
 def coerce_theorem(phi: FlexibleFormula) -> Theorem:
@@ -2136,7 +2136,7 @@ def coerce_theorem(phi: FlexibleFormula) -> Theorem:
         inference: Inference = coerce_inference(phi=phi.term_1)
         return Theorem(claim=proved_formula, i=inference)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
 
 
 def coerce_derivation(phi: FlexibleDerivation) -> Derivation:
@@ -2163,7 +2163,7 @@ def coerce_derivation(phi: FlexibleDerivation) -> Derivation:
         # phi: Formula = Formula(c=connectives.e, terms=phi)
         return Derivation(valid_statements=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Derivation, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Derivation, phi_type=type(phi), phi=phi)
 
 
 def coerce_derivation_builder(phi: FlexibleFormula) -> DerivationBuilder:
@@ -2190,7 +2190,7 @@ def coerce_derivation_builder(phi: FlexibleFormula) -> DerivationBuilder:
         whose valid-statements are the elements of the iterable."""
         return DerivationBuilder(valid_statements=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=DerivationBuilder, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=DerivationBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
@@ -2204,7 +2204,7 @@ def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
     elif isinstance(phi, Formula) and is_well_formed_axiomatization(phi=phi):
         return Axiomatization(axioms=phi)
     else:
-        raise_event(event_code=event_codes.e123, coerced_type=Axiomatization, phi_type=type(phi), phi=phi)
+        raise_error(error_code=event_codes.e123, coerced_type=Axiomatization, phi_type=type(phi), phi=phi)
 
 
 class TheoryState(Enumeration):
@@ -2483,7 +2483,7 @@ class Theorem(ValidStatement):
             if not is_formula_equivalent(phi=phi.term_0, psi=f_of_p):
                 # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
                 # issue a warning to facilitate troubleshooting and analysis.
-                raise_event(event_code=event_codes.e106, phi=phi, psi_expected=phi.term_0, psi_inferred=f_of_p,
+                raise_error(error_code=event_codes.e106, phi=phi, psi_expected=phi.term_0, psi_inferred=f_of_p,
                             inference_rule=i)
                 return False
             return True
@@ -2504,7 +2504,7 @@ class Theorem(ValidStatement):
         except CustomException as error:
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
-            raise_event(event_code=event_codes.e105, error=error, theorem_claim=claim, algorithm_output=f_of_p,
+            raise_error(error_code=event_codes.e105, error=error, theorem_claim=claim, algorithm_output=f_of_p,
                         inference=i)
         super().__init__(claim=claim, justification=i)
 
@@ -2585,7 +2585,7 @@ class DerivationBuilder(EnumerationBuilder):
 
 
 class Derivation(Enumeration):
-    """A derivation is an enumeration of valid-statements.
+    """A derivation is an enumeration of valid-statements and inference-rules.
 
     Syntactic definition:
     A well-formed derivation is an enumeration such that:
@@ -2643,7 +2643,7 @@ class Derivation(Enumeration):
                     if not claims.has_element(phi=premise):
                         # The premise is absent from the derivation
                         if raise_event_if_false:
-                            raise_event(event_code=event_codes.e111, premise=premise, premise_index=i, theorem=theorem,
+                            raise_error(error_code=event_codes.e111, premise=premise, premise_index=i, theorem=theorem,
                                         claim=claim)
                         return False
                     else:
@@ -2651,14 +2651,14 @@ class Derivation(Enumeration):
                         if premise_index >= i:
                             # The premise is not positioned before the conclusion.
                             if raise_event_if_false:
-                                raise_event(event_code=event_codes.e112, premise=premise, premise_index=i,
+                                raise_error(error_code=event_codes.e112, premise=premise, premise_index=i,
                                             theorem=theorem,
                                             claim=claim)
                             return False
                 if not claims.has_element(phi=inference.transformation_rule):
                     # The inference transformation-rule is absent from the derivation.
                     if raise_event_if_false:
-                        raise_event(event_code=event_codes.e119, transformation_rule=inference.transformation_rule,
+                        raise_error(error_code=event_codes.e119, transformation_rule=inference.transformation_rule,
                                     inference=inference, premise_index=i, theorem=theorem,
                                     claim=claim)
                     return False
@@ -2688,7 +2688,7 @@ class Derivation(Enumeration):
             is_well_formed_derivation(phi=valid_statements, raise_event_if_false=True)
         except Exception as error:
             # well-formedness verification failure, the theorem is ill-formed.
-            raise_event(event_code=event_codes.e120, error=error, valid_statements=valid_statements)
+            raise_error(error_code=event_codes.e120, error=error, valid_statements=valid_statements)
         o: tuple = super().__new__(cls, elements=valid_statements)
         return o
 
@@ -2700,6 +2700,18 @@ class Derivation(Enumeration):
             phi=(coerce_valid_statement(phi=p) for p in valid_statements))
         super().__init__(elements=valid_statements)
 
+    @property
+    def axioms(self) -> Enumeration:
+        """Return an enumeration of all axioms in the derivation, preserving order, filtering out inference-rules and
+        theorems."""
+        return Enumeration(elements=tuple(self.iterate_axioms()))
+
+    @property
+    def inference_rules(self) -> Enumeration:
+        """Return an enumeration of all inference-rules in the derivation, preserving order, filtering out axioms and
+        theorems."""
+        return Enumeration(elements=tuple(self.iterate_theorems()))
+
     def is_valid_statement(self, phi: FlexibleFormula) -> bool:
         """Return True if phi is demonstrated as a valid-statement in this derivation, False otherwise."""
         phi = coerce_formula(phi=phi)
@@ -2710,10 +2722,34 @@ class Derivation(Enumeration):
         return False
         # return any(is_formula_equivalent(phi=phi, psi=theorem) for theorem in self)
 
+    def iterate_axioms(self) -> typing.Iterator[Axiom]:
+        """Iterates over all axioms in the derivation, preserving order, filtering out inference-rules and theorems."""
+        for element in self:
+            if isinstance(element, Axiom):
+                yield element
+
+    def iterate_inference_rules(self) -> typing.Iterator[InferenceRule]:
+        """Iterates over all inference-rules in the derivation, preserving order, filtering out axioms and theorems."""
+        for element in self:
+            if isinstance(element, Theorem):
+                yield element
+
+    def iterate_theorems(self) -> typing.Iterator[Theorem]:
+        """Iterates over all theorems in the derivation, preserving order, filtering out axioms and inference-rules."""
+        for element in self:
+            if isinstance(element, Theorem):
+                yield element
+
     def rep(self, **kwargs) -> str:
         header: str = 'Derivation:\n\t'
         valid_statements: str = '\n\t'.join(valid_statement.rep(**kwargs) for valid_statement in self)
         return f'{header}{valid_statements}'
+
+    @property
+    def theorems(self) -> Enumeration:
+        """Return an enumeration of all theorems in the derivation, preserving order, filtering out axioms and
+        inference-rules."""
+        return Enumeration(elements=tuple(self.iterate_theorems()))
 
     def to_derivation_builder(self) -> DerivationBuilder:
         return DerivationBuilder(valid_statements=self)
@@ -2776,7 +2812,7 @@ class Axiomatization(Derivation):
                 eb.append(term=valid_statement)
             else:
                 # Incorrect form.
-                raise_event(event_code=event_codes.e123, phi=valid_statement, phi_type_1=InferenceRule,
+                raise_error(error_code=event_codes.e123, phi=valid_statement, phi_type_1=InferenceRule,
                             phi_type_2=Axiom)
         valid_statements: Enumeration = eb.to_enumeration()
         o: tuple = super().__new__(cls, valid_statements=valid_statements)
