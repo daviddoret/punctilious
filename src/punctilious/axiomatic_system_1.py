@@ -513,18 +513,33 @@ class Formula(tuple):
 
     @property
     def term_0(self) -> Formula:
+        """
+        TODO: Extend the data model and reserve this method to sub-classes that have an n-th element. It should be
+        possible to use the __new__ method to properly type formulas based on their arity.
+        :return:
+        """
         if len(self) < 1:
             raise_error(error_code=event_codes.e103, c=self.c)
         return self[0]
 
     @property
     def term_1(self) -> Formula:
+        """
+        TODO: Extend the data model and reserve this method to sub-classes that have an n-th element. It should be
+        possible to use the __new__ method to properly type formulas based on their arity.
+        :return:
+        """
         if len(self) < 2:
             raise_error(error_code=event_codes.e104, c=self.c)
         return self[1]
 
     @property
     def term_2(self) -> Formula:
+        """
+        TODO: Extend the data model and reserve this method to sub-classes that have an n-th element. It should be
+        possible to use the __new__ method to properly type formulas based on their arity.
+        :return:
+        """
         if len(self) < 3:
             raise_error(error_code=event_codes.e104, c=self.c)
         return self[2]

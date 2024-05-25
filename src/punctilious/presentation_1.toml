@@ -1,0 +1,4 @@
+# configuration file
+
+[presentation_1]
+default_encoding = "unicode_extended"
