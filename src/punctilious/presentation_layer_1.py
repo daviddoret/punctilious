@@ -23,7 +23,7 @@ class ConfigurationSettings(dict):
         """
         module_path: str = __file__
         module_folder: pathlib.Path = pathlib.Path(module_path).parent
-        configuration_file_path: pathlib.Path = module_folder.joinpath('presentation_1.toml')
+        configuration_file_path: pathlib.Path = module_folder.joinpath('presentation_layer_1.toml')
         with open(file=configuration_file_path, mode='rb') as f:
             configuration: dict[str, typing.Any] = tomllib.load(f)
             for key, value in configuration.items():

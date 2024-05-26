@@ -6,6 +6,7 @@ import typing
 import warnings
 # import threading
 import sys
+import presentation_layer_1 as pl1
 
 _current_module = sys.modules[__name__]
 if __name__ == '__main__':
@@ -3009,13 +3010,15 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
     premises: Tupl = coerce_tupl(phi=premises)
     inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
 
-    for premise in premises:
-        if not theory.has_element(phi=premise):
-            # the premise is missing from the derivation
-            # trigger auto-derivations
-            for auto_derivation in theory.auto_derivations:
-                if auto_derivation.match(premise):
-                    theory = auto_derivation.derive(theory=theory, premise=premise)
+    if 1 == 2:
+        # TODO: Complete implementation
+        for premise in premises:
+            if not theory.has_element(phi=premise):
+                # the premise is missing from the derivation
+                # trigger auto-derivations
+                for auto_derivation in theory.auto_derivations:
+                    if auto_derivation.match(premise):
+                        theory = auto_derivation.derive(theory=theory, premise=premise)
 
     # configure the inference
     inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
@@ -3027,3 +3030,5 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
     theory: Derivation = Derivation(valid_statements=(*theory, theorem,))
 
     return theory, theorem
+
+# PRESENTATION LAYER

@@ -6,8 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_1.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inference_rules_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation_layer_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -282,7 +288,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -489,7 +495,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_presentation_1.TestSymbols.test_symbols" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_presentation_layer_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -502,11 +508,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_presentation_1.TestSymbols.test_symbols&quot;" />
+      <option name="_new_target" value="&quot;test_presentation_layer_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -519,7 +525,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration&quot;" />
+      <option name="_new_target" value="&quot;test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -540,7 +546,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_presentation_1.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in test_presentation_layer_1.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -553,7 +559,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_presentation_1.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_presentation_layer_1.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -584,9 +590,9 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3" />
-      <item itemvalue="Python tests.pytest for test_presentation_1.TestSymbols.test_symbols" />
-      <item itemvalue="Python tests.pytest for test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration" />
-      <item itemvalue="Python tests.pytest in test_presentation_1.py" />
+      <item itemvalue="Python tests.pytest for test_presentation_layer_1" />
+      <item itemvalue="Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration" />
+      <item itemvalue="Python tests.pytest in test_presentation_layer_1.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -594,10 +600,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration" />
-        <item itemvalue="Python tests.pytest in test_presentation_1.py" />
-        <item itemvalue="Python tests.pytest for test_presentation_1.TestSymbols.test_symbols" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration" />
+        <item itemvalue="Python tests.pytest in test_presentation_layer_1.py" />
+        <item itemvalue="Python tests.pytest for test_presentation_layer_1" />
         <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3" />
       </list>
     </recent_temporary>
@@ -617,14 +623,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00580" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1715252045786</created>
-      <option name="number" value="00580" />
-      <option name="presentableId" value="LOCAL-00580" />
-      <option name="project" value="LOCAL" />
-      <updated>1715252045786</updated>
     </task>
     <task id="LOCAL-00581" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1010,7 +1008,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716707200994</updated>
     </task>
-    <option name="localTasksCounter" value="629" />
+    <task id="LOCAL-00629" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1716729242450</created>
+      <option name="number" value="00629" />
+      <option name="presentableId" value="LOCAL-00629" />
+      <option name="project" value="LOCAL" />
+      <updated>1716729242451</updated>
+    </task>
+    <option name="localTasksCounter" value="630" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

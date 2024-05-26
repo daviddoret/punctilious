@@ -767,12 +767,12 @@ class TestDemonstration:
                                                          variables=(x, y, z,))
 
         # derive a theorem
-        demo2 = pu.as1.derive_OBSOLETE(theory=theory,
-                                       claim=a | star | c,
-                                       premises=(
-                                           a | star | b,
-                                           b | star | c,),
-                                       inference_rule=ir1)
+        demo2, _, = pu.as1.derive(theory=theory,
+                                  claim=a | star | c,
+                                  premises=(
+                                      a | star | b,
+                                      b | star | c,),
+                                  inference_rule=ir1)
         assert demo2.is_valid_statement(phi=a | star | c)
 
         with pytest.raises(pu.as1.CustomException, match='e123'):

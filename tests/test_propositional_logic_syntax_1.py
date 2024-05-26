@@ -21,11 +21,11 @@ class TestPropositionalLogicMetaTheory:
         theory = pu.as1.Axiomatization(axioms=(pu.pls1.i1, a1,))
 
         # derive: p is-a proposition
-        theory = pu.as1.derive_OBSOLETE(theory=theory,
-                                        claim=p | is_a | proposition,
-                                        premises=(
-                                            p | is_a | propositional_variable,),
-                                        inference_rule=pu.pls1.i1)
+        theory, _, = pu.as1.derive(theory=theory,
+                                   claim=p | is_a | proposition,
+                                   premises=(
+                                       p | is_a | propositional_variable,),
+                                   inference_rule=pu.pls1.i1)
         assert theory.is_valid_statement(phi=p | is_a | proposition)
 
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition
