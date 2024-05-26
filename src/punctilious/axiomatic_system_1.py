@@ -2723,9 +2723,6 @@ class Derivation(Enumeration):
     def __new__(cls, valid_statements: FlexibleEnumeration = None):
         # coerce to enumeration
         valid_statements: Enumeration = coerce_enumeration(phi=valid_statements)
-        # coerce all elements of the enumeration to valid-statements
-        # valid_statements: Enumeration = coerce_enumeration(
-        #    phi=(coerce_valid_statement(phi=p) for p in valid_statements))
         try:
             is_well_formed_derivation(phi=valid_statements, raise_event_if_false=True)
         except Exception as error:
@@ -2974,31 +2971,27 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     return inference_rule
 
 
-def derive_OBSOLETE(theory: FlexibleDerivation, claim: FlexibleFormula, premises: FlexibleTupl,
-                    inference_rule: FlexibleInferenceRule):
-    """Given a derivation t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
+class AutoDerivation:
+    def __init__(self, matching_template: Formula, template_variables: Enumeration):
+        self._matching_template: Formula = matching_template
+        self._template_variables: Enumeration = template_variables
 
-    :param theory:
-    :param premises:
-    :param inference_rule:
-    :return:
-    """
-    # parameters validation
-    theory: Derivation = coerce_derivation(phi=theory)
-    claim: Formula = coerce_formula(phi=claim)
-    premises: Tupl = coerce_tupl(phi=premises)
-    inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
+    def match(self, missing_theorem: Formula) -> bool:
+        """Return true if the structure of the
 
-    # configure the inference
-    inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
+        :param phi:
+        :return:
+        """
+        # if is_formula_equivalent_with_variables(phi=missing_theorem,psi=self.matching_template)
+        pass
 
-    # derive the new theorem
-    theorem: ValidStatement = Theorem(claim=claim, i=inference)
+    @property
+    def matching_template(self) -> Formula:
+        return self._matching_template
 
-    # extends the derivation
-    derivation: Derivation = Derivation(valid_statements=(*theory, theorem,))
-
-    return derivation
+    @property
+    def template_variables(self) -> Enumeration:
+        return self._template_variables
 
 
 def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: FlexibleTupl,
@@ -3016,13 +3009,21 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
     premises: Tupl = coerce_tupl(phi=premises)
     inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
 
+    for premise in premises:
+        if not theory.has_element(phi=premise):
+            # the premise is missing from the derivation
+            # trigger auto-derivations
+            for auto_derivation in theory.auto_derivations:
+                if auto_derivation.match(premise):
+                    theory = auto_derivation.derive(theory=theory, premise=premise)
+
     # configure the inference
     inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
 
     # derive the new theorem
     theorem: ValidStatement = Theorem(claim=claim, i=inference)
 
-    # extends the derivation
-    derivation: Derivation = Derivation(valid_statements=(*theory, theorem,))
+    # extends the theory
+    theory: Derivation = Derivation(valid_statements=(*theory, theorem,))
 
-    return derivation, theorem
+    return theory, theorem
