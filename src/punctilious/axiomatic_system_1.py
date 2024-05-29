@@ -3136,7 +3136,7 @@ class ClassicalFormulaTypesetter(pl1.Typesetter):
         yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
-class InfixFormulaTypesettingMethod(pl1.Typesetter):
+class InfixFormulaTypesetter(pl1.Typesetter):
     def __init__(self, symbol: pl1.Symbol):
         super().__init__()
         self._symbol: pl1.Symbol = symbol
@@ -3155,7 +3155,7 @@ class InfixFormulaTypesettingMethod(pl1.Typesetter):
         yield from phi.term_1.typeset_from_generator(**kwargs)
 
 
-class ConstantTypesettingMethod(pl1.Typesetter):
+class SymbolTypesetter(pl1.Typesetter):
     def __init__(self, symbol: pl1.Symbol):
         super().__init__()
         self._symbol: pl1.Symbol = symbol
@@ -3170,6 +3170,36 @@ class ConstantTypesettingMethod(pl1.Typesetter):
         yield from self.symbol.typeset_from_generator(**kwargs)
 
 
+class IndexedSymbolTypesetter(pl1.Typesetter):
+    def __init__(self, symbol: pl1.Symbol, index: int):
+        super().__init__()
+        self._symbol: pl1.Symbol = symbol
+        self._index: int = index
+
+    @property
+    def index(self) -> int:
+        return self._index
+
+    @property
+    def symbol(self) -> pl1.Symbol:
+        return self._symbol
+
+    def typeset_from_generator(self, phi: FlexibleFormula, encoding: typing.Optional[pl1.encodings], **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        if encoding is None:
+            encoding = pl1.encodings.default
+        phi: Formula = coerce_formula(phi=phi)
+        yield from self.symbol.typeset_from_generator(encoding=encoding, **kwargs)
+        if encoding is pl1.encodings.latex_math:
+            yield f'_{{{self.index}}}'
+        elif encoding is pl1.encodings.unicode_extended:
+            yield pl1.unicode_subscriptify(s=str(self.index))
+        elif encoding is pl1.encodings.unicode_limited:
+            yield str(self.index)
+        else:
+            raise ValueError('Unsupported encoding')
+
+
 class Typesetters:
     """A factory of out-of-the-box encodings."""
 
@@ -3178,14 +3208,17 @@ class Typesetters:
             st1.axiomatic_system_1_typesetters = super(Typesetters, cls).__new__(cls)
         return st1.axiomatic_system_1_typesetters
 
-    def constant(self, symbol: pl1.Symbol) -> ConstantTypesettingMethod:
-        return ConstantTypesettingMethod(symbol=symbol)
+    def constant(self, symbol: pl1.Symbol) -> SymbolTypesetter:
+        return SymbolTypesetter(symbol=symbol)
 
     def classical_formula(self, symbol: pl1.Symbol) -> ClassicalFormulaTypesetter:
         return ClassicalFormulaTypesetter(symbol=symbol)
 
-    def infix_formula(self, symbol: pl1.Symbol) -> InfixFormulaTypesettingMethod:
-        return InfixFormulaTypesettingMethod(symbol=symbol)
+    def indexed_symbol(self, symbol: pl1.Symbol, index: int) -> IndexedSymbolTypesetter:
+        return IndexedSymbolTypesetter(symbol=symbol, index=index)
+
+    def infix_formula(self, symbol: pl1.Symbol) -> InfixFormulaTypesetter:
+        return InfixFormulaTypesetter(symbol=symbol)
 
 
 typesetters = Typesetters()

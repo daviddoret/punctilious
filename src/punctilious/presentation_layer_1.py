@@ -313,3 +313,37 @@ class Symbols(dict):
 
 
 symbols = Symbols()
+
+unicode_subscript_dictionary = {'0': u'₀', '1': u'₁', '2': u'₂', '3': u'₃', '4': u'₄', '5': u'₅',
+                                '6': u'₆', '7': u'₇', '8': u'₈', '9': u'₉', 'a': u'ₐ', 'e': u'ₑ',
+                                'o': u'ₒ', 'x': u'ₓ',  # '???': u'ₔ',
+                                'h': u'ₕ', 'k': u'ₖ', 'l': u'ₗ', 'm': u'ₘ', 'n': u'ₙ', 'p': u'ₚ',
+                                's': u'ₛ', 't': u'ₜ', '+': u'₊', '-': u'₋', '=': u'₌', '(': u'₍',
+                                ')': u'₎', 'j': u'ⱼ', 'i': u'ᵢ',
+                                # Alternative from the Unicode Phonetic Extensions block: ᵢ
+                                'r': u'ᵣ',  # Source: Unicode Phonetic Extensions block.
+                                'u': u'ᵤ',  # Source: Unicode Phonetic Extensions block.
+                                'v': u'ᵥ',  # Source: Unicode Phonetic Extensions block.
+                                'β': u'ᵦ',  # Source: Unicode Phonetic Extensions block.
+                                'γ': u'ᵧ',  # Source: Unicode Phonetic Extensions block.
+                                # '???': u'ᵨ', # Source: Unicode Phonetic Extensions block.
+                                'φ': u'ᵩ',  # Source: Unicode Phonetic Extensions block.
+                                'χ': u'ᵪ'  # Source: Unicode Phonetic Extensions block.
+                                }
+
+
+def unicode_subscriptify(s: str = ''):
+    """Converts to unicode-subscript the string s.
+
+    This is done in best effort, knowing that Unicode only contains a small subset of subscript characters.
+
+    References:
+        * https://stackoverflow.com/questions/13875507/convert-numeric-strings-to-superscript
+        * https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts
+    """
+    global unicode_subscript_dictionary
+    if isinstance(s, int):
+        s = str(s)
+    if s is None or s == '':
+        return ''
+    return ''.join([unicode_subscript_dictionary.get(c, c) for c in s])
