@@ -6,6 +6,8 @@ import typing
 import warnings
 # import threading
 import sys
+
+import state_1 as st1
 import presentation_layer_1 as pl1
 
 _current_module = sys.modules[__name__]
@@ -199,12 +201,16 @@ def raise_error(error_code: ErrorCode, **kwargs):
 class Connective:
     """A node color in a formula tree."""
 
-    def __init__(self, rep: str):
+    def __init__(self, rep: typing.Optional[FlexibleRepresentation] = None, formula_typesetter: pl1.Typesetter = None):
         """
 
         :param rep: A default text representation.
         """
         self._rep = rep
+        # if formula_typesetter is None:
+        #    # TODO: Push the default symbol in the configuration file.
+        #    formula_typesetter: pl1.Typesetter = get_classical_formula_typesetter(symbol=pl1.symbols.asterisk_operator)
+        self._formula_typesetter: pl1.Typesetter = formula_typesetter
 
     def __call__(self, *args):
         """Allows pseudo formal language in python."""
@@ -215,6 +221,14 @@ class Connective:
 
     def __str__(self):
         return self.rep()
+
+    @property
+    def formula_typesetter(self) -> pl1.Typesetter:
+        return self._formula_typesetter
+
+    @formula_typesetter.setter
+    def formula_typesetter(self, formula_typesetter: pl1.Typesetter):
+        self._formula_typesetter = formula_typesetter
 
     def rep(self, **kwargs):
         return self._rep
@@ -420,7 +434,8 @@ class Formula(tuple):
         phi: Formula = coerce_formula(phi=phi)
         return True
 
-    def __new__(cls, connective: Connective, terms: FlexibleTupl = None):
+    def __new__(cls, connective: Connective, terms: FlexibleTupl = None,
+                typesetting_configuration: typing.Optional[pl1.TypesettingConfiguration] = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
@@ -434,10 +449,11 @@ class Formula(tuple):
         else:
             raise_error(error_code=event_codes.e101, c=connective, terms_type=type(terms), terms=terms)
 
-    def __init__(self, connective: Connective, terms: FlexibleTupl = None):
+    def __init__(self, connective: Connective, terms: FlexibleTupl = None,
+                 typesetting_configuration: typing.Optional[pl1.TypesettingConfiguration] = None):
+        super().__init__()
         self._connective = connective
-        # TODO: Question: should __init__ be called in classes that implement __new__?
-        # super().__init__()
+        self._typesetter: typing.Optional[pl1.TypesettingConfiguration] = typesetting_configuration
 
     def __contains__(self, phi: FlexibleFormula):
         """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
@@ -500,17 +516,23 @@ class Formula(tuple):
         return is_term_of_formula(phi=phi, psi=self)
 
     def rep(self, **kwargs) -> str:
-        parenthesis = kwargs.get('parenthesis', False)
-        kwargs['parenthesis'] = True
-        if isinstance(self.c, NullaryConnective):
-            return f'{self.c.rep()}'
-        elif isinstance(self.c, BinaryConnective):
-            return (f'{'(' if parenthesis else ''}'
-                    f'{self.term_0.rep(**kwargs)} {self.c.rep()} {self.term_1.rep(**kwargs)}'
-                    f'{')' if parenthesis else ''}')
+
+        if self.get_typesetter(typesetter=None) is not pl1.typesetters.failsafe:
+            # NEW METHOD
+            return self.typeset_as_string(**kwargs)
         else:
-            terms: str = ', '.join(term.rep(**kwargs) for term in self)
-            return f'{'(' if parenthesis else ''}{self.c.rep(**kwargs)}({terms}){')' if parenthesis else ''}'
+            # OBSOLETE METHOD, TO BE PROGRESSIVELY PHASED OUT
+            parenthesis = kwargs.get('parenthesis', False)
+            kwargs['parenthesis'] = True
+            if isinstance(self.c, NullaryConnective):
+                return f'{self.c.rep()}'
+            elif isinstance(self.c, BinaryConnective):
+                return (f'{'(' if parenthesis else ''}'
+                        f'{self.term_0.rep(**kwargs)} {self.c.rep()} {self.term_1.rep(**kwargs)}'
+                        f'{')' if parenthesis else ''}')
+            else:
+                terms: str = ', '.join(term.rep(**kwargs) for term in self)
+                return f'{'(' if parenthesis else ''}{self.c.rep(**kwargs)}({terms}){')' if parenthesis else ''}'
 
     @property
     def term_0(self) -> Formula:
@@ -551,6 +573,57 @@ class Formula(tuple):
         terms: tuple[FormulaBuilder, ...] = tuple(coerce_formula_builder(phi=term) for term in self)
         phi: FormulaBuilder = FormulaBuilder(c=self.c, terms=terms)
         return phi
+
+    def get_typesetter(self, typesetter: typing.Optional[
+        pl1.Typesetter] = None) -> pl1.Typesetter:
+        """
+
+         - priority 1: parameter typesetter is passed explicitly.
+         - priority 2: a typesetting-configuration is attached to the formula, and its typesetting-method is defined.
+         - priority 3: a typesetting-configuration is attached to the formula connective, and its typesetting-method is defined.
+         - priority 4: failsafe typesetting method.
+
+        :param typesetter:
+        :return:
+        """
+
+        if typesetter is None:
+            if self.typesetter is not None:
+                typesetter: pl1.Typesetter = self.typesetter
+            elif self.c.formula_typesetter is not None:
+                typesetter: pl1.Typesetter = self.c.formula_typesetter
+            else:
+                typesetter = pl1.typesetters.failsafe
+        return typesetter
+
+    def typeset_as_string(self, typesetter: typing.Optional[pl1.Typesetter] = None, **kwargs) -> str:
+        """Returns a python-string from the typesetting-method.
+
+        If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
+        If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
+        loading all the content in memory.
+        """
+        typesetter = self.get_typesetter(typesetter=typesetter)
+        return typesetter.typeset_as_string(phi=self, **kwargs)
+
+    def typeset_from_generator(self, typesetter: typing.Optional[pl1.Typesetter] = None, **kwargs) -> \
+            typing.Generator[str, None, None]:
+        """Generates a stream of python-string chunks from the typesetting-method.
+
+        If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
+        If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
+        loading all the content in memory.
+        """
+        typesetter = self.get_typesetter(typesetter=typesetter)
+        yield from typesetter.typeset_from_generator(phi=self, **kwargs)
+
+    @property
+    def typesetter(self) -> pl1.Typesetter:
+        return self._typesetter
+
+    @typesetter.setter
+    def typesetter(self, typesetter: pl1.Typesetter):
+        self._typesetter = typesetter
 
 
 def coerce_formula_builder(phi: FlexibleFormula = None) -> FormulaBuilder:
@@ -759,9 +832,11 @@ class FixedArityConnective(Connective):
     """A fixed-arity connective is a connective with a constraint on its arity,
     that is its number of descendant notes."""
 
-    def __init__(self, rep: str, fixed_arity_constraint: int):
+    def __init__(self,
+                 fixed_arity_constraint: int, formula_typesetter: pl1.Typesetter = None,
+                 rep: FlexibleRepresentation = None):
         self._fixed_arity_constraint = fixed_arity_constraint
-        super().__init__(rep=rep)
+        super().__init__(formula_typesetter=formula_typesetter, rep=rep)
 
     @property
     def fixed_arity_constraint(self) -> int:
@@ -770,7 +845,7 @@ class FixedArityConnective(Connective):
 
 class NullaryConnective(FixedArityConnective):
 
-    def __init__(self, rep: str):
+    def __init__(self, rep: FlexibleRepresentation = None):
         super().__init__(rep=rep, fixed_arity_constraint=0)
 
 
@@ -838,8 +913,8 @@ class InfixPartialFormula:
 
 class BinaryConnective(FixedArityConnective):
 
-    def __init__(self, rep: str):
-        super().__init__(rep=rep, fixed_arity_constraint=2)
+    def __init__(self, rep: FlexibleRepresentation = None, formula_typesetter: pl1.Typesetter = None):
+        super().__init__(formula_typesetter=formula_typesetter, rep=rep, fixed_arity_constraint=2)
 
     def __ror__(self, other: FlexibleFormula):
         """Pseudo math notation. x | p | ?."""
@@ -981,19 +1056,22 @@ def v(rep: FlexibleRepresentation) -> typing.Union[
     return let_x_be_a_variable(rep=rep)
 
 
-FlexibleRepresentation = typing.Optional[typing.Union[str, typing.Iterable[str]]]
-"""FlexibleRepresentation is a flexible python type that may be safely coerced into an Enumeration or a 
-EnumerationBuilder."""
+FlexibleRepresentation = typing.Union[str, pl1.Symbol, pl1.Typesetter]
+"""FlexibleRepresentation is a flexible python type that may be safely coerced to a symbolic representation."""
+
+FlexibleMultiRepresentation = typing.Union[FlexibleRepresentation, typing.Iterable[FlexibleRepresentation]]
+"""FlexibleMultiRepresentation is a flexible python type that may be safely coerced to a single or multiple symbolic 
+representation."""
 
 
-def let_x_be_a_simple_object(rep: FlexibleRepresentation) -> typing.Union[
+def let_x_be_a_simple_object(rep: typing.Optional[FlexibleMultiRepresentation] = None) -> typing.Union[
     SimpleObject, typing.Generator[SimpleObject, typing.Any, None]]:
     """A helper function to declare one or multiple simple-objects.
 
     :param rep: A string (or an iterable of strings) default representation for the simple-object(s).
     :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
     """
-    if isinstance(rep, str):
+    if isinstance(rep, FlexibleRepresentation):
         return SimpleObject(connective=NullaryConnective(rep=rep))
     elif isinstance(rep, typing.Iterable):
         return (SimpleObject(connective=NullaryConnective(rep=r)) for r in rep)
@@ -3031,4 +3109,83 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
 
     return theory, theorem
 
+
 # PRESENTATION LAYER
+
+class ClassicalFormulaTypesetter(pl1.Typesetter):
+    def __init__(self, symbol: pl1.Symbol):
+        super().__init__()
+        self._symbol: pl1.Symbol = symbol
+
+    @property
+    def symbol(self) -> pl1.Symbol:
+        return self._symbol
+
+    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Formula = coerce_formula(phi=phi)
+        yield from self.symbol.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
+        first = True
+        for term in phi:
+            if not first:
+                yield from pl1.symbols.collection_separator.typeset_from_generator(**kwargs)
+            else:
+                first = False
+            yield from term.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
+
+
+class InfixFormulaTypesettingMethod(pl1.Typesetter):
+    def __init__(self, symbol: pl1.Symbol):
+        super().__init__()
+        self._symbol: pl1.Symbol = symbol
+
+    @property
+    def symbol(self) -> pl1.Symbol:
+        return self._symbol
+
+    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Formula = coerce_formula(phi=phi)
+        yield from phi.term_0.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+        yield from self.symbol.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+        yield from phi.term_1.typeset_from_generator(**kwargs)
+
+
+class ConstantTypesettingMethod(pl1.Typesetter):
+    def __init__(self, symbol: pl1.Symbol):
+        super().__init__()
+        self._symbol: pl1.Symbol = symbol
+
+    @property
+    def symbol(self) -> pl1.Symbol:
+        return self._symbol
+
+    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Formula = coerce_formula(phi=phi)
+        yield from self.symbol.typeset_from_generator(**kwargs)
+
+
+class Typesetters:
+    """A factory of out-of-the-box encodings."""
+
+    def __new__(cls):
+        if st1.axiomatic_system_1_typesetters is None:
+            st1.axiomatic_system_1_typesetters = super(Typesetters, cls).__new__(cls)
+        return st1.axiomatic_system_1_typesetters
+
+    def constant(self, symbol: pl1.Symbol) -> ConstantTypesettingMethod:
+        return ConstantTypesettingMethod(symbol=symbol)
+
+    def classical_formula(self, symbol: pl1.Symbol) -> ClassicalFormulaTypesetter:
+        return ClassicalFormulaTypesetter(symbol=symbol)
+
+    def infix_formula(self, symbol: pl1.Symbol) -> InfixFormulaTypesettingMethod:
+        return InfixFormulaTypesettingMethod(symbol=symbol)
+
+
+typesetters = Typesetters()

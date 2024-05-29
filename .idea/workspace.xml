@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/state_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_interactive_graphs.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts/prebuild_generate_theory_interactive_graphs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_1.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inference_rules_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_presentation_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation_layer_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation_layer_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,6 +177,7 @@
     "Python tests.pytest for test_pl1.TestPL1ML.test_substitute_meta_variables.executor": "Debug",
     "Python tests.pytest for test_presentation_1.TestSymbols.test_symbols.executor": "Run",
     "Python tests.pytest for test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration.executor": "Run",
+    "Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1.executor": "Run",
     "Python tests.pytest for test_typesetting.TestHierarchicalClass.test_is_subclass_of.executor": "Run",
     "Python tests.pytest for test_typesetting.TestIndexSymbol.test_to_string.executor": "Run",
@@ -204,7 +203,7 @@
     "Python tests.pytest in test_propositional_logic_syntax_1.py.executor": "Run",
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Run",
+    "Python tests.pytest in tests.executor": "Debug",
     "Python.__init__.executor": "Run",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
@@ -288,7 +287,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -600,8 +599,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_presentation_layer_1.py" />
         <item itemvalue="Python tests.pytest for test_presentation_layer_1" />
         <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3" />
@@ -623,14 +622,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00581" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1715279395374</created>
-      <option name="number" value="00581" />
-      <option name="presentableId" value="LOCAL-00581" />
-      <option name="project" value="LOCAL" />
-      <updated>1715279395375</updated>
     </task>
     <task id="LOCAL-00582" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1016,7 +1007,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716729242451</updated>
     </task>
-    <option name="localTasksCounter" value="630" />
+    <task id="LOCAL-00630" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1716740806801</created>
+      <option name="number" value="00630" />
+      <option name="presentableId" value="LOCAL-00630" />
+      <option name="project" value="LOCAL" />
+      <updated>1716740806801</updated>
+    </task>
+    <option name="localTasksCounter" value="631" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1134,14 +1133,9 @@
           <option name="timeStamp" value="180" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>205</line>
-          <option name="timeStamp" value="326" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>184</line>
-          <option name="timeStamp" value="327" />
+          <url>file://$PROJECT_DIR$/src/punctilious/presentation_layer_1.py</url>
+          <line>199</line>
+          <option name="timeStamp" value="335" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

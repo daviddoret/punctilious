@@ -5,6 +5,8 @@ import typing
 import tomllib
 import pathlib
 
+import state_1 as st1
+
 
 class ConfigurationSettings(dict):
     _singleton = None
@@ -54,12 +56,11 @@ class Encoding:
 
 class Encodings(dict):
     """A catalog of out-of-the-box encodings."""
-    _singleton = None
 
     def __new__(cls):
-        if cls._singleton is None:
-            cls._singleton = super(Encodings, cls).__new__(cls)
-        return cls._singleton
+        if st1.presentation_layer_1_encodings is None:
+            st1.presentation_layer_1_encodings = super(Encodings, cls).__new__(cls)
+        return st1.presentation_layer_1_encodings
 
     def __init__(self):
         global configuration_settings
@@ -119,36 +120,30 @@ class Encodings(dict):
 encodings = Encodings()
 
 
-class TypesettingMethod(abc.ABC):
+class Typesetter(abc.ABC):
     """An abstract class that represent a typesetting-method with the capability to typeset objects. It exposes
     two key methods:
      - typeset_as_string(...)
      - typeset_from_generator(...)
      """
 
-    def __init__(self, key: str):
-        self._key = key
-
     def __repr__(self) -> str:
         return self.typeset_as_string(encoding=None)
 
     def __str__(self) -> str:
         return self.typeset_as_string(encoding=None)
 
-    @property
-    def key(self):
-        return self._key
-
-    def typeset_as_string(self, encoding: typing.Optional[Encoding] = None, **kwargs) -> str:
+    def typeset_as_string(self, **kwargs) -> str:
         """Returns a python-string from the typesetting-method.
 
         If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
         If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
         loading all the content in memory.
         """
-        raise NotImplementedError('This is an abstract method.')
+        return ''.join(self.typeset_from_generator(**kwargs))
 
-    def typeset_from_generator(self, encoding: typing.Optional[Encoding] = None, **kwargs) -> (
+    @abc.abstractmethod
+    def typeset_from_generator(self, **kwargs) -> (
             typing.Generator)[str, None, None]:
         """Generates a stream of python-string chunks from the typesetting-method.
 
@@ -159,154 +154,43 @@ class TypesettingMethod(abc.ABC):
         raise NotImplementedError('This is an abstract method.')
 
 
-class FailsafeTypesettingMethod(TypesettingMethod):
+class FailsafeTypesetter(Typesetter):
     def __init__(self):
-        super().__init__(key='failsafe-typesetting-method')
-
-    def typeset_as_string(self, encoding: typing.Optional[Encoding] = None, **kwargs) -> str:
-        return f'python-object-{id(self)}'
+        super().__init__()
 
     def typeset_from_generator(self, encoding: typing.Optional[Encoding] = None, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        yield from self.typeset_as_string(encoding=encoding, **kwargs)
+        yield f'python-object-{id(self)}'
 
 
-class TypesettingMethods(dict):
-    """A catalog of out-of-the-box encodings."""
-    _singleton = None
+class Typesetters:
+    """A factory of out-of-the-box encodings."""
 
     def __new__(cls):
-        if cls._singleton is None:
-            cls._singleton = super(TypesettingMethods, cls).__new__(cls)
-        return cls._singleton
+        if st1.presentation_layer_1_typesetters is None:
+            st1.presentation_layer_1_typesetters = super(Typesetters, cls).__new__(cls)
+        return st1.presentation_layer_1_typesetters
 
-    def __init__(self):
-        global configuration_settings
-        super().__init__()
-        self._failsafe = self._register(typesetting_method=FailsafeTypesettingMethod())
-
-    def _register(self, typesetting_method: TypesettingMethod) -> TypesettingMethod:
-        self[typesetting_method.key] = typesetting_method
-        return typesetting_method
-
-    @property
-    def failsafe(self):
-        return self._failsafe
+    def failsafe(self) -> FailsafeTypesetter:
+        return FailsafeTypesetter()
 
 
-typesetting_methods = TypesettingMethods()
+typesetters = Typesetters()
 
 
-class Typesettable:
-    """A typesettable is a python object equipped with a reusable typesetting-configuration.
-
-    By inheriting from Typesettable, typesetting capabilities are added to the original class."""
-
-    def __init__(self, typesetting_configuration: typing.Optional[TypesettingConfiguration] = None):
-        if typesetting_configuration is None:
-            typesetting_configuration: TypesettingConfiguration = TypesettingConfiguration(typesetting_method=None)
-        self._typesetting_configuration: TypesettingConfiguration = typesetting_configuration
-
-    def __repr__(self) -> str:
-        return self.typeset_as_string(encoding=None)
-
-    def __str__(self) -> str:
-        return self.typeset_as_string(encoding=None)
-
-    @property
-    def typesetting_configuration(self) -> TypesettingConfiguration:
-        return self._typesetting_configuration
-
-    @typesetting_configuration.setter
-    def typesetting_configuration(self, typesetting_configuration: TypesettingConfiguration):
-        self._typesetting_configuration = typesetting_configuration
-
-    def typeset_as_string(self, encoding: typing.Optional[Encoding] = None, **kwargs) -> str:
-        """Returns a python-string from the typesetting-method.
-
-        If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
-        If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
-        loading all the content in memory.
-        """
-        if encoding is None:
-            encoding = encodings.default
-        return self.typesetting_configuration.typeset_as_string(encoding=encoding, **kwargs)
-
-    def typeset_from_generator(self, encoding: typing.Optional[Encoding] = None, **kwargs) -> (
-            typing.Generator)[str, None, None]:
-        """Generates a stream of python-string chunks from the typesetting-method.
-
-        If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
-        If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
-        loading all the content in memory.
-        """
-        if encoding is None:
-            encoding = encodings.default
-        yield from self.typesetting_configuration.typeset_from_generator(encoding=encoding, **kwargs)
-
-
-class TypesettingConfiguration:
-    """A typesetting-configuration equips an object to provide re-configurable typesetting capabilities:
-     - typesetting as a string via the typeset_as_string(...) method,
-     - typesetting from a generator via the typeset_from_generator(...) method,
-     - the capability to reuse the typesetting-configuration across objects, e.g.:
-      PropositionVariableTypesettingConfiguration, etc.
-     - the capability to modify the typesetting-configuration typesetting-method to change the way some objects
-      are typeset.
-    """
-
-    def __init__(self, typesetting_method: typing.Optional[TypesettingMethod] = None):
-        self._typesetting_method: typing.Optional[TypesettingMethod] = typesetting_method
-
-    def __repr__(self) -> str:
-        return self.typeset_as_string(encoding=None)
-
-    def __str__(self) -> str:
-        return self.typeset_as_string(encoding=None)
-
-    def typeset_as_string(self, encoding: typing.Optional[Encoding] = None, **kwargs) -> str:
-        """Returns a python-string from the typesetting-method.
-
-        If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
-        If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
-        loading all the content in memory.
-        """
-        global typesetting_methods
-        if self.typesetting_method is not None:
-            return self.typesetting_method.typeset_as_string(encoding=encoding, **kwargs)
-        else:
-            return typesetting_methods.failsafe.typeset_as_string(encoding=encoding, **kwargs)
-
-    def typeset_from_generator(self, encoding: typing.Optional[Encoding] = None, **kwargs) -> (
-            typing.Generator)[str, None, None]:
-        """Generates a stream of python-string chunks from the typesetting-method.
-
-        If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
-        If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
-        loading all the content in memory.
-        """
-        if self.typesetting_method is not None:
-            yield from self.typesetting_method.typeset_as_string(encoding=encoding, **kwargs)
-        else:
-            yield from typesetting_methods.failsafe.typeset_as_string(encoding=encoding, **kwargs)
-
-    @property
-    def typesetting_method(self) -> typing.Optional[TypesettingMethod]:
-        return self._typesetting_method
-
-    @typesetting_method.setter
-    def typesetting_method(self, typesetting_method: typing.Optional[TypesettingMethod]):
-        self._typesetting_method: typing.Optional[TypesettingMethod] = typesetting_method
-
-
-class Symbol(TypesettingMethod):
+class Symbol(Typesetter):
     """An atomic symbol."""
 
     def __init__(self, key: str, latex_math: str, unicode_extended: str, unicode_limited: str):
+        self._key = key
         self._latex_math: str = latex_math
         self._unicode_extended: str = unicode_extended
         self._unicode_limited: str = unicode_limited
-        super().__init__(key=key)
+        super().__init__()
+
+    @property
+    def key(self) -> str:
+        return self._key
 
     @property
     def latex_math(self) -> str:
@@ -429,20 +313,3 @@ class Symbols(dict):
 
 
 symbols = Symbols()
-
-
-class InfixBinaryFormulaTypesettingMethod(TypesettingMethod):
-    def __init__(self, connective_symbol: Symbol):
-        super().__init__()
-        self._connective_symbol = connective_symbol
-
-    @property
-    def connective_symbol(self) -> Symbol:
-        return self._connective_symbol
-
-    def typeset_as_string(self, phi: BinaryFormula, **kwargs) -> str:
-        return f'{phi.term_0.rep(**kwargs)}{symbols.space}{symbols.space}{symbols.space}{phi.term_1.rep(**kwargs)}'
-
-
-class IndexedSymbol(TypesettingMethod):
-    pass
