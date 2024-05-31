@@ -198,23 +198,23 @@ def raise_error(error_code: ErrorCode, **kwargs):
         warnings.warn(message=exception.rep())
 
 
-class DashedVariableTypesetter(pl1.Typesetter):
+class TextTypesetter(pl1.Typesetter):
     """TODO: implement support for multiple font variants.
 
     """
 
-    def __init__(self, dashed_variable: str):
+    def __init__(self, text: str):
         super().__init__()
-        self._dashed_variable: str = dashed_variable
+        self._text: str = text
 
     @property
-    def dashed_variable(self) -> str:
-        return self._dashed_variable
+    def text(self) -> str:
+        return self._text
 
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
-        yield self.dashed_variable
+        yield self.text
 
 
 class Connective:
@@ -231,7 +231,7 @@ class Connective:
             # if len(rep) == 1:
             #    formula_typesetter = pl1.symbols.get_sans_serif_letter(letter=rep)
             # else:
-            formula_typesetter = DashedVariableTypesetter(dashed_variable=rep)
+            formula_typesetter = TextTypesetter(text=rep)
         self._formula_typesetter: pl1.Typesetter = formula_typesetter
 
     def __call__(self, *args):
@@ -3236,8 +3236,8 @@ class Typesetters:
     def classical_formula(self, symbol: pl1.Symbol) -> ClassicalFormulaTypesetter:
         return ClassicalFormulaTypesetter(symbol=symbol)
 
-    def dashed_variable(self, dashed_variable: str) -> DashedVariableTypesetter:
-        return DashedVariableTypesetter(dashed_variable=dashed_variable)
+    def text(self, text: str) -> TextTypesetter:
+        return TextTypesetter(text=text)
 
     def indexed_symbol(self, symbol: pl1.Symbol, index: int) -> IndexedSymbolTypesetter:
         return IndexedSymbolTypesetter(symbol=symbol, index=index)
