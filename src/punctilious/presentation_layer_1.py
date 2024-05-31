@@ -340,6 +340,15 @@ class Symbols(dict):
         self._e_lowercase_serif_italic = self._register(
             Symbol(key='e_lowercase_serif_italic', latex_math='\\textit{e}', unicode_extended='𝑒',
                    unicode_limited='e'))
+        self._f_lowercase_serif_italic = self._register(
+            Symbol(key='f_lowercase_serif_italic', latex_math='\\textit{f}', unicode_extended='𝑓',
+                   unicode_limited='f'))
+        self._g_lowercase_serif_italic = self._register(
+            Symbol(key='g_lowercase_serif_italic', latex_math='\\textit{g}', unicode_extended='𝑔',
+                   unicode_limited='g'))
+        self._h_lowercase_serif_italic = self._register(
+            Symbol(key='h_lowercase_serif_italic', latex_math='\\textit{h}', unicode_extended='ℎ',
+                   unicode_limited='h'))
         self._p_lowercase_serif_italic = self._register(
             Symbol(key='p_lowercase_serif_italic', latex_math='\\textit{p}', unicode_extended='𝑝',
                    unicode_limited='p'))
@@ -374,6 +383,15 @@ class Symbols(dict):
         self._e_uppercase_serif_italic = self._register(
             Symbol(key='e_uppercase_serif_italic', latex_math='\\textit{E}', unicode_extended='𝐸',
                    unicode_limited='E'))
+        self._f_uppercase_serif_italic = self._register(
+            Symbol(key='f_uppercase_serif_italic', latex_math='\\textit{F}', unicode_extended='𝐹',
+                   unicode_limited='F'))
+        self._g_uppercase_serif_italic = self._register(
+            Symbol(key='g_uppercase_serif_italic', latex_math='\\textit{G}', unicode_extended='𝐺',
+                   unicode_limited='G'))
+        self._h_uppercase_serif_italic = self._register(
+            Symbol(key='h_uppercase_serif_italic', latex_math='\\textit{H}', unicode_extended='𝐻',
+                   unicode_limited='H'))
         self._p_uppercase_serif_italic = self._register(
             Symbol(key='p_uppercase_serif_italic', latex_math='\\textit{P}', unicode_extended='𝑃',
                    unicode_limited='P'))
@@ -397,8 +415,14 @@ class Symbols(dict):
         self[symbol.key] = symbol
         return symbol
 
-    def get_sans_serif_letter(self, letter: str):
-        if not len(letter) == 1 or not letter.isalpha():
+    def is_sans_serif_letter(self, letter: str) -> bool:
+        if letter is None or not len(letter) == 1 or not letter.isalpha():
+            return False
+        else:
+            return True
+
+    def get_sans_serif_letter(self, letter: str) -> Symbol:
+        if not self.is_sans_serif_letter(letter=letter):
             raise ValueError(f'ooooops')
         case: str
         if letter.islower():
@@ -465,6 +489,18 @@ class Symbols(dict):
         return self._e_lowercase_serif_italic
 
     @property
+    def f_lowercase_serif_italic(self) -> Symbol:
+        return self._f_lowercase_serif_italic
+
+    @property
+    def g_lowercase_serif_italic(self) -> Symbol:
+        return self._g_lowercase_serif_italic
+
+    @property
+    def h_lowercase_serif_italic(self) -> Symbol:
+        return self._h_lowercase_serif_italic
+
+    @property
     def p_lowercase_serif_italic(self) -> Symbol:
         return self._p_lowercase_serif_italic
 
@@ -505,6 +541,18 @@ class Symbols(dict):
     @property
     def d_uppercase_serif_italic(self) -> Symbol:
         return self._d_uppercase_serif_italic
+
+    @property
+    def f_uppercase_serif_italic(self) -> Symbol:
+        return self._f_uppercase_serif_italic
+
+    @property
+    def g_uppercase_serif_italic(self) -> Symbol:
+        return self._g_uppercase_serif_italic
+
+    @property
+    def h_uppercase_serif_italic(self) -> Symbol:
+        return self._h_uppercase_serif_italic
 
     @property
     def e_uppercase_serif_italic(self) -> Symbol:

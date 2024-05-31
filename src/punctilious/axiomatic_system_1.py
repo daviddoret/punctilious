@@ -209,10 +209,10 @@ class Connective:
         self._rep = rep
         if formula_typesetter is None and rep is not None:
             # temporary fix
-            # if len(rep) == 1:
-            #    formula_typesetter = pl1.symbols.get_sans_serif_letter(letter=rep)
-            # else:
-            formula_typesetter = pl1.typesetters.text(text=rep)
+            if pl1.symbols.is_sans_serif_letter(letter=rep):
+                formula_typesetter = pl1.symbols.get_sans_serif_letter(letter=rep)
+            else:
+                formula_typesetter = pl1.typesetters.text(text=rep)
         self._formula_typesetter: pl1.Typesetter = formula_typesetter
 
     def __call__(self, *args):
