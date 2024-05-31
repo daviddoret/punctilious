@@ -239,6 +239,7 @@ class Symbols(dict):
 
     def __init__(self):
         super().__init__()
+        # Symbols and punctuation
         self._asterisk_operator = self._register(
             Symbol(key='asterisk_operator', latex_math='\\ast', unicode_extended='∗', unicode_limited='*'))
         self._close_parenthesis = self._register(
@@ -249,6 +250,60 @@ class Symbols(dict):
             Symbol(key='not_sign', latex_math='\\lnot', unicode_extended='¬', unicode_limited='not'))
         self._open_parenthesis = self._register(
             Symbol(key='open_parenthesis', latex_math='\\left(', unicode_extended='(', unicode_limited='('))
+        self._rightwards_arrow = self._register(
+            Symbol(key='rightwards_arrow', latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->'))
+        self._space = self._register(Symbol(key='space', latex_math=' ', unicode_extended=' ', unicode_limited=' '))
+        self._tilde = self._register(Symbol(key='tilde', latex_math='\\sim', unicode_extended='~', unicode_limited='~'))
+        # Lowercase serif italic
+        self._a_lowercase_serif_italic = self._register(
+            Symbol(key='a_lowercase_serif_italic', latex_math='\\textit{a}', unicode_extended='𝑎',
+                   unicode_limited='a'))
+        self._b_lowercase_serif_italic = self._register(
+            Symbol(key='b_lowercase_serif_italic', latex_math='\\textit{b}', unicode_extended='𝑏',
+                   unicode_limited='b'))
+        self._c_lowercase_serif_italic = self._register(
+            Symbol(key='c_lowercase_serif_italic', latex_math='\\textit{c}', unicode_extended='𝑐',
+                   unicode_limited='c'))
+        self._d_lowercase_serif_italic = self._register(
+            Symbol(key='d_lowercase_serif_italic', latex_math='\\textit{d}', unicode_extended='𝑑',
+                   unicode_limited='d'))
+        self._e_lowercase_serif_italic = self._register(
+            Symbol(key='e_lowercase_serif_italic', latex_math='\\textit{e}', unicode_extended='𝑒',
+                   unicode_limited='e'))
+        self._p_lowercase_serif_italic = self._register(
+            Symbol(key='p_lowercase_serif_italic', latex_math='\\textit{p}', unicode_extended='𝑝',
+                   unicode_limited='p'))
+        self._q_lowercase_serif_italic = self._register(
+            Symbol(key='q_lowercase_serif_italic', latex_math='\\textit{q}', unicode_extended='𝑞',
+                   unicode_limited='q'))
+        self._r_lowercase_serif_italic = self._register(
+            Symbol(key='r_lowercase_serif_italic', latex_math='\\textit{r}', unicode_extended='𝑟',
+                   unicode_limited='r'))
+        self._x_lowercase_serif_italic = self._register(
+            Symbol(key='x_lowercase_serif_italic', latex_math='\\textit{x}', unicode_extended='𝑥',
+                   unicode_limited='x'))
+        self._y_lowercase_serif_italic = self._register(
+            Symbol(key='y_lowercase_serif_italic', latex_math='\\textit{y}', unicode_extended='𝑦',
+                   unicode_limited='y'))
+        self._z_lowercase_serif_italic = self._register(
+            Symbol(key='z_lowercase_serif_italic', latex_math='\\textit{z}', unicode_extended='𝑧',
+                   unicode_limited='z'))
+        # Uppercase serif italic
+        self._a_uppercase_serif_italic = self._register(
+            Symbol(key='a_uppercase_serif_italic', latex_math='\\textit{A}', unicode_extended='𝐴',
+                   unicode_limited='A'))
+        self._b_uppercase_serif_italic = self._register(
+            Symbol(key='b_uppercase_serif_italic', latex_math='\\textit{B}', unicode_extended='𝐵',
+                   unicode_limited='B'))
+        self._c_uppercase_serif_italic = self._register(
+            Symbol(key='c_uppercase_serif_italic', latex_math='\\textit{C}', unicode_extended='𝐶',
+                   unicode_limited='C'))
+        self._d_uppercase_serif_italic = self._register(
+            Symbol(key='d_uppercase_serif_italic', latex_math='\\textit{D}', unicode_extended='𝐷',
+                   unicode_limited='D'))
+        self._e_uppercase_serif_italic = self._register(
+            Symbol(key='e_uppercase_serif_italic', latex_math='\\textit{E}', unicode_extended='𝐸',
+                   unicode_limited='E'))
         self._p_uppercase_serif_italic = self._register(
             Symbol(key='p_uppercase_serif_italic', latex_math='\\textit{P}', unicode_extended='𝑃',
                    unicode_limited='P'))
@@ -258,14 +313,32 @@ class Symbols(dict):
         self._r_uppercase_serif_italic = self._register(
             Symbol(key='r_uppercase_serif_italic', latex_math='\\textit{R}', unicode_extended='𝑅',
                    unicode_limited='R'))
-        self._rightwards_arrow = self._register(
-            Symbol(key='rightwards_arrow', latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->'))
-        self._space = self._register(Symbol(key='space', latex_math=' ', unicode_extended=' ', unicode_limited=' '))
-        self._tilde = self._register(Symbol(key='tilde', latex_math='\\sim', unicode_extended='~', unicode_limited='~'))
+        self._x_uppercase_serif_italic = self._register(
+            Symbol(key='x_uppercase_serif_italic', latex_math='\\textit{X}', unicode_extended='𝑋',
+                   unicode_limited='X'))
+        self._y_uppercase_serif_italic = self._register(
+            Symbol(key='y_uppercase_serif_italic', latex_math='\\textit{Y}', unicode_extended='𝑌',
+                   unicode_limited='Y'))
+        self._z_uppercase_serif_italic = self._register(
+            Symbol(key='z_uppercase_serif_italic', latex_math='\\textit{Z}', unicode_extended='𝑍',
+                   unicode_limited='Z'))
 
     def _register(self, symbol: Symbol):
         self[symbol.key] = symbol
         return symbol
+
+    def get_sans_serif_letter(self, letter: str):
+        if not len(letter) == 1 or not letter.isalpha():
+            raise ValueError(f'ooooops')
+        case: str
+        if letter.islower():
+            case = 'lowercase'
+        else:
+            case = 'uppercase'
+        key: str = f'{letter.lower()}_{case}_serif_italic'
+        return self[key]
+
+    # Symbols and punctuation
 
     @property
     def asterisk_operator(self) -> Symbol:
@@ -288,6 +361,86 @@ class Symbols(dict):
         return self._open_parenthesis
 
     @property
+    def rightwards_arrow(self) -> Symbol:
+        return self._rightwards_arrow
+
+    @property
+    def space(self) -> Symbol:
+        return self._space
+
+    @property
+    def tilde(self) -> Symbol:
+        return self._tilde
+
+    # Lowercase serif italic
+
+    @property
+    def a_lowercase_serif_italic(self) -> Symbol:
+        return self._a_lowercase_serif_italic
+
+    @property
+    def b_lowercase_serif_italic(self) -> Symbol:
+        return self._b_lowercase_serif_italic
+
+    @property
+    def c_lowercase_serif_italic(self) -> Symbol:
+        return self._c_lowercase_serif_italic
+
+    @property
+    def d_lowercase_serif_italic(self) -> Symbol:
+        return self._d_lowercase_serif_italic
+
+    @property
+    def e_lowercase_serif_italic(self) -> Symbol:
+        return self._e_lowercase_serif_italic
+
+    @property
+    def p_lowercase_serif_italic(self) -> Symbol:
+        return self._p_lowercase_serif_italic
+
+    @property
+    def q_lowercase_serif_italic(self) -> Symbol:
+        return self._q_lowercase_serif_italic
+
+    @property
+    def r_lowercase_serif_italic(self) -> Symbol:
+        return self._r_lowercase_serif_italic
+
+    @property
+    def x_lowercase_serif_italic(self) -> Symbol:
+        return self._x_lowercase_serif_italic
+
+    @property
+    def y_lowercase_serif_italic(self) -> Symbol:
+        return self._y_lowercase_serif_italic
+
+    @property
+    def z_lowercase_serif_italic(self) -> Symbol:
+        return self._z_lowercase_serif_italic
+
+    # Uppercase serif italic
+
+    @property
+    def a_uppercase_serif_italic(self) -> Symbol:
+        return self._a_uppercase_serif_italic
+
+    @property
+    def b_uppercase_serif_italic(self) -> Symbol:
+        return self._b_uppercase_serif_italic
+
+    @property
+    def c_uppercase_serif_italic(self) -> Symbol:
+        return self._c_uppercase_serif_italic
+
+    @property
+    def d_uppercase_serif_italic(self) -> Symbol:
+        return self._d_uppercase_serif_italic
+
+    @property
+    def e_uppercase_serif_italic(self) -> Symbol:
+        return self._e_uppercase_serif_italic
+
+    @property
     def p_uppercase_serif_italic(self) -> Symbol:
         return self._p_uppercase_serif_italic
 
@@ -300,16 +453,16 @@ class Symbols(dict):
         return self._r_uppercase_serif_italic
 
     @property
-    def rightwards_arrow(self) -> Symbol:
-        return self._rightwards_arrow
+    def x_uppercase_serif_italic(self) -> Symbol:
+        return self._x_uppercase_serif_italic
 
     @property
-    def space(self) -> Symbol:
-        return self._space
+    def y_uppercase_serif_italic(self) -> Symbol:
+        return self._y_uppercase_serif_italic
 
     @property
-    def tilde(self) -> Symbol:
-        return self._tilde
+    def z_uppercase_serif_italic(self) -> Symbol:
+        return self._z_uppercase_serif_italic
 
 
 symbols = Symbols()
@@ -335,7 +488,8 @@ unicode_subscript_dictionary = {'0': u'₀', '1': u'₁', '2': u'₂', '3': u'�
 def unicode_subscriptify(s: str = ''):
     """Converts to unicode-subscript the string s.
 
-    This is done in best effort, knowing that Unicode only contains a small subset of subscript characters.
+    This is done in best-effort mode, knowing that Unicode only contains a small subset of subscript characters.
+    In particular, this function can be called safely to to convert digits to subscripts.
 
     References:
         * https://stackoverflow.com/questions/13875507/convert-numeric-strings-to-superscript

@@ -4,17 +4,20 @@ import punctilious as pu
 
 @pytest.fixture
 def c1():
-    return pu.as1.Connective(rep='c1')
+    return pu.as1.Connective(rep='c1', formula_typesetter=pu.as1.typesetters.classical_formula(
+        symbol=pu.pl1.symbols.asterisk_operator))
 
 
 @pytest.fixture
 def c2():
-    return pu.as1.Connective(rep='c2')
+    return pu.as1.Connective(rep='c2', formula_typesetter=pu.as1.typesetters.classical_formula(
+        symbol=pu.pl1.symbols.asterisk_operator))
 
 
 @pytest.fixture
 def c3():
-    return pu.as1.Connective(rep='c3')
+    return pu.as1.Connective(rep='c3', formula_typesetter=pu.as1.typesetters.classical_formula(
+        symbol=pu.pl1.symbols.asterisk_operator))
 
 
 @pytest.fixture
