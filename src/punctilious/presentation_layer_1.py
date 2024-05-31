@@ -163,6 +163,67 @@ class FailsafeTypesetter(Typesetter):
         yield f'python-object-{id(self)}'
 
 
+class SymbolTypesetter(Typesetter):
+    def __init__(self, symbol: Symbol):
+        super().__init__()
+        self._symbol: Symbol = symbol
+
+    @property
+    def symbol(self) -> Symbol:
+        return self._symbol
+
+    def typeset_from_generator(self, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        yield from self.symbol.typeset_from_generator(**kwargs)
+
+
+class IndexedSymbolTypesetter(Typesetter):
+    def __init__(self, symbol: Symbol, index: int):
+        super().__init__()
+        self._symbol: Symbol = symbol
+        self._index: int = index
+
+    @property
+    def index(self) -> int:
+        return self._index
+
+    @property
+    def symbol(self) -> Symbol:
+        return self._symbol
+
+    def typeset_from_generator(self, encoding: typing.Optional[encodings], **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        if encoding is None:
+            encoding = encodings.default
+        yield from self.symbol.typeset_from_generator(encoding=encoding, **kwargs)
+        if encoding is encodings.latex_math:
+            yield f'_{{{self.index}}}'
+        elif encoding is encodings.unicode_extended:
+            yield unicode_subscriptify(s=str(self.index))
+        elif encoding is encodings.unicode_limited:
+            yield str(self.index)
+        else:
+            raise ValueError('Unsupported encoding')
+
+
+class TextTypesetter(Typesetter):
+    """TODO: implement support for multiple font variants.
+
+    """
+
+    def __init__(self, text: str):
+        super().__init__()
+        self._text: str = text
+
+    @property
+    def text(self) -> str:
+        return self._text
+
+    def typeset_from_generator(self, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        yield self.text
+
+
 class Typesetters:
     """A factory of out-of-the-box encodings."""
 
@@ -173,6 +234,15 @@ class Typesetters:
 
     def failsafe(self) -> FailsafeTypesetter:
         return FailsafeTypesetter()
+
+    def symbol(self, symbol: Symbol) -> SymbolTypesetter:
+        return SymbolTypesetter(symbol=symbol)
+
+    def text(self, text: str) -> TextTypesetter:
+        return TextTypesetter(text=text)
+
+    def indexed_symbol(self, symbol: Symbol, index: int) -> IndexedSymbolTypesetter:
+        return IndexedSymbolTypesetter(symbol=symbol, index=index)
 
 
 typesetters = Typesetters()

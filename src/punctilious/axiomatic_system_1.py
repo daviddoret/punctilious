@@ -198,25 +198,6 @@ def raise_error(error_code: ErrorCode, **kwargs):
         warnings.warn(message=exception.rep())
 
 
-class TextTypesetter(pl1.Typesetter):
-    """TODO: implement support for multiple font variants.
-
-    """
-
-    def __init__(self, text: str):
-        super().__init__()
-        self._text: str = text
-
-    @property
-    def text(self) -> str:
-        return self._text
-
-    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
-            typing.Generator)[str, None, None]:
-        phi: Formula = coerce_formula(phi=phi)
-        yield self.text
-
-
 class Connective:
     """A node color in a formula tree."""
 
@@ -231,7 +212,7 @@ class Connective:
             # if len(rep) == 1:
             #    formula_typesetter = pl1.symbols.get_sans_serif_letter(letter=rep)
             # else:
-            formula_typesetter = TextTypesetter(text=rep)
+            formula_typesetter = pl1.typesetters.text(text=rep)
         self._formula_typesetter: pl1.Typesetter = formula_typesetter
 
     def __call__(self, *args):
@@ -3177,51 +3158,6 @@ class InfixFormulaTypesetter(pl1.Typesetter):
         yield from phi.term_1.typeset_from_generator(**kwargs)
 
 
-class SymbolTypesetter(pl1.Typesetter):
-    def __init__(self, symbol: pl1.Symbol):
-        super().__init__()
-        self._symbol: pl1.Symbol = symbol
-
-    @property
-    def symbol(self) -> pl1.Symbol:
-        return self._symbol
-
-    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
-            typing.Generator)[str, None, None]:
-        phi: Formula = coerce_formula(phi=phi)
-        yield from self.symbol.typeset_from_generator(**kwargs)
-
-
-class IndexedSymbolTypesetter(pl1.Typesetter):
-    def __init__(self, symbol: pl1.Symbol, index: int):
-        super().__init__()
-        self._symbol: pl1.Symbol = symbol
-        self._index: int = index
-
-    @property
-    def index(self) -> int:
-        return self._index
-
-    @property
-    def symbol(self) -> pl1.Symbol:
-        return self._symbol
-
-    def typeset_from_generator(self, phi: FlexibleFormula, encoding: typing.Optional[pl1.encodings], **kwargs) -> (
-            typing.Generator)[str, None, None]:
-        if encoding is None:
-            encoding = pl1.encodings.default
-        phi: Formula = coerce_formula(phi=phi)
-        yield from self.symbol.typeset_from_generator(encoding=encoding, **kwargs)
-        if encoding is pl1.encodings.latex_math:
-            yield f'_{{{self.index}}}'
-        elif encoding is pl1.encodings.unicode_extended:
-            yield pl1.unicode_subscriptify(s=str(self.index))
-        elif encoding is pl1.encodings.unicode_limited:
-            yield str(self.index)
-        else:
-            raise ValueError('Unsupported encoding')
-
-
 class Typesetters:
     """A factory of out-of-the-box encodings."""
 
@@ -3230,17 +3166,17 @@ class Typesetters:
             st1.axiomatic_system_1_typesetters = super(Typesetters, cls).__new__(cls)
         return st1.axiomatic_system_1_typesetters
 
-    def constant(self, symbol: pl1.Symbol) -> SymbolTypesetter:
-        return SymbolTypesetter(symbol=symbol)
+    def symbol(self, symbol: pl1.Symbol) -> pl1.SymbolTypesetter:
+        return pl1.typesetters.symbol(symbol=symbol)
 
     def classical_formula(self, symbol: pl1.Symbol) -> ClassicalFormulaTypesetter:
         return ClassicalFormulaTypesetter(symbol=symbol)
 
-    def text(self, text: str) -> TextTypesetter:
-        return TextTypesetter(text=text)
+    def text(self, text: str) -> pl1.TextTypesetter:
+        return pl1.typesetters.text(text=text)
 
-    def indexed_symbol(self, symbol: pl1.Symbol, index: int) -> IndexedSymbolTypesetter:
-        return IndexedSymbolTypesetter(symbol=symbol, index=index)
+    def indexed_symbol(self, symbol: pl1.Symbol, index: int) -> pl1.IndexedSymbolTypesetter:
+        return pl1.typesetters.indexed_symbol(symbol=symbol, index=index)
 
     def infix_formula(self, symbol: pl1.Symbol) -> InfixFormulaTypesetter:
         return InfixFormulaTypesetter(symbol=symbol)

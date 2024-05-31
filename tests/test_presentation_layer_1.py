@@ -5,14 +5,14 @@ import punctilious as pu
 class TestTypesettingConfiguration:
     def test_typesetting_configuration(self):
         p = pu.as1.NullaryConnective()
-        p.formula_typesetter = pu.as1.typesetters.constant(symbol=pu.pl1.symbols.p_uppercase_serif_italic)
+        p.formula_typesetter = pu.as1.typesetters.symbol(symbol=pu.pl1.symbols.p_uppercase_serif_italic)
         phi = pu.as1.Formula(connective=p)
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.latex_math) == '\\textit{P}'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_extended) == '𝑃'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_limited) == 'P'
 
         q = pu.as1.NullaryConnective()
-        q.formula_typesetter = pu.as1.typesetters.constant(symbol=pu.pl1.symbols.q_uppercase_serif_italic)
+        q.formula_typesetter = pu.as1.typesetters.symbol(symbol=pu.pl1.symbols.q_uppercase_serif_italic)
         phi = pu.as1.Formula(connective=q)
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.latex_math) == '\\textit{Q}'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_extended) == '𝑄'
