@@ -1457,12 +1457,6 @@ class TuplBuilder(FormulaBuilder):
     def __init__(self, elements: FlexibleTupl):
         super().__init__(c=connectives.tupl, terms=elements)
 
-    def rep(self, **kwargs) -> str:
-        parenthesis = kwargs.get('parenthesis', False)
-        kwargs['parenthesis'] = True
-        elements: str = ', '.join(element.rep(**kwargs) for element in self)
-        return f'({elements})'
-
     def to_tupl(self) -> Tupl:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
         phi: Tupl = Tupl(elements=elements)
@@ -1686,12 +1680,6 @@ class EnumerationBuilder(FormulaBuilder):
         phi ∼formula psi. False otherwise."""
         enumeration: Enumeration = self.to_enumeration()
         return is_term_of_formula(phi=phi, psi=enumeration)
-
-    def rep(self, **kwargs) -> str:
-        parenthesis = kwargs.get('parenthesis', False)
-        kwargs['parenthesis'] = True
-        elements: str = ', '.join(element.rep(**kwargs) for element in self)
-        return f'{{{elements}}}'
 
     def to_enumeration(self) -> Enumeration:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
@@ -2208,8 +2196,8 @@ def coerce_inference_rule(phi: FlexibleFormula) -> InferenceRule:
     if isinstance(phi, InferenceRule):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_inference_rule(phi=phi):
-        proved_formula: Formula = phi.term_0
-        return InferenceRule(transformation=proved_formula)
+        transfo: Transformation = coerce_transformation(phi=phi.term_0)
+        return InferenceRule(transformation=transfo)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=InferenceRule, phi_type=type(phi), phi=phi)
 
@@ -2722,6 +2710,8 @@ class Theory(Enumeration):
 
     """
 
+    # TODO: Theory does not contain typed axioms, inference-rules, etc. but formulas!!!!!!
+
     @staticmethod
     def is_well_formed(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
         """Return True if phi is a well-formed theory, False otherwise.
@@ -2741,37 +2731,40 @@ class Theory(Enumeration):
         # by the definition of a theory, these are the left term (term_0) of the formulas.
         valid_statements: TuplBuilder = TuplBuilder(elements=None)
         derivations: TuplBuilder = TuplBuilder(elements=None)
-        for theorem in phi:
-            if not is_well_formed_derivation(phi=theorem):
+        for derivation in phi:
+            if not is_well_formed_derivation(phi=derivation):
                 return False
             else:
-                theorem: Derivation = coerce_derivation(phi=theorem)
-                derivations.append(term=theorem)
+                derivation: Derivation = coerce_derivation(phi=derivation)
+                derivations.append(term=derivation)
                 # retrieve the formula claimed as valid from the theorem
-                valid_statement: Formula = theorem.valid_statement
+                valid_statement: Formula = derivation.valid_statement
                 valid_statements.append(term=valid_statement)
         # now that the derivations and valid_statements have been retrieved, and proved well-formed individually,
         # make the python objects immutable.
         derivations: Tupl = derivations.to_tupl()
         valid_statements: Tupl = valid_statements.to_tupl()
         for i in range(0, derivations.arity):
-            theorem = derivations[i]
+            derivation = derivations[i]
             valid_statement = valid_statements[i]
-            if is_well_formed_axiom(phi=theorem):
+            if is_well_formed_axiom(phi=derivation):
                 # This is an axiom.
+                derivation: Axiom = coerce_axiom(phi=derivation)
                 pass
-            elif is_well_formed_inference_rule(phi=theorem):
+            elif is_well_formed_inference_rule(phi=derivation):
                 # This is an inference-rule.
+                derivation: InferenceRule = coerce_inference_rule(phi=derivation)
                 pass
-            elif is_well_formed_theorem(phi=theorem):
-                theorem_by_inference: Theorem = coerce_theorem(phi=theorem)
+            elif is_well_formed_theorem(phi=derivation):
+                theorem_by_inference: Theorem = coerce_theorem(phi=derivation)
                 inference: Inference = theorem_by_inference.i
                 for premise in inference.premises:
                     # check that premise is a proven-formula (term_0) of a predecessor
                     if not valid_statements.has_element(phi=premise):
                         # The premise is absent from the theory
                         if raise_event_if_false:
-                            raise_error(error_code=error_codes.e111, premise=premise, premise_index=i, theorem=theorem,
+                            raise_error(error_code=error_codes.e111, premise=premise, premise_index=i,
+                                        theorem=derivation,
                                         valid_statement=valid_statement)
                         return False
                     else:
@@ -2780,14 +2773,14 @@ class Theory(Enumeration):
                             # The premise is not positioned before the conclusion.
                             if raise_event_if_false:
                                 raise_error(error_code=error_codes.e112, premise=premise, premise_index=i,
-                                            theorem=theorem,
+                                            theorem=derivation,
                                             valid_statement=valid_statement)
                             return False
                 if not valid_statements.has_element(phi=inference.transformation_rule):
                     # The inference transformation-rule is absent from the theory.
                     if raise_event_if_false:
                         raise_error(error_code=error_codes.e119, transformation_rule=inference.transformation_rule,
-                                    inference=inference, premise_index=i, theorem=theorem,
+                                    inference=inference, premise_index=i, theorem=derivation,
                                     valid_statement=valid_statement)
                     return False
                 else:
@@ -2809,8 +2802,12 @@ class Theory(Enumeration):
     def __new__(cls, derivations: FlexibleEnumeration = None):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(phi=derivations)
+        # use coerce_derivation() to assure that every derivation is properly types as Axiom, InferenceRule or Theorem.
+        derivations: Enumeration = coerce_enumeration(
+            phi=(coerce_derivation(phi=p) for p in derivations))
         try:
             is_well_formed_theory(phi=derivations, raise_event_if_false=True)
+
         except Exception as error:
             # well-formedness verification failure, the theorem is ill-formed.
             raise_error(error_code=error_codes.e120, error=error, derivations=derivations)
@@ -2827,14 +2824,17 @@ class Theory(Enumeration):
 
     @property
     def axioms(self) -> Enumeration:
-        """Return an enumeration of all axioms in the theory, preserving order, filtering out inference-rules and
-        theorems."""
+        """Return an enumeration of all axioms in the theory.
+
+        Note: order is preserved."""
         return Enumeration(elements=tuple(self.iterate_axioms()))
 
     @property
     def valid_statements(self) -> Enumeration:
         """Return an enumeration of all axiom and theorem valid-statements in the theory, preserving order."""
-        return Enumeration(elements=tuple(self.iterate_valid_statements()))
+        python_tuple: tuple = tuple(self.iterate_valid_statements())
+        e: Enumeration = Enumeration(elements=python_tuple)
+        return e
 
     @property
     def inference_rules(self) -> Enumeration:
@@ -2848,9 +2848,9 @@ class Theory(Enumeration):
             if isinstance(element, Axiom):
                 yield element
 
-    def iterate_valid_statements(self) -> typing.Iterator[Axiom]:
+    def iterate_valid_statements(self) -> typing.Iterator[Formula]:
         """Iterates over all axiom and theorem valid-statements in the theory, preserving order."""
-        for derivation in self.derivations:
+        for derivation in self.iterate_derivations():
             if isinstance(derivation, Axiom):
                 derivation: Axiom
                 yield derivation.valid_statement
@@ -2861,7 +2861,7 @@ class Theory(Enumeration):
     def iterate_inference_rules(self) -> typing.Iterator[InferenceRule]:
         """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems."""
         for element in self:
-            if isinstance(element, Theorem):
+            if isinstance(element, InferenceRule):
                 yield element
 
     def iterate_theorems(self) -> typing.Iterator[Theorem]:
@@ -3136,7 +3136,7 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
 
-        for derivation in t.iterate_derivations():
+        for derivation in t.iterate_valid_statements():
             if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
                 return t, derivation
     else:
@@ -3199,18 +3199,18 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
 # PRESENTATION LAYER
 
 class ClassicalFormulaTypesetter(pl1.Typesetter):
-    def __init__(self, symbol: pl1.Symbol):
+    def __init__(self, connective_typesetter: pl1.Typesetter):
         super().__init__()
-        self._symbol: pl1.Symbol = symbol
+        self._connective_typesetter: pl1.Typesetter = connective_typesetter
 
     @property
-    def symbol(self) -> pl1.Symbol:
-        return self._symbol
+    def connective_typesetter(self) -> pl1.Typesetter:
+        return self._connective_typesetter
 
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
-        yield from self.symbol.typeset_from_generator(**kwargs)
+        yield from self.connective_typesetter.typeset_from_generator(**kwargs)
         yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
         first = True
         for term in phi:
@@ -3223,20 +3223,20 @@ class ClassicalFormulaTypesetter(pl1.Typesetter):
 
 
 class InfixFormulaTypesetter(pl1.Typesetter):
-    def __init__(self, symbol: pl1.Symbol):
+    def __init__(self, connective_typesetter: pl1.Typesetter):
         super().__init__()
-        self._symbol: pl1.Symbol = symbol
+        self._connective_typesetter: pl1.Typesetter = connective_typesetter
 
     @property
-    def symbol(self) -> pl1.Symbol:
-        return self._symbol
+    def connective_typesetter(self) -> pl1.Typesetter:
+        return self._connective_typesetter
 
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
         yield from phi.term_0.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
-        yield from self.symbol.typeset_from_generator(**kwargs)
+        yield from self.connective_typesetter.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from phi.term_1.typeset_from_generator(**kwargs)
 
@@ -3293,7 +3293,7 @@ class Typesetters:
         return pl1.typesetters.symbol(symbol=symbol)
 
     def classical_formula(self, symbol: pl1.Symbol) -> ClassicalFormulaTypesetter:
-        return ClassicalFormulaTypesetter(symbol=symbol)
+        return ClassicalFormulaTypesetter(connective_typesetter=symbol)
 
     def text(self, text: str) -> pl1.TextTypesetter:
         return pl1.typesetters.text(text=text)
@@ -3302,7 +3302,7 @@ class Typesetters:
         return pl1.typesetters.indexed_symbol(symbol=symbol, index=index)
 
     def infix_formula(self, symbol: pl1.Symbol) -> InfixFormulaTypesetter:
-        return InfixFormulaTypesetter(symbol=symbol)
+        return InfixFormulaTypesetter(connective_typesetter=symbol)
 
     def transformation(self) -> TransformationTypesetter:
         return TransformationTypesetter()

@@ -631,3 +631,16 @@ def unicode_subscriptify(s: str = ''):
     if s is None or s == '':
         return ''
     return ''.join([unicode_subscript_dictionary.get(c, c) for c in s])
+
+
+FlexibleTypesetter = typing.Union[Typesetter, str]
+
+
+def coerce_typesetter(ts: FlexibleTypesetter) -> Typesetter:
+    global typesetters
+    if isinstance(ts, str):
+        return typesetters.text(text=ts)
+    elif isinstance(ts, Typesetter):
+        return ts
+    else:
+        raise Exception('unsupported value')
