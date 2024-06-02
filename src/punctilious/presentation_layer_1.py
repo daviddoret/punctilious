@@ -312,12 +312,16 @@ class Symbols(dict):
         # Symbols and punctuation
         self._asterisk_operator = self._register(
             Symbol(key='asterisk_operator', latex_math='\\ast', unicode_extended='∗', unicode_limited='*'))
+        self._close_curly_brace = self._register(
+            Symbol(key='close_curly_brace', latex_math='\\right\\}', unicode_extended='}', unicode_limited='}'))
         self._close_parenthesis = self._register(
             Symbol(key='close_parenthesis', latex_math='\\right)', unicode_extended=')', unicode_limited=')'))
         self._collection_separator = self._register(
             Symbol(key='collection_separator', latex_math=', ', unicode_extended=', ', unicode_limited=', '))
         self._not_sign = self._register(
             Symbol(key='not_sign', latex_math='\\lnot', unicode_extended='¬', unicode_limited='not'))
+        self._open_curly_brace = self._register(
+            Symbol(key='open_curly_brace', latex_math='\\left\\{', unicode_extended='{', unicode_limited='{'))
         self._open_parenthesis = self._register(
             Symbol(key='open_parenthesis', latex_math='\\left(', unicode_extended='(', unicode_limited='('))
         self._rightwards_arrow = self._register(
@@ -439,6 +443,10 @@ class Symbols(dict):
         return self._asterisk_operator
 
     @property
+    def close_curly_brace(self) -> Symbol:
+        return self._close_curly_brace
+
+    @property
     def close_parenthesis(self) -> Symbol:
         return self._close_parenthesis
 
@@ -449,6 +457,10 @@ class Symbols(dict):
     @property
     def not_sign(self) -> Symbol:
         return self._not_sign
+
+    @property
+    def open_curly_brace(self) -> Symbol:
+        return self._open_curly_brace
 
     @property
     def open_parenthesis(self) -> Symbol:

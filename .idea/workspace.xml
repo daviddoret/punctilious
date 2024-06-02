@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -136,7 +138,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestMap.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas.executor": "Run",
@@ -601,10 +603,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation" />
-        <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestAutoDerivation.test_auto_derivation" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization" />
+        <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestAutoDerivation.test_auto_derivation" />
       </list>
     </recent_temporary>
   </component>
@@ -1134,14 +1136,14 @@
           <option name="timeStamp" value="180" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3151</line>
-          <option name="timeStamp" value="339" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
           <line>817</line>
           <option name="timeStamp" value="342" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" log-message="true" suspend="NONE" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/presentation_layer_1.py</url>
+          <line>444</line>
+          <option name="timeStamp" value="346" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

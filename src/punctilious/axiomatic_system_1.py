@@ -682,7 +682,6 @@ def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        # phi: Formula = Formula(c=connectives.e, terms=phi)
         return Enumeration(elements=phi)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Enumeration, phi_type=type(phi), phi=phi)
@@ -828,8 +827,8 @@ class FreeArityConnective(Connective):
     """A free-arity connective is a connective without constraint on its arity,
     that is its number of descendant notes."""
 
-    def __init__(self, rep: str):
-        super().__init__(rep=rep)
+    def __init__(self, rep: typing.Optional[str] = None, formula_typesetter: typing.Optional[pl1.Typesetter] = None):
+        super().__init__(rep=rep, formula_typesetter=formula_typesetter)
 
 
 class FixedArityConnective(Connective):
@@ -837,7 +836,7 @@ class FixedArityConnective(Connective):
     that is its number of descendant notes."""
 
     def __init__(self,
-                 fixed_arity_constraint: int, formula_typesetter: pl1.Typesetter = None,
+                 fixed_arity_constraint: int, formula_typesetter: typing.Optional[pl1.Typesetter] = None,
                  rep: FlexibleRepresentation = None):
         self._fixed_arity_constraint = fixed_arity_constraint
         super().__init__(formula_typesetter=formula_typesetter, rep=rep)
@@ -849,8 +848,8 @@ class FixedArityConnective(Connective):
 
 class NullaryConnective(FixedArityConnective):
 
-    def __init__(self, rep: FlexibleRepresentation = None):
-        super().__init__(rep=rep, fixed_arity_constraint=0)
+    def __init__(self, rep: FlexibleRepresentation = None, formula_typesetter: typing.Optional[pl1.Typesetter] = None):
+        super().__init__(rep=rep, fixed_arity_constraint=0, formula_typesetter=formula_typesetter)
 
 
 class SimpleObject(Formula):
@@ -873,8 +872,8 @@ class SimpleObject(Formula):
 
 class UnaryConnective(FixedArityConnective):
 
-    def __init__(self, rep: str):
-        super().__init__(rep=rep, fixed_arity_constraint=1)
+    def __init__(self, rep: str, formula_typesetter: typing.Optional[pl1.Typesetter] = None):
+        super().__init__(rep=rep, fixed_arity_constraint=1, formula_typesetter=formula_typesetter)
 
 
 class InfixPartialFormula:
@@ -917,7 +916,7 @@ class InfixPartialFormula:
 
 class BinaryConnective(FixedArityConnective):
 
-    def __init__(self, rep: FlexibleRepresentation = None, formula_typesetter: pl1.Typesetter = None):
+    def __init__(self, rep: FlexibleRepresentation = None, formula_typesetter: typing.Optional[pl1.Typesetter] = None):
         super().__init__(formula_typesetter=formula_typesetter, rep=rep, fixed_arity_constraint=2)
 
     def __ror__(self, other: FlexibleFormula):
@@ -970,8 +969,9 @@ def get_index_of_first_equivalent_term_in_formula(phi: FlexibleFormula, psi: Fle
 
 class TernaryConnective(FixedArityConnective):
 
-    def __init__(self, rep: str):
-        super().__init__(rep=rep, fixed_arity_constraint=3)
+    def __init__(self, rep: typing.Optional[str] = None,
+                 formula_typesetter: typing.Optional[pl1.Typesetter] = None):
+        super().__init__(rep=rep, fixed_arity_constraint=3, formula_typesetter=formula_typesetter)
 
 
 class Variable(SimpleObject):
@@ -1102,20 +1102,24 @@ def formula_to_tuple(phi: FlexibleFormula) -> Enumeration:
     return Enumeration(elements=phi)
 
 
-def let_x_be_a_binary_connective(rep: str):
-    return BinaryConnective(rep=rep)
+def let_x_be_a_binary_connective(rep: typing.Optional[str] = None,
+                                 formula_typesetter: typing.Optional[pl1.Typesetter] = None):
+    return BinaryConnective(rep=rep, formula_typesetter=formula_typesetter)
 
 
-def let_x_be_a_ternary_connective(rep: str):
-    return TernaryConnective(rep=rep)
+def let_x_be_a_ternary_connective(rep: typing.Optional[str] = None,
+                                  formula_typesetter: typing.Optional[pl1.Typesetter] = None):
+    return TernaryConnective(rep=rep, formula_typesetter=formula_typesetter)
 
 
-def let_x_be_a_unary_connective(rep: str):
-    return UnaryConnective(rep=rep)
+def let_x_be_a_unary_connective(rep: typing.Optional[str] = None,
+                                formula_typesetter: typing.Optional[pl1.Typesetter] = None):
+    return UnaryConnective(rep=rep, formula_typesetter=formula_typesetter)
 
 
-def let_x_be_a_free_arity_connective(rep: str):
-    return FreeArityConnective(rep=rep)
+def let_x_be_a_free_arity_connective(rep: typing.Optional[str] = None,
+                                     formula_typesetter: typing.Optional[pl1.Typesetter] = None):
+    return FreeArityConnective(rep=rep, formula_typesetter=formula_typesetter)
 
 
 def let_x_be_an_inference_rule_deprecated(valid_statement: FlexibleTransformation):
@@ -1204,13 +1208,7 @@ def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormul
 class Connectives(typing.NamedTuple):
     axiom: UnaryConnective
     theory: FreeArityConnective
-    e: FreeArityConnective
-    """The enumeration connective, cf. the Enumeration class.
-    """
-
-    f: TernaryConnective
-    """The transformation connective, cf. the Transformation class.
-    """
+    enumeration: FreeArityConnective
     follows_from: BinaryConnective
     implies: BinaryConnective
     inference: BinaryConnective
@@ -1229,8 +1227,7 @@ class Connectives(typing.NamedTuple):
 connectives: Connectives = _set_state(key='connectives', value=Connectives(
     axiom=let_x_be_a_unary_connective(rep='axiom'),
     theory=let_x_be_a_free_arity_connective(rep='theory'),
-    e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
-    f=let_x_be_a_ternary_connective(rep='f'),  # Transformation, # duplicate with transformation?
+    enumeration=let_x_be_a_free_arity_connective(),
     follows_from=let_x_be_a_binary_connective(rep='follows-from'),
     implies=let_x_be_a_binary_connective(rep='implies'),
     inference=let_x_be_a_binary_connective(rep='inference'),
@@ -1242,7 +1239,7 @@ connectives: Connectives = _set_state(key='connectives', value=Connectives(
     map=let_x_be_a_binary_connective(rep='map'),
     proposition=let_x_be_a_simple_object(rep='proposition'),
     propositional_variable=let_x_be_a_simple_object(rep='propositional-variable'),
-    transformation=let_x_be_a_ternary_connective(rep='-->'),  # duplicate with f?
+    transformation=let_x_be_a_ternary_connective(),  # duplicate with f?
     tupl=let_x_be_a_free_arity_connective(rep='tuple'),
 
 ))
@@ -1522,12 +1519,6 @@ class Tupl(Formula):
         """Return True if the tuple has phi as one of its elements."""
         return is_term_of_formula(phi=phi, psi=self)
 
-    def rep(self, **kwargs) -> str:
-        parenthesis = kwargs.get('parenthesis', False)
-        kwargs['parenthesis'] = True
-        elements: str = ', '.join(element.rep(**kwargs) for element in self)
-        return f'({elements})'
-
     def to_tupl_builder(self) -> TuplBuilder:
         return TuplBuilder(elements=self)
 
@@ -1664,7 +1655,7 @@ class EnumerationBuilder(FormulaBuilder):
     Note: """
 
     def __init__(self, elements: FlexibleEnumeration):
-        super().__init__(c=connectives.e, terms=None)
+        super().__init__(c=connectives.enumeration, terms=None)
         if isinstance(elements, typing.Iterable):
             for element in elements:
                 self.append(term=element)
@@ -1770,17 +1761,16 @@ class Enumeration(Formula):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        connective: Connective = connectives.e if connective is None else connective
+        connective: Connective = connectives.enumeration if connective is None else connective
         if not is_well_formed_enumeration(phi=elements):
             raise_error(error_code=error_codes.e110, elements_type=type(elements), elements=elements)
-        o: tuple = super().__new__(cls, connective=connectives.e, terms=elements)
+        o: tuple = super().__new__(cls, connective=connectives.enumeration, terms=elements)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        connective = connectives.e if connective is None else connective
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
-        super().__init__(connective=connectives.e, terms=eb)
+        super().__init__(connective=connectives.enumeration, terms=eb)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
@@ -1808,12 +1798,6 @@ class Enumeration(Formula):
         phi = coerce_formula(phi=phi)
         return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
 
-    def rep(self, **kwargs) -> str:
-        parenthesis = kwargs.get('parenthesis', False)
-        kwargs['parenthesis'] = True
-        elements: str = ', '.join(element.rep(**kwargs) for element in self)
-        return f'{{{elements}}}'
-
     def to_enumeration_builder(self) -> EnumerationBuilder:
         return EnumerationBuilder(elements=self)
 
@@ -1821,7 +1805,7 @@ class Enumeration(Formula):
         return self.to_enumeration_builder()
 
 
-e = Enumeration
+enumeration = Enumeration
 """A shortcut for Enumeration."""
 
 FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, EnumerationBuilder, typing.Iterable[FlexibleFormula]]]
@@ -2054,20 +2038,6 @@ class Transformation(Formula):
     def premises(self) -> Tupl:
         return self[0]
 
-    def rep(self, **kwargs) -> str:
-        parenthesis = kwargs.get('parenthesis', False)
-        kwargs['parenthesis'] = True
-        premises: str = ', '.join(premise.rep(**kwargs) for premise in self.premises)
-        variables: str
-        if self.variables.arity == 0:
-            variables = ''
-        elif self.variables.arity == 1:
-            variables = f' where {self.variables.term_0} is a variable'
-        else:
-            variables = ', '.join(variable.rep(**kwargs) for variable in self.variables)
-            variables = f' where {variables} are variables'
-        return f'({premises}) --> ({self.conclusion}){variables}'
-
     def to_transformation_builder(self) -> TransformationBuilder:
         premises: TuplBuilder = self.premises.to_tupl_builder()
         conclusion: FormulaBuilder = self.conclusion.to_formula_builder()
@@ -2283,7 +2253,6 @@ def coerce_theory(phi: FlexibleTheory) -> Theory:
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        # phi: Formula = Formula(c=connectives.e, terms=phi)
         return Theory(derivations=phi)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Theory, phi_type=type(phi), phi=phi)
@@ -2881,11 +2850,13 @@ class Theory(Enumeration):
 
     def iterate_valid_statements(self) -> typing.Iterator[Axiom]:
         """Iterates over all axiom and theorem valid-statements in the theory, preserving order."""
-        for element in self:
-            if isinstance(element, Axiom):
-                yield element.valid_statement
-            elif isinstance(element, Theorem):
-                yield element.valid_statement
+        for derivation in self.derivations:
+            if isinstance(derivation, Axiom):
+                derivation: Axiom
+                yield derivation.valid_statement
+            elif isinstance(derivation, Theorem):
+                derivation: Theorem
+                yield derivation.valid_statement
 
     def iterate_inference_rules(self) -> typing.Iterator[InferenceRule]:
         """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems."""
@@ -2908,6 +2879,11 @@ class Theory(Enumeration):
         header: str = 'Derivation:\n\t'
         derivations: str = '\n\t'.join(derivation.rep(**kwargs) for derivation in self)
         return f'{header}{derivations}'
+
+    @property
+    def derivations(self) -> Enumeration:
+        """Return an enumeration of all derivations in the theory, preserving order."""
+        return Enumeration(elements=tuple(self.iterate_derivations()))
 
     @property
     def theorems(self) -> Enumeration:
@@ -3272,11 +3248,34 @@ class TransformationTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleTransformation, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Transformation = coerce_transformation(phi=phi)
-        yield from phi.term_0.typeset_from_generator(**kwargs)
+        yield from phi.premises.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
-        yield from phi.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.rightwards_arrow.typeset_from_generator(**kwargs)
+        yield from phi.variables.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
-        yield from phi.term_1.typeset_from_generator(**kwargs)
+        yield from phi.conclusion.typeset_from_generator(**kwargs)
+
+
+class BracketedListTypesetter(pl1.Typesetter):
+    def __init__(self, open_bracket: pl1.Symbol, separator: pl1.Symbol, close_bracket: pl1.Symbol):
+        self.open_bracket = open_bracket
+        self.separator = separator
+        self.close_bracket = close_bracket
+        super().__init__()
+
+    def typeset_from_generator(self, phi: Formula, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Formula = coerce_formula(phi=phi)
+
+        yield from self.open_bracket.typeset_from_generator(**kwargs)
+        first = True
+        for term in phi:
+            if not first:
+                yield self.separator
+                yield from pl1.symbols.space
+                first = False
+            yield from term.typeset_from_generator(**kwargs)
+        yield from self.close_bracket.typeset_from_generator(**kwargs)
 
 
 class Typesetters:
@@ -3286,6 +3285,9 @@ class Typesetters:
         if st1.axiomatic_system_1_typesetters is None:
             st1.axiomatic_system_1_typesetters = super(Typesetters, cls).__new__(cls)
         return st1.axiomatic_system_1_typesetters
+
+    def bracketed_list(self, open_bracket: pl1.Symbol, separator: pl1.Symbol, close_bracket: pl1.Symbol):
+        return BracketedListTypesetter(open_bracket=open_bracket, separator=separator, close_bracket=close_bracket)
 
     def symbol(self, symbol: pl1.Symbol) -> pl1.SymbolTypesetter:
         return pl1.typesetters.symbol(symbol=symbol)
@@ -3301,6 +3303,9 @@ class Typesetters:
 
     def infix_formula(self, symbol: pl1.Symbol) -> InfixFormulaTypesetter:
         return InfixFormulaTypesetter(symbol=symbol)
+
+    def transformation(self) -> TransformationTypesetter:
+        return TransformationTypesetter()
 
 
 typesetters = Typesetters()
