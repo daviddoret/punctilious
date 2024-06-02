@@ -717,7 +717,7 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
     return e
 
 
-def union_theory(phi: FlexibleDerivation, psi: FlexibleDerivation) -> Theory:
+def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
     """Given two theorys phi, and psi, the union-theory operator, noted phi ∪-theory psi,
     returns a new theory omega such that:
     - all valid-statements of phi are elements of omega,
@@ -1023,7 +1023,7 @@ def let_x_be_a_variable(rep: FlexibleRepresentation) -> typing.Union[
 
 def let_x_be_a_propositional_variable_OBSOLETE(
         rep: FlexibleRepresentation,
-        db: typing.Union[FlexibleDerivationBuilder, EnumerationBuilder] = None) -> \
+        db: typing.Union[FlexibleTheoryBuilder, EnumerationBuilder] = None) -> \
         typing.Union[Variable, typing.Generator[Variable, typing.Any, None]]:
     """
 
@@ -1121,7 +1121,7 @@ def let_x_be_an_inference_rule_deprecated(claim: FlexibleTransformation):
     return InferenceRule(transformation=claim)
 
 
-def let_x_be_an_inference_rule(theory: FlexibleDerivation,
+def let_x_be_an_inference_rule(theory: FlexibleTheory,
                                inference_rule: typing.Optional[FlexibleInferenceRule] = None,
                                premises: typing.Optional[FlexibleTupl] = None,
                                conclusion: typing.Optional[FlexibleFormula] = None,
@@ -1129,7 +1129,7 @@ def let_x_be_an_inference_rule(theory: FlexibleDerivation,
     if theory is None:
         theory = Axiomatization(axioms=None)
     else:
-        theory: FlexibleDerivation = coerce_theory(phi=theory)
+        theory: FlexibleTheory = coerce_theory(phi=theory)
 
     if inference_rule is None and premises is not None and conclusion is not None and variables is not None:
         transformation: Transformation = Transformation(premises=premises, conclusion=conclusion, variables=variables)
@@ -1149,7 +1149,7 @@ def let_x_be_an_axiom_deprecated(claim: FlexibleFormula):
     return Axiom(claim=claim)
 
 
-def let_x_be_an_axiom(theory: FlexibleDerivation, claim: typing.Optional[FlexibleFormula] = None,
+def let_x_be_an_axiom(theory: FlexibleTheory, claim: typing.Optional[FlexibleFormula] = None,
                       axiom: typing.Optional[FlexibleAxiom] = None):
     """
 
@@ -1164,7 +1164,7 @@ def let_x_be_an_axiom(theory: FlexibleDerivation, claim: typing.Optional[Flexibl
     if theory is None:
         theory = Axiomatization(axioms=None)
     else:
-        theory: FlexibleDerivation = coerce_theory(phi=theory)
+        theory: FlexibleTheory = coerce_theory(phi=theory)
     if claim is not None and axiom is not None:
         raise Exception('ooops 1')
     elif claim is None and axiom is None:
@@ -2250,7 +2250,7 @@ def coerce_theorem(phi: FlexibleFormula) -> Theorem:
         raise_error(error_code=error_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
 
 
-def coerce_theory(phi: FlexibleDerivation) -> Theory:
+def coerce_theory(phi: FlexibleTheory) -> Theory:
     """Validate that phi is a well-formed theory and returns it properly typed as Demonstration,
     or raise exception e123.
 
@@ -2924,12 +2924,11 @@ class Theory(Enumeration):
         return TheoryBuilder(valid_statements=self)
 
 
-FlexibleDerivation = typing.Optional[
+FlexibleTheory = typing.Optional[
     typing.Union[Theory, TheoryBuilder, typing.Iterable[FlexibleValidStatement]]]
-"""FlexibleDemonstration is a flexible python type that may be safely coerced into a Demonstration or a 
-DemonstrationBuilder."""
+"""FlexibleTheory is a flexible python type that may be safely coerced into a Theory."""
 
-FlexibleDerivationBuilder = typing.Optional[
+FlexibleTheoryBuilder = typing.Optional[
     typing.Union[Theory, TheoryBuilder, typing.Iterable[FlexibleValidStatement]]]
 
 
@@ -3128,7 +3127,7 @@ class AutoDerivationFailure(CustomException):
     """Auto-derivation was required but failed to succeed."""
 
 
-def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: FlexibleTupl,
+def derive(theory: FlexibleTheory, claim: FlexibleFormula, premises: FlexibleTupl,
            inference_rule: FlexibleInferenceRule):
     """Given a theory t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
 
@@ -3166,7 +3165,7 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
     return theory, theorem
 
 
-def auto_derive(theory: FlexibleDerivation, claim: FlexibleFormula) -> Theory:
+def auto_derive(theory: FlexibleTheory, claim: FlexibleFormula) -> Theory:
     """Try to derive a claim without premises.
 
     Raise an AutoDerivationFailure if the derivation is not successful.

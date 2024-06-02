@@ -155,7 +155,7 @@ extended_theory = as1.Theory(valid_statements=(*axioms,))
 
 
 def let_x_be_a_propositional_variable(
-        theory: as1.FlexibleDerivation,
+        theory: as1.FlexibleTheory,
         rep: as1.FlexibleRepresentation) -> \
         typing.Tuple[as1.Theory, as1.Variable | typing.Tuple[as1.Variable, ...]]:
     """Declare one or multiple propositional-variables in the input theory.
@@ -176,7 +176,7 @@ def let_x_be_a_propositional_variable(
     """
     global axioms
     global i1
-    theory: as1.FlexibleDerivation = as1.coerce_theory(phi=theory)
+    theory: as1.FlexibleTheory = as1.coerce_theory(phi=theory)
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
     # in the theory.
