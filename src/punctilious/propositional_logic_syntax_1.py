@@ -151,7 +151,7 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
 
 axioms = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))
 
-extended_theory = as1.Theory(valid_statements=(*axioms,))
+extended_theory = as1.Theory(derivations=(*axioms,))
 
 
 def let_x_be_a_propositional_variable(

@@ -627,8 +627,8 @@ class TestInferenceRule:
 
         # derivation from the axiom
         i = pu.as1.Inference(premises=None, transformation_rule=rule)
-        isolated_theorem = pu.as1.ValidStatement(claim=phi, justification=i)
-        demo = pu.as1.Theory(valid_statements=(*axiomatization, isolated_theorem))
+        isolated_theorem = pu.as1.Derivation(claim=phi, justification=i)
+        demo = pu.as1.Theory(derivations=(*axiomatization, isolated_theorem))
         assert pu.as1.is_formula_equivalent(
             phi=isolated_theorem.claim,
             psi=phi)
@@ -780,11 +780,11 @@ class TestDemonstration:
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # invalid proof raise exception
-            demo3 = pu.as1.Theory(valid_statements=(axiom_1, axiom_2, a | star | e))
+            demo3 = pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | e))
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # invalid proof sequence exception
-            demo4 = pu.as1.Theory(valid_statements=(axiom_1, axiom_2, a | star | c, ir1,))
+            demo4 = pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | c, ir1,))
             pass
 
 
