@@ -151,13 +151,13 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
 
 axioms = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))
 
-extended_theory = as1.Derivation(valid_statements=(*axioms,))
+extended_theory = as1.Theory(valid_statements=(*axioms,))
 
 
 def let_x_be_a_propositional_variable(
         theory: as1.FlexibleDerivation,
         rep: as1.FlexibleRepresentation) -> \
-        typing.Tuple[as1.Derivation, as1.Variable | typing.Tuple[as1.Variable, ...]]:
+        typing.Tuple[as1.Theory, as1.Variable | typing.Tuple[as1.Variable, ...]]:
     """Declare one or multiple propositional-variables in the input theory.
 
     If they are not already present, all axioms of propositional-logic-syntax-1 are appended to
@@ -176,7 +176,7 @@ def let_x_be_a_propositional_variable(
     """
     global axioms
     global i1
-    theory: as1.FlexibleDerivation = as1.coerce_derivation(phi=theory)
+    theory: as1.FlexibleDerivation = as1.coerce_theory(phi=theory)
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
     # in the theory.

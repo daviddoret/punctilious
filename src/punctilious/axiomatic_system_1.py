@@ -115,11 +115,11 @@ error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
                    message='Enumeration.__new__: Attempt to create enumeration from invalid elements. Often this is '
                            'caused by a paid of elements that are formula-equivalent.'),
     e111=ErrorCode(event_type=event_types.error, code='e111',
-                   message='While checking the well-formedness of a derivation, a premise is necessary to derive a '
-                           'theorem, but it is absent from the derivation.'),
+                   message='While checking the well-formedness of a theory, a premise is necessary to derive a '
+                           'theorem, but it is absent from the theory.'),
     e112=ErrorCode(event_type=event_types.error, code='e112',
-                   message='While checking the well-formedness of a derivation, a premise is necessary to derive a '
-                           'theorem, but its position in the derivation is posterior to the theorem.'),
+                   message='While checking the well-formedness of a theory, a premise is necessary to derive a '
+                           'theorem, but its position in the theory is posterior to the theorem.'),
     e113=ErrorCode(event_type=event_types.error, code='e113',
                    message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to '
                            'elaborate formulas.'),
@@ -143,12 +143,12 @@ error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
                    message='is_formula_equivalent_with_variables: There exists a phi''sub-formula of phi that is an '
                            'element of variables.'),
     e119=ErrorCode(event_type=event_types.error, code='e119',
-                   message='While checking the well-formedness of a derivation, a transformation-rule is necessary '
-                           'to derive a theorem, but it is absent from the derivation.'),
+                   message='While checking the well-formedness of a theory, a transformation-rule is necessary '
+                           'to derive a theorem, but it is absent from the theory.'),
     e120=ErrorCode(event_type=event_types.error, code='e120',
-                   message='During the initialization of a derivation (in the __new__ or __init__ methods of the '
-                           'Derivation class), the well-formedness of the derivation is verified. This '
-                           'verification failed, in consequence the derivation would be ill-formed. The error '
+                   message='During the initialization of a theory (in the __new__ or __init__ methods of the '
+                           'Derivation class), the well-formedness of the theory is verified. This '
+                           'verification failed, in consequence the theory would be ill-formed. The error '
                            'parameter explains why.'),
     e121=ErrorCode(event_type=event_types.error, code='e121',
                    message='While checking if two formulas are formula-equivalent-with-variables, formulas are '
@@ -717,9 +717,9 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
     return e
 
 
-def union_derivation(phi: FlexibleDerivation, psi: FlexibleDerivation) -> Derivation:
-    """Given two derivations phi, and psi, the union-derivation operator, noted phi ∪-derivation psi,
-    returns a new derivation omega such that:
+def union_theory(phi: FlexibleDerivation, psi: FlexibleDerivation) -> Theory:
+    """Given two theorys phi, and psi, the union-theory operator, noted phi ∪-theory psi,
+    returns a new theory omega such that:
     - all valid-statements of phi are elements of omega,
     - all valid-statements of psi are elements of omega,
     - no other valid-statements are valid-statements of omega.
@@ -728,22 +728,22 @@ def union_derivation(phi: FlexibleDerivation, psi: FlexibleDerivation) -> Deriva
     - the valid-statements from psi keep their original order in omega providing they are not already present in phi,
         in which case they are skipped
 
-    Under derivation-equivalence, the union-derivation operator is:
-     - Idempotent: (phi ∪-derivation phi) ~derivation phi.
-     - Symmetric: (phi ∪-derivation psi) ~derivation (psi ∪-derivation phi).
+    Under theory-equivalence, the union-theory operator is:
+     - Idempotent: (phi ∪-theory phi) ~theory phi.
+     - Symmetric: (phi ∪-theory psi) ~theory (psi ∪-theory phi).
 
-    Under formula-equivalence, the union-derivation operator is:
-     - Idempotent: (phi ∪-derivation phi) ~formula phi.
+    Under formula-equivalence, the union-theory operator is:
+     - Idempotent: (phi ∪-theory phi) ~formula phi.
      - Not symmetric if some element of psi are elements of phi: because of order.
     """
-    phi: Derivation = coerce_derivation(phi=phi)
-    psi: Derivation = coerce_derivation(phi=psi)
-    db: DerivationBuilder = DerivationBuilder(valid_statements=None)
+    phi: Theory = coerce_theory(phi=phi)
+    psi: Theory = coerce_theory(phi=psi)
+    db: TheoryBuilder = TheoryBuilder(valid_statements=None)
     for phi_prime in phi:
         db.append(term=phi_prime)
     for psi_prime in psi:
         db.append(term=psi_prime)
-    d: Derivation = db.to_derivation()
+    d: Theory = db.to_theory()
     return d
 
 
@@ -1028,14 +1028,14 @@ def let_x_be_a_propositional_variable_OBSOLETE(
     """
 
     :param rep:
-    :param db: If a derivation-builder is provided, append the axiom (x is-a proposition) where x is the new
+    :param db: If a theory-builder is provided, append the axiom (x is-a proposition) where x is the new
         variable. Alternatively, an enumeration-builder may be provided.
     :return:
     """
     # TODO: RESUME IMPLEMENTATION OF PARAMETER DB HERE.
     # TODO: EITHER MOVE THIS FUNCTION TO INFERENCE_RULES_1 OR MOVE FUNDAMENTAL LOGIC CONNECTIVES HERE
     if db is not None:
-        db = coerce_derivation_builder(phi=db)
+        db = coerce_theory_builder(phi=db)
     if isinstance(rep, str):
         x = Variable(connective=NullaryConnective(rep=rep))
         if db is not None:
@@ -1129,7 +1129,7 @@ def let_x_be_an_inference_rule(theory: FlexibleDerivation,
     if theory is None:
         theory = Axiomatization(axioms=None)
     else:
-        theory: FlexibleDerivation = coerce_derivation(phi=theory)
+        theory: FlexibleDerivation = coerce_theory(phi=theory)
 
     if inference_rule is None and premises is not None and conclusion is not None and variables is not None:
         transformation: Transformation = Transformation(premises=premises, conclusion=conclusion, variables=variables)
@@ -1138,8 +1138,8 @@ def let_x_be_an_inference_rule(theory: FlexibleDerivation,
     if isinstance(theory, Axiomatization):
         theory = Axiomatization(axioms=(*theory, inference_rule,))
         return theory, inference_rule
-    elif isinstance(theory, Derivation):
-        theory = Derivation(valid_statements=(*theory, inference_rule,))
+    elif isinstance(theory, Theory):
+        theory = Theory(valid_statements=(*theory, inference_rule,))
         return theory, inference_rule
     else:
         raise Exception('oops')
@@ -1153,7 +1153,7 @@ def let_x_be_an_axiom(theory: FlexibleDerivation, claim: typing.Optional[Flexibl
                       axiom: typing.Optional[FlexibleAxiom] = None):
     """
 
-    :param theory: An axiom-collection or a derivation. If None, the empty axiom-collection is implicitly used.
+    :param theory: An axiom-collection or a theory. If None, the empty axiom-collection is implicitly used.
     :param claim: The statement claimed by the new axiom. Either the claim or axiom parameter must be provided,
     and not both.
     :param axiom: An existing axiom. Either the claim or axiom parameter must be provided,
@@ -1164,7 +1164,7 @@ def let_x_be_an_axiom(theory: FlexibleDerivation, claim: typing.Optional[Flexibl
     if theory is None:
         theory = Axiomatization(axioms=None)
     else:
-        theory: FlexibleDerivation = coerce_derivation(phi=theory)
+        theory: FlexibleDerivation = coerce_theory(phi=theory)
     if claim is not None and axiom is not None:
         raise Exception('ooops 1')
     elif claim is None and axiom is None:
@@ -1175,8 +1175,8 @@ def let_x_be_an_axiom(theory: FlexibleDerivation, claim: typing.Optional[Flexibl
     if isinstance(theory, Axiomatization):
         theory = Axiomatization(axioms=(*theory, axiom,))
         return theory, axiom
-    elif isinstance(theory, Derivation):
-        theory = Derivation(valid_statements=(*theory, axiom,))
+    elif isinstance(theory, Theory):
+        theory = Theory(valid_statements=(*theory, axiom,))
         return theory, axiom
     else:
         raise Exception('oops 3')
@@ -1188,7 +1188,7 @@ def let_x_be_a_theory(valid_statements: typing.Optional[FlexibleEnumeration] = N
     :param valid_statements: an enumeration of valid-statements. If None, the empty theory is implicitly assumed.
     :return:
     """
-    return Derivation(valid_statements=valid_statements)
+    return Theory(valid_statements=valid_statements)
 
 
 def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
@@ -1202,7 +1202,7 @@ def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormul
 
 class Connectives(typing.NamedTuple):
     axiom: UnaryConnective
-    derivation: FreeArityConnective
+    theory: FreeArityConnective
     e: FreeArityConnective
     """The enumeration connective, cf. the Enumeration class.
     """
@@ -1227,7 +1227,7 @@ class Connectives(typing.NamedTuple):
 
 connectives: Connectives = _set_state(key='connectives', value=Connectives(
     axiom=let_x_be_a_unary_connective(rep='axiom'),
-    derivation=let_x_be_a_free_arity_connective(rep='derivation'),
+    theory=let_x_be_a_free_arity_connective(rep='theory'),
     e=let_x_be_a_free_arity_connective(rep='e'),  # enumeration
     f=let_x_be_a_ternary_connective(rep='f'),  # Transformation, # duplicate with transformation?
     follows_from=let_x_be_a_binary_connective(rep='follows-from'),
@@ -2174,9 +2174,9 @@ def is_well_formed_valid_statement(phi: FlexibleFormula) -> bool:
     return ValidStatement.is_well_formed(phi=phi)
 
 
-def is_well_formed_derivation(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
-    """Returns True if phi is a well-formed derivation, False otherwise."""
-    return Derivation.is_well_formed(phi=phi, raise_event_if_false=raise_event_if_false)
+def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
+    """Returns True if phi is a well-formed theory, False otherwise."""
+    return Theory.is_well_formed(phi=phi, raise_event_if_false=raise_event_if_false)
 
 
 def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
@@ -2250,59 +2250,59 @@ def coerce_theorem(phi: FlexibleFormula) -> Theorem:
         raise_error(error_code=error_codes.e123, coerced_type=Theorem, phi_type=type(phi), phi=phi)
 
 
-def coerce_derivation(phi: FlexibleDerivation) -> Derivation:
-    """Validate that phi is a well-formed derivation and returns it properly typed as Demonstration,
+def coerce_theory(phi: FlexibleDerivation) -> Theory:
+    """Validate that phi is a well-formed theory and returns it properly typed as Demonstration,
     or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, Derivation):
+    if isinstance(phi, Theory):
         return phi
-    elif isinstance(phi, Formula) and is_well_formed_derivation(phi=phi):
-        return Derivation(valid_statements=phi)
+    elif isinstance(phi, Formula) and is_well_formed_theory(phi=phi):
+        return Theory(valid_statements=phi)
     elif phi is None:
-        return Derivation(valid_statements=None)
+        return Theory(valid_statements=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Derivation(valid_statements=tuple(element for element in phi))
+        return Theory(valid_statements=tuple(element for element in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
         # phi: Formula = Formula(c=connectives.e, terms=phi)
-        return Derivation(valid_statements=phi)
+        return Theory(valid_statements=phi)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Derivation, phi_type=type(phi), phi=phi)
+        raise_error(error_code=error_codes.e123, coerced_type=Theory, phi_type=type(phi), phi=phi)
 
 
-def coerce_derivation_builder(phi: FlexibleFormula) -> DerivationBuilder:
-    """Validate that phi is a well-formed derivation-builder and returns it properly typed as
+def coerce_theory_builder(phi: FlexibleFormula) -> TheoryBuilder:
+    """Validate that phi is a well-formed theory-builder and returns it properly typed as
     DemonstrationBuilder, or raise exception e123.
 
     :param phi:
     :return:
     """
-    if isinstance(phi, DerivationBuilder):
+    if isinstance(phi, TheoryBuilder):
         return phi
-    elif isinstance(phi, Derivation):
-        return phi.to_derivation_builder()
+    elif isinstance(phi, Theory):
+        return phi.to_theory_builder()
     elif phi is None:
-        return DerivationBuilder(valid_statements=None)
+        return TheoryBuilder(valid_statements=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
-        We assume here that the intention was to implicitly convert this to an derivation-builder
+        We assume here that the intention was to implicitly convert this to an theory-builder
         whose valid-statements are the elements of the iterable."""
-        return DerivationBuilder(valid_statements=tuple(theorem for theorem in phi))
+        return TheoryBuilder(valid_statements=tuple(theorem for theorem in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
-        We assume here that the intention was to implicitly convert this to an derivation-builder
+        We assume here that the intention was to implicitly convert this to an theory-builder
         whose valid-statements are the elements of the iterable."""
-        return DerivationBuilder(valid_statements=phi)
+        return TheoryBuilder(valid_statements=phi)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=DerivationBuilder, phi_type=type(phi), phi=phi)
+        raise_error(error_code=error_codes.e123, coerced_type=TheoryBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
@@ -2334,13 +2334,29 @@ class TheoryState(Enumeration):
 
 
 class ValidStatement(Formula):
-    """A valid-statement is a formula that justifies the existence of a statement in a well-formed theory.
+    """A valid-statement has two definitions: a local definition with regard to a theory t, and a global definition.
 
-    There are three types of valid-statements:
+    Local definition (with regard to a theory t):
+    A well-formed valid-statement s with regard to a theory t is a formula that is:
+     - a term of theory t,
+     - a well-formed (global) valid-statement,
+     - and whose justification with regard to theory t is a proper-justification.
+
+    Global definition:
+    A well-formed valid-statement s is a formula of the form:
+     - phi follows-from psi,
+    where:
+     - phi is a formula,
+     - follows-from is the valid-statement connector,
+     - and psi is a proper-justification.
+
+    There are three mutually exclusive categories of valid-statements:
      - axioms,
      - inference-rules,
      - theorems.
-     """
+
+    See their respective definitions for the local and global definitions of proper-justification.
+    """
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula) -> bool:
@@ -2388,18 +2404,25 @@ class ValidStatement(Formula):
 
 
 class Axiom(ValidStatement):
-    """A well-formed axiom is a theorem that unconditionally justifies a statement.
+    """An axiom has two definitions: a local definition with regard to a theory t, and a global definition.
 
-    Syntactic definition:
-    A formula is a well-formed axiom if and only if it is of the form:
-        phi follows-from psi
-    Where:
-        - phi is a well-formed transformation, called the inference-rule,
-        - psi is the axiomatic-postulation urelement,
-        - follows-from is the follows-from binary connective.
+    Intuitive definition:
+    An axiom is a statement that unconditionally justifies a statement.
 
-    Semantic definition:
-    An axiom is the statement that a formula is postulated as true in a theory.
+    Local definition (with regard to a theory t):
+    An axiom is a valid-statement with regard to a theory t if and only if:
+     - it is a term of theory t,
+     - it is a well-formed (global) axiom.
+
+     Global definition:
+     An axiom is a well-formed valid-statement if and only if:
+      - it is a formula of the form phi follows-from axiom
+     where:
+      - phi is a formula,
+      - follows-from is the valid-statement connective,
+      - axiom it the axiom connective.
+
+    TODO: An axiom may be viewed as an inference-rule without premises. Thus, Axiom could derive from InferenceRule.
 
     """
 
@@ -2651,8 +2674,8 @@ class TheoryAccretor(EnumerationAccretor):
     pass
 
 
-class DerivationBuilder(EnumerationBuilder):
-    """A utility class to help build derivations. It is mutable and thus allows edition.
+class TheoryBuilder(EnumerationBuilder):
+    """A utility class to help build theories. It is mutable and thus allows edition.
 
     The allowed operations on an enumeration-builder are:
      - appending axiom,
@@ -2694,22 +2717,22 @@ class DerivationBuilder(EnumerationBuilder):
         valid_statements: str = '\n\t'.join(valid_statement.rep(**kwargs) for valid_statement in self)
         return f'{header}{valid_statements}'
 
-    def to_derivation(self) -> Derivation:
-        """If the derivation-builder is well-formed, return a derivation."""
+    def to_theory(self) -> Theory:
+        """If the theory-builder is well-formed, return a theory."""
         elements: tuple[Formula, ...] = tuple(coerce_valid_statement(phi=element) for element in self)
-        phi: Derivation = Derivation(valid_statements=elements)
+        phi: Theory = Theory(valid_statements=elements)
         return phi
 
     def to_formula(self) -> Formula:
-        """If the derivation-builder is well-formed, return a derivation, which is a formula."""
-        return self.to_derivation()
+        """If the theory-builder is well-formed, return a theory, which is a formula."""
+        return self.to_theory()
 
 
-class Derivation(Enumeration):
-    """A derivation is a justified enumeration of axioms, inference-rules, and theorems.
+class Theory(Enumeration):
+    """A theory is a justified enumeration of axioms, inference-rules, and theorems.
 
     Syntactic definition:
-    A well-formed derivation is an enumeration such that:
+    A well-formed theory is an enumeration such that:
      - all element phi of the enumeration is a well-formed theorem,
      - all premises of all theorem-by-inferences are predecessors of their parent theorem-by-inference.
 
@@ -2720,7 +2743,7 @@ class Derivation(Enumeration):
 
     @staticmethod
     def is_well_formed(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
-        """Return True if phi is a well-formed derivation, False otherwise.
+        """Return True if phi is a well-formed theory, False otherwise.
 
         :param phi: A formula.
         :param raise_event_if_false:
@@ -2728,13 +2751,13 @@ class Derivation(Enumeration):
         """
         phi = coerce_enumeration(phi=phi)
 
-        if isinstance(phi, Derivation):
-            # the Derivation class assure the well-formedness of the derivation.
+        if isinstance(phi, Theory):
+            # the Derivation class assure the well-formedness of the theory.
             return True
 
         # check the well-formedness of the individual valid-statements.
-        # and retrieve the terms claimed as proven in the derivation, preserving order.
-        # by the definition of a derivation, these are the left term (term_0) of the formulas.
+        # and retrieve the terms claimed as proven in the theory, preserving order.
+        # by the definition of a theory, these are the left term (term_0) of the formulas.
         claims: TuplBuilder = TuplBuilder(elements=None)
         valid_statements: TuplBuilder = TuplBuilder(elements=None)
         for theorem in phi:
@@ -2765,7 +2788,7 @@ class Derivation(Enumeration):
                 for premise in inference.premises:
                     # check that premise is a proven-formula (term_0) of a predecessor
                     if not claims.has_element(phi=premise):
-                        # The premise is absent from the derivation
+                        # The premise is absent from the theory
                         if raise_event_if_false:
                             raise_error(error_code=error_codes.e111, premise=premise, premise_index=i, theorem=theorem,
                                         claim=claim)
@@ -2780,7 +2803,7 @@ class Derivation(Enumeration):
                                             claim=claim)
                             return False
                 if not claims.has_element(phi=inference.transformation_rule):
-                    # The inference transformation-rule is absent from the derivation.
+                    # The inference transformation-rule is absent from the theory.
                     if raise_event_if_false:
                         raise_error(error_code=error_codes.e119, transformation_rule=inference.transformation_rule,
                                     inference=inference, premise_index=i, theorem=theorem,
@@ -2806,7 +2829,7 @@ class Derivation(Enumeration):
         # coerce to enumeration
         valid_statements: Enumeration = coerce_enumeration(phi=valid_statements)
         try:
-            is_well_formed_derivation(phi=valid_statements, raise_event_if_false=True)
+            is_well_formed_theory(phi=valid_statements, raise_event_if_false=True)
         except Exception as error:
             # well-formedness verification failure, the theorem is ill-formed.
             raise_error(error_code=error_codes.e120, error=error, valid_statements=valid_statements)
@@ -2823,18 +2846,28 @@ class Derivation(Enumeration):
 
     @property
     def axioms(self) -> Enumeration:
-        """Return an enumeration of all axioms in the derivation, preserving order, filtering out inference-rules and
+        """Return an enumeration of all axioms in the theory, preserving order, filtering out inference-rules and
         theorems."""
         return Enumeration(elements=tuple(self.iterate_axioms()))
 
     @property
+    def claims(self) -> Enumeration:
+        """Return an enumeration of all axiom and theorem claims in the theory, preserving order."""
+        return Enumeration(elements=tuple(self.iterate_claims()))
+
+    def has_claim(self, phi: FlexibleFormula) -> bool:
+        """Return True if phi is formula-equivalent with a claim in this theory."""
+        phi = coerce_formula(phi=phi)
+        return any(is_formula_equivalent(phi=phi, psi=claim) for claim in self.iterate_claims())
+
+    @property
     def inference_rules(self) -> Enumeration:
-        """Return an enumeration of all inference-rules in the derivation, preserving order, filtering out axioms and
+        """Return an enumeration of all inference-rules in the theory, preserving order, filtering out axioms and
         theorems."""
         return Enumeration(elements=tuple(self.iterate_theorems()))
 
     def is_valid_statement(self, phi: FlexibleFormula) -> bool:
-        """Return True if phi is demonstrated as a valid-statement in this derivation, False otherwise."""
+        """Return True if phi is demonstrated as a valid-statement in this theory, False otherwise."""
         phi = coerce_formula(phi=phi)
         for theorem in self:
             theorem: ValidStatement = coerce_valid_statement(phi=theorem)
@@ -2844,25 +2877,33 @@ class Derivation(Enumeration):
         # return any(is_formula_equivalent(phi=phi, psi=theorem) for theorem in self)
 
     def iterate_axioms(self) -> typing.Iterator[Axiom]:
-        """Iterates over all axioms in the derivation, preserving order, filtering out inference-rules and theorems."""
+        """Iterates over all axioms in the theory, preserving order, filtering out inference-rules and theorems."""
         for element in self:
             if isinstance(element, Axiom):
                 yield element
 
+    def iterate_claims(self) -> typing.Iterator[Axiom]:
+        """Iterates over all axiom and theorem claims in the theory, preserving order."""
+        for element in self:
+            if isinstance(element, Axiom):
+                yield element.claim
+            elif isinstance(element, Theorem):
+                yield element.claim
+
     def iterate_inference_rules(self) -> typing.Iterator[InferenceRule]:
-        """Iterates over all inference-rules in the derivation, preserving order, filtering out axioms and theorems."""
+        """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems."""
         for element in self:
             if isinstance(element, Theorem):
                 yield element
 
     def iterate_theorems(self) -> typing.Iterator[Theorem]:
-        """Iterates over all theorems in the derivation, preserving order, filtering out axioms and inference-rules."""
+        """Iterates over all theorems in the theory, preserving order, filtering out axioms and inference-rules."""
         for element in self:
             if isinstance(element, Theorem):
                 yield element
 
     def iterate_valid_statements(self) -> typing.Iterator[ValidStatement]:
-        """Iterates over all valid-statements, that is the claims of axioms and theorems in the derivation, preserving
+        """Iterates over all valid-statements, that is the claims of axioms and theorems in the theory, preserving
         order, filtering out inference-rules."""
         for element in self:
             if isinstance(element, ValidStatement):
@@ -2875,25 +2916,25 @@ class Derivation(Enumeration):
 
     @property
     def theorems(self) -> Enumeration:
-        """Return an enumeration of all theorems in the derivation, preserving order, filtering out axioms and
+        """Return an enumeration of all theorems in the theory, preserving order, filtering out axioms and
         inference-rules."""
         return Enumeration(elements=tuple(self.iterate_theorems()))
 
-    def to_derivation_builder(self) -> DerivationBuilder:
-        return DerivationBuilder(valid_statements=self)
+    def to_theory_builder(self) -> TheoryBuilder:
+        return TheoryBuilder(valid_statements=self)
 
 
 FlexibleDerivation = typing.Optional[
-    typing.Union[Derivation, DerivationBuilder, typing.Iterable[FlexibleValidStatement]]]
+    typing.Union[Theory, TheoryBuilder, typing.Iterable[FlexibleValidStatement]]]
 """FlexibleDemonstration is a flexible python type that may be safely coerced into a Demonstration or a 
 DemonstrationBuilder."""
 
 FlexibleDerivationBuilder = typing.Optional[
-    typing.Union[Derivation, DerivationBuilder, typing.Iterable[FlexibleValidStatement]]]
+    typing.Union[Theory, TheoryBuilder, typing.Iterable[FlexibleValidStatement]]]
 
 
-class Axiomatization(Derivation):
-    """An axiomatization is a derivation that is only composed of axioms,
+class Axiomatization(Theory):
+    """An axiomatization is a theory that is only composed of axioms,
     and/or inference-rules.
 
     Syntactic definition:
@@ -3089,7 +3130,7 @@ class AutoDerivationFailure(CustomException):
 
 def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: FlexibleTupl,
            inference_rule: FlexibleInferenceRule):
-    """Given a derivation t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
+    """Given a theory t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
 
     :param claim:
     :param theory:
@@ -3098,14 +3139,14 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
     :return:
     """
     # parameters validation
-    theory: Derivation = coerce_derivation(phi=theory)
+    theory: Theory = coerce_theory(phi=theory)
     claim: Formula = coerce_formula(phi=claim)
     premises: Tupl = coerce_tupl(phi=premises)
     inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
 
     for premise in premises:
         if not theory.has_element(phi=premise):
-            # the premise is missing from the derivation
+            # the premise is missing from the theory
             # trigger auto-derivations
             pass
             # try:
@@ -3120,23 +3161,25 @@ def derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: Flexibl
     theorem: ValidStatement = Theorem(claim=claim, i=inference)
 
     # extends the theory
-    theory: Derivation = Derivation(valid_statements=(*theory, theorem,))
+    theory: Theory = Theory(valid_statements=(*theory, theorem,))
 
     return theory, theorem
 
 
-def auto_derive(theory: FlexibleDerivation, claim: FlexibleFormula, premises: FlexibleTupl,
-                inference_rule: FlexibleInferenceRule) -> Derivation:
+def auto_derive(theory: FlexibleDerivation, claim: FlexibleFormula) -> Theory:
     """Try to derive a claim without premises.
 
     Raise an AutoDerivationFailure if the derivation is not successful.
     """
-    for auto_derivation in theory.auto_derivations:
-        if auto_derivation.match(claim):
-            theory = auto_derivation.derive(theory=theory, premise=claim)
-    if 1 == 2:
-        raise AutoDerivationFailure("Auto-derivation was not successful.")
-    return Derivation()
+    if theory.has_claim(phi=claim):
+        return theory
+    else:
+        for auto_derivation in theory.auto_derivations:
+            if auto_derivation.match(claim):
+                theory = auto_derivation.derive(theory=theory, premise=claim)
+        if 1 == 2:
+            raise AutoDerivationFailure("Auto-derivation was not successful.")
+        return Theory()
 
 
 # PRESENTATION LAYER
