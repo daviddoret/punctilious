@@ -601,6 +601,16 @@ class Formula(tuple):
         """
         typesetter = self.get_typesetter(typesetter=typesetter)
         yield from typesetter.typeset_from_generator(phi=self, **kwargs)
+        # yield_string_from_typesetter(x=self, **kwargs)
+
+
+def yield_string_from_typesetter(x, **kwargs):
+    # TODO: ?????
+    if isinstance(x, str):
+        yield x
+    elif isinstance(x, pl1.Typesetter):
+        for y in x.typeset_from_generator(**kwargs):
+            yield_string_from_typesetter(x=y, **kwargs)
 
 
 def coerce_formula_builder(phi: FlexibleFormula = None) -> FormulaBuilder:
@@ -982,7 +992,7 @@ class Variable(SimpleObject):
 
 def let_x_be_a_variable(formula_typesetter: pl1.FlexibleTypesetter) -> typing.Union[
     Variable, typing.Generator[Variable, typing.Any, None]]:
-    if isinstance(formula_typesetter, pl1.FlexibleTypesetter):
+    if formula_typesetter is None or isinstance(formula_typesetter, pl1.FlexibleTypesetter):
         return Variable(connective=NullaryConnective(formula_typesetter=formula_typesetter))
     elif isinstance(formula_typesetter, typing.Iterable):
         return (Variable(connective=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
@@ -3070,7 +3080,7 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
 
-        for derivation in t.iterate_valid_statements():
+        for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
                 return t, derivation
     else:
@@ -3156,6 +3166,7 @@ class ClassicalFormulaTypesetter(pl1.Typesetter):
         for term in phi:
             if not first:
                 yield from pl1.symbols.collection_separator.typeset_from_generator(**kwargs)
+                yield from pl1.symbols.space.typeset_from_generator(**kwargs)
             else:
                 first = False
             yield from term.typeset_from_generator(**kwargs)

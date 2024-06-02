@@ -633,16 +633,17 @@ FlexibleTypesetter = typing.Union[Typesetter, str]
 def coerce_typesetter(ts: FlexibleTypesetter) -> Typesetter:
     global typesetters
     if ts is None:
-        ts = typesetters.failsafe()
+        ts: Typesetter = typesetters.failsafe()
+        return ts
     elif isinstance(ts, str):
         # temporary fix
         if len(ts) == 1 and symbols.is_sans_serif_letter(letter=ts):
             # TODO: Temporary fix for variable names.
-            ts = symbols.get_sans_serif_letter(letter=ts)
+            ts: Typesetter = symbols.get_sans_serif_letter(letter=ts)
+            return ts
         else:
-            ts = typesetters.text(text=ts)
-
-        return typesetters.text(text=ts)
+            ts: Typesetter = typesetters.text(text=ts)
+            return ts
     elif isinstance(ts, Typesetter):
         return ts
     else:

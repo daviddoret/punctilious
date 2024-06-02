@@ -27,3 +27,5 @@ as1.connectives.axiom.formula_typesetter = as1.typesetters.text(
     text='axiom')
 as1.connectives.inference_rule.formula_typesetter = as1.typesetters.text(
     text='inference-rule')
+as1.connectives.theory.formula_typesetter = as1.typesetters.classical_formula(
+    connective_typesetter='theory')
