@@ -776,7 +776,7 @@ class TestDemonstration:
                                       a | star | b,
                                       b | star | c,),
                                   inference_rule=ir1)
-        assert demo2.is_valid_statement(phi=a | star | c)
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=a | star | c, t=demo2)
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # invalid proof raise exception

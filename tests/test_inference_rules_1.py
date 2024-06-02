@@ -40,21 +40,21 @@ def theory(a, b, c):
                                valid_statement=a | is_a | proposition,
                                premises=(a | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
-    assert theory.is_valid_statement(phi=a | is_a | proposition)
+    assert pu.as1.is_valid_statement_with_regard_to_theory(phi=a | is_a | proposition, t=theory)
 
     # derive: b is-a proposition
     theory, _, = pu.as1.derive(theory=theory,
                                valid_statement=b | is_a | proposition,
                                premises=(b | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
-    assert theory.is_valid_statement(phi=b | is_a | proposition)
+    assert pu.as1.is_valid_statement_with_regard_to_theory(phi=b | is_a | proposition, t=theory)
 
     # derive: c is-a proposition
     theory, _, = pu.as1.derive(theory=theory,
                                valid_statement=c | is_a | proposition,
                                premises=(c | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
-    assert theory.is_valid_statement(phi=c | is_a | proposition)
+    assert pu.as1.is_valid_statement_with_regard_to_theory(phi=c | is_a | proposition, t=theory)
 
     return theory
 
@@ -74,7 +74,7 @@ class TestAdjunction:
                                        a,
                                        b,),
                                    inference_rule=pu.ir1.adjunction_axiom)
-        assert theory.is_valid_statement(phi=a | land | b)
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=a | land | b, t=theory)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e105'):
@@ -101,7 +101,7 @@ class TestSimplification1:
                                        b | is_a | proposition,
                                        a | land | b,),
                                    inference_rule=pu.ir1.simplification_1_axiom)
-        assert theory.is_valid_statement(phi=a)
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=a, t=theory)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e105'):
@@ -128,7 +128,7 @@ class TestSimplification2:
                                        b | is_a | proposition,
                                        a | land | b,),
                                    inference_rule=pu.ir1.simplification_2_axiom)
-        assert theory.is_valid_statement(phi=b)
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=b, t=theory)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e120'):
@@ -157,7 +157,7 @@ class TestModusPonens:
                                        a | implies | b,
                                        a),
                                    inference_rule=pu.ir1.modus_ponens_axiom)
-        assert theory.is_valid_statement(phi=b)
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=b, t=theory)
 
         # extend the theory to perform a second test
         # using a single propositional-variable
@@ -173,7 +173,7 @@ class TestModusPonens:
                                        a | implies | (a | land | a),
                                        a),
                                    inference_rule=pu.ir1.modus_ponens_axiom)
-        assert theory.is_valid_statement(phi=a | land | a)
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=a | land | a, t=theory)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.as1.CustomException, match='e123'):

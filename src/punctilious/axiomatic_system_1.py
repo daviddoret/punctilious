@@ -719,7 +719,7 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
 
 
 def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
-    """Given two theorys phi, and psi, the union-theory operator, noted phi ∪-theory psi,
+    """Given two theories phi, and psi, the union-theory operator, noted phi ∪-theory psi,
     returns a new theory omega such that:
     - all derivations of phi are elements of omega,
     - all derivations of psi are elements of omega,
@@ -2160,6 +2160,11 @@ def is_well_formed_inference_rule(phi: FlexibleFormula) -> bool:
     return InferenceRule.is_well_formed(phi=phi)
 
 
+def is_valid_statement_with_regard_to_theory(phi: FlexibleFormula, t: FlexibleTheory) -> bool:
+    """Return True if formula phi is a valid-statement with regard to theory t, False otherwise."""
+    return any(is_formula_equivalent(phi=phi, psi=valid_statement) for valid_statement in t.iterate_valid_statements())
+
+
 def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
     """Returns True if phi is a well-formed axiom, False otherwise."""
     return Axiom.is_well_formed(phi=phi)
@@ -2857,27 +2862,11 @@ class Theory(Enumeration):
         """Return an enumeration of all axiom and theorem valid-statements in the theory, preserving order."""
         return Enumeration(elements=tuple(self.iterate_valid_statements()))
 
-    def has_valid_statement(self, phi: FlexibleFormula) -> bool:
-        """Return True if phi is formula-equivalent with a valid-statement in this theory."""
-        phi = coerce_formula(phi=phi)
-        return any(
-            is_formula_equivalent(phi=phi, psi=valid_statement) for valid_statement in self.iterate_valid_statements())
-
     @property
     def inference_rules(self) -> Enumeration:
         """Return an enumeration of all inference-rules in the theory, preserving order, filtering out axioms and
         theorems."""
         return Enumeration(elements=tuple(self.iterate_theorems()))
-
-    def is_valid_statement(self, phi: FlexibleFormula) -> bool:
-        """Return True if phi is demonstrated as a valid-statement of a derivation in this theory, False otherwise."""
-        phi = coerce_formula(phi=phi)
-        for theorem in self:
-            theorem: Derivation = coerce_derivation(phi=theorem)
-            if is_formula_equivalent(phi=phi, psi=theorem.valid_statement):
-                return True
-        return False
-        # return any(is_formula_equivalent(phi=phi, psi=theorem) for theorem in self)
 
     def iterate_axioms(self) -> typing.Iterator[Axiom]:
         """Iterates over all axioms in the theory, preserving order, filtering out inference-rules and theorems."""
@@ -3171,7 +3160,7 @@ def auto_derive(theory: FlexibleTheory, valid_statement: FlexibleFormula) -> The
 
     Raise an AutoDerivationFailure if the derivation is not successful.
     """
-    if theory.has_valid_statement(phi=valid_statement):
+    if is_valid_statement_with_regard_to_theory(phi=valid_statement, t=theory):
         return theory
     else:
         for auto_derivation in theory.auto_derivations:
