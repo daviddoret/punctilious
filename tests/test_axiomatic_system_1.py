@@ -150,10 +150,10 @@ class TestFormulaBuilder:
         assert len(fb) == 4
 
     def test_formula_builder(self, c1, c2, c3, fb4):
-        assert fb4.c is c1
-        assert fb4[0].c is c1
-        assert fb4[1].c is c2
-        assert fb4[2].c is c3
+        assert fb4.connective is c1
+        assert fb4[0].connective is c1
+        assert fb4[1].connective is c2
+        assert fb4[2].connective is c3
 
     def test_set_term(self):
         x, y, z = pu.as1.let_x_be_a_simple_object(rep=('x', 'y', 'z',))
@@ -168,84 +168,84 @@ class TestFormulaBuilder:
     def test_term_0(self, c1, c2, c3):
         fb = pu.as1.FormulaBuilder(c=c1)
         fb.term_0 = c2
-        assert fb.c is c1
-        assert fb[0].c is c2
+        assert fb.connective is c1
+        assert fb[0].connective is c2
 
     def test_terms(self, fb1, fb2, fb3):
         terms1 = pu.as1.FormulaBuilder()
         assert len(terms1) == 0
         terms2 = pu.as1.FormulaBuilder(terms=(fb1,))
         assert len(terms2) == 1
-        assert terms2[0].c is fb1.c
-        assert terms2.term_0.c is fb1.c
+        assert terms2[0].connective is fb1.connective
+        assert terms2.term_0.connective is fb1.connective
         terms3 = pu.as1.FormulaBuilder(terms=(fb1, fb2, fb1, fb1, fb3))
         assert len(terms3) == 5
-        assert terms3[0].c is fb1.c
-        assert terms3.term_0.c is fb1.c
-        assert terms3[1].c is fb2.c
-        assert terms3.term_1.c is fb2.c
-        assert terms3[2].c is fb1.c
-        assert terms3[3].c is fb1.c
-        assert terms3[4].c is fb3.c
+        assert terms3[0].connective is fb1.connective
+        assert terms3.term_0.connective is fb1.connective
+        assert terms3[1].connective is fb2.connective
+        assert terms3.term_1.connective is fb2.connective
+        assert terms3[2].connective is fb1.connective
+        assert terms3[3].connective is fb1.connective
+        assert terms3[4].connective is fb3.connective
 
     def test_to_formula(self, fb4):
         phi1 = fb4.to_formula()
-        assert phi1.c is fb4.c
-        assert phi1[0].c is fb4[0].c
-        assert phi1[0][0].c is fb4[0][0].c
-        assert phi1[0][1].c is fb4[0][1].c
-        assert phi1[1].c is fb4[1].c
-        assert phi1[2].c is fb4[2].c
-        assert phi1[2][0].c is fb4[2][0].c
-        assert phi1[2][0][0].c is fb4[2][0][0].c
-        assert phi1[2][0][1].c is fb4[2][0][1].c
-        assert phi1[2][1].c is fb4[2][1].c
+        assert phi1.connective is fb4.connective
+        assert phi1[0].connective is fb4[0].connective
+        assert phi1[0][0].connective is fb4[0][0].connective
+        assert phi1[0][1].connective is fb4[0][1].connective
+        assert phi1[1].connective is fb4[1].connective
+        assert phi1[2].connective is fb4[2].connective
+        assert phi1[2][0].connective is fb4[2][0].connective
+        assert phi1[2][0][0].connective is fb4[2][0][0].connective
+        assert phi1[2][0][1].connective is fb4[2][0][1].connective
+        assert phi1[2][1].connective is fb4[2][1].connective
 
 
 class TestFormula:
 
     def test_formula(self, c1, c2, c3, phi4):
-        assert phi4.c is c1
-        assert phi4[0].c is c1
-        assert phi4[1].c is c2
-        assert phi4[2].c is c3
+        assert phi4.connective is c1
+        assert phi4[0].connective is c1
+        assert phi4[1].connective is c2
+        assert phi4[2].connective is c3
 
     def test_term_1(self, c1, c2):
         fb = pu.as1.FormulaBuilder(c=c2)
-        fb.term_0.c = c1
+        fb.term_0.connective = c1
         phi = fb.to_formula()
-        assert phi.term_0.c is c1
-        assert phi[0].c is c1
+        assert phi.term_0.connective is c1
+        assert phi[0].connective is c1
 
     def test_terms(self, c1, phi1, phi2, phi3):
         terms1 = pu.as1.Formula(connective=c1)
         assert len(terms1) == 0
         terms2 = pu.as1.Formula(connective=c1, terms=(phi1,))
         assert len(terms2) == 1
-        assert terms2[0].c is phi1.c
-        assert terms2.term_0.c is phi1.c
+        assert terms2[0].connective is phi1.connective
+        assert terms2.term_0.connective is phi1.connective
         terms3 = pu.as1.Formula(connective=c1, terms=(phi1, phi2, phi1, phi1, phi3))
         assert len(terms3) == 5
-        assert terms3[0].c is phi1.c
-        assert terms3.term_0.c is phi1.c
-        assert terms3[1].c is phi2.c
-        assert terms3.term_1.c is phi2.c
-        assert terms3[2].c is phi1.c
-        assert terms3[3].c is phi1.c
-        assert terms3[4].c is phi3.c
+        assert terms3[0].connective is phi1.connective
+        assert terms3.term_0.connective is phi1.connective
+        assert terms3[1].connective is phi2.connective
+        assert terms3.term_1.connective is phi2.connective
+        assert terms3[2].connective is phi1.connective
+        assert terms3[3].connective is phi1.connective
+        assert terms3[4].connective is phi3.connective
 
     def test_to_formula_builder(self, phi4):
         fb1 = phi4.to_formula_builder()
-        assert fb1.c is phi4.c
-        assert fb1[0].c is phi4[0].c
-        assert fb1[0][0].c is phi4[0][0].c
-        assert fb1[0][1].c is phi4[0][1].c
-        assert fb1[1].c is phi4[1].c
-        assert fb1[2].c is phi4[2].c
-        assert fb1[2][0].c is phi4[2][0].c
-        assert fb1[2][0][0].c is phi4[2][0][0].c
-        assert fb1[2][0][1].c is phi4[2][0][1].c
-        assert fb1[2][1].c is phi4[2][1].c
+        assert fb1.connective is phi4.connective
+        assert fb1[0].connective is phi4[0].connective
+        assert fb1[0][0].connective is phi4[0][0].connective
+        assert fb1[0][1].connective is phi4[0][1].connective
+        assert fb1[1].connective is phi4[1].connective
+        assert fb1[2].connective is phi4[2].connective
+        assert fb1[2][0].connective is phi4[2][0].connective
+        assert fb1[2][0][0].connective is phi4[2][0][0].connective
+        assert fb1[2][0][1].connective is phi4[2][0][1].connective
+        assert fb1[2][1].connective is phi4[2][1].connective
 
 
 class TestConnectiveEquivalence:
@@ -796,3 +796,24 @@ class TestVariable:
             print(x)
             print(y)
             pass
+
+
+class TestAutoDerivation:
+    def test_auto_derivation(self):
+        # elaborate a theory
+        p = pu.as1.let_x_be_a_simple_object(rep='P')
+        q = pu.as1.let_x_be_a_simple_object(rep='Q')
+        a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=p)
+        if_p_then_q = pu.as1.InferenceRule(
+            transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
+        theory = pu.as1.Axiomatization(axioms=(a1, if_p_then_q,))
+        pass
+        # auto-derivation of an existing valid-statement
+        theory, _, = pu.as1.auto_derive(t=theory, phi=p)
+        pass
+        # manual derivation
+        theory2, _, = pu.as1.derive(theory=theory, valid_statement=q, premises=(p,), inference_rule=if_p_then_q)
+        pass
+        # auto-derivation
+        theory, _, = pu.as1.auto_derive(t=theory, phi=q)
+        pass

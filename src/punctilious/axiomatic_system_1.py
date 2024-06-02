@@ -251,7 +251,7 @@ class FormulaBuilder(list):
     def __init__(self, c: typing.Optional[Connective] = None, terms: FlexibleTupl = None):
         """
         :param FlexibleTerms terms: A collection of terms."""
-        self.c: typing.Optional[Connective] = c
+        self.connective: typing.Optional[Connective] = c
 
         # When inheriting from list, we implement __init__ and not __new__.
         # Reference: https://stackoverflow.com/questions/9432719/python-how-can-i-inherit-from-the-built-in-list-type
@@ -353,14 +353,14 @@ class FormulaBuilder(list):
     def rep(self, **kwargs) -> str:
         parenthesis = kwargs.get('parenthesis', False)
         kwargs['parenthesis'] = True
-        if isinstance(self.c, NullaryConnective):
-            return f'{self.c.rep()}'
-        elif isinstance(self.c, BinaryConnective):
+        if isinstance(self.connective, NullaryConnective):
+            return f'{self.connective.rep()}'
+        elif isinstance(self.connective, BinaryConnective):
             term_0: str = self.term_0.rep(**kwargs) if self.term_0 is not None else '?'
             term_1: str = self.term_1.rep(**kwargs) if self.term_1 is not None else '?'
-            return f'{'(' if parenthesis else ''}{term_0} {self.c.rep()} {term_1}{')' if parenthesis else ''}'
+            return f'{'(' if parenthesis else ''}{term_0} {self.connective.rep()} {term_1}{')' if parenthesis else ''}'
         else:
-            c: str = self.c.rep(**kwargs) if self.c is not None else '?'
+            c: str = self.connective.rep(**kwargs) if self.connective is not None else '?'
             terms: str = ', '.join(term.rep(**kwargs) if term is not None else '?' for term in self)
             return f'{'(' if parenthesis else ''}{c}({terms}){')' if parenthesis else ''}'
 
@@ -408,10 +408,10 @@ class FormulaBuilder(list):
             self[1] = term
 
     def to_formula(self) -> Formula:
-        if self.c is None:
-            raise_error(error_code=error_codes.e113, formula_builder=self, c=self.c)
+        if self.connective is None:
+            raise_error(error_code=error_codes.e113, formula_builder=self, c=self.connective)
         terms: tuple[Formula, ...] = tuple(coerce_formula(phi=term) for term in self)
-        phi: Formula = Formula(connective=self.c, terms=terms)
+        phi: Formula = Formula(connective=self.connective, terms=terms)
         return phi
 
     def validate_formula_builder(self) -> bool:
@@ -489,7 +489,7 @@ class Formula(tuple):
         return len(self)
 
     @property
-    def c(self) -> Connective:
+    def connective(self) -> Connective:
         return self._connective
 
     def get_index_of_first_equivalent_term(self, phi: FlexibleFormula) -> int:
@@ -528,15 +528,15 @@ class Formula(tuple):
             # OBSOLETE METHOD, TO BE PROGRESSIVELY PHASED OUT
             parenthesis = kwargs.get('parenthesis', False)
             kwargs['parenthesis'] = True
-            if isinstance(self.c, NullaryConnective):
-                return f'{self.c.rep()}'
-            elif isinstance(self.c, BinaryConnective):
+            if isinstance(self.connective, NullaryConnective):
+                return f'{self.connective.rep()}'
+            elif isinstance(self.connective, BinaryConnective):
                 return (f'{'(' if parenthesis else ''}'
-                        f'{self.term_0.rep(**kwargs)} {self.c.rep()} {self.term_1.rep(**kwargs)}'
+                        f'{self.term_0.rep(**kwargs)} {self.connective.rep()} {self.term_1.rep(**kwargs)}'
                         f'{')' if parenthesis else ''}')
             else:
                 terms: str = ', '.join(term.rep(**kwargs) for term in self)
-                return f'{'(' if parenthesis else ''}{self.c.rep(**kwargs)}({terms}){')' if parenthesis else ''}'
+                return f'{'(' if parenthesis else ''}{self.connective.rep(**kwargs)}({terms}){')' if parenthesis else ''}'
 
     @property
     def term_0(self) -> Formula:
@@ -546,7 +546,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 1:
-            raise_error(error_code=error_codes.e103, c=self.c)
+            raise_error(error_code=error_codes.e103, c=self.connective)
         return self[0]
 
     @property
@@ -557,7 +557,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 2:
-            raise_error(error_code=error_codes.e104, c=self.c)
+            raise_error(error_code=error_codes.e104, c=self.connective)
         return self[1]
 
     @property
@@ -568,14 +568,14 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 3:
-            raise_error(error_code=error_codes.e104, c=self.c)
+            raise_error(error_code=error_codes.e104, c=self.connective)
         return self[2]
 
     def to_formula_builder(self) -> FormulaBuilder:
         """Returns a formula-builder that is equivalent to this formula.
         This makes it possible to edit the formula-builder to elaborate new formulas."""
         terms: tuple[FormulaBuilder, ...] = tuple(coerce_formula_builder(phi=term) for term in self)
-        phi: FormulaBuilder = FormulaBuilder(c=self.c, terms=terms)
+        phi: FormulaBuilder = FormulaBuilder(c=self.connective, terms=terms)
         return phi
 
     def get_typesetter(self, typesetter: typing.Optional[
@@ -594,8 +594,8 @@ class Formula(tuple):
         if typesetter is None:
             if self.typesetter is not None:
                 typesetter: pl1.Typesetter = self.typesetter
-            elif self.c.formula_typesetter is not None:
-                typesetter: pl1.Typesetter = self.c.formula_typesetter
+            elif self.connective.formula_typesetter is not None:
+                typesetter: pl1.Typesetter = self.connective.formula_typesetter
             else:
                 typesetter = pl1.typesetters.failsafe
         return typesetter
@@ -670,7 +670,7 @@ def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
     elif isinstance(phi, Formula) and is_well_formed_enumeration(phi=phi):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(elements=phi, connective=phi.c)
+        return Enumeration(elements=phi, connective=phi.connective)
     elif phi is None:
         return Enumeration(elements=None)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
@@ -868,7 +868,7 @@ class SimpleObject(Formula):
 
     def rep(self, **kwargs) -> str:
         kwargs['parenthesis'] = True
-        return f'{self.c.rep(**kwargs)}'
+        return f'{self.connective.rep(**kwargs)}'
 
 
 class UnaryConnective(FixedArityConnective):
@@ -885,7 +885,7 @@ class InfixPartialFormula:
     """
 
     def __init__(self, c: Connective, term_1: FlexibleFormula):
-        self._c = c
+        self._connective = c
         self._term_1 = term_1
 
     def __or__(self, term_2: FlexibleFormula = None):
@@ -894,7 +894,7 @@ class InfixPartialFormula:
         overloading the __or__() method that is called when | is used,
         and gluing all this together with the InfixPartialFormula class.
         """
-        return Formula(connective=self._c, terms=(self.term_1, term_2,))
+        return Formula(connective=self._connective, terms=(self.term_1, term_2,))
 
     def __repr__(self):
         return self.rep()
@@ -903,12 +903,12 @@ class InfixPartialFormula:
         return self.rep()
 
     @property
-    def c(self) -> Connective:
-        return self._c
+    def connective(self) -> Connective:
+        return self._connective
 
     def rep(self, **kwargs):
         kwargs['parenthesis'] = True
-        return f'{self.c.rep(**kwargs)}({self.term_1.rep(**kwargs)}, ?)'
+        return f'{self.connective.rep(**kwargs)}({self.term_1.rep(**kwargs)}, ?)'
 
     @property
     def term_1(self) -> Connective:
@@ -1295,7 +1295,7 @@ def is_connective_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool
     """
     phi = coerce_formula(phi=phi)
     psi = coerce_formula(phi=psi)
-    return phi.c is psi.c
+    return phi.connective is psi.connective
 
 
 def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
@@ -1446,7 +1446,7 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         return assigned_value
     else:
         # build the replaced formula.
-        fb: FormulaBuilder = FormulaBuilder(c=phi.c)
+        fb: FormulaBuilder = FormulaBuilder(c=phi.connective)
         # recursively apply the replacement algorithm on phi terms.
         for term in phi:
             term_substitute = replace_formulas(phi=term, m=m)
@@ -1993,7 +1993,7 @@ class Transformation(Formula):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        if (phi.c is not connectives.transformation or
+        if (phi.connective is not connectives.transformation or
                 phi.arity != 3 or
                 not is_well_formed_tupl(phi=phi.term_0) or
                 not is_well_formed_formula(phi=phi.term_1) or
@@ -2161,7 +2161,12 @@ def is_well_formed_inference_rule(phi: FlexibleFormula) -> bool:
 
 
 def is_valid_statement_with_regard_to_theory(phi: FlexibleFormula, t: FlexibleTheory) -> bool:
-    """Return True if formula phi is a valid-statement with regard to theory t, False otherwise."""
+    """Return True if formula phi is a valid-statement with regard to theory t, False otherwise.
+
+    A formula phi is a valid-statement with regard to a theory t, if and only if:
+     - phi is the valid-statement of an axiom in t,
+     - or phi is the valid-statement of a theorem in t.
+    """
     return any(is_formula_equivalent(phi=phi, psi=valid_statement) for valid_statement in t.iterate_valid_statements())
 
 
@@ -2443,10 +2448,10 @@ class Axiom(Derivation):
         if isinstance(phi, Axiom):
             # Shortcut: the class assures the well-formedness of the formula.
             return True
-        elif (phi.c is not connectives.follows_from or
+        elif (phi.connective is not connectives.follows_from or
               not phi.arity == 2 or
               not is_well_formed_formula(phi=phi.term_0) or
-              phi.term_1.c is not connectives.axiom):
+              phi.term_1.connective is not connectives.axiom):
             return False
         else:
             return True
@@ -2498,10 +2503,10 @@ class InferenceRule(Derivation):
         if isinstance(phi, InferenceRule):
             # Shortcut: the class assures the well-formedness of the formula.
             return True
-        elif (not phi.c is connectives.follows_from or
+        elif (not phi.connective is connectives.follows_from or
               not phi.arity == 2 or
               not is_well_formed_transformation(phi=phi.term_0) or
-              phi.term_1.c is not connectives.inference_rule):
+              phi.term_1.connective is not connectives.inference_rule):
             return False
         else:
             return True
@@ -2548,7 +2553,7 @@ class Inference(Formula):
         :return: bool.
         """
         phi = coerce_formula(phi=phi)
-        if phi.c is not connectives.inference or not is_well_formed_enumeration(
+        if phi.connective is not connectives.inference or not is_well_formed_enumeration(
                 phi=phi.term_0) or not is_well_formed_transformation(phi=phi.term_1):
             return False
         else:
@@ -2620,7 +2625,7 @@ class Theorem(Derivation):
         if isinstance(phi, Theorem):
             # the type assure the well-formedness of the formula
             return True
-        if (phi.c is not connectives.follows_from or
+        if (phi.connective is not connectives.follows_from or
                 not phi.arity == 2 or
                 not is_well_formed_formula(phi=phi.term_0) or
                 not is_well_formed_inference(phi=phi.term_1)):
@@ -3049,7 +3054,7 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     :return:
     """
     phi = coerce_formula(phi=phi)
-    if phi.c is not connectives.implies:
+    if phi.connective is not connectives.implies:
         raise Exception('this is not an implication')
     # TODO: translate_implication_to_axiom: check that all sub-formulas in phi are either:
     # - valid propositional formulas (negation, conjunction, etc.)
@@ -3090,35 +3095,16 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     return inference_rule
 
 
-class AutoDerivation:
-    def __init__(self, matching_template: Formula, template_variables: Enumeration):
-        self._matching_template: Formula = matching_template
-        self._template_variables: Enumeration = template_variables
-
-    def match(self, missing_theorem: Formula) -> bool:
-        """Return true if the structure of the
-
-        :param phi:
-        :return:
-        """
-        # if is_formula_equivalent_with_variables(phi=missing_theorem,psi=self.matching_template)
-        pass
-
-    @property
-    def matching_template(self) -> Formula:
-        return self._matching_template
-
-    @property
-    def template_variables(self) -> Enumeration:
-        return self._template_variables
-
-
-class AutoDerivationFailure(CustomException):
+class AutoDerivationFailure(Exception):
     """Auto-derivation was required but failed to succeed."""
+
+    def __init__(self, msg: str, **kwargs):
+        super().__init__(msg)
+        self.kwargs = kwargs
 
 
 def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: FlexibleTupl,
-           inference_rule: FlexibleInferenceRule):
+           inference_rule: FlexibleInferenceRule) -> typing.Tuple[Theory, Theorem]:
     """Given a theory t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
 
     :param valid_statement:
@@ -3147,7 +3133,7 @@ def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: F
     inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
 
     # derive the new theorem
-    theorem: Derivation = Theorem(valid_statement=valid_statement, i=inference)
+    theorem: Theorem = Theorem(valid_statement=valid_statement, i=inference)
 
     # extends the theory
     theory: Theory = Theory(derivations=(*theory, theorem,))
@@ -3155,20 +3141,83 @@ def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: F
     return theory, theorem
 
 
-def auto_derive(theory: FlexibleTheory, valid_statement: FlexibleFormula) -> Theory:
-    """Try to derive a valid-statement without premises.
+def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list: FlexibleEnumeration = None) -> \
+        typing.Tuple[
+            Theory, Derivation]:
+    """Try to automatically derive phi as a valid-statement from t, without specifying the premises and inference-rule,
+    enriching t with new theorems as necessary to demonstrate phi.
 
     Raise an AutoDerivationFailure if the derivation is not successful.
     """
-    if is_valid_statement_with_regard_to_theory(phi=valid_statement, t=theory):
-        return theory
+    if premise_exclusion_list is None:
+        premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)
+
+    # append phi to the exclusion list of premises,
+    # to avoid circular research for premises.
+    premise_exclusion_list.append(term=phi)
+
+    if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
+        # phi is already a valid-statement with regard to t,
+        # no complementary derivation is necessary.
+
+        for derivation in t.iterate_derivations():
+            if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
+                return t, derivation
     else:
-        for auto_derivation in theory.auto_derivations:
-            if auto_derivation.match(valid_statement):
-                theory = auto_derivation.derive(theory=theory, premise=valid_statement)
-        if 1 == 2:
-            raise AutoDerivationFailure("Auto-derivation was not successful.")
-        return Theory()
+        # phi is not a valid-statement with regard to t,
+        # thus it may be possible to derive phi with complementary theorems in t.
+
+        # find the inference-rules in t that could derive phi.
+        # these are the inference-rules whose conclusions are formula-equivalent-with-variables to phi.
+        for ir in t.iterate_inference_rules():
+            ir: InferenceRule
+            transfo: Transformation = ir.transformation
+            if is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
+                # this inference-rule may potentially yield a valid-statement,
+                # that would be formula-equivalent to phi.
+
+                # we want to list what would be the required premises to yield phi.
+                # for this we need to "reverse-engineer" the inference-rule.
+
+                # first we should determine what are the necessary variable values in the transformation.
+                # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
+                # an empty map-builder:
+                m: MapBuilder = MapBuilder()
+                is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables, m=m)
+
+                # now that we know what are the necessary variable values, we can determine what
+                # are the necessary premises by substituting the variable values.
+                necessary_premises: EnumerationBuilder = EnumerationBuilder(elements=None)
+                for original_premise in transfo.premises:
+                    necessary_premise = replace_formulas(phi=original_premise, m=m)
+                    necessary_premises.append(term=necessary_premise)
+                necessary_premises: Enumeration = necessary_premises.to_enumeration()
+
+                # now that we have a list of necessary premises,
+                # we can recursively auto-derive these premises.
+                for necessary_premise in necessary_premises:
+
+                    if premise_exclusion_list.has_element(phi=necessary_premise):
+                        raise AutoDerivationFailure('this auto-derivation branch is circular',
+                                                    premise=necessary_premise)
+                    else:
+                        try:
+                            t = auto_derive(t=t, phi=necessary_premise)
+                        except AutoDerivationFailure:
+                            # this necessary premise cannot be derived from theory t.
+                            # in conclusion, this branch is a dead-end.
+                            # re-raise the exception.
+                            raise AutoDerivationFailure('this auto-derivation branch is circular',
+                                                        premise=necessary_premise)
+
+                # if we reach this, it means that all premises have been derived.
+                # in consequence we can derive phi.
+                t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises, inference_rule=ir)
+                return t, derivation
+
+        # we recursively tried to derive phi using all the inference-rules in the theory.
+        # it follows that we are unable to derive phi.
+        raise AutoDerivationFailure('Auto-derivation was not successful.')
 
 
 # PRESENTATION LAYER
@@ -3212,6 +3261,20 @@ class InfixFormulaTypesetter(pl1.Typesetter):
         yield from phi.term_0.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from self.symbol.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+        yield from phi.term_1.typeset_from_generator(**kwargs)
+
+
+class TransformationTypesetter(pl1.Typesetter):
+    def __init__(self):
+        super().__init__()
+
+    def typeset_from_generator(self, phi: FlexibleTransformation, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Transformation = coerce_transformation(phi=phi)
+        yield from phi.term_0.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+        yield from phi.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from phi.term_1.typeset_from_generator(**kwargs)
 
