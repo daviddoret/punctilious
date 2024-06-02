@@ -1734,9 +1734,12 @@ class Enumeration(Formula):
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None):
+        global connectives
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
-        super().__init__(connective=connectives.enumeration, terms=eb)
+        if connective is None:
+            connective = connectives.enumeration
+        super().__init__(connective=connective, terms=eb)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
@@ -2774,7 +2777,7 @@ class Theory(Enumeration):
         # coerce all elements of the enumeration to theorem
         derivations: Enumeration = coerce_enumeration(
             phi=(coerce_derivation(phi=p) for p in derivations))
-        super().__init__(elements=derivations)
+        super().__init__(elements=derivations, connective=connectives.theory)
 
     @property
     def axioms(self) -> Enumeration:

@@ -812,7 +812,7 @@ class TestAutoDerivation:
         a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=p)
         if_p_then_q = pu.as1.InferenceRule(
             transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
-        theory = pu.as1.Axiomatization(axioms=(a1, if_p_then_q,))
+        theory = pu.as1.Theory(derivations=(a1, if_p_then_q,))
         pass
         # auto-derivation of an existing valid-statement
         theory, _, = pu.as1.auto_derive(t=theory, phi=p)

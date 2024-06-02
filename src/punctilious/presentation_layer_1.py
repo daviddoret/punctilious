@@ -311,7 +311,7 @@ class Symbols(dict):
         self._close_parenthesis = self._register(
             Symbol(key='close_parenthesis', latex_math='\\right)', unicode_extended=')', unicode_limited=')'))
         self._collection_separator = self._register(
-            Symbol(key='collection_separator', latex_math=', ', unicode_extended=', ', unicode_limited=', '))
+            Symbol(key='collection_separator', latex_math=',', unicode_extended=',', unicode_limited=','))
         self._not_sign = self._register(
             Symbol(key='not_sign', latex_math='\\lnot', unicode_extended='¬', unicode_limited='not'))
         self._open_curly_brace = self._register(
