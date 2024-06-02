@@ -17,12 +17,12 @@ class TestPropositionalLogicMetaTheory:
 
         # elaborate a theory
         p = pu.as1.let_x_be_a_propositional_variable_OBSOLETE(rep='P')
-        a1 = pu.as1.let_x_be_an_axiom_deprecated(claim=p | is_a | propositional_variable)
+        a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=p | is_a | propositional_variable)
         theory = pu.as1.Axiomatization(axioms=(pu.pls1.i1, a1,))
 
         # derive: p is-a proposition
         theory, _, = pu.as1.derive(theory=theory,
-                                   claim=p | is_a | proposition,
+                                   valid_statement=p | is_a | proposition,
                                    premises=(
                                        p | is_a | propositional_variable,),
                                    inference_rule=pu.pls1.i1)
@@ -35,22 +35,22 @@ class TestPropositionalLogicMetaTheory:
             premises=(p | is_a | proposition,),
             transformation_rule=pu.pls1.i2.transformation)
         claim = lnot(p) | is_a | proposition
-        isolated_theorem = pu.as1.Theorem(claim=claim, i=inference)
-        assert pu.as1.is_formula_equivalent(phi=lnot(p) | is_a | proposition, psi=isolated_theorem.claim)
+        isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
+        assert pu.as1.is_formula_equivalent(phi=lnot(p) | is_a | proposition, psi=isolated_theorem.valid_statement)
         theory = pu.as1.Theory(derivations=(*theory, isolated_theorem,))
         assert theory.is_valid_statement(phi=lnot(p) | is_a | proposition)
 
         # declare 1 as a propositional-variable
         with pu.as1.let_x_be_a_propositional_variable_OBSOLETE(rep='Q') as q:
-            a2 = pu.as1.Axiom(claim=q | is_a | propositional_variable)
+            a2 = pu.as1.Axiom(valid_statement=q | is_a | propositional_variable)
         theory = pu.as1.Theory(derivations=(*theory, a2,))
 
         # derive q is-a proposition
         inference = pu.as1.Inference(
-            premises=(a2.claim,),
+            premises=(a2.valid_statement,),
             transformation_rule=pu.pls1.i1.transformation)
         claim = q | is_a | proposition
-        isolated_theorem = pu.as1.Theorem(claim=claim, i=inference)
+        isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
         theory = pu.as1.Theory(derivations=(*theory, isolated_theorem,))
 
         # add i3: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition)
@@ -59,8 +59,8 @@ class TestPropositionalLogicMetaTheory:
             premises=(p | is_a | proposition, q | is_a | proposition,),
             transformation_rule=pu.pls1.i3.transformation)
         claim = (p | land | q) | is_a | proposition
-        isolated_theorem = pu.as1.Theorem(claim=claim, i=inference)
-        assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.claim)
+        isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
+        assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.valid_statement)
         theory = pu.as1.Theory(derivations=(*theory, isolated_theorem,))
         assert theory.is_valid_statement(phi=claim)
 

@@ -627,10 +627,10 @@ class TestInferenceRule:
 
         # derivation from the axiom
         i = pu.as1.Inference(premises=None, transformation_rule=rule)
-        isolated_theorem = pu.as1.Derivation(claim=phi, justification=i)
+        isolated_theorem = pu.as1.Derivation(valid_statement=phi, justification=i)
         demo = pu.as1.Theory(derivations=(*axiomatization, isolated_theorem))
         assert pu.as1.is_formula_equivalent(
-            phi=isolated_theorem.claim,
+            phi=isolated_theorem.valid_statement,
             psi=phi)
 
     def test_is_well_formed_postulation(self):
@@ -688,7 +688,7 @@ class TestInference:
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        i = pu.as1.Theorem(claim=theorem, i=pu.as1.Inference(premises=p, transformation_rule=t))
+        i = pu.as1.Theorem(valid_statement=theorem, i=pu.as1.Inference(premises=p, transformation_rule=t))
         pu.as1.is_formula_equivalent(
             phi=i,
             psi=theorem | pu.as1.connectives.follows_from | pu.as1.connectives.inference(p, t))
@@ -720,7 +720,7 @@ class TestProofByInference:
         f = pu.as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         i = pu.as1.Inference(premises=(a | star | b, b | star | c,), transformation_rule=f)
         assert pu.as1.is_well_formed_theorem(phi=(a | star | c) | pu.as1.connectives.follows_from | i)
-        proof1 = pu.as1.Theorem(claim=a | star | c, i=i)  # would raise an exception if it was unsuccessful
+        proof1 = pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
         assert not pu.as1.is_well_formed_theorem(phi=(a | star | d) | pu.as1.connectives.follows_from | i)
         i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), transformation_rule=f)
         assert not pu.as1.is_well_formed_theorem(phi=(a | star | c) | pu.as1.connectives.follows_from | i2)
@@ -735,8 +735,8 @@ class TestAxiomatization:
         star1 = pu.as1.let_x_be_a_unary_connective(rep='*1')
         star2 = pu.as1.let_x_be_a_binary_connective(rep='*2')
         star3 = pu.as1.let_x_be_a_ternary_connective(rep='*3')
-        axiom_ok_1 = pu.as1.Axiom(claim=a | star2 | b)
-        axiom_ok_2 = pu.as1.Axiom(claim=star1(c))
+        axiom_ok_1 = pu.as1.Axiom(valid_statement=a | star2 | b)
+        axiom_ok_2 = pu.as1.Axiom(valid_statement=star1(c))
 
         # simple case
         e1 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
@@ -761,8 +761,8 @@ class TestDemonstration:
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(rep=('a', 'b', 'c', 'd', 'e',))
         x, y, z = pu.as1.let_x_be_a_variable(rep=('x', 'y', 'z',))
         star = pu.as1.let_x_be_a_binary_connective(rep='*')
-        theory, axiom_1, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | star | b)
-        theory, axiom_2, = pu.as1.let_x_be_an_axiom(theory=theory, claim=b | star | c)
+        theory, axiom_1, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=a | star | b)
+        theory, axiom_2, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=b | star | c)
         theory, ir1, = pu.as1.let_x_be_an_inference_rule(theory=theory,
                                                          premises=(x | star | y,
                                                                    y | star | z,),
@@ -771,7 +771,7 @@ class TestDemonstration:
 
         # derive a theorem
         demo2, _, = pu.as1.derive(theory=theory,
-                                  claim=a | star | c,
+                                  valid_statement=a | star | c,
                                   premises=(
                                       a | star | b,
                                       b | star | c,),

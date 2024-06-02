@@ -188,9 +188,9 @@ def let_x_be_a_propositional_variable(
         # declare a single propositional variable
         x = as1.Variable(connective=as1.NullaryConnective(rep=rep))
         theory, _ = as1.let_x_be_an_axiom(theory=theory,
-                                          claim=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+                                          valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
         theory, _ = as1.derive(theory=theory,
-                               claim=x | is_a | proposition,
+                               valid_statement=x | is_a | proposition,
                                premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
                                inference_rule=i1)
         return theory, x
@@ -201,9 +201,9 @@ def let_x_be_a_propositional_variable(
             x = as1.Variable(connective=as1.NullaryConnective(rep=r))
             propositional_variables = propositional_variables + (x,)
             theory, _ = as1.let_x_be_an_axiom(theory=theory,
-                                              claim=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+                                              valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
             theory, _ = as1.derive(theory=theory,
-                                   claim=x | is_a | proposition,
+                                   valid_statement=x | is_a | proposition,
                                    premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
                                    inference_rule=i1)
         return theory, *propositional_variables

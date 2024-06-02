@@ -30,28 +30,28 @@ def c():
 @pytest.fixture
 def theory(a, b, c):
     # elaborate a theory with 3 propositions: a, b, and c
-    a1 = pu.as1.let_x_be_an_axiom_deprecated(claim=a | is_a | propositional_variable)
-    a2 = pu.as1.let_x_be_an_axiom_deprecated(claim=b | is_a | propositional_variable)
-    a3 = pu.as1.let_x_be_an_axiom_deprecated(claim=c | is_a | propositional_variable)
+    a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=a | is_a | propositional_variable)
+    a2 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=b | is_a | propositional_variable)
+    a3 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=c | is_a | propositional_variable)
     theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms, a1, a2, a3,))
 
     # derive: a is-a proposition
     theory, _, = pu.as1.derive(theory=theory,
-                               claim=a | is_a | proposition,
+                               valid_statement=a | is_a | proposition,
                                premises=(a | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=a | is_a | proposition)
 
     # derive: b is-a proposition
     theory, _, = pu.as1.derive(theory=theory,
-                               claim=b | is_a | proposition,
+                               valid_statement=b | is_a | proposition,
                                premises=(b | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=b | is_a | proposition)
 
     # derive: c is-a proposition
     theory, _, = pu.as1.derive(theory=theory,
-                               claim=c | is_a | proposition,
+                               valid_statement=c | is_a | proposition,
                                premises=(c | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
     assert theory.is_valid_statement(phi=c | is_a | proposition)
@@ -62,12 +62,12 @@ def theory(a, b, c):
 class TestAdjunction:
     def test_adjunction(self, theory, a, b, c):
         # adapt the base theory
-        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a)
-        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=b)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=a)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=b)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   claim=a | land | b,
+                                   valid_statement=a | land | b,
                                    premises=(
                                        a | is_a | proposition,
                                        b | is_a | proposition,
@@ -80,7 +80,7 @@ class TestAdjunction:
         with pytest.raises(pu.as1.CustomException, match='e105'):
             # wrong theory
             pu.as1.derive(theory=theory,
-                          claim=a | land | c,
+                          valid_statement=a | land | c,
                           premises=(
                               a | is_a | proposition,
                               c | is_a | proposition,
@@ -91,11 +91,11 @@ class TestAdjunction:
 class TestSimplification1:
     def test_simplification_1(self, theory, a, b, c):
         # adapt the base theory
-        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | land | b)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=a | land | b)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   claim=a,
+                                   valid_statement=a,
                                    premises=(
                                        a | is_a | proposition,
                                        b | is_a | proposition,
@@ -107,7 +107,7 @@ class TestSimplification1:
         with pytest.raises(pu.as1.CustomException, match='e105'):
             # wrong theory
             pu.as1.derive(theory=theory,
-                          claim=c,
+                          valid_statement=c,
                           premises=(
                               a | is_a | proposition,
                               c | is_a | proposition,
@@ -118,11 +118,11 @@ class TestSimplification1:
 class TestSimplification2:
     def test_simplification_2(self, theory, a, b, c):
         # adapt the base theory
-        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | land | b)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=a | land | b)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   claim=b,
+                                   valid_statement=b,
                                    premises=(
                                        a | is_a | proposition,
                                        b | is_a | proposition,
@@ -134,7 +134,7 @@ class TestSimplification2:
         with pytest.raises(pu.as1.CustomException, match='e120'):
             # wrong theory
             pu.as1.derive(theory=theory,
-                          claim=c,
+                          valid_statement=c,
                           premises=(
                               a | is_a | proposition,
                               c | is_a | proposition,
@@ -145,12 +145,12 @@ class TestSimplification2:
 class TestModusPonens:
     def test_modus_ponens(self, theory, a, b, c):
         # adapt the base theory
-        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | implies | b)
-        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=a | implies | b)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=a)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   claim=b,
+                                   valid_statement=b,
                                    premises=(
                                        a | is_a | proposition,
                                        b | is_a | proposition,
@@ -161,12 +161,12 @@ class TestModusPonens:
 
         # extend the theory to perform a second test
         # using a single propositional-variable
-        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=a | implies | (a | land | a))
-        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, claim=(a | land | a) | is_a | proposition)
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=a | implies | (a | land | a))
+        theory, _, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=(a | land | a) | is_a | proposition)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   claim=a | land | a,
+                                   valid_statement=a | land | a,
                                    premises=(
                                        a | is_a | proposition,
                                        (a | land | a) | is_a | proposition,
@@ -179,7 +179,7 @@ class TestModusPonens:
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # wrong theory
             pu.as1.derive(theory=theory,
-                          claim=c,
+                          valid_statement=c,
                           premises=(
                               a | is_a | proposition,
                               c | is_a | proposition,
