@@ -13,9 +13,9 @@ class Connectives(typing.NamedTuple):
 connectives: Connectives = Connectives(
     land=as1.let_x_be_a_binary_connective(rep='∧'),
     equivalence=as1.let_x_be_a_binary_connective(rep='~propositional'),
-    falsehood=as1.let_x_be_a_simple_object(rep='falsehood'),
-    proposition=as1.let_x_be_a_simple_object(rep='proposition'),
-    truth=as1.let_x_be_a_simple_object(rep='truth'),
+    falsehood=as1.let_x_be_a_simple_object(formula_typesetter='falsehood'),
+    proposition=as1.let_x_be_a_simple_object(formula_typesetter='proposition'),
+    truth=as1.let_x_be_a_simple_object(formula_typesetter='truth'),
 )
 
 is_a = as1.connectives.is_a
@@ -24,8 +24,8 @@ proposition = connectives.proposition
 truth = connectives.truth
 land = connectives.land
 
-p = as1.let_x_be_a_variable(rep='p')
-q = as1.let_x_be_a_variable(rep='q')
+p = as1.let_x_be_a_variable(formula_typesetter='p')
+q = as1.let_x_be_a_variable(formula_typesetter='q')
 premises = (p | is_a | proposition,
             q | is_a | proposition,
             p | equivalence | truth,
@@ -33,8 +33,8 @@ premises = (p | is_a | proposition,
 conclusion = p | land | q
 t = as1.Transformation(premises=premises, conclusion=conclusion, variables=(p, q,))
 
-r = as1.let_x_be_a_variable(rep='r')
-s = as1.let_x_be_a_variable(rep='s')
+r = as1.let_x_be_a_variable(formula_typesetter='r')
+s = as1.let_x_be_a_variable(formula_typesetter='s')
 psi1 = r | is_a | proposition
 psi2 = s | is_a | proposition
 psi3 = r | equivalence | truth

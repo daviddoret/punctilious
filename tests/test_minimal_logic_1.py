@@ -11,19 +11,19 @@ implies = pu.as1.connectives.implies
 
 @pytest.fixture
 def a():
-    a = pu.as1.let_x_be_a_simple_object(rep='A')
+    a = pu.as1.let_x_be_a_simple_object(formula_typesetter='A')
     return a
 
 
 @pytest.fixture
 def b():
-    b = pu.as1.let_x_be_a_simple_object(rep='B')
+    b = pu.as1.let_x_be_a_simple_object(formula_typesetter='B')
     return b
 
 
 @pytest.fixture
 def c():
-    c = pu.as1.let_x_be_a_simple_object(rep='C')
+    c = pu.as1.let_x_be_a_simple_object(formula_typesetter='C')
     return c
 
 

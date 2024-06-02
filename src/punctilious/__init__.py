@@ -12,7 +12,8 @@ ir1 = inference_rules_1
 pls1 = propositional_logic_syntax_1
 ml1 = minimal_logic_1
 
-as1.connectives.follows_from.formula_typesetter = as1.typesetters.infix_formula(symbol=pl1.symbols.rightwards_arrow)
+as1.connectives.follows_from.formula_typesetter = as1.typesetters.infix_formula(
+    connective_typesetter='follows-from')
 as1.connectives.transformation.formula_typesetter = as1.typesetters.transformation()
 as1.connectives.enumeration.formula_typesetter = as1.typesetters.bracketed_list(
     open_bracket=pl1.symbols.open_curly_brace,
@@ -22,3 +23,7 @@ as1.connectives.tupl.formula_typesetter = as1.typesetters.bracketed_list(
     open_bracket=pl1.symbols.open_parenthesis,
     separator=pl1.symbols.collection_separator,
     close_bracket=pl1.symbols.close_parenthesis)
+as1.connectives.axiom.formula_typesetter = as1.typesetters.text(
+    text='axiom')
+as1.connectives.inference_rule.formula_typesetter = as1.typesetters.text(
+    text='inference-rule')

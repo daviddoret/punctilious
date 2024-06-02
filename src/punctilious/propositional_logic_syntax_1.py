@@ -28,7 +28,7 @@ lor = as1.connectives.lor
 proposition = as1.connectives.proposition  # synonym: propositional-formulas
 propositional_variable = as1.connectives.propositional_variable
 
-with as1.let_x_be_a_variable(rep='A') as a:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -51,7 +51,7 @@ with as1.let_x_be_a_variable(rep='A') as a:
     """
     pass
 
-with as1.let_x_be_a_variable(rep='A') as a:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     i2: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -74,7 +74,7 @@ with as1.let_x_be_a_variable(rep='A') as a:
     """
     pass
 
-with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as b:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
     i3: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -99,7 +99,7 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
     """
     pass
 
-with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as b:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
     i4: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -124,7 +124,7 @@ with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as 
     """
     pass
 
-with as1.let_x_be_a_variable(rep='A') as a, as1.let_x_be_a_variable(rep='B') as b:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
     i5: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -186,7 +186,7 @@ def let_x_be_a_propositional_variable(
 
     if isinstance(rep, str):
         # declare a single propositional variable
-        x = as1.Variable(connective=as1.NullaryConnective(rep=rep))
+        x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=rep))
         theory, _ = as1.let_x_be_an_axiom(theory=theory,
                                           valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
         theory, _ = as1.derive(theory=theory,
@@ -198,7 +198,7 @@ def let_x_be_a_propositional_variable(
         # declare multiple propositional variables
         propositional_variables = tuple()
         for r in rep:
-            x = as1.Variable(connective=as1.NullaryConnective(rep=r))
+            x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=r))
             propositional_variables = propositional_variables + (x,)
             theory, _ = as1.let_x_be_an_axiom(theory=theory,
                                               valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)

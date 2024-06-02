@@ -127,12 +127,6 @@ class Typesetter(abc.ABC):
      - typeset_from_generator(...)
      """
 
-    def __repr__(self) -> str:
-        return self.typeset_as_string(encoding=None)
-
-    def __str__(self) -> str:
-        return self.typeset_as_string(encoding=None)
-
     def typeset_as_string(self, **kwargs) -> str:
         """Returns a python-string from the typesetting-method.
 
@@ -213,7 +207,7 @@ class TextTypesetter(Typesetter):
 
     def __init__(self, text: str):
         super().__init__()
-        self._text: str = text
+        self._text: str = str(text)
 
     @property
     def text(self) -> str:
@@ -638,7 +632,16 @@ FlexibleTypesetter = typing.Union[Typesetter, str]
 
 def coerce_typesetter(ts: FlexibleTypesetter) -> Typesetter:
     global typesetters
-    if isinstance(ts, str):
+    if ts is None:
+        ts = typesetters.failsafe()
+    elif isinstance(ts, str):
+        # temporary fix
+        if len(ts) == 1 and symbols.is_sans_serif_letter(letter=ts):
+            # TODO: Temporary fix for variable names.
+            ts = symbols.get_sans_serif_letter(letter=ts)
+        else:
+            ts = typesetters.text(text=ts)
+
         return typesetters.text(text=ts)
     elif isinstance(ts, Typesetter):
         return ts

@@ -66,7 +66,7 @@ lnot = as1.connectives.lnot
 propositional_variable = as1.connectives.propositional_variable
 proposition = as1.connectives.proposition
 
-with as1.let_x_be_a_variable(rep='A') as a:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     pl01: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -89,7 +89,7 @@ with as1.let_x_be_a_variable(rep='A') as a:
     """
     pass
 
-with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b:
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(formula_typesetter='b') as b:
     pl02: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -114,8 +114,9 @@ with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as 
         """
     pass
 
-with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
-        rep='c') as c:
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
+        formula_typesetter='b') as b, as1.let_x_be_a_variable(
+    formula_typesetter='c') as c:
     pl03: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
