@@ -3085,7 +3085,7 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
         premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)
 
     # append phi to the exclusion list of premises,
-    # to avoid circular research for premises.
+    # to avoid circular attempts to auto-derive theorems.
     premise_exclusion_list.append(term=phi)
 
     if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
@@ -3133,17 +3133,22 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
                         raise AutoDerivationFailure('this auto-derivation branch is circular',
                                                     premise=necessary_premise)
                     else:
-                        try:
-                            t = auto_derive(t=t, phi=necessary_premise)
-                        except AutoDerivationFailure:
-                            # this necessary premise cannot be derived from theory t.
-                            # in conclusion, this branch is a dead-end.
-                            # re-raise the exception.
-                            raise AutoDerivationFailure('this auto-derivation branch is circular',
-                                                        premise=necessary_premise)
+                        if not is_valid_statement_with_regard_to_theory(phi=necessary_premise, t=t):
+                            # this necessary premise is not an existing valid-statement in theory t,
+                            # we thus need to recursively attempt to auto-derive this theorem.
+                            try:
+                                t = auto_derive(t=t, phi=necessary_premise,
+                                                premise_exclusion_list=premise_exclusion_list)
+                            except AutoDerivationFailure:
+                                # this necessary premise cannot be derived from theory t.
+                                # in conclusion, this branch is a dead-end.
+                                # re-raise the exception.
+                                raise AutoDerivationFailure('this auto-derivation branch is circular',
+                                                            premise=necessary_premise)
 
-                # if we reach this, it means that all premises have been derived.
-                # in consequence we can derive phi.
+                # if we reach this, it means that all necessary premises
+                # are either already present in the theory, or were successfuly auto-derived recursively.
+                # in consequence we can now safely derive phi.
                 t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises, inference_rule=ir)
                 return t, derivation
 

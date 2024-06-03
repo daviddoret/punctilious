@@ -31,3 +31,5 @@ as1.connectives.theory.formula_typesetter = as1.typesetters.classical_formula(
     connective_typesetter='theory')
 as1.connectives.axiomatization.formula_typesetter = as1.typesetters.classical_formula(
     connective_typesetter='axiomatization')
+as1.connectives.map.formula_typesetter = as1.typesetters.classical_formula(
+    connective_typesetter='map')
