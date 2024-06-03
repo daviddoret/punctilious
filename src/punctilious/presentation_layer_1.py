@@ -312,8 +312,12 @@ class Symbols(dict):
             Symbol(key='close_parenthesis', latex_math='\\right)', unicode_extended=')', unicode_limited=')'))
         self._collection_separator = self._register(
             Symbol(key='collection_separator', latex_math=',', unicode_extended=',', unicode_limited=','))
-        self._not_sign = self._register(
-            Symbol(key='not_sign', latex_math='\\lnot', unicode_extended='¬', unicode_limited='not'))
+        self._conjunction = self._register(
+            Symbol(key='conjunction', latex_math='\\wedge', unicode_extended='∧', unicode_limited='and'))
+        self._disjunction = self._register(
+            Symbol(key='disjunction', latex_math='\\vee', unicode_extended='∨', unicode_limited='or'))
+        self._negation = self._register(
+            Symbol(key='negation', latex_math='\\lnot', unicode_extended='¬', unicode_limited='not'))
         self._open_curly_brace = self._register(
             Symbol(key='open_curly_brace', latex_math='\\left\\{', unicode_extended='{', unicode_limited='{'))
         self._open_parenthesis = self._register(
@@ -449,8 +453,16 @@ class Symbols(dict):
         return self._collection_separator
 
     @property
-    def not_sign(self) -> Symbol:
-        return self._not_sign
+    def conjunction(self) -> Symbol:
+        return self._conjunction
+
+    @property
+    def disjunction(self) -> Symbol:
+        return self._disjunction
+
+    @property
+    def negation(self) -> Symbol:
+        return self._negation
 
     @property
     def open_curly_brace(self) -> Symbol:
