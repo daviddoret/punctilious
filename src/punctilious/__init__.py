@@ -14,6 +14,8 @@ ml1 = minimal_logic_1
 
 as1.connectives.follows_from.formula_typesetter = as1.typesetters.infix_formula(
     connective_typesetter='follows-from')
+as1.connectives.land.formula_typesetter = as1.typesetters.infix_formula(
+    connective_typesetter='and')
 as1.connectives.transformation.formula_typesetter = as1.typesetters.transformation()
 as1.connectives.enumeration.formula_typesetter = as1.typesetters.bracketed_list(
     open_bracket=pl1.symbols.open_curly_brace,

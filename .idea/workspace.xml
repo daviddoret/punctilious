@@ -7,7 +7,7 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +83,7 @@
     "PowerShell.release_patch.ps1.executor": "Run",
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiom.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiom.test_axiom_without_premises.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.executor": "Run",
@@ -194,7 +194,7 @@
     "Python tests.pytest for tests.test_typesetting.TestProtocolPreference.test_protocol.executor": "Debug",
     "Python tests.pytest in punctilious.executor": "Run",
     "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
-    "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
+    "Python tests.pytest in test_axiomatic_system_1.py.executor": "Debug",
     "Python tests.pytest in test_fl1.py.executor": "Run",
     "Python tests.pytest in test_inference_rules_1.py.executor": "Run",
     "Python tests.pytest in test_minimal_logic_1.py.executor": "Run",
@@ -602,8 +602,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_inference_rules_1.py" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable" />
       </list>
@@ -624,14 +624,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00600" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1716147349549</created>
-      <option name="number" value="00600" />
-      <option name="presentableId" value="LOCAL-00600" />
-      <option name="project" value="LOCAL" />
-      <updated>1716147349549</updated>
     </task>
     <task id="LOCAL-00601" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1017,7 +1009,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717444282800</updated>
     </task>
-    <option name="localTasksCounter" value="649" />
+    <task id="LOCAL-00649" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1717445119496</created>
+      <option name="number" value="00649" />
+      <option name="presentableId" value="LOCAL-00649" />
+      <option name="project" value="LOCAL" />
+      <updated>1717445119497</updated>
+    </task>
+    <option name="localTasksCounter" value="650" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1146,23 +1146,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>324</line>
-          <option name="timeStamp" value="354" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
           <line>378</line>
           <option name="timeStamp" value="360" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>823</line>
-          <option name="timeStamp" value="371" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3083</line>
-          <option name="timeStamp" value="372" />
+          <line>830</line>
+          <option name="timeStamp" value="374" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

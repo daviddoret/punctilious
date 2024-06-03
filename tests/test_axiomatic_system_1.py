@@ -812,14 +812,24 @@ class TestAutoDerivation:
         a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=p)
         if_p_then_q = pu.as1.InferenceRule(
             transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
-        theory = pu.as1.Theory(derivations=(a1, if_p_then_q,))
+        t = pu.as1.Theory(derivations=(a1, if_p_then_q,))
         pass
         # auto-derivation of an existing valid-statement
-        theory, _, = pu.as1.auto_derive(t=theory, phi=p)
+        t, _, = pu.as1.auto_derive(t=t, phi=p)
         pass
-        # manual derivation
-        theory2, _, = pu.as1.derive(theory=theory, valid_statement=q, premises=(p,), inference_rule=if_p_then_q)
+        # auto-derivation of a simple theorem, without variables
+        t, _, = pu.as1.auto_derive(t=t, phi=q)
         pass
-        # auto-derivation
-        theory, _, = pu.as1.auto_derive(t=theory, phi=q)
+        with pu.as1.let_x_be_a_variable(formula_typesetter='x') as x, pu.as1.let_x_be_a_variable(
+                formula_typesetter='y') as y:
+            x_y_then_x_and_y = pu.as1.InferenceRule(
+                transformation=pu.as1.Transformation(premises=(x, y,), conclusion=x | pu.as1.connectives.land | y,
+                                                     variables=(x, y,)))
+        t = pu.as1.Theory(derivations=(*t, x_y_then_x_and_y,))
+        # auto-derivation of a simple theorem, without some variables
+        t, _, = pu.as1.auto_derive(t=t, phi=p | pu.as1.connectives.land | q)
+        pass
+        with pytest.raises(pu.as1.AutoDerivationFailure):
+            # auto-derivation of an impossible theorem fails and raises an auto-derivation-failure
+            t, _, = pu.as1.auto_derive(t=t, phi=p | pu.as1.connectives.lor | q)
         pass
