@@ -200,7 +200,10 @@ def raise_error(error_code: ErrorCode, **kwargs):
 
 
 class Connective:
-    """A node color in a formula tree."""
+    """A connective is a symbol used as a signal to distinguish formulas in theories.
+
+    Equivalent definition:
+    A node color in a formula tree."""
 
     def __init__(self, formula_typesetter: pl1.FlexibleTypesetter = None):
         """
@@ -1185,7 +1188,7 @@ def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormul
 
 class Connectives(typing.NamedTuple):
     axiom: UnaryConnective
-    theory: FreeArityConnective
+    axiomatization: FreeArityConnective
     enumeration: FreeArityConnective
     follows_from: BinaryConnective
     implies: BinaryConnective
@@ -1198,13 +1201,15 @@ class Connectives(typing.NamedTuple):
     map: BinaryConnective
     proposition: SimpleObject
     propositional_variable: SimpleObject
+    theory: FreeArityConnective
+    theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
     transformation: TernaryConnective
     tupl: FreeArityConnective
 
 
 connectives: Connectives = _set_state(key='connectives', value=Connectives(
     axiom=let_x_be_a_unary_connective(formula_typesetter='axiom'),
-    theory=let_x_be_a_free_arity_connective(formula_typesetter='theory'),
+    axiomatization=let_x_be_a_free_arity_connective(formula_typesetter='axiomatization'),
     enumeration=let_x_be_a_free_arity_connective(formula_typesetter='enumeration'),
     follows_from=let_x_be_a_binary_connective(formula_typesetter='follows-from'),
     implies=let_x_be_a_binary_connective(formula_typesetter='implies'),
@@ -1217,7 +1222,9 @@ connectives: Connectives = _set_state(key='connectives', value=Connectives(
     map=let_x_be_a_binary_connective(formula_typesetter='map'),
     proposition=let_x_be_a_simple_object(formula_typesetter='proposition'),
     propositional_variable=let_x_be_a_simple_object(formula_typesetter='propositional-variable'),
-    transformation=let_x_be_a_ternary_connective(formula_typesetter='transformation'),  # duplicate with f?
+    theorem=let_x_be_a_free_arity_connective(formula_typesetter='theorem'),
+    theory=let_x_be_a_free_arity_connective(formula_typesetter='theory'),
+    transformation=let_x_be_a_ternary_connective(formula_typesetter='transformation'),
     tupl=let_x_be_a_free_arity_connective(formula_typesetter='tuple'),
 
 ))
@@ -2756,7 +2763,7 @@ class Theory(Enumeration):
         # All tests were successful.
         return True
 
-    def __new__(cls, derivations: FlexibleEnumeration = None):
+    def __new__(cls, connective: typing.Optional[Connective] = None, derivations: FlexibleEnumeration = None):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(phi=derivations)
         # use coerce_derivation() to assure that every derivation is properly types as Axiom, InferenceRule or Theorem.
@@ -2771,13 +2778,15 @@ class Theory(Enumeration):
         o: tuple = super().__new__(cls, elements=derivations)
         return o
 
-    def __init__(self, derivations: FlexibleEnumeration = None):
+    def __init__(self, connective: typing.Optional[Connective] = None, derivations: FlexibleEnumeration = None):
+        if connective is None:
+            connective: Connective = connectives.theory
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(phi=derivations)
         # coerce all elements of the enumeration to theorem
         derivations: Enumeration = coerce_enumeration(
             phi=(coerce_derivation(phi=p) for p in derivations))
-        super().__init__(elements=derivations, connective=connectives.theory)
+        super().__init__(connective=connective, elements=derivations)
 
     @property
     def axioms(self) -> Enumeration:
@@ -2927,7 +2936,7 @@ class Axiomatization(Theory):
                 # Incorrect form.
                 raise Exception('invalid theorem')
         e: Enumeration = eb.to_enumeration()
-        super().__init__(derivations=e)
+        super().__init__(connective=connectives.axiomatization, derivations=e)
 
 
 def is_leaf_formula(phi: FlexibleFormula) -> bool:
