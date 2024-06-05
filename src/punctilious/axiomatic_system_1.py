@@ -2806,7 +2806,7 @@ class Theory(Enumeration):
     def inference_rules(self) -> Enumeration:
         """Return an enumeration of all inference-rules in the theory, preserving order, filtering out axioms and
         theorems."""
-        return Enumeration(elements=tuple(self.iterate_theorems()))
+        return Enumeration(elements=tuple(self.iterate_inference_rules()))
 
     def iterate_axioms(self) -> typing.Iterator[Axiom]:
         """Iterates over all axioms in the theory, preserving order, filtering out inference-rules and theorems."""

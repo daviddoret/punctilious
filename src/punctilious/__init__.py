@@ -14,6 +14,9 @@ ml1 = minimal_logic_1
 
 as1.connectives.follows_from.formula_typesetter = as1.typesetters.infix_formula(
     connective_typesetter='follows-from')
+
+as1.connectives.is_a.formula_typesetter = as1.typesetters.infix_formula(
+    connective_typesetter='is-a')
 as1.connectives.land.formula_typesetter = as1.typesetters.infix_formula(
     connective_typesetter=pl1.symbols.conjunction)
 as1.connectives.lor.formula_typesetter = as1.typesetters.infix_formula(

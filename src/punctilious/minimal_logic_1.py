@@ -142,23 +142,36 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]. (Mancosu et al., p. 19).
     """
     pass
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
+        formula_typesetter='b') as b, as1.let_x_be_a_variable(
+    formula_typesetter='c') as c:
+    pl04: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition,
+             c | is_a | proposition),
+            conclusion=((a | implies | b) | land | ((b | implies | c)) | implies | (a | implies | c)),
+            variables=(a, b, c,)))
+    """The PL04 axiom schema: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶).
 
-# with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
-#        rep='c') as c:
-#    pl03 = as1.let_x_be_an_inference_rule(
-#        claim=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)))
-# with as1.let_x_be_a_variable(rep='a') as a, as1.let_x_be_a_variable(rep='b') as b, as1.let_x_be_a_variable(
-#        rep='c') as c:
-#    pl04 = as1.let_x_be_an_inference_rule(
-#        claim=((a | implies | b) | land | (b | implies | c)) | implies | (a | implies | b))
-# pl05 = as1.let_x_be_an_axiom(claim=𝐵 ⊃ (𝐴 ⊃ 𝐵))
-# pl06 = (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵
-# pl07 = 𝐴 ⊃ (𝐴 ∨ 𝐵)
-# pl08 = (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴)
-# pl09 = [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
-# pl10 = [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+     - C is-a proposition
 
-axioms = as1.Axiomatization(axioms=(pl01, pl02, pl03,))
+    Conclusion: 
+    [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
+
+    Variables:
+    {A, B, C}
+
+    Original axiom: 
+    PL4. [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶). (Mancosu et al., p. 19).
+    """
+    pass
+
+axioms = as1.Axiomatization(axioms=(pl01, pl02, pl03, pl04,))
 
 extended_theory = as1.Theory(derivations=(*axioms,))
 
