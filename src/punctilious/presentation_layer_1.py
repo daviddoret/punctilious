@@ -134,7 +134,8 @@ class Typesetter(abc.ABC):
         If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
         loading all the content in memory.
         """
-        return ''.join(self.typeset_from_generator(**kwargs))
+        # return ''.join(self.typeset_from_generator(**kwargs))
+        return ''.join([str(x) for x in self.typeset_from_generator(**kwargs)])
 
     @abc.abstractmethod
     def typeset_from_generator(self, **kwargs) -> (
@@ -146,6 +147,12 @@ class Typesetter(abc.ABC):
         loading all the content in memory.
         """
         raise NotImplementedError('This is an abstract method.')
+
+    def __str__(self):
+        return f'{type(self)}-typesetter'
+
+    def __repr__(self):
+        return f'{type(self)}-typesetter'
 
 
 class FailsafeTypesetter(Typesetter):

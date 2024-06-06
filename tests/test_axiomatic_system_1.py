@@ -301,6 +301,8 @@ class TestEnumeration:
     def test_tupl(self, phi1, phi2, phi3):
         cb1 = pu.as1.EnumerationBuilder((phi1, phi2, phi3, phi1, phi3,))
         e1 = cb1.to_enumeration()
+        print(e1)
+        e1 = pu.as1.Enumeration((phi1, phi2, phi3,))
         e2 = pu.as1.Enumeration((phi1, phi2, phi3,))
         e3 = pu.as1.Enumeration((phi3, phi1, phi2,))
         assert len(e1) == 3

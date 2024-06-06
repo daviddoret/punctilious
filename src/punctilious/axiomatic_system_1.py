@@ -164,6 +164,13 @@ error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
 ))
 
 
+def force_str(o: object):
+    try:
+        return str(o)
+    except Exception:
+        return f'object-{id(o)} of type {str(type(o))}'
+
+
 class CustomException(Exception):
     """A generic exception type for application custom exceptions."""
 
@@ -179,7 +186,7 @@ class CustomException(Exception):
         return self.typeset_as_string()
 
     def typeset_as_string(self) -> str:
-        kwargs: str = '\n\t'.join(f'{key}: {str(value)}' for key, value in self.kwargs.items())
+        kwargs: str = '\n\t'.join(f'{force_str(key)}: {force_str(value)}' for key, value in self.kwargs.items())
         return f'{self.error_code.event_type} {self.error_code.code}\n\t{self.error_code.message}\n\t{kwargs}'
 
 
@@ -216,6 +223,12 @@ class Connective:
     def __call__(self, *args):
         """Allows pseudo formal language in python."""
         return Formula(connective=self, terms=args)
+
+    def __str__(self):
+        return f'{id(self)}-connective'
+
+    def __repr__(self):
+        return f'{id(self)}-connective'
 
     @property
     def formula_typesetter(self) -> pl1.Typesetter:
@@ -1633,8 +1646,11 @@ class EnumerationBuilder(FormulaBuilder):
 
     Note: """
 
-    def __init__(self, elements: FlexibleEnumeration):
-        super().__init__(c=connectives.enumeration, terms=None)
+    def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None):
+        if connective is None:
+            connective = connectives.enumeration
+
+        super().__init__(c=connective, terms=None)
         if isinstance(elements, typing.Iterable):
             for element in elements:
                 self.append(term=element)
@@ -3244,11 +3260,10 @@ class BracketedListTypesetter(pl1.Typesetter):
         yield from self.open_bracket.typeset_from_generator(**kwargs)
         first = True
         for term in phi:
-            term: Formula = coerce_formula(phi=term)
             if not first:
-                yield self.separator
+                yield from self.separator.typeset_from_generator(**kwargs)
                 yield from pl1.symbols.space.typeset_from_generator(**kwargs)
-                first = False
+            first = False
             yield from term.typeset_from_generator(**kwargs)
         yield from self.close_bracket.typeset_from_generator(**kwargs)
 
