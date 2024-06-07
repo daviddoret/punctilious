@@ -248,7 +248,7 @@ class TestPL4:
 
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (q | implies | r)
-        t, _ = pu.as1.auto_derive(t=t, phi=phi)
+        t, _, _ = pu.as1.auto_derive(t=t, phi=phi)
         assert pu.as1.is_valid_statement_with_regard_to_theory(
             phi=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (q | implies | r)),

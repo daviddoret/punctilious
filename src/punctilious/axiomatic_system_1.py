@@ -3180,8 +3180,10 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
         if not is_valid_statement_with_regard_to_theory(phi=phi, t=t):
             # we recursively tried to derive phi using all the inference-rules in the theory.
             # it follows that we are unable to derive phi.
+            u1.log_info(f'\tfailure after all ir review: {phi}')
             return t, False, None
         else:
+            u1.log_info(f'\tsuccess after all ir review: {phi}')
             for derivation in t.iterate_derivations():
                 if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
                     return t, True, derivation

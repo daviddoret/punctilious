@@ -79,8 +79,7 @@ class TestPropositionalLogicMetaTheory:
         land = pu.as1.connectives.land
         proposition = pu.as1.connectives.proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='X')
-        t, q = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='Y')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='Y')
         phi = (p | land | q) | is_a | proposition
         t, _, _ = pu.as1.auto_derive(t=t, phi=phi)
-        xyz
         pass

@@ -817,10 +817,10 @@ class TestAutoDerivation:
         t = pu.as1.Theory(derivations=(a1, if_p_then_q,))
         pass
         # auto-derivation of an existing valid-statement
-        t, _, = pu.as1.auto_derive(t=t, phi=p)
+        t, _, _, = pu.as1.auto_derive(t=t, phi=p)
         pass
         # auto-derivation of a simple theorem, without variables
-        t, _, = pu.as1.auto_derive(t=t, phi=q)
+        t, _, _, = pu.as1.auto_derive(t=t, phi=q)
         pass
         with pu.as1.let_x_be_a_variable(formula_typesetter='x') as x, pu.as1.let_x_be_a_variable(
                 formula_typesetter='y') as y:
@@ -829,9 +829,10 @@ class TestAutoDerivation:
                                                      variables=(x, y,)))
         t = pu.as1.Theory(derivations=(*t, x_y_then_x_and_y,))
         # auto-derivation of a simple theorem, without some variables
-        t, _, = pu.as1.auto_derive(t=t, phi=p | pu.as1.connectives.land | q)
+        t, success, _, = pu.as1.auto_derive(t=t, phi=p | pu.as1.connectives.land | q)
+        assert success
         pass
-        with pytest.raises(pu.as1.AutoDerivationFailure):
-            # auto-derivation of an impossible theorem fails and raises an auto-derivation-failure
-            t, _, = pu.as1.auto_derive(t=t, phi=p | pu.as1.connectives.lor | q)
+        # auto-derivation of an impossible theorem fails and raises an auto-derivation-failure
+        t, success, _, = pu.as1.auto_derive(t=t, phi=p | pu.as1.connectives.lor | q)
+        assert not success
         pass
