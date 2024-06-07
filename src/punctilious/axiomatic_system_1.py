@@ -7,6 +7,7 @@ import warnings
 # import threading
 import sys
 
+import util_1 as u1
 import state_1 as st1
 import presentation_layer_1 as pl1
 
@@ -164,13 +165,6 @@ error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
 ))
 
 
-def force_str(o: object):
-    try:
-        return str(o)
-    except Exception:
-        return f'object-{id(o)} of type {str(type(o))}'
-
-
 class CustomException(Exception):
     """A generic exception type for application custom exceptions."""
 
@@ -185,9 +179,8 @@ class CustomException(Exception):
     def __repr__(self) -> str:
         return self.typeset_as_string()
 
-    def typeset_as_string(self) -> str:
-        kwargs: str = '\n\t'.join(f'{force_str(key)}: {force_str(value)}' for key, value in self.kwargs.items())
-        return f'{self.error_code.event_type} {self.error_code.code}\n\t{self.error_code.message}\n\t{kwargs}'
+    def typeset_as_string(self, **kwargs) -> str:
+        return f'{self.error_code.event_type} {self.error_code.code}\n\t{self.error_code.message}\n\t{u1.force_str(o=kwargs)}'
 
 
 def raise_error(error_code: ErrorCode, **kwargs):
@@ -3090,15 +3083,21 @@ def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: F
 
 
 def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list: FlexibleEnumeration = None) -> \
-        typing.Tuple[
-            Theory, Derivation]:
+        typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """Try to automatically derive phi as a valid-statement from t, without specifying the premises and inference-rule,
     enriching t with new theorems as necessary to demonstrate phi.
 
     Raise an AutoDerivationFailure if the derivation is not successful.
     """
+    u1.log_info(f'_______')
+    u1.log_info(f'auto-derive target: {phi}')
     if premise_exclusion_list is None:
         premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)
+    u1.log_info(f'\tpremise_exclusion_list: {premise_exclusion_list}')
+
+    if premise_exclusion_list.has_element(phi=phi):
+        u1.log_info(f'circular argument')
+        return t, False, None
 
     # append phi to the exclusion list of premises,
     # to avoid circular attempts to auto-derive theorems.
@@ -3107,22 +3106,28 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
     if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
+        u1.log_info(f'\tvalid-statement with regard to theory: {phi}')
 
         for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
-                return t, derivation
+                return t, True, derivation
+        raise AutoDerivationFailure('Inconsistent behavior during auto-derivation')
     else:
         # phi is not a valid-statement with regard to t,
         # thus it may be possible to derive phi with complementary theorems in t.
+        u1.log_info(f'\tstatement is not valid with regard to theory: {phi}')
 
         # find the inference-rules in t that could derive phi.
         # these are the inference-rules whose conclusions are formula-equivalent-with-variables to phi.
         for ir in t.iterate_inference_rules():
+            ir_success: bool = True
             ir: InferenceRule
+            u1.log_info(f'\tinference-rule: {ir.transformation}')
             transfo: Transformation = ir.transformation
             if is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
                 # this inference-rule may potentially yield a valid-statement,
                 # that would be formula-equivalent to phi.
+                u1.log_info(f'\t\tgood candidate')
 
                 # we want to list what would be the required premises to yield phi.
                 # for this we need to "reverse-engineer" the inference-rule.
@@ -3131,7 +3136,8 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
                 # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
                 # an empty map-builder:
                 m: MapBuilder = MapBuilder()
-                is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables, m=m)
+                is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables,
+                                                     m=m)
 
                 # now that we know what are the necessary variable values, we can determine what
                 # are the necessary premises by substituting the variable values.
@@ -3144,35 +3150,42 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
                 # now that we have a list of necessary premises,
                 # we can recursively auto-derive these premises.
                 for necessary_premise in necessary_premises:
+                    u1.log_info(f'\t\t\tnecessary_premise: {necessary_premise}')
 
-                    if premise_exclusion_list.has_element(phi=necessary_premise):
-                        raise AutoDerivationFailure('this auto-derivation branch is circular',
-                                                    premise=necessary_premise)
-                    else:
-                        if not is_valid_statement_with_regard_to_theory(phi=necessary_premise, t=t):
-                            # this necessary premise is not an existing valid-statement in theory t,
-                            # we thus need to recursively attempt to auto-derive this theorem.
-                            try:
-                                t = auto_derive(t=t, phi=necessary_premise,
-                                                premise_exclusion_list=premise_exclusion_list)
-                                print(f'auto-derived: {necessary_premise}')
-                            except AutoDerivationFailure:
-                                # this necessary premise cannot be derived from theory t.
-                                # in conclusion, this branch is a dead-end.
-                                # re-raise the exception.
-                                raise AutoDerivationFailure('this auto-derivation branch is circular',
-                                                            premise=necessary_premise)
+                    necessary_premise_success: bool = False
+                    t, necessary_premise_success, _ = auto_derive(t=t, phi=necessary_premise,
+                                                                  premise_exclusion_list=premise_exclusion_list)
+                    if not necessary_premise_success:
+                        ir_success = False
 
-                # if we reach this, it means that all necessary premises
-                # are either already present in the theory, or were successfuly auto-derived recursively.
-                # in consequence we can now safely derive phi.
-                t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises, inference_rule=ir)
-                print(f'auto-derived: {derivation}')
-                return t, derivation
+                if ir_success:
+                    # if we reach this, it means that all necessary premises
+                    # are either already present in the theory, or were successfuly auto-derived recursively.
+                    # in consequence we can now safely derive phi.
+                    u1.log_info(f'\twe should now be able to derive: {phi}')
+                    u1.log_info(f'\t\twith necessary_premises: {necessary_premises}')
+                    u1.log_info(f'\t\tand inference-rule: {ir}')
+                    t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises,
+                                           inference_rule=ir)
+                    u1.log_info(f'\tauto-derivation success: {derivation}')
+                    return t, True, derivation
+                else:
+                    u1.log_info(f'\tir was not conclusive: {ir.transformation}')
+                    ir_success = False
+            else:
+                # the conclusion of this inference-rule is not interesting
+                u1.log_info(f'\tir has not interesting conclusion: {ir.transformation}')
+                ir_success = False
 
-        # we recursively tried to derive phi using all the inference-rules in the theory.
-        # it follows that we are unable to derive phi.
-        raise AutoDerivationFailure('Auto-derivation was not successful.')
+        if not is_valid_statement_with_regard_to_theory(phi=phi, t=t):
+            # we recursively tried to derive phi using all the inference-rules in the theory.
+            # it follows that we are unable to derive phi.
+            return t, False, None
+        else:
+            for derivation in t.iterate_derivations():
+                if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
+                    return t, True, derivation
+            raise AutoDerivationFailure('Inconsistent behavior during auto-derivation')
 
 
 # PRESENTATION LAYER

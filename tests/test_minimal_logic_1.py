@@ -1,4 +1,5 @@
 import pytest
+import logging
 import punctilious as pu
 
 # retrieve some basic vocabulary
@@ -232,7 +233,9 @@ class TestPL3:
 
 
 class TestPL4:
-    def test_pl4_with_auto_derivation(self):
+    def test_pl4_with_auto_derivation(self, caplog):
+        caplog.set_level(logging.INFO)
+
         # PL4. [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables

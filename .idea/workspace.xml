@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/util_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
     </list>
@@ -186,7 +185,7 @@
     "Python tests.pytest for test_propositional_logic_syntax_1.TestAutoDerivation.test_auto_derivation.executor": "Debug",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2.executor": "Debug",
-    "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3.executor": "Debug",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3.executor": "Run",
     "Python tests.pytest for test_typesetting.TestHierarchicalClass.test_is_subclass_of.executor": "Run",
     "Python tests.pytest for test_typesetting.TestIndexSymbol.test_to_string.executor": "Run",
     "Python tests.pytest for test_typesetting.TestProtocolPreference.test_protocol.executor": "Run",
@@ -633,14 +632,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00605" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1716209462488</created>
-      <option name="number" value="00605" />
-      <option name="presentableId" value="LOCAL-00605" />
-      <option name="project" value="LOCAL" />
-      <updated>1716209462488</updated>
-    </task>
     <task id="LOCAL-00606" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1716210868433</created>
@@ -1025,7 +1016,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717702945425</updated>
     </task>
-    <option name="localTasksCounter" value="654" />
+    <task id="LOCAL-00654" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1717759181644</created>
+      <option name="number" value="00654" />
+      <option name="presentableId" value="LOCAL-00654" />
+      <option name="project" value="LOCAL" />
+      <updated>1717759181644</updated>
+    </task>
+    <option name="localTasksCounter" value="655" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1144,33 +1143,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2816</line>
+          <line>2809</line>
           <option name="timeStamp" value="349" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>252</line>
+          <line>255</line>
           <option name="timeStamp" value="377" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>248</line>
+          <line>251</line>
           <option name="timeStamp" value="379" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>247</line>
+          <line>250</line>
           <option name="timeStamp" value="380" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
           <line>304</line>
           <option name="timeStamp" value="386" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3119</line>
-          <option name="timeStamp" value="387" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py</url>
@@ -1184,8 +1178,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py</url>
-          <line>82</line>
-          <option name="timeStamp" value="390" />
+          <line>85</line>
+          <option name="timeStamp" value="392" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py</url>
+          <line>83</line>
+          <option name="timeStamp" value="393" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

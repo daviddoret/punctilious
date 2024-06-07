@@ -1,3 +1,4 @@
+import util_1
 import state_1
 import presentation_layer_1
 import axiomatic_system_1
@@ -5,6 +6,7 @@ import inference_rules_1
 import propositional_logic_syntax_1
 import minimal_logic_1
 
+u1 = util_1
 st1 = state_1
 pl1 = presentation_layer_1
 as1 = axiomatic_system_1
