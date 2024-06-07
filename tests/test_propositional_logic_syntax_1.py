@@ -65,3 +65,21 @@ class TestPropositionalLogicMetaTheory:
         assert pu.as1.is_valid_statement_with_regard_to_theory(phi=claim, t=theory)
 
         pass
+
+    def test_pl1_2(self):
+        is_a = pu.as1.connectives.is_a
+        proposition = pu.as1.connectives.proposition
+        t, p = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
+        phi = p | is_a | proposition
+        t, _ = pu.as1.auto_derive(t=t, phi=phi)
+        pass
+
+    def test_pl1_3(self):
+        is_a = pu.as1.connectives.is_a
+        land = pu.as1.connectives.land
+        proposition = pu.as1.connectives.proposition
+        t, p = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='Q')
+        phi = (p | land | q) | is_a | proposition
+        t, _ = pu.as1.auto_derive(t=t, phi=phi)
+        pass

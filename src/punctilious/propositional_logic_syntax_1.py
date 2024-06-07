@@ -189,10 +189,7 @@ def let_x_be_a_propositional_variable(
         x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=rep))
         theory, _ = as1.let_x_be_an_axiom(theory=theory,
                                           valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
-        theory, _ = as1.derive(theory=theory,
-                               valid_statement=x | is_a | proposition,
-                               premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
-                               inference_rule=i1)
+ 
         return theory, x
     elif isinstance(rep, typing.Iterable):
         # declare multiple propositional variables

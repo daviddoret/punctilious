@@ -236,18 +236,18 @@ class TestPL4:
         # PL4. [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        theory, p, = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
-        theory, q, = pu.pls1.let_x_be_a_propositional_variable(theory=theory, rep='Q')
-        theory, r, = pu.pls1.let_x_be_a_propositional_variable(theory=theory, rep='R')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='Q')
+        t, r, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='R')
 
         # Add axiom PL03 to the theory
-        theory, _ = pu.as1.let_x_be_an_inference_rule(theory=theory, inference_rule=pu.ml1.pl04, )
+        t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl04, )
 
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
-        theory, _ = pu.as1.auto_derive(t=theory, phi=((p | implies | q) | land | (
-            (q | implies | r)) | implies | (q | implies | r)))
+        phi = ((p | implies | q) | land | (q | implies | r)) | implies | (q | implies | r)
+        t, _ = pu.as1.auto_derive(t=t, phi=phi)
         assert pu.as1.is_valid_statement_with_regard_to_theory(
             phi=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (q | implies | r)),
-            t=theory)
+            t=t)
         pass

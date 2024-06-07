@@ -3155,6 +3155,7 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
                             try:
                                 t = auto_derive(t=t, phi=necessary_premise,
                                                 premise_exclusion_list=premise_exclusion_list)
+                                print(f'auto-derived: {necessary_premise}')
                             except AutoDerivationFailure:
                                 # this necessary premise cannot be derived from theory t.
                                 # in conclusion, this branch is a dead-end.
@@ -3166,6 +3167,7 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
                 # are either already present in the theory, or were successfuly auto-derived recursively.
                 # in consequence we can now safely derive phi.
                 t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises, inference_rule=ir)
+                print(f'auto-derived: {derivation}')
                 return t, derivation
 
         # we recursively tried to derive phi using all the inference-rules in the theory.
@@ -3174,6 +3176,7 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
 
 
 # PRESENTATION LAYER
+
 
 class ClassicalFormulaTypesetter(pl1.Typesetter):
     def __init__(self, connective_typesetter: pl1.Typesetter):
@@ -3193,6 +3196,8 @@ class ClassicalFormulaTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
+        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        kwargs['is_sub_formula'] = True
         yield from self.connective_typesetter.typeset_from_generator(**kwargs)
         yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
         first = True
@@ -3224,11 +3229,17 @@ class InfixFormulaTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
+        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        kwargs['is_sub_formula'] = True
+        if is_sub_formula:
+            yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
         yield from phi.term_0.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from self.connective_typesetter.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from phi.term_1.typeset_from_generator(**kwargs)
+        if is_sub_formula:
+            yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
 class TransformationTypesetter(pl1.Typesetter):
@@ -3238,12 +3249,19 @@ class TransformationTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleTransformation, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Transformation = coerce_transformation(phi=phi)
+
+        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        kwargs['is_sub_formula'] = True
+        if is_sub_formula:
+            yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
         yield from phi.premises.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from pl1.symbols.rightwards_arrow.typeset_from_generator(**kwargs)
         yield from phi.variables.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from phi.conclusion.typeset_from_generator(**kwargs)
+        if is_sub_formula:
+            yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
 class BracketedListTypesetter(pl1.Typesetter):
@@ -3256,6 +3274,8 @@ class BracketedListTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: Formula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
+        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        kwargs['is_sub_formula'] = True
 
         yield from self.open_bracket.typeset_from_generator(**kwargs)
         first = True

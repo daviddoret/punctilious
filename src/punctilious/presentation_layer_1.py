@@ -323,6 +323,8 @@ class Symbols(dict):
             Symbol(key='conjunction', latex_math='\\wedge', unicode_extended='∧', unicode_limited='and'))
         self._disjunction = self._register(
             Symbol(key='disjunction', latex_math='\\vee', unicode_extended='∨', unicode_limited='or'))
+        self._implication = self._register(
+            Symbol(key='implication', latex_math='\\implies', unicode_extended='⇒', unicode_limited='==>'))
         self._negation = self._register(
             Symbol(key='negation', latex_math='\\lnot', unicode_extended='¬', unicode_limited='not'))
         self._open_curly_brace = self._register(
@@ -466,6 +468,10 @@ class Symbols(dict):
     @property
     def disjunction(self) -> Symbol:
         return self._disjunction
+
+    @property
+    def implication(self) -> Symbol:
+        return self._implication
 
     @property
     def negation(self) -> Symbol:
