@@ -755,7 +755,7 @@ class TestAxiomatization:
         a1 = pu.as1.Axiomatization(axioms=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
 
         # bad case: an enumeration with a non-axiom
-        e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e)))
+        e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(phi=e3)
         with pytest.raises(pu.as1.CustomException, match='e123'):
             a2 = pu.as1.Axiomatization(axioms=e3)  # raise an e123 exception
@@ -836,3 +836,14 @@ class TestAutoDerivation:
         t, success, _, = pu.as1.auto_derive(t=t, phi=p | pu.as1.connectives.lor | q)
         assert not success
         pass
+
+
+class TestFormulaDepth:
+    def test_get_formula_depth(self):
+        c = pu.as1.FreeArityConnective(formula_typesetter=pu.pl1.symbols.x_uppercase_serif_italic)
+        phi1 = pu.as1.Formula(connective=c, terms=None)
+        assert pu.as1.get_formula_depth(phi=phi1) == 1
+        phi2 = pu.as1.Formula(connective=c, terms=(phi1, phi1,))
+        assert pu.as1.get_formula_depth(phi=phi2) == 2
+        phi3 = pu.as1.Formula(connective=c, terms=(phi1, phi2, phi1, phi2))
+        assert pu.as1.get_formula_depth(phi=phi3) == 3

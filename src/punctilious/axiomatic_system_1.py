@@ -2986,6 +2986,42 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: EnumerationBuilder = None) -> En
     return e
 
 
+def get_formula_depth(phi: FlexibleFormula) -> int:
+    """The depth of a formula is the number of sub-formula layers it has.
+
+    :param phi:
+    :return:
+    """
+    phi = coerce_formula(phi=phi)
+    if phi.arity == 0:
+        return 1
+    else:
+        return max(get_formula_depth(phi=term) for term in phi) + 1
+
+
+def extend_theory(t: FlexibleTheory, *args) -> Theory:
+    t = coerce_theory(phi=t)
+    if args is None:
+        return t
+    else:
+        for argument in args:
+            if is_well_formed_theory(phi=argument):
+                argument: Theory = coerce_theory(phi=argument)
+                t: Theory = Theory(derivations=(*t, *argument,))
+            elif is_well_formed_axiom(phi=argument):
+                argument: Axiom = coerce_axiom(phi=argument)
+                t: Theory = Theory(derivations=(*t, argument,))
+            elif is_well_formed_inference_rule(phi=argument):
+                argument: InferenceRule = coerce_inference_rule(phi=argument)
+                t: Theory = Theory(derivations=(*t, argument,))
+            elif is_well_formed_theorem(phi=argument):
+                argument: Theorem = coerce_theorem(phi=argument)
+                t: Theory = Theory(derivations=(*t, argument,))
+            else:
+                raise Exception(f'Invalid argument: ({type(argument)}) {argument}.')
+        return t
+
+
 def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     """Given a propositional formula phi that is an implication,
     translates phi to an equivalent axiomatic-system-1 inference-rule.
@@ -3085,14 +3121,32 @@ def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: F
     return theory, theorem
 
 
-def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list: FlexibleEnumeration = None) -> \
+def auto_derive(t: FlexibleTheory, phi: FlexibleFormula) -> \
+        typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
+    max_formula_depth = 3
+    while True:
+        u1.log_info(f'\tauto-derive max_formula_depth {max_formula_depth}.')
+
+        t, success, derivation, = _auto_derive(t=t, phi=phi, premise_exclusion_list=None,
+                                               max_formula_depth=max_formula_depth)
+        if not success:
+            max_formula_depth = max_formula_depth + 1
+        else:
+            return t, success, derivation
+
+
+def _auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list: FlexibleEnumeration = None,
+                 max_formula_depth: int = 1) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """Try to automatically derive phi as a valid-statement from t, without specifying the premises and inference-rule,
     enriching t with new theorems as necessary to demonstrate phi.
 
     Raise an AutoDerivationFailure if the derivation is not successful.
     """
-    u1.log_info(f'auto-derivation target: {phi}')
+    u1.log_info(f'auto-derivation target: max-depth:{max_formula_depth} {phi}')
+    if get_formula_depth(phi=phi) > max_formula_depth:
+        u1.log_info(f'\tmax-depth reached, post-poning search to next iteration.')
+        return t, False, None
     if premise_exclusion_list is None:
         premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)
     # u1.log_info(f'\tpremise_exclusion_list: {premise_exclusion_list}')
@@ -3158,8 +3212,9 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
                     # u1.log_info(f'\t\t\tnecessary_premise: {necessary_premise}')
 
                     necessary_premise_success: bool = False
-                    t, necessary_premise_success, _ = auto_derive(t=t, phi=necessary_premise,
-                                                                  premise_exclusion_list=premise_exclusion_list)
+                    t, necessary_premise_success, _ = _auto_derive(t=t, phi=necessary_premise,
+                                                                   premise_exclusion_list=premise_exclusion_list,
+                                                                   max_formula_depth=max_formula_depth)
                     if not necessary_premise_success:
                         ir_success = False
 
