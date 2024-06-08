@@ -3089,7 +3089,6 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
 
     Raise an AutoDerivationFailure if the derivation is not successful.
     """
-    u1.log_info(f'_______')
     u1.log_info(f'auto-derive target: {phi}')
     if premise_exclusion_list is None:
         premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)

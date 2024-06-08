@@ -71,8 +71,8 @@ class TestPropositionalLogicMetaTheory:
         proposition = pu.as1.connectives.proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
         phi = p | is_a | proposition
-        t, _ = pu.as1.auto_derive(t=t, phi=phi)
-        pass
+        t, _, _, = pu.as1.auto_derive(t=t, phi=phi)
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=phi, t=t)
 
     def test_pl1_3(self):
         is_a = pu.as1.connectives.is_a

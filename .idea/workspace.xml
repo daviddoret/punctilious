@@ -7,7 +7,7 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/util_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
     </list>
@@ -162,10 +162,10 @@
     "Python tests.pytest for test_inference_rules_1.TestSimplification2.test_simplification_2.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestAdjunction.test_adjunction.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL1.test_pl1.executor": "Debug",
-    "Python tests.pytest for test_minimal_logic_1.TestPL2.test_pl2.executor": "Debug",
+    "Python tests.pytest for test_minimal_logic_1.TestPL2.test_pl2.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4.executor": "Debug",
-    "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation.executor": "Debug",
+    "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation.executor": "Run",
     "Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Debug",
     "Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor": "Debug",
@@ -295,7 +295,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation">
+  <component name="RunManager" selected="Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -485,7 +485,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_minimal_logic_1.TestPL2.test_pl2" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -498,11 +498,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation&quot;" />
+      <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL2.test_pl2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestEnumeration.test_tupl" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_minimal_logic_1.TestPL3.test_pl3" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -515,7 +515,24 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestEnumeration.test_tupl&quot;" />
+      <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL3.test_pl3&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -533,23 +550,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -596,10 +596,10 @@
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_tupl" />
+      <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL2.test_pl2" />
+      <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3" />
+      <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation" />
       <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2" />
-      <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -607,11 +607,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation" />
-        <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3" />
         <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2" />
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_tupl" />
+        <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation" />
+        <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3" />
+        <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL2.test_pl2" />
       </list>
     </recent_temporary>
   </component>
@@ -630,14 +630,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00607" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1716217178721</created>
-      <option name="number" value="00607" />
-      <option name="presentableId" value="LOCAL-00607" />
-      <option name="project" value="LOCAL" />
-      <updated>1716217178721</updated>
     </task>
     <task id="LOCAL-00608" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1023,7 +1015,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717792875322</updated>
     </task>
-    <option name="localTasksCounter" value="656" />
+    <task id="LOCAL-00656" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1717793746256</created>
+      <option name="number" value="00656" />
+      <option name="presentableId" value="LOCAL-00656" />
+      <option name="project" value="LOCAL" />
+      <updated>1717793746257</updated>
+    </task>
+    <option name="localTasksCounter" value="657" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1146,21 +1146,6 @@
           <option name="timeStamp" value="349" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>255</line>
-          <option name="timeStamp" value="377" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>251</line>
-          <option name="timeStamp" value="379" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>250</line>
-          <option name="timeStamp" value="380" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
           <line>304</line>
           <option name="timeStamp" value="386" />
@@ -1174,6 +1159,11 @@
           <url>file://$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py</url>
           <line>72</line>
           <option name="timeStamp" value="389" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
+          <line>67</line>
+          <option name="timeStamp" value="395" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

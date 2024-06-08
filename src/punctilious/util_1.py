@@ -19,6 +19,6 @@ def force_str(o: object):
 
 def log_info(msg: str, **kwargs):
     global logger
-    logger.info(msg, kwargs)
+    logger.info(msg)
     # warnings.warn('{msg} :{force_str(kwargs)}.')
     print(f'{msg}')
