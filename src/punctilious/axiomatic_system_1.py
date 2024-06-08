@@ -6,6 +6,7 @@ import typing
 import warnings
 # import threading
 import sys
+import random
 
 import util_1 as u1
 import state_1 as st1
@@ -3079,6 +3080,8 @@ def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: F
     # extends the theory
     theory: Theory = Theory(derivations=(*theory, theorem,))
 
+    u1.log_info(theorem.typeset_as_string())
+
     return theory, theorem
 
 
@@ -3089,13 +3092,13 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
 
     Raise an AutoDerivationFailure if the derivation is not successful.
     """
-    u1.log_info(f'auto-derive target: {phi}')
+    u1.log_info(f'auto-derivation target: {phi}')
     if premise_exclusion_list is None:
         premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)
-    u1.log_info(f'\tpremise_exclusion_list: {premise_exclusion_list}')
+    # u1.log_info(f'\tpremise_exclusion_list: {premise_exclusion_list}')
 
     if premise_exclusion_list.has_element(phi=phi):
-        u1.log_info(f'circular argument')
+        # u1.log_info(f'circular argument')
         return t, False, None
 
     # append phi to the exclusion list of premises,
@@ -3105,7 +3108,7 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
     if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
-        u1.log_info(f'\tvalid-statement with regard to theory: {phi}')
+        # u1.log_info(f'\tvalid-statement with regard to theory: {phi}')
 
         for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
@@ -3114,19 +3117,22 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
     else:
         # phi is not a valid-statement with regard to t,
         # thus it may be possible to derive phi with complementary theorems in t.
-        u1.log_info(f'\tstatement is not valid with regard to theory: {phi}')
+        # u1.log_info(f'\tstatement is not valid with regard to theory: {phi}')
 
         # find the inference-rules in t that could derive phi.
         # these are the inference-rules whose conclusions are formula-equivalent-with-variables to phi.
+        # ir_list = list(t.inference_rules)
+        # random.shuffle(ir_list)
+        # for ir in ir_list:
         for ir in t.iterate_inference_rules():
             ir_success: bool = True
             ir: InferenceRule
-            u1.log_info(f'\tinference-rule: {ir.transformation}')
+            # u1.log_info(f'\tinference-rule: {ir.transformation}')
             transfo: Transformation = ir.transformation
             if is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
                 # this inference-rule may potentially yield a valid-statement,
                 # that would be formula-equivalent to phi.
-                u1.log_info(f'\t\tgood candidate')
+                # u1.log_info(f'\t\tgood candidate')
 
                 # we want to list what would be the required premises to yield phi.
                 # for this we need to "reverse-engineer" the inference-rule.
@@ -3149,7 +3155,7 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
                 # now that we have a list of necessary premises,
                 # we can recursively auto-derive these premises.
                 for necessary_premise in necessary_premises:
-                    u1.log_info(f'\t\t\tnecessary_premise: {necessary_premise}')
+                    # u1.log_info(f'\t\t\tnecessary_premise: {necessary_premise}')
 
                     necessary_premise_success: bool = False
                     t, necessary_premise_success, _ = auto_derive(t=t, phi=necessary_premise,
@@ -3161,28 +3167,28 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list:
                     # if we reach this, it means that all necessary premises
                     # are either already present in the theory, or were successfuly auto-derived recursively.
                     # in consequence we can now safely derive phi.
-                    u1.log_info(f'\twe should now be able to derive: {phi}')
-                    u1.log_info(f'\t\twith necessary_premises: {necessary_premises}')
-                    u1.log_info(f'\t\tand inference-rule: {ir}')
+                    # u1.log_info(f'\twe should now be able to derive: {phi}')
+                    # u1.log_info(f'\t\twith necessary_premises: {necessary_premises}')
+                    # u1.log_info(f'\t\tand inference-rule: {ir}')
                     t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises,
                                            inference_rule=ir)
-                    u1.log_info(f'\tauto-derivation success: {derivation}')
+                    # u1.log_info(f'\tauto-derivation success: {derivation}')
                     return t, True, derivation
                 else:
-                    u1.log_info(f'\tir was not conclusive: {ir.transformation}')
+                    # u1.log_info(f'\tir was not conclusive: {ir.transformation}')
                     ir_success = False
             else:
                 # the conclusion of this inference-rule is not interesting
-                u1.log_info(f'\tir has not interesting conclusion: {ir.transformation}')
+                # u1.log_info(f'\tir has not interesting conclusion: {ir.transformation}')
                 ir_success = False
 
         if not is_valid_statement_with_regard_to_theory(phi=phi, t=t):
             # we recursively tried to derive phi using all the inference-rules in the theory.
             # it follows that we are unable to derive phi.
-            u1.log_info(f'\tfailure after all ir review: {phi}')
+            # u1.log_info(f'\tfailure after all ir review: {phi}')
             return t, False, None
         else:
-            u1.log_info(f'\tsuccess after all ir review: {phi}')
+            # u1.log_info(f'\tsuccess after all ir review: {phi}')
             for derivation in t.iterate_derivations():
                 if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
                     return t, True, derivation

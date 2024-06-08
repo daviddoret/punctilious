@@ -142,6 +142,7 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]. (Mancosu et al., p. 19).
     """
     pass
+
 with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
         formula_typesetter='b') as b, as1.let_x_be_a_variable(
     formula_typesetter='c') as c:
@@ -170,6 +171,38 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     PL4. [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶). (Mancosu et al., p. 19).
     """
     pass
+
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
+        formula_typesetter='b') as b:
+    pl05: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition),
+            conclusion=b | implies | (a | implies | b),
+            variables=(a, b,)))
+    """The PL05 axiom schema: 𝐵 ⊃ (𝐴 ⊃ 𝐵).
+
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+
+    Conclusion: 
+    𝐵 ⊃ (𝐴 ⊃ 𝐵)
+
+    Variables:
+    {A, B}
+
+    Original axiom: 
+    PL5. 𝐵 ⊃ (𝐴 ⊃ 𝐵). (Mancosu et al., p. 19).
+    """
+    pass
+
+# - PL6. (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵
+# - PL7. 𝐴 ⊃ (𝐴 ∨ 𝐵)
+# - PL8. (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴)
+# - PL9. [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
+# - PL10. [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
 
 axioms = as1.Axiomatization(axioms=(pl01, pl02, pl03, pl04,))
 

@@ -271,3 +271,26 @@ class TestPL4:
                 (q | implies | r)) | implies | (p | implies | r)),
             t=t)
         pass
+
+
+class TestPL5:
+    def test_pl5_with_auto_derivation(self, caplog):
+        caplog.set_level(logging.INFO)
+
+        # PL5. 𝐵 ⊃ (𝐴 ⊃ 𝐵).
+
+        # Elaborate a basic theory with P, Q, and R as a propositional-variables
+        t = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms,))
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='Q')
+        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=q)
+
+        # Add axiom PL05 to the theory
+        t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl05, )
+
+        # Derive: P ⊃ Q
+        phi = p | implies | q
+        t, success, _ = pu.as1.auto_derive(t=t, phi=phi)
+        assert success
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=phi, t=t)
+        pass
