@@ -33,7 +33,7 @@ def theory(a, b, c):
     a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=a | is_a | propositional_variable)
     a2 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=b | is_a | propositional_variable)
     a3 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=c | is_a | propositional_variable)
-    theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms, a1, a2, a3,))
+    theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive: a is-a proposition
     theory, _, = pu.as1.derive(theory=theory,

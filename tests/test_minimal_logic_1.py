@@ -34,7 +34,7 @@ def theory(a, b, c):
     a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=a | is_a | propositional_variable)
     a2 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=b | is_a | propositional_variable)
     a3 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=c | is_a | propositional_variable)
-    theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms, a1, a2, a3,))
+    theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive: a is-a proposition
     theory = pu.as1.derive_OBSOLETE(theory=theory,
@@ -65,7 +65,7 @@ class TestPL1:
         # Test PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 
         # Elaborate a basic theory with P as a propositional-variable
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
 
         # Add axiom PL01 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl01, )
@@ -119,8 +119,8 @@ class TestPL2:
         # PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴)
 
         # Elaborate a basic theory with P and Q as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='Q')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, _, _, = pu.as1.auto_derive(t=t, phi=p | is_a | proposition)
         t, _, _, = pu.as1.auto_derive(t=t, phi=q | is_a | proposition)
 
@@ -174,9 +174,9 @@ class TestPL3:
         # PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='Q')
-        t, r, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='R')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
+        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
         t, _, _, = pu.as1.auto_derive(t=t, phi=p | is_a | proposition)
         t, _, _, = pu.as1.auto_derive(t=t, phi=q | is_a | proposition)
         t, _, _, = pu.as1.auto_derive(t=t, phi=r | is_a | proposition)
@@ -253,9 +253,9 @@ class TestPL4:
         # PL4. [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='Q')
-        t, r, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='R')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
+        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
         t, _, _, = pu.as1.auto_derive(t=t, phi=p | is_a | proposition)
         t, _, _, = pu.as1.auto_derive(t=t, phi=q | is_a | proposition)
         t, _, _, = pu.as1.auto_derive(t=t, phi=r | is_a | proposition)
@@ -280,9 +280,9 @@ class TestPL5:
         # PL5. 𝐵 ⊃ (𝐴 ⊃ 𝐵).
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axioms,))
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='Q')
+        t = pu.as1.Axiomatization(axioms=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=q)
 
         # Add axiom PL05 to the theory

@@ -204,8 +204,8 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
 # - PL9. [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
 # - PL10. [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
 
-axioms = as1.Axiomatization(axioms=(pl01, pl02, pl03, pl04,))
+axiomatization = as1.Axiomatization(axioms=(pl01, pl02, pl03, pl04,))
 
-extended_theory = as1.Theory(derivations=(*axioms,))
+extended_theory = as1.Theory(derivations=(*axiomatization,))
 
 pass

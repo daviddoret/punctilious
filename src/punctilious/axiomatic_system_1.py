@@ -913,7 +913,9 @@ class BinaryConnective(FixedArityConnective):
 
 
 def is_term_of_formula(phi: Formula, psi: Formula) -> bool:
-    """Returns True if phi is a term of psi, False otherwise.
+    """Returns True if and only if there exists a term t of psi such that phi ~formula t.
+
+    When this condition is satisfied, we say that phi is a term of psi.
 
     :param phi: A formula.
     :type phi: FlexibleFormula

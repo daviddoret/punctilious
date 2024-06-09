@@ -173,13 +173,13 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
     """
     pass
 
-axioms = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))
+axiomatization = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))
 
-extended_theory = as1.Theory(derivations=(*axioms,))
+extended_theory = as1.Theory(derivations=(*axiomatization,))
 
 
 def let_x_be_a_propositional_variable(
-        theory: as1.FlexibleTheory,
+        t: as1.FlexibleTheory,
         rep: as1.FlexibleRepresentation) -> \
         typing.Tuple[as1.Theory, as1.Variable | typing.Tuple[as1.Variable, ...]]:
     """Declare one or multiple propositional-variables in the input theory.
@@ -194,40 +194,40 @@ def let_x_be_a_propositional_variable(
 
     The following
 
-    :param theory:
+    :param t:
     :param rep:
     :return:
     """
-    global axioms
+    global axiomatization
     global i1
-    theory: as1.FlexibleTheory = as1.coerce_theory(phi=theory)
+    t: as1.FlexibleTheory = as1.coerce_theory(phi=t)
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
     # in the theory.
-    for inference_rule in axioms:
-        if not theory.has_element(inference_rule):
-            theory, _ = as1.let_x_be_an_inference_rule(theory=theory, inference_rule=inference_rule)
+    for inference_rule in axiomatization:
+        if not t.has_element(inference_rule):
+            t, _ = as1.let_x_be_an_inference_rule(theory=t, inference_rule=inference_rule)
 
     if isinstance(rep, str):
         # declare a single propositional variable
         x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=rep))
-        theory, _ = as1.let_x_be_an_axiom(theory=theory,
-                                          valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+        t, _ = as1.let_x_be_an_axiom(theory=t,
+                                     valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
 
-        return theory, x
+        return t, x
     elif isinstance(rep, typing.Iterable):
         # declare multiple propositional variables
         propositional_variables = tuple()
         for r in rep:
             x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=r))
             propositional_variables = propositional_variables + (x,)
-            theory, _ = as1.let_x_be_an_axiom(theory=theory,
-                                              valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
-            theory, _ = as1.derive(theory=theory,
-                                   valid_statement=x | is_a | proposition,
-                                   premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
-                                   inference_rule=i1)
-        return theory, *propositional_variables
+            t, _ = as1.let_x_be_an_axiom(theory=t,
+                                         valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+            t, _ = as1.derive(theory=t,
+                              valid_statement=x | is_a | proposition,
+                              premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
+                              inference_rule=i1)
+        return t, *propositional_variables
     else:
         raise TypeError  # TODO: Implement event code.
 

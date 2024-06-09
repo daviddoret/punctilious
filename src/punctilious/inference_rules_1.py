@@ -115,7 +115,7 @@ Conclusion: psi
 Variables: phi, psi
 """
 
-axioms = as1.Axiomatization(axioms=(
+axiomatization = as1.Axiomatization(axioms=(
     adjunction_axiom,
     simplification_1_axiom,
     simplification_2_axiom,

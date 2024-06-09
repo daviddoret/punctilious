@@ -69,7 +69,7 @@ class TestPropositionalLogicMetaTheory:
     def test_pl1_2(self):
         is_a = pu.as1.connectives.is_a
         proposition = pu.as1.connectives.proposition
-        t, p = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='P')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         phi = p | is_a | proposition
         t, _, _, = pu.as1.auto_derive(t=t, phi=phi)
         assert pu.as1.is_valid_statement_with_regard_to_theory(phi=phi, t=t)
@@ -78,8 +78,8 @@ class TestPropositionalLogicMetaTheory:
         is_a = pu.as1.connectives.is_a
         land = pu.as1.connectives.land
         proposition = pu.as1.connectives.proposition
-        t, p = pu.pls1.let_x_be_a_propositional_variable(theory=None, rep='X')
-        t, q = pu.pls1.let_x_be_a_propositional_variable(theory=t, rep='Y')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='X')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Y')
         phi = (p | land | q) | is_a | proposition
         t, _, _ = pu.as1.auto_derive(t=t, phi=phi)
         pass
