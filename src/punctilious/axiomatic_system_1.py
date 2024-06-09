@@ -923,9 +923,27 @@ def is_term_of_formula(phi: Formula, psi: Formula) -> bool:
     :return: True if phi is a term of psi, False otherwise.
     :rtype: bool
     """
-    phi = coerce_formula(phi=phi)
-    psi = coerce_formula(phi=psi)
+    phi: Formula = coerce_formula(phi=phi)
+    psi: Formula = coerce_formula(phi=psi)
     return any(is_formula_equivalent(phi=phi, psi=psi_term) for psi_term in psi)
+
+
+def is_axiom_of_theory(a: FlexibleAxiom, t: FlexibleTheory):
+    a: Axiom = coerce_axiom(phi=a)
+    t: Theory = coerce_theory(phi=t)
+    return any(is_formula_equivalent(phi=a, psi=a2) for a2 in t.axioms)
+
+
+def is_inference_rule_of_theory(ir: FlexibleInferenceRule, t: FlexibleTheory):
+    ir: InferenceRule = coerce_inference_rule(phi=ir)
+    t: Theory = coerce_theory(phi=t)
+    return any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in t.inference_rules)
+
+
+def is_theorem_of_theory(thrm: FlexibleTheorem, t: FlexibleTheory):
+    thrm: Theorem = coerce_theorem(phi=thrm)
+    t: Theory = coerce_theory(phi=t)
+    return any(is_formula_equivalent(phi=thrm, psi=thrm2) for thrm2 in t.theorems)
 
 
 def get_index_of_first_equivalent_term_in_formula(phi: FlexibleFormula, psi: FlexibleFormula) -> int:
@@ -2999,26 +3017,31 @@ def get_formula_depth(phi: FlexibleFormula) -> int:
         return max(get_formula_depth(phi=term) for term in phi) + 1
 
 
-def extend_theory(t: FlexibleTheory, *args) -> Theory:
+def extend_theory(*args, t: FlexibleTheory) -> Theory:
     t = coerce_theory(phi=t)
     if args is None:
         return t
     else:
         for argument in args:
             if is_well_formed_theory(phi=argument):
-                argument: Theory = coerce_theory(phi=argument)
-                t: Theory = Theory(derivations=(*t, *argument,))
+                # recursively append all derivations of t2 in t
+                t2: Theory = coerce_theory(phi=argument)
+                for d in t2.derivations:
+                    t: Theory = extend_theory(d, t=t)
             elif is_well_formed_axiom(phi=argument):
-                argument: Axiom = coerce_axiom(phi=argument)
-                t: Theory = Theory(derivations=(*t, argument,))
+                a: Axiom = coerce_axiom(phi=argument)
+                if not is_axiom_of_theory(a=a, t=t):
+                    t: Theory = Theory(derivations=(*t, a,))
             elif is_well_formed_inference_rule(phi=argument):
-                argument: InferenceRule = coerce_inference_rule(phi=argument)
-                t: Theory = Theory(derivations=(*t, argument,))
+                ir: InferenceRule = coerce_inference_rule(phi=argument)
+                if not is_inference_rule_of_theory(ir=ir, t=t):
+                    t: Theory = Theory(derivations=(*t, ir,))
             elif is_well_formed_theorem(phi=argument):
-                argument: Theorem = coerce_theorem(phi=argument)
-                t: Theory = Theory(derivations=(*t, argument,))
+                thrm: Theorem = coerce_theorem(phi=argument)
+                if not is_theorem_of_theory(thrm=thrm, t=t):
+                    t: Theory = Theory(derivations=(*t, thrm,))
             else:
-                raise Exception(f'Invalid argument: ({type(argument)}) {argument}.')
+                raise ValueError(f'Invalid argument: ({type(argument)}) {argument}.')
         return t
 
 
@@ -3121,10 +3144,27 @@ def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: F
     return theory, theorem
 
 
+def is_in_formula_tree(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
+    """Return True if phi is formula-equivalent to psi or a sub-formula of psi."""
+    phi = coerce_formula(phi=phi)
+    psi = coerce_formula(phi=psi)
+    if is_formula_equivalent(phi=phi, psi=psi):
+        return True
+    else:
+        for term in psi:
+            if is_in_formula_tree(phi=phi, psi=term):
+                return True
+    return False
+
+
+auto_derivation_max_formula_depth_preference = 4
+
+
 def auto_derive(t: FlexibleTheory, phi: FlexibleFormula) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
+    global auto_derivation_max_formula_depth_preference
     max_formula_depth = 3
-    while True:
+    while max_formula_depth <= auto_derivation_max_formula_depth_preference:
         u1.log_info(f'\tauto-derive max_formula_depth {max_formula_depth}.')
 
         t, success, derivation, = _auto_derive(t=t, phi=phi, premise_exclusion_list=None,
@@ -3133,6 +3173,8 @@ def auto_derive(t: FlexibleTheory, phi: FlexibleFormula) -> \
             max_formula_depth = max_formula_depth + 1
         else:
             return t, success, derivation
+    u1.log_info(f'\tstop max_formula_depth {max_formula_depth}.')
+    return t, False, None
 
 
 def _auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list: FlexibleEnumeration = None,
@@ -3181,9 +3223,12 @@ def _auto_derive(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list
         for ir in t.iterate_inference_rules():
             ir_success: bool = True
             ir: InferenceRule
-            # u1.log_info(f'\tinference-rule: {ir.transformation}')
+            u1.log_info(f'\tinference-rule: {ir.transformation}')
             transfo: Transformation = ir.transformation
-            if is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
+            if any(is_in_formula_tree(phi=v, psi=phi) for v in transfo.variables):
+                u1.log_info(f'\tvariable {v} is present in the target {phi}')
+                ir_success = False
+            elif is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
                 # this inference-rule may potentially yield a valid-statement,
                 # that would be formula-equivalent to phi.
                 # u1.log_info(f'\t\tgood candidate')

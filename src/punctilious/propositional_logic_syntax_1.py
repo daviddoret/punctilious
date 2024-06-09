@@ -149,6 +149,30 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
     """
     pass
 
+with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
+    i6: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=None,
+            conclusion=lnot(a | is_a | proposition),
+            variables=(a, b,)))
+    """Axiom schema: ?????.
+    
+    TODO: How could we implement the extreme case????????
+
+    Premises:
+    ?????
+
+    Conclusion: 
+    not (A is a proposition)
+
+    Variables:
+    {A}
+
+    Original axiom: 
+    "Extremal clause: Nothing else is a formula." (Mancosu et al., 2021).
+    """
+    pass
+
 axioms = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))
 
 extended_theory = as1.Theory(derivations=(*axioms,))
@@ -189,7 +213,7 @@ def let_x_be_a_propositional_variable(
         x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=rep))
         theory, _ = as1.let_x_be_an_axiom(theory=theory,
                                           valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
- 
+
         return theory, x
     elif isinstance(rep, typing.Iterable):
         # declare multiple propositional variables
