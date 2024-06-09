@@ -204,9 +204,7 @@ def let_x_be_a_propositional_variable(
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
     # in the theory.
-    for inference_rule in axiomatization:
-        if not t.has_element(inference_rule):
-            t, _ = as1.let_x_be_an_inference_rule(theory=t, inference_rule=inference_rule)
+    t = as1.extend_theory(axiomatization, t=t)
 
     if isinstance(rep, str):
         # declare a single propositional variable

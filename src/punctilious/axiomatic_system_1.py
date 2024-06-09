@@ -1030,38 +1030,6 @@ def let_x_be_a_variable(formula_typesetter: pl1.FlexibleTypesetter) -> typing.Un
         raise TypeError  # TODO: Implement event code.
 
 
-def let_x_be_a_propositional_variable_OBSOLETE(
-        rep: FlexibleRepresentation,
-        db: typing.Union[FlexibleTheoryBuilder, EnumerationBuilder] = None) -> \
-        typing.Union[Variable, typing.Generator[Variable, typing.Any, None]]:
-    """
-
-    :param rep:
-    :param db: If a theory-builder is provided, append the axiom (x is-a proposition) where x is the new
-        variable. Alternatively, an enumeration-builder may be provided.
-    :return:
-    """
-    # TODO: RESUME IMPLEMENTATION OF PARAMETER DB HERE.
-    # TODO: EITHER MOVE THIS FUNCTION TO INFERENCE_RULES_1 OR MOVE FUNDAMENTAL LOGIC CONNECTIVES HERE
-    if db is not None:
-        db = coerce_theory_builder(phi=db)
-    if isinstance(rep, str):
-        x = Variable(connective=NullaryConnective(formula_typesetter=rep))
-        if db is not None:
-            db.append(term=Axiom(valid_statement=x | connectives.is_a | connectives.propositional_variable))
-        return x
-    elif isinstance(rep, typing.Iterable):
-        t = tuple()
-        for r in rep:
-            x = Variable(connective=NullaryConnective(formula_typesetter=r))
-            if db is not None:
-                db.append(term=Axiom(valid_statement=x | connectives.is_a | connectives.propositional_variable))
-            t = t + (x,)
-        return t
-    else:
-        raise TypeError  # TODO: Implement event code.
-
-
 def v(rep: FlexibleRepresentation) -> typing.Union[
     NullaryConnective, typing.Generator[NullaryConnective, typing.Any, None]]:
     """A shortcut for let_x_be_a_variable."""
@@ -3020,6 +2988,12 @@ def get_formula_depth(phi: FlexibleFormula) -> int:
 
 
 def extend_theory(*args, t: FlexibleTheory) -> Theory:
+    """
+
+    :param args:
+    :param t:
+    :return:
+    """
     t = coerce_theory(phi=t)
     if args is None:
         return t
