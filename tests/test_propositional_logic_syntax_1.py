@@ -69,9 +69,9 @@ class TestPropositionalLogicMetaTheory:
         is_a = pu.as1.connectives.is_a
         proposition = pu.as1.connectives.proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
-        phi = p | is_a | proposition
-        t, _, _, = pu.as1.auto_derive(t=t, phi=phi)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=phi, t=t)
+        t, success, _, = pu.as1.auto_derive_1(t=t, phi=p | is_a | proposition)
+        assert success
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | is_a | proposition, t=t)
 
     def test_pl1_3(self):
         is_a = pu.as1.connectives.is_a
@@ -79,6 +79,13 @@ class TestPropositionalLogicMetaTheory:
         proposition = pu.as1.connectives.proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='X')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Y')
-        phi = (p | land | q) | is_a | proposition
-        t, _, _ = pu.as1.auto_derive(t=t, phi=phi)
+        t, success, _ = pu.as1.auto_derive_1(t=t, phi=p | is_a | proposition)
+        assert success
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | is_a | proposition, t=t)
+        t, success, _ = pu.as1.auto_derive_1(t=t, phi=q | is_a | proposition)
+        assert success
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=q | is_a | proposition, t=t)
+        t, success, _ = pu.as1.auto_derive_1(t=t, phi=(p | land | q) | is_a | proposition)
+        assert success
+        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(p | land | q) | is_a | proposition, t=t)
         pass
