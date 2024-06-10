@@ -48,7 +48,7 @@ with as1.let_x_be_a_variable(formula_typesetter='phi') as phi, as1.let_x_be_a_va
             psi,),
         conclusion=phi | land | psi,
         variables=(phi, psi,))
-adjunction_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_deprecated(valid_statement=adjunction_rule)
+adjunction_axiom: as1.InferenceRule = as1.InferenceRule(transformation=adjunction_rule)
 
 # Simplification inference rule, aka conjunction elimination:
 #   phi ∧ psi
@@ -65,8 +65,7 @@ with as1.let_x_be_a_variable(formula_typesetter='phi') as phi, as1.let_x_be_a_va
             phi | land | psi,),
         conclusion=phi,
         variables=(phi, psi,))
-simplification_1_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_deprecated(
-    valid_statement=simplification_1_rule)
+simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(transformation=simplification_1_rule)
 
 # Simplification inference rule, aka conjunction elimination:
 #   phi ∧ psi
@@ -83,8 +82,7 @@ with as1.let_x_be_a_variable(formula_typesetter='phi') as phi, as1.let_x_be_a_va
             phi | land | psi,),
         conclusion=psi,
         variables=(phi, psi,))
-simplification_2_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_deprecated(
-    valid_statement=simplification_2_rule)
+simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(transformation=simplification_2_rule)
 
 # Modus ponens inference rule:
 #   phi --> psi
@@ -103,7 +101,7 @@ with as1.let_x_be_a_variable(formula_typesetter='P') as phi, as1.let_x_be_a_vari
             phi),
         conclusion=psi,
         variables=(phi, psi,))
-modus_ponens_axiom: as1.InferenceRule = as1.let_x_be_an_inference_rule_deprecated(valid_statement=modus_ponens_rule)
+modus_ponens_axiom: as1.InferenceRule = as1.InferenceRule(transformation=modus_ponens_rule)
 """Premises:
  - phi | is_a | proposition,
  - psi | is_a | proposition,

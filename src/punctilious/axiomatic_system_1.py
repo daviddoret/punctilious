@@ -1098,10 +1098,6 @@ def let_x_be_a_free_arity_connective(
     return FreeArityConnective(formula_typesetter=formula_typesetter)
 
 
-def let_x_be_an_inference_rule_deprecated(valid_statement: FlexibleTransformation):
-    return InferenceRule(transformation=valid_statement)
-
-
 def let_x_be_an_inference_rule(theory: FlexibleTheory,
                                inference_rule: typing.Optional[FlexibleInferenceRule] = None,
                                premises: typing.Optional[FlexibleTupl] = None,

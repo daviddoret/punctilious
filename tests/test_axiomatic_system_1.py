@@ -811,10 +811,10 @@ class TestAutoDerivation:
         # elaborate a theory
         p = pu.as1.let_x_be_a_simple_object(formula_typesetter='P')
         q = pu.as1.let_x_be_a_simple_object(formula_typesetter='Q')
-        a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=p)
+        t, a1 = pu.as1.let_x_be_an_axiom(theory=None, axiom=pu.as1.Axiom(valid_statement=p))
         if_p_then_q = pu.as1.InferenceRule(
             transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
-        t = pu.as1.Theory(derivations=(a1, if_p_then_q,))
+        t = pu.as1.extend_theory(if_p_then_q, t=t)
         pass
         # auto-derivation of an existing valid-statement
         t, _, _, = pu.as1.auto_derive_2(t=t, phi=p)
