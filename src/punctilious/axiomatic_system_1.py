@@ -3148,7 +3148,6 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
     if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
-        # u1.log_info(f'\tvalid-statement with regard to theory: {phi}')
 
         for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
