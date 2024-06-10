@@ -209,7 +209,7 @@ class Connective:
     def __init__(self, formula_typesetter: pl1.FlexibleTypesetter = None):
         """
 
-        :param rep: A default text representation.
+        :param formula_typesetter: A default text representation.
         """
         formula_typesetter: pl1.Typesetter = pl1.coerce_typesetter(ts=formula_typesetter)
         self._formula_typesetter: pl1.Typesetter = formula_typesetter
@@ -314,8 +314,7 @@ class FormulaBuilder(list):
         """
         return any(is_formula_equivalent(phi=phi, psi=psi_prime) for psi_prime in self)
 
-    def get_typesetter(self, typesetter: typing.Optional[
-        pl1.Typesetter] = None) -> pl1.Typesetter:
+    def get_typesetter(self, typesetter: typing.Optional[pl1.Typesetter] = None) -> pl1.Typesetter:
         """
 
          - priority 1: parameter typesetter is passed explicitly.
@@ -454,7 +453,7 @@ class Formula(tuple):
         :return: bool.
         """
         # TODO: Formula.is_well_formed: review this to avoid raising an exception, but return False instead.
-        phi: Formula = coerce_formula(phi=phi)
+        coerce_formula(phi=phi)
         return True
 
     def __new__(cls, connective: Connective, terms: FlexibleTupl = None):
@@ -1135,7 +1134,7 @@ def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[F
     and not both.
     :param axiom: An existing axiom. Either the claim or axiom parameter must be provided,
     and not both.
-    :return: a pair (t, a,) where t is an extension of the input theory, with a new axiom claiming the
+    :return: a pair (t, a) where t is an extension of the input theory, with a new axiom claiming the
     input statement, and a is the new axiom.
     """
     if theory is None:
@@ -1731,15 +1730,14 @@ class Enumeration(Formula):
         connective: Connective = connectives.enumeration if connective is None else connective
         if not is_well_formed_enumeration(phi=elements):
             raise_error(error_code=error_codes.e110, elements_type=type(elements), elements=elements)
-        o: tuple = super().__new__(cls, connective=connectives.enumeration, terms=elements)
+        o: tuple = super().__new__(cls, connective=connective, terms=elements)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None):
         global connectives
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
-        if connective is None:
-            connective = connectives.enumeration
+        connective: Connective = connectives.enumeration if connective is None else connective
         super().__init__(connective=connective, terms=eb)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
@@ -2899,11 +2897,11 @@ class Axiomatization(Theory):
             if is_well_formed_inference_rule(phi=derivation):
                 # This is an inference-rule.
                 inference_rule: InferenceRule = coerce_inference_rule(phi=derivation)
-                eb.append(term=derivation)
+                eb.append(term=inference_rule)
             elif is_well_formed_axiom(phi=derivation):
                 # This is an axiom.
                 axiom: Axiom = coerce_axiom(phi=derivation)
-                eb.append(term=derivation)
+                eb.append(term=axiom)
             else:
                 # Incorrect form.
                 raise_error(error_code=error_codes.e123, phi=derivation, phi_type_1=InferenceRule,
@@ -3192,7 +3190,7 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
 
                 if ir_success:
                     # if we reach this, it means that all necessary premises
-                    # are either already present in the theory, or were successfuly auto-derived recursively.
+                    # are either already present in the theory, or were successfully auto-derived recursively.
                     # in consequence we can now safely derive phi.
                     t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises,
                                            inference_rule=ir)
@@ -3208,10 +3206,8 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
         if not is_valid_statement_with_regard_to_theory(phi=phi, t=t):
             # we recursively tried to derive phi using all the inference-rules in the theory.
             # it follows that we are unable to derive phi.
-            # u1.log_info(f'\tfailure after all ir review: {phi}')
             return t, False, None
         else:
-            # u1.log_info(f'\tsuccess after all ir review: {phi}')
             for derivation in t.iterate_derivations():
                 if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
                     return t, True, derivation
@@ -3252,10 +3248,8 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
         return t, False, None
     if premise_exclusion_list is None:
         premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)
-    # u1.log_info(f'\tpremise_exclusion_list: {premise_exclusion_list}')
 
     if premise_exclusion_list.has_element(phi=phi):
-        # u1.log_info(f'circular argument')
         return t, False, None
 
     # append phi to the exclusion list of premises,
@@ -3265,7 +3259,6 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
     if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
-        # u1.log_info(f'\tvalid-statement with regard to theory: {phi}')
 
         for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
@@ -3286,8 +3279,8 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
             ir: InferenceRule
             u1.log_info(f'\tinference-rule: {ir.transformation}')
             transfo: Transformation = ir.transformation
-            if any(is_in_formula_tree(phi=v, psi=phi) for v in transfo.variables):
-                u1.log_info(f'\tvariable {v} is present in the target {phi}')
+            if any(is_in_formula_tree(phi=variable, psi=phi) for variable in transfo.variables):
+                u1.log_info(f'\tsome variable is present in the target {phi}')
                 ir_success = False
             elif is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
                 # this inference-rule may potentially yield a valid-statement,
@@ -3346,10 +3339,8 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
         if not is_valid_statement_with_regard_to_theory(phi=phi, t=t):
             # we recursively tried to derive phi using all the inference-rules in the theory.
             # it follows that we are unable to derive phi.
-            # u1.log_info(f'\tfailure after all ir review: {phi}')
             return t, False, None
         else:
-            # u1.log_info(f'\tsuccess after all ir review: {phi}')
             for derivation in t.iterate_derivations():
                 if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
                     return t, True, derivation

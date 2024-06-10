@@ -42,16 +42,16 @@ def fb3(c3):
 def fb4(c1, c2, c3):
     fb1 = pu.as1.FormulaBuilder(c=c1)
     n1_0 = fb1.append(term=c1)
-    n1_0_0 = n1_0.append(term=c3)
-    n1_0_1 = n1_0.append(term=c2)
-    n1_1 = fb1.append(term=c2)
+    n1_0.append(term=c3)
+    n1_0.append(term=c2)
+    fb1.append(term=c2)
     n1_2 = fb1.append(term=c3)
     n1_2_0 = n1_2.append(term=c1)
     n1_2_0_0 = n1_2_0.append(term=c1)
-    n1_2_0_0_0 = n1_2_0_0.append(term=c1)
-    n1_2_0_0_1 = n1_2_0_0.append(term=c3)
-    n1_2_0_1 = n1_2_0.append(term=c1)
-    n1_2_1 = n1_2.append(term=c2)
+    n1_2_0_0.append(term=c1)
+    n1_2_0_0.append(term=c3)
+    n1_2_0.append(term=c1)
+    n1_2.append(term=c2)
     return fb1
 
 
@@ -635,7 +635,7 @@ class TestInferenceRule:
         # derivation from the axiom
         i = pu.as1.Inference(premises=None, transformation_rule=rule)
         isolated_theorem = pu.as1.Derivation(valid_statement=phi, justification=i)
-        demo = pu.as1.Theory(derivations=(*axiomatization, isolated_theorem))
+        pu.as1.Theory(derivations=(*axiomatization, isolated_theorem))
         assert pu.as1.is_formula_equivalent(
             phi=isolated_theorem.valid_statement,
             psi=phi)
@@ -727,7 +727,7 @@ class TestProofByInference:
         f = pu.as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         i = pu.as1.Inference(premises=(a | star | b, b | star | c,), transformation_rule=f)
         assert pu.as1.is_well_formed_theorem(phi=(a | star | c) | pu.as1.connectives.follows_from | i)
-        proof1 = pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
+        pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
         assert not pu.as1.is_well_formed_theorem(phi=(a | star | d) | pu.as1.connectives.follows_from | i)
         i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), transformation_rule=f)
         assert not pu.as1.is_well_formed_theorem(phi=(a | star | c) | pu.as1.connectives.follows_from | i2)
@@ -741,7 +741,6 @@ class TestAxiomatization:
         x, y, z = pu.as1.let_x_be_a_variable(formula_typesetter=('x', 'y', 'z',))
         star1 = pu.as1.let_x_be_a_unary_connective(formula_typesetter='*1')
         star2 = pu.as1.let_x_be_a_binary_connective(formula_typesetter='*2')
-        star3 = pu.as1.let_x_be_a_ternary_connective(formula_typesetter='*3')
         axiom_ok_1 = pu.as1.Axiom(valid_statement=a | star2 | b)
         axiom_ok_2 = pu.as1.Axiom(valid_statement=star1(c))
 
@@ -787,11 +786,11 @@ class TestDemonstration:
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # invalid proof raise exception
-            demo3 = pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | e))
+            pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | e))
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # invalid proof sequence exception
-            demo4 = pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | c, ir1,))
+            pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | c, ir1,))
             pass
 
 
