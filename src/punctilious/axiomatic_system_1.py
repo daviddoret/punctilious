@@ -6,7 +6,7 @@ import typing
 import warnings
 # import threading
 import sys
-import random
+# import random
 
 import util_1 as u1
 import state_1 as st1
@@ -528,7 +528,7 @@ class Formula(tuple):
         :param phi: A formula.
         :type phi: FlexibleFormula
         ...
-        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
+        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi2. False
           otherwise.
         :rtype: bool
         """
@@ -1142,7 +1142,7 @@ def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[F
     else:
         theory: FlexibleTheory = coerce_theory(phi=theory)
     if valid_statement is not None and axiom is not None:
-        raise Exception('ooops 1')
+        raise Exception('oops 1')
     elif valid_statement is None and axiom is None:
         raise Exception('oops 2')
     elif valid_statement is not None:
@@ -1656,8 +1656,8 @@ class EnumerationBuilder(FormulaBuilder):
     def has_element(self, phi: FlexibleFormula) -> bool:
         """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
         phi ∼formula psi. False otherwise."""
-        enumeration: Enumeration = self.to_enumeration()
-        return is_term_of_formula(phi=phi, psi=enumeration)
+        e: Enumeration = self.to_enumeration()
+        return is_term_of_formula(phi=phi, psi=e)
 
     def to_enumeration(self) -> Enumeration:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
@@ -3076,7 +3076,7 @@ class AutoDerivationFailure(Exception):
 
 def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: FlexibleTupl,
            inference_rule: FlexibleInferenceRule) -> typing.Tuple[Theory, Theorem]:
-    """Given a theory t, derives a new theory t' that extends t with a new theorem by applying an inference-rule.
+    """Given a theory t, derives a new theory t2 that extends t with a new theorem by applying an inference-rule.
 
     :param valid_statement:
     :param theory:
@@ -3191,7 +3191,7 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
                 if ir_success:
                     # if we reach this, it means that all necessary premises
                     # are either already present in the theory, or were successfully auto-derived recursively.
-                    # in consequence we can now safely derive phi.
+                    # in consequence, we can now safely derive phi.
                     t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises,
                                            inference_rule=ir)
                     return t, True, derivation
@@ -3244,7 +3244,7 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
     """
     u1.log_info(f'auto-derivation target: max-depth:{max_formula_depth} {phi}')
     if get_formula_depth(phi=phi) > max_formula_depth:
-        u1.log_info(f'\tmax-depth reached, post-poning search to next iteration.')
+        u1.log_info(f'\tmax-depth reached, postponing search to next iteration.')
         return t, False, None
     if premise_exclusion_list is None:
         premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)
@@ -3267,7 +3267,6 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
     else:
         # phi is not a valid-statement with regard to t,
         # thus it may be possible to derive phi with complementary theorems in t.
-        # u1.log_info(f'\tstatement is not valid with regard to theory: {phi}')
 
         # find the inference-rules in t that could derive phi.
         # these are the inference-rules whose conclusions are formula-equivalent-with-variables to phi.
@@ -3285,7 +3284,7 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
             elif is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
                 # this inference-rule may potentially yield a valid-statement,
                 # that would be formula-equivalent to phi.
-                # u1.log_info(f'\t\tgood candidate')
+                # u1.log_info(f'\t\t good candidate')
 
                 # we want to list what would be the required premises to yield phi.
                 # for this we need to "reverse-engineer" the inference-rule.
@@ -3308,7 +3307,7 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
                 # now that we have a list of necessary premises,
                 # we can recursively auto-derive these premises.
                 for necessary_premise in necessary_premises:
-                    # u1.log_info(f'\t\t\tnecessary_premise: {necessary_premise}')
+                    # u1.log_info(f'\t\t\t necessary_premise: {necessary_premise}')
 
                     necessary_premise_success: bool = False
                     t, necessary_premise_success, _ = _auto_derive_2(t=t, phi=necessary_premise,
@@ -3319,14 +3318,14 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
 
                 if ir_success:
                     # if we reach this, it means that all necessary premises
-                    # are either already present in the theory, or were successfuly auto-derived recursively.
-                    # in consequence we can now safely derive phi.
+                    # are either already present in the theory, or were successfully auto-derived recursively.
+                    # in consequence, we can now safely derive phi.
                     # u1.log_info(f'\twe should now be able to derive: {phi}')
                     # u1.log_info(f'\t\twith necessary_premises: {necessary_premises}')
-                    # u1.log_info(f'\t\tand inference-rule: {ir}')
+                    # u1.log_info(f'\t\t and inference-rule: {ir}')
                     t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises,
                                            inference_rule=ir)
-                    # u1.log_info(f'\tauto-derivation success: {derivation}')
+                    # u1.log_info(f'\t auto-derivation success: {derivation}')
                     return t, True, derivation
                 else:
                     # u1.log_info(f'\tir was not conclusive: {ir.transformation}')
