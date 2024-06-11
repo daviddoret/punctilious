@@ -743,9 +743,11 @@ class TestAxiomatization:
         star2 = pu.as1.let_x_be_a_binary_connective(formula_typesetter='*2')
         axiom_ok_1 = pu.as1.Axiom(valid_statement=a | star2 | b)
         axiom_ok_2 = pu.as1.Axiom(valid_statement=star1(c))
+        assert pu.as1.is_well_formed_axiom(phi=axiom_ok_2)
 
         # simple case
         e1 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
+        e1 = pu.as1.Axiomatization(axioms=e1)
         assert pu.as1.is_well_formed_axiomatization(phi=e1)
 
         # extreme case: the empty enumeration

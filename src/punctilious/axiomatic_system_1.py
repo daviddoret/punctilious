@@ -2109,8 +2109,24 @@ def is_valid_statement_with_regard_to_theory(phi: FlexibleFormula, t: FlexibleTh
 
 
 def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed axiom, False otherwise."""
-    return Axiom.is_well_formed(phi=phi)
+    """Return True if phi is a well-formed axiom, False otherwise.
+
+    :param phi: A formula.
+    :return: bool.
+    """
+    phi = coerce_formula(phi=phi)
+    if phi.arity != 2:
+        return False
+    if phi.connective is not connectives.follows_from:
+        return False
+    if not is_well_formed_formula(phi=phi.term_0):
+        return False
+    if phi.term_1.arity != 0:
+        return False
+    if phi.term_1.connective != connectives.axiom:
+        return False
+    # All tests were successful.
+    return True
 
 
 def is_well_formed_theorem(phi: FlexibleFormula) -> bool:
@@ -2865,28 +2881,6 @@ class Axiomatization(Theory):
      - all element phi of the enumeration is a well-formed axiom or an inference-rule.
 
     """
-
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed axiomatization, False otherwise.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        phi = coerce_enumeration(phi=phi)
-        for i in range(0, phi.arity):
-            psi = phi[i]
-            if is_well_formed_inference_rule(phi=psi):
-                # This is an inference-rule.
-                pass
-            elif is_well_formed_axiom(phi=psi):
-                # This is an axiom.
-                pass
-            else:
-                # Incorrect form.
-                return False
-        # All tests were successful.
-        return True
 
     def __new__(cls, axioms: FlexibleEnumeration = None):
         # coerce to enumeration
