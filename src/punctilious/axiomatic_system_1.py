@@ -1937,23 +1937,6 @@ class Transformation(Formula):
           even though this constraint is immediately relieved by the interchange structural rule.
     """
 
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed transformation, False otherwise.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        phi = coerce_formula(phi=phi)
-        if (phi.connective is not connectives.transformation or
-                phi.arity != 3 or
-                not is_well_formed_tupl(phi=phi.term_0) or
-                not is_well_formed_formula(phi=phi.term_1) or
-                not is_well_formed_enumeration(phi=phi.term_2)):
-            return False
-        else:
-            return True
-
     def __new__(cls, premises: FlexibleTupl, conclusion: FlexibleFormula,
                 variables: FlexibleEnumeration):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
@@ -2020,7 +2003,7 @@ class Transformation(Formula):
         return self[2]
 
 
-FlexibleTransformation = typing.Optional[typing.Union[Transformation, TransformationBuilder]]
+FlexibleTransformation = typing.Optional[typing.Union[Transformation]]
 
 
 def coerce_transformation(phi: FlexibleTransformation) -> Transformation:
@@ -2084,8 +2067,20 @@ def is_well_formed_inference(phi: FlexibleFormula) -> bool:
 
 
 def is_well_formed_transformation(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed transformation, False otherwise."""
-    return Transformation.is_well_formed(phi=phi)
+    """Return True if and only if phi is a well-formed transformation, False otherwise.
+
+    :param phi: A formula.
+    :return: bool.
+    """
+    phi = coerce_formula(phi=phi)
+    if (phi.connective is not connectives.transformation or
+            phi.arity != 3 or
+            not is_well_formed_tupl(phi=phi.term_0) or
+            not is_well_formed_formula(phi=phi.term_1) or
+            not is_well_formed_enumeration(phi=phi.term_2)):
+        return False
+    else:
+        return True
 
 
 def is_well_formed_enumeration(phi: FlexibleFormula) -> bool:
@@ -2135,8 +2130,20 @@ def is_well_formed_theorem(phi: FlexibleFormula) -> bool:
 
 
 def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed derivation, False otherwise."""
-    return Derivation.is_well_formed(phi=phi)
+    """Return True if phi is a well-formed theorem, False otherwise.
+
+    :param phi: A formula.
+    :return: bool.
+    """
+    phi: Formula = coerce_formula(phi=phi)
+    if is_well_formed_theorem(phi=phi):
+        return True
+    elif is_well_formed_inference_rule(phi=phi):
+        return True
+    elif is_well_formed_axiom(phi=phi):
+        return True
+    else:
+        return False
 
 
 def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
@@ -2321,23 +2328,6 @@ class Derivation(Formula):
 
     See their respective definitions for the local and global definitions of proper-justification.
     """
-
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed theorem, False otherwise.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        phi: Formula = coerce_formula(phi=phi)
-        if is_well_formed_theorem(phi=phi):
-            return True
-        elif is_well_formed_inference_rule(phi=phi):
-            return True
-        elif is_well_formed_axiom(phi=phi):
-            return True
-        else:
-            return False
 
     def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula):
         valid_statement = coerce_formula(phi=valid_statement)
