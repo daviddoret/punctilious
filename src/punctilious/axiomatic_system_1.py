@@ -2494,25 +2494,6 @@ class Axiom(Derivation):
 
     """
 
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed axiom, False otherwise.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        phi = coerce_formula(phi=phi)
-        if isinstance(phi, Axiom):
-            # Shortcut: the class assures the well-formedness of the formula.
-            return True
-        elif (phi.connective is not connectives.follows_from or
-              not phi.arity == 2 or
-              not is_well_formed_formula(phi=phi.term_0) or
-              phi.term_1.connective is not connectives.axiom):
-            return False
-        else:
-            return True
-
     def __new__(cls, valid_statement: FlexibleFormula = None):
         valid_statement: Formula = coerce_formula(phi=valid_statement)
         o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=connectives.axiom)
@@ -3148,11 +3129,13 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
                     return t, True, derivation
                 else:
                     # u1.log_info(f'\tir was not conclusive: {ir.transformation}')
-                    ir_success = False
+                    # ir_success = False
+                    pass
             else:
                 # the conclusion of this inference-rule is not interesting
                 # u1.log_info(f'\tir has not interesting conclusion: {ir.transformation}')
-                ir_success = False
+                # ir_success = False
+                pass
 
         if not is_valid_statement_with_regard_to_theory(phi=phi, t=t):
             # we recursively tried to derive phi using all the inference-rules in the theory.
