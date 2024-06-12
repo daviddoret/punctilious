@@ -181,7 +181,8 @@ class CustomException(Exception):
         return self.typeset_as_string()
 
     def typeset_as_string(self, **kwargs) -> str:
-        return f'{self.error_code.event_type} {self.error_code.code}\n\t{self.error_code.message}\n\t{u1.force_str(o=kwargs)}'
+        return (f'{self.error_code.event_type} '
+                f'{self.error_code.code}\n\t{self.error_code.message}\n\t{u1.force_str(o=kwargs)}')
 
 
 def raise_error(error_code: ErrorCode, **kwargs):
@@ -319,7 +320,8 @@ class FormulaBuilder(list):
 
          - priority 1: parameter typesetter is passed explicitly.
          - priority 2: a typesetting-configuration is attached to the formula, and its typesetting-method is defined.
-         - priority 3: a typesetting-configuration is attached to the formula connective, and its typesetting-method is defined.
+         - priority 3: a typesetting-configuration is attached to the formula connective, and its typesetting-method is
+           defined.
          - priority 4: failsafe typesetting method.
 
         :param typesetter:
@@ -560,13 +562,13 @@ class Formula(tuple):
         phi: FormulaBuilder = FormulaBuilder(c=self.connective, terms=terms)
         return phi
 
-    def get_typesetter(self, typesetter: typing.Optional[
-        pl1.FlexibleTypesetter] = None) -> pl1.Typesetter:
+    def get_typesetter(self, typesetter: typing.Optional[pl1.FlexibleTypesetter] = None) -> pl1.Typesetter:
         """
 
          - priority 1: parameter typesetter is passed explicitly.
          - priority 2: a typesetting-configuration is attached to the formula, and its typesetting-method is defined.
-         - priority 3: a typesetting-configuration is attached to the formula connective, and its typesetting-method is defined.
+         - priority 3: a typesetting-configuration is attached to the formula connective, and its typesetting-method is
+           defined.
          - priority 4: failsafe typesetting method.
 
         :param typesetter:
@@ -716,7 +718,7 @@ def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
     """
     phi: Theory = coerce_theory(phi=phi)
     psi: Theory = coerce_theory(phi=psi)
-    t2 = Theory(derivations=(*phi, *psi,))
+    t2: Theory = Theory(derivations=(*phi, *psi,))
     return t2
 
 
@@ -875,7 +877,7 @@ class InfixPartialFormula:
 
     def typeset_as_string(self, **kwargs):
         # TODO: Enrich the representation of partial-formulas
-        return f'partial-formula(...)'
+        return f'{self.connective}(???,{self.term_1})'
 
     @property
     def term_1(self) -> Connective:
@@ -1084,7 +1086,7 @@ def let_x_be_an_inference_rule(theory: FlexibleTheory,
                                conclusion: typing.Optional[FlexibleFormula] = None,
                                variables: typing.Optional[FlexibleEnumeration] = None):
     if theory is None:
-        theory = Axiomatization(axioms=None)
+        theory = Axiomatization(derivations=None)
     else:
         theory: FlexibleTheory = coerce_theory(phi=theory)
 
@@ -1093,7 +1095,7 @@ def let_x_be_an_inference_rule(theory: FlexibleTheory,
         inference_rule: InferenceRule = InferenceRule(transformation=transformation)
 
     if isinstance(theory, Axiomatization):
-        theory = Axiomatization(axioms=(*theory, inference_rule,))
+        theory = Axiomatization(derivations=(*theory, inference_rule,))
         return theory, inference_rule
     elif isinstance(theory, Theory):
         theory = Theory(derivations=(*theory, inference_rule,))
@@ -1119,7 +1121,7 @@ def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[F
     input statement, and a is the new axiom.
     """
     if theory is None:
-        theory = Axiomatization(axioms=None)
+        theory = Axiomatization(derivations=None)
     else:
         theory: FlexibleTheory = coerce_theory(phi=theory)
     if valid_statement is not None and axiom is not None:
@@ -1130,7 +1132,7 @@ def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[F
         axiom: Axiom = Axiom(valid_statement=valid_statement)
 
     if isinstance(theory, Axiomatization):
-        theory = Axiomatization(axioms=(*theory, axiom,))
+        theory = Axiomatization(derivations=(*theory, axiom,))
         return theory, axiom
     elif isinstance(theory, Theory):
         theory = Theory(derivations=(*theory, axiom,))
@@ -1149,7 +1151,7 @@ def let_x_be_a_theory(derivations: typing.Optional[FlexibleEnumeration] = None):
 
 
 def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
-    return Axiomatization(axioms=axioms)
+    return Axiomatization(derivations=axioms)
 
 
 def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormula,
@@ -2252,33 +2254,6 @@ def coerce_theory(phi: FlexibleTheory) -> Theory:
         raise_error(error_code=error_codes.e123, coerced_type=Theory, phi_type=type(phi), phi=phi)
 
 
-def coerce_theory_builder(phi: FlexibleFormula) -> TheoryBuilder:
-    """Validate that phi is a well-formed theory-builder and returns it properly typed as
-    DemonstrationBuilder, or raise exception e123.
-
-    :param phi:
-    :return:
-    """
-    if isinstance(phi, TheoryBuilder):
-        return phi
-    elif isinstance(phi, Theory):
-        return phi.to_theory_builder()
-    elif phi is None:
-        return TheoryBuilder(derivations=None)
-    elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
-        """A non-Formula iterable type, such as python native tuple, set, list, etc.
-        We assume here that the intention was to implicitly convert this to an theory-builder
-        whose derivations are the elements of the iterable."""
-        return TheoryBuilder(derivations=tuple(theorem for theorem in phi))
-    elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
-        """A non-Formula iterable type, such as python native tuple, set, list, etc.
-        We assume here that the intention was to implicitly convert this to an theory-builder
-        whose derivations are the elements of the iterable."""
-        return TheoryBuilder(derivations=phi)
-    else:
-        raise_error(error_code=error_codes.e123, coerced_type=TheoryBuilder, phi_type=type(phi), phi=phi)
-
-
 def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
     """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatization,
     or raise exception e123.
@@ -2289,7 +2264,7 @@ def coerce_axiomatization(phi: FlexibleFormula) -> Axiomatization:
     if isinstance(phi, Axiomatization):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_axiomatization(phi=phi):
-        return Axiomatization(axioms=phi)
+        return Axiomatization(derivations=phi)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Axiomatization, phi_type=type(phi), phi=phi)
 
@@ -2650,47 +2625,46 @@ class Axiomatization(Theory):
 
     """
 
-    def __new__(cls, axioms: FlexibleEnumeration = None):
+    def __new__(cls, derivations: FlexibleEnumeration = None):
         # coerce to enumeration
-        axioms: Enumeration = coerce_enumeration(phi=axioms)
+        derivations: Enumeration = coerce_enumeration(phi=derivations)
         # coerce all elements of the enumeration to axioms or inference-rules.
-        eb: EnumerationBuilder = EnumerationBuilder(elements=None)
-        for derivation in axioms:
+        coerced_derivations: Enumeration = Enumeration(elements=None)
+        for derivation in derivations:
             if is_well_formed_inference_rule(phi=derivation):
                 # This is an inference-rule.
                 inference_rule: InferenceRule = coerce_inference_rule(phi=derivation)
-                eb.append(term=inference_rule)
+                coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
             elif is_well_formed_axiom(phi=derivation):
                 # This is an axiom.
                 axiom: Axiom = coerce_axiom(phi=derivation)
-                eb.append(term=axiom)
+                coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
             else:
                 # Incorrect form.
                 raise_error(error_code=error_codes.e123, phi=derivation, phi_type_1=InferenceRule,
                             phi_type_2=Axiom)
-        derivations: Enumeration = eb.to_enumeration()
-        o: tuple = super().__new__(cls, derivations=derivations)
+        o: tuple = super().__new__(cls, derivations=coerced_derivations)
         return o
 
-    def __init__(self, axioms: FlexibleEnumeration = None):
+    def __init__(self, derivations: FlexibleEnumeration = None):
         # coerce to enumeration
-        axioms: Enumeration = coerce_enumeration(phi=axioms)
+        derivations: Enumeration = coerce_enumeration(phi=derivations)
         # coerce all elements of the enumeration to axioms or inference-rules.
-        eb: EnumerationBuilder = EnumerationBuilder(elements=None)
-        for theorem in axioms:
-            if is_well_formed_inference_rule(phi=theorem):
+        coerced_derivations: Enumeration = Enumeration(elements=None)
+        for derivation in derivations:
+            if is_well_formed_inference_rule(phi=derivation):
                 # This is an inference-rule.
-                inference_rule: InferenceRule = coerce_inference_rule(phi=theorem)
-                eb.append(term=theorem)
-            elif is_well_formed_axiom(phi=theorem):
+                inference_rule: InferenceRule = coerce_inference_rule(phi=derivation)
+                coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
+            elif is_well_formed_axiom(phi=derivation):
                 # This is an axiom.
-                axiom: Axiom = coerce_axiom(phi=theorem)
-                eb.append(term=theorem)
+                axiom: Axiom = coerce_axiom(phi=derivation)
+                coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
             else:
                 # Incorrect form.
-                raise Exception('invalid theorem')
-        e: Enumeration = eb.to_enumeration()
-        super().__init__(connective=connectives.axiomatization, derivations=e)
+                raise_error(error_code=error_codes.e123, phi=derivation, phi_type_1=InferenceRule,
+                            phi_type_2=Axiom)
+        super().__init__(connective=connectives.axiomatization, derivations=coerced_derivations)
 
 
 def is_leaf_formula(phi: FlexibleFormula) -> bool:

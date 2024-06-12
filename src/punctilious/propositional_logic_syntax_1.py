@@ -173,7 +173,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
     """
     pass
 
-axiomatization = as1.Axiomatization(axioms=(i1, i2, i3, i4, i5,))
+axiomatization = as1.Axiomatization(derivations=(i1, i2, i3, i4, i5,))
 
 extended_theory = as1.Theory(derivations=(*axiomatization,))
 

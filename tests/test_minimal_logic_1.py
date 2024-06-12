@@ -34,7 +34,7 @@ def theory(a, b, c):
     a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=a | is_a | propositional_variable)
     a2 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=b | is_a | propositional_variable)
     a3 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=c | is_a | propositional_variable)
-    theory = pu.as1.Axiomatization(axioms=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
+    theory = pu.as1.Axiomatization(derivations=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive: a is-a proposition
     theory = pu.as1.derive_OBSOLETE(theory=theory,
@@ -280,7 +280,7 @@ class TestPL5:
         # PL5. 𝐵 ⊃ (𝐴 ⊃ 𝐵).
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t = pu.as1.Axiomatization(axioms=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
+        t = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=q)

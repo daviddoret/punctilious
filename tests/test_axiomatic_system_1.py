@@ -592,7 +592,7 @@ class TestInferenceRule:
         phi = a | f | b
         rule = pu.as1.Transformation(premises=None, conclusion=phi, variables=None)
         ir = pu.as1.InferenceRule(transformation=rule)
-        axiomatization = pu.as1.Axiomatization(axioms=(ir,))
+        axiomatization = pu.as1.Axiomatization(derivations=(ir,))
 
         # derivation from the axiom
         i = pu.as1.Inference(premises=None, transformation_rule=rule)
@@ -709,20 +709,20 @@ class TestAxiomatization:
 
         # simple case
         e1 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
-        e1 = pu.as1.Axiomatization(axioms=e1)
+        e1 = pu.as1.Axiomatization(derivations=e1)
         assert pu.as1.is_well_formed_axiomatization(phi=e1)
 
         # extreme case: the empty enumeration
         e2 = pu.as1.Enumeration()
-        e2 = pu.as1.Axiomatization(axioms=e2)
+        e2 = pu.as1.Axiomatization(derivations=e2)
         assert pu.as1.is_well_formed_axiomatization(phi=e2)
-        a1 = pu.as1.Axiomatization(axioms=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
+        a1 = pu.as1.Axiomatization(derivations=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
 
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(phi=e3)
         with pytest.raises(pu.as1.CustomException, match='e123'):
-            a2 = pu.as1.Axiomatization(axioms=e3)  # raise an e123 exception
+            a2 = pu.as1.Axiomatization(derivations=e3)  # raise an e123 exception
 
 
 class TestDemonstration:
