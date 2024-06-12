@@ -1764,60 +1764,6 @@ class SingletonEnumeration(Enumeration):
         super().__init__(elements=element)
 
 
-class EnumerationAccretor(EnumerationBuilder):
-    """An enumeration-accretor is an enumeration-builder with additional constraints:
-    it only allows appending new elements via the append-element and extend-with-elements operations,
-    and it forbids the delete-element, insert-element, and set-element operations.
-
-
-    """
-
-    def __delitem__(self, phi: FlexibleFormula):
-        """By definition, the delete-element operation is forbidden on enumeration-accretors.
-        Calling this method raises exception e114."""
-        raise_error(error_code=error_codes.e114, enumeration_accretor=self, phi=phi)
-
-    def __setitem__(self, i, element):
-        """By definition, the set-element operation is forbidden on enumeration-accretors.
-        Calling this method raises exception e115."""
-        raise_error(error_code=error_codes.e115, enumeration_accretor=self, index=i, element=element)
-
-    def insert(self, index, element):
-        """By definition, the insert-element operation is forbidden on enumeration-accretors.
-        Calling this method raises exception e116."""
-        raise_error(error_code=error_codes.e116, enumeration_accretor=self, index=index, element=element)
-
-    def append(self, element: FlexibleFormula):
-        """The append-element is the only operation allowed on enumeration-accretors that has the capability to
-        modify its elements.
-
-        This method is overridden for readability purposes."""
-        super().append(term=element)
-
-    def extend(self, elements: typing.Iterable[FlexibleFormula]):
-        """The extend-with-elements operation is allowed on enumeration-accretors as a sequence of append-element
-        operations.
-
-        This method is overridden for readability purposes."""
-        for element in elements:
-            self.append(element=element)
-
-    def pop(self, __index=-1):
-        """By definition, the delete-element operation is forbidden on enumeration-accretors.
-        Calling this method raises exception e114."""
-        raise_error(error_code=error_codes.e114, enumeration_accretor=self, __index=__index)
-
-    def remove(self, phi: FlexibleFormula) -> None:
-        """By definition, the delete-element operation is forbidden on enumeration-accretors.
-        Calling this method raises exception e114."""
-        raise_error(error_code=error_codes.e114, enumeration_accretor=self, phi=phi)
-
-    def remove_formula(self, phi: FlexibleFormula) -> None:
-        """By definition, the delete-element operation is forbidden on enumeration-accretors.
-        Calling this method raises exception e114."""
-        raise_error(error_code=error_codes.e114, enumeration_accretor=self, phi=phi)
-
-
 class TransformationBuilder(FormulaBuilder):
 
     def __init__(self, premises: FlexibleTupl, conclusion: FlexibleFormula,
@@ -2639,10 +2585,6 @@ class Theorem(Derivation):
 
 FlexibleTheorem = typing.Union[Theorem, Formula]
 FlexibleDerivation = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRule]
-
-
-class TheoryAccretor(EnumerationAccretor):
-    pass
 
 
 class TheoryBuilder(EnumerationBuilder):

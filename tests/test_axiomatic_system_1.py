@@ -570,44 +570,6 @@ class TestUnionEnumeration:
         assert pu.as1.is_formula_equivalent(phi=abcde3, psi=abcde1)
 
 
-class TestEnumerationAccretor:
-    def test_del_element(self):
-        a = pu.as1.EnumerationAccretor(elements=None)
-        x, y, z = pu.as1.let_x_be_a_simple_object(formula_typesetter=('x', 'y', 'z',))
-        a.append(element=x)
-        a.append(element=y)
-        a.append(element=z)
-        assert a.has_element(phi=x)
-        assert a.has_element(phi=y)
-        assert a.has_element(phi=z)
-        with pytest.raises(pu.as1.CustomException, match='e114'):
-            a.remove(y)
-        with pytest.raises(pu.as1.CustomException, match='e114'):
-            a.pop(1)
-        with pytest.raises(pu.as1.CustomException, match='e114'):
-            a.remove_formula(z)
-
-    def insert_element(self):
-        a = pu.as1.EnumerationAccretor(elements=None)
-        x, y, z = pu.as1.let_x_be_a_simple_object(formula_typesetter=('x', 'y', 'z',))
-        a.append(element=x)
-        a.append(element=z)
-        assert a.has_element(phi=x)
-        assert a.has_element(phi=z)
-        with pytest.raises(pu.as1.CustomException, match='e115'):
-            a.insert(1, y)
-
-    def set_element(self):
-        a = pu.as1.EnumerationAccretor(elements=None)
-        x, y, z = pu.as1.let_x_be_a_simple_object(formula_typesetter=('x', 'y', 'z',))
-        a.append(element=x)
-        a.append(element=z)
-        assert a.has_element(phi=x)
-        assert a.has_element(phi=z)
-        with pytest.raises(pu.as1.CustomException, match='e116'):
-            a[1] = y
-
-
 class TestEmptyEnumeration:
     def test_empty_enumeration(self):
         a = pu.as1.EmptyEnumeration()
