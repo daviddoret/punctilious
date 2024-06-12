@@ -716,13 +716,8 @@ def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
     """
     phi: Theory = coerce_theory(phi=phi)
     psi: Theory = coerce_theory(phi=psi)
-    db: TheoryBuilder = TheoryBuilder(derivations=None)
-    for phi_prime in phi:
-        db.append(term=phi_prime)
-    for psi_prime in psi:
-        db.append(term=psi_prime)
-    d: Theory = db.to_theory()
-    return d
+    t2 = Theory(derivations=(*phi, *psi,))
+    return t2
 
 
 def coerce_enumeration_builder(phi: FlexibleEnumeration) -> EnumerationBuilder:
@@ -1764,38 +1759,6 @@ class SingletonEnumeration(Enumeration):
         super().__init__(elements=element)
 
 
-class TransformationBuilder(FormulaBuilder):
-
-    def __init__(self, premises: FlexibleTupl, conclusion: FlexibleFormula,
-                 variables: FlexibleTupl):
-        premises: EnumerationBuilder = EnumerationBuilder(elements=premises)
-        variables: EnumerationBuilder = EnumerationBuilder(elements=variables)
-        super().__init__(c=connectives.inference, terms=(premises, conclusion, variables,))
-
-    @property
-    def conclusion(self) -> FormulaBuilder:
-        return self[1]
-
-    @property
-    def premises(self) -> EnumerationBuilder:
-        return self[0]
-
-    def to_transformation(self) -> Transformation:
-        premises = self.premises.to_enumeration()
-        conclusion: Formula = self.conclusion.to_formula()
-        variables = self.variables.to_enumeration()
-        t: Transformation = Transformation(premises=premises, conclusion=conclusion, variables=variables)
-        return t
-
-    def to_formula(self) -> Formula:
-        """Return a Transformation."""
-        return self.to_transformation()
-
-    @property
-    def variables(self) -> EnumerationBuilder:
-        return self[2]
-
-
 class Transformation(Formula):
     """A formula-transformation, or transformation, is a map from the class of formulas to itself.
 
@@ -1888,15 +1851,6 @@ class Transformation(Formula):
     def premises(self) -> Tupl:
         return self[0]
 
-    def to_transformation_builder(self) -> TransformationBuilder:
-        premises: TuplBuilder = self.premises.to_tupl_builder()
-        conclusion: FormulaBuilder = self.conclusion.to_formula_builder()
-        variables: EnumerationBuilder = self.variables.to_enumeration_builder()
-        return TransformationBuilder(premises=premises, conclusion=conclusion, variables=variables)
-
-    def to_formula_builder(self) -> FormulaBuilder:
-        return self.to_transformation_builder()
-
     @property
     def variables(self) -> Enumeration:
         return self[2]
@@ -1908,23 +1862,12 @@ FlexibleTransformation = typing.Optional[typing.Union[Transformation]]
 def coerce_transformation(phi: FlexibleFormula) -> Transformation:
     if isinstance(phi, Transformation):
         return phi
-    elif isinstance(phi, TransformationBuilder):
-        return phi.to_transformation()
     elif isinstance(phi, Formula) and is_well_formed_transformation(phi=phi):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         return Transformation(premises=phi.term_0, conclusion=phi.term_1, variables=phi.term_2)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
-
-
-def coerce_transformation_builder(phi: FlexibleTransformation) -> TransformationBuilder:
-    if isinstance(phi, TransformationBuilder):
-        return phi
-    elif isinstance(phi, Transformation):
-        return phi.to_transformation_builder()
-    else:
-        raise_error(error_code=error_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
 def coerce_inference(phi: FlexibleFormula) -> Inference:
@@ -2587,55 +2530,6 @@ FlexibleTheorem = typing.Union[Theorem, Formula]
 FlexibleDerivation = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRule]
 
 
-class TheoryBuilder(EnumerationBuilder):
-    """A utility class to help build theories. It is mutable and thus allows edition.
-
-    The allowed operations on an enumeration-builder are:
-     - appending axiom,
-     - appending inference-rule,
-     - appending theorem-from-inference.
-
-    Note: """
-
-    def __init__(self, derivations: FlexibleEnumeration):
-        super().__init__(elements=None)
-        if isinstance(derivations, typing.Iterable):
-            for element in derivations:
-                self.append(term=element)
-
-    def append(self, term: FlexibleDerivation) -> None:
-        """
-        Override the append method to assure the consistency of newly added elements.
-
-        :param term:
-        :return:
-        """
-        term: Derivation = coerce_derivation(phi=term)
-        super().append(term=term)
-
-    def append_axiom(self, axiom: FlexibleAxiom) -> None:
-        axiom: Axiom = coerce_axiom(phi=axiom)
-        self.append(term=axiom)
-
-    def append_inference_rule(self, inference_rule: FlexibleInferenceRule) -> None:
-        inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
-        self.append(term=inference_rule)
-
-    def append_theorem_by_inference(self, theorem: FlexibleTheorem) -> None:
-        theorem: Theorem = coerce_theorem(phi=theorem)
-        self.append(term=theorem)
-
-    def to_theory(self) -> Theory:
-        """If the theory-builder is well-formed, return a theory."""
-        elements: tuple[Formula, ...] = tuple(coerce_derivation(phi=element) for element in self)
-        phi: Theory = Theory(derivations=elements)
-        return phi
-
-    def to_formula(self) -> Formula:
-        """If the theory-builder is well-formed, return a theory, which is a formula."""
-        return self.to_theory()
-
-
 class Theory(Enumeration):
     """A theory is a justified enumeration of axioms, inference-rules, and theorems.
 
@@ -2740,16 +2634,10 @@ class Theory(Enumeration):
         inference-rules."""
         return Enumeration(elements=tuple(self.iterate_theorems()))
 
-    def to_theory_builder(self) -> TheoryBuilder:
-        return TheoryBuilder(derivations=self)
-
 
 FlexibleTheory = typing.Optional[
-    typing.Union[Theory, TheoryBuilder, typing.Iterable[FlexibleDerivation]]]
+    typing.Union[Theory, typing.Iterable[FlexibleDerivation]]]
 """FlexibleTheory is a flexible python type that may be safely coerced into a Theory."""
-
-FlexibleTheoryBuilder = typing.Optional[
-    typing.Union[Theory, TheoryBuilder, typing.Iterable[FlexibleDerivation]]]
 
 
 class Axiomatization(Theory):
@@ -2931,8 +2819,8 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     conclusion: Formula = psi.term_1
 
     # build the rule
-    rule: TransformationBuilder = TransformationBuilder(premises=premises, conclusion=conclusion,
-                                                        variables=variables)
+    rule: Transformation = Transformation(premises=premises, conclusion=conclusion,
+                                          variables=variables)
 
     # build the inference-rule
     inference_rule: InferenceRule = InferenceRule(transformation=rule)
