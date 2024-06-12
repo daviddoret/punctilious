@@ -442,20 +442,6 @@ class FormulaBuilder(list):
 class Formula(tuple):
     """An immutable formula modeled as an edge-ordered, node-colored tree."""
 
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed formula, False otherwise.
-
-        Note: the Formula python class assures the well-formedness of formulas. Hence, this function is trivial: if
-        phi coerces to Formula, it is a well-formed formula.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        # TODO: Formula.is_well_formed: review this to avoid raising an exception, but return False instead.
-        coerce_formula(phi=phi)
-        return True
-
     def __new__(cls, connective: Connective, terms: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
@@ -1454,19 +1440,6 @@ class Tupl(Formula):
      Python implementation: in python, the word 'tuple' is reserved. For this reason, the word 'tupl' is used instead
      to implement this object."""
 
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed tuple, False otherwise.
-
-        Note: by definition, all formulas are also tuple. Hence, if phi is a formula, phi is a tuple.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        # TODO: Tupl.is_well_formed: review this to avoid raising an exception, but return False instead.
-        phi: Formula = coerce_formula(phi=phi)
-        return True
-
     def __new__(cls, elements: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
@@ -1702,26 +1675,6 @@ class Enumeration(Formula):
      - union-enumeration
 
     """
-
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if phi is a well-formed enumeration, False otherwise.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        if phi is None:
-            # Implicit conversion of None to the empty enumeration.
-            return True
-        else:
-            phi = coerce_formula(phi=phi)
-            for i in range(0, phi.arity):
-                if i != phi.arity - 1:
-                    for j in range(i + 1, phi.arity):
-                        if is_formula_equivalent(phi=phi[i], psi=phi[j]):
-                            # We found a pair of duplicates, i.e.: phi_i ~formula phi_j.
-                            return False
-            return True
 
     def __new__(cls, elements: FlexibleEnumeration = None, connective: Connective = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
@@ -2006,7 +1959,7 @@ class Transformation(Formula):
 FlexibleTransformation = typing.Optional[typing.Union[Transformation]]
 
 
-def coerce_transformation(phi: FlexibleTransformation) -> Transformation:
+def coerce_transformation(phi: FlexibleFormula) -> Transformation:
     if isinstance(phi, Transformation):
         return phi
     elif isinstance(phi, TransformationBuilder):
@@ -2028,7 +1981,7 @@ def coerce_transformation_builder(phi: FlexibleTransformation) -> Transformation
         raise_error(error_code=error_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
-def coerce_inference(phi: FlexibleInference) -> Inference:
+def coerce_inference(phi: FlexibleFormula) -> Inference:
     if isinstance(phi, Inference):
         return phi
     elif isinstance(phi, Formula) and is_well_formed_inference(phi=phi):
@@ -2046,7 +1999,17 @@ def is_well_formed_formula(phi: FlexibleFormula) -> bool:
     :param phi:
     :return: bool
     """
-    return Formula.is_well_formed(phi=phi)
+    """Return True if and only if phi is a well-formed formula, False otherwise.
+
+    Note: the Formula python class assures the well-formedness of formulas. Hence, this function is trivial: if
+    phi coerces to Formula, it is a well-formed formula.
+
+    :param phi: A formula.
+    :return: bool.
+    """
+    # TODO: review this to avoid raising an exception, but return False instead.
+    coerce_formula(phi=phi)
+    return True
 
 
 def is_well_formed_tupl(phi: FlexibleFormula) -> bool:
@@ -2058,12 +2021,24 @@ def is_well_formed_tupl(phi: FlexibleFormula) -> bool:
     :param phi:
     :return: bool
     """
-    return Tupl.is_well_formed(phi=phi)
+    # TODO: Tupl.is_well_formed: review this to avoid raising an exception, but return False instead.
+    # TODO: Do we want to signal tuples formally with a dedicated connective?
+    phi: Formula = coerce_formula(phi=phi)
+    return True
 
 
 def is_well_formed_inference(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed inference, False otherwise."""
-    return Inference.is_well_formed(phi=phi)
+    """Return True if and only if phi is a well-formed inference, False otherwise.
+
+    :param phi: A formula.
+    :return: bool.
+    """
+    phi = coerce_formula(phi=phi)
+    if phi.connective is not connectives.inference or not is_well_formed_enumeration(
+            phi=phi.term_0) or not is_well_formed_transformation(phi=phi.term_1):
+        return False
+    else:
+        return True
 
 
 def is_well_formed_transformation(phi: FlexibleFormula) -> bool:
@@ -2084,13 +2059,42 @@ def is_well_formed_transformation(phi: FlexibleFormula) -> bool:
 
 
 def is_well_formed_enumeration(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed enumeration, False otherwise."""
-    return Enumeration.is_well_formed(phi=phi)
+    """Return True if phi is a well-formed enumeration, False otherwise.
+
+    :param phi: A formula.
+    :return: bool.
+    """
+    if phi is None:
+        # Implicit conversion of None to the empty enumeration.
+        return True
+    else:
+        phi = coerce_formula(phi=phi)
+        for i in range(0, phi.arity):
+            if i != phi.arity - 1:
+                for j in range(i + 1, phi.arity):
+                    if is_formula_equivalent(phi=phi[i], psi=phi[j]):
+                        # We found a pair of duplicates, i.e.: phi_i ~formula phi_j.
+                        return False
+        return True
 
 
 def is_well_formed_inference_rule(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed inference-rule, False otherwise."""
-    return InferenceRule.is_well_formed(phi=phi)
+    """Return True if and only if phi is a well-formed inference-rule, False otherwise.
+
+    :param phi: A formula.
+    :return: bool.
+    """
+    phi = coerce_formula(phi=phi)
+    if isinstance(phi, InferenceRule):
+        # Shortcut: the class assures the well-formedness of the formula.
+        return True
+    elif (phi.connective is not connectives.follows_from or
+          not phi.arity == 2 or
+          not is_well_formed_transformation(phi=phi.term_0) or
+          phi.term_1.connective is not connectives.inference_rule):
+        return False
+    else:
+        return True
 
 
 def is_valid_statement_with_regard_to_theory(phi: FlexibleFormula, t: FlexibleTheory) -> bool:
@@ -2125,8 +2129,30 @@ def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
 
 
 def is_well_formed_theorem(phi: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed theorem, False otherwise."""
-    return Theorem.is_well_formed(phi=phi)
+    """Return True if and only if phi is a well-formed theorem, False otherwise.
+
+    :param phi: A formula.
+    :return: bool.
+    """
+    phi = coerce_formula(phi=phi)
+    if isinstance(phi, Theorem):
+        # the Theorem python-type assure the well-formedness of the object.
+        return True
+    if (phi.connective is not connectives.follows_from or
+            not phi.arity == 2 or
+            not is_well_formed_formula(phi=phi.term_0) or
+            not is_well_formed_inference(phi=phi.term_1)):
+        return False
+    else:
+        i: Inference = coerce_inference(phi=phi.term_1)
+        f_of_p: Formula = i.transformation_rule(i.premises)
+        if not is_formula_equivalent(phi=phi.term_0, psi=f_of_p):
+            # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
+            # issue a warning to facilitate troubleshooting and analysis.
+            raise_error(error_code=error_codes.e106, phi=phi, psi_expected=phi.term_0, psi_inferred=f_of_p,
+                        inference_rule=i)
+            return False
+        return True
 
 
 def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
@@ -2147,13 +2173,101 @@ def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
 
 
 def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
-    """Returns True if phi is a well-formed theory, False otherwise."""
-    return Theory.is_well_formed(phi=phi, raise_event_if_false=raise_event_if_false)
+    """Return True if phi is a well-formed theory, False otherwise.
+
+    :param phi: A formula.
+    :param raise_event_if_false:
+    :return: bool.
+    """
+    phi = coerce_enumeration(phi=phi)
+
+    if isinstance(phi, Theory):
+        # the Derivation class assure the well-formedness of the theory.
+        return True
+
+    # check the well-formedness of the individual derivations.
+    # and retrieve the terms claimed as proven in the theory, preserving order.
+    # by the definition of a theory, these are the left term (term_0) of the formulas.
+    valid_statements: TuplBuilder = TuplBuilder(elements=None)
+    derivations: TuplBuilder = TuplBuilder(elements=None)
+    for derivation in phi:
+        if not is_well_formed_derivation(phi=derivation):
+            return False
+        else:
+            derivation: Derivation = coerce_derivation(phi=derivation)
+            derivations.append(term=derivation)
+            # retrieve the formula claimed as valid from the theorem
+            valid_statement: Formula = derivation.valid_statement
+            valid_statements.append(term=valid_statement)
+    # now that the derivations and valid_statements have been retrieved, and proved well-formed individually,
+    # make the python objects immutable.
+    derivations: Tupl = derivations.to_tupl()
+    valid_statements: Tupl = valid_statements.to_tupl()
+    for i in range(0, derivations.arity):
+        derivation = derivations[i]
+        valid_statement = valid_statements[i]
+        if is_well_formed_axiom(phi=derivation):
+            # This is an axiom.
+            derivation: Axiom = coerce_axiom(phi=derivation)
+            pass
+        elif is_well_formed_inference_rule(phi=derivation):
+            # This is an inference-rule.
+            derivation: InferenceRule = coerce_inference_rule(phi=derivation)
+            pass
+        elif is_well_formed_theorem(phi=derivation):
+            theorem_by_inference: Theorem = coerce_theorem(phi=derivation)
+            inference: Inference = theorem_by_inference.i
+            for premise in inference.premises:
+                # check that premise is a proven-formula (term_0) of a predecessor
+                if not valid_statements.has_element(phi=premise):
+                    # The premise is absent from the theory
+                    if raise_event_if_false:
+                        raise_error(error_code=error_codes.e111, premise=premise, premise_index=i,
+                                    theorem=derivation,
+                                    valid_statement=valid_statement)
+                    return False
+                else:
+                    premise_index = valid_statements.get_index_of_first_equivalent_element(phi=premise)
+                    if premise_index >= i:
+                        # The premise is not positioned before the conclusion.
+                        if raise_event_if_false:
+                            raise_error(error_code=error_codes.e112, premise=premise, premise_index=i,
+                                        theorem=derivation,
+                                        valid_statement=valid_statement)
+                        return False
+            if not valid_statements.has_element(phi=inference.transformation_rule):
+                # The inference transformation-rule is absent from the theory.
+                if raise_event_if_false:
+                    raise_error(error_code=error_codes.e119, transformation_rule=inference.transformation_rule,
+                                inference=inference, premise_index=i, theorem=derivation,
+                                valid_statement=valid_statement)
+                return False
+            else:
+                transformation_index = valid_statements.get_index_of_first_equivalent_element(
+                    phi=inference.transformation_rule)
+                if transformation_index >= i:
+                    # The transformation is not positioned before the conclusion.
+                    return False
+            # And finally, confirm that the inference effectively yields phi.
+            phi_prime = inference.transformation_rule.apply_transformation(arguments=inference.premises)
+            if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
+                return False
+        else:
+            # Incorrect form.
+            return False
+    # All tests were successful.
+    return True
 
 
 def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
     """Returns True if phi is a well-formed axiomatization, False otherwise."""
-    return Axiomatization.is_well_formed(phi=phi)
+    phi = coerce_formula(phi=phi)
+    if phi.connective is not connectives.axiomatization:
+        return False
+    for element in phi:
+        if not is_well_formed_axiom(phi=element) and not is_well_formed_inference_rule(phi=element):
+            return False
+    return True
 
 
 def coerce_derivation(phi: FlexibleFormula) -> Derivation:
@@ -2432,25 +2546,6 @@ class InferenceRule(Derivation):
 
     """
 
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed axiom, False otherwise.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        phi = coerce_formula(phi=phi)
-        if isinstance(phi, InferenceRule):
-            # Shortcut: the class assures the well-formedness of the formula.
-            return True
-        elif (not phi.connective is connectives.follows_from or
-              not phi.arity == 2 or
-              not is_well_formed_transformation(phi=phi.term_0) or
-              phi.term_1.connective is not connectives.inference_rule):
-            return False
-        else:
-            return True
-
     def __new__(cls, transformation: FlexibleTransformation = None):
         transformation: Transformation = coerce_transformation(phi=transformation)
         o: tuple = super().__new__(cls, valid_statement=transformation, justification=connectives.inference_rule)
@@ -2481,20 +2576,6 @@ class Inference(Formula):
 
     Semantic definition:
     An inference is a formal description of one usage of an inference-rule."""
-
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed inference, False otherwise.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        phi = coerce_formula(phi=phi)
-        if phi.connective is not connectives.inference or not is_well_formed_enumeration(
-                phi=phi.term_0) or not is_well_formed_transformation(phi=phi.term_1):
-            return False
-        else:
-            return True
 
     def __new__(cls, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
         premises: Tupl = coerce_tupl(phi=premises)
@@ -2542,33 +2623,6 @@ class Theorem(Derivation):
     the transformation-rule that yield phi, i.e.:
     t(P) ~formula phi
     """
-
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula) -> bool:
-        """Return True if and only if phi is a well-formed theorem-by-inference, False otherwise.
-
-        :param phi: A formula.
-        :return: bool.
-        """
-        phi = coerce_formula(phi=phi)
-        if isinstance(phi, Theorem):
-            # the type assure the well-formedness of the formula
-            return True
-        if (phi.connective is not connectives.follows_from or
-                not phi.arity == 2 or
-                not is_well_formed_formula(phi=phi.term_0) or
-                not is_well_formed_inference(phi=phi.term_1)):
-            return False
-        else:
-            i: Inference = coerce_inference(phi=phi.term_1)
-            f_of_p: Formula = i.transformation_rule(i.premises)
-            if not is_formula_equivalent(phi=phi.term_0, psi=f_of_p):
-                # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
-                # issue a warning to facilitate troubleshooting and analysis.
-                raise_error(error_code=error_codes.e106, phi=phi, psi_expected=phi.term_0, psi_inferred=f_of_p,
-                            inference_rule=i)
-                return False
-            return True
 
     def __new__(cls, valid_statement: FlexibleFormula, i: FlexibleInference):
         valid_statement: Formula = coerce_formula(phi=valid_statement)
@@ -2673,93 +2727,6 @@ class Theory(Enumeration):
     """
 
     # TODO: Theory does not contain typed axioms, inference-rules, etc. but formulas!!!!!!
-
-    @staticmethod
-    def is_well_formed(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
-        """Return True if phi is a well-formed theory, False otherwise.
-
-        :param phi: A formula.
-        :param raise_event_if_false:
-        :return: bool.
-        """
-        phi = coerce_enumeration(phi=phi)
-
-        if isinstance(phi, Theory):
-            # the Derivation class assure the well-formedness of the theory.
-            return True
-
-        # check the well-formedness of the individual derivations.
-        # and retrieve the terms claimed as proven in the theory, preserving order.
-        # by the definition of a theory, these are the left term (term_0) of the formulas.
-        valid_statements: TuplBuilder = TuplBuilder(elements=None)
-        derivations: TuplBuilder = TuplBuilder(elements=None)
-        for derivation in phi:
-            if not is_well_formed_derivation(phi=derivation):
-                return False
-            else:
-                derivation: Derivation = coerce_derivation(phi=derivation)
-                derivations.append(term=derivation)
-                # retrieve the formula claimed as valid from the theorem
-                valid_statement: Formula = derivation.valid_statement
-                valid_statements.append(term=valid_statement)
-        # now that the derivations and valid_statements have been retrieved, and proved well-formed individually,
-        # make the python objects immutable.
-        derivations: Tupl = derivations.to_tupl()
-        valid_statements: Tupl = valid_statements.to_tupl()
-        for i in range(0, derivations.arity):
-            derivation = derivations[i]
-            valid_statement = valid_statements[i]
-            if is_well_formed_axiom(phi=derivation):
-                # This is an axiom.
-                derivation: Axiom = coerce_axiom(phi=derivation)
-                pass
-            elif is_well_formed_inference_rule(phi=derivation):
-                # This is an inference-rule.
-                derivation: InferenceRule = coerce_inference_rule(phi=derivation)
-                pass
-            elif is_well_formed_theorem(phi=derivation):
-                theorem_by_inference: Theorem = coerce_theorem(phi=derivation)
-                inference: Inference = theorem_by_inference.i
-                for premise in inference.premises:
-                    # check that premise is a proven-formula (term_0) of a predecessor
-                    if not valid_statements.has_element(phi=premise):
-                        # The premise is absent from the theory
-                        if raise_event_if_false:
-                            raise_error(error_code=error_codes.e111, premise=premise, premise_index=i,
-                                        theorem=derivation,
-                                        valid_statement=valid_statement)
-                        return False
-                    else:
-                        premise_index = valid_statements.get_index_of_first_equivalent_element(phi=premise)
-                        if premise_index >= i:
-                            # The premise is not positioned before the conclusion.
-                            if raise_event_if_false:
-                                raise_error(error_code=error_codes.e112, premise=premise, premise_index=i,
-                                            theorem=derivation,
-                                            valid_statement=valid_statement)
-                            return False
-                if not valid_statements.has_element(phi=inference.transformation_rule):
-                    # The inference transformation-rule is absent from the theory.
-                    if raise_event_if_false:
-                        raise_error(error_code=error_codes.e119, transformation_rule=inference.transformation_rule,
-                                    inference=inference, premise_index=i, theorem=derivation,
-                                    valid_statement=valid_statement)
-                    return False
-                else:
-                    transformation_index = valid_statements.get_index_of_first_equivalent_element(
-                        phi=inference.transformation_rule)
-                    if transformation_index >= i:
-                        # The transformation is not positioned before the conclusion.
-                        return False
-                # And finally, confirm that the inference effectively yields phi.
-                phi_prime = inference.transformation_rule.apply_transformation(arguments=inference.premises)
-                if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
-                    return False
-            else:
-                # Incorrect form.
-                return False
-        # All tests were successful.
-        return True
 
     def __new__(cls, connective: typing.Optional[Connective] = None, derivations: FlexibleEnumeration = None):
         # coerce to enumeration

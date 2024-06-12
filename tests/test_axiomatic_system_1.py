@@ -752,6 +752,7 @@ class TestAxiomatization:
 
         # extreme case: the empty enumeration
         e2 = pu.as1.Enumeration()
+        e2 = pu.as1.Axiomatization(axioms=e2)
         assert pu.as1.is_well_formed_axiomatization(phi=e2)
         a1 = pu.as1.Axiomatization(axioms=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
 
