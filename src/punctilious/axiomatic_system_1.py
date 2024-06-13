@@ -1294,24 +1294,25 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_even
 
 
 def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
-                                         m: FlexibleMap = None, raise_event_if_false: bool = False) -> bool:
+                                         variables_fixed_values: FlexibleMap = None,
+                                         raise_event_if_false: bool = False) -> bool:
     """Two formulas phi and psi are formula-equivalent-with-variables in regard to variables V if and only if:
-     - All formulas in V are not sub-formula of phi,
+     - Variables in V are not sub-formula of phi,
      - We declare a new formula psi' where every sub-formula that is an element of V,
        is substituted by the formula that is at the exact same position in the tree.
-     - And the phi and psi' are formula-equivalent.
+     - phi and psi' are formula-equivalent.
 
      Note: is-formula-equivalent-with-variables is not commutative.
 
     :param phi: a formula that does not contain any element of variables.
     :param psi: a formula that may contain some elements of variables.
     :param variables: an enumeration of formulas called variables.
-    :param m: (conditional) a mapping between variables and their assigned values. used internally for recursive calls.
+    :param variables_fixed_values: (conditional) a mapping between variables and their assigned values. used internally for recursive calls.
       leave it to None.
     :param raise_event_if_false:
     :return:
     """
-    m: MapBuilder = coerce_map_builder(phi=m)
+    variables_fixed_values: MapBuilder = coerce_map_builder(phi=variables_fixed_values)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     psi_value: Formula = psi
@@ -1321,9 +1322,9 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
         raise_error(error_code=error_codes.e118, phi=phi, psi=psi, v=variables)
     if variables.has_element(phi=psi):
         # psi is a variable.
-        if m.is_defined_in(phi=psi):
+        if variables_fixed_values.is_defined_in(phi=psi):
             # psi's value is already mapped.
-            already_mapped_value: Formula = m.get_assigned_value(phi=psi)
+            already_mapped_value: Formula = variables_fixed_values.get_assigned_value(phi=psi)
             if is_formula_equivalent(phi=phi, psi=already_mapped_value):
                 # phi is consistent with the already mapped value.
                 # we can safely substitute the variable with its value.
@@ -1340,14 +1341,15 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
             # psi's value has not been mapped yet.
             # substitute the variable with its newly mapped value.
             psi_value = phi
-            m.set_pair(phi=psi, psi=psi_value)
+            variables_fixed_values.set_pair(phi=psi, psi=psi_value)
     # print(f'    psi_value:{psi_value}')
     # at this point, variable substitution has been completed at the formula-root level.
     if (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == 0) and (psi_value.arity == 0):
         # Base case
         return True
     elif (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == psi_value.arity) and all(
-            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, variables=variables, m=m) for
+            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, variables=variables,
+                                                 variables_fixed_values=variables_fixed_values) for
             phi_prime, psi_prime in zip(phi, psi_value)):
         # Inductive step
         return True
@@ -1835,7 +1837,7 @@ class Transformation(Formula):
         variables_map: MapBuilder = MapBuilder()
         try:
             is_formula_equivalent_with_variables(phi=arguments, psi=self.premises, variables=self.variables,
-                                                 m=variables_map, raise_event_if_false=True)
+                                                 variables_fixed_values=variables_map, raise_event_if_false=True)
         except Exception as error:
             raise_error(error_code=error_codes.e117, error=error, arguments=arguments, premises=self.premises,
                         variables=self.variables)
@@ -2863,7 +2865,7 @@ def is_in_formula_tree(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
     return False
 
 
-def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
+def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """Try to automatically derive phi as a valid-statement from t, without specifying the premises and inference-rule,
     enriching t with new theorems as necessary to demonstrate phi.
@@ -2874,10 +2876,12 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
     """
     t = coerce_theory(phi=t)
     phi = coerce_formula(phi=phi)
+    u1.log_info(f'auto-derivation-1 target: {phi}')
 
     if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
+        u1.log_info(f'\t target is valid')
 
         for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
@@ -2886,19 +2890,24 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
     else:
         # phi is not a valid-statement with regard to t,
         # thus it may be possible to derive phi with complementary theorems in t.
+        u1.log_info(f'\t target is not valid')
 
         # find the inference-rules in t that could derive phi.
         # these are the inference-rules whose conclusions are formula-equivalent-with-variables to phi.
         # ir_list = list(t.inference_rules)
         # random.shuffle(ir_list)
         # for ir in ir_list:
+        if debug:
+            pass
         for ir in t.iterate_inference_rules():
             ir_success: bool = True
             ir: InferenceRule
-            u1.log_info(f'\tinference-rule: {ir.transformation}')
+            u1.log_info(
+                f'\t inference-rule: {ir.transformation.conclusion} from premises {ir.transformation.premises}')
             transfo: Transformation = ir.transformation
             if is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
                 # this inference-rule may potentially yield target phi as a valid-statement,
+                u1.log_info(f'\t\t inference-rule is candidate')
 
                 # we want to list what would be the required premises to yield phi.
                 # for this we need to "reverse-engineer" the inference-rule.
@@ -2908,7 +2917,10 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
                 # an empty map-builder:
                 m: MapBuilder = MapBuilder()
                 is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables,
-                                                     m=m)
+                                                     variables_fixed_values=m)
+                u1.log_info(f'\t\t variable maps from conclusion: {m}')
+                # TODO: At this point, we may have missing variables.
+                #   These are completely free variables.
 
                 # now that we know what are the necessary variable values, we can determine what
                 # are the necessary premises by substituting the variable values.
@@ -2922,6 +2934,7 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
                 # we can recursively auto-derive these premises.
                 for necessary_premise in necessary_premises:
                     if not is_valid_statement_with_regard_to_theory(phi=necessary_premise, t=t):
+                        u1.log_info(f'\t\t\t premise {necessary_premise} is not valid')
                         ir_success = False
 
                 if ir_success:
@@ -2937,7 +2950,7 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula) -> \
                     pass
             else:
                 # the conclusion of this inference-rule is not interesting
-                # u1.log_info(f'\tir has not interesting conclusion: {ir.transformation}')
+                u1.log_info(f'\t\t inference-rule conclusion is not interesting: {ir.transformation.conclusion}')
                 # ir_success = False
                 pass
 
@@ -3032,7 +3045,7 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
                 # an empty map-builder:
                 m: MapBuilder = MapBuilder()
                 is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables,
-                                                     m=m)
+                                                     variables_fixed_values=m)
 
                 # now that we know what are the necessary variable values, we can determine what
                 # are the necessary premises by substituting the variable values.

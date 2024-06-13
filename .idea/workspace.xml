@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -175,7 +177,7 @@
     "Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4.executor": "Debug",
     "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation.executor": "Run",
-    "Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation.executor": "Debug",
     "Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Debug",
     "Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor": "Debug",
@@ -641,14 +643,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00625" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1716618437959</created>
-      <option name="number" value="00625" />
-      <option name="presentableId" value="LOCAL-00625" />
-      <option name="project" value="LOCAL" />
-      <updated>1716618437960</updated>
-    </task>
     <task id="LOCAL-00626" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1716619205917</created>
@@ -1033,7 +1027,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718225376831</updated>
     </task>
-    <option name="localTasksCounter" value="674" />
+    <task id="LOCAL-00674" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1718225854429</created>
+      <option name="number" value="00674" />
+      <option name="presentableId" value="LOCAL-00674" />
+      <option name="project" value="LOCAL" />
+      <updated>1718225854429</updated>
+    </task>
+    <option name="localTasksCounter" value="675" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1156,24 +1158,19 @@
           <option name="timeStamp" value="407" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2874</line>
-          <option name="timeStamp" value="408" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2894</line>
-          <option name="timeStamp" value="409" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>707</line>
+          <line>709</line>
           <option name="timeStamp" value="415" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>303</line>
-          <option name="timeStamp" value="417" />
+          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
+          <line>2900</line>
+          <option name="timeStamp" value="425" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
+          <line>2906</line>
+          <option name="timeStamp" value="429" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
