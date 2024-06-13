@@ -520,7 +520,7 @@ class Formula(tuple):
           otherwise.
         :rtype: bool
         """
-        return is_term_of_formula(phi=phi, psi=self)
+        return is_term_of_formula(term=phi, phi=self)
 
     @property
     def term_0(self) -> Formula:
@@ -894,22 +894,41 @@ class BinaryConnective(FixedArityConnective):
         return InfixPartialFormula(c=self, term_1=other)
 
 
-def is_term_of_formula(phi: Formula, psi: Formula) -> bool:
-    """Returns True if and only if there exists a term t of psi such that phi ~formula t.
+def is_term_of_formula(term: FlexibleFormula, phi: FlexibleFormula) -> bool:
+    """Returns True if and only if there exists a term t of phi such that phi ~formula the given term.
 
     When this condition is satisfied, we say that phi is a term of psi.
 
+    :param term: A formula.
+    :type term: FlexibleFormula
     :param phi: A formula.
     :type phi: FlexibleFormula
-    :param psi: A formula.
-    :type psi: FlexibleFormula
     ...
     :return: True if phi is a term of psi, False otherwise.
     :rtype: bool
     """
+    term: Formula = coerce_formula(phi=term)
     phi: Formula = coerce_formula(phi=phi)
-    psi: Formula = coerce_formula(phi=psi)
-    return any(is_formula_equivalent(phi=phi, psi=psi_term) for psi_term in psi)
+    return any(is_formula_equivalent(phi=term, psi=psi_term) for psi_term in phi)
+
+
+def is_element_of_enumeration(e: FlexibleFormula, big_e: FlexibleEnumeration) -> bool:
+    """Returns True if and only if there exists an element e2 of enumeration E,
+     such that the given element e ~formula e2.
+
+    When this condition is satisfied, we say that e1 is an element of enumeration E.
+
+    :param e: A formula.
+    :type e: FlexibleFormula
+    :param big_e: An enumeration.
+    :type big_e: FlexibleFormula
+    ...
+    :return: True if element is a term of psi, False otherwise.
+    :rtype: bool
+    """
+    e: Formula = coerce_formula(phi=e)
+    big_e: Enumeration = coerce_enumeration(phi=big_e)
+    return is_term_of_formula(term=e, phi=big_e)
 
 
 def is_axiom_of_theory(a: FlexibleAxiom, t: FlexibleTheory):
@@ -946,7 +965,7 @@ def get_index_of_first_equivalent_term_in_formula(phi: FlexibleFormula, psi: Fle
     """
     phi = coerce_formula(phi=phi)
     psi = coerce_formula(phi=psi)
-    if is_term_of_formula(phi=phi, psi=psi):
+    if is_term_of_formula(term=phi, phi=psi):
         # two formulas that are formula-equivalent may not be equal.
         # for this reason we must first find the first formula-equivalent element in the tuple.
         n: int = 0
@@ -1358,6 +1377,99 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
         return False
 
 
+def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
+                                           variables_fixed_values: FlexibleMap = None,
+                                           raise_event_if_false: bool = False) -> typing.Tuple[
+    bool, typing.Optional[Map]]:
+    """Given that:
+     - phi is a formula,
+     - psi is a formula,
+     - X is an enumeration of formulas named variables,
+     - every variable x in X is an atomic formula (i.e. a formula whose arity = 0),
+     - every variable x in X is not a sub-formula of phi,
+     Then, phi and psi are formula-equivalent-with-variables if and only if:
+     - by substitution of sub-formula x in psi with their counterpart in psi at the same position in the formula tree,
+       every variable x can only be mapped to a single other formula,
+     - and if with these substitutions phi and psi are formula-equivalent,
+     Otherwise they are not formula-equivalent-with-variables.
+
+     If the conditions under "given that" above are not satisfied, the result is undetermined
+     and this python-function raises an exception.
+
+     Note: is-formula-equivalent-with-variables is not commutative.
+
+    :param phi: a formula that does not contain any element of variables.
+    :param psi: a formula that may contain some elements of variables.
+    :param variables: an enumeration of formulas called variables.
+    :param variables_fixed_values: (conditional) a mapping between variables and their assigned values. used internally for recursive calls.
+      leave it to None.
+    :param raise_event_if_false:
+    :return:
+    """
+    variables_fixed_values: Map = coerce_map(phi=variables_fixed_values)
+    phi: Formula = coerce_formula(phi=phi)
+    psi: Formula = coerce_formula(phi=psi)
+    psi_value: Formula = psi
+    variables: Enumeration = coerce_enumeration(phi=variables)
+    # check that all variables are atomic formulas
+    for x in variables:
+        x: Formula = coerce_formula(phi=phi)
+        if x.arity != 0:
+            raise Exception(f'the arity of variable {x} in variables is not equal to 0.')
+        if is_subformula_of(formula=phi, subformula=x):
+            raise Exception(f'variable {x} is a sub-formula of phi.')
+    # check that all variables in the map are atomic formulas and are correctly listed in variables
+    for x in variables_fixed_values.domain:
+        x: Formula = coerce_formula(phi=phi)
+        if x.arity != 0:
+            raise Exception(f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
+        if not is_element_of_enumeration(e=x, big_e=variables):
+            raise Exception(f'variable {x} is present in the domain of the map variables_fixed_values, '
+                            f'but it is not an element of the enumeration variables.')
+    if is_element_of_enumeration(e=phi, big_e=variables):
+        # phi is a variable
+        if is_formula_equivalent(phi=phi, psi=psi):
+            # phi and psi are the same variable
+            return True, variables_fixed_values
+
+    if variables.has_element(phi=psi):
+        # psi is a variable.
+        if variables_fixed_values.is_defined_in(phi=psi):
+            # psi's value is already mapped.
+            already_mapped_value: Formula = variables_fixed_values.get_assigned_value(phi=psi)
+            if is_formula_equivalent(phi=phi, psi=already_mapped_value):
+                # phi is consistent with the already mapped value.
+                # we can safely substitute the variable with its value.
+                psi_value: Formula = already_mapped_value
+                # print(f'    substituted with {psi}.')
+            else:
+                # psi is not consistent with its already mapped value.
+                # it follows that phi and psi are not formula-equivalent-with-variables.
+                if raise_event_if_false:
+                    raise_error(error_code=error_codes.e121, variable=psi,
+                                already_mapped_value=already_mapped_value, distinct_value=phi)
+                return False, None
+        else:
+            # psi's value has not been mapped yet.
+            # substitute the variable with its newly mapped value.
+            psi_value = phi
+            variables_fixed_values.set_pair(phi=psi, psi=psi_value)
+    # print(f'    psi_value:{psi_value}')
+    # at this point, variable substitution has been completed at the formula-root level.
+    if (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == 0) and (psi_value.arity == 0):
+        # Base case
+        return True, variables_fixed_values
+    elif (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == psi_value.arity) and all(
+            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, variables=variables,
+                                                 variables_fixed_values=variables_fixed_values) for
+            phi_prime, psi_prime in zip(phi, psi_value)):
+        # Inductive step
+        return True, variables_fixed_values
+    else:
+        # Extreme case
+        return False, None
+
+
 def is_tuple_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
     """Two formula or tuples phi and psi is tuple-equivalent, denoted phi ~tuple psi, if and only if:
      - |phi| = |psi|
@@ -1458,7 +1570,7 @@ class Tupl(Formula):
 
     def has_element(self, phi: Formula) -> bool:
         """Return True if the tuple has phi as one of its elements."""
-        return is_term_of_formula(phi=phi, psi=self)
+        return is_term_of_formula(term=phi, phi=self)
 
     def to_tupl_builder(self) -> TuplBuilder:
         return TuplBuilder(elements=self)
@@ -1629,7 +1741,7 @@ class EnumerationBuilder(FormulaBuilder):
         """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
         phi ∼formula psi. False otherwise."""
         e: Enumeration = self.to_enumeration()
-        return is_term_of_formula(phi=phi, psi=e)
+        return is_term_of_formula(term=phi, phi=e)
 
     def to_enumeration(self) -> Enumeration:
         elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
@@ -2667,6 +2779,24 @@ class Axiomatization(Theory):
                 raise_error(error_code=error_codes.e123, phi=derivation, phi_type_1=InferenceRule,
                             phi_type_2=Axiom)
         super().__init__(connective=connectives.axiomatization, derivations=coerced_derivations)
+
+
+def is_subformula_of_formula(subformula: FlexibleFormula, formula: FlexibleFormula) -> bool:
+    """Return True if and only if formula subformula is a sub-formula of formula formula, False otherwise.
+
+    :param subformula:
+    :param formula:
+    :return: True if and only if formula subformula is a sub-formula of formula formula, False otherwise.
+    :rtype: bool
+    """
+    subformula: Formula = coerce_formula(phi=subformula)
+    formula: Formula = coerce_formula(phi=formula)
+    if is_formula_equivalent(phi=subformula, psi=formula):
+        return True
+    for term in formula:
+        if is_subformula_of_formula(subformula=subformula, formula=term):
+            return True
+    return False
 
 
 def is_leaf_formula(phi: FlexibleFormula) -> bool:

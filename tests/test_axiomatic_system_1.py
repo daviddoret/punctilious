@@ -253,6 +253,29 @@ class TestFormula:
         assert fb1[2][1].connective is phi4[2][1].connective
 
 
+class TestIsSubformulaofFormula:
+    def test_is_subformula_of_formula(self):
+        c1 = pu.as1.FreeArityConnective(formula_typesetter='c1')
+        c2 = pu.as1.FreeArityConnective(formula_typesetter='c2')
+        c3 = pu.as1.FreeArityConnective(formula_typesetter='c3')
+        assert pu.as1.is_subformula_of_formula(
+            subformula=c1(c2, c3, c2(c1)),
+            formula=c1(c2, c3, c2(c1))
+        )
+        assert not pu.as1.is_subformula_of_formula(
+            subformula=c1(c2, c3, c2(c2)),
+            formula=c1(c2, c3, c2(c1))
+        )
+        assert pu.as1.is_subformula_of_formula(
+            subformula=c2(c2),
+            formula=c1(c2, c3, c2(c2))
+        )
+        assert pu.as1.is_subformula_of_formula(
+            subformula=c3(c2, c1),
+            formula=c1(c2, c3(c2(c1(c3(c2, c1)))), c2(c2))
+        )
+
+
 class TestConnectiveEquivalence:
     def test_is_connective_equivalent(self):
         a, b, c = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c',))
