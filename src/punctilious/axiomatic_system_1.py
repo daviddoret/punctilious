@@ -1435,9 +1435,9 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
     for x in variables:
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
-            raise Exception(f'the arity of variable {x} in variables is not equal to 0.')
+            raise Exception(f'the arity of variable "{x}" in variables is not equal to 0.')
         if is_subformula_of_formula(formula=phi, subformula=x):
-            raise Exception(f'variable {x} is a sub-formula of phi.')
+            raise Exception(f'variable "{x}" is a sub-formula of phi.')
     # check that all variables in the map are atomic formulas and are correctly listed in variables
     for x in variables_fixed_values.domain:
         x: Formula = coerce_formula(phi=x)
@@ -2139,7 +2139,7 @@ def is_valid_statement_with_free_variables_in_theory(phi: FlexibleFormula, t: Fl
     t: Theory = coerce_theory(phi=t)
     free_variables: Enumeration = coerce_enumeration_of_variables(e=free_variables)
     for valid_statement in t.iterate_valid_statements():
-        output, _, = is_formula_equivalent_with_variables_2(phi=phi, psi=valid_statement, variables=free_variables)
+        output, _, = is_formula_equivalent_with_variables_2(phi=valid_statement, psi=phi, variables=free_variables)
         if output:
             return True
     return False
@@ -3113,6 +3113,14 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
                 # are the necessary premises by substituting the variable values.
                 necessary_premises: EnumerationBuilder = EnumerationBuilder(elements=None)
                 for original_premise in transfo.premises:
+                    # TODO: The bug is here. If we have missing variables, the algorithm is more complex.
+                    # we must elaborate a set of premises for that inference-rule,
+                    # some variables in the inference-rule transformation must be mapped to free-variables,
+                    # which means that any arbitrary value will be valid,
+                    # but this must be consistent across all premises.
+                    # if there is only 1 free-variable, this is easier.
+                    # but what should be do if there are more than 1 variable?
+                    XXX
                     necessary_premise = replace_formulas(phi=original_premise, m=m)
                     necessary_premises.append(term=necessary_premise)
                 necessary_premises: Enumeration = necessary_premises.to_enumeration()
