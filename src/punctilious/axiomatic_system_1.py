@@ -1341,7 +1341,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
         raise_error(error_code=error_codes.e118, phi=phi, psi=psi, v=variables)
     if variables.has_element(phi=psi):
         # psi is a variable.
-        if variables_fixed_values.is_defined_in(phi=psi):
+        if is_in_map_domain(phi=psi, m=variables_fixed_values):
             # psi's value is already mapped.
             already_mapped_value: Formula = variables_fixed_values.get_assigned_value(phi=psi)
             if is_formula_equivalent(phi=phi, psi=already_mapped_value):
@@ -1419,7 +1419,7 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
             raise Exception(f'variable {x} is a sub-formula of phi.')
     # check that all variables in the map are atomic formulas and are correctly listed in variables
     for x in variables_fixed_values.domain:
-        x: Formula = coerce_formula(phi=phi)
+        x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
             raise Exception(f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
         if not is_element_of_enumeration(e=x, big_e=variables):
@@ -1427,7 +1427,7 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
                             f'but it is not an element of the enumeration variables.')
     if is_element_of_enumeration(e=psi, big_e=variables):
         # psi is a variable
-        if variables_fixed_values.is_defined_in(phi=psi):
+        if is_in_map_domain(phi=psi, m=variables_fixed_values):
             # psi is in the domain of the map of fixed values
             psi_value: Formula = variables_fixed_values.get_assigned_value(phi=psi)
             if is_formula_equivalent(phi=phi, psi=psi_value):
@@ -1505,7 +1505,7 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     """Performs a top-down, left-to-right replacement of formulas in formula phi."""
     phi: Formula = coerce_formula(phi=phi)
     m: Map = coerce_map(phi=m)
-    if m.is_defined_in(phi=phi):
+    if is_in_map_domain(phi=phi, m=m):
         # phi must be replaced at its root.
         # the replacement algorithm stops right there (i.e.: no more recursion).
         assigned_value: Formula = m.get_assigned_value(phi=phi)
@@ -1597,7 +1597,7 @@ class MapBuilder(FormulaBuilder):
         """
         phi: Formula = coerce_formula(phi=phi)
         psi: Formula = coerce_formula(phi=psi)
-        if self.is_defined_in(phi=phi):
+        if is_in_map_domain(phi=phi, m=self):
             # phi is already defined in the map, we consequently overwrite it.
             index_position: int = self.domain.get_index_of_equivalent_term(phi=phi)
             self.codomain[index_position] = psi
@@ -1620,15 +1620,11 @@ class MapBuilder(FormulaBuilder):
 
     def get_assigned_value(self, phi: FlexibleFormula) -> FlexibleFormula:
         """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
-        if self.is_defined_in(phi=phi):
+        if is_in_map_domain(phi=phi, m=self):
             index_position: int = self.domain.get_index_of_equivalent_term(phi=phi)
             return self.codomain[index_position]
         else:
             raise IndexError('Map domain does not contain this element')
-
-    def is_defined_in(self, phi: FlexibleFormula) -> bool:
-        """Return True if phi is formula-equivalent to an element of the map domain."""
-        return self.domain.has_element(phi=phi)
 
     def to_map(self) -> Map:
         """Convert this map-builder to a map."""
@@ -1678,7 +1674,7 @@ class Map(Formula):
 
     def get_assigned_value(self, phi: Formula) -> Formula:
         """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
-        if self.is_defined_in(phi=phi):
+        if is_in_map_domain(phi=phi, m=self):
             index_position: int = self.domain.get_element_index(phi=phi)
             return self.codomain[index_position]
         else:
@@ -2023,7 +2019,6 @@ def is_well_formed_tupl(phi: FlexibleFormula) -> bool:
     :param phi:
     :return: bool
     """
-    # TODO: Tupl.is_well_formed: review this to avoid raising an exception, but return False instead.
     # TODO: Do we want to signal tuples formally with a dedicated connective?
     phi: Formula = coerce_formula(phi=phi)
     return True
@@ -2990,6 +2985,26 @@ def is_in_formula_tree(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
             if is_in_formula_tree(phi=phi, psi=term):
                 return True
     return False
+
+
+def is_in_formula_tree(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
+    """Return True if phi is formula-equivalent to psi or a sub-formula of psi."""
+    phi = coerce_formula(phi=phi)
+    psi = coerce_formula(phi=psi)
+    if is_formula_equivalent(phi=phi, psi=psi):
+        return True
+    else:
+        for term in psi:
+            if is_in_formula_tree(phi=phi, psi=term):
+                return True
+    return False
+
+
+def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
+    """Return True if phi is a formula in the domain of map m, False otherwise."""
+    phi = coerce_formula(phi=phi)
+    m = coerce_map(phi=m)
+    return is_element_of_enumeration(e=phi, big_e=m.domain)
 
 
 def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) -> \

@@ -42,17 +42,17 @@
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {}
 }</component>
-  <component name="GitHubPullRequestState"><![CDATA[{
-  "prStates": [
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
     {
-      "id": {
-        "id": "PR_kwDOJefIp85j2dQl",
-        "number": 250
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOJefIp85j2dQl&quot;,
+        &quot;number&quot;: 250
       },
-      "lastSeen": 1717827471532
+      &quot;lastSeen&quot;: 1717827471532
     }
   ]
-}]]></component>
+}</component>
   <component name="GithubProjectSettings">
     <option name="branchProtectionPatterns">
       <list>
@@ -142,14 +142,15 @@
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_sandbox.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables_2.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestIsSubformulaofFormula.test_is_subformula_of_formula.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestMap.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed.executor": "Run",
@@ -223,7 +224,7 @@
     "Python tests.pytest in test_propositional_logic_syntax_1.py.executor": "Run",
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Run",
+    "Python tests.pytest in tests.executor": "Debug",
     "Python.__init__.executor": "Run",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
@@ -308,7 +309,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestMap.test_map">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -498,23 +499,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestAxiomatization.test_is_well_formed&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -529,6 +513,23 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables_2" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables_2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -549,7 +550,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestMap.test_map" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -562,7 +563,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestMap.test_map&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -609,10 +610,10 @@
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables_2" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestMap.test_map" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestIsSubformulaofFormula.test_is_subformula_of_formula" />
-      <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -620,11 +621,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestMap.test_map" />
+        <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables_2" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestIsSubformulaofFormula.test_is_subformula_of_formula" />
-        <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed" />
       </list>
     </recent_temporary>
   </component>
@@ -643,14 +644,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00628" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1716707200994</created>
-      <option name="number" value="00628" />
-      <option name="presentableId" value="LOCAL-00628" />
-      <option name="project" value="LOCAL" />
-      <updated>1716707200994</updated>
     </task>
     <task id="LOCAL-00629" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1036,7 +1029,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718310179748</updated>
     </task>
-    <option name="localTasksCounter" value="677" />
+    <task id="LOCAL-00677" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1718314342576</created>
+      <option name="number" value="00677" />
+      <option name="presentableId" value="LOCAL-00677" />
+      <option name="project" value="LOCAL" />
+      <updated>1718314342576</updated>
+    </task>
+    <option name="localTasksCounter" value="678" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1155,28 +1156,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>805</line>
+          <line>835</line>
           <option name="timeStamp" value="415" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3027</line>
+          <line>3042</line>
           <option name="timeStamp" value="425" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3033</line>
+          <line>3048</line>
           <option name="timeStamp" value="429" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>1413</line>
-          <option name="timeStamp" value="437" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>501</line>
-          <option name="timeStamp" value="438" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
