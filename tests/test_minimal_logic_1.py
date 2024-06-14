@@ -76,7 +76,7 @@ class TestPL1:
                              premises=(
                                  p | is_a | propositional_variable,),
                              inference_rule=pu.pls1.i1)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
         pass
 
         # Derive: P ⊃ (P ∧ P)
@@ -85,7 +85,7 @@ class TestPL1:
                              premises=(
                                  p | is_a | proposition,),
                              inference_rule=pu.ml1.pl01)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | implies | (p | land | p), t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=p | implies | (p | land | p), t=t)
         pass
 
         # Derive: (P ∧ P) is-a proposition
@@ -95,7 +95,7 @@ class TestPL1:
                                  p | is_a | proposition,
                                  p | is_a | proposition,),
                              inference_rule=pu.pls1.i3)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(p | land | p) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(p | land | p) | is_a | proposition, t=t)
 
         # make P valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=p)
@@ -110,7 +110,7 @@ class TestPL1:
                                  p | implies | (p | land | p),
                                  p,),
                              inference_rule=pu.ir1.modus_ponens_axiom)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | land | p, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=p | land | p, t=t)
         pass
 
 
@@ -134,7 +134,7 @@ class TestPL2:
                                  p | is_a | proposition,
                                  q | is_a | proposition,),
                              inference_rule=pu.ml1.pl02)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(p | land | q) | implies | (q | land | p), t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(p | land | q) | implies | (q | land | p), t=t)
 
         # Derive: (P ∧ Q) and (Q ∧ P) is-a proposition
         t, _ = pu.as1.derive(theory=t,
@@ -143,14 +143,14 @@ class TestPL2:
                                  p | is_a | proposition,
                                  q | is_a | proposition,),
                              inference_rule=pu.pls1.i3)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(p | land | q) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(p | land | q) | is_a | proposition, t=t)
         t, _ = pu.as1.derive(theory=t,
                              valid_statement=(q | land | p) | is_a | proposition,
                              premises=(
                                  q | is_a | proposition,
                                  p | is_a | proposition,),
                              inference_rule=pu.pls1.i3)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(q | land | p) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(q | land | p) | is_a | proposition, t=t)
 
         # make (P ∧ Q) valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=p | land | q)
@@ -165,7 +165,7 @@ class TestPL2:
                                  (p | land | q) | implies | (q | land | p),
                                  p | land | q,),
                              inference_rule=pu.ir1.modus_ponens_axiom)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=q | land | p, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=q | land | p, t=t)
         pass
 
 
@@ -193,7 +193,7 @@ class TestPL3:
                                  q | is_a | proposition,
                                  r | is_a | proposition,),
                              inference_rule=pu.ml1.pl03)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(
+        assert pu.as1.is_valid_statement_in_theory(
             phi=(p | implies | q) | implies | ((p | land | r) | implies | (q | land | r)),
             t=t)
         pass
@@ -205,28 +205,28 @@ class TestPL3:
                                  p | is_a | proposition,
                                  r | is_a | proposition,),
                              inference_rule=pu.pls1.i3)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(p | land | r) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(p | land | r) | is_a | proposition, t=t)
         t, _ = pu.as1.derive(theory=t,
                              valid_statement=(q | land | r) | is_a | proposition,
                              premises=(
                                  q | is_a | proposition,
                                  r | is_a | proposition,),
                              inference_rule=pu.pls1.i3)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(q | land | r) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(q | land | r) | is_a | proposition, t=t)
         t, _ = pu.as1.derive(theory=t,
                              valid_statement=(p | implies | q) | is_a | proposition,
                              premises=(
                                  p | is_a | proposition,
                                  q | is_a | proposition,),
                              inference_rule=pu.pls1.i4)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(p | implies | q) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(p | implies | q) | is_a | proposition, t=t)
         t, _ = pu.as1.derive(theory=t,
                              valid_statement=((p | land | r) | implies | (q | land | r)) | is_a | proposition,
                              premises=(
                                  (p | land | r) | is_a | proposition,
                                  (q | land | r) | is_a | proposition,),
                              inference_rule=pu.pls1.i4)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(
+        assert pu.as1.is_valid_statement_in_theory(
             phi=((p | land | r) | implies | (q | land | r)) | is_a | proposition, t=t)
 
         # make (P implies Q) valid and add modus-ponens to the theory
@@ -242,7 +242,7 @@ class TestPL3:
                                  (p | implies | q) | implies | ((p | land | r) | implies | (q | land | r)),
                                  p | implies | q,),
                              inference_rule=pu.ir1.modus_ponens_axiom)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(p | land | r) | implies | (q | land | r), t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(p | land | r) | implies | (q | land | r), t=t)
         pass
 
 
@@ -266,7 +266,7 @@ class TestPL4:
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (p | implies | r)
         t, _, _ = pu.as1.auto_derive_2(t=t, phi=phi)
-        assert pu.as1.is_valid_statement_with_regard_to_theory(
+        assert pu.as1.is_valid_statement_in_theory(
             phi=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (p | implies | r)),
             t=t)
@@ -291,19 +291,19 @@ class TestPL5:
         # Derive: P ⊃ Q
         t, success, _ = pu.as1.auto_derive_1(t=t, phi=p | is_a | proposition)
         assert success
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
 
         t, success, _ = pu.as1.auto_derive_1(t=t, phi=q | is_a | proposition)
         assert success
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=q | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=q | is_a | proposition, t=t)
 
         t, success, _ = pu.as1.auto_derive_1(t=t, phi=(p | implies | q) | is_a | proposition)
         assert success
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=(p | implies | q) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(p | implies | q) | is_a | proposition, t=t)
 
         t, success, _ = pu.as1.auto_derive_1(t=t, phi=q | implies | (p | implies | q))
         assert success
-        assert pu.as1.is_valid_statement_with_regard_to_theory(phi=q | implies | (p | implies | q), t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=q | implies | (p | implies | q), t=t)
         # t, _, = pu.as1.derive(
         #    theory=t,
         #    valid_statement=p | implies | q,

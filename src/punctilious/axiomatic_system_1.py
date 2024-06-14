@@ -640,6 +640,18 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
         raise_error(error_code=error_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
 
 
+def coerce_variable(x: FlexibleFormula) -> Formula:
+    """Any formula of arity 0 can be used as a variable.
+
+    :param x:
+    :return:
+    """
+    x = coerce_formula(phi=x)
+    if x.arity != 0:
+        raise Exception('coerce_variable: x.arity != 0')
+    return x
+
+
 def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
     """Coerce elements to an enumeration.
     If elements is None, coerce it to an empty enumeration."""
@@ -665,6 +677,15 @@ def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
         return Enumeration(elements=phi)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Enumeration, phi_type=type(phi), phi=phi)
+
+
+def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
+    e = coerce_enumeration(phi=e)
+    e2 = Enumeration()
+    for element in e:
+        element = coerce_variable(x=element)
+        e2 = Enumeration(elements=(*e2, element,))
+    return e2
 
 
 def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enumeration:
@@ -2094,14 +2115,34 @@ def is_well_formed_inference_rule(phi: FlexibleFormula) -> bool:
         return True
 
 
-def is_valid_statement_with_regard_to_theory(phi: FlexibleFormula, t: FlexibleTheory) -> bool:
+def is_valid_statement_in_theory(phi: FlexibleFormula, t: FlexibleTheory) -> bool:
     """Return True if formula phi is a valid-statement with regard to theory t, False otherwise.
 
     A formula phi is a valid-statement with regard to a theory t, if and only if:
      - phi is the valid-statement of an axiom in t,
      - or phi is the valid-statement of a theorem in t.
     """
+    phi: Formula = coerce_formula(phi=phi)
+    t: Theory = coerce_theory(phi=t)
     return any(is_formula_equivalent(phi=phi, psi=valid_statement) for valid_statement in t.iterate_valid_statements())
+
+
+def is_valid_statement_with_free_variables_in_theory(phi: FlexibleFormula, t: FlexibleTheory,
+                                                     free_variables: FlexibleEnumeration) -> bool:
+    """Return True if formula phi is a valid-statement with regard to theory t, False otherwise.
+
+    A formula phi is a valid-statement with regard to a theory t, if and only if:
+     - phi is the valid-statement of an axiom in t,
+     - or phi is the valid-statement of a theorem in t.
+    """
+    phi: Formula = coerce_formula(phi=phi)
+    t: Theory = coerce_theory(phi=t)
+    free_variables: Enumeration = coerce_enumeration_of_variables(e=free_variables)
+    for valid_statement in t.iterate_valid_statements():
+        output, _, = is_formula_equivalent_with_variables_2(phi=phi, psi=valid_statement, variables=free_variables)
+        if output:
+            return True
+    return False
 
 
 def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
@@ -3020,7 +3061,7 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
     phi = coerce_formula(phi=phi)
     u1.log_info(f'auto-derivation-1 target: {phi}')
 
-    if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
+    if is_valid_statement_in_theory(phi=phi, t=t):
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
         u1.log_info(f'\t target is valid')
@@ -3057,12 +3098,16 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
                 # first we should determine what are the necessary variable values in the transformation.
                 # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
                 # an empty map-builder:
-                m: MapBuilder = MapBuilder()
-                is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables,
-                                                     variables_fixed_values=m)
+                output, m, = is_formula_equivalent_with_variables_2(phi=phi, psi=transfo.conclusion,
+                                                                    variables=transfo.variables,
+                                                                    variables_fixed_values=None)
                 u1.log_info(f'\t\t variable maps from conclusion: {m}')
-                # TODO: At this point, we may have missing variables.
-                #   These are completely free variables.
+
+                free_variables: Enumeration = Enumeration()
+                for x in transfo.variables:
+                    if not is_element_of_enumeration(e=x, big_e=m.domain):
+                        free_variables = Enumeration(elements=(*free_variables, x,))
+                u1.log_info(f'\t\t free-variables: {free_variables}')
 
                 # now that we know what are the necessary variable values, we can determine what
                 # are the necessary premises by substituting the variable values.
@@ -3075,8 +3120,9 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
                 # now that we have a list of necessary premises,
                 # we can recursively auto-derive these premises.
                 for necessary_premise in necessary_premises:
-                    if not is_valid_statement_with_regard_to_theory(phi=necessary_premise, t=t):
-                        u1.log_info(f'\t\t\t premise {necessary_premise} is not valid')
+                    if not is_valid_statement_with_free_variables_in_theory(phi=necessary_premise, t=t,
+                                                                            free_variables=free_variables):
+                        u1.log_info(f'\t\t\t premise {necessary_premise} is not valid with variables {free_variables}')
                         ir_success = False
 
                 if ir_success:
@@ -3096,7 +3142,7 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
                 # ir_success = False
                 pass
 
-        if not is_valid_statement_with_regard_to_theory(phi=phi, t=t):
+        if not is_valid_statement_in_theory(phi=phi, t=t):
             # we recursively tried to derive phi using all the inference-rules in the theory.
             # it follows that we are unable to derive phi.
             return t, False, None
@@ -3149,7 +3195,7 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
     # to avoid circular attempts to auto-derive theorems.
     premise_exclusion_list.append(term=phi)
 
-    if is_valid_statement_with_regard_to_theory(phi=phi, t=t):
+    if is_valid_statement_in_theory(phi=phi, t=t):
         # phi is already a valid-statement with regard to t,
         # no complementary derivation is necessary.
 
@@ -3228,7 +3274,7 @@ def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_li
                 # u1.log_info(f'\tir has not interesting conclusion: {ir.transformation}')
                 ir_success = False
 
-        if not is_valid_statement_with_regard_to_theory(phi=phi, t=t):
+        if not is_valid_statement_in_theory(phi=phi, t=t):
             # we recursively tried to derive phi using all the inference-rules in the theory.
             # it follows that we are unable to derive phi.
             return t, False, None
