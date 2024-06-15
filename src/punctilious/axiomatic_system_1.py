@@ -656,6 +656,11 @@ def coerce_variable(x: FlexibleFormula) -> Formula:
 def coerce_enumeration(phi: FlexibleEnumeration, strip_duplicates: bool = False) -> Enumeration:
     """Coerce elements to an enumeration.
     If elements is None, coerce it to an empty enumeration."""
+    if strip_duplicates:
+        # this should not be necessary, because duplicate stripping
+        # takes place in Enumeration __init__. but there must be some kind of implicit conversion
+        # too early in the process which leads to an error being raised.
+        phi = strip_duplicate_formulas_in_python_tuple(t=phi)
     if isinstance(phi, Enumeration):
         return phi
     elif isinstance(phi, EnumerationBuilder):
@@ -2267,8 +2272,8 @@ def are_valid_statements_in_theory_with_variables(
                                                                                         n=permutation_size):
             variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
             s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
-            s_with_variable_substitution: Enumeration = coerce_enumeration(phi=s_with_variable_substitution,
-                                                                           strip_duplicates=True)
+            s_with_variable_substitution: Enumeration = coerce_enumeration(
+                phi=s_with_variable_substitution, strip_duplicates=True)
             s_with_permutation: Enumeration = union_enumeration(phi=s_with_variable_substitution, psi=permutation)
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
