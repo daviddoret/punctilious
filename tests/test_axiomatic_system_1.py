@@ -892,6 +892,24 @@ class TestAreValidStatementsInTheory:
         assert not pu.as1.are_valid_statements_in_theory(s=(a, e, b,), t=t)
 
 
+class TestAreValidStatementsInTheoryWithVariables:
+    def test_are_valid_statements_in_theory_with_variables(self):
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        t, _, = pu.as1.let_x_be_an_axiom(theory=None, valid_statement=a)
+        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=c)
+        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=d)
+        valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c,), t=t, variables=None,
+                                                                         variables_values=None)
+        assert valid
+        valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c, e,), t=t, variables=(e,),
+                                                                         variables_values=pu.as1.Map(domain=(e,),
+                                                                                                     codomain=(d,)))
+        assert valid
+        valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c, e,), t=t, variables=(e,),
+                                                                         variables_values=None)
+        assert valid
+
+
 class TestAxiomatization:
     def test_is_well_formed(self):
         # elaborate a theory

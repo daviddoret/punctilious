@@ -653,7 +653,7 @@ def coerce_variable(x: FlexibleFormula) -> Formula:
     return x
 
 
-def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
+def coerce_enumeration(phi: FlexibleEnumeration, strip_duplicates: bool = False) -> Enumeration:
     """Coerce elements to an enumeration.
     If elements is None, coerce it to an empty enumeration."""
     if isinstance(phi, Enumeration):
@@ -663,19 +663,19 @@ def coerce_enumeration(phi: FlexibleEnumeration) -> Enumeration:
     elif isinstance(phi, Formula) and is_well_formed_enumeration(phi=phi):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(elements=phi, connective=phi.connective)
+        return Enumeration(elements=phi, connective=phi.connective, strip_duplicates=strip_duplicates)
     elif phi is None:
-        return Enumeration(elements=None)
+        return Enumeration(elements=None, strip_duplicates=strip_duplicates)
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(elements=tuple(element for element in phi))
+        return Enumeration(elements=tuple(element for element in phi), strip_duplicates=strip_duplicates)
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(elements=phi)
+        return Enumeration(elements=phi, strip_duplicates=strip_duplicates)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Enumeration, phi_type=type(phi), phi=phi)
 
@@ -1768,6 +1768,23 @@ class EnumerationBuilder(FormulaBuilder):
         return self.to_enumeration()
 
 
+def enumerate_formula_terms(phi: FlexibleFormula) -> Enumeration:
+    """Given a formula phi, return an enumeration of the terms in phi,
+    discarding duplicate terms in the process, i.e. only the first term is preserved
+    whenever t1 is-formula-equivalent-to t2 for two terms."""
+    phi: Formula = coerce_formula(phi=phi)
+    # Do not reuse the Enumeration constructor here,
+    # because enumerate_formula_terms is called in the Enumeration constructor to strip duplicates.
+    e: tuple = ()
+    for term in iterate_formula_terms(phi=phi):
+        if not any(is_formula_equivalent(phi=phi, psi=term) for element in e):
+            e: tuple = (*e, term,)
+    # strip_duplicates is not necessary and would lead to an infinite loop,
+    # because enumerate_formula_terms is called in the Enumeration constructor:
+    e: Enumeration = Enumeration(elements=e, strip_duplicates=False)
+    return e
+
+
 class Enumeration(Formula):
     """An enumeration is formula whose terms, called elements, are unique over the ~formula operator.
 
@@ -1802,22 +1819,26 @@ class Enumeration(Formula):
 
     """
 
-    def __new__(cls, elements: FlexibleEnumeration = None, connective: Connective = None):
+    def __new__(cls, elements: FlexibleEnumeration = None, connective: Connective = None,
+                strip_duplicates: bool = False):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         connective: Connective = connectives.enumeration if connective is None else connective
+        if strip_duplicates:
+            elements = enumerate_formula_terms(phi=elements)
         if not is_well_formed_enumeration(phi=elements):
             raise_error(error_code=error_codes.e110, elements_type=type(elements), elements=elements)
         o: tuple = super().__new__(cls, connective=connective, terms=elements)
         return o
 
-    def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None):
+    def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None,
+                 strip_duplicates: bool = False):
         global connectives
-        # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        eb: EnumerationBuilder = EnumerationBuilder(elements=elements)
         connective: Connective = connectives.enumeration if connective is None else connective
-        super().__init__(connective=connective, terms=eb)
+        if strip_duplicates:
+            elements = enumerate_formula_terms(phi=elements)
+        super().__init__(connective=connective, terms=elements)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
@@ -2199,10 +2220,11 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Fo
     return
 
 
-def are_valid_statements_in_theory_with_variables(s: FlexibleEnumeration, t: FlexibleTheory,
-                                                  variables: FlexibleEnumeration,
-                                                  variables_values: FlexibleMap, debug: bool = False) -> typing.Tuple[
-    bool, typing.Optional[Enumeration], typing.Optional[Map]]:
+def are_valid_statements_in_theory_with_variables(
+        s: FlexibleEnumeration, t: FlexibleTheory,
+        variables: FlexibleEnumeration,
+        variables_values: FlexibleMap, debug: bool = False) \
+        -> tuple[bool, typing.Optional[Enumeration]]:
     """Return True if every formula phi in enumeration s is a valid-statement in theory t,
     considering some variables, and some variable values.
     If a variable in variables has not an assigned value, then it is a free variable.
@@ -2211,8 +2233,8 @@ def are_valid_statements_in_theory_with_variables(s: FlexibleEnumeration, t: Fle
     Performance warning: this may be a very expansive algorithm, because multiple
     recursive iterations may be required to find a solution.
 
-    TODO: if return True, return as well the enumeration of valid-statements,
-        and the variable assignment map.
+    TODO: retrieve and return the final map of variable values as well? is this really needed?
+
     """
     s: Enumeration = coerce_enumeration(phi=s)
     t: Theory = coerce_theory(phi=t)
@@ -2231,13 +2253,30 @@ def are_valid_statements_in_theory_with_variables(s: FlexibleEnumeration, t: Fle
 
     permutation_size: int = free_variables.arity
 
-    valid_statements = iterate_valid_statements_in_theory(t=t)
-    for e in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements, n=permutation_size):
-        s2: Enumeration = Enumeration(elements=(*s, *e,))
-        if are_valid_statements_in_theory(s=s2, t=t):
-            # TODO: retrieve the variable map and output it? is this needed?
-            return True, s2, None
-    return False, None, None
+    if permutation_size == 0:
+        # there are no free variables.
+        # but there may be some or no variables with assigned values.
+        # it follows that 1) there will be no permutations,
+        # and 2) are_valid_statements_in_theory() is equivalent.
+        s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variables_values)
+        s_with_variable_substitution: Enumeration = coerce_enumeration(phi=s_with_variable_substitution)
+        valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
+        if valid:
+            return valid, s_with_variable_substitution
+        else:
+            return valid, None
+    else:
+        valid_statements = iterate_valid_statements_in_theory(t=t)
+        for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
+                                                                                        n=permutation_size):
+            variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
+            s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
+            s_with_variable_substitution: Enumeration = coerce_enumeration(phi=s_with_variable_substitution,
+                                                                           strip_duplicates=True)
+            s_with_permutation: Enumeration = union_enumeration(phi=s_with_variable_substitution, psi=permutation)
+            if are_valid_statements_in_theory(s=s_with_permutation, t=t):
+                return True, s_with_permutation
+        return False, None
 
 
 def is_valid_statement_with_free_variables_in_theory(phi: FlexibleFormula, t: FlexibleTheory,

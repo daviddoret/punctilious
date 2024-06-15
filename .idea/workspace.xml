@@ -7,6 +7,7 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +95,7 @@
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiom.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiom.test_axiom_without_premises.executor": "Run",
@@ -310,7 +312,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -500,6 +502,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -531,23 +550,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_axiomatic_system_1.TestIteratePermutationsOfEnumerationElementsWithFixedSize.test_iterate_permutations_of_enumeration_elements_with_fixed_size&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestMap.test_map" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestMap.test_map&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -612,8 +614,8 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestIteratePermutationsOfEnumerationElementsWithFixedSize.test_iterate_permutations_of_enumeration_elements_with_fixed_size" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestMap.test_map" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -622,11 +624,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestIteratePermutationsOfEnumerationElementsWithFixedSize.test_iterate_permutations_of_enumeration_elements_with_fixed_size" />
         <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestMap.test_map" />
       </list>
     </recent_temporary>
   </component>
@@ -645,14 +647,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00634" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1717128682399</created>
-      <option name="number" value="00634" />
-      <option name="presentableId" value="LOCAL-00634" />
-      <option name="project" value="LOCAL" />
-      <updated>1717128682399</updated>
     </task>
     <task id="LOCAL-00635" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1038,7 +1032,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718445855954</updated>
     </task>
-    <option name="localTasksCounter" value="683" />
+    <task id="LOCAL-00683" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1718446059623</created>
+      <option name="number" value="00683" />
+      <option name="presentableId" value="LOCAL-00683" />
+      <option name="project" value="LOCAL" />
+      <updated>1718446059623</updated>
+    </task>
+    <option name="localTasksCounter" value="684" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1157,7 +1159,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3212</line>
+          <line>3252</line>
           <option name="timeStamp" value="456" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1167,8 +1169,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3221</line>
+          <line>3261</line>
           <option name="timeStamp" value="458" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
+          <line>907</line>
+          <option name="timeStamp" value="463" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
+          <line>2238</line>
+          <option name="timeStamp" value="464" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
