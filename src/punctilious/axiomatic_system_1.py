@@ -2209,6 +2209,9 @@ def are_valid_statements_in_theory_with_variables(s: FlexibleEnumeration, t: Fle
 
     Performance warning: this may be a very expansive algorithm, because multiple
     recursive iterations may be required to find a solution.
+
+    TODO: if return True, return as well the enumeration of valid-statements,
+        and the variable assignment map.
     """
     s: Enumeration = coerce_enumeration(phi=s)
     t: Theory = coerce_theory(phi=t)
@@ -2231,8 +2234,8 @@ def are_valid_statements_in_theory_with_variables(s: FlexibleEnumeration, t: Fle
     for e in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements, n=permutation_size):
         s2: Enumeration = Enumeration(elements=(*s, *e,))
         if are_valid_statements_in_theory(s=s2, t=t):
-            return True
-    return False
+            return True, None, None
+    return False, None, None
 
 
 def is_valid_statement_with_free_variables_in_theory(phi: FlexibleFormula, t: FlexibleTheory,

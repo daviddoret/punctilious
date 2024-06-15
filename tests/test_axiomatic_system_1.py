@@ -877,6 +877,21 @@ class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
         assert i == 6
 
 
+class TestAreValidStatementsInTheory:
+    def test_are_valid_statements_in_theory(self):
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        t, _, = pu.as1.let_x_be_an_axiom(theory=None, valid_statement=a)
+        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=c)
+        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=d)
+        assert pu.as1.are_valid_statements_in_theory(s=(a, c,), t=t)
+        assert pu.as1.are_valid_statements_in_theory(s=(a, c, d,), t=t)
+        assert pu.as1.are_valid_statements_in_theory(s=(d, a, c,), t=t)
+        assert pu.as1.are_valid_statements_in_theory(s=None, t=t)
+        assert not pu.as1.are_valid_statements_in_theory(s=(e,), t=t)
+        assert not pu.as1.are_valid_statements_in_theory(s=(a, b, d,), t=t)
+        assert not pu.as1.are_valid_statements_in_theory(s=(a, e, b,), t=t)
+
+
 class TestAxiomatization:
     def test_is_well_formed(self):
         # elaborate a theory
