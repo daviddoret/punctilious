@@ -317,7 +317,7 @@ class Symbols(dict):
             Symbol(key='close_curly_brace', latex_math='\\right\\}', unicode_extended='}', unicode_limited='}'))
         self._close_parenthesis = self._register(
             Symbol(key='close_parenthesis', latex_math='\\right)', unicode_extended=')', unicode_limited=')'))
-        self._collection_separator = self._register(
+        self._comma = self._register(
             Symbol(key='collection_separator', latex_math=',', unicode_extended=',', unicode_limited=','))
         self._conjunction = self._register(
             Symbol(key='conjunction', latex_math='\\wedge', unicode_extended='∧', unicode_limited='and'))
@@ -325,6 +325,8 @@ class Symbols(dict):
             Symbol(key='disjunction', latex_math='\\vee', unicode_extended='∨', unicode_limited='or'))
         self._implication = self._register(
             Symbol(key='implication', latex_math='\\implies', unicode_extended='⇒', unicode_limited='==>'))
+        self._maps_to = self._register(
+            Symbol(key='maps_to', latex_math='\\mapsto', unicode_extended='↦', unicode_limited='|-->'))
         self._negation = self._register(
             Symbol(key='negation', latex_math='\\lnot', unicode_extended='¬', unicode_limited='not'))
         self._open_curly_brace = self._register(
@@ -458,8 +460,8 @@ class Symbols(dict):
         return self._close_parenthesis
 
     @property
-    def collection_separator(self) -> Symbol:
-        return self._collection_separator
+    def comma(self) -> Symbol:
+        return self._comma
 
     @property
     def conjunction(self) -> Symbol:
@@ -472,6 +474,10 @@ class Symbols(dict):
     @property
     def implication(self) -> Symbol:
         return self._implication
+
+    @property
+    def maps_to(self) -> Symbol:
+        return self._maps_to
 
     @property
     def negation(self) -> Symbol:

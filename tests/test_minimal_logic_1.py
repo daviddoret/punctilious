@@ -289,19 +289,19 @@ class TestPL5:
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl05, )
 
         # Derive: P ⊃ Q
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=x | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_1(t=t, candidate_statement=x | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | is_a | proposition, t=t)
 
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=y | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_1(t=t, candidate_statement=y | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=y | is_a | proposition, t=t)
 
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=(x | implies | y) | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_1(t=t, candidate_statement=(x | implies | y) | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=(x | implies | y) | is_a | proposition, t=t)
 
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=y | implies | (x | implies | y))
+        t, success, _ = pu.as1.auto_derive_1(t=t, candidate_statement=y | implies | (x | implies | y))
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=y | implies | (x | implies | y), t=t)
         # t, _, = pu.as1.derive(
@@ -315,7 +315,7 @@ class TestPL5:
         #    inference_rule=pu.ir1.modus_ponens_axiom)
         # TODO: derivation above functions properly
         # TODO: but the following auto-derivation fails, why?????
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=x | implies | y, debug=True)
+        t, success, _ = pu.as1.auto_derive_1(t=t, candidate_statement=x | implies | y, debug=True)
         assert success
         # assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | implies | q, t=t)
         pass

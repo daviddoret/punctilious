@@ -910,6 +910,28 @@ class TestAreValidStatementsInTheoryWithVariables:
         assert valid
 
 
+class TestStripDuplicateFormulasInPythonTuple:
+    def test_strip_duplicate_formulas_in_python_tuple(self):
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        t1 = pu.as1.Tupl(elements=(a, b, a, a, e, e,))
+        t2 = pu.as1.Tupl(elements=(a, b, e,))
+        t3 = pu.as1.strip_duplicate_formulas_in_python_tuple(t=t1)
+        t3 = pu.as1.Tupl(elements=t3)
+        assert not pu.as1.is_formula_equivalent(phi=t1, psi=t3)
+        assert pu.as1.is_formula_equivalent(phi=t2, psi=t3)
+
+
+class TestCoerceEnumeration:
+    def test_coerce_enumeration(self):
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        e1 = pu.as1.Enumeration(elements=(a, b, a, a, e, e,), strip_duplicates=True)
+        e2 = pu.as1.Enumeration(elements=(a, b, e,), strip_duplicates=True)
+        e3 = pu.as1.Enumeration(elements=e1, strip_duplicates=True)
+        assert pu.as1.is_formula_equivalent(phi=e1, psi=e3)
+        assert pu.as1.is_formula_equivalent(phi=e2, psi=e3)
+        assert pu.as1.is_formula_equivalent(phi=e1, psi=e2)
+
+
 class TestAxiomatization:
     def test_is_well_formed(self):
         # elaborate a theory
@@ -995,10 +1017,12 @@ class TestAutoDerivation:
         t = pu.as1.extend_theory(if_p_then_q, t=t)
         pass
         # auto-derivation of an existing valid-statement
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=p)
+        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=p)
+        assert success
         pass
         # auto-derivation of a simple theorem, without variables
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=q)
+        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=q)
+        assert success
         pass
         with pu.as1.let_x_be_a_variable(formula_typesetter='x') as x, pu.as1.let_x_be_a_variable(
                 formula_typesetter='y') as y:
@@ -1007,11 +1031,11 @@ class TestAutoDerivation:
                                                      variables=(x, y,)))
         t = pu.as1.Theory(derivations=(*t, x_y_then_x_and_y,))
         # auto-derivation of a simple theorem, without some variables
-        t, success, _, = pu.as1.auto_derive_2(t=t, phi=p | pu.as1.connectives.land | q)
+        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=p | pu.as1.connectives.land | q)
         assert success
         pass
         # auto-derivation of an impossible theorem fails and raises an auto-derivation-failure
-        t, success, _, = pu.as1.auto_derive_2(t=t, phi=p | pu.as1.connectives.lor | q)
+        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=p | pu.as1.connectives.lor | q)
         assert not success
         pass
 

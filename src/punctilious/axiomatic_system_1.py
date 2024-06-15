@@ -1768,21 +1768,17 @@ class EnumerationBuilder(FormulaBuilder):
         return self.to_enumeration()
 
 
-def enumerate_formula_terms(phi: FlexibleFormula) -> Enumeration:
-    """Given a formula phi, return an enumeration of the terms in phi,
-    discarding duplicate terms in the process, i.e. only the first term is preserved
-    whenever t1 is-formula-equivalent-to t2 for two terms."""
-    phi: Formula = coerce_formula(phi=phi)
+def strip_duplicate_formulas_in_python_tuple(t: tuple[Formula, ...]) -> tuple[Formula, ...]:
+    """Strip a python-tuple from formulas that are duplicate because of formula-equivalence.
+    Order is preserved.
+    Only the first formula is maintained, all consecutive formulas are discarded."""
     # Do not reuse the Enumeration constructor here,
     # because enumerate_formula_terms is called in the Enumeration constructor to strip duplicates.
-    e: tuple = ()
-    for term in iterate_formula_terms(phi=phi):
-        if not any(is_formula_equivalent(phi=phi, psi=term) for element in e):
-            e: tuple = (*e, term,)
-    # strip_duplicates is not necessary and would lead to an infinite loop,
-    # because enumerate_formula_terms is called in the Enumeration constructor:
-    e: Enumeration = Enumeration(elements=e, strip_duplicates=False)
-    return e
+    t2: tuple = ()
+    for element in t:
+        if not any(is_formula_equivalent(phi=element, psi=existing_element) for existing_element in t2):
+            t2: tuple = (*t2, element,)
+    return t2
 
 
 class Enumeration(Formula):
@@ -1826,7 +1822,7 @@ class Enumeration(Formula):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         connective: Connective = connectives.enumeration if connective is None else connective
         if strip_duplicates:
-            elements = enumerate_formula_terms(phi=elements)
+            elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         if not is_well_formed_enumeration(phi=elements):
             raise_error(error_code=error_codes.e110, elements_type=type(elements), elements=elements)
         o: tuple = super().__new__(cls, connective=connective, terms=elements)
@@ -1837,7 +1833,7 @@ class Enumeration(Formula):
         global connectives
         connective: Connective = connectives.enumeration if connective is None else connective
         if strip_duplicates:
-            elements = enumerate_formula_terms(phi=elements)
+            elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         super().__init__(connective=connective, terms=elements)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
@@ -3200,7 +3196,7 @@ def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
     return is_element_of_enumeration(e=phi, big_e=m.domain)
 
 
-def auto_derive_0(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) -> \
+def auto_derive_0(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """If phi is a valid-statement in t,
     return the python-tuple (t, True, psi) where psi is the first derivation in t proving phi,
@@ -3212,11 +3208,11 @@ def auto_derive_0(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
         the other auto-derivation functions.
     """
     t = coerce_theory(phi=t)
-    phi = coerce_formula(phi=phi)
-    if is_valid_statement_in_theory(phi=phi, t=t):  # this first check is superfluous
+    candidate_statement = coerce_formula(phi=candidate_statement)
+    if is_valid_statement_in_theory(phi=candidate_statement, t=t):  # this first check is superfluous
         # loop through derivations
         for derivation in t.iterate_derivations():
-            if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
+            if is_formula_equivalent(phi=candidate_statement, psi=derivation.valid_statement):
                 # the valid-statement of this derivation matches phi,
                 # the auto-derivation is successful.
                 if debug:
@@ -3227,7 +3223,7 @@ def auto_derive_0(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
     return t, False, None
 
 
-def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) -> \
+def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """Try to automatically derive phi as a valid-statement from t, without specifying the premises and inference-rule,
     enriching t with new theorems as necessary to demonstrate phi.
@@ -3237,10 +3233,10 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
     derivations, avoiding the necessity to expressly mention all premises.
     """
     t = coerce_theory(phi=t)
-    phi = coerce_formula(phi=phi)
-    u1.log_info(f'auto-derivation-1 target: {phi}')
+    candidate_statement = coerce_formula(phi=candidate_statement)
+    u1.log_info(f'auto-derivation-1 target: {candidate_statement}')
 
-    t, successful, derivation, = auto_derive_0(t=t, phi=phi, debug=debug)
+    t, successful, derivation, = auto_derive_0(t=t, candidate_statement=candidate_statement, debug=debug)
     if successful:
         return t, successful, derivation
 
@@ -3257,7 +3253,9 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
         u1.log_info(
             f'\t inference-rule: {ir.transformation.conclusion} from premises {ir.transformation.premises}')
         transfo: Transformation = ir.transformation
-        if is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
+        conclusion: Formula = ir.transformation.conclusion
+        if is_formula_equivalent_with_variables(phi=candidate_statement, psi=transfo.conclusion,
+                                                variables=transfo.variables):
             # this inference-rule may potentially yield target phi as a valid-statement,
             u1.log_info(f'\t\t inference-rule is candidate')
 
@@ -3267,7 +3265,7 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
             # first we should determine what are the necessary variable values in the transformation.
             # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
             # an empty map-builder:
-            output, m, = is_formula_equivalent_with_variables_2(phi=phi, psi=transfo.conclusion,
+            output, m, = is_formula_equivalent_with_variables_2(phi=candidate_statement, psi=transfo.conclusion,
                                                                 variables=transfo.variables,
                                                                 variables_fixed_values=None)
             u1.log_info(f'\t\t variable maps from conclusion: {m}')
@@ -3296,19 +3294,24 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
                 necessary_premises.append(term=necessary_premise)
             necessary_premises: Enumeration = necessary_premises.to_enumeration()
 
+            success, effective_premises = are_valid_statements_in_theory_with_variables(s=necessary_premises, t=t,
+                                                                                        variables=transfo.variables,
+                                                                                        variables_values=m)
+            if not success:
+                ir_success = False
             # now that we have a list of necessary premises,
             # we can recursively auto-derive these premises.
-            for necessary_premise in necessary_premises:
-                if not is_valid_statement_with_free_variables_in_theory(phi=necessary_premise, t=t,
-                                                                        free_variables=free_variables):
-                    u1.log_info(f'\t\t\t premise {necessary_premise} is not valid with variables {free_variables}')
-                    ir_success = False
+            # for necessary_premise in necessary_premises:
+            #    if not is_valid_statement_with_free_variables_in_theory(phi=necessary_premise, t=t,
+            #                                                            free_variables=free_variables):
+            #        u1.log_info(f'\t\t\t premise {necessary_premise} is not valid with variables {free_variables}')
+            #        ir_success = False
 
             if ir_success:
                 # if we reach this, it means that all necessary premises
                 # are either already present in the theory, or were successfully auto-derived recursively.
                 # in consequence, we can now safely derive phi.
-                t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises,
+                t, derivation = derive(theory=t, valid_statement=candidate_statement, premises=effective_premises,
                                        inference_rule=ir)
                 return t, True, derivation
             else:
@@ -3321,13 +3324,13 @@ def auto_derive_1(t: FlexibleTheory, phi: FlexibleFormula, debug: bool = False) 
             # ir_success = False
             pass
 
-    if not is_valid_statement_in_theory(phi=phi, t=t):
+    if not is_valid_statement_in_theory(phi=candidate_statement, t=t):
         # we recursively tried to derive phi using all the inference-rules in the theory.
         # it follows that we are unable to derive phi.
         return t, False, None
     else:
         for derivation in t.iterate_derivations():
-            if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
+            if is_formula_equivalent(phi=candidate_statement, psi=derivation.valid_statement):
                 return t, True, derivation
         raise AutoDerivationFailure('Inconsistent behavior during auto-derivation')
 
@@ -3492,7 +3495,7 @@ class ClassicalFormulaTypesetter(pl1.Typesetter):
         first = True
         for term in phi:
             if not first:
-                yield from pl1.symbols.collection_separator.typeset_from_generator(**kwargs)
+                yield from pl1.symbols.comma.typeset_from_generator(**kwargs)
                 yield from pl1.symbols.space.typeset_from_generator(**kwargs)
             else:
                 first = False
@@ -3577,6 +3580,31 @@ class BracketedListTypesetter(pl1.Typesetter):
         yield from self.close_bracket.typeset_from_generator(**kwargs)
 
 
+class MapTypesetter(pl1.Typesetter):
+    def __init__(self):
+        super().__init__()
+
+    def typeset_from_generator(self, phi: Formula, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Map = coerce_map(phi=phi)
+        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        kwargs['is_sub_formula'] = True
+
+        yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
+        first = True
+        for domain_element, codomain_element in zip(phi.domain, phi.codomain):
+            if not first:
+                yield from pl1.symbols.comma.typeset_from_generator(**kwargs)
+                yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+            first = False
+            yield from domain_element.typeset_from_generator(**kwargs)
+            yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+            yield from pl1.symbols.maps_to.typeset_from_generator(**kwargs)
+            yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+            yield from codomain_element.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
+
+
 class Typesetters:
     """A factory of out-of-the-box encodings."""
 
@@ -3602,6 +3630,9 @@ class Typesetters:
 
     def infix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> InfixFormulaTypesetter:
         return InfixFormulaTypesetter(connective_typesetter=connective_typesetter)
+
+    def map(self) -> MapTypesetter:
+        return MapTypesetter()
 
     def transformation(self) -> TransformationTypesetter:
         return TransformationTypesetter()
