@@ -281,29 +281,29 @@ class TestPL5:
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
         t = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
-        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=q)
+        t, x, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='X')
+        t, y, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Y')
+        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=y)
 
         # Add axiom PL05 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl05, )
 
         # Derive: P ⊃ Q
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=p | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_1(t=t, phi=x | is_a | proposition)
         assert success
-        assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=x | is_a | proposition, t=t)
 
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=q | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_1(t=t, phi=y | is_a | proposition)
         assert success
-        assert pu.as1.is_valid_statement_in_theory(phi=q | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=y | is_a | proposition, t=t)
 
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=(p | implies | q) | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_1(t=t, phi=(x | implies | y) | is_a | proposition)
         assert success
-        assert pu.as1.is_valid_statement_in_theory(phi=(p | implies | q) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=(x | implies | y) | is_a | proposition, t=t)
 
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=q | implies | (p | implies | q))
+        t, success, _ = pu.as1.auto_derive_1(t=t, phi=y | implies | (x | implies | y))
         assert success
-        assert pu.as1.is_valid_statement_in_theory(phi=q | implies | (p | implies | q), t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=y | implies | (x | implies | y), t=t)
         # t, _, = pu.as1.derive(
         #    theory=t,
         #    valid_statement=p | implies | q,
@@ -315,7 +315,7 @@ class TestPL5:
         #    inference_rule=pu.ir1.modus_ponens_axiom)
         # TODO: derivation above functions properly
         # TODO: but the following auto-derivation fails, why?????
-        t, success, _ = pu.as1.auto_derive_1(t=t, phi=p | implies | q, debug=True)
+        t, success, _ = pu.as1.auto_derive_1(t=t, phi=x | implies | y, debug=True)
         assert success
         # assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | implies | q, t=t)
         pass

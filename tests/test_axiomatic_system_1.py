@@ -824,6 +824,59 @@ class TestProofByInference:
         pass
 
 
+class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
+    def test_iterate_permutations_of_enumeration_elements_with_fixed_size(self):
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+
+        e = pu.as1.Enumeration()
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=0):
+            i = i + 1
+        assert i == 0
+
+        e = pu.as1.Enumeration(elements=(a,))
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=0):
+            i = i + 1
+        assert i == 0
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=1):
+            i = i + 1
+        assert i == 1
+
+        e = pu.as1.Enumeration(elements=(a, b,))
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=0):
+            i = i + 1
+        assert i == 0
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=1):
+            i = i + 1
+        assert i == 2
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=2):
+            i = i + 1
+        assert i == 2
+
+        e = pu.as1.Enumeration(elements=(a, b, c,))
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=0):
+            i = i + 1
+        assert i == 0
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=1):
+            i = i + 1
+        assert i == 3
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=2):
+            i = i + 1
+        assert i == 6
+        i = 0
+        for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=3):
+            i = i + 1
+        assert i == 6
+
+
 class TestAxiomatization:
     def test_is_well_formed(self):
         # elaborate a theory
