@@ -2201,7 +2201,8 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Fo
 
 def are_valid_statements_in_theory_with_variables(s: FlexibleEnumeration, t: FlexibleTheory,
                                                   variables: FlexibleEnumeration,
-                                                  variables_values: FlexibleMap, debug: bool = False) -> bool:
+                                                  variables_values: FlexibleMap, debug: bool = False) -> typing.Tuple[
+    bool, typing.Optional[Enumeration], typing.Optional[Map]]:
     """Return True if every formula phi in enumeration s is a valid-statement in theory t,
     considering some variables, and some variable values.
     If a variable in variables has not an assigned value, then it is a free variable.
@@ -2234,7 +2235,8 @@ def are_valid_statements_in_theory_with_variables(s: FlexibleEnumeration, t: Fle
     for e in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements, n=permutation_size):
         s2: Enumeration = Enumeration(elements=(*s, *e,))
         if are_valid_statements_in_theory(s=s2, t=t):
-            return True, None, None
+            # TODO: retrieve the variable map and output it? is this needed?
+            return True, s2, None
     return False, None, None
 
 
