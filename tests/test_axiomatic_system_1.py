@@ -1011,31 +1011,48 @@ class TestAutoDerivation:
         # elaborate a theory
         p = pu.as1.let_x_be_a_simple_object(formula_typesetter='P')
         q = pu.as1.let_x_be_a_simple_object(formula_typesetter='Q')
-        t, a1 = pu.as1.let_x_be_an_axiom(theory=None, axiom=pu.as1.Axiom(valid_statement=p))
+        t1, a1 = pu.as1.let_x_be_an_axiom(theory=None, axiom=pu.as1.Axiom(valid_statement=p))
+
+        t1, success, _, = pu.as1.auto_derive_0(t=t1, candidate_statement=p)
+
         if_p_then_q = pu.as1.InferenceRule(
             transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
-        t = pu.as1.extend_theory(if_p_then_q, t=t)
-        pass
-        # auto-derivation of an existing valid-statement
-        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=p)
-        assert success
-        pass
-        # auto-derivation of a simple theorem, without variables
-        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=q)
-        assert success
-        pass
+        t1 = pu.as1.extend_theory(if_p_then_q, t=t1)
+
         with pu.as1.let_x_be_a_variable(formula_typesetter='x') as x, pu.as1.let_x_be_a_variable(
                 formula_typesetter='y') as y:
             x_y_then_x_and_y = pu.as1.InferenceRule(
                 transformation=pu.as1.Transformation(premises=(x, y,), conclusion=x | pu.as1.connectives.land | y,
                                                      variables=(x, y,)))
-        t = pu.as1.Theory(derivations=(*t, x_y_then_x_and_y,))
+        t1 = pu.as1.Theory(derivations=(*t1, x_y_then_x_and_y,))
+
+        pass
+        # auto-derivation of an existing valid-statement
+        t2, success, _, = pu.as1.auto_derive_1(t=t1, candidate_statement=p)
+        assert success
+        pass
+        # auto-derivation of a simple theorem, without variables
+        t2, success, _, = pu.as1.auto_derive_1(t=t2, candidate_statement=q)
+        assert success
+        pass
+
         # auto-derivation of a simple theorem, without some variables
-        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=p | pu.as1.connectives.land | q)
+        t2, success, _, = pu.as1.auto_derive_1(t=t2, candidate_statement=p | pu.as1.connectives.land | q)
         assert success
         pass
         # auto-derivation of an impossible theorem fails and raises an auto-derivation-failure
-        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=p | pu.as1.connectives.lor | q)
+        t2, success, _, = pu.as1.auto_derive_1(t=t2, candidate_statement=p | pu.as1.connectives.lor | q)
+        assert not success
+        pass
+
+        # use auto-derivation-2
+        t3, success, derivation, _ = pu.as1.auto_derive_2(t=t1, candidate_statement=p | pu.as1.connectives.land | q,
+                                                          max_recursion=8, debug=True)
+        assert success
+        pass
+
+        t3, success, derivation, _ = pu.as1.auto_derive_2(t=t1, candidate_statement=p | pu.as1.connectives.lor | q,
+                                                          max_recursion=8, debug=True)
         assert not success
         pass
 

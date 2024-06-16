@@ -3433,15 +3433,17 @@ def auto_derive_2(
             # **********************************************
             permutation_size: int = free_variables.arity
 
+            effective_premises: Enumeration = Enumeration()
+
             if permutation_size == 0:
                 ir_success: bool = True
                 # there are no free variables.
                 # but there may be some or no variables with assigned values.
                 # it follows that 1) there will be no permutations,
                 # and 2) are_valid_statements_in_theory() is equivalent.
-                s_with_variable_substitution: Formula = replace_formulas(phi=necessary_premises, m=m)
-                s_with_variable_substitution: Enumeration = coerce_enumeration(phi=s_with_variable_substitution)
-                for premise_target_statement in s_with_variable_substitution:
+                effective_premises: Formula = replace_formulas(phi=necessary_premises, m=m)
+                effective_premises: Enumeration = coerce_enumeration(phi=effective_premises)
+                for premise_target_statement in effective_premises:
                     if not is_element_of_enumeration(e=premise_target_statement, big_e=statement_exclusion_list):
                         # recursively try to auto-derive the premise
                         t, derivation_success, _, _ = auto_derive_2(t=t, candidate_statement=premise_target_statement,
@@ -3458,12 +3460,12 @@ def auto_derive_2(
                                                                                                 n=permutation_size):
                     permutation_success: bool = True
                     variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
-                    s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
-                    s_with_variable_substitution: Enumeration = coerce_enumeration(
-                        phi=s_with_variable_substitution, strip_duplicates=True)
-                    s_with_permutation: Enumeration = union_enumeration(phi=s_with_variable_substitution,
+                    effective_premises: Formula = replace_formulas(phi=necessary_premises, m=variable_substitution)
+                    effective_premises: Enumeration = coerce_enumeration(
+                        phi=effective_premises, strip_duplicates=True)
+                    effective_premises: Enumeration = union_enumeration(phi=effective_premises,
                                                                         psi=permutation)
-                    for premise_target_statement in s_with_variable_substitution:
+                    for premise_target_statement in effective_premises:
                         if not is_element_of_enumeration(e=premise_target_statement, big_e=statement_exclusion_list):
                             # recursively try to auto-derive the premise
                             t, derivation_success, _, _ = auto_derive_2(
@@ -3483,9 +3485,8 @@ def auto_derive_2(
                 # if we reach this, it means that all necessary premises
                 # are either already present in the theory, or were successfully auto-derived recursively.
                 # in consequence, we can now safely derive phi.
-                # TODO: We can pass the effective-premises down here or use auto-derive-1:
-                XXXXXXXXXXX
-                t, derivation = derive(theory=t, valid_statement=candidate_statement, premises=effective_premises,
+                t, derivation = derive(theory=t, valid_statement=candidate_statement,
+                                       premises=effective_premises,
                                        inference_rule=ir)
                 return t, True, derivation, statement_exclusion_list
             else:
@@ -3500,11 +3501,11 @@ def auto_derive_2(
     if not is_valid_statement_in_theory(phi=candidate_statement, t=t):
         # we recursively tried to derive phi using all the inference-rules in the theory.
         # it follows that we are unable to derive phi.
-        return t, False, None
+        return t, False, None, statement_exclusion_list
     else:
         for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=candidate_statement, psi=derivation.valid_statement):
-                return t, True, derivation
+                return t, True, derivation, statement_exclusion_list
         raise AutoDerivationFailure('Inconsistent behavior during auto-derivation')
 
 
