@@ -3285,7 +3285,6 @@ def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
             # are the necessary premises by substituting the variable values.
             necessary_premises: EnumerationBuilder = EnumerationBuilder(elements=None)
             for original_premise in transfo.premises:
-                # TODO: The bug is here. If we have missing variables, the algorithm is more complex.
                 # we must find a set of premises in the theory
                 # with free-variables.
                 # I see two possible strategies:
@@ -3294,7 +3293,6 @@ def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
                 # 2) develop an algorithm that given a set of premises returns true if they are all valid,
                 #    and then extend this algorithm to support variables.
                 # to avoid the burden of all these conjunctions in the theory, I start with the second approach.
-                # TODO: So let's develop first the function are_valid_statements_in_theory().
                 necessary_premise = replace_formulas(phi=original_premise, m=m)
                 necessary_premises.append(term=necessary_premise)
             necessary_premises: Enumeration = necessary_premises.to_enumeration()
@@ -3304,13 +3302,6 @@ def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
                                                                                         variables_values=m)
             if not success:
                 ir_success = False
-            # now that we have a list of necessary premises,
-            # we can recursively auto-derive these premises.
-            # for necessary_premise in necessary_premises:
-            #    if not is_valid_statement_with_free_variables_in_theory(phi=necessary_premise, t=t,
-            #                                                            free_variables=free_variables):
-            #        u1.log_info(f'\t\t\t premise {necessary_premise} is not valid with variables {free_variables}')
-            #        ir_success = False
 
             if ir_success:
                 # if we reach this, it means that all necessary premises
@@ -3343,133 +3334,153 @@ def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
 auto_derivation_max_formula_depth_preference = 4
 
 
-def auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula) -> \
-        typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
-    global auto_derivation_max_formula_depth_preference
-    max_formula_depth = 3
-    while max_formula_depth <= auto_derivation_max_formula_depth_preference:
-        u1.log_info(f'\tauto-derive max_formula_depth {max_formula_depth}.')
-
-        t, success, derivation, = _auto_derive_2(t=t, phi=phi, premise_exclusion_list=None,
-                                                 max_formula_depth=max_formula_depth)
-        if not success:
-            max_formula_depth = max_formula_depth + 1
-        else:
-            return t, success, derivation
-    u1.log_info(f'\tstop max_formula_depth {max_formula_depth}.')
-    return t, False, None
-
-
-def _auto_derive_2(t: FlexibleTheory, phi: FlexibleFormula, premise_exclusion_list: FlexibleEnumeration = None,
-                   max_formula_depth: int = 1) -> \
-        typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
-    """Try to automatically derive phi as a valid-statement from t, without specifying the premises and inference-rule,
-    enriching t with new theorems as necessary to demonstrate phi.
-
-    Raise an AutoDerivationFailure if the derivation is not successful.
+def auto_derive_2(
+        t: FlexibleTheory, candidate_statement: FlexibleFormula,
+        statement_exclusion_list: FlexibleEnumeration = None, debug: bool = False) -> \
+        typing.Tuple[Theory, bool, typing.Optional[Derivation], FlexibleEnumeration]:
     """
-    u1.log_info(f'auto-derivation target: max-depth:{max_formula_depth} {phi}')
-    if get_formula_depth(phi=phi) > max_formula_depth:
-        u1.log_info(f'\tmax-depth reached, postponing search to next iteration.')
+    recursively try to auto-derive the premises,
+    and this is complex because of free-variables.
+    proposed approach:
+           loop on candidate inference-rules:
+               loop on all combinations of premises, taking into account free variables,
+               that may yield the conclusion.
+               recursively call auto-derive-2 for more depth,
+               or call auto-derive-1 to stop at the next level.
+
+    :param t:
+    :param candidate_statement:
+    :param statement_exclusion_list:
+    :param debug:
+    :return:
+    """
+    if debug:
+        pass
+    global auto_derivation_max_formula_depth_preference
+    max_formula_depth: int = 3
+    t: Theory = coerce_theory(phi=t)
+    candidate_statement: Formula = coerce_formula(phi=candidate_statement)
+    statement_exclusion_list: Enumeration = coerce_enumeration(phi=statement_exclusion_list)
+    u1.log_info(f'auto-derivation-2 target: {candidate_statement}')
+
+    # as a first step, attempt to auto-derive the target-statement with the less powerful,
+    # but less expansive auto-derivation-1 method:
+    t, successful, derivation, = auto_derive_1(t=t, candidate_statement=candidate_statement, debug=debug)
+    if successful:
+        return t, successful, derivation, None
+
+    # loop through all theory inference-rules to find those that could potentially derive the target-statement.
+    # these are the inference-rules whose conclusions are formula-equivalent-with-variables to the target-statement.
+    for ir in t.iterate_inference_rules():
+        ir_success: bool = True
+        transfo: Transformation = ir.transformation
+        conclusion: Formula = ir.transformation.conclusion
+        if is_formula_equivalent_with_variables(phi=candidate_statement, psi=transfo.conclusion,
+                                                variables=transfo.variables):
+            # this inference-rule may potentially yield target phi as a valid-statement,
+            u1.log_info(
+                f'candidate inference-rule: {ir.transformation.conclusion} from premises {ir.transformation.premises}')
+
+            # we want to list what would be the required premises to yield phi.
+            # for this we need to "reverse-engineer" the inference-rule.
+
+            # first determine what are the necessary variable values in the transformation.
+            # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
+            # an empty map-builder:
+            output, m, = is_formula_equivalent_with_variables_2(phi=candidate_statement, psi=transfo.conclusion,
+                                                                variables=transfo.variables,
+                                                                variables_fixed_values=None)
+            u1.log_info(f'\t\t variable maps from conclusion: {m}')
+
+            # then we list the variables for which we don't have an assigned value,
+            # called the free-variables.
+            free_variables: Enumeration = Enumeration()
+            for x in transfo.variables:
+                if not is_element_of_enumeration(e=x, big_e=m.domain):
+                    free_variables = Enumeration(elements=(*free_variables, x,))
+            u1.log_info(f'\t\t free-variables: {free_variables}')
+
+            # now that we know what are the necessary variable values, we can determine what
+            # are the necessary premises by substituting the variable values.
+            necessary_premises: EnumerationBuilder = EnumerationBuilder(elements=None)
+            for original_premise in transfo.premises:
+                # we must find a set of premises in the theory
+                # with free-variables.
+                # I see two possible strategies:
+                # 1) elaborate a new single proposition with the conjunction P1 and P2 and ... and Pn with all premises
+                #    and then try to find that proposition in the theory, taking into account variables.
+                # 2) develop an algorithm that given a set of premises returns true if they are all valid,
+                #    and then extend this algorithm to support variables.
+                # to avoid the burden of all these conjunctions in the theory, I start with the second approach.
+                necessary_premise = replace_formulas(phi=original_premise, m=m)
+                necessary_premises.append(term=necessary_premise)
+            necessary_premises: Enumeration = necessary_premises.to_enumeration()
+
+            # the following step is where auto-derivation-2 is different from auto-derivation-1.
+            # we are not assuming that there should exist valid premises to derive the target statement,
+            # but instead we recursively auto-derive all required effective premises
+            # hoping to eventually derive the target statement.
+
+            # **********************************************
+            permutation_size: int = free_variables.arity
+
+            if permutation_size == 0:
+                # there are no free variables.
+                # but there may be some or no variables with assigned values.
+                # it follows that 1) there will be no permutations,
+                # and 2) are_valid_statements_in_theory() is equivalent.
+                s_with_variable_substitution: Formula = replace_formulas(phi=necessary_premises, m=m)
+                s_with_variable_substitution: Enumeration = coerce_enumeration(phi=s_with_variable_substitution)
+                valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
+                if valid:
+                    # in practice this should never happen because we called auto-derive-1 initially.
+                    ir_success = True
+                else:
+            # TODO: Recursively try to auto-derive the premises.
+            else:
+                valid_statements = iterate_valid_statements_in_theory(t=t)
+                for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
+                                                                                                n=permutation_size):
+                    variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
+                    s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
+                    s_with_variable_substitution: Enumeration = coerce_enumeration(
+                        phi=s_with_variable_substitution, strip_duplicates=True)
+                    s_with_permutation: Enumeration = union_enumeration(phi=s_with_variable_substitution,
+                                                                        psi=permutation)
+                    if are_valid_statements_in_theory(s=s_with_permutation, t=t):
+                        # All premises are valid, we can proceed with direct derivation.
+                        return True, s_with_permutation
+                    else:
+                # TODO: Try to recursively auto-derive the premises.
+                return False, None
+
+            # **********************************************
+            if ir_success:
+                # if we reach this, it means that all necessary premises
+                # are either already present in the theory, or were successfully auto-derived recursively.
+                # in consequence, we can now safely derive phi.
+                t, derivation = derive(theory=t, valid_statement=candidate_statement, premises=effective_premises,
+                                       inference_rule=ir)
+                return t, True, derivation
+            else:
+                # u1.log_info(f'\tir was not conclusive: {ir.transformation}')
+                # ir_success = False
+                pass
+        else:
+            # the conclusion of this inference-rule is not interesting
+            u1.log_info(f'\t\t inference-rule conclusion is not interesting: {ir.transformation.conclusion}')
+            # ir_success = False
+            pass
+
+    if not is_valid_statement_in_theory(phi=candidate_statement, t=t):
+        # we recursively tried to derive phi using all the inference-rules in the theory.
+        # it follows that we are unable to derive phi.
         return t, False, None
-    if premise_exclusion_list is None:
-        premise_exclusion_list: EnumerationBuilder = EnumerationBuilder(elements=None)
-
-    if premise_exclusion_list.has_element(phi=phi):
-        return t, False, None
-
-    # append phi to the exclusion list of premises,
-    # to avoid circular attempts to auto-derive theorems.
-    premise_exclusion_list.append(term=phi)
-
-    if is_valid_statement_in_theory(phi=phi, t=t):
-        # phi is already a valid-statement with regard to t,
-        # no complementary derivation is necessary.
-
+    else:
         for derivation in t.iterate_derivations():
-            if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
+            if is_formula_equivalent(phi=candidate_statement, psi=derivation.valid_statement):
                 return t, True, derivation
         raise AutoDerivationFailure('Inconsistent behavior during auto-derivation')
-    else:
-        # phi is not a valid-statement with regard to t,
-        # thus it may be possible to derive phi with complementary theorems in t.
-
-        # find the inference-rules in t that could derive phi.
-        # these are the inference-rules whose conclusions are formula-equivalent-with-variables to phi.
-        # ir_list = list(t.inference_rules)
-        # random.shuffle(ir_list)
-        # for ir in ir_list:
-        for ir in t.iterate_inference_rules():
-            ir_success: bool = True
-            ir: InferenceRule
-            u1.log_info(f'\tinference-rule: {ir.transformation}')
-            transfo: Transformation = ir.transformation
-            if any(is_in_formula_tree(phi=variable, psi=phi) for variable in transfo.variables):
-                u1.log_info(f'\tsome variable is present in the target {phi}')
-                ir_success = False
-            elif is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables):
-                # this inference-rule may potentially yield a valid-statement,
-                # that would be formula-equivalent to phi.
-                # u1.log_info(f'\t\t good candidate')
-
-                # we want to list what would be the required premises to yield phi.
-                # for this we need to "reverse-engineer" the inference-rule.
-
-                # first we should determine what are the necessary variable values in the transformation.
-                # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
-                # an empty map-builder:
-                m: MapBuilder = MapBuilder()
-                is_formula_equivalent_with_variables(phi=phi, psi=transfo.conclusion, variables=transfo.variables,
-                                                     variables_fixed_values=m)
-
-                # now that we know what are the necessary variable values, we can determine what
-                # are the necessary premises by substituting the variable values.
-                necessary_premises: EnumerationBuilder = EnumerationBuilder(elements=None)
-                for original_premise in transfo.premises:
-                    necessary_premise = replace_formulas(phi=original_premise, m=m)
-                    necessary_premises.append(term=necessary_premise)
-                necessary_premises: Enumeration = necessary_premises.to_enumeration()
-
-                # now that we have a list of necessary premises,
-                # we can recursively auto-derive these premises.
-                for necessary_premise in necessary_premises:
-                    # u1.log_info(f'\t\t\t necessary_premise: {necessary_premise}')
-
-                    necessary_premise_success: bool = False
-                    t, necessary_premise_success, _ = _auto_derive_2(t=t, phi=necessary_premise,
-                                                                     premise_exclusion_list=premise_exclusion_list,
-                                                                     max_formula_depth=max_formula_depth)
-                    if not necessary_premise_success:
-                        ir_success = False
-
-                if ir_success:
-                    # if we reach this, it means that all necessary premises
-                    # are either already present in the theory, or were successfully auto-derived recursively.
-                    # in consequence, we can now safely derive phi.
-                    # u1.log_info(f'\twe should now be able to derive: {phi}')
-                    # u1.log_info(f'\t\twith necessary_premises: {necessary_premises}')
-                    # u1.log_info(f'\t\t and inference-rule: {ir}')
-                    t, derivation = derive(theory=t, valid_statement=phi, premises=necessary_premises,
-                                           inference_rule=ir)
-                    # u1.log_info(f'\t auto-derivation success: {derivation}')
-                    return t, True, derivation
-                else:
-                    # u1.log_info(f'\tir was not conclusive: {ir.transformation}')
-                    ir_success = False
-            else:
-                # the conclusion of this inference-rule is not interesting
-                # u1.log_info(f'\tir has not interesting conclusion: {ir.transformation}')
-                ir_success = False
-
-        if not is_valid_statement_in_theory(phi=phi, t=t):
-            # we recursively tried to derive phi using all the inference-rules in the theory.
-            # it follows that we are unable to derive phi.
-            return t, False, None
-        else:
-            for derivation in t.iterate_derivations():
-                if is_formula_equivalent(phi=phi, psi=derivation.valid_statement):
-                    return t, True, derivation
-            raise AutoDerivationFailure('Inconsistent behavior during auto-derivation')
 
 
 # PRESENTATION LAYER

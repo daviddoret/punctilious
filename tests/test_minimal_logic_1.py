@@ -121,8 +121,8 @@ class TestPL2:
         # Elaborate a basic theory with P and Q as a propositional-variables
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=q | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=p | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=q | is_a | proposition)
 
         # Add axiom PL02 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl02, )
@@ -177,9 +177,9 @@ class TestPL3:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=q | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=r | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=p | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=q | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl03, )
@@ -256,16 +256,16 @@ class TestPL4:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=q | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, phi=r | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=p | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=q | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl04, )
 
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (p | implies | r)
-        t, _, _ = pu.as1.auto_derive_2(t=t, phi=phi)
+        t, _, _ = pu.as1.auto_derive_2(t=t, candidate_statement=phi)
         assert pu.as1.is_valid_statement_in_theory(
             phi=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (p | implies | r)),
