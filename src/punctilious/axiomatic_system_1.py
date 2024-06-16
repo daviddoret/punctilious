@@ -3336,7 +3336,7 @@ auto_derivation_max_formula_depth_preference = 4
 
 def auto_derive_2(
         t: FlexibleTheory, candidate_statement: FlexibleFormula,
-        statement_exclusion_list: FlexibleEnumeration = None, debug: bool = False) -> \
+        statement_exclusion_list: FlexibleEnumeration = None, max_recursion: int = 3, debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation], FlexibleEnumeration]:
     """
     recursively try to auto-derive the premises,
@@ -3348,6 +3348,7 @@ def auto_derive_2(
                recursively call auto-derive-2 for more depth,
                or call auto-derive-1 to stop at the next level.
 
+    :param max_recursion:
     :param t:
     :param candidate_statement:
     :param statement_exclusion_list:
@@ -3357,7 +3358,6 @@ def auto_derive_2(
     if debug:
         pass
     global auto_derivation_max_formula_depth_preference
-    max_formula_depth: int = 3
     t: Theory = coerce_theory(phi=t)
     candidate_statement: Formula = coerce_formula(phi=candidate_statement)
     statement_exclusion_list: Enumeration = coerce_enumeration(phi=statement_exclusion_list)
@@ -3368,6 +3368,15 @@ def auto_derive_2(
     t, successful, derivation, = auto_derive_1(t=t, candidate_statement=candidate_statement, debug=debug)
     if successful:
         return t, successful, derivation, None
+
+    # to prevent infinite loops, we populate an exclusion list of statements that are already
+    # being searched in higher recursions.
+    statement_exclusion_list = Enumeration(elements=(*statement_exclusion_list, candidate_statement,))
+
+    max_recursion = max_recursion - 1
+    if max_recursion < 1:
+        # We reached the max-recursion, it follows that auto-derivation failed.
+        return t, False, None, statement_exclusion_list
 
     # loop through all theory inference-rules to find those that could potentially derive the target-statement.
     # these are the inference-rules whose conclusions are formula-equivalent-with-variables to the target-statement.
@@ -3425,46 +3434,62 @@ def auto_derive_2(
             permutation_size: int = free_variables.arity
 
             if permutation_size == 0:
+                ir_success: bool = True
                 # there are no free variables.
                 # but there may be some or no variables with assigned values.
                 # it follows that 1) there will be no permutations,
                 # and 2) are_valid_statements_in_theory() is equivalent.
                 s_with_variable_substitution: Formula = replace_formulas(phi=necessary_premises, m=m)
                 s_with_variable_substitution: Enumeration = coerce_enumeration(phi=s_with_variable_substitution)
-                valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
-                if valid:
-                    # in practice this should never happen because we called auto-derive-1 initially.
-                    ir_success = True
-                else:
-            # TODO: Recursively try to auto-derive the premises.
+                for premise_target_statement in s_with_variable_substitution:
+                    if not is_element_of_enumeration(e=premise_target_statement, big_e=statement_exclusion_list):
+                        # recursively try to auto-derive the premise
+                        t, derivation_success, _, _ = auto_derive_2(t=t, candidate_statement=premise_target_statement,
+                                                                    statement_exclusion_list=statement_exclusion_list,
+                                                                    max_recursion=max_recursion - 1, debug=debug)
+                        if not derivation_success:
+                            ir_success = False
+                            break
+
             else:
+                ir_success: bool = False
                 valid_statements = iterate_valid_statements_in_theory(t=t)
                 for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                                 n=permutation_size):
+                    permutation_success: bool = True
                     variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
                     s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
                     s_with_variable_substitution: Enumeration = coerce_enumeration(
                         phi=s_with_variable_substitution, strip_duplicates=True)
                     s_with_permutation: Enumeration = union_enumeration(phi=s_with_variable_substitution,
                                                                         psi=permutation)
-                    if are_valid_statements_in_theory(s=s_with_permutation, t=t):
-                        # All premises are valid, we can proceed with direct derivation.
-                        return True, s_with_permutation
-                    else:
-                # TODO: Try to recursively auto-derive the premises.
-                return False, None
+                    for premise_target_statement in s_with_variable_substitution:
+                        if not is_element_of_enumeration(e=premise_target_statement, big_e=statement_exclusion_list):
+                            # recursively try to auto-derive the premise
+                            t, derivation_success, _, _ = auto_derive_2(
+                                t=t, candidate_statement=premise_target_statement,
+                                statement_exclusion_list=statement_exclusion_list,
+                                max_recursion=max_recursion - 1, debug=debug)
+                            if not derivation_success:
+                                permutation_success = False
+                                break
+                    if permutation_success:
+                        # a single permutation success is sufficient, we can stop the research here
+                        ir_success = True
+                        break
 
             # **********************************************
             if ir_success:
                 # if we reach this, it means that all necessary premises
                 # are either already present in the theory, or were successfully auto-derived recursively.
                 # in consequence, we can now safely derive phi.
+                # TODO: We can pass the effective-premises down here or use auto-derive-1:
+                XXXXXXXXXXX
                 t, derivation = derive(theory=t, valid_statement=candidate_statement, premises=effective_premises,
                                        inference_rule=ir)
-                return t, True, derivation
+                return t, True, derivation, statement_exclusion_list
             else:
-                # u1.log_info(f'\tir was not conclusive: {ir.transformation}')
-                # ir_success = False
+                # this inference-rule did not led to a successful derivation of the candidate-statement.
                 pass
         else:
             # the conclusion of this inference-rule is not interesting
