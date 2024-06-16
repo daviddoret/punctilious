@@ -3220,8 +3220,8 @@ def auto_derive_0(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
             if is_formula_equivalent(phi=candidate_statement, psi=derivation.valid_statement):
                 # the valid-statement of this derivation matches phi,
                 # the auto-derivation is successful.
-                if debug:
-                    u1.log_info(f'auto-derivation-0 successful: {derivation}')
+                # if debug:
+                # u1.log_info(f'auto-derivation-0 successful: {derivation}')
                 return t, True, derivation
     # all derivations have been tested and none matched phi,
     # it follows that the auto-derivation failed.
@@ -3239,7 +3239,7 @@ def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
     """
     t = coerce_theory(phi=t)
     candidate_statement = coerce_formula(phi=candidate_statement)
-    u1.log_info(f'auto-derivation-1 target: {candidate_statement}')
+    # u1.log_info(f'auto-derivation-1 target: {candidate_statement}')
 
     t, successful, derivation, = auto_derive_0(t=t, candidate_statement=candidate_statement, debug=debug)
     if successful:
@@ -3255,14 +3255,14 @@ def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
     for ir in t.iterate_inference_rules():
         ir_success: bool = True
         ir: InferenceRule
-        u1.log_info(
-            f'\t inference-rule: {ir.transformation.conclusion} from premises {ir.transformation.premises}')
+        # u1.log_info(
+        #    f'\t inference-rule: {ir.transformation.conclusion} from premises {ir.transformation.premises}')
         transfo: Transformation = ir.transformation
         conclusion: Formula = ir.transformation.conclusion
         if is_formula_equivalent_with_variables(phi=candidate_statement, psi=transfo.conclusion,
                                                 variables=transfo.variables):
             # this inference-rule may potentially yield target phi as a valid-statement,
-            u1.log_info(f'\t\t inference-rule is candidate')
+            # u1.log_info(f'\t\t inference-rule is candidate')
 
             # we want to list what would be the required premises to yield phi.
             # for this we need to "reverse-engineer" the inference-rule.
@@ -3273,13 +3273,13 @@ def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
             output, m, = is_formula_equivalent_with_variables_2(phi=candidate_statement, psi=transfo.conclusion,
                                                                 variables=transfo.variables,
                                                                 variables_fixed_values=None)
-            u1.log_info(f'\t\t variable maps from conclusion: {m}')
+            # u1.log_info(f'\t\t variable maps from conclusion: {m}')
 
             free_variables: Enumeration = Enumeration()
             for x in transfo.variables:
                 if not is_element_of_enumeration(e=x, big_e=m.domain):
                     free_variables = Enumeration(elements=(*free_variables, x,))
-            u1.log_info(f'\t\t free-variables: {free_variables}')
+            # u1.log_info(f'\t\t free-variables: {free_variables}')
 
             # now that we know what are the necessary variable values, we can determine what
             # are the necessary premises by substituting the variable values.
@@ -3316,7 +3316,7 @@ def auto_derive_1(t: FlexibleTheory, candidate_statement: FlexibleFormula, debug
                 pass
         else:
             # the conclusion of this inference-rule is not interesting
-            u1.log_info(f'\t\t inference-rule conclusion is not interesting: {ir.transformation.conclusion}')
+            # u1.log_info(f'\t\t inference-rule conclusion is not interesting: {ir.transformation.conclusion}')
             # ir_success = False
             pass
 
@@ -3361,7 +3361,7 @@ def auto_derive_2(
     t: Theory = coerce_theory(phi=t)
     candidate_statement: Formula = coerce_formula(phi=candidate_statement)
     statement_exclusion_list: Enumeration = coerce_enumeration(phi=statement_exclusion_list)
-    u1.log_info(f'auto-derivation-2 target: {candidate_statement}')
+    # u1.log_info(f'auto-derivation-2 target: {candidate_statement}')
 
     # as a first step, attempt to auto-derive the target-statement with the less powerful,
     # but less expansive auto-derivation-1 method:
@@ -3387,8 +3387,8 @@ def auto_derive_2(
         if is_formula_equivalent_with_variables(phi=candidate_statement, psi=transfo.conclusion,
                                                 variables=transfo.variables):
             # this inference-rule may potentially yield target phi as a valid-statement,
-            u1.log_info(
-                f'candidate inference-rule: {ir.transformation.conclusion} from premises {ir.transformation.premises}')
+            # u1.log_info(
+            #    f'candidate inference-rule: {ir.transformation.conclusion} from premises {ir.transformation.premises}')
 
             # we want to list what would be the required premises to yield phi.
             # for this we need to "reverse-engineer" the inference-rule.
@@ -3399,7 +3399,7 @@ def auto_derive_2(
             output, m, = is_formula_equivalent_with_variables_2(phi=candidate_statement, psi=transfo.conclusion,
                                                                 variables=transfo.variables,
                                                                 variables_fixed_values=None)
-            u1.log_info(f'\t\t variable maps from conclusion: {m}')
+            # u1.log_info(f'\t\t variable maps from conclusion: {m}')
 
             # then we list the variables for which we don't have an assigned value,
             # called the free-variables.
@@ -3407,7 +3407,7 @@ def auto_derive_2(
             for x in transfo.variables:
                 if not is_element_of_enumeration(e=x, big_e=m.domain):
                     free_variables = Enumeration(elements=(*free_variables, x,))
-            u1.log_info(f'\t\t free-variables: {free_variables}')
+            # u1.log_info(f'\t\t free-variables: {free_variables}')
 
             # now that we know what are the necessary variable values, we can determine what
             # are the necessary premises by substituting the variable values.
@@ -3446,9 +3446,12 @@ def auto_derive_2(
                 for premise_target_statement in effective_premises:
                     if not is_element_of_enumeration(e=premise_target_statement, big_e=statement_exclusion_list):
                         # recursively try to auto-derive the premise
-                        t, derivation_success, _, _ = auto_derive_2(t=t, candidate_statement=premise_target_statement,
-                                                                    statement_exclusion_list=statement_exclusion_list,
-                                                                    max_recursion=max_recursion - 1, debug=debug)
+                        t, derivation_success, _, statement_exclusion_list = auto_derive_2(
+                            t=t,
+                            candidate_statement=premise_target_statement,
+                            statement_exclusion_list=statement_exclusion_list,
+                            max_recursion=max_recursion - 1,
+                            debug=debug)
                         if not derivation_success:
                             ir_success = False
                             break
@@ -3468,7 +3471,7 @@ def auto_derive_2(
                     for premise_target_statement in effective_premises:
                         if not is_element_of_enumeration(e=premise_target_statement, big_e=statement_exclusion_list):
                             # recursively try to auto-derive the premise
-                            t, derivation_success, _, _ = auto_derive_2(
+                            t, derivation_success, _, statement_exclusion_list = auto_derive_2(
                                 t=t, candidate_statement=premise_target_statement,
                                 statement_exclusion_list=statement_exclusion_list,
                                 max_recursion=max_recursion - 1, debug=debug)
@@ -3494,7 +3497,7 @@ def auto_derive_2(
                 pass
         else:
             # the conclusion of this inference-rule is not interesting
-            u1.log_info(f'\t\t inference-rule conclusion is not interesting: {ir.transformation.conclusion}')
+            # u1.log_info(f'\t\t inference-rule conclusion is not interesting: {ir.transformation.conclusion}')
             # ir_success = False
             pass
 
