@@ -1142,11 +1142,11 @@ def let_x_be_an_inference_rule(theory: FlexibleTheory,
 
     if isinstance(theory, Axiomatization):
         theory = Axiomatization(derivations=(*theory, inference_rule,))
-        u1.log_info(inference_rule.typeset_as_string())
+        u1.log_info(inference_rule.typeset_as_string(theory=theory))
         return theory, inference_rule
     elif isinstance(theory, Theory):
         theory = Theory(derivations=(*theory, inference_rule,))
-        u1.log_info(inference_rule.typeset_as_string())
+        u1.log_info(inference_rule.typeset_as_string(theory=theory))
         return theory, inference_rule
     else:
         raise Exception('oops')
@@ -1181,11 +1181,11 @@ def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[F
 
     if isinstance(theory, Axiomatization):
         theory = Axiomatization(derivations=(*theory, axiom,))
-        u1.log_info(axiom.typeset_as_string())
+        u1.log_info(axiom.typeset_as_string(theory=theory))
         return theory, axiom
     elif isinstance(theory, Theory):
         theory = Theory(derivations=(*theory, axiom,))
-        u1.log_info(axiom.typeset_as_string())
+        u1.log_info(axiom.typeset_as_string(theory=theory))
         return theory, axiom
     else:
         raise Exception('oops 3')
@@ -2133,13 +2133,13 @@ def is_well_formed_inference_rule(phi: FlexibleFormula) -> bool:
     if isinstance(phi, InferenceRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif (phi.connective is not connectives.follows_from or
-          not phi.arity == 2 or
-          not is_well_formed_transformation(phi=phi.term_0) or
-          phi.term_1.connective is not connectives.inference_rule):
-        return False
-    else:
+    elif (phi.connective is connectives.follows_from and
+          phi.arity == 2 and
+          is_well_formed_transformation(phi=phi.term_0) and
+          phi.term_1.connective is connectives.inference_rule):
         return True
+    else:
+        return False
 
 
 def is_valid_statement_in_theory(phi: FlexibleFormula, t: FlexibleTheory) -> bool:
@@ -3662,20 +3662,45 @@ class DerivationTypesetter(pl1.Typesetter):
                                **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Derivation = coerce_derivation(phi=phi)
+        if theory is not None:
+            i: int = 1 + get_index_of_first_equivalent_term_in_formula(phi=phi, psi=theory)
+            yield f'({i})\t'
         yield from phi.valid_statement.typeset_from_generator(**kwargs)
         if is_well_formed_axiom(phi=phi):
             phi: Axiom = coerce_axiom(phi=phi)
-            yield '\t|\tThis is an axiom.'
+            yield '\t\t| Axiom.'
         elif is_well_formed_inference_rule(phi=phi):
             phi: InferenceRule = coerce_inference_rule(phi=phi)
-            yield '\t|\tThis is an inference rule.'
+            yield '\t\t| Inference rule.'
         elif is_well_formed_theorem(phi=phi):
             phi: Theorem = coerce_theorem(phi=phi)
             inference: Inference = phi.inference
-            yield '\t|\tThis is a theorem that follows from '
-            yield from phi.inference.transformation_rule.typeset_as_string(**kwargs)
-            yield ' given '
-            yield from phi.inference.premises.typeset_as_string(**kwargs)
+            transformation: Transformation = inference.transformation_rule
+            yield '\t\t| Follows from '
+            if theory is not None:
+                # yield from phi.inference.transformation_rule.typeset_as_string(**kwargs)
+                i = 0
+                j = 0
+                for ir in theory:
+                    if is_well_formed_inference_rule(phi=ir):
+                        ir: InferenceRule
+                        if is_formula_equivalent(phi=ir.transformation, psi=transformation):
+                            j = i
+                    i = i + 1
+                yield f'({j}) given '
+                # yield from phi.inference.premises.typeset_as_string(**kwargs)
+                first = True
+                for premise in phi.inference.premises:
+                    i: int = 1 + get_index_of_first_equivalent_term_in_formula(phi=premise, psi=theory.valid_statements)
+                    if not first:
+                        yield ', '
+                    yield f'({i})'
+                    first = False
+            else:
+                yield from inference.typeset_as_string(**kwargs)
+            # for premise in phi.inference.premises:
+            #    i: int = 1 + get_index_of_first_equivalent_term_in_formula(phi=premise, psi=theory)
+            #    yield f'({i})\t'
             yield '.'
 
 
