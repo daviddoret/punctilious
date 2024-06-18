@@ -5,6 +5,7 @@ import punctilious as pu
 # retrieve some basic vocabulary
 is_a = pu.as1.connectives.is_a
 propositional_variable = pu.as1.connectives.propositional_variable
+lor = pu.as1.connectives.lor
 land = pu.as1.connectives.land
 proposition = pu.as1.connectives.proposition
 implies = pu.as1.connectives.implies
@@ -322,4 +323,14 @@ class TestPL5:
 
         t3, success, _, _ = pu.as1.auto_derive_3(t=t1, conjecture=x | implies | y, debug=True, max_recursion=5)
         assert success
+        pass
+
+
+class TestComplete:
+    def test_mancosu_page_20(self, caplog):
+        t = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
+        t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='p1')
+        t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='p2')
+        t, success, derivation, _ = pu.as1.auto_derive_3(t=t, conjecture=p1 | implies | (p2 | lor | p1),
+                                                         max_recursion=11)
         pass

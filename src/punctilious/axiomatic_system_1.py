@@ -715,12 +715,7 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
     """
     phi: Enumeration = coerce_enumeration(phi=phi)
     psi: Enumeration = coerce_enumeration(phi=psi)
-    eb: EnumerationBuilder = EnumerationBuilder(elements=None)
-    for phi_prime in phi:
-        eb.append(term=phi_prime)
-    for psi_prime in psi:
-        eb.append(term=psi_prime)
-    e: Enumeration = eb.to_enumeration()
+    e: Enumeration = Enumeration(elements=(*phi, *psi,), strip_duplicates=True)
     return e
 
 
@@ -3351,8 +3346,8 @@ auto_derivation_max_formula_depth_preference = 4
 
 
 def auto_derive_3(
-        t: FlexibleTheory, conjecture: FlexibleFormula,
-        conjecture_exclusion_list: FlexibleEnumeration = None, max_recursion: int = 3, debug: bool = False) -> \
+        t: FlexibleTheory, conjecture: FlexibleFormula, max_recursion: int = 3,
+        conjecture_exclusion_list: FlexibleEnumeration = None, debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation], FlexibleEnumeration]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
