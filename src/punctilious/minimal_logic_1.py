@@ -41,27 +41,14 @@ import typing
 import axiomatic_system_1 as as1
 import inference_rules_1 as ir1
 
-
 # Propositional logic vocabulary
 
-class Connectives(typing.NamedTuple):
-    implies: as1.BinaryConnective
-    land: as1.BinaryConnective
-    lnot: as1.UnaryConnective
-    propositional_variable: as1.SimpleObject
-
-
-connectives: Connectives = Connectives(
-    implies=as1.connectives.implies,
-    land=as1.connectives.land,
-    lnot=as1.connectives.lnot,
-    propositional_variable=as1.connectives.propositional_variable,
-)
 
 # retrieve vocabulary from axiomatic-system-1
 is_a = as1.connectives.is_a
 implies = as1.connectives.implies
 land = as1.connectives.land
+lor = as1.connectives.lor
 lnot = as1.connectives.lnot
 propositional_variable = as1.connectives.propositional_variable
 proposition = as1.connectives.proposition
@@ -198,13 +185,140 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     """
     pass
 
-# - PL6. (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵
-# - PL7. 𝐴 ⊃ (𝐴 ∨ 𝐵)
-# - PL8. (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴)
-# - PL9. [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
-# - PL10. [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
+        formula_typesetter='b') as b:
+    pl06: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition),
+            conclusion=(b | land | (a | implies | b)) | implies | b,
+            variables=(a, b,)))
+    """The PL06 axiom schema: (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵.
 
-axiomatization = as1.Axiomatization(derivations=(pl01, pl02, pl03, pl04,))
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+
+    Conclusion: 
+    (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵
+
+    Variables:
+    {A, B}
+
+    Original axiom: 
+    PL6. (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵. (Mancosu et al., p. 19).
+    """
+    pass
+
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
+        formula_typesetter='b') as b:
+    pl07: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition),
+            conclusion=a | implies | (a | lor | b),
+            variables=(a, b,)))
+    """The PL07 axiom schema: 𝐴 ⊃ (𝐴 ∨ 𝐵).
+
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+
+    Conclusion: 
+    𝐴 ⊃ (𝐴 ∨ 𝐵)
+
+    Variables:
+    {A, B}
+
+    Original axiom: 
+    PL7. 𝐴 ⊃ (𝐴 ∨ 𝐵). (Mancosu et al., p. 19).
+    """
+    pass
+
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
+        formula_typesetter='b') as b:
+    pl08: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition),
+            conclusion=(a | lor | b) | implies | (b | lor | a),
+            variables=(a, b,)))
+    """The PL08 axiom schema: (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴).
+
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+
+    Conclusion: 
+    (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴)
+
+    Variables:
+    {A, B}
+
+    Original axiom: 
+    PL8. (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴). (Mancosu et al., p. 19).
+    """
+    pass
+
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
+        formula_typesetter='b') as b:
+    pl09: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition,
+             c | is_a | proposition),
+            conclusion=((a | implies | c) | land | (b | implies | c)) | implies | ((a | lor | b) | implies | c),
+            variables=(a, b,)))
+    """The PL09 axiom schema: [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶].
+
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+     - C is-a proposition
+
+    Conclusion: 
+    [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]
+
+    Variables:
+    {A, B, C}
+
+    Original axiom: 
+    PL9. [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶]. (Mancosu et al., p. 19).
+    """
+    pass
+
+with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
+        formula_typesetter='b') as b:
+    pl10: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            premises=
+            (a | is_a | proposition,
+             b | is_a | proposition),
+            conclusion=((a | implies | b) | land | (a | implies | lnot(b))) | implies | lnot(a),
+            variables=(a, b,)))
+    """The PL10 axiom schema:  [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴.
+
+    Premises:
+     - A is-a proposition
+     - B is-a proposition
+     - C is-a proposition
+
+    Conclusion: 
+    [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴
+
+    Variables:
+    {A, B, C}
+
+    Original axiom: 
+    PL10. [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴. (Mancosu et al., p. 19).
+    """
+    pass
+
+axiomatization = as1.Axiomatization(derivations=(pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10))
 
 extended_theory = as1.Theory(derivations=(*axiomatization,))
 
