@@ -222,7 +222,7 @@ def let_x_be_a_propositional_variable(
             t, _ = as1.let_x_be_an_axiom(theory=t,
                                          valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
             t, _ = as1.derive(theory=t,
-                              valid_statement=x | is_a | proposition,
+                              conjecture=x | is_a | proposition,
                               premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
                               inference_rule=i1)
         return t, *propositional_variables

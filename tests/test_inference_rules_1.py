@@ -37,21 +37,21 @@ def theory(a, b, c):
 
     # derive: a is-a proposition
     theory, _, = pu.as1.derive(theory=theory,
-                               valid_statement=a | is_a | proposition,
+                               conjecture=a | is_a | proposition,
                                premises=(a | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
     assert pu.as1.is_valid_statement_in_theory(phi=a | is_a | proposition, t=theory)
 
     # derive: b is-a proposition
     theory, _, = pu.as1.derive(theory=theory,
-                               valid_statement=b | is_a | proposition,
+                               conjecture=b | is_a | proposition,
                                premises=(b | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
     assert pu.as1.is_valid_statement_in_theory(phi=b | is_a | proposition, t=theory)
 
     # derive: c is-a proposition
     theory, _, = pu.as1.derive(theory=theory,
-                               valid_statement=c | is_a | proposition,
+                               conjecture=c | is_a | proposition,
                                premises=(c | is_a | propositional_variable,),
                                inference_rule=pu.pls1.i1)
     assert pu.as1.is_valid_statement_in_theory(phi=c | is_a | proposition, t=theory)
@@ -67,7 +67,7 @@ class TestAdjunction:
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   valid_statement=a | land | b,
+                                   conjecture=a | land | b,
                                    premises=(
                                        a | is_a | proposition,
                                        b | is_a | proposition,
@@ -80,7 +80,7 @@ class TestAdjunction:
         with pytest.raises(pu.as1.CustomException, match='e105'):
             # wrong theory
             pu.as1.derive(theory=theory,
-                          valid_statement=a | land | c,
+                          conjecture=a | land | c,
                           premises=(
                               a | is_a | proposition,
                               c | is_a | proposition,
@@ -95,7 +95,7 @@ class TestSimplification1:
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   valid_statement=a,
+                                   conjecture=a,
                                    premises=(
                                        a | is_a | proposition,
                                        b | is_a | proposition,
@@ -107,7 +107,7 @@ class TestSimplification1:
         with pytest.raises(pu.as1.CustomException, match='e105'):
             # wrong theory
             pu.as1.derive(theory=theory,
-                          valid_statement=c,
+                          conjecture=c,
                           premises=(
                               a | is_a | proposition,
                               c | is_a | proposition,
@@ -122,7 +122,7 @@ class TestSimplification2:
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   valid_statement=b,
+                                   conjecture=b,
                                    premises=(
                                        a | is_a | proposition,
                                        b | is_a | proposition,
@@ -134,7 +134,7 @@ class TestSimplification2:
         with pytest.raises(pu.as1.CustomException, match='e120'):
             # wrong theory
             pu.as1.derive(theory=theory,
-                          valid_statement=c,
+                          conjecture=c,
                           premises=(
                               a | is_a | proposition,
                               c | is_a | proposition,
@@ -150,7 +150,7 @@ class TestModusPonens:
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   valid_statement=b,
+                                   conjecture=b,
                                    premises=(
                                        a | is_a | proposition,
                                        b | is_a | proposition,
@@ -166,7 +166,7 @@ class TestModusPonens:
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive(theory=theory,
-                                   valid_statement=a | land | a,
+                                   conjecture=a | land | a,
                                    premises=(
                                        a | is_a | proposition,
                                        (a | land | a) | is_a | proposition,
@@ -179,7 +179,7 @@ class TestModusPonens:
         with pytest.raises(pu.as1.CustomException, match='e123'):
             # wrong theory
             pu.as1.derive(theory=theory,
-                          valid_statement=c,
+                          conjecture=c,
                           premises=(
                               a | is_a | proposition,
                               c | is_a | proposition,

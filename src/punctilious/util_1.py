@@ -22,3 +22,10 @@ def log_info(msg: str, **kwargs):
     logger.info(msg)
     # warnings.warn('{msg} :{force_str(kwargs)}.')
     print(f'{msg}', flush=True)
+
+
+def log_debug(msg: str, **kwargs):
+    global logger
+    logger.debug(msg)
+    # warnings.warn('{msg} :{force_str(kwargs)}.')
+    print(f'{msg}', flush=True)

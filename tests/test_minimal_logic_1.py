@@ -72,7 +72,7 @@ class TestPL1:
 
         # Derive: P is-a proposition
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=p | is_a | proposition,
+                             conjecture=p | is_a | proposition,
                              premises=(
                                  p | is_a | propositional_variable,),
                              inference_rule=pu.pls1.i1)
@@ -81,7 +81,7 @@ class TestPL1:
 
         # Derive: P ⊃ (P ∧ P)
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=p | implies | (p | land | p),
+                             conjecture=p | implies | (p | land | p),
                              premises=(
                                  p | is_a | proposition,),
                              inference_rule=pu.ml1.pl01)
@@ -90,7 +90,7 @@ class TestPL1:
 
         # Derive: (P ∧ P) is-a proposition
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(p | land | p) | is_a | proposition,
+                             conjecture=(p | land | p) | is_a | proposition,
                              premises=(
                                  p | is_a | proposition,
                                  p | is_a | proposition,),
@@ -103,7 +103,7 @@ class TestPL1:
 
         # Derive: P ∧ P from P by modus-ponens
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=p | land | p,
+                             conjecture=p | land | p,
                              premises=(
                                  p | is_a | proposition,
                                  (p | land | p) | is_a | proposition,
@@ -121,15 +121,15 @@ class TestPL2:
         # Elaborate a basic theory with P and Q as a propositional-variables
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
-        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=q | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
 
         # Add axiom PL02 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl02, )
 
         # Derive: (P ∧ Q) ⊃ (Q ∧ P)
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(p | land | q) | implies | (q | land | p),
+                             conjecture=(p | land | q) | implies | (q | land | p),
                              premises=(
                                  p | is_a | proposition,
                                  q | is_a | proposition,),
@@ -138,14 +138,14 @@ class TestPL2:
 
         # Derive: (P ∧ Q) and (Q ∧ P) is-a proposition
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(p | land | q) | is_a | proposition,
+                             conjecture=(p | land | q) | is_a | proposition,
                              premises=(
                                  p | is_a | proposition,
                                  q | is_a | proposition,),
                              inference_rule=pu.pls1.i3)
         assert pu.as1.is_valid_statement_in_theory(phi=(p | land | q) | is_a | proposition, t=t)
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(q | land | p) | is_a | proposition,
+                             conjecture=(q | land | p) | is_a | proposition,
                              premises=(
                                  q | is_a | proposition,
                                  p | is_a | proposition,),
@@ -158,7 +158,7 @@ class TestPL2:
 
         # Derive: P ∧ P from P by modus-ponens
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=q | land | p,
+                             conjecture=q | land | p,
                              premises=(
                                  (p | land | q) | is_a | proposition,
                                  (q | land | p) | is_a | proposition,
@@ -177,16 +177,16 @@ class TestPL3:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
-        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=q | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=r | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl03, )
 
         # Derive: (P ⊃ Q) ⊃ ((P ∧ R) ⊃ (B ∧ R))
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(p | implies | q) | implies | (
+                             conjecture=(p | implies | q) | implies | (
                                      (p | land | r) | implies | (q | land | r)),
                              premises=(
                                  p | is_a | proposition,
@@ -200,28 +200,28 @@ class TestPL3:
 
         # Derive: propositions
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(p | land | r) | is_a | proposition,
+                             conjecture=(p | land | r) | is_a | proposition,
                              premises=(
                                  p | is_a | proposition,
                                  r | is_a | proposition,),
                              inference_rule=pu.pls1.i3)
         assert pu.as1.is_valid_statement_in_theory(phi=(p | land | r) | is_a | proposition, t=t)
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(q | land | r) | is_a | proposition,
+                             conjecture=(q | land | r) | is_a | proposition,
                              premises=(
                                  q | is_a | proposition,
                                  r | is_a | proposition,),
                              inference_rule=pu.pls1.i3)
         assert pu.as1.is_valid_statement_in_theory(phi=(q | land | r) | is_a | proposition, t=t)
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(p | implies | q) | is_a | proposition,
+                             conjecture=(p | implies | q) | is_a | proposition,
                              premises=(
                                  p | is_a | proposition,
                                  q | is_a | proposition,),
                              inference_rule=pu.pls1.i4)
         assert pu.as1.is_valid_statement_in_theory(phi=(p | implies | q) | is_a | proposition, t=t)
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=((p | land | r) | implies | (q | land | r)) | is_a | proposition,
+                             conjecture=((p | land | r) | implies | (q | land | r)) | is_a | proposition,
                              premises=(
                                  (p | land | r) | is_a | proposition,
                                  (q | land | r) | is_a | proposition,),
@@ -235,7 +235,7 @@ class TestPL3:
 
         # Derive: (P ∧ R) implies (Q ∧ R)  from P by modus-ponens
         t, _ = pu.as1.derive(theory=t,
-                             valid_statement=(p | land | r) | implies | (q | land | r),
+                             conjecture=(p | land | r) | implies | (q | land | r),
                              premises=(
                                  (p | implies | q) | is_a | proposition,
                                  ((p | land | r) | implies | (q | land | r)) | is_a | proposition,
@@ -256,16 +256,16 @@ class TestPL4:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
-        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=q | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_2(t=t, candidate_statement=r | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
+        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl04, )
 
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (p | implies | r)
-        t, _, _ = pu.as1.auto_derive_2(t=t, candidate_statement=phi)
+        t, _, _ = pu.as1.auto_derive_3(t=t, conjecture=phi)
         assert pu.as1.is_valid_statement_in_theory(
             phi=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (p | implies | r)),
@@ -289,19 +289,19 @@ class TestPL5:
         t1, _ = pu.as1.let_x_be_an_inference_rule(theory=t1, inference_rule=pu.ml1.pl05, )
 
         # Derive: P ⊃ Q
-        t2, success, _ = pu.as1.auto_derive_1(t=t1, candidate_statement=x | is_a | proposition)
+        t2, success, _ = pu.as1.auto_derive_2(t=t1, conjecture=x | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | is_a | proposition, t=t2)
 
-        t2, success, _ = pu.as1.auto_derive_1(t=t2, candidate_statement=y | is_a | proposition)
+        t2, success, _ = pu.as1.auto_derive_2(t=t2, conjecture=y | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=y | is_a | proposition, t=t2)
 
-        t2, success, _ = pu.as1.auto_derive_1(t=t2, candidate_statement=(x | implies | y) | is_a | proposition)
+        t2, success, _ = pu.as1.auto_derive_2(t=t2, conjecture=(x | implies | y) | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=(x | implies | y) | is_a | proposition, t=t2)
 
-        t2, success, _ = pu.as1.auto_derive_1(t=t2, candidate_statement=y | implies | (x | implies | y))
+        t2, success, _ = pu.as1.auto_derive_2(t=t2, conjecture=y | implies | (x | implies | y))
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=y | implies | (x | implies | y), t=t2)
         # t, _, = pu.as1.derive(
@@ -315,11 +315,11 @@ class TestPL5:
         #    inference_rule=pu.ir1.modus_ponens_axiom)
         # TODO: derivation above functions properly
         # TODO: but the following auto-derivation fails, why?????
-        t2, success, _ = pu.as1.auto_derive_1(t=t2, candidate_statement=x | implies | y, debug=True)
+        t2, success, _ = pu.as1.auto_derive_2(t=t2, conjecture=x | implies | y, debug=True)
         assert success
         # assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | implies | q, t=t)
         pass
 
-        t3, success, _, _ = pu.as1.auto_derive_2(t=t1, candidate_statement=x | implies | y, debug=True, max_recursion=5)
+        t3, success, _, _ = pu.as1.auto_derive_3(t=t1, conjecture=x | implies | y, debug=True, max_recursion=5)
         assert success
         pass

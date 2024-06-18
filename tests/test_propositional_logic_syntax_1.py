@@ -20,7 +20,7 @@ class TestPropositionalLogicMetaTheory:
 
         # derive: p is-a proposition
         theory, _, = pu.as1.derive(theory=theory,
-                                   valid_statement=p | is_a | proposition,
+                                   conjecture=p | is_a | proposition,
                                    premises=(
                                        p | is_a | propositional_variable,),
                                    inference_rule=pu.pls1.i1)
@@ -69,7 +69,7 @@ class TestPropositionalLogicMetaTheory:
         is_a = pu.as1.connectives.is_a
         proposition = pu.as1.connectives.proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
-        t, success, _, = pu.as1.auto_derive_1(t=t, candidate_statement=p | is_a | proposition)
+        t, success, _, = pu.as1.auto_derive_2(t=t, conjecture=p | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
 
@@ -79,13 +79,13 @@ class TestPropositionalLogicMetaTheory:
         proposition = pu.as1.connectives.proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='X')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Y')
-        t, success, _ = pu.as1.auto_derive_1(t=t, candidate_statement=p | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=p | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
-        t, success, _ = pu.as1.auto_derive_1(t=t, candidate_statement=q | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=q | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=q | is_a | proposition, t=t)
-        t, success, _ = pu.as1.auto_derive_1(t=t, candidate_statement=(p | land | q) | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=(p | land | q) | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=(p | land | q) | is_a | proposition, t=t)
         pass
