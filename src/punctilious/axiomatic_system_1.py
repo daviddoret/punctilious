@@ -1142,9 +1142,11 @@ def let_x_be_an_inference_rule(theory: FlexibleTheory,
 
     if isinstance(theory, Axiomatization):
         theory = Axiomatization(derivations=(*theory, inference_rule,))
+        u1.log_info(inference_rule.typeset_as_string())
         return theory, inference_rule
     elif isinstance(theory, Theory):
         theory = Theory(derivations=(*theory, inference_rule,))
+        u1.log_info(inference_rule.typeset_as_string())
         return theory, inference_rule
     else:
         raise Exception('oops')
@@ -1179,9 +1181,11 @@ def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[F
 
     if isinstance(theory, Axiomatization):
         theory = Axiomatization(derivations=(*theory, axiom,))
+        u1.log_info(axiom.typeset_as_string())
         return theory, axiom
     elif isinstance(theory, Theory):
         theory = Theory(derivations=(*theory, axiom,))
+        u1.log_info(axiom.typeset_as_string())
         return theory, axiom
     else:
         raise Exception('oops 3')
@@ -2407,7 +2411,7 @@ def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = Fal
             pass
         elif is_well_formed_theorem(phi=derivation):
             theorem_by_inference: Theorem = coerce_theorem(phi=derivation)
-            inference: Inference = theorem_by_inference.i
+            inference: Inference = theorem_by_inference.inference
             for premise in inference.premises:
                 # check that premise is a proven-formula (term_0) of a predecessor
                 if not valid_statements.has_element(phi=premise):
@@ -2777,7 +2781,7 @@ class Theorem(Derivation):
 
     def __init__(self, valid_statement: FlexibleFormula, i: FlexibleInference):
         self._phi: Formula = coerce_formula(phi=valid_statement)
-        self._i: Inference = coerce_inference(phi=i)
+        self._inference: Inference = coerce_inference(phi=i)
         # check the validity of the theorem
         f_of_p: Formula = i.transformation_rule(i.premises)
         try:
@@ -2791,9 +2795,9 @@ class Theorem(Derivation):
         super().__init__(valid_statement=valid_statement, justification=i)
 
     @property
-    def i(self) -> Inference:
+    def inference(self) -> Inference:
         """The inference of the theorem."""
-        return self._i
+        return self._inference
 
     @property
     def phi(self) -> Formula:
@@ -3163,7 +3167,7 @@ def derive(theory: FlexibleTheory, valid_statement: FlexibleFormula, premises: F
     # extends the theory
     theory: Theory = Theory(derivations=(*theory, theorem,))
 
-    u1.log_info(theorem.typeset_as_string())
+    u1.log_info(theorem.typeset_as_string(theory=theory))
 
     return theory, theorem
 
@@ -3650,6 +3654,31 @@ class MapTypesetter(pl1.Typesetter):
         yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
+class DerivationTypesetter(pl1.Typesetter):
+    def __init__(self):
+        super().__init__()
+
+    def typeset_from_generator(self, phi: FlexibleDerivation, theory: typing.Optional[FlexibleTheory] = None,
+                               **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Derivation = coerce_derivation(phi=phi)
+        yield from phi.valid_statement.typeset_from_generator(**kwargs)
+        if is_well_formed_axiom(phi=phi):
+            phi: Axiom = coerce_axiom(phi=phi)
+            yield '\t|\tThis is an axiom.'
+        elif is_well_formed_inference_rule(phi=phi):
+            phi: InferenceRule = coerce_inference_rule(phi=phi)
+            yield '\t|\tThis is an inference rule.'
+        elif is_well_formed_theorem(phi=phi):
+            phi: Theorem = coerce_theorem(phi=phi)
+            inference: Inference = phi.inference
+            yield '\t|\tThis is a theorem that follows from '
+            yield from phi.inference.transformation_rule.typeset_as_string(**kwargs)
+            yield ' given '
+            yield from phi.inference.premises.typeset_as_string(**kwargs)
+            yield '.'
+
+
 class Typesetters:
     """A factory of out-of-the-box encodings."""
 
@@ -3681,6 +3710,9 @@ class Typesetters:
 
     def transformation(self) -> TransformationTypesetter:
         return TransformationTypesetter()
+
+    def derivation(self) -> DerivationTypesetter:
+        return DerivationTypesetter()
 
 
 typesetters = Typesetters()

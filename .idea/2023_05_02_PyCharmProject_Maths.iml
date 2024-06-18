@@ -11,13 +11,13 @@
       <excludeFolder url="file://$MODULE_DIR$/trashcan/punctilious_obsolete_20240114/sample" />
       <excludeFolder url="file://$MODULE_DIR$/trashcan/punctilious_obsolete_20240114/theory" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
-      <excludeFolder url="file://$MODULE_DIR$/src/punctilious_old" />
       <excludeFolder url="file://$MODULE_DIR$/trashcan/project" />
       <excludeFolder url="file://$MODULE_DIR$/trashcan/tests_old" />
       <excludeFolder url="file://$MODULE_DIR$/trashcan/theory" />
       <excludeFolder url="file://$MODULE_DIR$/docs/source.old" />
       <excludeFolder url="file://$MODULE_DIR$/docs/source.old/math/inference_rule" />
       <excludeFolder url="file://$MODULE_DIR$/docs/source.old/math/theory" />
+      <excludeFolder url="file://$MODULE_DIR$/trashcan/punctilious_old" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.12 (punctilious)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

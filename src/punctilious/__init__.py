@@ -49,3 +49,4 @@ as1.connectives.theory.formula_typesetter = as1.typesetters.classical_formula(
 as1.connectives.axiomatization.formula_typesetter = as1.typesetters.classical_formula(
     connective_typesetter='axiomatization')
 as1.connectives.map.formula_typesetter = as1.typesetters.map()
+as1.connectives.follows_from.formula_typesetter = as1.typesetters.derivation()
