@@ -2813,11 +2813,9 @@ class Theory(Enumeration):
      - all premises of all theorem-by-inferences are predecessors of their parent theorem-by-inference.
 
     TODO: Consider the following data-model change: a derivation is only an axiom or an inference-rule. In
-    effect, stating that in inference-rule is a derivation seems to be a bit of a semantic stretch.
+        effect, stating that in inference-rule is a derivation seems to be a bit of a semantic stretch.
 
     """
-
-    # TODO: Theory does not contain typed axioms, inference-rules, etc. but formulas!!!!!!
 
     def __new__(cls, connective: typing.Optional[Connective] = None, derivations: FlexibleEnumeration = None):
         # coerce to enumeration
@@ -3144,22 +3142,22 @@ def derive(theory: FlexibleTheory, conjecture: FlexibleFormula, premises: Flexib
     inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
 
     for premise in premises:
-        if not theory.has_element(phi=premise):
-            # the premise is missing from the theory
-            # trigger auto_derive
-            pass
-            # try:
-            #    theory = auto_derive(theory=theory, valid_statement=premise)
-            # except AutoDerivationFailure:
-            #    raise DerivationFailure()
+        # The validity of the premises is checked during theory initialization,
+        # but re-checking it here "in advance" helps provide more context in the exception that is being raised.
+        if not is_valid_statement_in_theory(phi=premise, t=theory):
+            raise Exception(
+                f'Conjecture: \n\t{conjecture} \n...cannot be derived because premise: \n\t{premise}'
+                f' \n...is not a valid-statement in the theory. The inference-rule used to try this derivation was: '
+                f'\n\t{inference_rule} \nThe complete theory is: \n\t{theory}')
 
-    # configure the inference
+    # Configure the inference that derives the theorem.
     inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
 
-    # derive the new theorem
+    # Prepare the new theorem.
     theorem: Theorem = Theorem(valid_statement=conjecture, i=inference)
 
-    # extends the theory
+    # Extends the theory with the new theorem.
+    # The validity of the premises will be checked during theory initialization.
     theory: Theory = Theory(derivations=(*theory, theorem,))
 
     u1.log_info(theorem.typeset_as_string(theory=theory))
