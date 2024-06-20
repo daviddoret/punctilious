@@ -2166,9 +2166,11 @@ def iterate_enumeration_elements(e: FlexibleEnumeration) -> typing.Generator[For
     yield from iterate_formula_terms(phi=e)
 
 
-def are_valid_statements_in_theory(s: FlexibleEnumeration, t: FlexibleTheory) -> bool:
+def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     """Return True if every formula phi in enumeration s is a valid-statement in theory t, False otherwise.
     """
+    s: Tupl = coerce_tupl(phi=s)
+    t: Theory = coerce_theory(phi=t)
     return all(is_valid_statement_in_theory(phi=phi, t=t) for phi in iterate_enumeration_elements(s))
 
 
@@ -2221,11 +2223,11 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Fo
 
 
 def are_valid_statements_in_theory_with_variables(
-        s: FlexibleEnumeration, t: FlexibleTheory,
+        s: FlexibleTupl, t: FlexibleTheory,
         variables: FlexibleEnumeration,
         variables_values: FlexibleMap, debug: bool = False) \
-        -> tuple[bool, typing.Optional[Enumeration]]:
-    """Return True if every formula phi in enumeration s is a valid-statement in theory t,
+        -> tuple[bool, typing.Optional[Tupl]]:
+    """Return True if every formula phi in tuple s is a valid-statement in theory t,
     considering some variables, and some variable values.
     If a variable in variables has not an assigned value, then it is a free variable.
     Return False otherwise.
@@ -2236,7 +2238,7 @@ def are_valid_statements_in_theory_with_variables(
     TODO: retrieve and return the final map of variable values as well? is this really needed?
 
     """
-    s: Enumeration = coerce_enumeration(phi=s, strip_duplicates=True)
+    s: Tupl = coerce_tupl(phi=s)
     t: Theory = coerce_theory(phi=t)
     variables: Enumeration = coerce_enumeration(phi=variables, strip_duplicates=True)
     variables_values: Map = coerce_map(phi=variables_values)
@@ -2259,7 +2261,7 @@ def are_valid_statements_in_theory_with_variables(
         # it follows that 1) there will be no permutations,
         # and 2) are_valid_statements_in_theory() is equivalent.
         s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variables_values)
-        s_with_variable_substitution: Enumeration = coerce_enumeration(phi=s_with_variable_substitution)
+        s_with_variable_substitution: Tupl = coerce_tupl(phi=s_with_variable_substitution)
         valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
         if valid:
             return valid, s_with_variable_substitution
@@ -2271,9 +2273,8 @@ def are_valid_statements_in_theory_with_variables(
                                                                                         n=permutation_size):
             variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
             s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
-            s_with_variable_substitution: Enumeration = coerce_enumeration(
-                phi=s_with_variable_substitution, strip_duplicates=True)
-            s_with_permutation: Enumeration = union_enumeration(phi=s_with_variable_substitution, psi=permutation)
+            s_with_variable_substitution: Tupl = coerce_tupl(phi=s_with_variable_substitution)
+            s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution, permutation))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
         return False, None
@@ -3258,6 +3259,11 @@ def auto_derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule
     if debug:
         u1.log_debug(f'auto_derive_1: start. conjecture:{conjecture}. inference_rule:{inference_rule}.')
 
+    if not is_element_of_enumeration(e=inference_rule, big_e=t.inference_rules):
+        # The inference_rule is not in the theory,
+        # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
+        return t, False, None
+
     # First try the less expansive auto_derive_0 algorithm
     t, successful, derivation, = auto_derive_0(t=t, conjecture=conjecture, debug=debug)
     if successful:
@@ -3286,10 +3292,12 @@ def auto_derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule
 
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
-        necessary_premises: Tupl = Tupl(elements=None)
-        for original_premise in inference_rule.transformation.premises:
-            necessary_premise = replace_formulas(phi=original_premise, m=known_variable_values)
-            necessary_premises: Tupl = Tupl(elements=(*necessary_premises, necessary_premise,))
+        necessary_premises: Tupl = Tupl(
+            elements=replace_formulas(phi=inference_rule.transformation.premises, m=known_variable_values))
+        # necessary_premises: Tupl = Tupl(elements=None)
+        # for original_premise in inference_rule.transformation.premises:
+        #    necessary_premise = replace_formulas(phi=original_premise, m=known_variable_values)
+        #    necessary_premises: Tupl = Tupl(elements=(*necessary_premises, necessary_premise,))
 
         # Find a set of valid_statements in theory t, such that they match the necessary_premises.
         success, effective_premises = are_valid_statements_in_theory_with_variables(
