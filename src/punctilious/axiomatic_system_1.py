@@ -1779,9 +1779,12 @@ def strip_duplicate_formulas_in_python_tuple(t: tuple[Formula, ...]) -> tuple[Fo
     # Do not reuse the Enumeration constructor here,
     # because enumerate_formula_terms is called in the Enumeration constructor to strip duplicates.
     t2: tuple = ()
-    for element in t:
-        if not any(is_formula_equivalent(phi=element, psi=existing_element) for existing_element in t2):
-            t2: tuple = (*t2, element,)
+    if t is None:
+        return t2
+    else:
+        for element in t:
+            if not any(is_formula_equivalent(phi=element, psi=existing_element) for existing_element in t2):
+                t2: tuple = (*t2, element,)
     return t2
 
 
@@ -2156,6 +2159,13 @@ def iterate_formula_terms(phi: FlexibleFormula) -> typing.Generator[Formula, Non
     yield from phi  # super(phi) is a native python tuple.
 
 
+def iterate_tuple_elements(phi: FlexibleTupl) -> typing.Generator[Formula, None, None]:
+    """Iterates the elements of a tuple in canonical order.
+    """
+    phi = coerce_tupl(phi=phi)
+    yield from iterate_formula_terms(phi=phi)
+
+
 def iterate_enumeration_elements(e: FlexibleEnumeration) -> typing.Generator[Formula, None, None]:
     """Iterates the elements of an enumeration.
 
@@ -2171,7 +2181,7 @@ def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     """
     s: Tupl = coerce_tupl(phi=s)
     t: Theory = coerce_theory(phi=t)
-    return all(is_valid_statement_in_theory(phi=phi, t=t) for phi in iterate_enumeration_elements(s))
+    return all(is_valid_statement_in_theory(phi=phi, t=t) for phi in iterate_tuple_elements(s))
 
 
 def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnumeration, n: int) -> typing.Generator[
@@ -2274,7 +2284,7 @@ def are_valid_statements_in_theory_with_variables(
             variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
             s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
             s_with_variable_substitution: Tupl = coerce_tupl(phi=s_with_variable_substitution)
-            s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution, permutation))
+            s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution, *permutation))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
         return False, None
