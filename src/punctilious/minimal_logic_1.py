@@ -76,7 +76,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(formula_typesetter='b') as b:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
     pl02: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -101,9 +101,9 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
         """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
-        formula_typesetter='b') as b, as1.let_x_be_a_variable(
-    formula_typesetter='c') as c:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(
+        formula_typesetter='B') as b, as1.let_x_be_a_variable(
+    formula_typesetter='C') as c:
     pl03: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=
@@ -130,9 +130,9 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
-        formula_typesetter='b') as b, as1.let_x_be_a_variable(
-    formula_typesetter='c') as c:
+with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(
+        formula_typesetter='B') as b, as1.let_x_be_a_variable(
+    formula_typesetter='C') as c:
     pl04: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=

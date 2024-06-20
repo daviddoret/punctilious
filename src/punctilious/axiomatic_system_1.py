@@ -2236,9 +2236,9 @@ def are_valid_statements_in_theory_with_variables(
     TODO: retrieve and return the final map of variable values as well? is this really needed?
 
     """
-    s: Enumeration = coerce_enumeration(phi=s)
+    s: Enumeration = coerce_enumeration(phi=s, strip_duplicates=True)
     t: Theory = coerce_theory(phi=t)
-    variables: Enumeration = coerce_enumeration(phi=variables)
+    variables: Enumeration = coerce_enumeration(phi=variables, strip_duplicates=True)
     variables_values: Map = coerce_map(phi=variables_values)
 
     # list the free variables.
@@ -3286,10 +3286,10 @@ def auto_derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule
 
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
-        necessary_premises: Enumeration = Enumeration(elements=None)
+        necessary_premises: Tupl = Tupl(elements=None)
         for original_premise in inference_rule.transformation.premises:
             necessary_premise = replace_formulas(phi=original_premise, m=known_variable_values)
-            necessary_premises: Enumeration = Enumeration(elements=(*necessary_premises, necessary_premise,))
+            necessary_premises: Tupl = Tupl(elements=(*necessary_premises, necessary_premise,))
 
         # Find a set of valid_statements in theory t, such that they match the necessary_premises.
         success, effective_premises = are_valid_statements_in_theory_with_variables(
@@ -3353,6 +3353,10 @@ def auto_derive_3(
     1) loop through all inference-rules in theory t, and recursively calls itself to attempt to prove premises,
        until max_recursion is reached at which point call auto_derive_1 algorithm.
 
+    auto_derive_3 is a depth-first algorithm, which makes it often very inefficient because
+    if max_recursion is increased, the search space increases dramatically.
+    a width-first algorithm would probably be more interesting in most practical situations.
+
     recursively try to auto_derive the premises,
     and this is complex because of free-variables.
     proposed approach:
@@ -3374,13 +3378,18 @@ def auto_derive_3(
     t: Theory = coerce_theory(phi=t)
     conjecture: Formula = coerce_formula(phi=conjecture)
     conjecture_exclusion_list: Enumeration = coerce_enumeration(phi=conjecture_exclusion_list)
+    indent: str = ' ' * (auto_derivation_max_formula_depth_preference - max_recursion + 1)
+    if max_recursion == 2:
+        pass
     if debug:
-        u1.log_debug(f'auto_derive_3: start. conjecture:{conjecture}.')
+        u1.log_debug(f'{indent}auto_derive_3: start. conjecture:{conjecture}.')
 
     # As a first step, attempt to auto_derive the conjecture with the less powerful,
     # but less expansive auto_derive_2 method:
-    t, successful, derivation, = auto_derive_2(t=t, conjecture=conjecture, debug=debug)
+    t, successful, derivation, = auto_derive_2(t=t, conjecture=conjecture)
     if successful:
+        if debug:
+            u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
         return t, successful, derivation, None
 
     # To prevent infinite loops, populate an exclusion list of conjectures that are already
@@ -3390,6 +3399,8 @@ def auto_derive_3(
     max_recursion = max_recursion - 1
     if max_recursion < 1:
         # We reached the max_recursion threshold, it follows that auto_derive failed.
+        if debug:
+            u1.log_debug(f'{indent}auto_derive_3: failure. conjecture:{conjecture}.')
         return t, False, None, conjecture_exclusion_list
 
     # Loop through all theory inference-rules to find those that could potentially prove the conjecture.
@@ -3421,7 +3432,7 @@ def auto_derive_3(
 
             # now that we know what are the necessary variable values, we can determine what
             # are the necessary premises by substituting the variable values.
-            necessary_premises: EnumerationBuilder = EnumerationBuilder(elements=None)
+            necessary_premises: Tupl = Tupl(elements=None)
             for original_premise in inference_rule.transformation.premises:
                 # we must find a set of premises in the theory
                 # with free-variables.
@@ -3431,9 +3442,8 @@ def auto_derive_3(
                 # 2) develop an algorithm that given a set of premises returns true if they are all valid,
                 #    and then extend this algorithm to support variables.
                 # to avoid the burden of all these conjunctions in the theory, I start with the second approach.
-                necessary_premise = replace_formulas(phi=original_premise, m=m)
-                necessary_premises.append(term=necessary_premise)
-            necessary_premises: Enumeration = necessary_premises.to_enumeration()
+                necessary_premise: Formula = replace_formulas(phi=original_premise, m=m)
+                necessary_premises: Tupl = Tupl(elements=(*necessary_premises, necessary_premise,))
 
             # the following step is where auto_derive_2 is different from auto_derive_1.
             # we are not assuming that there should exist valid premises to derive the target statement,
@@ -3443,8 +3453,6 @@ def auto_derive_3(
             # **********************************************
             permutation_size: int = free_variables.arity
 
-            effective_premises: Enumeration = Enumeration()
-
             if permutation_size == 0:
                 inference_rule_success: bool = True
                 # there are no free variables.
@@ -3452,7 +3460,7 @@ def auto_derive_3(
                 # it follows that 1) there will be no permutations,
                 # and 2) are_valid_statements_in_theory() is equivalent.
                 effective_premises: Formula = replace_formulas(phi=necessary_premises, m=m)
-                effective_premises: Enumeration = coerce_enumeration(phi=effective_premises)
+                effective_premises: Tupl = Tupl(elements=effective_premises)
                 for premise_target_statement in effective_premises:
                     if not is_element_of_enumeration(e=premise_target_statement, big_e=conjecture_exclusion_list):
                         # recursively try to auto_derive the premise
@@ -3465,19 +3473,22 @@ def auto_derive_3(
                         if not derivation_success:
                             inference_rule_success = False
                             break
-
+                if inference_rule_success:
+                    # all premises have been successfully proven.
+                    t, derivation = derive(theory=t, conjecture=conjecture,
+                                           premises=effective_premises,
+                                           inference_rule=inference_rule)
+                    if debug:
+                        u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
+                    return t, True, derivation, conjecture_exclusion_list
             else:
-                inference_rule_success: bool = False
                 valid_statements = iterate_valid_statements_in_theory(t=t)
                 for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                                 n=permutation_size):
                     permutation_success: bool = True
                     variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
                     effective_premises: Formula = replace_formulas(phi=necessary_premises, m=variable_substitution)
-                    effective_premises: Enumeration = coerce_enumeration(
-                        phi=effective_premises, strip_duplicates=True)
-                    effective_premises: Enumeration = union_enumeration(phi=effective_premises,
-                                                                        psi=permutation)
+                    effective_premises: Tupl = Tupl(elements=(*effective_premises, permutation,))
                     for premise_target_statement in effective_premises:
                         if not is_element_of_enumeration(e=premise_target_statement, big_e=conjecture_exclusion_list):
                             # recursively try to auto_derive the premise
@@ -3489,37 +3500,16 @@ def auto_derive_3(
                                 permutation_success = False
                                 break
                     if permutation_success:
-                        # a single permutation success is sufficient, we can stop the research here
-                        inference_rule_success = True
-                        break
-
-            # **********************************************
-            if inference_rule_success:
-                # if we reach this, it means that all necessary premises
-                # are either already present in the theory, or were successfully auto_derived recursively.
-                # in consequence, we can now safely derive phi.
-                t, derivation = derive(theory=t, conjecture=conjecture,
-                                       premises=effective_premises,
-                                       inference_rule=inference_rule)
-                return t, True, derivation, conjecture_exclusion_list
-            else:
-                # this inference-rule did not led to a successful derivation of the candidate-statement.
-                pass
-        else:
-            # the conclusion of this inference-rule is not interesting
-            # u1.log_info(f'\t\t inference-rule conclusion is not interesting: {ir.transformation.conclusion}')
-            # ir_success = False
-            pass
-
-    if not is_valid_statement_in_theory(phi=conjecture, t=t):
-        # we recursively tried to derive phi using all the inference-rules in the theory.
-        # it follows that we are unable to derive phi.
-        return t, False, None, conjecture_exclusion_list
-    else:
-        for derivation in t.iterate_derivations():
-            if is_formula_equivalent(phi=conjecture, psi=derivation.valid_statement):
-                return t, True, derivation, conjecture_exclusion_list
-        raise AutoDerivationFailure('Inconsistent behavior during auto_derive')
+                        # all premises have been successfully proven.
+                        t, derivation = derive(theory=t, conjecture=conjecture,
+                                               premises=effective_premises,
+                                               inference_rule=inference_rule)
+                        if debug:
+                            u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
+                        return t, True, derivation, conjecture_exclusion_list
+    if debug:
+        u1.log_debug(f'{indent}auto_derive_3: failure. conjecture:{conjecture}.')
+    return t, False, None, conjecture_exclusion_list
 
 
 # PRESENTATION LAYER

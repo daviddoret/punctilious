@@ -122,8 +122,8 @@ class TestPL2:
         # Elaborate a basic theory with P and Q as a propositional-variables
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
-        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
+        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
+        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
 
         # Add axiom PL02 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl02, )
@@ -178,9 +178,9 @@ class TestPL3:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
-        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=r | is_a | proposition)
+        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
+        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
+        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl03, )
@@ -257,16 +257,16 @@ class TestPL4:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
-        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
-        t, _, _, = pu.as1.auto_derive_3(t=t, conjecture=r | is_a | proposition)
+        t, _, _, _, = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
+        t, _, _, _, = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
+        t, _, _, _, = pu.as1.auto_derive_3(t=t, conjecture=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl04, )
 
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (p | implies | r)
-        t, _, _ = pu.as1.auto_derive_3(t=t, conjecture=phi)
+        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=phi)
         assert pu.as1.is_valid_statement_in_theory(
             phi=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (p | implies | r)),
@@ -321,7 +321,7 @@ class TestPL5:
         # assert pu.as1.is_valid_statement_with_regard_to_theory(phi=p | implies | q, t=t)
         pass
 
-        t3, success, _, _ = pu.as1.auto_derive_3(t=t1, conjecture=x | implies | y, debug=True, max_recursion=5)
+        t3, success, _, _ = pu.as1.auto_derive_3(t=t1, conjecture=x | implies | y, debug=True, max_recursion=8)
         assert success
         pass
 
@@ -331,6 +331,8 @@ class TestComplete:
         t = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
         t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='p1')
         t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='p2')
-        t, success, derivation, _ = pu.as1.auto_derive_3(t=t, conjecture=p1 | implies | (p2 | lor | p1),
-                                                         max_recursion=11)
+        t, success, derivation, _ = pu.as1.auto_derive_3(t=t, conjecture=p1 | implies | (p1 | lor | p2),
+                                                         max_recursion=4, debug=True)
+        # t, success, derivation, _ = pu.as1.auto_derive_3(t=t, conjecture=p1 | implies | (p2 | lor | p1),
+        #                                                 max_recursion=15, debug=True)
         pass
