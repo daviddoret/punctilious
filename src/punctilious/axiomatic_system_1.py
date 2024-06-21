@@ -2284,7 +2284,7 @@ def are_valid_statements_in_theory_with_variables(
             variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
             s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
             s_with_variable_substitution: Tupl = coerce_tupl(phi=s_with_variable_substitution)
-            s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution, *permutation))
+            s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution,))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
         return False, None
@@ -2786,8 +2786,12 @@ class Theorem(Derivation):
         return o
 
     def __init__(self, valid_statement: FlexibleFormula, i: FlexibleInference):
-        self._phi: Formula = coerce_formula(phi=valid_statement)
-        self._inference: Inference = coerce_inference(phi=i)
+        valid_statement: Formula = coerce_formula(phi=valid_statement)
+        i: Inference = coerce_inference(phi=i)
+        self._phi: Formula = valid_statement
+        self._inference: Inference = i
+        # complete object initialization to assure that we have a well-formed formula with connective, etc.
+        super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
         f_of_p: Formula = i.transformation_rule(i.premises)
         try:
@@ -2797,8 +2801,7 @@ class Theorem(Derivation):
             # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
             raise_error(error_code=error_codes.e105, error=error, valid_statement=valid_statement,
                         algorithm_output=f_of_p,
-                        inference=i)
-        super().__init__(valid_statement=valid_statement, justification=i)
+                        inference=i, inference_transformation_rule=i.transformation_rule, inference_premises=i.premises)
 
     @property
     def inference(self) -> Inference:
