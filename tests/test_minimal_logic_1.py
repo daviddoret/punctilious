@@ -320,8 +320,8 @@ class TestPL5:
         assert pu.as1.is_valid_statement_in_theory(phi=x | implies | y, t=t3b)
         pass
 
-        # t3, success, _, _ = pu.as1.auto_derive_3(t=t1, conjecture=x | implies | y, debug=True, max_recursion=8)
-        # assert success
+        t3c, success, _, _ = pu.as1.auto_derive_3(t=t1, conjecture=x | implies | y, debug=False, max_recursion=6)
+        assert success
         pass
 
 
