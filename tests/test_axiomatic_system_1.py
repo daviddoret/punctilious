@@ -1046,12 +1046,12 @@ class TestAutoDerivation:
         pass
 
         # use auto-derivation-2
-        t3, success, derivation, _ = pu.as1.auto_derive_3(t=t1, conjecture=p | pu.as1.connectives.land | q,
+        t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1, conjecture=p | pu.as1.connectives.land | q,
                                                           max_recursion=8, debug=True)
         assert success
         pass
 
-        t3, success, derivation, _ = pu.as1.auto_derive_3(t=t1, conjecture=p | pu.as1.connectives.lor | q,
+        t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1, conjecture=p | pu.as1.connectives.lor | q,
                                                           max_recursion=8, debug=True)
         assert not success
         pass

@@ -9,6 +9,11 @@ lor = pu.as1.connectives.lor
 land = pu.as1.connectives.land
 proposition = pu.as1.connectives.proposition
 implies = pu.as1.connectives.implies
+auto_derive_0 = pu.as1.auto_derive_0
+auto_derive_1 = pu.as1.auto_derive_1
+auto_derive_2 = pu.as1.auto_derive_2
+auto_derive_3 = pu.as1.auto_derive_3
+auto_derive_4 = pu.as1.auto_derive_4
 
 
 @pytest.fixture
@@ -122,8 +127,8 @@ class TestPL2:
         # Elaborate a basic theory with P and Q as a propositional-variables
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
-        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
-        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
+        t, _, _, _ = auto_derive_4(t=t, conjecture=p | is_a | proposition)
+        t, _, _, _ = auto_derive_4(t=t, conjecture=q | is_a | proposition)
 
         # Add axiom PL02 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl02, )
@@ -178,9 +183,9 @@ class TestPL3:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
-        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
-        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
-        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=r | is_a | proposition)
+        t, _, _, _ = auto_derive_4(t=t, conjecture=p | is_a | proposition)
+        t, _, _, _ = auto_derive_4(t=t, conjecture=q | is_a | proposition)
+        t, _, _, _ = auto_derive_4(t=t, conjecture=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl03, )
@@ -257,16 +262,16 @@ class TestPL4:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
-        t, _, _, _, = pu.as1.auto_derive_3(t=t, conjecture=p | is_a | proposition)
-        t, _, _, _, = pu.as1.auto_derive_3(t=t, conjecture=q | is_a | proposition)
-        t, _, _, _, = pu.as1.auto_derive_3(t=t, conjecture=r | is_a | proposition)
+        t, _, _, _, = auto_derive_4(t=t, conjecture=p | is_a | proposition)
+        t, _, _, _, = auto_derive_4(t=t, conjecture=q | is_a | proposition)
+        t, _, _, _, = auto_derive_4(t=t, conjecture=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl04, )
 
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (p | implies | r)
-        t, _, _, _ = pu.as1.auto_derive_3(t=t, conjecture=phi)
+        t, _, _, _ = auto_derive_4(t=t, conjecture=phi)
         assert pu.as1.is_valid_statement_in_theory(
             phi=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (p | implies | r)),
@@ -290,24 +295,24 @@ class TestPL5:
         t1, _ = pu.as1.let_x_be_an_inference_rule(theory=t1, inference_rule=pu.ml1.pl05, )
 
         # Derive: P ⊃ Q
-        t2, success, _ = pu.as1.auto_derive_2(t=t1, conjecture=x | is_a | proposition)
+        t2, success, _ = auto_derive_2(t=t1, conjecture=x | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | is_a | proposition, t=t2)
 
-        t2, success, _ = pu.as1.auto_derive_2(t=t2, conjecture=y | is_a | proposition)
+        t2, success, _ = auto_derive_2(t=t2, conjecture=y | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=y | is_a | proposition, t=t2)
 
-        t2, success, _ = pu.as1.auto_derive_2(t=t2, conjecture=(x | implies | y) | is_a | proposition)
+        t2, success, _ = auto_derive_2(t=t2, conjecture=(x | implies | y) | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=(x | implies | y) | is_a | proposition, t=t2)
 
-        t3, success, _, _ = pu.as1.auto_derive_3(t=t1, conjecture=(x | implies | y) | is_a | proposition,
-                                                 max_recursion=4)
+        t3, success, _, _ = auto_derive_4(t=t1, conjecture=(x | implies | y) | is_a | proposition,
+                                          max_recursion=4)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=(x | implies | y) | is_a | proposition, t=t3)
 
-        t2, success, _ = pu.as1.auto_derive_2(t=t2, conjecture=y | implies | (x | implies | y))
+        t2, success, _ = auto_derive_2(t=t2, conjecture=y | implies | (x | implies | y))
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=y | implies | (x | implies | y), t=t2)
 
@@ -323,26 +328,65 @@ class TestPL5:
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | implies | y, t=t4)
 
-        t5, success, _ = pu.as1.auto_derive_1(t=t2, conjecture=x | implies | y, debug=True,
-                                              inference_rule=pu.ir1.modus_ponens_axiom)
+        t5, success, _ = auto_derive_1(t=t2, conjecture=x | implies | y, debug=True,
+                                       inference_rule=pu.ir1.modus_ponens_axiom)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | implies | y, t=t5)
         pass
 
         # TODO: This automatic-derivation fails.
-        # t6, success, _, _ = pu.as1.auto_derive_3(t=t3, conjecture=x | implies | y, debug=False, max_recursion=5)
+        # t6, success, _, _ = auto_derive_4(t=t3, conjecture=x | implies | y, debug=False, max_recursion=5)
         # assert success
         # assert pu.as1.is_valid_statement_in_theory(phi=x | implies | y, t=t6)
         # pass
 
 
-class TestComplete:
-    def test_mancosu_page_20(self, caplog):
-        t = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
+class TestMancosu2021P20:
+    def test_mancosu_2021_page_20_with_derivation_1(self, caplog):
+        t = pu.as1.Axiomatization(
+            derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
         t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='p1')
         t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='p2')
-        t, success, derivation, _ = pu.as1.auto_derive_3(t=t, conjecture=p1 | implies | (p1 | lor | p2),
-                                                         max_recursion=4, debug=True)
-        # t, success, derivation, _ = pu.as1.auto_derive_3(t=t, conjecture=p1 | implies | (p2 | lor | p1),
-        #                                                 max_recursion=15, debug=True)
+        t, success, _, = auto_derive_1(conjecture=p1 | is_a | proposition,
+                                       inference_rule=pu.pls1.i1, t=t)
+        t, success, _, = auto_derive_1(conjecture=p2 | is_a | proposition,
+                                       inference_rule=pu.pls1.i1, t=t)
+        t, success, _, = auto_derive_1(conjecture=(p1 | lor | p2) | is_a | proposition,
+                                       inference_rule=pu.pls1.i5, t=t)
+        t, success, _, = auto_derive_1(conjecture=(p2 | lor | p1) | is_a | proposition,
+                                       inference_rule=pu.pls1.i5, t=t)
+        t, success, _, = auto_derive_1(conjecture=(p1 | implies | (p1 | lor | p2)) | is_a | proposition,
+                                       inference_rule=pu.pls1.i4, t=t)
+        t, success, _, = auto_derive_1(conjecture=((p1 | lor | p2) | implies | (p2 | lor | p1)) | is_a | proposition,
+                                       inference_rule=pu.pls1.i4, t=t)
+
+        # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
+        t, success, _, = auto_derive_1(t=t, conjecture=p1 | implies | (p1 | lor | p2),
+                                       inference_rule=pu.ml1.pl07)
+        assert success
+
+        # 2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
+        t, success, _, = auto_derive_1(
+            t=t,
+            conjecture=(p1 | implies | (p1 | lor | p2)) | implies | (
+                    ((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2))),
+            inference_rule=pu.ml1.pl05)
+        assert success
+
+        # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
+        t, success, _, = auto_derive_1(
+            t=t,
+            conjecture=((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2)),
+            inference_rule=pu.ir1.modus_ponens_axiom, debug=True)
+        assert success
+
+        # 4. ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}] (axiom PL3)
+        # 5. ⊢ {((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} (mp 3, 4)
+        # 6. ⊢ [(𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] (axiom PL1)
+        # 7. ⊢ (𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)(axiom PL8)
+        # 8. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) (mp 6, 7)
+        # 9. ⊢ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) (mp 5, 8)
+        # 10. ⊢ [((𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] ⊃ (𝑝1 ⊃ (𝑝2 ∨ 𝑝1)) (axiom PL4)
+        # 11. ⊢ 𝑝1 ⊃ (𝑝2 ∨ 𝑝1)(mp 9, 10)
+
         pass

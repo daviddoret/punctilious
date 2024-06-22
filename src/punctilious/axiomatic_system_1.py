@@ -3272,7 +3272,7 @@ def auto_derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule
     if debug:
         u1.log_debug(f'auto_derive_1: start. conjecture:{conjecture}. inference_rule:{inference_rule}.')
 
-    if not is_element_of_enumeration(e=inference_rule, big_e=t.inference_rules):
+    if not is_inference_rule_of_theory(ir=inference_rule, t=t):
         # The inference_rule is not in the theory,
         # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
         return t, False, None
@@ -3365,6 +3365,25 @@ auto_derivation_max_formula_depth_preference = 4
 
 
 def auto_derive_3(
+        t: FlexibleTheory, conjectures: FlexibleTupl) -> \
+        typing.Tuple[Theory, bool]:
+    """An auto-derivation algorithm that receives a tuple (basically an ordered list) of conjectures,
+    and that applies auto-derivation-2 to derive these conjectures in sequence.
+
+    :param t:
+    :param conjectures:
+    :return:
+    """
+    t: Theory = coerce_theory(phi=t)
+    conjectures: Tupl = coerce_tupl(phi=conjectures)
+    for conjecture in iterate_tuple_elements(phi=conjectures):
+        t, success, _ = auto_derive_2(t=t, conjecture=conjecture)
+        if not success:
+            return t, False
+    return t, True
+
+
+def auto_derive_4(
         t: FlexibleTheory, conjecture: FlexibleFormula, max_recursion: int = 3,
         conjecture_exclusion_list: FlexibleEnumeration = None, debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation], FlexibleEnumeration]:
@@ -3485,7 +3504,7 @@ def auto_derive_3(
                 for premise_target_statement in effective_premises:
                     if not is_element_of_enumeration(e=premise_target_statement, big_e=conjecture_exclusion_list):
                         # recursively try to auto_derive the premise
-                        t, derivation_success, _, conjecture_exclusion_list = auto_derive_3(
+                        t, derivation_success, _, conjecture_exclusion_list = auto_derive_4(
                             t=t,
                             conjecture=premise_target_statement,
                             conjecture_exclusion_list=conjecture_exclusion_list,
@@ -3513,7 +3532,7 @@ def auto_derive_3(
                     for premise_target_statement in effective_premises:
                         if not is_element_of_enumeration(e=premise_target_statement, big_e=conjecture_exclusion_list):
                             # recursively try to auto_derive the premise
-                            t, derivation_success, _, conjecture_exclusion_list = auto_derive_3(
+                            t, derivation_success, _, conjecture_exclusion_list = auto_derive_4(
                                 t=t, conjecture=premise_target_statement,
                                 conjecture_exclusion_list=conjecture_exclusion_list,
                                 max_recursion=max_recursion - 1, debug=debug)
