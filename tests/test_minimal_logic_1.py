@@ -426,11 +426,28 @@ class TestMancosu2021P20:
         assert success
         # 4. ⊢ (𝐷 ⊃ 𝐶) ⊃ [(𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)] (axiom PL3)
         t, success, _, = auto_derive_1(
-            conjecture=(d | implies | c) | implies | ((d | land | d) | implies | (c | land | c)),
+            conjecture=(d | implies | c) | implies | ((d | land | d) | implies | (c | land | d)),
             inference_rule=pu.ml1.pl03, t=t, debug=True)
         assert success
         # 5. ⊢ (𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)(mp 3, 4)
+        t, success, _, = auto_derive_1(
+            conjecture=(d | land | d) | implies | (c | land | d),
+            inference_rule=pu.ir1.modus_ponens_axiom, t=t, debug=True)
+        assert success
         # 6. ⊢ 𝐷 ⊃ (𝐷 ∧ 𝐷)(axiom PL1)
+        t, success, _, = auto_derive_1(
+            conjecture=d | implies | (d | land | d),
+            inference_rule=pu.ml1.pl01, t=t, debug=True)
+        assert success
         # 7. ⊢ 𝐷(hypothesis)
+        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=d)
         # 8. ⊢ 𝐷 ∧ 𝐷(mp 6, 7)
+        t, success, _, = auto_derive_1(
+            conjecture=d | land | d,
+            inference_rule=pu.ir1.modus_ponens_axiom, t=t, debug=True)
+        assert success
         # 9. ⊢ 𝐶 ∧ 𝐷(mp 5, 8)
+        t, success, _, = auto_derive_1(
+            conjecture=c | land | d,
+            inference_rule=pu.ir1.modus_ponens_axiom, t=t, debug=True)
+        assert success
