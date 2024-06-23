@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import abc
 import collections
 import logging
 import typing
@@ -2816,6 +2817,25 @@ class Theorem(Derivation):
 
 FlexibleTheorem = typing.Union[Theorem, Formula]
 FlexibleDerivation = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRule]
+
+
+class Heuristic(abc.ABC):
+    """A heuristic is a method that facilitates proofs. It recognizes a conjecture pattern to check if the
+    conjecture is a conjecture that it is able to process, and then it applies an algorithm to attempt to automatically
+    derive the conjecture.
+
+    Heuristics can be attached to theories to simplify proofs.
+    """
+
+    @abc.abstractmethod
+    def process_conjecture(self, conjecture: FlexibleFormula, t: FlexibleTheory) -> tuple[Theory, bool,]:
+        """
+
+        :param conjecture:
+        :param t:
+        :return:
+        """
+        pass
 
 
 class Theory(Enumeration):
