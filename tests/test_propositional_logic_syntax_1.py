@@ -1,8 +1,41 @@
 import pytest
 import punctilious as pu
 
+is_a = pu.axiomatic_system_1.connectives.is_a
+proposition = pu.axiomatic_system_1.connectives.proposition
+land = pu.axiomatic_system_1.connectives.land
+implies = pu.axiomatic_system_1.connectives.implies
+lor = pu.axiomatic_system_1.connectives.lor
+lnot = pu.axiomatic_system_1.connectives.lnot
 
-class TestPropositionalLogicMetaTheory:
+
+class TestHeuristic:
+    def test_heuristic_basic(self):
+        t = pu.pls1.get_propositional_logic_syntax_theory()
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
+        assert not pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=p | is_a | proposition, t=t)
+        assert success
+        assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | land | q) | is_a | proposition, t=t)
+        assert success
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | implies | q) | is_a | proposition, t=t)
+        assert success
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | lor | q) | is_a | proposition, t=t)
+        assert success
+
+    def test_heuristic_complex(self):
+        t = pu.pls1.get_propositional_logic_syntax_theory()
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
+        t, success = pu.as1.auto_derive_with_heuristics(
+            conjecture=((q | lor | q) | implies | (
+                    (p | land | p) | land | (p | lor | (q | implies | lnot(q))))) | is_a | proposition, t=t)
+        assert success
+
+
+class TestAxioms:
     def test_pl1(self):
         # PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 

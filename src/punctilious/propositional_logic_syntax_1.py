@@ -231,42 +231,158 @@ def let_x_be_a_propositional_variable(
 
 
 class PIsAProposition(as1.Heuristic):
-    _x: as1.Variable = as1.let_x_be_a_variable(formula_typesetter='x')
-    _x_is_proposition: as1.Formula = _x | is_a | proposition
-    _variables: as1.Enumeration = as1.Enumeration(elements=(_x,))
 
     def process_conjecture(self, conjecture: as1.FlexibleFormula, t: as1.FlexibleTheory) -> tuple[as1.Theory, bool,]:
         conjecture: as1.Formula = as1.coerce_formula(phi=conjecture)
         t: as1.Theory = as1.coerce_theory(phi=t)
-        x_is_proposition: as1.Formula = PIsAProposition._x_is_proposition
-        variables: as1.Enumeration = PIsAProposition._variables
 
-        success, m = as1.is_formula_equivalent_with_variables_2(
-            phi=conjecture, psi=x_is_proposition, variables=variables)
-
+        t, success, _ = as1.derive_0(conjecture=conjecture, t=t)
         if success:
-            # The conjecture is of the form x is-a proposition.
-            # Make an attempt to automatically derive the conjecture.
-
-            # retrieve P
-            p: as1.Formula = m.codomain[0]
-
-            # If P is a propositional-variable:
-            if as1.is_valid_statement_in_theory(phi=p | is_a | propositional_variable):
-                # We can safely derive p | is_a | proposition
-                t, _ = as1.derive_1(
-                    conjecture=p | is_a | proposition,
-                    premises=(
-                        p | is_a | propositional_variable,),
-                    inference_rule=pls1, t=t)
-
-            # If x is of the form not x
-
-            # If ...
-
+            # The conjecture is already proven in the theory.
             return t, True
-        else:
-            return t, False
+
+        with as1.let_x_be_a_meta_variable(formula_typesetter='P') as p:
+            success, m = as1.is_formula_equivalent_with_variables_2(
+                phi=conjecture, psi=p | is_a | proposition, variables=(p,))
+
+            if success:
+                # The conjecture is of the form (P is-a proposition).
+                # Make an attempt to automatically derive the conjecture.
+
+                # retrieve P's value
+                p_value: as1.Formula = m.get_assigned_value(phi=p)
+
+                if as1.is_valid_statement_in_theory(phi=p_value | is_a | propositional_variable, t=t):
+                    # If P is a propositional-variable:
+                    # We can safely derive p | is_a | proposition
+                    t, _ = as1.derive_1(
+                        conjecture=p_value | is_a | proposition,
+                        premises=(
+                            p_value | is_a | propositional_variable,),
+                        inference_rule=i1, t=t)
+
+                    return t, True
+
+                with as1.let_x_be_a_meta_variable(formula_typesetter='Q') as q:
+                    success, m = as1.is_formula_equivalent_with_variables_2(phi=p_value, psi=lnot(q), variables=(q,))
+                    if success:
+                        # The conjecture (P) is of the form (¬Q).
+                        # Retrieve the value assigned to Q.
+                        q_value: as1.Formula = m.get_assigned_value(phi=q)
+                        # Recursively try to derive (Q is-a proposition).
+                        t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
+                        if success:
+                            # (Q is-a proposition) is proved.
+                            # We can safely derive ((¬Q) is-a proposition).
+                            t, _ = as1.derive_1(
+                                conjecture=lnot(q_value) | is_a | proposition,
+                                premises=(
+                                    q_value | is_a | proposition,),
+                                inference_rule=i2, t=t)
+                            return t, True
+                        else:
+                            # (Q is-a proposition) is not proved.
+                            return t, False
+
+                with (as1.let_x_be_a_meta_variable(formula_typesetter='Q') as q,
+                      as1.let_x_be_a_meta_variable(formula_typesetter='R') as r):
+                    success, m = as1.is_formula_equivalent_with_variables_2(phi=p_value, psi=q | land | r,
+                                                                            variables=(q, r,))
+                    if success:
+                        # The conjecture (P) is of the form (Q ∧ R).
+                        # Retrieve the values assigned to Q and R.
+                        q_value: as1.Formula = m.get_assigned_value(phi=q)
+                        r_value: as1.Formula = m.get_assigned_value(phi=r)
+                        # Recursively try to derive (Q is-a proposition).
+                        t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
+                        if success:
+                            # (Q is-a proposition) is proved.
+                            t, success = self.process_conjecture(conjecture=r_value | is_a | proposition, t=t)
+                            if success:
+                                # (R is-a proposition) is proved.
+                                # We can safely derive ((Q ∧ R) is-a proposition).
+                                t, _ = as1.derive_1(
+                                    conjecture=(q_value | land | r_value) | is_a | proposition,
+                                    premises=(
+                                        q_value | is_a | proposition,
+                                        r_value | is_a | proposition,),
+                                    inference_rule=i3, t=t)
+                                return t, True
+                            else:
+                                # (R is-a proposition) is not proved.
+                                return t, False
+                        else:
+                            # (Q is-a proposition) is not proved.
+                            return t, False
+
+                with (as1.let_x_be_a_meta_variable(formula_typesetter='Q') as q,
+                      as1.let_x_be_a_meta_variable(formula_typesetter='R') as r):
+                    success, m = as1.is_formula_equivalent_with_variables_2(phi=p_value, psi=q | implies | r,
+                                                                            variables=(q, r,))
+                    if success:
+                        # The conjecture (P) is of the form (Q ⊃ R).
+                        # Retrieve the values assigned to Q and R.
+                        q_value: as1.Formula = m.get_assigned_value(phi=q)
+                        r_value: as1.Formula = m.get_assigned_value(phi=r)
+                        # Recursively try to derive (Q is-a proposition).
+                        t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
+                        if success:
+                            # (Q is-a proposition) is proved.
+                            t, success = self.process_conjecture(conjecture=r_value | is_a | proposition, t=t)
+                            if success:
+                                # (R is-a proposition) is proved.
+                                # We can safely derive ((Q ⊃ R) is-a proposition).
+                                t, _ = as1.derive_1(
+                                    conjecture=(q_value | implies | r_value) | is_a | proposition,
+                                    premises=(
+                                        q_value | is_a | proposition,
+                                        r_value | is_a | proposition,),
+                                    inference_rule=i4, t=t)
+                                return t, True
+                            else:
+                                # (R is-a proposition) is not proved.
+                                return t, False
+                        else:
+                            # (Q is-a proposition) is not proved.
+                            return t, False
+
+                with (as1.let_x_be_a_meta_variable(formula_typesetter='Q') as q,
+                      as1.let_x_be_a_meta_variable(formula_typesetter='R') as r):
+                    success, m = as1.is_formula_equivalent_with_variables_2(phi=p_value, psi=q | lor | r,
+                                                                            variables=(q, r,))
+                    if success:
+                        # The conjecture (P) is of the form (Q ∨ R).
+                        # Retrieve the values assigned to Q and R.
+                        q_value: as1.Formula = m.get_assigned_value(phi=q)
+                        r_value: as1.Formula = m.get_assigned_value(phi=r)
+                        # Recursively try to derive (Q is-a proposition).
+                        t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
+                        if success:
+                            # (Q is-a proposition) is proved.
+                            t, success = self.process_conjecture(conjecture=r_value | is_a | proposition, t=t)
+                            if success:
+                                # (R is-a proposition) is proved.
+                                # We can safely derive ((Q ∨ R) is-a proposition).
+                                t, _ = as1.derive_1(
+                                    conjecture=(q_value | lor | r_value) | is_a | proposition,
+                                    premises=(
+                                        q_value | is_a | proposition,
+                                        r_value | is_a | proposition,),
+                                    inference_rule=i5, t=t)
+                                return t, True
+                            else:
+                                # (R is-a proposition) is not proved.
+                                return t, False
+                        else:
+                            # (Q is-a proposition) is not proved.
+                            return t, False
+
+                # The conjecture is not in any of the required forms above.
+                return t, False
+            else:
+                # The conjecture is not of the form (P is-a proposition).
+                # This heuristic is not applicable.
+                return t, False
 
 
 p_is_a_proposition_heuristic = PIsAProposition()
@@ -278,13 +394,13 @@ def extend_theory_with_propositional_logic_syntax(t: as1.FlexibleTheory) -> as1.
      - the "p is-a proposition" heuristic.
 
     """
-    global pls1, pls2, pls3, pls4, pls5, p_is_a_proposition_heuristic
+    global i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
     t: as1.Theory = as1.coerce_theory(phi=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pls1, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pls2, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pls3, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pls4, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pls5, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=i1, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=i2, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=i3, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=i4, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=i5, t=t)
     t.heuristics.add(p_is_a_proposition_heuristic)
     return t
 

@@ -1044,12 +1044,46 @@ class Variable(SimpleObject):
         return
 
 
+class MetaVariable(SimpleObject):
+    """A variable is defined as a simple-object that is not declared in the theory with a is-a operator.
+
+    The justification for a dedicated python class is the implementation of the __enter__ and __exit__ methods,
+    which allow the usage of variables with the python with statement."""
+
+    def __new__(cls, connective: NullaryConnective):
+        o: tuple
+        o = super().__new__(cls, connective=connective)
+        return o
+
+    def __init__(self, connective: NullaryConnective):
+        super().__init__(connective=connective)
+
+    def __enter__(self) -> MetaVariable:
+        return self
+
+    def __exit__(self, exc_type: typing.Optional[type], exc: typing.Optional[BaseException],
+                 exc_tb: typing.Any) -> None:
+        return
+
+
 def let_x_be_a_variable(formula_typesetter: pl1.FlexibleTypesetter) -> typing.Union[
     Variable, typing.Generator[Variable, typing.Any, None]]:
     if formula_typesetter is None or isinstance(formula_typesetter, pl1.FlexibleTypesetter):
         return Variable(connective=NullaryConnective(formula_typesetter=formula_typesetter))
     elif isinstance(formula_typesetter, typing.Iterable):
         return (Variable(connective=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
+    else:
+        raise TypeError  # TODO: Implement event code.
+
+
+def let_x_be_a_meta_variable(
+        formula_typesetter: pl1.FlexibleTypesetter | typing.Iterable[pl1.FlexibleTypesetter, ...]) -> (
+        MetaVariable | tuple[MetaVariable, ...]):
+    """A meta-variable is a nullary-connective formula (*) that is not declared in the theory with a is-a operator."""
+    if formula_typesetter is None or isinstance(formula_typesetter, pl1.FlexibleTypesetter):
+        return MetaVariable(connective=NullaryConnective(formula_typesetter=formula_typesetter))
+    elif isinstance(formula_typesetter, typing.Iterable):
+        return tuple(MetaVariable(connective=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
     else:
         raise TypeError  # TODO: Implement event code.
 
@@ -3375,6 +3409,22 @@ def derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule: Fle
 
     # The conclusion of the inference_rule is not compatible with the conjecture.
     return t, False, None
+
+
+def auto_derive_with_heuristics(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
+        typing.Tuple[Theory, bool]:
+    """Attempt to derive automatically a conjecture using the heuristics attached to the theory.
+
+    :param t:
+    :param conjecture:
+    :param debug:
+    :return: a tuple (t, success)
+    """
+    for heuristic in t.heuristics:
+        t, success = heuristic.process_conjecture(conjecture=conjecture, t=t)
+        if success:
+            return t, True
+    return t, False
 
 
 def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
