@@ -1176,11 +1176,11 @@ def let_x_be_an_axiom(t: FlexibleTheory, valid_statement: typing.Optional[Flexib
         axiom: Axiom = Axiom(valid_statement=valid_statement)
 
     if isinstance(t, Axiomatization):
-        t = Axiomatization(derivations=(*t, axiom,))
+        t = Axiomatization(derivations=(*t, axiom,), decorations=(t,))
         u1.log_info(axiom.typeset_as_string(theory=t))
         return t, axiom
     elif isinstance(t, Theory):
-        t = Theory(derivations=(*t, axiom,))
+        t = Theory(derivations=(*t, axiom,), decorations=(t,))
         u1.log_info(axiom.typeset_as_string(theory=t))
         return t, axiom
     else:
