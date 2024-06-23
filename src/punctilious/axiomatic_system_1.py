@@ -2851,7 +2851,8 @@ class Theory(Enumeration):
 
     """
 
-    def __new__(cls, connective: Connective | None = None, derivations: FlexibleEnumeration = None):
+    def __new__(cls, connective: Connective | None = None, derivations: FlexibleEnumeration = None,
+                decorations: tuple[Theory, ...] | tuple[()] | None = None):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(phi=derivations)
         # use coerce_derivation() to assure that every derivation is properly types as Axiom, InferenceRule or Theorem.
@@ -2866,7 +2867,8 @@ class Theory(Enumeration):
         o: tuple = super().__new__(cls, elements=derivations)
         return o
 
-    def __init__(self, connective: Connective | None = None, derivations: FlexibleEnumeration = None):
+    def __init__(self, connective: Connective | None = None, derivations: FlexibleEnumeration = None,
+                 decorations: tuple[Theory, ...] | tuple[()] | None = None):
         if connective is None:
             connective: Connective = connectives.theory
         # coerce to enumeration
@@ -2876,6 +2878,7 @@ class Theory(Enumeration):
             phi=(coerce_derivation(phi=p) for p in derivations))
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         super().__init__(connective=connective, elements=derivations)
+        copy_theory_decorations(target=self, decorations=decorations)
 
     @property
     def axioms(self) -> Enumeration:
@@ -2953,6 +2956,19 @@ class Theory(Enumeration):
 FlexibleTheory = typing.Optional[
     typing.Union[Theory, typing.Iterable[FlexibleDerivation]]]
 """FlexibleTheory is a flexible python type that may be safely coerced into a Theory."""
+
+
+def copy_theory_decorations(target: FlexibleTheory, decorations: tuple[Theory, ...] | tuple[()] | None = None):
+    """Copy the decorative-properties of a source theory onto a target theory.
+
+    :param target:
+    :param decorations:
+    :return:
+    """
+    if decorations is not None:
+        for decorative_theory in decorations:
+            # Copies all heuristics
+            target.heuristics.update(decorative_theory.heuristics)
 
 
 class Axiomatization(Theory):
