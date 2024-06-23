@@ -2851,7 +2851,7 @@ class Theory(Enumeration):
 
     """
 
-    def __new__(cls, connective: typing.Optional[Connective] = None, derivations: FlexibleEnumeration = None):
+    def __new__(cls, connective: Connective | None = None, derivations: FlexibleEnumeration = None):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(phi=derivations)
         # use coerce_derivation() to assure that every derivation is properly types as Axiom, InferenceRule or Theorem.
@@ -2866,7 +2866,7 @@ class Theory(Enumeration):
         o: tuple = super().__new__(cls, elements=derivations)
         return o
 
-    def __init__(self, connective: typing.Optional[Connective] = None, derivations: FlexibleEnumeration = None):
+    def __init__(self, connective: Connective | None = None, derivations: FlexibleEnumeration = None):
         if connective is None:
             connective: Connective = connectives.theory
         # coerce to enumeration
@@ -2874,6 +2874,7 @@ class Theory(Enumeration):
         # coerce all elements of the enumeration to theorem
         derivations: Enumeration = coerce_enumeration(
             phi=(coerce_derivation(phi=p) for p in derivations))
+        self._heuristics: set[Heuristic, ...] | set[{}] = set()
         super().__init__(connective=connective, elements=derivations)
 
     @property
@@ -2882,6 +2883,14 @@ class Theory(Enumeration):
 
         Note: order is preserved."""
         return Enumeration(elements=tuple(self.iterate_axioms()))
+
+    @property
+    def heuristics(self) -> set[Heuristic, ...] | set[{}]:
+        """A python-set of heuristics.
+
+        Heuristics are not formally part of a theory. They are decorative objects used to facilitate proof derivations.
+        """
+        return self._heuristics
 
     @property
     def valid_statements(self) -> Enumeration:
