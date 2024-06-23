@@ -2852,7 +2852,7 @@ class Theory(Enumeration):
     """
 
     def __new__(cls, connective: Connective | None = None, derivations: FlexibleEnumeration = None,
-                decorations: tuple[Theory, ...] | tuple[()] | None = None):
+                decorations: FlexibleDecorations = None):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(phi=derivations)
         # use coerce_derivation() to assure that every derivation is properly types as Axiom, InferenceRule or Theorem.
@@ -2868,7 +2868,7 @@ class Theory(Enumeration):
         return o
 
     def __init__(self, connective: Connective | None = None, derivations: FlexibleEnumeration = None,
-                 decorations: tuple[Theory, ...] | tuple[()] | None = None):
+                 decorations: FlexibleDecorations = None):
         if connective is None:
             connective: Connective = connectives.theory
         # coerce to enumeration
@@ -2957,8 +2957,10 @@ FlexibleTheory = typing.Optional[
     typing.Union[Theory, typing.Iterable[FlexibleDerivation]]]
 """FlexibleTheory is a flexible python type that may be safely coerced into a Theory."""
 
+FlexibleDecorations = typing.Optional[typing.Union[typing.Tuple[Theory, ...], typing.Tuple[()]]]
 
-def copy_theory_decorations(target: FlexibleTheory, decorations: tuple[Theory, ...] | tuple[()] | None = None):
+
+def copy_theory_decorations(target: FlexibleTheory, decorations: FlexibleDecorations = None):
     """Copy the decorative-properties of a source theory onto a target theory.
 
     :param target:
@@ -2981,7 +2983,7 @@ class Axiomatization(Theory):
 
     """
 
-    def __new__(cls, derivations: FlexibleEnumeration = None):
+    def __new__(cls, derivations: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(phi=derivations)
         # coerce all elements of the enumeration to axioms or inference-rules.
@@ -3002,7 +3004,7 @@ class Axiomatization(Theory):
         o: tuple = super().__new__(cls, derivations=coerced_derivations)
         return o
 
-    def __init__(self, derivations: FlexibleEnumeration = None):
+    def __init__(self, derivations: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(phi=derivations)
         # coerce all elements of the enumeration to axioms or inference-rules.
@@ -3020,7 +3022,8 @@ class Axiomatization(Theory):
                 # Incorrect form.
                 raise_error(error_code=error_codes.e123, phi=derivation, phi_type_1=InferenceRule,
                             phi_type_2=Axiom)
-        super().__init__(connective=connectives.axiomatization, derivations=coerced_derivations)
+        super().__init__(connective=connectives.axiomatization, derivations=coerced_derivations,
+                         decorations=decorations)
 
 
 def is_subformula_of_formula(subformula: FlexibleFormula, formula: FlexibleFormula) -> bool:
@@ -3217,7 +3220,7 @@ def derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, premises: FlexibleT
 
     # Extends the theory with the new theorem.
     # The validity of the premises will be checked during theory initialization.
-    t: Theory = Theory(derivations=(*t, theorem,))
+    t: Theory = Theory(derivations=(*t, theorem,), decorations=(t,))
 
     u1.log_info(theorem.typeset_as_string(theory=t))
 
