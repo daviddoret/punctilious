@@ -1151,11 +1151,11 @@ def let_x_be_an_axiom_deprecated(valid_statement: FlexibleFormula):
     return Axiom(valid_statement=valid_statement)
 
 
-def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[FlexibleFormula] = None,
+def let_x_be_an_axiom(t: FlexibleTheory, valid_statement: typing.Optional[FlexibleFormula] = None,
                       axiom: typing.Optional[FlexibleAxiom] = None):
     """
 
-    :param theory: An axiom-collection or a theory. If None, the empty axiom-collection is implicitly used.
+    :param t: An axiomatization or a theory. If None, the empty axiom-collection is implicitly used.
     :param valid_statement: The statement claimed by the new axiom. Either the claim or axiom parameter must be provided,
     and not both.
     :param axiom: An existing axiom. Either the claim or axiom parameter must be provided,
@@ -1163,10 +1163,10 @@ def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[F
     :return: a pair (t, a) where t is an extension of the input theory, with a new axiom claiming the
     input statement, and a is the new axiom.
     """
-    if theory is None:
-        theory = Axiomatization(derivations=None)
+    if t is None:
+        t = Axiomatization(derivations=None)
     else:
-        theory: FlexibleTheory = coerce_theory(phi=theory)
+        t: FlexibleTheory = coerce_theory(phi=t)
     if valid_statement is not None and axiom is not None:
         raise Exception('oops 1')
     elif valid_statement is None and axiom is None:
@@ -1174,14 +1174,14 @@ def let_x_be_an_axiom(theory: FlexibleTheory, valid_statement: typing.Optional[F
     elif valid_statement is not None:
         axiom: Axiom = Axiom(valid_statement=valid_statement)
 
-    if isinstance(theory, Axiomatization):
-        theory = Axiomatization(derivations=(*theory, axiom,))
-        u1.log_info(axiom.typeset_as_string(theory=theory))
-        return theory, axiom
-    elif isinstance(theory, Theory):
-        theory = Theory(derivations=(*theory, axiom,))
-        u1.log_info(axiom.typeset_as_string(theory=theory))
-        return theory, axiom
+    if isinstance(t, Axiomatization):
+        t = Axiomatization(derivations=(*t, axiom,))
+        u1.log_info(axiom.typeset_as_string(theory=t))
+        return t, axiom
+    elif isinstance(t, Theory):
+        t = Theory(derivations=(*t, axiom,))
+        u1.log_info(axiom.typeset_as_string(theory=t))
+        return t, axiom
     else:
         raise Exception('oops 3')
 
@@ -3139,18 +3139,18 @@ class AutoDerivationFailure(Exception):
         self.kwargs = kwargs
 
 
-def derive(theory: FlexibleTheory, conjecture: FlexibleFormula, premises: FlexibleTupl,
-           inference_rule: FlexibleInferenceRule) -> typing.Tuple[Theory, Theorem]:
+def derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, premises: FlexibleTupl,
+             inference_rule: FlexibleInferenceRule) -> typing.Tuple[Theory, Theorem]:
     """Given a theory t, derives a new theory t2 that extends t with a new theorem by applying an inference-rule.
 
     :param conjecture:
-    :param theory:
+    :param t:
     :param premises:
     :param inference_rule:
     :return:
     """
     # parameters validation
-    theory: Theory = coerce_theory(phi=theory)
+    t: Theory = coerce_theory(phi=t)
     conjecture: Formula = coerce_formula(phi=conjecture)
     premises: Tupl = coerce_tupl(phi=premises)
     inference_rule: InferenceRule = coerce_inference_rule(phi=inference_rule)
@@ -3158,11 +3158,11 @@ def derive(theory: FlexibleTheory, conjecture: FlexibleFormula, premises: Flexib
     for premise in premises:
         # The validity of the premises is checked during theory initialization,
         # but re-checking it here "in advance" helps provide more context in the exception that is being raised.
-        if not is_valid_statement_in_theory(phi=premise, t=theory):
+        if not is_valid_statement_in_theory(phi=premise, t=t):
             raise Exception(
                 f'Conjecture: \n\t{conjecture} \n...cannot be derived because premise: \n\t{premise}'
                 f' \n...is not a valid-statement in the theory. The inference-rule used to try this derivation was: '
-                f'\n\t{inference_rule} \nThe complete theory is: \n\t{theory}')
+                f'\n\t{inference_rule} \nThe complete theory is: \n\t{t}')
 
     # Configure the inference that derives the theorem.
     inference: Inference = Inference(premises=premises, transformation_rule=inference_rule.transformation)
@@ -3172,11 +3172,11 @@ def derive(theory: FlexibleTheory, conjecture: FlexibleFormula, premises: Flexib
 
     # Extends the theory with the new theorem.
     # The validity of the premises will be checked during theory initialization.
-    theory: Theory = Theory(derivations=(*theory, theorem,))
+    t: Theory = Theory(derivations=(*t, theorem,))
 
-    u1.log_info(theorem.typeset_as_string(theory=theory))
+    u1.log_info(theorem.typeset_as_string(theory=t))
 
-    return theory, theorem
+    return t, theorem
 
 
 def is_in_formula_tree(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
@@ -3212,7 +3212,7 @@ def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
     return is_element_of_enumeration(e=phi, big_e=m.domain)
 
 
-def auto_derive_0(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
+def derive_0(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
@@ -3247,38 +3247,37 @@ def auto_derive_0(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = 
     return t, False, None
 
 
-def auto_derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule: FlexibleInferenceRule,
-                  debug: bool = False) -> \
+def derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule: FlexibleInferenceRule,
+             debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
-    """An algorithm that attempts to automatically prove a conjecture in a theory.
+    """Attempts to prove a conjecture in a theory with an inference-rule.
 
-    The auto_derive_1 algorithm "narrow and shallow inference" builds upon auto_derive_0:
-    1) check that the conclusion of the inference_rule is consistent with the conjecture,
-    2) automatically finds a set of valid-statements in the theory that matches
-       the inference_rule premises in the theory such as to derive the conjecture.
+    derive_1 requires the explicit list of premises. derive_2 automatically finds a set of premises
+    among the theory valid-statements, such that the conjecture can be derived.
 
-    Note: this algorithm is still trivial as it does not rely on recursion to look for solutions.
-
-    :param t:
-    :param conjecture:
-    :param inference_rule:
+    :param t: a theory.
+    :param conjecture: the conjecture to be proven.
+    :param inference_rule: the inference-rule from which the conjecture can be derived.
     :param debug:
-    :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
+    :return: A python-tuple (t, True, derivation) if the derivation is successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[Theory, bool, typing.Optional[Derivation]]
     """
     t = coerce_theory(phi=t)
     conjecture = coerce_formula(phi=conjecture)
     inference_rule = coerce_inference_rule(phi=inference_rule)
     if debug:
-        u1.log_debug(f'auto_derive_1: start. conjecture:{conjecture}. inference_rule:{inference_rule}.')
+        u1.log_debug(f'derive_2: Derivation started. conjecture:{conjecture}. inference_rule:{inference_rule}.')
 
     if not is_inference_rule_of_theory(ir=inference_rule, t=t):
         # The inference_rule is not in the theory,
         # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
+        u1.log_debug(
+            f'derive_2: The derivation failed because the inference-rule is not contained in the theory. '
+            f'conjecture:{conjecture}. inference_rule:{inference_rule}. ')
         return t, False, None
 
     # First try the less expansive auto_derive_0 algorithm
-    t, successful, derivation, = auto_derive_0(t=t, conjecture=conjecture, debug=debug)
+    t, successful, derivation, = derive_0(t=t, conjecture=conjecture, debug=debug)
     if successful:
         return t, successful, derivation
 
@@ -3319,8 +3318,8 @@ def auto_derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule
 
         if success:
             # All required premises are present in theory t, the conjecture can be proven.
-            t, derivation = derive(theory=t, conjecture=conjecture, premises=effective_premises,
-                                   inference_rule=inference_rule)
+            t, derivation = derive_1(t=t, conjecture=conjecture, premises=effective_premises,
+                                     inference_rule=inference_rule)
             return t, True, derivation
         else:
             # The required premises are not present in theory t, report failure.
@@ -3352,7 +3351,7 @@ def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = 
 
     # Loop through all inference_rules in theory t.
     for inference_rule in t.iterate_inference_rules():
-        t, success, d = auto_derive_1(t=t, conjecture=conjecture, inference_rule=inference_rule)
+        t, success, d = derive_2(t=t, conjecture=conjecture, inference_rule=inference_rule)
         if success:
             # Eureka, the conjecture was proven.
             return t, success, d
@@ -3515,9 +3514,9 @@ def auto_derive_4(
                             break
                 if inference_rule_success:
                     # all premises have been successfully proven.
-                    t, derivation = derive(theory=t, conjecture=conjecture,
-                                           premises=effective_premises,
-                                           inference_rule=inference_rule)
+                    t, derivation = derive_1(t=t, conjecture=conjecture,
+                                             premises=effective_premises,
+                                             inference_rule=inference_rule)
                     if debug:
                         u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
                     return t, True, derivation, conjecture_exclusion_list
@@ -3541,9 +3540,9 @@ def auto_derive_4(
                                 break
                     if permutation_success:
                         # all premises have been successfully proven.
-                        t, derivation = derive(theory=t, conjecture=conjecture,
-                                               premises=effective_premises,
-                                               inference_rule=inference_rule)
+                        t, derivation = derive_1(t=t, conjecture=conjecture,
+                                                 premises=effective_premises,
+                                                 inference_rule=inference_rule)
                         if debug:
                             u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
                         return t, True, derivation, conjecture_exclusion_list

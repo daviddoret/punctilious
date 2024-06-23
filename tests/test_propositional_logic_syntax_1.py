@@ -19,11 +19,11 @@ class TestPropositionalLogicMetaTheory:
         theory, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
 
         # derive: p is-a proposition
-        theory, _, = pu.as1.derive(theory=theory,
-                                   conjecture=p | is_a | proposition,
-                                   premises=(
-                                       p | is_a | propositional_variable,),
-                                   inference_rule=pu.pls1.i1)
+        theory, _, = pu.as1.derive_1(t=theory,
+                                     conjecture=p | is_a | proposition,
+                                     premises=(
+                                         p | is_a | propositional_variable,),
+                                     inference_rule=pu.pls1.i1)
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=theory)
 
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition

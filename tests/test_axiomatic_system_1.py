@@ -880,9 +880,9 @@ class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
 class TestAreValidStatementsInTheory:
     def test_are_valid_statements_in_theory(self):
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        t, _, = pu.as1.let_x_be_an_axiom(theory=None, valid_statement=a)
-        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=c)
-        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=d)
+        t, _, = pu.as1.let_x_be_an_axiom(t=None, valid_statement=a)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=c)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=d)
         assert pu.as1.are_valid_statements_in_theory(s=(a, c,), t=t)
         assert pu.as1.are_valid_statements_in_theory(s=(a, c, d,), t=t)
         assert pu.as1.are_valid_statements_in_theory(s=(d, a, c,), t=t)
@@ -895,9 +895,9 @@ class TestAreValidStatementsInTheory:
 class TestAreValidStatementsInTheoryWithVariables:
     def test_are_valid_statements_in_theory_with_variables(self):
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        t, _, = pu.as1.let_x_be_an_axiom(theory=None, valid_statement=a)
-        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=c)
-        t, _, = pu.as1.let_x_be_an_axiom(theory=t, valid_statement=d)
+        t, _, = pu.as1.let_x_be_an_axiom(t=None, valid_statement=a)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=c)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=d)
         valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c,), t=t, variables=None,
                                                                          variables_values=None)
         assert valid
@@ -968,8 +968,8 @@ class TestDemonstration:
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
         x, y, z = pu.as1.let_x_be_a_variable(formula_typesetter=('x', 'y', 'z',))
         star = pu.as1.let_x_be_a_binary_connective(formula_typesetter='*')
-        theory, axiom_1, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=a | star | b)
-        theory, axiom_2, = pu.as1.let_x_be_an_axiom(theory=theory, valid_statement=b | star | c)
+        theory, axiom_1, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a | star | b)
+        theory, axiom_2, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=b | star | c)
         theory, ir1, = pu.as1.let_x_be_an_inference_rule(theory=theory,
                                                          premises=(x | star | y,
                                                                    y | star | z,),
@@ -977,12 +977,12 @@ class TestDemonstration:
                                                          variables=(x, y, z,))
 
         # derive a theorem
-        demo2, _, = pu.as1.derive(theory=theory,
-                                  conjecture=a | star | c,
-                                  premises=(
-                                      a | star | b,
-                                      b | star | c,),
-                                  inference_rule=ir1)
+        demo2, _, = pu.as1.derive_1(t=theory,
+                                    conjecture=a | star | c,
+                                    premises=(
+                                        a | star | b,
+                                        b | star | c,),
+                                    inference_rule=ir1)
         assert pu.as1.is_valid_statement_in_theory(phi=a | star | c, t=demo2)
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
@@ -1011,9 +1011,9 @@ class TestAutoDerivation:
         # elaborate a theory
         p = pu.as1.let_x_be_a_simple_object(formula_typesetter='P')
         q = pu.as1.let_x_be_a_simple_object(formula_typesetter='Q')
-        t1, a1 = pu.as1.let_x_be_an_axiom(theory=None, axiom=pu.as1.Axiom(valid_statement=p))
+        t1, a1 = pu.as1.let_x_be_an_axiom(t=None, axiom=pu.as1.Axiom(valid_statement=p))
 
-        t1, success, _, = pu.as1.auto_derive_0(t=t1, conjecture=p)
+        t1, success, _, = pu.as1.derive_0(t=t1, conjecture=p)
 
         if_p_then_q = pu.as1.InferenceRule(
             transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
@@ -1028,11 +1028,11 @@ class TestAutoDerivation:
 
         pass
         # auto-derivation of an existing valid-statement
-        t2, success, _, = pu.as1.auto_derive_0(t=t1, conjecture=p)
+        t2, success, _, = pu.as1.derive_0(t=t1, conjecture=p)
         assert success
         pass
         # auto-derivation of a simple theorem, without variables
-        t2, success, _, = pu.as1.auto_derive_1(t=t2, conjecture=q, inference_rule=if_p_then_q)
+        t2, success, _, = pu.as1.derive_2(t=t2, conjecture=q, inference_rule=if_p_then_q)
         assert success
         pass
 

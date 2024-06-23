@@ -209,7 +209,7 @@ def let_x_be_a_propositional_variable(
     if isinstance(rep, str):
         # declare a single propositional variable
         x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=rep))
-        t, _ = as1.let_x_be_an_axiom(theory=t,
+        t, _ = as1.let_x_be_an_axiom(t=t,
                                      valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
 
         return t, x
@@ -219,12 +219,12 @@ def let_x_be_a_propositional_variable(
         for r in rep:
             x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=r))
             propositional_variables = propositional_variables + (x,)
-            t, _ = as1.let_x_be_an_axiom(theory=t,
+            t, _ = as1.let_x_be_an_axiom(t=t,
                                          valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
-            t, _ = as1.derive(theory=t,
-                              conjecture=x | is_a | proposition,
-                              premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
-                              inference_rule=i1)
+            t, _ = as1.derive_1(t=t,
+                                conjecture=x | is_a | proposition,
+                                premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
+                                inference_rule=i1)
         return t, *propositional_variables
     else:
         raise TypeError  # TODO: Implement event code.
