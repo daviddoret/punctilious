@@ -388,7 +388,7 @@ class PIsAProposition(as1.Heuristic):
 p_is_a_proposition_heuristic = PIsAProposition()
 
 
-def extend_theory_with_propositional_logic_syntax(t: as1.FlexibleTheory) -> as1.Theory:
+def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as1.Theory:
     """Extends a theory with:
      - the propositional-logic-syntax-1 axioms,
      - the "p is-a proposition" heuristic.
@@ -405,11 +405,11 @@ def extend_theory_with_propositional_logic_syntax(t: as1.FlexibleTheory) -> as1.
     return t
 
 
-def get_propositional_logic_syntax_theory() -> as1.Theory:
+def let_x_be_a_propositional_logic_syntax_1_theory() -> as1.Theory:
     """Return a new theory with:
      - the propositional-logic-syntax-1 axioms,
      - the "p is-a proposition" heuristic.
      """
     t: as1.Theory = as1.Theory()
-    t = extend_theory_with_propositional_logic_syntax(t=t)
+    t = extend_theory_with_propositional_logic_syntax_1(t=t)
     return t

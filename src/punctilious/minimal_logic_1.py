@@ -35,11 +35,9 @@ Bibliography:
  - Mancosu et al., 2021, p. 19.
 """
 
-# python native modules
 import typing
-# punctilious modules
 import axiomatic_system_1 as as1
-import inference_rules_1 as ir1
+import propositional_logic_syntax_1 as pls1
 
 # Propositional logic vocabulary
 
@@ -322,4 +320,36 @@ axiomatization = as1.Axiomatization(derivations=(pl01, pl02, pl03, pl04, pl05, p
 
 extended_theory = as1.Theory(derivations=(*axiomatization,))
 
-pass
+
+def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
+    """Extends a theory with:
+     - the propositional-logic-syntax-1 axioms,
+     - the minimal-logic-1 axioms,
+     - TODO: add some theory-specific heuristics?
+
+    """
+    global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
+    t: as1.Theory = as1.coerce_theory(phi=t)
+    t: as1.Theory = pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl01, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl02, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl03, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl04, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl05, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl06, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl07, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl08, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl09, t=t)
+    t, _ = as1.let_x_be_an_axiom(axiom=pl10, t=t)
+    return t
+
+
+def let_x_be_a_minimal_logic_1_theory() -> as1.Theory:
+    """Return a new theory with:
+     - the propositional-logic-syntax-1 axioms,
+     - the minimal-logic-1 axioms,
+     - TODO: add some theory-specific heuristics?
+     """
+    t: as1.Theory = as1.Theory()
+    t = extend_theory_with_minimal_logic_1(t=t)
+    return t

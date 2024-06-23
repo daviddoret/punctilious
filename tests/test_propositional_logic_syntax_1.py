@@ -11,7 +11,7 @@ lnot = pu.axiomatic_system_1.connectives.lnot
 
 class TestHeuristic:
     def test_heuristic_basic(self):
-        t = pu.pls1.get_propositional_logic_syntax_theory()
+        t = pu.pls1.let_x_be_a_propositional_logic_syntax_1_theory()
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
         assert not pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=p | is_a | proposition, t=t)
@@ -26,7 +26,7 @@ class TestHeuristic:
         assert success
 
     def test_heuristic_complex(self):
-        t = pu.pls1.get_propositional_logic_syntax_theory()
+        t = pu.pls1.let_x_be_a_propositional_logic_syntax_1_theory()
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
         t, success = pu.as1.auto_derive_with_heuristics(
