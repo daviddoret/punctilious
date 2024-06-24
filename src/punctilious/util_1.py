@@ -29,3 +29,11 @@ def log_debug(msg: str, **kwargs):
     logger.debug(msg)
     # warnings.warn('{msg} :{force_str(kwargs)}.')
     print(f'{msg}', flush=True)
+
+
+class ApplicativeException(Exception):
+    def __init__(self, code: str | None = None, msg: str | None = None, **kwargs):
+        self.code = code
+        self.msg = msg
+        self.kwargs = kwargs
+        super().__init__(msg)

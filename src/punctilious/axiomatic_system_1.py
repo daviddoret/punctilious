@@ -2020,13 +2020,13 @@ class Transformation(Formula):
         arguments = coerce_tupl(phi=arguments)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
-        variables_map: MapBuilder = MapBuilder()
-        try:
-            is_formula_equivalent_with_variables(phi=arguments, psi=self.premises, variables=self.variables,
-                                                 variables_fixed_values=variables_map, raise_event_if_false=True)
-        except Exception as error:
-            raise_error(error_code=error_codes.e117, error=error, arguments=arguments, premises=self.premises,
-                        variables=self.variables)
+        success, variables_map = is_formula_equivalent_with_variables_2(phi=arguments, psi=self.premises,
+                                                                        variables=self.variables,
+                                                                        variables_fixed_values=None)
+        if not success:
+            raise u1.ApplicativeException(code='e117', msg='Applying a transformation with incorrect premises.',
+                                          target_formula=arguments, transformation_premises=self.premises,
+                                          transformation_variables=self.variables, transformation=self)
 
         # step 2:
         outcome: Formula = replace_formulas(phi=self.conclusion, m=variables_map)

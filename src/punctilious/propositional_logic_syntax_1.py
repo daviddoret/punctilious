@@ -386,6 +386,11 @@ class PIsAProposition(as1.Heuristic):
 
 
 p_is_a_proposition_heuristic = PIsAProposition()
+"""The (P is-a proposition) heuristic derives automatically any proposition of the form (P is-a proposition).
+
+It is a "closed" heuristic, in the sense that it does not call general derivation heuristics recursively.
+Instead, it only calls itself recursively.
+"""
 
 
 def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as1.Theory:
