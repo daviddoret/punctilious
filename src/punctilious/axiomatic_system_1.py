@@ -1392,50 +1392,10 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     :param raise_event_if_false:
     :return:
     """
-    variables_fixed_values: MapBuilder = coerce_map_builder(phi=variables_fixed_values)
-    phi: Formula = coerce_formula(phi=phi)
-    psi: Formula = coerce_formula(phi=psi)
-    psi_value: Formula = psi
-    variables: Tupl = coerce_tupl(phi=variables)
-    if variables.has_element(phi=phi):
-        # The sub-formulas of left-hand formula phi can't be elements of the variables enumeration.
-        raise_error(error_code=error_codes.e118, phi=phi, psi=psi, v=variables)
-    if variables.has_element(phi=psi):
-        # psi is a variable.
-        if is_in_map_domain(phi=psi, m=variables_fixed_values):
-            # psi's value is already mapped.
-            already_mapped_value: Formula = variables_fixed_values.get_assigned_value(phi=psi)
-            if is_formula_equivalent(phi=phi, psi=already_mapped_value):
-                # phi is consistent with the already mapped value.
-                # we can safely substitute the variable with its value.
-                psi_value: Formula = already_mapped_value
-                # print(f'    substituted with {psi}.')
-            else:
-                # psi is not consistent with its already mapped value.
-                # it follows that phi and psi are not formula-equivalent-with-variables.
-                if raise_event_if_false:
-                    raise_error(error_code=error_codes.e121, variable=psi,
-                                already_mapped_value=already_mapped_value, distinct_value=phi)
-                return False
-        else:
-            # psi's value has not been mapped yet.
-            # substitute the variable with its newly mapped value.
-            psi_value = phi
-            variables_fixed_values.set_pair_OBSOLETE(phi=psi, psi=psi_value)
-    # print(f'    psi_value:{psi_value}')
-    # at this point, variable substitution has been completed at the formula-root level.
-    if (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == 0) and (psi_value.arity == 0):
-        # Base case
-        return True
-    elif (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == psi_value.arity) and all(
-            is_formula_equivalent_with_variables(phi=phi_prime, psi=psi_prime, variables=variables,
-                                                 variables_fixed_values=variables_fixed_values) for
-            phi_prime, psi_prime in zip(phi, psi_value)):
-        # Inductive step
-        return True
-    else:
-        # Extreme case
-        return False
+    is_equivalent, _ = is_formula_equivalent_with_variables_2(phi=phi, psi=psi, variables=variables,
+                                                              variables_fixed_values=variables_fixed_values,
+                                                              raise_event_if_false=raise_event_if_false)
+    return is_equivalent
 
 
 def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
@@ -1475,17 +1435,17 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
     for x in variables:
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
-            raise Exception(f'the arity of variable "{x}" in variables is not equal to 0.')
+            raise u1.ApplicativeException(f'the arity of variable "{x}" in variables is not equal to 0.')
         if is_subformula_of_formula(formula=phi, subformula=x):
-            raise Exception(f'variable "{x}" is a sub-formula of phi.')
+            raise u1.ApplicativeException(f'variable "{x}" is a sub-formula of phi.')
     # check that all variables in the map are atomic formulas and are correctly listed in variables
     for x in variables_fixed_values.domain:
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
-            raise Exception(f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
+            raise u1.ApplicativeException(f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
         if not is_element_of_enumeration(element=x, enumeration=variables):
-            raise Exception(f'variable {x} is present in the domain of the map variables_fixed_values, '
-                            f'but it is not an element of the enumeration variables.')
+            raise u1.ApplicativeException(f'variable {x} is present in the domain of the map variables_fixed_values, '
+                                          f'but it is not an element of the enumeration variables.')
     if is_element_of_enumeration(element=psi, enumeration=variables):
         # psi is a variable
         if is_in_map_domain(phi=psi, m=variables_fixed_values):
@@ -1495,8 +1455,8 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
                 return True, variables_fixed_values
             else:
                 if raise_event_if_false:
-                    raise Exception(f'formula "{phi}" is not formula-equivalent to '
-                                    f'the assigned value "{psi_value}" of variable "{psi}".')
+                    raise u1.ApplicativeException(f'formula "{phi}" is not formula-equivalent to '
+                                                  f'the assigned value "{psi_value}" of variable "{psi}".')
                 return False, variables_fixed_values
         else:
             # psi is not defined in the domain of the map of fixed values
@@ -1509,8 +1469,8 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
         # psi is not a variable
         if not phi.connective is psi.connective or phi.arity != psi.arity:
             if raise_event_if_false:
-                raise Exception(f'the connective or arity of "{phi}" are not equal '
-                                f'to the connective or aritity of "{psi}".')
+                raise u1.ApplicativeException(f'the connective or arity of "{phi}" are not equal '
+                                              f'to the connective or aritity of "{psi}".')
             return False, variables_fixed_values
         else:
             for phi_term, psi_term in zip(phi, psi):
@@ -1521,8 +1481,8 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
                     raise_event_if_false=False)
                 if not check:
                     if raise_event_if_false:
-                        raise Exception(f'term "{phi_term}" "{phi}" is not formula-equivalent '
-                                        f'to the term {psi_term} of "{psi}".')
+                        raise u1.ApplicativeException(f'term "{phi_term}" "{phi}" is not formula-equivalent '
+                                                      f'to the term {psi_term} of "{psi}".')
                     return False, variables_fixed_values
             # all term pairs have been checked
             return True, variables_fixed_values
@@ -3577,8 +3537,10 @@ def auto_derive_4(
     # These are the inference-rules whose conclusions are formula-equivalent-with-variables to the conjecture.
     for inference_rule in t.iterate_inference_rules():
         inference_rule_success: bool = False
-        if is_formula_equivalent_with_variables(phi=conjecture, psi=inference_rule.transformation.conclusion,
-                                                variables=inference_rule.transformation.variables):
+        is_equivalent, m = is_formula_equivalent_with_variables_2(phi=conjecture,
+                                                                  psi=inference_rule.transformation.conclusion,
+                                                                  variables=inference_rule.transformation.variables)
+        if is_equivalent:
             # This inference-rule is compatible with the conjecture.
 
             # To list what would be the required premises to derive the conjecture,

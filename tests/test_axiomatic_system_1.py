@@ -415,7 +415,7 @@ class TestFormulaEquivalenceWithVariables:
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | human,
             variables=())
-        with pytest.raises(pu.as1.CustomException, match='e118'):
+        with pytest.raises(pu.u1.ApplicativeException):
             # the following is ill-formed because the variable is an element of phi, and not of psi.
             # reminder: formula-equivalence-with-variables is non-commutative.
             pu.as1.is_formula_equivalent_with_variables(
@@ -434,10 +434,13 @@ class TestFormulaEquivalenceWithVariables:
             phi=aristotle | is_a | x,
             psi=aristotle | is_a | human,
             variables=(y,))
-        assert not pu.as1.is_formula_equivalent_with_variables(
-            phi=aristotle | is_a | x,
-            psi=platypus | is_a | human,
-            variables=(x,))
+        with pytest.raises(pu.u1.ApplicativeException):
+            # the following is ill-formed because the variable is an element of phi, and not of psi.
+            # reminder: formula-equivalence-with-variables is non-commutative.
+            assert not pu.as1.is_formula_equivalent_with_variables(
+                phi=aristotle | is_a | x,
+                psi=platypus | is_a | human,
+                variables=(x,))
 
     def test_is_formula_equivalent_with_variables_2(self):
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
@@ -445,21 +448,28 @@ class TestFormulaEquivalenceWithVariables:
         cd = pu.as1.Tupl(elements=(c, d,))
         assert not pu.as1.is_formula_equivalent(phi=ab, psi=cd)
         m = pu.as1.MapBuilder()
-        assert pu.as1.is_formula_equivalent_with_variables(phi=ab, psi=cd, variables=(c, d,), variables_fixed_values=m)
+        is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=ab, psi=cd, variables=(c, d,),
+                                                                         variables_fixed_values=m)
+        assert is_equivalent
         assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=a)
         assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=d), psi=b)
         bba = pu.as1.Tupl(elements=(b, b, a,))
         cca = pu.as1.Tupl(elements=(c, c, a,))
         m = pu.as1.MapBuilder()
-        assert pu.as1.is_formula_equivalent_with_variables(phi=bba, psi=bba, variables=(), variables_fixed_values=m)
+        is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=bba, variables=(),
+                                                                         variables_fixed_values=m)
+        assert is_equivalent
         m = pu.as1.MapBuilder()
-        assert pu.as1.is_formula_equivalent_with_variables(phi=bba, psi=cca, variables=(c,), variables_fixed_values=m)
+        is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=cca, variables=(c,),
+                                                                         variables_fixed_values=m)
+        assert is_equivalent
         assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=b)
         ababbba = pu.as1.Tupl(elements=(a, b, a, b, b, a,))
         acaccca = pu.as1.Tupl(elements=(a, c, a, c, c, a,))
         m = pu.as1.MapBuilder()
-        assert pu.as1.is_formula_equivalent_with_variables(phi=ababbba, psi=acaccca, variables=(c,),
-                                                           variables_fixed_values=m)
+        is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=ababbba, psi=acaccca, variables=(c,),
+                                                                         variables_fixed_values=m)
+        assert is_equivalent
         assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=b)
         multilevel1 = pu.as1.Tupl(elements=(a, b, a, b, b, c, c,))
         multilevel2 = pu.as1.Tupl(elements=(a, multilevel1, a, multilevel1, c,))
@@ -467,8 +477,9 @@ class TestFormulaEquivalenceWithVariables:
         print(multilevel3)
         test = pu.as1.replace_formulas(phi=multilevel3, m={a: e, b: d})
         m = pu.as1.MapBuilder()
-        assert pu.as1.is_formula_equivalent_with_variables(phi=multilevel3, psi=test, variables=(d, e,),
-                                                           variables_fixed_values=m)
+        is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=multilevel3, psi=test, variables=(d, e,),
+                                                                         variables_fixed_values=m)
+        assert is_equivalent
         assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=d), psi=b)
         assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=e), psi=a)
 
