@@ -1598,6 +1598,20 @@ def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
         return m
 
 
+def extend_enumeration(enumeration: FlexibleEnumeration, element: FlexibleFormula) -> Enumeration:
+    """Return a new enumeration with a new element.
+    If the element is already a member of the enumeration, the function does nothing.
+    """
+    enumeration: Enumeration = coerce_enumeration(phi=enumeration)
+    element: Formula = coerce_formula(phi=element)
+    if is_element_of_enumeration(element=element, enumeration=enumeration):
+        # The element is already in the enumeration.
+        return enumeration
+    else:
+        extended_enumeration: Enumeration = Enumeration(elements=(*enumeration, element,))
+        return extended_enumeration
+
+
 def extend_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula) -> Map:
     """Return a new map m2 with a new (preimage, image) pair.
     If the preimage is already defined in m, replace it.
@@ -3004,7 +3018,7 @@ def is_leaf_formula(phi: FlexibleFormula) -> bool:
     return phi.arity == 0
 
 
-def get_leaf_formulas(phi: FlexibleFormula, eb: EnumerationBuilder = None) -> Enumeration:
+def get_leaf_formulas(phi: FlexibleFormula, eb: Enumeration = None) -> Enumeration:
     """Return the enumeration of leaf-formulas in phi.
 
     Note: if phi is a leaf-formula, return phi.
@@ -3015,15 +3029,14 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: EnumerationBuilder = None) -> En
     """
     phi: Formula = coerce_formula(phi=phi)
     if eb is None:
-        eb: EnumerationBuilder = EnumerationBuilder(elements=None)
+        eb: Enumeration = Enumeration(elements=None)
     if not eb.has_element(phi=phi) and is_leaf_formula(phi=phi):
-        eb.append(term=phi)
+        eb = extend_enumeration(element=phi, enumeration=eb)
     else:
         for term in phi:
             # Recursively call get_leaf_formulas,
             # which complete eb with any remaining leaf formulas.
-            get_leaf_formulas(phi=term, eb=eb)
-    e: Enumeration = eb.to_enumeration()
+            eb = union_enumeration(phi=eb, psi=get_leaf_formulas(phi=term, eb=eb))
     return e
 
 
