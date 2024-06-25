@@ -762,8 +762,6 @@ def coerce_enumeration_builder(phi: FlexibleEnumeration) -> EnumerationBuilder:
 def coerce_map(m: FlexibleMap) -> Map:
     if isinstance(m, Map):
         return m
-    elif isinstance(m, MapBuilder):
-        return m.to_map()
     elif m is None:
         return Map(domain=None, codomain=None)
     # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
@@ -773,21 +771,6 @@ def coerce_map(m: FlexibleMap) -> Map:
         return Map(domain=domain, codomain=codomain)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Map, phi_type=type(m), phi=m)
-
-
-def coerce_map_builder(phi: FlexibleMap) -> MapBuilder:
-    if isinstance(phi, MapBuilder):
-        return phi
-    elif isinstance(phi, Map):
-        return phi.to_map_builder()
-    elif phi is None:
-        return MapBuilder(domain=None, codomain=None)
-    elif isinstance(phi, dict):
-        domain: EnumerationBuilder = coerce_enumeration_builder(phi=phi.keys())
-        codomain: TuplBuilder = coerce_tupl_builder(phi=phi.values())
-        return MapBuilder(domain=domain, codomain=codomain)
-    else:
-        raise_error(error_code=error_codes.e123, coerced_type=MapBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_tupl(phi: FlexibleTupl) -> Tupl:
@@ -1634,64 +1617,6 @@ def extend_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula
     return m
 
 
-class MapBuilder(FormulaBuilder):
-    """A utility class to help build maps. It is mutable and thus allows edition."""
-
-    def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
-        domain: EnumerationBuilder = coerce_enumeration_builder(phi=domain)
-        codomain: TuplBuilder = coerce_tupl_builder(phi=codomain)
-        super().__init__(c=connectives.map, terms=(domain, codomain,))
-
-    def set_pair_OBSOLETE(self, phi: FlexibleFormula, psi: FlexibleFormula) -> None:
-        """Set the pair (phi, psi) to the map-builder.
-
-        :param phi: a formula that will become an element of the domain.
-        :param psi: a formula that will become an element of the codomain mapped with phi.
-        :return: None.
-        """
-        phi: Formula = coerce_formula(phi=phi)
-        psi: Formula = coerce_formula(phi=psi)
-        if is_in_map_domain(phi=phi, m=self):
-            # phi is already defined in the map, we consequently overwrite it.
-            index_position: int = self.domain.get_index_of_equivalent_term(phi=phi)
-            self.codomain[index_position] = psi
-        else:
-            # phi is not already defined in the map, we can append it.
-            if len(self.domain) != len(self.codomain):
-                raise ValueError('map is inconsistent!')
-            self.domain.append(term=phi)
-            self.codomain.append(term=psi)
-
-    @property
-    def codomain(self) -> TuplBuilder:
-        """The co-domain of the map is its second formula term."""
-        return coerce_tupl_builder(phi=self.term_1)
-
-    @property
-    def domain(self) -> EnumerationBuilder:
-        """The domain of the map is its first formula term."""
-        return coerce_enumeration_builder(phi=self.term_0)
-
-    def get_assigned_value(self, phi: FlexibleFormula) -> FlexibleFormula:
-        """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
-        if is_in_map_domain(phi=phi, m=self):
-            index_position: int = self.domain.get_index_of_equivalent_term(phi=phi)
-            return self.codomain[index_position]
-        else:
-            raise IndexError('Map domain does not contain this element')
-
-    def to_map(self) -> Map:
-        """Convert this map-builder to a map."""
-        keys: Tupl = coerce_tupl(phi=self.term_0)
-        values: Tupl = coerce_tupl(phi=self.term_1)
-        phi: Map = Map(domain=keys, codomain=values)
-        return phi
-
-    def to_formula(self) -> Formula:
-        """Return a formula."""
-        return self.to_map()
-
-
 class Map(Formula):
     """A map is a formula m(t0(k0, k1, ..., kn), t1(l0, l1, ..., ln)) where:
      - m is a node with the map connective.
@@ -1738,15 +1663,9 @@ class Map(Formula):
         """Return True if phi is formula-equivalent to an element of the map domain."""
         return self.domain.has_element(phi=phi)
 
-    def to_map_builder(self) -> MapBuilder:
-        return MapBuilder(domain=self.term_0, codomain=self.term_1)
 
-    def to_formula_builder(self) -> FormulaBuilder:
-        return self.to_map_builder()
-
-
-FlexibleMap = typing.Optional[typing.Union[Map, MapBuilder, typing.Dict[Formula, Formula]]]
-"""FlexibleMap is a flexible python type that may be safely coerced into a Map or a MapBuilder."""
+FlexibleMap = typing.Optional[typing.Union[Map, typing.Dict[Formula, Formula]]]
+"""FlexibleMap is a flexible python type that may be safely coerced into a Map."""
 
 
 class EnumerationBuilder(FormulaBuilder):
@@ -3175,14 +3094,13 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     # Retrieve the list of propositional-variables in phi:
     propositional_variables: Enumeration = get_leaf_formulas(phi=phi)
     premises: EnumerationBuilder = EnumerationBuilder(elements=None)
-    variables_map: MapBuilder = MapBuilder(domain=None, codomain=None)
+    variables_map: Map = Map(domain=None, codomain=None)
     for x in propositional_variables:
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable_OBSOLETE(rep=rep) as x2:
             premises.append(term=x2 | connectives.is_a | connectives.propositional_variable)
-            variables_map.set_pair_OBSOLETE(phi=x, psi=x2)
-    variables_map: Map = variables_map.to_map()
+            variables_map: Map = extend_map(m=variables_map, preimage=x, image=x2)
     variables: Enumeration = Enumeration(elements=variables_map.codomain)
 
     # elaborate a new formula psi where all variables have been replaced with the new variables

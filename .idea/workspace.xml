@@ -320,7 +320,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for tests.test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -668,8 +668,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestMap.test_map" />
         <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20_with_derivation_1" />
@@ -691,14 +691,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00667" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1718139710450</created>
-      <option name="number" value="00667" />
-      <option name="presentableId" value="LOCAL-00667" />
-      <option name="project" value="LOCAL" />
-      <updated>1718139710450</updated>
     </task>
     <task id="LOCAL-00668" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1084,7 +1076,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719288084991</updated>
     </task>
-    <option name="localTasksCounter" value="716" />
+    <task id="LOCAL-00716" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1719290007789</created>
+      <option name="number" value="00716" />
+      <option name="presentableId" value="LOCAL-00716" />
+      <option name="project" value="LOCAL" />
+      <updated>1719290007789</updated>
+    </task>
+    <option name="localTasksCounter" value="717" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
