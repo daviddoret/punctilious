@@ -670,6 +670,15 @@ class TestMap:
         assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[1]), yellow)
         assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[2]), blue)
         assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[3]), red)
+        m1 = pu.as1.reduce_map(m=m1, preimage=fruits[2])
+        assert pu.as1.is_in_map_domain(phi=fruits[0], m=m1)
+        assert pu.as1.is_in_map_domain(phi=fruits[1], m=m1)
+        assert not pu.as1.is_in_map_domain(phi=fruits[2], m=m1)
+        assert pu.as1.is_in_map_domain(phi=fruits[3], m=m1)
+        m1 = pu.as1.extend_map(m=m1, preimage=fruits[3], image=yellow)
+        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[0]), red)
+        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[1]), yellow)
+        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[3]), yellow)
 
 
 class TestEnumerationEquivalence:

@@ -509,7 +509,7 @@ class Formula(tuple):
         :return: the 0 based-based index of the first occurrence of phi in the current formula terms.
         :rtype: int
         """
-        return get_index_of_first_equivalent_term_in_formula(phi=phi, psi=self)
+        return get_index_of_first_equivalent_term_in_formula(term=phi, formula=self)
 
     def has_term(self, phi: FlexibleFormula) -> bool:
         """Return True if there exists a term psi of the current formula terms,
@@ -759,20 +759,20 @@ def coerce_enumeration_builder(phi: FlexibleEnumeration) -> EnumerationBuilder:
         raise_error(error_code=error_codes.e123, coerced_type=EnumerationBuilder, phi_type=type(phi), phi=phi)
 
 
-def coerce_map(phi: FlexibleMap) -> Map:
-    if isinstance(phi, Map):
-        return phi
-    elif isinstance(phi, MapBuilder):
-        return phi.to_map()
-    elif phi is None:
+def coerce_map(m: FlexibleMap) -> Map:
+    if isinstance(m, Map):
+        return m
+    elif isinstance(m, MapBuilder):
+        return m.to_map()
+    elif m is None:
         return Map(domain=None, codomain=None)
     # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
-    elif isinstance(phi, dict):
-        domain: Enumeration = coerce_enumeration(phi=phi.keys())
-        codomain: Tupl = coerce_tupl(phi=phi.values())
+    elif isinstance(m, dict):
+        domain: Enumeration = coerce_enumeration(phi=m.keys())
+        codomain: Tupl = coerce_tupl(phi=m.values())
         return Map(domain=domain, codomain=codomain)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Map, phi_type=type(phi), phi=phi)
+        raise_error(error_code=error_codes.e123, coerced_type=Map, phi_type=type(m), phi=m)
 
 
 def coerce_map_builder(phi: FlexibleMap) -> MapBuilder:
@@ -935,23 +935,23 @@ def is_term_of_formula(term: FlexibleFormula, phi: FlexibleFormula) -> bool:
     return any(is_formula_equivalent(phi=term, psi=psi_term) for psi_term in phi)
 
 
-def is_element_of_enumeration(e: FlexibleFormula, big_e: FlexibleEnumeration) -> bool:
+def is_element_of_enumeration(element: FlexibleFormula, enumeration: FlexibleEnumeration) -> bool:
     """Returns True if and only if there exists an element e2 of enumeration E,
      such that the given element e ~formula e2.
 
     When this condition is satisfied, we say that e1 is an element of enumeration E.
 
-    :param e: A formula.
-    :type e: FlexibleFormula
-    :param big_e: An enumeration.
-    :type big_e: FlexibleFormula
+    :param element: A formula.
+    :type element: FlexibleFormula
+    :param enumeration: An enumeration.
+    :type enumeration: FlexibleEnumeration
     ...
     :return: True if element is a term of psi, False otherwise.
     :rtype: bool
     """
-    e: Formula = coerce_formula(phi=e)
-    big_e: Enumeration = coerce_enumeration(phi=big_e)
-    return is_term_of_formula(term=e, phi=big_e)
+    element: Formula = coerce_formula(phi=element)
+    enumeration: Enumeration = coerce_enumeration(phi=enumeration)
+    return is_term_of_formula(term=element, phi=enumeration)
 
 
 def is_axiom_of_theory(a: FlexibleAxiom, t: FlexibleTheory):
@@ -972,31 +972,31 @@ def is_theorem_of_theory(thrm: FlexibleTheorem, t: FlexibleTheory):
     return any(is_formula_equivalent(phi=thrm, psi=thrm2) for thrm2 in t.theorems)
 
 
-def get_index_of_first_equivalent_term_in_formula(phi: FlexibleFormula, psi: FlexibleFormula) -> int:
+def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula: FlexibleFormula) -> int:
     """Returns the o-based index of the first occurrence of a formula phi in the terms of a formula psi,
      such that psi ~formula phi.
 
-    :param phi: The formula being searched.
-    :type phi: FlexibleFormula
-    :param psi: The formula whose terms are being searched.
-    :type psi: FlexibleFormula
+    :param term: The formula being searched.
+    :type term: FlexibleFormula
+    :param formula: The formula whose terms are being searched.
+    :type formula: FlexibleFormula
     ...
     :raises CustomException: Raise exception e109 if phi is not a term of psi.
     ...
     :return: the 0 based-based index of the first occurrence of phi in psi terms, such that they are equivalent.
     :rtype: int
     """
-    phi = coerce_formula(phi=phi)
-    psi = coerce_formula(phi=psi)
-    if is_term_of_formula(term=phi, phi=psi):
+    term = coerce_formula(phi=term)
+    formula = coerce_formula(phi=formula)
+    if is_term_of_formula(term=term, phi=formula):
         # two formulas that are formula-equivalent may not be equal.
         # for this reason we must first find the first formula-equivalent element in the tuple.
         n: int = 0
-        for psi_term in psi:
-            if is_formula_equivalent(phi=phi, psi=psi_term):
+        for mapped_term in formula:
+            if is_formula_equivalent(phi=term, psi=mapped_term):
                 return n
             n = n + 1
-    raise_error(error_code=error_codes.e109, phi=phi, psi=psi)
+    raise_error(error_code=error_codes.e109, phi=term, psi=formula)
 
 
 class TernaryConnective(FixedArityConnective):
@@ -1421,7 +1421,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
             # psi's value has not been mapped yet.
             # substitute the variable with its newly mapped value.
             psi_value = phi
-            variables_fixed_values.set_pair(phi=psi, psi=psi_value)
+            variables_fixed_values.set_pair_OBSOLETE(phi=psi, psi=psi_value)
     # print(f'    psi_value:{psi_value}')
     # at this point, variable substitution has been completed at the formula-root level.
     if (is_connective_equivalent(phi=phi, psi=psi_value)) and (phi.arity == 0) and (psi_value.arity == 0):
@@ -1467,7 +1467,7 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
     :param raise_event_if_false:
     :return:
     """
-    variables_fixed_values: Map = coerce_map(phi=variables_fixed_values)
+    variables_fixed_values: Map = coerce_map(m=variables_fixed_values)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     variables: Enumeration = coerce_enumeration(phi=variables)
@@ -1483,10 +1483,10 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
             raise Exception(f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
-        if not is_element_of_enumeration(e=x, big_e=variables):
+        if not is_element_of_enumeration(element=x, enumeration=variables):
             raise Exception(f'variable {x} is present in the domain of the map variables_fixed_values, '
                             f'but it is not an element of the enumeration variables.')
-    if is_element_of_enumeration(e=psi, big_e=variables):
+    if is_element_of_enumeration(element=psi, enumeration=variables):
         # psi is a variable
         if is_in_map_domain(phi=psi, m=variables_fixed_values):
             # psi is in the domain of the map of fixed values
@@ -1565,7 +1565,7 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
 def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     """Performs a top-down, left-to-right replacement of formulas in formula phi."""
     phi: Formula = coerce_formula(phi=phi)
-    m: Map = coerce_map(phi=m)
+    m: Map = coerce_map(m=m)
     if is_in_map_domain(phi=phi, m=m):
         # phi must be replaced at its root.
         # the replacement algorithm stops right there (i.e.: no more recursion).
@@ -1641,6 +1641,39 @@ FlexibleTupl = typing.Optional[typing.Union[Tupl, TuplBuilder, typing.Iterable[F
 """FlexibleTupl is a flexible python type that may be safely coerced into a Tupl or a TupleBuilder."""
 
 
+def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
+    """Return a new map such that the preimage is no longer an element of its domain."""
+    m: Map = coerce_map(m=m)
+    preimage: Formula = coerce_formula(phi=preimage)
+    if is_element_of_enumeration(element=preimage, enumeration=m.domain):
+        index: int = get_index_of_first_equivalent_term_in_formula(term=preimage, formula=m.domain)
+        reduced_domain: tuple[Formula, ...] = (*m.domain[0:index], *m.domain[index + 1:])
+        reduced_codomain: tuple[Formula, ...] = (*m.codomain[0:index], *m.codomain[index + 1:])
+        reduced_map: Map = Map(domain=reduced_domain, codomain=reduced_codomain)
+        return reduced_map
+    else:
+        return m
+
+
+def extend_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula) -> Map:
+    """Return a new map m2 with a new (preimage, image) pair.
+    If the preimage is already defined in m, replace it.
+
+    :param m:
+    :param preimage:
+    :param image:
+    :return:
+    """
+    m: Map = coerce_map(m=m)
+    preimage: Formula = coerce_formula(phi=preimage)
+    # Reduce the map to assure the preimage is no longer an element of its domain.
+    m: Map = reduce_map(m=m, preimage=preimage)
+    extended_domain: tuple[Formula, ...] = (*m.domain, preimage)
+    extended_codomain: tuple[Formula, ...] = (*m.codomain, image)
+    m: Map = Map(domain=extended_domain, codomain=extended_codomain)
+    return m
+
+
 class MapBuilder(FormulaBuilder):
     """A utility class to help build maps. It is mutable and thus allows edition."""
 
@@ -1649,7 +1682,7 @@ class MapBuilder(FormulaBuilder):
         codomain: TuplBuilder = coerce_tupl_builder(phi=codomain)
         super().__init__(c=connectives.map, terms=(domain, codomain,))
 
-    def set_pair(self, phi: FlexibleFormula, psi: FlexibleFormula) -> None:
+    def set_pair_OBSOLETE(self, phi: FlexibleFormula, psi: FlexibleFormula) -> None:
         """Set the pair (phi, psi) to the map-builder.
 
         :param phi: a formula that will become an element of the domain.
@@ -1789,7 +1822,7 @@ class EnumerationBuilder(FormulaBuilder):
 
         This method is not available on formulas because duplicate elements are possible on formulas,
         but are not possible on enumerations."""
-        return get_index_of_first_equivalent_term_in_formula(phi=phi, psi=self)
+        return get_index_of_first_equivalent_term_in_formula(term=phi, formula=self)
 
     def has_element(self, phi: FlexibleFormula) -> bool:
         """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
@@ -2286,7 +2319,7 @@ def are_valid_statements_in_theory_with_variables(
     s: Tupl = coerce_tupl(phi=s)
     t: Theory = coerce_theory(phi=t)
     variables: Enumeration = coerce_enumeration(phi=variables, strip_duplicates=True)
-    variables_values: Map = coerce_map(phi=variables_values)
+    variables_values: Map = coerce_map(m=variables_values)
 
     # list the free variables.
     # these are the variables that are in "variables" that are not in the domain of "variables_values".
@@ -3188,7 +3221,7 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable_OBSOLETE(rep=rep) as x2:
             premises.append(term=x2 | connectives.is_a | connectives.propositional_variable)
-            variables_map.set_pair(phi=x, psi=x2)
+            variables_map.set_pair_OBSOLETE(phi=x, psi=x2)
     variables_map: Map = variables_map.to_map()
     variables: Enumeration = Enumeration(elements=variables_map.codomain)
 
@@ -3290,8 +3323,8 @@ def is_in_formula_tree(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
     """Return True if phi is a formula in the domain of map m, False otherwise."""
     phi = coerce_formula(phi=phi)
-    m = coerce_map(phi=m)
-    return is_element_of_enumeration(e=phi, big_e=m.domain)
+    m = coerce_map(m=m)
+    return is_element_of_enumeration(element=phi, enumeration=m.domain)
 
 
 def derive_0(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
@@ -3381,7 +3414,7 @@ def derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule: Fle
         # By contrast, the unknown variable values can be listed.
         unknown_variable_values: Enumeration = Enumeration()
         for x in inference_rule.transformation.variables:
-            if not is_element_of_enumeration(e=x, big_e=known_variable_values.domain):
+            if not is_element_of_enumeration(element=x, enumeration=known_variable_values.domain):
                 unknown_variable_values = Enumeration(elements=(*unknown_variable_values, x,))
 
         # Using substitution for the known_variable_values,
@@ -3563,7 +3596,7 @@ def auto_derive_4(
             # called the free-variables.
             free_variables: Enumeration = Enumeration()
             for x in inference_rule.transformation.variables:
-                if not is_element_of_enumeration(e=x, big_e=m.domain):
+                if not is_element_of_enumeration(element=x, enumeration=m.domain):
                     free_variables = Enumeration(elements=(*free_variables, x,))
             # u1.log_info(f'\t\t free-variables: {free_variables}')
 
@@ -3599,7 +3632,8 @@ def auto_derive_4(
                 effective_premises: Formula = replace_formulas(phi=necessary_premises, m=m)
                 effective_premises: Tupl = Tupl(elements=effective_premises)
                 for premise_target_statement in effective_premises:
-                    if not is_element_of_enumeration(e=premise_target_statement, big_e=conjecture_exclusion_list):
+                    if not is_element_of_enumeration(element=premise_target_statement,
+                                                     enumeration=conjecture_exclusion_list):
                         # recursively try to auto_derive the premise
                         t, derivation_success, _, conjecture_exclusion_list = auto_derive_4(
                             t=t,
@@ -3627,7 +3661,8 @@ def auto_derive_4(
                     effective_premises: Formula = replace_formulas(phi=necessary_premises, m=variable_substitution)
                     effective_premises: Tupl = Tupl(elements=(*effective_premises, permutation,))
                     for premise_target_statement in effective_premises:
-                        if not is_element_of_enumeration(e=premise_target_statement, big_e=conjecture_exclusion_list):
+                        if not is_element_of_enumeration(element=premise_target_statement,
+                                                         enumeration=conjecture_exclusion_list):
                             # recursively try to auto_derive the premise
                             t, derivation_success, _, conjecture_exclusion_list = auto_derive_4(
                                 t=t, conjecture=premise_target_statement,
@@ -3768,7 +3803,7 @@ class MapTypesetter(pl1.Typesetter):
 
     def typeset_from_generator(self, phi: Formula, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: Map = coerce_map(phi=phi)
+        phi: Map = coerce_map(m=phi)
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
 
@@ -3796,7 +3831,7 @@ class DerivationTypesetter(pl1.Typesetter):
             typing.Generator)[str, None, None]:
         phi: Derivation = coerce_derivation(phi=phi)
         if theory is not None:
-            i: int = 1 + get_index_of_first_equivalent_term_in_formula(phi=phi, psi=theory)
+            i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=phi, formula=theory)
             yield f'({i})\t'
         yield from phi.valid_statement.typeset_from_generator(**kwargs)
         if is_well_formed_axiom(phi=phi):
@@ -3824,7 +3859,8 @@ class DerivationTypesetter(pl1.Typesetter):
                 # yield from phi.inference.premises.typeset_as_string(**kwargs)
                 first = True
                 for premise in phi.inference.premises:
-                    i: int = 1 + get_index_of_first_equivalent_term_in_formula(phi=premise, psi=theory.valid_statements)
+                    i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=premise,
+                                                                               formula=theory.valid_statements)
                     if not first:
                         yield ', '
                     yield f'({i})'
