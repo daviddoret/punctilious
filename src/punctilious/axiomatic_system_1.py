@@ -67,7 +67,6 @@ class ErrorCodes(typing.NamedTuple):
     e106: ErrorCode
     e107: ErrorCode
     e108: ErrorCode
-    e109: ErrorCode
     e110: ErrorCode
     e111: ErrorCode
     e112: ErrorCode
@@ -114,8 +113,6 @@ error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
                    message='coerce_enumeration: The argument could not be coerced to a enumeration.'),
     e108=ErrorCode(event_type=event_types.error, code='e108',
                    message='Ill-formed formula: Formula phi is ill-formed, because of reason.'),
-    e109=ErrorCode(event_type=event_types.error, code='e109',
-                   message='get_index_of_first_term_in_formula: formula psi is not a term of formula phi.'),
     e110=ErrorCode(event_type=event_types.error, code='e110',
                    message='Enumeration.__new__: Attempt to create enumeration from invalid elements. Often this is '
                            'caused by a paid of elements that are formula-equivalent.'),
@@ -956,30 +953,59 @@ def is_theorem_of_theory(thrm: FlexibleTheorem, t: FlexibleTheory):
 
 
 def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula: FlexibleFormula) -> int:
-    """Returns the o-based index of the first occurrence of a formula phi in the terms of a formula psi,
-     such that psi ~formula phi.
+    """Return the o-based index of the first occurrence of a term in the terms of a formula,
+     such that they are formula-equivalent.
 
     :param term: The formula being searched.
     :type term: FlexibleFormula
     :param formula: The formula whose terms are being searched.
     :type formula: FlexibleFormula
     ...
-    :raises CustomException: Raise exception e109 if phi is not a term of psi.
+    :raises CustomException: Raise exception e109 if the term is not a term of the formula.
     ...
-    :return: the 0 based-based index of the first occurrence of phi in psi terms, such that they are equivalent.
+    :return: the 0 based-based index of the first occurrence of the term in the formula, such that they are
+    formula-equivalent.
     :rtype: int
     """
     term = coerce_formula(phi=term)
     formula = coerce_formula(phi=formula)
-    if is_term_of_formula(term=term, phi=formula):
-        # two formulas that are formula-equivalent may not be equal.
-        # for this reason we must first find the first formula-equivalent element in the tuple.
-        n: int = 0
-        for mapped_term in formula:
-            if is_formula_equivalent(phi=term, psi=mapped_term):
-                return n
-            n = n + 1
-    raise_error(error_code=error_codes.e109, phi=term, psi=formula)
+    n: int = 0
+    for mapped_term in iterate_formula_terms(phi=formula):
+        if is_formula_equivalent(phi=term, psi=mapped_term):
+            # This is the first match
+            return n
+        n = n + 1
+    # No match was found
+    raise u1.ApplicativeException(code='e109',
+                                  msg=f'Trying to get the index of the term "{term}" in the formula "{formula}", '
+                                      f'but this term is not a term of the formula.')
+
+
+def get_index_of_first_equivalent_element_in_enumeration(element: FlexibleFormula,
+                                                         enumeration: FlexibleEnumeration) -> int:
+    """Return the o-based index of the first occurrence of an element in an enumeration,
+     such that they are formula-equivalent.
+
+    :param element:
+    :param enumeration:
+    :return:
+    """
+    element: Formula = coerce_formula(phi=element)
+    enumeration: Enumeration = coerce_enumeration(phi=enumeration)
+    return get_index_of_first_equivalent_term_in_formula(term=element, formula=enumeration)
+
+
+def get_index_of_first_equivalent_element_in_tuple(element: FlexibleFormula, tupl: FlexibleTupl) -> int:
+    """Return the o-based index of the first occurrence of an element in a tuple,
+     such that they are formula-equivalent.
+
+    :param element:
+    :param tupl:
+    :return:
+    """
+    element: Formula = coerce_formula(phi=element)
+    tupl: Tupl = coerce_tupl(phi=tupl)
+    return get_index_of_first_equivalent_term_in_formula(term=element, formula=tupl)
 
 
 class TernaryConnective(FixedArityConnective):
@@ -1599,8 +1625,8 @@ def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
 
 
 def extend_enumeration(enumeration: FlexibleEnumeration, element: FlexibleFormula) -> Enumeration:
-    """Return a new enumeration with a new element.
-    If the element is already a member of the enumeration, the function does nothing.
+    """Return a new extended enumeration such that element is an element of if.
+    If the element is already a member of the enumeration, the function returns the original enumeration.
     """
     enumeration: Enumeration = coerce_enumeration(phi=enumeration)
     element: Formula = coerce_formula(phi=element)
