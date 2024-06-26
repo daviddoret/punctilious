@@ -769,11 +769,11 @@ class TestDemonstration:
         star = pu.as1.let_x_be_a_binary_connective(formula_typesetter='*')
         theory, axiom_1, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a | star | b)
         theory, axiom_2, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=b | star | c)
-        theory, ir1, = pu.as1.let_x_be_an_inference_rule(theory=theory,
-                                                         premises=(x | star | y,
-                                                                   y | star | z,),
-                                                         conclusion=x | star | z,
-                                                         variables=(x, y, z,))
+        theory, ir1, = pu.as1.let_x_be_an_inference_rule(t=theory,
+                                                         p=(x | star | y,
+                                                            y | star | z,),
+                                                         c=x | star | z,
+                                                         x=(x, y, z,))
 
         # derive a theorem
         demo2, _, = pu.as1.derive_1(t=theory,

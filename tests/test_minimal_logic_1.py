@@ -74,7 +74,7 @@ class TestPL1:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
 
         # Add axiom PL01 to the theory
-        t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl01, )
+        t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl01, )
 
         # Derive: P is-a proposition
         t, _ = pu.as1.derive_1(t=t,
@@ -105,7 +105,7 @@ class TestPL1:
 
         # make P valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=p)
-        t, _, = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ir1.modus_ponens_axiom)
+        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
 
         # Derive: P ∧ P from P by modus-ponens
         t, _ = pu.as1.derive_1(t=t,
@@ -131,7 +131,7 @@ class TestPL2:
         t, _, _, _ = auto_derive_4(t=t, conjecture=q | is_a | proposition)
 
         # Add axiom PL02 to the theory
-        t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl02, )
+        t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl02, )
 
         # Derive: (P ∧ Q) ⊃ (Q ∧ P)
         t, _ = pu.as1.derive_1(t=t,
@@ -160,7 +160,7 @@ class TestPL2:
 
         # make (P ∧ Q) valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=p | land | q)
-        t, _, = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ir1.modus_ponens_axiom)
+        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
 
         # Derive: P ∧ P from P by modus-ponens
         t, _ = pu.as1.derive_1(t=t,
@@ -188,7 +188,7 @@ class TestPL3:
         t, _, _, _ = auto_derive_4(t=t, conjecture=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
-        t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl03, )
+        t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl03, )
 
         # Derive: (P ⊃ Q) ⊃ ((P ∧ R) ⊃ (B ∧ R))
         t, _ = pu.as1.derive_1(t=t,
@@ -237,7 +237,7 @@ class TestPL3:
 
         # make (P implies Q) valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=p | implies | q)
-        t, _, = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ir1.modus_ponens_axiom)
+        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
 
         # Derive: (P ∧ R) implies (Q ∧ R)  from P by modus-ponens
         t, _ = pu.as1.derive_1(t=t,
@@ -267,7 +267,7 @@ class TestPL4:
         t, _, _, _, = auto_derive_4(t=t, conjecture=r | is_a | proposition)
 
         # Add axiom PL03 to the theory
-        t, _ = pu.as1.let_x_be_an_inference_rule(theory=t, inference_rule=pu.ml1.pl04, )
+        t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl04, )
 
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (p | implies | r)
@@ -292,7 +292,7 @@ class TestPL5:
         t1, _, = pu.as1.let_x_be_an_axiom(t=t1, valid_statement=y)
 
         # Add axiom PL05 to the theory
-        t1, _ = pu.as1.let_x_be_an_inference_rule(theory=t1, inference_rule=pu.ml1.pl05, )
+        t1, _ = pu.as1.let_x_be_an_inference_rule(t=t1, i=pu.ml1.pl05, )
 
         # Derive: P ⊃ Q
         t2, success, _ = auto_derive_2(t=t1, conjecture=x | is_a | proposition)

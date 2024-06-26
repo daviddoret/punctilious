@@ -16,8 +16,8 @@ import presentation_layer_1 as pl1
 
 _current_module = sys.modules[__name__]
 if __name__ == '__main__':
-    raise ImportError(
-        'This module does not support being directly executed as a script. Please use the import statement.')
+    raise u1.ApplicativeException(
+        msg='This module does not support being directly executed as a script. Please use the import statement.')
 _state = dict() if not hasattr(_current_module, '_state') else getattr(_current_module, '_state')
 
 
@@ -822,7 +822,7 @@ def let_x_be_a_variable(formula_typesetter: pl1.FlexibleTypesetter) -> typing.Un
     elif isinstance(formula_typesetter, typing.Iterable):
         return (Variable(connective=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
     else:
-        raise TypeError  # TODO: Implement event code.
+        raise u1.ApplicativeException(msg='Non supported arguments.', formula_typesetter=formula_typesetter)
 
 
 def let_x_be_a_meta_variable(
@@ -834,7 +834,7 @@ def let_x_be_a_meta_variable(
     elif isinstance(formula_typesetter, typing.Iterable):
         return tuple(MetaVariable(connective=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
     else:
-        raise TypeError  # TODO: Implement event code.
+        raise u1.ApplicativeException(msg='Non supported arguments.', formula_typesetter=formula_typesetter)
 
 
 FlexibleRepresentation = typing.Union[str, pl1.Symbol, pl1.Typesetter]
@@ -857,7 +857,7 @@ def let_x_be_a_simple_object(formula_typesetter: typing.Optional[pl1.FlexibleTyp
     elif isinstance(formula_typesetter, typing.Iterable):
         return (SimpleObject(connective=NullaryConnective(formula_typesetter=r)) for r in formula_typesetter)
     else:
-        raise TypeError  # TODO: Implement event code.
+        raise u1.ApplicativeException(msg='Non supported arguments.', formula_typesetter=formula_typesetter)
 
 
 def formula_to_tuple(phi: FlexibleFormula) -> Enumeration:
@@ -899,30 +899,39 @@ def let_x_be_a_free_arity_connective(
     return FreeArityConnective(formula_typesetter=formula_typesetter)
 
 
-def let_x_be_an_inference_rule(theory: FlexibleTheory,
-                               inference_rule: typing.Optional[FlexibleInferenceRule] = None,
-                               premises: typing.Optional[FlexibleTupl] = None,
-                               conclusion: typing.Optional[FlexibleFormula] = None,
-                               variables: typing.Optional[FlexibleEnumeration] = None):
-    if theory is None:
-        theory = Axiomatization(derivations=None)
-    else:
-        theory: FlexibleTheory = coerce_theory(t=theory)
+def let_x_be_an_inference_rule(t: FlexibleTheory,
+                               i: typing.Optional[FlexibleInferenceRule] = None,
+                               p: typing.Optional[FlexibleTupl] = None,
+                               c: typing.Optional[FlexibleFormula] = None,
+                               x: typing.Optional[FlexibleEnumeration] = None) -> tuple[Theory, InferenceRule]:
+    """
 
-    if inference_rule is None and premises is not None and conclusion is not None and variables is not None:
-        transformation: Transformation = Transformation(premises=premises, conclusion=conclusion, variables=variables)
-        inference_rule: InferenceRule = InferenceRule(transformation=transformation)
-
-    if isinstance(theory, Axiomatization):
-        theory = Axiomatization(derivations=(*theory, inference_rule,))
-        u1.log_info(inference_rule.typeset_as_string(theory=theory))
-        return theory, inference_rule
-    elif isinstance(theory, Theory):
-        theory = Theory(derivations=(*theory, inference_rule,))
-        u1.log_info(inference_rule.typeset_as_string(theory=theory))
-        return theory, inference_rule
+    :param t: A theory.
+    :param i: An inference-rule.
+    :param p: A tuple of premises.
+    :param c: A conclusion.
+    :param x: An enumeration of variables.
+    :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
+    """
+    if t is None:
+        t = Axiomatization(derivations=None)
     else:
-        raise Exception('oops')
+        t: FlexibleTheory = coerce_theory(t=t)
+
+    if i is None and p is not None and c is not None and x is not None:
+        transformation: Transformation = Transformation(premises=p, conclusion=c, variables=x)
+        i: InferenceRule = InferenceRule(transformation=transformation)
+
+    if isinstance(t, Axiomatization):
+        t = Axiomatization(derivations=(*t, i,))
+        u1.log_info(i.typeset_as_string(theory=t))
+        return t, i
+    elif isinstance(t, Theory):
+        t = Theory(derivations=(*t, i,))
+        u1.log_info(i.typeset_as_string(theory=t))
+        return t, i
+    else:
+        raise u1.ApplicativeException(msg='Non supported arguments.', i=i, t=t)
 
 
 def let_x_be_an_axiom_deprecated(valid_statement: FlexibleFormula):
