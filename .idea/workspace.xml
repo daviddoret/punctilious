@@ -320,7 +320,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestFormula.test_formula">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -544,7 +544,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestFormula.test_formula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -557,7 +557,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestFormula.test_formula&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -658,7 +658,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormula.test_formula" />
       <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2" />
       <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       <item itemvalue="Python tests.pytest in tests" />
@@ -668,11 +668,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormula.test_formula" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration" />
         <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables" />
       </list>
     </recent_temporary>
   </component>
@@ -691,14 +691,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00672" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1718224380579</created>
-      <option name="number" value="00672" />
-      <option name="presentableId" value="LOCAL-00672" />
-      <option name="project" value="LOCAL" />
-      <updated>1718224380580</updated>
     </task>
     <task id="LOCAL-00673" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1084,7 +1076,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719373728029</updated>
     </task>
-    <option name="localTasksCounter" value="721" />
+    <task id="LOCAL-00721" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1719373944117</created>
+      <option name="number" value="00721" />
+      <option name="presentableId" value="LOCAL-00721" />
+      <option name="project" value="LOCAL" />
+      <updated>1719373944117</updated>
+    </task>
+    <option name="localTasksCounter" value="722" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

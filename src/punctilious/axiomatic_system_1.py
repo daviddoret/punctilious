@@ -85,7 +85,7 @@ class ErrorCodes(typing.NamedTuple):
 
 error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
     e100=ErrorCode(event_type=event_types.error, code='e100',
-                   message='FormulaBuilder.__init__: Unsupported type for the terms argument.'),
+                   message='OBSOLETE REUSE'),
     e101=ErrorCode(event_type=event_types.error, code='e101',
                    message='Formula.__new__: Unsupported type for the terms argument.'),
     e102=ErrorCode(event_type=event_types.error, code='e102',
@@ -122,8 +122,7 @@ error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
                    message='While checking the well-formedness of a theory, a premise is necessary to derive a '
                            'theorem, but its position in the theory is posterior to the theorem.'),
     e113=ErrorCode(event_type=event_types.error, code='e113',
-                   message='FormulaBuilder.to_formula: The connective property is None but it is mandatory to '
-                           'elaborate formulas.'),
+                   message='OBSOLETE REUSE'),
     e114=ErrorCode(event_type=event_types.error, code='e114',
                    message='EnumerationAccretor.__del_item__,pop,remove,remove_formula: The remove-formula operation '
                            'is forbidden on'
@@ -1509,12 +1508,12 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         return assigned_value
     else:
         # build the replaced formula.
-        fb: FormulaBuilder = FormulaBuilder(c=phi.connective)
+        fb: Formula = Formula(connective=phi.connective)
         # recursively apply the replacement algorithm on phi terms.
         for term in phi:
             term_substitute = replace_formulas(phi=term, m=m)
-            fb.append(term=term_substitute)
-        return fb.to_formula()
+            fb: Formula = extend_formula(formula=fb, term=term_substitute)
+        return fb
 
 
 class Tupl(Formula):
@@ -1587,13 +1586,21 @@ def extend_enumeration(enumeration: FlexibleEnumeration, element: FlexibleFormul
 
 
 def extend_tupl(tupl: FlexibleTupl, element: FlexibleFormula) -> Tupl:
-    """Return a new extended punctilious-tuple such that element is an element of it.
-    If the element is already a member of the enumeration, the function returns the original punctilious-tuple.
+    """Return a new extended punctilious-tuple such that element is a new element appended to its existing elements.
     """
     tupl: Tupl = coerce_tupl(phi=tupl)
     element: Formula = coerce_formula(phi=element)
     extended_tupl: Tupl = Tupl(elements=(*tupl, element,))
     return extended_tupl
+
+
+def extend_formula(formula: FlexibleFormula, term: FlexibleFormula) -> Formula:
+    """Return a new extended formula such that term is a new term appended to its existing terms.
+    """
+    formula: Formula = coerce_formula(phi=formula)
+    term: Formula = coerce_formula(phi=term)
+    extended_formula: Formula = Formula(terms=(*formula, term,), connective=formula.connective)
+    return extended_formula
 
 
 def extend_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula) -> Map:
