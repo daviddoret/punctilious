@@ -305,9 +305,9 @@ class TestFormulaEquivalence:
 
 class TestTupl:
     def test_tupl(self, phi1, phi2, phi3):
-        cb1 = pu.as1.TuplBuilder((phi1, phi2, phi3,))
-        c1 = cb1.to_tupl()
-        c2 = pu.as1.Tupl((phi1, phi2, phi3,))
+        cb1 = pu.as1.Tupl(elements=(phi1, phi2, phi3,))
+        c1 = pu.as1.Tupl(elements=(*cb1,))
+        c2 = pu.as1.Tupl(elements=(phi1, phi2, phi3,))
         assert pu.as1.is_formula_equivalent(c1, c2)
         assert len(c1) == 3
         assert len(c2) == 3

@@ -756,8 +756,6 @@ def coerce_map(m: FlexibleMap) -> Map:
 def coerce_tupl(phi: FlexibleTupl) -> Tupl:
     if isinstance(phi, Tupl):
         return phi
-    elif isinstance(phi, TuplBuilder):
-        return phi.to_tupl()
     elif phi is None:
         return Tupl(elements=None)
     elif isinstance(phi, collections.abc.Iterable):
@@ -765,20 +763,6 @@ def coerce_tupl(phi: FlexibleTupl) -> Tupl:
         return Tupl(elements=phi)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Tupl, phi_type=type(phi), phi=phi)
-
-
-def coerce_tupl_builder(phi: FlexibleTupl) -> TuplBuilder:
-    if isinstance(phi, TuplBuilder):
-        return phi
-    elif isinstance(phi, Tupl):
-        return phi.to_tupl_builder()
-    elif phi is None:
-        return TuplBuilder(elements=None)
-    elif isinstance(phi, collections.abc.Iterable):
-        """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return TuplBuilder(elements=phi)
-    else:
-        raise_error(error_code=error_codes.e123, coerced_type=TuplBuilder, phi_type=type(phi), phi=phi)
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula, FormulaBuilder]]
@@ -1533,22 +1517,6 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         return fb.to_formula()
 
 
-class TuplBuilder(FormulaBuilder):
-    """A utility class to help build tuples. It is mutable and thus allows edition."""
-
-    def __init__(self, elements: FlexibleTupl):
-        super().__init__(c=connectives.tupl, terms=elements)
-
-    def to_tupl(self) -> Tupl:
-        elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
-        phi: Tupl = Tupl(elements=elements)
-        return phi
-
-    def to_formula(self) -> Formula:
-        """Return a Collection."""
-        return self.to_tupl()
-
-
 class Tupl(Formula):
     """A tuple is a synonym for formula.
 
@@ -1582,15 +1550,12 @@ class Tupl(Formula):
         """Return True if the tuple has phi as one of its elements."""
         return is_term_of_formula(term=phi, phi=self)
 
-    def to_tupl_builder(self) -> TuplBuilder:
-        return TuplBuilder(elements=self)
-
     def to_formula_builder(self) -> FormulaBuilder:
         return self.to_tupl_builder()
 
 
-FlexibleTupl = typing.Optional[typing.Union[Tupl, TuplBuilder, typing.Iterable[FlexibleFormula]]]
-"""FlexibleTupl is a flexible python type that may be safely coerced into a Tupl or a TupleBuilder."""
+FlexibleTupl = typing.Optional[typing.Union[Tupl, typing.Iterable[FlexibleFormula]]]
+"""FlexibleTupl is a flexible python type that may be safely coerced into a Tupl."""
 
 
 def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
