@@ -325,12 +325,11 @@ class TestTupl:
 
 class TestEnumeration:
     def test_tupl(self, phi1, phi2, phi3):
-        cb1 = pu.as1.EnumerationBuilder((phi1, phi2, phi3, phi1, phi3,))
-        e1 = cb1.to_enumeration()
+        e1 = pu.as1.Enumeration(elements=(phi1, phi2, phi3, phi1, phi3,), strip_duplicates=True)
         print(e1)
-        e1 = pu.as1.Enumeration((phi1, phi2, phi3,))
-        e2 = pu.as1.Enumeration((phi1, phi2, phi3,))
-        e3 = pu.as1.Enumeration((phi3, phi1, phi2,))
+        e1 = pu.as1.Enumeration(elements=(phi1, phi2, phi3,))
+        e2 = pu.as1.Enumeration(elements=(phi1, phi2, phi3,))
+        e3 = pu.as1.Enumeration(elements=(phi3, phi1, phi2,))
         assert len(e1) == 3
         assert len(e2) == 3
         assert len(e3) == 3
@@ -724,12 +723,6 @@ class TestEmptyEnumeration:
         x, y, z = pu.as1.let_x_be_a_simple_object(formula_typesetter=('x', 'y', 'z',))
         assert not a.has_element(phi=x)
         assert a.arity == 0
-
-
-class TestEnumerationBuilder:
-    def test_get_element_index(self):
-        # assert False
-        pass
 
 
 class TestInferenceRule:

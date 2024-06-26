@@ -95,8 +95,7 @@ error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
                    message='Formula.term_1: Attempt to access property term_1 but formula does not contain a term at '
                            'index 0.'),
     e104=ErrorCode(event_type=event_types.warning, code='e104',
-                   message='EnumerationBuilder.__init__: Attempt to add duplicate formula-equivalent formulas as '
-                           'elements of the enumeration. The new element / term is ignored.'),
+                   message='OBSOLETE, REUSE'),
     e105=ErrorCode(event_type=event_types.error, code='e105',
                    message='During the initialization of a theorem (methods __init__ or __new__ of the Theorem class), '
                            'the well-formedness of the theorem is checked. One well-formedness rule is that applying '
@@ -661,8 +660,6 @@ def coerce_enumeration(phi: FlexibleEnumeration, strip_duplicates: bool = False)
         phi = strip_duplicate_formulas_in_python_tuple(t=phi)
     if isinstance(phi, Enumeration):
         return phi
-    elif isinstance(phi, EnumerationBuilder):
-        return phi.to_enumeration()
     elif isinstance(phi, Formula) and is_well_formed_enumeration(phi=phi):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
@@ -740,20 +737,6 @@ def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
     psi: Theory = coerce_theory(phi=psi)
     t2: Theory = Theory(derivations=(*phi, *psi,))
     return t2
-
-
-def coerce_enumeration_builder(phi: FlexibleEnumeration) -> EnumerationBuilder:
-    if isinstance(phi, EnumerationBuilder):
-        return phi
-    elif isinstance(phi, Enumeration):
-        return phi.to_enumeration_builder()
-    elif phi is None:
-        return EnumerationBuilder(elements=None)
-    elif isinstance(phi, typing.Iterable):
-        """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return EnumerationBuilder(elements=phi)
-    else:
-        raise_error(error_code=error_codes.e123, coerced_type=EnumerationBuilder, phi_type=type(phi), phi=phi)
 
 
 def coerce_map(m: FlexibleMap) -> Map:
@@ -1625,7 +1608,7 @@ def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
 
 
 def extend_enumeration(enumeration: FlexibleEnumeration, element: FlexibleFormula) -> Enumeration:
-    """Return a new extended enumeration such that element is an element of if.
+    """Return a new extended enumeration such that element is an element of it.
     If the element is already a member of the enumeration, the function returns the original enumeration.
     """
     enumeration: Enumeration = coerce_enumeration(phi=enumeration)
@@ -1636,6 +1619,16 @@ def extend_enumeration(enumeration: FlexibleEnumeration, element: FlexibleFormul
     else:
         extended_enumeration: Enumeration = Enumeration(elements=(*enumeration, element,))
         return extended_enumeration
+
+
+def extend_tupl(tupl: FlexibleTupl, element: FlexibleFormula) -> Tupl:
+    """Return a new extended punctilious-tuple such that element is an element of it.
+    If the element is already a member of the enumeration, the function returns the original punctilious-tuple.
+    """
+    tupl: Tupl = coerce_tupl(phi=tupl)
+    element: Formula = coerce_formula(phi=element)
+    extended_tupl: Tupl = Tupl(elements=(*tupl, element,))
+    return extended_tupl
 
 
 def extend_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula) -> Map:
@@ -1706,57 +1699,6 @@ class Map(Formula):
 
 FlexibleMap = typing.Optional[typing.Union[Map, typing.Dict[Formula, Formula]]]
 """FlexibleMap is a flexible python type that may be safely coerced into a Map."""
-
-
-class EnumerationBuilder(FormulaBuilder):
-    """A utility class to help build enumerations. It is mutable and thus allows edition.
-
-    Note: """
-
-    def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None):
-        if connective is None:
-            connective = connectives.enumeration
-
-        super().__init__(c=connective, terms=None)
-        if isinstance(elements, typing.Iterable):
-            for element in elements:
-                self.append(term=element)
-
-    def append(self, term: FlexibleFormula) -> None:
-        """
-
-        Override the append method to assure the unicity of newly added elements.
-
-        :param term:
-        :return:
-        """
-        term = coerce_formula(phi=term)
-        if any(is_formula_equivalent(phi=term, psi=element) for element in self):
-            raise_error(error_code=error_codes.e104, enumeration=self, term=term)
-        else:
-            super().append(term=term)
-
-    def get_index_of_equivalent_term(self, phi: FlexibleFormula) -> typing.Optional[int]:
-        """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
-
-        This method is not available on formulas because duplicate elements are possible on formulas,
-        but are not possible on enumerations."""
-        return get_index_of_first_equivalent_term_in_formula(term=phi, formula=self)
-
-    def has_element(self, phi: FlexibleFormula) -> bool:
-        """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
-        phi ∼formula psi. False otherwise."""
-        e: Enumeration = self.to_enumeration()
-        return is_term_of_formula(term=phi, phi=e)
-
-    def to_enumeration(self) -> Enumeration:
-        elements: tuple[Formula, ...] = tuple(coerce_formula(phi=element) for element in self)
-        phi: Enumeration = Enumeration(elements=elements)
-        return phi
-
-    def to_formula(self) -> Formula:
-        """Return a Collection."""
-        return self.to_enumeration()
 
 
 def strip_duplicate_formulas_in_python_tuple(t: tuple[Formula, ...]) -> tuple[Formula, ...]:
@@ -1856,9 +1798,6 @@ class Enumeration(Formula):
         phi = coerce_formula(phi=phi)
         return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
 
-    def to_enumeration_builder(self) -> EnumerationBuilder:
-        return EnumerationBuilder(elements=self)
-
     def to_formula_builder(self) -> FormulaBuilder:
         return self.to_enumeration_builder()
 
@@ -1866,9 +1805,8 @@ class Enumeration(Formula):
 enumeration = Enumeration
 """A shortcut for Enumeration."""
 
-FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, EnumerationBuilder, typing.Iterable[FlexibleFormula]]]
-"""FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration or a 
-EnumerationBuilder."""
+FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, typing.Iterable[FlexibleFormula]]]
+"""FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration."""
 
 
 class EmptyEnumeration(Enumeration):
@@ -2376,21 +2314,18 @@ def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = Fal
     # check the well-formedness of the individual derivations.
     # and retrieve the terms claimed as proven in the theory, preserving order.
     # by the definition of a theory, these are the left term (term_0) of the formulas.
-    valid_statements: TuplBuilder = TuplBuilder(elements=None)
-    derivations: TuplBuilder = TuplBuilder(elements=None)
+    valid_statements: Tupl = Tupl(elements=None)
+    derivations: Tupl = Tupl(elements=None)
     for derivation in phi:
         if not is_well_formed_derivation(phi=derivation):
             return False
         else:
             derivation: Derivation = coerce_derivation(phi=derivation)
-            derivations.append(term=derivation)
+            derivations: Tupl = extend_tupl(tupl=derivations, element=derivation)
             # retrieve the formula claimed as valid from the theorem
             valid_statement: Formula = derivation.valid_statement
-            valid_statements.append(term=valid_statement)
-    # now that the derivations and valid_statements have been retrieved, and proved well-formed individually,
-    # make the python objects immutable.
-    derivations: Tupl = derivations.to_tupl()
-    valid_statements: Tupl = valid_statements.to_tupl()
+            valid_statements: Tupl = extend_tupl(tupl=valid_statements, element=valid_statement)
+    # now the derivations and valid_statements have been retrieved, and proved well-formed individually,
     for i in range(0, derivations.arity):
         derivation = derivations[i]
         valid_statement = valid_statements[i]
@@ -3132,13 +3067,14 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     # Now we have the assurance that phi is a well-formed propositional formula.
     # Retrieve the list of propositional-variables in phi:
     propositional_variables: Enumeration = get_leaf_formulas(phi=phi)
-    premises: EnumerationBuilder = EnumerationBuilder(elements=None)
+    premises: Enumeration = Enumeration(elements=None)
     variables_map: Map = Map(domain=None, codomain=None)
     for x in propositional_variables:
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable_OBSOLETE(rep=rep) as x2:
-            premises.append(term=x2 | connectives.is_a | connectives.propositional_variable)
+            premises: Enumeration = extend_enumeration(
+                enumeration=premises, element=x2 | connectives.is_a | connectives.propositional_variable)
             variables_map: Map = extend_map(m=variables_map, preimage=x, image=x2)
     variables: Enumeration = Enumeration(elements=variables_map.codomain)
 
@@ -3148,7 +3084,8 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     # translate the antecedent of the implication to the main premises
     # note: we could further split conjunctions into multiple premises
     antecedent: Formula = psi.term_0
-    premises.append(term=antecedent)
+    premises: Enumeration = extend_enumeration(
+        enumeration=premises, element=antecedent)
 
     # retrieve the conclusion
     conclusion: Formula = psi.term_1
