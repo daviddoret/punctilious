@@ -433,7 +433,7 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
         e = strip_duplicate_formulas_in_python_tuple(t=e)
     if isinstance(e, Enumeration):
         return e
-    elif isinstance(e, Formula) and is_well_formed_enumeration(phi=e):
+    elif isinstance(e, Formula) and is_well_formed_enumeration(e=e):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
         return Enumeration(elements=e, connective=e.connective, strip_duplicates=strip_duplicates)
@@ -1496,7 +1496,7 @@ class Enumeration(Formula):
         connective: Connective = connectives.enumeration if connective is None else connective
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
-        if not is_well_formed_enumeration(phi=elements):
+        if not is_well_formed_enumeration(e=elements):
             raise_error(error_code=error_codes.e110, elements_type=type(elements), elements=elements)
         o: tuple = super().__new__(cls, connective=connective, terms=elements)
         return o
@@ -1676,7 +1676,7 @@ FlexibleTransformation = typing.Optional[typing.Union[Transformation]]
 def coerce_transformation(t: FlexibleFormula) -> Transformation:
     if isinstance(t, Transformation):
         return t
-    elif isinstance(t, Formula) and is_well_formed_transformation(phi=t):
+    elif isinstance(t, Formula) and is_well_formed_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         return Transformation(premises=t.term_0, conclusion=t.term_1, variables=t.term_2)
@@ -1687,7 +1687,7 @@ def coerce_transformation(t: FlexibleFormula) -> Transformation:
 def coerce_inference(i: FlexibleFormula) -> Inference:
     if isinstance(i, Inference):
         return i
-    elif isinstance(i, Formula) and is_well_formed_inference(phi=i):
+    elif isinstance(i, Formula) and is_well_formed_inference(i=i):
         transformation: Transformation = coerce_transformation(t=i.term_1)
         return Inference(premises=i.term_0, transformation_rule=transformation)
     else:
@@ -1715,85 +1715,85 @@ def is_well_formed_formula(phi: FlexibleFormula) -> bool:
     return True
 
 
-def is_well_formed_tupl(phi: FlexibleFormula) -> bool:
+def is_well_formed_tupl(t: FlexibleFormula) -> bool:
     """Returns True if phi is a well-formed tuple, False otherwise.
 
     Note: by definition, all formulas are also tuples. Hence, return True if phi converts smoothly to a well-formed
     formula.
 
-    :param phi:
+    :param t:
     :return: bool
     """
     # TODO: Do we want to signal tuples formally with a dedicated connective?
-    phi: Formula = coerce_formula(phi=phi)
+    t: Formula = coerce_formula(phi=t)
     return True
 
 
-def is_well_formed_inference(phi: FlexibleFormula) -> bool:
+def is_well_formed_inference(i: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed inference, False otherwise.
 
-    :param phi: A formula.
+    :param i: A formula.
     :return: bool.
     """
-    phi = coerce_formula(phi=phi)
-    if phi.connective is not connectives.inference or not is_well_formed_enumeration(
-            phi=phi.term_0) or not is_well_formed_transformation(phi=phi.term_1):
+    i = coerce_formula(phi=i)
+    if i.connective is not connectives.inference or not is_well_formed_enumeration(
+            e=i.term_0) or not is_well_formed_transformation(t=i.term_1):
         return False
     else:
         return True
 
 
-def is_well_formed_transformation(phi: FlexibleFormula) -> bool:
+def is_well_formed_transformation(t: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed transformation, False otherwise.
 
-    :param phi: A formula.
+    :param t: A formula.
     :return: bool.
     """
-    phi = coerce_formula(phi=phi)
-    if (phi.connective is not connectives.transformation or
-            phi.arity != 3 or
-            not is_well_formed_tupl(phi=phi.term_0) or
-            not is_well_formed_formula(phi=phi.term_1) or
-            not is_well_formed_enumeration(phi=phi.term_2)):
+    t = coerce_formula(phi=t)
+    if (t.connective is not connectives.transformation or
+            t.arity != 3 or
+            not is_well_formed_tupl(t=t.term_0) or
+            not is_well_formed_formula(phi=t.term_1) or
+            not is_well_formed_enumeration(e=t.term_2)):
         return False
     else:
         return True
 
 
-def is_well_formed_enumeration(phi: FlexibleFormula) -> bool:
+def is_well_formed_enumeration(e: FlexibleFormula) -> bool:
     """Return True if phi is a well-formed enumeration, False otherwise.
 
-    :param phi: A formula.
+    :param e: A formula.
     :return: bool.
     """
-    if phi is None:
+    if e is None:
         # Implicit conversion of None to the empty enumeration.
         return True
     else:
-        phi = coerce_formula(phi=phi)
-        for i in range(0, phi.arity):
-            if i != phi.arity - 1:
-                for j in range(i + 1, phi.arity):
-                    if is_formula_equivalent(phi=phi[i], psi=phi[j]):
+        e = coerce_formula(phi=e)
+        for i in range(0, e.arity):
+            if i != e.arity - 1:
+                for j in range(i + 1, e.arity):
+                    if is_formula_equivalent(phi=e[i], psi=e[j]):
                         # We found a pair of duplicates, i.e.: phi_i ~formula phi_j.
                         return False
         return True
 
 
-def is_well_formed_inference_rule(phi: FlexibleFormula) -> bool:
+def is_well_formed_inference_rule(i: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed inference-rule, False otherwise.
 
-    :param phi: A formula.
+    :param i: A formula.
     :return: bool.
     """
-    phi = coerce_formula(phi=phi)
-    if isinstance(phi, InferenceRule):
+    i = coerce_formula(phi=i)
+    if isinstance(i, InferenceRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif (phi.connective is connectives.follows_from and
-          phi.arity == 2 and
-          is_well_formed_transformation(phi=phi.term_0) and
-          phi.term_1.connective is connectives.inference_rule):
+    elif (i.connective is connectives.follows_from and
+          i.arity == 2 and
+          is_well_formed_transformation(t=i.term_0) and
+          i.term_1.connective is connectives.inference_rule):
         return True
     else:
         return False
@@ -1880,11 +1880,11 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Fo
     t = coerce_theory(t=t)
     derivations = iterate_derivations_in_theory(t=t)
     for derivation in derivations:
-        if is_well_formed_axiom(phi=derivation):
+        if is_well_formed_axiom(a=derivation):
             derivation: Axiom = coerce_axiom(a=derivation)
             valid_statement: Formula = derivation.valid_statement
             yield valid_statement
-        elif is_well_formed_theorem(phi=derivation):
+        elif is_well_formed_theorem(t=derivation):
             derivation: Theorem = coerce_theorem(t=derivation)
             valid_statement: Formula = derivation.valid_statement
             yield valid_statement
@@ -1967,81 +1967,81 @@ def is_valid_statement_with_free_variables_in_theory(phi: FlexibleFormula, t: Fl
     return False
 
 
-def is_well_formed_axiom(phi: FlexibleFormula) -> bool:
+def is_well_formed_axiom(a: FlexibleFormula) -> bool:
     """Return True if phi is a well-formed axiom, False otherwise.
 
-    :param phi: A formula.
+    :param a: A formula.
     :return: bool.
     """
-    phi = coerce_formula(phi=phi)
-    if phi.arity != 2:
+    a = coerce_formula(phi=a)
+    if a.arity != 2:
         return False
-    if phi.connective is not connectives.follows_from:
+    if a.connective is not connectives.follows_from:
         return False
-    if not is_well_formed_formula(phi=phi.term_0):
+    if not is_well_formed_formula(phi=a.term_0):
         return False
-    if phi.term_1.arity != 0:
+    if a.term_1.arity != 0:
         return False
-    if phi.term_1.connective != connectives.axiom:
+    if a.term_1.connective != connectives.axiom:
         return False
     # All tests were successful.
     return True
 
 
-def is_well_formed_theorem(phi: FlexibleFormula) -> bool:
+def is_well_formed_theorem(t: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed theorem, False otherwise.
 
-    :param phi: A formula.
+    :param t: A formula.
     :return: bool.
     """
-    phi = coerce_formula(phi=phi)
-    if isinstance(phi, Theorem):
+    t = coerce_formula(phi=t)
+    if isinstance(t, Theorem):
         # the Theorem python-type assure the well-formedness of the object.
         return True
-    if (phi.connective is not connectives.follows_from or
-            not phi.arity == 2 or
-            not is_well_formed_formula(phi=phi.term_0) or
-            not is_well_formed_inference(phi=phi.term_1)):
+    if (t.connective is not connectives.follows_from or
+            not t.arity == 2 or
+            not is_well_formed_formula(phi=t.term_0) or
+            not is_well_formed_inference(i=t.term_1)):
         return False
     else:
-        i: Inference = coerce_inference(i=phi.term_1)
+        i: Inference = coerce_inference(i=t.term_1)
         f_of_p: Formula = i.transformation_rule(i.premises)
-        if not is_formula_equivalent(phi=phi.term_0, psi=f_of_p):
+        if not is_formula_equivalent(phi=t.term_0, psi=f_of_p):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             # issue a warning to facilitate troubleshooting and analysis.
-            raise_error(error_code=error_codes.e106, phi=phi, psi_expected=phi.term_0, psi_inferred=f_of_p,
+            raise_error(error_code=error_codes.e106, phi=t, psi_expected=t.term_0, psi_inferred=f_of_p,
                         inference_rule=i)
             return False
         return True
 
 
-def is_well_formed_derivation(phi: FlexibleFormula) -> bool:
+def is_well_formed_derivation(d: FlexibleFormula) -> bool:
     """Return True if phi is a well-formed theorem, False otherwise.
 
-    :param phi: A formula.
+    :param d: A formula.
     :return: bool.
     """
-    phi: Formula = coerce_formula(phi=phi)
-    if is_well_formed_theorem(phi=phi):
+    d: Formula = coerce_formula(phi=d)
+    if is_well_formed_theorem(t=d):
         return True
-    elif is_well_formed_inference_rule(phi=phi):
+    elif is_well_formed_inference_rule(i=d):
         return True
-    elif is_well_formed_axiom(phi=phi):
+    elif is_well_formed_axiom(a=d):
         return True
     else:
         return False
 
 
-def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
+def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
     """Return True if phi is a well-formed theory, False otherwise.
 
-    :param phi: A formula.
+    :param t: A formula.
     :param raise_event_if_false:
     :return: bool.
     """
-    phi = coerce_enumeration(e=phi)
+    t = coerce_enumeration(e=t)
 
-    if isinstance(phi, Theory):
+    if isinstance(t, Theory):
         # the Derivation class assure the well-formedness of the theory.
         return True
 
@@ -2050,8 +2050,8 @@ def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = Fal
     # by the definition of a theory, these are the left term (term_0) of the formulas.
     valid_statements: Tupl = Tupl(elements=None)
     derivations: Tupl = Tupl(elements=None)
-    for derivation in phi:
-        if not is_well_formed_derivation(phi=derivation):
+    for derivation in t:
+        if not is_well_formed_derivation(d=derivation):
             return False
         else:
             derivation: Derivation = coerce_derivation(d=derivation)
@@ -2063,15 +2063,15 @@ def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = Fal
     for i in range(0, derivations.arity):
         derivation = derivations[i]
         valid_statement = valid_statements[i]
-        if is_well_formed_axiom(phi=derivation):
+        if is_well_formed_axiom(a=derivation):
             # This is an axiom.
             derivation: Axiom = coerce_axiom(a=derivation)
             pass
-        elif is_well_formed_inference_rule(phi=derivation):
+        elif is_well_formed_inference_rule(i=derivation):
             # This is an inference-rule.
             derivation: InferenceRule = coerce_inference_rule(i=derivation)
             pass
-        elif is_well_formed_theorem(phi=derivation):
+        elif is_well_formed_theorem(t=derivation):
             theorem_by_inference: Theorem = coerce_theorem(t=derivation)
             inference: Inference = theorem_by_inference.inference
             for premise in inference.premises:
@@ -2116,13 +2116,13 @@ def is_well_formed_theory(phi: FlexibleFormula, raise_event_if_false: bool = Fal
     return True
 
 
-def is_well_formed_axiomatization(phi: FlexibleFormula) -> bool:
+def is_well_formed_axiomatization(a: FlexibleFormula) -> bool:
     """Returns True if phi is a well-formed axiomatization, False otherwise."""
-    phi = coerce_formula(phi=phi)
-    if phi.connective is not connectives.axiomatization:
+    a = coerce_formula(phi=a)
+    if a.connective is not connectives.axiomatization:
         return False
-    for element in phi:
-        if not is_well_formed_axiom(phi=element) and not is_well_formed_inference_rule(phi=element):
+    for element in a:
+        if not is_well_formed_axiom(a=element) and not is_well_formed_inference_rule(i=element):
             return False
     return True
 
@@ -2134,11 +2134,11 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
     :return:
     """
     d: Formula = coerce_formula(phi=d)
-    if is_well_formed_theorem(phi=d):
+    if is_well_formed_theorem(t=d):
         return coerce_theorem(t=d)
-    elif is_well_formed_inference_rule(phi=d):
+    elif is_well_formed_inference_rule(i=d):
         return coerce_inference_rule(i=d)
-    elif is_well_formed_axiom(phi=d):
+    elif is_well_formed_axiom(a=d):
         return coerce_axiom(a=d)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Derivation, phi_type=type(d), phi=d)
@@ -2153,7 +2153,7 @@ def coerce_axiom(a: FlexibleFormula) -> Axiom:
     """
     if isinstance(a, Axiom):
         return a
-    elif isinstance(a, Formula) and is_well_formed_axiom(phi=a):
+    elif isinstance(a, Formula) and is_well_formed_axiom(a=a):
         proved_formula: Formula = a.term_0
         return Axiom(valid_statement=proved_formula)
     else:
@@ -2169,7 +2169,7 @@ def coerce_inference_rule(i: FlexibleFormula) -> InferenceRule:
     """
     if isinstance(i, InferenceRule):
         return i
-    elif isinstance(i, Formula) and is_well_formed_inference_rule(phi=i):
+    elif isinstance(i, Formula) and is_well_formed_inference_rule(i=i):
         transfo: Transformation = coerce_transformation(t=i.term_0)
         return InferenceRule(transformation=transfo)
     else:
@@ -2185,7 +2185,7 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
     """
     if isinstance(t, Theorem):
         return t
-    elif isinstance(t, Formula) and is_well_formed_theorem(phi=t):
+    elif isinstance(t, Formula) and is_well_formed_theorem(t=t):
         proved_formula: Formula = coerce_formula(phi=t.term_0)
         inference: Inference = coerce_inference(i=t.term_1)
         return Theorem(valid_statement=proved_formula, i=inference)
@@ -2202,7 +2202,7 @@ def coerce_theory(t: FlexibleTheory) -> Theory:
     """
     if isinstance(t, Theory):
         return t
-    elif isinstance(t, Formula) and is_well_formed_theory(phi=t):
+    elif isinstance(t, Formula) and is_well_formed_theory(t=t):
         return Theory(derivations=t)
     elif t is None:
         return Theory(derivations=None)
@@ -2229,7 +2229,7 @@ def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
     """
     if isinstance(a, Axiomatization):
         return a
-    elif isinstance(a, Formula) and is_well_formed_axiomatization(phi=a):
+    elif isinstance(a, Formula) and is_well_formed_axiomatization(a=a):
         return Axiomatization(derivations=a)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Axiomatization, phi_type=type(a), phi=a)
@@ -2514,7 +2514,7 @@ class Theory(Enumeration):
         derivations: Enumeration = coerce_enumeration(
             e=(coerce_derivation(d=p) for p in derivations))
         try:
-            is_well_formed_theory(phi=derivations, raise_event_if_false=True)
+            is_well_formed_theory(t=derivations, raise_event_if_false=True)
 
         except Exception as error:
             # well-formedness verification failure, the theorem is ill-formed.
@@ -2644,11 +2644,11 @@ class Axiomatization(Theory):
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
         for derivation in derivations:
-            if is_well_formed_inference_rule(phi=derivation):
+            if is_well_formed_inference_rule(i=derivation):
                 # This is an inference-rule.
                 inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
-            elif is_well_formed_axiom(phi=derivation):
+            elif is_well_formed_axiom(a=derivation):
                 # This is an axiom.
                 axiom: Axiom = coerce_axiom(a=derivation)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
@@ -2665,11 +2665,11 @@ class Axiomatization(Theory):
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
         for derivation in derivations:
-            if is_well_formed_inference_rule(phi=derivation):
+            if is_well_formed_inference_rule(i=derivation):
                 # This is an inference-rule.
                 inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
-            elif is_well_formed_axiom(phi=derivation):
+            elif is_well_formed_axiom(a=derivation):
                 # This is an axiom.
                 axiom: Axiom = coerce_axiom(a=derivation)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
@@ -2760,20 +2760,20 @@ def extend_theory(*args, t: FlexibleTheory) -> Theory:
         return t
     else:
         for argument in args:
-            if is_well_formed_theory(phi=argument):
+            if is_well_formed_theory(t=argument):
                 # recursively append all derivations of t2 in t
                 t2: Theory = coerce_theory(t=argument)
                 for d in t2.derivations:
                     t: Theory = extend_theory(d, t=t)
-            elif is_well_formed_axiom(phi=argument):
+            elif is_well_formed_axiom(a=argument):
                 a: Axiom = coerce_axiom(a=argument)
                 if not is_axiom_of_theory(a=a, t=t):
                     t: Theory = Theory(derivations=(*t, a,))
-            elif is_well_formed_inference_rule(phi=argument):
+            elif is_well_formed_inference_rule(i=argument):
                 ir: InferenceRule = coerce_inference_rule(i=argument)
                 if not is_inference_rule_of_theory(ir=ir, t=t):
                     t: Theory = Theory(derivations=(*t, ir,))
-            elif is_well_formed_theorem(phi=argument):
+            elif is_well_formed_theorem(t=argument):
                 thrm: Theorem = coerce_theorem(t=argument)
                 if not is_theorem_of_theory(thrm=thrm, t=t):
                     t: Theory = Theory(derivations=(*t, thrm,))
@@ -3411,13 +3411,13 @@ class DerivationTypesetter(pl1.Typesetter):
             i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=phi, formula=theory)
             yield f'({i})\t'
         yield from phi.valid_statement.typeset_from_generator(**kwargs)
-        if is_well_formed_axiom(phi=phi):
+        if is_well_formed_axiom(a=phi):
             phi: Axiom = coerce_axiom(a=phi)
             yield '\t\t| Axiom.'
-        elif is_well_formed_inference_rule(phi=phi):
+        elif is_well_formed_inference_rule(i=phi):
             phi: InferenceRule = coerce_inference_rule(i=phi)
             yield '\t\t| Inference rule.'
-        elif is_well_formed_theorem(phi=phi):
+        elif is_well_formed_theorem(t=phi):
             phi: Theorem = coerce_theorem(t=phi)
             inference: Inference = phi.inference
             transformation: Transformation = inference.transformation_rule
@@ -3427,7 +3427,7 @@ class DerivationTypesetter(pl1.Typesetter):
                 i = 0
                 j = 0
                 for ir in theory:
-                    if is_well_formed_inference_rule(phi=ir):
+                    if is_well_formed_inference_rule(i=ir):
                         ir: InferenceRule
                         if is_formula_equivalent(phi=ir.transformation, psi=transformation):
                             j = i

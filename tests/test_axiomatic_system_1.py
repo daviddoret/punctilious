@@ -176,15 +176,15 @@ class TestEnumeration:
         a, b, c = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c',))
         star = pu.as1.FreeArityConnective(formula_typesetter='*')
         phi1 = pu.as1.Formula(connective=star, terms=(a, b, c,))
-        assert pu.as1.is_well_formed_enumeration(phi=phi1)
+        assert pu.as1.is_well_formed_enumeration(e=phi1)
         phi2 = pu.as1.Formula(connective=star, terms=None)
-        assert pu.as1.is_well_formed_enumeration(phi=phi2)
+        assert pu.as1.is_well_formed_enumeration(e=phi2)
         phi3 = pu.as1.Formula(connective=star, terms=(a, a, b, c,))
-        assert not pu.as1.is_well_formed_enumeration(phi=phi3)
+        assert not pu.as1.is_well_formed_enumeration(e=phi3)
         phi4 = pu.as1.Formula(connective=star, terms=(a, b, b, c,))
-        assert not pu.as1.is_well_formed_enumeration(phi=phi4)
+        assert not pu.as1.is_well_formed_enumeration(e=phi4)
         phi5 = pu.as1.Formula(connective=star, terms=(a, b, c, c,))
-        assert not pu.as1.is_well_formed_enumeration(phi=phi5)
+        assert not pu.as1.is_well_formed_enumeration(e=phi5)
 
 
 class TestFormulaEquivalenceWithVariables:
@@ -402,10 +402,10 @@ class TestTransformation:
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(elements=(x,))
         phi1 = pu.as1.connectives.transformation(premises, conclusion, variables)
-        assert pu.as1.is_well_formed_transformation(phi=phi1)
+        assert pu.as1.is_well_formed_transformation(t=phi1)
         t = pu.as1.Tupl(elements=(platypus, platypus,))
         phi2 = pu.as1.connectives.transformation(premises, conclusion, t)
-        assert not pu.as1.is_well_formed_transformation(phi=phi2)
+        assert not pu.as1.is_well_formed_transformation(t=phi2)
 
 
 class TestReplaceFormulas:
@@ -535,15 +535,15 @@ class TestInferenceRule:
         rule = pu.as1.Transformation(premises=None, conclusion=a | f | b,
                                      variables=None)
         phi1 = rule | pu.as1.connectives.follows_from | pu.as1.connectives.inference_rule
-        assert pu.as1.is_well_formed_inference_rule(phi=phi1)
+        assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
         # incorrect connective
         phi2 = rule | pu.as1.connectives.inference | pu.as1.connectives.inference_rule
-        assert not pu.as1.is_well_formed_inference_rule(phi=phi2)
+        assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
         phi3 = rule | pu.as1.connectives.follows_from | pu.as1.connectives.enumeration
-        assert not pu.as1.is_well_formed_inference_rule(phi=phi3)
+        assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
 class TestFormulaToTuple:
@@ -568,11 +568,11 @@ class TestProofByPostulation:
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_typesetter='*3')
         rule1 = pu.as1.Transformation(premises=None, conclusion=star3(e, b, d), variables=None)
         phi1 = rule1 | pu.as1.connectives.follows_from | pu.as1.connectives.inference_rule
-        assert pu.as1.is_well_formed_inference_rule(phi=phi1)
+        assert pu.as1.is_well_formed_inference_rule(i=phi1)
         phi2 = rule1 | pu.as1.connectives.map | pu.as1.connectives.inference_rule
-        assert not pu.as1.is_well_formed_inference_rule(phi=phi2)
+        assert not pu.as1.is_well_formed_inference_rule(i=phi2)
         phi3 = rule1 | pu.as1.connectives.follows_from | b
-        assert not pu.as1.is_well_formed_inference_rule(phi=phi3)
+        assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
 class TestInference:
@@ -596,13 +596,13 @@ class TestInference:
         t = pu.as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
         p = (a | f | b, b | f | c,)
         phi1 = p | pu.as1.connectives.inference | t
-        assert pu.as1.is_well_formed_inference(phi=phi1)
+        assert pu.as1.is_well_formed_inference(i=phi1)
         phi2 = p | pu.as1.connectives.inference | a
-        assert not pu.as1.is_well_formed_inference(phi=phi2)
+        assert not pu.as1.is_well_formed_inference(i=phi2)
         phi3 = p | pu.as1.connectives.follows_from | t
-        assert not pu.as1.is_well_formed_inference(phi=phi3)
+        assert not pu.as1.is_well_formed_inference(i=phi3)
         phi4 = f(a, a, b, b) | pu.as1.connectives.follows_from | t
-        assert not pu.as1.is_well_formed_inference(phi=phi4)
+        assert not pu.as1.is_well_formed_inference(i=phi4)
 
 
 class TestProofByInference:
@@ -615,11 +615,11 @@ class TestProofByInference:
         variables = pu.as1.Enumeration(elements=(x, y, z,))
         f = pu.as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
         i = pu.as1.Inference(premises=(a | star | b, b | star | c,), transformation_rule=f)
-        assert pu.as1.is_well_formed_theorem(phi=(a | star | c) | pu.as1.connectives.follows_from | i)
+        assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.connectives.follows_from | i)
         pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
-        assert not pu.as1.is_well_formed_theorem(phi=(a | star | d) | pu.as1.connectives.follows_from | i)
+        assert not pu.as1.is_well_formed_theorem(t=(a | star | d) | pu.as1.connectives.follows_from | i)
         i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), transformation_rule=f)
-        assert not pu.as1.is_well_formed_theorem(phi=(a | star | c) | pu.as1.connectives.follows_from | i2)
+        assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.connectives.follows_from | i2)
         pass
 
 
@@ -740,22 +740,22 @@ class TestAxiomatization:
         star2 = pu.as1.let_x_be_a_binary_connective(formula_typesetter='*2')
         axiom_ok_1 = pu.as1.Axiom(valid_statement=a | star2 | b)
         axiom_ok_2 = pu.as1.Axiom(valid_statement=star1(c))
-        assert pu.as1.is_well_formed_axiom(phi=axiom_ok_2)
+        assert pu.as1.is_well_formed_axiom(a=axiom_ok_2)
 
         # simple case
         e1 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
         e1 = pu.as1.Axiomatization(derivations=e1)
-        assert pu.as1.is_well_formed_axiomatization(phi=e1)
+        assert pu.as1.is_well_formed_axiomatization(a=e1)
 
         # extreme case: the empty enumeration
         e2 = pu.as1.Enumeration()
         e2 = pu.as1.Axiomatization(derivations=e2)
-        assert pu.as1.is_well_formed_axiomatization(phi=e2)
+        assert pu.as1.is_well_formed_axiomatization(a=e2)
         a1 = pu.as1.Axiomatization(derivations=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
 
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
-        assert not pu.as1.is_well_formed_axiomatization(phi=e3)
+        assert not pu.as1.is_well_formed_axiomatization(a=e3)
         with pytest.raises(pu.as1.CustomException, match='e123'):
             a2 = pu.as1.Axiomatization(derivations=e3)  # raise an e123 exception
 
