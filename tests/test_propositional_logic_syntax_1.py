@@ -53,10 +53,10 @@ class TestAxioms:
 
         # derive: p is-a proposition
         theory, _, = pu.as1.derive_1(t=theory,
-                                     conjecture=p | is_a | proposition,
-                                     premises=(
+                                     c=p | is_a | proposition,
+                                     p=(
                                          p | is_a | propositional_variable,),
-                                     inference_rule=pu.pls1.i1)
+                                     i=pu.pls1.i1)
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=theory)
 
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition

@@ -222,9 +222,9 @@ def let_x_be_a_propositional_variable(
             t, _ = as1.let_x_be_an_axiom(t=t,
                                          valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
             t, _ = as1.derive_1(t=t,
-                                conjecture=x | is_a | proposition,
-                                premises=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
-                                inference_rule=i1)
+                                c=x | is_a | proposition,
+                                p=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
+                                i=i1)
         return t, *propositional_variables
     else:
         raise TypeError  # TODO: Implement event code.
@@ -256,10 +256,10 @@ class PIsAProposition(as1.Heuristic):
                     # If P is a propositional-variable:
                     # We can safely derive p | is_a | proposition
                     t, _ = as1.derive_1(
-                        conjecture=p_value | is_a | proposition,
-                        premises=(
+                        c=p_value | is_a | proposition,
+                        p=(
                             p_value | is_a | propositional_variable,),
-                        inference_rule=i1, t=t)
+                        i=i1, t=t)
 
                     return t, True
 
@@ -275,10 +275,10 @@ class PIsAProposition(as1.Heuristic):
                             # (Q is-a proposition) is proved.
                             # We can safely derive ((¬Q) is-a proposition).
                             t, _ = as1.derive_1(
-                                conjecture=lnot(q_value) | is_a | proposition,
-                                premises=(
+                                c=lnot(q_value) | is_a | proposition,
+                                p=(
                                     q_value | is_a | proposition,),
-                                inference_rule=i2, t=t)
+                                i=i2, t=t)
                             return t, True
                         else:
                             # (Q is-a proposition) is not proved.
@@ -302,11 +302,11 @@ class PIsAProposition(as1.Heuristic):
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∧ R) is-a proposition).
                                 t, _ = as1.derive_1(
-                                    conjecture=(q_value | land | r_value) | is_a | proposition,
-                                    premises=(
+                                    c=(q_value | land | r_value) | is_a | proposition,
+                                    p=(
                                         q_value | is_a | proposition,
                                         r_value | is_a | proposition,),
-                                    inference_rule=i3, t=t)
+                                    i=i3, t=t)
                                 return t, True
                             else:
                                 # (R is-a proposition) is not proved.
@@ -333,11 +333,11 @@ class PIsAProposition(as1.Heuristic):
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ⊃ R) is-a proposition).
                                 t, _ = as1.derive_1(
-                                    conjecture=(q_value | implies | r_value) | is_a | proposition,
-                                    premises=(
+                                    c=(q_value | implies | r_value) | is_a | proposition,
+                                    p=(
                                         q_value | is_a | proposition,
                                         r_value | is_a | proposition,),
-                                    inference_rule=i4, t=t)
+                                    i=i4, t=t)
                                 return t, True
                             else:
                                 # (R is-a proposition) is not proved.
@@ -364,11 +364,11 @@ class PIsAProposition(as1.Heuristic):
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∨ R) is-a proposition).
                                 t, _ = as1.derive_1(
-                                    conjecture=(q_value | lor | r_value) | is_a | proposition,
-                                    premises=(
+                                    c=(q_value | lor | r_value) | is_a | proposition,
+                                    p=(
                                         q_value | is_a | proposition,
                                         r_value | is_a | proposition,),
-                                    inference_rule=i5, t=t)
+                                    i=i5, t=t)
                                 return t, True
                             else:
                                 # (R is-a proposition) is not proved.

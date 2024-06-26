@@ -777,11 +777,11 @@ class TestDemonstration:
 
         # derive a theorem
         demo2, _, = pu.as1.derive_1(t=theory,
-                                    conjecture=a | star | c,
-                                    premises=(
+                                    c=a | star | c,
+                                    p=(
                                         a | star | b,
                                         b | star | c,),
-                                    inference_rule=ir1)
+                                    i=ir1)
         assert pu.as1.is_valid_statement_in_theory(phi=a | star | c, t=demo2)
 
         with pytest.raises(pu.as1.CustomException, match='e123'):
@@ -831,7 +831,7 @@ class TestAutoDerivation:
         assert success
         pass
         # auto-derivation of a simple theorem, without variables
-        t2, success, _, = pu.as1.derive_2(t=t2, conjecture=q, inference_rule=if_p_then_q)
+        t2, success, _, = pu.as1.derive_2(t=t2, c=q, i=if_p_then_q)
         assert success
         pass
 
