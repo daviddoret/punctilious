@@ -329,7 +329,7 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
 
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
-    t: as1.Theory = as1.coerce_theory(phi=t)
+    t: as1.Theory = as1.coerce_theory(t=t)
     t: as1.Theory = pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
     t, _ = as1.let_x_be_an_axiom(axiom=pl01, t=t)
     t, _ = as1.let_x_be_an_axiom(axiom=pl02, t=t)

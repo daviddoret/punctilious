@@ -506,8 +506,8 @@ def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
      - Idempotent: (phi ∪-theory phi) ~formula phi.
      - Not symmetric if some element of psi are elements of phi: because of order.
     """
-    phi: Theory = coerce_theory(phi=phi)
-    psi: Theory = coerce_theory(phi=psi)
+    phi: Theory = coerce_theory(t=phi)
+    psi: Theory = coerce_theory(t=psi)
     t2: Theory = Theory(derivations=(*phi, *psi,))
     return t2
 
@@ -676,19 +676,19 @@ def is_element_of_enumeration(element: FlexibleFormula, enumeration: FlexibleEnu
 
 def is_axiom_of_theory(a: FlexibleAxiom, t: FlexibleTheory):
     a: Axiom = coerce_axiom(a=a)
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     return any(is_formula_equivalent(phi=a, psi=a2) for a2 in t.axioms)
 
 
 def is_inference_rule_of_theory(ir: FlexibleInferenceRule, t: FlexibleTheory):
     ir: InferenceRule = coerce_inference_rule(i=ir)
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     return any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in t.inference_rules)
 
 
 def is_theorem_of_theory(thrm: FlexibleTheorem, t: FlexibleTheory):
     thrm: Theorem = coerce_theorem(t=thrm)
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     return any(is_formula_equivalent(phi=thrm, psi=thrm2) for thrm2 in t.theorems)
 
 
@@ -907,7 +907,7 @@ def let_x_be_an_inference_rule(theory: FlexibleTheory,
     if theory is None:
         theory = Axiomatization(derivations=None)
     else:
-        theory: FlexibleTheory = coerce_theory(phi=theory)
+        theory: FlexibleTheory = coerce_theory(t=theory)
 
     if inference_rule is None and premises is not None and conclusion is not None and variables is not None:
         transformation: Transformation = Transformation(premises=premises, conclusion=conclusion, variables=variables)
@@ -944,7 +944,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, valid_statement: typing.Optional[Flexib
     if t is None:
         t = Axiomatization(derivations=None)
     else:
-        t: FlexibleTheory = coerce_theory(phi=t)
+        t: FlexibleTheory = coerce_theory(t=t)
     if valid_statement is not None and axiom is not None:
         raise Exception('oops 1')
     elif valid_statement is None and axiom is None:
@@ -1673,22 +1673,22 @@ class Transformation(Formula):
 FlexibleTransformation = typing.Optional[typing.Union[Transformation]]
 
 
-def coerce_transformation(phi: FlexibleFormula) -> Transformation:
-    if isinstance(phi, Transformation):
-        return phi
-    elif isinstance(phi, Formula) and is_well_formed_transformation(phi=phi):
+def coerce_transformation(t: FlexibleFormula) -> Transformation:
+    if isinstance(t, Transformation):
+        return t
+    elif isinstance(t, Formula) and is_well_formed_transformation(phi=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return Transformation(premises=phi.term_0, conclusion=phi.term_1, variables=phi.term_2)
+        return Transformation(premises=t.term_0, conclusion=t.term_1, variables=t.term_2)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Transformation, phi_type=type(phi), phi=phi)
+        raise_error(error_code=error_codes.e123, coerced_type=Transformation, phi_type=type(t), phi=t)
 
 
 def coerce_inference(i: FlexibleFormula) -> Inference:
     if isinstance(i, Inference):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference(phi=i):
-        transformation: Transformation = coerce_transformation(phi=i.term_1)
+        transformation: Transformation = coerce_transformation(t=i.term_1)
         return Inference(premises=i.term_0, transformation_rule=transformation)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=Inference, phi_type=type(i), phi=i)
@@ -1807,7 +1807,7 @@ def is_valid_statement_in_theory(phi: FlexibleFormula, t: FlexibleTheory) -> boo
      - or phi is the valid-statement of a theorem in t.
     """
     phi: Formula = coerce_formula(phi=phi)
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     return any(is_formula_equivalent(phi=phi, psi=valid_statement) for valid_statement in t.iterate_valid_statements())
 
 
@@ -1839,7 +1839,7 @@ def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     """Return True if every formula phi in enumeration s is a valid-statement in theory t, False otherwise.
     """
     s: Tupl = coerce_tupl(t=s)
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     return all(is_valid_statement_in_theory(phi=phi, t=t) for phi in iterate_tuple_elements(s))
 
 
@@ -1869,7 +1869,7 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
 
 
 def iterate_derivations_in_theory(t: FlexibleTheory) -> typing.Generator[Formula, None, None]:
-    t = coerce_theory(phi=t)
+    t = coerce_theory(t=t)
     for derivation in t:
         derivation = coerce_derivation(d=derivation)
         yield derivation
@@ -1877,7 +1877,7 @@ def iterate_derivations_in_theory(t: FlexibleTheory) -> typing.Generator[Formula
 
 
 def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Formula, None, None]:
-    t = coerce_theory(phi=t)
+    t = coerce_theory(t=t)
     derivations = iterate_derivations_in_theory(t=t)
     for derivation in derivations:
         if is_well_formed_axiom(phi=derivation):
@@ -1908,7 +1908,7 @@ def are_valid_statements_in_theory_with_variables(
 
     """
     s: Tupl = coerce_tupl(t=s)
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     variables: Enumeration = coerce_enumeration(e=variables, strip_duplicates=True)
     variables_values: Map = coerce_map(m=variables_values)
 
@@ -1958,7 +1958,7 @@ def is_valid_statement_with_free_variables_in_theory(phi: FlexibleFormula, t: Fl
      - or phi is the valid-statement of a theorem in t.
     """
     phi: Formula = coerce_formula(phi=phi)
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     free_variables: Enumeration = coerce_enumeration_of_variables(e=free_variables)
     for valid_statement in t.iterate_valid_statements():
         output, _, = is_formula_equivalent_with_variables_2(phi=valid_statement, psi=phi, variables=free_variables)
@@ -2170,7 +2170,7 @@ def coerce_inference_rule(i: FlexibleFormula) -> InferenceRule:
     if isinstance(i, InferenceRule):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference_rule(phi=i):
-        transfo: Transformation = coerce_transformation(phi=i.term_0)
+        transfo: Transformation = coerce_transformation(t=i.term_0)
         return InferenceRule(transformation=transfo)
     else:
         raise_error(error_code=error_codes.e123, coerced_type=InferenceRule, phi_type=type(i), phi=i)
@@ -2193,31 +2193,31 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
         raise_error(error_code=error_codes.e123, coerced_type=Theorem, phi_type=type(t), phi=t)
 
 
-def coerce_theory(phi: FlexibleTheory) -> Theory:
+def coerce_theory(t: FlexibleTheory) -> Theory:
     """Validate that phi is a well-formed theory and returns it properly typed as Demonstration,
     or raise exception e123.
 
-    :param phi:
+    :param t:
     :return:
     """
-    if isinstance(phi, Theory):
-        return phi
-    elif isinstance(phi, Formula) and is_well_formed_theory(phi=phi):
-        return Theory(derivations=phi)
-    elif phi is None:
+    if isinstance(t, Theory):
+        return t
+    elif isinstance(t, Formula) and is_well_formed_theory(phi=t):
+        return Theory(derivations=t)
+    elif t is None:
         return Theory(derivations=None)
-    elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
+    elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Theory(derivations=tuple(element for element in phi))
-    elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
+        return Theory(derivations=tuple(element for element in t))
+    elif isinstance(t, typing.Iterable) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Theory(derivations=phi)
+        return Theory(derivations=t)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Theory, phi_type=type(phi), phi=phi)
+        raise_error(error_code=error_codes.e123, coerced_type=Theory, phi_type=type(t), phi=t)
 
 
 def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
@@ -2358,12 +2358,12 @@ class InferenceRule(Derivation):
     """
 
     def __new__(cls, transformation: FlexibleTransformation = None):
-        transformation: Transformation = coerce_transformation(phi=transformation)
+        transformation: Transformation = coerce_transformation(t=transformation)
         o: tuple = super().__new__(cls, valid_statement=transformation, justification=connectives.inference_rule)
         return o
 
     def __init__(self, transformation: FlexibleTransformation):
-        self._transformation: Transformation = coerce_transformation(phi=transformation)
+        self._transformation: Transformation = coerce_transformation(t=transformation)
         super().__init__(valid_statement=self._transformation, justification=connectives.inference_rule)
 
     @property
@@ -2390,14 +2390,14 @@ class Inference(Formula):
 
     def __new__(cls, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
         premises: Tupl = coerce_tupl(t=premises)
-        transformation_rule: Transformation = coerce_transformation(phi=transformation_rule)
+        transformation_rule: Transformation = coerce_transformation(t=transformation_rule)
         c: Connective = connectives.inference
         o: tuple = super().__new__(cls, connective=c, terms=(premises, transformation_rule,))
         return o
 
     def __init__(self, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
         self._premises: Tupl = coerce_tupl(t=premises)
-        self._transformation_rule: Transformation = coerce_transformation(phi=transformation_rule)
+        self._transformation_rule: Transformation = coerce_transformation(t=transformation_rule)
         c: Connective = connectives.inference
         super().__init__(connective=c, terms=(self._premises, self._transformation_rule,))
 
@@ -2755,14 +2755,14 @@ def extend_theory(*args, t: FlexibleTheory) -> Theory:
     :param t:
     :return:
     """
-    t = coerce_theory(phi=t)
+    t = coerce_theory(t=t)
     if args is None:
         return t
     else:
         for argument in args:
             if is_well_formed_theory(phi=argument):
                 # recursively append all derivations of t2 in t
-                t2: Theory = coerce_theory(phi=argument)
+                t2: Theory = coerce_theory(t=argument)
                 for d in t2.derivations:
                     t: Theory = extend_theory(d, t=t)
             elif is_well_formed_axiom(phi=argument):
@@ -2853,7 +2853,7 @@ def derive_1(t: FlexibleTheory, conjecture: FlexibleFormula, premises: FlexibleT
     :return:
     """
     # parameters validation
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     conjecture: Formula = coerce_formula(phi=conjecture)
     premises: Tupl = coerce_tupl(t=premises)
     inference_rule: InferenceRule = coerce_inference_rule(i=inference_rule)
@@ -2919,7 +2919,7 @@ def derive_0(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[Theory, bool, typing.Optional[Derivation]]
     """
-    t = coerce_theory(phi=t)
+    t = coerce_theory(t=t)
     conjecture = coerce_formula(phi=conjecture)
     if debug:
         u1.log_debug(f'auto_derive_0: start. conjecture:{conjecture}.')
@@ -2952,7 +2952,7 @@ def derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, inference_rule: Fle
     :return: A python-tuple (t, True, derivation) if the derivation is successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[Theory, bool, typing.Optional[Derivation]]
     """
-    t = coerce_theory(phi=t)
+    t = coerce_theory(t=t)
     conjecture = coerce_formula(phi=conjecture)
     inference_rule = coerce_inference_rule(i=inference_rule)
     if debug:
@@ -3050,7 +3050,7 @@ def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = 
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[Theory, bool, typing.Optional[Derivation]]
     """
-    t = coerce_theory(phi=t)
+    t = coerce_theory(t=t)
     conjecture = coerce_formula(phi=conjecture)
     if debug:
         u1.log_debug(f'auto_derive_2: start. conjecture:{conjecture}.')
@@ -3079,7 +3079,7 @@ def auto_derive_3(
     :param conjectures:
     :return:
     """
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     conjectures: Tupl = coerce_tupl(t=conjectures)
     for conjecture in iterate_tuple_elements(phi=conjectures):
         t, success, _ = auto_derive_2(t=t, conjecture=conjecture)
@@ -3120,7 +3120,7 @@ def auto_derive_4(
     :rtype: typing.Tuple[Theory, bool, typing.Optional[Derivation]]
     """
     global auto_derivation_max_formula_depth_preference
-    t: Theory = coerce_theory(phi=t)
+    t: Theory = coerce_theory(t=t)
     conjecture: Formula = coerce_formula(phi=conjecture)
     conjecture_exclusion_list: Enumeration = coerce_enumeration(e=conjecture_exclusion_list)
     indent: str = ' ' * (auto_derivation_max_formula_depth_preference - max_recursion + 1)
@@ -3334,7 +3334,7 @@ class TransformationTypesetter(pl1.Typesetter):
 
     def typeset_from_generator(self, phi: FlexibleTransformation, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: Transformation = coerce_transformation(phi=phi)
+        phi: Transformation = coerce_transformation(t=phi)
 
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True

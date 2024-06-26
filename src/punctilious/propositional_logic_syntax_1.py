@@ -200,7 +200,7 @@ def let_x_be_a_propositional_variable(
     """
     global axiomatization
     global i1
-    t: as1.FlexibleTheory = as1.coerce_theory(phi=t)
+    t: as1.FlexibleTheory = as1.coerce_theory(t=t)
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
     # in the theory.
@@ -234,7 +234,7 @@ class PIsAProposition(as1.Heuristic):
 
     def process_conjecture(self, conjecture: as1.FlexibleFormula, t: as1.FlexibleTheory) -> tuple[as1.Theory, bool,]:
         conjecture: as1.Formula = as1.coerce_formula(phi=conjecture)
-        t: as1.Theory = as1.coerce_theory(phi=t)
+        t: as1.Theory = as1.coerce_theory(t=t)
 
         t, success, _ = as1.derive_0(conjecture=conjecture, t=t)
         if success:
@@ -400,7 +400,7 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
 
     """
     global i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
-    t: as1.Theory = as1.coerce_theory(phi=t)
+    t: as1.Theory = as1.coerce_theory(t=t)
     t, _ = as1.let_x_be_an_axiom(axiom=i1, t=t)
     t, _ = as1.let_x_be_an_axiom(axiom=i2, t=t)
     t, _ = as1.let_x_be_an_axiom(axiom=i3, t=t)
