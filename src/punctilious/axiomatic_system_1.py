@@ -233,210 +233,6 @@ class Connective:
     def to_formula(self) -> Formula:
         return Formula(connective=self)
 
-    def to_formula_builder(self) -> FormulaBuilder:
-        return FormulaBuilder(c=self)
-
-
-class FormulaBuilder(list):
-    """A mutable object to edit and elaborate formulas.
-    Note: formula-builder may be syntactically inconsistent."""
-
-    def __init__(self, c: typing.Optional[Connective] = None, terms: FlexibleTupl = None):
-        """
-        :param FlexibleTerms terms: A collection of terms."""
-        self.connective: typing.Optional[Connective] = c
-
-        # When inheriting from list, we implement __init__ and not __new__.
-        # Reference: https://stackoverflow.com/questions/9432719/python-how-can-i-inherit-from-the-built-in-list-type
-        super().__init__(self)
-        if isinstance(terms, collections.abc.Iterable):
-            coerced_tuple = tuple(coerce_formula_builder(term) for term in terms)
-            for term in coerced_tuple:
-                self.append(term=term)
-        elif terms is not None:
-            raise_error(error_code=error_codes.e100, c=c, terms_type=type(terms), terms=terms)
-
-    def __contains__(self, phi: FlexibleFormula):
-        """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
-          otherwise.
-
-        :param phi: A formula.
-        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
-          otherwise.
-        """
-        return self.contain_formula(phi=phi)
-
-    def __delitem__(self, phi):
-        """Remove every sub-formula psi' from the formula psi, if and only psi' ~formula phi.
-
-        Attention point: the native python list.remove() method removes only the first element from the list,
-        which is a completely different behavior.
-
-        :param phi: A formula
-        :return: None
-        """
-        self.remove_formula(phi=phi)
-
-    def __repr__(self):
-        return self.typeset_as_string()
-
-    def __str__(self):
-        return self.typeset_as_string()
-
-    def __setitem__(self, i: int, phi: FlexibleFormula) -> None:
-        self.set_term(i=i, phi=phi)
-
-    def append(self, term: FlexibleFormula) -> FormulaBuilder:
-        """Append a new term to the formula."""
-        term = coerce_formula_builder(phi=term)
-        super().append(term)
-        return term
-
-    @property
-    def arity(self) -> int:
-        return len(self)
-
-    def assure_term(self, i: int) -> None:
-        """Assure the presence of an i-th term (i being the 0-based index).
-        Nodes are initialized with None connective."""
-        while len(self) <= i:
-            self.append(FormulaBuilder())
-
-    def contain_formula(self, phi: FlexibleFormula) -> bool:
-        """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
-          otherwise.
-
-        :param phi: A formula.
-        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
-          otherwise.
-        """
-        return any(is_formula_equivalent(phi=phi, psi=psi_prime) for psi_prime in self)
-
-    def get_typesetter(self, typesetter: typing.Optional[pl1.Typesetter] = None) -> pl1.Typesetter:
-        """
-
-         - priority 1: parameter typesetter is passed explicitly.
-         - priority 2: a typesetting-configuration is attached to the formula, and its typesetting-method is defined.
-         - priority 3: a typesetting-configuration is attached to the formula connective, and its typesetting-method is
-           defined.
-         - priority 4: failsafe typesetting method.
-
-        :param typesetter:
-        :return:
-        """
-
-        if typesetter is None:
-            typesetter: pl1.Typesetter = self.connective.formula_typesetter
-        return typesetter
-
-    def iterate_canonical(self):
-        """A top-down, left-to-right iteration."""
-        yield self
-        for t in self:
-            yield from t.iterate_canonical()
-
-    def remove(self, phi: FlexibleFormula) -> None:
-        """Remove every sub-formula psi' from the formula psi, if and only psi' ~formula phi.
-
-        Attention point: the native python list.remove() method removes only the first element from the list,
-        which is a completely different behavior.
-
-        :param phi: A formula
-        :return: None
-        """
-        self.remove_formula(phi=phi)
-
-    def remove_formula(self, phi: FlexibleFormula) -> None:
-        """Remove every sub-formula psi' from the formula psi, if and only psi' ~formula phi.
-
-        Attention point: the native python list.remove() method removes only the first element from the list,
-        which is a completely different behavior.
-
-        :param phi: A formula
-        :return: None
-        """
-        phi = coerce_formula(phi=phi)
-        for psi_prime in self:
-            if is_formula_equivalent(phi=phi, psi=psi_prime):
-                super().remove(psi_prime)
-
-    def set_term(self, i: int, phi: FlexibleFormula) -> None:
-        """Set term / sub-formula at index position i to be formula phi.
-
-        If the sub-formulas of the current formula do not extend to position i, populate the intermediary sub-formulas
-        with None.
-
-        :param i: A zero-based index position.
-        :param phi: The term / sub-formula.
-        :return: None.
-        """
-        """"""
-        phi = coerce_formula(phi=phi)
-        self.assure_term(i=i)
-        super().__setitem__(i, phi)
-
-    @property
-    def term_0(self) -> FormulaBuilder:
-        self.assure_term(i=0)
-        return self[0]
-
-    @term_0.setter
-    def term_0(self, term: FlexibleFormula):
-        term = coerce_formula_builder(phi=term)
-        if len(self) == 0:
-            self.append(term)
-        else:
-            self[0] = term
-
-    @property
-    def term_1(self) -> FormulaBuilder:
-        self.assure_term(i=1)
-        return self[1]
-
-    @term_1.setter
-    def term_1(self, term: FlexibleFormula):
-        term = coerce_formula_builder(phi=term)
-        if len(self) < 2:
-            if len(self) == 0:
-                self.assure_term(i=0)
-            self.append(term)
-        else:
-            self[1] = term
-
-    def to_formula(self) -> Formula:
-        if self.connective is None:
-            raise_error(error_code=error_codes.e113, formula_builder=self, c=self.connective)
-        terms: tuple[Formula, ...] = tuple(coerce_formula(phi=term) for term in self)
-        phi: Formula = Formula(connective=self.connective, terms=terms)
-        return phi
-
-    def typeset_as_string(self, typesetter: typing.Optional[pl1.Typesetter] = None, **kwargs) -> str:
-        """Returns a python-string from the typesetting-method.
-
-        If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
-        If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
-        loading all the content in memory.
-        """
-        typesetter = self.get_typesetter(typesetter=typesetter)
-        return typesetter.typeset_as_string(phi=self, **kwargs)
-
-    def typeset_from_generator(self, typesetter: typing.Optional[pl1.Typesetter] = None, **kwargs) -> \
-            typing.Generator[str, None, None]:
-        """Generates a stream of python-string chunks from the typesetting-method.
-
-        If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
-        If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
-        loading all the content in memory.
-        """
-        typesetter = self.get_typesetter(typesetter=typesetter)
-        yield from typesetter.typeset_from_generator(phi=self, **kwargs)
-
-    def validate_formula_builder(self) -> bool:
-        """Validate the syntactical consistency of a candidate formula."""
-        # TODO: validate_formula_builder: check no infinite loops
-        # TODO: validate_formula_builder: check all nodes have a connective
-        return True
-
 
 class Formula(tuple):
     """An immutable formula modeled as an edge-ordered, node-colored tree."""
@@ -552,13 +348,6 @@ class Formula(tuple):
             raise_error(error_code=error_codes.e104, c=self.connective)
         return self[2]
 
-    def to_formula_builder(self) -> FormulaBuilder:
-        """Returns a formula-builder that is equivalent to this formula.
-        This makes it possible to edit the formula-builder to elaborate new formulas."""
-        terms: tuple[FormulaBuilder, ...] = tuple(coerce_formula_builder(phi=term) for term in self)
-        phi: FormulaBuilder = FormulaBuilder(c=self.connective, terms=terms)
-        return phi
-
     def get_typesetter(self, typesetter: typing.Optional[pl1.FlexibleTypesetter] = None) -> pl1.Typesetter:
         """
 
@@ -607,25 +396,10 @@ def yield_string_from_typesetter(x, **kwargs):
             yield_string_from_typesetter(x=y, **kwargs)
 
 
-def coerce_formula_builder(phi: FlexibleFormula = None) -> FormulaBuilder:
-    if isinstance(phi, FormulaBuilder):
-        return phi
-    elif isinstance(phi, Connective):
-        return phi.to_formula_builder()
-    elif isinstance(phi, Formula):
-        return phi.to_formula_builder()
-    elif phi is None:
-        return FormulaBuilder(c=None, terms=None)
-    else:
-        raise_error(error_code=error_codes.e123, coerced_type=FormulaBuilder, phi_type=type(phi), phi=phi)
-
-
 def coerce_formula(phi: FlexibleFormula) -> Formula:
     if isinstance(phi, Formula):
         return phi
     elif isinstance(phi, Connective):
-        return phi.to_formula()
-    elif isinstance(phi, FormulaBuilder):
         return phi.to_formula()
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         # Implicit conversion of generators to tuple formulas.
@@ -764,7 +538,7 @@ def coerce_tupl(phi: FlexibleTupl) -> Tupl:
         raise_error(error_code=error_codes.e123, coerced_type=Tupl, phi_type=type(phi), phi=phi)
 
 
-FlexibleFormula = typing.Optional[typing.Union[Connective, Formula, FormulaBuilder]]
+FlexibleFormula = typing.Optional[typing.Union[Connective, Formula]]
 
 
 class FreeArityConnective(Connective):
@@ -1549,9 +1323,6 @@ class Tupl(Formula):
         """Return True if the tuple has phi as one of its elements."""
         return is_term_of_formula(term=phi, phi=self)
 
-    def to_formula_builder(self) -> FormulaBuilder:
-        return self.to_tupl_builder()
-
 
 FlexibleTupl = typing.Optional[typing.Union[Tupl, typing.Iterable[FlexibleFormula]]]
 """FlexibleTupl is a flexible python type that may be safely coerced into a Tupl."""
@@ -1769,9 +1540,6 @@ class Enumeration(Formula):
         phi ∼formula psi. False otherwise."""
         phi = coerce_formula(phi=phi)
         return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
-
-    def to_formula_builder(self) -> FormulaBuilder:
-        return self.to_enumeration_builder()
 
 
 enumeration = Enumeration
