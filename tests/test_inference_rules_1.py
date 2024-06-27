@@ -176,7 +176,7 @@ class TestModusPonens:
         assert pu.as1.is_valid_statement_in_theory(phi=a | land | a, t=theory)
 
         # show that wrong premises fail to derive a theorem
-        with pytest.raises(pu.as1.CustomException, match='e123'):
+        with pytest.raises(pu.u1.ApplicativeException, match='E-123-2'):
             # wrong theory
             pu.as1.derive_1(t=theory,
                             c=c,

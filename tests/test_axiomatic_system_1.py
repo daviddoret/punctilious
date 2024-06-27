@@ -784,11 +784,11 @@ class TestDemonstration:
                                     i=ir1)
         assert pu.as1.is_valid_statement_in_theory(phi=a | star | c, t=demo2)
 
-        with pytest.raises(pu.as1.CustomException, match='e123'):
+        with pytest.raises(pu.u1.ApplicativeException, match='E-123-6'):
             # invalid proof raise exception
             pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | e))
 
-        with pytest.raises(pu.as1.CustomException, match='e123'):
+        with pytest.raises(pu.u1.ApplicativeException, match='E-123-6'):
             # invalid proof sequence exception
             pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | c, ir1,))
             pass
