@@ -235,7 +235,28 @@ class Connective:
 
 
 class Formula(tuple):
-    """An immutable formula modeled as an edge-ordered, node-colored tree."""
+    """A python-class modeling a formula.
+
+    Definition (sequence of formulas):
+    "" is an empty sequence of formulas.
+    If "phi" is a formula, then "phi" is a non-empty sequence of formulas.
+    If "s" is a sequence of formulas, and "phi" is a formula, then "s, phi" is a non-empty sequence of formulas.
+    Nothing else is a sequence of formulas.
+
+    Definition (formula):
+    If "c" is a connective, then "(c())" is a nullary formula.
+    If "c" is a connective, and "s" is a non-empty sequence of formulas, then "(c(s))" is an n-ary formula.
+
+    Conventions:
+    Assuming unambiguous representation:
+    "(c())" can be written "(c)".
+    "(c(phi, psi)" can be written "phi c psi", this is called infix notation.
+    "c(d)" can be written "cd", this is called prefix notation.
+    "c(d)" can be written "dc", this is called postfix notation.
+
+    Equivalent definition (formula):
+    A finite tree whose nodes are colored, and where edges are fully ordered under their edge.
+    """
 
     def __new__(cls, connective: Connective, terms: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
@@ -313,7 +334,7 @@ class Formula(tuple):
           otherwise.
         :rtype: bool
         """
-        return is_term_of_formula(term=phi, phi=self)
+        return is_term_of_formula(x=phi, phi=self)
 
     @property
     def term_0(self) -> Formula:
@@ -637,59 +658,71 @@ class BinaryConnective(FixedArityConnective):
         return InfixPartialFormula(c=self, term_1=other)
 
 
-def is_term_of_formula(term: FlexibleFormula, phi: FlexibleFormula) -> bool:
-    """Returns True if and only if there exists a term t of phi such that phi ~formula the given term.
+def is_term_of_formula(x: FlexibleFormula, phi: FlexibleFormula) -> bool:
+    """Returns True if x is a term of formula phi, False otherwise.
 
-    When this condition is satisfied, we say that phi is a term of psi.
+    Definition (term of a formula):
+    Cf. definition of formula.
+    If "(c(phi))" is a formula where c is a connective, and phi a formula, then "phi" is a term of "(c(phi))".
+    If "(c(s, phi))" is a formula where c is a connective, s is a non-empty sequence of formulas, and phi a formula,
+    then "phi" is a term of "(c(phi))".
+    Nothing else is a term of a formula.
 
-    :param term: A formula.
-    :type term: FlexibleFormula
+    :param x: A formula.
+    :type x: FlexibleFormula
     :param phi: A formula.
     :type phi: FlexibleFormula
     ...
     :return: True if phi is a term of psi, False otherwise.
     :rtype: bool
     """
-    term: Formula = coerce_formula(phi=term)
+    x: Formula = coerce_formula(phi=x)
     phi: Formula = coerce_formula(phi=phi)
-    return any(is_formula_equivalent(phi=term, psi=psi_term) for psi_term in phi)
+    return any(is_formula_equivalent(phi=x, psi=psi_term) for psi_term in iterate_formula_terms(phi=phi))
 
 
-def is_element_of_enumeration(element: FlexibleFormula, enumeration: FlexibleEnumeration) -> bool:
-    """Returns True if and only if there exists an element e2 of enumeration E,
-     such that the given element e ~formula e2.
+def is_element_of_enumeration(x: FlexibleFormula, e: FlexibleEnumeration) -> bool:
+    """Returns True if x is an element of enumeration e, False otherwise.
 
-    When this condition is satisfied, we say that e1 is an element of enumeration E.
+    Definition:
+    A formula x is an element of an enumeration e if and only if there exists a formula y that is a term of formula e,
+    such that x ~ y.
+    Nothing else is an element of e.
 
-    :param element: A formula.
-    :type element: FlexibleFormula
-    :param enumeration: An enumeration.
-    :type enumeration: FlexibleEnumeration
+    When this condition is satisfied, we say that formula x is an element of enumeration e.
+
+    :param x: A formula.
+    :type x: FlexibleFormula
+    :param e: An enumeration.
+    :type e: FlexibleEnumeration
     ...
     :return: True if element is a term of psi, False otherwise.
     :rtype: bool
     """
-    element: Formula = coerce_formula(phi=element)
-    enumeration: Enumeration = coerce_enumeration(e=enumeration)
-    return is_term_of_formula(term=element, phi=enumeration)
+    x: Formula = coerce_formula(phi=x)
+    e: Enumeration = coerce_enumeration(e=e)
+    return is_term_of_formula(x=x, phi=e)
 
 
 def is_axiom_of_theory(a: FlexibleAxiom, t: FlexibleTheory):
+    """Return True if "a" is an axiom in theory "t", False otherwise."""
     a: Axiom = coerce_axiom(a=a)
     t: Theory = coerce_theory(t=t)
     return any(is_formula_equivalent(phi=a, psi=a2) for a2 in t.axioms)
 
 
-def is_inference_rule_of_theory(ir: FlexibleInferenceRule, t: FlexibleTheory):
-    ir: InferenceRule = coerce_inference_rule(i=ir)
+def is_inference_rule_of_theory(i: FlexibleInferenceRule, t: FlexibleTheory):
+    """Return True if "i" is an inference-rule in theory "i", False otherwise."""
+    i: InferenceRule = coerce_inference_rule(i=i)
     t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in t.inference_rules)
+    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in t.inference_rules)
 
 
-def is_theorem_of_theory(thrm: FlexibleTheorem, t: FlexibleTheory):
-    thrm: Theorem = coerce_theorem(t=thrm)
+def is_theorem_of_theory(m: FlexibleTheorem, t: FlexibleTheory):
+    """Return True if "m" is a theorem in theory "t", False otherwise."""
+    m: Theorem = coerce_theorem(t=m)
     t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=thrm, psi=thrm2) for thrm2 in t.theorems)
+    return any(is_formula_equivalent(phi=m, psi=thrm2) for thrm2 in t.theorems)
 
 
 def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula: FlexibleFormula) -> int:
@@ -815,8 +848,8 @@ class MetaVariable(SimpleObject):
         return
 
 
-def let_x_be_a_variable(formula_typesetter: pl1.FlexibleTypesetter) -> typing.Union[
-    Variable, typing.Generator[Variable, typing.Any, None]]:
+def let_x_be_a_variable(formula_typesetter: pl1.FlexibleTypesetter) -> (
+        typing.Union)[Variable, typing.Generator[Variable, typing.Any, None]]:
     if formula_typesetter is None or isinstance(formula_typesetter, pl1.FlexibleTypesetter):
         return Variable(connective=NullaryConnective(formula_typesetter=formula_typesetter))
     elif isinstance(formula_typesetter, typing.Iterable):
@@ -845,8 +878,8 @@ FlexibleMultiRepresentation = typing.Union[FlexibleRepresentation, typing.Iterab
 representation."""
 
 
-def let_x_be_a_simple_object(formula_typesetter: typing.Optional[pl1.FlexibleTypesetter] = None) -> typing.Union[
-    SimpleObject, typing.Generator[SimpleObject, typing.Any, None]]:
+def let_x_be_a_simple_object(formula_typesetter: typing.Optional[pl1.FlexibleTypesetter] = None) -> (
+        typing.Union)[SimpleObject, typing.Generator[SimpleObject, typing.Any, None]]:
     """A helper function to declare one or multiple simple-objects.
 
     :param formula_typesetter: A string (or an iterable of strings) default representation for the simple-object(s).
@@ -1150,10 +1183,10 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
     return is_equivalent
 
 
-def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
-                                           variables_fixed_values: FlexibleMap = None,
-                                           raise_event_if_false: bool = False) -> typing.Tuple[
-    bool, typing.Optional[Map]]:
+def is_formula_equivalent_with_variables_2(
+        phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
+        variables_fixed_values: FlexibleMap = None, raise_event_if_false: bool = False) -> (
+        typing.Tuple)[bool, typing.Optional[Map]]:
     """Given that:
      - phi is a formula,
      - psi is a formula,
@@ -1174,8 +1207,8 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
     :param phi: a formula that does not contain any element of variables.
     :param psi: a formula that may contain some elements of variables.
     :param variables: an enumeration of formulas called variables.
-    :param variables_fixed_values: (conditional) a mapping between variables and their assigned values. used internally for recursive calls.
-      leave it to None.
+    :param variables_fixed_values: (conditional) a mapping between variables and their assigned values. used
+    internally for recursive calls. leave it to None.
     :param raise_event_if_false:
     :return:
     """
@@ -1195,10 +1228,10 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
             raise u1.ApplicativeException(f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
-        if not is_element_of_enumeration(element=x, enumeration=variables):
+        if not is_element_of_enumeration(x=x, e=variables):
             raise u1.ApplicativeException(f'variable {x} is present in the domain of the map variables_fixed_values, '
                                           f'but it is not an element of the enumeration variables.')
-    if is_element_of_enumeration(element=psi, enumeration=variables):
+    if is_element_of_enumeration(x=psi, e=variables):
         # psi is a variable
         if is_in_map_domain(phi=psi, m=variables_fixed_values):
             # psi is in the domain of the map of fixed values
@@ -1219,7 +1252,7 @@ def is_formula_equivalent_with_variables_2(phi: FlexibleFormula, psi: FlexibleFo
             return True, variables_fixed_values
     else:
         # psi is not a variable
-        if not phi.connective is psi.connective or phi.arity != psi.arity:
+        if phi.connective is not psi.connective or phi.arity != psi.arity:
             if raise_event_if_false:
                 raise u1.ApplicativeException(f'the connective or arity of "{phi}" are not equal '
                                               f'to the connective or aritity of "{psi}".')
@@ -1324,7 +1357,7 @@ class Tupl(Formula):
 
     def has_element(self, phi: Formula) -> bool:
         """Return True if the tuple has phi as one of its elements."""
-        return is_term_of_formula(term=phi, phi=self)
+        return is_term_of_formula(x=phi, phi=self)
 
 
 FlexibleTupl = typing.Optional[typing.Union[Tupl, typing.Iterable[FlexibleFormula]]]
@@ -1335,7 +1368,7 @@ def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
     """Return a new map such that the preimage is no longer an element of its domain."""
     m: Map = coerce_map(m=m)
     preimage: Formula = coerce_formula(phi=preimage)
-    if is_element_of_enumeration(element=preimage, enumeration=m.domain):
+    if is_element_of_enumeration(x=preimage, e=m.domain):
         index: int = get_index_of_first_equivalent_term_in_formula(term=preimage, formula=m.domain)
         reduced_domain: tuple[Formula, ...] = (*m.domain[0:index], *m.domain[index + 1:])
         reduced_codomain: tuple[Formula, ...] = (*m.codomain[0:index], *m.codomain[index + 1:])
@@ -1351,7 +1384,7 @@ def extend_enumeration(enumeration: FlexibleEnumeration, element: FlexibleFormul
     """
     enumeration: Enumeration = coerce_enumeration(e=enumeration)
     element: Formula = coerce_formula(phi=element)
-    if is_element_of_enumeration(element=element, enumeration=enumeration):
+    if is_element_of_enumeration(x=element, e=enumeration):
         # The element is already in the enumeration.
         return enumeration
     else:
@@ -1852,8 +1885,8 @@ def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     return all(is_valid_statement_in_theory(phi=phi, t=t) for phi in iterate_tuple_elements(s))
 
 
-def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnumeration, n: int) -> typing.Generator[
-    Enumeration, None, None]:
+def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnumeration, n: int) -> \
+        typing.Generator[Enumeration, None, None]:
     """Iterate all distinct tuples (order matters) of exactly n elements in enumeration e.
 
     :param n:
@@ -2780,11 +2813,11 @@ def extend_theory(*args, t: FlexibleTheory) -> Theory:
                     t: Theory = Theory(derivations=(*t, a,))
             elif is_well_formed_inference_rule(i=argument):
                 ir: InferenceRule = coerce_inference_rule(i=argument)
-                if not is_inference_rule_of_theory(ir=ir, t=t):
+                if not is_inference_rule_of_theory(i=ir, t=t):
                     t: Theory = Theory(derivations=(*t, ir,))
             elif is_well_formed_theorem(t=argument):
                 thrm: Theorem = coerce_theorem(t=argument)
-                if not is_theorem_of_theory(thrm=thrm, t=t):
+                if not is_theorem_of_theory(m=thrm, t=t):
                     t: Theory = Theory(derivations=(*t, thrm,))
             else:
                 raise ValueError(f'Invalid argument: ({type(argument)}) {argument}.')
@@ -2908,7 +2941,7 @@ def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
     """Return True if phi is a formula in the domain of map m, False otherwise."""
     phi = coerce_formula(phi=phi)
     m = coerce_map(m=m)
-    return is_element_of_enumeration(element=phi, enumeration=m.domain)
+    return is_element_of_enumeration(x=phi, e=m.domain)
 
 
 def derive_0(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
@@ -2968,7 +3001,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
     if debug:
         u1.log_debug(f'derive_2: Derivation started. conjecture:{c}. inference_rule:{i}.')
 
-    if not is_inference_rule_of_theory(ir=i, t=t):
+    if not is_inference_rule_of_theory(i=i, t=t):
         # The inference_rule is not in the theory,
         # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
         u1.log_debug(
@@ -2999,7 +3032,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         # By contrast, the unknown variable values can be listed.
         unknown_variable_values: Enumeration = Enumeration()
         for x in i.transformation.variables:
-            if not is_element_of_enumeration(element=x, enumeration=known_variable_values.domain):
+            if not is_element_of_enumeration(x=x, e=known_variable_values.domain):
                 unknown_variable_values = Enumeration(elements=(*unknown_variable_values, x,))
 
         # Using substitution for the known_variable_values,
@@ -3183,7 +3216,7 @@ def auto_derive_4(
             # called the free-variables.
             free_variables: Enumeration = Enumeration()
             for x in inference_rule.transformation.variables:
-                if not is_element_of_enumeration(element=x, enumeration=m.domain):
+                if not is_element_of_enumeration(x=x, e=m.domain):
                     free_variables = Enumeration(elements=(*free_variables, x,))
             # u1.log_info(f'\t\t free-variables: {free_variables}')
 
@@ -3219,8 +3252,8 @@ def auto_derive_4(
                 effective_premises: Formula = replace_formulas(phi=necessary_premises, m=m)
                 effective_premises: Tupl = Tupl(elements=effective_premises)
                 for premise_target_statement in effective_premises:
-                    if not is_element_of_enumeration(element=premise_target_statement,
-                                                     enumeration=conjecture_exclusion_list):
+                    if not is_element_of_enumeration(x=premise_target_statement,
+                                                     e=conjecture_exclusion_list):
                         # recursively try to auto_derive the premise
                         t, derivation_success, _, conjecture_exclusion_list = auto_derive_4(
                             t=t,
@@ -3248,8 +3281,8 @@ def auto_derive_4(
                     effective_premises: Formula = replace_formulas(phi=necessary_premises, m=variable_substitution)
                     effective_premises: Tupl = Tupl(elements=(*effective_premises, permutation,))
                     for premise_target_statement in effective_premises:
-                        if not is_element_of_enumeration(element=premise_target_statement,
-                                                         enumeration=conjecture_exclusion_list):
+                        if not is_element_of_enumeration(x=premise_target_statement,
+                                                         e=conjecture_exclusion_list):
                             # recursively try to auto_derive the premise
                             t, derivation_success, _, conjecture_exclusion_list = auto_derive_4(
                                 t=t, conjecture=premise_target_statement,
@@ -3388,7 +3421,7 @@ class MapTypesetter(pl1.Typesetter):
     def __init__(self):
         super().__init__()
 
-    def typeset_from_generator(self, phi: Formula, **kwargs) -> (
+    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Map = coerce_map(m=phi)
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
