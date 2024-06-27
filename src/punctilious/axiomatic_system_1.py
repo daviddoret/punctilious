@@ -3535,41 +3535,65 @@ class DerivationTypesetter(pl1.Typesetter):
                                **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Derivation = coerce_derivation(d=phi)
-        if theory is not None:
+        if theory is None:
+            yield from phi.valid_statement.typeset_from_generator(**kwargs)
+            if is_well_formed_axiom(a=phi):
+                phi: Axiom = coerce_axiom(a=phi)
+                yield '\t\t| Axiom.'
+            elif is_well_formed_inference_rule(i=phi):
+                phi: InferenceRule = coerce_inference_rule(i=phi)
+                yield '\t\t| Inference rule.'
+            elif is_well_formed_theorem(t=phi):
+                phi: Theorem = coerce_theorem(t=phi)
+                inference: Inference = phi.inference
+                transformation: Transformation = inference.transformation_rule
+                yield f'\t\t| Follows from inference-rule [{transformation}] given premises '
+                first: bool = True
+                for premise in phi.inference.premises:
+                    if not first:
+                        yield ', '
+                    yield f'[{premise}]'
+                    first = False
+                yield '.'
+            else:
+                raise u1.ApplicativeException(msg=f'Unsupported derivation "{phi}" in the '
+                                                  f'theory.', phi=phi, theory=theory)
+        else:
+            # Theory parameter was provided, we have more context.
             i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=phi, formula=theory)
             yield f'[{i}]\t'
-        yield from phi.valid_statement.typeset_from_generator(**kwargs)
-        if is_well_formed_axiom(a=phi):
-            phi: Axiom = coerce_axiom(a=phi)
-            yield '\t\t| Axiom.'
-        elif is_well_formed_inference_rule(i=phi):
-            phi: InferenceRule = coerce_inference_rule(i=phi)
-            yield '\t\t| Inference rule.'
-        elif is_well_formed_theorem(t=phi):
-            phi: Theorem = coerce_theorem(t=phi)
-            inference: Inference = phi.inference
-            transformation: Transformation = inference.transformation_rule
-            success, inference_rule = get_theory_inference_rule_from_transformation_rule(t=theory, r=transformation)
-            if not success:
-                raise u1.ApplicativeException(msg=f'Transformation "{transformation}" could not be found in the '
-                                                  f'theory.', phi=phi, inference=inference,
-                                              transformation=transformation, theory=theory)
-            inference_rule_1_based_index: int = get_index_of_first_equivalent_term_in_formula(term=inference_rule,
-                                                                                              formula=theory)
-            yield f'\t\t| Follows from inference-rule [{inference_rule_1_based_index}] given premises '
-            first: bool = True
-            for premise in phi.inference.premises:
-                success, derivation = get_theory_derivation_from_valid_statement(t=theory, s=premise)
-                derivation: Derivation
-                i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=derivation, formula=theory)
-                if not first:
-                    yield ', '
-                yield f'[{i}]'
-                first = False
-            yield '.'
-        else:
-            raise u1.ApplicativeException(msg=f'Unsupported derivation "{phi}" in the '
-                                              f'theory.', phi=phi, theory=theory)
+            yield from phi.valid_statement.typeset_from_generator(**kwargs)
+            if is_well_formed_axiom(a=phi):
+                phi: Axiom = coerce_axiom(a=phi)
+                yield '\t\t| Axiom.'
+            elif is_well_formed_inference_rule(i=phi):
+                phi: InferenceRule = coerce_inference_rule(i=phi)
+                yield '\t\t| Inference rule.'
+            elif is_well_formed_theorem(t=phi):
+                phi: Theorem = coerce_theorem(t=phi)
+                inference: Inference = phi.inference
+                transformation: Transformation = inference.transformation_rule
+                success, inference_rule = get_theory_inference_rule_from_transformation_rule(t=theory, r=transformation)
+                if not success:
+                    raise u1.ApplicativeException(msg=f'Transformation "{transformation}" could not be found in the '
+                                                      f'theory.', phi=phi, inference=inference,
+                                                  transformation=transformation, theory=theory)
+                inference_rule_1_based_index: int = get_index_of_first_equivalent_term_in_formula(term=inference_rule,
+                                                                                                  formula=theory)
+                yield f'\t\t| Follows from inference-rule [{inference_rule_1_based_index}] given premises '
+                first: bool = True
+                for premise in phi.inference.premises:
+                    success, derivation = get_theory_derivation_from_valid_statement(t=theory, s=premise)
+                    derivation: Derivation
+                    i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=derivation, formula=theory)
+                    if not first:
+                        yield ', '
+                    yield f'[{i}]'
+                    first = False
+                yield '.'
+            else:
+                raise u1.ApplicativeException(msg=f'Unsupported derivation "{phi}" in the '
+                                                  f'theory.', phi=phi, theory=theory)
 
 
 class Typesetters:

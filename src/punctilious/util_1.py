@@ -25,14 +25,14 @@ def prettify_kwargs(**kwargs) -> str:
 def log_info(msg: str, **kwargs):
     global logger
     pretty_msg: str = f'{msg}{prettify_kwargs(**kwargs)}'
-    logger.info(pretty_msg)
+    logger.info(pretty_msg.replace('\t', '  '))
     print(pretty_msg, flush=True)
 
 
 def log_debug(msg: str, **kwargs):
     global logger
     pretty_msg: str = f'{msg}{prettify_kwargs(**kwargs)}'
-    logger.debug(pretty_msg)
+    logger.debug(pretty_msg.replace('\t', '  '))
     print(pretty_msg, flush=True)
 
 
@@ -55,5 +55,5 @@ class ApplicativeException(Exception):
 
 def log_error(e: ApplicativeException):
     global logger
-    logger.error(str(e))
+    logger.error(str(e).replace('\t', '  '))
     print(f'{e}', flush=True)
