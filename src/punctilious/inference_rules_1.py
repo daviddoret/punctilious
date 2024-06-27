@@ -1,4 +1,4 @@
-import typing
+# import typing
 import sys
 
 import axiomatic_system_1 as as1

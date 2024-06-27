@@ -14,7 +14,8 @@ Bibliography:
 import typing
 # punctilious modules
 import axiomatic_system_1 as as1
-import inference_rules_1 as ir1
+
+# import inference_rules_1 as ir1
 
 # Propositional logic vocabulary
 
@@ -31,8 +32,7 @@ propositional_variable = as1.connectives.propositional_variable
 with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
-            premises=
-            (a | is_a | propositional_variable,),
+            premises=(a | is_a | propositional_variable,),
             conclusion=a | is_a | proposition,
             variables=(a,)))
     """Axiom schema: A is-a propositional-variable ⊃ A is-a proposition.
@@ -54,8 +54,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a:
 with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     i2: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
-            premises=
-            (a | is_a | proposition,),
+            premises=(a | is_a | proposition,),
             conclusion=lnot(a) | is_a | proposition,
             variables=(a,)))
     """Axiom schema: A is-a proposition ⊃ ¬A is a proposition.
@@ -77,9 +76,8 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a:
 with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
     i3: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
-            premises=
-            (a | is_a | proposition,
-             b | is_a | proposition),
+            premises=(a | is_a | proposition,
+                      b | is_a | proposition),
             conclusion=(a | land | b) | is_a | proposition,
             variables=(a, b,)))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition).
@@ -102,9 +100,8 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
 with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
     i4: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
-            premises=
-            (a | is_a | proposition,
-             b | is_a | proposition),
+            premises=(a | is_a | proposition,
+                      b | is_a | proposition),
             conclusion=(a | implies | b) | is_a | proposition,
             variables=(a, b,)))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ⊃ B) is a proposition).
@@ -127,9 +124,8 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
 with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
     i5: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
-            premises=
-            (a | is_a | proposition,
-             b | is_a | proposition),
+            premises=(a | is_a | proposition,
+                      b | is_a | proposition),
             conclusion=(a | lor | b) | is_a | proposition,
             variables=(a, b,)))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∨ B) is a proposition).
@@ -219,8 +215,9 @@ def let_x_be_a_propositional_variable(
         for r in rep:
             x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=r))
             propositional_variables = propositional_variables + (x,)
-            t, _ = as1.let_x_be_an_axiom(t=t,
-                                         valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+            t, _ = as1.let_x_be_an_axiom(
+                t=t,
+                valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
             t, _ = as1.derive_1(t=t,
                                 c=x | is_a | proposition,
                                 p=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
