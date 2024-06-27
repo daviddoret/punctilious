@@ -768,17 +768,17 @@ def get_index_of_first_equivalent_element_in_enumeration(element: FlexibleFormul
     return get_index_of_first_equivalent_term_in_formula(term=element, formula=enumeration)
 
 
-def get_index_of_first_equivalent_element_in_tuple(element: FlexibleFormula, tupl: FlexibleTupl) -> int:
-    """Return the o-based index of the first occurrence of an element in a tuple,
-     such that they are formula-equivalent.
+def get_index_of_first_equivalent_element_in_tuple(x: FlexibleFormula, t: FlexibleTupl) -> int:
+    """If formula "x" is a term of tuple "t", return the o-based index of the first occurrence of the term "x"
+    in "t".
 
-    :param element:
-    :param tupl:
-    :return:
+    :param x: A formula.
+    :param t: A tuple.
+    :return: The 0-based index of "x" in "t".
     """
-    element: Formula = coerce_formula(phi=element)
-    tupl: Tupl = coerce_tupl(t=tupl)
-    return get_index_of_first_equivalent_term_in_formula(term=element, formula=tupl)
+    x: Formula = coerce_formula(phi=x)
+    t: Tupl = coerce_tupl(t=t)
+    return get_index_of_first_equivalent_term_in_formula(term=x, formula=t)
 
 
 class TernaryConnective(FixedArityConnective):
