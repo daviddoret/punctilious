@@ -429,7 +429,11 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
         # Implicit conversion of iterators to tuple formulas.
         return Tupl(elements=phi)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Formula, phi_type=type(phi), phi=phi)
+        raise u1.ApplicativeException(
+            code='E-123-1',
+            msg=f'Argument "phi" of python-type {str(type(phi))} could not be coerced to a formula of python-type '
+                f'Formula. The string representation of "phi" is: {u1.force_str(o=phi)}.',
+            phi=phi, t_python_type=type(phi))
 
 
 def coerce_variable(x: FlexibleFormula) -> Formula:
@@ -640,7 +644,7 @@ class InfixPartialFormula:
         return self._connective
 
     def typeset_as_string(self, **kwargs):
-        # TODO: Enrich the representation of partial-formulas
+        # TODO: Nice to have: Enrich the representation of partial-formulas
         return f'{self.connective}(???,{self.term_1})'
 
     @property
@@ -827,7 +831,7 @@ class Variable(SimpleObject):
 
 
 class MetaVariable(SimpleObject):
-    """A variable is defined as a simple-object that is not declared in the theory with a is-a operator.
+    """A variable is defined as a simple-object that is not declared in the theory with a "is-a" operator.
 
     The justification for a dedicated python class is the implementation of the __enter__ and __exit__ methods,
     which allow the usage of variables with the python with statement."""
@@ -861,7 +865,7 @@ def let_x_be_a_variable(formula_typesetter: pl1.FlexibleTypesetter) -> (
 def let_x_be_a_meta_variable(
         formula_typesetter: pl1.FlexibleTypesetter | typing.Iterable[pl1.FlexibleTypesetter, ...]) -> (
         MetaVariable | tuple[MetaVariable, ...]):
-    """A meta-variable is a nullary-connective formula (*) that is not declared in the theory with a is-a operator."""
+    """A meta-variable is a nullary-connective formula (*) that is not declared in the theory with a "is-a" operator."""
     if formula_typesetter is None or isinstance(formula_typesetter, pl1.FlexibleTypesetter):
         return MetaVariable(connective=NullaryConnective(formula_typesetter=formula_typesetter))
     elif isinstance(formula_typesetter, typing.Iterable):
@@ -981,7 +985,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, valid_statement: typing.Optional[Flexib
     :param axiom: An existing axiom. Either the claim or axiom parameter must be provided,
     and not both.
     :return: a pair (t, a) where t is an extension of the input theory, with a new axiom claiming the
-    input statement, and a is the new axiom.
+    input statement, and "a" is the new axiom.
     """
     if t is None:
         t = Axiomatization(derivations=None)
@@ -1255,7 +1259,7 @@ def is_formula_equivalent_with_variables_2(
         if phi.connective is not psi.connective or phi.arity != psi.arity:
             if raise_event_if_false:
                 raise u1.ApplicativeException(f'the connective or arity of "{phi}" are not equal '
-                                              f'to the connective or aritity of "{psi}".')
+                                              f'to the connective or arity of "{psi}".')
             return False, variables_fixed_values
         else:
             for phi_term, psi_term in zip(phi, psi):
@@ -2192,15 +2196,20 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
     elif is_well_formed_axiom(a=d):
         return coerce_axiom(a=d)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Derivation, phi_type=type(d), phi=d)
+        raise u1.ApplicativeException(
+            code='E-123-6',
+            msg=f'Argument "d" of python-type {str(type(d))} could not be coerced to a derivation of python-type '
+                f'Derivation. The string representation of "d" is: {u1.force_str(o=d)}.',
+            d=d, t_python_type=type(d))
 
 
 def coerce_axiom(a: FlexibleFormula) -> Axiom:
-    """Validate that p is a well-formed axiom and returns it properly typed as an instance of Axiom,
-    or raise exception e123.
+    """Validates that loosely typed argument "a" is a well-formed axiom and returns it properly typed as an instance
+    of python-class Axiom.
 
-    :param a:
-    :return:
+    :raises ApplicativeException: Raises an exception with code "E-123" if coercion fails.
+    :param a: An axiom.
+    :return: An axiom.
     """
     if isinstance(a, Axiom):
         return a
@@ -2208,7 +2217,11 @@ def coerce_axiom(a: FlexibleFormula) -> Axiom:
         proved_formula: Formula = a.term_0
         return Axiom(valid_statement=proved_formula)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=InferenceRule, phi_type=type(a), phi=a)
+        raise u1.ApplicativeException(
+            code='E-123-7',
+            msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiom of python-type Axiom. '
+                f'The string representation of "a" is: {u1.force_str(o=a)}.',
+            a=a, a_python_type=type(a))
 
 
 def coerce_inference_rule(i: FlexibleFormula) -> InferenceRule:
@@ -2224,7 +2237,11 @@ def coerce_inference_rule(i: FlexibleFormula) -> InferenceRule:
         transfo: Transformation = coerce_transformation(t=i.term_0)
         return InferenceRule(transformation=transfo)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=InferenceRule, phi_type=type(i), phi=i)
+        raise u1.ApplicativeException(
+            code='E-123-2',
+            msg=f'Argument "i" of python-type {str(type(i))} could not be coerced to an inference-rule of python-type '
+                f'InferenceRule. The string representation of "i" is: {u1.force_str(o=i)}.',
+            i=i, i_python_type=type(i))
 
 
 def coerce_theorem(t: FlexibleFormula) -> Theorem:
@@ -2241,7 +2258,11 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
         inference: Inference = coerce_inference(i=t.term_1)
         return Theorem(valid_statement=proved_formula, i=inference)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Theorem, phi_type=type(t), phi=t)
+        raise u1.ApplicativeException(
+            code='E-123-3',
+            msg=f'Argument "t" of python-type {str(type(t))} could not be coerced to a theorem of python-type '
+                f'Theorem. The string representation of "t" is: {u1.force_str(o=t)}.',
+            t=t, t_python_type=type(t))
 
 
 def coerce_theory(t: FlexibleTheory) -> Theory:
@@ -2268,7 +2289,11 @@ def coerce_theory(t: FlexibleTheory) -> Theory:
         whose elements are the elements of the iterable."""
         return Theory(derivations=t)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Theory, phi_type=type(t), phi=t)
+        raise u1.ApplicativeException(
+            code='E-123-4',
+            msg=f'Argument "t" of python-type {str(type(t))} could not be coerced to a theory of python-type '
+                f'Theory. The string representation of "t" is: {u1.force_str(o=t)}.',
+            t=t, t_python_type=type(t))
 
 
 def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
@@ -2283,7 +2308,11 @@ def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
     elif isinstance(a, Formula) and is_well_formed_axiomatization(a=a):
         return Axiomatization(derivations=a)
     else:
-        raise_error(error_code=error_codes.e123, coerced_type=Axiomatization, phi_type=type(a), phi=a)
+        raise u1.ApplicativeException(
+            code='E-123-5',
+            msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiomatization of python-type '
+                f'Axiomatization. The string representation of "a" is: {u1.force_str(o=a)}.',
+            a=a, t_python_type=type(a))
 
 
 class TheoryState(Enumeration):
