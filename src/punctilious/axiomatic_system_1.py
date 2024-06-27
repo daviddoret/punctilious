@@ -1946,6 +1946,16 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Fo
     return
 
 
+def iterate_inference_rules_in_theory(t: FlexibleTheory) -> typing.Generator[InferenceRule, None, None]:
+    """Iterate through all inference-rules in theory "t", following canonical order."""
+    t = coerce_theory(t=t)
+    derivations = iterate_derivations_in_theory(t=t)
+    for derivation in derivations:
+        if is_well_formed_inference_rule(i=derivation):
+            inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
+            yield inference_rule
+
+
 def are_valid_statements_in_theory_with_variables(
         s: FlexibleTupl, t: FlexibleTheory,
         variables: FlexibleEnumeration,
@@ -2982,7 +2992,7 @@ def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
     return is_element_of_enumeration(x=phi, e=m.domain)
 
 
-def derive_0(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
+def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
@@ -2994,19 +3004,19 @@ def derive_0(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False
     auto_derive functions.
 
     :param t:
-    :param conjecture:
+    :param c:
     :param debug:
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[Theory, bool, typing.Optional[Derivation]]
     """
     t = coerce_theory(t=t)
-    conjecture = coerce_formula(phi=conjecture)
+    c = coerce_formula(phi=c)
     if debug:
-        u1.log_debug(f'auto_derive_0: start. conjecture:{conjecture}.')
-    if is_valid_statement_in_theory(phi=conjecture, t=t):  # this first check is superfluous
+        u1.log_debug(f'auto_derive_0: start. conjecture:{c}.')
+    if is_valid_statement_in_theory(phi=c, t=t):  # this first check is superfluous
         # loop through derivations
         for derivation in t.iterate_derivations():
-            if is_formula_equivalent(phi=conjecture, psi=derivation.valid_statement):
+            if is_formula_equivalent(phi=c, psi=derivation.valid_statement):
                 # the valid-statement of this derivation matches phi,
                 # the auto_derive is successful.
                 # if debug:
@@ -3048,7 +3058,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         return t, False, None
 
     # First try the less expansive auto_derive_0 algorithm
-    t, successful, derivation, = derive_0(t=t, conjecture=c, debug=debug)
+    t, successful, derivation, = derive_0(t=t, c=c, debug=debug)
     if successful:
         return t, successful, derivation
 
@@ -3480,6 +3490,43 @@ class MapTypesetter(pl1.Typesetter):
         yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
+def get_theory_inference_rule_from_transformation_rule(t: FlexibleTheory, r: FlexibleTransformation) -> \
+        tuple[bool, InferenceRule | None]:
+    """Given a theory "t" and a transformation-rule "r", return the first occurrence of an inference-rule in "t" such
+    that its transformation-rule is formula-equivalent to "r".
+
+    :param t: A theory.
+    :param r: A transformation-rule.
+    :return: A python-tuple (True, i) where "i" is the inference-rule if "i" is found in "t", (False, None) otherwise.
+    """
+    t: Theory = coerce_theory(t=t)
+    r: Transformation = coerce_transformation(t=r)
+    for i in iterate_inference_rules_in_theory(t=t):
+        i: InferenceRule
+        if is_formula_equivalent(phi=r, psi=i.transformation):
+            return True, i
+    return False, None
+
+
+def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFormula) -> \
+        tuple[bool, Formula | None]:
+    """Given a theory "t" and a valid-statement "s" in "t", return the first occurrence of a derivation in "t" such
+    that its valid-statement is formula-equivalent to "s".
+
+    :param t: A theory.
+    :param s: A formula that is a valid statement in "t".
+    :return: A python-tuple (True, d) where "d" is the derivation if "s" is found in "t" valid-statements,
+    (False, None) otherwise.
+    """
+    t: Theory = coerce_theory(t=t)
+    s: Formula = coerce_formula(phi=s)
+    for d in iterate_derivations_in_theory(t=t):
+        d: Derivation
+        if is_formula_equivalent(phi=s, psi=d.valid_statement):
+            return True, d
+    return False, None
+
+
 class DerivationTypesetter(pl1.Typesetter):
     def __init__(self):
         super().__init__()
@@ -3490,7 +3537,7 @@ class DerivationTypesetter(pl1.Typesetter):
         phi: Derivation = coerce_derivation(d=phi)
         if theory is not None:
             i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=phi, formula=theory)
-            yield f'({i})\t'
+            yield f'[{i}]\t'
         yield from phi.valid_statement.typeset_from_generator(**kwargs)
         if is_well_formed_axiom(a=phi):
             phi: Axiom = coerce_axiom(a=phi)
@@ -3502,33 +3549,27 @@ class DerivationTypesetter(pl1.Typesetter):
             phi: Theorem = coerce_theorem(t=phi)
             inference: Inference = phi.inference
             transformation: Transformation = inference.transformation_rule
-            yield '\t\t| Follows from '
-            if theory is not None:
-                # yield from phi.inference.transformation_rule.typeset_as_string(**kwargs)
-                i = 0
-                j = 0
-                for ir in theory:
-                    if is_well_formed_inference_rule(i=ir):
-                        ir: InferenceRule
-                        if is_formula_equivalent(phi=ir.transformation, psi=transformation):
-                            j = i
-                    i = i + 1
-                yield f'({j}) given '
-                # yield from phi.inference.premises.typeset_as_string(**kwargs)
-                first = True
-                for premise in phi.inference.premises:
-                    i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=premise,
-                                                                               formula=theory.valid_statements)
-                    if not first:
-                        yield ', '
-                    yield f'({i})'
-                    first = False
-            else:
-                yield from inference.typeset_as_string(**kwargs)
-            # for premise in phi.inference.premises:
-            #    i: int = 1 + get_index_of_first_equivalent_term_in_formula(phi=premise, psi=theory)
-            #    yield f'({i})\t'
+            success, inference_rule = get_theory_inference_rule_from_transformation_rule(t=theory, r=transformation)
+            if not success:
+                raise u1.ApplicativeException(msg=f'Transformation "{transformation}" could not be found in the '
+                                                  f'theory.', phi=phi, inference=inference,
+                                              transformation=transformation, theory=theory)
+            inference_rule_1_based_index: int = get_index_of_first_equivalent_term_in_formula(term=inference_rule,
+                                                                                              formula=theory)
+            yield f'\t\t| Follows from inference-rule [{inference_rule_1_based_index}] given premises '
+            first: bool = True
+            for premise in phi.inference.premises:
+                success, derivation = get_theory_derivation_from_valid_statement(t=theory, s=premise)
+                derivation: Derivation
+                i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=derivation, formula=theory)
+                if not first:
+                    yield ', '
+                yield f'[{i}]'
+                first = False
             yield '.'
+        else:
+            raise u1.ApplicativeException(msg=f'Unsupported derivation "{phi}" in the '
+                                              f'theory.', phi=phi, theory=theory)
 
 
 class Typesetters:

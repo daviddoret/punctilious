@@ -812,7 +812,7 @@ class TestAutoDerivation:
         q = pu.as1.let_x_be_a_simple_object(formula_typesetter='Q')
         t1, a1 = pu.as1.let_x_be_an_axiom(t=None, axiom=pu.as1.Axiom(valid_statement=p))
 
-        t1, success, _, = pu.as1.derive_0(t=t1, conjecture=p)
+        t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
         if_p_then_q = pu.as1.InferenceRule(
             transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
@@ -827,7 +827,7 @@ class TestAutoDerivation:
 
         pass
         # auto-derivation of an existing valid-statement
-        t2, success, _, = pu.as1.derive_0(t=t1, conjecture=p)
+        t2, success, _, = pu.as1.derive_0(t=t1, c=p)
         assert success
         pass
         # auto-derivation of a simple theorem, without variables

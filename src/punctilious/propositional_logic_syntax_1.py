@@ -233,7 +233,7 @@ class PIsAProposition(as1.Heuristic):
         conjecture: as1.Formula = as1.coerce_formula(phi=conjecture)
         t: as1.Theory = as1.coerce_theory(t=t)
 
-        t, success, _ = as1.derive_0(conjecture=conjecture, t=t)
+        t, success, _ = as1.derive_0(c=conjecture, t=t)
         if success:
             # The conjecture is already proven in the theory.
             return t, True
