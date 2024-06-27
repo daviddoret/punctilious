@@ -754,18 +754,18 @@ def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula
                                       f'but this term is not a term of the formula.')
 
 
-def get_index_of_first_equivalent_element_in_enumeration(element: FlexibleFormula,
-                                                         enumeration: FlexibleEnumeration) -> int:
+def get_index_of_first_equivalent_element_in_enumeration(x: FlexibleFormula,
+                                                         e: FlexibleEnumeration) -> int:
     """Return the o-based index of the first occurrence of an element in an enumeration,
      such that they are formula-equivalent.
 
-    :param element:
-    :param enumeration:
+    :param x:
+    :param e:
     :return:
     """
-    element: Formula = coerce_formula(phi=element)
-    enumeration: Enumeration = coerce_enumeration(e=enumeration)
-    return get_index_of_first_equivalent_term_in_formula(term=element, formula=enumeration)
+    x: Formula = coerce_formula(phi=x)
+    e: Enumeration = coerce_enumeration(e=e)
+    return get_index_of_first_equivalent_term_in_formula(term=x, formula=e)
 
 
 def get_index_of_first_equivalent_element_in_tuple(x: FlexibleFormula, t: FlexibleTupl) -> int:
@@ -1378,17 +1378,26 @@ def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
         return m
 
 
-def extend_enumeration(enumeration: FlexibleEnumeration, element: FlexibleFormula) -> Enumeration:
-    """Return a new extended enumeration such that element is an element of it.
-    If the element is already a member of the enumeration, the function returns the original enumeration.
+def extend_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) -> Enumeration:
+    """Return a new enumeration e′ such that:
+     - all elements of e are elements of e′,
+     - x is an element of e′.
+
+    Note: if "x" is an element of "e", then: e ~ e′.
+
+    Definition (extend an enumeration "e" with an element "x"):
+    Cf. the definition of enumeration.
+    If "x" is an element of "e", return "e".
+    If "x" is not an element of "e", and "s" is the sequence of terms in "e", return "(s, e)".
     """
-    enumeration: Enumeration = coerce_enumeration(e=enumeration)
-    element: Formula = coerce_formula(phi=element)
-    if is_element_of_enumeration(x=element, e=enumeration):
-        # The element is already in the enumeration.
-        return enumeration
+    e: Enumeration = coerce_enumeration(e=e)
+    x: Formula = coerce_formula(phi=x)
+    if is_element_of_enumeration(x=x, e=e):
+        # "x" is an element of "e":
+        return e
     else:
-        extended_enumeration: Enumeration = Enumeration(elements=(*enumeration, element,))
+        # "x" is not an element of "e":
+        extended_enumeration: Enumeration = Enumeration(elements=(*e, x,))
         return extended_enumeration
 
 
@@ -2768,7 +2777,7 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: Enumeration = None) -> Enumerati
     if eb is None:
         eb: Enumeration = Enumeration(elements=None)
     if not eb.has_element(phi=phi) and is_leaf_formula(phi=phi):
-        eb = extend_enumeration(element=phi, enumeration=eb)
+        eb = extend_enumeration(x=phi, e=eb)
     else:
         for term in phi:
             # Recursively call get_leaf_formulas,
@@ -2850,7 +2859,7 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable_OBSOLETE(rep=rep) as x2:
             premises: Enumeration = extend_enumeration(
-                enumeration=premises, element=x2 | connectives.is_a | connectives.propositional_variable)
+                e=premises, x=x2 | connectives.is_a | connectives.propositional_variable)
             variables_map: Map = extend_map(m=variables_map, preimage=x, image=x2)
     variables: Enumeration = Enumeration(elements=variables_map.codomain)
 
@@ -2861,7 +2870,7 @@ def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
     # note: we could further split conjunctions into multiple premises
     antecedent: Formula = psi.term_0
     premises: Enumeration = extend_enumeration(
-        enumeration=premises, element=antecedent)
+        e=premises, x=antecedent)
 
     # retrieve the conclusion
     conclusion: Formula = psi.term_1
