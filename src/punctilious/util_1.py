@@ -41,16 +41,16 @@ class ApplicativeException(Exception):
         self.code: str = code
         self.msg: str = msg
         self.kwargs: dict[str, typing.Any] = kwargs
-        super().__init__(msg)
+        self.report = f'ERROR' ' ' + str(self.code) if self.code is not None else '' + f'\n  '.join(
+            f'{key}: {value}' for key, value in kwargs.items())
+        super().__init__(self.report)
         log_error(e=self)
 
     def __str__(self) -> str:
-        report: str = f'Error {self.code}: ' if self.code is not None else f'Error: '
-        report: str = f'{report}{self.msg}'
-        return report
+        return self.report
 
     def __repr__(self) -> str:
-        return self.__str__()
+        return self.report
 
 
 def log_error(e: ApplicativeException):

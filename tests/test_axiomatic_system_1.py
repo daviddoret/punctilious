@@ -756,7 +756,7 @@ class TestAxiomatization:
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(a=e3)
-        with pytest.raises(pu.as1.CustomException, match=pu.as1.ERROR_CODE_AS1_047):
+        with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_047):
             a2 = pu.as1.Axiomatization(derivations=e3)  # raise an e123 exception
 
 

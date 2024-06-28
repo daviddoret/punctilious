@@ -93,156 +93,6 @@ def _set_state(key: str, value: object):
     return value
 
 
-class EventType(str):
-    pass
-
-
-class EventTypes(typing.NamedTuple):
-    error: EventType
-    warning: EventType
-    info: EventType
-    debug: EventType
-
-
-event_types: EventTypes = _set_state(key='event_types', value=EventTypes(
-    error=EventType('error'),
-    warning=EventType('warning'),
-    info=EventType('info'),
-    debug=EventType('debug')
-))
-
-
-class ErrorCode(typing.NamedTuple):
-    event_type: EventType
-    code: str
-    message: str
-
-
-class ErrorCodes(typing.NamedTuple):
-    e100: ErrorCode
-    e101: ErrorCode
-    e102: ErrorCode
-    e103: ErrorCode
-    e104: ErrorCode
-    e105: ErrorCode
-    e106: ErrorCode
-    e107: ErrorCode
-    e108: ErrorCode
-    e110: ErrorCode
-    e111: ErrorCode
-    e112: ErrorCode
-    e113: ErrorCode
-    e114: ErrorCode
-    e115: ErrorCode
-    e116: ErrorCode
-    e117: ErrorCode
-    e118: ErrorCode
-    e119: ErrorCode
-    e120: ErrorCode
-    e121: ErrorCode
-    e122: ErrorCode
-    e123: ErrorCode
-
-
-error_codes: ErrorCodes = _set_state(key='event_codes', value=ErrorCodes(
-    e100=ErrorCode(event_type=event_types.error, code='e100',
-                   message='OBSOLETE REUSE'),
-    e101=ErrorCode(event_type=event_types.error, code='e101',
-                   message='Formula.__new__: Unsupported type for the terms argument.'),
-    e102=ErrorCode(event_type=event_types.error, code='e102',
-                   message='Formula.term_0: Attempt to access property term_0 but formula does not contain a term at '
-                           'index 0.'),
-    e103=ErrorCode(event_type=event_types.error, code='e103',
-                   message='Formula.term_1: Attempt to access property term_1 but formula does not contain a term at '
-                           'index 0.'),
-    e104=ErrorCode(event_type=event_types.warning, code='e104',
-                   message='OBSOLETE, REUSE'),
-    e105=ErrorCode(event_type=event_types.error, code='e105',
-                   message='During the initialization of a theorem (methods __init__ or __new__ of the Theorem class), '
-                           'the well-formedness of the theorem is checked. One well-formedness rule is that applying '
-                           'the transformation of the inference on the premises must effectively yield the claimed '
-                           'valid-statement. Here, the claimed valid-statement is not formula-equivalent to the '
-                           'algorithm output. In'
-                           'consequence, the theorem would be ill-formed. The error parameter provides more detailed '
-                           'information.'),
-    e106=ErrorCode(event_type=event_types.warning, code='e106',
-                   message='is_well_formed_theorem_by_inference: phi is an ill-formed theorem-by-inference because '
-                           'psi_expected ~formula psi_inferred, '
-                           'where psi_inferred = f(p), f the inference transformation, and p the inference premises.'),
-    e107=ErrorCode(event_type=event_types.error, code='e107',
-                   message='coerce_enumeration: The argument could not be coerced to a enumeration.'),
-    e108=ErrorCode(event_type=event_types.error, code='e108',
-                   message='Ill-formed formula: Formula phi is ill-formed, because of reason.'),
-    e110=ErrorCode(event_type=event_types.error, code='e110',
-                   message='Enumeration.__new__: Attempt to create enumeration from invalid elements. Often this is '
-                           'caused by a paid of elements that are formula-equivalent.'),
-    e111=ErrorCode(event_type=event_types.error, code='e111',
-                   message='While checking the well-formedness of a theory, a premise is necessary to derive a '
-                           'theorem, but it is absent from the theory.'),
-    e112=ErrorCode(event_type=event_types.error, code='e112',
-                   message='While checking the well-formedness of a theory, a premise is necessary to derive a '
-                           'theorem, but its position in the theory is posterior to the theorem.'),
-    e113=ErrorCode(event_type=event_types.error, code='e113',
-                   message='OBSOLETE REUSE'),
-    e114=ErrorCode(event_type=event_types.error, code='e114',
-                   message='EnumerationAccretor.__del_item__,pop,remove,remove_formula: The remove-formula operation '
-                           'is forbidden on'
-                           'enumeration-accretors.'),
-    e115=ErrorCode(event_type=event_types.error, code='e115',
-                   message='EnumerationAccretor.__set_item__: The set-element operation is forbidden on '
-                           'enumeration-accretors.'),
-    e116=ErrorCode(event_type=event_types.error, code='e116',
-                   message='EnumerationAccretor.insert: The insert-element operation is forbidden on '
-                           'enumeration-accretors.'),
-    e117=ErrorCode(event_type=event_types.error, code='e117',
-                   message='Before applying a transformation (method apply_transformation of the Transformation '
-                           'class), the arguments passed to the transformation algorithm are verified to check that '
-                           'they are formula-equivalent-with-variables with the premises of the transformation, '
-                           'and with regards to the variables. The error parameter provides more detailed information '
-                           'on the issue.'),
-    e118=ErrorCode(event_type=event_types.error, code='e118',
-                   message='is_formula_equivalent_with_variables: There exists a phi''sub-formula of phi that is an '
-                           'element of variables.'),
-    e119=ErrorCode(event_type=event_types.error, code='e119',
-                   message='While checking the well-formedness of a theory, a transformation-rule is necessary '
-                           'to derive a theorem, but it is absent from the theory.'),
-    e120=ErrorCode(event_type=event_types.error, code='e120',
-                   message='During the initialization of a theory (in the __new__ or __init__ methods of the '
-                           'Derivation class), the well-formedness of the theory is verified. This '
-                           'verification failed, in consequence the theory would be ill-formed. The error '
-                           'parameter explains why.'),
-    e121=ErrorCode(event_type=event_types.error, code='e121',
-                   message='While checking if two formulas are formula-equivalent-with-variables, formulas are '
-                           'automatically mapped to values. Of course, if a variable appears multiple times, '
-                           'every instance must be mapped to the same value. Here, this verification failed. Some '
-                           'variable was already mapped to a value, and then a distinct mapped value was found.'),
-    e122=ErrorCode(event_type=event_types.error, code='e122',
-                   message='While checking if two formulas are formula-equivalent, a difference was found. The '
-                           'parameters phi and psi show two formulas or sub-formulas that are distinct.'),
-    e123=ErrorCode(event_type=event_types.error, code='e123',
-                   message='Coercion failure: phi of phi_type could not be coerced to coerced_type.'),
-))
-
-
-class CustomException(Exception):
-    """A generic exception type for application custom exceptions."""
-
-    def __init__(self, error_code: typing.Optional[ErrorCode] = None, **kwargs):
-        self.error_code = error_code
-        self.kwargs = kwargs
-        super().__init__()
-
-    def __str__(self) -> str:
-        return self.typeset_as_string()
-
-    def __repr__(self) -> str:
-        return self.typeset_as_string()
-
-    def typeset_as_string(self, **kwargs) -> str:
-        return (f'{self.error_code.event_type} '
-                f'{self.error_code.code}\n\t{self.error_code.message}\n\t{u1.force_str(o=kwargs)}')
-
-
 class Connective:
     """A connective is a symbol used as a signal to distinguish formulas in theories.
 
@@ -2108,7 +1958,7 @@ def is_well_formed_axiom(a: FlexibleFormula) -> bool:
     return True
 
 
-def is_well_formed_theorem(t: FlexibleFormula) -> bool:
+def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool = False) -> bool:
     """Return True if and only if phi is a well-formed theorem, False otherwise.
 
     :param t: A formula.
@@ -2128,10 +1978,12 @@ def is_well_formed_theorem(t: FlexibleFormula) -> bool:
         f_of_p: Formula = i.transformation_rule(i.premises)
         if not is_formula_equivalent(phi=t.term_0, psi=f_of_p):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
-            # issue a warning to facilitate troubleshooting and analysis.
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_035, phi=t, psi_expected=t.term_0, psi_inferred=f_of_p,
-                                          inference_rule=i)
-            return False
+            if raise_error_if_ill_formed:
+                raise u1.ApplicativeException(code=ERROR_CODE_AS1_035, phi=t, psi_expected=t.term_0,
+                                              psi_inferred=f_of_p,
+                                              inference_rule=i)
+            else:
+                return False
         return True
 
 
@@ -2790,19 +2642,24 @@ class Axiomatization(Theory):
         derivations: Enumeration = coerce_enumeration(e=derivations)
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
-        for derivation in derivations:
-            if is_well_formed_inference_rule(i=derivation):
+        for d in derivations:
+            if is_well_formed_inference_rule(i=d):
                 # This is an inference-rule.
-                inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
+                inference_rule: InferenceRule = coerce_inference_rule(i=d)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
-            elif is_well_formed_axiom(a=derivation):
+            elif is_well_formed_axiom(a=d):
                 # This is an axiom.
-                axiom: Axiom = coerce_axiom(a=derivation)
+                axiom: Axiom = coerce_axiom(a=d)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
             else:
                 # Incorrect form.
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_047, phi=derivation, phi_type_1=InferenceRule,
-                                              phi_type_2=Axiom)
+                raise u1.ApplicativeException(code=ERROR_CODE_AS1_047,
+                                              msg=f'Derivation "d" is not of the correct form for an axiomatization. '
+                                                  f'Correct form should be axiom, or inference-rule.',
+                                              d=d,
+                                              d_type=type(d),
+                                              expected_form_1=InferenceRule,
+                                              expected_form_2=Axiom)
         o: tuple = super().__new__(cls, derivations=coerced_derivations)
         return o
 
