@@ -64,7 +64,7 @@ ERROR_CODE_AS1_046 = 'E-AS1-046'
 ERROR_CODE_AS1_047 = 'E-AS1-047'
 ERROR_CODE_AS1_048 = 'E-AS1-048'
 ERROR_CODE_AS1_049 = 'E-AS1-049'
-ERROR_CODE_AS1_050 = 'E-AS1-050'
+ERROR_CODE_AS1_050 = 'E-AS1-050'  # NOT USED
 ERROR_CODE_AS1_051 = 'E-AS1-051'
 ERROR_CODE_AS1_052 = 'E-AS1-052'
 ERROR_CODE_AS1_053 = 'E-AS1-053'
@@ -2450,7 +2450,7 @@ class Theorem(Derivation):
         f_of_p: Formula = i.transformation_rule(i.premises)
         try:
             is_formula_equivalent(phi=valid_statement, psi=f_of_p, raise_event_if_false=True)
-        except CustomException as error:
+        except u1.ApplicativeException as error:
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
@@ -2785,58 +2785,6 @@ def extend_theory(*args, t: FlexibleTheory) -> Theory:
                 raise u1.ApplicativeException(code=ERROR_CODE_AS1_049,
                                               msg=f'Invalid argument: ({type(argument)}) {argument}.')
         return t
-
-
-def translate_implication_to_axiom(phi: FlexibleFormula) -> InferenceRule:
-    """Given a propositional formula phi that is an implication,
-    translates phi to an equivalent axiomatic-system-1 inference-rule.
-
-    Note: the initial need was to translate the original axioms of minimal-logic-1.
-
-    :param phi:
-    :return:
-    """
-    phi = coerce_formula(phi=phi)
-    if phi.connective is not connectives.implies:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_050, msg='this is not an implication')
-    # TODO: translate_implication_to_axiom: check that all sub-formulas in phi are either:
-    # - valid propositional formulas (negation, conjunction, etc.)
-    # - atomic elements that can be mapped to propositional variables
-
-    # Now we have the assurance that phi is a well-formed propositional formula.
-    # Retrieve the list of propositional-variables in phi:
-    propositional_variables: Enumeration = get_leaf_formulas(phi=phi)
-    premises: Enumeration = Enumeration(elements=None)
-    variables_map: Map = Map(domain=None, codomain=None)
-    for x in propositional_variables:
-        rep: str = x.typeset_as_string() + '\''
-        # automatically append the axiom: x is-a propositional-variable
-        with let_x_be_a_propositional_variable_OBSOLETE(rep=rep) as x2:
-            premises: Enumeration = extend_enumeration(
-                e=premises, x=x2 | connectives.is_a | connectives.propositional_variable)
-            variables_map: Map = extend_map(m=variables_map, preimage=x, image=x2)
-    variables: Enumeration = Enumeration(elements=variables_map.codomain)
-
-    # elaborate a new formula psi where all variables have been replaced with the new variables
-    psi = replace_formulas(phi=phi, m=variables_map)
-
-    # translate the antecedent of the implication to the main premises
-    # note: we could further split conjunctions into multiple premises
-    antecedent: Formula = psi.term_0
-    premises: Enumeration = extend_enumeration(
-        e=premises, x=antecedent)
-
-    # retrieve the conclusion
-    conclusion: Formula = psi.term_1
-
-    # build the rule
-    rule: Transformation = Transformation(premises=premises, conclusion=conclusion,
-                                          variables=variables)
-
-    # build the inference-rule
-    inference_rule: InferenceRule = InferenceRule(transformation=rule)
-
-    return inference_rule
 
 
 class AutoDerivationFailure(Exception):

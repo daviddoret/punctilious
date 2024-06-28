@@ -13,9 +13,21 @@ Bibliography:
 # python native modules
 import typing
 # punctilious modules
+import util_1 as u1
 import axiomatic_system_1 as as1
 
 # import inference_rules_1 as ir1
+
+ERROR_CODE_PLS1_001 = 'E-PLS1-001'
+ERROR_CODE_PLS1_002 = 'E-PLS1-002'
+ERROR_CODE_PLS1_003 = 'E-PLS1-003'
+ERROR_CODE_PLS1_004 = 'E-PLS1-004'
+ERROR_CODE_PLS1_005 = 'E-PLS1-005'
+ERROR_CODE_PLS1_006 = 'E-PLS1-006'
+ERROR_CODE_PLS1_007 = 'E-PLS1-007'
+ERROR_CODE_PLS1_008 = 'E-PLS1-008'
+ERROR_CODE_PLS1_009 = 'E-PLS1-009'
+ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 
 # Propositional logic vocabulary
 
@@ -225,6 +237,59 @@ def let_x_be_a_propositional_variable(
         return t, *propositional_variables
     else:
         raise TypeError  # TODO: Implement event code.
+
+
+def translate_implication_to_axiom(t: as1.FlexibleTheory, phi: as1.FlexibleFormula) -> as1.InferenceRule:
+    """Given a propositional formula phi that is an implication,
+    translates phi to an equivalent axiomatic-system-1 inference-rule.
+
+    Note: the initial need was to translate the original axioms of minimal-logic-1.
+
+    :param t:
+    :param phi:
+    :return:
+    """
+    phi = as1.coerce_formula(phi=phi)
+    if phi.connective is not as1.connectives.implies:
+        raise u1.ApplicativeException(code=ERROR_CODE_PLS1_001, msg='this is not an implication')
+    # TODO: translate_implication_to_axiom: check that all sub-formulas in phi are either:
+    # - valid propositional formulas (negation, conjunction, etc.)
+    # - atomic elements that can be mapped to propositional variables
+
+    # Now we have the assurance that phi is a well-formed propositional formula.
+    # Retrieve the list of propositional-variables in phi:
+    propositional_variables: as1.Enumeration = as1.get_leaf_formulas(phi=phi)
+    premises: as1.Enumeration = as1.Enumeration(elements=None)
+    variables_map: as1.Map = as1.Map(domain=None, codomain=None)
+    for x in propositional_variables:
+        rep: str = x.typeset_as_string() + '\''
+        # automatically append the axiom: x is-a propositional-variable
+        with let_x_be_a_propositional_variable(t=t, rep=rep) as x2:
+            premises: as1.Enumeration = as1.extend_enumeration(
+                e=premises, x=x2 | as1.connectives.is_a | as1.connectives.propositional_variable)
+            variables_map: as1.Map = as1.extend_map(m=variables_map, preimage=x, image=x2)
+    variables: as1.Enumeration = as1.Enumeration(elements=variables_map.codomain)
+
+    # elaborate a new formula psi where all variables have been replaced with the new variables
+    psi = as1.replace_formulas(phi=phi, m=variables_map)
+
+    # translate the antecedent of the implication to the main premises
+    # note: we could further split conjunctions into multiple premises
+    antecedent: as1.Formula = psi.term_0
+    premises: as1.Enumeration = as1.extend_enumeration(
+        e=premises, x=antecedent)
+
+    # retrieve the conclusion
+    conclusion: as1.Formula = psi.term_1
+
+    # build the rule
+    rule: as1.Transformation = as1.Transformation(premises=premises, conclusion=conclusion,
+                                                  variables=variables)
+
+    # build the inference-rule
+    inference_rule: as1.InferenceRule = as1.InferenceRule(transformation=rule)
+
+    return inference_rule
 
 
 class PIsAProposition(as1.Heuristic):
