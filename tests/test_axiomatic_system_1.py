@@ -148,7 +148,7 @@ class TestEnumeration:
         a = pu.as1.let_x_be_a_simple_object(formula_typesetter='a')
         b = pu.as1.let_x_be_a_simple_object(formula_typesetter='b')
         c = pu.as1.let_x_be_a_simple_object(formula_typesetter='c')
-        with pytest.raises(pu.as1.CustomException, match='e110'):
+        with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_029):
             # duplicate formula-equivalent formulas are forbidden in enumerations.
             e1 = pu.as1.Enumeration(elements=(a, b, c, b,))
 
@@ -756,7 +756,7 @@ class TestAxiomatization:
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(a=e3)
-        with pytest.raises(pu.as1.CustomException, match='e123'):
+        with pytest.raises(pu.as1.CustomException, match=pu.as1.ERROR_CODE_AS1_047):
             a2 = pu.as1.Axiomatization(derivations=e3)  # raise an e123 exception
 
 
@@ -784,11 +784,11 @@ class TestDemonstration:
                                     i=ir1)
         assert pu.as1.is_valid_statement_in_theory(phi=a | star | c, t=demo2)
 
-        with pytest.raises(pu.u1.ApplicativeException, match='E-123-6'):
+        with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_039):
             # invalid proof raise exception
             pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | e))
 
-        with pytest.raises(pu.u1.ApplicativeException, match='E-123-6'):
+        with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_039):
             # invalid proof sequence exception
             pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | c, ir1,))
             pass
