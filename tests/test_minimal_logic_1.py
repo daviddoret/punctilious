@@ -1,14 +1,8 @@
 import pytest
 import logging
 import punctilious as pu
+from punctilious.connectives_standard_library_1 import *
 
-# retrieve some basic vocabulary
-is_a = pu.as1.connectives.is_a
-propositional_variable = pu.as1.connectives.propositional_variable
-lor = pu.as1.connectives.lor
-land = pu.as1.connectives.land
-proposition = pu.as1.connectives.proposition
-implies = pu.as1.connectives.implies
 derive_0 = pu.as1.derive_0
 derive_1 = pu.as1.derive_2
 auto_derive_2 = pu.as1.auto_derive_2
@@ -40,30 +34,30 @@ def theory(a, b, c):
     a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=a | is_a | propositional_variable)
     a2 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=b | is_a | propositional_variable)
     a3 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=c | is_a | propositional_variable)
-    theory = pu.as1.Axiomatization(derivations=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
+    t = pu.as1.Axiomatization(derivations=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive: a is-a proposition
-    theory = pu.as1.derive_OBSOLETE(theory=theory,
-                                    claim=a | is_a | proposition,
-                                    premises=(a | is_a | propositional_variable,),
-                                    inference_rule=pu.pls1.i1)
-    assert theory.is_valid_statement(phi=a | is_a | proposition)
+    t, m = pu.as1.derive_1(t=t,
+                           c=a | is_a | proposition,
+                           p=(a | is_a | propositional_variable,),
+                           i=pu.pls1.i1)
+    assert as1.is_valid_statement_in_theory(phi=a | is_a | proposition, t=t)
 
     # derive: b is-a proposition
-    theory = pu.as1.derive_OBSOLETE(theory=theory,
-                                    claim=b | is_a | proposition,
-                                    premises=(b | is_a | propositional_variable,),
-                                    inference_rule=pu.pls1.i1)
-    assert theory.is_valid_statement(phi=b | is_a | proposition)
+    t, m = pu.as1.derive_1(t=t,
+                           c=b | is_a | proposition,
+                           p=(b | is_a | propositional_variable,),
+                           i=pu.pls1.i1)
+    assert as1.is_valid_statement_in_theory(phi=b | is_a | proposition, t=t)
 
     # derive: c is-a proposition
-    theory = pu.as1.derive_OBSOLETE(theory=theory,
-                                    claim=c | is_a | proposition,
-                                    premises=(c | is_a | propositional_variable,),
-                                    inference_rule=pu.pls1.i1)
-    assert theory.is_valid_statement(phi=c | is_a | proposition)
+    t, m = pu.as1.derive_1(t=t,
+                           c=c | is_a | proposition,
+                           p=(c | is_a | propositional_variable,),
+                           i=pu.pls1.i1)
+    assert as1.is_valid_statement_in_theory(phi=c | is_a | proposition, t=t)
 
-    return theory
+    return t
 
 
 class TestPL1:

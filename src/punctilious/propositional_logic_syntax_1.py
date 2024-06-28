@@ -33,13 +33,13 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 
 
 # retrieve vocabulary from axiomatic-system-1
-is_a = as1.connectives.is_a
-implies = as1.connectives.implies
-land = as1.connectives.land
-lnot = as1.connectives.lnot
-lor = as1.connectives.lor
-proposition = as1.connectives.proposition  # synonym: propositional-formulas
-propositional_variable = as1.connectives.propositional_variable
+is_a = as1._connectives.is_a
+implies = as1._connectives.implies
+land = as1._connectives.land
+lnot = as1._connectives.lnot
+lor = as1._connectives.lor
+proposition = as1._connectives.proposition  # synonym: propositional-formulas
+propositional_variable = as1._connectives.propositional_variable
 
 with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
@@ -216,23 +216,23 @@ def let_x_be_a_propositional_variable(
 
     if isinstance(rep, str):
         # declare a single propositional variable
-        x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=rep))
+        x = as1.Variable(c=as1.NullaryConnective(formula_typesetter=rep))
         t, _ = as1.let_x_be_an_axiom(t=t,
-                                     valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+                                     valid_statement=x | as1._connectives.is_a | as1._connectives.propositional_variable)
 
         return t, x
     elif isinstance(rep, typing.Iterable):
         # declare multiple propositional variables
         propositional_variables = tuple()
         for r in rep:
-            x = as1.Variable(connective=as1.NullaryConnective(formula_typesetter=r))
+            x = as1.Variable(c=as1.NullaryConnective(formula_typesetter=r))
             propositional_variables = propositional_variables + (x,)
             t, _ = as1.let_x_be_an_axiom(
                 t=t,
-                valid_statement=x | as1.connectives.is_a | as1.connectives.propositional_variable)
+                valid_statement=x | as1._connectives.is_a | as1._connectives.propositional_variable)
             t, _ = as1.derive_1(t=t,
                                 c=x | is_a | proposition,
-                                p=(x | as1.connectives.is_a | as1.connectives.propositional_variable,),
+                                p=(x | as1._connectives.is_a | as1._connectives.propositional_variable,),
                                 i=i1)
         return t, *propositional_variables
     else:
@@ -250,7 +250,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory, phi: as1.FlexibleFormu
     :return:
     """
     phi = as1.coerce_formula(phi=phi)
-    if phi.connective is not as1.connectives.implies:
+    if phi.connective is not as1._connectives.implies:
         raise u1.ApplicativeException(code=ERROR_CODE_PLS1_001, msg='this is not an implication')
     # TODO: translate_implication_to_axiom: check that all sub-formulas in phi are either:
     # - valid propositional formulas (negation, conjunction, etc.)
@@ -266,7 +266,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory, phi: as1.FlexibleFormu
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable(t=t, rep=rep) as x2:
             premises: as1.Enumeration = as1.extend_enumeration(
-                e=premises, x=x2 | as1.connectives.is_a | as1.connectives.propositional_variable)
+                e=premises, x=x2 | as1._connectives.is_a | as1._connectives.propositional_variable)
             variables_map: as1.Map = as1.extend_map(m=variables_map, preimage=x, image=x2)
     variables: as1.Enumeration = as1.Enumeration(elements=variables_map.codomain)
 

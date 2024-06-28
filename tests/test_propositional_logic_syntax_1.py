@@ -1,12 +1,6 @@
 import pytest
 import punctilious as pu
-
-is_a = pu.axiomatic_system_1.connectives.is_a
-proposition = pu.axiomatic_system_1.connectives.proposition
-land = pu.axiomatic_system_1.connectives.land
-implies = pu.axiomatic_system_1.connectives.implies
-lor = pu.axiomatic_system_1.connectives.lor
-lnot = pu.axiomatic_system_1.connectives.lnot
+from punctilious.connectives_standard_library_1 import *
 
 
 class TestHeuristic:
@@ -40,13 +34,13 @@ class TestAxioms:
         # PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 
         # retrieve some basic vocabulary
-        is_a = pu.as1.connectives.is_a
-        proposition = pu.as1.connectives.proposition
-        propositional_variable = pu.as1.connectives.propositional_variable
-        land = pu.as1.connectives.land
-        lnot = pu.as1.connectives.lnot
-        lor = pu.as1.connectives.lor
-        implies = pu.as1.connectives.implies
+        is_a = pu.as1._connectives.is_a
+        proposition = pu.as1._connectives.proposition
+        propositional_variable = pu.as1._connectives.propositional_variable
+        land = pu.as1._connectives.land
+        lnot = pu.as1._connectives.lnot
+        lor = pu.as1._connectives.lor
+        implies = pu.as1._connectives.implies
 
         # elaborate a theory
         theory, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
@@ -99,17 +93,17 @@ class TestAxioms:
         pass
 
     def test_pl1_2(self):
-        is_a = pu.as1.connectives.is_a
-        proposition = pu.as1.connectives.proposition
+        is_a = pu.as1._connectives.is_a
+        proposition = pu.as1._connectives.proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
         t, success, _, = pu.as1.auto_derive_2(t=t, conjecture=p | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
 
     def test_pl1_3(self):
-        is_a = pu.as1.connectives.is_a
-        land = pu.as1.connectives.land
-        proposition = pu.as1.connectives.proposition
+        is_a = pu.as1._connectives.is_a
+        land = pu.as1._connectives.land
+        proposition = pu.as1._connectives.proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='X')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Y')
         t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=p | is_a | proposition)

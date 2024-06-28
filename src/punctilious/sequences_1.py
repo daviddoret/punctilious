@@ -1,9 +1,9 @@
 import collections
 import axiomatic_system_1 as as1
 
-land = as1.connectives.land
-implies = as1.connectives.implies
-is_a = as1.connectives.is_a
+land = as1._connectives.land
+implies = as1._connectives.implies
+is_a = as1._connectives.is_a
 
 sequence_of_numbers = as1.let_x_be_a_simple_object(formula_typesetter='sequence-of-numbers')
 bounded_above = as1.let_x_be_a_simple_object(formula_typesetter='bounded-above')

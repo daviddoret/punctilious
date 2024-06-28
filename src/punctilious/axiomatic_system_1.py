@@ -109,7 +109,7 @@ class Connective:
 
     def __call__(self, *args):
         """Allows pseudo formal language in python."""
-        return Formula(connective=self, terms=args)
+        return Formula(c=self, terms=args)
 
     def __str__(self):
         return f'{id(self)}-connective'
@@ -126,7 +126,7 @@ class Connective:
         self._formula_typesetter = formula_typesetter
 
     def to_formula(self) -> Formula:
-        return Formula(connective=self)
+        return Formula(c=self)
 
 
 class Formula(tuple):
@@ -153,7 +153,7 @@ class Formula(tuple):
     A finite tree whose nodes are colored, and where edges are fully ordered under their edge.
     """
 
-    def __new__(cls, connective: Connective, terms: FlexibleTupl = None):
+    def __new__(cls, c: Connective, terms: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
@@ -165,11 +165,11 @@ class Formula(tuple):
             o = super().__new__(cls)
             return o
         else:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_002, c=connective, terms_type=type(terms), terms=terms)
+            raise u1.ApplicativeException(code=ERROR_CODE_AS1_002, c=c, terms_type=type(terms), terms=terms)
 
-    def __init__(self, connective: Connective, terms: FlexibleTupl = None):
+    def __init__(self, c: Connective, terms: FlexibleTupl = None):
         super().__init__()
-        self._connective = connective
+        self._connective = c
 
     def __contains__(self, phi: FlexibleFormula):
         """Return True is there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
@@ -356,7 +356,7 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
     elif isinstance(e, Formula) and is_well_formed_enumeration(e=e):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(elements=e, connective=e.connective, strip_duplicates=strip_duplicates)
+        return Enumeration(elements=e, c=e.connective, strip_duplicates=strip_duplicates)
     elif e is None:
         return Enumeration(elements=None, strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Generator) and not isinstance(e, Formula):
@@ -492,15 +492,15 @@ class NullaryConnective(FixedArityConnective):
 class SimpleObject(Formula):
     """A simple-object is a formula composed of a nullary-connective."""
 
-    def __new__(cls, connective: NullaryConnective):
+    def __new__(cls, c: NullaryConnective):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
-        o = super().__new__(cls, connective=connective, terms=None)
+        o = super().__new__(cls, c=c, terms=None)
         return o
 
-    def __init__(self, connective: NullaryConnective):
-        super().__init__(connective=connective, terms=None)
+    def __init__(self, c: NullaryConnective):
+        super().__init__(c=c, terms=None)
 
 
 class UnaryConnective(FixedArityConnective):
@@ -526,7 +526,7 @@ class InfixPartialFormula:
         overloading the __or__() method that is called when | is used,
         and gluing all this together with the InfixPartialFormula class.
         """
-        return Formula(connective=self._connective, terms=(self.term_1, term_2,))
+        return Formula(c=self._connective, terms=(self.term_1, term_2,))
 
     def __repr__(self):
         return self.typeset_as_string()
@@ -709,13 +709,13 @@ class Variable(SimpleObject):
             return False
         return True
 
-    def __new__(cls, connective: NullaryConnective):
+    def __new__(cls, c: NullaryConnective):
         o: tuple
-        o = super().__new__(cls, connective=connective)
+        o = super().__new__(cls, c=c)
         return o
 
-    def __init__(self, connective: NullaryConnective):
-        super().__init__(connective=connective)
+    def __init__(self, c: NullaryConnective):
+        super().__init__(c=c)
 
     def __enter__(self) -> Variable:
         return self
@@ -731,13 +731,13 @@ class MetaVariable(SimpleObject):
     The justification for a dedicated python class is the implementation of the __enter__ and __exit__ methods,
     which allow the usage of variables with the python with statement."""
 
-    def __new__(cls, connective: NullaryConnective):
+    def __new__(cls, c: NullaryConnective):
         o: tuple
-        o = super().__new__(cls, connective=connective)
+        o = super().__new__(cls, c=c)
         return o
 
-    def __init__(self, connective: NullaryConnective):
-        super().__init__(connective=connective)
+    def __init__(self, c: NullaryConnective):
+        super().__init__(c=c)
 
     def __enter__(self) -> MetaVariable:
         return self
@@ -750,9 +750,9 @@ class MetaVariable(SimpleObject):
 def let_x_be_a_variable(formula_typesetter: pl1.FlexibleTypesetter) -> (
         typing.Union)[Variable, typing.Generator[Variable, typing.Any, None]]:
     if formula_typesetter is None or isinstance(formula_typesetter, pl1.FlexibleTypesetter):
-        return Variable(connective=NullaryConnective(formula_typesetter=formula_typesetter))
+        return Variable(c=NullaryConnective(formula_typesetter=formula_typesetter))
     elif isinstance(formula_typesetter, typing.Iterable):
-        return (Variable(connective=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
+        return (Variable(c=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
     else:
         raise u1.ApplicativeException(code=ERROR_CODE_AS1_012, msg='Non supported arguments.',
                                       formula_typesetter=formula_typesetter)
@@ -763,9 +763,9 @@ def let_x_be_a_meta_variable(
         MetaVariable | tuple[MetaVariable, ...]):
     """A meta-variable is a nullary-connective formula (*) that is not declared in the theory with a "is-a" operator."""
     if formula_typesetter is None or isinstance(formula_typesetter, pl1.FlexibleTypesetter):
-        return MetaVariable(connective=NullaryConnective(formula_typesetter=formula_typesetter))
+        return MetaVariable(c=NullaryConnective(formula_typesetter=formula_typesetter))
     elif isinstance(formula_typesetter, typing.Iterable):
-        return tuple(MetaVariable(connective=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
+        return tuple(MetaVariable(c=NullaryConnective(formula_typesetter=ts)) for ts in formula_typesetter)
     else:
         raise u1.ApplicativeException(code=ERROR_CODE_AS1_013, msg='Non supported arguments.',
                                       formula_typesetter=formula_typesetter)
@@ -787,9 +787,9 @@ def let_x_be_a_simple_object(formula_typesetter: typing.Optional[pl1.FlexibleTyp
     :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
     """
     if isinstance(formula_typesetter, FlexibleRepresentation):
-        return SimpleObject(connective=NullaryConnective(formula_typesetter=formula_typesetter))
+        return SimpleObject(c=NullaryConnective(formula_typesetter=formula_typesetter))
     elif isinstance(formula_typesetter, typing.Iterable):
-        return (SimpleObject(connective=NullaryConnective(formula_typesetter=r)) for r in formula_typesetter)
+        return (SimpleObject(c=NullaryConnective(formula_typesetter=r)) for r in formula_typesetter)
     else:
         raise u1.ApplicativeException(code=ERROR_CODE_AS1_014, msg='Non supported arguments.',
                                       formula_typesetter=formula_typesetter)
@@ -947,7 +947,7 @@ class Connectives(typing.NamedTuple):
     tupl: FreeArityConnective
 
 
-connectives: Connectives = _set_state(key='connectives', value=Connectives(
+_connectives: Connectives = _set_state(key='connectives', value=Connectives(
     axiom=let_x_be_a_unary_connective(formula_typesetter='axiom'),
     axiomatization=let_x_be_a_free_arity_connective(formula_typesetter='axiomatization'),
     enumeration=let_x_be_a_free_arity_connective(formula_typesetter='enumeration'),
@@ -1226,7 +1226,7 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         return assigned_value
     else:
         # build the replaced formula.
-        fb: Formula = Formula(connective=phi.connective)
+        fb: Formula = Formula(c=phi.connective)
         # recursively apply the replacement algorithm on phi terms.
         for term in phi:
             term_substitute = replace_formulas(phi=term, m=m)
@@ -1249,11 +1249,11 @@ class Tupl(Formula):
     def __new__(cls, elements: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple = super().__new__(cls, connective=connectives.tupl, terms=elements)
+        o: tuple = super().__new__(cls, c=_connectives.tupl, terms=elements)
         return o
 
     def __init__(self, elements: FlexibleTupl = None):
-        super().__init__(connective=connectives.tupl, terms=elements)
+        super().__init__(c=_connectives.tupl, terms=elements)
 
     def get_index_of_first_equivalent_element(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
@@ -1323,7 +1323,7 @@ def extend_formula(formula: FlexibleFormula, term: FlexibleFormula) -> Formula:
     """
     formula: Formula = coerce_formula(phi=formula)
     term: Formula = coerce_formula(phi=term)
-    extended_formula: Formula = Formula(terms=(*formula, term,), connective=formula.connective)
+    extended_formula: Formula = Formula(terms=(*formula, term,), c=formula.connective)
     return extended_formula
 
 
@@ -1364,13 +1364,13 @@ class Map(Formula):
         codomain: Tupl = coerce_tupl(t=codomain)
         if len(domain) != len(codomain):
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
-        o: tuple = super().__new__(cls, connective=connectives.map, terms=(domain, codomain,))
+        o: tuple = super().__new__(cls, c=_connectives.map, terms=(domain, codomain,))
         return o
 
     def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
         domain: Enumeration = coerce_enumeration(e=domain)
         codomain: Tupl = coerce_tupl(t=codomain)
-        super().__init__(connective=connectives.map, terms=(domain, codomain,))
+        super().__init__(c=_connectives.map, terms=(domain, codomain,))
 
     @property
     def codomain(self) -> Tupl:
@@ -1447,26 +1447,26 @@ class Enumeration(Formula):
 
     """
 
-    def __new__(cls, elements: FlexibleEnumeration = None, connective: Connective = None,
+    def __new__(cls, elements: FlexibleEnumeration = None, c: Connective = None,
                 strip_duplicates: bool = False):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        connective: Connective = connectives.enumeration if connective is None else connective
+        c: Connective = _connectives.enumeration if c is None else c
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         if not is_well_formed_enumeration(e=elements):
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
-        o: tuple = super().__new__(cls, connective=connective, terms=elements)
+        o: tuple = super().__new__(cls, c=c, terms=elements)
         return o
 
-    def __init__(self, elements: FlexibleEnumeration = None, connective: Connective = None,
+    def __init__(self, elements: FlexibleEnumeration = None, c: Connective = None,
                  strip_duplicates: bool = False):
-        global connectives
-        connective: Connective = connectives.enumeration if connective is None else connective
+        global _connectives
+        c: Connective = _connectives.enumeration if c is None else c
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
-        super().__init__(connective=connective, terms=elements)
+        super().__init__(c=c, terms=elements)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
@@ -1579,7 +1579,7 @@ class Transformation(Formula):
         premises: Tupl = coerce_tupl(t=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
-        o: tuple = super().__new__(cls, connective=connectives.transformation,
+        o: tuple = super().__new__(cls, c=_connectives.transformation,
                                    terms=(premises, conclusion, variables,))
         return o
 
@@ -1588,7 +1588,7 @@ class Transformation(Formula):
         premises: Tupl = coerce_tupl(t=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
-        super().__init__(connective=connectives.transformation, terms=(premises, conclusion, variables,))
+        super().__init__(c=_connectives.transformation, terms=(premises, conclusion, variables,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1696,7 +1696,7 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
     :return: bool.
     """
     i = coerce_formula(phi=i)
-    if i.connective is not connectives.inference or not is_well_formed_enumeration(
+    if i.connective is not _connectives.inference or not is_well_formed_enumeration(
             e=i.term_0) or not is_well_formed_transformation(t=i.term_1):
         return False
     else:
@@ -1710,7 +1710,7 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
     :return: bool.
     """
     t = coerce_formula(phi=t)
-    if (t.connective is not connectives.transformation or
+    if (t.connective is not _connectives.transformation or
             t.arity != 3 or
             not is_well_formed_tupl(t=t.term_0) or
             not is_well_formed_formula(phi=t.term_1) or
@@ -1750,10 +1750,10 @@ def is_well_formed_inference_rule(i: FlexibleFormula) -> bool:
     if isinstance(i, InferenceRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif (i.connective is connectives.follows_from and
+    elif (i.connective is _connectives.follows_from and
           i.arity == 2 and
           is_well_formed_transformation(t=i.term_0) and
-          i.term_1.connective is connectives.inference_rule):
+          i.term_1.connective is _connectives.inference_rule):
         return True
     else:
         return False
@@ -1946,13 +1946,13 @@ def is_well_formed_axiom(a: FlexibleFormula) -> bool:
     a = coerce_formula(phi=a)
     if a.arity != 2:
         return False
-    if a.connective is not connectives.follows_from:
+    if a.connective is not _connectives.follows_from:
         return False
     if not is_well_formed_formula(phi=a.term_0):
         return False
     if a.term_1.arity != 0:
         return False
-    if a.term_1.connective != connectives.axiom:
+    if a.term_1.connective != _connectives.axiom:
         return False
     # All tests were successful.
     return True
@@ -1968,7 +1968,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
     if isinstance(t, Theorem):
         # the Theorem python-type assure the well-formedness of the object.
         return True
-    if (t.connective is not connectives.follows_from or
+    if (t.connective is not _connectives.follows_from or
             not t.arity == 2 or
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_inference(i=t.term_1)):
@@ -2092,7 +2092,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
 def is_well_formed_axiomatization(a: FlexibleFormula) -> bool:
     """Returns True if phi is a well-formed axiomatization, False otherwise."""
     a = coerce_formula(phi=a)
-    if a.connective is not connectives.axiomatization:
+    if a.connective is not _connectives.axiomatization:
         return False
     for element in a:
         if not is_well_formed_axiom(a=element) and not is_well_formed_inference_rule(i=element):
@@ -2274,15 +2274,15 @@ class Derivation(Formula):
     def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula):
         valid_statement = coerce_formula(phi=valid_statement)
         justification = coerce_formula(phi=justification)
-        c: Connective = connectives.follows_from
-        o: tuple = super().__new__(cls, connective=c, terms=(valid_statement, justification,))
+        c: Connective = _connectives.follows_from
+        o: tuple = super().__new__(cls, c=c, terms=(valid_statement, justification,))
         return o
 
     def __init__(self, valid_statement: FlexibleFormula, justification: FlexibleFormula):
         self._valid_statement = coerce_formula(phi=valid_statement)
         self._justification = coerce_formula(phi=justification)
-        c: Connective = connectives.follows_from
-        super().__init__(connective=c, terms=(self._valid_statement, self._justification,))
+        c: Connective = _connectives.follows_from
+        super().__init__(c=c, terms=(self._valid_statement, self._justification,))
 
     @property
     def valid_statement(self) -> Formula:
@@ -2324,12 +2324,12 @@ class Axiom(Derivation):
 
     def __new__(cls, valid_statement: FlexibleFormula = None):
         valid_statement: Formula = coerce_formula(phi=valid_statement)
-        o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=connectives.axiom)
+        o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=_connectives.axiom)
         return o
 
     def __init__(self, valid_statement: FlexibleFormula):
         valid_statement: Formula = coerce_formula(phi=valid_statement)
-        super().__init__(valid_statement=valid_statement, justification=connectives.axiom)
+        super().__init__(valid_statement=valid_statement, justification=_connectives.axiom)
 
 
 FlexibleAxiom = typing.Union[Axiom, Formula]
@@ -2357,12 +2357,12 @@ class InferenceRule(Derivation):
 
     def __new__(cls, transformation: FlexibleTransformation = None):
         transformation: Transformation = coerce_transformation(t=transformation)
-        o: tuple = super().__new__(cls, valid_statement=transformation, justification=connectives.inference_rule)
+        o: tuple = super().__new__(cls, valid_statement=transformation, justification=_connectives.inference_rule)
         return o
 
     def __init__(self, transformation: FlexibleTransformation):
         self._transformation: Transformation = coerce_transformation(t=transformation)
-        super().__init__(valid_statement=self._transformation, justification=connectives.inference_rule)
+        super().__init__(valid_statement=self._transformation, justification=_connectives.inference_rule)
 
     @property
     def transformation(self) -> Transformation:
@@ -2389,15 +2389,15 @@ class Inference(Formula):
     def __new__(cls, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
         premises: Tupl = coerce_tupl(t=premises)
         transformation_rule: Transformation = coerce_transformation(t=transformation_rule)
-        c: Connective = connectives.inference
-        o: tuple = super().__new__(cls, connective=c, terms=(premises, transformation_rule,))
+        c: Connective = _connectives.inference
+        o: tuple = super().__new__(cls, c=c, terms=(premises, transformation_rule,))
         return o
 
     def __init__(self, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
         self._premises: Tupl = coerce_tupl(t=premises)
         self._transformation_rule: Transformation = coerce_transformation(t=transformation_rule)
-        c: Connective = connectives.inference
-        super().__init__(connective=c, terms=(self._premises, self._transformation_rule,))
+        c: Connective = _connectives.inference
+        super().__init__(c=c, terms=(self._premises, self._transformation_rule,))
 
     @property
     def transformation_rule(self) -> Transformation:
@@ -2505,7 +2505,7 @@ class Theory(Enumeration):
 
     """
 
-    def __new__(cls, connective: Connective | None = None, derivations: FlexibleEnumeration = None,
+    def __new__(cls, c: Connective | None = None, derivations: FlexibleEnumeration = None,
                 decorations: FlexibleDecorations = None):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(e=derivations)
@@ -2521,17 +2521,17 @@ class Theory(Enumeration):
         o: tuple = super().__new__(cls, elements=derivations)
         return o
 
-    def __init__(self, connective: Connective | None = None, derivations: FlexibleEnumeration = None,
+    def __init__(self, c: Connective | None = None, derivations: FlexibleEnumeration = None,
                  decorations: FlexibleDecorations = None):
-        if connective is None:
-            connective: Connective = connectives.theory
+        if c is None:
+            c: Connective = _connectives.theory
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(e=derivations)
         # coerce all elements of the enumeration to theorem
         derivations: Enumeration = coerce_enumeration(
             e=(coerce_derivation(d=p) for p in derivations))
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
-        super().__init__(connective=connective, elements=derivations)
+        super().__init__(c=c, elements=derivations)
         copy_theory_decorations(target=self, decorations=decorations)
 
     @property
@@ -2681,7 +2681,7 @@ class Axiomatization(Theory):
                 # Incorrect form.
                 raise u1.ApplicativeException(code=ERROR_CODE_AS1_048, phi=derivation, phi_type_1=InferenceRule,
                                               phi_type_2=Axiom)
-        super().__init__(connective=connectives.axiomatization, derivations=coerced_derivations,
+        super().__init__(c=_connectives.axiomatization, derivations=coerced_derivations,
                          decorations=decorations)
 
 
@@ -3220,10 +3220,10 @@ def auto_derive_4(
 
 
 class ClassicalFormulaTypesetter(pl1.Typesetter):
-    def __init__(self, connective_typesetter: pl1.Typesetter):
+    def __init__(self, connective_ts: pl1.Typesetter):
         super().__init__()
-        connective_typesetter = pl1.coerce_typesetter(ts=connective_typesetter)
-        self._connective_typesetter: pl1.Typesetter = connective_typesetter
+        connective_ts = pl1.coerce_typesetter(ts=connective_ts)
+        self._connective_typesetter: pl1.Typesetter = connective_ts
 
     @property
     def connective_typesetter(self) -> pl1.Typesetter:
@@ -3253,10 +3253,10 @@ class ClassicalFormulaTypesetter(pl1.Typesetter):
 
 
 class InfixFormulaTypesetter(pl1.Typesetter):
-    def __init__(self, connective_typesetter: pl1.FlexibleTypesetter):
+    def __init__(self, connective_ts: pl1.FlexibleTypesetter):
         super().__init__()
-        connective_typesetter = pl1.coerce_typesetter(ts=connective_typesetter)
-        self._connective_typesetter: pl1.Typesetter = connective_typesetter
+        connective_ts = pl1.coerce_typesetter(ts=connective_ts)
+        self._connective_typesetter: pl1.Typesetter = connective_ts
 
     @property
     def connective_typesetter(self) -> pl1.Typesetter:
@@ -3476,7 +3476,7 @@ class Typesetters:
         return pl1.typesetters.symbol(symbol=symbol)
 
     def classical_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> ClassicalFormulaTypesetter:
-        return ClassicalFormulaTypesetter(connective_typesetter=connective_typesetter)
+        return ClassicalFormulaTypesetter(connective_ts=connective_typesetter)
 
     def text(self, text: str) -> pl1.TextTypesetter:
         return pl1.typesetters.text(text=text)
@@ -3485,7 +3485,7 @@ class Typesetters:
         return pl1.typesetters.indexed_symbol(symbol=symbol, index=index)
 
     def infix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> InfixFormulaTypesetter:
-        return InfixFormulaTypesetter(connective_typesetter=connective_typesetter)
+        return InfixFormulaTypesetter(connective_ts=connective_typesetter)
 
     def map(self) -> MapTypesetter:
         return MapTypesetter()

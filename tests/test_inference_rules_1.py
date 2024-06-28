@@ -1,12 +1,6 @@
 import pytest
 import punctilious as pu
-
-# retrieve some basic vocabulary
-is_a = pu.as1.connectives.is_a
-propositional_variable = pu.as1.connectives.propositional_variable
-land = pu.as1.connectives.land
-proposition = pu.as1.connectives.proposition
-implies = pu.as1.connectives.implies
+from punctilious.connectives_standard_library_1 import *
 
 
 @pytest.fixture
@@ -35,21 +29,21 @@ def theory(a, b, c):
     a3 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=c | is_a | propositional_variable)
     theory = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, a1, a2, a3,))
 
-    # derive: a is-a proposition
+    # derive:(a is-a proposition)
     theory, _, = pu.as1.derive_1(t=theory,
                                  c=a | is_a | proposition,
                                  p=(a | is_a | propositional_variable,),
                                  i=pu.pls1.i1)
     assert pu.as1.is_valid_statement_in_theory(phi=a | is_a | proposition, t=theory)
 
-    # derive: b is-a proposition
+    # derive: (b is-a proposition)
     theory, _, = pu.as1.derive_1(t=theory,
                                  c=b | is_a | proposition,
                                  p=(b | is_a | propositional_variable,),
                                  i=pu.pls1.i1)
     assert pu.as1.is_valid_statement_in_theory(phi=b | is_a | proposition, t=theory)
 
-    # derive: c is-a proposition
+    # derive: (c is-a proposition)
     theory, _, = pu.as1.derive_1(t=theory,
                                  c=c | is_a | proposition,
                                  p=(c | is_a | propositional_variable,),

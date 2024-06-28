@@ -22,12 +22,12 @@ def _set_state(key: str, value: object):
 
 
 # Propositional logic vocabulary
-is_a = as1.connectives.is_a
-implies = as1.connectives.implies
-land = as1.connectives.land
-lnot = as1.connectives.lnot
-proposition = as1.connectives.proposition
-propositional_variable = as1.connectives.propositional_variable
+is_a = as1._connectives.is_a
+implies = as1._connectives.implies
+land = as1._connectives.land
+lnot = as1._connectives.lnot
+proposition = as1._connectives.proposition
+propositional_variable = as1._connectives.propositional_variable
 
 # Basic inference rules
 

@@ -37,19 +37,12 @@ Bibliography:
 
 # import typing
 import axiomatic_system_1 as as1
+from connectives_standard_library_1 import *
+import inference_rules_1 as ir1
 import propositional_logic_syntax_1 as pls1
 
 # Propositional logic vocabulary
 
-
-# retrieve vocabulary from axiomatic-system-1
-is_a = as1.connectives.is_a
-implies = as1.connectives.implies
-land = as1.connectives.land
-lor = as1.connectives.lor
-lnot = as1.connectives.lnot
-propositional_variable = as1.connectives.propositional_variable
-proposition = as1.connectives.proposition
 
 with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     pl01: as1.InferenceRule = as1.InferenceRule(
@@ -329,6 +322,114 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
     t, _ = as1.let_x_be_an_axiom(axiom=pl08, t=t)
     t, _ = as1.let_x_be_an_axiom(axiom=pl09, t=t)
     t, _ = as1.let_x_be_an_axiom(axiom=pl10, t=t)
+    return t
+
+
+def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory:
+    """Extends a theory with Mancosu et al., page 20:
+    1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
+    2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
+    3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
+    4. ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃
+        {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}] (axiom PL3)
+    5. ⊢ {((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} (mp 3, 4)
+    6. ⊢ [(𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] (axiom PL1)
+    7. ⊢ (𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1) (axiom PL8)
+    8. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) (mp 6, 7)
+    9. ⊢ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) (mp 5, 8)
+    10. ⊢ [((𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] ⊃ (𝑝1 ⊃ (𝑝2 ∨ 𝑝1)) (axiom PL4)
+    11. ⊢ 𝑝1 ⊃ (𝑝2 ∨ 𝑝1) (mp 9, 10)
+
+    :param t:
+    :return:
+    """
+    global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
+    t = extend_theory_with_minimal_logic_1(t=t)
+    t, c, = pls1.let_x_be_a_propositional_variable(t=t, rep='C')
+    t, d, = pls1.let_x_be_a_propositional_variable(t=t, rep='D')
+    # TODO: Implement this as a proper hypothesis
+    # TODO: Implement short reference names
+    # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
+    # 2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
+    # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
+    # 4. ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃
+    #     {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}] (axiom PL3)
+    # 5. ⊢ {((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} (mp 3, 4)
+    # 6. ⊢ [(𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] (axiom PL1)
+    # 7. ⊢ (𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1) (axiom PL8)
+    # 8. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) (mp 6, 7)
+    # 9. ⊢ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) (mp 5, 8)
+    # 10. ⊢ [((𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] ⊃ (𝑝1 ⊃ (𝑝2 ∨ 𝑝1)) (axiom PL4)
+    # 11. ⊢ 𝑝1 ⊃ (𝑝2 ∨ 𝑝1) (mp 9, 10)
+
+    return t
+
+
+def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory:
+    """Extends a theory with Mancosu et al., page 22:
+        1. ⊢ 𝐶 (hypothesis)
+        2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶) (axiom PL5)
+        3. ⊢ 𝐷 ⊃ 𝐶 (mp 1, 2)
+        4. ⊢ (𝐷 ⊃ 𝐶) ⊃ [(𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)] (axiom PL3)
+        5. ⊢ (𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷) (mp 3, 4)
+        6. ⊢ 𝐷 ⊃ (𝐷 ∧ 𝐷) (axiom PL1)
+        7. ⊢ 𝐷 (hypothesis)
+        8. ⊢ 𝐷 ∧ 𝐷 (mp 6, 7)
+        9. ⊢ 𝐶 ∧ 𝐷 (mp 5, 8)
+
+    :param t:
+    :return:
+    """
+    global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
+    t = extend_theory_with_minimal_logic_1(t=t)
+    t, c, = pls1.let_x_be_a_propositional_variable(t=t, rep='C')
+    t, d, = pls1.let_x_be_a_propositional_variable(t=t, rep='D')
+    t, success, _ = as1.derive_2(c=c | is_a | proposition,
+                                 i=pls1.i1, t=t)
+    t, success, _ = as1.derive_2(c=d | is_a | proposition,
+                                 i=pls1.i1, t=t)
+    t, success, _ = as1.derive_2(c=(c | implies | d) | is_a | proposition,
+                                 i=pls1.i4, t=t)
+    t, success, _ = as1.derive_2(c=(d | implies | c) | is_a | proposition,
+                                 i=pls1.i4, t=t)
+    t, success, _ = as1.derive_2(c=(d | land | d) | is_a | proposition,
+                                 i=pls1.i3, t=t)
+    t, success, _ = as1.derive_2(c=(c | land | d) | is_a | proposition,
+                                 i=pls1.i3, t=t)
+    t, success, _ = as1.derive_2(c=((d | land | d) | implies | (c | land | d)) | is_a | proposition,
+                                 i=pls1.i4, t=t)
+    # 1. ⊢ 𝐶(hypothesis)
+    # TODO: Implement this as a proper hypothesis
+    t, hypothesis = as1.let_x_be_an_axiom(t=t, valid_statement=c)
+    # 2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶)(axiom PL5)
+    t, success, _, = as1.derive_2(c=c | implies | (d | implies | c),
+                                  i=pl05, t=t)
+    # 3. ⊢ 𝐷 ⊃ 𝐶 (mp 1, 2)
+    t, success, _, = as1.derive_2(c=d | implies | c,
+                                  i=ir1.modus_ponens_axiom, t=t)
+    # 4. ⊢ (𝐷 ⊃ 𝐶) ⊃ [(𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)] (axiom PL3)
+    t, success, _, = as1.derive_2(
+        c=(d | implies | c) | implies | ((d | land | d) | implies | (c | land | d)),
+        i=pl03, t=t)
+    # 5. ⊢ (𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)(mp 3, 4)
+    t, success, _, = as1.derive_2(
+        c=(d | land | d) | implies | (c | land | d),
+        i=ir1.modus_ponens_axiom, t=t)
+    # 6. ⊢ 𝐷 ⊃ (𝐷 ∧ 𝐷)(axiom PL1)
+    t, success, _, = as1.derive_2(
+        c=d | implies | (d | land | d),
+        i=pl01, t=t)
+    # 7. ⊢ 𝐷(hypothesis)
+    t, _, = as1.let_x_be_an_axiom(t=t, valid_statement=d)
+    # 8. ⊢ 𝐷 ∧ 𝐷(mp 6, 7)
+    t, success, _, = as1.derive_2(
+        c=d | land | d,
+        i=ir1.modus_ponens_axiom, t=t)
+    # 9. ⊢ 𝐶 ∧ 𝐷(mp 5, 8)
+    t, success, _, = as1.derive_2(
+        c=c | land | d,
+        i=ir1.modus_ponens_axiom, t=t, debug=True)
+
     return t
 
 
