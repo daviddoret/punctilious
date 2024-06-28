@@ -20,7 +20,7 @@ class TestTypesettingConfiguration:
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_limited) == 'Q'
 
         ast = pu.as1.BinaryConnective()
-        phi = pu.as1.Formula(c=ast, terms=(p, q,))
+        phi = pu.as1.Formula(c=ast, t=(p, q,))
 
         ast.formula_typesetter = pu.as1.typesetters.classical_formula(
             connective_typesetter=pu.pl1.symbols.asterisk_operator)

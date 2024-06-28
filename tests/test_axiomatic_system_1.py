@@ -65,9 +65,9 @@ class TestConnective:
         f = pu.as1.let_x_be_a_unary_connective(formula_typesetter='f')
         g = pu.as1.let_x_be_a_binary_connective(formula_typesetter='g')
         h = pu.as1.let_x_be_a_ternary_connective(formula_typesetter='h')
-        assert pu.as1.is_formula_equivalent(phi=f(), psi=pu.as1.Formula(c=f, terms=None))
-        assert pu.as1.is_formula_equivalent(phi=g(x), psi=pu.as1.Formula(c=g, terms=(x,)))
-        assert pu.as1.is_formula_equivalent(phi=h(x, y), psi=pu.as1.Formula(c=h, terms=(x, y,)))
+        assert pu.as1.is_formula_equivalent(phi=f(), psi=pu.as1.Formula(c=f, t=None))
+        assert pu.as1.is_formula_equivalent(phi=g(x), psi=pu.as1.Formula(c=g, t=(x,)))
+        assert pu.as1.is_formula_equivalent(phi=h(x, y), psi=pu.as1.Formula(c=h, t=(x, y,)))
 
 
 class TestIsSubformulaFormula:
@@ -176,15 +176,15 @@ class TestEnumeration:
     def test_is_well_formed_enumeration(self):
         a, b, c = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c',))
         star = pu.as1.FreeArityConnective(formula_typesetter='*')
-        phi1 = pu.as1.Formula(c=star, terms=(a, b, c,))
+        phi1 = pu.as1.Formula(c=star, t=(a, b, c,))
         assert pu.as1.is_well_formed_enumeration(e=phi1)
-        phi2 = pu.as1.Formula(c=star, terms=None)
+        phi2 = pu.as1.Formula(c=star, t=None)
         assert pu.as1.is_well_formed_enumeration(e=phi2)
-        phi3 = pu.as1.Formula(c=star, terms=(a, a, b, c,))
+        phi3 = pu.as1.Formula(c=star, t=(a, a, b, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi3)
-        phi4 = pu.as1.Formula(c=star, terms=(a, b, b, c,))
+        phi4 = pu.as1.Formula(c=star, t=(a, b, b, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi4)
-        phi5 = pu.as1.Formula(c=star, terms=(a, b, c, c,))
+        phi5 = pu.as1.Formula(c=star, t=(a, b, c, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi5)
 
 
@@ -860,9 +860,9 @@ class TestAutoDerivation:
 class TestFormulaDepth:
     def test_get_formula_depth(self):
         c = pu.as1.FreeArityConnective(formula_typesetter=pu.pl1.symbols.x_uppercase_serif_italic)
-        phi1 = pu.as1.Formula(c=c, terms=None)
+        phi1 = pu.as1.Formula(c=c, t=None)
         assert pu.as1.get_formula_depth(phi=phi1) == 1
-        phi2 = pu.as1.Formula(c=c, terms=(phi1, phi1,))
+        phi2 = pu.as1.Formula(c=c, t=(phi1, phi1,))
         assert pu.as1.get_formula_depth(phi=phi2) == 2
-        phi3 = pu.as1.Formula(c=c, terms=(phi1, phi2, phi1, phi2))
+        phi3 = pu.as1.Formula(c=c, t=(phi1, phi2, phi1, phi2))
         assert pu.as1.get_formula_depth(phi=phi3) == 3

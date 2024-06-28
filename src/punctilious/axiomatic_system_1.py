@@ -109,7 +109,7 @@ class Connective:
 
     def __call__(self, *args):
         """Allows pseudo formal language in python."""
-        return Formula(c=self, terms=args)
+        return Formula(c=self, t=args)
 
     def __str__(self):
         return f'{id(self)}-connective'
@@ -153,21 +153,21 @@ class Formula(tuple):
     A finite tree whose nodes are colored, and where edges are fully ordered under their edge.
     """
 
-    def __new__(cls, c: Connective, terms: FlexibleTupl = None):
+    def __new__(cls, c: Connective, t: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
-        if isinstance(terms, collections.abc.Iterable):
-            elements = tuple(coerce_formula(phi=term) for term in terms)
+        if isinstance(t, collections.abc.Iterable):
+            elements = tuple(coerce_formula(phi=term) for term in t)
             o = super().__new__(cls, elements)
             return o
-        elif terms is None:
+        elif t is None:
             o = super().__new__(cls)
             return o
         else:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_002, c=c, terms_type=type(terms), terms=terms)
+            raise u1.ApplicativeException(code=ERROR_CODE_AS1_002, c=c, terms_type=type(t), terms=t)
 
-    def __init__(self, c: Connective, terms: FlexibleTupl = None):
+    def __init__(self, c: Connective, t: FlexibleTupl = None):
         super().__init__()
         self._connective = c
 
@@ -496,11 +496,11 @@ class SimpleObject(Formula):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
-        o = super().__new__(cls, c=c, terms=None)
+        o = super().__new__(cls, c=c, t=None)
         return o
 
     def __init__(self, c: NullaryConnective):
-        super().__init__(c=c, terms=None)
+        super().__init__(c=c, t=None)
 
 
 class UnaryConnective(FixedArityConnective):
@@ -526,7 +526,7 @@ class InfixPartialFormula:
         overloading the __or__() method that is called when | is used,
         and gluing all this together with the InfixPartialFormula class.
         """
-        return Formula(c=self._connective, terms=(self.term_1, term_2,))
+        return Formula(c=self._connective, t=(self.term_1, term_2,))
 
     def __repr__(self):
         return self.typeset_as_string()
@@ -1249,11 +1249,11 @@ class Tupl(Formula):
     def __new__(cls, elements: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple = super().__new__(cls, c=_connectives.tupl, terms=elements)
+        o: tuple = super().__new__(cls, c=_connectives.tupl, t=elements)
         return o
 
     def __init__(self, elements: FlexibleTupl = None):
-        super().__init__(c=_connectives.tupl, terms=elements)
+        super().__init__(c=_connectives.tupl, t=elements)
 
     def get_index_of_first_equivalent_element(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
@@ -1323,7 +1323,7 @@ def extend_formula(formula: FlexibleFormula, term: FlexibleFormula) -> Formula:
     """
     formula: Formula = coerce_formula(phi=formula)
     term: Formula = coerce_formula(phi=term)
-    extended_formula: Formula = Formula(terms=(*formula, term,), c=formula.connective)
+    extended_formula: Formula = Formula(t=(*formula, term,), c=formula.connective)
     return extended_formula
 
 
@@ -1364,13 +1364,13 @@ class Map(Formula):
         codomain: Tupl = coerce_tupl(t=codomain)
         if len(domain) != len(codomain):
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
-        o: tuple = super().__new__(cls, c=_connectives.map, terms=(domain, codomain,))
+        o: tuple = super().__new__(cls, c=_connectives.map, t=(domain, codomain,))
         return o
 
     def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
         domain: Enumeration = coerce_enumeration(e=domain)
         codomain: Tupl = coerce_tupl(t=codomain)
-        super().__init__(c=_connectives.map, terms=(domain, codomain,))
+        super().__init__(c=_connectives.map, t=(domain, codomain,))
 
     @property
     def codomain(self) -> Tupl:
@@ -1457,7 +1457,7 @@ class Enumeration(Formula):
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         if not is_well_formed_enumeration(e=elements):
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
-        o: tuple = super().__new__(cls, c=c, terms=elements)
+        o: tuple = super().__new__(cls, c=c, t=elements)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None, c: Connective = None,
@@ -1466,7 +1466,7 @@ class Enumeration(Formula):
         c: Connective = _connectives.enumeration if c is None else c
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
-        super().__init__(c=c, terms=elements)
+        super().__init__(c=c, t=elements)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
@@ -1580,7 +1580,7 @@ class Transformation(Formula):
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
         o: tuple = super().__new__(cls, c=_connectives.transformation,
-                                   terms=(premises, conclusion, variables,))
+                                   t=(premises, conclusion, variables,))
         return o
 
     def __init__(self, premises: FlexibleTupl, conclusion: FlexibleFormula,
@@ -1588,7 +1588,7 @@ class Transformation(Formula):
         premises: Tupl = coerce_tupl(t=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
-        super().__init__(c=_connectives.transformation, terms=(premises, conclusion, variables,))
+        super().__init__(c=_connectives.transformation, t=(premises, conclusion, variables,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -2275,14 +2275,14 @@ class Derivation(Formula):
         valid_statement = coerce_formula(phi=valid_statement)
         justification = coerce_formula(phi=justification)
         c: Connective = _connectives.follows_from
-        o: tuple = super().__new__(cls, c=c, terms=(valid_statement, justification,))
+        o: tuple = super().__new__(cls, c=c, t=(valid_statement, justification,))
         return o
 
     def __init__(self, valid_statement: FlexibleFormula, justification: FlexibleFormula):
         self._valid_statement = coerce_formula(phi=valid_statement)
         self._justification = coerce_formula(phi=justification)
         c: Connective = _connectives.follows_from
-        super().__init__(c=c, terms=(self._valid_statement, self._justification,))
+        super().__init__(c=c, t=(self._valid_statement, self._justification,))
 
     @property
     def valid_statement(self) -> Formula:
@@ -2390,14 +2390,14 @@ class Inference(Formula):
         premises: Tupl = coerce_tupl(t=premises)
         transformation_rule: Transformation = coerce_transformation(t=transformation_rule)
         c: Connective = _connectives.inference
-        o: tuple = super().__new__(cls, c=c, terms=(premises, transformation_rule,))
+        o: tuple = super().__new__(cls, c=c, t=(premises, transformation_rule,))
         return o
 
     def __init__(self, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
         self._premises: Tupl = coerce_tupl(t=premises)
         self._transformation_rule: Transformation = coerce_transformation(t=transformation_rule)
         c: Connective = _connectives.inference
-        super().__init__(c=c, terms=(self._premises, self._transformation_rule,))
+        super().__init__(c=c, t=(self._premises, self._transformation_rule,))
 
     @property
     def transformation_rule(self) -> Transformation:
