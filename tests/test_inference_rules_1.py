@@ -67,7 +67,7 @@ class TestAdjunction:
                                          b | is_a | proposition,
                                          a,
                                          b,),
-                                     i=pu.ir1.adjunction_axiom)
+                                     i=pu.ir1.conjunction_introduction)
         assert pu.as1.is_valid_statement_in_theory(phi=a | land | b, t=theory)
 
         # show that wrong premises fail to derive a theorem
@@ -79,7 +79,7 @@ class TestAdjunction:
                                 a | is_a | proposition,
                                 c | is_a | proposition,
                                 a | land | c,),
-                            i=pu.ir1.adjunction_axiom)
+                            i=pu.ir1.conjunction_introduction)
 
 
 class TestSimplification1:

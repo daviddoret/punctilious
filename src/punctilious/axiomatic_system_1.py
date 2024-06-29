@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import abc
 import collections
-import logging
+# import logging
 import typing
-import warnings
+# import warnings
 # import threading
 import sys
 # import random
@@ -1151,7 +1151,8 @@ def is_formula_equivalent_with_variables_2(
                                           msg=f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
         if not is_element_of_enumeration(x=x, e=variables):
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_023,
-                                          msg=f'variable {x} is present in the domain of the map variables_fixed_values, '
+                                          msg=f'variable {x} is present in the domain of the map '
+                                              f'variables_fixed_values, '
                                               f'but it is not an element of the enumeration variables.')
     if is_element_of_enumeration(x=psi, e=variables):
         # psi is a variable

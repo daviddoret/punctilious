@@ -25,24 +25,35 @@ def _set_state(key: str, value: object):
 
 # Basic inference rules
 
-# Adjunction inference rule, aka conjunction introduction:
-#   phi
-#   psi
-#   ________
-#   phi ∧ psi
-#
-# References:
-#  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
-    adjunction_rule: as1.Transformation = as1.let_x_be_a_transformation(
-        premises=(
-            phi | is_a | proposition,
-            psi | is_a | proposition,
-            phi,
-            psi,),
-        conclusion=phi | land | psi,
-        variables=(phi, psi,))
-adjunction_axiom: as1.InferenceRule = as1.InferenceRule(transformation=adjunction_rule)
+    conjunction_introduction: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.let_x_be_a_transformation(
+            premises=(
+                phi | is_a | proposition,
+                psi | is_a | proposition,
+                phi,
+                psi,),
+            conclusion=phi | land | psi,
+            variables=(phi, psi,)),
+        ref_ts=pl1.Monospace(text='CI'))
+    """The conjunction-introduction inference rule.
+
+    Abbreviation: CI
+    
+    Aka:
+     - Adjunction
+     
+    Definition:
+        phi is-a proposition
+        psi is-a proposition
+        phi
+        psi
+        ________
+        phi ∧ psi
+
+    References:
+     - https://en.wikipedia.org/wiki/List_of_rules_of_inference
+    """
 
 # Simplification inference rule, aka conjunction elimination:
 #   phi ∧ psi
@@ -109,7 +120,7 @@ Variables: phi, psi
 """
 
 axiomatization = as1.Axiomatization(derivations=(
-    adjunction_axiom,
+    conjunction_introduction,
     simplification_1_axiom,
     simplification_2_axiom,
     modus_ponens_axiom,))
