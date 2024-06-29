@@ -8,40 +8,40 @@ from punctilious.connectives_standard_library_1 import *
 
 @pytest.fixture
 def c1():
-    return pu.as1.Connective(formula_typesetter=pu.as1.typesetters.classical_formula(
+    return pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
         connective_typesetter='c1'))
 
 
 @pytest.fixture
 def c2():
-    return pu.as1.Connective(formula_typesetter=pu.as1.typesetters.classical_formula(
+    return pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
         connective_typesetter='c2'))
 
 
 @pytest.fixture
 def c3():
-    return pu.as1.Connective(formula_typesetter=pu.as1.typesetters.classical_formula(
+    return pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
         connective_typesetter='c3'))
 
 
 @pytest.fixture
 def apple():
-    return pu.as1.let_x_be_a_simple_object(formula_typesetter='apple')
+    return pu.as1.let_x_be_a_simple_object(formula_ts='apple')
 
 
 @pytest.fixture
 def ananas():
-    return pu.as1.let_x_be_a_simple_object(formula_typesetter='ananas')
+    return pu.as1.let_x_be_a_simple_object(formula_ts='ananas')
 
 
 @pytest.fixture
 def strawberry():
-    return pu.as1.let_x_be_a_simple_object(formula_typesetter='strawberry')
+    return pu.as1.let_x_be_a_simple_object(formula_ts='strawberry')
 
 
 @pytest.fixture
 def blueberry():
-    return pu.as1.let_x_be_a_simple_object(formula_typesetter='blueberry')
+    return pu.as1.let_x_be_a_simple_object(formula_ts='blueberry')
 
 
 @pytest.fixture
@@ -55,16 +55,16 @@ class TestConnective:
         assert c1 is not c2
 
     def test_simple(self):
-        a = pu.as1.let_x_be_a_simple_object(formula_typesetter='a')
+        a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         x = a.__str__()
         pass
 
     def test_call(self):
-        x, y, z = pu.as1.let_x_be_a_variable(formula_typesetter=('x', 'y', 'z',))
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        f = pu.as1.let_x_be_a_unary_connective(formula_typesetter='f')
-        g = pu.as1.let_x_be_a_binary_connective(formula_typesetter='g')
-        h = pu.as1.let_x_be_a_ternary_connective(formula_typesetter='h')
+        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        f = pu.as1.let_x_be_a_unary_connective(formula_ts='f')
+        g = pu.as1.let_x_be_a_binary_connective(formula_ts='g')
+        h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
         assert pu.as1.is_formula_equivalent(phi=f(), psi=pu.as1.Formula(c=f, t=None))
         assert pu.as1.is_formula_equivalent(phi=g(x), psi=pu.as1.Formula(c=g, t=(x,)))
         assert pu.as1.is_formula_equivalent(phi=h(x, y), psi=pu.as1.Formula(c=h, t=(x, y,)))
@@ -72,9 +72,9 @@ class TestConnective:
 
 class TestIsSubformulaFormula:
     def test_is_subformula_of_formula(self):
-        c1 = pu.as1.FreeArityConnective(formula_typesetter='c1')
-        c2 = pu.as1.FreeArityConnective(formula_typesetter='c2')
-        c3 = pu.as1.FreeArityConnective(formula_typesetter='c3')
+        c1 = pu.as1.FreeArityConnective(formula_ts='c1')
+        c2 = pu.as1.FreeArityConnective(formula_ts='c2')
+        c3 = pu.as1.FreeArityConnective(formula_ts='c3')
         assert pu.as1.is_subformula_of_formula(
             subformula=c1(c2, c3, c2(c1)),
             formula=c1(c2, c3, c2(c1))
@@ -95,9 +95,9 @@ class TestIsSubformulaFormula:
 
 class TestConnectiveEquivalence:
     def test_is_connective_equivalent(self):
-        a, b, c = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c',))
-        c1 = pu.as1.BinaryConnective(formula_typesetter='c1')
-        c2 = pu.as1.BinaryConnective(formula_typesetter='c2')
+        a, b, c = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c',))
+        c1 = pu.as1.BinaryConnective(formula_ts='c1')
+        c2 = pu.as1.BinaryConnective(formula_ts='c2')
         phi = a | c1 | b
         assert pu.as1.is_connective_equivalent(phi=phi, psi=phi)
         psi = b | c1 | c
@@ -116,8 +116,8 @@ class TestTupl:
         pass
 
     def test_in(self):
-        x = pu.as1.let_x_be_a_variable(formula_typesetter='x')
-        y = pu.as1.let_x_be_a_variable(formula_typesetter='y')
+        x = pu.as1.let_x_be_a_variable(formula_ts='x')
+        y = pu.as1.let_x_be_a_variable(formula_ts='y')
         c = pu.as1.Tupl(elements=(x,))
         assert x in c
         assert y not in c
@@ -129,10 +129,10 @@ class TestEnumeration:
         pass
 
     def test_has_element(self):
-        c1 = pu.as1.let_x_be_a_binary_connective(formula_typesetter='c1')
-        c2 = pu.as1.let_x_be_a_binary_connective(formula_typesetter='c2')
-        x = pu.as1.let_x_be_a_simple_object(formula_typesetter='x')
-        y = pu.as1.let_x_be_a_simple_object(formula_typesetter='y')
+        c1 = pu.as1.let_x_be_a_binary_connective(formula_ts='c1')
+        c2 = pu.as1.let_x_be_a_binary_connective(formula_ts='c2')
+        x = pu.as1.let_x_be_a_simple_object(formula_ts='x')
+        y = pu.as1.let_x_be_a_simple_object(formula_ts='y')
         phi1 = x | c1 | y
         phi2 = x | c2 | y
         phi3 = y | c1 | x
@@ -146,15 +146,15 @@ class TestEnumeration:
         assert e1.get_element_index(phi=phi3) == 2
 
     def test_exception(self):
-        a = pu.as1.let_x_be_a_simple_object(formula_typesetter='a')
-        b = pu.as1.let_x_be_a_simple_object(formula_typesetter='b')
-        c = pu.as1.let_x_be_a_simple_object(formula_typesetter='c')
+        a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
+        b = pu.as1.let_x_be_a_simple_object(formula_ts='b')
+        c = pu.as1.let_x_be_a_simple_object(formula_ts='c')
         with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_029):
             # duplicate formula-equivalent formulas are forbidden in enumerations.
             e1 = pu.as1.Enumeration(elements=(a, b, c, b,))
 
     def test_enumeration(self):
-        a, b, c, x, y, z = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'x', 'y', 'z',))
+        a, b, c, x, y, z = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'x', 'y', 'z',))
         baczx = pu.as1.Enumeration(elements=(b, a, c, z, x))
         assert pu.as1.is_formula_equivalent(phi=baczx, psi=baczx)
         assert pu.as1.is_enumeration_equivalent(phi=baczx, psi=baczx)
@@ -174,8 +174,8 @@ class TestEnumeration:
         assert pu.as1.is_enumeration_equivalent(phi=baczx, psi=baczx2)
 
     def test_is_well_formed_enumeration(self):
-        a, b, c = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c',))
-        star = pu.as1.FreeArityConnective(formula_typesetter='*')
+        a, b, c = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c',))
+        star = pu.as1.FreeArityConnective(formula_ts='*')
         phi1 = pu.as1.Formula(c=star, t=(a, b, c,))
         assert pu.as1.is_well_formed_enumeration(e=phi1)
         phi2 = pu.as1.Formula(c=star, t=None)
@@ -190,13 +190,13 @@ class TestEnumeration:
 
 class TestFormulaEquivalenceWithVariables:
     def test_is_formula_equivalent_with_variables(self):
-        x = pu.as1.let_x_be_a_variable(formula_typesetter='x')
-        y = pu.as1.let_x_be_a_variable(formula_typesetter='y')
-        is_a = pu.as1.let_x_be_a_binary_connective(formula_typesetter='is-a')
-        human = pu.as1.let_x_be_a_simple_object(formula_typesetter='human')
-        platypus = pu.as1.let_x_be_a_simple_object(formula_typesetter='platypus')
-        mortal = pu.as1.let_x_be_a_simple_object(formula_typesetter='mortal')
-        aristotle = pu.as1.let_x_be_a_simple_object(formula_typesetter='aristotle')
+        x = pu.as1.let_x_be_a_variable(formula_ts='x')
+        y = pu.as1.let_x_be_a_variable(formula_ts='y')
+        is_a = pu.as1.let_x_be_a_binary_connective(formula_ts='is-a')
+        human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
+        platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
+        mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
+        aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
         assert pu.as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | human,
@@ -229,7 +229,7 @@ class TestFormulaEquivalenceWithVariables:
                 variables=(x,))
 
     def test_is_formula_equivalent_with_variables_2(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         ab = pu.as1.Tupl(elements=(a, b,))
         cd = pu.as1.Tupl(elements=(c, d,))
         assert not pu.as1.is_formula_equivalent(phi=ab, psi=cd)
@@ -272,14 +272,14 @@ class TestFormulaEquivalenceWithVariables:
 
 class TestFormulaEquivalenceWithVariables2:
     def test_is_formula_equivalent_with_variables(self):
-        x = pu.as1.let_x_be_a_variable(formula_typesetter='x')
-        y = pu.as1.let_x_be_a_variable(formula_typesetter='y')
+        x = pu.as1.let_x_be_a_variable(formula_ts='x')
+        y = pu.as1.let_x_be_a_variable(formula_ts='y')
         is_a = pu.as1.let_x_be_a_binary_connective(
-            formula_typesetter=pu.as1.InfixFormulaTypesetter(connective_ts='is-a'))
-        human = pu.as1.let_x_be_a_simple_object(formula_typesetter='human')
-        platypus = pu.as1.let_x_be_a_simple_object(formula_typesetter='platypus')
-        mortal = pu.as1.let_x_be_a_simple_object(formula_typesetter='mortal')
-        aristotle = pu.as1.let_x_be_a_simple_object(formula_typesetter='aristotle')
+            formula_ts=pu.as1.InfixFormulaTypesetter(connective_ts='is-a'))
+        human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
+        platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
+        mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
+        aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
 
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(
             phi=aristotle | is_a | human,
@@ -327,7 +327,7 @@ class TestFormulaEquivalenceWithVariables2:
                 variables=(x,))
 
     def test_is_formula_equivalent_with_variables_2(self):
-        a, b, c, d, e, = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e, = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         ab = pu.as1.Tupl(elements=(a, b,))
         cd = pu.as1.Tupl(elements=(c, d,))
         assert not pu.as1.is_formula_equivalent(phi=ab, psi=cd)
@@ -372,13 +372,13 @@ class TestFormulaEquivalenceWithVariables2:
 
 class TestTransformation:
     def test_transformation(self):
-        x = pu.as1.let_x_be_a_variable(formula_typesetter='x')
-        y = pu.as1.let_x_be_a_variable(formula_typesetter='y')
-        is_a = pu.as1.let_x_be_a_binary_connective(formula_typesetter='is-a')
-        human = pu.as1.let_x_be_a_simple_object(formula_typesetter='human')
-        platypus = pu.as1.let_x_be_a_simple_object(formula_typesetter='platypus')
-        mortal = pu.as1.let_x_be_a_simple_object(formula_typesetter='mortal')
-        aristotle = pu.as1.let_x_be_a_simple_object(formula_typesetter='aristotle')
+        x = pu.as1.let_x_be_a_variable(formula_ts='x')
+        y = pu.as1.let_x_be_a_variable(formula_ts='y')
+        is_a = pu.as1.let_x_be_a_binary_connective(formula_ts='is-a')
+        human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
+        platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
+        mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
+        aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
         p1 = x | is_a | human
         p2 = aristotle | is_a | human
         premises = pu.as1.Enumeration(elements=(p1,))
@@ -390,13 +390,13 @@ class TestTransformation:
         pu.as1.is_formula_equivalent(phi=aristotle | is_a | mortal, psi=output)
 
     def test_is_well_formed_transformation(self):
-        x = pu.as1.let_x_be_a_variable(formula_typesetter='x')
-        y = pu.as1.let_x_be_a_variable(formula_typesetter='y')
-        is_a = pu.as1.let_x_be_a_binary_connective(formula_typesetter='is-a')
-        human = pu.as1.let_x_be_a_simple_object(formula_typesetter='human')
-        platypus = pu.as1.let_x_be_a_simple_object(formula_typesetter='platypus')
-        mortal = pu.as1.let_x_be_a_simple_object(formula_typesetter='mortal')
-        aristotle = pu.as1.let_x_be_a_simple_object(formula_typesetter='aristotle')
+        x = pu.as1.let_x_be_a_variable(formula_ts='x')
+        y = pu.as1.let_x_be_a_variable(formula_ts='y')
+        is_a = pu.as1.let_x_be_a_binary_connective(formula_ts='is-a')
+        human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
+        platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
+        mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
+        aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
         p1 = x | is_a | human
         p2 = aristotle | is_a | human
         premises = pu.as1.Enumeration(elements=(p1,))
@@ -411,15 +411,15 @@ class TestTransformation:
 
 class TestReplaceFormulas:
     def test_replace_formulas(self):
-        land = pu.as1.let_x_be_a_binary_connective(formula_typesetter='land')
-        x = pu.as1.let_x_be_a_variable(formula_typesetter='x')
-        y = pu.as1.let_x_be_a_variable(formula_typesetter='y')
-        is_a = pu.as1.let_x_be_a_binary_connective(formula_typesetter='is-a')
-        human = pu.as1.let_x_be_a_simple_object(formula_typesetter='human')
-        animal = pu.as1.let_x_be_a_simple_object(formula_typesetter='animal')
-        platypus = pu.as1.let_x_be_a_simple_object(formula_typesetter='platypus')
-        mortal = pu.as1.let_x_be_a_simple_object(formula_typesetter='mortal')
-        aristotle = pu.as1.let_x_be_a_simple_object(formula_typesetter='aristotle')
+        land = pu.as1.let_x_be_a_binary_connective(formula_ts='land')
+        x = pu.as1.let_x_be_a_variable(formula_ts='x')
+        y = pu.as1.let_x_be_a_variable(formula_ts='y')
+        is_a = pu.as1.let_x_be_a_binary_connective(formula_ts='is-a')
+        human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
+        animal = pu.as1.let_x_be_a_simple_object(formula_ts='animal')
+        platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
+        mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
+        aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
         assert pu.as1.is_formula_equivalent(
             phi=pu.as1.replace_formulas(phi=x | is_a | human, m={x: aristotle}),
             psi=aristotle | is_a | human)
@@ -440,9 +440,9 @@ class TestReplaceFormulas:
             psi=(aristotle | is_a | aristotle) | land | (platypus | is_a | animal))
 
     def test_replace_formulas_two_variables(self):
-        a, b, c, d = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd'))
-        c1 = pu.as1.let_x_be_a_unary_connective(formula_typesetter='c1')
-        c2 = pu.as1.let_x_be_a_binary_connective(formula_typesetter='c2')
+        a, b, c, d = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd'))
+        c1 = pu.as1.let_x_be_a_unary_connective(formula_ts='c1')
+        c2 = pu.as1.let_x_be_a_binary_connective(formula_ts='c2')
         phi = a | c2 | b
         psi = pu.as1.replace_formulas(phi=phi, m={a: c, b: d})
         assert pu.as1.is_formula_equivalent(phi=c | c2 | d, psi=psi)
@@ -453,9 +453,9 @@ class TestReplaceFormulas:
 
 class TestMap:
     def test_map(self, fruits):
-        red = pu.as1.let_x_be_a_simple_object(formula_typesetter='red')
-        yellow = pu.as1.let_x_be_a_simple_object(formula_typesetter='yellow')
-        blue = pu.as1.let_x_be_a_simple_object(formula_typesetter='blue')
+        red = pu.as1.let_x_be_a_simple_object(formula_ts='red')
+        yellow = pu.as1.let_x_be_a_simple_object(formula_ts='yellow')
+        blue = pu.as1.let_x_be_a_simple_object(formula_ts='blue')
         codomain = pu.as1.Tupl(elements=(red, yellow, blue, red))
         m1 = pu.as1.Map(domain=fruits, codomain=codomain)
         assert len(m1) == 2
@@ -480,7 +480,7 @@ class TestMap:
 
 class TestEnumerationEquivalence:
     def test_enumeration_equivalence(self):
-        red, yellow, blue = pu.as1.let_x_be_a_simple_object(formula_typesetter=('red', 'yellow', 'blue',))
+        red, yellow, blue = pu.as1.let_x_be_a_simple_object(formula_ts=('red', 'yellow', 'blue',))
         e1 = pu.as1.Enumeration(elements=(red, yellow, blue,))
         e2 = pu.as1.Enumeration(elements=(yellow, red, blue,))
         assert pu.as1.is_enumeration_equivalent(phi=e1, psi=e2)
@@ -489,7 +489,7 @@ class TestEnumerationEquivalence:
 
 class TestUnionEnumeration:
     def test_union_enumeration(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e'))
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e'))
         abc = pu.as1.Enumeration(elements=(a, b, c,))
         cd = pu.as1.Enumeration(elements=(c, d,))
         abcd1 = pu.as1.union_enumeration(phi=abc, psi=cd)
@@ -507,7 +507,7 @@ class TestUnionEnumeration:
 class TestEmptyEnumeration:
     def test_empty_enumeration(self):
         a = pu.as1.EmptyEnumeration()
-        x, y, z = pu.as1.let_x_be_a_simple_object(formula_typesetter=('x', 'y', 'z',))
+        x, y, z = pu.as1.let_x_be_a_simple_object(formula_ts=('x', 'y', 'z',))
         assert not a.has_element(phi=x)
         assert a.arity == 0
 
@@ -515,8 +515,8 @@ class TestEmptyEnumeration:
 class TestInferenceRule:
     def test_inference_rule_without_premises(self):
         # elaborate a theory
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        f = pu.as1.let_x_be_a_binary_connective(formula_typesetter='f')
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         phi = a | f | b
         rule = pu.as1.Transformation(premises=None, conclusion=phi, variables=None)
         ir = pu.as1.InferenceRule(transformation=rule)
@@ -531,8 +531,8 @@ class TestInferenceRule:
             psi=phi)
 
     def test_is_well_formed_postulation(self):
-        a, b = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b',))
-        f = pu.as1.let_x_be_a_binary_connective(formula_typesetter='f')
+        a, b = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b',))
+        f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         rule = pu.as1.Transformation(premises=None, conclusion=a | f | b,
                                      variables=None)
         phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
@@ -549,10 +549,10 @@ class TestInferenceRule:
 
 class TestFormulaToTuple:
     def test_formula_to_tuple(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        f = pu.as1.let_x_be_a_unary_connective(formula_typesetter='f')
-        g = pu.as1.let_x_be_a_binary_connective(formula_typesetter='g')
-        h = pu.as1.let_x_be_a_ternary_connective(formula_typesetter='h')
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        f = pu.as1.let_x_be_a_unary_connective(formula_ts='f')
+        g = pu.as1.let_x_be_a_binary_connective(formula_ts='g')
+        h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
         phi1 = h(e, b, d)
         e1_result = pu.as1.formula_to_tuple(phi=phi1)
         e1_expected = pu.as1.enumeration(elements=(e, b, d,))
@@ -565,8 +565,8 @@ class TestFormulaToTuple:
 
 class TestProofByPostulation:
     def test_is_well_formed(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        star3 = pu.as1.let_x_be_a_ternary_connective(formula_typesetter='*3')
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
         rule1 = pu.as1.Transformation(premises=None, conclusion=star3(e, b, d), variables=None)
         phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
@@ -578,9 +578,9 @@ class TestProofByPostulation:
 
 class TestInference:
     def test_inference(self):
-        x, y, z = pu.as1.let_x_be_a_variable(formula_typesetter=('x', 'y', 'z',))
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        f = pu.as1.let_x_be_a_binary_connective(formula_typesetter='f')
+        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         t = pu.as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
@@ -591,9 +591,9 @@ class TestInference:
             psi=theorem | pu.as1._connectives.follows_from | pu.as1._connectives.inference(p, t))
 
     def test_is_well_formed_inference(self):
-        x, y, z = pu.as1.let_x_be_a_variable(formula_typesetter=('x', 'y', 'z',))
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        f = pu.as1.let_x_be_a_binary_connective(formula_typesetter='f')
+        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         t = pu.as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
         p = (a | f | b, b | f | c,)
         phi1 = p | pu.as1._connectives.inference | t
@@ -608,9 +608,9 @@ class TestInference:
 
 class TestProofByInference:
     def test_is_well_formed(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        x, y, z = pu.as1.let_x_be_a_variable(formula_typesetter=('x', 'y', 'z',))
-        star = pu.as1.let_x_be_a_binary_connective(formula_typesetter='*')
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        star = pu.as1.let_x_be_a_binary_connective(formula_ts='*')
         premises = pu.as1.Enumeration(elements=(x | star | y, y | star | z,))
         conclusion = x | star | z
         variables = pu.as1.Enumeration(elements=(x, y, z,))
@@ -626,7 +626,7 @@ class TestProofByInference:
 
 class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
     def test_iterate_permutations_of_enumeration_elements_with_fixed_size(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
 
         e = pu.as1.Enumeration()
         i = 0
@@ -679,10 +679,10 @@ class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
 
 class TestAreValidStatementsInTheory:
     def test_are_valid_statements_in_theory(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        t, _, = pu.as1.let_x_be_an_axiom(t=None, valid_statement=a)
-        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=c)
-        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=d)
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        t, _, = pu.as1.let_x_be_an_axiom(t=None, s=a)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, s=c)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, s=d)
         assert pu.as1.are_valid_statements_in_theory(s=(a, c,), t=t)
         assert pu.as1.are_valid_statements_in_theory(s=(a, c, d,), t=t)
         assert pu.as1.are_valid_statements_in_theory(s=(d, a, c,), t=t)
@@ -694,10 +694,10 @@ class TestAreValidStatementsInTheory:
 
 class TestAreValidStatementsInTheoryWithVariables:
     def test_are_valid_statements_in_theory_with_variables(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        t, _, = pu.as1.let_x_be_an_axiom(t=None, valid_statement=a)
-        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=c)
-        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=d)
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        t, _, = pu.as1.let_x_be_an_axiom(t=None, s=a)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, s=c)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, s=d)
         valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c,), t=t, variables=None,
                                                                          variables_values=None)
         assert valid
@@ -712,7 +712,7 @@ class TestAreValidStatementsInTheoryWithVariables:
 
 class TestStripDuplicateFormulasInPythonTuple:
     def test_strip_duplicate_formulas_in_python_tuple(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         t1 = pu.as1.Tupl(elements=(a, b, a, a, e, e,))
         t2 = pu.as1.Tupl(elements=(a, b, e,))
         t3 = pu.as1.strip_duplicate_formulas_in_python_tuple(t=t1)
@@ -723,7 +723,7 @@ class TestStripDuplicateFormulasInPythonTuple:
 
 class TestCoerceEnumeration:
     def test_coerce_enumeration(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         e1 = pu.as1.Enumeration(elements=(a, b, a, a, e, e,), strip_duplicates=True)
         e2 = pu.as1.Enumeration(elements=(a, b, e,), strip_duplicates=True)
         e3 = pu.as1.Enumeration(elements=e1, strip_duplicates=True)
@@ -735,10 +735,10 @@ class TestCoerceEnumeration:
 class TestAxiomatization:
     def test_is_well_formed(self):
         # elaborate a theory
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        x, y, z = pu.as1.let_x_be_a_variable(formula_typesetter=('x', 'y', 'z',))
-        star1 = pu.as1.let_x_be_a_unary_connective(formula_typesetter='*1')
-        star2 = pu.as1.let_x_be_a_binary_connective(formula_typesetter='*2')
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        star1 = pu.as1.let_x_be_a_unary_connective(formula_ts='*1')
+        star2 = pu.as1.let_x_be_a_binary_connective(formula_ts='*2')
         axiom_ok_1 = pu.as1.Axiom(valid_statement=a | star2 | b)
         axiom_ok_2 = pu.as1.Axiom(valid_statement=star1(c))
         assert pu.as1.is_well_formed_axiom(a=axiom_ok_2)
@@ -765,11 +765,11 @@ class TestDemonstration:
     def test_is_well_formed(self):
         # elaborate a theory
         theory = pu.as1.let_x_be_a_collection_of_axioms(axioms=None)
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_typesetter=('a', 'b', 'c', 'd', 'e',))
-        x, y, z = pu.as1.let_x_be_a_variable(formula_typesetter=('x', 'y', 'z',))
-        star = pu.as1.let_x_be_a_binary_connective(formula_typesetter='*')
-        theory, axiom_1, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a | star | b)
-        theory, axiom_2, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=b | star | c)
+        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        star = pu.as1.let_x_be_a_binary_connective(formula_ts='*')
+        theory, axiom_1, = pu.as1.let_x_be_an_axiom(t=theory, s=a | star | b)
+        theory, axiom_2, = pu.as1.let_x_be_an_axiom(t=theory, s=b | star | c)
         theory, ir1, = pu.as1.let_x_be_an_inference_rule(t=theory,
                                                          p=(x | star | y,
                                                             y | star | z,),
@@ -797,10 +797,10 @@ class TestDemonstration:
 
 class TestVariable:
     def test_variable(self):
-        with pu.as1.let_x_be_a_variable(formula_typesetter='x') as x:
+        with pu.as1.let_x_be_a_variable(formula_ts='x') as x:
             print(x)
-        with pu.as1.let_x_be_a_variable(formula_typesetter='x') as x, pu.as1.let_x_be_a_variable(
-                formula_typesetter='y') as y:
+        with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
+                formula_ts='y') as y:
             print(x)
             print(y)
             pass
@@ -809,9 +809,9 @@ class TestVariable:
 class TestAutoDerivation:
     def test_auto_derivation(self):
         # elaborate a theory
-        p = pu.as1.let_x_be_a_simple_object(formula_typesetter='P')
-        q = pu.as1.let_x_be_a_simple_object(formula_typesetter='Q')
-        t1, a1 = pu.as1.let_x_be_an_axiom(t=None, axiom=pu.as1.Axiom(valid_statement=p))
+        p = pu.as1.let_x_be_a_simple_object(formula_ts='P')
+        q = pu.as1.let_x_be_a_simple_object(formula_ts='Q')
+        t1, a1 = pu.as1.let_x_be_an_axiom(t=None, a=pu.as1.Axiom(valid_statement=p))
 
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
@@ -819,8 +819,8 @@ class TestAutoDerivation:
             transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
         t1 = pu.as1.extend_theory(if_p_then_q, t=t1)
 
-        with pu.as1.let_x_be_a_variable(formula_typesetter='x') as x, pu.as1.let_x_be_a_variable(
-                formula_typesetter='y') as y:
+        with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
+                formula_ts='y') as y:
             x_y_then_x_and_y = pu.as1.InferenceRule(
                 transformation=pu.as1.Transformation(premises=(x, y,), conclusion=x | pu.as1._connectives.land | y,
                                                      variables=(x, y,)))
@@ -859,7 +859,7 @@ class TestAutoDerivation:
 
 class TestFormulaDepth:
     def test_get_formula_depth(self):
-        c = pu.as1.FreeArityConnective(formula_typesetter=pu.pl1.symbols.x_uppercase_serif_italic)
+        c = pu.as1.FreeArityConnective(formula_ts=pu.pl1.symbols.x_uppercase_serif_italic)
         phi1 = pu.as1.Formula(c=c, t=None)
         assert pu.as1.get_formula_depth(phi=phi1) == 1
         phi2 = pu.as1.Formula(c=c, t=(phi1, phi1,))

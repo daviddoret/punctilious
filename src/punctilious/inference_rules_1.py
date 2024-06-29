@@ -39,7 +39,7 @@ propositional_variable = as1._connectives.propositional_variable
 #
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
-with as1.let_x_be_a_variable(formula_typesetter='phi') as phi, as1.let_x_be_a_variable(formula_typesetter='psi') as psi:
+with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     adjunction_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
             phi | is_a | proposition,
@@ -57,7 +57,7 @@ adjunction_axiom: as1.InferenceRule = as1.InferenceRule(transformation=adjunctio
 #
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
-with as1.let_x_be_a_variable(formula_typesetter='phi') as phi, as1.let_x_be_a_variable(formula_typesetter='psi') as psi:
+with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_1_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
             phi | is_a | proposition,
@@ -74,7 +74,7 @@ simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(transformation=sim
 #
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
-with as1.let_x_be_a_variable(formula_typesetter='phi') as phi, as1.let_x_be_a_variable(formula_typesetter='psi') as psi:
+with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_2_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
             phi | is_a | proposition,
@@ -92,7 +92,7 @@ simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(transformation=sim
 #
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
-with as1.let_x_be_a_variable(formula_typesetter='P') as phi, as1.let_x_be_a_variable(formula_typesetter='Q') as psi:
+with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(formula_ts='Q') as psi:
     modus_ponens_rule: as1.Transformation = as1.let_x_be_a_transformation(
         premises=(
             phi | is_a | proposition,

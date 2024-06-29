@@ -5,28 +5,28 @@ from punctilious.connectives_standard_library_1 import *
 
 @pytest.fixture
 def a():
-    a = pu.as1.let_x_be_a_simple_object(formula_typesetter='A')
+    a = pu.as1.let_x_be_a_simple_object(formula_ts='A')
     return a
 
 
 @pytest.fixture
 def b():
-    b = pu.as1.let_x_be_a_simple_object(formula_typesetter='B')
+    b = pu.as1.let_x_be_a_simple_object(formula_ts='B')
     return b
 
 
 @pytest.fixture
 def c():
-    c = pu.as1.let_x_be_a_simple_object(formula_typesetter='C')
+    c = pu.as1.let_x_be_a_simple_object(formula_ts='C')
     return c
 
 
 @pytest.fixture
 def theory(a, b, c):
     # elaborate a theory with 3 propositions: a, b, and c
-    a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=a | is_a | propositional_variable)
-    a2 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=b | is_a | propositional_variable)
-    a3 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=c | is_a | propositional_variable)
+    a1 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=a | is_a | propositional_variable)
+    a2 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=b | is_a | propositional_variable)
+    a3 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=c | is_a | propositional_variable)
     theory = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive:(a is-a proposition)
@@ -56,8 +56,8 @@ def theory(a, b, c):
 class TestAdjunction:
     def test_adjunction(self, theory, a, b, c):
         # adapt the base theory
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a)
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=b)
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a)
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=b)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive_1(t=theory,
@@ -85,7 +85,7 @@ class TestAdjunction:
 class TestSimplification1:
     def test_simplification_1(self, theory, a, b, c):
         # adapt the base theory
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a | land | b)
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a | land | b)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive_1(t=theory,
@@ -112,7 +112,7 @@ class TestSimplification1:
 class TestSimplification2:
     def test_simplification_2(self, theory, a, b, c):
         # adapt the base theory
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a | land | b)
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a | land | b)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive_1(t=theory,
@@ -139,8 +139,8 @@ class TestSimplification2:
 class TestModusPonens:
     def test_modus_ponens(self, theory, a, b, c):
         # adapt the base theory
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a | implies | b)
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a)
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a | implies | b)
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive_1(t=theory,
@@ -155,8 +155,8 @@ class TestModusPonens:
 
         # extend the theory to perform a second test
         # using a single propositional-variable
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=a | implies | (a | land | a))
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, valid_statement=(a | land | a) | is_a | proposition)
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a | implies | (a | land | a))
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=(a | land | a) | is_a | proposition)
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive_1(t=theory,

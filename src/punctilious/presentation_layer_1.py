@@ -679,3 +679,9 @@ def coerce_typesetter(ts: FlexibleTypesetter) -> Typesetter:
         return ts
     else:
         raise Exception('unsupported value')
+
+
+def extract_typesetters(t: dict[str, typing.Any]) -> dict[str, Typesetter]:
+    """Returns a python-dict of (string, typesetter)pairs from a dict of anything.
+    Used to process *kwargs in __init__ methods."""
+    return {key: value for key, value in t.items() if isinstance(value, Typesetter)}

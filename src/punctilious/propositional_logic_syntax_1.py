@@ -15,6 +15,7 @@ import typing
 # punctilious modules
 import util_1 as u1
 import axiomatic_system_1 as as1
+from connectives_standard_library_1 import *
 
 # import inference_rules_1 as ir1
 
@@ -32,16 +33,7 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 # Propositional logic vocabulary
 
 
-# retrieve vocabulary from axiomatic-system-1
-is_a = as1._connectives.is_a
-implies = as1._connectives.implies
-land = as1._connectives.land
-lnot = as1._connectives.lnot
-lor = as1._connectives.lor
-proposition = as1._connectives.proposition  # synonym: propositional-formulas
-propositional_variable = as1._connectives.propositional_variable
-
-with as1.let_x_be_a_variable(formula_typesetter='A') as a:
+with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | propositional_variable,),
@@ -63,7 +55,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a:
+with as1.let_x_be_a_variable(formula_ts='A') as a:
     i2: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,),
@@ -85,7 +77,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
+with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i3: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -109,7 +101,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
+with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i4: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -133,7 +125,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
+with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i5: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -157,7 +149,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
+with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i6: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=None,
@@ -188,7 +180,7 @@ extended_theory = as1.Theory(derivations=(*axiomatization,))
 
 def let_x_be_a_propositional_variable(
         t: as1.FlexibleTheory,
-        rep: as1.FlexibleRepresentation) -> \
+        ts: as1.FlexibleRepresentation) -> \
         typing.Tuple[as1.Theory, as1.Variable | typing.Tuple[as1.Variable, ...]]:
     """Declare one or multiple propositional-variables in the input theory.
 
@@ -203,7 +195,7 @@ def let_x_be_a_propositional_variable(
     The following
 
     :param t:
-    :param rep:
+    :param ts:
     :return:
     """
     global axiomatization
@@ -214,22 +206,22 @@ def let_x_be_a_propositional_variable(
     # in the theory.
     t = as1.extend_theory(axiomatization, t=t)
 
-    if isinstance(rep, str):
+    if isinstance(ts, str):
         # declare a single propositional variable
-        x = as1.Variable(c=as1.NullaryConnective(formula_typesetter=rep))
+        x = as1.Variable(c=as1.NullaryConnective(formula_ts=ts))
         t, _ = as1.let_x_be_an_axiom(t=t,
-                                     valid_statement=x | as1._connectives.is_a | as1._connectives.propositional_variable)
+                                     s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
 
         return t, x
-    elif isinstance(rep, typing.Iterable):
+    elif isinstance(ts, typing.Iterable):
         # declare multiple propositional variables
         propositional_variables = tuple()
-        for r in rep:
-            x = as1.Variable(c=as1.NullaryConnective(formula_typesetter=r))
+        for r in ts:
+            x = as1.Variable(c=as1.NullaryConnective(formula_ts=r))
             propositional_variables = propositional_variables + (x,)
             t, _ = as1.let_x_be_an_axiom(
                 t=t,
-                valid_statement=x | as1._connectives.is_a | as1._connectives.propositional_variable)
+                s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
             t, _ = as1.derive_1(t=t,
                                 c=x | is_a | proposition,
                                 p=(x | as1._connectives.is_a | as1._connectives.propositional_variable,),
@@ -264,7 +256,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory, phi: as1.FlexibleFormu
     for x in propositional_variables:
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
-        with let_x_be_a_propositional_variable(t=t, rep=rep) as x2:
+        with let_x_be_a_propositional_variable(t=t, ts=rep) as x2:
             premises: as1.Enumeration = as1.extend_enumeration(
                 e=premises, x=x2 | as1._connectives.is_a | as1._connectives.propositional_variable)
             variables_map: as1.Map = as1.extend_map(m=variables_map, preimage=x, image=x2)
@@ -303,7 +295,7 @@ class PIsAProposition(as1.Heuristic):
             # The conjecture is already proven in the theory.
             return t, True
 
-        with as1.let_x_be_a_meta_variable(formula_typesetter='P') as p:
+        with as1.let_x_be_a_meta_variable(formula_ts='P') as p:
             success, m = as1.is_formula_equivalent_with_variables_2(
                 phi=conjecture, psi=p | is_a | proposition, variables=(p,))
 
@@ -325,7 +317,7 @@ class PIsAProposition(as1.Heuristic):
 
                     return t, True
 
-                with as1.let_x_be_a_meta_variable(formula_typesetter='Q') as q:
+                with as1.let_x_be_a_meta_variable(formula_ts='Q') as q:
                     success, m = as1.is_formula_equivalent_with_variables_2(phi=p_value, psi=lnot(q), variables=(q,))
                     if success:
                         # The conjecture (P) is of the form (¬Q).
@@ -346,8 +338,8 @@ class PIsAProposition(as1.Heuristic):
                             # (Q is-a proposition) is not proved.
                             return t, False
 
-                with (as1.let_x_be_a_meta_variable(formula_typesetter='Q') as q,
-                      as1.let_x_be_a_meta_variable(formula_typesetter='R') as r):
+                with (as1.let_x_be_a_meta_variable(formula_ts='Q') as q,
+                      as1.let_x_be_a_meta_variable(formula_ts='R') as r):
                     success, m = as1.is_formula_equivalent_with_variables_2(phi=p_value, psi=q | land | r,
                                                                             variables=(q, r,))
                     if success:
@@ -377,8 +369,8 @@ class PIsAProposition(as1.Heuristic):
                             # (Q is-a proposition) is not proved.
                             return t, False
 
-                with (as1.let_x_be_a_meta_variable(formula_typesetter='Q') as q,
-                      as1.let_x_be_a_meta_variable(formula_typesetter='R') as r):
+                with (as1.let_x_be_a_meta_variable(formula_ts='Q') as q,
+                      as1.let_x_be_a_meta_variable(formula_ts='R') as r):
                     success, m = as1.is_formula_equivalent_with_variables_2(phi=p_value, psi=q | implies | r,
                                                                             variables=(q, r,))
                     if success:
@@ -408,8 +400,8 @@ class PIsAProposition(as1.Heuristic):
                             # (Q is-a proposition) is not proved.
                             return t, False
 
-                with (as1.let_x_be_a_meta_variable(formula_typesetter='Q') as q,
-                      as1.let_x_be_a_meta_variable(formula_typesetter='R') as r):
+                with (as1.let_x_be_a_meta_variable(formula_ts='Q') as q,
+                      as1.let_x_be_a_meta_variable(formula_ts='R') as r):
                     success, m = as1.is_formula_equivalent_with_variables_2(phi=p_value, psi=q | lor | r,
                                                                             variables=(q, r,))
                     if success:
@@ -463,11 +455,11 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
     """
     global i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
     t: as1.Theory = as1.coerce_theory(t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=i1, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=i2, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=i3, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=i4, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=i5, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i2, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i3, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i4, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i5, t=t)
     t.heuristics.add(p_is_a_proposition_heuristic)
     return t
 

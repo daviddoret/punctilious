@@ -44,7 +44,7 @@ import propositional_logic_syntax_1 as pls1
 # Propositional logic vocabulary
 
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a:
+with as1.let_x_be_a_variable(formula_ts='A') as a:
     pl01: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,),
@@ -66,7 +66,7 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a:
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(formula_typesetter='B') as b:
+with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     pl02: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -90,8 +90,8 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
         """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(
-        formula_typesetter='B') as b, as1.let_x_be_a_variable(formula_typesetter='C') as c:
+with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
+        formula_ts='B') as b, as1.let_x_be_a_variable(formula_ts='C') as c:
     pl03: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -117,8 +117,8 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variable(
-        formula_typesetter='B') as b, as1.let_x_be_a_variable(formula_typesetter='C') as c:
+with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
+        formula_ts='B') as b, as1.let_x_be_a_variable(formula_ts='C') as c:
     pl04: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -144,8 +144,8 @@ with as1.let_x_be_a_variable(formula_typesetter='A') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
-        formula_typesetter='b') as b:
+with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
+        formula_ts='b') as b:
     pl05: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -169,8 +169,8 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
-        formula_typesetter='b') as b:
+with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
+        formula_ts='b') as b:
     pl06: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -194,8 +194,8 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
-        formula_typesetter='b') as b:
+with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
+        formula_ts='b') as b:
     pl07: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -219,8 +219,8 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
-        formula_typesetter='b') as b:
+with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
+        formula_ts='b') as b:
     pl08: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -244,8 +244,8 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
-        formula_typesetter='b') as b:
+with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
+        formula_ts='b') as b:
     pl09: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -271,8 +271,8 @@ with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variab
     """
     pass
 
-with as1.let_x_be_a_variable(formula_typesetter='a') as a, as1.let_x_be_a_variable(
-        formula_typesetter='b') as b:
+with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
+        formula_ts='b') as b:
     pl10: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
@@ -345,8 +345,8 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
     t = extend_theory_with_minimal_logic_1(t=t)
-    t, c, = pls1.let_x_be_a_propositional_variable(t=t, rep='C')
-    t, d, = pls1.let_x_be_a_propositional_variable(t=t, rep='D')
+    t, c, = pls1.let_x_be_a_propositional_variable(t=t, ts='C')
+    t, d, = pls1.let_x_be_a_propositional_variable(t=t, ts='D')
     # TODO: Implement this as a proper hypothesis
     # TODO: Implement short reference names
     # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
@@ -382,8 +382,8 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
     t = extend_theory_with_minimal_logic_1(t=t)
-    t, c, = pls1.let_x_be_a_propositional_variable(t=t, rep='C')
-    t, d, = pls1.let_x_be_a_propositional_variable(t=t, rep='D')
+    t, c, = pls1.let_x_be_a_propositional_variable(t=t, ts='C')
+    t, d, = pls1.let_x_be_a_propositional_variable(t=t, ts='D')
     t, success, _ = as1.derive_2(c=c | is_a | proposition,
                                  i=pls1.i1, t=t)
     t, success, _ = as1.derive_2(c=d | is_a | proposition,
@@ -400,7 +400,7 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
                                  i=pls1.i4, t=t)
     # 1. ⊢ 𝐶(hypothesis)
     # TODO: Implement this as a proper hypothesis
-    t, hypothesis = as1.let_x_be_an_axiom(t=t, valid_statement=c)
+    t, hypothesis = as1.let_x_be_an_axiom(t=t, s=c)
     # 2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶)(axiom PL5)
     t, success, _, = as1.derive_2(c=c | implies | (d | implies | c),
                                   i=pl05, t=t)
@@ -420,7 +420,7 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
         c=d | implies | (d | land | d),
         i=pl01, t=t)
     # 7. ⊢ 𝐷(hypothesis)
-    t, _, = as1.let_x_be_an_axiom(t=t, valid_statement=d)
+    t, _, = as1.let_x_be_an_axiom(t=t, s=d)
     # 8. ⊢ 𝐷 ∧ 𝐷(mp 6, 7)
     t, success, _, = as1.derive_2(
         c=d | land | d,

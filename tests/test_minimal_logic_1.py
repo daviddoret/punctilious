@@ -12,28 +12,28 @@ auto_derive_4 = pu.as1.auto_derive_4
 
 @pytest.fixture
 def a():
-    a = pu.as1.let_x_be_a_simple_object(formula_typesetter='A')
+    a = pu.as1.let_x_be_a_simple_object(formula_ts='A')
     return a
 
 
 @pytest.fixture
 def b():
-    b = pu.as1.let_x_be_a_simple_object(formula_typesetter='B')
+    b = pu.as1.let_x_be_a_simple_object(formula_ts='B')
     return b
 
 
 @pytest.fixture
 def c():
-    c = pu.as1.let_x_be_a_simple_object(formula_typesetter='C')
+    c = pu.as1.let_x_be_a_simple_object(formula_ts='C')
     return c
 
 
 @pytest.fixture
 def theory(a, b, c):
     # elaborate a theory with 3 propositions: a, b, and c
-    a1 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=a | is_a | propositional_variable)
-    a2 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=b | is_a | propositional_variable)
-    a3 = pu.as1.let_x_be_an_axiom_deprecated(valid_statement=c | is_a | propositional_variable)
+    a1 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=a | is_a | propositional_variable)
+    a2 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=b | is_a | propositional_variable)
+    a3 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=c | is_a | propositional_variable)
     t = pu.as1.Axiomatization(derivations=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive: a is-a proposition
@@ -65,7 +65,7 @@ class TestPL1:
         # Test PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 
         # Elaborate a basic theory with P as a propositional-variable
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
 
         # Add axiom PL01 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl01, )
@@ -98,7 +98,7 @@ class TestPL1:
         assert pu.as1.is_valid_statement_in_theory(phi=(p | land | p) | is_a | proposition, t=t)
 
         # make P valid and add modus-ponens to the theory
-        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=p)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, s=p)
         t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
 
         # Derive: P ∧ P from P by modus-ponens
@@ -119,8 +119,8 @@ class TestPL2:
         # PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴)
 
         # Elaborate a basic theory with P and Q as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
         t, _, _, _ = auto_derive_4(t=t, conjecture=p | is_a | proposition)
         t, _, _, _ = auto_derive_4(t=t, conjecture=q | is_a | proposition)
 
@@ -153,7 +153,7 @@ class TestPL2:
         assert pu.as1.is_valid_statement_in_theory(phi=(q | land | p) | is_a | proposition, t=t)
 
         # make (P ∧ Q) valid and add modus-ponens to the theory
-        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=p | land | q)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, s=p | land | q)
         t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
 
         # Derive: P ∧ P from P by modus-ponens
@@ -174,9 +174,9 @@ class TestPL3:
         # PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
-        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
+        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='R')
         t, _, _, _ = auto_derive_4(t=t, conjecture=p | is_a | proposition)
         t, _, _, _ = auto_derive_4(t=t, conjecture=q | is_a | proposition)
         t, _, _, _ = auto_derive_4(t=t, conjecture=r | is_a | proposition)
@@ -230,7 +230,7 @@ class TestPL3:
             phi=((p | land | r) | implies | (q | land | r)) | is_a | proposition, t=t)
 
         # make (P implies Q) valid and add modus-ponens to the theory
-        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=p | implies | q)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, s=p | implies | q)
         t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
 
         # Derive: (P ∧ R) implies (Q ∧ R)  from P by modus-ponens
@@ -253,9 +253,9 @@ class TestPL4:
         # PL4. [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
-        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='R')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
+        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='R')
         t, _, _, _, = auto_derive_4(t=t, conjecture=p | is_a | proposition)
         t, _, _, _, = auto_derive_4(t=t, conjecture=q | is_a | proposition)
         t, _, _, _, = auto_derive_4(t=t, conjecture=r | is_a | proposition)
@@ -281,9 +281,9 @@ class TestPL5:
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
         t1 = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
-        t1, x, = pu.pls1.let_x_be_a_propositional_variable(t=t1, rep='X')
-        t1, y, = pu.pls1.let_x_be_a_propositional_variable(t=t1, rep='Y')
-        t1, _, = pu.as1.let_x_be_an_axiom(t=t1, valid_statement=y)
+        t1, x, = pu.pls1.let_x_be_a_propositional_variable(t=t1, ts='X')
+        t1, y, = pu.pls1.let_x_be_a_propositional_variable(t=t1, ts='Y')
+        t1, _, = pu.as1.let_x_be_an_axiom(t=t1, s=y)
 
         # Add axiom PL05 to the theory
         t1, _ = pu.as1.let_x_be_an_inference_rule(t=t1, i=pu.ml1.pl05, )
@@ -339,8 +339,8 @@ class TestMancosu2021P20:
     def test_mancosu_2021_page_20_with_derivation_1(self, caplog):
         t = pu.as1.Axiomatization(
             derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
-        t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='p1')
-        t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='p2')
+        t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='p1')
+        t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='p2')
         t, success, _, = derive_1(c=p1 | is_a | proposition,
                                   i=pu.pls1.i1, t=t)
         t, success, _, = derive_1(c=p2 | is_a | proposition,
@@ -391,8 +391,8 @@ class TestMancosu2021P20:
     def test_mancosu_2021_page_21_with_derivation_1(self, caplog):
         t = pu.as1.Axiomatization(
             derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
-        t, c, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='C')
-        t, d, = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='D')
+        t, c, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='C')
+        t, d, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='D')
         t, success, _, = derive_1(c=c | is_a | proposition,
                                   i=pu.pls1.i1, t=t)
         t, success, _, = derive_1(c=d | is_a | proposition,
@@ -408,7 +408,7 @@ class TestMancosu2021P20:
         t, success, _, = derive_1(c=((d | land | d) | implies | (c | land | d)) | is_a | proposition,
                                   i=pu.pls1.i4, t=t)
         # 1. ⊢ 𝐶(hypothesis)
-        t, hypothesis = pu.as1.let_x_be_an_axiom(t=t, valid_statement=c)
+        t, hypothesis = pu.as1.let_x_be_an_axiom(t=t, s=c)
         assert pu.as1.is_valid_statement_in_theory(phi=c, t=t)
         # 2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶)(axiom PL5)
         t, success, _, = derive_1(c=c | implies | (d | implies | c),
@@ -434,7 +434,7 @@ class TestMancosu2021P20:
             i=pu.ml1.pl01, t=t)
         assert success
         # 7. ⊢ 𝐷(hypothesis)
-        t, _, = pu.as1.let_x_be_an_axiom(t=t, valid_statement=d)
+        t, _, = pu.as1.let_x_be_an_axiom(t=t, s=d)
         # 8. ⊢ 𝐷 ∧ 𝐷(mp 6, 7)
         t, success, _, = derive_1(
             c=d | land | d,

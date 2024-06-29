@@ -6,12 +6,12 @@ from punctilious.connectives_standard_library_1 import *
 class TestHeuristic:
     def test_heuristic_basic(self):
         t = pu.pls1.let_x_be_a_propositional_logic_syntax_1_theory()
-        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='P')
         assert not pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=p | is_a | proposition, t=t)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
-        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | land | q) | is_a | proposition, t=t)
         assert success
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | implies | q) | is_a | proposition, t=t)
@@ -21,8 +21,8 @@ class TestHeuristic:
 
     def test_heuristic_complex(self):
         t = pu.pls1.let_x_be_a_propositional_logic_syntax_1_theory()
-        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='P')
-        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Q')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='P')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
         t, success = pu.as1.auto_derive_with_heuristics(
             conjecture=((q | lor | q) | implies | (
                     (p | land | p) | land | (p | lor | (q | implies | lnot(q))))) | is_a | proposition, t=t)
@@ -43,7 +43,7 @@ class TestAxioms:
         implies = pu.as1._connectives.implies
 
         # elaborate a theory
-        theory, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
+        theory, p = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
 
         # derive: p is-a proposition
         theory, _, = pu.as1.derive_1(t=theory,
@@ -67,7 +67,7 @@ class TestAxioms:
         assert pu.as1.is_valid_statement_in_theory(phi=lnot(p) | is_a | proposition, t=theory)
 
         # declare 1 as a propositional-variable
-        theory, q = pu.pls1.let_x_be_a_propositional_variable(t=theory, rep='Q')
+        theory, q = pu.pls1.let_x_be_a_propositional_variable(t=theory, ts='Q')
         a2 = pu.as1.Axiom(valid_statement=q | is_a | propositional_variable)
         theory = pu.as1.extend_theory(a2, t=theory)
 
@@ -95,7 +95,7 @@ class TestAxioms:
     def test_pl1_2(self):
         is_a = pu.as1._connectives.is_a
         proposition = pu.as1._connectives.proposition
-        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='P')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
         t, success, _, = pu.as1.auto_derive_2(t=t, conjecture=p | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
@@ -104,8 +104,8 @@ class TestAxioms:
         is_a = pu.as1._connectives.is_a
         land = pu.as1._connectives.land
         proposition = pu.as1._connectives.proposition
-        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, rep='X')
-        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, rep='Y')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='X')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Y')
         t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=p | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
