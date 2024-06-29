@@ -270,7 +270,8 @@ class Formula(tuple):
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_005, c=self.connective)
         return self[2]
 
-    def get_typesetter(self, typesetter: typing.Optional[pl1.FlexibleTypesetter] = None) -> pl1.Typesetter:
+    def get_typesetter(self, typesetter: typing.Optional[pl1.FlexibleTypesetter] = None,
+                       ts_key: str | None = None) -> pl1.Typesetter:
         """
 
          - priority 1: parameter typesetter is passed explicitly.
@@ -282,22 +283,26 @@ class Formula(tuple):
         :param typesetter:
         :return:
         """
+        # If typesetter is provided directly in argument, it is used in priority.
         if typesetter is None:
-            # For a formula, we use by default the typesetter attached to the formula connective.
+            if ts_key is not None and ts_key in self.ts:
+                # If ts_key argument was provided, return the typesetter from the
+                return self.ts.get(ts_key)
+            # Otherwise return the typesetter attached to the formula's connective.
             typesetter: pl1.Typesetter = self.connective.formula_typesetter
         return typesetter
 
-    def typeset_as_string(self, ts: typing.Optional[pl1.Typesetter] = None, **kwargs) -> str:
+    def typeset_as_string(self, ts: typing.Optional[pl1.Typesetter] = None, ts_key: str | None = None, **kwargs) -> str:
         """Returns a python-string from the typesetting-method.
 
         If the typesetting-method returns content of reasonable length, typeset_as_string() is an adequate solution.
         If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
         loading all the content in memory.
         """
-        ts = self.get_typesetter(typesetter=ts)
+        ts = self.get_typesetter(typesetter=ts, ts_key=ts_key)
         return ts.typeset_as_string(phi=self, **kwargs)
 
-    def typeset_from_generator(self, ts: typing.Optional[pl1.Typesetter] = None, **kwargs) -> \
+    def typeset_from_generator(self, ts: typing.Optional[pl1.Typesetter] = None, ts_key: str | None = None, **kwargs) -> \
             typing.Generator[str, None, None]:
         """Generates a stream of python-string chunks from the typesetting-method.
 
@@ -305,9 +310,8 @@ class Formula(tuple):
         If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
         loading all the content in memory.
         """
-        ts = self.get_typesetter(typesetter=ts)
+        ts = self.get_typesetter(typesetter=ts, ts_key=ts_key)
         yield from ts.typeset_from_generator(phi=self, **kwargs)
-        # yield_string_from_typesetter(x=self, **kwargs)
 
 
 def yield_string_from_typesetter(x, **kwargs):
@@ -2370,14 +2374,15 @@ class InferenceRule(Derivation):
 
     """
 
-    def __new__(cls, transformation: FlexibleTransformation = None):
+    def __new__(cls, transformation: FlexibleTransformation = None, **kwargs):
         transformation: Transformation = coerce_transformation(t=transformation)
-        o: tuple = super().__new__(cls, valid_statement=transformation, justification=_connectives.inference_rule)
+        o: tuple = super().__new__(cls, valid_statement=transformation, justification=_connectives.inference_rule,
+                                   **kwargs)
         return o
 
-    def __init__(self, transformation: FlexibleTransformation):
+    def __init__(self, transformation: FlexibleTransformation, **kwargs):
         self._transformation: Transformation = coerce_transformation(t=transformation)
-        super().__init__(valid_statement=self._transformation, justification=_connectives.inference_rule)
+        super().__init__(valid_statement=self._transformation, justification=_connectives.inference_rule, **kwargs)
 
     @property
     def transformation(self) -> Transformation:
@@ -3406,6 +3411,41 @@ def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFor
     return False, None
 
 
+def typeset_formula_reference(phi: FlexibleFormula, t: FlexibleTheory | None, **kwargs):
+    """Typeset a formula's reference if it exists.
+
+    :param phi:
+    :param t:
+    :return:
+    """
+    phi = coerce_formula(phi=phi)
+    if t is not None:
+        t = coerce_theory(t=t)
+    if 'ref_ts' in phi.ts:
+        # This formula has a typesetting reference, e.g. "PL01".
+        yield from pl1.symbols.open_square_bracket.typeset_from_generator(**kwargs)
+        yield from phi.ts.get('ref_ts').typeset_from_generator(**kwargs)
+        yield from pl1.symbols.close_square_bracket.typeset_from_generator(**kwargs)
+    elif t is not None and is_well_formed_derivation(d=phi) and is_term_of_formula(x=phi, phi=t):
+        # phi is a derivation in a theory.
+        # we can use the 1-based index of the formula in the theory.
+        i: int = get_index_of_first_equivalent_term_in_formula(term=phi, formula=t)
+        yield from pl1.symbols.open_square_bracket.typeset_from_generator(**kwargs)
+        yield i + 1
+        yield from pl1.symbols.close_square_bracket.typeset_from_generator(**kwargs)
+    elif t is not None and is_valid_statement_in_theory(phi=phi, t=t):
+        # phi is a valid-statement in a theory.
+        # we can use the 1-based index of the formula in the theory.
+        success, d = get_theory_derivation_from_valid_statement(t=t, s=phi)
+        i: int = get_index_of_first_equivalent_term_in_formula(term=d, formula=t)
+        yield from pl1.symbols.open_square_bracket.typeset_from_generator(**kwargs)
+        yield i + 1
+        yield from pl1.symbols.close_square_bracket.typeset_from_generator(**kwargs)
+    else:
+        # we don't have any context, our only choice is to typeset the original formula explicitly.
+        yield from phi.typeset_from_generator(**kwargs)
+
+
 class DerivationTypesetter(pl1.Typesetter):
     def __init__(self):
         super().__init__()
@@ -3426,7 +3466,7 @@ class DerivationTypesetter(pl1.Typesetter):
                 phi: Theorem = coerce_theorem(t=phi)
                 inference: Inference = phi.inference
                 transformation: Transformation = inference.transformation_rule
-                yield f'\t\t| Follows from inference-rule [{transformation}] given premises '
+                yield f'\t\t| Follows from [{transformation}] given '
                 first: bool = True
                 for premise in phi.inference.premises:
                     if not first:
@@ -3438,9 +3478,9 @@ class DerivationTypesetter(pl1.Typesetter):
                 raise u1.ApplicativeException(code=ERROR_CODE_AS1_052, msg=f'Unsupported derivation "{phi}" in the '
                                                                            f'theory.', phi=phi, theory=theory)
         else:
-            # Theory parameter was provided, we have more context.
-            i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=phi, formula=theory)
-            yield f'[{i}]\t'
+            # Theory parameter was provided, we have more context and premises can reference the derivation's number.
+            yield from typeset_formula_reference(phi=phi, t=theory)
+            yield f'\t'
             yield from phi.valid_statement.typeset_from_generator(**kwargs)
             if is_well_formed_axiom(a=phi):
                 phi: Axiom = coerce_axiom(a=phi)
@@ -3458,9 +3498,9 @@ class DerivationTypesetter(pl1.Typesetter):
                                                   msg=f'Transformation "{transformation}" could not be found in the '
                                                       f'theory.', phi=phi, inference=inference,
                                                   transformation=transformation, theory=theory)
-                inference_rule_1_based_index: int = get_index_of_first_equivalent_term_in_formula(term=inference_rule,
-                                                                                                  formula=theory)
-                yield f'\t\t| Follows from inference-rule [{inference_rule_1_based_index}] given premises '
+                yield f'\t\t| Follows from '
+                yield from typeset_formula_reference(phi=inference_rule, t=theory, **kwargs)
+                yield f' given '
                 first: bool = True
                 for premise in phi.inference.premises:
                     success, derivation = get_theory_derivation_from_valid_statement(t=theory, s=premise)
@@ -3468,7 +3508,8 @@ class DerivationTypesetter(pl1.Typesetter):
                     i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=derivation, formula=theory)
                     if not first:
                         yield ', '
-                    yield f'[{i}]'
+                    yield from typeset_formula_reference(phi=premise, t=theory, **kwargs)
+                    # yield f'[{i}]'
                     first = False
                 yield '.'
             else:

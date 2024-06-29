@@ -1,7 +1,9 @@
 # import typing
 import sys
 
+import presentation_layer_1 as pl1
 import axiomatic_system_1 as as1
+from connectives_standard_library_1 import *
 
 _current_module = sys.modules[__name__]
 if __name__ == '__main__':
@@ -20,14 +22,6 @@ def _set_state(key: str, value: object):
         _state[key] = value
     return value
 
-
-# Propositional logic vocabulary
-is_a = as1._connectives.is_a
-implies = as1._connectives.implies
-land = as1._connectives.land
-lnot = as1._connectives.lnot
-proposition = as1._connectives.proposition
-propositional_variable = as1._connectives.propositional_variable
 
 # Basic inference rules
 
@@ -101,7 +95,8 @@ with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(for
             phi),
         conclusion=psi,
         variables=(phi, psi,))
-modus_ponens_axiom: as1.InferenceRule = as1.InferenceRule(transformation=modus_ponens_rule)
+modus_ponens_axiom: as1.InferenceRule = as1.InferenceRule(transformation=modus_ponens_rule,
+                                                          ref_ts=pl1.Monospace(text='MP'))
 """Premises:
  - phi | is_a | proposition,
  - psi | is_a | proposition,

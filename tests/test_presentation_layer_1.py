@@ -51,3 +51,11 @@ class TestTypesettingConfiguration:
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.latex_math) == '\\textit{P}_{2}'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_extended) == '𝑃₂'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_limited) == 'P2'
+
+
+class TestMonospace:
+    def test_monospace(self):
+        text = 'HELLO WORLD 1'
+        t = pu.pl1.Monospace(text=text)
+        output = t.typeset_as_string()
+        pass

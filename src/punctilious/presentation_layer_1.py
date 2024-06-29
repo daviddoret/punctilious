@@ -149,10 +149,10 @@ class Typesetter(abc.ABC):
         raise NotImplementedError('This is an abstract method.')
 
     def __str__(self):
-        return f'{type(self)}-typesetter'
+        return f'ts:{self.typeset_as_string()}'
 
     def __repr__(self):
-        return f'{type(self)}-typesetter'
+        return f'ts:{self.typeset_as_string()}'
 
 
 class FailsafeTypesetter(Typesetter):
@@ -223,6 +223,43 @@ class TextTypesetter(Typesetter):
     def typeset_from_generator(self, **kwargs) -> (
             typing.Generator)[str, None, None]:
         yield self.text
+
+
+digit_names = {'0': 'zero', '1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five', '6': 'six', '7': 'seven',
+               '8': 'eight', '9': 'nine'}
+
+
+class Monospace(Typesetter):
+    """
+
+    """
+
+    def __init__(self, text: str):
+        super().__init__()
+        self._text: str = str(text)
+
+    @property
+    def text(self) -> str:
+        return self._text
+
+    def typeset_from_generator(self, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        for c in self.text:
+            c: str
+            if c.isalnum():
+                if c.isnumeric():
+                    digit_name: str = digit_names.get(c)
+                    key: str = f'{digit_name}_monospace'
+                    symbol: Symbol = symbols.get(key, c)
+                    yield from symbol.typeset_from_generator(**kwargs)
+                elif c.isalpha() and c.isupper():
+                    key: str = f'{c.lower()}_uppercase_monospace'
+                    symbol: Symbol = symbols.get(key, c)
+                    yield from symbol.typeset_from_generator(**kwargs)
+                else:
+                    yield c
+            else:
+                yield c
 
 
 class Typesetters:
@@ -317,6 +354,8 @@ class Symbols(dict):
             Symbol(key='close_curly_brace', latex_math='\\right\\}', unicode_extended='}', unicode_limited='}'))
         self._close_parenthesis = self._register(
             Symbol(key='close_parenthesis', latex_math='\\right)', unicode_extended=')', unicode_limited=')'))
+        self._close_square_bracket = self._register(
+            Symbol(key='close_square_bracket', latex_math='\\right]', unicode_extended=']', unicode_limited=']'))
         self._comma = self._register(
             Symbol(key='collection_separator', latex_math=',', unicode_extended=',', unicode_limited=','))
         self._conjunction = self._register(
@@ -333,6 +372,8 @@ class Symbols(dict):
             Symbol(key='open_curly_brace', latex_math='\\left\\{', unicode_extended='{', unicode_limited='{'))
         self._open_parenthesis = self._register(
             Symbol(key='open_parenthesis', latex_math='\\left(', unicode_extended='(', unicode_limited='('))
+        self._open_square_bracket = self._register(
+            Symbol(key='open_square_bracket', latex_math='\\left[', unicode_extended='[', unicode_limited='['))
         self._rightwards_arrow = self._register(
             Symbol(key='rightwards_arrow', latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->'))
         self._space = self._register(Symbol(key='space', latex_math=' ', unicode_extended=' ', unicode_limited=' '))
@@ -423,12 +464,138 @@ class Symbols(dict):
         self._z_uppercase_serif_italic = self._register(
             Symbol(key='z_uppercase_serif_italic', latex_math='\\textit{Z}', unicode_extended='𝑍',
                    unicode_limited='Z'))
+        # Monospace digits
+        self._zero_monospace = self._register(
+            Symbol(key='zero_monospace', latex_math='\\texttt{𝟶}', unicode_extended='0',
+                   unicode_limited='𝟶'))
+
+        self._one_monospace = self._register(
+            Symbol(key='one_monospace', latex_math='\\texttt{𝟷}', unicode_extended='1',
+                   unicode_limited='𝟷'))
+
+        self._two_monospace = self._register(
+            Symbol(key='two_monospace', latex_math='\\texttt{𝟸}', unicode_extended='2',
+                   unicode_limited='𝟸'))
+
+        self._three_monospace = self._register(
+            Symbol(key='three_monospace', latex_math='\\texttt{𝟹}', unicode_extended='3',
+                   unicode_limited='𝟹'))
+
+        self._four_monospace = self._register(
+            Symbol(key='four_monospace', latex_math='\\texttt{𝟺}', unicode_extended='4',
+                   unicode_limited='𝟺'))
+
+        self._five_monospace = self._register(
+            Symbol(key='five_monospace', latex_math='\\texttt{𝟻}', unicode_extended='5',
+                   unicode_limited='𝟻'))
+
+        self._six_monospace = self._register(
+            Symbol(key='six_monospace', latex_math='\\texttt{𝟼}', unicode_extended='6',
+                   unicode_limited='𝟼'))
+
+        self._seven_monospace = self._register(
+            Symbol(key='seven_monospace', latex_math='\\texttt{𝟽}', unicode_extended='7',
+                   unicode_limited='𝟽'))
+
+        self._eight_monospace = self._register(
+            Symbol(key='eight_monospace', latex_math='\\texttt{𝟾}', unicode_extended='8',
+                   unicode_limited='𝟾'))
+
+        self._nine_monospace = self._register(
+            Symbol(key='nine_monospace', latex_math='\\texttt{𝟿}', unicode_extended='9',
+                   unicode_limited='𝟿'))
+
+        # Uppercase monospace
+        self._a_uppercase_monospace = self._register(
+            Symbol(key='a_uppercase_monospace', latex_math='\\texttt{A}', unicode_extended='𝙰',
+                   unicode_limited='A'))
+        self._b_uppercase_monospace = self._register(
+            Symbol(key='b_uppercase_monospace', latex_math='\\texttt{B}', unicode_extended='𝙱',
+                   unicode_limited='B'))
+        self._c_uppercase_monospace = self._register(
+            Symbol(key='c_uppercase_monospace', latex_math='\\texttt{C}', unicode_extended='𝙲',
+                   unicode_limited='C'))
+        self._d_uppercase_monospace = self._register(
+            Symbol(key='d_uppercase_monospace', latex_math='\\texttt{D}', unicode_extended='𝙳',
+                   unicode_limited='D'))
+        self._e_uppercase_monospace = self._register(
+            Symbol(key='e_uppercase_monospace', latex_math='\\texttt{E}', unicode_extended='𝙴',
+                   unicode_limited='E'))
+        self._f_uppercase_monospace = self._register(
+            Symbol(key='f_uppercase_monospace', latex_math='\\texttt{F}', unicode_extended='𝙵',
+                   unicode_limited='F'))
+        self._g_uppercase_monospace = self._register(
+            Symbol(key='g_uppercase_monospace', latex_math='\\texttt{G}', unicode_extended='𝙶',
+                   unicode_limited='G'))
+        self._h_uppercase_monospace = self._register(
+            Symbol(key='h_uppercase_monospace', latex_math='\\texttt{H}', unicode_extended='𝙷',
+                   unicode_limited='H'))
+        self._i_uppercase_monospace = self._register(
+            Symbol(key='i_uppercase_monospace', latex_math='\\texttt{I}', unicode_extended='𝙸',
+                   unicode_limited='I'))
+        self._j_uppercase_monospace = self._register(
+            Symbol(key='j_uppercase_monospace', latex_math='\\texttt{J}', unicode_extended='𝙹',
+                   unicode_limited='J'))
+        self._k_uppercase_monospace = self._register(
+            Symbol(key='k_uppercase_monospace', latex_math='\\texttt{K}', unicode_extended='𝙺',
+                   unicode_limited='K'))
+        self._l_uppercase_monospace = self._register(
+            Symbol(key='l_uppercase_monospace', latex_math='\\texttt{L}', unicode_extended='𝙻',
+                   unicode_limited='L'))
+        self._m_uppercase_monospace = self._register(
+            Symbol(key='m_uppercase_monospace', latex_math='\\texttt{M}', unicode_extended='𝙼',
+                   unicode_limited='M'))
+        self._n_uppercase_monospace = self._register(
+            Symbol(key='n_uppercase_monospace', latex_math='\\texttt{N}', unicode_extended='𝙽',
+                   unicode_limited='N'))
+        self._o_uppercase_monospace = self._register(
+            Symbol(key='o_uppercase_monospace', latex_math='\\texttt{O}', unicode_extended='𝙾',
+                   unicode_limited='O'))
+        self._p_uppercase_monospace = self._register(
+            Symbol(key='p_uppercase_monospace', latex_math='\\texttt{P}', unicode_extended='𝙿',
+                   unicode_limited='P'))
+        self._q_uppercase_monospace = self._register(
+            Symbol(key='q_uppercase_monospace', latex_math='\\texttt{Q}', unicode_extended='𝚀',
+                   unicode_limited='Q'))
+        self._r_uppercase_monospace = self._register(
+            Symbol(key='r_uppercase_monospace', latex_math='\\texttt{R}', unicode_extended='𝚁',
+                   unicode_limited='R'))
+        self._s_uppercase_monospace = self._register(
+            Symbol(key='s_uppercase_monospace', latex_math='\\texttt{S}', unicode_extended='𝚂',
+                   unicode_limited='S'))
+        self._t_uppercase_monospace = self._register(
+            Symbol(key='t_uppercase_monospace', latex_math='\\texttt{T}', unicode_extended='𝚃',
+                   unicode_limited='T'))
+        self._u_uppercase_monospace = self._register(
+            Symbol(key='u_uppercase_monospace', latex_math='\\texttt{U}', unicode_extended='𝚄',
+                   unicode_limited='U'))
+        self._v_uppercase_monospace = self._register(
+            Symbol(key='v_uppercase_monospace', latex_math='\\texttt{V}', unicode_extended='𝚅',
+                   unicode_limited='V'))
+        self._w_uppercase_monospace = self._register(
+            Symbol(key='w_uppercase_monospace', latex_math='\\texttt{W}', unicode_extended='𝚆',
+                   unicode_limited='W'))
+        self._x_uppercase_monospace = self._register(
+            Symbol(key='x_uppercase_monospace', latex_math='\\texttt{X}', unicode_extended='𝚇',
+                   unicode_limited='X'))
+        self._y_uppercase_monospace = self._register(
+            Symbol(key='y_uppercase_monospace', latex_math='\\texttt{Y}', unicode_extended='𝚈',
+                   unicode_limited='Y'))
+        self._z_uppercase_monospace = self._register(
+            Symbol(key='z_uppercase_monospace', latex_math='\\texttt{Z}', unicode_extended='𝚉',
+                   unicode_limited='Z'))
 
     def _register(self, symbol: Symbol):
         self[symbol.key] = symbol
         return symbol
 
     def is_sans_serif_letter(self, letter: str) -> bool:
+        if letter is None or not len(letter) == 1 or not letter.isalpha():
+            return False
+        else:
+            return True
+
+    def is_monospace_letter(self, letter: str) -> bool:
         if letter is None or not len(letter) == 1 or not letter.isalpha():
             return False
         else:
@@ -445,6 +612,17 @@ class Symbols(dict):
         key: str = f'{letter.lower()}_{case}_serif_italic'
         return self[key]
 
+    def get_monospace_letter(self, letter: str) -> Symbol:
+        if not self.is_monospace_letter(letter=letter):
+            raise ValueError(f'ooooops')
+        case: str
+        if letter.islower():
+            case = 'lowercase'
+        else:
+            case = 'uppercase'
+        key: str = f'{letter.lower()}_{case}_monospace'
+        return self[key]
+
     # Symbols and punctuation
 
     @property
@@ -458,6 +636,10 @@ class Symbols(dict):
     @property
     def close_parenthesis(self) -> Symbol:
         return self._close_parenthesis
+
+    @property
+    def close_square_bracket(self) -> Symbol:
+        return self._close_square_bracket
 
     @property
     def comma(self) -> Symbol:
@@ -490,6 +672,10 @@ class Symbols(dict):
     @property
     def open_parenthesis(self) -> Symbol:
         return self._open_parenthesis
+
+    @property
+    def open_square_bracket(self) -> Symbol:
+        return self._open_square_bracket
 
     @property
     def rightwards_arrow(self) -> Symbol:
@@ -618,6 +804,154 @@ class Symbols(dict):
     @property
     def z_uppercase_serif_italic(self) -> Symbol:
         return self._z_uppercase_serif_italic
+
+    # Monospace digits
+
+    @property
+    def zero_monospace(self) -> Symbol:
+        return self._zero_monospace
+
+    @property
+    def one_monospace(self) -> Symbol:
+        return self._one_monospace
+
+    @property
+    def two_monospace(self) -> Symbol:
+        return self._two_monospace
+
+    @property
+    def three_monospace(self) -> Symbol:
+        return self._three_monospace
+
+    @property
+    def four_monospace(self) -> Symbol:
+        return self._four_monospace
+
+    @property
+    def five_monospace(self) -> Symbol:
+        return self._five_monospace
+
+    @property
+    def six_monospace(self) -> Symbol:
+        return self._six_monospace
+
+    @property
+    def seven_monospace(self) -> Symbol:
+        return self._seven_monospace
+
+    @property
+    def eight_monospace(self) -> Symbol:
+        return self._eight_monospace
+
+    @property
+    def nine_monospace(self) -> Symbol:
+        return self._nine_monospace
+
+    # Monospace uppercase letters
+
+    @property
+    def a_uppercase_monospace(self) -> Symbol:
+        return self._a_uppercase_monospace
+
+    @property
+    def b_uppercase_monospace(self) -> Symbol:
+        return self._b_uppercase_monospace
+
+    @property
+    def c_uppercase_monospace(self) -> Symbol:
+        return self._c_uppercase_monospace
+
+    @property
+    def d_uppercase_monospace(self) -> Symbol:
+        return self._d_uppercase_monospace
+
+    @property
+    def e_uppercase_monospace(self) -> Symbol:
+        return self._e_uppercase_monospace
+
+    @property
+    def f_uppercase_monospace(self) -> Symbol:
+        return self._f_uppercase_monospace
+
+    @property
+    def g_uppercase_monospace(self) -> Symbol:
+        return self._g_uppercase_monospace
+
+    @property
+    def h_uppercase_monospace(self) -> Symbol:
+        return self._h_uppercase_monospace
+
+    @property
+    def i_uppercase_monospace(self) -> Symbol:
+        return self._i_uppercase_monospace
+
+    @property
+    def j_uppercase_monospace(self) -> Symbol:
+        return self._j_uppercase_monospace
+
+    @property
+    def k_uppercase_monospace(self) -> Symbol:
+        return self._k_uppercase_monospace
+
+    @property
+    def l_uppercase_monospace(self) -> Symbol:
+        return self._l_uppercase_monospace
+
+    @property
+    def m_uppercase_monospace(self) -> Symbol:
+        return self._m_uppercase_monospace
+
+    @property
+    def n_uppercase_monospace(self) -> Symbol:
+        return self._n_uppercase_monospace
+
+    @property
+    def o_uppercase_monospace(self) -> Symbol:
+        return self._o_uppercase_monospace
+
+    @property
+    def p_uppercase_monospace(self) -> Symbol:
+        return self._p_uppercase_monospace
+
+    @property
+    def q_uppercase_monospace(self) -> Symbol:
+        return self._q_uppercase_monospace
+
+    @property
+    def r_uppercase_monospace(self) -> Symbol:
+        return self._r_uppercase_monospace
+
+    @property
+    def s_uppercase_monospace(self) -> Symbol:
+        return self._s_uppercase_monospace
+
+    @property
+    def t_uppercase_monospace(self) -> Symbol:
+        return self._t_uppercase_monospace
+
+    @property
+    def u_uppercase_monospace(self) -> Symbol:
+        return self._u_uppercase_monospace
+
+    @property
+    def v_uppercase_monospace(self) -> Symbol:
+        return self._v_uppercase_monospace
+
+    @property
+    def w_uppercase_monospace(self) -> Symbol:
+        return self._w_uppercase_monospace
+
+    @property
+    def x_uppercase_monospace(self) -> Symbol:
+        return self._x_uppercase_monospace
+
+    @property
+    def y_uppercase_monospace(self) -> Symbol:
+        return self._y_uppercase_monospace
+
+    @property
+    def z_uppercase_monospace(self) -> Symbol:
+        return self._z_uppercase_monospace
 
 
 symbols = Symbols()

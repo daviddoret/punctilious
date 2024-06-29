@@ -36,6 +36,7 @@ Bibliography:
 """
 
 # import typing
+import presentation_layer_1 as pl1
 import axiomatic_system_1 as as1
 from connectives_standard_library_1 import *
 import inference_rules_1 as ir1
@@ -49,7 +50,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,),
             conclusion=a | implies | (a | land | a),
-            variables=(a,)))
+            variables=(a,)),
+        ref_ts=pl1.Monospace(text='PL1'))
     """The PL01 axiom schema: A ⊃ (A ∧ A).
     
     Premises:
@@ -72,7 +74,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
             premises=(a | is_a | proposition,
                       b | is_a | proposition,),
             conclusion=(a | land | b) | implies | (b | land | a),
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PL2'))
     """The PL02 axiom schema: (A ∧ B) ⊃ (B ∧ A).
 
         Premises:
@@ -98,7 +101,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
                       b | is_a | proposition,
                       c | is_a | proposition),
             conclusion=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)),
-            variables=(a, b, c,)))
+            variables=(a, b, c,)),
+        ref_ts=pl1.Monospace(text='PL3'))
     """The PL03 axiom schema: (A ⊃ B) ⊃ [(A ∧ C) ⊃ (B ∧ C)].
     
     Premises:
@@ -125,7 +129,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
                       b | is_a | proposition,
                       c | is_a | proposition),
             conclusion=((a | implies | b) | land | (b | implies | c) | implies | (a | implies | c)),
-            variables=(a, b, c,)))
+            variables=(a, b, c,)),
+        ref_ts=pl1.Monospace(text='PL4'))
     """The PL04 axiom schema: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶).
 
     Premises:
@@ -151,7 +156,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
             conclusion=b | implies | (a | implies | b),
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PL5'))
     """The PL05 axiom schema: 𝐵 ⊃ (𝐴 ⊃ 𝐵).
 
     Premises:
@@ -176,7 +182,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
             conclusion=(b | land | (a | implies | b)) | implies | b,
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PL6'))
     """The PL06 axiom schema: (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵.
 
     Premises:
@@ -201,7 +208,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
             conclusion=a | implies | (a | lor | b),
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PL7'))
     """The PL07 axiom schema: 𝐴 ⊃ (𝐴 ∨ 𝐵).
 
     Premises:
@@ -226,7 +234,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
             conclusion=(a | lor | b) | implies | (b | lor | a),
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PL8'))
     """The PL08 axiom schema: (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴).
 
     Premises:
@@ -252,7 +261,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
                       b | is_a | proposition,
                       c | is_a | proposition),
             conclusion=((a | implies | c) | land | (b | implies | c)) | implies | ((a | lor | b) | implies | c),
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PL9'))
     """The PL09 axiom schema: [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶].
 
     Premises:
@@ -278,7 +288,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
             conclusion=((a | implies | b) | land | (a | implies | lnot(b))) | implies | lnot(a),
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PL10'))
     """The PL10 axiom schema:  [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴.
 
     Premises:

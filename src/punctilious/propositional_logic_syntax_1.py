@@ -14,6 +14,7 @@ Bibliography:
 import typing
 # punctilious modules
 import util_1 as u1
+import presentation_layer_1 as pl1
 import axiomatic_system_1 as as1
 from connectives_standard_library_1 import *
 
@@ -38,7 +39,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
         transformation=as1.Transformation(
             premises=(a | is_a | propositional_variable,),
             conclusion=a | is_a | proposition,
-            variables=(a,)))
+            variables=(a,)),
+        ref_ts=pl1.Monospace(text='PLS1'))
     """Axiom schema: A is-a propositional-variable ⊃ A is-a proposition.
     
     Premises:
@@ -60,7 +62,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,),
             conclusion=lnot(a) | is_a | proposition,
-            variables=(a,)))
+            variables=(a,)),
+        ref_ts=pl1.Monospace(text='PLS2'))
     """Axiom schema: A is-a proposition ⊃ ¬A is a proposition.
 
     Premises:
@@ -83,7 +86,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
             conclusion=(a | land | b) | is_a | proposition,
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PLS3'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition).
 
     Premises:
@@ -107,7 +111,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
             conclusion=(a | implies | b) | is_a | proposition,
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PLS4'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ⊃ B) is a proposition).
 
     Premises:
@@ -131,7 +136,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
             conclusion=(a | lor | b) | is_a | proposition,
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PLS5'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∨ B) is a proposition).
 
     Premises:
@@ -154,7 +160,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
         transformation=as1.Transformation(
             premises=None,
             conclusion=lnot(a | is_a | proposition),
-            variables=(a, b,)))
+            variables=(a, b,)),
+        ref_ts=pl1.Monospace(text='PLS6'))
     """Axiom schema: ?????.
     
     TODO: How could we implement the extreme case????????
