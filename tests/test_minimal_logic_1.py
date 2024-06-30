@@ -63,7 +63,7 @@ def theory(a, b, c):
 class TestPL1:
     def test_pl1(self):
         # Test PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
-        t = pu.as1.let_x_be_a_theory()
+        _, t = pu.as1.let_x_be_a_theory()
 
         # Elaborate a basic theory with P as a propositional-variable
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')

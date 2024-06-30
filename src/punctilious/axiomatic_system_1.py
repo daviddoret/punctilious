@@ -925,7 +925,9 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         raise u1.ApplicativeException(code=ERROR_CODE_AS1_018, msg='oops 3')
 
 
-def let_x_be_a_theory(d: FlexibleEnumeration | None = None, m: FlexibleTheory | None = None, **kwargs):
+def let_x_be_a_theory(d: FlexibleEnumeration | None = None,
+                      m: FlexibleTheory | None = None, **kwargs) -> (
+        tuple)[Theory, Theory]:
     """Declare a new theory T.
 
     If a meta-theory M is provided, then T is declared as a sub-theory of M. To formalize this relation,
@@ -941,7 +943,13 @@ def let_x_be_a_theory(d: FlexibleEnumeration | None = None, m: FlexibleTheory | 
     if 'formula_name_ts' not in kwargs:
         kwargs['formula_name_ts'] = pl1.Script(text='T')
 
-    return Theory(derivations=d, **kwargs)
+    t = Theory(derivations=d, **kwargs)
+
+    if m is not None:
+        m: Theory = coerce_theory(t=m)
+        m, _ = let_x_be_an_axiom(t=m, s=t | _connectives.is_a | _connectives.theory)
+
+    return m, t
 
 
 def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):

@@ -179,9 +179,9 @@ class SymbolTypesetter(Typesetter):
 
 
 class IndexedSymbolTypesetter(Typesetter):
-    def __init__(self, symbol: Symbol, index: int):
+    def __init__(self, body_ts: Typesetter, index: int):
         super().__init__()
-        self._symbol: Symbol = symbol
+        self._body_ts: Typesetter = body_ts
         self._index: int = index
 
     @property
@@ -189,14 +189,14 @@ class IndexedSymbolTypesetter(Typesetter):
         return self._index
 
     @property
-    def symbol(self) -> Symbol:
-        return self._symbol
+    def body_ts(self) -> Typesetter:
+        return self._body_ts
 
     def typeset_from_generator(self, encoding: typing.Optional[encodings], **kwargs) -> (
             typing.Generator)[str, None, None]:
         if encoding is None:
             encoding = encodings.default
-        yield from self.symbol.typeset_from_generator(encoding=encoding, **kwargs)
+        yield from self.body_ts.typeset_from_generator(encoding=encoding, **kwargs)
         if encoding is encodings.latex_math:
             yield f'_{{{self.index}}}'
         elif encoding is encodings.unicode_extended:
@@ -312,7 +312,7 @@ class Typesetters:
         return TextTypesetter(text=text)
 
     def indexed_symbol(self, symbol: Symbol, index: int) -> IndexedSymbolTypesetter:
-        return IndexedSymbolTypesetter(symbol=symbol, index=index)
+        return IndexedSymbolTypesetter(body_ts=symbol, index=index)
 
 
 typesetters = Typesetters()
