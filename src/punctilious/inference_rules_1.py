@@ -37,19 +37,19 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
             variables=(phi, psi,)),
         ref_ts=pl1.Monospace(text='CI'))
     """The conjunction-introduction inference rule.
-
+    
     Abbreviation: CI
     
     Aka:
      - Adjunction
      
-    Definition:
-        phi is-a proposition
-        psi is-a proposition
-        phi
-        psi
-        ________
-        phi ∧ psi
+    Premises:
+     1. phi is-a proposition
+     2. psi is-a proposition
+     3. phi
+     4. psi
+     
+    Conclusion: phi ∧ psi
 
     References:
      - https://en.wikipedia.org/wiki/List_of_rules_of_inference
@@ -98,29 +98,33 @@ simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(transformation=sim
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(formula_ts='Q') as psi:
-    modus_ponens_rule: as1.Transformation = as1.let_x_be_a_transformation(
-        premises=(
-            phi | is_a | proposition,
-            psi | is_a | proposition,
-            phi | implies | psi,
-            phi),
-        conclusion=psi,
-        variables=(phi, psi,))
-modus_ponens_axiom: as1.InferenceRule = as1.InferenceRule(transformation=modus_ponens_rule,
-                                                          ref_ts=pl1.Monospace(text='MP'))
-"""Premises:
- - phi | is_a | proposition,
- - psi | is_a | proposition,
- - phi | implies | psi,
- - phi
-
-Conclusion: psi
-
-Variables: phi, psi
-"""
+    modus_ponens: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.let_x_be_a_transformation(
+            premises=(
+                phi | is_a | proposition,
+                psi | is_a | proposition,
+                phi | implies | psi,
+                phi),
+            conclusion=psi,
+            variables=(phi, psi,)),
+        ref_ts=pl1.Monospace(text='MP'))
+    """The modus-ponens inference-rule.
+    
+    Abbreviation: MP
+    
+    Premises:
+     1. phi | is_a | proposition,
+     2. psi | is_a | proposition,
+     3. phi | implies | psi,
+     4. phi
+    
+    Conclusion: psi
+    
+    Variables: phi, psi
+    """
 
 axiomatization = as1.Axiomatization(derivations=(
     conjunction_introduction,
     simplification_1_axiom,
     simplification_2_axiom,
-    modus_ponens_axiom,))
+    modus_ponens,))

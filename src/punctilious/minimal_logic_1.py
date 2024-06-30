@@ -417,7 +417,7 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
                                   i=pl05, t=t)
     # 3. ⊢ 𝐷 ⊃ 𝐶 (mp 1, 2)
     t, success, _, = as1.derive_2(c=d | implies | c,
-                                  i=ir1.modus_ponens_axiom, t=t)
+                                  i=ir1.modus_ponens, t=t)
     # 4. ⊢ (𝐷 ⊃ 𝐶) ⊃ [(𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)] (axiom PL3)
     t, success, _, = as1.derive_2(
         c=(d | implies | c) | implies | ((d | land | d) | implies | (c | land | d)),
@@ -425,7 +425,7 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     # 5. ⊢ (𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)(mp 3, 4)
     t, success, _, = as1.derive_2(
         c=(d | land | d) | implies | (c | land | d),
-        i=ir1.modus_ponens_axiom, t=t)
+        i=ir1.modus_ponens, t=t)
     # 6. ⊢ 𝐷 ⊃ (𝐷 ∧ 𝐷)(axiom PL1)
     t, success, _, = as1.derive_2(
         c=d | implies | (d | land | d),
@@ -435,11 +435,11 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     # 8. ⊢ 𝐷 ∧ 𝐷(mp 6, 7)
     t, success, _, = as1.derive_2(
         c=d | land | d,
-        i=ir1.modus_ponens_axiom, t=t)
+        i=ir1.modus_ponens, t=t)
     # 9. ⊢ 𝐶 ∧ 𝐷(mp 5, 8)
     t, success, _, = as1.derive_2(
         c=c | land | d,
-        i=ir1.modus_ponens_axiom, t=t, debug=True)
+        i=ir1.modus_ponens, t=t, debug=True)
 
     return t
 

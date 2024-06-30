@@ -55,7 +55,15 @@ class TestTypesettingConfiguration:
 
 class TestMonospace:
     def test_monospace(self):
-        text = 'HELLO WORLD 1'
+        text = 'The quick brown fox jumps over the lazy dog 0123456789'
         t = pu.pl1.Monospace(text=text)
         output = t.typeset_as_string()
-        pass
+        assert output == '𝚃𝚑𝚎 𝚚𝚞𝚒𝚌𝚔 𝚋𝚛𝚘𝚠𝚗 𝚏𝚘𝚡 𝚓𝚞𝚖𝚙𝚜 𝚘𝚟𝚎𝚛 𝚝𝚑𝚎 𝚕𝚊𝚣𝚢 𝚍𝚘𝚐 0123456789'
+
+
+class TestScript:
+    def test_script(self):
+        text = 'The quick brown fox jumps over the lazy dog 0123456789'
+        t = pu.pl1.Script(text=text)
+        output = t.typeset_as_string()
+        assert output == '𝒯𝒽ℯ 𝓆𝓊𝒾𝒸𝓀 𝒷𝓇ℴ𝓌𝓃 𝒻ℴ𝓍 𝒿𝓊𝓂𝓅𝓈 ℴ𝓋ℯ𝓇 𝓉𝒽ℯ 𝓁𝒶𝓏𝓎 𝒹ℴℊ 0123456789'

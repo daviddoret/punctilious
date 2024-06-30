@@ -150,7 +150,7 @@ class TestModusPonens:
                                          b | is_a | proposition,
                                          a | implies | b,
                                          a),
-                                     i=pu.ir1.modus_ponens_axiom)
+                                     i=pu.ir1.modus_ponens)
         assert pu.as1.is_valid_statement_in_theory(phi=b, t=theory)
 
         # extend the theory to perform a second test
@@ -166,7 +166,7 @@ class TestModusPonens:
                                          (a | land | a) | is_a | proposition,
                                          a | implies | (a | land | a),
                                          a),
-                                     i=pu.ir1.modus_ponens_axiom)
+                                     i=pu.ir1.modus_ponens)
         assert pu.as1.is_valid_statement_in_theory(phi=a | land | a, t=theory)
 
         # show that wrong premises fail to derive a theorem
@@ -179,4 +179,4 @@ class TestModusPonens:
                                 c | is_a | proposition,
                                 a | implies | c,
                                 c),
-                            i=pu.ir1.modus_ponens_rule)
+                            i=pu.ir1.modus_ponens.transformation)

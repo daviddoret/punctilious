@@ -63,6 +63,7 @@ def theory(a, b, c):
 class TestPL1:
     def test_pl1(self):
         # Test PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
+        t = pu.as1.let_x_be_a_theory()
 
         # Elaborate a basic theory with P as a propositional-variable
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
@@ -99,7 +100,7 @@ class TestPL1:
 
         # make P valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=p)
-        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
+        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens)
 
         # Derive: P ∧ P from P by modus-ponens
         t, _ = pu.as1.derive_1(t=t,
@@ -109,7 +110,7 @@ class TestPL1:
                                    (p | land | p) | is_a | proposition,
                                    p | implies | (p | land | p),
                                    p,),
-                               i=pu.ir1.modus_ponens_axiom)
+                               i=pu.ir1.modus_ponens)
         assert pu.as1.is_valid_statement_in_theory(phi=p | land | p, t=t)
         pass
 
@@ -154,7 +155,7 @@ class TestPL2:
 
         # make (P ∧ Q) valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=p | land | q)
-        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
+        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens)
 
         # Derive: P ∧ P from P by modus-ponens
         t, _ = pu.as1.derive_1(t=t,
@@ -164,7 +165,7 @@ class TestPL2:
                                    (q | land | p) | is_a | proposition,
                                    (p | land | q) | implies | (q | land | p),
                                    p | land | q,),
-                               i=pu.ir1.modus_ponens_axiom)
+                               i=pu.ir1.modus_ponens)
         assert pu.as1.is_valid_statement_in_theory(phi=q | land | p, t=t)
         pass
 
@@ -231,7 +232,7 @@ class TestPL3:
 
         # make (P implies Q) valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=p | implies | q)
-        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens_axiom)
+        t, _, = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ir1.modus_ponens)
 
         # Derive: (P ∧ R) implies (Q ∧ R)  from P by modus-ponens
         t, _ = pu.as1.derive_1(t=t,
@@ -241,7 +242,7 @@ class TestPL3:
                                    ((p | land | r) | implies | (q | land | r)) | is_a | proposition,
                                    (p | implies | q) | implies | ((p | land | r) | implies | (q | land | r)),
                                    p | implies | q,),
-                               i=pu.ir1.modus_ponens_axiom)
+                               i=pu.ir1.modus_ponens)
         assert pu.as1.is_valid_statement_in_theory(phi=(p | land | r) | implies | (q | land | r), t=t)
         pass
 
@@ -318,12 +319,12 @@ class TestPL5:
                 (x | implies | y) | is_a | proposition,
                 y | implies | (x | implies | y),
                 y,),
-            i=pu.ir1.modus_ponens_axiom)
+            i=pu.ir1.modus_ponens)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | implies | y, t=t4)
 
         t5, success, _ = derive_1(t=t2, c=x | implies | y, debug=True,
-                                  i=pu.ir1.modus_ponens_axiom)
+                                  i=pu.ir1.modus_ponens)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | implies | y, t=t5)
         pass
@@ -374,7 +375,7 @@ class TestMancosu2021P20:
         # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
         t, success, _, = derive_1(
             c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2)),
-            i=pu.ir1.modus_ponens_axiom, t=t, debug=True)
+            i=pu.ir1.modus_ponens, t=t, debug=True)
         assert success
 
         # 4. ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}] (axiom PL3)
@@ -416,7 +417,7 @@ class TestMancosu2021P20:
         assert success
         # 3. ⊢ 𝐷 ⊃ 𝐶 (mp 1, 2)
         t, success, _, = derive_1(c=d | implies | c,
-                                  i=pu.ir1.modus_ponens_axiom, t=t)
+                                  i=pu.ir1.modus_ponens, t=t)
         assert success
         # 4. ⊢ (𝐷 ⊃ 𝐶) ⊃ [(𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)] (axiom PL3)
         t, success, _, = derive_1(
@@ -426,7 +427,7 @@ class TestMancosu2021P20:
         # 5. ⊢ (𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)(mp 3, 4)
         t, success, _, = derive_1(
             c=(d | land | d) | implies | (c | land | d),
-            i=pu.ir1.modus_ponens_axiom, t=t)
+            i=pu.ir1.modus_ponens, t=t)
         assert success
         # 6. ⊢ 𝐷 ⊃ (𝐷 ∧ 𝐷)(axiom PL1)
         t, success, _, = derive_1(
@@ -438,10 +439,10 @@ class TestMancosu2021P20:
         # 8. ⊢ 𝐷 ∧ 𝐷(mp 6, 7)
         t, success, _, = derive_1(
             c=d | land | d,
-            i=pu.ir1.modus_ponens_axiom, t=t)
+            i=pu.ir1.modus_ponens, t=t)
         assert success
         # 9. ⊢ 𝐶 ∧ 𝐷(mp 5, 8)
         t, success, _, = derive_1(
             c=c | land | d,
-            i=pu.ir1.modus_ponens_axiom, t=t, debug=True)
+            i=pu.ir1.modus_ponens, t=t, debug=True)
         assert success

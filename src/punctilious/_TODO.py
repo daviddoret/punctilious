@@ -5,14 +5,20 @@ TODO: Consider using a three-valued logic:
  - or P is false
  - or P is not decidable in this axiomatization
 
+TODO: Implement analysis of theory consistency
+    t  |-- p
+    t  |-- not(p)
+    _____________
+    t is inconsistent
 
-TODO: Remove "ref" argumnets
+TODO: Implement hypothesis
+    t1
+        ...
+        ...
+        ...
+    h1 = (t1, assumption)
 
-Idea:
-- In kwargs, pass typesetter argument values. Ex: ref_ts='PL01'.
-- Then add these to a local dictionary. Ex: ts.
-- Then, have a method ts(...) where we can pass the typesetter argument,
-    ex: typeset(o, ts='ref', ...)
-
-
+    h1 is inconsistent
+    __________________
+    not(assumption)
 """

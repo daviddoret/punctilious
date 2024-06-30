@@ -230,7 +230,7 @@ digit_names = {'0': 'zero', '1': 'one', '2': 'two', '3': 'three', '4': 'four', '
 
 
 class Monospace(Typesetter):
-    """
+    """A multi-format best-effort string in monospace style.
 
     """
 
@@ -246,18 +246,50 @@ class Monospace(Typesetter):
             typing.Generator)[str, None, None]:
         for c in self.text:
             c: str
-            if c.isalnum():
-                if c.isnumeric():
-                    digit_name: str = digit_names.get(c)
-                    key: str = f'{digit_name}_monospace'
-                    symbol: Symbol = symbols.get(key, c)
-                    yield from symbol.typeset_from_generator(**kwargs)
-                elif c.isalpha() and c.isupper():
-                    key: str = f'{c.lower()}_uppercase_monospace'
-                    symbol: Symbol = symbols.get(key, c)
-                    yield from symbol.typeset_from_generator(**kwargs)
-                else:
-                    yield c
+            if c in '0123456789':
+                digit_name: str = digit_names.get(c)
+                key: str = f'{digit_name}_monospace'
+                symbol: Symbol = symbols.get(key, c)
+                yield from symbol.typeset_from_generator(**kwargs)
+            elif c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+                key: str = f'{c.lower()}_uppercase_monospace'
+                symbol: Symbol = symbols.get(key, c)
+                yield from symbol.typeset_from_generator(**kwargs)
+            elif c in 'abcdefghijklmnopqrstuvwxyz':
+                key: str = f'{c}_lowercase_monospace'
+                symbol: Symbol = symbols.get(key, c)
+                yield from symbol.typeset_from_generator(**kwargs)
+            else:
+                yield c
+
+
+class Script(Typesetter):
+    """A multi-format best-effort string in script style.
+
+
+
+    """
+
+    def __init__(self, text: str):
+        super().__init__()
+        self._text: str = str(text)
+
+    @property
+    def text(self) -> str:
+        return self._text
+
+    def typeset_from_generator(self, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        for c in self.text:
+            c: str
+            if c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+                key: str = f'{c.lower()}_uppercase_script'
+                symbol: Symbol = symbols.get(key, c)
+                yield from symbol.typeset_from_generator(**kwargs)
+            elif c in 'abcdefghijklmnopqrstuvwxyz':
+                key: str = f'{c}_lowercase_script'
+                symbol: Symbol = symbols.get(key, c)
+                yield from symbol.typeset_from_generator(**kwargs)
             else:
                 yield c
 
@@ -337,7 +369,13 @@ class Symbol(Typesetter):
 
 
 class Symbols(dict):
-    """A catalog of out-of-the-box symbols."""
+    """A catalog of out-of-the-box symbols.
+
+    References:
+        - https://mirror.init7.net/ctan/macros/unicodetex/latex/unicode-math/unimath-symbols.pdf
+        - https://gist.github.com/taliesinb/4c2700c543c6e06a47a8a3cc85bb9772
+
+    """
     _singleton = None
 
     def __new__(cls):
@@ -584,6 +622,298 @@ class Symbols(dict):
         self._z_uppercase_monospace = self._register(
             Symbol(key='z_uppercase_monospace', latex_math='\\texttt{Z}', unicode_extended='𝚉',
                    unicode_limited='Z'))
+
+        # Lowercase monospace
+        self._a_lowercase_monospace = self._register(
+            Symbol(key='a_lowercase_monospace', latex_math='\\texttt{a}', unicode_extended='𝚊',
+                   unicode_limited='a'))
+        self._b_lowercase_monospace = self._register(
+            Symbol(key='b_lowercase_monospace', latex_math='\\texttt{b}', unicode_extended='𝚋',
+                   unicode_limited='b'))
+        self._c_lowercase_monospace = self._register(
+            Symbol(key='c_lowercase_monospace', latex_math='\\texttt{c}', unicode_extended='𝚌',
+                   unicode_limited='c'))
+        self._d_lowercase_monospace = self._register(
+            Symbol(key='d_lowercase_monospace', latex_math='\\texttt{d}', unicode_extended='𝚍',
+                   unicode_limited='d'))
+        self._e_lowercase_monospace = self._register(
+            Symbol(key='e_lowercase_monospace', latex_math='\\texttt{e}', unicode_extended='𝚎',
+                   unicode_limited='e'))
+        self._f_lowercase_monospace = self._register(
+            Symbol(key='f_lowercase_monospace', latex_math='\\texttt{f}', unicode_extended='𝚏',
+                   unicode_limited='f'))
+        self._g_lowercase_monospace = self._register(
+            Symbol(key='g_lowercase_monospace', latex_math='\\texttt{g}', unicode_extended='𝚐',
+                   unicode_limited='g'))
+        self._h_lowercase_monospace = self._register(
+            Symbol(key='h_lowercase_monospace', latex_math='\\texttt{h}', unicode_extended='𝚑',
+                   unicode_limited='h'))
+        self._i_lowercase_monospace = self._register(
+            Symbol(key='i_lowercase_monospace', latex_math='\\texttt{i}', unicode_extended='𝚒',
+                   unicode_limited='i'))
+        self._j_lowercase_monospace = self._register(
+            Symbol(key='j_lowercase_monospace', latex_math='\\texttt{j}', unicode_extended='𝚓',
+                   unicode_limited='j'))
+        self._k_lowercase_monospace = self._register(
+            Symbol(key='k_lowercase_monospace', latex_math='\\texttt{k}', unicode_extended='𝚔',
+                   unicode_limited='k'))
+        self._l_lowercase_monospace = self._register(
+            Symbol(key='l_lowercase_monospace', latex_math='\\texttt{l}', unicode_extended='𝚕',
+                   unicode_limited='l'))
+        self._m_lowercase_monospace = self._register(
+            Symbol(key='m_lowercase_monospace', latex_math='\\texttt{m}', unicode_extended='𝚖',
+                   unicode_limited='m'))
+        self._n_lowercase_monospace = self._register(
+            Symbol(key='n_lowercase_monospace', latex_math='\\texttt{n}', unicode_extended='𝚗',
+                   unicode_limited='n'))
+        self._o_lowercase_monospace = self._register(
+            Symbol(key='o_lowercase_monospace', latex_math='\\texttt{o}', unicode_extended='𝚘',
+                   unicode_limited='o'))
+        self._p_lowercase_monospace = self._register(
+            Symbol(key='p_lowercase_monospace', latex_math='\\texttt{p}', unicode_extended='𝚙',
+                   unicode_limited='p'))
+        self._q_lowercase_monospace = self._register(
+            Symbol(key='q_lowercase_monospace', latex_math='\\texttt{q}', unicode_extended='𝚚',
+                   unicode_limited='q'))
+        self._r_lowercase_monospace = self._register(
+            Symbol(key='r_lowercase_monospace', latex_math='\\texttt{r}', unicode_extended='𝚛',
+                   unicode_limited='r'))
+        self._s_lowercase_monospace = self._register(
+            Symbol(key='s_lowercase_monospace', latex_math='\\texttt{s}', unicode_extended='𝚜',
+                   unicode_limited='s'))
+        self._t_lowercase_monospace = self._register(
+            Symbol(key='t_lowercase_monospace', latex_math='\\texttt{t}', unicode_extended='𝚝',
+                   unicode_limited='t'))
+        self._u_lowercase_monospace = self._register(
+            Symbol(key='u_lowercase_monospace', latex_math='\\texttt{u}', unicode_extended='𝚞',
+                   unicode_limited='u'))
+        self._v_lowercase_monospace = self._register(
+            Symbol(key='v_lowercase_monospace', latex_math='\\texttt{v}', unicode_extended='𝚟',
+                   unicode_limited='v'))
+        self._w_lowercase_monospace = self._register(
+            Symbol(key='w_lowercase_monospace', latex_math='\\texttt{w}', unicode_extended='𝚠',
+                   unicode_limited='w'))
+        self._x_lowercase_monospace = self._register(
+            Symbol(key='x_lowercase_monospace', latex_math='\\texttt{x}', unicode_extended='𝚡',
+                   unicode_limited='x'))
+        self._y_lowercase_monospace = self._register(
+            Symbol(key='y_lowercase_monospace', latex_math='\\texttt{y}', unicode_extended='𝚢',
+                   unicode_limited='y'))
+        self._z_lowercase_monospace = self._register(
+            Symbol(key='z_lowercase_monospace', latex_math='\\texttt{z}', unicode_extended='𝚣',
+                   unicode_limited='z'))
+
+        # Script Uppercase
+
+        self._a_uppercase_script = self._register(
+            Symbol(key='a_uppercase_script', latex_math='\\texttt{A}', unicode_extended='𝒜',
+                   unicode_limited='A'))
+
+        self._b_uppercase_script = self._register(
+            Symbol(key='b_uppercase_script', latex_math='\\texttt{B}', unicode_extended='ℬ',
+                   unicode_limited='B'))
+
+        self._c_uppercase_script = self._register(
+            Symbol(key='c_uppercase_script', latex_math='\\texttt{C}', unicode_extended='𝒞',
+                   unicode_limited='C'))
+
+        self._d_uppercase_script = self._register(
+            Symbol(key='d_uppercase_script', latex_math='\\texttt{D}', unicode_extended='𝒟',
+                   unicode_limited='D'))
+
+        self._e_uppercase_script = self._register(
+            Symbol(key='e_uppercase_script', latex_math='\\texttt{E}', unicode_extended='ℰ',
+                   unicode_limited='E'))
+
+        self._f_uppercase_script = self._register(
+            Symbol(key='f_uppercase_script', latex_math='\\texttt{F}', unicode_extended='ℱ',
+                   unicode_limited='F'))
+
+        self._g_uppercase_script = self._register(
+            Symbol(key='g_uppercase_script', latex_math='\\texttt{G}', unicode_extended='𝒢',
+                   unicode_limited='G'))
+
+        self._h_uppercase_script = self._register(
+            Symbol(key='h_uppercase_script', latex_math='\\texttt{H}', unicode_extended='ℋ',
+                   unicode_limited='H'))
+
+        self._i_uppercase_script = self._register(
+            Symbol(key='i_uppercase_script', latex_math='\\texttt{I}', unicode_extended='ℐ',
+                   unicode_limited='I'))
+
+        self._j_uppercase_script = self._register(
+            Symbol(key='j_uppercase_script', latex_math='\\texttt{J}', unicode_extended='𝒥',
+                   unicode_limited='J'))
+
+        self._k_uppercase_script = self._register(
+            Symbol(key='k_uppercase_script', latex_math='\\texttt{K}', unicode_extended='𝒦',
+                   unicode_limited='K'))
+
+        self._l_uppercase_script = self._register(
+            Symbol(key='l_uppercase_script', latex_math='\\texttt{L}', unicode_extended='ℒ',
+                   unicode_limited='L'))
+
+        self._m_uppercase_script = self._register(
+            Symbol(key='m_uppercase_script', latex_math='\\texttt{M}', unicode_extended='ℳ',
+                   unicode_limited='M'))
+
+        self._n_uppercase_script = self._register(
+            Symbol(key='n_uppercase_script', latex_math='\\texttt{N}', unicode_extended='𝒩',
+                   unicode_limited='N'))
+
+        self._o_uppercase_script = self._register(
+            Symbol(key='o_uppercase_script', latex_math='\\texttt{O}', unicode_extended='𝒪',
+                   unicode_limited='O'))
+
+        self._p_uppercase_script = self._register(
+            Symbol(key='p_uppercase_script', latex_math='\\texttt{P}', unicode_extended='𝒫',
+                   unicode_limited='P'))
+
+        self._q_uppercase_script = self._register(
+            Symbol(key='q_uppercase_script', latex_math='\\texttt{Q}', unicode_extended='𝒬',
+                   unicode_limited='Q'))
+
+        self._r_uppercase_script = self._register(
+            Symbol(key='r_uppercase_script', latex_math='\\texttt{R}', unicode_extended='ℛ',
+                   unicode_limited='R'))
+
+        self._s_uppercase_script = self._register(
+            Symbol(key='s_uppercase_script', latex_math='\\texttt{S}', unicode_extended='𝒮',
+                   unicode_limited='S'))
+
+        self._t_uppercase_script = self._register(
+            Symbol(key='t_uppercase_script', latex_math='\\texttt{T}', unicode_extended='𝒯',
+                   unicode_limited='T'))
+
+        self._u_uppercase_script = self._register(
+            Symbol(key='u_uppercase_script', latex_math='\\texttt{U}', unicode_extended='𝒰',
+                   unicode_limited='U'))
+
+        self._v_uppercase_script = self._register(
+            Symbol(key='v_uppercase_script', latex_math='\\texttt{V}', unicode_extended='𝒱',
+                   unicode_limited='V'))
+
+        self._w_uppercase_script = self._register(
+            Symbol(key='w_uppercase_script', latex_math='\\texttt{W}', unicode_extended='𝒲',
+                   unicode_limited='W'))
+
+        self._x_uppercase_script = self._register(
+            Symbol(key='x_uppercase_script', latex_math='\\texttt{X}', unicode_extended='𝒳',
+                   unicode_limited='X'))
+
+        self._y_uppercase_script = self._register(
+            Symbol(key='y_uppercase_script', latex_math='\\texttt{Y}', unicode_extended='𝒴',
+                   unicode_limited='Y'))
+
+        self._z_uppercase_script = self._register(
+            Symbol(key='z_uppercase_script', latex_math='\\texttt{Z}', unicode_extended='𝒵',
+                   unicode_limited='Z'))
+
+        # Script lowercase
+
+        self._a_lowercase_script = self._register(
+            Symbol(key='a_lowercase_script', latex_math='\\texttt{a}', unicode_extended='𝒶',
+                   unicode_limited='a'))
+
+        self._b_lowercase_script = self._register(
+            Symbol(key='b_lowercase_script', latex_math='\\texttt{b}', unicode_extended='𝒷',
+                   unicode_limited='b'))
+
+        self._c_lowercase_script = self._register(
+            Symbol(key='c_lowercase_script', latex_math='\\texttt{c}', unicode_extended='𝒸',
+                   unicode_limited='c'))
+
+        self._d_lowercase_script = self._register(
+            Symbol(key='d_lowercase_script', latex_math='\\texttt{d}', unicode_extended='𝒹',
+                   unicode_limited='d'))
+
+        self._e_lowercase_script = self._register(
+            Symbol(key='e_lowercase_script', latex_math='\\texttt{e}', unicode_extended='ℯ',
+                   unicode_limited='e'))
+
+        self._f_lowercase_script = self._register(
+            Symbol(key='f_lowercase_script', latex_math='\\texttt{f}', unicode_extended='𝒻',
+                   unicode_limited='f'))
+
+        self._g_lowercase_script = self._register(
+            Symbol(key='g_lowercase_script', latex_math='\\texttt{g}', unicode_extended='ℊ',
+                   unicode_limited='g'))
+
+        self._h_lowercase_script = self._register(
+            Symbol(key='h_lowercase_script', latex_math='\\texttt{h}', unicode_extended='𝒽',
+                   unicode_limited='h'))
+
+        self._i_lowercase_script = self._register(
+            Symbol(key='i_lowercase_script', latex_math='\\texttt{i}', unicode_extended='𝒾',
+                   unicode_limited='i'))
+
+        self._j_lowercase_script = self._register(
+            Symbol(key='j_lowercase_script', latex_math='\\texttt{j}', unicode_extended='𝒿',
+                   unicode_limited='j'))
+
+        self._k_lowercase_script = self._register(
+            Symbol(key='k_lowercase_script', latex_math='\\texttt{k}', unicode_extended='𝓀',
+                   unicode_limited='k'))
+
+        self._l_lowercase_script = self._register(
+            Symbol(key='l_lowercase_script', latex_math='\\texttt{l}', unicode_extended='𝓁',
+                   unicode_limited='l'))
+
+        self._m_lowercase_script = self._register(
+            Symbol(key='m_lowercase_script', latex_math='\\texttt{m}', unicode_extended='𝓂',
+                   unicode_limited='m'))
+
+        self._n_lowercase_script = self._register(
+            Symbol(key='n_lowercase_script', latex_math='\\texttt{n}', unicode_extended='𝓃',
+                   unicode_limited='n'))
+
+        self._o_lowercase_script = self._register(
+            Symbol(key='o_lowercase_script', latex_math='\\texttt{o}', unicode_extended='ℴ',
+                   unicode_limited='o'))
+
+        self._p_lowercase_script = self._register(
+            Symbol(key='p_lowercase_script', latex_math='\\texttt{p}', unicode_extended='𝓅',
+                   unicode_limited='p'))
+
+        self._q_lowercase_script = self._register(
+            Symbol(key='q_lowercase_script', latex_math='\\texttt{q}', unicode_extended='𝓆',
+                   unicode_limited='q'))
+
+        self._r_lowercase_script = self._register(
+            Symbol(key='r_lowercase_script', latex_math='\\texttt{r}', unicode_extended='𝓇',
+                   unicode_limited='r'))
+
+        self._s_lowercase_script = self._register(
+            Symbol(key='s_lowercase_script', latex_math='\\texttt{s}', unicode_extended='𝓈',
+                   unicode_limited='s'))
+
+        self._t_lowercase_script = self._register(
+            Symbol(key='t_lowercase_script', latex_math='\\texttt{t}', unicode_extended='𝓉',
+                   unicode_limited='t'))
+
+        self._u_lowercase_script = self._register(
+            Symbol(key='u_lowercase_script', latex_math='\\texttt{u}', unicode_extended='𝓊',
+                   unicode_limited='u'))
+
+        self._v_lowercase_script = self._register(
+            Symbol(key='v_lowercase_script', latex_math='\\texttt{v}', unicode_extended='𝓋',
+                   unicode_limited='v'))
+
+        self._w_lowercase_script = self._register(
+            Symbol(key='w_lowercase_script', latex_math='\\texttt{w}', unicode_extended='𝓌',
+                   unicode_limited='w'))
+
+        self._x_lowercase_script = self._register(
+            Symbol(key='x_lowercase_script', latex_math='\\texttt{x}', unicode_extended='𝓍',
+                   unicode_limited='x'))
+
+        self._y_lowercase_script = self._register(
+            Symbol(key='y_lowercase_script', latex_math='\\texttt{y}', unicode_extended='𝓎',
+                   unicode_limited='y'))
+
+        self._z_lowercase_script = self._register(
+            Symbol(key='z_lowercase_script', latex_math='\\texttt{z}', unicode_extended='𝓏',
+                   unicode_limited='z'))
 
     def _register(self, symbol: Symbol):
         self[symbol.key] = symbol
@@ -952,6 +1282,218 @@ class Symbols(dict):
     @property
     def z_uppercase_monospace(self) -> Symbol:
         return self._z_uppercase_monospace
+
+    # Uppercase script
+
+    @property
+    def a_uppercase_script(self) -> Symbol:
+        return self._a_uppercase_script
+
+    @property
+    def b_uppercase_script(self) -> Symbol:
+        return self._b_uppercase_script
+
+    @property
+    def c_uppercase_script(self) -> Symbol:
+        return self._c_uppercase_script
+
+    @property
+    def d_uppercase_script(self) -> Symbol:
+        return self._d_uppercase_script
+
+    @property
+    def e_uppercase_script(self) -> Symbol:
+        return self._e_uppercase_script
+
+    @property
+    def f_uppercase_script(self) -> Symbol:
+        return self._f_uppercase_script
+
+    @property
+    def g_uppercase_script(self) -> Symbol:
+        return self._g_uppercase_script
+
+    @property
+    def h_uppercase_script(self) -> Symbol:
+        return self._h_uppercase_script
+
+    @property
+    def i_uppercase_script(self) -> Symbol:
+        return self._i_uppercase_script
+
+    @property
+    def j_uppercase_script(self) -> Symbol:
+        return self._j_uppercase_script
+
+    @property
+    def k_uppercase_script(self) -> Symbol:
+        return self._k_uppercase_script
+
+    @property
+    def l_uppercase_script(self) -> Symbol:
+        return self._l_uppercase_script
+
+    @property
+    def m_uppercase_script(self) -> Symbol:
+        return self._m_uppercase_script
+
+    @property
+    def n_uppercase_script(self) -> Symbol:
+        return self._n_uppercase_script
+
+    @property
+    def o_uppercase_script(self) -> Symbol:
+        return self._o_uppercase_script
+
+    @property
+    def p_uppercase_script(self) -> Symbol:
+        return self._p_uppercase_script
+
+    @property
+    def q_uppercase_script(self) -> Symbol:
+        return self._q_uppercase_script
+
+    @property
+    def r_uppercase_script(self) -> Symbol:
+        return self._r_uppercase_script
+
+    @property
+    def s_uppercase_script(self) -> Symbol:
+        return self._s_uppercase_script
+
+    @property
+    def t_uppercase_script(self) -> Symbol:
+        return self._t_uppercase_script
+
+    @property
+    def u_uppercase_script(self) -> Symbol:
+        return self._u_uppercase_script
+
+    @property
+    def v_uppercase_script(self) -> Symbol:
+        return self._v_uppercase_script
+
+    @property
+    def w_uppercase_script(self) -> Symbol:
+        return self._w_uppercase_script
+
+    @property
+    def x_uppercase_script(self) -> Symbol:
+        return self._x_uppercase_script
+
+    @property
+    def y_uppercase_script(self) -> Symbol:
+        return self._y_uppercase_script
+
+    @property
+    def z_uppercase_script(self) -> Symbol:
+        return self._z_uppercase_script
+
+    # Lowercase script
+
+    @property
+    def a_lowercase_script(self) -> Symbol:
+        return self._a_lowercase_script
+
+    @property
+    def b_lowercase_script(self) -> Symbol:
+        return self._b_lowercase_script
+
+    @property
+    def c_lowercase_script(self) -> Symbol:
+        return self._c_lowercase_script
+
+    @property
+    def d_lowercase_script(self) -> Symbol:
+        return self._d_lowercase_script
+
+    @property
+    def e_lowercase_script(self) -> Symbol:
+        return self._e_lowercase_script
+
+    @property
+    def f_lowercase_script(self) -> Symbol:
+        return self._f_lowercase_script
+
+    @property
+    def g_lowercase_script(self) -> Symbol:
+        return self._g_lowercase_script
+
+    @property
+    def h_lowercase_script(self) -> Symbol:
+        return self._h_lowercase_script
+
+    @property
+    def i_lowercase_script(self) -> Symbol:
+        return self._i_lowercase_script
+
+    @property
+    def j_lowercase_script(self) -> Symbol:
+        return self._j_lowercase_script
+
+    @property
+    def k_lowercase_script(self) -> Symbol:
+        return self._k_lowercase_script
+
+    @property
+    def l_lowercase_script(self) -> Symbol:
+        return self._l_lowercase_script
+
+    @property
+    def m_lowercase_script(self) -> Symbol:
+        return self._m_lowercase_script
+
+    @property
+    def n_lowercase_script(self) -> Symbol:
+        return self._n_lowercase_script
+
+    @property
+    def o_lowercase_script(self) -> Symbol:
+        return self._o_lowercase_script
+
+    @property
+    def p_lowercase_script(self) -> Symbol:
+        return self._p_lowercase_script
+
+    @property
+    def q_lowercase_script(self) -> Symbol:
+        return self._q_lowercase_script
+
+    @property
+    def r_lowercase_script(self) -> Symbol:
+        return self._r_lowercase_script
+
+    @property
+    def s_lowercase_script(self) -> Symbol:
+        return self._s_lowercase_script
+
+    @property
+    def t_lowercase_script(self) -> Symbol:
+        return self._t_lowercase_script
+
+    @property
+    def u_lowercase_script(self) -> Symbol:
+        return self._u_lowercase_script
+
+    @property
+    def v_lowercase_script(self) -> Symbol:
+        return self._v_lowercase_script
+
+    @property
+    def w_lowercase_script(self) -> Symbol:
+        return self._w_lowercase_script
+
+    @property
+    def x_lowercase_script(self) -> Symbol:
+        return self._x_lowercase_script
+
+    @property
+    def y_lowercase_script(self) -> Symbol:
+        return self._y_lowercase_script
+
+    @property
+    def z_lowercase_script(self) -> Symbol:
+        return self._z_lowercase_script
 
 
 symbols = Symbols()
