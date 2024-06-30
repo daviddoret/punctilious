@@ -99,13 +99,14 @@ class Connective:
     Equivalent definition:
     A node color in a formula tree."""
 
-    def __init__(self, formula_ts: pl1.FlexibleTypesetter = None):
+    def __init__(self, formula_ts: pl1.FlexibleTypesetter = None, **kwargs):
         """
 
         :param formula_ts: A default text representation.
         """
         formula_ts: pl1.Typesetter = pl1.coerce_typesetter(ts=formula_ts)
         self._formula_typesetter: pl1.Typesetter = formula_ts
+        self._ts: dict[str, pl1.Typesetter] = pl1.extract_typesetters(t=kwargs)
 
     def __call__(self, *args):
         """Allows pseudo formal language in python."""
@@ -118,15 +119,20 @@ class Connective:
         return f'{id(self)}-connective'
 
     @property
-    def formula_typesetter(self) -> pl1.Typesetter:
+    def formula_ts(self) -> pl1.Typesetter:
         return self._formula_typesetter
 
-    @formula_typesetter.setter
-    def formula_typesetter(self, formula_typesetter: pl1.Typesetter):
+    @formula_ts.setter
+    def formula_ts(self, formula_typesetter: pl1.Typesetter):
         self._formula_typesetter = formula_typesetter
 
     def to_formula(self) -> Formula:
         return Formula(c=self)
+
+    @property
+    def ts(self) -> dict[str, pl1.Typesetter]:
+        """A dictionary of typesetters that may output representations of this object, or linked objects."""
+        return self._ts
 
 
 class Formula(tuple):
@@ -233,11 +239,6 @@ class Formula(tuple):
         return is_term_of_formula(x=phi, phi=self)
 
     @property
-    def ts(self) -> dict[str, pl1.Typesetter]:
-        """A dictionary of typesetters that may output representations of this object."""
-        return self._ts
-
-    @property
     def term_0(self) -> Formula:
         """
         TODO: Extend the data model and reserve this method to sub-classes that have an n-th element. It should be
@@ -270,6 +271,11 @@ class Formula(tuple):
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_005, c=self.connective)
         return self[2]
 
+    @property
+    def ts(self) -> dict[str, pl1.Typesetter]:
+        """A dictionary of typesetters that may output representations of this object."""
+        return self._ts
+
     def get_typesetter(self, typesetter: typing.Optional[pl1.FlexibleTypesetter] = None,
                        ts_key: str | None = None) -> pl1.Typesetter:
         """
@@ -289,7 +295,7 @@ class Formula(tuple):
                 # If ts_key argument was provided, return the typesetter from the
                 return self.ts.get(ts_key)
             # Otherwise return the typesetter attached to the formula's connective.
-            typesetter: pl1.Typesetter = self.connective.formula_typesetter
+            typesetter: pl1.Typesetter = self.connective.formula_ts
         return typesetter
 
     def typeset_as_string(self, ts: typing.Optional[pl1.Typesetter] = None, ts_key: str | None = None, **kwargs) -> str:
