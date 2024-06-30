@@ -6,12 +6,12 @@ from punctilious.connectives_standard_library_1 import *
 class TestHeuristic:
     def test_heuristic_basic(self):
         t = pu.pls1.let_x_be_a_propositional_logic_syntax_1_theory()
-        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='P')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='P')
         assert not pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=p | is_a | proposition, t=t)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
-        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | land | q) | is_a | proposition, t=t)
         assert success
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | implies | q) | is_a | proposition, t=t)
@@ -21,8 +21,8 @@ class TestHeuristic:
 
     def test_heuristic_complex(self):
         t = pu.pls1.let_x_be_a_propositional_logic_syntax_1_theory()
-        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='P')
-        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='P')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         t, success = pu.as1.auto_derive_with_heuristics(
             conjecture=((q | lor | q) | implies | (
                     (p | land | p) | land | (p | lor | (q | implies | lnot(q))))) | is_a | proposition, t=t)
@@ -43,33 +43,33 @@ class TestAxioms:
         implies = pu.as1._connectives.implies
 
         # elaborate a theory
-        theory, p = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
 
         # derive: p is-a proposition
-        theory, _, = pu.as1.derive_1(t=theory,
-                                     c=p | is_a | proposition,
-                                     p=(
-                                         p | is_a | propositional_variable,),
-                                     i=pu.pls1.i1)
-        assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=theory)
+        t, _, = pu.as1.derive_1(t=t,
+                                c=p | is_a | proposition,
+                                p=(
+                                    p | is_a | propositional_variable,),
+                                i=pu.pls1.i1)
+        assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
 
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition
         # note that it is not necessary that either A or ¬A be valid
-        theory = pu.as1.extend_theory(pu.pls1.i2, t=theory)
+        t = pu.as1.extend_theory(pu.pls1.i2, t=t)
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition,),
             transformation_rule=pu.pls1.i2.transformation)
         claim = lnot(p) | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=lnot(p) | is_a | proposition, psi=isolated_theorem.valid_statement)
-        theory = pu.as1.extend_theory(isolated_theorem, t=theory)
+        t = pu.as1.extend_theory(isolated_theorem, t=t)
 
-        assert pu.as1.is_valid_statement_in_theory(phi=lnot(p) | is_a | proposition, t=theory)
+        assert pu.as1.is_valid_statement_in_theory(phi=lnot(p) | is_a | proposition, t=t)
 
         # declare 1 as a propositional-variable
-        theory, q = pu.pls1.let_x_be_a_propositional_variable(t=theory, ts='Q')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         a2 = pu.as1.Axiom(valid_statement=q | is_a | propositional_variable)
-        theory = pu.as1.extend_theory(a2, t=theory)
+        t = pu.as1.extend_theory(a2, t=t)
 
         # derive q is-a proposition
         inference = pu.as1.Inference(
@@ -77,25 +77,25 @@ class TestAxioms:
             transformation_rule=pu.pls1.i1.transformation)
         claim = q | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
-        theory = pu.as1.extend_theory(isolated_theorem, t=theory)
+        t = pu.as1.extend_theory(isolated_theorem, t=t)
 
         # add i3: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition)
-        theory = pu.as1.extend_theory(pu.pls1.i3, t=theory)
+        t = pu.as1.extend_theory(pu.pls1.i3, t=t)
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition, q | is_a | proposition,),
             transformation_rule=pu.pls1.i3.transformation)
         claim = (p | land | q) | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.valid_statement)
-        theory = pu.as1.extend_theory(isolated_theorem, t=theory)
-        assert pu.as1.is_valid_statement_in_theory(phi=claim, t=theory)
+        t = pu.as1.extend_theory(isolated_theorem, t=t)
+        assert pu.as1.is_valid_statement_in_theory(phi=claim, t=t)
 
         pass
 
     def test_pl1_2(self):
         is_a = pu.as1._connectives.is_a
         proposition = pu.as1._connectives.proposition
-        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
         t, success, _, = pu.as1.auto_derive_2(t=t, conjecture=p | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)
@@ -104,8 +104,8 @@ class TestAxioms:
         is_a = pu.as1._connectives.is_a
         land = pu.as1._connectives.land
         proposition = pu.as1._connectives.proposition
-        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='X')
-        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Y')
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='X')
+        t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Y')
         t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=p | is_a | proposition)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=p | is_a | proposition, t=t)

@@ -356,8 +356,8 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
     t = extend_theory_with_minimal_logic_1(t=t)
-    t, c, = pls1.let_x_be_a_propositional_variable(t=t, ts='C')
-    t, d, = pls1.let_x_be_a_propositional_variable(t=t, ts='D')
+    t, c, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='C')
+    t, d, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')
     # TODO: Implement this as a proper hypothesis
     # TODO: Implement short reference names
     # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
@@ -393,8 +393,8 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
     t = extend_theory_with_minimal_logic_1(t=t)
-    t, c, = pls1.let_x_be_a_propositional_variable(t=t, ts='C')
-    t, d, = pls1.let_x_be_a_propositional_variable(t=t, ts='D')
+    t, c = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='C')
+    t, d = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')
     t, success, _ = as1.derive_2(c=c | is_a | proposition,
                                  i=pls1.i1, t=t)
     t, success, _ = as1.derive_2(c=d | is_a | proposition,

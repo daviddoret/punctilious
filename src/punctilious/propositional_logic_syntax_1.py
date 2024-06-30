@@ -186,23 +186,16 @@ extended_theory = as1.Theory(derivations=(*axiomatization,))
 
 
 def let_x_be_a_propositional_variable(
-        t: as1.FlexibleTheory,
-        ts: as1.FlexibleRepresentation) -> \
-        typing.Tuple[as1.Theory, as1.Variable | typing.Tuple[as1.Variable, ...]]:
-    """Declare one or multiple propositional-variables in the input theory.
+        t: as1.FlexibleTheory, formula_ts: as1.FlexibleRepresentation) -> typing.Tuple[as1.Theory, as1.Variable]:
+    """Declare a propositional-variable in theory t.
 
-    If they are not already present, all axioms of propositional-logic-syntax-1 are appended to
-    the theory.
+    If they are not already present, all axioms of propositional-logic-syntax-1 are appended to theory t.
 
-    For every propositional-variable, the following axiom is automatically postulated in the theory:
-     - x is-a propositional-variable
-    ...and the following theorem is derived:
-     - x is-a propositional
-
-    The following
+    The following axiom is automatically postulated in theory t:
+        (x is-a propositional-variable)
 
     :param t:
-    :param ts:
+    :param formula_ts:
     :return:
     """
     global axiomatization
@@ -213,29 +206,20 @@ def let_x_be_a_propositional_variable(
     # in the theory.
     t = as1.extend_theory(axiomatization, t=t)
 
-    if isinstance(ts, str):
-        # declare a single propositional variable
-        x = as1.Variable(c=as1.NullaryConnective(formula_ts=ts))
-        t, _ = as1.let_x_be_an_axiom(t=t,
-                                     s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
+    x = as1.Variable(c=as1.NullaryConnective(formula_ts=formula_ts))
+    t, _ = as1.let_x_be_an_axiom(t=t, s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
+    return t, x
 
-        return t, x
-    elif isinstance(ts, typing.Iterable):
-        # declare multiple propositional variables
-        propositional_variables = tuple()
-        for r in ts:
-            x = as1.Variable(c=as1.NullaryConnective(formula_ts=r))
-            propositional_variables = propositional_variables + (x,)
-            t, _ = as1.let_x_be_an_axiom(
-                t=t,
-                s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
-            t, _ = as1.derive_1(t=t,
-                                c=x | is_a | proposition,
-                                p=(x | as1._connectives.is_a | as1._connectives.propositional_variable,),
-                                i=i1)
-        return t, *propositional_variables
-    else:
-        raise TypeError  # TODO: Implement event code.
+
+def let_x_be_some_propositional_variables(
+        t: as1.FlexibleTheory,
+        ts: typing.Iterable[as1.FlexibleRepresentation]) -> typing.Tuple[as1.Theory, as1.Variable, ...]:
+    """"""
+    propositional_variables: tuple[as1.Variable, ...] = tuple()
+    for ts in ts:
+        t, x = let_x_be_a_propositional_variable(t=t, formula_ts=ts)
+        propositional_variables = propositional_variables + (x,)
+    return t, *propositional_variables
 
 
 def translate_implication_to_axiom(t: as1.FlexibleTheory, phi: as1.FlexibleFormula) -> as1.InferenceRule:
@@ -263,7 +247,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory, phi: as1.FlexibleFormu
     for x in propositional_variables:
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
-        with let_x_be_a_propositional_variable(t=t, ts=rep) as x2:
+        with let_x_be_a_propositional_variable(t=t, formula_ts=rep) as x2:
             premises: as1.Enumeration = as1.extend_enumeration(
                 e=premises, x=x2 | as1._connectives.is_a | as1._connectives.propositional_variable)
             variables_map: as1.Map = as1.extend_map(m=variables_map, preimage=x, image=x2)

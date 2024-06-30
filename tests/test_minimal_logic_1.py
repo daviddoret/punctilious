@@ -66,7 +66,7 @@ class TestPL1:
         t = pu.as1.let_x_be_a_theory()
 
         # Elaborate a basic theory with P as a propositional-variable
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
 
         # Add axiom PL01 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl01, )
@@ -120,8 +120,8 @@ class TestPL2:
         # PL2. (𝐴 ∧ 𝐵) ⊃ (𝐵 ∧ 𝐴)
 
         # Elaborate a basic theory with P and Q as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         t, _, _, _ = auto_derive_4(t=t, conjecture=p | is_a | proposition)
         t, _, _, _ = auto_derive_4(t=t, conjecture=q | is_a | proposition)
 
@@ -175,9 +175,9 @@ class TestPL3:
         # PL3. (𝐴 ⊃ 𝐵) ⊃ [(𝐴 ∧ 𝐶) ⊃ (𝐵 ∧ 𝐶)]
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
-        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='R')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
+        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='R')
         t, _, _, _ = auto_derive_4(t=t, conjecture=p | is_a | proposition)
         t, _, _, _ = auto_derive_4(t=t, conjecture=q | is_a | proposition)
         t, _, _, _ = auto_derive_4(t=t, conjecture=r | is_a | proposition)
@@ -254,9 +254,9 @@ class TestPL4:
         # PL4. [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, ts='P')
-        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='Q')
-        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='R')
+        t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
+        t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
+        t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='R')
         t, _, _, _, = auto_derive_4(t=t, conjecture=p | is_a | proposition)
         t, _, _, _, = auto_derive_4(t=t, conjecture=q | is_a | proposition)
         t, _, _, _, = auto_derive_4(t=t, conjecture=r | is_a | proposition)
@@ -282,8 +282,8 @@ class TestPL5:
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
         t1 = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
-        t1, x, = pu.pls1.let_x_be_a_propositional_variable(t=t1, ts='X')
-        t1, y, = pu.pls1.let_x_be_a_propositional_variable(t=t1, ts='Y')
+        t1, x, = pu.pls1.let_x_be_a_propositional_variable(t=t1, formula_ts='X')
+        t1, y, = pu.pls1.let_x_be_a_propositional_variable(t=t1, formula_ts='Y')
         t1, _, = pu.as1.let_x_be_an_axiom(t=t1, s=y)
 
         # Add axiom PL05 to the theory
@@ -340,8 +340,8 @@ class TestMancosu2021P20:
     def test_mancosu_2021_page_20_with_derivation_1(self, caplog):
         t = pu.as1.Axiomatization(
             derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
-        t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='p1')
-        t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='p2')
+        t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p1')
+        t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p2')
         t, success, _, = derive_1(c=p1 | is_a | proposition,
                                   i=pu.pls1.i1, t=t)
         t, success, _, = derive_1(c=p2 | is_a | proposition,
@@ -392,8 +392,8 @@ class TestMancosu2021P20:
     def test_mancosu_2021_page_21_with_derivation_1(self, caplog):
         t = pu.as1.Axiomatization(
             derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
-        t, c, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='C')
-        t, d, = pu.pls1.let_x_be_a_propositional_variable(t=t, ts='D')
+        t, c, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='C')
+        t, d, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')
         t, success, _, = derive_1(c=c | is_a | proposition,
                                   i=pu.pls1.i1, t=t)
         t, success, _, = derive_1(c=d | is_a | proposition,
