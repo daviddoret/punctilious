@@ -925,13 +925,23 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         raise u1.ApplicativeException(code=ERROR_CODE_AS1_018, msg='oops 3')
 
 
-def let_x_be_a_theory(d: typing.Optional[FlexibleEnumeration] = None):
-    """
+def let_x_be_a_theory(d: FlexibleEnumeration | None = None, m: FlexibleTheory | None = None, **kwargs):
+    """Declare a new theory T.
+
+    If a meta-theory M is provided, then T is declared as a sub-theory of M. To formalize this relation,
+    the following axiom is added to M:
+        (T is-a sub-theory)
+    Note that M does not self-reference itself (i.e. we don't use the formula (T is-a sub-theory of M),
+    this reference is implicit in (T is-a sub-theory) because it is a derivation in M.
 
     :param d: an enumeration of derivations. If None, the empty theory is implicitly assumed.
-    :return:
+    :param m: (conditional) a meta-theory M such that T is a sub-theory of M.
+    :return: A theory.
     """
-    return Theory(derivations=d)
+    if 'formula_name_ts' not in kwargs:
+        kwargs['formula_name_ts'] = pl1.Script(text='T')
+
+    return Theory(derivations=d, **kwargs)
 
 
 def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
@@ -1466,7 +1476,7 @@ class Enumeration(Formula):
     """
 
     def __new__(cls, elements: FlexibleEnumeration = None, c: Connective = None,
-                strip_duplicates: bool = False):
+                strip_duplicates: bool = False, **kwargs):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
@@ -1475,16 +1485,16 @@ class Enumeration(Formula):
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         if not is_well_formed_enumeration(e=elements):
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
-        o: tuple = super().__new__(cls, c=c, t=elements)
+        o: tuple = super().__new__(cls, c=c, t=elements, **kwargs)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None, c: Connective = None,
-                 strip_duplicates: bool = False):
+                 strip_duplicates: bool = False, **kwargs):
         global _connectives
         c: Connective = _connectives.enumeration if c is None else c
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
-        super().__init__(c=c, t=elements)
+        super().__init__(c=c, t=elements, **kwargs)
 
     def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
         """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
@@ -2527,7 +2537,7 @@ class Theory(Enumeration):
     """
 
     def __new__(cls, c: Connective | None = None, derivations: FlexibleEnumeration = None,
-                decorations: FlexibleDecorations = None):
+                decorations: FlexibleDecorations = None, **kwargs):
         # coerce to enumeration
         derivations: Enumeration = coerce_enumeration(e=derivations)
         # use coerce_derivation() to assure that every derivation is properly types as Axiom, InferenceRule or Theorem.
@@ -2539,11 +2549,11 @@ class Theory(Enumeration):
         except Exception as error:
             # well-formedness verification failure, the theorem is ill-formed.
             raise u1.ApplicativeException(code=ERROR_CODE_AS1_046, error=error, derivations=derivations)
-        o: tuple = super().__new__(cls, elements=derivations)
+        o: tuple = super().__new__(cls, elements=derivations, **kwargs)
         return o
 
     def __init__(self, c: Connective | None = None, derivations: FlexibleEnumeration = None,
-                 decorations: FlexibleDecorations = None):
+                 decorations: FlexibleDecorations = None, **kwargs):
         if c is None:
             c: Connective = _connectives.theory
         # coerce to enumeration
@@ -2552,7 +2562,7 @@ class Theory(Enumeration):
         derivations: Enumeration = coerce_enumeration(
             e=(coerce_derivation(d=p) for p in derivations))
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
-        super().__init__(c=c, elements=derivations)
+        super().__init__(c=c, elements=derivations, **kwargs)
         copy_theory_decorations(target=self, decorations=decorations)
 
     @property
