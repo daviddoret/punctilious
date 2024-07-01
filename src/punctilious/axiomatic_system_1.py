@@ -2566,6 +2566,17 @@ class Inference(Formula):
 FlexibleInference = typing.Optional[typing.Union[Inference]]
 
 
+def inverse_map(m: FlexibleMap) -> Map:
+    """If a map is a function, generate the inverse map."""
+    m: Map = coerce_map(m=m)
+    codomain = Enumeration(elements=m.domain)
+    domain = Enumeration(elements=m.codomain)
+    if len(codomain) != len(domain):
+        assert u1.ApplicativeException(msg='Cannot inverse map if it is not a function!')
+    m2: Map = Map(domain=domain, codomain=codomain)
+    return m2
+
+
 class Theorem(Derivation):
     """A theorem-by-inference is a theorem that is proven by inference.
 
@@ -2601,15 +2612,33 @@ class Theorem(Derivation):
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
         f_of_p: Formula = i.transformation_rule(i.premises)
-        try:
-            is_formula_equivalent(phi=valid_statement, psi=f_of_p, raise_event_if_false=True)
-        except u1.ApplicativeException as error:
-            # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
-            # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
-                                          algorithm_output=f_of_p,
-                                          inference=i, inference_transformation_rule=i.transformation_rule,
-                                          inference_premises=i.premises)
+        if len(i.transformation_rule.declarations) == 0:
+            # This transformation is deterministic because it comprises no new-object-declarations.
+            try:
+                is_formula_equivalent(phi=valid_statement, psi=f_of_p, raise_event_if_false=True)
+            except u1.ApplicativeException as error:
+                # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
+                # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
+                raise u1.ApplicativeException(code=ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
+                                              algorithm_output=f_of_p,
+                                              inference=i, inference_transformation_rule=i.transformation_rule,
+                                              inference_premises=i.premises)
+        else:
+            # If there are new-object-declarations, f_of_p is not directly comparable with valid_statements.
+            # This is because transformations with new-object-declarations are non-deterministic.
+            # In order to check that valid_statement is consistent with the inference-rule, we can
+            # compare both formulas with the inference-rule conclusion and with regards to new-object-declaration variables.
+            success_1, m1 = is_formula_equivalent_with_variables_2(phi=valid_statement,
+                                                                   psi=i.transformation_rule.conclusion,
+                                                                   variables=i.transformation_rule.declarations)
+            if not success_1:
+                raise u1.ApplicativeException(
+                    msg='The valid-statement is not consistent with the inference-rule conclusion, considering new-object-declarations')
+            m1_reversed = inverse_map(m=m1)
+            valid_statement_reversed: Formula = replace_formulas(phi=valid_statement, m=m1_reversed)
+            if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.transformation_rule.conclusion):
+                raise u1.ApplicativeException(
+                    msg='Reversing the valid-statement does not yield the inference-rule conclusion.')
 
     @property
     def inference(self) -> Inference:
