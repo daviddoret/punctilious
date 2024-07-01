@@ -323,16 +323,16 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
     t: as1.Theory = as1.coerce_theory(t=t)
     t: as1.Theory = pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl01, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl02, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl03, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl04, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl05, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl06, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl07, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl08, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl09, t=t)
-    t, _ = as1.let_x_be_an_axiom(axiom=pl10, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl01, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl02, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl03, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl04, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl05, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl06, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl07, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl08, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl09, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=pl10, t=t)
     return t
 
 
@@ -444,12 +444,14 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     return t
 
 
-def let_x_be_a_minimal_logic_1_theory() -> as1.Theory:
+def let_x_be_a_minimal_logic_1_theory(**kwargs) -> as1.Theory:
     """Return a new theory with:
      - the propositional-logic-syntax-1 axioms,
      - the minimal-logic-1 axioms,
      - TODO: add some theory-specific heuristics?
      """
-    t: as1.Theory = as1.Theory()
+    # if 'formula_name_ts' not in kwargs:
+    #    kwargs['formula_name_ts'] = pl1.IndexedSymbolTypesetter(body_ts=pl1.Script(text='M'), index=0)
+    t: as1.Theory = as1.Theory(**kwargs)
     t = extend_theory_with_minimal_logic_1(t=t)
     return t

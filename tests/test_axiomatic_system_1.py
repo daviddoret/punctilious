@@ -866,3 +866,16 @@ class TestFormulaDepth:
         assert pu.as1.get_formula_depth(phi=phi2) == 2
         phi3 = pu.as1.Formula(c=c, t=(phi1, phi2, phi1, phi2))
         assert pu.as1.get_formula_depth(phi=phi3) == 3
+
+
+class TestMetaTheory:
+    def test_meta_theory(self):
+        t = pu.ml1.let_x_be_a_minimal_logic_1_theory()
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='P')
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=p)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=lnot(p))  # This is a contradiction!
+        # Let's prove t is inconsistent
+        m = pu.as1.let_x_be_a_meta_theory(d=None)
+        m = pu.as1.let_x_be_a_sub_theory_of_y(t=t, m=m)
+        m, d = pu.as1.derive_1()
+        pass

@@ -934,28 +934,51 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
 def let_x_be_a_theory(d: FlexibleEnumeration | None = None,
                       m: FlexibleTheory | None = None, **kwargs) -> (
         tuple)[Theory, Theory]:
-    """Declare a new theory T.
+    """Declare a new theory T in meta-theory M.
 
-    If a meta-theory M is provided, then T is declared as a sub-theory of M. To formalize this relation,
-    the following axiom is added to M:
-        (T is-a sub-theory)
-    Note that M does not self-reference itself (i.e. we don't use the formula (T is-a sub-theory of M),
-    this reference is implicit in (T is-a sub-theory) because it is a derivation in M.
+    T is declared as a sub-theory of M. To formalize this relation, the following axiom is added to M:
+        (T is-a theory)
+    Note that M does not self-references itself (i.e. we don't use the formula (T is-a sub-theory of M),
+    this reference is implicit in (T is-a theory) because it is a derivation in M.
 
-    :param d: an enumeration of derivations. If None, the empty theory is implicitly assumed.
+    :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
     :param m: (conditional) a meta-theory M such that T is a sub-theory of M.
-    :return: A theory.
+    :return: A python-tuple (m, t).
     """
     if 'formula_name_ts' not in kwargs:
         kwargs['formula_name_ts'] = pl1.Script(text='T')
 
     t = Theory(derivations=d, **kwargs)
 
-    if m is not None:
-        m: Theory = coerce_theory(t=m)
-        m, _ = let_x_be_an_axiom(t=m, s=t | _connectives.is_a | _connectives.theory)
+    return t
 
-    return m, t
+
+def let_x_be_a_meta_theory(d: FlexibleEnumeration | None = None,
+                           **kwargs) -> Theory:
+    """Declare a new meta-theory T.
+
+    :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
+    :return: A theory.
+    """
+    if 'formula_name_ts' not in kwargs:
+        kwargs['formula_name_ts'] = pl1.Script(text='M')
+
+    t = Theory(derivations=d, **kwargs)
+
+    return t
+
+
+def let_x_be_a_sub_theory_of_y(t: FlexibleTheory, m: FlexibleTheory) -> Theory:
+    """
+
+    :param t:
+    :param m:
+    :return:
+    """
+    t = coerce_theory(t=t)
+    m = coerce_theory(t=t)
+    m, a = let_x_be_an_axiom(t=m, s=t | _connectives.is_a | _connectives.theory)
+    return m
 
 
 def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
@@ -2670,6 +2693,7 @@ def copy_theory_decorations(target: FlexibleTheory, decorations: FlexibleDecorat
         for decorative_theory in decorations:
             # Copies all heuristics
             target.heuristics.update(decorative_theory.heuristics)
+            target.ts.update(decorative_theory.ts | target.ts)  # Give priority to the existing
 
 
 class Axiomatization(Theory):

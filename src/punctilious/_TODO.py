@@ -5,6 +5,15 @@ TODO: Consider using a three-valued logic:
  - or P is false
  - or P is not decidable in this axiomatization
 
+TODO: Question: How could we introduce a new symbol in a theory?
+    For this we need a special "instruction" or proto-derivation.
+    Something like: Let S be a new symbol or: (s is-a new-symbol).
+    And we must be able to derive that two symbols introduced in a theory
+    are necessarily unequal, or not symbol-equivalent.
+    Should we use the target theory for that?
+    Or a special-purpose meta-theory?
+
+
 
 TODO: Implement sub-theory
     In the parent theory:
