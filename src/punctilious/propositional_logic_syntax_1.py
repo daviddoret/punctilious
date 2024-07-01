@@ -35,6 +35,32 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
+    i0: as1.InferenceRule = as1.InferenceRule(
+        transformation=as1.Transformation(
+            conclusion=a | is_a | proposition,
+            variables=None,
+            declarations=(a,),
+            premises=None
+        ),
+        ref_ts=pl1.Monospace(text='PLS1'))
+    """Axiom schema: A is-a propositional-variable.
+
+    Premises:
+     - None
+     
+    Declarations of new objects:
+     - A
+
+    Conclusion: 
+    A is-a proposition
+
+    Variables:
+     - None
+
+    """
+    pass
+
+with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
         transformation=as1.Transformation(
             premises=(a | is_a | propositional_variable,),
@@ -199,7 +225,7 @@ def let_x_be_a_propositional_variable(
     :return:
     """
     global axiomatization
-    global i1
+    global i0
     t: as1.FlexibleTheory = as1.coerce_theory(t=t)
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
@@ -207,7 +233,10 @@ def let_x_be_a_propositional_variable(
     t = as1.extend_theory(axiomatization, t=t)
 
     x = as1.Variable(c=as1.NullaryConnective(formula_ts=formula_ts))
-    t, _ = as1.let_x_be_an_axiom(t=t, s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
+    # t, _ = as1.let_x_be_an_axiom(t=t, s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
+    t, _ = as1.derive_1(t=t, c=x | as1._connectives.is_a | as1._connectives.propositional_variable,
+                        p=None, i=i0)
+
     return t, x
 
 
@@ -295,7 +324,7 @@ class PIsAProposition(as1.Heuristic):
                 # Make an attempt to automatically derive the conjecture.
 
                 # retrieve P's value
-                p_value: as1.Formula = m.get_assigned_value(phi=p)
+                p_value: as1.Formula = as1.get_image_from_map(m=m, preimage=p)
 
                 if as1.is_valid_statement_in_theory(phi=p_value | is_a | propositional_variable, t=t):
                     # If P is a propositional-variable:
@@ -313,7 +342,7 @@ class PIsAProposition(as1.Heuristic):
                     if success:
                         # The conjecture (P) is of the form (¬Q).
                         # Retrieve the value assigned to Q.
-                        q_value: as1.Formula = m.get_assigned_value(phi=q)
+                        q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
                         # Recursively try to derive (Q is-a proposition).
                         t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
                         if success:
@@ -336,8 +365,8 @@ class PIsAProposition(as1.Heuristic):
                     if success:
                         # The conjecture (P) is of the form (Q ∧ R).
                         # Retrieve the values assigned to Q and R.
-                        q_value: as1.Formula = m.get_assigned_value(phi=q)
-                        r_value: as1.Formula = m.get_assigned_value(phi=r)
+                        q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
+                        r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
                         t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
                         if success:
@@ -367,8 +396,8 @@ class PIsAProposition(as1.Heuristic):
                     if success:
                         # The conjecture (P) is of the form (Q ⊃ R).
                         # Retrieve the values assigned to Q and R.
-                        q_value: as1.Formula = m.get_assigned_value(phi=q)
-                        r_value: as1.Formula = m.get_assigned_value(phi=r)
+                        q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
+                        r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
                         t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
                         if success:
@@ -398,8 +427,8 @@ class PIsAProposition(as1.Heuristic):
                     if success:
                         # The conjecture (P) is of the form (Q ∨ R).
                         # Retrieve the values assigned to Q and R.
-                        q_value: as1.Formula = m.get_assigned_value(phi=q)
-                        r_value: as1.Formula = m.get_assigned_value(phi=r)
+                        q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
+                        r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
                         t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
                         if success:

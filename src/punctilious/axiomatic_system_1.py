@@ -1231,7 +1231,7 @@ def is_formula_equivalent_with_variables_2(
         # psi is a variable
         if is_in_map_domain(phi=psi, m=variables_fixed_values):
             # psi is in the domain of the map of fixed values
-            psi_value: Formula = variables_fixed_values.get_assigned_value(phi=psi)
+            psi_value: Formula = get_image_from_map(m=variables_fixed_values, preimage=psi)
             if is_formula_equivalent(phi=phi, psi=psi_value):
                 return True, variables_fixed_values
             else:
@@ -1313,7 +1313,7 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     if is_in_map_domain(phi=phi, m=m):
         # phi must be replaced at its root.
         # the replacement algorithm stops right there (i.e.: no more recursion).
-        assigned_value: Formula = m.get_assigned_value(phi=phi)
+        assigned_value: Formula = get_image_from_map(m=m, preimage=phi)
         return assigned_value
     else:
         # build the replaced formula.
@@ -1323,6 +1323,29 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
             term_substitute = replace_formulas(phi=term, m=m)
             fb: Formula = extend_formula(formula=fb, term=term_substitute)
         return fb
+
+
+def replace_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
+    """Given a formula phi, return a new formula psi structurally equivalent to phi,
+    where all connectives are substituted according to the map m.
+
+    :param phi:
+    :param m: A map of connectives, where connectives are represented as atomic formulas (c).
+    :return:
+    """
+    phi: Formula = coerce_formula(phi=phi)
+    m: Map = coerce_map(m=m)
+    # TODO: Check that the map domain and codomains are composed of simple objects.
+    c: Connective = phi.connective
+    c_formula: Formula = Formula(c=c)
+    if is_in_map_domain(phi=c_formula, m=m):
+        preimage: Formula = Formula(c=c)
+        image: Formula = get_image_from_map(m=m, preimage=preimage)
+        c: Connective = image.connective
+    # Build the new formula psi with the new connective,
+    # and by calling replace_connectives recursively on all terms.
+    psi: Formula = Formula(c=c, t=(replace_connectives(phi=term, m=m) for term in phi))
+    return psi
 
 
 class Tupl(Formula):
@@ -1437,6 +1460,15 @@ def extend_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula
     return m
 
 
+def get_image_from_map(m: FlexibleMap, preimage: FlexibleFormula) -> Formula:
+    """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
+    if is_in_map_domain(phi=preimage, m=m):
+        index_position: int = m.domain.get_element_index(phi=preimage)
+        return m.codomain[index_position]
+    else:
+        raise u1.ApplicativeException(code=ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
+
+
 class Map(Formula):
     """A map is a formula m(t0(k0, k1, ..., kn), t1(l0, l1, ..., ln)) where:
      - m is a node with the map connective.
@@ -1471,7 +1503,7 @@ class Map(Formula):
     def domain(self) -> Enumeration:
         return coerce_enumeration(e=self.term_0)
 
-    def get_assigned_value(self, phi: Formula) -> Formula:
+    def get_assigned_value_OBSOLETE(self, phi: Formula) -> Formula:
         """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
         if is_in_map_domain(phi=phi, m=self):
             index_position: int = self.domain.get_element_index(phi=phi)
@@ -1626,34 +1658,38 @@ class SingletonEnumeration(Enumeration):
 class Transformation(Formula):
     """A formula-transformation, or transformation, is a map from the class of formulas to itself.
 
-    Mathematical definition:
-    f:  Phi --> Phi
-        phi |-> psi
-    Where:
-     - Phi is the class of formulas,
-     - phi is a formula,
-     - psi is a formula.
-
-    Syntactically, a transformation is a formula f(P, c, V) where:
-     - f is the transformation connective,
-     - P is an enumeration whose children are called premises,
-     - c is a formula called the conclusion,
-     - V is a enumeration whose children are the variables.
+    Syntactically, a transformation is a formula t(c, V, D, P) where:
+     - t is the transformation connective,
+     - c is a formula called the conclusion, which gives the shape of the transformation output formula.
+     - V is a enumeration whose children are simple-objects called the variables.
+     - D is a enumeration whose children are simple-objects called the new-object-declarations.
+     - P is an enumeration of formulas whose children are called premises.
+     - The intersection V ∩ D is empty.
 
     Algorithm:
-    From a transformation, the following algorithm is derived:
-    Phi --> psi
-    t(Phi) --> psi
-    map every formula in Phi collection in-order with the premises
-    confirm that they are formula-with-variables-equivalent
-    confirm that every variable has strictly one mapped formula
-    map all variables with their respective formulas
-    return the conclusion by substituting variables with formulas
-    # TODO: Transformation: rewrite the above clearly
+    The following algorithm is applied when a transformation is "called":
+     - Input argument: P_input (an enumeration of formulas that are formula-equivalent-with-variables to
+       P, given variables V.
+     - Procedure:
+        1) Map variables in P with their corresponding sub-formulas in P_input, denoted variable_values.
+        2) Substitute variables in c with their variable_values from that map.
+        3) For every new object declaration, create a new connective with a new symbol.
+        4) Substitute the connectives of new object declarations in c with their newly created connectives.
 
-    Note 1: when a transformation is a theorem, it becomes an inference-rule for that theory.
+    Note 1: If a transformation contains new-object-declarations, then it is non-deterministic,
+        i.e.: every time it is called with the same input arguments, it creates a new unique formula.
+        To the contrary, if a transformation contains no new-object-declarations, then it is deterministic,
+        i.e.: every time it is called with the same input arguments, it creates identical formulas.
 
-    Note 2: when a transformation is a theorem, it is very similar to an intuitionistic sequent (cf. Mancosu et al,
+    Note 2: When new-object-declarations are used, the transformation declares new objects in the theory. In fact,
+        this is the only possibility for new objects to be created / declared.
+
+    Note 3: When new-object-declarations are used, note that it is not the sub-formulas that are replaced,
+        but the connectives. This makes it possible to design transformation that output new non
+
+    Note 4: Transformations are the building blocks of inference-rules. Ses inference-rules for more details.
+
+    Note 5: The transformation in an inference rule is very similar to an intuitionistic sequent (cf. Mancosu et al,
     2021, p. 170), i.e.: "In intuitionistic-sequent, there may be at most one formula to the right of ⇒ .", with
     some distinctive properties:
         - a transformation comprises an explicit and finite set of variables,
@@ -1668,10 +1704,10 @@ class Transformation(Formula):
                 premises: FlexibleTupl | None = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        declarations: Enumeration = coerce_enumeration(e=declarations)
-        premises: Tupl = coerce_tupl(t=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
+        declarations: Enumeration = coerce_enumeration(e=declarations)
+        premises: Tupl = coerce_tupl(t=premises)
         o: tuple = super().__new__(cls, c=_connectives.transformation,
                                    t=(conclusion, variables, declarations, premises,))
         return o
@@ -1709,6 +1745,18 @@ class Transformation(Formula):
 
         # step 2:
         outcome: Formula = replace_formulas(phi=self.conclusion, m=variables_map)
+
+        # step 3: new objects declarations.
+        declarations_map: Map = Map()
+        for declaration in self.declarations:
+            new_connective: Connective = Connective()
+            simple_formula: Formula = Formula(c=new_connective)
+            # TODO: Find a way to initialize the new_connective formula_typesetter.
+            # TODO: Find a way to initialize the new_connective arity.
+            declarations_map: Map = extend_map(m=declarations_map, preimage=declaration, image=simple_formula)
+
+        # step 4: substitute new-object-declarations in the conclusion
+        outcome: Formula = replace_connectives(phi=outcome, m=declarations_map)
 
         return outcome
 
@@ -1817,6 +1865,8 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
             not is_well_formed_tupl(t=t.term_3)):
         return False
     else:
+        # TODO: Check that variables are only simple-objects (or not???)
+        # TODO: Check that declarations are only simple-objects (or not???)
         return True
 
 

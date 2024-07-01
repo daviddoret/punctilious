@@ -237,8 +237,8 @@ class TestFormulaEquivalenceWithVariables:
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=ab, psi=cd, variables=(c, d,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
-        assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=a)
-        assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=d), psi=b)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=c), psi=a)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=d), psi=b)
         bba = pu.as1.Tupl(elements=(b, b, a,))
         cca = pu.as1.Tupl(elements=(c, c, a,))
         m = pu.as1.Map()
@@ -249,14 +249,14 @@ class TestFormulaEquivalenceWithVariables:
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=cca, variables=(c,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
-        assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=b)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=c), psi=b)
         ababbba = pu.as1.Tupl(elements=(a, b, a, b, b, a,))
         acaccca = pu.as1.Tupl(elements=(a, c, a, c, c, a,))
         m = pu.as1.Map()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=ababbba, psi=acaccca, variables=(c,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
-        assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=c), psi=b)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=c), psi=b)
         multilevel1 = pu.as1.Tupl(elements=(a, b, a, b, b, c, c,))
         multilevel2 = pu.as1.Tupl(elements=(a, multilevel1, a, multilevel1, c,))
         multilevel3 = pu.as1.Tupl(elements=(c, multilevel2, a, multilevel1,))
@@ -266,8 +266,8 @@ class TestFormulaEquivalenceWithVariables:
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=multilevel3, psi=test, variables=(d, e,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
-        assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=d), psi=b)
-        assert pu.as1.is_formula_equivalent(phi=m.get_assigned_value(phi=e), psi=a)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=d), psi=b)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=e), psi=a)
 
 
 class TestFormulaEquivalenceWithVariables2:
@@ -300,7 +300,7 @@ class TestFormulaEquivalenceWithVariables2:
             psi=aristotle | is_a | x,
             variables=(x,))
         assert result
-        assert pu.as1.is_formula_equivalent(phi=map.get_assigned_value(phi=x), psi=human)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=x), psi=human)
 
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(
             phi=human,
@@ -336,8 +336,8 @@ class TestFormulaEquivalenceWithVariables2:
             variables=(c, d,),
             variables_fixed_values=None)
         assert result
-        assert pu.as1.is_formula_equivalent(phi=map.get_assigned_value(phi=c), psi=a)
-        assert pu.as1.is_formula_equivalent(phi=map.get_assigned_value(phi=d), psi=b)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=c), psi=a)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=d), psi=b)
 
         bba = pu.as1.Tupl(elements=(b, b, a,))
         cca = pu.as1.Tupl(elements=(c, c, a,))
@@ -349,14 +349,14 @@ class TestFormulaEquivalenceWithVariables2:
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=cca, variables=(c,),
                                                                      variables_fixed_values=None)
         assert result
-        assert pu.as1.is_formula_equivalent(phi=map.get_assigned_value(phi=c), psi=b)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=c), psi=b)
 
         ababbba = pu.as1.Tupl(elements=(a, b, a, b, b, a,))
         acaccca = pu.as1.Tupl(elements=(a, c, a, c, c, a,))
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(phi=ababbba, psi=acaccca, variables=(c,),
                                                                      variables_fixed_values=None)
         assert result
-        assert pu.as1.is_formula_equivalent(phi=map.get_assigned_value(phi=c), psi=b)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=c), psi=b)
 
         multilevel1 = pu.as1.Tupl(elements=(a, b, a, b, b, c, c,))
         multilevel2 = pu.as1.Tupl(elements=(a, multilevel1, a, multilevel1, c,))
@@ -366,15 +366,35 @@ class TestFormulaEquivalenceWithVariables2:
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(phi=multilevel3, psi=test, variables=(d, e,),
                                                                      variables_fixed_values=None)
         assert result
-        assert pu.as1.is_formula_equivalent(phi=map.get_assigned_value(phi=d), psi=b)
-        assert pu.as1.is_formula_equivalent(phi=map.get_assigned_value(phi=e), psi=a)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=d), psi=b)
+        assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=e), psi=a)
+
+
+class TestReplaceConnectives:
+    def test_replace_connectives(self):
+        c1 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='c1'))
+        c2 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='c2'))
+        c3 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='c3'))
+        c4 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='c4'))
+        d1 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d1'))
+        d2 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d2'))
+        d3 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d3'))
+        d4 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d4'))
+        phi = c1(c2(c3, c3, c3, c1, c4(c3, c2, c1)), c3)
+        m = pu.as1.Map(domain=(c1, c2, c3, c4,), codomain=(d1, d2, d3, d4,))
+        psi = pu.as1.replace_connectives(phi=phi, m=m)
+        n = pu.as1.Map(domain=(d1, d2, d3, d4,), codomain=(c1, c2, c3, c4,))
+        phi2 = pu.as1.replace_connectives(phi=psi, m=n)
+        assert pu.as1.is_formula_equivalent(phi=phi, psi=phi2)
+        pass
 
 
 class TestTransformation:
     def test_transformation(self):
         x = pu.as1.let_x_be_a_variable(formula_ts='x')
         y = pu.as1.let_x_be_a_variable(formula_ts='y')
-        is_a = pu.as1.let_x_be_a_binary_connective(formula_ts='is-a')
+        is_a = pu.as1.let_x_be_a_binary_connective(
+            formula_ts=pu.as1.typesetters.infix_formula(connective_typesetter='is-a'))
         human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
         platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
         mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
@@ -384,10 +404,11 @@ class TestTransformation:
         premises = pu.as1.Enumeration(elements=(p1,))
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(elements=(x,))
-        f = pu.as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
+        f = pu.as1.Transformation(conclusion=conclusion, variables=variables, declarations=None, premises=premises)
         arguments = pu.as1.Tupl(elements=(p2,))
         output = f.apply_transformation(arguments=arguments)
-        pu.as1.is_formula_equivalent(phi=aristotle | is_a | mortal, psi=output)
+        phi = aristotle | is_a | mortal
+        pu.as1.is_formula_equivalent(phi=phi, psi=output)
 
     def test_is_well_formed_transformation(self):
         x = pu.as1.let_x_be_a_variable(formula_ts='x')
@@ -469,19 +490,19 @@ class TestMap:
         assert pu.as1.is_in_map_domain(phi=fruits[1], m=m1)
         assert pu.as1.is_in_map_domain(phi=fruits[2], m=m1)
         assert pu.as1.is_in_map_domain(phi=fruits[3], m=m1)
-        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[0]), red)
-        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[1]), yellow)
-        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[2]), blue)
-        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[3]), red)
+        assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[0]), red)
+        assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[1]), yellow)
+        assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[2]), blue)
+        assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[3]), red)
         m1 = pu.as1.reduce_map(m=m1, preimage=fruits[2])
         assert pu.as1.is_in_map_domain(phi=fruits[0], m=m1)
         assert pu.as1.is_in_map_domain(phi=fruits[1], m=m1)
         assert not pu.as1.is_in_map_domain(phi=fruits[2], m=m1)
         assert pu.as1.is_in_map_domain(phi=fruits[3], m=m1)
         m1 = pu.as1.extend_map(m=m1, preimage=fruits[3], image=yellow)
-        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[0]), red)
-        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[1]), yellow)
-        assert pu.as1.is_formula_equivalent(m1.get_assigned_value(phi=fruits[3]), yellow)
+        assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[0]), red)
+        assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[1]), yellow)
+        assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[3]), yellow)
 
 
 class TestEnumerationEquivalence:
