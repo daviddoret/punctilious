@@ -272,6 +272,17 @@ class Formula(tuple):
         return self[2]
 
     @property
+    def term_3(self) -> Formula:
+        """
+        TODO: Extend the data model and reserve this method to sub-classes that have an n-th element. It should be
+        possible to use the __new__ method to properly type formulas based on their arity.
+        :return:
+        """
+        if len(self) < 4:
+            raise u1.ApplicativeException(code=ERROR_CODE_AS1_005, c=self.connective)
+        return self[3]
+
+    @property
     def ts(self) -> dict[str, pl1.Typesetter]:
         """A dictionary of typesetters that may output representations of this object."""
         return self._ts
@@ -704,6 +715,13 @@ class TernaryConnective(FixedArityConnective):
         super().__init__(fixed_arity_constraint=3, formula_ts=formula_ts)
 
 
+class QuaternaryConnective(FixedArityConnective):
+
+    def __init__(self,
+                 formula_ts: typing.Optional[pl1.Typesetter] = None):
+        super().__init__(fixed_arity_constraint=4, formula_ts=formula_ts)
+
+
 class Variable(SimpleObject):
     """A variable is defined as a simple-object.
 
@@ -839,6 +857,11 @@ def let_x_be_a_binary_connective(
 def let_x_be_a_ternary_connective(
         formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
     return TernaryConnective(formula_ts=formula_ts)
+
+
+def let_x_be_a_quaternary_connective(
+        formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
+    return QuaternaryConnective(formula_ts=formula_ts)
 
 
 def let_x_be_a_unary_connective(
@@ -985,9 +1008,12 @@ def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
     return Axiomatization(derivations=axioms)
 
 
-def let_x_be_a_transformation(premises: FlexibleTupl, conclusion: FlexibleFormula,
-                              variables: FlexibleEnumeration):
-    return Transformation(premises=premises, conclusion=conclusion, variables=variables)
+def let_x_be_a_transformation(conclusion: FlexibleFormula,
+                              variables: FlexibleEnumeration | None = None,
+                              declarations: FlexibleEnumeration | None = None,
+                              premises: FlexibleTupl | None = None
+                              ):
+    return Transformation(conclusion=conclusion, variables=variables, declarations=declarations, premises=premises)
 
 
 class Connectives(typing.NamedTuple):
@@ -1007,7 +1033,7 @@ class Connectives(typing.NamedTuple):
     propositional_variable: SimpleObject
     theory: FreeArityConnective
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
-    transformation: TernaryConnective
+    transformation: QuaternaryConnective
     tupl: FreeArityConnective
 
 
@@ -1028,7 +1054,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     propositional_variable=let_x_be_a_simple_object(formula_ts='propositional-variable'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory=let_x_be_a_free_arity_connective(formula_ts='theory'),
-    transformation=let_x_be_a_ternary_connective(formula_ts='transformation'),
+    transformation=let_x_be_a_quaternary_connective(formula_ts='transformation'),
     tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
 
 ))
@@ -1637,23 +1663,27 @@ class Transformation(Formula):
           even though this constraint is immediately relieved by the interchange structural rule.
     """
 
-    def __new__(cls, premises: FlexibleTupl, conclusion: FlexibleFormula,
-                variables: FlexibleEnumeration):
+    def __new__(cls, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
+                declarations: FlexibleEnumeration | None = None,
+                premises: FlexibleTupl | None = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
+        declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
         o: tuple = super().__new__(cls, c=_connectives.transformation,
-                                   t=(premises, conclusion, variables,))
+                                   t=(conclusion, variables, declarations, premises,))
         return o
 
-    def __init__(self, premises: FlexibleTupl, conclusion: FlexibleFormula,
-                 variables: FlexibleEnumeration):
-        premises: Tupl = coerce_tupl(t=premises)
+    def __init__(self, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
+                 declarations: FlexibleEnumeration | None = None,
+                 premises: FlexibleTupl | None = None):
         conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
-        super().__init__(c=_connectives.transformation, t=(premises, conclusion, variables,))
+        declarations: Enumeration = coerce_enumeration(e=declarations)
+        premises: Tupl = coerce_tupl(t=premises)
+        super().__init__(c=_connectives.transformation, t=(conclusion, variables, declarations, premises,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1684,15 +1714,19 @@ class Transformation(Formula):
 
     @property
     def conclusion(self) -> Formula:
-        return self[1]
-
-    @property
-    def premises(self) -> Tupl:
         return self[0]
 
     @property
-    def variables(self) -> Enumeration:
+    def declarations(self) -> Enumeration:
         return self[2]
+
+    @property
+    def premises(self) -> Tupl:
+        return self[3]
+
+    @property
+    def variables(self) -> Enumeration:
+        return self[1]
 
 
 FlexibleTransformation = typing.Optional[typing.Union[Transformation]]
@@ -1776,10 +1810,11 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
     """
     t = coerce_formula(phi=t)
     if (t.connective is not _connectives.transformation or
-            t.arity != 3 or
-            not is_well_formed_tupl(t=t.term_0) or
-            not is_well_formed_formula(phi=t.term_1) or
-            not is_well_formed_enumeration(e=t.term_2)):
+            t.arity != 4 or
+            not is_well_formed_formula(phi=t.term_0) or
+            not is_well_formed_enumeration(e=t.term_1) or
+            not is_well_formed_enumeration(e=t.term_2) or
+            not is_well_formed_tupl(t=t.term_3)):
         return False
     else:
         return True
@@ -3367,9 +3402,13 @@ class TransformationTypesetter(pl1.Typesetter):
         yield from phi.premises.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from pl1.symbols.rightwards_arrow.typeset_from_generator(**kwargs)
-        yield from phi.variables.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from phi.conclusion.typeset_from_generator(**kwargs)
+        yield ' with variables '
+        yield from phi.variables.typeset_from_generator(**kwargs)
+        yield ' and declarations '
+        yield from phi.declarations.typeset_from_generator(**kwargs)
+
         if is_sub_formula:
             yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 

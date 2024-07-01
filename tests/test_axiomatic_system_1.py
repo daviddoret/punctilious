@@ -392,20 +392,26 @@ class TestTransformation:
     def test_is_well_formed_transformation(self):
         x = pu.as1.let_x_be_a_variable(formula_ts='x')
         y = pu.as1.let_x_be_a_variable(formula_ts='y')
-        is_a = pu.as1.let_x_be_a_binary_connective(formula_ts='is-a')
+        is_a = pu.as1.let_x_be_a_binary_connective(
+            formula_ts=pu.as1.typesetters.infix_formula(connective_typesetter='is-a'))
         human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
         platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
         mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
         aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
         p1 = x | is_a | human
         p2 = aristotle | is_a | human
-        premises = pu.as1.Enumeration(elements=(p1,))
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(elements=(x,))
-        phi1 = pu.as1._connectives.transformation(premises, conclusion, variables)
+        declarations = pu.as1.Enumeration(elements=None)
+        premises = pu.as1.Tupl(elements=(p1,))
+        phi1 = pu.as1._connectives.transformation(conclusion, variables, declarations, premises)
         assert pu.as1.is_well_formed_transformation(t=phi1)
-        t = pu.as1.Tupl(elements=(platypus, platypus,))
-        phi2 = pu.as1._connectives.transformation(premises, conclusion, t)
+        phi1 = pu.as1.coerce_transformation(t=phi1)
+        conclusion = x | is_a | mortal
+        variables = pu.as1.Enumeration(elements=(x,))
+        declarations = pu.as1.Enumeration(elements=None)
+        premises = pu.as1.Tupl(elements=(platypus, platypus,))
+        phi2 = pu.as1._connectives.transformation(conclusion, variables, declarations, premises, premises)
         assert not pu.as1.is_well_formed_transformation(t=phi2)
 
 
@@ -518,7 +524,7 @@ class TestInferenceRule:
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         phi = a | f | b
-        rule = pu.as1.Transformation(premises=None, conclusion=phi, variables=None)
+        rule = pu.as1.Transformation(conclusion=phi, variables=None, declarations=None, premises=None)
         ir = pu.as1.InferenceRule(transformation=rule)
         axiomatization = pu.as1.Axiomatization(derivations=(ir,))
 
@@ -533,8 +539,7 @@ class TestInferenceRule:
     def test_is_well_formed_postulation(self):
         a, b = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        rule = pu.as1.Transformation(premises=None, conclusion=a | f | b,
-                                     variables=None)
+        rule = pu.as1.Transformation(conclusion=a | f | b, variables=None, declarations=None, premises=None)
         phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
@@ -567,7 +572,7 @@ class TestProofByPostulation:
     def test_is_well_formed(self):
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
-        rule1 = pu.as1.Transformation(premises=None, conclusion=star3(e, b, d), variables=None)
+        rule1 = pu.as1.Transformation(conclusion=star3(e, b, d), variables=None, declarations=None, premises=None)
         phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
         phi2 = rule1 | pu.as1._connectives.map | pu.as1._connectives.inference_rule
@@ -581,7 +586,8 @@ class TestInference:
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        t = pu.as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
+        t = pu.as1.Transformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
+                                  premises=(x | f | y, y | f | z,), )
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
@@ -594,7 +600,8 @@ class TestInference:
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        t = pu.as1.Transformation(premises=(x | f | y, y | f | z,), conclusion=x | f | z, variables=(x, y, z,))
+        t = pu.as1.Transformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
+                                  premises=(x | f | y, y | f | z,))
         p = (a | f | b, b | f | c,)
         phi1 = p | pu.as1._connectives.inference | t
         assert pu.as1.is_well_formed_inference(i=phi1)
@@ -614,7 +621,8 @@ class TestProofByInference:
         premises = pu.as1.Enumeration(elements=(x | star | y, y | star | z,))
         conclusion = x | star | z
         variables = pu.as1.Enumeration(elements=(x, y, z,))
-        f = pu.as1.Transformation(premises=premises, conclusion=conclusion, variables=variables)
+        f = pu.as1.Transformation(conclusion=conclusion, variables=variables, declarations=None,
+                                  premises=premises)
         i = pu.as1.Inference(premises=(a | star | b, b | star | c,), transformation_rule=f)
         assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i)
         pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
@@ -816,14 +824,14 @@ class TestAutoDerivation:
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
         if_p_then_q = pu.as1.InferenceRule(
-            transformation=pu.as1.Transformation(premises=(p,), conclusion=q, variables=()))
+            transformation=pu.as1.Transformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
         t1 = pu.as1.extend_theory(if_p_then_q, t=t1)
 
         with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
                 formula_ts='y') as y:
             x_y_then_x_and_y = pu.as1.InferenceRule(
-                transformation=pu.as1.Transformation(premises=(x, y,), conclusion=x | pu.as1._connectives.land | y,
-                                                     variables=(x, y,)))
+                transformation=pu.as1.Transformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
+                                                     declarations=None, premises=(x, y,)))
         t1 = pu.as1.Theory(derivations=(*t1, x_y_then_x_and_y,))
 
         pass
@@ -877,5 +885,21 @@ class TestMetaTheory:
         # Let's prove t is inconsistent
         m = pu.as1.let_x_be_a_meta_theory(d=None)
         m = pu.as1.let_x_be_a_sub_theory_of_y(t=t, m=m)
-        m, d = pu.as1.derive_1()
+        # m, d = pu.as1.derive_1()
+        # TODO: Come back here and complete development.
         pass
+
+
+class TestObjectCreation:
+    def test_object_creation(self):
+        if 1 == 2:
+            t = as1.let_x_be_a_theory()
+            x = as1.let_x_be_a_new_object()
+            t2 = as1.Transformation(conclusion=x | is_a | propositional_variable, variables=(x,), declarations=(x,),
+                                    premises=None)
+            # rule 1: a variable x in the enumeration of variables car either be listed in declarations,
+            #   exclusive-or be referenced in premises, exclusive-or not be referenced.
+            # rule 2: a new object in creations must not be present in previous derivations in the theory,
+            #   otherwise it would be possible to "create the same object multiple times" which doesn't make sense.
+            a = as1.let_x_be_an_axiom(t=t, a=a)
+            t, _ = as1.derive_1(t=t, c=x | is_a | propositional_variable, )
