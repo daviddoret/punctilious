@@ -1,17 +1,20 @@
 """
 
-TODO: Consider using a three-valued logic:
+TODO: KEY QUALITY CHECK: In both the Theorem.__init__ or __new__ and in the is_well_formed_theorem function,
+    check that newly declared objects are not present in any precedent formula in the theory!
+
+TODO: IDEA: Consider using a three-valued logic:
  - P is true
  - or P is false
  - or P is not decidable in this axiomatization
 
-TODO: Algorithm class. (not sure this is a good idea...)
+TODO: IDEA: Algorithm class. (not sure this is a good idea...)
     General idea: an algorithm is an implementation in a programming language,
     here python, of a (determinist???) algorithm that acts like an inference-rule,
     i.e. given a number of arguments (that must be valid-statements in the theory),
     generates a new valid-statement in the theory.
 
-TODO: Implement sub-theory
+TODO: KEY FEATURE: Implement sub-theory
     In the parent theory:
         t1
             [1] ...
