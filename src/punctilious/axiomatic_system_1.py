@@ -2611,16 +2611,16 @@ class Theorem(Derivation):
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
-        f_of_p: Formula = i.transformation_rule(i.premises)
+        re_derived_valid_statement: Formula = i.transformation_rule(i.premises)
         if len(i.transformation_rule.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
-                is_formula_equivalent(phi=valid_statement, psi=f_of_p, raise_event_if_false=True)
+                is_formula_equivalent(phi=valid_statement, psi=re_derived_valid_statement, raise_event_if_false=True)
             except u1.ApplicativeException as error:
                 # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
                 # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
                 raise u1.ApplicativeException(code=ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
-                                              algorithm_output=f_of_p,
+                                              algorithm_output=re_derived_valid_statement,
                                               inference=i, inference_transformation_rule=i.transformation_rule,
                                               inference_premises=i.premises)
         else:
@@ -2634,7 +2634,12 @@ class Theorem(Derivation):
             if not success_1:
                 raise u1.ApplicativeException(
                     msg='The valid-statement is not consistent with the inference-rule conclusion, considering new-object-declarations')
+            # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
+            success_2, m2 = is_formula_equivalent_with_variables_2(phi=valid_statement,
+                                                                   psi=i.transformation_rule.conclusion,
+                                                                   variables=m1.domain)
+            pass
             valid_statement_reversed: Formula = replace_formulas(phi=valid_statement, m=m1_reversed)
             if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.transformation_rule.conclusion):
                 raise u1.ApplicativeException(
@@ -2695,6 +2700,7 @@ class Theory(Enumeration):
         derivations: Enumeration = coerce_enumeration(
             e=(coerce_derivation(d=p) for p in derivations))
         try:
+            pass
             is_well_formed_theory(t=derivations, raise_event_if_false=True)
 
         except Exception as error:

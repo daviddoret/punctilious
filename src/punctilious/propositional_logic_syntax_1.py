@@ -206,7 +206,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     """
     pass
 
-axiomatization = as1.Axiomatization(derivations=(i1, i2, i3, i4, i5,))
+axiomatization = as1.Axiomatization(derivations=(i0, i1, i2, i3, i4, i5,))
 
 extended_theory = as1.Theory(derivations=(*axiomatization,))
 
@@ -473,8 +473,9 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
      - the "p is-a proposition" heuristic.
 
     """
-    global i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
+    global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
     t: as1.Theory = as1.coerce_theory(t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i0, t=t)
     t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
     t, _ = as1.let_x_be_an_axiom(a=i2, t=t)
     t, _ = as1.let_x_be_an_axiom(a=i3, t=t)
