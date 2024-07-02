@@ -8,11 +8,14 @@ TODO: IDEA: Consider using a three-valued logic:
  - or P is false
  - or P is not decidable in this axiomatization
 
-TODO: IDEA: Algorithm class. (not sure this is a good idea...)
+TODO: IDEA: Algorithm class.
     General idea: an algorithm is an implementation in a programming language,
     here python, of a (determinist???) algorithm that acts like an inference-rule,
     i.e. given a number of arguments (that must be valid-statements in the theory),
     generates a new valid-statement in the theory.
+
+
+
 
 TODO: KEY FEATURE: Implement sub-theory
     In the parent theory:
@@ -55,7 +58,7 @@ TODO: Implement hypothesis
             [q] not(phi)
 
 
-TODO: AccretingTheory class
+TODO: AccretingTheory class ??? is this a good idea ???
     An accreting theory is a sequence of theories T0, T1, T2, ..., Tn, such that
     T0 is a theory, and Tn+1 is a theory that is Tn with one additional derivation.
     This would allow to keep a python-object as a reference object with an inner

@@ -1791,6 +1791,25 @@ def coerce_transformation(t: FlexibleFormula) -> Transformation:
         raise u1.ApplicativeException(code=ERROR_CODE_AS1_031, coerced_type=Transformation, phi_type=type(t), phi=t)
 
 
+class Algorithm(Formula):
+    """A well-formed algorithm is a derivation that justified the derivation of further theorems in a theory,
+    should bew impose conditions ex premises???
+    by executing an algorithm that is external to the theory.
+    The algorithm generates a new formula.
+
+    Distinctively from premises, we should pass arguments to the algorithm."""
+    # TODO: Algorithm: Complete development
+    pass
+
+
+FlexibleAlgorithm = typing.Optional[typing.Union[Connective, Formula]]
+
+
+def coerce_algorithm(a: FlexibleAlgorithm) -> Algorithm:
+    # TODO: coerce_algorithm: Complete development
+    pass
+
+
 def coerce_inference(i: FlexibleFormula) -> Inference:
     if isinstance(i, Inference):
         return i
@@ -1946,7 +1965,7 @@ def iterate_enumeration_elements(e: FlexibleEnumeration) -> typing.Generator[For
 
 
 def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
-    """Return True if every formula phi in enumeration s is a valid-statement in theory t, False otherwise.
+    """Returns True if every formula phi in enumeration s is a valid-statement in theory t, False otherwise.
     """
     s: Tupl = coerce_tupl(t=s)
     t: Theory = coerce_theory(t=t)
@@ -1955,7 +1974,7 @@ def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
 
 def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnumeration, n: int) -> \
         typing.Generator[Enumeration, None, None]:
-    """Iterate all distinct tuples (order matters) of exactly n elements in enumeration e.
+    """Iterates all distinct tuples (order matters) of exactly n elements in enumeration e.
 
     :param n:
     :param e:
@@ -2491,7 +2510,7 @@ FlexibleAxiom = typing.Union[Axiom, Formula]
 
 
 class InferenceRule(Derivation):
-    """A well-formed inference-rule is a theorem that justifies the derivation of theorems in a theory,
+    """A well-formed inference-rule is a derivation that justifies the derivation of further theorems in a theory,
     under certain conditions called premises.
 
     Syntactic definition:
