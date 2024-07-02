@@ -5,20 +5,7 @@ TODO: Consider using a three-valued logic:
  - or P is false
  - or P is not decidable in this axiomatization
 
-TODO: Question: How could we introduce a new symbol or connective in a theory?
-    For this we need a special "instruction" or proto-derivation.
-    Something like: Let S be a new symbol/connective or: (s is-a new-symbol).
-    And we must be able to derive that two symbols introduced in a theory
-    are necessarily unequal, or not symbol-equivalent.
-    Should we use the target theory for that?
-    Or a special-purpose meta-theory?
-    Side note: this allows the development of a theory of connectives.
-    Possibility:
-        (x is-a new-connective ^ x is-a propositional-variable)
-        or simply:
-        (x is-a propositional-variable) with new-connective-variable x
-
-TODO: Algorithm class.
+TODO: Algorithm class. (not sure this is a good idea...)
     General idea: an algorithm is an implementation in a programming language,
     here python, of a (determinist???) algorithm that acts like an inference-rule,
     i.e. given a number of arguments (that must be valid-statements in the theory),

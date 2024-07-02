@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +210,7 @@
     "Python tests.pytest for test_presentation_layer_1.TestScript.test_script.executor": "Run",
     "Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestAutoDerivation.test_auto_derivation.executor": "Debug",
-    "Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1.executor": "Debug",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2.executor": "Run",
@@ -331,7 +331,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -645,7 +645,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_propositional_logic_syntax_1.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -658,7 +658,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -677,18 +677,18 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL1.test_pl1" />
       <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1" />
       <item itemvalue="Python tests.pytest in test_minimal_logic_1.py" />
-      <item itemvalue="Python tests.pytest in test_propositional_logic_syntax_1.py" />
+      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1" />
         <item itemvalue="Python.propositional_logic_syntax_1" />
         <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL1.test_pl1" />
         <item itemvalue="Python tests.pytest in test_minimal_logic_1.py" />
-        <item itemvalue="Python tests.pytest in test_propositional_logic_syntax_1.py" />
       </list>
     </recent_temporary>
   </component>
@@ -707,14 +707,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00706" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1719089067186</created>
-      <option name="number" value="00706" />
-      <option name="presentableId" value="LOCAL-00706" />
-      <option name="project" value="LOCAL" />
-      <updated>1719089067186</updated>
     </task>
     <task id="LOCAL-00707" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1100,7 +1092,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719868769955</updated>
     </task>
-    <option name="localTasksCounter" value="755" />
+    <task id="LOCAL-00755" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1719919076426</created>
+      <option name="number" value="00755" />
+      <option name="presentableId" value="LOCAL-00755" />
+      <option name="project" value="LOCAL" />
+      <updated>1719919076426</updated>
+    </task>
+    <option name="localTasksCounter" value="756" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1198,33 +1198,23 @@
           <option name="timeStamp" value="120" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py</url>
-          <line>236</line>
-          <option name="timeStamp" value="579" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
           <line>903</line>
           <option name="timeStamp" value="583" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2126</line>
-          <option name="timeStamp" value="584" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2641</line>
+          <line>2644</line>
           <option name="timeStamp" value="585" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2613</line>
+          <line>2616</line>
           <option name="timeStamp" value="586" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3020</line>
+          <line>3023</line>
           <option name="timeStamp" value="587" />
         </line-breakpoint>
       </breakpoints>

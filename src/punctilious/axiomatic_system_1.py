@@ -2122,8 +2122,12 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
             not t.arity == 2 or
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_inference(i=t.term_1)):
+        if raise_error_if_ill_formed:
+            raise u1.ApplicativeException(code=ERROR_CODE_AS1_035, t=t)
         return False
     else:
+        # TODO: Factorize the check in Theorem.__new__ or __init__,
+        #   that takes into account new-object-declarations.
         i: Inference = coerce_inference(i=t.term_1)
         f_of_p: Formula = i.transformation_rule(i.premises)
         if not is_formula_equivalent(phi=t.term_0, psi=f_of_p):
@@ -2132,8 +2136,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
                 raise u1.ApplicativeException(code=ERROR_CODE_AS1_035, phi=t, psi_expected=t.term_0,
                                               psi_inferred=f_of_p,
                                               inference_rule=i)
-            else:
-                return False
+            return False
         return True
 
 
