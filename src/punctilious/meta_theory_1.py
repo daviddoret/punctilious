@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
 # THIS MUST BE AN ALGORITHMIC INFERENCE-RULE!!!!!!
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='t') as t:
-    is_valid_in: as1.InferenceRule = as1.InferenceRule(
+    is_valid_in: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
         transformation=as1.let_x_be_a_transformation(
             premises=(
                 t | is_a | theory,

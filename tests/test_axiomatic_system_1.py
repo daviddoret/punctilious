@@ -546,7 +546,7 @@ class TestInferenceRule:
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         phi = a | f | b
         rule = pu.as1.Transformation(conclusion=phi, variables=None, declarations=None, premises=None)
-        ir = pu.as1.InferenceRule(transformation=rule)
+        ir = pu.as1.InferenceRuleByTransformation(transformation=rule)
         axiomatization = pu.as1.Axiomatization(derivations=(ir,))
 
         # derivation from the axiom
@@ -844,13 +844,13 @@ class TestAutoDerivation:
 
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
-        if_p_then_q = pu.as1.InferenceRule(
+        if_p_then_q = pu.as1.InferenceRuleByTransformation(
             transformation=pu.as1.Transformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
         t1 = pu.as1.extend_theory(if_p_then_q, t=t1)
 
         with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
                 formula_ts='y') as y:
-            x_y_then_x_and_y = pu.as1.InferenceRule(
+            x_y_then_x_and_y = pu.as1.InferenceRuleByTransformation(
                 transformation=pu.as1.Transformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
                                                      declarations=None, premises=(x, y,)))
         t1 = pu.as1.Theory(derivations=(*t1, x_y_then_x_and_y,))

@@ -35,7 +35,7 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
-    i0: as1.InferenceRule = as1.InferenceRule(
+    i0: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
         transformation=as1.Transformation(
             conclusion=a | is_a | propositional_variable,
             variables=None,
@@ -61,7 +61,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     pass
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
-    i1: as1.InferenceRule = as1.InferenceRule(
+    i1: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
         transformation=as1.Transformation(
             premises=(a | is_a | propositional_variable,),
             conclusion=a | is_a | proposition,
@@ -84,7 +84,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     pass
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
-    i2: as1.InferenceRule = as1.InferenceRule(
+    i2: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,),
             conclusion=lnot(a) | is_a | proposition,
@@ -107,7 +107,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     pass
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
-    i3: as1.InferenceRule = as1.InferenceRule(
+    i3: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
@@ -132,7 +132,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     pass
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
-    i4: as1.InferenceRule = as1.InferenceRule(
+    i4: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
@@ -157,7 +157,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     pass
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
-    i5: as1.InferenceRule = as1.InferenceRule(
+    i5: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
         transformation=as1.Transformation(
             premises=(a | is_a | proposition,
                       b | is_a | proposition),
@@ -182,7 +182,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     pass
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
-    i6: as1.InferenceRule = as1.InferenceRule(
+    i6: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
         transformation=as1.Transformation(
             premises=None,
             conclusion=lnot(a | is_a | proposition),
@@ -251,7 +251,8 @@ def let_x_be_some_propositional_variables(
     return t, *propositional_variables
 
 
-def translate_implication_to_axiom(t: as1.FlexibleTheory, phi: as1.FlexibleFormula) -> as1.InferenceRule:
+def translate_implication_to_axiom(t: as1.FlexibleTheory,
+                                   phi: as1.FlexibleFormula) -> as1.InferenceRuleByTransformation:
     """Given a propositional formula phi that is an implication,
     translates phi to an equivalent axiomatic-system-1 inference-rule.
 
@@ -299,7 +300,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory, phi: as1.FlexibleFormu
                                                   variables=variables)
 
     # build the inference-rule
-    inference_rule: as1.InferenceRule = as1.InferenceRule(transformation=rule)
+    inference_rule: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(transformation=rule)
 
     return inference_rule
 
