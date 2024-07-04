@@ -561,16 +561,16 @@ class TestInferenceRule:
         a, b = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         rule = pu.as1.Transformation(conclusion=a | f | b, variables=None, declarations=None, premises=None)
-        phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
-        assert pu.as1.is_well_formed_inference_rule(i=phi1)
+        phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule_by_transformation
+        assert pu.as1.is_well_formed_inference_rule_by_transformation(i=phi1)
 
         # incorrect connective
-        phi2 = rule | pu.as1._connectives.inference | pu.as1._connectives.inference_rule
-        assert not pu.as1.is_well_formed_inference_rule(i=phi2)
+        phi2 = rule | pu.as1._connectives.inference | pu.as1._connectives.inference_rule_by_transformation
+        assert not pu.as1.is_well_formed_inference_rule_by_transformation(i=phi2)
 
         # incorrect axiomatic-postulation
         phi3 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.enumeration
-        assert not pu.as1.is_well_formed_inference_rule(i=phi3)
+        assert not pu.as1.is_well_formed_inference_rule_by_transformation(i=phi3)
 
 
 class TestFormulaToTuple:
@@ -594,12 +594,12 @@ class TestProofByPostulation:
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
         rule1 = pu.as1.Transformation(conclusion=star3(e, b, d), variables=None, declarations=None, premises=None)
-        phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
-        assert pu.as1.is_well_formed_inference_rule(i=phi1)
-        phi2 = rule1 | pu.as1._connectives.map | pu.as1._connectives.inference_rule
-        assert not pu.as1.is_well_formed_inference_rule(i=phi2)
+        phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule_by_transformation
+        assert pu.as1.is_well_formed_inference_rule_by_transformation(i=phi1)
+        phi2 = rule1 | pu.as1._connectives.map | pu.as1._connectives.inference_rule_by_transformation
+        assert not pu.as1.is_well_formed_inference_rule_by_transformation(i=phi2)
         phi3 = rule1 | pu.as1._connectives.follows_from | b
-        assert not pu.as1.is_well_formed_inference_rule(i=phi3)
+        assert not pu.as1.is_well_formed_inference_rule_by_transformation(i=phi3)
 
 
 class TestInference:
