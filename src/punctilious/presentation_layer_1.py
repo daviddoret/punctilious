@@ -7,6 +7,11 @@ import pathlib
 
 import state_1 as st1
 
+# Pseudo-constants
+FORMULA_TS = 'formula_ts'
+REF_TS = 'ref_ts'
+DECLARATION_TS = 'declaration_ts'
+
 
 class ConfigurationSettings(dict):
     _singleton = None
@@ -192,7 +197,7 @@ class IndexedSymbolTypesetter(Typesetter):
     def body_ts(self) -> Typesetter:
         return self._body_ts
 
-    def typeset_from_generator(self, encoding: typing.Optional[encodings], **kwargs) -> (
+    def typeset_from_generator(self, encoding: typing.Optional[encodings] = None, **kwargs) -> (
             typing.Generator)[str, None, None]:
         if encoding is None:
             encoding = encodings.default

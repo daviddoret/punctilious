@@ -458,7 +458,7 @@ def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
     """
     phi: Theory = coerce_theory(t=phi)
     psi: Theory = coerce_theory(t=psi)
-    t2: Theory = Theory(derivations=(*phi, *psi,))
+    t2: Theory = Theory(d=(*phi, *psi,))
     return t2
 
 
@@ -892,7 +892,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
     :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
     """
     if t is None:
-        t = Axiomatization(derivations=None)
+        t = Axiomatization(d=None)
     else:
         t: FlexibleTheory = coerce_theory(t=t)
 
@@ -901,11 +901,11 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         i: InferenceRuleByTransformation = InferenceRuleByTransformation(transformation=transformation)
 
     if isinstance(t, Axiomatization):
-        t = Axiomatization(derivations=(*t, i,))
+        t = Axiomatization(d=(*t, i,))
         u1.log_info(i.typeset_as_string(theory=t))
         return t, i
     elif isinstance(t, Theory):
-        t = Theory(derivations=(*t, i,))
+        t = Theory(d=(*t, i,))
         u1.log_info(i.typeset_as_string(theory=t))
         return t, i
     else:
@@ -929,7 +929,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
     input statement, and "a" is the new axiom.
     """
     if t is None:
-        t = Axiomatization(derivations=None)
+        t = Axiomatization(d=None)
     else:
         t: FlexibleTheory = coerce_theory(t=t)
     if s is not None and a is not None:
@@ -944,12 +944,12 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         a: Axiom = Axiom(valid_statement=s, **kwargs)
 
     if isinstance(t, Axiomatization):
-        t = Axiomatization(derivations=(*t, a,), decorations=(t,))
+        t = Axiomatization(d=(*t, a,), decorations=(t,))
         # TODO: Copy theory decorations
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
     elif isinstance(t, Theory):
-        t = Theory(derivations=(*t, a,), decorations=(t,))
+        t = Theory(d=(*t, a,), decorations=(t,))
         # TODO: Copy theory decorations
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
@@ -974,7 +974,7 @@ def let_x_be_a_theory(d: FlexibleEnumeration | None = None,
     if 'formula_name_ts' not in kwargs:
         kwargs['formula_name_ts'] = pl1.Script(text='T')
 
-    t = Theory(derivations=d, **kwargs)
+    t = Theory(d=d, **kwargs)
 
     return t
 
@@ -989,7 +989,7 @@ def let_x_be_a_meta_theory(d: FlexibleEnumeration | None = None,
     if 'formula_name_ts' not in kwargs:
         kwargs['formula_name_ts'] = pl1.Script(text='M')
 
-    t = Theory(derivations=d, **kwargs)
+    t = Theory(d=d, **kwargs)
 
     return t
 
@@ -1008,7 +1008,7 @@ def let_x_be_a_sub_theory_of_y(t: FlexibleTheory, m: FlexibleTheory) -> Theory:
 
 
 def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
-    return Axiomatization(derivations=axioms)
+    return Axiomatization(d=axioms)
 
 
 def let_x_be_a_transformation(conclusion: FlexibleFormula,
@@ -2467,19 +2467,19 @@ def coerce_theory(t: FlexibleTheory) -> Theory:
     if isinstance(t, Theory):
         return t
     elif isinstance(t, Formula) and is_well_formed_theory(t=t):
-        return Theory(derivations=t)
+        return Theory(d=t)
     elif t is None:
-        return Theory(derivations=None)
+        return Theory(d=None)
     elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Theory(derivations=tuple(element for element in t))
+        return Theory(d=tuple(element for element in t))
     elif isinstance(t, typing.Iterable) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Theory(derivations=t)
+        return Theory(d=t)
     else:
         raise u1.ApplicativeException(
             code=ERROR_CODE_AS1_043,
@@ -2498,7 +2498,7 @@ def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
     if isinstance(a, Axiomatization):
         return a
     elif isinstance(a, Formula) and is_well_formed_axiomatization(a=a):
-        return Axiomatization(derivations=a)
+        return Axiomatization(d=a)
     else:
         raise u1.ApplicativeException(
             code=ERROR_CODE_AS1_044,
@@ -2868,36 +2868,62 @@ class Theory(Enumeration):
         effect, stating that in inference-rule is a derivation seems to be a bit of a semantic stretch.
 
     """
+    _last_index: int = 0
 
-    def __new__(cls, c: Connective | None = None, derivations: FlexibleEnumeration = None,
+    def __new__(cls, c: Connective | None = None,
+                t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
                 decorations: FlexibleDecorations = None, **kwargs):
-        # coerce to enumeration
-        derivations: Enumeration = coerce_enumeration(e=derivations)
-        # use coerce_derivation() to assure that every derivation is properly types as Axiom, InferenceRule or Theorem.
-        derivations: Enumeration = coerce_enumeration(
-            e=(coerce_derivation(d=p) for p in derivations))
+        """
+
+        :param c:
+        :param t: A theory that is being extended by the new theory. If None, the empty theory is assumed.
+        :param d: An enumeration of derivations for the new theory.
+        :param decorations:
+        :param kwargs:
+        """
+        if t is not None:
+            t: Theory = coerce_theory(t=t)
+        d: Enumeration = coerce_enumeration(e=d)
+        d: Enumeration = coerce_enumeration(
+            e=(coerce_derivation(d=p) for p in d))
+        if t is not None:
+            d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
         try:
             pass
-            is_well_formed_theory(t=derivations, raise_event_if_false=True)
-
+            is_well_formed_theory(t=d, raise_event_if_false=True)
         except Exception as error:
             # well-formedness verification failure, the theorem is ill-formed.
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_046, error=error, derivations=derivations)
-        o: tuple = super().__new__(cls, elements=derivations, **kwargs)
+            raise u1.ApplicativeException(code=ERROR_CODE_AS1_046, error=error, derivations=d)
+        o: tuple = super().__new__(cls, elements=d, **kwargs)
         return o
 
-    def __init__(self, c: Connective | None = None, derivations: FlexibleEnumeration = None,
+    def __init__(self, c: Connective | None = None,
+                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
                  decorations: FlexibleDecorations = None, **kwargs):
         if c is None:
             c: Connective = _connectives.theory
-        # coerce to enumeration
-        derivations: Enumeration = coerce_enumeration(e=derivations)
-        # coerce all elements of the enumeration to theorem
-        derivations: Enumeration = coerce_enumeration(
-            e=(coerce_derivation(d=p) for p in derivations))
+
+        if t is not None:
+            t: Theory = coerce_theory(t=t)
+        d: Enumeration = coerce_enumeration(e=d)
+        d: Enumeration = coerce_enumeration(
+            e=(coerce_derivation(d=p) for p in d))
+        if t is not None:
+            d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
+
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
-        super().__init__(c=c, elements=derivations, **kwargs)
+        super().__init__(c=c, elements=d, **kwargs)
         copy_theory_decorations(target=self, decorations=decorations)
+        if pl1.REF_TS not in self.ts.keys():
+            Theory._last_index = Theory._last_index + 1
+            self.ts[pl1.REF_TS] = pl1.IndexedSymbolTypesetter(body_ts=pl1.symbols.t_uppercase_script,
+                                                              index=Theory._last_index)
+        if pl1.DECLARATION_TS not in self.ts.keys():
+            self.ts[pl1.DECLARATION_TS] = typesetters.declaration(conventional_class='theory')
+        if t is not None:
+            # This is not an extended theory, this is a new theory.
+            # Output its declaration.
+            u1.log_info(self.typeset_as_string(theory=self, ts_key=pl1.DECLARATION_TS))
 
     @property
     def axioms(self) -> Enumeration:
@@ -3003,12 +3029,12 @@ class Axiomatization(Theory):
 
     """
 
-    def __new__(cls, derivations: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
+    def __new__(cls, d: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
         # coerce to enumeration
-        derivations: Enumeration = coerce_enumeration(e=derivations)
+        d: Enumeration = coerce_enumeration(e=d)
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
-        for d in derivations:
+        for d in d:
             if is_well_formed_inference_rule_by_transformation(i=d):
                 # This is an inference-rule.
                 inference_rule: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=d)
@@ -3026,15 +3052,15 @@ class Axiomatization(Theory):
                                               d_type=type(d),
                                               expected_form_1=InferenceRuleByTransformation,
                                               expected_form_2=Axiom)
-        o: tuple = super().__new__(cls, derivations=coerced_derivations)
+        o: tuple = super().__new__(cls, d=coerced_derivations)
         return o
 
-    def __init__(self, derivations: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
+    def __init__(self, d: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
         # coerce to enumeration
-        derivations: Enumeration = coerce_enumeration(e=derivations)
+        d: Enumeration = coerce_enumeration(e=d)
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
-        for derivation in derivations:
+        for derivation in d:
             if is_well_formed_inference_rule_by_transformation(i=derivation):
                 # This is an inference-rule.
                 inference_rule: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=derivation)
@@ -3048,7 +3074,7 @@ class Axiomatization(Theory):
                 raise u1.ApplicativeException(code=ERROR_CODE_AS1_048, phi=derivation,
                                               phi_type_1=InferenceRuleByTransformation,
                                               phi_type_2=Axiom)
-        super().__init__(c=_connectives.axiomatization, derivations=coerced_derivations,
+        super().__init__(c=_connectives.axiomatization, d=coerced_derivations,
                          decorations=decorations)
 
 
@@ -3120,34 +3146,32 @@ def get_formula_depth(phi: FlexibleFormula) -> int:
 
 
 def extend_theory(*args, t: FlexibleTheory) -> Theory:
-    """
+    """Extend theory t with whatever is passed in *args.
 
     :param args:
     :param t:
     :return:
     """
-    t = coerce_theory(t=t)
+    t: Theory = coerce_theory(t=t)
     if args is None:
         return t
     else:
         for argument in args:
             if is_well_formed_theory(t=argument):
-                # recursively append all derivations of t2 in t
-                t2: Theory = coerce_theory(t=argument)
-                for d in t2.derivations:
-                    t: Theory = extend_theory(d, t=t)
+                extension_t: Theory = coerce_theory(t=argument)
+                t: Theory = Theory(t=t, d=extension_t)
             elif is_well_formed_axiom(a=argument):
-                a: Axiom = coerce_axiom(a=argument)
-                if not is_axiom_of_theory(a=a, t=t):
-                    t: Theory = Theory(derivations=(*t, a,))
+                extension_a: Axiom = coerce_axiom(a=argument)
+                if not is_axiom_of_theory(a=extension_a, t=t):
+                    t: Theory = Theory(t=t, d=(extension_a,))
             elif is_well_formed_inference_rule_by_transformation(i=argument):
-                ir: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=argument)
-                if not is_inference_rule_of_theory(i=ir, t=t):
-                    t: Theory = Theory(derivations=(*t, ir,))
+                extension_i: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=argument)
+                if not is_inference_rule_of_theory(i=extension_i, t=t):
+                    t: Theory = Theory(t=t, d=(extension_i,))
             elif is_well_formed_theorem(t=argument):
-                thrm: Theorem = coerce_theorem(t=argument)
-                if not is_theorem_of_theory(m=thrm, t=t):
-                    t: Theory = Theory(derivations=(*t, thrm,))
+                extension_m: Theorem = coerce_theorem(t=argument)
+                if not is_theorem_of_theory(m=extension_m, t=t):
+                    t: Theory = Theory(t=t, d=(extension_m,))
             else:
                 raise u1.ApplicativeException(code=ERROR_CODE_AS1_049,
                                               msg=f'Invalid argument: ({type(argument)}) {argument}.')
@@ -3196,7 +3220,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
 
     # Extends the theory with the new theorem.
     # The validity of the premises will be checked during theory initialization.
-    t: Theory = Theory(derivations=(*t, theorem,), decorations=(t,))
+    t: Theory = Theory(t=t, d=(theorem,), decorations=(t,))
 
     u1.log_info(theorem.typeset_as_string(theory=t))
 
@@ -3725,6 +3749,22 @@ class MapTypesetter(pl1.Typesetter):
         yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
+class DeclarationTypesetter(pl1.Typesetter):
+    def __init__(self, conventional_class: str | None):
+        self._conventional_class = conventional_class
+        super().__init__()
+
+    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Formula = coerce_formula(phi=phi)
+        yield 'Let '
+        yield from phi.typeset_from_generator(ts_key=pl1.REF_TS, **kwargs)
+        if self._conventional_class is not None:
+            yield f' be a '
+            yield self._conventional_class
+        yield '.'
+
+
 def get_theory_inference_rule_from_transformation_rule(t: FlexibleTheory, r: FlexibleTransformation) -> \
         tuple[bool, InferenceRuleByTransformation | None]:
     """Given a theory "t" and a transformation-rule "r", return the first occurrence of an inference-rule in "t" such
@@ -3772,16 +3812,22 @@ def typeset_formula_reference(phi: FlexibleFormula, t: FlexibleTheory | None, **
     phi = coerce_formula(phi=phi)
     if t is not None:
         t = coerce_theory(t=t)
-    if 'ref_ts' in phi.ts:
+    if pl1.REF_TS in phi.ts:
         # This formula has a typesetting reference, e.g. "PL01".
         yield from pl1.symbols.open_square_bracket.typeset_from_generator(**kwargs)
-        yield from phi.ts.get('ref_ts').typeset_from_generator(**kwargs)
+        if t is not None:
+            yield from t.typeset_from_generator(ts_key=pl1.REF_TS, **kwargs)
+            yield '.'
+        yield from phi.ts.get(pl1.REF_TS).typeset_from_generator(**kwargs)
         yield from pl1.symbols.close_square_bracket.typeset_from_generator(**kwargs)
     elif t is not None and is_well_formed_derivation(d=phi) and is_term_of_formula(x=phi, phi=t):
         # phi is a derivation in a theory.
         # we can use the 1-based index of the formula in the theory.
         i: int = get_index_of_first_equivalent_term_in_formula(term=phi, formula=t)
         yield from pl1.symbols.open_square_bracket.typeset_from_generator(**kwargs)
+        if t is not None:
+            yield from t.typeset_from_generator(ts_key=pl1.REF_TS, **kwargs)
+            yield '.'
         yield i + 1
         yield from pl1.symbols.close_square_bracket.typeset_from_generator(**kwargs)
     elif t is not None and is_valid_statement_in_theory(phi=phi, t=t):
@@ -3790,6 +3836,9 @@ def typeset_formula_reference(phi: FlexibleFormula, t: FlexibleTheory | None, **
         success, d = get_theory_derivation_from_valid_statement(t=t, s=phi)
         i: int = get_index_of_first_equivalent_term_in_formula(term=d, formula=t)
         yield from pl1.symbols.open_square_bracket.typeset_from_generator(**kwargs)
+        if t is not None:
+            yield from t.typeset_from_generator(ts_key=pl1.REF_TS, **kwargs)
+            yield '.'
         yield i + 1
         yield from pl1.symbols.close_square_bracket.typeset_from_generator(**kwargs)
     else:
@@ -3806,6 +3855,7 @@ class DerivationTypesetter(pl1.Typesetter):
             typing.Generator)[str, None, None]:
         phi: Derivation = coerce_derivation(d=phi)
         if theory is None:
+            yield '\t'
             yield from phi.valid_statement.typeset_from_generator(**kwargs)
             if is_well_formed_axiom(a=phi):
                 phi: Axiom = coerce_axiom(a=phi)
@@ -3830,6 +3880,7 @@ class DerivationTypesetter(pl1.Typesetter):
                                                                            f'theory.', phi=phi, theory=theory)
         else:
             # Theory parameter was provided, we have more context and premises can reference the derivation's number.
+            yield '\t'
             yield from typeset_formula_reference(phi=phi, t=theory)
             yield f'\t'
             yield from phi.valid_statement.typeset_from_generator(**kwargs)
@@ -3884,6 +3935,9 @@ class Typesetters:
 
     def classical_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> ClassicalFormulaTypesetter:
         return ClassicalFormulaTypesetter(connective_ts=connective_typesetter)
+
+    def declaration(self, conventional_class: str | None) -> DeclarationTypesetter:
+        return DeclarationTypesetter(conventional_class=conventional_class)
 
     def text(self, text: str) -> pl1.TextTypesetter:
         return pl1.typesetters.text(text=text)

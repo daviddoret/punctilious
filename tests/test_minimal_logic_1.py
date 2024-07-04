@@ -34,7 +34,7 @@ def theory(a, b, c):
     a1 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=a | is_a | propositional_variable)
     a2 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=b | is_a | propositional_variable)
     a3 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=c | is_a | propositional_variable)
-    t = pu.as1.Axiomatization(derivations=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
+    t = pu.as1.Axiomatization(d=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive: a is-a proposition
     t, m = pu.as1.derive_1(t=t,
@@ -281,7 +281,7 @@ class TestPL5:
         # PL5. 𝐵 ⊃ (𝐴 ⊃ 𝐵).
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t1 = pu.as1.Axiomatization(derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
+        t1 = pu.as1.Axiomatization(d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
         t1, x, = pu.pls1.let_x_be_a_propositional_variable(t=t1, formula_ts='X')
         t1, y, = pu.pls1.let_x_be_a_propositional_variable(t=t1, formula_ts='Y')
         t1, _, = pu.as1.let_x_be_an_axiom(t=t1, s=y)
@@ -339,7 +339,7 @@ class TestPL5:
 class TestMancosu2021P20:
     def test_mancosu_2021_page_20_with_derivation_1(self, caplog):
         t = pu.as1.Axiomatization(
-            derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
+            d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
         t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p1')
         t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p2')
         t, success, _, = derive_1(c=p1 | is_a | proposition,
@@ -391,7 +391,7 @@ class TestMancosu2021P20:
 
     def test_mancosu_2021_page_21_with_derivation_1(self, caplog):
         t = pu.as1.Axiomatization(
-            derivations=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
+            d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
         t, c, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='C')
         t, d, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')
         t, success, _, = derive_1(c=c | is_a | proposition,

@@ -125,7 +125,7 @@ with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(for
     Variables: phi, psi
     """
 
-axiomatization = as1.Axiomatization(derivations=(
+axiomatization = as1.Axiomatization(d=(
     conjunction_introduction,
     simplification_1_axiom,
     simplification_2_axiom,

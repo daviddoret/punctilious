@@ -547,12 +547,12 @@ class TestInferenceRule:
         phi = a | f | b
         rule = pu.as1.Transformation(conclusion=phi, variables=None, declarations=None, premises=None)
         ir = pu.as1.InferenceRuleByTransformation(transformation=rule)
-        axiomatization = pu.as1.Axiomatization(derivations=(ir,))
+        axiomatization = pu.as1.Axiomatization(d=(ir,))
 
         # derivation from the axiom
         i = pu.as1.Inference(premises=None, transformation_rule=rule)
         isolated_theorem = pu.as1.Derivation(valid_statement=phi, justification=i)
-        pu.as1.Theory(derivations=(*axiomatization, isolated_theorem))
+        pu.as1.Theory(d=(*axiomatization, isolated_theorem))
         assert pu.as1.is_formula_equivalent(
             phi=isolated_theorem.valid_statement,
             psi=phi)
@@ -774,20 +774,20 @@ class TestAxiomatization:
 
         # simple case
         e1 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
-        e1 = pu.as1.Axiomatization(derivations=e1)
+        e1 = pu.as1.Axiomatization(d=e1)
         assert pu.as1.is_well_formed_axiomatization(a=e1)
 
         # extreme case: the empty enumeration
         e2 = pu.as1.Enumeration()
-        e2 = pu.as1.Axiomatization(derivations=e2)
+        e2 = pu.as1.Axiomatization(d=e2)
         assert pu.as1.is_well_formed_axiomatization(a=e2)
-        a1 = pu.as1.Axiomatization(derivations=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
+        a1 = pu.as1.Axiomatization(d=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
 
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(a=e3)
         with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_047):
-            a2 = pu.as1.Axiomatization(derivations=e3)  # raise an e123 exception
+            a2 = pu.as1.Axiomatization(d=e3)  # raise an e123 exception
 
 
 class TestDemonstration:
@@ -816,11 +816,11 @@ class TestDemonstration:
 
         with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_039):
             # invalid proof raise exception
-            pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | e))
+            pu.as1.Theory(d=(axiom_1, axiom_2, a | star | e))
 
         with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_039):
             # invalid proof sequence exception
-            pu.as1.Theory(derivations=(axiom_1, axiom_2, a | star | c, ir1,))
+            pu.as1.Theory(d=(axiom_1, axiom_2, a | star | c, ir1,))
             pass
 
 
@@ -853,7 +853,7 @@ class TestAutoDerivation:
             x_y_then_x_and_y = pu.as1.InferenceRuleByTransformation(
                 transformation=pu.as1.Transformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
                                                      declarations=None, premises=(x, y,)))
-        t1 = pu.as1.Theory(derivations=(*t1, x_y_then_x_and_y,))
+        t1 = pu.as1.Theory(d=(*t1, x_y_then_x_and_y,))
 
         pass
         # auto-derivation of an existing valid-statement
@@ -902,11 +902,11 @@ class TestMetaTheory:
         t = pu.ml1.let_x_be_a_minimal_logic_1_theory()
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='P')
         pass
-        # t, _ = pu.as1.let_x_be_an_axiom(t=t, s=p)
-        # t, _ = pu.as1.let_x_be_an_axiom(t=t, s=lnot(p))  # This is a contradiction!
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=p)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=lnot(p))  # This is a contradiction!
         # Let's prove t is inconsistent
-        # m = pu.as1.let_x_be_a_meta_theory(d=None)
-        # m = pu.as1.let_x_be_a_sub_theory_of_y(t=t, m=m)
+        m = pu.as1.let_x_be_a_meta_theory(d=None)
+        m = pu.as1.let_x_be_a_sub_theory_of_y(t=t, m=m)
         ## m, d = pu.as1.derive_1()
         ## TODO: Come back here and complete development.
         pass

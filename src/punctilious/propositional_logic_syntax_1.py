@@ -206,9 +206,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     """
     pass
 
-axiomatization = as1.Axiomatization(derivations=(i0, i1, i2, i3, i4, i5,))
+axiomatization = as1.Axiomatization(d=(i0, i1, i2, i3, i4, i5,))
 
-extended_theory = as1.Theory(derivations=(*axiomatization,))
+extended_theory = as1.Theory(d=(*axiomatization,))
 
 
 def let_x_be_a_propositional_variable(

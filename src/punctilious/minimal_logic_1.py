@@ -308,9 +308,9 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
     """
     pass
 
-axiomatization = as1.Axiomatization(derivations=(pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10))
+axiomatization = as1.Axiomatization(d=(pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10))
 
-extended_theory = as1.Theory(derivations=(*axiomatization,))
+extended_theory = as1.Theory(d=(*axiomatization,))
 
 
 def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
