@@ -1327,7 +1327,7 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         # recursively apply the replacement algorithm on phi terms.
         for term in phi:
             term_substitute = replace_formulas(phi=term, m=m)
-            fb: Formula = extend_formula(formula=fb, term=term_substitute)
+            fb: Formula = append_term_to_formula(formula=fb, term=term_substitute)
         return fb
 
 
@@ -1406,7 +1406,7 @@ def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
         return m
 
 
-def extend_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) -> Enumeration:
+def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) -> Enumeration:
     """Return a new enumeration e′ such that:
      - all elements of e are elements of e′,
      - x is an element of e′.
@@ -1429,7 +1429,7 @@ def extend_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) -> Enumeratio
         return extended_enumeration
 
 
-def extend_tupl(tupl: FlexibleTupl, element: FlexibleFormula) -> Tupl:
+def append_element_to_tuple(tupl: FlexibleTupl, element: FlexibleFormula) -> Tupl:
     """Return a new extended punctilious-tuple such that element is a new element appended to its existing elements.
     """
     tupl: Tupl = coerce_tupl(t=tupl)
@@ -1438,7 +1438,7 @@ def extend_tupl(tupl: FlexibleTupl, element: FlexibleFormula) -> Tupl:
     return extended_tupl
 
 
-def extend_formula(formula: FlexibleFormula, term: FlexibleFormula) -> Formula:
+def append_term_to_formula(formula: FlexibleFormula, term: FlexibleFormula) -> Formula:
     """Return a new extended formula such that term is a new term appended to its existing terms.
     """
     formula: Formula = coerce_formula(phi=formula)
@@ -1447,7 +1447,7 @@ def extend_formula(formula: FlexibleFormula, term: FlexibleFormula) -> Formula:
     return extended_formula
 
 
-def extend_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula) -> Map:
+def append_pair_to_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula) -> Map:
     """Return a new map m2 with a new (preimage, image) pair.
     If the preimage is already defined in m, replace it.
 
@@ -1759,7 +1759,7 @@ class Transformation(Formula):
             simple_formula: Formula = Formula(c=new_connective)
             # TODO: Find a way to initialize the new_connective formula_typesetter.
             # TODO: Find a way to initialize the new_connective arity.
-            declarations_map: Map = extend_map(m=declarations_map, preimage=declaration, image=simple_formula)
+            declarations_map: Map = append_pair_to_map(m=declarations_map, preimage=declaration, image=simple_formula)
 
         # step 4: substitute new-object-declarations in the conclusion
         outcome: Formula = replace_connectives(phi=outcome, m=declarations_map)
@@ -2293,10 +2293,10 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
             return False
         else:
             derivation: Derivation = coerce_derivation(d=derivation)
-            derivations: Tupl = extend_tupl(tupl=derivations, element=derivation)
+            derivations: Tupl = append_element_to_tuple(tupl=derivations, element=derivation)
             # retrieve the formula claimed as valid from the theorem
             valid_statement: Formula = derivation.valid_statement
-            valid_statements: Tupl = extend_tupl(tupl=valid_statements, element=valid_statement)
+            valid_statements: Tupl = append_element_to_tuple(tupl=valid_statements, element=valid_statement)
     # now the derivations and valid_statements have been retrieved, and proved well-formed individually,
     for i in range(0, derivations.arity):
         derivation = derivations[i]
@@ -2612,7 +2612,15 @@ FlexibleAxiom = typing.Union[Axiom, Formula]
 
 
 class InferenceRule(Derivation):
-    pass
+
+    def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula, **kwargs):
+        o: tuple = super().__new__(cls, valid_statement=valid_statement,
+                                   justification=justification, **kwargs)
+        return o
+
+    def __init__(self, valid_statement: FlexibleFormula, justification: FlexibleFormula, **kwargs):
+        super().__init__(valid_statement=valid_statement,
+                         justification=justification, **kwargs)
 
 
 class InferenceRuleByTransformation(InferenceRule):
@@ -2900,6 +2908,16 @@ class Theory(Enumeration):
     def __init__(self, c: Connective | None = None,
                  t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
                  decorations: FlexibleDecorations = None, **kwargs):
+        """Declares a new theory t′ such that t′ = t ∪ d, where:
+         - t is a theory (or the empty theory if the argument is not provided),
+         - d is an enumeration of derivations (or the empty enumeration if the argument is not provided).
+
+        :param c:
+        :param t: A theory to be extended by the new theory.
+        :param d: An enumerations of derivations.
+        :param decorations: TODO: this argument is useless, get rid of it and only use theory extension.
+        :param kwargs:
+        """
         if c is None:
             c: Connective = _connectives.theory
 
@@ -2914,13 +2932,15 @@ class Theory(Enumeration):
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         super().__init__(c=c, elements=d, **kwargs)
         copy_theory_decorations(target=self, decorations=decorations)
+        if t is not None:
+            copy_theory_decorations(target=self, decorations=(t,))
         if pl1.REF_TS not in self.ts.keys():
             Theory._last_index = Theory._last_index + 1
             self.ts[pl1.REF_TS] = pl1.IndexedSymbolTypesetter(body_ts=pl1.symbols.t_uppercase_script,
                                                               index=Theory._last_index)
         if pl1.DECLARATION_TS not in self.ts.keys():
             self.ts[pl1.DECLARATION_TS] = typesetters.declaration(conventional_class='theory')
-        if t is not None:
+        if t is None:
             # This is not an extended theory, this is a new theory.
             # Output its declaration.
             u1.log_info(self.typeset_as_string(theory=self, ts_key=pl1.DECLARATION_TS))
@@ -3016,6 +3036,7 @@ def copy_theory_decorations(target: FlexibleTheory, decorations: FlexibleDecorat
         for decorative_theory in decorations:
             # Copies all heuristics
             target.heuristics.update(decorative_theory.heuristics)
+            # Copies all typesetting methods
             target.ts.update(decorative_theory.ts | target.ts)  # Give priority to the existing
 
 
@@ -3123,7 +3144,7 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: Enumeration = None) -> Enumerati
     if eb is None:
         eb: Enumeration = Enumeration(elements=None)
     if not eb.has_element(phi=phi) and is_leaf_formula(phi=phi):
-        eb = extend_enumeration(x=phi, e=eb)
+        eb = append_element_to_enumeration(x=phi, e=eb)
     else:
         for term in phi:
             # Recursively call get_leaf_formulas,
@@ -3145,8 +3166,8 @@ def get_formula_depth(phi: FlexibleFormula) -> int:
         return max(get_formula_depth(phi=term) for term in phi) + 1
 
 
-def extend_theory(*args, t: FlexibleTheory) -> Theory:
-    """Extend theory t with whatever is passed in *args.
+def append_to_theory(*args, t: FlexibleTheory) -> Theory:
+    """Extend theory t by appending to it whatever is passed in *args.
 
     :param args:
     :param t:
@@ -3160,6 +3181,7 @@ def extend_theory(*args, t: FlexibleTheory) -> Theory:
             if is_well_formed_theory(t=argument):
                 extension_t: Theory = coerce_theory(t=argument)
                 t: Theory = Theory(t=t, d=extension_t)
+                copy_theory_decorations(target=t, decorations=(extension_t,))
             elif is_well_formed_axiom(a=argument):
                 extension_a: Axiom = coerce_axiom(a=argument)
                 if not is_axiom_of_theory(a=extension_a, t=t):

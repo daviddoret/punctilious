@@ -55,21 +55,21 @@ class TestAxioms:
 
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition
         # note that it is not necessary that either A or ¬A be valid
-        t = pu.as1.extend_theory(pu.pls1.i2, t=t)
+        t = pu.as1.append_to_theory(pu.pls1.i2, t=t)
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition,),
             transformation_rule=pu.pls1.i2.transformation)
         claim = lnot(p) | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=lnot(p) | is_a | proposition, psi=isolated_theorem.valid_statement)
-        t = pu.as1.extend_theory(isolated_theorem, t=t)
+        t = pu.as1.append_to_theory(isolated_theorem, t=t)
 
         assert pu.as1.is_valid_statement_in_theory(phi=lnot(p) | is_a | proposition, t=t)
 
         # declare 1 as a propositional-variable
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         a2 = pu.as1.Axiom(valid_statement=q | is_a | propositional_variable)
-        t = pu.as1.extend_theory(a2, t=t)
+        t = pu.as1.append_to_theory(a2, t=t)
 
         # derive q is-a proposition
         inference = pu.as1.Inference(
@@ -77,17 +77,17 @@ class TestAxioms:
             transformation_rule=pu.pls1.i1.transformation)
         claim = q | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
-        t = pu.as1.extend_theory(isolated_theorem, t=t)
+        t = pu.as1.append_to_theory(isolated_theorem, t=t)
 
         # add i3: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition)
-        t = pu.as1.extend_theory(pu.pls1.i3, t=t)
+        t = pu.as1.append_to_theory(pu.pls1.i3, t=t)
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition, q | is_a | proposition,),
             transformation_rule=pu.pls1.i3.transformation)
         claim = (p | land | q) | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.valid_statement)
-        t = pu.as1.extend_theory(isolated_theorem, t=t)
+        t = pu.as1.append_to_theory(isolated_theorem, t=t)
         assert pu.as1.is_valid_statement_in_theory(phi=claim, t=t)
 
         pass

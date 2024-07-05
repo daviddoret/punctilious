@@ -499,7 +499,7 @@ class TestMap:
         assert pu.as1.is_in_map_domain(phi=fruits[1], m=m1)
         assert not pu.as1.is_in_map_domain(phi=fruits[2], m=m1)
         assert pu.as1.is_in_map_domain(phi=fruits[3], m=m1)
-        m1 = pu.as1.extend_map(m=m1, preimage=fruits[3], image=yellow)
+        m1 = pu.as1.append_pair_to_map(m=m1, preimage=fruits[3], image=yellow)
         assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[0]), red)
         assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[1]), yellow)
         assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[3]), yellow)
@@ -846,7 +846,7 @@ class TestAutoDerivation:
 
         if_p_then_q = pu.as1.InferenceRuleByTransformation(
             transformation=pu.as1.Transformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
-        t1 = pu.as1.extend_theory(if_p_then_q, t=t1)
+        t1 = pu.as1.append_to_theory(if_p_then_q, t=t1)
 
         with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
                 formula_ts='y') as y:

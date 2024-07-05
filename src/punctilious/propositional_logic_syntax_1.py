@@ -230,7 +230,7 @@ def let_x_be_a_propositional_variable(
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
     # in the theory.
-    t = as1.extend_theory(axiomatization, t=t)
+    t = as1.append_to_theory(axiomatization, t=t)
 
     x = as1.Variable(c=as1.NullaryConnective(formula_ts=formula_ts))
     # t, _ = as1.let_x_be_an_axiom(t=t, s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
@@ -278,9 +278,9 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable(t=t, formula_ts=rep) as x2:
-            premises: as1.Enumeration = as1.extend_enumeration(
+            premises: as1.Enumeration = as1.append_element_to_enumeration(
                 e=premises, x=x2 | as1._connectives.is_a | as1._connectives.propositional_variable)
-            variables_map: as1.Map = as1.extend_map(m=variables_map, preimage=x, image=x2)
+            variables_map: as1.Map = as1.append_pair_to_map(m=variables_map, preimage=x, image=x2)
     variables: as1.Enumeration = as1.Enumeration(elements=variables_map.codomain)
 
     # elaborate a new formula psi where all variables have been replaced with the new variables
@@ -289,7 +289,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     # translate the antecedent of the implication to the main premises
     # note: we could further split conjunctions into multiple premises
     antecedent: as1.Formula = psi.term_0
-    premises: as1.Enumeration = as1.extend_enumeration(
+    premises: as1.Enumeration = as1.append_element_to_enumeration(
         e=premises, x=antecedent)
 
     # retrieve the conclusion
@@ -467,6 +467,15 @@ It is a "closed" heuristic, in the sense that it does not call general derivatio
 Instead, it only calls itself recursively.
 """
 
+propositional_logic_syntax_1: as1.Theory = as1.Theory()
+propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i0, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i1, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i2, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i3, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i4, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i5, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1.heuristics.add(p_is_a_proposition_heuristic)
+
 
 def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as1.Theory:
     """Extends a theory with:
@@ -474,16 +483,19 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
      - the "p is-a proposition" heuristic.
 
     """
-    global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
-    t: as1.Theory = as1.coerce_theory(t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i0, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i2, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i3, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i4, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i5, t=t)
-    t.heuristics.add(p_is_a_proposition_heuristic)
+    global propositional_logic_syntax_1
+    t = as1.append_to_theory(propositional_logic_syntax_1, t=t)
     return t
+    # global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
+    # t: as1.Theory = as1.coerce_theory(t=t)
+    # t, _ = as1.let_x_be_an_axiom(a=i0, t=t)
+    # t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
+    # t, _ = as1.let_x_be_an_axiom(a=i2, t=t)
+    # t, _ = as1.let_x_be_an_axiom(a=i3, t=t)
+    # t, _ = as1.let_x_be_an_axiom(a=i4, t=t)
+    # t, _ = as1.let_x_be_an_axiom(a=i5, t=t)
+    # t.heuristics.add(p_is_a_proposition_heuristic)
+    # return t
 
 
 def let_x_be_a_propositional_logic_syntax_1_theory() -> as1.Theory:
