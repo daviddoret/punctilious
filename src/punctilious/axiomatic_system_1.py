@@ -70,8 +70,8 @@ ERROR_CODE_AS1_052 = 'E-AS1-052'
 ERROR_CODE_AS1_053 = 'E-AS1-053'
 ERROR_CODE_AS1_054 = 'E-AS1-054'
 ERROR_CODE_AS1_055 = 'E-AS1-055'
-ERROR_CODE_AS1_056 = 'E-AS1-056'  # NOT USED
-ERROR_CODE_AS1_057 = 'E-AS1-057'  # NOT USED
+ERROR_CODE_AS1_056 = 'E-AS1-056'
+ERROR_CODE_AS1_057 = 'E-AS1-057'
 ERROR_CODE_AS1_058 = 'E-AS1-058'  # NOT USED
 ERROR_CODE_AS1_059 = 'E-AS1-059'  # NOT USED
 
@@ -912,6 +912,41 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         raise u1.ApplicativeException(code=ERROR_CODE_AS1_015, msg='Non supported arguments.', i=i, t=t)
 
 
+def let_x_be_an_inference_rule_by_algorithm(t: FlexibleTheory,
+                                            i: typing.Optional[FlexibleInferenceRuleByTransformation] = None,
+                                            p: typing.Optional[FlexibleTupl] = None,
+                                            c: typing.Optional[FlexibleFormula] = None,
+                                            x: typing.Optional[FlexibleEnumeration] = None) -> tuple[
+    Theory, InferenceRuleByAlgorithm]:
+    """
+
+    :param t: A theory.
+    :param i: An inference-rule-by-algorithm
+    :param p: A tuple of premises.
+    :param c: A conclusion.
+    :param x: An enumeration of variables.
+    :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
+    """
+    if t is None:
+        t = Axiomatization(d=None)
+    else:
+        t: FlexibleTheory = coerce_theory(t=t)
+
+    i = coerce_inference_rule_by_algorithm(i=i)
+
+    if isinstance(t, Axiomatization):
+        # TODO: re-implement with append_to_axiomatization()
+        t = Axiomatization(d=(*t, i,))
+        u1.log_info(i.typeset_as_string(theory=t))
+        return t, i
+    elif isinstance(t, Theory):
+        t = append_to_theory(i, t=t)
+        u1.log_info(i.typeset_as_string(theory=t))
+        return t, i
+    else:
+        raise u1.ApplicativeException(code=ERROR_CODE_AS1_058, msg='Non supported arguments.', i=i, t=t)
+
+
 def let_x_be_an_axiom_DEPRECATED(s: FlexibleFormula):
     return Axiom(valid_statement=s)
 
@@ -1020,6 +1055,7 @@ def let_x_be_a_transformation(conclusion: FlexibleFormula,
 
 
 class Connectives(typing.NamedTuple):
+    algorithm: NullaryConnective
     axiom: UnaryConnective
     axiomatization: FreeArityConnective
     enumeration: FreeArityConnective
@@ -1042,6 +1078,7 @@ class Connectives(typing.NamedTuple):
 
 
 _connectives: Connectives = _set_state(key='connectives', value=Connectives(
+    algorithm=let_x_be_a_simple_object(formula_ts='algorithm'),
     axiom=let_x_be_a_unary_connective(formula_ts='axiom'),
     axiomatization=let_x_be_a_free_arity_connective(formula_ts='axiomatization'),
     enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
@@ -1064,9 +1101,6 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
 
 ))
 
-
-# TODO: Rename Enumeration to HorizontalEnumeration, then implement VerticalEnumeration and parent class Enumeration.
-# TODO: Implement EnumerationAccretor.
 
 def is_symbol_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
     """Two formulas phi and psi are symbol-equivalent, noted phi ~symbol psi, if and only if they are the same symbol.
@@ -1825,7 +1859,7 @@ class Algorithm(Formula):
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
         variables: Enumeration = coerce_enumeration(e=variables)
         premises: Tupl = coerce_tupl(t=premises)
-        o: tuple = super().__new__(cls, c=_connectives.transformation,
+        o: tuple = super().__new__(cls, c=_connectives.algorithm,
                                    t=(variables, premises,))
         return o
 
@@ -1835,8 +1869,8 @@ class Algorithm(Formula):
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
         variables: Enumeration = coerce_enumeration(e=variables)
         premises: Tupl = coerce_tupl(t=premises)
-        self._external_algorithm = external_algorithm
-        super().__init__(c=_connectives.transformation, t=(variables, premises,))
+        self._external_algorithm: typing.Callable = external_algorithm
+        super().__init__(c=_connectives.algorithm, t=(variables, premises,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1867,7 +1901,7 @@ class Algorithm(Formula):
 
     @property
     def external_algorithm(self) -> typing.Callable:
-        return self.external_algorithm
+        return self._external_algorithm
 
     @property
     def premises(self) -> Tupl:
@@ -2018,8 +2052,36 @@ def is_well_formed_inference_rule_by_transformation(i: FlexibleFormula) -> bool:
         return False
 
 
+def is_well_formed_algorithm(a: FlexibleFormula) -> bool:
+    """Return True if and only if phi is a well-formed algorithm, False otherwise.
+
+    :param i: A formula.
+    :return: bool.
+    """
+    a = coerce_formula(phi=a)
+    if isinstance(a, Algorithm):
+        # Shortcut: the class assures the well-formedness of the formula.
+        return True
+    elif (a.arity == 0 and
+          a.connective is _connectives.algorithm and
+          hasattr(a, 'external_algorithm')):
+        return True
+    else:
+        return False
+
+
 def is_well_formed_inference_rule_by_algorithm(i: FlexibleFormula) -> bool:
-    raise NotImplementedError()
+    i = coerce_formula(phi=i)
+    if isinstance(i, InferenceRuleByAlgorithm):
+        # Shortcut: the class assures the well-formedness of the formula.
+        return True
+    elif (i.connective is _connectives.follows_from and
+          i.arity == 2 and
+          is_well_formed_algorithm(a=i.term_0) and
+          i.term_1.connective is _connectives.inference_rule_by_algorithm):
+        return True
+    else:
+        return False
 
 
 def is_valid_statement_in_theory(phi: FlexibleFormula, t: FlexibleTheory) -> bool:
@@ -2377,6 +2439,8 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
         return coerce_theorem(t=d)
     elif is_well_formed_inference_rule_by_transformation(i=d):
         return coerce_inference_rule_by_transformation(i=d)
+    elif is_well_formed_inference_rule_by_algorithm(i=d):
+        return coerce_inference_rule_by_algorithm(i=d)
     elif is_well_formed_axiom(a=d):
         return coerce_axiom(a=d)
     else:
@@ -2433,7 +2497,17 @@ def coerce_inference_rule_by_transformation(i: FlexibleInferenceRuleByTransforma
 
 
 def coerce_inference_rule_by_algorithm(i: FlexibleInferenceRuleByAlgorithm) -> InferenceRuleByAlgorithm:
-    raise NotImplementedError()
+    if isinstance(i, InferenceRuleByAlgorithm):
+        return i
+    elif isinstance(i, Formula) and is_well_formed_inference_rule_by_algorithm(i=i):
+        algo: Algorithm = coerce_algorithm(a=i.term_0)
+        return InferenceRuleByAlgorithm(algorithm=algo)
+    else:
+        raise u1.ApplicativeException(
+            code=ERROR_CODE_AS1_057,
+            msg=f'Argument "i" of python-type {str(type(i))} could not be coerced to an inference-rule-by-algorithm'
+                f' of python-type InferenceRuleByAlgorithm. The string representation of "i" is: {u1.force_str(o=i)}.',
+            i=i, i_python_type=type(i))
 
 
 def coerce_theorem(t: FlexibleFormula) -> Theorem:
@@ -3885,6 +3959,9 @@ class DerivationTypesetter(pl1.Typesetter):
             elif is_well_formed_inference_rule_by_transformation(i=phi):
                 phi: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=phi)
                 yield '\t\t| Inference rule.'
+            elif is_well_formed_inference_rule_by_algorithm(i=phi):
+                phi: InferenceRuleByAlgorithm = coerce_inference_rule_by_algorithm(i=phi)
+                yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: Theorem = coerce_theorem(t=phi)
                 inference: Inference = phi.inference
@@ -3911,6 +3988,9 @@ class DerivationTypesetter(pl1.Typesetter):
                 yield '\t\t| Axiom.'
             elif is_well_formed_inference_rule_by_transformation(i=phi):
                 phi: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=phi)
+                yield '\t\t| Inference rule.'
+            elif is_well_formed_inference_rule_by_algorithm(i=phi):
+                phi: InferenceRuleByAlgorithm = coerce_inference_rule_by_algorithm(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: Theorem = coerce_theorem(t=phi)

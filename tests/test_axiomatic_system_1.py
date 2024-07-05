@@ -653,6 +653,29 @@ class TestProofByInference:
         pass
 
 
+class TestAlgorithm:
+    def test_algorithm(self):
+        def x_is_a_theory(*arguments):
+            t = as1.coerce_tupl(t=arguments)
+            if not t.arity == 1:
+                raise pu.u1.ApplicativeException(msg='wrong arguments')
+            if as1.is_well_formed_theory(t=t[0]):
+                t2 = as1.coerce_theory(t=t[0])
+                phi = t2 | is_a | theory
+                return phi
+            else:
+                t2 = as1.coerce_theory(t=t[0])
+                phi = lnot(t2 | is_a | theory)
+                return phi
+
+        t = as1.let_x_be_a_theory()
+        m = as1.let_x_be_a_theory()
+        algo = as1.Algorithm(external_algorithm=x_is_a_theory)
+        i = as1.InferenceRuleByAlgorithm(algorithm=algo)
+        t, i = as1.let_x_be_an_inference_rule_by_algorithm(t=t, i=i)
+        pass
+
+
 class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
     def test_iterate_permutations_of_enumeration_elements_with_fixed_size(self):
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
