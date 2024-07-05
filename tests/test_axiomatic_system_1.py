@@ -876,12 +876,12 @@ class TestAutoDerivation:
 
         # use auto-derivation-2
         t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1, conjecture=p | pu.as1._connectives.land | q,
-                                                          max_recursion=8, debug=True)
+                                                          max_recursion=8, debug=False)
         assert success
         pass
 
         t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1, conjecture=p | pu.as1._connectives.lor | q,
-                                                          max_recursion=8, debug=True)
+                                                          max_recursion=8, debug=False)
         assert not success
         pass
 

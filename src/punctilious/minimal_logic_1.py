@@ -439,7 +439,7 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     # 9. ⊢ 𝐶 ∧ 𝐷(mp 5, 8)
     t, success, _, = as1.derive_2(
         c=c | land | d,
-        i=ir1.modus_ponens, t=t, debug=True)
+        i=ir1.modus_ponens, t=t, debug=False)
 
     return t
 

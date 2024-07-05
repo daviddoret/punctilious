@@ -323,7 +323,7 @@ class TestPL5:
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | implies | y, t=t4)
 
-        t5, success, _ = derive_1(t=t2, c=x | implies | y, debug=True,
+        t5, success, _ = derive_1(t=t2, c=x | implies | y, debug=False,
                                   i=pu.ir1.modus_ponens)
         assert success
         assert pu.as1.is_valid_statement_in_theory(phi=x | implies | y, t=t5)
@@ -375,7 +375,7 @@ class TestMancosu2021P20:
         # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
         t, success, _, = derive_1(
             c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2)),
-            i=pu.ir1.modus_ponens, t=t, debug=True)
+            i=pu.ir1.modus_ponens, t=t, debug=False)
         assert success
 
         # 4. ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}] (axiom PL3)
@@ -444,5 +444,5 @@ class TestMancosu2021P20:
         # 9. ⊢ 𝐶 ∧ 𝐷(mp 5, 8)
         t, success, _, = derive_1(
             c=c | land | d,
-            i=pu.ir1.modus_ponens, t=t, debug=True)
+            i=pu.ir1.modus_ponens, t=t, debug=False)
         assert success
