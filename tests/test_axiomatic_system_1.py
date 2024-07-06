@@ -675,7 +675,8 @@ class TestAlgorithm:
                                  conclusion=x | is_a | theory,
                                  declarations={x, })
         i = as1.InferenceRule(mechanism=algo)
-        t, i = as1.let_x_be_an_inference_rule_by_algorithm(t=t, i=i)
+        m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
+        t, d = as1.derive_1(t=m, c=t | is_a | theory, p=None, i=i)
         pass
 
 

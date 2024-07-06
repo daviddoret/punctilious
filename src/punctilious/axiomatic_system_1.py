@@ -818,11 +818,8 @@ def let_x_be_a_free_arity_connective(
 
 
 def let_x_be_an_inference_rule(t: FlexibleTheory,
-                               i: typing.Optional[FlexibleInferenceRuleByTransformation] = None,
-                               p: typing.Optional[FlexibleTupl] = None,
-                               c: typing.Optional[FlexibleFormula] = None,
-                               x: typing.Optional[FlexibleEnumeration] = None) -> tuple[
-    Theory, InferenceRule]:
+                               i: FlexibleInferenceRule | None = None,
+                               m: FlexibleMechanism | Nones = None) -> tuple[Theory, InferenceRule]:
     """
 
     :param t: A theory.
@@ -837,55 +834,29 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
     else:
         t: FlexibleTheory = coerce_theory(t=t)
 
-    if i is None and p is not None and c is not None and x is not None:
-        transformation: Transformation = Transformation(premises=p, conclusion=c, variables=x)
-        i: InferenceRule = InferenceRule(mechanism=transformation)
+    if i is None and m is None:
+        raise u1.ApplicativeException(msg='missing argument')
+    if i is not None and m is not None and not is_formula_equivalent(phi=i.mechanism, psi=m):
+        raise u1.ApplicativeException(msg='inconsistent argument')
+
+    if i is None and m is not None:
+        m: Mechanism = coerce_mechanism(m=m)
+        i: InferenceRule = InferenceRule(mechanism=m)
+
+    if m is None:
+        m: Mechanism = i.mechanism
 
     if isinstance(t, Axiomatization):
+        # TODO: Use extend_axiomaziation instead
         t = Axiomatization(d=(*t, i,))
         u1.log_info(i.typeset_as_string(theory=t))
         return t, i
     elif isinstance(t, Theory):
-        t = Theory(d=(*t, i,))
+        t: Theory = append_to_theory(i, t=t)
         u1.log_info(i.typeset_as_string(theory=t))
         return t, i
     else:
         raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_015, msg='Non supported arguments.', i=i, t=t)
-
-
-def let_x_be_an_inference_rule_by_algorithm(t: FlexibleTheory,
-                                            i: typing.Optional[FlexibleInferenceRuleByTransformation] = None,
-                                            p: typing.Optional[FlexibleTupl] = None,
-                                            c: typing.Optional[FlexibleFormula] = None,
-                                            x: typing.Optional[FlexibleEnumeration] = None) -> tuple[
-    Theory, InferenceRule]:
-    """
-
-    :param t: A theory.
-    :param i: An inference-rule-by-algorithm
-    :param p: A tuple of premises.
-    :param c: A conclusion.
-    :param x: An enumeration of variables.
-    :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
-    """
-    if t is None:
-        t = Axiomatization(d=None)
-    else:
-        t: FlexibleTheory = coerce_theory(t=t)
-
-    i = coerce_inference_rule_by_algorithm(i=i)
-
-    if isinstance(t, Axiomatization):
-        # TODO: re-implement with append_to_axiomatization()
-        t = Axiomatization(d=(*t, i,))
-        u1.log_info(i.typeset_as_string(theory=t))
-        return t, i
-    elif isinstance(t, Theory):
-        t = append_to_theory(i, t=t)
-        u1.log_info(i.typeset_as_string(theory=t))
-        return t, i
-    else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_058, msg='Non supported arguments.', i=i, t=t)
 
 
 def let_x_be_an_axiom_DEPRECATED(s: FlexibleFormula):
