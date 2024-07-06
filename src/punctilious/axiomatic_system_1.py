@@ -1668,10 +1668,10 @@ class Mechanism(Formula):
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(arguments=arguments)
+        return self.execute_mechanism(arguments=arguments)
 
     @abc.abstractmethod
-    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
+    def execute_mechanism(self, arguments: FlexibleTupl) -> Formula:
         """
 
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
@@ -1769,9 +1769,9 @@ class Transformation(Formula):
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(arguments=arguments)
+        return self.execute_mechanism(arguments=arguments)
 
-    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
+    def execute_mechanism(self, arguments: FlexibleTupl) -> Formula:
         """
 
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
@@ -1906,9 +1906,9 @@ class Algorithm(Formula):
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(arguments=arguments)
+        return self.execute_mechanism(arguments=arguments)
 
-    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
+    def execute_mechanism(self, arguments: FlexibleTupl) -> Formula:
         """
 
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
@@ -2457,7 +2457,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     # The transformation is not positioned before the conclusion.
                     return False
             # And finally, confirm that the inference effectively yields phi.
-            phi_prime = inference.transformation_rule.apply_transformation(arguments=inference.premises)
+            phi_prime = inference.transformation_rule.execute_mechanism(arguments=inference.premises)
             if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
                 return False
         else:

@@ -406,7 +406,7 @@ class TestTransformation:
         variables = pu.as1.Enumeration(elements=(x,))
         f = pu.as1.Transformation(conclusion=conclusion, variables=variables, declarations=None, premises=premises)
         arguments = pu.as1.Tupl(elements=(p2,))
-        output = f.apply_transformation(arguments=arguments)
+        output = f.execute_mechanism(arguments=arguments)
         phi = aristotle | is_a | mortal
         pu.as1.is_formula_equivalent(phi=phi, psi=output)
 
