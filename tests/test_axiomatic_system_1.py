@@ -149,7 +149,7 @@ class TestEnumeration:
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         b = pu.as1.let_x_be_a_simple_object(formula_ts='b')
         c = pu.as1.let_x_be_a_simple_object(formula_ts='c')
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_029):
+        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_029):
             # duplicate formula-equivalent formulas are forbidden in enumerations.
             e1 = pu.as1.Enumeration(elements=(a, b, c, b,))
 
@@ -546,7 +546,7 @@ class TestInferenceRule:
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         phi = a | f | b
         rule = pu.as1.Transformation(conclusion=phi, variables=None, declarations=None, premises=None)
-        ir = pu.as1.InferenceRuleByTransformation(transformation=rule)
+        ir = pu.as1.InferenceRule(mechanism=rule)
         axiomatization = pu.as1.Axiomatization(d=(ir,))
 
         # derivation from the axiom
@@ -670,8 +670,11 @@ class TestAlgorithm:
 
         t = as1.let_x_be_a_theory()
         m = as1.let_x_be_a_theory()
-        algo = as1.Algorithm(external_algorithm=x_is_a_theory)
-        i = as1.InferenceRuleByAlgorithm(algorithm=algo)
+        with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
+            algo = as1.Algorithm(external_algorithm=x_is_a_theory,
+                                 conclusion=x | is_a | theory,
+                                 declarations={x, })
+        i = as1.InferenceRule(mechanism=algo)
         t, i = as1.let_x_be_an_inference_rule_by_algorithm(t=t, i=i)
         pass
 
@@ -809,7 +812,7 @@ class TestAxiomatization:
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(a=e3)
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_047):
+        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_047):
             a2 = pu.as1.Axiomatization(d=e3)  # raise an e123 exception
 
 
@@ -837,11 +840,11 @@ class TestDemonstration:
                                     i=ir1)
         assert pu.as1.is_valid_statement_in_theory(phi=a | star | c, t=demo2)
 
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_039):
+        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_039):
             # invalid proof raise exception
             pu.as1.Theory(d=(axiom_1, axiom_2, a | star | e))
 
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.as1.ERROR_CODE_AS1_039):
+        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_039):
             # invalid proof sequence exception
             pu.as1.Theory(d=(axiom_1, axiom_2, a | star | c, ir1,))
             pass
@@ -867,15 +870,15 @@ class TestAutoDerivation:
 
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
-        if_p_then_q = pu.as1.InferenceRuleByTransformation(
-            transformation=pu.as1.Transformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
+        if_p_then_q = pu.as1.InferenceRule(
+            mechanism=pu.as1.Transformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
         t1 = pu.as1.append_to_theory(if_p_then_q, t=t1)
 
         with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
                 formula_ts='y') as y:
-            x_y_then_x_and_y = pu.as1.InferenceRuleByTransformation(
-                transformation=pu.as1.Transformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
-                                                     declarations=None, premises=(x, y,)))
+            x_y_then_x_and_y = pu.as1.InferenceRule(
+                mechanism=pu.as1.Transformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
+                                                declarations=None, premises=(x, y,)))
         t1 = pu.as1.Theory(d=(*t1, x_y_then_x_and_y,))
 
         pass

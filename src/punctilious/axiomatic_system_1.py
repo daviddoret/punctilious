@@ -11,73 +11,14 @@ import sys
 import itertools
 
 # import constants_1 as c1
+import constants_1 as c1
 import util_1 as u1
 import state_1 as st1
 import presentation_layer_1 as pl1
 
-ERROR_CODE_AS1_001 = 'E-AS1-001'
-ERROR_CODE_AS1_002 = 'E-AS1-002'
-ERROR_CODE_AS1_003 = 'E-AS1-003'
-ERROR_CODE_AS1_004 = 'E-AS1-004'
-ERROR_CODE_AS1_005 = 'E-AS1-005'
-ERROR_CODE_AS1_006 = 'E-AS1-006'
-ERROR_CODE_AS1_007 = 'E-AS1-007'
-ERROR_CODE_AS1_008 = 'E-AS1-008'
-ERROR_CODE_AS1_009 = 'E-AS1-009'
-ERROR_CODE_AS1_010 = 'E-AS1-010'
-ERROR_CODE_AS1_011 = 'E-AS1-011'
-ERROR_CODE_AS1_012 = 'E-AS1-012'
-ERROR_CODE_AS1_013 = 'E-AS1-013'
-ERROR_CODE_AS1_014 = 'E-AS1-014'
-ERROR_CODE_AS1_015 = 'E-AS1-015'
-ERROR_CODE_AS1_016 = 'E-AS1-016'
-ERROR_CODE_AS1_017 = 'E-AS1-017'
-ERROR_CODE_AS1_018 = 'E-AS1-018'
-ERROR_CODE_AS1_019 = 'E-AS1-019'
-ERROR_CODE_AS1_020 = 'E-AS1-020'
-ERROR_CODE_AS1_021 = 'E-AS1-021'
-ERROR_CODE_AS1_022 = 'E-AS1-022'
-ERROR_CODE_AS1_023 = 'E-AS1-023'
-ERROR_CODE_AS1_024 = 'E-AS1-024'
-ERROR_CODE_AS1_025 = 'E-AS1-025'
-ERROR_CODE_AS1_026 = 'E-AS1-026'
-ERROR_CODE_AS1_027 = 'E-AS1-027'
-ERROR_CODE_AS1_028 = 'E-AS1-028'
-ERROR_CODE_AS1_029 = 'E-AS1-029'
-ERROR_CODE_AS1_030 = 'E-AS1-030'
-ERROR_CODE_AS1_031 = 'E-AS1-031'
-ERROR_CODE_AS1_032 = 'E-AS1-032'
-ERROR_CODE_AS1_033 = 'E-AS1-033'
-ERROR_CODE_AS1_034 = 'E-AS1-034'
-ERROR_CODE_AS1_035 = 'E-AS1-035'
-ERROR_CODE_AS1_036 = 'E-AS1-036'
-ERROR_CODE_AS1_037 = 'E-AS1-037'
-ERROR_CODE_AS1_038 = 'E-AS1-038'
-ERROR_CODE_AS1_039 = 'E-AS1-039'
-ERROR_CODE_AS1_040 = 'E-AS1-040'
-ERROR_CODE_AS1_041 = 'E-AS1-041'
-ERROR_CODE_AS1_042 = 'E-AS1-042'
-ERROR_CODE_AS1_043 = 'E-AS1-043'
-ERROR_CODE_AS1_044 = 'E-AS1-044'
-ERROR_CODE_AS1_045 = 'E-AS1-045'
-ERROR_CODE_AS1_046 = 'E-AS1-046'
-ERROR_CODE_AS1_047 = 'E-AS1-047'
-ERROR_CODE_AS1_048 = 'E-AS1-048'
-ERROR_CODE_AS1_049 = 'E-AS1-049'
-ERROR_CODE_AS1_050 = 'E-AS1-050'
-ERROR_CODE_AS1_051 = 'E-AS1-051'
-ERROR_CODE_AS1_052 = 'E-AS1-052'
-ERROR_CODE_AS1_053 = 'E-AS1-053'
-ERROR_CODE_AS1_054 = 'E-AS1-054'
-ERROR_CODE_AS1_055 = 'E-AS1-055'
-ERROR_CODE_AS1_056 = 'E-AS1-056'
-ERROR_CODE_AS1_057 = 'E-AS1-057'
-ERROR_CODE_AS1_058 = 'E-AS1-058'  # NOT USED
-ERROR_CODE_AS1_059 = 'E-AS1-059'  # NOT USED
-
 _current_module = sys.modules[__name__]
 if __name__ == '__main__':
-    raise u1.ApplicativeException(code=ERROR_CODE_AS1_001,
+    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_001,
                                   msg='This module does not support being directly executed as a script. '
                                       'Please use the import statement.')
 _state = dict() if not hasattr(_current_module, '_state') else getattr(_current_module, '_state')
@@ -172,7 +113,7 @@ class Formula(tuple):
             o = super().__new__(cls)
             return o
         else:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_002, c=c, terms_type=type(t), terms=t)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_002, c=c, terms_type=type(t), terms=t)
 
     def __init__(self, c: Connective, t: FlexibleTupl = None, **kwargs):
         super().__init__()
@@ -247,7 +188,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 1:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_003, c=self.connective)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_003, c=self.connective)
         return self[0]
 
     @property
@@ -258,7 +199,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 2:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_004, c=self.connective)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_004, c=self.connective)
         return self[1]
 
     @property
@@ -269,7 +210,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 3:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_005, c=self.connective)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_005, c=self.connective)
         return self[2]
 
     @property
@@ -280,7 +221,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 4:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_005, c=self.connective)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_005, c=self.connective)
         return self[3]
 
     @property
@@ -355,7 +296,7 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
         return Tupl(elements=phi)
     else:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_006,
+            code=c1.ERROR_CODE_AS1_006,
             msg=f'Argument "phi" of python-type {str(type(phi))} could not be coerced to a formula of python-type '
                 f'Formula. The string representation of "phi" is: {u1.force_str(o=phi)}.',
             phi=phi, t_python_type=type(phi))
@@ -369,7 +310,7 @@ def coerce_variable(x: FlexibleFormula) -> Formula:
     """
     x = coerce_formula(phi=x)
     if x.arity != 0:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_007, msg='coerce_variable: x.arity != 0')
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_007, msg='coerce_variable: x.arity != 0')
     return x
 
 
@@ -400,7 +341,7 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
         whose elements are the elements of the iterable."""
         return Enumeration(elements=e, strip_duplicates=strip_duplicates)
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
 
 
 def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
@@ -473,7 +414,7 @@ def coerce_map(m: FlexibleMap) -> Map:
         codomain: Tupl = coerce_tupl(t=m.values())
         return Map(domain=domain, codomain=codomain)
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_009, coerced_type=Map, phi_type=type(m), phi=m)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_009, coerced_type=Map, phi_type=type(m), phi=m)
 
 
 def coerce_tupl(t: FlexibleTupl) -> Tupl:
@@ -485,7 +426,7 @@ def coerce_tupl(t: FlexibleTupl) -> Tupl:
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Tupl(elements=t)
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_010, coerced_type=Tupl, phi_type=type(t), phi=t)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_010, coerced_type=Tupl, phi_type=type(t), phi=t)
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula]]
@@ -642,7 +583,7 @@ def is_axiom_of_theory(a: FlexibleAxiom, t: FlexibleTheory):
 
 def is_inference_rule_of_theory(i: FlexibleInferenceRuleByTransformation, t: FlexibleTheory):
     """Return True if "i" is an inference-rule in theory "i", False otherwise."""
-    i: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=i)
+    i: InferenceRule = coerce_inference_rule_by_transformation(i=i)
     t: Theory = coerce_theory(t=t)
     return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in t.inference_rules)
 
@@ -678,7 +619,7 @@ def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula
             return n
         n = n + 1
     # No match was found
-    raise u1.ApplicativeException(code=ERROR_CODE_AS1_011,
+    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_011,
                                   msg=f'Trying to get the index of the term "{term}" in the formula "{formula}", '
                                       f'but this term is not a term of the formula.')
 
@@ -791,7 +732,7 @@ def let_x_be_a_variable(formula_ts: pl1.FlexibleTypesetter) -> (
     elif isinstance(formula_ts, typing.Iterable):
         return (Variable(c=NullaryConnective(formula_ts=ts)) for ts in formula_ts)
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_012, msg='Non supported arguments.',
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_012, msg='Non supported arguments.',
                                       formula_typesetter=formula_ts)
 
 
@@ -804,7 +745,7 @@ def let_x_be_a_meta_variable(
     elif isinstance(formula_ts, typing.Iterable):
         return tuple(MetaVariable(c=NullaryConnective(formula_ts=ts)) for ts in formula_ts)
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_013, msg='Non supported arguments.',
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_013, msg='Non supported arguments.',
                                       formula_typesetter=formula_ts)
 
 
@@ -828,7 +769,7 @@ def let_x_be_a_simple_object(formula_ts: typing.Optional[pl1.FlexibleTypesetter]
     elif isinstance(formula_ts, typing.Iterable):
         return (SimpleObject(c=NullaryConnective(formula_ts=r)) for r in formula_ts)
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_014, msg='Non supported arguments.',
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_014, msg='Non supported arguments.',
                                       formula_typesetter=formula_ts)
 
 
@@ -881,7 +822,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
                                p: typing.Optional[FlexibleTupl] = None,
                                c: typing.Optional[FlexibleFormula] = None,
                                x: typing.Optional[FlexibleEnumeration] = None) -> tuple[
-    Theory, InferenceRuleByTransformation]:
+    Theory, InferenceRule]:
     """
 
     :param t: A theory.
@@ -898,7 +839,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
 
     if i is None and p is not None and c is not None and x is not None:
         transformation: Transformation = Transformation(premises=p, conclusion=c, variables=x)
-        i: InferenceRuleByTransformation = InferenceRuleByTransformation(transformation=transformation)
+        i: InferenceRule = InferenceRule(mechanism=transformation)
 
     if isinstance(t, Axiomatization):
         t = Axiomatization(d=(*t, i,))
@@ -909,7 +850,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         u1.log_info(i.typeset_as_string(theory=t))
         return t, i
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_015, msg='Non supported arguments.', i=i, t=t)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_015, msg='Non supported arguments.', i=i, t=t)
 
 
 def let_x_be_an_inference_rule_by_algorithm(t: FlexibleTheory,
@@ -917,7 +858,7 @@ def let_x_be_an_inference_rule_by_algorithm(t: FlexibleTheory,
                                             p: typing.Optional[FlexibleTupl] = None,
                                             c: typing.Optional[FlexibleFormula] = None,
                                             x: typing.Optional[FlexibleEnumeration] = None) -> tuple[
-    Theory, InferenceRuleByAlgorithm]:
+    Theory, InferenceRule]:
     """
 
     :param t: A theory.
@@ -944,7 +885,7 @@ def let_x_be_an_inference_rule_by_algorithm(t: FlexibleTheory,
         u1.log_info(i.typeset_as_string(theory=t))
         return t, i
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_058, msg='Non supported arguments.', i=i, t=t)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_058, msg='Non supported arguments.', i=i, t=t)
 
 
 def let_x_be_an_axiom_DEPRECATED(s: FlexibleFormula):
@@ -969,11 +910,11 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         t: FlexibleTheory = coerce_theory(t=t)
     if s is not None and a is not None:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_016,
+            code=c1.ERROR_CODE_AS1_016,
             msg='Both "s" and "a" are not None. It is mandatory to provide only one of these two arguments.')
     elif s is None and a is None:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_017,
+            code=c1.ERROR_CODE_AS1_017,
             msg='Both "s" and "a" are None. It is mandatory to provide one of these two arguments.')
     elif s is not None:
         a: Axiom = Axiom(valid_statement=s, **kwargs)
@@ -989,7 +930,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_018, msg='oops 3')
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_018, msg='oops 3')
 
 
 def let_x_be_a_theory(d: FlexibleEnumeration | None = None,
@@ -1185,7 +1126,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_even
     else:
         # Extreme case
         if raise_event_if_false:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_019, phi=phi, psi=psi)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_019, phi=phi, psi=psi)
         return False
 
 
@@ -1251,18 +1192,18 @@ def is_formula_equivalent_with_variables_2(
     for x in variables:
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_020,
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_020,
                                           msg=f'the arity of variable "{x}" in variables is not equal to 0.')
         if is_subformula_of_formula(formula=phi, subformula=x):
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_021, msg=f'variable "{x}" is a sub-formula of phi.')
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_021, msg=f'variable "{x}" is a sub-formula of phi.')
     # check that all variables in the map are atomic formulas and are correctly listed in variables
     for x in variables_fixed_values.domain:
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_022,
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_022,
                                           msg=f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
         if not is_element_of_enumeration(x=x, e=variables):
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_023,
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_023,
                                           msg=f'variable {x} is present in the domain of the map '
                                               f'variables_fixed_values, '
                                               f'but it is not an element of the enumeration variables.')
@@ -1276,7 +1217,7 @@ def is_formula_equivalent_with_variables_2(
             else:
                 if raise_event_if_false:
                     raise u1.ApplicativeException(
-                        code=ERROR_CODE_AS1_024,
+                        code=c1.ERROR_CODE_AS1_024,
                         msg=f'formula "{phi}" is not formula-equivalent to '
                             f'the assigned value "{psi_value}" of variable "{psi}".')
                 return False, variables_fixed_values
@@ -1291,7 +1232,7 @@ def is_formula_equivalent_with_variables_2(
         # psi is not a variable
         if phi.connective is not psi.connective or phi.arity != psi.arity:
             if raise_event_if_false:
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_025,
+                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_025,
                                               msg=f'the connective or arity of "{phi}" are not equal '
                                                   f'to the connective or arity of "{psi}".')
             return False, variables_fixed_values
@@ -1304,7 +1245,7 @@ def is_formula_equivalent_with_variables_2(
                     raise_event_if_false=False)
                 if not check:
                     if raise_event_if_false:
-                        raise u1.ApplicativeException(code=ERROR_CODE_AS1_026,
+                        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_026,
                                                       msg=f'term "{phi_term}" "{phi}" is not formula-equivalent '
                                                           f'to the term {psi_term} of "{psi}".')
                     return False, variables_fixed_values
@@ -1506,7 +1447,7 @@ def get_image_from_map(m: FlexibleMap, preimage: FlexibleFormula) -> Formula:
         index_position: int = m.domain.get_element_index(phi=preimage)
         return m.codomain[index_position]
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
 
 
 class Map(Formula):
@@ -1526,7 +1467,7 @@ class Map(Formula):
         domain: Enumeration = coerce_enumeration(e=domain)
         codomain: Tupl = coerce_tupl(t=codomain)
         if len(domain) != len(codomain):
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
         o: tuple = super().__new__(cls, c=_connectives.map, t=(domain, codomain,))
         return o
 
@@ -1549,7 +1490,7 @@ class Map(Formula):
             index_position: int = self.domain.get_element_index(phi=phi)
             return self.codomain[index_position]
         else:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
 
     def is_defined_in(self, phi: Formula) -> bool:
         """Return True if phi is formula-equivalent to an element of the map domain."""
@@ -1619,7 +1560,7 @@ class Enumeration(Formula):
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         if not is_well_formed_enumeration(e=elements):
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
         o: tuple = super().__new__(cls, c=c, t=elements, **kwargs)
         return o
 
@@ -1693,6 +1634,71 @@ class SingletonEnumeration(Enumeration):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         element: Formula = coerce_formula(phi=element)
         super().__init__(elements=element)
+
+
+class Mechanism(Formula):
+    """A mechanism is method by which new formulas may be created.
+
+    The following mechanisms are supported:
+     - transformation (cf. Transformation python-class)
+     - algorithm (cf. Algorithm python-class)
+    """
+
+    def __new__(cls, c: Connective, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
+                declarations: FlexibleEnumeration | None = None,
+                premises: FlexibleTupl | None = None, ):
+        c: Connective = coerce_connective(c=c)
+        conclusion: Formula = coerce_formula(phi=conclusion)
+        variables: Enumeration = coerce_enumeration(e=variables)
+        declarations: Enumeration = coerce_enumeration(e=declarations)
+        premises: Tupl = coerce_tupl(t=premises)
+        o: tuple = super().__new__(cls, c=_connectives.transformation,
+                                   t=(conclusion, variables, declarations, premises,))
+        return o
+
+    def __init__(self, c: Connective, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
+                 declarations: FlexibleEnumeration | None = None,
+                 premises: FlexibleTupl | None = None):
+        c: Connective = coerce_connective(c=c)
+        conclusion: Formula = coerce_formula(phi=conclusion)
+        variables: Enumeration = coerce_enumeration(e=variables)
+        declarations: Enumeration = coerce_enumeration(e=declarations)
+        premises: Tupl = coerce_tupl(t=premises)
+        super().__init__(c=_connectives.transformation, t=(conclusion, variables, declarations, premises,))
+
+    def __call__(self, arguments: FlexibleTupl) -> Formula:
+        """A shortcut for self.apply_transformation()"""
+        return self.apply_transformation(arguments=arguments)
+
+    @abc.abstractmethod
+    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
+        """
+
+        :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
+        :return:
+        """
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_058,
+                                      msg='Abstract python method is not implemented.',
+                                      object=self, object_type=type(self),
+                                      arguments=arguments)
+
+    @property
+    def conclusion(self) -> Formula:
+        return self[0]
+
+    @property
+    def declarations(self) -> Enumeration:
+        return self[2]
+
+    @property
+    def premises(self) -> Tupl:
+        """A tuple of premises that are necessary conditions before the mechanism can be executed."""
+        return self[3]
+
+    @property
+    def variables(self) -> Enumeration:
+        """Variables used in premises and possibly the conclusion."""
+        return self[1]
 
 
 class Transformation(Formula):
@@ -1778,7 +1784,7 @@ class Transformation(Formula):
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_030,
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_030,
                                           msg='Applying a transformation with incorrect premises.',
                                           target_formula=arguments, transformation_premises=self.premises,
                                           transformation_variables=self.variables, transformation=self)
@@ -1820,6 +1826,25 @@ class Transformation(Formula):
 FlexibleTransformation = typing.Optional[typing.Union[Transformation]]
 
 
+def coerce_mechanism(m: FlexibleMechanism) -> Mechanism:
+    """Coerces lose argument "m" to a mechanism, strongly python-typed as Mechanism,
+    or raises an error with code E-AS1-060 if this fails."""
+    m: Formula = coerce_formula(phi=m)
+    if isinstance(m, Mechanism):
+        return m
+    elif is_well_formed_transformation(t=m):
+        # phi is a well-formed transformation,
+        # it can be safely re-instantiated as a Transformation and returned.
+        return Transformation(conclusion=m[0], variables=m[1], declarations=m[2], premises=m[3])
+    elif is_well_formed_algorithm(a=m):
+        # phi is a well-formed algorithm,
+        # it can be safely re-instantiated as an Algorithm and returned.
+        return Algorithm(external_algorithm=m.external_algorithm, conclusion=m[0], variables=m[1], declarations=m[2],
+                         premises=m[3])
+    else:
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_060, coerced_type=Transformation, m_type=type(m), m=m)
+
+
 def coerce_transformation(t: FlexibleFormula) -> Transformation:
     """Coerces lose argument "t" to a transformation, strongly python-typed as Transformation,
     or raises an error with code E-AS1-031 if this fails."""
@@ -1829,9 +1854,9 @@ def coerce_transformation(t: FlexibleFormula) -> Transformation:
     elif isinstance(t, Formula) and is_well_formed_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return Transformation(premises=t.term_0, conclusion=t.term_1, variables=t.term_2)
+        return Transformation(conclusion=t[0], variables=t[1], declarations=t[2], premises=t[3])
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_031, coerced_type=Transformation, phi_type=type(t), phi=t)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_031, coerced_type=Transformation, t_type=type(t), t=t)
 
 
 def coerce_external_algorithm(f: object) -> typing.Callable:
@@ -1840,7 +1865,7 @@ def coerce_external_algorithm(f: object) -> typing.Callable:
     if isinstance(f, typing.Callable):
         return f
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_056, coerced_type=typing.Callable,
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_056, coerced_type=typing.Callable,
                                       external_algorithm_type=type(f),
                                       external_algorithm=f)
 
@@ -1853,24 +1878,31 @@ class Algorithm(Formula):
 
     Distinctively from premises, we should pass arguments to the algorithm."""
 
-    def __new__(cls, external_algorithm: typing.Callable,
+    def __new__(cls, external_algorithm: typing.Callable, conclusion: FlexibleFormula,
                 variables: FlexibleEnumeration | None = None,
+                declarations: FlexibleEnumeration | None = None,
                 premises: FlexibleTupl | None = None):
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
+        conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
+        declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
         o: tuple = super().__new__(cls, c=_connectives.algorithm,
-                                   t=(variables, premises,))
+                                   t=(conclusion, variables, declarations, premises,))
         return o
 
     def __init__(self, external_algorithm: typing.Callable,
-                 variables: FlexibleEnumeration | None = None,
+                 conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
+                 declarations: FlexibleEnumeration | None = None,
                  premises: FlexibleTupl | None = None):
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
+        conclusion: Formula = coerce_formula(phi=conclusion)
         variables: Enumeration = coerce_enumeration(e=variables)
+        declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
         self._external_algorithm: typing.Callable = external_algorithm
-        super().__init__(c=_connectives.algorithm, t=(variables, premises,))
+        super().__init__(c=_connectives.algorithm,
+                         t=(conclusion, variables, declarations, premises,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1889,7 +1921,7 @@ class Algorithm(Formula):
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_050,
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_050,
                                           msg='Applying an algorithm with incorrect premises.',
                                           target_formula=arguments, transformation_premises=self.premises,
                                           transformation_variables=self.variables, transformation=self)
@@ -1902,6 +1934,14 @@ class Algorithm(Formula):
     @property
     def external_algorithm(self) -> typing.Callable:
         return self._external_algorithm
+
+    @property
+    def conclusion(self) -> Formula:
+        return self[0]
+
+    @property
+    def declarations(self) -> Enumeration:
+        return self[2]
 
     @property
     def premises(self) -> Tupl:
@@ -1921,8 +1961,18 @@ def coerce_algorithm(a: FlexibleAlgorithm) -> Algorithm:
     if isinstance(a, Algorithm):
         return a
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_055, coerced_type=Algorithm, algorithm_type=type(a),
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_055, coerced_type=Algorithm, algorithm_type=type(a),
                                       algorithm=a)
+
+
+def coerce_connective(c: Connective) -> Connective:
+    if isinstance(c, Connective):
+        return c
+    else:
+        raise u1.ApplicativeException(
+            code=c1.ERROR_CODE_AS1_059,
+            msg='c could not be coerced to Connective type.',
+            c=c, c_type=type(c))
 
 
 def coerce_inference(i: FlexibleFormula) -> Inference:
@@ -1932,7 +1982,7 @@ def coerce_inference(i: FlexibleFormula) -> Inference:
         transformation: Transformation = coerce_transformation(t=i.term_1)
         return Inference(premises=i.term_0, transformation_rule=transformation)
     else:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
 
 
 def is_well_formed_formula(phi: FlexibleFormula) -> bool:
@@ -2040,7 +2090,7 @@ def is_well_formed_inference_rule_by_transformation(i: FlexibleFormula) -> bool:
     :return: bool.
     """
     i = coerce_formula(phi=i)
-    if isinstance(i, InferenceRuleByTransformation):
+    if isinstance(i, InferenceRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
     elif (i.connective is _connectives.follows_from and
@@ -2072,7 +2122,7 @@ def is_well_formed_algorithm(a: FlexibleFormula) -> bool:
 
 def is_well_formed_inference_rule_by_algorithm(i: FlexibleFormula) -> bool:
     i = coerce_formula(phi=i)
-    if isinstance(i, InferenceRuleByAlgorithm):
+    if isinstance(i, InferenceRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
     elif (i.connective is _connectives.follows_from and
@@ -2138,9 +2188,9 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
     """
     e: Enumeration = coerce_enumeration(e=e)
     if n > e.arity:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_033, msg='n > |e|')
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_033, msg='n > |e|')
     if n < 0:
-        raise u1.ApplicativeException(code=ERROR_CODE_AS1_034, msg='n < 0')
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_034, msg='n < 0')
     if n == 0:
         # nothing will be yield from the function.
         # note that itertools.permutations would yield one empty tuple.
@@ -2176,13 +2226,13 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Fo
     return
 
 
-def iterate_inference_rules_in_theory(t: FlexibleTheory) -> typing.Generator[InferenceRuleByTransformation, None, None]:
+def iterate_inference_rules_in_theory(t: FlexibleTheory) -> typing.Generator[InferenceRule, None, None]:
     """Iterate through all inference-rules in theory "t", following canonical order."""
     t = coerce_theory(t=t)
     derivations = iterate_derivations_in_theory(t=t)
     for derivation in derivations:
         if is_well_formed_inference_rule_by_transformation(i=derivation):
-            inference_rule: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=derivation)
+            inference_rule: InferenceRule = coerce_inference_rule_by_transformation(i=derivation)
             yield inference_rule
 
 
@@ -2298,7 +2348,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_inference(i=t.term_1)):
         if raise_error_if_ill_formed:
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_035, t=t)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_035, t=t)
         return False
     else:
         # TODO: Factorize the check in Theorem.__new__ or __init__,
@@ -2308,7 +2358,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
         if not is_formula_equivalent(phi=t.term_0, psi=f_of_p):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             if raise_error_if_ill_formed:
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_035, phi=t, psi_expected=t.term_0,
+                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_035, phi=t, psi_expected=t.term_0,
                                               psi_inferred=f_of_p,
                                               inference_rule=i)
             return False
@@ -2369,7 +2419,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
             pass
         elif is_well_formed_inference_rule_by_transformation(i=derivation):
             # This is an inference-rule.
-            derivation: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=derivation)
+            derivation: InferenceRule = coerce_inference_rule_by_transformation(i=derivation)
             pass
         elif is_well_formed_theorem(t=derivation):
             theorem_by_inference: Theorem = coerce_theorem(t=derivation)
@@ -2379,7 +2429,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                 if not valid_statements.has_element(phi=premise):
                     # The premise is absent from the theory
                     if raise_event_if_false:
-                        raise u1.ApplicativeException(code=ERROR_CODE_AS1_036, premise=premise, premise_index=i,
+                        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_036, premise=premise, premise_index=i,
                                                       theorem=derivation,
                                                       valid_statement=valid_statement)
                     return False
@@ -2388,14 +2438,14 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     if premise_index >= i:
                         # The premise is not positioned before the conclusion.
                         if raise_event_if_false:
-                            raise u1.ApplicativeException(code=ERROR_CODE_AS1_037, premise=premise, premise_index=i,
+                            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_037, premise=premise, premise_index=i,
                                                           theorem=derivation,
                                                           valid_statement=valid_statement)
                         return False
             if not valid_statements.has_element(phi=inference.transformation_rule):
                 # The inference transformation-rule is absent from the theory.
                 if raise_event_if_false:
-                    raise u1.ApplicativeException(code=ERROR_CODE_AS1_038,
+                    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_038,
                                                   transformation_rule=inference.transformation_rule,
                                                   inference=inference, premise_index=i, theorem=derivation,
                                                   valid_statement=valid_statement)
@@ -2445,7 +2495,7 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
         return coerce_axiom(a=d)
     else:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_039,
+            code=c1.ERROR_CODE_AS1_039,
             msg=f'Argument "d" of python-type {str(type(d))} could not be coerced to a derivation of python-type '
                 f'Derivation. The string representation of "d" is: {u1.force_str(o=d)}.',
             d=d, t_python_type=type(d))
@@ -2466,7 +2516,7 @@ def coerce_axiom(a: FlexibleFormula) -> Axiom:
         return Axiom(valid_statement=proved_formula)
     else:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_040,
+            code=c1.ERROR_CODE_AS1_040,
             msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiom of python-type Axiom. '
                 f'The string representation of "a" is: {u1.force_str(o=a)}.',
             a=a, a_python_type=type(a))
@@ -2476,35 +2526,35 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
     raise NotImplementedError()
 
 
-def coerce_inference_rule_by_transformation(i: FlexibleInferenceRuleByTransformation) -> InferenceRuleByTransformation:
+def coerce_inference_rule_by_transformation(i: FlexibleInferenceRuleByTransformation) -> InferenceRule:
     """Validate that p is a well-formed inference-rule and returns it properly typed as an instance of InferenceRule,
     or raise exception e123.
 
     :param i:
     :return:
     """
-    if isinstance(i, InferenceRuleByTransformation):
+    if isinstance(i, InferenceRule):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference_rule_by_transformation(i=i):
         transfo: Transformation = coerce_transformation(t=i.term_0)
-        return InferenceRuleByTransformation(transformation=transfo)
+        return InferenceRule(mechanism=transfo)
     else:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_041,
+            code=c1.ERROR_CODE_AS1_041,
             msg=f'Argument "i" of python-type {str(type(i))} could not be coerced to an inference-rule of python-type '
                 f'InferenceRule. The string representation of "i" is: {u1.force_str(o=i)}.',
             i=i, i_python_type=type(i))
 
 
-def coerce_inference_rule_by_algorithm(i: FlexibleInferenceRuleByAlgorithm) -> InferenceRuleByAlgorithm:
-    if isinstance(i, InferenceRuleByAlgorithm):
+def coerce_inference_rule_by_algorithm(i: FlexibleInferenceRuleByAlgorithm) -> InferenceRule:
+    if isinstance(i, InferenceRule):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference_rule_by_algorithm(i=i):
         algo: Algorithm = coerce_algorithm(a=i.term_0)
-        return InferenceRuleByAlgorithm(algorithm=algo)
+        return InferenceRule(algorithm=algo)
     else:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_057,
+            code=c1.ERROR_CODE_AS1_057,
             msg=f'Argument "i" of python-type {str(type(i))} could not be coerced to an inference-rule-by-algorithm'
                 f' of python-type InferenceRuleByAlgorithm. The string representation of "i" is: {u1.force_str(o=i)}.',
             i=i, i_python_type=type(i))
@@ -2525,7 +2575,7 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
         return Theorem(valid_statement=proved_formula, i=inference)
     else:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_042,
+            code=c1.ERROR_CODE_AS1_042,
             msg=f'Argument "t" of python-type {str(type(t))} could not be coerced to a theorem of python-type '
                 f'Theorem. The string representation of "t" is: {u1.force_str(o=t)}.',
             t=t, t_python_type=type(t))
@@ -2556,7 +2606,7 @@ def coerce_theory(t: FlexibleTheory) -> Theory:
         return Theory(d=t)
     else:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_043,
+            code=c1.ERROR_CODE_AS1_043,
             msg=f'Argument "t" of python-type {str(type(t))} could not be coerced to a theory of python-type '
                 f'Theory. The string representation of "t" is: {u1.force_str(o=t)}.',
             t=t, t_python_type=type(t))
@@ -2575,7 +2625,7 @@ def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
         return Axiomatization(d=a)
     else:
         raise u1.ApplicativeException(
-            code=ERROR_CODE_AS1_044,
+            code=c1.ERROR_CODE_AS1_044,
             msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiomatization of python-type '
                 f'Axiomatization. The string representation of "a" is: {u1.force_str(o=a)}.',
             a=a, t_python_type=type(a))
@@ -2686,18 +2736,6 @@ FlexibleAxiom = typing.Union[Axiom, Formula]
 
 
 class InferenceRule(Derivation):
-
-    def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula, **kwargs):
-        o: tuple = super().__new__(cls, valid_statement=valid_statement,
-                                   justification=justification, **kwargs)
-        return o
-
-    def __init__(self, valid_statement: FlexibleFormula, justification: FlexibleFormula, **kwargs):
-        super().__init__(valid_statement=valid_statement,
-                         justification=justification, **kwargs)
-
-
-class InferenceRuleByTransformation(InferenceRule):
     """A well-formed inference-rule is an authorization for the usage of a transformation or algorithm,
     to derive further theorems in a theory under certain conditions called premises.
 
@@ -2721,67 +2759,25 @@ class InferenceRuleByTransformation(InferenceRule):
 
     """
 
-    def __new__(cls, transformation: FlexibleTransformation = None, **kwargs):
-        transformation: Transformation = coerce_transformation(t=transformation)
-        o: tuple = super().__new__(cls, valid_statement=transformation,
+    def __new__(cls, mechanism: FlexibleMechanism = None, **kwargs):
+        mechanism: Mechanism = coerce_mechanism(m=mechanism)
+        o: tuple = super().__new__(cls, valid_statement=mechanism,
                                    justification=_connectives.inference_rule_by_transformation,
                                    **kwargs)
         return o
 
-    def __init__(self, transformation: FlexibleTransformation, **kwargs):
-        self._transformation: Transformation = coerce_transformation(t=transformation)
-        super().__init__(valid_statement=self._transformation,
+    def __init__(self, mechanism: FlexibleMechanism, **kwargs):
+        self._mechanism: Mechanism = coerce_mechanism(m=mechanism)
+        super().__init__(valid_statement=self._mechanism,
                          justification=_connectives.inference_rule_by_transformation, **kwargs)
 
     @property
-    def transformation(self) -> Transformation:
-        return self._transformation
+    def mechanism(self) -> Mechanism:
+        return self._mechanism
 
 
-class InferenceRuleByAlgorithm(InferenceRule):
-    """A well-formed inference-rule is an authorization for the usage of a transformation or algorithm,
-    to derive further theorems in a theory under certain conditions called premises.
-
-    Two inference-rule methods are implemented:
-     - inference-rules-based-on-transformation:
-     - inference-rules-based-on-algorithm
-
-    Syntactic definition:
-    A formula is a well-formed inference-rule if and only if it is of the form:
-        (x follows-from inference-rule)
-    Where:
-        - x is either a well-formed transformation, or an algorithm.
-        - "inference-rule" is the inference-rule urelement.
-        - "follows-from" is the follows-from binary connective.
-
-    Semantic definition:
-    An inference-rule is the statement that a transformation is a valid inference-rule in a theory,
-    i.e.: all formulas derived from that inference-rule are valid in the theory.
-
-    Note: if an inference-rule has no premises, it is equivalent to an axiom.
-
-    """
-
-    def __new__(cls, algorithm: FlexibleAlgorithm = None, **kwargs):
-        algorithm: Algorithm = coerce_algorithm(a=algorithm)
-        o: tuple = super().__new__(cls, valid_statement=algorithm,
-                                   justification=_connectives.inference_rule_by_transformation,
-                                   **kwargs)
-        return o
-
-    def __init__(self, algorithm: FlexibleAlgorithm, **kwargs):
-        self._algorithm: Algorithm = coerce_algorithm(a=algorithm)
-        super().__init__(valid_statement=self._algorithm, justification=_connectives.inference_rule_by_transformation,
-                         **kwargs)
-
-    @property
-    def algorithm(self) -> Algorithm:
-        return self._algorithm
-
-
-FlexibleInferenceRuleByAlgorithm = typing.Union[InferenceRuleByAlgorithm, Formula]
-FlexibleInferenceRuleByTransformation = typing.Union[InferenceRuleByTransformation, Formula]
-FlexibleInferenceRule = typing.Union[FlexibleInferenceRuleByTransformation, FlexibleInferenceRuleByAlgorithm]
+FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
+FlexibleMechanism = typing.Union[Mechanism, Algorithm, Transformation, Formula]
 
 
 class Inference(Formula):
@@ -2878,7 +2874,7 @@ class Theorem(Derivation):
             except u1.ApplicativeException as error:
                 # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
                 # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
+                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
                                               algorithm_output=re_derived_valid_statement,
                                               inference=i, inference_transformation_rule=i.transformation_rule,
                                               inference_premises=i.premises)
@@ -2916,7 +2912,7 @@ class Theorem(Derivation):
 
 
 FlexibleTheorem = typing.Union[Theorem, Formula]
-FlexibleDerivation = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRuleByTransformation]
+FlexibleDerivation = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRule]
 
 
 class Heuristic(abc.ABC):
@@ -2975,7 +2971,7 @@ class Theory(Enumeration):
             is_well_formed_theory(t=d, raise_event_if_false=True)
         except Exception as error:
             # well-formedness verification failure, the theorem is ill-formed.
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_046, error=error, derivations=d)
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_046, error=error, derivations=d)
         o: tuple = super().__new__(cls, elements=d, **kwargs)
         return o
 
@@ -3063,10 +3059,10 @@ class Theory(Enumeration):
                 derivation: Theorem
                 yield derivation.valid_statement
 
-    def iterate_inference_rules(self) -> typing.Iterator[InferenceRuleByTransformation]:
+    def iterate_inference_rules(self) -> typing.Iterator[InferenceRule]:
         """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems."""
         for element in self:
-            if isinstance(element, InferenceRuleByTransformation):
+            if isinstance(element, InferenceRule):
                 yield element
 
     def iterate_theorems(self) -> typing.Iterator[Theorem]:
@@ -3132,7 +3128,7 @@ class Axiomatization(Theory):
         for d in d:
             if is_well_formed_inference_rule_by_transformation(i=d):
                 # This is an inference-rule.
-                inference_rule: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=d)
+                inference_rule: InferenceRule = coerce_inference_rule_by_transformation(i=d)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
             elif is_well_formed_axiom(a=d):
                 # This is an axiom.
@@ -3140,12 +3136,12 @@ class Axiomatization(Theory):
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
             else:
                 # Incorrect form.
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_047,
+                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_047,
                                               msg=f'Derivation "d" is not of the correct form for an axiomatization. '
                                                   f'Correct form should be axiom, or inference-rule.',
                                               d=d,
                                               d_type=type(d),
-                                              expected_form_1=InferenceRuleByTransformation,
+                                              expected_form_1=InferenceRule,
                                               expected_form_2=Axiom)
         o: tuple = super().__new__(cls, d=coerced_derivations)
         return o
@@ -3158,7 +3154,7 @@ class Axiomatization(Theory):
         for derivation in d:
             if is_well_formed_inference_rule_by_transformation(i=derivation):
                 # This is an inference-rule.
-                inference_rule: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=derivation)
+                inference_rule: InferenceRule = coerce_inference_rule_by_transformation(i=derivation)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
             elif is_well_formed_axiom(a=derivation):
                 # This is an axiom.
@@ -3166,8 +3162,8 @@ class Axiomatization(Theory):
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
             else:
                 # Incorrect form.
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_048, phi=derivation,
-                                              phi_type_1=InferenceRuleByTransformation,
+                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_048, phi=derivation,
+                                              phi_type_1=InferenceRule,
                                               phi_type_2=Axiom)
         super().__init__(c=_connectives.axiomatization, d=coerced_derivations,
                          decorations=decorations)
@@ -3261,7 +3257,11 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
                 if not is_axiom_of_theory(a=extension_a, t=t):
                     t: Theory = Theory(t=t, d=(extension_a,))
             elif is_well_formed_inference_rule_by_transformation(i=argument):
-                extension_i: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=argument)
+                extension_i: InferenceRule = coerce_inference_rule_by_transformation(i=argument)
+                if not is_inference_rule_of_theory(i=extension_i, t=t):
+                    t: Theory = Theory(t=t, d=(extension_i,))
+            elif is_well_formed_inference_rule_by_algorithm(i=argument):
+                extension_i: InferenceRule = coerce_inference_rule_by_algorithm(i=argument)
                 if not is_inference_rule_of_theory(i=extension_i, t=t):
                     t: Theory = Theory(t=t, d=(extension_i,))
             elif is_well_formed_theorem(t=argument):
@@ -3269,7 +3269,7 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
                 if not is_theorem_of_theory(m=extension_m, t=t):
                     t: Theory = Theory(t=t, d=(extension_m,))
             else:
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_049,
+                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_049,
                                               msg=f'Invalid argument: ({type(argument)}) {argument}.')
         return t
 
@@ -3296,20 +3296,20 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     t: Theory = coerce_theory(t=t)
     c: Formula = coerce_formula(phi=c)
     p: Tupl = coerce_tupl(t=p)
-    i: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=i)
+    i: InferenceRule = coerce_inference_rule_by_transformation(i=i)
 
     for premise in p:
         # The validity of the premises is checked during theory initialization,
         # but re-checking it here "in advance" helps provide more context in the exception that is being raised.
         if not is_valid_statement_in_theory(phi=premise, t=t):
-            raise u1.ApplicativeException(code=ERROR_CODE_AS1_051,
+            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_051,
                                           msg=f'Conjecture: \n\t{c} \n...cannot be derived because premise: \n\t{premise}'
                                               f' \n...is not a valid-statement in theory t. The inference-rule used to try this derivation was: '
                                               f'\n\t{i} \nThe complete theory is: \n\t{t}', c=c, premise=premise, p=p,
                                           i=i, t=t)
 
     # Configure the inference that derives the theorem.
-    inference: Inference = Inference(premises=p, transformation_rule=i.transformation)
+    inference: Inference = Inference(premises=p, transformation_rule=i.mechanism)
 
     # Prepare the new theorem.
     theorem: Theorem = Theorem(valid_statement=c, i=inference)
@@ -3421,8 +3421,8 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRuleByTr
     # Function is_formula_equivalent_with_variables_2 returns this map directly.
     conclusion_is_compatible_with_conjecture, known_variable_values = is_formula_equivalent_with_variables_2(
         phi=c,
-        psi=i.transformation.conclusion,
-        variables=i.transformation.variables,
+        psi=i.mechanism.conclusion,
+        variables=i.mechanism.variables,
         variables_fixed_values=None)
     if conclusion_is_compatible_with_conjecture:
         # The conclusion of the inference-rule is compatible with the conjecture.
@@ -3430,14 +3430,14 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRuleByTr
 
         # By contrast, the unknown variable values can be listed.
         unknown_variable_values: Enumeration = Enumeration()
-        for x in i.transformation.variables:
+        for x in i.mechanism.variables:
             if not is_element_of_enumeration(x=x, e=known_variable_values.domain):
                 unknown_variable_values = Enumeration(elements=(*unknown_variable_values, x,))
 
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
         necessary_premises: Tupl = Tupl(
-            elements=replace_formulas(phi=i.transformation.premises, m=known_variable_values))
+            elements=replace_formulas(phi=i.mechanism.premises, m=known_variable_values))
         # necessary_premises: Tupl = Tupl(elements=None)
         # for original_premise in inference_rule.transformation.premises:
         #    necessary_premise = replace_formulas(phi=original_premise, m=known_variable_values)
@@ -3445,7 +3445,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRuleByTr
 
         # Find a set of valid_statements in theory t, such that they match the necessary_premises.
         success, effective_premises = are_valid_statements_in_theory_with_variables(
-            s=necessary_premises, t=t, variables=i.transformation.variables,
+            s=necessary_premises, t=t, variables=i.mechanism.variables,
             variables_values=known_variable_values)
 
         if success:
@@ -3595,8 +3595,8 @@ def auto_derive_4(
     for inference_rule in t.iterate_inference_rules():
         inference_rule_success: bool = False
         is_equivalent, m = is_formula_equivalent_with_variables_2(phi=conjecture,
-                                                                  psi=inference_rule.transformation.conclusion,
-                                                                  variables=inference_rule.transformation.variables)
+                                                                  psi=inference_rule.mechanism.conclusion,
+                                                                  variables=inference_rule.mechanism.variables)
         if is_equivalent:
             # This inference-rule is compatible with the conjecture.
 
@@ -3607,14 +3607,14 @@ def auto_derive_4(
             # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
             # an empty map-builder:
             output, m, = is_formula_equivalent_with_variables_2(phi=conjecture,
-                                                                psi=inference_rule.transformation.conclusion,
-                                                                variables=inference_rule.transformation.variables,
+                                                                psi=inference_rule.mechanism.conclusion,
+                                                                variables=inference_rule.mechanism.variables,
                                                                 variables_fixed_values=None)
 
             # then we list the variables for which we don't have an assigned value,
             # called the free-variables.
             free_variables: Enumeration = Enumeration()
-            for x in inference_rule.transformation.variables:
+            for x in inference_rule.mechanism.variables:
                 if not is_element_of_enumeration(x=x, e=m.domain):
                     free_variables = Enumeration(elements=(*free_variables, x,))
             # u1.log_info(f'\t\t free-variables: {free_variables}')
@@ -3622,7 +3622,7 @@ def auto_derive_4(
             # now that we know what are the necessary variable values, we can determine what
             # are the necessary premises by substituting the variable values.
             necessary_premises: Tupl = Tupl(elements=None)
-            for original_premise in inference_rule.transformation.premises:
+            for original_premise in inference_rule.mechanism.premises:
                 # we must find a set of premises in the theory
                 # with free-variables.
                 # I see two possible strategies:
@@ -3862,7 +3862,7 @@ class DeclarationTypesetter(pl1.Typesetter):
 
 
 def get_theory_inference_rule_from_transformation_rule(t: FlexibleTheory, r: FlexibleTransformation) -> \
-        tuple[bool, InferenceRuleByTransformation | None]:
+        tuple[bool, InferenceRule | None]:
     """Given a theory "t" and a transformation-rule "r", return the first occurrence of an inference-rule in "t" such
     that its transformation-rule is formula-equivalent to "r".
 
@@ -3873,8 +3873,8 @@ def get_theory_inference_rule_from_transformation_rule(t: FlexibleTheory, r: Fle
     t: Theory = coerce_theory(t=t)
     r: Transformation = coerce_transformation(t=r)
     for i in iterate_inference_rules_in_theory(t=t):
-        i: InferenceRuleByTransformation
-        if is_formula_equivalent(phi=r, psi=i.transformation):
+        i: InferenceRule
+        if is_formula_equivalent(phi=r, psi=i.mechanism):
             return True, i
     return False, None
 
@@ -3957,10 +3957,10 @@ class DerivationTypesetter(pl1.Typesetter):
                 phi: Axiom = coerce_axiom(a=phi)
                 yield '\t\t| Axiom.'
             elif is_well_formed_inference_rule_by_transformation(i=phi):
-                phi: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=phi)
+                phi: InferenceRule = coerce_inference_rule_by_transformation(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_inference_rule_by_algorithm(i=phi):
-                phi: InferenceRuleByAlgorithm = coerce_inference_rule_by_algorithm(i=phi)
+                phi: InferenceRule = coerce_inference_rule_by_algorithm(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: Theorem = coerce_theorem(t=phi)
@@ -3975,8 +3975,8 @@ class DerivationTypesetter(pl1.Typesetter):
                     first = False
                 yield '.'
             else:
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_052, msg=f'Unsupported derivation "{phi}" in the '
-                                                                           f'theory.', phi=phi, theory=theory)
+                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_052, msg=f'Unsupported derivation "{phi}" in the '
+                                                                              f'theory.', phi=phi, theory=theory)
         else:
             # Theory parameter was provided, we have more context and premises can reference the derivation's number.
             yield '\t'
@@ -3987,10 +3987,10 @@ class DerivationTypesetter(pl1.Typesetter):
                 phi: Axiom = coerce_axiom(a=phi)
                 yield '\t\t| Axiom.'
             elif is_well_formed_inference_rule_by_transformation(i=phi):
-                phi: InferenceRuleByTransformation = coerce_inference_rule_by_transformation(i=phi)
+                phi: InferenceRule = coerce_inference_rule_by_transformation(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_inference_rule_by_algorithm(i=phi):
-                phi: InferenceRuleByAlgorithm = coerce_inference_rule_by_algorithm(i=phi)
+                phi: InferenceRule = coerce_inference_rule_by_algorithm(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: Theorem = coerce_theorem(t=phi)
@@ -3998,7 +3998,7 @@ class DerivationTypesetter(pl1.Typesetter):
                 transformation: Transformation = inference.transformation_rule
                 success, inference_rule = get_theory_inference_rule_from_transformation_rule(t=theory, r=transformation)
                 if not success:
-                    raise u1.ApplicativeException(code=ERROR_CODE_AS1_053,
+                    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_053,
                                                   msg=f'Transformation "{transformation}" could not be found in the '
                                                       f'theory.', phi=phi, inference=inference,
                                                   transformation=transformation, theory=theory)
@@ -4017,8 +4017,8 @@ class DerivationTypesetter(pl1.Typesetter):
                     first = False
                 yield '.'
             else:
-                raise u1.ApplicativeException(code=ERROR_CODE_AS1_054, msg=f'Unsupported derivation "{phi}" in the '
-                                                                           f'theory.', phi=phi, theory=theory)
+                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_054, msg=f'Unsupported derivation "{phi}" in the '
+                                                                              f'theory.', phi=phi, theory=theory)
 
 
 class Typesetters:

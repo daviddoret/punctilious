@@ -58,7 +58,7 @@ class TestAxioms:
         t = pu.as1.append_to_theory(pu.pls1.i2, t=t)
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition,),
-            transformation_rule=pu.pls1.i2.transformation)
+            transformation_rule=pu.pls1.i2.mechanism)
         claim = lnot(p) | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=lnot(p) | is_a | proposition, psi=isolated_theorem.valid_statement)
@@ -74,7 +74,7 @@ class TestAxioms:
         # derive q is-a proposition
         inference = pu.as1.Inference(
             premises=(a2.valid_statement,),
-            transformation_rule=pu.pls1.i1.transformation)
+            transformation_rule=pu.pls1.i1.mechanism)
         claim = q | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
         t = pu.as1.append_to_theory(isolated_theorem, t=t)
@@ -83,7 +83,7 @@ class TestAxioms:
         t = pu.as1.append_to_theory(pu.pls1.i3, t=t)
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition, q | is_a | proposition,),
-            transformation_rule=pu.pls1.i3.transformation)
+            transformation_rule=pu.pls1.i3.mechanism)
         claim = (p | land | q) | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.valid_statement)

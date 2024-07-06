@@ -8,7 +8,14 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inference_rules_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +102,7 @@
     "PowerShell.release_patch.ps1.executor": "Run",
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor": "Run",
@@ -575,6 +582,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -589,23 +613,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_propositional_logic_syntax_1.TestAxioms.test_pl1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -672,9 +679,9 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm" />
-      <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1" />
       <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic_basic" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestMetaTheory.test_meta_theory" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -683,10 +690,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm" />
-        <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic_basic" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestMetaTheory.test_meta_theory" />
-        <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1" />
+        <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic_basic" />
       </list>
     </recent_temporary>
   </component>
@@ -705,14 +712,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00715" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1719288084991</created>
-      <option name="number" value="00715" />
-      <option name="presentableId" value="LOCAL-00715" />
-      <option name="project" value="LOCAL" />
-      <updated>1719288084991</updated>
     </task>
     <task id="LOCAL-00716" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1098,7 +1097,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720161463965</updated>
     </task>
-    <option name="localTasksCounter" value="764" />
+    <task id="LOCAL-00764" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1720209943728</created>
+      <option name="number" value="00764" />
+      <option name="presentableId" value="LOCAL-00764" />
+      <option name="project" value="LOCAL" />
+      <updated>1720209943728</updated>
+    </task>
+    <option name="localTasksCounter" value="765" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1209,11 +1216,6 @@
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
           <line>670</line>
           <option name="timeStamp" value="597" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>1868</line>
-          <option name="timeStamp" value="598" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

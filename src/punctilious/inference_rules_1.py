@@ -26,8 +26,8 @@ def _set_state(key: str, value: object):
 # Basic inference rules
 
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
-    conjunction_introduction: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
-        transformation=as1.let_x_be_a_transformation(
+    conjunction_introduction: as1.InferenceRule = as1.InferenceRule(
+        mechanism=as1.let_x_be_a_transformation(
             premises=(
                 phi | is_a | proposition,
                 psi | is_a | proposition,
@@ -70,8 +70,8 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
             phi | land | psi,),
         conclusion=phi,
         variables=(phi, psi,))
-simplification_1_axiom: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
-    transformation=simplification_1_rule)
+simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
+    mechanism=simplification_1_rule)
 
 # Simplification inference rule, aka conjunction elimination:
 #   phi ∧ psi
@@ -88,8 +88,8 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
             phi | land | psi,),
         conclusion=psi,
         variables=(phi, psi,))
-simplification_2_axiom: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
-    transformation=simplification_2_rule)
+simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
+    mechanism=simplification_2_rule)
 
 # Modus ponens inference rule:
 #   phi --> psi
@@ -100,8 +100,8 @@ simplification_2_axiom: as1.InferenceRuleByTransformation = as1.InferenceRuleByT
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(formula_ts='Q') as psi:
-    modus_ponens: as1.InferenceRuleByTransformation = as1.InferenceRuleByTransformation(
-        transformation=as1.let_x_be_a_transformation(
+    modus_ponens: as1.InferenceRule = as1.InferenceRule(
+        mechanism=as1.let_x_be_a_transformation(
             premises=(
                 phi | is_a | proposition,
                 psi | is_a | proposition,
