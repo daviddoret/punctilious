@@ -822,7 +822,7 @@ def let_x_be_a_free_arity_connective(
 
 def let_x_be_an_inference_rule(t: FlexibleTheory,
                                i: FlexibleInferenceRule | None = None,
-                               m: FlexibleMechanism | None = None,
+                               m: FlexibleTransformation | None = None,
                                c: FlexibleFormula | None = None,
                                v: FlexibleEnumeration | None = None,
                                d: FlexibleEnumeration | None = None,
@@ -844,7 +844,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         i: InferenceRule = coerce_inference_rule(i=i)
     # Signature #2: provide the mechanism upon which the inference-rule can be built
     elif m is not None:
-        m: Mechanism = coerce_mechanism(m=m)
+        m: Transformation = coerce_transformation(m=m)
         i: InferenceRule = InferenceRule(mechanism=m)
     # Signature #3: provide the arguments upon which the mechanism can be built upon which ...
     elif c is not None:
@@ -1616,8 +1616,8 @@ class SingletonEnumeration(Enumeration):
         super().__init__(elements=element)
 
 
-class Mechanism(Formula):
-    """A mechanism is method by which new formulas may be created.
+class Transformation(Formula):
+    """A transformation is method by which new formulas may be created.
 
     The following transformations are supported:
      - natural-transformation (cf. NaturalTransformation python-class)
@@ -1648,10 +1648,10 @@ class Mechanism(Formula):
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.execute_mechanism(arguments=arguments)
+        return self.apply_transformation(arguments=arguments)
 
     @abc.abstractmethod
-    def execute_mechanism(self, arguments: FlexibleTupl) -> Formula:
+    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
         """
 
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
@@ -1681,7 +1681,7 @@ class Mechanism(Formula):
         return self[1]
 
 
-class NaturalTransformation(Mechanism):
+class NaturalTransformation(Transformation):
     """A natural-transformation, is a map from the class of formulas to itself.
 
     Syntactically, a natural-transformation is a formula t(c, V, D, P) where:
@@ -1751,9 +1751,9 @@ class NaturalTransformation(Mechanism):
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.execute_mechanism(arguments=arguments)
+        return self.apply_transformation(arguments=arguments)
 
-    def execute_mechanism(self, arguments: FlexibleTupl) -> Formula:
+    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
         """
 
         :param arguments: A tuple of arguments, whose order matches the order of the natural-transformation premises.
@@ -1808,11 +1808,11 @@ class NaturalTransformation(Mechanism):
 FlexibleNaturalTransformation = typing.Optional[typing.Union[NaturalTransformation]]
 
 
-def coerce_mechanism(m: FlexibleMechanism) -> Mechanism:
+def coerce_transformation(m: FlexibleTransformation) -> Transformation:
     """Coerces lose argument "m" to a mechanism, strongly python-typed as Mechanism,
     or raises an error with code E-AS1-060 if this fails."""
     m: Formula = coerce_formula(phi=m)
-    if isinstance(m, Mechanism):
+    if isinstance(m, Transformation):
         return m
     elif is_well_formed_natural_transformation(t=m):
         # phi is a well-formed transformation,
@@ -1855,7 +1855,7 @@ def coerce_external_algorithm(f: object) -> typing.Callable:
                                       external_algorithm=f)
 
 
-class AlgorithmicTransformation(Mechanism):
+class AlgorithmicTransformation(Transformation):
     """A well-formed algorithmic-transformation is a derivation that justified the derivation of further theorems in a theory,
     should bew impose conditions ex premises???
     by executing an algorithm that is external to the theory.
@@ -1892,9 +1892,9 @@ class AlgorithmicTransformation(Mechanism):
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.execute_mechanism(arguments=arguments)
+        return self.apply_transformation(arguments=arguments)
 
-    def execute_mechanism(self, arguments: FlexibleTupl) -> Formula:
+    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
         """
 
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
@@ -2448,7 +2448,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     # The transformation is not positioned before the conclusion.
                     return False
             # And finally, confirm that the inference effectively yields phi.
-            phi_prime = inference.inference_rule.mechanism.execute_mechanism(arguments=inference.premises)
+            phi_prime = inference.inference_rule.mechanism.apply_transformation(arguments=inference.premises)
             if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
                 return False
         else:
@@ -2521,7 +2521,7 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
     if isinstance(i, InferenceRule):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference_rule(i=i):
-        m: Mechanism = coerce_mechanism(m=i.term_0)
+        m: Transformation = coerce_transformation(m=i.term_0)
         return InferenceRule(mechanism=m)
     else:
         raise u1.ApplicativeException(
@@ -2730,25 +2730,25 @@ class InferenceRule(Derivation):
 
     """
 
-    def __new__(cls, mechanism: FlexibleMechanism = None, **kwargs):
-        mechanism: Mechanism = coerce_mechanism(m=mechanism)
+    def __new__(cls, mechanism: FlexibleTransformation = None, **kwargs):
+        mechanism: Transformation = coerce_transformation(m=mechanism)
         o: tuple = super().__new__(cls, valid_statement=mechanism,
                                    justification=_connectives.inference_rule,
                                    **kwargs)
         return o
 
-    def __init__(self, mechanism: FlexibleMechanism, **kwargs):
-        self._mechanism: Mechanism = coerce_mechanism(m=mechanism)
+    def __init__(self, mechanism: FlexibleTransformation, **kwargs):
+        self._mechanism: Transformation = coerce_transformation(m=mechanism)
         super().__init__(valid_statement=self._mechanism,
                          justification=_connectives.inference_rule, **kwargs)
 
     @property
-    def mechanism(self) -> Mechanism:
+    def mechanism(self) -> Transformation:
         return self._mechanism
 
 
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
-FlexibleMechanism = typing.Union[Mechanism, AlgorithmicTransformation, NaturalTransformation, Formula]
+FlexibleTransformation = typing.Union[Transformation, AlgorithmicTransformation, NaturalTransformation, Formula]
 
 
 class Inference(Formula):
@@ -2837,7 +2837,7 @@ class Theorem(Derivation):
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
-        re_derived_valid_statement: Formula = i.inference_rule.mechanism.execute_mechanism(arguments=i.premises)
+        re_derived_valid_statement: Formula = i.inference_rule.mechanism.apply_transformation(arguments=i.premises)
         if len(i.inference_rule.mechanism.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
