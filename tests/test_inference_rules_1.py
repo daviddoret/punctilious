@@ -179,4 +179,4 @@ class TestModusPonens:
                                 c | is_a | proposition,
                                 a | implies | c,
                                 c),
-                            i=pu.ir1.modus_ponens.mechanism)
+                            i=pu.ir1.modus_ponens.transformation)

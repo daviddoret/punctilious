@@ -2336,7 +2336,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
         # TODO: Factorize the check in Theorem.__new__ or __init__,
         #   that takes into account new-object-declarations.
         i: Inference = coerce_inference(i=t.term_1)
-        recomputed_outcome: Formula = i.inference_rule.mechanism(i.premises)
+        recomputed_outcome: Formula = i.inference_rule.transformation(i.premises)
         if not is_formula_equivalent(phi=t.term_0, psi=recomputed_outcome):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             if raise_error_if_ill_formed:
@@ -2448,7 +2448,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     # The transformation is not positioned before the conclusion.
                     return False
             # And finally, confirm that the inference effectively yields phi.
-            phi_prime = inference.inference_rule.mechanism.apply_transformation(arguments=inference.premises)
+            phi_prime = inference.inference_rule.transformation.apply_transformation(arguments=inference.premises)
             if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
                 return False
         else:
@@ -2738,13 +2738,13 @@ class InferenceRule(Derivation):
         return o
 
     def __init__(self, mechanism: FlexibleTransformation, **kwargs):
-        self._mechanism: Transformation = coerce_transformation(t=mechanism)
-        super().__init__(valid_statement=self._mechanism,
+        self._transformation: Transformation = coerce_transformation(t=mechanism)
+        super().__init__(valid_statement=self._transformation,
                          justification=_connectives.inference_rule, **kwargs)
 
     @property
-    def mechanism(self) -> Transformation:
-        return self._mechanism
+    def transformation(self) -> Transformation:
+        return self._transformation
 
 
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
@@ -2837,8 +2837,8 @@ class Theorem(Derivation):
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
-        re_derived_valid_statement: Formula = i.inference_rule.mechanism.apply_transformation(arguments=i.premises)
-        if len(i.inference_rule.mechanism.declarations) == 0:
+        re_derived_valid_statement: Formula = i.inference_rule.transformation.apply_transformation(arguments=i.premises)
+        if len(i.inference_rule.transformation.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
                 is_formula_equivalent(phi=valid_statement, psi=re_derived_valid_statement, raise_event_if_false=True)
@@ -2854,19 +2854,19 @@ class Theorem(Derivation):
             # In order to check that valid_statement is consistent with the inference-rule, we can
             # compare both formulas with the inference-rule conclusion and with regards to new-object-declaration variables.
             success_1, m1 = is_formula_equivalent_with_variables_2(phi=valid_statement,
-                                                                   psi=i.inference_rule.mechanism.conclusion,
-                                                                   variables=i.inference_rule.mechanism.declarations)
+                                                                   psi=i.inference_rule.transformation.conclusion,
+                                                                   variables=i.inference_rule.transformation.declarations)
             if not success_1:
                 raise u1.ApplicativeException(
                     msg='The valid-statement is not consistent with the inference-rule conclusion, considering new-object-declarations')
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
             success_2, m2 = is_formula_equivalent_with_variables_2(phi=valid_statement,
-                                                                   psi=i.inference_rule.mechanism.conclusion,
+                                                                   psi=i.inference_rule.transformation.conclusion,
                                                                    variables=m1.domain)
             pass
             valid_statement_reversed: Formula = replace_formulas(phi=valid_statement, m=m1_reversed)
-            if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.inference_rule.mechanism.conclusion):
+            if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.inference_rule.transformation.conclusion):
                 raise u1.ApplicativeException(
                     msg='Reversing the valid-statement does not yield the inference-rule conclusion.')
 
@@ -3392,8 +3392,8 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
     # Function is_formula_equivalent_with_variables_2 returns this map directly.
     conclusion_is_compatible_with_conjecture, known_variable_values = is_formula_equivalent_with_variables_2(
         phi=c,
-        psi=i.mechanism.conclusion,
-        variables=i.mechanism.variables,
+        psi=i.transformation.conclusion,
+        variables=i.transformation.variables,
         variables_fixed_values=None)
     if conclusion_is_compatible_with_conjecture:
         # The conclusion of the inference-rule is compatible with the conjecture.
@@ -3401,14 +3401,14 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
 
         # By contrast, the unknown variable values can be listed.
         unknown_variable_values: Enumeration = Enumeration()
-        for x in i.mechanism.variables:
+        for x in i.transformation.variables:
             if not is_element_of_enumeration(x=x, e=known_variable_values.domain):
                 unknown_variable_values = Enumeration(elements=(*unknown_variable_values, x,))
 
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
         necessary_premises: Tupl = Tupl(
-            elements=replace_formulas(phi=i.mechanism.premises, m=known_variable_values))
+            elements=replace_formulas(phi=i.transformation.premises, m=known_variable_values))
         # necessary_premises: Tupl = Tupl(elements=None)
         # for original_premise in inference_rule.transformation.premises:
         #    necessary_premise = replace_formulas(phi=original_premise, m=known_variable_values)
@@ -3416,7 +3416,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
 
         # Find a set of valid_statements in theory t, such that they match the necessary_premises.
         success, effective_premises = are_valid_statements_in_theory_with_variables(
-            s=necessary_premises, t=t, variables=i.mechanism.variables,
+            s=necessary_premises, t=t, variables=i.transformation.variables,
             variables_values=known_variable_values)
 
         if success:
@@ -3566,8 +3566,8 @@ def auto_derive_4(
     for inference_rule in t.iterate_inference_rules():
         inference_rule_success: bool = False
         is_equivalent, m = is_formula_equivalent_with_variables_2(phi=conjecture,
-                                                                  psi=inference_rule.mechanism.conclusion,
-                                                                  variables=inference_rule.mechanism.variables)
+                                                                  psi=inference_rule.transformation.conclusion,
+                                                                  variables=inference_rule.transformation.variables)
         if is_equivalent:
             # This inference-rule is compatible with the conjecture.
 
@@ -3578,14 +3578,14 @@ def auto_derive_4(
             # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
             # an empty map-builder:
             output, m, = is_formula_equivalent_with_variables_2(phi=conjecture,
-                                                                psi=inference_rule.mechanism.conclusion,
-                                                                variables=inference_rule.mechanism.variables,
+                                                                psi=inference_rule.transformation.conclusion,
+                                                                variables=inference_rule.transformation.variables,
                                                                 variables_fixed_values=None)
 
             # then we list the variables for which we don't have an assigned value,
             # called the free-variables.
             free_variables: Enumeration = Enumeration()
-            for x in inference_rule.mechanism.variables:
+            for x in inference_rule.transformation.variables:
                 if not is_element_of_enumeration(x=x, e=m.domain):
                     free_variables = Enumeration(elements=(*free_variables, x,))
             # u1.log_info(f'\t\t free-variables: {free_variables}')
@@ -3593,7 +3593,7 @@ def auto_derive_4(
             # now that we know what are the necessary variable values, we can determine what
             # are the necessary premises by substituting the variable values.
             necessary_premises: Tupl = Tupl(elements=None)
-            for original_premise in inference_rule.mechanism.premises:
+            for original_premise in inference_rule.transformation.premises:
                 # we must find a set of premises in the theory
                 # with free-variables.
                 # I see two possible strategies:
@@ -3845,7 +3845,7 @@ def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory
     r: NaturalTransformation = coerce_natural_transformation(t=r)
     for i in iterate_inference_rules_in_theory(t=t):
         i: InferenceRule
-        if is_formula_equivalent(phi=r, psi=i.mechanism):
+        if is_formula_equivalent(phi=r, psi=i.transformation):
             return True, i
     return False, None
 
