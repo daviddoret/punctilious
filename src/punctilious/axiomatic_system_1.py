@@ -1669,23 +1669,23 @@ class Transformation(Formula):
         p: Tupl = coerce_tupl(t=p)
         super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
 
-    def __call__(self, arguments: FlexibleTupl) -> Formula:
+    def __call__(self, premises: FlexibleTupl | None = None, arguments: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(premises=arguments)
+        return self.apply_transformation(p=premises, arguments=arguments)
 
     @abc.abstractmethod
-    def apply_transformation(self, premises: FlexibleTupl | None = None,
+    def apply_transformation(self, p: FlexibleTupl | None = None,
                              arguments: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param premises: A tuple of premises arguments, whose order matches the order of the transformation premises.
+        :param p: A tuple of premises arguments, whose order matches the order of the transformation premises.
         :param arguments: A tuple of supplementary arguments.
         :return:
         """
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
                                   msg='Abstract python method is not implemented.',
                                   object=self, object_type=type(self),
-                                  arguments=premises)
+                                  arguments=p)
 
     @property
     def conclusion(self) -> Formula:
@@ -1788,28 +1788,28 @@ class NaturalTransformation(Transformation):
         super().__init__(connective=_connectives.natural_transformation, c=c, v=v,
                          d=d, p=p)
 
-    def __call__(self, arguments: FlexibleTupl) -> Formula:
+    def __call__(self, premises: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(premises=arguments)
+        return self.apply_transformation(p=premises)
 
-    def apply_transformation(self, premises: FlexibleTupl | None = None,
+    def apply_transformation(self, p: FlexibleTupl | None = None,
                              arguments: FlexibleTupl | None = None) -> Formula:
         """
 
         :param arguments:
-        :param premises: A tuple of arguments, whose order matches the order of the natural-transformation premises.
+        :param p: A tuple of arguments, whose order matches the order of the natural-transformation premises.
         :return:
         """
-        premises = coerce_tupl(t=premises)
+        p = coerce_tupl(t=p)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=premises, psi=self.premises,
+        success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_030,
                                       msg='Applying a natural-transformation with incorrect premises.',
-                                      target_formula=premises, transformation_premises=self.premises,
+                                      target_formula=p, transformation_premises=self.premises,
                                       transformation_variables=self.variables, transformation=self)
 
         # step 2:
@@ -1947,32 +1947,32 @@ class AlgorithmicTransformation(Transformation):
         super().__init__(connective=_connectives.algorithm,
                          c=c, v=v, d=d, p=p)
 
-    def __call__(self, arguments: FlexibleTupl) -> Formula:
+    def __call__(self, premises: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(premises=arguments)
+        return self.apply_transformation(p=premises)
 
-    def apply_transformation(self, premises: FlexibleTupl | None = None,
+    def apply_transformation(self, p: FlexibleTupl | None = None,
                              arguments: FlexibleTupl | None = None) -> Formula:
         """
 
         :param arguments:
-        :param premises: A tuple of arguments, whose order matches the order of the transformation premises.
+        :param p: A tuple of arguments, whose order matches the order of the transformation premises.
         :return:
         """
-        premises = coerce_tupl(t=premises)
+        p = coerce_tupl(t=p)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=premises, psi=self.premises,
+        success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_050,
                                       msg='Applying an algorithm with incorrect premises.',
-                                      target_formula=premises, transformation_premises=self.premises,
+                                      target_formula=p, transformation_premises=self.premises,
                                       transformation_variables=self.variables, transformation=self)
 
         # call the external-algorithm
-        outcome: Formula = self.external_algorithm(arguments=premises)
+        outcome: Formula = self.external_algorithm(arguments=p)
 
         return outcome
 
@@ -2512,7 +2512,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     # The transformation is not positioned before the conclusion.
                     return False
             # And finally, confirm that the inference effectively yields phi.
-            phi_prime = inference.inference_rule.transformation.apply_transformation(premises=inference.premises)
+            phi_prime = inference.inference_rule.transformation.apply_transformation(p=inference.premises)
             if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
                 return False
         else:
@@ -2923,7 +2923,8 @@ class Theorem(Derivation):
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
-        re_derived_valid_statement: Formula = i.inference_rule.transformation.apply_transformation(premises=i.premises)
+        re_derived_valid_statement: Formula = i.inference_rule.transformation.apply_transformation(p=i.premises,
+                                                                                                   arguments=i.arguments)
         if len(i.inference_rule.transformation.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:

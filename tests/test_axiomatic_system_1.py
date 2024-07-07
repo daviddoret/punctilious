@@ -407,7 +407,7 @@ class TestNaturalTransformation:
         f = pu.as1.NaturalTransformation(c=conclusion, v=variables, d=None,
                                          p=premises)
         arguments = pu.as1.Tupl(elements=(p2,))
-        output = f.apply_transformation(premises=arguments)
+        output = f.apply_transformation(p=arguments)
         phi = aristotle | is_a | mortal
         pu.as1.is_formula_equivalent(phi=phi, psi=output)
 
@@ -674,7 +674,7 @@ class TestProofByInference:
         ir = pu.as1.InferenceRule(t=f)
         p = (a | star | b, b | star | c,)
         i = pu.as1.Inference(p=p, i=ir)
-        outcome = f.apply_transformation(premises=p)
+        outcome = f.apply_transformation(p=p)
         m = pu.as1.Theorem(valid_statement=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(t=m)
         assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i)
