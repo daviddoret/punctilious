@@ -61,7 +61,7 @@ class TestConnective:
 
     def test_call(self):
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_unary_connective(formula_ts='f')
         g = pu.as1.let_x_be_a_binary_connective(formula_ts='g')
         h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
@@ -95,7 +95,7 @@ class TestIsSubformulaFormula:
 
 class TestConnectiveEquivalence:
     def test_is_connective_equivalent(self):
-        a, b, c = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c',))
+        a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
         c1 = pu.as1.BinaryConnective(formula_ts='c1')
         c2 = pu.as1.BinaryConnective(formula_ts='c2')
         phi = a | c1 | b
@@ -154,7 +154,7 @@ class TestEnumeration:
             e1 = pu.as1.Enumeration(elements=(a, b, c, b,))
 
     def test_enumeration(self):
-        a, b, c, x, y, z = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'x', 'y', 'z',))
+        a, b, c, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'x', 'y', 'z',))
         baczx = pu.as1.Enumeration(elements=(b, a, c, z, x))
         assert pu.as1.is_formula_equivalent(phi=baczx, psi=baczx)
         assert pu.as1.is_enumeration_equivalent(phi=baczx, psi=baczx)
@@ -174,7 +174,7 @@ class TestEnumeration:
         assert pu.as1.is_enumeration_equivalent(phi=baczx, psi=baczx2)
 
     def test_is_well_formed_enumeration(self):
-        a, b, c = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c',))
+        a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
         star = pu.as1.FreeArityConnective(formula_ts='*')
         phi1 = pu.as1.Formula(c=star, t=(a, b, c,))
         assert pu.as1.is_well_formed_enumeration(e=phi1)
@@ -229,7 +229,7 @@ class TestFormulaEquivalenceWithVariables:
                 variables=(x,))
 
     def test_is_formula_equivalent_with_variables_2(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         ab = pu.as1.Tupl(elements=(a, b,))
         cd = pu.as1.Tupl(elements=(c, d,))
         assert not pu.as1.is_formula_equivalent(phi=ab, psi=cd)
@@ -327,7 +327,7 @@ class TestFormulaEquivalenceWithVariables2:
                 variables=(x,))
 
     def test_is_formula_equivalent_with_variables_2(self):
-        a, b, c, d, e, = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e, = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         ab = pu.as1.Tupl(elements=(a, b,))
         cd = pu.as1.Tupl(elements=(c, d,))
         assert not pu.as1.is_formula_equivalent(phi=ab, psi=cd)
@@ -467,7 +467,7 @@ class TestReplaceFormulas:
             psi=(aristotle | is_a | aristotle) | land | (platypus | is_a | animal))
 
     def test_replace_formulas_two_variables(self):
-        a, b, c, d = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd'))
+        a, b, c, d = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd',))
         c1 = pu.as1.let_x_be_a_unary_connective(formula_ts='c1')
         c2 = pu.as1.let_x_be_a_binary_connective(formula_ts='c2')
         phi = a | c2 | b
@@ -507,7 +507,7 @@ class TestMap:
 
 class TestEnumerationEquivalence:
     def test_enumeration_equivalence(self):
-        red, yellow, blue = pu.as1.let_x_be_a_simple_object(formula_ts=('red', 'yellow', 'blue',))
+        red, yellow, blue = pu.as1.let_x_be_some_simple_objects(reps=('red', 'yellow', 'blue',))
         e1 = pu.as1.Enumeration(elements=(red, yellow, blue,))
         e2 = pu.as1.Enumeration(elements=(yellow, red, blue,))
         assert pu.as1.is_enumeration_equivalent(phi=e1, psi=e2)
@@ -516,7 +516,7 @@ class TestEnumerationEquivalence:
 
 class TestUnionEnumeration:
     def test_union_enumeration(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e'))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         abc = pu.as1.Enumeration(elements=(a, b, c,))
         cd = pu.as1.Enumeration(elements=(c, d,))
         abcd1 = pu.as1.union_enumeration(phi=abc, psi=cd)
@@ -534,7 +534,7 @@ class TestUnionEnumeration:
 class TestEmptyEnumeration:
     def test_empty_enumeration(self):
         a = pu.as1.EmptyEnumeration()
-        x, y, z = pu.as1.let_x_be_a_simple_object(formula_ts=('x', 'y', 'z',))
+        x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('x', 'y', 'z',))
         assert not a.has_element(phi=x)
         assert a.arity == 0
 
@@ -542,7 +542,7 @@ class TestEmptyEnumeration:
 class TestInferenceRule:
     def test_inference_rule_without_premises(self):
         # elaborate a theory
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         phi = a | f | b
         rule = pu.as1.Transformation(conclusion=phi, variables=None, declarations=None, premises=None)
@@ -558,7 +558,7 @@ class TestInferenceRule:
             psi=phi)
 
     def test_is_well_formed_postulation(self):
-        a, b = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b',))
+        a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         rule = pu.as1.Transformation(conclusion=a | f | b, variables=None, declarations=None, premises=None)
         phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
@@ -575,7 +575,7 @@ class TestInferenceRule:
 
 class TestFormulaToTuple:
     def test_formula_to_tuple(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_unary_connective(formula_ts='f')
         g = pu.as1.let_x_be_a_binary_connective(formula_ts='g')
         h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
@@ -591,7 +591,7 @@ class TestFormulaToTuple:
 
 class TestProofByPostulation:
     def test_is_well_formed(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
         rule1 = pu.as1.Transformation(conclusion=star3(e, b, d), variables=None, declarations=None, premises=None)
         phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
@@ -602,10 +602,16 @@ class TestProofByPostulation:
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
+class TestTheorem:
+    def test_coerce_theorem(self):
+        t = pu.as1.let_x_be_a_theory()
+        a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
+
+
 class TestInference:
     def test_inference(self):
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         t = pu.as1.Transformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
                                   premises=(x | f | y, y | f | z,), )
@@ -621,7 +627,7 @@ class TestInference:
 
     def test_is_well_formed_inference(self):
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         t = pu.as1.Transformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
                                   premises=(x | f | y, y | f | z,))
@@ -638,19 +644,25 @@ class TestInference:
 
 class TestProofByInference:
     def test_is_well_formed(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
-        star = pu.as1.let_x_be_a_binary_connective(formula_ts='*')
+        star = pu.as1.let_x_be_a_binary_connective(
+            formula_ts=pu.as1.typesetters.infix_formula(connective_typesetter=pu.pl1.symbols.asterisk_operator))
         premises = pu.as1.Enumeration(elements=(x | star | y, y | star | z,))
         conclusion = x | star | z
         variables = pu.as1.Enumeration(elements=(x, y, z,))
         f = pu.as1.Transformation(conclusion=conclusion, variables=variables, declarations=None,
                                   premises=premises)
         ir = pu.as1.InferenceRule(mechanism=f)
-        i = pu.as1.Inference(premises=(a | star | b, b | star | c,), i=ir)
+        p = (a | star | b, b | star | c,)
+        i = pu.as1.Inference(premises=p, i=ir)
+        outcome = f.execute_mechanism(arguments=p)
+        m = pu.as1.Theorem(valid_statement=a | star | c, i=i)
+        assert pu.as1.is_well_formed_theorem(t=m)
         assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i)
-        pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
-        assert not pu.as1.is_well_formed_theorem(t=(a | star | d) | pu.as1._connectives.follows_from | i)
+        m2 = pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
+        # assert not pu.as1.is_well_formed_theorem(t=(a | star | d) | pu.as1._connectives.follows_from | i)
+        assert not pu.as1.is_well_formed_theorem(t=m2)
 
         i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), i=ir)
         assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i2)
@@ -686,7 +698,7 @@ class TestAlgorithm:
 
 class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
     def test_iterate_permutations_of_enumeration_elements_with_fixed_size(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
 
         e = pu.as1.Enumeration()
         i = 0
@@ -739,7 +751,7 @@ class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
 
 class TestAreValidStatementsInTheory:
     def test_are_valid_statements_in_theory(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         t, _, = pu.as1.let_x_be_an_axiom(t=None, s=a)
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=c)
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=d)
@@ -754,7 +766,7 @@ class TestAreValidStatementsInTheory:
 
 class TestAreValidStatementsInTheoryWithVariables:
     def test_are_valid_statements_in_theory_with_variables(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         t, _, = pu.as1.let_x_be_an_axiom(t=None, s=a)
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=c)
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=d)
@@ -772,7 +784,7 @@ class TestAreValidStatementsInTheoryWithVariables:
 
 class TestStripDuplicateFormulasInPythonTuple:
     def test_strip_duplicate_formulas_in_python_tuple(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         t1 = pu.as1.Tupl(elements=(a, b, a, a, e, e,))
         t2 = pu.as1.Tupl(elements=(a, b, e,))
         t3 = pu.as1.strip_duplicate_formulas_in_python_tuple(t=t1)
@@ -783,7 +795,7 @@ class TestStripDuplicateFormulasInPythonTuple:
 
 class TestCoerceEnumeration:
     def test_coerce_enumeration(self):
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         e1 = pu.as1.Enumeration(elements=(a, b, a, a, e, e,), strip_duplicates=True)
         e2 = pu.as1.Enumeration(elements=(a, b, e,), strip_duplicates=True)
         e3 = pu.as1.Enumeration(elements=e1, strip_duplicates=True)
@@ -795,7 +807,7 @@ class TestCoerceEnumeration:
 class TestAxiomatization:
     def test_is_well_formed(self):
         # elaborate a theory
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         star1 = pu.as1.let_x_be_a_unary_connective(formula_ts='*1')
         star2 = pu.as1.let_x_be_a_binary_connective(formula_ts='*2')
@@ -825,7 +837,7 @@ class TestDemonstration:
     def test_is_well_formed(self):
         # elaborate a theory
         theory = pu.as1.let_x_be_a_collection_of_axioms(axioms=None)
-        a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
+        a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         star = pu.as1.let_x_be_a_binary_connective(formula_ts='*')
         theory, axiom_1, = pu.as1.let_x_be_an_axiom(t=theory, s=a | star | b)

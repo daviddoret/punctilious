@@ -757,20 +757,23 @@ FlexibleMultiRepresentation = typing.Union[FlexibleRepresentation, typing.Iterab
 representation."""
 
 
-def let_x_be_a_simple_object(formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None) -> (
-        typing.Union)[SimpleObject, typing.Generator[SimpleObject, typing.Any, None]]:
+def let_x_be_a_simple_object(formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None) -> SimpleObject:
     """A helper function to declare one or multiple simple-objects.
 
     :param formula_ts: A string (or an iterable of strings) default representation for the simple-object(s).
     :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
     """
-    if isinstance(formula_ts, FlexibleRepresentation):
-        return SimpleObject(c=NullaryConnective(formula_ts=formula_ts))
-    elif isinstance(formula_ts, typing.Iterable):
-        return (SimpleObject(c=NullaryConnective(formula_ts=r)) for r in formula_ts)
-    else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_014, msg='Non supported arguments.',
-                                      formula_typesetter=formula_ts)
+    return SimpleObject(c=NullaryConnective(formula_ts=formula_ts))
+
+
+def let_x_be_some_simple_objects(reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[
+    SimpleObject, typing.Any, None]:
+    """A helper function to declare one or multiple simple-objects.
+
+    :param formula_ts: A string (or an iterable of strings) default representation for the simple-object(s).
+    :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
+    """
+    return (let_x_be_a_simple_object(formula_ts=rep) for rep in reps)
 
 
 def formula_to_tuple(phi: FlexibleFormula) -> Enumeration:
@@ -2324,12 +2327,12 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
         # TODO: Factorize the check in Theorem.__new__ or __init__,
         #   that takes into account new-object-declarations.
         i: Inference = coerce_inference(i=t.term_1)
-        f_of_p: Formula = i.inference_rule.mechanism(i.premises)
-        if not is_formula_equivalent(phi=t.term_0, psi=f_of_p):
+        recomputed_outcome: Formula = i.inference_rule.mechanism(i.premises)
+        if not is_formula_equivalent(phi=t.term_0, psi=recomputed_outcome):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             if raise_error_if_ill_formed:
                 raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_035, phi=t, psi_expected=t.term_0,
-                                              psi_inferred=f_of_p,
+                                              psi_inferred=recomputed_outcome,
                                               inference_rule=i)
             return False
         return True
