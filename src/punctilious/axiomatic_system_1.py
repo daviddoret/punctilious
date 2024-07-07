@@ -1626,6 +1626,10 @@ class Transformation(Formula):
      - natural-transformation (cf. NaturalTransformation python-class)
      - algorithmic-transformation (cf. AlgorithmicTransformation python-class)
     """
+    CONCLUSION_INDEX = 0
+    VARIABLES_INDEX = 1
+    DECLARATIONS_INDEX = 2
+    PREMISES_INDEX = 3
 
     def __new__(cls, connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
@@ -1685,21 +1689,21 @@ class Transformation(Formula):
 
     @property
     def conclusion(self) -> Formula:
-        return self[0]
+        return self[Transformation.CONCLUSION_INDEX]
 
     @property
     def declarations(self) -> Enumeration:
-        return self[2]
+        return self[Transformation.DECLARATIONS_INDEX]
 
     @property
     def premises(self) -> Tupl:
         """A tuple of premises that are necessary conditions before the mechanism can be executed."""
-        return self[3]
+        return self[Transformation.PREMISES_INDEX]
 
     @property
     def variables(self) -> Enumeration:
         """Variables used in premises and possibly the conclusion."""
-        return self[1]
+        return self[Transformation.VARIABLES_INDEX]
 
 
 class NaturalTransformation(Transformation):
