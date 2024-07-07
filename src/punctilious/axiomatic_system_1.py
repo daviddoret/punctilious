@@ -1669,17 +1669,22 @@ class Transformation(Formula):
         p: Tupl = coerce_tupl(t=p)
         super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
 
-    def __call__(self, premises: FlexibleTupl | None = None, arguments: FlexibleTupl | None = None) -> Formula:
-        """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=premises, a=arguments)
+    def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
+        """A shortcut for self.apply_transformation()
+
+        :param p: A tuple of formulas denoted as the premises.
+        :param a: A tuple of formulas denoted as the supplementary arguments.s
+        :return:
+        """
+        return self.apply_transformation(p=p, a=a)
 
     @abc.abstractmethod
     def apply_transformation(self, p: FlexibleTupl | None = None,
                              a: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param p: A tuple of premises arguments, whose order matches the order of the transformation premises.
-        :param a: A tuple of supplementary arguments.
+        :param p: A tuple of formulas denoted as the premises. Order must be identical to transformation premises.
+        :param a: A tuple of formulas denoted as the supplementary arguments.s
         :return:
         """
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
@@ -1788,9 +1793,9 @@ class NaturalTransformation(Transformation):
         super().__init__(connective=_connectives.natural_transformation, c=c, v=v,
                          d=d, p=p)
 
-    def __call__(self, premises: FlexibleTupl) -> Formula:
+    def __call__(self, p: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=premises)
+        return self.apply_transformation(p=p)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
                              a: FlexibleTupl | None = None) -> Formula:
@@ -1947,9 +1952,9 @@ class AlgorithmicTransformation(Transformation):
         super().__init__(connective=_connectives.algorithm,
                          c=c, v=v, d=d, p=p)
 
-    def __call__(self, premises: FlexibleTupl) -> Formula:
+    def __call__(self, p: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=premises)
+        return self.apply_transformation(p=p)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
                              a: FlexibleTupl | None = None) -> Formula:
