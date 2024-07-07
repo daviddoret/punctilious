@@ -1630,6 +1630,14 @@ class Transformation(Formula):
     def __new__(cls, connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None, ):
+        """
+
+        :param connective:
+        :param c: A formula denoted as the conclusion.
+        :param v: An enumeration of variables used in the premises.
+        :param d: An enumeration of variables used for object declarations.
+        :param p: A tuple of formulas denoted as the premises.
+        """
         connective: Connective = coerce_connective(c=connective)
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
@@ -1642,6 +1650,14 @@ class Transformation(Formula):
     def __init__(self, connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
+        """
+
+        :param connective:
+        :param c: A formula denoted as the conclusion.
+        :param v: An enumeration of variables used in the premises.
+        :param d: An enumeration of variables used for object declarations.
+        :param p: A tuple of formulas denoted as the premises.
+        """
         connective: Connective = coerce_connective(c=connective)
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
@@ -1733,6 +1749,13 @@ class NaturalTransformation(Transformation):
     def __new__(cls, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
+        """
+
+        :param c: A formula denoted as the conclusion.
+        :param v: An enumeration of variables used in the premises.
+        :param d: An enumeration of variables used for object declarations.
+        :param p: A tuple of formulas denoted as the premises.
+        """
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         c: Formula = coerce_formula(phi=c)
@@ -1747,6 +1770,13 @@ class NaturalTransformation(Transformation):
     def __init__(self, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
+        """
+
+        :param c: A formula denoted as the conclusion.
+        :param v: An enumeration of variables used in the premises.
+        :param d: An enumeration of variables used for object declarations.
+        :param p: A tuple of formulas denoted as the premises.
+        """
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
         d: Enumeration = coerce_enumeration(e=d)
@@ -1877,10 +1907,10 @@ class AlgorithmicTransformation(Transformation):
         """
 
         :param external_algorithm:
-        :param c:
-        :param v:
-        :param d:
-        :param p:
+        :param c: A formula denoted as the conclusion.
+        :param v: An enumeration of variables used in the premises.
+        :param d: An enumeration of variables used for object declarations.
+        :param p: A tuple of formulas denoted as the premises.
         """
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
         c: Formula = coerce_formula(phi=c)
@@ -1896,6 +1926,14 @@ class AlgorithmicTransformation(Transformation):
                  c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
+        """
+
+        :param external_algorithm:
+        :param c: A formula denoted as the conclusion.
+        :param v: An enumeration of variables used in the premises.
+        :param d: An enumeration of variables used for object declarations.
+        :param p: A tuple of formulas denoted as the premises.
+        """
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
