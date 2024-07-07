@@ -1671,15 +1671,15 @@ class Transformation(Formula):
 
     def __call__(self, premises: FlexibleTupl | None = None, arguments: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=premises, arguments=arguments)
+        return self.apply_transformation(p=premises, a=arguments)
 
     @abc.abstractmethod
     def apply_transformation(self, p: FlexibleTupl | None = None,
-                             arguments: FlexibleTupl | None = None) -> Formula:
+                             a: FlexibleTupl | None = None) -> Formula:
         """
 
         :param p: A tuple of premises arguments, whose order matches the order of the transformation premises.
-        :param arguments: A tuple of supplementary arguments.
+        :param a: A tuple of supplementary arguments.
         :return:
         """
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
@@ -1793,10 +1793,10 @@ class NaturalTransformation(Transformation):
         return self.apply_transformation(p=premises)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
-                             arguments: FlexibleTupl | None = None) -> Formula:
+                             a: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param arguments:
+        :param a:
         :param p: A tuple of arguments, whose order matches the order of the natural-transformation premises.
         :return:
         """
@@ -1952,10 +1952,10 @@ class AlgorithmicTransformation(Transformation):
         return self.apply_transformation(p=premises)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
-                             arguments: FlexibleTupl | None = None) -> Formula:
+                             a: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param arguments:
+        :param a:
         :param p: A tuple of arguments, whose order matches the order of the transformation premises.
         :return:
         """
@@ -2924,7 +2924,7 @@ class Theorem(Derivation):
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
         re_derived_valid_statement: Formula = i.inference_rule.transformation.apply_transformation(p=i.premises,
-                                                                                                   arguments=i.arguments)
+                                                                                                   a=i.arguments)
         if len(i.inference_rule.transformation.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
