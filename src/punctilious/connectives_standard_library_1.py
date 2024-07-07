@@ -19,5 +19,5 @@ proposition = as1._connectives.proposition
 propositional_variable = as1._connectives.propositional_variable
 theorem = as1._connectives.theorem
 theory = as1._connectives.theory
-transformation = as1._connectives.transformation
+transformation = as1._connectives.natural_transformation
 tupl = as1._connectives.tupl

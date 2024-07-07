@@ -854,7 +854,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         p: Tupl = coerce_tupl(t=p)
         if a is None:
             # Signature 3: This is a natural transformation:
-            m: Transformation = Transformation(conclusion=c, variables=v, declarations=d, premises=p)
+            m: NaturalTransformation = NaturalTransformation(conclusion=c, variables=v, declarations=d, premises=p)
             i: InferenceRule = InferenceRule(mechanism=m)
         else:
             # Signature 4: This is an algorithm-based mechanism:
@@ -967,12 +967,13 @@ def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
     return Axiomatization(d=axioms)
 
 
-def let_x_be_a_transformation(conclusion: FlexibleFormula,
-                              variables: FlexibleEnumeration | None = None,
-                              declarations: FlexibleEnumeration | None = None,
-                              premises: FlexibleTupl | None = None
-                              ):
-    return Transformation(conclusion=conclusion, variables=variables, declarations=declarations, premises=premises)
+def let_x_be_a_natural_transformation(conclusion: FlexibleFormula,
+                                      variables: FlexibleEnumeration | None = None,
+                                      declarations: FlexibleEnumeration | None = None,
+                                      premises: FlexibleTupl | None = None
+                                      ):
+    return NaturalTransformation(conclusion=conclusion, variables=variables, declarations=declarations,
+                                 premises=premises)
 
 
 class Connectives(typing.NamedTuple):
@@ -993,7 +994,7 @@ class Connectives(typing.NamedTuple):
     propositional_variable: SimpleObject
     theory: FreeArityConnective
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
-    transformation: QuaternaryConnective
+    natural_transformation: QuaternaryConnective
     tupl: FreeArityConnective
 
 
@@ -1015,7 +1016,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     propositional_variable=let_x_be_a_simple_object(formula_ts='propositional-variable'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory=let_x_be_a_free_arity_connective(formula_ts='theory'),
-    transformation=let_x_be_a_quaternary_connective(formula_ts='transformation'),
+    natural_transformation=let_x_be_a_quaternary_connective(formula_ts='natural-transformation'),
     tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
 
 ))
@@ -1630,7 +1631,7 @@ class Mechanism(Formula):
         variables: Enumeration = coerce_enumeration(e=variables)
         declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
-        o: tuple = super().__new__(cls, c=_connectives.transformation,
+        o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
                                    t=(conclusion, variables, declarations, premises,))
         return o
 
@@ -1642,7 +1643,7 @@ class Mechanism(Formula):
         variables: Enumeration = coerce_enumeration(e=variables)
         declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
-        super().__init__(c=_connectives.transformation, t=(conclusion, variables, declarations, premises,))
+        super().__init__(c=_connectives.natural_transformation, t=(conclusion, variables, declarations, premises,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1679,8 +1680,8 @@ class Mechanism(Formula):
         return self[1]
 
 
-class Transformation(Formula):
-    """A formula-transformation, or transformation, is a map from the class of formulas to itself.
+class NaturalTransformation(Formula):
+    """A natural-transformation, is a map from the class of formulas to itself.
 
     Syntactically, a transformation is a formula t(c, V, D, P) where:
      - t is the transformation connective,
@@ -1732,7 +1733,7 @@ class Transformation(Formula):
         variables: Enumeration = coerce_enumeration(e=variables)
         declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
-        o: tuple = super().__new__(cls, c=_connectives.transformation,
+        o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
                                    t=(conclusion, variables, declarations, premises,))
         return o
 
@@ -1743,7 +1744,7 @@ class Transformation(Formula):
         variables: Enumeration = coerce_enumeration(e=variables)
         declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
-        super().__init__(c=_connectives.transformation, t=(conclusion, variables, declarations, premises,))
+        super().__init__(c=_connectives.natural_transformation, t=(conclusion, variables, declarations, premises,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1801,7 +1802,7 @@ class Transformation(Formula):
         return self[1]
 
 
-FlexibleTransformation = typing.Optional[typing.Union[Transformation]]
+FlexibleNaturalTransformation = typing.Optional[typing.Union[NaturalTransformation]]
 
 
 def coerce_mechanism(m: FlexibleMechanism) -> Mechanism:
@@ -1810,31 +1811,33 @@ def coerce_mechanism(m: FlexibleMechanism) -> Mechanism:
     m: Formula = coerce_formula(phi=m)
     if isinstance(m, Mechanism):
         return m
-    elif is_well_formed_transformation(t=m):
+    elif is_well_formed_natural_transformation(t=m):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return Transformation(conclusion=m[0], variables=m[1], declarations=m[2], premises=m[3])
+        return NaturalTransformation(conclusion=m[0], variables=m[1], declarations=m[2], premises=m[3])
     elif is_well_formed_algorithm(a=m):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
         return Algorithm(external_algorithm=m.external_algorithm, conclusion=m[0], variables=m[1], declarations=m[2],
                          premises=m[3])
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_060, coerced_type=Transformation, m_type=type(m), m=m)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_060, coerced_type=NaturalTransformation, m_type=type(m),
+                                      m=m)
 
 
-def coerce_transformation(t: FlexibleFormula) -> Transformation:
+def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
     """Coerces lose argument "t" to a transformation, strongly python-typed as Transformation,
     or raises an error with code E-AS1-031 if this fails."""
     t: Formula = coerce_formula(phi=t)
-    if isinstance(t, Transformation):
+    if isinstance(t, NaturalTransformation):
         return t
-    elif isinstance(t, Formula) and is_well_formed_transformation(t=t):
+    elif isinstance(t, Formula) and is_well_formed_natural_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return Transformation(conclusion=t[0], variables=t[1], declarations=t[2], premises=t[3])
+        return NaturalTransformation(conclusion=t[0], variables=t[1], declarations=t[2], premises=t[3])
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_031, coerced_type=Transformation, t_type=type(t), t=t)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_031, coerced_type=NaturalTransformation, t_type=type(t),
+                                      t=t)
 
 
 def coerce_external_algorithm(f: object) -> typing.Callable:
@@ -2006,20 +2009,20 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
     """
     i = coerce_formula(phi=i)
     if i.connective is not _connectives.inference or not is_well_formed_enumeration(
-            e=i.term_0) or not is_well_formed_transformation(t=i.term_1):
+            e=i.term_0) or not is_well_formed_inference_rule(i=i.term_1):
         return False
     else:
         return True
 
 
-def is_well_formed_transformation(t: FlexibleFormula) -> bool:
+def is_well_formed_natural_transformation(t: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed transformation, False otherwise.
 
     :param t: A formula.
     :return: bool.
     """
     t = coerce_formula(phi=t)
-    if (t.connective is not _connectives.transformation or
+    if (t.connective is not _connectives.natural_transformation or
             t.arity != 4 or
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_enumeration(e=t.term_1) or
@@ -2081,7 +2084,7 @@ def is_well_formed_mechanism(m: FlexibleFormula) -> bool:
     if isinstance(m, InferenceRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif is_well_formed_transformation(t=m):
+    elif is_well_formed_natural_transformation(t=m):
         return True
     elif is_well_formed_algorithm(a=m):
         return True
@@ -2314,7 +2317,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
     """
     t = coerce_formula(phi=t)
     if isinstance(t, Theorem):
-        # the Theorem python-type assure the well-formedness of the object.
+        # the Theorem python-type assures the well-formedness of the object.
         return True
     if (t.connective is not _connectives.follows_from or
             not t.arity == 2 or
@@ -2739,7 +2742,7 @@ class InferenceRule(Derivation):
 
 
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
-FlexibleMechanism = typing.Union[Mechanism, Algorithm, Transformation, Formula]
+FlexibleMechanism = typing.Union[Mechanism, Algorithm, NaturalTransformation, Formula]
 
 
 class Inference(Formula):
@@ -2828,7 +2831,7 @@ class Theorem(Derivation):
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
-        re_derived_valid_statement: Formula = i.inference_rule.mechanism.execute_mechanism(i.premises)
+        re_derived_valid_statement: Formula = i.inference_rule.mechanism.execute_mechanism(arguments=i.premises)
         if len(i.inference_rule.mechanism.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
@@ -3732,13 +3735,13 @@ class InfixFormulaTypesetter(pl1.Typesetter):
             yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
-class TransformationTypesetter(pl1.Typesetter):
+class NaturalTransformationTypesetter(pl1.Typesetter):
     def __init__(self):
         super().__init__()
 
-    def typeset_from_generator(self, phi: FlexibleTransformation, **kwargs) -> (
+    def typeset_from_generator(self, phi: FlexibleNaturalTransformation, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: Transformation = coerce_transformation(t=phi)
+        phi: NaturalTransformation = coerce_natural_transformation(t=phi)
 
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
@@ -3823,7 +3826,7 @@ class DeclarationTypesetter(pl1.Typesetter):
         yield '.'
 
 
-def get_theory_inference_rule_from_transformation_rule(t: FlexibleTheory, r: FlexibleTransformation) -> \
+def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory, r: FlexibleNaturalTransformation) -> \
         tuple[bool, InferenceRule | None]:
     """Given a theory "t" and a transformation-rule "r", return the first occurrence of an inference-rule in "t" such
     that its transformation-rule is formula-equivalent to "r".
@@ -3833,7 +3836,7 @@ def get_theory_inference_rule_from_transformation_rule(t: FlexibleTheory, r: Fle
     :return: A python-tuple (True, i) where "i" is the inference-rule if "i" is found in "t", (False, None) otherwise.
     """
     t: Theory = coerce_theory(t=t)
-    r: Transformation = coerce_transformation(t=r)
+    r: NaturalTransformation = coerce_natural_transformation(t=r)
     for i in iterate_inference_rules_in_theory(t=t):
         i: InferenceRule
         if is_formula_equivalent(phi=r, psi=i.mechanism):
@@ -4009,8 +4012,8 @@ class Typesetters:
     def map(self) -> MapTypesetter:
         return MapTypesetter()
 
-    def transformation(self) -> TransformationTypesetter:
-        return TransformationTypesetter()
+    def natural_transformation(self) -> NaturalTransformationTypesetter:
+        return NaturalTransformationTypesetter()
 
     def derivation(self) -> DerivationTypesetter:
         return DerivationTypesetter()

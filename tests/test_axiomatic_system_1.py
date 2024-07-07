@@ -389,8 +389,8 @@ class TestReplaceConnectives:
         pass
 
 
-class TestTransformation:
-    def test_transformation(self):
+class TestNaturalTransformation:
+    def test_natural_transformation(self):
         x = pu.as1.let_x_be_a_variable(formula_ts='x')
         y = pu.as1.let_x_be_a_variable(formula_ts='y')
         is_a = pu.as1.let_x_be_a_binary_connective(
@@ -404,13 +404,14 @@ class TestTransformation:
         premises = pu.as1.Enumeration(elements=(p1,))
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(elements=(x,))
-        f = pu.as1.Transformation(conclusion=conclusion, variables=variables, declarations=None, premises=premises)
+        f = pu.as1.NaturalTransformation(conclusion=conclusion, variables=variables, declarations=None,
+                                         premises=premises)
         arguments = pu.as1.Tupl(elements=(p2,))
         output = f.execute_mechanism(arguments=arguments)
         phi = aristotle | is_a | mortal
         pu.as1.is_formula_equivalent(phi=phi, psi=output)
 
-    def test_is_well_formed_transformation(self):
+    def test_is_well_formed_natural_transformation(self):
         x = pu.as1.let_x_be_a_variable(formula_ts='x')
         y = pu.as1.let_x_be_a_variable(formula_ts='y')
         is_a = pu.as1.let_x_be_a_binary_connective(
@@ -425,15 +426,15 @@ class TestTransformation:
         variables = pu.as1.Enumeration(elements=(x,))
         declarations = pu.as1.Enumeration(elements=None)
         premises = pu.as1.Tupl(elements=(p1,))
-        phi1 = pu.as1._connectives.transformation(conclusion, variables, declarations, premises)
-        assert pu.as1.is_well_formed_transformation(t=phi1)
-        phi1 = pu.as1.coerce_transformation(t=phi1)
+        phi1 = pu.as1._connectives.natural_transformation(conclusion, variables, declarations, premises)
+        assert pu.as1.is_well_formed_natural_transformation(t=phi1)
+        phi1 = pu.as1.coerce_natural_transformation(t=phi1)
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(elements=(x,))
         declarations = pu.as1.Enumeration(elements=None)
         premises = pu.as1.Tupl(elements=(platypus, platypus,))
-        phi2 = pu.as1._connectives.transformation(conclusion, variables, declarations, premises, premises)
-        assert not pu.as1.is_well_formed_transformation(t=phi2)
+        phi2 = pu.as1._connectives.natural_transformation(conclusion, variables, declarations, premises, premises)
+        assert not pu.as1.is_well_formed_natural_transformation(t=phi2)
 
 
 class TestReplaceFormulas:
@@ -545,7 +546,7 @@ class TestInferenceRule:
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         phi = a | f | b
-        rule = pu.as1.Transformation(conclusion=phi, variables=None, declarations=None, premises=None)
+        rule = pu.as1.NaturalTransformation(conclusion=phi, variables=None, declarations=None, premises=None)
         ir = pu.as1.InferenceRule(mechanism=rule)
         axiomatization = pu.as1.Axiomatization(d=(ir,))
 
@@ -560,7 +561,7 @@ class TestInferenceRule:
     def test_is_well_formed_postulation(self):
         a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        rule = pu.as1.Transformation(conclusion=a | f | b, variables=None, declarations=None, premises=None)
+        rule = pu.as1.NaturalTransformation(conclusion=a | f | b, variables=None, declarations=None, premises=None)
         phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
@@ -593,7 +594,8 @@ class TestProofByPostulation:
     def test_is_well_formed(self):
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
-        rule1 = pu.as1.Transformation(conclusion=star3(e, b, d), variables=None, declarations=None, premises=None)
+        rule1 = pu.as1.NaturalTransformation(conclusion=star3(e, b, d), variables=None, declarations=None,
+                                             premises=None)
         phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
         phi2 = rule1 | pu.as1._connectives.map | pu.as1._connectives.inference_rule
@@ -605,7 +607,21 @@ class TestProofByPostulation:
 class TestTheorem:
     def test_coerce_theorem(self):
         t = pu.as1.let_x_be_a_theory()
-        a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
+        a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
+        i = pu.as1.InferenceRule(mechanism=pu.as1.NaturalTransformation(conclusion=b, premises=(a,)))
+        t = pu.as1.append_to_theory(i, t=t)
+        i2 = pu.as1.Inference(premises=(a,), i=i)
+        # For the purpose of this test,
+        # build the theorem manually,
+        # i.e. without using a derivation function.
+        m = pu.as1.Theorem(valid_statement=b, i=i2)
+        m = pu.as1.coerce_theorem(t=m)
+        m2 = b | follows_from | i2
+        assert pu.as1.is_formula_equivalent(phi=m, psi=m2)
+        m2 = pu.as1.coerce_theorem(t=m2)
+        t = pu.as1.append_to_theory(m, t=t)
+        pass
 
 
 class TestInference:
@@ -613,8 +629,8 @@ class TestInference:
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        t = pu.as1.Transformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
-                                  premises=(x | f | y, y | f | z,), )
+        t = pu.as1.NaturalTransformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
+                                         premises=(x | f | y, y | f | z,), )
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
@@ -629,16 +645,17 @@ class TestInference:
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        t = pu.as1.Transformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
-                                  premises=(x | f | y, y | f | z,))
+        t = pu.as1.NaturalTransformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
+                                         premises=(x | f | y, y | f | z,))
         p = (a | f | b, b | f | c,)
-        phi1 = p | pu.as1._connectives.inference | t
+        i = pu.as1.InferenceRule(mechanism=t)
+        phi1 = p | pu.as1._connectives.inference | i
         assert pu.as1.is_well_formed_inference(i=phi1)
         phi2 = p | pu.as1._connectives.inference | a
         assert not pu.as1.is_well_formed_inference(i=phi2)
-        phi3 = p | pu.as1._connectives.follows_from | t
+        phi3 = p | pu.as1._connectives.follows_from | i
         assert not pu.as1.is_well_formed_inference(i=phi3)
-        phi4 = f(a, a, b, b) | pu.as1._connectives.follows_from | t
+        phi4 = f(a, a, b, b) | pu.as1._connectives.follows_from | i
         assert not pu.as1.is_well_formed_inference(i=phi4)
 
 
@@ -651,8 +668,8 @@ class TestProofByInference:
         premises = pu.as1.Enumeration(elements=(x | star | y, y | star | z,))
         conclusion = x | star | z
         variables = pu.as1.Enumeration(elements=(x, y, z,))
-        f = pu.as1.Transformation(conclusion=conclusion, variables=variables, declarations=None,
-                                  premises=premises)
+        f = pu.as1.NaturalTransformation(conclusion=conclusion, variables=variables, declarations=None,
+                                         premises=premises)
         ir = pu.as1.InferenceRule(mechanism=f)
         p = (a | star | b, b | star | c,)
         i = pu.as1.Inference(premises=p, i=ir)
@@ -660,9 +677,6 @@ class TestProofByInference:
         m = pu.as1.Theorem(valid_statement=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(t=m)
         assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i)
-        m2 = pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
-        # assert not pu.as1.is_well_formed_theorem(t=(a | star | d) | pu.as1._connectives.follows_from | i)
-        assert not pu.as1.is_well_formed_theorem(t=m2)
 
         i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), i=ir)
         assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i2)
@@ -671,7 +685,7 @@ class TestProofByInference:
 
 class TestAlgorithm:
     def test_algorithm(self):
-        def x_is_a_theory(*arguments):
+        def x_is_a_theory(arguments):
             t = as1.coerce_tupl(t=arguments)
             if not t.arity == 1:
                 raise pu.u1.ApplicativeException(msg='wrong arguments')
@@ -692,7 +706,8 @@ class TestAlgorithm:
                                  declarations={x, })
         i = as1.InferenceRule(mechanism=algo)
         m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
-        m, d = as1.derive_1(t=m, c=t | is_a | theory, p=None, i=i)
+        s = x | is_a | theory
+        m, d = as1.derive_1(t=m, c=s, p=None, i=i)
         pass
 
 
@@ -888,14 +903,14 @@ class TestAutoDerivation:
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
         if_p_then_q = pu.as1.InferenceRule(
-            mechanism=pu.as1.Transformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
+            mechanism=pu.as1.NaturalTransformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
         t1 = pu.as1.append_to_theory(if_p_then_q, t=t1)
 
         with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
                 formula_ts='y') as y:
             x_y_then_x_and_y = pu.as1.InferenceRule(
-                mechanism=pu.as1.Transformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
-                                                declarations=None, premises=(x, y,)))
+                mechanism=pu.as1.NaturalTransformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
+                                                       declarations=None, premises=(x, y,)))
         t1 = pu.as1.Theory(d=(*t1, x_y_then_x_and_y,))
 
         pass
@@ -960,8 +975,9 @@ class TestObjectCreation:
         if 1 == 2:
             t = as1.let_x_be_a_theory()
             x = as1.let_x_be_a_new_object()
-            t2 = as1.Transformation(conclusion=x | is_a | propositional_variable, variables=(x,), declarations=(x,),
-                                    premises=None)
+            t2 = as1.NaturalTransformation(conclusion=x | is_a | propositional_variable, variables=(x,),
+                                           declarations=(x,),
+                                           premises=None)
             # rule 1: a variable x in the enumeration of variables car either be listed in declarations,
             #   exclusive-or be referenced in premises, exclusive-or not be referenced.
             # rule 2: a new object in creations must not be present in previous derivations in the theory,
