@@ -18,9 +18,9 @@ import presentation_layer_1 as pl1
 
 _current_module = sys.modules[__name__]
 if __name__ == '__main__':
-    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_001,
-                                  msg='This module does not support being directly executed as a script. '
-                                      'Please use the import statement.')
+    raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_001,
+                              msg='This module does not support being directly executed as a script. '
+                                  'Please use the import statement.')
 _state = dict() if not hasattr(_current_module, '_state') else getattr(_current_module, '_state')
 
 
@@ -113,7 +113,7 @@ class Formula(tuple):
             o = super().__new__(cls)
             return o
         else:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_002, c=c, terms_type=type(t), terms=t)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_002, c=c, terms_type=type(t), terms=t)
 
     def __init__(self, c: Connective, t: FlexibleTupl = None, **kwargs):
         super().__init__()
@@ -188,7 +188,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 1:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_003, c=self.connective)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_003, c=self.connective)
         return self[0]
 
     @property
@@ -199,7 +199,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 2:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_004, c=self.connective)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_004, c=self.connective)
         return self[1]
 
     @property
@@ -210,7 +210,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 3:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_005, c=self.connective)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_005, c=self.connective)
         return self[2]
 
     @property
@@ -221,7 +221,7 @@ class Formula(tuple):
         :return:
         """
         if len(self) < 4:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_005, c=self.connective)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_005, c=self.connective)
         return self[3]
 
     @property
@@ -295,7 +295,7 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
         # Implicit conversion of iterators to tuple formulas.
         return Tupl(elements=phi)
     else:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_006,
             msg=f'Argument "phi" of python-type {str(type(phi))} could not be coerced to a formula of python-type '
                 f'Formula. The string representation of "phi" is: {u1.force_str(o=phi)}.',
@@ -310,7 +310,7 @@ def coerce_variable(x: FlexibleFormula) -> Formula:
     """
     x = coerce_formula(phi=x)
     if x.arity != 0:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_007, msg='coerce_variable: x.arity != 0')
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_007, msg='coerce_variable: x.arity != 0')
     return x
 
 
@@ -341,7 +341,7 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
         whose elements are the elements of the iterable."""
         return Enumeration(elements=e, strip_duplicates=strip_duplicates)
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
 
 
 def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
@@ -414,7 +414,7 @@ def coerce_map(m: FlexibleMap) -> Map:
         codomain: Tupl = coerce_tupl(t=m.values())
         return Map(domain=domain, codomain=codomain)
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_009, coerced_type=Map, phi_type=type(m), phi=m)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_009, coerced_type=Map, phi_type=type(m), phi=m)
 
 
 def coerce_tupl(t: FlexibleTupl) -> Tupl:
@@ -426,7 +426,7 @@ def coerce_tupl(t: FlexibleTupl) -> Tupl:
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
         return Tupl(elements=t)
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_010, coerced_type=Tupl, phi_type=type(t), phi=t)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_010, coerced_type=Tupl, phi_type=type(t), phi=t)
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula]]
@@ -619,9 +619,9 @@ def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula
             return n
         n = n + 1
     # No match was found
-    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_011,
-                                  msg=f'Trying to get the index of the term "{term}" in the formula "{formula}", '
-                                      f'but this term is not a term of the formula.')
+    raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_011,
+                              msg=f'Trying to get the index of the term "{term}" in the formula "{formula}", '
+                                  f'but this term is not a term of the formula.')
 
 
 def get_index_of_first_equivalent_element_in_enumeration(x: FlexibleFormula,
@@ -732,8 +732,8 @@ def let_x_be_a_variable(formula_ts: pl1.FlexibleTypesetter) -> (
     elif isinstance(formula_ts, typing.Iterable):
         return (Variable(c=NullaryConnective(formula_ts=ts)) for ts in formula_ts)
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_012, msg='Non supported arguments.',
-                                      formula_typesetter=formula_ts)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_012, msg='Non supported arguments.',
+                                  formula_typesetter=formula_ts)
 
 
 def let_x_be_a_meta_variable(
@@ -745,8 +745,8 @@ def let_x_be_a_meta_variable(
     elif isinstance(formula_ts, typing.Iterable):
         return tuple(MetaVariable(c=NullaryConnective(formula_ts=ts)) for ts in formula_ts)
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_013, msg='Non supported arguments.',
-                                      formula_typesetter=formula_ts)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_013, msg='Non supported arguments.',
+                                  formula_typesetter=formula_ts)
 
 
 FlexibleRepresentation = typing.Union[str, pl1.Symbol, pl1.Typesetter]
@@ -865,7 +865,7 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
                                                                       declarations=d, premises=p)
             i: InferenceRule = InferenceRule(t=t2)
     else:
-        raise u1.ApplicativeException(msg='inconsistent arguments')
+        raise u1.ApplicativeError(msg='inconsistent arguments')
 
     t1: Theory = append_to_theory(i, t=t1)
     # u1.log_info(i.typeset_as_string(theory=t))
@@ -893,11 +893,11 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
     else:
         t: FlexibleTheory = coerce_theory(t=t)
     if s is not None and a is not None:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_016,
             msg='Both "s" and "a" are not None. It is mandatory to provide only one of these two arguments.')
     elif s is None and a is None:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_017,
             msg='Both "s" and "a" are None. It is mandatory to provide one of these two arguments.')
     elif s is not None:
@@ -914,7 +914,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_018, msg='oops 3')
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_018, msg='oops 3')
 
 
 def let_x_be_a_theory(d: FlexibleEnumeration | None = None,
@@ -994,8 +994,8 @@ class Connectives(typing.NamedTuple):
     lnot: UnaryConnective
     lor: BinaryConnective
     map: BinaryConnective
-    proposition: SimpleObject
-    propositional_variable: SimpleObject
+    proposition: NullaryConnective
+    propositional_variable: NullaryConnective
     theory: FreeArityConnective
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
     natural_transformation: QuaternaryConnective
@@ -1003,7 +1003,7 @@ class Connectives(typing.NamedTuple):
 
 
 _connectives: Connectives = _set_state(key='connectives', value=Connectives(
-    algorithm=let_x_be_a_simple_object(formula_ts='algorithm'),
+    algorithm=NullaryConnective(formula_ts='algorithm'),
     axiom=let_x_be_a_unary_connective(formula_ts='axiom'),
     axiomatization=let_x_be_a_free_arity_connective(formula_ts='axiomatization'),
     enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
@@ -1016,8 +1016,8 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     lnot=let_x_be_a_unary_connective(formula_ts='¬'),
     lor=let_x_be_a_binary_connective(formula_ts='∨'),
     map=let_x_be_a_binary_connective(formula_ts='map'),
-    proposition=let_x_be_a_simple_object(formula_ts='proposition'),
-    propositional_variable=let_x_be_a_simple_object(formula_ts='propositional-variable'),
+    proposition=NullaryConnective(formula_ts='proposition'),
+    propositional_variable=NullaryConnective(formula_ts='propositional-variable'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory=let_x_be_a_free_arity_connective(formula_ts='theory'),
     natural_transformation=let_x_be_a_quaternary_connective(formula_ts='natural-transformation'),
@@ -1109,7 +1109,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_even
     else:
         # Extreme case
         if raise_event_if_false:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_019, phi=phi, psi=psi)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_019, phi=phi, psi=psi)
         return False
 
 
@@ -1175,21 +1175,21 @@ def is_formula_equivalent_with_variables_2(
     for x in variables:
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_020,
-                                          msg=f'the arity of variable "{x}" in variables is not equal to 0.')
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_020,
+                                      msg=f'the arity of variable "{x}" in variables is not equal to 0.')
         if is_subformula_of_formula(formula=phi, subformula=x):
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_021, msg=f'variable "{x}" is a sub-formula of phi.')
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_021, msg=f'variable "{x}" is a sub-formula of phi.')
     # check that all variables in the map are atomic formulas and are correctly listed in variables
     for x in variables_fixed_values.domain:
         x: Formula = coerce_formula(phi=x)
         if x.arity != 0:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_022,
-                                          msg=f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_022,
+                                      msg=f'the arity of variable {x} in variables_fixed_values is not equal to 0.')
         if not is_element_of_enumeration(x=x, e=variables):
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_023,
-                                          msg=f'variable {x} is present in the domain of the map '
-                                              f'variables_fixed_values, '
-                                              f'but it is not an element of the enumeration variables.')
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_023,
+                                      msg=f'variable {x} is present in the domain of the map '
+                                          f'variables_fixed_values, '
+                                          f'but it is not an element of the enumeration variables.')
     if is_element_of_enumeration(x=psi, e=variables):
         # psi is a variable
         if is_in_map_domain(phi=psi, m=variables_fixed_values):
@@ -1199,7 +1199,7 @@ def is_formula_equivalent_with_variables_2(
                 return True, variables_fixed_values
             else:
                 if raise_event_if_false:
-                    raise u1.ApplicativeException(
+                    raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_024,
                         msg=f'formula "{phi}" is not formula-equivalent to '
                             f'the assigned value "{psi_value}" of variable "{psi}".')
@@ -1215,9 +1215,9 @@ def is_formula_equivalent_with_variables_2(
         # psi is not a variable
         if phi.connective is not psi.connective or phi.arity != psi.arity:
             if raise_event_if_false:
-                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_025,
-                                              msg=f'the connective or arity of "{phi}" are not equal '
-                                                  f'to the connective or arity of "{psi}".')
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_025,
+                                          msg=f'the connective or arity of "{phi}" are not equal '
+                                              f'to the connective or arity of "{psi}".')
             return False, variables_fixed_values
         else:
             for phi_term, psi_term in zip(phi, psi):
@@ -1228,9 +1228,9 @@ def is_formula_equivalent_with_variables_2(
                     raise_event_if_false=False)
                 if not check:
                     if raise_event_if_false:
-                        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_026,
-                                                      msg=f'term "{phi_term}" "{phi}" is not formula-equivalent '
-                                                          f'to the term {psi_term} of "{psi}".')
+                        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_026,
+                                                  msg=f'term "{phi_term}" "{phi}" is not formula-equivalent '
+                                                      f'to the term {psi_term} of "{psi}".')
                     return False, variables_fixed_values
             # all term pairs have been checked
             return True, variables_fixed_values
@@ -1430,7 +1430,7 @@ def get_image_from_map(m: FlexibleMap, preimage: FlexibleFormula) -> Formula:
         index_position: int = m.domain.get_element_index(phi=preimage)
         return m.codomain[index_position]
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
 
 
 class Map(Formula):
@@ -1450,7 +1450,7 @@ class Map(Formula):
         domain: Enumeration = coerce_enumeration(e=domain)
         codomain: Tupl = coerce_tupl(t=codomain)
         if len(domain) != len(codomain):
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
         o: tuple = super().__new__(cls, c=_connectives.map, t=(domain, codomain,))
         return o
 
@@ -1473,7 +1473,7 @@ class Map(Formula):
             index_position: int = self.domain.get_element_index(phi=phi)
             return self.codomain[index_position]
         else:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
 
     def is_defined_in(self, phi: Formula) -> bool:
         """Return True if phi is formula-equivalent to an element of the map domain."""
@@ -1543,7 +1543,7 @@ class Enumeration(Formula):
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         if not is_well_formed_enumeration(e=elements):
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
         o: tuple = super().__new__(cls, c=c, t=elements, **kwargs)
         return o
 
@@ -1660,10 +1660,10 @@ class Transformation(Formula):
         :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
         :return:
         """
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_058,
-                                      msg='Abstract python method is not implemented.',
-                                      object=self, object_type=type(self),
-                                      arguments=arguments)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
+                                  msg='Abstract python method is not implemented.',
+                                  object=self, object_type=type(self),
+                                  arguments=arguments)
 
     @property
     def conclusion(self) -> Formula:
@@ -1769,10 +1769,10 @@ class NaturalTransformation(Transformation):
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_030,
-                                          msg='Applying a natural-transformation with incorrect premises.',
-                                          target_formula=arguments, transformation_premises=self.premises,
-                                          transformation_variables=self.variables, transformation=self)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_030,
+                                      msg='Applying a natural-transformation with incorrect premises.',
+                                      target_formula=arguments, transformation_premises=self.premises,
+                                      transformation_variables=self.variables, transformation=self)
 
         # step 2:
         outcome: Formula = replace_formulas(phi=self.conclusion, m=variables_map)
@@ -1828,8 +1828,8 @@ def coerce_transformation(t: FlexibleTransformation) -> Transformation:
                                          declarations=t[2],
                                          premises=t[3])
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_060, coerced_type=NaturalTransformation, m_type=type(t),
-                                      m=t)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_060, coerced_type=NaturalTransformation, m_type=type(t),
+                                  m=t)
 
 
 def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
@@ -1843,8 +1843,8 @@ def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
         # it can be safely re-instantiated as a Transformation and returned.
         return NaturalTransformation(conclusion=t[0], variables=t[1], declarations=t[2], premises=t[3])
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_031, coerced_type=NaturalTransformation, t_type=type(t),
-                                      t=t)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_031, coerced_type=NaturalTransformation, t_type=type(t),
+                                  t=t)
 
 
 def coerce_external_algorithm(f: object) -> typing.Callable:
@@ -1853,9 +1853,9 @@ def coerce_external_algorithm(f: object) -> typing.Callable:
     if isinstance(f, typing.Callable):
         return f
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_056, coerced_type=typing.Callable,
-                                      external_algorithm_type=type(f),
-                                      external_algorithm=f)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_056, coerced_type=typing.Callable,
+                                  external_algorithm_type=type(f),
+                                  external_algorithm=f)
 
 
 class AlgorithmicTransformation(Transformation):
@@ -1910,10 +1910,10 @@ class AlgorithmicTransformation(Transformation):
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_050,
-                                          msg='Applying an algorithm with incorrect premises.',
-                                          target_formula=arguments, transformation_premises=self.premises,
-                                          transformation_variables=self.variables, transformation=self)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_050,
+                                      msg='Applying an algorithm with incorrect premises.',
+                                      target_formula=arguments, transformation_premises=self.premises,
+                                      transformation_variables=self.variables, transformation=self)
 
         # call the external-algorithm
         outcome: Formula = self.external_algorithm(arguments=arguments)
@@ -1950,16 +1950,16 @@ def coerce_algorithmic_transformation(a: FlexibleAlgorithmicTransformation) -> A
     if isinstance(a, AlgorithmicTransformation):
         return a
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_055, coerced_type=AlgorithmicTransformation,
-                                      algorithm_type=type(a),
-                                      algorithm=a)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_055, coerced_type=AlgorithmicTransformation,
+                                  algorithm_type=type(a),
+                                  algorithm=a)
 
 
 def coerce_connective(c: Connective) -> Connective:
     if isinstance(c, Connective):
         return c
     else:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_059,
             msg='c could not be coerced to Connective type.',
             c=c, c_type=type(c))
@@ -1972,7 +1972,7 @@ def coerce_inference(i: FlexibleFormula) -> Inference:
         i2: InferenceRule = coerce_inference_rule(i=i.term_1)
         return Inference(premises=i.term_0, i=i2)
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
 
 
 def is_well_formed_formula(phi: FlexibleFormula) -> bool:
@@ -2173,9 +2173,9 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
     """
     e: Enumeration = coerce_enumeration(e=e)
     if n > e.arity:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_033, msg='n > |e|')
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_033, msg='n > |e|')
     if n < 0:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_034, msg='n < 0')
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_034, msg='n < 0')
     if n == 0:
         # nothing will be yield from the function.
         # note that itertools.permutations would yield one empty tuple.
@@ -2333,7 +2333,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_inference(i=t.term_1)):
         if raise_error_if_ill_formed:
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_035, t=t)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_035, t=t)
         return False
     else:
         # TODO: Factorize the check in Theorem.__new__ or __init__,
@@ -2343,9 +2343,9 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
         if not is_formula_equivalent(phi=t.term_0, psi=recomputed_outcome):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             if raise_error_if_ill_formed:
-                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_035, phi=t, psi_expected=t.term_0,
-                                              psi_inferred=recomputed_outcome,
-                                              inference_rule=i)
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_035, phi=t, psi_expected=t.term_0,
+                                          psi_inferred=recomputed_outcome,
+                                          inference_rule=i)
             return False
         return True
 
@@ -2414,16 +2414,16 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                 if not valid_statements.has_element(phi=premise):
                     # The premise is absent from the theory
                     if raise_event_if_false:
-                        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_036, premise=premise, premise_index=i,
-                                                      theorem=derivation,
-                                                      valid_statement=valid_statement)
+                        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_036, premise=premise, premise_index=i,
+                                                  theorem=derivation,
+                                                  valid_statement=valid_statement)
                     return False
                 else:
                     premise_index = valid_statements.get_index_of_first_equivalent_element(phi=premise)
                     if premise_index >= i:
                         # The premise is not positioned before the conclusion.
                         if raise_event_if_false:
-                            raise u1.ApplicativeException(
+                            raise u1.ApplicativeError(
                                 code=c1.ERROR_CODE_AS1_037,
                                 msg='The premise is not positioned before the conclusion.',
                                 premise=premise, premise_index=i,
@@ -2438,11 +2438,11 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                 # check using the above expression whether the inference-rule is in the theory.
                 # The inference-rule is absent from the theory.
                 if raise_event_if_false:
-                    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_038,
-                                                  msg='The inference-rule is absent in the theory.',
-                                                  transformation_rule=inference.inference_rule,
-                                                  inference=inference, premise_index=i, theorem=derivation,
-                                                  valid_statement=valid_statement)
+                    raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_038,
+                                              msg='The inference-rule is absent in the theory.',
+                                              transformation_rule=inference.inference_rule,
+                                              inference=inference, premise_index=i, theorem=derivation,
+                                              valid_statement=valid_statement)
                 return False
             else:
                 inference_rule_index = derivations.get_index_of_first_equivalent_element(
@@ -2486,7 +2486,7 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
     elif is_well_formed_axiom(a=d):
         return coerce_axiom(a=d)
     else:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_039,
             msg=f'Argument "d" of python-type {str(type(d))} could not be coerced to a derivation of python-type '
                 f'Derivation. The string representation of "d" is: {u1.force_str(o=d)}.',
@@ -2507,7 +2507,7 @@ def coerce_axiom(a: FlexibleFormula) -> Axiom:
         proved_formula: Formula = a.term_0
         return Axiom(valid_statement=proved_formula)
     else:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_040,
             msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiom of python-type Axiom. '
                 f'The string representation of "a" is: {u1.force_str(o=a)}.',
@@ -2527,7 +2527,7 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
         m: Transformation = coerce_transformation(t=i.term_0)
         return InferenceRule(t=m)
     else:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_041,
             msg=f'Argument "i" of python-type {str(type(i))} could not be coerced to an inference-rule of python-type '
                 f'InferenceRule. The string representation of "i" is: {u1.force_str(o=i)}.',
@@ -2548,7 +2548,7 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
         inference: Inference = coerce_inference(i=t.term_1)
         return Theorem(valid_statement=proved_formula, i=inference)
     else:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_042,
             msg=f'Argument "t" of python-type {str(type(t))} could not be coerced to a theorem of python-type '
                 f'Theorem. The string representation of "t" is: {u1.force_str(o=t)}.',
@@ -2579,7 +2579,7 @@ def coerce_theory(t: FlexibleTheory) -> Theory:
         whose elements are the elements of the iterable."""
         return Theory(d=t)
     else:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_043,
             msg=f'Argument "t" of python-type {str(type(t))} could not be coerced to a theory of python-type '
                 f'Theory. The string representation of "t" is: {u1.force_str(o=t)}.',
@@ -2598,7 +2598,7 @@ def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
     elif isinstance(a, Formula) and is_well_formed_axiomatization(a=a):
         return Axiomatization(d=a)
     else:
-        raise u1.ApplicativeException(
+        raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_044,
             msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiomatization of python-type '
                 f'Axiomatization. The string representation of "a" is: {u1.force_str(o=a)}.',
@@ -2801,7 +2801,7 @@ def inverse_map(m: FlexibleMap) -> Map:
     codomain = Enumeration(elements=m.domain)
     domain = Enumeration(elements=m.codomain)
     if len(codomain) != len(domain):
-        assert u1.ApplicativeException(msg='Cannot inverse map if it is not a function!')
+        assert u1.ApplicativeError(msg='Cannot inverse map if it is not a function!')
     m2: Map = Map(domain=domain, codomain=codomain)
     return m2
 
@@ -2845,12 +2845,12 @@ class Theorem(Derivation):
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
                 is_formula_equivalent(phi=valid_statement, psi=re_derived_valid_statement, raise_event_if_false=True)
-            except u1.ApplicativeException as error:
+            except u1.ApplicativeError as error:
                 # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
                 # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
-                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
-                                              algorithm_output=re_derived_valid_statement,
-                                              inference=i)
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
+                                          algorithm_output=re_derived_valid_statement,
+                                          inference=i)
         else:
             # If there are new-object-declarations, f_of_p is not directly comparable with valid_statements.
             # This is because transformations with new-object-declarations are non-deterministic.
@@ -2860,7 +2860,7 @@ class Theorem(Derivation):
                                                                    psi=i.inference_rule.transformation.conclusion,
                                                                    variables=i.inference_rule.transformation.declarations)
             if not success_1:
-                raise u1.ApplicativeException(
+                raise u1.ApplicativeError(
                     msg='The valid-statement is not consistent with the inference-rule conclusion, considering new-object-declarations')
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
@@ -2870,7 +2870,7 @@ class Theorem(Derivation):
             pass
             valid_statement_reversed: Formula = replace_formulas(phi=valid_statement, m=m1_reversed)
             if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.inference_rule.transformation.conclusion):
-                raise u1.ApplicativeException(
+                raise u1.ApplicativeError(
                     msg='Reversing the valid-statement does not yield the inference-rule conclusion.')
 
     @property
@@ -3109,13 +3109,13 @@ class Axiomatization(Theory):
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
             else:
                 # Incorrect form.
-                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_047,
-                                              msg=f'Derivation "d" is not of the correct form for an axiomatization. '
-                                                  f'Correct form should be axiom, or inference-rule.',
-                                              d=d,
-                                              d_type=type(d),
-                                              expected_form_1=InferenceRule,
-                                              expected_form_2=Axiom)
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_047,
+                                          msg=f'Derivation "d" is not of the correct form for an axiomatization. '
+                                              f'Correct form should be axiom, or inference-rule.',
+                                          d=d,
+                                          d_type=type(d),
+                                          expected_form_1=InferenceRule,
+                                          expected_form_2=Axiom)
         o: tuple = super().__new__(cls, d=coerced_derivations)
         return o
 
@@ -3135,9 +3135,9 @@ class Axiomatization(Theory):
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
             else:
                 # Incorrect form.
-                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_048, phi=derivation,
-                                              phi_type_1=InferenceRule,
-                                              phi_type_2=Axiom)
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_048, phi=derivation,
+                                          phi_type_1=InferenceRule,
+                                          phi_type_2=Axiom)
         super().__init__(c=_connectives.axiomatization, d=coerced_derivations,
                          decorations=decorations)
 
@@ -3242,8 +3242,8 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
                 if not is_theorem_of_theory(m=extension_m, t=t):
                     t: Theory = Theory(t=t, d=(extension_m,))
             else:
-                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_049,
-                                              msg=f'Invalid argument: ({type(argument)}) {argument}.')
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_049,
+                                          msg=f'Invalid argument: ({type(argument)}) {argument}.')
         return t
 
 
@@ -3275,11 +3275,11 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
         # The validity of the premises is checked during theory initialization,
         # but re-checking it here "in advance" helps provide more context in the exception that is being raised.
         if not is_valid_statement_in_theory(phi=premise, t=t):
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_051,
-                                          msg=f'Conjecture: \n\t{c} \n...cannot be derived because premise: \n\t{premise}'
-                                              f' \n...is not a valid-statement in theory t. The inference-rule used to try this derivation was: '
-                                              f'\n\t{i} \nThe complete theory is: \n\t{t}', c=c, premise=premise, p=p,
-                                          i=i, t=t)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_051,
+                                      msg=f'Conjecture: \n\t{c} \n...cannot be derived because premise: \n\t{premise}'
+                                          f' \n...is not a valid-statement in theory t. The inference-rule used to try this derivation was: '
+                                          f'\n\t{i} \nThe complete theory is: \n\t{t}', c=c, premise=premise, p=p,
+                                      i=i, t=t)
 
     # Configure the inference that derives the theorem.
     inference: Inference = Inference(premises=p, i=i)
@@ -3949,8 +3949,8 @@ class DerivationTypesetter(pl1.Typesetter):
                     first = False
                 yield '.'
             else:
-                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_052, msg=f'Unsupported derivation "{phi}" in the '
-                                                                              f'theory.', phi=phi, theory=theory)
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_052, msg=f'Unsupported derivation "{phi}" in the '
+                                                                          f'theory.', phi=phi, theory=theory)
         else:
             # Theory parameter was provided, we have more context and premises can reference the derivation's number.
             yield '\t'
@@ -3985,8 +3985,8 @@ class DerivationTypesetter(pl1.Typesetter):
                     first = False
                 yield '.'
             else:
-                raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_054, msg=f'Unsupported derivation "{phi}" in the '
-                                                                              f'theory.', phi=phi, theory=theory)
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_054, msg=f'Unsupported derivation "{phi}" in the '
+                                                                          f'theory.', phi=phi, theory=theory)
 
 
 class Typesetters:

@@ -149,7 +149,7 @@ class TestEnumeration:
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         b = pu.as1.let_x_be_a_simple_object(formula_ts='b')
         c = pu.as1.let_x_be_a_simple_object(formula_ts='c')
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_029):
+        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_029):
             # duplicate formula-equivalent formulas are forbidden in enumerations.
             e1 = pu.as1.Enumeration(elements=(a, b, c, b,))
 
@@ -201,7 +201,7 @@ class TestFormulaEquivalenceWithVariables:
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | human,
             variables=())
-        with pytest.raises(pu.u1.ApplicativeException):
+        with pytest.raises(pu.u1.ApplicativeError):
             # the following is ill-formed because the variable is an element of phi, and not of psi.
             # reminder: formula-equivalence-with-variables is non-commutative.
             pu.as1.is_formula_equivalent_with_variables(
@@ -220,7 +220,7 @@ class TestFormulaEquivalenceWithVariables:
             phi=aristotle | is_a | x,
             psi=aristotle | is_a | human,
             variables=(y,))
-        with pytest.raises(pu.u1.ApplicativeException):
+        with pytest.raises(pu.u1.ApplicativeError):
             # the following is ill-formed because the variable is an element of phi, and not of psi.
             # reminder: formula-equivalence-with-variables is non-commutative.
             assert not pu.as1.is_formula_equivalent_with_variables(
@@ -688,7 +688,7 @@ class TestAlgorithm:
         def x_is_a_theory(arguments):
             t = as1.coerce_tupl(t=arguments)
             if not t.arity == 1:
-                raise pu.u1.ApplicativeException(msg='wrong arguments')
+                raise pu.u1.ApplicativeError(msg='wrong arguments')
             if as1.is_well_formed_theory(t=t[0]):
                 t2 = as1.coerce_theory(t=t[0])
                 phi = t2 | is_a | theory
@@ -844,7 +844,7 @@ class TestAxiomatization:
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(a=e3)
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_047):
+        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_047):
             a2 = pu.as1.Axiomatization(d=e3)  # raise an e123 exception
 
 
@@ -872,11 +872,11 @@ class TestDemonstration:
                                     i=ir1)
         assert pu.as1.is_valid_statement_in_theory(phi=a | star | c, t=demo2)
 
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_039):
+        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_039):
             # invalid proof raise exception
             pu.as1.Theory(d=(axiom_1, axiom_2, a | star | e))
 
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_039):
+        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_039):
             # invalid proof sequence exception
             pu.as1.Theory(d=(axiom_1, axiom_2, a | star | c, ir1,))
             pass

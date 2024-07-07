@@ -170,7 +170,7 @@ class TestModusPonens:
         assert pu.as1.is_valid_statement_in_theory(phi=a | land | a, t=theory)
 
         # show that wrong premises fail to derive a theorem
-        with pytest.raises(pu.u1.ApplicativeException, match=pu.c1.ERROR_CODE_AS1_041):
+        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_041):
             # wrong theory
             pu.as1.derive_1(t=theory,
                             c=c,

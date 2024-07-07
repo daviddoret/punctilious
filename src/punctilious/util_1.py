@@ -36,13 +36,16 @@ def log_debug(msg: str, **kwargs):
     print(pretty_msg, flush=True)
 
 
-class ApplicativeException(Exception):
+class ApplicativeError(Exception):
     def __init__(self, code: str | None = None, msg: str | None = None, **kwargs):
         self.code: str = code
         self.msg: str = msg
         self.kwargs: dict[str, typing.Any] = kwargs
-        self.report = f'ERROR' ' ' + str(self.code) if self.code is not None else '' + f'\n  '.join(
-            f'{key}: {value}' for key, value in kwargs.items())
+        self.report = 'ERROR'
+        self.report = self.report + (' ' + str(self.code)) if self.code is not None else ''
+        self.report = self.report + ': ' + str(msg)
+        self.report = self.report + '\n\t'
+        self.report = self.report + f'\n\t'.join(f'{key}: {value}' for key, value in kwargs.items())
         super().__init__(self.report)
         log_error(e=self)
 
@@ -53,7 +56,8 @@ class ApplicativeException(Exception):
         return self.report
 
 
-def log_error(e: ApplicativeException):
+def log_error(e: ApplicativeError):
     global logger
-    logger.error(str(e).replace('\t', '  '))
+    # logger.error(str(e).replace('\t', '  '))
+    logger.error(msg=str(e))
     print(f'{e}', flush=True)

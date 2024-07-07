@@ -7,13 +7,11 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/util_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inference_rules_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +98,7 @@
     "PowerShell.release_patch.ps1.executor": "Run",
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor": "Run",
@@ -342,7 +340,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -690,8 +688,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheorem.test_coerce_theorem" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed" />
@@ -713,14 +711,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00730" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1719452148638</created>
-      <option name="number" value="00730" />
-      <option name="presentableId" value="LOCAL-00730" />
-      <option name="project" value="LOCAL" />
-      <updated>1719452148638</updated>
     </task>
     <task id="LOCAL-00731" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1106,7 +1096,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720378781632</updated>
     </task>
-    <option name="localTasksCounter" value="779" />
+    <task id="LOCAL-00779" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1720379144437</created>
+      <option name="number" value="00779" />
+      <option name="presentableId" value="LOCAL-00779" />
+      <option name="project" value="LOCAL" />
+      <updated>1720379144437</updated>
+    </task>
+    <option name="localTasksCounter" value="780" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
