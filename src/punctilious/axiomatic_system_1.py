@@ -770,7 +770,7 @@ def let_x_be_some_simple_objects(reps: tuple[pl1.FlexibleTypesetter, ...]) -> ty
     SimpleObject, typing.Any, None]:
     """A helper function to declare one or multiple simple-objects.
 
-    :param formula_ts: A string (or an iterable of strings) default representation for the simple-object(s).
+    :param reps: A string (or an iterable of strings) default representation for the simple-object(s).
     :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
     """
     return (let_x_be_a_simple_object(formula_ts=rep) for rep in reps)
@@ -827,7 +827,7 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
                                v: FlexibleEnumeration | None = None,
                                d: FlexibleEnumeration | None = None,
                                p: FlexibleTupl | None = None,
-                               a: typing.Callable | None = None
+                               a: typing.Optional[typing.Callable] = None
                                ) -> tuple[Theory, InferenceRule]:
     """
 
@@ -1821,7 +1821,7 @@ def coerce_transformation(t: FlexibleTransformation) -> Transformation:
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         return NaturalTransformation(conclusion=t[0], variables=t[1], declarations=t[2], premises=t[3])
-    elif is_well_formed_algorithmic_transformation(a=t):
+    elif is_well_formed_algorithmic_transformation(t=t):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
         return AlgorithmicTransformation(external_algorithm=t.external_algorithm, conclusion=t[0], variables=t[1],
@@ -2095,25 +2095,25 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
         return True
     elif is_well_formed_natural_transformation(t=t):
         return True
-    elif is_well_formed_algorithmic_transformation(a=t):
+    elif is_well_formed_algorithmic_transformation(t=t):
         return True
     else:
         return False
 
 
-def is_well_formed_algorithmic_transformation(a: FlexibleFormula) -> bool:
+def is_well_formed_algorithmic_transformation(t: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed algorithm, False otherwise.
 
-    :param i: A formula.
+    :param t: A formula.
     :return: bool.
     """
-    a = coerce_formula(phi=a)
-    if isinstance(a, AlgorithmicTransformation):
+    t = coerce_formula(phi=t)
+    if isinstance(t, AlgorithmicTransformation):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif (a.arity == 0 and
-          a.connective is _connectives.algorithm and
-          hasattr(a, 'external_algorithm')):
+    elif (t.arity == 0 and
+          t.connective is _connectives.algorithm and
+          hasattr(t, 'external_algorithm')):
         return True
     else:
         return False
