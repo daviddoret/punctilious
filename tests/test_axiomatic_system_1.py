@@ -701,9 +701,9 @@ class TestAlgorithm:
         t = as1.let_x_be_a_theory()
         m = as1.let_x_be_a_theory()
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
-            algo = as1.Algorithm(external_algorithm=x_is_a_theory,
-                                 conclusion=x | is_a | theory,
-                                 declarations={x, })
+            algo = as1.AlgorithmicTransformation(external_algorithm=x_is_a_theory,
+                                                 conclusion=x | is_a | theory,
+                                                 declarations={x, })
         i = as1.InferenceRule(mechanism=algo)
         m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
         s = x | is_a | theory

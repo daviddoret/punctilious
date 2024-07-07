@@ -858,7 +858,8 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
             i: InferenceRule = InferenceRule(mechanism=m)
         else:
             # Signature 4: This is an algorithm-based mechanism:
-            m: Algorithm = Algorithm(external_algorithm=a, conclusion=c, variables=v, declarations=d, premises=p)
+            m: AlgorithmicTransformation = AlgorithmicTransformation(external_algorithm=a, conclusion=c, variables=v,
+                                                                     declarations=d, premises=p)
             i: InferenceRule = InferenceRule(mechanism=m)
     else:
         raise u1.ApplicativeException(msg='inconsistent arguments')
@@ -1815,11 +1816,12 @@ def coerce_mechanism(m: FlexibleMechanism) -> Mechanism:
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         return NaturalTransformation(conclusion=m[0], variables=m[1], declarations=m[2], premises=m[3])
-    elif is_well_formed_algorithm(a=m):
+    elif is_well_formed_algorithmic_transformation(a=m):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
-        return Algorithm(external_algorithm=m.external_algorithm, conclusion=m[0], variables=m[1], declarations=m[2],
-                         premises=m[3])
+        return AlgorithmicTransformation(external_algorithm=m.external_algorithm, conclusion=m[0], variables=m[1],
+                                         declarations=m[2],
+                                         premises=m[3])
     else:
         raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_060, coerced_type=NaturalTransformation, m_type=type(m),
                                       m=m)
@@ -1851,8 +1853,8 @@ def coerce_external_algorithm(f: object) -> typing.Callable:
                                       external_algorithm=f)
 
 
-class Algorithm(Formula):
-    """A well-formed algorithm is a derivation that justified the derivation of further theorems in a theory,
+class AlgorithmicTransformation(Formula):
+    """A well-formed algorithmic-transformation is a derivation that justified the derivation of further theorems in a theory,
     should bew impose conditions ex premises???
     by executing an algorithm that is external to the theory.
     The algorithm generates a new formula.
@@ -1933,16 +1935,17 @@ class Algorithm(Formula):
         return self[1]
 
 
-FlexibleAlgorithm = typing.Optional[typing.Union[Connective, Formula]]
+FlexibleAlgorithmicTransformation = typing.Optional[typing.Union[Connective, Formula, AlgorithmicTransformation]]
 
 
-def coerce_algorithm(a: FlexibleAlgorithm) -> Algorithm:
+def coerce_algorithmic_transformation(a: FlexibleAlgorithmicTransformation) -> AlgorithmicTransformation:
     """Coerces loose argument "a" to an algorithm, strongly typed as Algorithm,
     or raises an error with code E-AS1-055 if this fails."""
-    if isinstance(a, Algorithm):
+    if isinstance(a, AlgorithmicTransformation):
         return a
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_055, coerced_type=Algorithm, algorithm_type=type(a),
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_055, coerced_type=AlgorithmicTransformation,
+                                      algorithm_type=type(a),
                                       algorithm=a)
 
 
@@ -2086,20 +2089,20 @@ def is_well_formed_mechanism(m: FlexibleFormula) -> bool:
         return True
     elif is_well_formed_natural_transformation(t=m):
         return True
-    elif is_well_formed_algorithm(a=m):
+    elif is_well_formed_algorithmic_transformation(a=m):
         return True
     else:
         return False
 
 
-def is_well_formed_algorithm(a: FlexibleFormula) -> bool:
+def is_well_formed_algorithmic_transformation(a: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed algorithm, False otherwise.
 
     :param i: A formula.
     :return: bool.
     """
     a = coerce_formula(phi=a)
-    if isinstance(a, Algorithm):
+    if isinstance(a, AlgorithmicTransformation):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
     elif (a.arity == 0 and
@@ -2742,7 +2745,7 @@ class InferenceRule(Derivation):
 
 
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
-FlexibleMechanism = typing.Union[Mechanism, Algorithm, NaturalTransformation, Formula]
+FlexibleMechanism = typing.Union[Mechanism, AlgorithmicTransformation, NaturalTransformation, Formula]
 
 
 class Inference(Formula):

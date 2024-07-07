@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -714,14 +708,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00723" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1719377105085</created>
-      <option name="number" value="00723" />
-      <option name="presentableId" value="LOCAL-00723" />
-      <option name="project" value="LOCAL" />
-      <updated>1719377105085</updated>
-    </task>
     <task id="LOCAL-00724" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1719377847481</created>
@@ -1106,7 +1092,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720371109694</updated>
     </task>
-    <option name="localTasksCounter" value="772" />
+    <task id="LOCAL-00772" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1720373742390</created>
+      <option name="number" value="00772" />
+      <option name="presentableId" value="LOCAL-00772" />
+      <option name="project" value="LOCAL" />
+      <updated>1720373742390</updated>
+    </task>
+    <option name="localTasksCounter" value="773" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1205,7 +1199,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3437</line>
+          <line>3440</line>
           <option name="timeStamp" value="594" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1225,7 +1219,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2537</line>
+          <line>2540</line>
           <option name="timeStamp" value="611" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1235,7 +1229,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3278</line>
+          <line>3281</line>
           <option name="timeStamp" value="614" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
