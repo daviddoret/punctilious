@@ -547,7 +547,7 @@ class TestInferenceRule:
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         phi = a | f | b
         rule = pu.as1.NaturalTransformation(conclusion=phi, variables=None, declarations=None, premises=None)
-        ir = pu.as1.InferenceRule(mechanism=rule)
+        ir = pu.as1.InferenceRule(t=rule)
         axiomatization = pu.as1.Axiomatization(d=(ir,))
 
         # derivation from the axiom
@@ -609,7 +609,7 @@ class TestTheorem:
         t = pu.as1.let_x_be_a_theory()
         a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
-        i = pu.as1.InferenceRule(mechanism=pu.as1.NaturalTransformation(conclusion=b, premises=(a,)))
+        i = pu.as1.InferenceRule(t=pu.as1.NaturalTransformation(conclusion=b, premises=(a,)))
         t = pu.as1.append_to_theory(i, t=t)
         i2 = pu.as1.Inference(premises=(a,), i=i)
         # For the purpose of this test,
@@ -634,7 +634,7 @@ class TestInference:
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        inference_rule = pu.as1.InferenceRule(mechanism=t)
+        inference_rule = pu.as1.InferenceRule(t=t)
         inference = pu.as1.Inference(premises=p, i=inference_rule)
         i = pu.as1.Theorem(valid_statement=theorem, i=inference)
         pu.as1.is_formula_equivalent(
@@ -648,7 +648,7 @@ class TestInference:
         t = pu.as1.NaturalTransformation(conclusion=x | f | z, variables=(x, y, z,), declarations=None,
                                          premises=(x | f | y, y | f | z,))
         p = (a | f | b, b | f | c,)
-        i = pu.as1.InferenceRule(mechanism=t)
+        i = pu.as1.InferenceRule(t=t)
         phi1 = p | pu.as1._connectives.inference | i
         assert pu.as1.is_well_formed_inference(i=phi1)
         phi2 = p | pu.as1._connectives.inference | a
@@ -670,7 +670,7 @@ class TestProofByInference:
         variables = pu.as1.Enumeration(elements=(x, y, z,))
         f = pu.as1.NaturalTransformation(conclusion=conclusion, variables=variables, declarations=None,
                                          premises=premises)
-        ir = pu.as1.InferenceRule(mechanism=f)
+        ir = pu.as1.InferenceRule(t=f)
         p = (a | star | b, b | star | c,)
         i = pu.as1.Inference(premises=p, i=ir)
         outcome = f.apply_transformation(arguments=p)
@@ -704,8 +704,8 @@ class TestAlgorithm:
             algo = as1.AlgorithmicTransformation(external_algorithm=x_is_a_theory,
                                                  conclusion=x | is_a | theory,
                                                  declarations={x, })
-        i = as1.InferenceRule(mechanism=algo)
-        m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
+        i = as1.InferenceRule(t=algo)
+        m, i = as1.let_x_be_an_inference_rule(t1=m, i=i)
         s = x | is_a | theory
         m, d = as1.derive_1(t=m, c=s, p=None, i=i)
         pass
@@ -857,7 +857,7 @@ class TestDemonstration:
         star = pu.as1.let_x_be_a_binary_connective(formula_ts='*')
         theory, axiom_1, = pu.as1.let_x_be_an_axiom(t=theory, s=a | star | b)
         theory, axiom_2, = pu.as1.let_x_be_an_axiom(t=theory, s=b | star | c)
-        theory, ir1, = pu.as1.let_x_be_an_inference_rule(t=theory,
+        theory, ir1, = pu.as1.let_x_be_an_inference_rule(t1=theory,
                                                          p=(x | star | y,
                                                             y | star | z,),
                                                          c=x | star | z,
@@ -903,14 +903,14 @@ class TestAutoDerivation:
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
         if_p_then_q = pu.as1.InferenceRule(
-            mechanism=pu.as1.NaturalTransformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
+            t=pu.as1.NaturalTransformation(conclusion=q, variables=(), declarations=None, premises=(p,)))
         t1 = pu.as1.append_to_theory(if_p_then_q, t=t1)
 
         with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
                 formula_ts='y') as y:
             x_y_then_x_and_y = pu.as1.InferenceRule(
-                mechanism=pu.as1.NaturalTransformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
-                                                       declarations=None, premises=(x, y,)))
+                t=pu.as1.NaturalTransformation(conclusion=x | pu.as1._connectives.land | y, variables=(x, y,),
+                                               declarations=None, premises=(x, y,)))
         t1 = pu.as1.Theory(d=(*t1, x_y_then_x_and_y,))
 
         pass

@@ -27,7 +27,7 @@ def _set_state(key: str, value: object):
 
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     conjunction_introduction: as1.InferenceRule = as1.InferenceRule(
-        mechanism=as1.let_x_be_a_natural_transformation(
+        t=as1.let_x_be_a_natural_transformation(
             premises=(
                 phi | is_a | proposition,
                 psi | is_a | proposition,
@@ -71,7 +71,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
         conclusion=phi,
         variables=(phi, psi,))
 simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
-    mechanism=simplification_1_rule)
+    t=simplification_1_rule)
 
 # Simplification inference rule, aka conjunction elimination:
 #   phi ∧ psi
@@ -89,7 +89,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
         conclusion=psi,
         variables=(phi, psi,))
 simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
-    mechanism=simplification_2_rule)
+    t=simplification_2_rule)
 
 # Modus ponens inference rule:
 #   phi --> psi
@@ -101,7 +101,7 @@ simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(formula_ts='Q') as psi:
     modus_ponens: as1.InferenceRule = as1.InferenceRule(
-        mechanism=as1.let_x_be_a_natural_transformation(
+        t=as1.let_x_be_a_natural_transformation(
             premises=(
                 phi | is_a | proposition,
                 psi | is_a | proposition,

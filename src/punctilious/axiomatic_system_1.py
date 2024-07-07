@@ -820,9 +820,9 @@ def let_x_be_a_free_arity_connective(
     return FreeArityConnective(formula_ts=formula_ts)
 
 
-def let_x_be_an_inference_rule(t: FlexibleTheory,
+def let_x_be_an_inference_rule(t1: FlexibleTheory,
                                i: FlexibleInferenceRule | None = None,
-                               m: FlexibleTransformation | None = None,
+                               t2: FlexibleTransformation | None = None,
                                c: FlexibleFormula | None = None,
                                v: FlexibleEnumeration | None = None,
                                d: FlexibleEnumeration | None = None,
@@ -831,22 +831,25 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
                                ) -> tuple[Theory, InferenceRule]:
     """
 
-    :param t: A theory.
+    :param t1: A theory.
     :param i: An inference-rule.
-    :param p: A tuple of premises.
-    :param c: A conclusion.
-    :param x: An enumeration of variables.
+    :param t2: A transformation.
+    :param c: A formula denoted as the conclusion.
+    :param v: An enumeration of variables used in premises.
+    :param d: An enumeration of variables used for new object declarations.
+    :param p: A tuple of formulas denoted as premises.
+    :param a: (conditional) An external algorithm.
     :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
     """
-    t: FlexibleTheory = coerce_theory(t=t)
+    t1: FlexibleTheory = coerce_theory(t=t1)
     # Signature #1: provide the inference-rule
     if i is not None:
         i: InferenceRule = coerce_inference_rule(i=i)
-    # Signature #2: provide the mechanism upon which the inference-rule can be built
-    elif m is not None:
-        m: Transformation = coerce_transformation(t=m)
-        i: InferenceRule = InferenceRule(mechanism=m)
-    # Signature #3: provide the arguments upon which the mechanism can be built upon which ...
+    # Signature #2: provide the transformation upon which the inference-rule can be built
+    elif t2 is not None:
+        t2: Transformation = coerce_transformation(t=t2)
+        i: InferenceRule = InferenceRule(t=t2)
+    # Signature #3: provide the arguments upon which the transformation can be built upon which ...
     elif c is not None:
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True)
@@ -854,19 +857,19 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         p: Tupl = coerce_tupl(t=p)
         if a is None:
             # Signature 3: This is a natural transformation:
-            m: NaturalTransformation = NaturalTransformation(conclusion=c, variables=v, declarations=d, premises=p)
-            i: InferenceRule = InferenceRule(mechanism=m)
+            t2: NaturalTransformation = NaturalTransformation(conclusion=c, variables=v, declarations=d, premises=p)
+            i: InferenceRule = InferenceRule(t=t2)
         else:
             # Signature 4: This is an algorithmic transformation:
-            m: AlgorithmicTransformation = AlgorithmicTransformation(external_algorithm=a, conclusion=c, variables=v,
-                                                                     declarations=d, premises=p)
-            i: InferenceRule = InferenceRule(mechanism=m)
+            t2: AlgorithmicTransformation = AlgorithmicTransformation(external_algorithm=a, conclusion=c, variables=v,
+                                                                      declarations=d, premises=p)
+            i: InferenceRule = InferenceRule(t=t2)
     else:
         raise u1.ApplicativeException(msg='inconsistent arguments')
 
-    t: Theory = append_to_theory(i, t=t)
+    t1: Theory = append_to_theory(i, t=t1)
     # u1.log_info(i.typeset_as_string(theory=t))
-    return t, i
+    return t1, i
 
 
 def let_x_be_an_axiom_DEPRECATED(s: FlexibleFormula):
@@ -2522,7 +2525,7 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
         return i
     elif isinstance(i, Formula) and is_well_formed_inference_rule(i=i):
         m: Transformation = coerce_transformation(t=i.term_0)
-        return InferenceRule(mechanism=m)
+        return InferenceRule(t=m)
     else:
         raise u1.ApplicativeException(
             code=c1.ERROR_CODE_AS1_041,
@@ -2730,15 +2733,15 @@ class InferenceRule(Derivation):
 
     """
 
-    def __new__(cls, mechanism: FlexibleTransformation = None, **kwargs):
-        mechanism: Transformation = coerce_transformation(t=mechanism)
-        o: tuple = super().__new__(cls, valid_statement=mechanism,
+    def __new__(cls, t: FlexibleTransformation = None, **kwargs):
+        t: Transformation = coerce_transformation(t=t)
+        o: tuple = super().__new__(cls, valid_statement=t,
                                    justification=_connectives.inference_rule,
                                    **kwargs)
         return o
 
-    def __init__(self, mechanism: FlexibleTransformation, **kwargs):
-        self._transformation: Transformation = coerce_transformation(t=mechanism)
+    def __init__(self, t: FlexibleTransformation, **kwargs):
+        self._transformation: Transformation = coerce_transformation(t=t)
         super().__init__(valid_statement=self._transformation,
                          justification=_connectives.inference_rule, **kwargs)
 

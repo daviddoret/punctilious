@@ -13,7 +13,7 @@ if __name__ == '__main__':
 # THIS MUST BE AN ALGORITHMIC INFERENCE-RULE!!!!!!
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='t') as t:
     is_valid_in: as1.InferenceRule = as1.InferenceRule(
-        mechanism=as1.let_x_be_a_natural_transformation(
+        t=as1.let_x_be_a_natural_transformation(
             premises=(
                 t | is_a | theory,
                 phi | is_a | formula,

@@ -56,7 +56,7 @@ class TestAxioms:
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition
         # note that it is not necessary that either A or ¬A be valid
         t = pu.as1.append_to_theory(pu.pls1.i2, t=t)
-        inference_rule = pu.as1.InferenceRule(mechanism=pu.pls1.i2.transformation)
+        inference_rule = pu.as1.InferenceRule(t=pu.pls1.i2.transformation)
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition,),
             i=inference_rule)
@@ -73,7 +73,7 @@ class TestAxioms:
         t = pu.as1.append_to_theory(a2, t=t)
 
         # derive q is-a proposition
-        inference_rule = pu.as1.InferenceRule(mechanism=pu.pls1.i1.transformation)
+        inference_rule = pu.as1.InferenceRule(t=pu.pls1.i1.transformation)
         inference = pu.as1.Inference(
             premises=(a2.valid_statement,),
             i=inference_rule)
@@ -83,7 +83,7 @@ class TestAxioms:
 
         # add i3: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition)
         t = pu.as1.append_to_theory(pu.pls1.i3, t=t)
-        inference_rule = pu.as1.InferenceRule(mechanism=pu.pls1.i3.transformation)
+        inference_rule = pu.as1.InferenceRule(t=pu.pls1.i3.transformation)
         inference = pu.as1.Inference(
             premises=(p | is_a | proposition, q | is_a | proposition,),
             i=inference_rule)
