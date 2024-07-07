@@ -646,11 +646,13 @@ class TestProofByInference:
         variables = pu.as1.Enumeration(elements=(x, y, z,))
         f = pu.as1.Transformation(conclusion=conclusion, variables=variables, declarations=None,
                                   premises=premises)
-        i = pu.as1.Inference(premises=(a | star | b, b | star | c,), transformation_rule=f)
+        ir = pu.as1.InferenceRule(mechanism=f)
+        i = pu.as1.Inference(premises=(a | star | b, b | star | c,), i=ir)
         assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i)
         pu.as1.Theorem(valid_statement=a | star | c, i=i)  # would raise an exception if it was unsuccessful
         assert not pu.as1.is_well_formed_theorem(t=(a | star | d) | pu.as1._connectives.follows_from | i)
-        i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), transformation_rule=f)
+
+        i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), i=ir)
         assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i2)
         pass
 

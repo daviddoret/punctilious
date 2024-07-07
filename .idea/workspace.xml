@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -337,7 +335,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for tests.test_minimal_logic_1.TestPL1.test_pl1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="axiomatic_system_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -600,7 +598,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for tests.test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -613,7 +611,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises&quot;" />
+      <option name="_new_target" value="&quot;test_propositional_logic_syntax_1.TestAxioms.test_pl1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -681,7 +679,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference" />
-      <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises" />
+      <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1" />
       <item itemvalue="Python tests.pytest for tests.test_minimal_logic_1.TestPL1.test_pl1" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -690,11 +688,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for tests.test_minimal_logic_1.TestPL1.test_pl1" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1" />
+        <item itemvalue="Python tests.pytest for tests.test_minimal_logic_1.TestPL1.test_pl1" />
         <item itemvalue="Python.axiomatic_system_1" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference" />
-        <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises" />
       </list>
     </recent_temporary>
   </component>
@@ -713,14 +711,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00720" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1719373728029</created>
-      <option name="number" value="00720" />
-      <option name="presentableId" value="LOCAL-00720" />
-      <option name="project" value="LOCAL" />
-      <updated>1719373728029</updated>
     </task>
     <task id="LOCAL-00721" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1106,7 +1096,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720329574339</updated>
     </task>
-    <option name="localTasksCounter" value="769" />
+    <task id="LOCAL-00769" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1720333623055</created>
+      <option name="number" value="00769" />
+      <option name="presentableId" value="LOCAL-00769" />
+      <option name="project" value="LOCAL" />
+      <updated>1720333623055</updated>
+    </task>
+    <option name="localTasksCounter" value="770" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1210,12 +1208,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>681</line>
+          <line>683</line>
           <option name="timeStamp" value="599" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>824</line>
+          <line>826</line>
           <option name="timeStamp" value="600" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
