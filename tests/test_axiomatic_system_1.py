@@ -551,7 +551,7 @@ class TestInferenceRule:
         axiomatization = pu.as1.Axiomatization(d=(ir,))
 
         # derivation from the axiom
-        i = pu.as1.Inference(premises=None, i=ir)
+        i = pu.as1.Inference(p=None, i=ir)
         isolated_theorem = pu.as1.Theorem(valid_statement=phi, i=i)
         t = pu.as1.append_to_theory(isolated_theorem, t=axiomatization)
         assert pu.as1.is_formula_equivalent(
@@ -611,7 +611,7 @@ class TestTheorem:
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         i = pu.as1.InferenceRule(t=pu.as1.NaturalTransformation(c=b, p=(a,)))
         t = pu.as1.append_to_theory(i, t=t)
-        i2 = pu.as1.Inference(premises=(a,), i=i)
+        i2 = pu.as1.Inference(p=(a,), i=i)
         # For the purpose of this test,
         # build the theorem manually,
         # i.e. without using a derivation function.
@@ -635,11 +635,12 @@ class TestInference:
         theorem = a | f | c
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
         inference_rule = pu.as1.InferenceRule(t=t)
-        inference = pu.as1.Inference(premises=p, i=inference_rule)
-        i = pu.as1.Theorem(valid_statement=theorem, i=inference)
+        inference = pu.as1.Inference(i=inference_rule, p=p, a=None)
+        theorem_2 = pu.as1.Theorem(valid_statement=theorem, i=inference)
         pu.as1.is_formula_equivalent(
-            phi=i,
-            psi=theorem | pu.as1._connectives.follows_from | pu.as1._connectives.inference(p, t))
+            phi=theorem_2,
+            psi=theorem | pu.as1._connectives.follows_from | pu.as1._connectives.inference(inference_rule, p,
+                                                                                           pu.as1.Tupl()))
 
     def test_is_well_formed_inference(self):
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
@@ -649,9 +650,9 @@ class TestInference:
                                          p=(x | f | y, y | f | z,))
         p = (a | f | b, b | f | c,)
         i = pu.as1.InferenceRule(t=t)
-        phi1 = p | pu.as1._connectives.inference | i
+        phi1 = pu.as1._connectives.inference(i, p, as1.Tupl())
         assert pu.as1.is_well_formed_inference(i=phi1)
-        phi2 = p | pu.as1._connectives.inference | a
+        phi2 = pu.as1._connectives.inference(i, as1.Tupl())
         assert not pu.as1.is_well_formed_inference(i=phi2)
         phi3 = p | pu.as1._connectives.follows_from | i
         assert not pu.as1.is_well_formed_inference(i=phi3)
@@ -672,13 +673,13 @@ class TestProofByInference:
                                          p=premises)
         ir = pu.as1.InferenceRule(t=f)
         p = (a | star | b, b | star | c,)
-        i = pu.as1.Inference(premises=p, i=ir)
+        i = pu.as1.Inference(p=p, i=ir)
         outcome = f.apply_transformation(premises=p)
         m = pu.as1.Theorem(valid_statement=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(t=m)
         assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i)
 
-        i2 = pu.as1.Inference(premises=(a | star | b, b | star | a,), i=ir)
+        i2 = pu.as1.Inference(p=(a | star | b, b | star | a,), i=ir)
         assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i2)
         pass
 

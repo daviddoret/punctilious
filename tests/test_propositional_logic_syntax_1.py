@@ -58,7 +58,7 @@ class TestAxioms:
         t = pu.as1.append_to_theory(pu.pls1.i2, t=t)
         inference_rule = pu.as1.InferenceRule(t=pu.pls1.i2.transformation)
         inference = pu.as1.Inference(
-            premises=(p | is_a | proposition,),
+            p=(p | is_a | proposition,),
             i=inference_rule)
         claim = lnot(p) | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
@@ -75,7 +75,7 @@ class TestAxioms:
         # derive q is-a proposition
         inference_rule = pu.as1.InferenceRule(t=pu.pls1.i1.transformation)
         inference = pu.as1.Inference(
-            premises=(a2.valid_statement,),
+            p=(a2.valid_statement,),
             i=inference_rule)
         claim = q | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)
@@ -85,7 +85,7 @@ class TestAxioms:
         t = pu.as1.append_to_theory(pu.pls1.i3, t=t)
         inference_rule = pu.as1.InferenceRule(t=pu.pls1.i3.transformation)
         inference = pu.as1.Inference(
-            premises=(p | is_a | proposition, q | is_a | proposition,),
+            p=(p | is_a | proposition, q | is_a | proposition,),
             i=inference_rule)
         claim = (p | land | q) | is_a | proposition
         isolated_theorem = pu.as1.Theorem(valid_statement=claim, i=inference)

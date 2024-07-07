@@ -987,7 +987,7 @@ class Connectives(typing.NamedTuple):
     enumeration: FreeArityConnective
     follows_from: BinaryConnective
     implies: BinaryConnective
-    inference: BinaryConnective
+    inference: TernaryConnective
     inference_rule: UnaryConnective
     is_a: BinaryConnective
     land: BinaryConnective
@@ -2021,8 +2021,10 @@ def coerce_inference(i: FlexibleFormula) -> Inference:
     if isinstance(i, Inference):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference(i=i):
-        i2: InferenceRule = coerce_inference_rule(i=i.term_1)
-        return Inference(premises=i.term_0, i=i2)
+        i2: InferenceRule = coerce_inference_rule(i=i[0])
+        p: Tupl = coerce_tupl(t=i[1])
+        a: Tupl = coerce_tupl(t=i[2])
+        return Inference(i=i2, p=p, a=a)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
 
@@ -2069,8 +2071,11 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
     :return: bool.
     """
     i = coerce_formula(phi=i)
-    if i.connective is not _connectives.inference or not is_well_formed_enumeration(
-            e=i.term_0) or not is_well_formed_inference_rule(i=i.term_1):
+    if (i.connective is not _connectives.inference or
+            not i.arity == 3 or
+            not is_well_formed_inference_rule(i=i[0]) or
+            not is_well_formed_tupl(t=i[1]) or
+            not is_well_formed_tupl(t=i[2])):
         return False
     else:
         return True
@@ -2819,29 +2824,51 @@ class Inference(Formula):
 
     Semantic definition:
     An inference is a formal description of one usage of an inference-rule."""
+    INFERENCE_RULE_INDEX = 0
+    PREMISES_INDEX = 1
+    ARGUMENTS_INDEX = 2
 
-    def __new__(cls, premises: FlexibleTupl, i: FlexibleInferenceRule):
-        premises: Tupl = coerce_tupl(t=premises)
+    def __new__(cls, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
+        """
+
+        :param i: An inference-rule.
+        :param p: A tuple of formulas denoted as the premises.
+        :param a: A tuple of formulas denoted as the supplementary arguments.
+        """
         i: InferenceRule = coerce_inference_rule(i=i)
+        p: Tupl = coerce_tupl(t=p)
+        a: Tupl = coerce_tupl(t=a)
         c: Connective = _connectives.inference
-        o: tuple = super().__new__(cls, c=c, t=(premises, i,))
+        o: tuple = super().__new__(cls, c=c, t=(i, p, a))
         return o
 
-    def __init__(self, premises: FlexibleTupl, i: FlexibleInferenceRule):
-        self._premises: Tupl = coerce_tupl(t=premises)
-        self._inference_rule: InferenceRule = coerce_inference_rule(i=i)
+    def __init__(self, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
+        """
+
+        :param i: An inference-rule.
+        :param p: A tuple of formulas denoted as the premises.
+        :param a: A tuple of formulas denoted as the supplementary arguments.
+        """
+        i: InferenceRule = coerce_inference_rule(i=i)
+        p: Tupl = coerce_tupl(t=p)
+        a: Tupl = coerce_tupl(t=a)
         c: Connective = _connectives.inference
-        super().__init__(c=c, t=(self._premises, self._inference_rule,))
+        super().__init__(c=c, t=(i, p, a,))
+
+    @property
+    def arguments(self) -> Tupl:
+        """A tuple of supplementary arguments to be passed to the transformation as input parameters."""
+        return self[Inference.ARGUMENTS_INDEX]
 
     @property
     def inference_rule(self) -> InferenceRule:
         """The inference-rule of the inference."""
-        return self._inference_rule
+        return self[Inference.INFERENCE_RULE_INDEX]
 
     @property
     def premises(self) -> Tupl:
         """The premises of the inference."""
-        return self._premises
+        return self[Inference.PREMISES_INDEX]
 
 
 FlexibleInference = typing.Optional[typing.Union[Inference]]
@@ -3308,13 +3335,14 @@ class AutoDerivationFailure(Exception):
 
 
 def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
-             i: FlexibleInferenceRule) -> typing.Tuple[Theory, Theorem]:
+             i: FlexibleInferenceRule, a: FlexibleTupl | None = None) -> typing.Tuple[Theory, Theorem]:
     """Given a theory t, derives a new theory t' that extends t with a new theorem derived by applying inference-rule i.
 
     :param c: A propositional formula posed as a conjecture.
     :param t: A theory.
     :param p: A tuple of premises.
     :param i: An inference-rule.
+    :param a: A tuple of supplementary arguments to be transmitted to the transformation.
     :return: A python-tuple (t′, theorem)
     """
     # parameters validation
@@ -3322,6 +3350,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     c: Formula = coerce_formula(phi=c)
     p: Tupl = coerce_tupl(t=p)
     i: InferenceRule = coerce_inference_rule(i=i)
+    a: Tupl = coerce_tupl(t=a)
 
     for premise in p:
         # The validity of the premises is checked during theory initialization,
@@ -3334,7 +3363,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
                                       i=i, t=t)
 
     # Configure the inference that derives the theorem.
-    inference: Inference = Inference(premises=p, i=i)
+    inference: Inference = Inference(p=p, a=a, i=i)
 
     # Prepare the new theorem.
     theorem: Theorem = Theorem(valid_statement=c, i=inference)
