@@ -844,7 +844,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         i: InferenceRule = coerce_inference_rule(i=i)
     # Signature #2: provide the mechanism upon which the inference-rule can be built
     elif m is not None:
-        m: Transformation = coerce_transformation(m=m)
+        m: Transformation = coerce_transformation(t=m)
         i: InferenceRule = InferenceRule(mechanism=m)
     # Signature #3: provide the arguments upon which the mechanism can be built upon which ...
     elif c is not None:
@@ -1808,25 +1808,25 @@ class NaturalTransformation(Transformation):
 FlexibleNaturalTransformation = typing.Optional[typing.Union[NaturalTransformation]]
 
 
-def coerce_transformation(m: FlexibleTransformation) -> Transformation:
-    """Coerces lose argument "m" to a mechanism, strongly python-typed as Mechanism,
+def coerce_transformation(t: FlexibleTransformation) -> Transformation:
+    """Coerces lose argument "t" to a transformation, strongly python-typed as Transformation,
     or raises an error with code E-AS1-060 if this fails."""
-    m: Formula = coerce_formula(phi=m)
-    if isinstance(m, Transformation):
-        return m
-    elif is_well_formed_natural_transformation(t=m):
+    t: Formula = coerce_formula(phi=t)
+    if isinstance(t, Transformation):
+        return t
+    elif is_well_formed_natural_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return NaturalTransformation(conclusion=m[0], variables=m[1], declarations=m[2], premises=m[3])
-    elif is_well_formed_algorithmic_transformation(a=m):
+        return NaturalTransformation(conclusion=t[0], variables=t[1], declarations=t[2], premises=t[3])
+    elif is_well_formed_algorithmic_transformation(a=t):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
-        return AlgorithmicTransformation(external_algorithm=m.external_algorithm, conclusion=m[0], variables=m[1],
-                                         declarations=m[2],
-                                         premises=m[3])
+        return AlgorithmicTransformation(external_algorithm=t.external_algorithm, conclusion=t[0], variables=t[1],
+                                         declarations=t[2],
+                                         premises=t[3])
     else:
-        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_060, coerced_type=NaturalTransformation, m_type=type(m),
-                                      m=m)
+        raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_060, coerced_type=NaturalTransformation, m_type=type(t),
+                                      m=t)
 
 
 def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
@@ -2073,26 +2073,26 @@ def is_well_formed_inference_rule(i: FlexibleFormula) -> bool:
         return True
     elif (i.connective is _connectives.follows_from and
           i.arity == 2 and
-          is_well_formed_mechanism(m=i.term_0) and
+          is_well_formed_transformation(t=i.term_0) and
           i.term_1.connective is _connectives.inference_rule):
         return True
     else:
         return False
 
 
-def is_well_formed_mechanism(m: FlexibleFormula) -> bool:
-    """Return True if and only if m is a well-formed mechanism, False otherwise.
+def is_well_formed_transformation(t: FlexibleFormula) -> bool:
+    """Return True if and only if "t" is a well-formed transformation, False otherwise.
 
-    :param m: A formula.
+    :param t: A formula.
     :return: bool.
     """
-    m = coerce_formula(phi=m)
-    if isinstance(m, InferenceRule):
+    t = coerce_formula(phi=t)
+    if isinstance(t, Transformation):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif is_well_formed_natural_transformation(t=m):
+    elif is_well_formed_natural_transformation(t=t):
         return True
-    elif is_well_formed_algorithmic_transformation(a=m):
+    elif is_well_formed_algorithmic_transformation(a=t):
         return True
     else:
         return False
@@ -2521,7 +2521,7 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
     if isinstance(i, InferenceRule):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference_rule(i=i):
-        m: Transformation = coerce_transformation(m=i.term_0)
+        m: Transformation = coerce_transformation(t=i.term_0)
         return InferenceRule(mechanism=m)
     else:
         raise u1.ApplicativeException(
@@ -2731,14 +2731,14 @@ class InferenceRule(Derivation):
     """
 
     def __new__(cls, mechanism: FlexibleTransformation = None, **kwargs):
-        mechanism: Transformation = coerce_transformation(m=mechanism)
+        mechanism: Transformation = coerce_transformation(t=mechanism)
         o: tuple = super().__new__(cls, valid_statement=mechanism,
                                    justification=_connectives.inference_rule,
                                    **kwargs)
         return o
 
     def __init__(self, mechanism: FlexibleTransformation, **kwargs):
-        self._mechanism: Transformation = coerce_transformation(m=mechanism)
+        self._mechanism: Transformation = coerce_transformation(t=mechanism)
         super().__init__(valid_statement=self._mechanism,
                          justification=_connectives.inference_rule, **kwargs)
 
