@@ -633,7 +633,7 @@ class TestInference:
                                          p=(x | f | y, y | f | z,), )
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
-        pu.as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
+        pu.as1.is_formula_equivalent(phi=theorem, psi=t(p=p, a=None))
         inference_rule = pu.as1.InferenceRule(t=t)
         inference = pu.as1.Inference(i=inference_rule, p=p, a=None)
         theorem_2 = pu.as1.Theorem(valid_statement=theorem, i=inference)
@@ -686,8 +686,8 @@ class TestProofByInference:
 
 class TestAlgorithm:
     def test_algorithm(self):
-        def x_is_a_theory(arguments):
-            t = as1.coerce_tupl(t=arguments)
+        def x_is_a_theory(p: pu.as1.Tupl | None = None, a: pu.as1.Tupl | None = None):
+            t = as1.coerce_tupl(t=a)
             if not t.arity == 1:
                 raise pu.u1.ApplicativeError(msg='wrong arguments')
             if as1.is_well_formed_theory(t=t[0]):
@@ -708,7 +708,7 @@ class TestAlgorithm:
         i = as1.InferenceRule(t=algo)
         m, i = as1.let_x_be_an_inference_rule(t1=m, i=i)
         s = x | is_a | theory
-        m, d = as1.derive_1(t=m, c=s, p=None, i=i)
+        m, d = as1.derive_1(t=m, c=s, p=None, i=i, a=t)
         pass
 
 

@@ -1793,19 +1793,21 @@ class NaturalTransformation(Transformation):
         super().__init__(connective=_connectives.natural_transformation, c=c, v=v,
                          d=d, p=p)
 
-    def __call__(self, p: FlexibleTupl) -> Formula:
+    def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTuple | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=p)
+        return self.apply_transformation(p=p, a=a)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
                              a: FlexibleTupl | None = None) -> Formula:
         """
 
+        :param p: A tuple of formulas, denoted as the premises. Order must be identical to the order or premises in the
+        transformation.
         :param a:
-        :param p: A tuple of arguments, whose order matches the order of the natural-transformation premises.
         :return:
         """
         p = coerce_tupl(t=p)
+        a = coerce_tupl(t=a)  # This argument is not used by natural-transformation.
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
@@ -1833,22 +1835,6 @@ class NaturalTransformation(Transformation):
         outcome: Formula = replace_connectives(phi=outcome, m=declarations_map)
 
         return outcome
-
-    @property
-    def conclusion(self) -> Formula:
-        return self[0]
-
-    @property
-    def declarations(self) -> Enumeration:
-        return self[2]
-
-    @property
-    def premises(self) -> Tupl:
-        return self[3]
-
-    @property
-    def variables(self) -> Enumeration:
-        return self[1]
 
 
 FlexibleNaturalTransformation = typing.Optional[typing.Union[NaturalTransformation]]
@@ -1952,9 +1938,9 @@ class AlgorithmicTransformation(Transformation):
         super().__init__(connective=_connectives.algorithm,
                          c=c, v=v, d=d, p=p)
 
-    def __call__(self, p: FlexibleTupl) -> Formula:
+    def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=p)
+        return self.apply_transformation(p=p, a=a)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
                              a: FlexibleTupl | None = None) -> Formula:
@@ -1977,7 +1963,7 @@ class AlgorithmicTransformation(Transformation):
                                       transformation_variables=self.variables, transformation=self)
 
         # call the external-algorithm
-        outcome: Formula = self.external_algorithm(arguments=p)
+        outcome: Formula = self.external_algorithm(p=p, a=a)
 
         return outcome
 
