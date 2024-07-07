@@ -857,12 +857,12 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
         p: Tupl = coerce_tupl(t=p)
         if a is None:
             # Signature 3: This is a natural transformation:
-            t2: NaturalTransformation = NaturalTransformation(conclusion=c, variables=v, declarations=d, premises=p)
+            t2: NaturalTransformation = NaturalTransformation(c=c, v=v, d=d, p=p)
             i: InferenceRule = InferenceRule(t=t2)
         else:
             # Signature 4: This is an algorithmic transformation:
-            t2: AlgorithmicTransformation = AlgorithmicTransformation(external_algorithm=a, conclusion=c, variables=v,
-                                                                      declarations=d, premises=p)
+            t2: AlgorithmicTransformation = AlgorithmicTransformation(external_algorithm=a, c=c, v=v,
+                                                                      d=d, p=p)
             i: InferenceRule = InferenceRule(t=t2)
     else:
         raise u1.ApplicativeError(msg='inconsistent arguments')
@@ -976,8 +976,8 @@ def let_x_be_a_natural_transformation(conclusion: FlexibleFormula,
                                       declarations: FlexibleEnumeration | None = None,
                                       premises: FlexibleTupl | None = None
                                       ):
-    return NaturalTransformation(conclusion=conclusion, variables=variables, declarations=declarations,
-                                 premises=premises)
+    return NaturalTransformation(c=conclusion, v=variables, d=declarations,
+                                 p=premises)
 
 
 class Connectives(typing.NamedTuple):
@@ -1627,43 +1627,45 @@ class Transformation(Formula):
      - algorithmic-transformation (cf. AlgorithmicTransformation python-class)
     """
 
-    def __new__(cls, c: Connective, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
-                declarations: FlexibleEnumeration | None = None,
-                premises: FlexibleTupl | None = None, ):
-        c: Connective = coerce_connective(c=c)
-        conclusion: Formula = coerce_formula(phi=conclusion)
-        variables: Enumeration = coerce_enumeration(e=variables)
-        declarations: Enumeration = coerce_enumeration(e=declarations)
-        premises: Tupl = coerce_tupl(t=premises)
+    def __new__(cls, connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                d: FlexibleEnumeration | None = None,
+                p: FlexibleTupl | None = None, ):
+        connective: Connective = coerce_connective(c=connective)
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration(e=v)
+        d: Enumeration = coerce_enumeration(e=d)
+        p: Tupl = coerce_tupl(t=p)
         o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
-                                   t=(conclusion, variables, declarations, premises,))
+                                   t=(c, v, d, p,))
         return o
 
-    def __init__(self, c: Connective, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
-                 declarations: FlexibleEnumeration | None = None,
-                 premises: FlexibleTupl | None = None):
-        c: Connective = coerce_connective(c=c)
-        conclusion: Formula = coerce_formula(phi=conclusion)
-        variables: Enumeration = coerce_enumeration(e=variables)
-        declarations: Enumeration = coerce_enumeration(e=declarations)
-        premises: Tupl = coerce_tupl(t=premises)
-        super().__init__(c=_connectives.natural_transformation, t=(conclusion, variables, declarations, premises,))
+    def __init__(self, connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                 d: FlexibleEnumeration | None = None,
+                 p: FlexibleTupl | None = None):
+        connective: Connective = coerce_connective(c=connective)
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration(e=v)
+        d: Enumeration = coerce_enumeration(e=d)
+        p: Tupl = coerce_tupl(t=p)
+        super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(arguments=arguments)
+        return self.apply_transformation(premises=arguments)
 
     @abc.abstractmethod
-    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
+    def apply_transformation(self, premises: FlexibleTupl | None = None,
+                             arguments: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
+        :param premises: A tuple of premises arguments, whose order matches the order of the transformation premises.
+        :param arguments: A tuple of supplementary arguments.
         :return:
         """
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
                                   msg='Abstract python method is not implemented.',
                                   object=self, object_type=type(self),
-                                  arguments=arguments)
+                                  arguments=premises)
 
     @property
     def conclusion(self) -> Formula:
@@ -1728,50 +1730,52 @@ class NaturalTransformation(Transformation):
           even though this constraint is immediately relieved by the interchange structural rule.
     """
 
-    def __new__(cls, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
-                declarations: FlexibleEnumeration | None = None,
-                premises: FlexibleTupl | None = None):
+    def __new__(cls, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                d: FlexibleEnumeration | None = None,
+                p: FlexibleTupl | None = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        conclusion: Formula = coerce_formula(phi=conclusion)
-        variables: Enumeration = coerce_enumeration(e=variables)
-        declarations: Enumeration = coerce_enumeration(e=declarations)
-        premises: Tupl = coerce_tupl(t=premises)
-        o: tuple = super().__new__(cls, c=_connectives.natural_transformation, conclusion=conclusion,
-                                   variables=variables,
-                                   declarations=declarations, premises=premises)
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration(e=v)
+        d: Enumeration = coerce_enumeration(e=d)
+        p: Tupl = coerce_tupl(t=p)
+        o: tuple = super().__new__(cls, connective=_connectives.natural_transformation, c=c,
+                                   v=v,
+                                   d=d, p=p)
         return o
 
-    def __init__(self, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
-                 declarations: FlexibleEnumeration | None = None,
-                 premises: FlexibleTupl | None = None):
-        conclusion: Formula = coerce_formula(phi=conclusion)
-        variables: Enumeration = coerce_enumeration(e=variables)
-        declarations: Enumeration = coerce_enumeration(e=declarations)
-        premises: Tupl = coerce_tupl(t=premises)
-        super().__init__(c=_connectives.natural_transformation, conclusion=conclusion, variables=variables,
-                         declarations=declarations, premises=premises)
+    def __init__(self, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                 d: FlexibleEnumeration | None = None,
+                 p: FlexibleTupl | None = None):
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration(e=v)
+        d: Enumeration = coerce_enumeration(e=d)
+        p: Tupl = coerce_tupl(t=p)
+        super().__init__(connective=_connectives.natural_transformation, c=c, v=v,
+                         d=d, p=p)
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(arguments=arguments)
+        return self.apply_transformation(premises=arguments)
 
-    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
+    def apply_transformation(self, premises: FlexibleTupl | None = None,
+                             arguments: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param arguments: A tuple of arguments, whose order matches the order of the natural-transformation premises.
+        :param arguments:
+        :param premises: A tuple of arguments, whose order matches the order of the natural-transformation premises.
         :return:
         """
-        arguments = coerce_tupl(t=arguments)
+        premises = coerce_tupl(t=premises)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=arguments, psi=self.premises,
+        success, variables_map = is_formula_equivalent_with_variables_2(phi=premises, psi=self.premises,
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_030,
                                       msg='Applying a natural-transformation with incorrect premises.',
-                                      target_formula=arguments, transformation_premises=self.premises,
+                                      target_formula=premises, transformation_premises=self.premises,
                                       transformation_variables=self.variables, transformation=self)
 
         # step 2:
@@ -1820,13 +1824,13 @@ def coerce_transformation(t: FlexibleTransformation) -> Transformation:
     elif is_well_formed_natural_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return NaturalTransformation(conclusion=t[0], variables=t[1], declarations=t[2], premises=t[3])
+        return NaturalTransformation(c=t[0], v=t[1], d=t[2], p=t[3])
     elif is_well_formed_algorithmic_transformation(t=t):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
-        return AlgorithmicTransformation(external_algorithm=t.external_algorithm, conclusion=t[0], variables=t[1],
-                                         declarations=t[2],
-                                         premises=t[3])
+        return AlgorithmicTransformation(external_algorithm=t.external_algorithm, c=t[0], v=t[1],
+                                         d=t[2],
+                                         p=t[3])
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_060, coerced_type=NaturalTransformation, m_type=type(t),
                                   m=t)
@@ -1841,7 +1845,7 @@ def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
     elif isinstance(t, Formula) and is_well_formed_natural_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return NaturalTransformation(conclusion=t[0], variables=t[1], declarations=t[2], premises=t[3])
+        return NaturalTransformation(c=t[0], v=t[1], d=t[2], p=t[3])
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_031, coerced_type=NaturalTransformation, t_type=type(t),
                                   t=t)
@@ -1866,57 +1870,67 @@ class AlgorithmicTransformation(Transformation):
 
     Distinctively from premises, we should pass arguments to the algorithm."""
 
-    def __new__(cls, external_algorithm: typing.Callable, conclusion: FlexibleFormula,
-                variables: FlexibleEnumeration | None = None,
-                declarations: FlexibleEnumeration | None = None,
-                premises: FlexibleTupl | None = None):
+    def __new__(cls, external_algorithm: typing.Callable, c: FlexibleFormula,
+                v: FlexibleEnumeration | None = None,
+                d: FlexibleEnumeration | None = None,
+                p: FlexibleTupl | None = None):
+        """
+
+        :param external_algorithm:
+        :param c:
+        :param v:
+        :param d:
+        :param p:
+        """
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
-        conclusion: Formula = coerce_formula(phi=conclusion)
-        variables: Enumeration = coerce_enumeration(e=variables)
-        declarations: Enumeration = coerce_enumeration(e=declarations)
-        premises: Tupl = coerce_tupl(t=premises)
-        o: tuple = super().__new__(cls, c=_connectives.algorithm,
-                                   conclusion=conclusion, variables=variables, declarations=declarations,
-                                   premises=premises)
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration(e=v)
+        d: Enumeration = coerce_enumeration(e=d)
+        p: Tupl = coerce_tupl(t=p)
+        o: tuple = super().__new__(cls, connective=_connectives.algorithm,
+                                   c=c, v=v, d=d,
+                                   p=p)
         return o
 
     def __init__(self, external_algorithm: typing.Callable,
-                 conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
-                 declarations: FlexibleEnumeration | None = None,
-                 premises: FlexibleTupl | None = None):
+                 c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                 d: FlexibleEnumeration | None = None,
+                 p: FlexibleTupl | None = None):
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
-        conclusion: Formula = coerce_formula(phi=conclusion)
-        variables: Enumeration = coerce_enumeration(e=variables)
-        declarations: Enumeration = coerce_enumeration(e=declarations)
-        premises: Tupl = coerce_tupl(t=premises)
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration(e=v)
+        d: Enumeration = coerce_enumeration(e=d)
+        p: Tupl = coerce_tupl(t=p)
         self._external_algorithm: typing.Callable = external_algorithm
-        super().__init__(c=_connectives.algorithm,
-                         conclusion=conclusion, variables=variables, declarations=declarations, premises=premises)
+        super().__init__(connective=_connectives.algorithm,
+                         c=c, v=v, d=d, p=p)
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(arguments=arguments)
+        return self.apply_transformation(premises=arguments)
 
-    def apply_transformation(self, arguments: FlexibleTupl) -> Formula:
+    def apply_transformation(self, premises: FlexibleTupl | None = None,
+                             arguments: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
+        :param arguments:
+        :param premises: A tuple of arguments, whose order matches the order of the transformation premises.
         :return:
         """
-        arguments = coerce_tupl(t=arguments)
+        premises = coerce_tupl(t=premises)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=arguments, psi=self.premises,
+        success, variables_map = is_formula_equivalent_with_variables_2(phi=premises, psi=self.premises,
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_050,
                                       msg='Applying an algorithm with incorrect premises.',
-                                      target_formula=arguments, transformation_premises=self.premises,
+                                      target_formula=premises, transformation_premises=self.premises,
                                       transformation_variables=self.variables, transformation=self)
 
         # call the external-algorithm
-        outcome: Formula = self.external_algorithm(arguments=arguments)
+        outcome: Formula = self.external_algorithm(arguments=premises)
 
         return outcome
 
@@ -2451,7 +2465,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     # The transformation is not positioned before the conclusion.
                     return False
             # And finally, confirm that the inference effectively yields phi.
-            phi_prime = inference.inference_rule.transformation.apply_transformation(arguments=inference.premises)
+            phi_prime = inference.inference_rule.transformation.apply_transformation(premises=inference.premises)
             if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
                 return False
         else:
@@ -2840,7 +2854,7 @@ class Theorem(Derivation):
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
-        re_derived_valid_statement: Formula = i.inference_rule.transformation.apply_transformation(arguments=i.premises)
+        re_derived_valid_statement: Formula = i.inference_rule.transformation.apply_transformation(premises=i.premises)
         if len(i.inference_rule.transformation.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:

@@ -37,10 +37,10 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i0: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            conclusion=a | is_a | propositional_variable,
-            variables=None,
-            declarations=(a,),
-            premises=None
+            c=a | is_a | propositional_variable,
+            v=None,
+            d=(a,),
+            p=None
         ),
         ref_ts=pl1.Monospace(text='PLS1'))
     """Axiom schema: A is-a propositional-variable.
@@ -63,9 +63,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            premises=(a | is_a | propositional_variable,),
-            conclusion=a | is_a | proposition,
-            variables=(a,)),
+            p=(a | is_a | propositional_variable,),
+            c=a | is_a | proposition,
+            v=(a,)),
         ref_ts=pl1.Monospace(text='PLS1'))
     """Axiom schema: A is-a propositional-variable ⊃ A is-a proposition.
     
@@ -86,9 +86,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i2: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            premises=(a | is_a | proposition,),
-            conclusion=lnot(a) | is_a | proposition,
-            variables=(a,)),
+            p=(a | is_a | proposition,),
+            c=lnot(a) | is_a | proposition,
+            v=(a,)),
         ref_ts=pl1.Monospace(text='PLS2'))
     """Axiom schema: A is-a proposition ⊃ ¬A is a proposition.
 
@@ -109,10 +109,10 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i3: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            premises=(a | is_a | proposition,
-                      b | is_a | proposition),
-            conclusion=(a | land | b) | is_a | proposition,
-            variables=(a, b,)),
+            p=(a | is_a | proposition,
+               b | is_a | proposition),
+            c=(a | land | b) | is_a | proposition,
+            v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS3'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition).
 
@@ -134,10 +134,10 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i4: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            premises=(a | is_a | proposition,
-                      b | is_a | proposition),
-            conclusion=(a | implies | b) | is_a | proposition,
-            variables=(a, b,)),
+            p=(a | is_a | proposition,
+               b | is_a | proposition),
+            c=(a | implies | b) | is_a | proposition,
+            v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS4'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ⊃ B) is a proposition).
 
@@ -159,10 +159,10 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i5: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            premises=(a | is_a | proposition,
-                      b | is_a | proposition),
-            conclusion=(a | lor | b) | is_a | proposition,
-            variables=(a, b,)),
+            p=(a | is_a | proposition,
+               b | is_a | proposition),
+            c=(a | lor | b) | is_a | proposition,
+            v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS5'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∨ B) is a proposition).
 
@@ -184,9 +184,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i6: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            premises=None,
-            conclusion=lnot(a | is_a | proposition),
-            variables=(a, b,)),
+            p=None,
+            c=lnot(a | is_a | proposition),
+            v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS6'))
     """Axiom schema: ?????.
     
@@ -296,8 +296,8 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     conclusion: as1.Formula = psi.term_1
 
     # build the rule
-    rule: as1.NaturalTransformation = as1.NaturalTransformation(premises=premises, conclusion=conclusion,
-                                                                variables=variables)
+    rule: as1.NaturalTransformation = as1.NaturalTransformation(p=premises, c=conclusion,
+                                                                v=variables)
 
     # build the inference-rule
     inference_rule: as1.InferenceRule = as1.InferenceRule(t=rule)
