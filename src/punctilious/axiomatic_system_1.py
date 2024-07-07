@@ -857,7 +857,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
             m: NaturalTransformation = NaturalTransformation(conclusion=c, variables=v, declarations=d, premises=p)
             i: InferenceRule = InferenceRule(mechanism=m)
         else:
-            # Signature 4: This is an algorithm-based mechanism:
+            # Signature 4: This is an algorithmic transformation:
             m: AlgorithmicTransformation = AlgorithmicTransformation(external_algorithm=a, conclusion=c, variables=v,
                                                                      declarations=d, premises=p)
             i: InferenceRule = InferenceRule(mechanism=m)
@@ -1619,9 +1619,9 @@ class SingletonEnumeration(Enumeration):
 class Mechanism(Formula):
     """A mechanism is method by which new formulas may be created.
 
-    The following mechanisms are supported:
-     - transformation (cf. Transformation python-class)
-     - algorithm (cf. Algorithm python-class)
+    The following transformations are supported:
+     - natural-transformation (cf. NaturalTransformation python-class)
+     - algorithmic-transformation (cf. AlgorithmicTransformation python-class)
     """
 
     def __new__(cls, c: Connective, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
@@ -1681,19 +1681,19 @@ class Mechanism(Formula):
         return self[1]
 
 
-class NaturalTransformation(Formula):
+class NaturalTransformation(Mechanism):
     """A natural-transformation, is a map from the class of formulas to itself.
 
-    Syntactically, a transformation is a formula t(c, V, D, P) where:
-     - t is the transformation connective,
-     - c is a formula called the conclusion, which gives the shape of the transformation output formula.
+    Syntactically, a natural-transformation is a formula t(c, V, D, P) where:
+     - t is the natural-transformation connective,
+     - c is a formula called the conclusion, which gives the shape of the natural-transformation output formula.
      - V is a enumeration whose children are simple-objects called the variables.
      - D is a enumeration whose children are simple-objects called the new-object-declarations.
      - P is an enumeration of formulas whose children are called premises.
      - The intersection V ∩ D is empty.
 
     Algorithm:
-    The following algorithm is applied when a transformation is "called":
+    The following algorithm is applied when a natural-transformation is "called":
      - Input argument: P_input (an enumeration of formulas that are formula-equivalent-with-variables to
        P, given variables V.
      - Procedure:
@@ -1702,25 +1702,25 @@ class NaturalTransformation(Formula):
         3) For every new object declaration, create a new connective with a new symbol.
         4) Substitute the connectives of new object declarations in c with their newly created connectives.
 
-    Note 1: If a transformation contains new-object-declarations, then it is non-deterministic,
+    Note 1: If a natural-transformation contains new-object-declarations, then it is non-deterministic,
         i.e.: every time it is called with the same input arguments, it creates a new unique formula.
-        To the contrary, if a transformation contains no new-object-declarations, then it is deterministic,
+        To the contrary, if a natural-transformation contains no new-object-declarations, then it is deterministic,
         i.e.: every time it is called with the same input arguments, it creates identical formulas.
 
-    Note 2: When new-object-declarations are used, the transformation declares new objects in the theory. In fact,
+    Note 2: When new-object-declarations are used, the natural-transformation declares new objects in the theory. In fact,
         this is the only possibility for new objects to be created / declared.
 
     Note 3: When new-object-declarations are used, note that it is not the sub-formulas that are replaced,
-        but the connectives. This makes it possible to design transformation that output new non
+        but the connectives. This makes it possible to design natural-transformation that output new non
 
     Note 4: Transformations are the building blocks of inference-rules. Ses inference-rules for more details.
 
-    Note 5: The transformation in an inference rule is very similar to an intuitionistic sequent (cf. Mancosu et al,
+    Note 5: The natural-transformation in an inference rule is very similar to an intuitionistic sequent (cf. Mancosu et al,
     2021, p. 170), i.e.: "In intuitionistic-sequent, there may be at most one formula to the right of ⇒ .", with
     some distinctive properties:
-        - a transformation comprises an explicit and finite set of variables,
+        - a natural-transformation comprises an explicit and finite set of variables,
           while an intuitionistic-sequent uses only formula variables.
-        - the order of the premises in a transformation does not matter a priori because it is an enumeration,
+        - the order of the premises in a natural-transformation does not matter a priori because it is an enumeration,
           while the order of the formulas in the antecedent of an intuitionistic-sequent matter a priori,
           even though this constraint is immediately relieved by the interchange structural rule.
     """
@@ -1734,8 +1734,9 @@ class NaturalTransformation(Formula):
         variables: Enumeration = coerce_enumeration(e=variables)
         declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
-        o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
-                                   t=(conclusion, variables, declarations, premises,))
+        o: tuple = super().__new__(cls, c=_connectives.natural_transformation, conclusion=conclusion,
+                                   variables=variables,
+                                   declarations=declarations, premises=premises)
         return o
 
     def __init__(self, conclusion: FlexibleFormula, variables: FlexibleEnumeration | None = None,
@@ -1745,7 +1746,8 @@ class NaturalTransformation(Formula):
         variables: Enumeration = coerce_enumeration(e=variables)
         declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
-        super().__init__(c=_connectives.natural_transformation, t=(conclusion, variables, declarations, premises,))
+        super().__init__(c=_connectives.natural_transformation, conclusion=conclusion, variables=variables,
+                         declarations=declarations, premises=premises)
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -1754,7 +1756,7 @@ class NaturalTransformation(Formula):
     def execute_mechanism(self, arguments: FlexibleTupl) -> Formula:
         """
 
-        :param arguments: A tuple of arguments, whose order matches the order of the transformation premises.
+        :param arguments: A tuple of arguments, whose order matches the order of the natural-transformation premises.
         :return:
         """
         arguments = coerce_tupl(t=arguments)
@@ -1765,7 +1767,7 @@ class NaturalTransformation(Formula):
                                                                         variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_030,
-                                          msg='Applying a transformation with incorrect premises.',
+                                          msg='Applying a natural-transformation with incorrect premises.',
                                           target_formula=arguments, transformation_premises=self.premises,
                                           transformation_variables=self.variables, transformation=self)
 
