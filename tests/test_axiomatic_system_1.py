@@ -830,7 +830,7 @@ class TestDemonstration:
                                                          p=(x | star | y,
                                                             y | star | z,),
                                                          c=x | star | z,
-                                                         x=(x, y, z,))
+                                                         v=(x, y, z,))
 
         # derive a theorem
         demo2, _, = pu.as1.derive_1(t=theory,
