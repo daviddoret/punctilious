@@ -550,9 +550,9 @@ class TestInferenceRule:
         axiomatization = pu.as1.Axiomatization(d=(ir,))
 
         # derivation from the axiom
-        i = pu.as1.Inference(premises=None, transformation_rule=rule)
-        isolated_theorem = pu.as1.Derivation(valid_statement=phi, justification=i)
-        pu.as1.Theory(d=(*axiomatization, isolated_theorem))
+        i = pu.as1.Inference(premises=None, i=ir)
+        isolated_theorem = pu.as1.Theorem(valid_statement=phi, i=i)
+        t = pu.as1.append_to_theory(isolated_theorem, t=axiomatization)
         assert pu.as1.is_formula_equivalent(
             phi=isolated_theorem.valid_statement,
             psi=phi)
@@ -561,16 +561,16 @@ class TestInferenceRule:
         a, b = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         rule = pu.as1.Transformation(conclusion=a | f | b, variables=None, declarations=None, premises=None)
-        phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule_by_transformation
-        assert pu.as1.is_well_formed_inference_rule_by_transformation(i=phi1)
+        phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
+        assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
         # incorrect connective
-        phi2 = rule | pu.as1._connectives.inference | pu.as1._connectives.inference_rule_by_transformation
-        assert not pu.as1.is_well_formed_inference_rule_by_transformation(i=phi2)
+        phi2 = rule | pu.as1._connectives.inference | pu.as1._connectives.inference_rule
+        assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
         phi3 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.enumeration
-        assert not pu.as1.is_well_formed_inference_rule_by_transformation(i=phi3)
+        assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
 class TestFormulaToTuple:
@@ -594,12 +594,12 @@ class TestProofByPostulation:
         a, b, c, d, e = pu.as1.let_x_be_a_simple_object(formula_ts=('a', 'b', 'c', 'd', 'e',))
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
         rule1 = pu.as1.Transformation(conclusion=star3(e, b, d), variables=None, declarations=None, premises=None)
-        phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule_by_transformation
-        assert pu.as1.is_well_formed_inference_rule_by_transformation(i=phi1)
-        phi2 = rule1 | pu.as1._connectives.map | pu.as1._connectives.inference_rule_by_transformation
-        assert not pu.as1.is_well_formed_inference_rule_by_transformation(i=phi2)
+        phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
+        assert pu.as1.is_well_formed_inference_rule(i=phi1)
+        phi2 = rule1 | pu.as1._connectives.map | pu.as1._connectives.inference_rule
+        assert not pu.as1.is_well_formed_inference_rule(i=phi2)
         phi3 = rule1 | pu.as1._connectives.follows_from | b
-        assert not pu.as1.is_well_formed_inference_rule_by_transformation(i=phi3)
+        assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
 class TestInference:
@@ -612,7 +612,9 @@ class TestInference:
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(arguments=p))
-        i = pu.as1.Theorem(valid_statement=theorem, i=pu.as1.Inference(premises=p, transformation_rule=t))
+        inference_rule = pu.as1.InferenceRule(mechanism=t)
+        inference = pu.as1.Inference(premises=p, i=inference_rule)
+        i = pu.as1.Theorem(valid_statement=theorem, i=inference)
         pu.as1.is_formula_equivalent(
             phi=i,
             psi=theorem | pu.as1._connectives.follows_from | pu.as1._connectives.inference(p, t))
@@ -676,7 +678,7 @@ class TestAlgorithm:
                                  declarations={x, })
         i = as1.InferenceRule(mechanism=algo)
         m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
-        t, d = as1.derive_1(t=m, c=t | is_a | theory, p=None, i=i)
+        m, d = as1.derive_1(t=m, c=t | is_a | theory, p=None, i=i)
         pass
 
 

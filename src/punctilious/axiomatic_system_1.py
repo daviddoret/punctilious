@@ -585,7 +585,7 @@ def is_inference_rule_of_theory(i: FlexibleInferenceRule, t: FlexibleTheory):
     """Return True if "i" is an inference-rule in theory "i", False otherwise."""
     i: InferenceRule = coerce_inference_rule(i=i)
     t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in t.inference_rules)
+    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in iterate_inference_rules_in_theory(t=t))
 
 
 def is_theorem_of_theory(m: FlexibleTheorem, t: FlexibleTheory):
@@ -980,8 +980,7 @@ class Connectives(typing.NamedTuple):
     follows_from: BinaryConnective
     implies: BinaryConnective
     inference: BinaryConnective
-    inference_rule_by_algorithm: UnaryConnective
-    inference_rule_by_transformation: UnaryConnective
+    inference_rule: UnaryConnective
     is_a: BinaryConnective
     land: BinaryConnective
     lnot: UnaryConnective
@@ -1003,8 +1002,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     follows_from=let_x_be_a_binary_connective(formula_ts='follows-from'),
     implies=let_x_be_a_binary_connective(formula_ts='implies'),
     inference=let_x_be_a_binary_connective(formula_ts='inference'),
-    inference_rule_by_algorithm=let_x_be_a_unary_connective(formula_ts='inference-rule-by-algorithm'),
-    inference_rule_by_transformation=let_x_be_a_unary_connective(formula_ts='inference-rule-by-transformation'),
+    inference_rule=let_x_be_a_unary_connective(formula_ts='inference-rule'),
     is_a=let_x_be_a_binary_connective(formula_ts='is-a'),
     land=let_x_be_a_binary_connective(formula_ts='∧'),
     lnot=let_x_be_a_unary_connective(formula_ts='¬'),
@@ -1956,8 +1954,8 @@ def coerce_inference(i: FlexibleFormula) -> Inference:
     if isinstance(i, Inference):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference(i=i):
-        transformation: Transformation = coerce_transformation(t=i.term_1)
-        return Inference(premises=i.term_0, transformation_rule=transformation)
+        i2: InferenceRule = coerce_inference_rule(i=i.term_1)
+        return Inference(premises=i.term_0, i=i2)
     else:
         raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
 
@@ -2052,15 +2050,6 @@ def is_well_formed_enumeration(e: FlexibleFormula) -> bool:
 
 
 def is_well_formed_inference_rule(i: FlexibleFormula) -> bool:
-    """Return True if and only if formula :math:`i` is a well-formed inference-rule, False otherwise.
-
-    :param i:
-    :return:
-    """
-    return is_well_formed_inference_rule_by_transformation(i=i) or is_well_formed_inference_rule_by_algorithm(i=i)
-
-
-def is_well_formed_inference_rule_by_transformation(i: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed inference-rule, False otherwise.
 
     :param i: A formula.
@@ -2072,8 +2061,26 @@ def is_well_formed_inference_rule_by_transformation(i: FlexibleFormula) -> bool:
         return True
     elif (i.connective is _connectives.follows_from and
           i.arity == 2 and
-          is_well_formed_transformation(t=i.term_0) and
-          i.term_1.connective is _connectives.inference_rule_by_transformation):
+          is_well_formed_mechanism(m=i.term_0) and
+          i.term_1.connective is _connectives.inference_rule):
+        return True
+    else:
+        return False
+
+
+def is_well_formed_mechanism(m: FlexibleFormula) -> bool:
+    """Return True if and only if m is a well-formed mechanism, False otherwise.
+
+    :param m: A formula.
+    :return: bool.
+    """
+    m = coerce_formula(phi=m)
+    if isinstance(m, InferenceRule):
+        # Shortcut: the class assures the well-formedness of the formula.
+        return True
+    elif is_well_formed_transformation(t=m):
+        return True
+    elif is_well_formed_algorithm(a=m):
         return True
     else:
         return False
@@ -2092,20 +2099,6 @@ def is_well_formed_algorithm(a: FlexibleFormula) -> bool:
     elif (a.arity == 0 and
           a.connective is _connectives.algorithm and
           hasattr(a, 'external_algorithm')):
-        return True
-    else:
-        return False
-
-
-def is_well_formed_inference_rule_by_algorithm(i: FlexibleFormula) -> bool:
-    i = coerce_formula(phi=i)
-    if isinstance(i, InferenceRule):
-        # Shortcut: the class assures the well-formedness of the formula.
-        return True
-    elif (i.connective is _connectives.follows_from and
-          i.arity == 2 and
-          is_well_formed_algorithm(a=i.term_0) and
-          i.term_1.connective is _connectives.inference_rule_by_algorithm):
         return True
     else:
         return False
@@ -2208,7 +2201,7 @@ def iterate_inference_rules_in_theory(t: FlexibleTheory) -> typing.Generator[Inf
     t = coerce_theory(t=t)
     derivations = iterate_derivations_in_theory(t=t)
     for derivation in derivations:
-        if is_well_formed_inference_rule_by_transformation(i=derivation):
+        if is_well_formed_inference_rule(i=derivation):
             inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
             yield inference_rule
 
@@ -2331,7 +2324,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool =
         # TODO: Factorize the check in Theorem.__new__ or __init__,
         #   that takes into account new-object-declarations.
         i: Inference = coerce_inference(i=t.term_1)
-        f_of_p: Formula = i.transformation_rule(i.premises)
+        f_of_p: Formula = i.inference_rule.mechanism(i.premises)
         if not is_formula_equivalent(phi=t.term_0, psi=f_of_p):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
             if raise_error_if_ill_formed:
@@ -2351,7 +2344,7 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
     d: Formula = coerce_formula(phi=d)
     if is_well_formed_theorem(t=d):
         return True
-    elif is_well_formed_inference_rule_by_transformation(i=d):
+    elif is_well_formed_inference_rule(i=d):
         return True
     elif is_well_formed_axiom(a=d):
         return True
@@ -2394,7 +2387,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
             # This is an axiom.
             derivation: Axiom = coerce_axiom(a=derivation)
             pass
-        elif is_well_formed_inference_rule_by_transformation(i=derivation):
+        elif is_well_formed_inference_rule(i=derivation):
             # This is an inference-rule.
             derivation: InferenceRule = coerce_inference_rule(i=derivation)
             pass
@@ -2415,26 +2408,35 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     if premise_index >= i:
                         # The premise is not positioned before the conclusion.
                         if raise_event_if_false:
-                            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_037, premise=premise, premise_index=i,
-                                                          theorem=derivation,
-                                                          valid_statement=valid_statement)
+                            raise u1.ApplicativeException(
+                                code=c1.ERROR_CODE_AS1_037,
+                                msg='The premise is not positioned before the conclusion.',
+                                premise=premise, premise_index=i,
+                                theorem=derivation,
+                                valid_statement=valid_statement)
                         return False
-            if not valid_statements.has_element(phi=inference.transformation_rule):
-                # The inference transformation-rule is absent from the theory.
+            if not any(
+                    isinstance(ir, InferenceRule) and is_formula_equivalent(phi=inference.inference_rule, psi=ir) for ir
+                    in t):
+                # Exceptionally we cannot call is_inference_rule_of_theory because this
+                # would lead to an infinite recursion. In consequence, we must "manually"
+                # check using the above expression whether the inference-rule is in the theory.
+                # The inference-rule is absent from the theory.
                 if raise_event_if_false:
                     raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_038,
-                                                  transformation_rule=inference.transformation_rule,
+                                                  msg='The inference-rule is absent in the theory.',
+                                                  transformation_rule=inference.inference_rule,
                                                   inference=inference, premise_index=i, theorem=derivation,
                                                   valid_statement=valid_statement)
                 return False
             else:
-                transformation_index = valid_statements.get_index_of_first_equivalent_element(
-                    phi=inference.transformation_rule)
-                if transformation_index >= i:
+                inference_rule_index = derivations.get_index_of_first_equivalent_element(
+                    phi=inference.inference_rule)
+                if inference_rule_index >= i:
                     # The transformation is not positioned before the conclusion.
                     return False
             # And finally, confirm that the inference effectively yields phi.
-            phi_prime = inference.transformation_rule.execute_mechanism(arguments=inference.premises)
+            phi_prime = inference.inference_rule.mechanism.execute_mechanism(arguments=inference.premises)
             if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
                 return False
         else:
@@ -2450,7 +2452,7 @@ def is_well_formed_axiomatization(a: FlexibleFormula) -> bool:
     if a.connective is not _connectives.axiomatization:
         return False
     for element in a:
-        if not is_well_formed_axiom(a=element) and not is_well_formed_inference_rule_by_transformation(i=element):
+        if not is_well_formed_axiom(a=element) and not is_well_formed_inference_rule(i=element):
             return False
     return True
 
@@ -2464,9 +2466,7 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
     d: Formula = coerce_formula(phi=d)
     if is_well_formed_theorem(t=d):
         return coerce_theorem(t=d)
-    elif is_well_formed_inference_rule_by_transformation(i=d):
-        return coerce_inference_rule(i=d)
-    elif is_well_formed_inference_rule_by_algorithm(i=d):
+    elif is_well_formed_inference_rule(i=d):
         return coerce_inference_rule(i=d)
     elif is_well_formed_axiom(a=d):
         return coerce_axiom(a=d)
@@ -2721,14 +2721,14 @@ class InferenceRule(Derivation):
     def __new__(cls, mechanism: FlexibleMechanism = None, **kwargs):
         mechanism: Mechanism = coerce_mechanism(m=mechanism)
         o: tuple = super().__new__(cls, valid_statement=mechanism,
-                                   justification=_connectives.inference_rule_by_transformation,
+                                   justification=_connectives.inference_rule,
                                    **kwargs)
         return o
 
     def __init__(self, mechanism: FlexibleMechanism, **kwargs):
         self._mechanism: Mechanism = coerce_mechanism(m=mechanism)
         super().__init__(valid_statement=self._mechanism,
-                         justification=_connectives.inference_rule_by_transformation, **kwargs)
+                         justification=_connectives.inference_rule, **kwargs)
 
     @property
     def mechanism(self) -> Mechanism:
@@ -2744,34 +2744,32 @@ class Inference(Formula):
 
     Syntactic definition:
     An inference is a formula of the form:
-        inference(P, f)
+        inference(P, i)
     Where:
         - inference is the inference connective,
         - P is an enumeration called the premises,
-        - f is a transformation called the inference-rule.
+        - i is an inference-rule.
 
     Semantic definition:
     An inference is a formal description of one usage of an inference-rule."""
 
-    # TODO: Replace transformation_rule argument with inference_rule
-
-    def __new__(cls, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
+    def __new__(cls, premises: FlexibleTupl, i: FlexibleInferenceRule):
         premises: Tupl = coerce_tupl(t=premises)
-        transformation_rule: Transformation = coerce_transformation(t=transformation_rule)
+        i: InferenceRule = coerce_inference_rule(i=i)
         c: Connective = _connectives.inference
-        o: tuple = super().__new__(cls, c=c, t=(premises, transformation_rule,))
+        o: tuple = super().__new__(cls, c=c, t=(premises, i,))
         return o
 
-    def __init__(self, premises: FlexibleTupl, transformation_rule: FlexibleTransformation):
+    def __init__(self, premises: FlexibleTupl, i: FlexibleInferenceRule):
         self._premises: Tupl = coerce_tupl(t=premises)
-        self._transformation_rule: Transformation = coerce_transformation(t=transformation_rule)
+        self._inference_rule: InferenceRule = coerce_inference_rule(i=i)
         c: Connective = _connectives.inference
-        super().__init__(c=c, t=(self._premises, self._transformation_rule,))
+        super().__init__(c=c, t=(self._premises, self._inference_rule,))
 
     @property
-    def transformation_rule(self) -> Transformation:
+    def inference_rule(self) -> InferenceRule:
         """The inference-rule of the inference."""
-        return self._transformation_rule
+        return self._inference_rule
 
     @property
     def premises(self) -> Tupl:
@@ -2827,8 +2825,8 @@ class Theorem(Derivation):
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
-        re_derived_valid_statement: Formula = i.transformation_rule(i.premises)
-        if len(i.transformation_rule.declarations) == 0:
+        re_derived_valid_statement: Formula = i.inference_rule.mechanism.execute_mechanism(i.premises)
+        if len(i.inference_rule.mechanism.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
                 is_formula_equivalent(phi=valid_statement, psi=re_derived_valid_statement, raise_event_if_false=True)
@@ -2837,27 +2835,26 @@ class Theorem(Derivation):
                 # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
                 raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
                                               algorithm_output=re_derived_valid_statement,
-                                              inference=i, inference_transformation_rule=i.transformation_rule,
-                                              inference_premises=i.premises)
+                                              inference=i)
         else:
             # If there are new-object-declarations, f_of_p is not directly comparable with valid_statements.
             # This is because transformations with new-object-declarations are non-deterministic.
             # In order to check that valid_statement is consistent with the inference-rule, we can
             # compare both formulas with the inference-rule conclusion and with regards to new-object-declaration variables.
             success_1, m1 = is_formula_equivalent_with_variables_2(phi=valid_statement,
-                                                                   psi=i.transformation_rule.conclusion,
-                                                                   variables=i.transformation_rule.declarations)
+                                                                   psi=i.inference_rule.mechanism.conclusion,
+                                                                   variables=i.inference_rule.mechanism.declarations)
             if not success_1:
                 raise u1.ApplicativeException(
                     msg='The valid-statement is not consistent with the inference-rule conclusion, considering new-object-declarations')
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
             success_2, m2 = is_formula_equivalent_with_variables_2(phi=valid_statement,
-                                                                   psi=i.transformation_rule.conclusion,
+                                                                   psi=i.inference_rule.mechanism.conclusion,
                                                                    variables=m1.domain)
             pass
             valid_statement_reversed: Formula = replace_formulas(phi=valid_statement, m=m1_reversed)
-            if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.transformation_rule.conclusion):
+            if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.inference_rule.mechanism.conclusion):
                 raise u1.ApplicativeException(
                     msg='Reversing the valid-statement does not yield the inference-rule conclusion.')
 
@@ -2927,12 +2924,12 @@ class Theory(Enumeration):
             e=(coerce_derivation(d=p) for p in d))
         if t is not None:
             d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
-        try:
-            pass
-            is_well_formed_theory(t=d, raise_event_if_false=True)
-        except Exception as error:
-            # well-formedness verification failure, the theorem is ill-formed.
-            raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_046, error=error, derivations=d)
+        # try:
+        #    pass
+        is_well_formed_theory(t=d, raise_event_if_false=True)
+        # except Exception as error:
+        #    # well-formedness verification failure, the theorem is ill-formed.
+        #    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_046, error=error, derivations=d)
         o: tuple = super().__new__(cls, elements=d, **kwargs)
         return o
 
@@ -3087,7 +3084,7 @@ class Axiomatization(Theory):
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
         for d in d:
-            if is_well_formed_inference_rule_by_transformation(i=d):
+            if is_well_formed_inference_rule(i=d):
                 # This is an inference-rule.
                 inference_rule: InferenceRule = coerce_inference_rule(i=d)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
@@ -3113,7 +3110,7 @@ class Axiomatization(Theory):
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
         for derivation in d:
-            if is_well_formed_inference_rule_by_transformation(i=derivation):
+            if is_well_formed_inference_rule(i=derivation):
                 # This is an inference-rule.
                 inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
                 coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
@@ -3217,11 +3214,11 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
                 extension_a: Axiom = coerce_axiom(a=argument)
                 if not is_axiom_of_theory(a=extension_a, t=t):
                     t: Theory = Theory(t=t, d=(extension_a,))
-            elif is_well_formed_inference_rule_by_transformation(i=argument):
+            elif is_well_formed_inference_rule(i=argument):
                 extension_i: InferenceRule = coerce_inference_rule(i=argument)
                 if not is_inference_rule_of_theory(i=extension_i, t=t):
                     t: Theory = Theory(t=t, d=(extension_i,))
-            elif is_well_formed_inference_rule_by_algorithm(i=argument):
+            elif is_well_formed_inference(i=argument):
                 extension_i: InferenceRule = coerce_inference_rule(i=argument)
                 if not is_inference_rule_of_theory(i=extension_i, t=t):
                     t: Theory = Theory(t=t, d=(extension_i,))
@@ -3270,14 +3267,15 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
                                           i=i, t=t)
 
     # Configure the inference that derives the theorem.
-    inference: Inference = Inference(premises=p, transformation_rule=i.mechanism)
+    inference: Inference = Inference(premises=p, i=i)
 
     # Prepare the new theorem.
     theorem: Theorem = Theorem(valid_statement=c, i=inference)
 
     # Extends the theory with the new theorem.
     # The validity of the premises will be checked during theory initialization.
-    t: Theory = Theory(t=t, d=(theorem,), decorations=(t,))
+    t: Theory = append_to_theory(theorem, t=t)
+    # t: Theory = Theory(t=t, d=(theorem,), decorations=(t,))
 
     u1.log_info(theorem.typeset_as_string(theory=t))
 
@@ -3917,17 +3915,17 @@ class DerivationTypesetter(pl1.Typesetter):
             if is_well_formed_axiom(a=phi):
                 phi: Axiom = coerce_axiom(a=phi)
                 yield '\t\t| Axiom.'
-            elif is_well_formed_inference_rule_by_transformation(i=phi):
+            elif is_well_formed_inference_rule(i=phi):
                 phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
-            elif is_well_formed_inference_rule_by_algorithm(i=phi):
+            elif is_well_formed_inference(i=phi):
                 phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: Theorem = coerce_theorem(t=phi)
                 inference: Inference = phi.inference
-                transformation: Transformation = inference.transformation_rule
-                yield f'\t\t| Follows from [{transformation}] given '
+                inference_rule: InferenceRule = inference.inference_rule
+                yield f'\t\t| Follows from [{inference_rule}] given '
                 first: bool = True
                 for premise in phi.inference.premises:
                     if not first:
@@ -3947,22 +3945,16 @@ class DerivationTypesetter(pl1.Typesetter):
             if is_well_formed_axiom(a=phi):
                 phi: Axiom = coerce_axiom(a=phi)
                 yield '\t\t| Axiom.'
-            elif is_well_formed_inference_rule_by_transformation(i=phi):
+            elif is_well_formed_inference_rule(i=phi):
                 phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
-            elif is_well_formed_inference_rule_by_algorithm(i=phi):
+            elif is_well_formed_inference(i=phi):
                 phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: Theorem = coerce_theorem(t=phi)
                 inference: Inference = phi.inference
-                transformation: Transformation = inference.transformation_rule
-                success, inference_rule = get_theory_inference_rule_from_transformation_rule(t=theory, r=transformation)
-                if not success:
-                    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_053,
-                                                  msg=f'Transformation "{transformation}" could not be found in the '
-                                                      f'theory.', phi=phi, inference=inference,
-                                                  transformation=transformation, theory=theory)
+                inference_rule: InferenceRule = inference.inference_rule
                 yield f'\t\t| Follows from '
                 yield from typeset_formula_reference(phi=inference_rule, t=theory, **kwargs)
                 yield f' given '
