@@ -1855,7 +1855,7 @@ def coerce_external_algorithm(f: object) -> typing.Callable:
                                       external_algorithm=f)
 
 
-class AlgorithmicTransformation(Formula):
+class AlgorithmicTransformation(Mechanism):
     """A well-formed algorithmic-transformation is a derivation that justified the derivation of further theorems in a theory,
     should bew impose conditions ex premises???
     by executing an algorithm that is external to the theory.
@@ -1873,7 +1873,8 @@ class AlgorithmicTransformation(Formula):
         declarations: Enumeration = coerce_enumeration(e=declarations)
         premises: Tupl = coerce_tupl(t=premises)
         o: tuple = super().__new__(cls, c=_connectives.algorithm,
-                                   t=(conclusion, variables, declarations, premises,))
+                                   conclusion=conclusion, variables=variables, declarations=declarations,
+                                   premises=premises)
         return o
 
     def __init__(self, external_algorithm: typing.Callable,
@@ -1887,7 +1888,7 @@ class AlgorithmicTransformation(Formula):
         premises: Tupl = coerce_tupl(t=premises)
         self._external_algorithm: typing.Callable = external_algorithm
         super().__init__(c=_connectives.algorithm,
-                         t=(conclusion, variables, declarations, premises,))
+                         conclusion=conclusion, variables=variables, declarations=declarations, premises=premises)
 
     def __call__(self, arguments: FlexibleTupl) -> Formula:
         """A shortcut for self.apply_transformation()"""
