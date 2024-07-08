@@ -183,7 +183,7 @@ class SymbolTypesetter(Typesetter):
         yield from self.symbol.typeset_from_generator(**kwargs)
 
 
-class IndexedSymbolTypesetter(Typesetter):
+class NaturalIndexedSymbolTypesetter(Typesetter):
     def __init__(self, body_ts: Typesetter, index: int):
         super().__init__()
         self._body_ts: Typesetter = body_ts
@@ -208,6 +208,44 @@ class IndexedSymbolTypesetter(Typesetter):
             yield unicode_subscriptify(s=str(self.index))
         elif encoding is encodings.unicode_limited:
             yield str(self.index)
+        else:
+            raise ValueError('Unsupported encoding')
+
+
+class ArbitraryIndexedSymbolTypesetter(Typesetter):
+    """"""
+
+    def __init__(self, body_ts: Typesetter, subscript_ts: Typesetter):
+        super().__init__()
+        body_ts: Typesetter = coerce_typesetter(ts=body_ts)
+        subscript_ts: Typesetter = coerce_typesetter(ts=subscript_ts)
+        self._body_ts: FlexibleTypesetter = body_ts
+        self._subscript_ts: FlexibleTypesetter = subscript_ts
+
+    @property
+    def subscript_ts(self) -> Typesetter:
+        return self._subscript_ts
+
+    @property
+    def body_ts(self) -> Typesetter:
+        return self._body_ts
+
+    def typeset_from_generator(self, encoding: typing.Optional[encodings] = None, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        if encoding is None:
+            encoding = encodings.default
+        yield from self.body_ts.typeset_from_generator(encoding=encoding, **kwargs)
+        if encoding is encodings.latex_math:
+            yield f'_{{'
+            yield from self.subscript_ts.typeset_from_generator(encoding=encoding, **kwargs)
+            yield f'}}'
+        elif encoding is encodings.unicode_extended:
+            subscript: str = self.subscript_ts.typeset_as_string(encoding=encoding, **kwargs)
+            yield unicode_subscriptify(s=subscript)
+        elif encoding is encodings.unicode_limited:
+            subscript: str = self.subscript_ts.typeset_as_string(encoding=encoding, **kwargs)
+            yield '_'
+            yield subscript
         else:
             raise ValueError('Unsupported encoding')
 
@@ -316,8 +354,8 @@ class Typesetters:
     def text(self, text: str) -> TextTypesetter:
         return TextTypesetter(text=text)
 
-    def indexed_symbol(self, symbol: Symbol, index: int) -> IndexedSymbolTypesetter:
-        return IndexedSymbolTypesetter(body_ts=symbol, index=index)
+    def indexed_symbol(self, symbol: Symbol, index: int) -> NaturalIndexedSymbolTypesetter:
+        return NaturalIndexedSymbolTypesetter(body_ts=symbol, index=index)
 
 
 typesetters = Typesetters()

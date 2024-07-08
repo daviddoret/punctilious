@@ -42,8 +42,10 @@ as1._connectives.inference_rule.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='inference-rule')
 as1._connectives.inference_rule.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='inference-rule')
-as1._connectives.theory.formula_ts = as1.typesetters.classical_formula(
+as1._connectives.theory_formula.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='theory')
+as1._connectives.theory_predicate.formula_ts = as1.typesetters.classical_formula(
+    connective_typesetter=pl1.ArbitraryIndexedSymbolTypesetter(body_ts='theory', subscript_ts='p'))
 as1._connectives.axiomatization.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='axiomatization')
 as1._connectives.map.formula_ts = as1.typesetters.map()

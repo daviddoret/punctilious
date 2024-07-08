@@ -963,7 +963,7 @@ def let_x_be_a_sub_theory_of_y(t: FlexibleTheory, m: FlexibleTheory) -> Theory:
     """
     t = coerce_theory(t=t)
     m = coerce_theory(t=t)
-    m, a = let_x_be_an_axiom(t=m, s=t | _connectives.is_a | _connectives.theory)
+    m, a = let_x_be_an_axiom(t=m, s=t | _connectives.is_a | _connectives.theory_formula)
     return m
 
 
@@ -996,7 +996,8 @@ class Connectives(typing.NamedTuple):
     map: BinaryConnective
     proposition: NullaryConnective
     propositional_variable: NullaryConnective
-    theory: FreeArityConnective
+    theory_formula: FreeArityConnective
+    theory_predicate: UnaryConnective
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
     natural_transformation: QuaternaryConnective
     tupl: FreeArityConnective
@@ -1019,7 +1020,8 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     proposition=NullaryConnective(formula_ts='proposition'),
     propositional_variable=NullaryConnective(formula_ts='propositional-variable'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
-    theory=let_x_be_a_free_arity_connective(formula_ts='theory'),
+    theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
+    theory_predicate=let_x_be_a_unary_connective(formula_ts='theory-predicate'),
     natural_transformation=let_x_be_a_quaternary_connective(formula_ts='natural-transformation'),
     tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
 
@@ -2504,8 +2506,10 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                 if inference_rule_index >= i:
                     # The transformation is not positioned before the conclusion.
                     return False
+            # Now we have the assurance that the inference-rule and all premises are valid.
             # And finally, confirm that the inference effectively yields phi.
-            phi_prime = inference.inference_rule.transformation.apply_transformation(p=inference.premises)
+            phi_prime = inference.inference_rule.transformation.apply_transformation(p=inference.premises,
+                                                                                     a=inference.arguments)
             if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
                 return False
         else:
@@ -2950,7 +2954,9 @@ class Theorem(Derivation):
             valid_statement_reversed: Formula = replace_formulas(phi=valid_statement, m=m1_reversed)
             if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.inference_rule.transformation.conclusion):
                 raise u1.ApplicativeError(
-                    msg='Reversing the valid-statement does not yield the inference-rule conclusion.')
+                    msg='Reversing the valid-statement does not yield the inference-rule conclusion.',
+                    valid_statement_reversed=valid_statement_reversed,
+                    expected_conclusion=i.inference_rule.transformation.conclusion)
 
     @property
     def inference(self) -> Inference:
@@ -3041,7 +3047,7 @@ class Theory(Enumeration):
         :param kwargs:
         """
         if c is None:
-            c: Connective = _connectives.theory
+            c: Connective = _connectives.theory_formula
 
         if t is not None:
             t: Theory = coerce_theory(t=t)
@@ -3058,8 +3064,8 @@ class Theory(Enumeration):
             copy_theory_decorations(target=self, decorations=(t,))
         if pl1.REF_TS not in self.ts.keys():
             Theory._last_index = Theory._last_index + 1
-            self.ts[pl1.REF_TS] = pl1.IndexedSymbolTypesetter(body_ts=pl1.symbols.t_uppercase_script,
-                                                              index=Theory._last_index)
+            self.ts[pl1.REF_TS] = pl1.NaturalIndexedSymbolTypesetter(body_ts=pl1.symbols.t_uppercase_script,
+                                                                     index=Theory._last_index)
         if pl1.DECLARATION_TS not in self.ts.keys():
             self.ts[pl1.DECLARATION_TS] = typesetters.declaration(conventional_class='theory')
         if t is None:
@@ -4094,7 +4100,7 @@ class Typesetters:
     def text(self, text: str) -> pl1.TextTypesetter:
         return pl1.typesetters.text(text=text)
 
-    def indexed_symbol(self, symbol: pl1.Symbol, index: int) -> pl1.IndexedSymbolTypesetter:
+    def indexed_symbol(self, symbol: pl1.Symbol, index: int) -> pl1.NaturalIndexedSymbolTypesetter:
         return pl1.typesetters.indexed_symbol(symbol=symbol, index=index)
 
     def infix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> InfixFormulaTypesetter:

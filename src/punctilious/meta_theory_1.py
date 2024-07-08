@@ -15,7 +15,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
     is_valid_in: as1.InferenceRule = as1.InferenceRule(
         t=as1.let_x_be_a_natural_transformation(
             premises=(
-                t | is_a | theory,
+                t | is_a | theory_formula,
                 phi | is_a | formula,
                 phi | is_valid_statement_in | t,
             ),

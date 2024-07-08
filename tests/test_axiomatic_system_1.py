@@ -690,26 +690,27 @@ class TestAlgorithm:
             p = as1.coerce_tupl(t=p)
             a = as1.coerce_tupl(t=a)
             if not a.arity == 1:
-                raise pu.u1.ApplicativeError(msg='wrong arguments')
+                raise pu.u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
             t = a[0]
             if as1.is_well_formed_theory(t=t):
                 t = as1.coerce_theory(t=t)
-                phi = t | is_a | theory
+                phi = theory_predicate(t)
                 return phi
             else:
-                phi = lnot(t | is_a | theory)
+                phi = lnot(theory_predicate(t))
                 return phi
 
         t = as1.let_x_be_a_theory()
         m = as1.let_x_be_a_theory()
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
             algo = as1.AlgorithmicTransformation(external_algorithm=x_is_a_theory,
-                                                 c=x | is_a | theory,
+                                                 c=theory_predicate(x),
+                                                 v={x, },
                                                  d={x, })
         i = as1.InferenceRule(t=algo)
         m, i = as1.let_x_be_an_inference_rule(t1=m, i=i)
-        s = x | is_a | theory
-        m, d = as1.derive_1(t=m, c=s, p=None, i=i, a=(t,))
+        c = theory_predicate(t)
+        m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,))
         pass
 
 
