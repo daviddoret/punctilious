@@ -1009,7 +1009,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
     follows_from=let_x_be_a_binary_connective(formula_ts='follows-from'),
     implies=let_x_be_a_binary_connective(formula_ts='implies'),
-    inference=let_x_be_a_binary_connective(formula_ts='inference'),
+    inference=let_x_be_a_ternary_connective(formula_ts='inference'),
     inference_rule=let_x_be_a_unary_connective(formula_ts='inference-rule'),
     is_a=let_x_be_a_binary_connective(formula_ts='is-a'),
     land=let_x_be_a_binary_connective(formula_ts='∧'),
@@ -1346,7 +1346,7 @@ class Tupl(Formula):
         return is_term_of_formula(x=phi, phi=self)
 
 
-FlexibleTupl = typing.Optional[typing.Union[Tupl, typing.Iterable[FlexibleFormula]]]
+FlexibleTupl = typing.Optional[typing.Union[Tupl, typing.Iterable[FlexibleFormula], tuple, None]]
 """FlexibleTupl is a flexible python type that may be safely coerced into a Tupl."""
 
 
@@ -2807,15 +2807,17 @@ FlexibleTransformation = typing.Union[Transformation, AlgorithmicTransformation,
 
 
 class Inference(Formula):
-    """An inference is the description of a usage of an inference-rule.
+    """An inference is the description of a usage of an inference-rule. Intuitively, it can be understood as an instance
+    of the arguments passed to an inference-rule.
 
     Syntactic definition:
     An inference is a formula of the form:
-        inference(P, i)
+        inference(i, P, A)
     Where:
         - inference is the inference connective,
-        - P is an enumeration called the premises,
         - i is an inference-rule.
+        - P is a tuple of formulas denoted as the premises,
+        - (for algorithmic-transformations) A is a tuple of formulas denoted as the supplementary arguments.
 
     Semantic definition:
     An inference is a formal description of one usage of an inference-rule."""
@@ -3334,11 +3336,12 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
              i: FlexibleInferenceRule, a: FlexibleTupl | None = None) -> typing.Tuple[Theory, Theorem]:
     """Given a theory t, derives a new theory t' that extends t with a new theorem derived by applying inference-rule i.
 
-    :param c: A propositional formula posed as a conjecture.
     :param t: A theory.
-    :param p: A tuple of premises.
+    :param c: A propositional formula denoted as the conjecture.
+    :param p: A tuple of propositional formulas denoted as the premises.
     :param i: An inference-rule.
-    :param a: A tuple of supplementary arguments to be transmitted to the transformation.
+    :param a: (For algorithmic-transformations) A tuple of formulas denoted as the supplementary-arguments to be
+        transmitted as input arguments to the transformation.
     :return: A python-tuple (t′, theorem)
     """
     # parameters validation

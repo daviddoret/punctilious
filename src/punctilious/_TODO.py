@@ -3,10 +3,16 @@
 TODO: KEY QUALITY CHECK: In both the Theorem.__init__ or __new__ and in the is_well_formed_theorem function,
     check that newly declared objects are not present in any precedent formula in the theory!
 
-TODO: IDEA: Consider using a three-valued logic:
+TODO: IDEA: Develop a three-valued logic:
  - P is true
  - or P is false
  - or P is not decidable in this axiomatization
+
+TODO: Implement Predicates.
+
+TODO: Determine how to express predicates or classes over connectives,
+    example: if blue is a predicate, to express formulas such as blue(sky),
+    the truth that blue is a predicate should be expressible for example as predicate(blue).
 
 TODO: IDEA: Algorithm class.
     General idea: an algorithm is an implementation in a programming language,
@@ -15,7 +21,8 @@ TODO: IDEA: Algorithm class.
     generates a new valid-statement in the theory.
 
 
-
+TODO: Implement index constants on all formula classes, e.g. Inference. Then replace
+    all hard-coded index positions.
 
 TODO: KEY FEATURE: Implement sub-theory
     In the parent theory:

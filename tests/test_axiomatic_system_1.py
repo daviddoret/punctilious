@@ -566,7 +566,7 @@ class TestInferenceRule:
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
         # incorrect connective
-        phi2 = rule | pu.as1._connectives.inference | pu.as1._connectives.inference_rule
+        phi2 = pu.as1.Formula(c=pu.as1._connectives.inference, t=(pu.as1._connectives.inference_rule, rule,))
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
@@ -708,7 +708,7 @@ class TestAlgorithm:
         i = as1.InferenceRule(t=algo)
         m, i = as1.let_x_be_an_inference_rule(t1=m, i=i)
         s = x | is_a | theory
-        m, d = as1.derive_1(t=m, c=s, p=None, i=i, a=t)
+        m, d = as1.derive_1(t=m, c=s, p=None, i=i, a=(t,))
         pass
 
 
