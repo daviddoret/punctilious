@@ -687,16 +687,17 @@ class TestProofByInference:
 class TestAlgorithm:
     def test_algorithm(self):
         def x_is_a_theory(p: pu.as1.Tupl | None = None, a: pu.as1.Tupl | None = None):
-            t = as1.coerce_tupl(t=a)
-            if not t.arity == 1:
+            p = as1.coerce_tupl(t=p)
+            a = as1.coerce_tupl(t=a)
+            if not a.arity == 1:
                 raise pu.u1.ApplicativeError(msg='wrong arguments')
-            if as1.is_well_formed_theory(t=t[0]):
-                t2 = as1.coerce_theory(t=t[0])
-                phi = t2 | is_a | theory
+            t = a[0]
+            if as1.is_well_formed_theory(t=t):
+                t = as1.coerce_theory(t=t)
+                phi = t | is_a | theory
                 return phi
             else:
-                t2 = as1.coerce_theory(t=t[0])
-                phi = lnot(t2 | is_a | theory)
+                phi = lnot(t | is_a | theory)
                 return phi
 
         t = as1.let_x_be_a_theory()

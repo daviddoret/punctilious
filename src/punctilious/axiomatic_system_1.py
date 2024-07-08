@@ -1951,8 +1951,10 @@ class AlgorithmicTransformation(Transformation):
         :return:
         """
         p = coerce_tupl(t=p)
+        a = coerce_tupl(t=a)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
+        # supported extreme case: there are no premises.
         success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
