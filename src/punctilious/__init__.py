@@ -5,48 +5,53 @@ import presentation_layer_1 as pl1
 import axiomatic_system_1 as as1
 import connectives_standard_library_1 as csl1
 import inference_rules_1 as ir1
+import meta_theory_1 as mt1
 import propositional_logic_syntax_1 as pls1
 import minimal_logic_1 as ml1
 
-as1._connectives.follows_from.formula_ts = as1.typesetters.infix_formula(
+csl1.follows_from.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter='follows-from')
 
-as1._connectives.is_a.formula_ts = as1.typesetters.infix_formula(
+csl1.is_a.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter='is-a')
-as1._connectives.land.formula_ts = as1.typesetters.infix_formula(
+csl1.land.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter=pl1.symbols.conjunction)
-as1._connectives.lor.formula_ts = as1.typesetters.infix_formula(
+csl1.lor.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter=pl1.symbols.disjunction)
-as1._connectives.implies.formula_ts = as1.typesetters.infix_formula(
+csl1.implies.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter=pl1.symbols.implication)
-as1._connectives.algorithm.formula_ts = pl1.typesetters.text(
+csl1.algorithm.formula_ts = pl1.typesetters.text(
     text='algorithm')
-as1._connectives.lnot.formula_ts = as1.typesetters.classical_formula(
+csl1.lnot.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter=pl1.symbols.negation)
-as1._connectives.natural_transformation.formula_ts = as1.typesetters.natural_transformation()
-as1._connectives.tupl.formula_ts = as1.typesetters.bracketed_list(
+csl1.natural_transformation.formula_ts = as1.typesetters.natural_transformation()
+csl1.tupl.formula_ts = as1.typesetters.bracketed_list(
     open_bracket=pl1.symbols.open_curly_brace,
     separator=pl1.symbols.comma,
     close_bracket=pl1.symbols.close_curly_brace)
-as1._connectives.enumeration.formula_ts = as1.typesetters.bracketed_list(
+csl1.enumeration.formula_ts = as1.typesetters.bracketed_list(
     open_bracket=pl1.symbols.open_curly_brace,
     separator=pl1.symbols.comma,
     close_bracket=pl1.symbols.close_curly_brace)
-as1._connectives.tupl.formula_ts = as1.typesetters.bracketed_list(
+csl1.tupl.formula_ts = as1.typesetters.bracketed_list(
     open_bracket=pl1.symbols.open_parenthesis,
     separator=pl1.symbols.comma,
     close_bracket=pl1.symbols.close_parenthesis)
-as1._connectives.axiom.formula_ts = as1.typesetters.classical_formula(
+csl1.axiom.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='axiom')
-as1._connectives.inference_rule.formula_ts = as1.typesetters.classical_formula(
+csl1.inference_rule.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='inference-rule')
-as1._connectives.inference_rule.formula_ts = as1.typesetters.classical_formula(
+csl1.inference_rule.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='inference-rule')
-as1._connectives.theory_formula.formula_ts = as1.typesetters.classical_formula(
+csl1.is_well_formed_formula_predicate.formula_ts = as1.typesetters.classical_formula(
+    connective_typesetter='is-well-formed-formula')
+csl1.is_well_formed_inference_rule_predicate.formula_ts = as1.typesetters.classical_formula(
+    connective_typesetter='is-well-formed-inference-rule')
+csl1.is_well_formed_theory_predicate.formula_ts = as1.typesetters.classical_formula(
+    connective_typesetter='is-well-formed-theory')
+csl1.theory_formula.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='theory')
-as1._connectives.theory_predicate.formula_ts = as1.typesetters.classical_formula(
-    connective_typesetter=pl1.ArbitraryIndexedSymbolTypesetter(body_ts='theory', subscript_ts='p'))
-as1._connectives.axiomatization.formula_ts = as1.typesetters.classical_formula(
+csl1.axiomatization.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='axiomatization')
-as1._connectives.map.formula_ts = as1.typesetters.map()
-as1._connectives.follows_from.formula_ts = as1.typesetters.derivation()
+csl1.map.formula_ts = as1.typesetters.map()
+csl1.follows_from.formula_ts = as1.typesetters.derivation()

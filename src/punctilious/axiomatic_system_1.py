@@ -990,6 +990,9 @@ class Connectives(typing.NamedTuple):
     inference: TernaryConnective
     inference_rule: UnaryConnective
     is_a: BinaryConnective
+    is_well_formed_formula_predicate: UnaryConnective
+    is_well_formed_inference_rule_predicate: UnaryConnective
+    is_well_formed_theory_predicate: UnaryConnective
     land: BinaryConnective
     lnot: UnaryConnective
     lor: BinaryConnective
@@ -997,7 +1000,7 @@ class Connectives(typing.NamedTuple):
     proposition: NullaryConnective
     propositional_variable: NullaryConnective
     theory_formula: FreeArityConnective
-    theory_predicate: UnaryConnective
+    is_well_formed_theory: UnaryConnective
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
     natural_transformation: QuaternaryConnective
     tupl: FreeArityConnective
@@ -1013,6 +1016,9 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     inference=let_x_be_a_ternary_connective(formula_ts='inference'),
     inference_rule=let_x_be_a_unary_connective(formula_ts='inference-rule'),
     is_a=let_x_be_a_binary_connective(formula_ts='is-a'),
+    is_well_formed_formula_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-formula'),
+    is_well_formed_inference_rule_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule'),
+    is_well_formed_theory_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-theory'),
     land=let_x_be_a_binary_connective(formula_ts='∧'),
     lnot=let_x_be_a_unary_connective(formula_ts='¬'),
     lor=let_x_be_a_binary_connective(formula_ts='∨'),
@@ -1021,7 +1027,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     propositional_variable=NullaryConnective(formula_ts='propositional-variable'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
-    theory_predicate=let_x_be_a_unary_connective(formula_ts='theory-predicate'),
+    is_well_formed_theory=let_x_be_a_unary_connective(),
     natural_transformation=let_x_be_a_quaternary_connective(formula_ts='natural-transformation'),
     tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
 

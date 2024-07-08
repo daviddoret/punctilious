@@ -694,7 +694,7 @@ class TestAlgorithm:
             t = a[0]
             if as1.is_well_formed_theory(t=t):
                 t = as1.coerce_theory(t=t)
-                phi = theory_predicate(t)
+                phi = is_well_formed_theory_predicate(t)
                 return phi
             else:
                 phi = lnot(theory_predicate(t))
@@ -704,12 +704,12 @@ class TestAlgorithm:
         m = as1.let_x_be_a_theory()
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
             algo = as1.AlgorithmicTransformation(external_algorithm=x_is_a_theory,
-                                                 c=theory_predicate(x),
+                                                 c=is_well_formed_theory_predicate(x),
                                                  v={x, },
                                                  d={x, })
         i = as1.InferenceRule(t=algo)
         m, i = as1.let_x_be_an_inference_rule(t1=m, i=i)
-        c = theory_predicate(t)
+        c = is_well_formed_theory_predicate(t)
         m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,))
         pass
 
