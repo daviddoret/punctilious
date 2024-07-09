@@ -381,9 +381,9 @@ class TestReplaceConnectives:
         d3 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d3'))
         d4 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d4'))
         phi = c1(c2(c3, c3, c3, c1, c4(c3, c2, c1)), c3)
-        m = pu.as1.Map(domain=(c1, c2, c3, c4,), codomain=(d1, d2, d3, d4,))
+        m = pu.as1.Map(d=(c1, c2, c3, c4,), c=(d1, d2, d3, d4,))
         psi = pu.as1.replace_connectives(phi=phi, m=m)
-        n = pu.as1.Map(domain=(d1, d2, d3, d4,), codomain=(c1, c2, c3, c4,))
+        n = pu.as1.Map(d=(d1, d2, d3, d4,), c=(c1, c2, c3, c4,))
         phi2 = pu.as1.replace_connectives(phi=psi, m=n)
         assert pu.as1.is_formula_equivalent(phi=phi, psi=phi2)
         pass
@@ -485,7 +485,7 @@ class TestMap:
         yellow = pu.as1.let_x_be_a_simple_object(formula_ts='yellow')
         blue = pu.as1.let_x_be_a_simple_object(formula_ts='blue')
         codomain = pu.as1.Tupl(elements=(red, yellow, blue, red))
-        m1 = pu.as1.Map(domain=fruits, codomain=codomain)
+        m1 = pu.as1.Map(d=fruits, c=codomain)
         assert len(m1) == 2
         assert pu.as1.is_in_map_domain(phi=fruits[0], m=m1)
         assert pu.as1.is_in_map_domain(phi=fruits[1], m=m1)
@@ -504,6 +504,7 @@ class TestMap:
         assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[0]), red)
         assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[1]), yellow)
         assert pu.as1.is_formula_equivalent(pu.as1.get_image_from_map(m=m1, preimage=fruits[3]), yellow)
+        pass
 
 
 class TestEnumerationEquivalence:
@@ -598,7 +599,7 @@ class TestProofByPostulation:
                                              p=None)
         phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
-        phi2 = rule1 | pu.as1._connectives.map | pu.as1._connectives.inference_rule
+        phi2 = rule1 | pu.as1._connectives.map_formula | pu.as1._connectives.inference_rule
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
         phi3 = rule1 | pu.as1._connectives.follows_from | b
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
@@ -792,8 +793,8 @@ class TestAreValidStatementsInTheoryWithVariables:
                                                                          variables_values=None)
         assert valid
         valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c, e,), t=t, variables=(e,),
-                                                                         variables_values=pu.as1.Map(domain=(e,),
-                                                                                                     codomain=(d,)))
+                                                                         variables_values=pu.as1.Map(d=(e,),
+                                                                                                     c=(d,)))
         assert valid
         valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c, e,), t=t, variables=(e,),
                                                                          variables_values=None)

@@ -407,12 +407,12 @@ def coerce_map(m: FlexibleMap) -> Map:
     if isinstance(m, Map):
         return m
     elif m is None:
-        return Map(domain=None, codomain=None)
+        return Map(d=None, c=None)
     # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
     elif isinstance(m, dict):
         domain: Enumeration = coerce_enumeration(e=m.keys())
         codomain: Tupl = coerce_tupl(t=m.values())
-        return Map(domain=domain, codomain=codomain)
+        return Map(d=domain, c=codomain)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_009, coerced_type=Map, phi_type=type(m), phi=m)
 
@@ -996,7 +996,7 @@ class Connectives(typing.NamedTuple):
     land: BinaryConnective
     lnot: UnaryConnective
     lor: BinaryConnective
-    map: BinaryConnective
+    map_formula: BinaryConnective
     proposition: NullaryConnective
     propositional_variable: NullaryConnective
     theory_formula: FreeArityConnective
@@ -1022,7 +1022,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     land=let_x_be_a_binary_connective(formula_ts='∧'),
     lnot=let_x_be_a_unary_connective(formula_ts='¬'),
     lor=let_x_be_a_binary_connective(formula_ts='∨'),
-    map=let_x_be_a_binary_connective(formula_ts='map'),
+    map_formula=let_x_be_a_binary_connective(formula_ts='map'),
     proposition=NullaryConnective(formula_ts='proposition'),
     propositional_variable=NullaryConnective(formula_ts='propositional-variable'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
@@ -1220,8 +1220,8 @@ def is_formula_equivalent_with_variables_2(
             # psi is not defined in the domain of the map of fixed values
             psi_value: Formula = phi
             # extend the map of fixed values
-            variables_fixed_values: Map = Map(domain=(*variables_fixed_values.domain, psi,),
-                                              codomain=(*variables_fixed_values.codomain, psi_value,))
+            variables_fixed_values: Map = Map(d=(*variables_fixed_values.domain, psi,),
+                                              c=(*variables_fixed_values.codomain, psi_value,))
             return True, variables_fixed_values
     else:
         # psi is not a variable
@@ -1370,7 +1370,7 @@ def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
         index: int = get_index_of_first_equivalent_term_in_formula(term=preimage, formula=m.domain)
         reduced_domain: tuple[Formula, ...] = (*m.domain[0:index], *m.domain[index + 1:])
         reduced_codomain: tuple[Formula, ...] = (*m.codomain[0:index], *m.codomain[index + 1:])
-        reduced_map: Map = Map(domain=reduced_domain, codomain=reduced_codomain)
+        reduced_map: Map = Map(d=reduced_domain, c=reduced_codomain)
         return reduced_map
     else:
         return m
@@ -1432,7 +1432,7 @@ def append_pair_to_map(m: FlexibleMap, preimage: FlexibleFormula, image: Flexibl
     m: Map = reduce_map(m=m, preimage=preimage)
     extended_domain: tuple[Formula, ...] = (*m.domain, preimage)
     extended_codomain: tuple[Formula, ...] = (*m.codomain, image)
-    m: Map = Map(domain=extended_domain, codomain=extended_codomain)
+    m: Map = Map(d=extended_domain, c=extended_codomain)
     return m
 
 
@@ -1456,20 +1456,32 @@ class Map(Formula):
 
     """
 
-    def __new__(cls, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
+    def __new__(cls, d: FlexibleEnumeration = None, c: FlexibleTupl = None):
+        """Creates a well-formed-map of python-type Map.
+
+        :param d: An enumeration denoted as the domain of the map.
+        :param c: An enumeration denoted as the codomain of the map.
+        """
+        # __new__ runs to completion before __init__ starts.
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        domain: Enumeration = coerce_enumeration(e=domain)
-        codomain: Tupl = coerce_tupl(t=codomain)
-        if len(domain) != len(codomain):
+        d: Enumeration = coerce_enumeration(e=d)
+        c: Tupl = coerce_tupl(t=c)
+        if len(d) != len(c):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
-        o: tuple = super().__new__(cls, c=_connectives.map, t=(domain, codomain,))
+        o: tuple = super().__new__(cls, c=_connectives.map_formula, t=(d, c,))
         return o
 
-    def __init__(self, domain: FlexibleEnumeration = None, codomain: FlexibleTupl = None):
-        domain: Enumeration = coerce_enumeration(e=domain)
-        codomain: Tupl = coerce_tupl(t=codomain)
-        super().__init__(c=_connectives.map, t=(domain, codomain,))
+    def __init__(self, d: FlexibleEnumeration = None, c: FlexibleTupl = None):
+        """Creates a well-formed-map of python-type Map.
+
+        :param d: An enumeration denoted as the domain of the map.
+        :param c: An enumeration denoted as the codomain of the map.
+        """
+        # __new__ runs to completion before __init__ starts.
+        d: Enumeration = coerce_enumeration(e=d)
+        c: Tupl = coerce_tupl(t=c)
+        super().__init__(c=_connectives.map_formula, t=(d, c,))
 
     @property
     def codomain(self) -> Tupl:
@@ -2336,7 +2348,7 @@ def are_valid_statements_in_theory_with_variables(
         valid_statements = iterate_valid_statements_in_theory(t=t)
         for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                         n=permutation_size):
-            variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
+            variable_substitution: Map = Map(d=free_variables, c=permutation)
             s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
             s_with_variable_substitution: Tupl = coerce_tupl(t=s_with_variable_substitution)
             s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution,))
@@ -2914,7 +2926,7 @@ def inverse_map(m: FlexibleMap) -> Map:
     domain = Enumeration(elements=m.codomain)
     if len(codomain) != len(domain):
         assert u1.ApplicativeError(msg='Cannot inverse map if it is not a function!')
-    m2: Map = Map(domain=domain, codomain=codomain)
+    m2: Map = Map(d=domain, c=codomain)
     return m2
 
 
@@ -3770,7 +3782,7 @@ def auto_derive_4(
                 for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                                 n=permutation_size):
                     permutation_success: bool = True
-                    variable_substitution: Map = Map(domain=free_variables, codomain=permutation)
+                    variable_substitution: Map = Map(d=free_variables, c=permutation)
                     effective_premises: Formula = replace_formulas(phi=necessary_premises, m=variable_substitution)
                     effective_premises: Tupl = Tupl(elements=(*effective_premises, permutation,))
                     for premise_target_statement in effective_premises:

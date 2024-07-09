@@ -53,5 +53,5 @@ csl1.theory_formula.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='theory')
 csl1.axiomatization.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='axiomatization')
-csl1.map.formula_ts = as1.typesetters.map()
+csl1.map_formula.formula_ts = as1.typesetters.map()
 csl1.follows_from.formula_ts = as1.typesetters.derivation()

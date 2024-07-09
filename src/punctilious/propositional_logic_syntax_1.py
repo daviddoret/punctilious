@@ -273,7 +273,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     # Retrieve the list of propositional-variables in phi:
     propositional_variables: as1.Enumeration = as1.get_leaf_formulas(phi=phi)
     premises: as1.Enumeration = as1.Enumeration(elements=None)
-    variables_map: as1.Map = as1.Map(domain=None, codomain=None)
+    variables_map: as1.Map = as1.Map(d=None, c=None)
     for x in propositional_variables:
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
