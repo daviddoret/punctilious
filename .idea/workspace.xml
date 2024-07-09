@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -159,7 +157,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestIsSubformulaofFormula.test_is_subformula_of_formula.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestIteratePermutationsOfEnumerationElementsWithFixedSize.test_iterate_permutations_of_enumeration_elements_with_fixed_size.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestMap.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestMetaTheory.test_meta_theory.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestObjectCreation.test_object_creation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation.executor": "Run",
@@ -345,7 +343,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestMap.test_map">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -693,8 +691,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestMap.test_map" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1" />
@@ -716,14 +714,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00748" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1719731098054</created>
-      <option name="number" value="00748" />
-      <option name="presentableId" value="LOCAL-00748" />
-      <option name="project" value="LOCAL" />
-      <updated>1719731098054</updated>
     </task>
     <task id="LOCAL-00749" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1109,7 +1099,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720495847957</updated>
     </task>
-    <option name="localTasksCounter" value="797" />
+    <task id="LOCAL-00797" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1720504531134</created>
+      <option name="number" value="00797" />
+      <option name="presentableId" value="LOCAL-00797" />
+      <option name="project" value="LOCAL" />
+      <updated>1720504531135</updated>
+    </task>
+    <option name="localTasksCounter" value="798" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1213,12 +1211,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>857</line>
+          <line>855</line>
           <option name="timeStamp" value="600" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>556</line>
+          <line>554</line>
           <option name="timeStamp" value="603" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

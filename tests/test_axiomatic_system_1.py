@@ -481,11 +481,9 @@ class TestReplaceFormulas:
 
 class TestMap:
     def test_map(self, fruits):
-        red = pu.as1.let_x_be_a_simple_object(formula_ts='red')
-        yellow = pu.as1.let_x_be_a_simple_object(formula_ts='yellow')
-        blue = pu.as1.let_x_be_a_simple_object(formula_ts='blue')
-        codomain = pu.as1.Tupl(elements=(red, yellow, blue, red))
-        m1 = pu.as1.Map(d=fruits, c=codomain)
+        red, yellow, blue = pu.as1.let_x_be_some_simple_objects(reps=('red', 'yellow', 'blue',))
+        c = pu.as1.Tupl(elements=(red, yellow, blue, red))
+        m1 = pu.as1.Map(d=fruits, c=c)
         assert len(m1) == 2
         assert pu.as1.is_in_map_domain(phi=fruits[0], m=m1)
         assert pu.as1.is_in_map_domain(phi=fruits[1], m=m1)

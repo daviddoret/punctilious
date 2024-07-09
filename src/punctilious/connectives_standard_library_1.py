@@ -18,7 +18,10 @@ is_well_formed_theory_predicate = as1._connectives.is_well_formed_theory_predica
 land = as1._connectives.land
 lnot = as1._connectives.lnot
 lor = as1._connectives.lor
+
 map_formula = as1._connectives.map_formula
+"""The connective dedicated to signaling map formulas. Cf. Map python-class."""
+
 natural_transformation = as1._connectives.natural_transformation
 proposition = as1._connectives.proposition
 propositional_variable = as1._connectives.propositional_variable

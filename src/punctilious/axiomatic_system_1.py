@@ -1485,19 +1485,19 @@ class Map(Formula):
 
     @property
     def codomain(self) -> Tupl:
+        """A tuple of formulas denoted as the codomain of the map.
+
+        The codomain of a map is the enumeration of possible outputs of the get_image_from_map function.
+        """
         return coerce_tupl(t=self.term_1)
 
     @property
     def domain(self) -> Enumeration:
-        return coerce_enumeration(e=self.term_0)
+        """An enumeration of formulas denoted as the domain of the map.
 
-    def get_assigned_value_OBSOLETE(self, phi: Formula) -> Formula:
-        """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
-        if is_in_map_domain(phi=phi, m=self):
-            index_position: int = self.domain.get_element_index(phi=phi)
-            return self.codomain[index_position]
-        else:
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
+        The domain of a map is the enumeration of possible inputs of the get_image_from_map function.
+        """
+        return coerce_enumeration(e=self.term_0)
 
     def is_defined_in(self, phi: Formula) -> bool:
         """Return True if phi is formula-equivalent to an element of the map domain."""
