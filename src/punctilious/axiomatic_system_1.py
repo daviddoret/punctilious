@@ -3341,7 +3341,7 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: Enumeration = None) -> Enumerati
     phi: Formula = coerce_formula(phi=phi)
     if eb is None:
         eb: Enumeration = Enumeration(elements=None)
-    if not eb.has_element(phi=phi) and is_leaf_formula(phi=phi):
+    if not is_element_of_enumeration(x=phi, e=eb) and is_leaf_formula(phi=phi):
         eb = append_element_to_enumeration(x=phi, e=eb)
     else:
         for term in phi:

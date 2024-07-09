@@ -137,10 +137,10 @@ class TestEnumeration:
         phi2 = x | c2 | y
         phi3 = y | c1 | x
         e1 = pu.as1.Enumeration(elements=(phi1, phi2, phi3,))
-        assert e1.has_element(phi=phi1)
-        assert not e1.has_element(phi=x | c1 | x)
+        assert pu.as1.is_element_of_enumeration(e=e1, x=phi1)
+        assert not pu.as1.is_element_of_enumeration(e=e1, x=x | c1 | x)
         phi1_other_instance = x | c1 | y
-        assert e1.has_element(phi=phi1_other_instance)
+        assert pu.as1.is_element_of_enumeration(e=e1, x=phi1_other_instance)
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi1) == 0
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi2) == 1
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi3) == 2
@@ -158,17 +158,17 @@ class TestEnumeration:
         baczx = pu.as1.Enumeration(elements=(b, a, c, z, x))
         assert pu.as1.is_formula_equivalent(phi=baczx, psi=baczx)
         assert pu.as1.is_enumeration_equivalent(phi=baczx, psi=baczx)
-        assert baczx.has_element(phi=a)
-        assert baczx.has_element(phi=b)
-        assert baczx.has_element(phi=c)
-        assert baczx.has_element(phi=x)
-        assert baczx.has_element(phi=z)
+        assert pu.as1.is_element_of_enumeration(e=baczx, x=a)
+        assert pu.as1.is_element_of_enumeration(e=baczx, x=b)
+        assert pu.as1.is_element_of_enumeration(e=baczx, x=c)
+        assert pu.as1.is_element_of_enumeration(e=baczx, x=x)
+        assert pu.as1.is_element_of_enumeration(e=baczx, x=z)
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=b) == 0
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=a) == 1
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=c) == 2
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=z) == 3
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=x) == 4
-        assert not baczx.has_element(phi=y)
+        assert not pu.as1.is_element_of_enumeration(x=y, e=baczx)
         baczx2 = pu.as1.Enumeration(elements=(b, a, c, z, x))
         assert pu.as1.is_formula_equivalent(phi=baczx, psi=baczx2)
         assert pu.as1.is_enumeration_equivalent(phi=baczx, psi=baczx2)
@@ -537,7 +537,7 @@ class TestEmptyEnumeration:
     def test_empty_enumeration(self):
         a = pu.as1.EmptyEnumeration()
         x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('x', 'y', 'z',))
-        assert not a.has_element(phi=x)
+        assert not pu.as1.is_element_of_enumeration(x=x, e=a)
         assert a.arity == 0
 
 
