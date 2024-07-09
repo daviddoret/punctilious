@@ -141,9 +141,9 @@ class TestEnumeration:
         assert not e1.has_element(phi=x | c1 | x)
         phi1_other_instance = x | c1 | y
         assert e1.has_element(phi=phi1_other_instance)
-        assert e1.get_element_index(phi=phi1) == 0
-        assert e1.get_element_index(phi=phi2) == 1
-        assert e1.get_element_index(phi=phi3) == 2
+        assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi1) == 0
+        assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi2) == 1
+        assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi3) == 2
 
     def test_exception(self):
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
@@ -163,11 +163,11 @@ class TestEnumeration:
         assert baczx.has_element(phi=c)
         assert baczx.has_element(phi=x)
         assert baczx.has_element(phi=z)
-        assert baczx.get_element_index(phi=b) == 0
-        assert baczx.get_element_index(phi=a) == 1
-        assert baczx.get_element_index(phi=c) == 2
-        assert baczx.get_element_index(phi=z) == 3
-        assert baczx.get_element_index(phi=x) == 4
+        assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=b) == 0
+        assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=a) == 1
+        assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=c) == 2
+        assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=z) == 3
+        assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=x) == 4
         assert not baczx.has_element(phi=y)
         baczx2 = pu.as1.Enumeration(elements=(b, a, c, z, x))
         assert pu.as1.is_formula_equivalent(phi=baczx, psi=baczx2)

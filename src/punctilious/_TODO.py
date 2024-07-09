@@ -28,13 +28,6 @@ TODO: Determine how to express predicates or classes over connectives,
     example: if blue is a predicate, to express formulas such as blue(sky),
     the truth that blue is a predicate should be expressible for example as predicate(blue).
 
-TODO: IDEA: Algorithm class.
-    General idea: an algorithm is an implementation in a programming language,
-    here python, of a (determinist???) algorithm that acts like an inference-rule,
-    i.e. given a number of arguments (that must be valid-statements in the theory),
-    generates a new valid-statement in the theory.
-
-
 TODO: Implement index constants on all formula classes, e.g. Inference. Then replace
     all hard-coded index positions.
 

@@ -303,7 +303,9 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
 
 
 def coerce_variable(x: FlexibleFormula) -> Formula:
-    """Any formula of arity 0 can be used as a variable.
+    """Any nullary formula can be used as a variable.
+
+    In a meta-theory, a variable is signaled with the is-well-formed-variable predicate.
 
     :param x:
     :return:
@@ -635,13 +637,20 @@ def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula
 
 def get_index_of_first_equivalent_element_in_enumeration(x: FlexibleFormula,
                                                          e: FlexibleEnumeration) -> int:
-    """Return the o-based index of the first occurrence of an element in an enumeration,
-     such that they are formula-equivalent.
+    """Given a formula :math:`x` and an enumeration :math:`e`, returns the o-based index of the first occurrence
+    of an element :math:`y` in :math:`e` such that :math:`x` formula-equivalent :math:`y`.
 
     :param x:
     :param e:
     :return:
     """
+    """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
+
+    Note: not to be confused with get_first_element_index on formulas and tuples.
+
+    This method is not available on formulas because duplicate elements are possible on formulas,
+    but are not possible on enumerations. The two methods are algorithmically equivalent but their
+    intent is distinct."""
     x: Formula = coerce_formula(phi=x)
     e: Enumeration = coerce_enumeration(e=e)
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=e)
@@ -1448,7 +1457,7 @@ def append_pair_to_map(m: FlexibleMap, preimage: FlexibleFormula, image: Flexibl
 def get_image_from_map(m: FlexibleMap, preimage: FlexibleFormula) -> Formula:
     """Given phi an element of the map domain, returns the corresponding element psi of the codomain."""
     if is_in_map_domain(phi=preimage, m=m):
-        index_position: int = m.domain.get_element_index(phi=preimage)
+        index_position: int = get_index_of_first_equivalent_element_in_enumeration(x=preimage, e=m.domain)
         return m.codomain[index_position]
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
@@ -1591,26 +1600,6 @@ class Enumeration(Formula):
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         super().__init__(c=c, t=elements, **kwargs)
-
-    def get_element_index(self, phi: FlexibleFormula) -> typing.Optional[int]:
-        """Return the index of phi if phi is formula-equivalent with an element of the enumeration, None otherwise.
-
-        Note: not to be confused with get_first_element_index on formulas and tuples.
-
-        This method is not available on formulas because duplicate elements are possible on formulas,
-        but are not possible on enumerations. The two methods are algorithmically equivalent but their
-        intent is distinct."""
-        phi = coerce_formula(phi=phi)
-        if self.has_element(phi=phi):
-            # two formulas that are formula-equivalent may not be equal.
-            # for this reason we must first find the first formula-equivalent element in the enumeration.
-            n: int = 0
-            for phi_prime in self:
-                if is_formula_equivalent(phi=phi, psi=phi_prime):
-                    return n
-                n = n + 1
-        else:
-            return None
 
     def has_element(self, phi: Formula) -> bool:
         """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
@@ -2116,10 +2105,10 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
 
 
 def is_well_formed_map(m: FlexibleFormula, raise_error_if_ill_formed: bool = False) -> bool:
-    """Return True if and only if :math:`m` is a well-formed-map, False otherwise, i.e. it is ill-formed.
+    """Returns True if and only if :math:`m` is a well-formed-map, False otherwise, i.e. it is ill-formed.
 
     :param m: A formula, possibly a well-formed map.
-    :param raise_error_if_ill_formed: Raise a A1-001 error if :math:`m` is ill-formed.
+    :param raise_error_if_ill_formed: If True, raises an AS1-061 error if :math:`m` is ill-formed.
     :return: bool.
     """
     m = coerce_formula(phi=m)
