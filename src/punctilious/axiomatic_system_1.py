@@ -1601,12 +1601,6 @@ class Enumeration(Formula):
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         super().__init__(c=c, t=elements, **kwargs)
 
-    def has_element(self, phi: Formula) -> bool:
-        """Return True if and only if there exists a formula psi that is an element of the enumeration, and such that
-        phi ∼formula psi. False otherwise."""
-        phi = coerce_formula(phi=phi)
-        return any(is_formula_equivalent(phi=phi, psi=term) for term in self)
-
 
 enumeration = Enumeration
 """A shortcut for Enumeration."""
@@ -3060,7 +3054,7 @@ class Heuristic(abc.ABC):
         pass
 
 
-class Theory(Enumeration):
+class Theory(Formula):
     """A theory is a justified enumeration of axioms, inference-rules, and theorems.
 
     Syntactic definition:
@@ -3097,7 +3091,7 @@ class Theory(Enumeration):
         # except Exception as error:
         #    # well-formedness verification failure, the theorem is ill-formed.
         #    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_046, error=error, derivations=d)
-        o: tuple = super().__new__(cls, elements=d, **kwargs)
+        o: tuple = super().__new__(cls, c=_connectives.theory_formula, t=d, **kwargs)
         return o
 
     def __init__(self, c: Connective | None = None,
@@ -3125,7 +3119,7 @@ class Theory(Enumeration):
             d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
 
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
-        super().__init__(c=c, elements=d, **kwargs)
+        super().__init__(c=c, t=d, **kwargs)
         copy_theory_decorations(target=self, decorations=decorations)
         if t is not None:
             copy_theory_decorations(target=self, decorations=(t,))
@@ -3238,7 +3232,7 @@ def copy_theory_decorations(target: FlexibleTheory, decorations: FlexibleDecorat
             target.ts.update(decorative_theory.ts | target.ts)  # Give priority to the existing
 
 
-class Axiomatization(Theory):
+class Axiomatization(Formula):
     """An axiomatization is a theory that is only composed of axioms,
     and/or inference-rules.
 
@@ -3271,7 +3265,7 @@ class Axiomatization(Theory):
                                           d_type=type(d),
                                           expected_form_1=InferenceRule,
                                           expected_form_2=Axiom)
-        o: tuple = super().__new__(cls, d=coerced_derivations)
+        o: tuple = super().__new__(cls, c=_connectives.axiomatization_formula, t=coerced_derivations)
         return o
 
     def __init__(self, d: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
@@ -3293,7 +3287,7 @@ class Axiomatization(Theory):
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_048, phi=derivation,
                                           phi_type_1=InferenceRule,
                                           phi_type_2=Axiom)
-        super().__init__(c=_connectives.axiomatization_formula, d=coerced_derivations,
+        super().__init__(c=_connectives.axiomatization_formula, t=coerced_derivations,
                          decorations=decorations)
 
 
