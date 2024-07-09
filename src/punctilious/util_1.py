@@ -45,7 +45,8 @@ class ApplicativeError(Exception):
         self.report = self.report + (' ' + str(self.code)) if self.code is not None else ''
         self.report = self.report + ': ' + str(msg)
         self.report = self.report + '\n\t'
-        self.report = self.report + f'\n\t'.join(f'{key}: {value}' for key, value in kwargs.items())
+        self.report = self.report + f'\n\t'.join(
+            f'{key}: {value} (type: {str(type(value))}, id: {str(id(value))}' for key, value in kwargs.items())
         super().__init__(self.report)
         log_error(e=self)
 

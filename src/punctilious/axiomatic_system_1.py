@@ -2115,10 +2115,11 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
         return True
 
 
-def is_well_formed_map(m: FlexibleFormula) -> bool:
-    """Return True if and only if m is a well-formed map, False otherwise.
+def is_well_formed_map(m: FlexibleFormula, raise_error_if_ill_formed: bool = False) -> bool:
+    """Return True if and only if :math:`m` is a well-formed-map, False otherwise, i.e. it is ill-formed.
 
     :param m: A formula, possibly a well-formed map.
+    :param raise_error_if_ill_formed: Raise a A1-001 error if :math:`m` is ill-formed.
     :return: bool.
     """
     m = coerce_formula(phi=m)
@@ -2126,6 +2127,12 @@ def is_well_formed_map(m: FlexibleFormula) -> bool:
             not m.arity == 2 or
             not is_well_formed_enumeration(e=m[Map.DOMAIN_INDEX]) or
             not is_well_formed_tupl(t=m[Map.CODOMAIN_INDEX])):
+        if raise_error_if_ill_formed:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_061,
+                msg='"m" is not a well-formed-map.',
+                m=m
+            )
         return False
     else:
         return True
@@ -2428,6 +2435,7 @@ def is_well_formed_axiom(a: FlexibleFormula) -> bool:
 def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_ill_formed: bool = False) -> bool:
     """Return True if and only if phi is a well-formed theorem, False otherwise.
 
+    :param raise_error_if_ill_formed:
     :param t: A formula.
     :return: bool.
     """
