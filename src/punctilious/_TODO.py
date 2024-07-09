@@ -1,5 +1,17 @@
 """
 
+TODO: Implement strict connectives check in coerce_functions. To do this, we must better manage
+    python-class inheritance (because this changes the connectives). Start systematically with
+    python-classes that are not inherited.
+
+TODO: Replace the follows-from scheme?, e.g. inference-rule(blablabla), axiom(blablabla).
+    Put more thought into this before changing anything, because we need to model Derivation.
+    Distinguish clearly the predicate-function is-a-well-formed-axiom(a) from the
+    derivation-function which implies that the axiom is in the current theory,
+    i.e. a follows-from axiom.
+
+TODO: Introduce canonical conversions (formula to enumeration, formula to tuple, etc.).
+
 TODO: KEY QUALITY CHECK: In both the Theorem.__init__ or __new__ and in the is_well_formed_theorem function,
     check that newly declared objects are not present in any precedent formula in the theory!
 

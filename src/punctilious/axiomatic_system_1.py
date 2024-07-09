@@ -983,7 +983,7 @@ def let_x_be_a_natural_transformation(conclusion: FlexibleFormula,
 class Connectives(typing.NamedTuple):
     algorithm: NullaryConnective
     axiom: UnaryConnective
-    axiomatization: FreeArityConnective
+    axiomatization_formula: FreeArityConnective
     enumeration: FreeArityConnective
     follows_from: BinaryConnective
     implies: BinaryConnective
@@ -1009,7 +1009,7 @@ class Connectives(typing.NamedTuple):
 _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     algorithm=NullaryConnective(formula_ts='algorithm'),
     axiom=let_x_be_a_unary_connective(formula_ts='axiom'),
-    axiomatization=let_x_be_a_free_arity_connective(formula_ts='axiomatization'),
+    axiomatization_formula=let_x_be_a_free_arity_connective(formula_ts='axiomatization'),
     enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
     follows_from=let_x_be_a_binary_connective(formula_ts='follows-from'),
     implies=let_x_be_a_binary_connective(formula_ts='implies'),
@@ -2448,7 +2448,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
 
     c: Connective = t.connective
     if (c is not _connectives.theory_formula and
-            c is not _connectives.axiomatization and
+            c is not _connectives.axiomatization_formula and
             1 == 2):
         # TODO: Remove the 1==2 condition above to re-implement a check of strict connectives constraints.
         #   But then we must properly manage python inheritance (Axiomatization --> Theory --> Enumeration).
@@ -2552,7 +2552,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
 def is_well_formed_axiomatization(a: FlexibleFormula) -> bool:
     """Returns True if phi is a well-formed axiomatization, False otherwise."""
     a = coerce_formula(phi=a)
-    if a.connective is not _connectives.axiomatization:
+    if a.connective is not _connectives.axiomatization_formula:
         return False
     for element in a:
         if not is_well_formed_axiom(a=element) and not is_well_formed_inference_rule(i=element):
@@ -3255,7 +3255,7 @@ class Axiomatization(Theory):
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_048, phi=derivation,
                                           phi_type_1=InferenceRule,
                                           phi_type_2=Axiom)
-        super().__init__(c=_connectives.axiomatization, d=coerced_derivations,
+        super().__init__(c=_connectives.axiomatization_formula, d=coerced_derivations,
                          decorations=decorations)
 
 

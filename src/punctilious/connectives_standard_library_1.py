@@ -5,7 +5,7 @@ import axiomatic_system_1 as as1
 
 algorithm = as1._connectives.algorithm
 axiom = as1._connectives.axiom
-axiomatization = as1._connectives.axiomatization
+axiomatization = as1._connectives.axiomatization_formula
 enumeration = as1._connectives.enumeration
 follows_from = as1._connectives.follows_from
 implies = as1._connectives.implies
