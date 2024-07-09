@@ -1186,7 +1186,11 @@ def is_formula_equivalent_with_variables_2(
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_020,
                                       msg=f'the arity of variable "{x}" in variables is not equal to 0.')
         if is_subformula_of_formula(formula=phi, subformula=x):
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_021, msg=f'variable "{x}" is a sub-formula of phi.')
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_021,
+                msg=f'variable x is a sub-formula of phi.',
+                x=x,
+                phi=phi)
     # check that all variables in the map are atomic formulas and are correctly listed in variables
     for x in variables_fixed_values.domain:
         x: Formula = coerce_formula(phi=x)
@@ -2436,40 +2440,60 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
     :param raise_event_if_false:
     :return: bool.
     """
-    t = coerce_enumeration(e=t)
+    t = coerce_formula(phi=t)
 
     if isinstance(t, Theory):
         # the Derivation class assure the well-formedness of the theory.
         return True
+
+    c: Connective = t.connective
+    if (c is not _connectives.theory_formula and
+            c is not _connectives.axiomatization and
+            1 == 2):
+        # TODO: Remove the 1==2 condition above to re-implement a check of strict connectives constraints.
+        #   But then we must properly manage python inheritance (Axiomatization --> Theory --> Enumeration).
+        if raise_event_if_false:
+            raise u1.ApplicativeError(
+                msg='The connective "c" of theory "t" is not the "theory-formula" connective. '
+                    'It follows that "t" is not a well-formed-theory.',
+                c=c,
+                c_id=id(c),
+                theory_formula=_connectives.theory_formula,
+                theory_formula_id=id(_connectives.theory_formula),
+                t=t)
+        return False
 
     # check the well-formedness of the individual derivations.
     # and retrieve the terms claimed as proven in the theory, preserving order.
     # by the definition of a theory, these are the left term (term_0) of the formulas.
     valid_statements: Tupl = Tupl(elements=None)
     derivations: Tupl = Tupl(elements=None)
-    for derivation in t:
-        if not is_well_formed_derivation(d=derivation):
+    for d in t:
+        if not is_well_formed_derivation(d=d):
+            if raise_event_if_false:
+                raise u1.ApplicativeError(msg='Derivation d is not a well-formed-derivation in theory t.',
+                                          d=d, d_type=type(d), t=t)
             return False
         else:
-            derivation: Derivation = coerce_derivation(d=derivation)
-            derivations: Tupl = append_element_to_tuple(tupl=derivations, element=derivation)
+            d: Derivation = coerce_derivation(d=d)
+            derivations: Tupl = append_element_to_tuple(tupl=derivations, element=d)
             # retrieve the formula claimed as valid from the theorem
-            valid_statement: Formula = derivation.valid_statement
+            valid_statement: Formula = d.valid_statement
             valid_statements: Tupl = append_element_to_tuple(tupl=valid_statements, element=valid_statement)
     # now the derivations and valid_statements have been retrieved, and proved well-formed individually,
     for i in range(0, derivations.arity):
-        derivation = derivations[i]
+        d = derivations[i]
         valid_statement = valid_statements[i]
-        if is_well_formed_axiom(a=derivation):
+        if is_well_formed_axiom(a=d):
             # This is an axiom.
-            derivation: Axiom = coerce_axiom(a=derivation)
+            d: Axiom = coerce_axiom(a=d)
             pass
-        elif is_well_formed_inference_rule(i=derivation):
+        elif is_well_formed_inference_rule(i=d):
             # This is an inference-rule.
-            derivation: InferenceRule = coerce_inference_rule(i=derivation)
+            d: InferenceRule = coerce_inference_rule(i=d)
             pass
-        elif is_well_formed_theorem(t=derivation):
-            theorem_by_inference: Theorem = coerce_theorem(t=derivation)
+        elif is_well_formed_theorem(t=d):
+            theorem_by_inference: Theorem = coerce_theorem(t=d)
             inference: Inference = theorem_by_inference.inference
             for premise in inference.premises:
                 # check that premise is a proven-formula (term_0) of a predecessor
@@ -2477,7 +2501,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     # The premise is absent from the theory
                     if raise_event_if_false:
                         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_036, premise=premise, premise_index=i,
-                                                  theorem=derivation,
+                                                  theorem=d,
                                                   valid_statement=valid_statement)
                     return False
                 else:
@@ -2489,7 +2513,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                                 code=c1.ERROR_CODE_AS1_037,
                                 msg='The premise is not positioned before the conclusion.',
                                 premise=premise, premise_index=i,
-                                theorem=derivation,
+                                theorem=d,
                                 valid_statement=valid_statement)
                         return False
             if not any(
@@ -2503,7 +2527,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_038,
                                               msg='The inference-rule is absent in the theory.',
                                               transformation_rule=inference.inference_rule,
-                                              inference=inference, premise_index=i, theorem=derivation,
+                                              inference=inference, premise_index=i, theorem=d,
                                               valid_statement=valid_statement)
                 return False
             else:
@@ -3032,7 +3056,6 @@ class Theory(Enumeration):
             d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
         # try:
         #    pass
-        is_well_formed_theory(t=d, raise_event_if_false=True)
         # except Exception as error:
         #    # well-formedness verification failure, the theorem is ill-formed.
         #    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_046, error=error, derivations=d)
@@ -3074,6 +3097,9 @@ class Theory(Enumeration):
                                                                      index=Theory._last_index)
         if pl1.DECLARATION_TS not in self.ts.keys():
             self.ts[pl1.DECLARATION_TS] = typesetters.declaration(conventional_class='theory')
+
+        is_well_formed_theory(t=d, raise_event_if_false=True)
+
         if t is None:
             # This is not an extended theory, this is a new theory.
             # Output its declaration.
