@@ -192,14 +192,16 @@ class TestFormulaEquivalenceWithVariables:
     def test_is_formula_equivalent_with_variables(self):
         x = pu.as1.let_x_be_a_variable(formula_ts='x')
         y = pu.as1.let_x_be_a_variable(formula_ts='y')
-        is_a = pu.as1.let_x_be_a_binary_connective(formula_ts='is-a')
+        is_a = pu.as1.let_x_be_a_binary_connective(as1.typesetters.infix_formula(connective_typesetter='is-a'))
         human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
         platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
         mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
         aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
+        phi = aristotle | is_a | human
+        psi = aristotle | is_a | human
         assert pu.as1.is_formula_equivalent_with_variables(
-            phi=aristotle | is_a | human,
-            psi=aristotle | is_a | human,
+            phi=phi,
+            psi=psi,
             variables=())
         with pytest.raises(pu.u1.ApplicativeError):
             # the following is ill-formed because the variable is an element of phi, and not of psi.

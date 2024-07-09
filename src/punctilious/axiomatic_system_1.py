@@ -405,16 +405,25 @@ def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
 
 def coerce_map(m: FlexibleMap) -> Map:
     if isinstance(m, Map):
+        # "m" is properly python-typed and the python-type assures well-formedness.
         return m
     elif m is None:
+        # implicit conversion of None to the empty map.
         return Map(d=None, c=None)
-    # TODO: coerce_map: Implement with isinstance(phi, FlexibleFormula) and is_well_formed...
+    elif is_well_formed_map(m=m):
+        # "m" is improperly python-typed but it is a well-formed map.
+        return Map(d=m[Map.DOMAIN_INDEX], c=m[Map.CODOMAIN_INDEX])
     elif isinstance(m, dict):
+        # implicit conversion of python dict to Map.
         domain: Enumeration = coerce_enumeration(e=m.keys())
         codomain: Tupl = coerce_tupl(t=m.values())
         return Map(d=domain, c=codomain)
     else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_009, coerced_type=Map, phi_type=type(m), phi=m)
+        # no coercion solution found.
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_009,
+            msg='Argument "m" could not be coerced to a map.',
+            coerced_type=Map, m_type=type(m), m=m)
 
 
 def coerce_tupl(t: FlexibleTupl) -> Tupl:
@@ -1455,10 +1464,14 @@ class Map(Formula):
      The empty-map is the map m(t0(), t1()).
 
      See also:
-      - get_image_from_map()
-      - is_in_map_domain()
+      - :py:function:`pu.as1.coerce_map`
+      - :py:function:`pu.as1.get_image_from_map`
+      - :py:function:`pu.as1.is_in_map_domain`
+      - :py:function:`pu.as1.is_well_formed_map`
 
     """
+    DOMAIN_INDEX = 0
+    CODOMAIN_INDEX = 1
 
     def __new__(cls, d: FlexibleEnumeration = None, c: FlexibleTupl = None):
         """Creates a well-formed-map of python-type Map.
@@ -1493,7 +1506,7 @@ class Map(Formula):
 
         The codomain of a map is the enumeration of possible outputs of the get_image_from_map function.
         """
-        return coerce_tupl(t=self.term_1)
+        return coerce_tupl(t=self[Map.CODOMAIN_INDEX])
 
     @property
     def domain(self) -> Enumeration:
@@ -1501,7 +1514,7 @@ class Map(Formula):
 
         The domain of a map is the enumeration of possible inputs of the get_image_from_map function.
         """
-        return coerce_enumeration(e=self.term_0)
+        return coerce_enumeration(e=self[Map.DOMAIN_INDEX])
 
 
 FlexibleMap = typing.Optional[typing.Union[Map, typing.Dict[Formula, Formula]]]
@@ -2097,6 +2110,22 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
             not is_well_formed_inference_rule(i=i[0]) or
             not is_well_formed_tupl(t=i[1]) or
             not is_well_formed_tupl(t=i[2])):
+        return False
+    else:
+        return True
+
+
+def is_well_formed_map(m: FlexibleFormula) -> bool:
+    """Return True if and only if m is a well-formed map, False otherwise.
+
+    :param m: A formula, possibly a well-formed map.
+    :return: bool.
+    """
+    m = coerce_formula(phi=m)
+    if (m.connective is not _connectives.map_formula or
+            not m.arity == 2 or
+            not is_well_formed_enumeration(e=m[Map.DOMAIN_INDEX]) or
+            not is_well_formed_tupl(t=m[Map.CODOMAIN_INDEX])):
         return False
     else:
         return True

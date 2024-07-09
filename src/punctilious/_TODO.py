@@ -3,6 +3,8 @@
 TODO: Implement strict connectives check in coerce_functions. To do this, we must better manage
     python-class inheritance (because this changes the connectives). Start systematically with
     python-classes that are not inherited.
+        Map: OK
+
 
 TODO: Replace the follows-from scheme?, e.g. inference-rule(blablabla), axiom(blablabla).
     Put more thought into this before changing anything, because we need to model Derivation.
