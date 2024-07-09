@@ -1454,6 +1454,10 @@ class Map(Formula):
 
      The empty-map is the map m(t0(), t1()).
 
+     See also:
+      - get_image_from_map()
+      - is_in_map_domain()
+
     """
 
     def __new__(cls, d: FlexibleEnumeration = None, c: FlexibleTupl = None):
@@ -1498,10 +1502,6 @@ class Map(Formula):
         The domain of a map is the enumeration of possible inputs of the get_image_from_map function.
         """
         return coerce_enumeration(e=self.term_0)
-
-    def is_defined_in(self, phi: Formula) -> bool:
-        """Return True if phi is formula-equivalent to an element of the map domain."""
-        return self.domain.has_element(phi=phi)
 
 
 FlexibleMap = typing.Optional[typing.Union[Map, typing.Dict[Formula, Formula]]]
@@ -1817,7 +1817,7 @@ class NaturalTransformation(Transformation):
         super().__init__(connective=_connectives.natural_transformation, c=c, v=v,
                          d=d, p=p)
 
-    def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTuple | None = None) -> Formula:
+    def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
         return self.apply_transformation(p=p, a=a)
 
