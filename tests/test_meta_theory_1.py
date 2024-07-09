@@ -35,7 +35,8 @@ class TestMT2:
         # A simple-object formula is not an inference-rule
         c = is_well_formed_inference_rule_predicate(a)
         m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(a,))
-        # TODO: BUG: The derivation should return lnot(is_well_formed_inference_rule_predicate(a))
+        # TODO: BUG: The derivation should return lnot(is_well_formed_inference_rule_predicate(a)).
+        #   is_well_formed_inference_rule works properly, probably derive_1 returns c directly.
         assert as1.is_formula_equivalent(phi=lnot(c), psi=d.valid_statement)
         # A theory is not an inference-rule
         c = is_well_formed_inference_rule_predicate(t)

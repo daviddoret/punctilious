@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_meta_theory_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -715,14 +713,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00745" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1719685285329</created>
-      <option name="number" value="00745" />
-      <option name="presentableId" value="LOCAL-00745" />
-      <option name="project" value="LOCAL" />
-      <updated>1719685285329</updated>
-    </task>
     <task id="LOCAL-00746" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1719688033549</created>
@@ -1107,7 +1097,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720470434900</updated>
     </task>
-    <option name="localTasksCounter" value="794" />
+    <task id="LOCAL-00794" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1720494918455</created>
+      <option name="number" value="00794" />
+      <option name="presentableId" value="LOCAL-00794" />
+      <option name="project" value="LOCAL" />
+      <updated>1720494918455</updated>
+    </task>
+    <option name="localTasksCounter" value="795" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1241,12 +1239,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_meta_theory_1.py</url>
-          <line>43</line>
+          <line>44</line>
           <option name="timeStamp" value="626" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_meta_theory_1.py</url>
-          <line>38</line>
+          <line>39</line>
           <option name="timeStamp" value="632" />
         </line-breakpoint>
       </breakpoints>
