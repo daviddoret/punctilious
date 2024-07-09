@@ -329,7 +329,7 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
     elif isinstance(e, Formula) and is_well_formed_enumeration(e=e):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(elements=e, c=e.connective, strip_duplicates=strip_duplicates)
+        return Enumeration(elements=e, strip_duplicates=strip_duplicates)
     elif e is None:
         return Enumeration(elements=None, strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Generator) and not isinstance(e, Formula):
@@ -1580,26 +1580,25 @@ class Enumeration(Formula):
 
     """
 
-    def __new__(cls, elements: FlexibleEnumeration = None, c: Connective = None,
+    def __new__(cls, elements: FlexibleEnumeration = None,
                 strip_duplicates: bool = False, **kwargs):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        c: Connective = _connectives.enumeration if c is None else c
+        global _connectives
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         if not is_well_formed_enumeration(e=elements):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
-        o: tuple = super().__new__(cls, c=c, t=elements, **kwargs)
+        o: tuple = super().__new__(cls, c=_connectives.enumeration, t=elements, **kwargs)
         return o
 
     def __init__(self, elements: FlexibleEnumeration = None, c: Connective = None,
                  strip_duplicates: bool = False, **kwargs):
         global _connectives
-        c: Connective = _connectives.enumeration if c is None else c
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
-        super().__init__(c=c, t=elements, **kwargs)
+        super().__init__(c=_connectives.enumeration, t=elements, **kwargs)
 
 
 enumeration = Enumeration
@@ -2723,19 +2722,6 @@ def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
             msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiomatization of python-type '
                 f'Axiomatization. The string representation of "a" is: {u1.force_str(o=a)}.',
             a=a, t_python_type=type(a))
-
-
-class TheoryState(Enumeration):
-    """A theory-state is an enumeration of formulas."""
-
-    def __new__(cls, elements: FlexibleEnumeration = None):
-        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
-        # because tuple is immutable.
-        o: tuple = super().__new__(cls, elements=elements)
-        return o
-
-    def __init__(self, elements: FlexibleEnumeration = None):
-        super().__init__(elements=elements)
 
 
 class Derivation(Formula):
