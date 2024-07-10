@@ -2584,14 +2584,24 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
     return True
 
 
-def is_well_formed_axiomatization(a: FlexibleFormula) -> bool:
-    """Returns True if phi is a well-formed axiomatization, False otherwise."""
+def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_ill_formed: bool = False) -> bool:
+    """Returns True if and only if :math:`a` is a well-formed axiomatization, False otherwise, i.e. it is ill-formed.
+
+    :param a: A formula, possibly a well-formed axiomatization.
+    :param raise_error_if_ill_formed: If True, raises an AS1-061 error if :math:`a` is ill-formed.
+    :return: bool.
+    """
     a = coerce_formula(phi=a)
-    if a.connective is not _connectives.axiomatization_formula:
+    if (a.connective is not _connectives.axiomatization_formula or
+            any(not is_well_formed_axiom(a=x) and not is_well_formed_inference_rule(i=x)
+                for x in iterate_formula_terms(phi=a))):
+        if raise_error_if_ill_formed:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_064,
+                msg='"a" is not a well-formed axiomatization.',
+                a=a
+            )
         return False
-    for element in a:
-        if not is_well_formed_axiom(a=element) and not is_well_formed_inference_rule(i=element):
-            return False
     return True
 
 
