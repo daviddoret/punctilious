@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def force_str(o: object):
     if isinstance(o, typing.Dict):
-        '(' + ', '.join(f'{force_str(key)}: {force_str(value)}' for key, value in o.items()) + ')'
+        '{' + ', '.join(f'{force_str(key)}: {force_str(value)}' for key, value in o.items()) + '}'
     elif isinstance(o, typing.Iterable):
         '(' + ', '.join(f'{force_str(element)}' for element in o) + ')'
     else:
@@ -46,7 +46,8 @@ class ApplicativeError(Exception):
         self.report = self.report + ': ' + str(msg)
         self.report = self.report + '\n\t'
         self.report = self.report + f'\n\t'.join(
-            f'{key}: {value} (type: {str(type(value))}, id: {str(id(value))}' for key, value in kwargs.items())
+            f'{key}: {value} (type: {str(type(value))}, id: {str(id(value))})' for key, value in
+            kwargs.items())
         super().__init__(self.report)
         log_error(e=self)
 

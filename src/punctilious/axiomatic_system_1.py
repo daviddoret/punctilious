@@ -2101,7 +2101,7 @@ def is_well_formed_map(m: FlexibleFormula, raise_error_if_ill_formed: bool = Fal
     """Returns True if and only if :math:`m` is a well-formed-map, False otherwise, i.e. it is ill-formed.
 
     :param m: A formula, possibly a well-formed map.
-    :param raise_error_if_ill_formed: If True, raises an AS1-061 error if :math:`m` is ill-formed.
+    :param raise_error_if_ill_formed: If True, raises an AS1-061 error when :math:`m` is not a well-formed map.
     :return: bool.
     """
     m = coerce_formula(phi=m)
@@ -2588,7 +2588,10 @@ def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_ill_formed:
     """Returns True if and only if :math:`a` is a well-formed axiomatization, False otherwise, i.e. it is ill-formed.
 
     :param a: A formula, possibly a well-formed axiomatization.
-    :param raise_error_if_ill_formed: If True, raises an AS1-061 error if :math:`a` is ill-formed.
+    :param raise_error_if_ill_formed: If True, raises an error when :math:`a` is not a well-formed
+        axiomatization.
+    :raises ApplicativeError: with error code AS1-064 when :math:`a` is not a well-formed axiomatization and
+        "raise_error_if_ill_formed" = True.
     :return: bool.
     """
     a = coerce_formula(phi=a)
@@ -2721,22 +2724,22 @@ def coerce_theory(t: FlexibleTheory) -> Theory:
 
 
 def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
-    """Validate that phi is a well-formed axiomatization and returns it properly typed as Axiomatization,
-    or raise exception e123.
+    """Validate that phi is a well-formed axiomatization and returns it properly python-typed as Axiomatization,
+    or raise error AS1-044.
 
     :param a:
     :return:
     """
     if isinstance(a, Axiomatization):
         return a
-    elif isinstance(a, Formula) and is_well_formed_axiomatization(a=a):
+    elif is_well_formed_axiomatization(a=a):
         return Axiomatization(d=a)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_044,
             msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiomatization of python-type '
                 f'Axiomatization. The string representation of "a" is: {u1.force_str(o=a)}.',
-            a=a, t_python_type=type(a))
+            a=a)
 
 
 class Derivation(Formula):
