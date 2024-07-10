@@ -1588,17 +1588,17 @@ class Enumeration(Formula):
         global _connectives
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
-        if not is_well_formed_enumeration(e=elements):
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
         o: tuple = super().__new__(cls, c=_connectives.enumeration, t=elements, **kwargs)
         return o
 
-    def __init__(self, elements: FlexibleEnumeration = None, c: Connective = None,
+    def __init__(self, elements: FlexibleEnumeration = None,
                  strip_duplicates: bool = False, **kwargs):
         global _connectives
         if strip_duplicates:
             elements = strip_duplicate_formulas_in_python_tuple(t=elements)
         super().__init__(c=_connectives.enumeration, t=elements, **kwargs)
+        if not is_well_formed_enumeration(e=self):
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
 
 
 enumeration = Enumeration
@@ -2146,11 +2146,15 @@ def is_well_formed_enumeration(e: FlexibleFormula) -> bool:
     :param e: A formula.
     :return: bool.
     """
+    global _connectives
     if e is None:
+        # This is debatable.
         # Implicit conversion of None to the empty enumeration.
         return True
     else:
         e = coerce_formula(phi=e)
+        if not e.connective is _connectives.enumeration:
+            return False
         for i in range(0, e.arity):
             if i != e.arity - 1:
                 for j in range(i + 1, e.arity):
@@ -2683,10 +2687,11 @@ def coerce_theory(t: FlexibleTheory) -> Theory:
     """
     if isinstance(t, Theory):
         return t
-    elif isinstance(t, Formula) and is_well_formed_theory(t=t):
-        return Theory(d=t)
     elif t is None:
         return Theory(d=None)
+    elif is_well_formed_theory(t=t):
+        t: Formula = coerce_formula(phi=t)
+        return Theory(d=(*t,))
     elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
@@ -3228,9 +3233,13 @@ class Axiomatization(Formula):
 
     """
 
-    def __new__(cls, d: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
+    def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None,
+                decorations: FlexibleDecorations = None):
+        # TODO: Implement similar to theory the parameter "a" for a derived axiomatization.
         # coerce to enumeration
         d: Enumeration = coerce_enumeration(e=d)
+        if a is not None:
+            d: Enumeration = Enumeration(elements=(*a, *d), strip_duplicates=True)
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
         for d in d:
@@ -3254,7 +3263,15 @@ class Axiomatization(Formula):
         o: tuple = super().__new__(cls, c=_connectives.axiomatization_formula, t=coerced_derivations)
         return o
 
-    def __init__(self, d: FlexibleEnumeration = None, decorations: FlexibleDecorations = None):
+    def __init__(self, a: Axiomatization | None = None, d: FlexibleEnumeration = None,
+                 decorations: FlexibleDecorations = None):
+        """
+
+        :param a:
+        :param d:
+        :param decorations:
+        """
+        # TODO: Implement similar to theory the parameter "a" for a derived axiomatization.
         # coerce to enumeration
         d: Enumeration = coerce_enumeration(e=d)
         # coerce all elements of the enumeration to axioms or inference-rules.
@@ -3275,6 +3292,10 @@ class Axiomatization(Formula):
                                           phi_type_2=Axiom)
         super().__init__(c=_connectives.axiomatization_formula, t=coerced_derivations,
                          decorations=decorations)
+
+
+FlexibleAxiomatization = typing.Optional[
+    typing.Union[Axiomatization, typing.Iterable[typing.Union[Axiom, InferenceRule]]]]
 
 
 def is_subformula_of_formula(subformula: FlexibleFormula, formula: FlexibleFormula) -> bool:
@@ -3356,9 +3377,18 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
         return t
     else:
         for argument in args:
-            if is_well_formed_theory(t=argument):
+            if is_well_formed_axiomatization(a=argument):
+                # If the argument is an axiomatization,
+                # all the derivations (axioms and inference-rules) from the axiomatization
+                # are appended to the theory.
+                extension_a: Axiomatization = coerce_axiomatization(a=argument)
+                t: Theory = Theory(t=t, d=(*extension_a,))
+            elif is_well_formed_theory(t=argument):
+                # If the argument is an axiomatization,
+                # all the derivations (axioms, inference-rules, theorems) from the axiomatization
+                # are appended to the theory.
                 extension_t: Theory = coerce_theory(t=argument)
-                t: Theory = Theory(t=t, d=extension_t)
+                t: Theory = Theory(t=t, d=(*extension_t,))
                 copy_theory_decorations(target=t, decorations=(extension_t,))
             elif is_well_formed_axiom(a=argument):
                 extension_a: Axiom = coerce_axiom(a=argument)
@@ -3380,6 +3410,44 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_049,
                                           msg=f'Invalid argument: ({type(argument)}) {argument}.')
         return t
+
+
+def append_to_axiomatization(*args, a: FlexibleAxiomatization) -> Axiomatization:
+    """Extend theory t by appending to it whatever is passed in *args.
+
+    :param args:
+    :param a:
+    :return:
+    """
+    a: Axiomatization = coerce_axiomatization(a=a)
+    if args is None:
+        return a
+    else:
+        for x in args:
+            if is_well_formed_theory(t=x):
+                extension_t: Theory = coerce_theory(t=x)
+                # If a theory is passed as argument,
+                # this is interpreted as 'hoping all derivations in "t" are axioms or inference-rules,
+                # please append them all to axiomatization "a"'.
+                for d in iterate_derivations_in_theory(t=extension_t):
+                    a = append_to_axiomatization(d, a=a)
+            elif is_well_formed_axiom(a=x):
+                extension_a: Axiom = coerce_axiom(a=x)
+                if not is_axiom_of_theory(a=extension_a, t=a):
+                    a: Axiomatization = Axiomatization(a=a, d=(extension_a,))
+            elif is_well_formed_inference_rule(i=x):
+                extension_i: InferenceRule = coerce_inference_rule(i=x)
+                if not is_inference_rule_of_theory(i=extension_i, t=a):
+                    a: Axiomatization = Axiomatization(a=a, d=(extension_i,))
+            else:
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
+                                          msg=f'Argument "x" intended to extend axiomatization "a" is not of a '
+                                              f'supported form (e.g.: axiom, inference-rule, theory, axiomatization, '
+                                              f'...).',
+                                          x=x,
+                                          a=a
+                                          )
+        return a
 
 
 class AutoDerivationFailure(Exception):
