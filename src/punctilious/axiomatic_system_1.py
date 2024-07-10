@@ -2723,23 +2723,26 @@ def coerce_theory(t: FlexibleTheory) -> Theory:
             t=t, t_python_type=type(t))
 
 
-def coerce_axiomatization(a: FlexibleFormula) -> Axiomatization:
+def coerce_axiomatization(a: FlexibleFormula, interpret_none_as_empty: bool = False) -> Axiomatization:
     """Validate that phi is a well-formed axiomatization and returns it properly python-typed as Axiomatization,
     or raise error AS1-044.
 
     :param a:
+    :param interpret_none_as_empty:
     :return:
     """
     if isinstance(a, Axiomatization):
         return a
+    elif a is None and interpret_none_as_empty:
+        return Axiomatization(a=None, d=None)
     elif is_well_formed_axiomatization(a=a):
         return Axiomatization(d=a)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_044,
-            msg=f'Argument "a" of python-type {str(type(a))} could not be coerced to an axiomatization of python-type '
-                f'Axiomatization. The string representation of "a" is: {u1.force_str(o=a)}.',
-            a=a)
+            msg=f'Argument "a" could not be coerced to an axiomatization.',
+            a=a,
+            interpret_none_as_empty=interpret_none_as_empty)
 
 
 class Derivation(Formula):
@@ -3221,6 +3224,54 @@ FlexibleTheory = typing.Optional[
 FlexibleDecorations = typing.Optional[typing.Union[typing.Tuple[Theory, ...], typing.Tuple[()]]]
 
 
+def convert_axiomatization_to_theory(a: FlexibleAxiomatization) -> Theory:
+    """Canonical function that converts an axiomatization "a" to a theory.
+
+    An axiomatization is a theory whose derivations are limited to axioms and inference-rules.
+    This function provides the canonical conversion method from axiomatizations to theories,
+    by returning a new theory "t" such that all the derivations in "t" are derivations of "a",
+    preserving order.
+
+    :param a: An axiomatization.
+    :return: A theory.
+    """
+    a: Axiomatization = coerce_axiomatization(a=a)
+    t: Theory = Theory(d=(*a,))
+    return t
+
+
+def convert_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumeration:
+    """Canonical function that converts an axiomatization "a" to an enumeration.
+
+    An axiomatization is fundamentally an enumeration of derivations, limited to axioms and inference-rules.
+    This function provides the canonical conversion method from axiomatizations to enumeration,
+    by returning a new enumeration "e" such that all the derivations in "a" are elements of "e",
+    preserving order.
+
+    :param a: An axiomatization.
+    :return: An enumeration.
+    """
+    a: Axiomatization = coerce_axiomatization(a=a)
+    e: Enumeration = Enumeration(d=(*a,))
+    return e
+
+
+def convert_theory_to_enumeration(t: FlexibleTheory) -> Enumeration:
+    """Canonical function that converts a theory "t" to an enumeration.
+
+    A theory is fundamentally an enumeration of derivations.
+    This function provides the canonical conversion method from theory to enumeration,
+    by returning a new enumeration "e" such that all the derivations in "t" are elements of "e",
+    preserving order.
+
+    :param t: A theory.
+    :return: An enumeration.
+    """
+    t: Theory = coerce_theory(t=t)
+    e: Enumeration = Enumeration(d=(*t,))
+    return e
+
+
 def copy_theory_decorations(target: FlexibleTheory, decorations: FlexibleDecorations = None):
     """Copy the decorative-properties of a source theory onto a target theory.
 
@@ -3246,34 +3297,43 @@ class Axiomatization(Formula):
 
     """
 
-    def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None,
-                decorations: FlexibleDecorations = None):
-        # TODO: Implement similar to theory the parameter "a" for a derived axiomatization.
-        # coerce to enumeration
+    @staticmethod
+    def _data_validation(a: FlexibleAxiomatization | None = None,
+                         d: FlexibleEnumeration = None) -> tuple[Connective, Enumeration]:
         d: Enumeration = coerce_enumeration(e=d)
         if a is not None:
+            a: Axiomatization = coerce_axiomatization(a=a)
+            # Duplicate derivations are not allowed in axiomatizations, so strip duplicates during merge.
+            # The first occurrence is maintained, and the second occurrence is stripped.
             d: Enumeration = Enumeration(elements=(*a, *d), strip_duplicates=True)
         # coerce all elements of the enumeration to axioms or inference-rules.
         coerced_derivations: Enumeration = Enumeration(elements=None)
-        for d in d:
-            if is_well_formed_inference_rule(i=d):
+        for x in iterate_enumeration_elements(e=d):
+            if is_well_formed_inference_rule(i=x):
                 # This is an inference-rule.
-                inference_rule: InferenceRule = coerce_inference_rule(i=d)
-                coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
-            elif is_well_formed_axiom(a=d):
+                inference_rule: InferenceRule = coerce_inference_rule(i=x)
+                coerced_derivations: Enumeration = append_element_to_enumeration(
+                    e=coerced_derivations, x=inference_rule)
+            elif is_well_formed_axiom(a=x):
                 # This is an axiom.
-                axiom: Axiom = coerce_axiom(a=d)
-                coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
+                axiom: Axiom = coerce_axiom(a=x)
+                coerced_derivations: Enumeration = append_element_to_enumeration(
+                    e=coerced_derivations, x=axiom)
             else:
                 # Incorrect form.
-                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_047,
-                                          msg=f'Derivation "d" is not of the correct form for an axiomatization. '
-                                              f'Correct form should be axiom, or inference-rule.',
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
+                                          msg=f'Cannot append derivation "d" to axiomatization "a", '
+                                              f'because "d" is not in proper form '
+                                              f'(e.g.: axiom, inference-rule).',
                                           d=d,
-                                          d_type=type(d),
-                                          expected_form_1=InferenceRule,
-                                          expected_form_2=Axiom)
-        o: tuple = super().__new__(cls, c=_connectives.axiomatization_formula, t=coerced_derivations)
+                                          a=a
+                                          )
+        return _connectives.axiomatization_formula, coerced_derivations
+
+    def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None,
+                decorations: FlexibleDecorations = None):
+        c, t = Axiomatization._data_validation(a=a, d=d)
+        o: tuple = super().__new__(cls, c=c, t=t)
         return o
 
     def __init__(self, a: Axiomatization | None = None, d: FlexibleEnumeration = None,
@@ -3284,27 +3344,10 @@ class Axiomatization(Formula):
         :param d:
         :param decorations:
         """
-        # TODO: Implement similar to theory the parameter "a" for a derived axiomatization.
-        # coerce to enumeration
-        d: Enumeration = coerce_enumeration(e=d)
-        # coerce all elements of the enumeration to axioms or inference-rules.
-        coerced_derivations: Enumeration = Enumeration(elements=None)
-        for derivation in d:
-            if is_well_formed_inference_rule(i=derivation):
-                # This is an inference-rule.
-                inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
-                coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, inference_rule,))
-            elif is_well_formed_axiom(a=derivation):
-                # This is an axiom.
-                axiom: Axiom = coerce_axiom(a=derivation)
-                coerced_derivations: Enumeration = Enumeration(elements=(*coerced_derivations, axiom,))
-            else:
-                # Incorrect form.
-                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_048, phi=derivation,
-                                          phi_type_1=InferenceRule,
-                                          phi_type_2=Axiom)
-        super().__init__(c=_connectives.axiomatization_formula, t=coerced_derivations,
-                         decorations=decorations)
+        c, t = Axiomatization._data_validation(a=a, d=d)
+        super().__init__(c=c, t=t)
+        if a is not None:
+            copy_theory_decorations(target=self, decorations=(a,))
 
 
 FlexibleAxiomatization = typing.Optional[
@@ -3425,7 +3468,35 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
         return t
 
 
-def append_to_axiomatization(*args, a: FlexibleAxiomatization) -> Axiomatization:
+def append_derivation_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxiomatization) -> Axiomatization:
+    """Extend axiomatization "a" with derivation "d".
+
+    :param d:
+    :param a:
+    :return:
+    """
+    d: Derivation = coerce_derivation(d=d)
+    a: Axiomatization = coerce_axiomatization(a=a)
+    if is_well_formed_axiom(a=d):
+        extension_a: Axiom = coerce_axiom(a=d)
+        if not is_axiom_of_theory(a=extension_a, t=a):
+            a: Axiomatization = Axiomatization(a=a, d=(extension_a,))
+    elif is_well_formed_inference_rule(i=d):
+        extension_i: InferenceRule = coerce_inference_rule(i=d)
+        if not is_inference_rule_of_theory(i=extension_i, t=a):
+            a: Axiomatization = Axiomatization(a=a, d=(extension_i,))
+    else:
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
+                                  msg=f'Cannot append derivation "d" to axiomatization "a", '
+                                      f'because "d" is not in proper form '
+                                      f'(e.g.: axiom, inference-rule).',
+                                  d=d,
+                                  a=a
+                                  )
+    return a
+
+
+def append_args_to_axiomatization(*args, a: FlexibleAxiomatization) -> Axiomatization:
     """Extend theory t by appending to it whatever is passed in *args.
 
     :param args:
@@ -3436,30 +3507,8 @@ def append_to_axiomatization(*args, a: FlexibleAxiomatization) -> Axiomatization
     if args is None:
         return a
     else:
-        for x in args:
-            if is_well_formed_theory(t=x):
-                extension_t: Theory = coerce_theory(t=x)
-                # If a theory is passed as argument,
-                # this is interpreted as 'hoping all derivations in "t" are axioms or inference-rules,
-                # please append them all to axiomatization "a"'.
-                for d in iterate_derivations_in_theory(t=extension_t):
-                    a = append_to_axiomatization(d, a=a)
-            elif is_well_formed_axiom(a=x):
-                extension_a: Axiom = coerce_axiom(a=x)
-                if not is_axiom_of_theory(a=extension_a, t=a):
-                    a: Axiomatization = Axiomatization(a=a, d=(extension_a,))
-            elif is_well_formed_inference_rule(i=x):
-                extension_i: InferenceRule = coerce_inference_rule(i=x)
-                if not is_inference_rule_of_theory(i=extension_i, t=a):
-                    a: Axiomatization = Axiomatization(a=a, d=(extension_i,))
-            else:
-                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
-                                          msg=f'Argument "x" intended to extend axiomatization "a" is not of a '
-                                              f'supported form (e.g.: axiom, inference-rule, theory, axiomatization, '
-                                              f'...).',
-                                          x=x,
-                                          a=a
-                                          )
+        for d in args:
+            a = append_derivation_to_axiomatization(d=d, a=a)
         return a
 
 

@@ -1,5 +1,9 @@
 """
 
+TODO: Code quality question: do we need to repeat data validation logic in _init__ and __new__? probably
+    not, as long as we don't need to manipulate the objects in init. for consistency, we may use a 3rd
+    custom static constructor method.
+
 TODO: Implement strict connectives check in coerce_functions. To do this, we must better manage
     python-class inheritance (because this changes the connectives). Start systematically with
     python-classes that are not inherited.
