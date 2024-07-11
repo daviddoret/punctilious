@@ -346,7 +346,7 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
 
 
-def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty) -> Tupl:
+def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False) -> Tupl:
     if isinstance(t, Tupl):
         return t
     elif is_well_formed_tupl(t=t, interpret_none_as_empty=interpret_none_as_empty):
