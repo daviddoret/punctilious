@@ -125,10 +125,8 @@ class TestTupl:
 
 
 class TestEnumeration:
-    def test_enumeration(self):
-        pass
 
-    def test_has_element(self):
+    def test_is_element_of_enumeration(self):
         c1 = pu.as1.let_x_be_a_binary_connective(formula_ts='c1')
         c2 = pu.as1.let_x_be_a_binary_connective(formula_ts='c2')
         x = pu.as1.let_x_be_a_simple_object(formula_ts='x')
@@ -145,13 +143,15 @@ class TestEnumeration:
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi2) == 1
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi3) == 2
 
-    def test_exception(self):
+    def test_enumeration_duplicate_elements(self):
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         b = pu.as1.let_x_be_a_simple_object(formula_ts='b')
         c = pu.as1.let_x_be_a_simple_object(formula_ts='c')
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_029):
             # duplicate formula-equivalent formulas are forbidden in enumerations.
             e1 = pu.as1.Enumeration(elements=(a, b, c, b,))
+        # with strip_duplicates, duplicates are automatically removed.
+        e1 = pu.as1.Enumeration(elements=(a, b, c, b,), strip_duplicates=True)
 
     def test_enumeration(self):
         a, b, c, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'x', 'y', 'z',))
@@ -175,6 +175,7 @@ class TestEnumeration:
 
     def test_is_well_formed_enumeration(self):
         a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
+        # ill-formed enumerations because of wrong connective
         star = pu.as1.FreeArityConnective(formula_ts='*')
         phi1 = pu.as1.Formula(c=star, t=(a, b, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi1)
@@ -185,6 +186,18 @@ class TestEnumeration:
         phi4 = pu.as1.Formula(c=star, t=(a, b, b, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi4)
         phi5 = pu.as1.Formula(c=star, t=(a, b, c, c,))
+        assert not pu.as1.is_well_formed_enumeration(e=phi5)
+        # well-formed enumerations
+        phi1 = pu.as1.Formula(c=pu.csl1.enumeration, t=(a, b, c,))
+        assert pu.as1.is_well_formed_enumeration(e=phi1)
+        phi2 = pu.as1.Formula(c=pu.csl1.enumeration, t=None)
+        assert pu.as1.is_well_formed_enumeration(e=phi2)
+        # ill-formed enumerations because of duplicate elements
+        phi3 = pu.as1.Formula(c=pu.csl1.enumeration, t=(a, a, b, c,), )
+        assert not pu.as1.is_well_formed_enumeration(e=phi3)
+        phi4 = pu.as1.Formula(c=pu.csl1.enumeration, t=(a, b, b, c,))
+        assert not pu.as1.is_well_formed_enumeration(e=phi4)
+        phi5 = pu.as1.Formula(c=pu.csl1.enumeration, t=(a, b, c, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi5)
 
 
