@@ -346,13 +346,15 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
 
 
-def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False) -> Tupl:
+def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic_conversion: bool = False) -> Tupl:
     if isinstance(t, Tupl):
         return t
     elif is_well_formed_tupl(t=t, interpret_none_as_empty=interpret_none_as_empty):
         return Tupl(elements=t)
     elif interpret_none_as_empty and t is None:
         return Tupl(elements=None)
+    elif canonic_conversion and is_well_formed_formula(phi=t):
+        return transform_formula_to_tuple(phi=t)
     elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
@@ -2747,11 +2749,11 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
         t: Formula = coerce_formula(phi=t)
         return Theory(d=(*t,))
     elif canonical_conversion and is_well_formed_axiomatization(a=t):
-        return convert_axiomatization_to_theory(a=t)
+        return transform_axiomatization_to_theory(a=t)
     elif canonical_conversion and is_well_formed_enumeration(e=t):
-        return convert_enumeration_to_theory(e=t)
+        return transform_enumeration_to_theory(e=t)
     elif canonical_conversion and is_well_formed_tuple(a=t):
-        return convert_tuple_to_theory(t=t)
+        return transform_tuple_to_theory(t=t)
     elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
@@ -3271,7 +3273,7 @@ FlexibleTheory = typing.Optional[
 FlexibleDecorations = typing.Optional[typing.Union[typing.Tuple[Theory, ...], typing.Tuple[()]]]
 
 
-def convert_axiomatization_to_theory(a: FlexibleAxiomatization) -> Theory:
+def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> Theory:
     """Canonical function that converts an axiomatization "a" to a theory.
 
     An axiomatization is a theory whose derivations are limited to axioms and inference-rules.
@@ -3287,7 +3289,7 @@ def convert_axiomatization_to_theory(a: FlexibleAxiomatization) -> Theory:
     return t
 
 
-def convert_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
+def transform_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
     """Canonical function that converts an enumeration "e" to a theory,
     providing that all elements "x" of "e" are well-formed derivations.
 
@@ -3299,7 +3301,7 @@ def convert_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
     return t
 
 
-def convert_tuple_to_theory(t: FlexibleTupl) -> Theory:
+def transform_tuple_to_theory(t: FlexibleTupl) -> Theory:
     """Canonical function that converts an enumeration "e" to a theory,
     providing that all elements "x" of "e" are well-formed derivations.
 
@@ -3308,7 +3310,7 @@ def convert_tuple_to_theory(t: FlexibleTupl) -> Theory:
     """
     t: Tupl = coerce_tuple(t=t)
     e: Enumeration = coerce_enumeration(e=t, strip_duplicates=True)
-    t2: Theory = convert_enumeration_to_theory(e=e)
+    t2: Theory = transform_enumeration_to_theory(e=e)
     return t2
 
 
@@ -3331,7 +3333,7 @@ def transform_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumer
     return e
 
 
-def convert_theory_to_enumeration(t: FlexibleTheory) -> Enumeration:
+def transform_theory_to_enumeration(t: FlexibleTheory) -> Enumeration:
     """Canonical function that converts a theory "t" to an enumeration.
 
     A theory is fundamentally an enumeration of derivations.
