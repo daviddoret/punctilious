@@ -1555,7 +1555,8 @@ class Map(Formula):
         # __new__ runs to completion before __init__ starts.
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
+        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
+                                            canonic_conversion=True)
         c: Tupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
         if len(d) != len(c):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
@@ -1569,7 +1570,8 @@ class Map(Formula):
         :param c: An enumeration denoted as the codomain of the map.
         """
         # __new__ runs to completion before __init__ starts.
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
+        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
+                                            canonic_conversion=True)
         c: Tupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
         super().__init__(c=_connectives.map_formula, t=(d, c,))
 
