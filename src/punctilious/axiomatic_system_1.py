@@ -354,6 +354,7 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic
     elif interpret_none_as_empty and t is None:
         return Tupl(elements=None)
     elif canonic_conversion and is_well_formed_formula(phi=t):
+        # Every formula can be transformed to a tuple using canonical transformation.
         return transform_formula_to_tuple(phi=t)
     elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
@@ -3299,6 +3300,26 @@ def transform_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
     e: Enumeration = coerce_enumeration(e=e)
     t: Theory = Theory(d=e)
     return t
+
+
+def transform_formula_to_tuple(phi: FlexibleFormula) -> Tupl:
+    """Canonical transformation of formulas to tuples.
+
+    Every formula is a tuple if we don't consider its connective.
+    The canonical transformation returns a tuple if :math:`phi` is a well-formed tupl,
+    otherwise it returns a new tupl such that the elements of the tuple
+    are the terms of the formula, preserving order.
+
+    :param phi: A formula.
+    :return: A theory.
+    """
+    phi: Formula = coerce_formula(phi=phi)
+    if is_well_formed_tupl(t=phi):
+        phi: Tupl = coerce_tuple(t=phi)
+        return phi
+    else:
+        phi: Tupl = Tupl(elements=iterate_formula_terms(phi=phi))
+        return phi
 
 
 def transform_tuple_to_theory(t: FlexibleTupl) -> Theory:
