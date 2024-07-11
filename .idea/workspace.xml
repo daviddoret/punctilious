@@ -7,7 +7,6 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -718,14 +717,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00762" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1720161187705</created>
-      <option name="number" value="00762" />
-      <option name="presentableId" value="LOCAL-00762" />
-      <option name="project" value="LOCAL" />
-      <updated>1720161187705</updated>
-    </task>
     <task id="LOCAL-00763" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1720161463965</created>
@@ -1110,7 +1101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720677597531</updated>
     </task>
-    <option name="localTasksCounter" value="811" />
+    <task id="LOCAL-00811" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1720677717802</created>
+      <option name="number" value="00811" />
+      <option name="presentableId" value="LOCAL-00811" />
+      <option name="project" value="LOCAL" />
+      <updated>1720677717802</updated>
+    </task>
+    <option name="localTasksCounter" value="812" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1209,7 +1208,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3715</line>
+          <line>3719</line>
           <option name="timeStamp" value="594" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1254,7 +1253,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3089</line>
+          <line>3093</line>
           <option name="timeStamp" value="651" />
         </line-breakpoint>
       </breakpoints>

@@ -2691,7 +2691,8 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
             t=t, t_python_type=type(t))
 
 
-def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False) -> Theory:
+def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
+                  canonical_conversion: bool = False) -> Theory:
     """Validate that phi is a well-formed theory and returns it properly typed as Demonstration,
     or raise exception e123.
 
@@ -2706,6 +2707,9 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False) -> T
     elif is_well_formed_theory(t=t):
         t: Formula = coerce_formula(phi=t)
         return Theory(d=(*t,))
+    elif canonical_conversion and is_well_formed_axiomatization(a=t):
+        t: Formula = coerce_formula(phi=t)
+        return convert_axiomatization_to_theory(a=t)
     elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
