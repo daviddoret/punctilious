@@ -2691,16 +2691,17 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
             t=t, t_python_type=type(t))
 
 
-def coerce_theory(t: FlexibleTheory) -> Theory:
+def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False) -> Theory:
     """Validate that phi is a well-formed theory and returns it properly typed as Demonstration,
     or raise exception e123.
 
+    :param interpret_none_as_empty:
     :param t:
     :return:
     """
     if isinstance(t, Theory):
         return t
-    elif t is None:
+    elif interpret_none_as_empty and t is None:
         return Theory(d=None)
     elif is_well_formed_theory(t=t):
         t: Formula = coerce_formula(phi=t)

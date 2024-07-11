@@ -226,7 +226,7 @@ def let_x_be_a_propositional_variable(
     """
     global axiomatization
     global i0
-    t: as1.FlexibleTheory = as1.coerce_theory(t=t)
+    t: as1.FlexibleTheory = as1.coerce_theory(t=t, interpret_none_as_empty=True)
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
     # in the theory.
