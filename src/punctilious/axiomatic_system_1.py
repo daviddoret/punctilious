@@ -2995,8 +2995,8 @@ class Inference(Formula):
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
         i: InferenceRule = coerce_inference_rule(i=i)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
-        a: Tupl = coerce_tupl_OBSOLETE(t=a)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
         c: Connective = _connectives.inference
         o: tuple = super().__new__(cls, c=c, t=(i, p, a))
         return o
@@ -3009,8 +3009,8 @@ class Inference(Formula):
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
         i: InferenceRule = coerce_inference_rule(i=i)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
-        a: Tupl = coerce_tupl_OBSOLETE(t=a)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
         c: Connective = _connectives.inference
         super().__init__(c=c, t=(i, p, a,))
 
@@ -3034,12 +3034,18 @@ FlexibleInference = typing.Optional[typing.Union[Inference]]
 
 
 def inverse_map(m: FlexibleMap) -> Map:
-    """If a map is a function, generate the inverse map."""
+    """If a map is bijective, returns the inverse map."""
     m: Map = coerce_map(m=m)
-    codomain = Enumeration(e=m.domain)
-    domain = Enumeration(e=m.codomain)
-    if len(codomain) != len(domain):
-        assert u1.ApplicativeError(msg='Cannot inverse map if it is not a function!')
+    domain = transform_formula_to_enumeration(phi=m.codomain, strip_duplicates=True)
+    codomain = transform_formula_to_tuple(phi=m.domain)
+    if domain.arity != codomain.arity:
+        assert u1.ApplicativeError(
+            msg='Map "m" cannot be inversed because it is not bijective.',
+            new_domain_arity=domain.arity,
+            new_codomain_arity=codomain.arity,
+            new_domain=domain,
+            new_codomain=codomain,
+            original_map=m)
     m2: Map = Map(d=domain, c=codomain)
     return m2
 
