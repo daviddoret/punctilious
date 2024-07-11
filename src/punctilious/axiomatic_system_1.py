@@ -443,7 +443,7 @@ def coerce_map(m: FlexibleMap) -> Map:
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
         domain: Enumeration = coerce_enumeration(e=m.keys())
-        codomain: Tupl = coerce_tupl(t=m.values())
+        codomain: Tupl = coerce_tupl_OBSOLETE(t=m.values())
         return Map(d=domain, c=codomain)
     else:
         # no coercion solution found.
@@ -453,7 +453,7 @@ def coerce_map(m: FlexibleMap) -> Map:
             coerced_type=Map, m_type=type(m), m=m)
 
 
-def coerce_tupl(t: FlexibleTupl) -> Tupl:
+def coerce_tupl_OBSOLETE(t: FlexibleTupl) -> Tupl:
     if isinstance(t, Tupl):
         return t
     elif t is None:
@@ -690,7 +690,7 @@ def get_index_of_first_equivalent_element_in_tuple(x: FlexibleFormula, t: Flexib
     :return: The 0-based index of "x" in "t".
     """
     x: Formula = coerce_formula(phi=x)
-    t: Tupl = coerce_tupl(t=t)
+    t: Tupl = coerce_tupl_OBSOLETE(t=t)
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=t)
 
 
@@ -897,7 +897,7 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True)
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True)
-        p: Tupl = coerce_tupl(t=p)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
         if a is None:
             # Signature 3: This is a natural transformation:
             t2: NaturalTransformation = NaturalTransformation(c=c, v=v, d=d, p=p)
@@ -1445,7 +1445,7 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
 def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> Tupl:
     """Return a new extended punctilious-tuple such that element is a new element appended to its existing elements.
     """
-    t: Tupl = coerce_tupl(t=t)
+    t: Tupl = coerce_tupl_OBSOLETE(t=t)
     x: Formula = coerce_formula(phi=x)
     extended_tupl: Tupl = Tupl(elements=(*t, x,))
     return extended_tupl
@@ -1517,7 +1517,7 @@ class Map(Formula):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         d: Enumeration = coerce_enumeration(e=d)
-        c: Tupl = coerce_tupl(t=c)
+        c: Tupl = coerce_tupl_OBSOLETE(t=c)
         if len(d) != len(c):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
         o: tuple = super().__new__(cls, c=_connectives.map_formula, t=(d, c,))
@@ -1531,7 +1531,7 @@ class Map(Formula):
         """
         # __new__ runs to completion before __init__ starts.
         d: Enumeration = coerce_enumeration(e=d)
-        c: Tupl = coerce_tupl(t=c)
+        c: Tupl = coerce_tupl_OBSOLETE(t=c)
         super().__init__(c=_connectives.map_formula, t=(d, c,))
 
     @property
@@ -1540,7 +1540,7 @@ class Map(Formula):
 
         The codomain of a map is the enumeration of possible outputs of the get_image_from_map function.
         """
-        return coerce_tupl(t=self[Map.CODOMAIN_INDEX])
+        return coerce_tupl_OBSOLETE(t=self[Map.CODOMAIN_INDEX])
 
     @property
     def domain(self) -> Enumeration:
@@ -1690,7 +1690,7 @@ class Transformation(Formula):
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
         d: Enumeration = coerce_enumeration(e=d)
-        p: Tupl = coerce_tupl(t=p)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
         o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
                                    t=(c, v, d, p,))
         return o
@@ -1710,7 +1710,7 @@ class Transformation(Formula):
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
         d: Enumeration = coerce_enumeration(e=d)
-        p: Tupl = coerce_tupl(t=p)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
         super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
@@ -1814,7 +1814,7 @@ class NaturalTransformation(Transformation):
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
         d: Enumeration = coerce_enumeration(e=d)
-        p: Tupl = coerce_tupl(t=p)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
         o: tuple = super().__new__(cls, connective=_connectives.natural_transformation, c=c,
                                    v=v,
                                    d=d, p=p)
@@ -1833,7 +1833,7 @@ class NaturalTransformation(Transformation):
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
         d: Enumeration = coerce_enumeration(e=d)
-        p: Tupl = coerce_tupl(t=p)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
         super().__init__(connective=_connectives.natural_transformation, c=c, v=v,
                          d=d, p=p)
 
@@ -1850,8 +1850,8 @@ class NaturalTransformation(Transformation):
         :param a:
         :return:
         """
-        p = coerce_tupl(t=p)
-        a = coerce_tupl(t=a)  # This argument is not used by natural-transformation.
+        p = coerce_tupl_OBSOLETE(t=p)
+        a = coerce_tupl_OBSOLETE(t=a)  # This argument is not used by natural-transformation.
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
@@ -1955,7 +1955,7 @@ class AlgorithmicTransformation(Transformation):
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v)
         d: Enumeration = coerce_enumeration(e=d)
-        p: Tupl = coerce_tupl(t=p)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
         o: tuple = super().__new__(cls, connective=_connectives.algorithm,
                                    c=c, v=v, d=d,
                                    p=p)
@@ -1994,8 +1994,8 @@ class AlgorithmicTransformation(Transformation):
         :param p: A tuple of arguments, whose order matches the order of the transformation premises.
         :return:
         """
-        p = coerce_tupl(t=p)
-        a = coerce_tupl(t=a)
+        p = coerce_tupl_OBSOLETE(t=p)
+        a = coerce_tupl_OBSOLETE(t=a)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         # supported extreme case: there are no premises.
@@ -2063,8 +2063,8 @@ def coerce_inference(i: FlexibleFormula) -> Inference:
         return i
     elif isinstance(i, Formula) and is_well_formed_inference(i=i):
         i2: InferenceRule = coerce_inference_rule(i=i[0])
-        p: Tupl = coerce_tupl(t=i[1])
-        a: Tupl = coerce_tupl(t=i[2])
+        p: Tupl = coerce_tupl_OBSOLETE(t=i[1])
+        a: Tupl = coerce_tupl_OBSOLETE(t=i[2])
         return Inference(i=i2, p=p, a=a)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
@@ -2280,7 +2280,7 @@ def iterate_formula_terms(phi: FlexibleFormula) -> typing.Generator[Formula, Non
 def iterate_tuple_elements(phi: FlexibleTupl) -> typing.Generator[Formula, None, None]:
     """Iterates the elements of a tuple in canonical order.
     """
-    phi = coerce_tupl(t=phi)
+    phi = coerce_tuple(t=phi)
     yield from iterate_formula_terms(phi=phi)
 
 
@@ -2297,7 +2297,7 @@ def iterate_enumeration_elements(e: FlexibleEnumeration) -> typing.Generator[For
 def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     """Returns True if every formula phi in enumeration s is a valid-statement in theory t, False otherwise.
     """
-    s: Tupl = coerce_tupl(t=s)
+    s: Tupl = coerce_tupl_OBSOLETE(t=s)
     t: Theory = coerce_theory(t=t)
     return all(is_valid_statement_in_theory(phi=phi, t=t) for phi in iterate_tuple_elements(s))
 
@@ -2376,7 +2376,7 @@ def are_valid_statements_in_theory_with_variables(
     TODO: retrieve and return the final map of variable values as well? is this really needed?
 
     """
-    s: Tupl = coerce_tupl(t=s)
+    s: Tupl = coerce_tupl_OBSOLETE(t=s)
     t: Theory = coerce_theory(t=t)
     variables: Enumeration = coerce_enumeration(e=variables, strip_duplicates=True)
     variables_values: Map = coerce_map(m=variables_values)
@@ -2399,7 +2399,7 @@ def are_valid_statements_in_theory_with_variables(
         # it follows that 1) there will be no permutations,
         # and 2) are_valid_statements_in_theory() is equivalent.
         s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variables_values)
-        s_with_variable_substitution: Tupl = coerce_tupl(t=s_with_variable_substitution)
+        s_with_variable_substitution: Tupl = coerce_tupl_OBSOLETE(t=s_with_variable_substitution)
         valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
         if valid:
             return valid, s_with_variable_substitution
@@ -2411,7 +2411,7 @@ def are_valid_statements_in_theory_with_variables(
                                                                                         n=permutation_size):
             variable_substitution: Map = Map(d=free_variables, c=permutation)
             s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
-            s_with_variable_substitution: Tupl = coerce_tupl(t=s_with_variable_substitution)
+            s_with_variable_substitution: Tupl = coerce_tupl_OBSOLETE(t=s_with_variable_substitution)
             s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution,))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
@@ -2955,8 +2955,8 @@ class Inference(Formula):
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
         i: InferenceRule = coerce_inference_rule(i=i)
-        p: Tupl = coerce_tupl(t=p)
-        a: Tupl = coerce_tupl(t=a)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
+        a: Tupl = coerce_tupl_OBSOLETE(t=a)
         c: Connective = _connectives.inference
         o: tuple = super().__new__(cls, c=c, t=(i, p, a))
         return o
@@ -2969,8 +2969,8 @@ class Inference(Formula):
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
         i: InferenceRule = coerce_inference_rule(i=i)
-        p: Tupl = coerce_tupl(t=p)
-        a: Tupl = coerce_tupl(t=a)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
+        a: Tupl = coerce_tupl_OBSOLETE(t=a)
         c: Connective = _connectives.inference
         super().__init__(c=c, t=(i, p, a,))
 
@@ -3610,9 +3610,9 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     # parameters validation
     t: Theory = coerce_theory(t=t)
     c: Formula = coerce_formula(phi=c)
-    p: Tupl = coerce_tupl(t=p)
+    p: Tupl = coerce_tupl_OBSOLETE(t=p)
     i: InferenceRule = coerce_inference_rule(i=i)
-    a: Tupl = coerce_tupl(t=a)
+    a: Tupl = coerce_tupl_OBSOLETE(t=a)
 
     for premise in p:
         # The validity of the premises is checked during theory initialization,
@@ -3839,7 +3839,7 @@ def auto_derive_3(
     :return:
     """
     t: Theory = coerce_theory(t=t)
-    conjectures: Tupl = coerce_tupl(t=conjectures)
+    conjectures: Tupl = coerce_tupl_OBSOLETE(t=conjectures)
     for conjecture in iterate_tuple_elements(phi=conjectures):
         t, success, _ = auto_derive_2(t=t, conjecture=conjecture)
         if not success:

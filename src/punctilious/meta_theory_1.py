@@ -17,8 +17,8 @@ if __name__ == '__main__':
 
 def is_well_formed_formula_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     """A"""
-    p: as1.Tupl = as1.coerce_tupl(t=p)
-    a: as1.Tupl = as1.coerce_tupl(t=a)
+    p: as1.Tupl = as1.coerce_tupl_OBSOLETE(t=p)
+    a: as1.Tupl = as1.coerce_tupl_OBSOLETE(t=a)
     if not a.arity == 1:
         raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
     phi: as1.Formula = as1.coerce_formula(phi=a[0])
@@ -34,8 +34,8 @@ def is_well_formed_formula_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | No
 
 def is_well_formed_inference_rule_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     """A"""
-    p: as1.Tupl = as1.coerce_tupl(t=p)
-    a: as1.Tupl = as1.coerce_tupl(t=a)
+    p: as1.Tupl = as1.coerce_tupl_OBSOLETE(t=p)
+    a: as1.Tupl = as1.coerce_tupl_OBSOLETE(t=a)
     if not a.arity == 1:
         raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
     i: as1.Formula = as1.coerce_formula(phi=a[0])
@@ -52,8 +52,8 @@ def is_well_formed_inference_rule_algorithm(p: as1.Tupl | None = None, a: as1.Tu
 
 def is_well_formed_theory_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     """A"""
-    p: as1.Tupl = as1.coerce_tupl(t=p)
-    a: as1.Tupl = as1.coerce_tupl(t=a)
+    p: as1.Tupl = as1.coerce_tupl_OBSOLETE(t=p)
+    a: as1.Tupl = as1.coerce_tupl_OBSOLETE(t=a)
     if not a.arity == 1:
         raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
     t: as1.Formula = as1.coerce_formula(phi=a[0])

@@ -701,8 +701,8 @@ class TestProofByInference:
 class TestAlgorithm:
     def test_algorithm(self):
         def x_is_a_theory(p: pu.as1.Tupl | None = None, a: pu.as1.Tupl | None = None):
-            p = as1.coerce_tupl(t=p)
-            a = as1.coerce_tupl(t=a)
+            p = as1.coerce_tupl_OBSOLETE(t=p)
+            a = as1.coerce_tupl_OBSOLETE(t=a)
             if not a.arity == 1:
                 raise pu.u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
             t = a[0]
