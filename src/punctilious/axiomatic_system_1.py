@@ -897,7 +897,7 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True)
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
         if a is None:
             # Signature 3: This is a natural transformation:
             t2: NaturalTransformation = NaturalTransformation(c=c, v=v, d=d, p=p)
