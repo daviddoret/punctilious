@@ -46,7 +46,7 @@ def blueberry():
 
 @pytest.fixture
 def fruits(apple, ananas, blueberry, strawberry):
-    fruits = pu.as1.Enumeration(elements=(apple, ananas, blueberry, strawberry))
+    fruits = pu.as1.Enumeration(e=(apple, ananas, blueberry, strawberry))
     return fruits
 
 
@@ -134,7 +134,7 @@ class TestEnumeration:
         phi1 = x | c1 | y
         phi2 = x | c2 | y
         phi3 = y | c1 | x
-        e1 = pu.as1.Enumeration(elements=(phi1, phi2, phi3,))
+        e1 = pu.as1.Enumeration(e=(phi1, phi2, phi3,))
         assert pu.as1.is_element_of_enumeration(e=e1, x=phi1)
         assert not pu.as1.is_element_of_enumeration(e=e1, x=x | c1 | x)
         phi1_other_instance = x | c1 | y
@@ -149,13 +149,13 @@ class TestEnumeration:
         c = pu.as1.let_x_be_a_simple_object(formula_ts='c')
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_029):
             # duplicate formula-equivalent formulas are forbidden in enumerations.
-            e1 = pu.as1.Enumeration(elements=(a, b, c, b,))
+            e1 = pu.as1.Enumeration(e=(a, b, c, b,))
         # with strip_duplicates, duplicates are automatically removed.
-        e1 = pu.as1.Enumeration(elements=(a, b, c, b,), strip_duplicates=True)
+        e1 = pu.as1.Enumeration(e=(a, b, c, b,), strip_duplicates=True)
 
     def test_enumeration(self):
         a, b, c, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'x', 'y', 'z',))
-        baczx = pu.as1.Enumeration(elements=(b, a, c, z, x))
+        baczx = pu.as1.Enumeration(e=(b, a, c, z, x))
         assert pu.as1.is_formula_equivalent(phi=baczx, psi=baczx)
         assert pu.as1.is_enumeration_equivalent(phi=baczx, psi=baczx)
         assert pu.as1.is_element_of_enumeration(e=baczx, x=a)
@@ -169,7 +169,7 @@ class TestEnumeration:
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=z) == 3
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=baczx, x=x) == 4
         assert not pu.as1.is_element_of_enumeration(x=y, e=baczx)
-        baczx2 = pu.as1.Enumeration(elements=(b, a, c, z, x))
+        baczx2 = pu.as1.Enumeration(e=(b, a, c, z, x))
         assert pu.as1.is_formula_equivalent(phi=baczx, psi=baczx2)
         assert pu.as1.is_enumeration_equivalent(phi=baczx, psi=baczx2)
 
@@ -416,9 +416,9 @@ class TestNaturalTransformation:
         aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
         p1 = x | is_a | human
         p2 = aristotle | is_a | human
-        premises = pu.as1.Enumeration(elements=(p1,))
+        premises = pu.as1.Enumeration(e=(p1,))
         conclusion = x | is_a | mortal
-        variables = pu.as1.Enumeration(elements=(x,))
+        variables = pu.as1.Enumeration(e=(x,))
         f = pu.as1.NaturalTransformation(c=conclusion, v=variables, d=None,
                                          p=premises)
         arguments = pu.as1.Tupl(elements=(p2,))
@@ -438,15 +438,15 @@ class TestNaturalTransformation:
         p1 = x | is_a | human
         p2 = aristotle | is_a | human
         conclusion = x | is_a | mortal
-        variables = pu.as1.Enumeration(elements=(x,))
-        declarations = pu.as1.Enumeration(elements=None)
+        variables = pu.as1.Enumeration(e=(x,))
+        declarations = pu.as1.Enumeration(e=None)
         premises = pu.as1.Tupl(elements=(p1,))
         phi1 = pu.as1._connectives.natural_transformation(conclusion, variables, declarations, premises)
         assert pu.as1.is_well_formed_natural_transformation(t=phi1)
         phi1 = pu.as1.coerce_natural_transformation(t=phi1)
         conclusion = x | is_a | mortal
-        variables = pu.as1.Enumeration(elements=(x,))
-        declarations = pu.as1.Enumeration(elements=None)
+        variables = pu.as1.Enumeration(e=(x,))
+        declarations = pu.as1.Enumeration(e=None)
         premises = pu.as1.Tupl(elements=(platypus, platypus,))
         phi2 = pu.as1._connectives.natural_transformation(conclusion, variables, declarations, premises, premises)
         assert not pu.as1.is_well_formed_natural_transformation(t=phi2)
@@ -523,8 +523,8 @@ class TestMap:
 class TestEnumerationEquivalence:
     def test_enumeration_equivalence(self):
         red, yellow, blue = pu.as1.let_x_be_some_simple_objects(reps=('red', 'yellow', 'blue',))
-        e1 = pu.as1.Enumeration(elements=(red, yellow, blue,))
-        e2 = pu.as1.Enumeration(elements=(yellow, red, blue,))
+        e1 = pu.as1.Enumeration(e=(red, yellow, blue,))
+        e2 = pu.as1.Enumeration(e=(yellow, red, blue,))
         assert pu.as1.is_enumeration_equivalent(phi=e1, psi=e2)
         assert not pu.as1.is_formula_equivalent(phi=e1, psi=e2)
 
@@ -532,13 +532,13 @@ class TestEnumerationEquivalence:
 class TestUnionEnumeration:
     def test_union_enumeration(self):
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
-        abc = pu.as1.Enumeration(elements=(a, b, c,))
-        cd = pu.as1.Enumeration(elements=(c, d,))
+        abc = pu.as1.Enumeration(e=(a, b, c,))
+        cd = pu.as1.Enumeration(e=(c, d,))
         abcd1 = pu.as1.union_enumeration(phi=abc, psi=cd)
-        abcd2 = pu.as1.Enumeration(elements=(a, b, c, d,))
+        abcd2 = pu.as1.Enumeration(e=(a, b, c, d,))
         assert pu.as1.is_enumeration_equivalent(phi=abcd1, psi=abcd2)
-        abcde1 = pu.as1.Enumeration(elements=(a, b, c, d, e,))
-        abcde2 = pu.as1.Enumeration(elements=(a, b, c, e, d,))
+        abcde1 = pu.as1.Enumeration(e=(a, b, c, d, e,))
+        abcde2 = pu.as1.Enumeration(e=(a, b, c, e, d,))
         assert pu.as1.is_enumeration_equivalent(phi=abcde1, psi=abcde2)
         assert not pu.as1.is_formula_equivalent(phi=abcde1, psi=abcde2)  # because of order
         abcde3 = pu.as1.union_enumeration(phi=abcde1, psi=abcde1)
@@ -596,11 +596,11 @@ class TestFormulaToTuple:
         h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
         phi1 = h(e, b, d)
         e1_result = pu.as1.formula_to_tuple(phi=phi1)
-        e1_expected = pu.as1.enumeration(elements=(e, b, d,))
+        e1_expected = pu.as1.enumeration(e=(e, b, d,))
         assert pu.as1.is_formula_equivalent(phi=e1_result, psi=e1_expected)
         phi2 = h(phi1, b, g(a, f(b)))
         e2_result = pu.as1.formula_to_tuple(phi=phi2)
-        e2_expected = pu.as1.enumeration(elements=(phi1, b, g(a, f(b)),))
+        e2_expected = pu.as1.enumeration(e=(phi1, b, g(a, f(b)),))
         assert pu.as1.is_formula_equivalent(phi=e2_result, psi=e2_expected)
 
 
@@ -680,9 +680,9 @@ class TestProofByInference:
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         star = pu.as1.let_x_be_a_binary_connective(
             formula_ts=pu.as1.typesetters.infix_formula(connective_typesetter=pu.pl1.symbols.asterisk_operator))
-        premises = pu.as1.Enumeration(elements=(x | star | y, y | star | z,))
+        premises = pu.as1.Enumeration(e=(x | star | y, y | star | z,))
         conclusion = x | star | z
-        variables = pu.as1.Enumeration(elements=(x, y, z,))
+        variables = pu.as1.Enumeration(e=(x, y, z,))
         f = pu.as1.NaturalTransformation(c=conclusion, v=variables, d=None,
                                          p=premises)
         ir = pu.as1.InferenceRule(t=f)
@@ -738,7 +738,7 @@ class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
             i = i + 1
         assert i == 0
 
-        e = pu.as1.Enumeration(elements=(a,))
+        e = pu.as1.Enumeration(e=(a,))
         i = 0
         for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=0):
             i = i + 1
@@ -748,7 +748,7 @@ class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
             i = i + 1
         assert i == 1
 
-        e = pu.as1.Enumeration(elements=(a, b,))
+        e = pu.as1.Enumeration(e=(a, b,))
         i = 0
         for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=0):
             i = i + 1
@@ -762,7 +762,7 @@ class TestIteratePermutationsOfEnumerationElementsWithFixedSize:
             i = i + 1
         assert i == 2
 
-        e = pu.as1.Enumeration(elements=(a, b, c,))
+        e = pu.as1.Enumeration(e=(a, b, c,))
         i = 0
         for x in pu.as1.iterate_permutations_of_enumeration_elements_with_fixed_size(e=e, n=0):
             i = i + 1
@@ -828,9 +828,9 @@ class TestStripDuplicateFormulasInPythonTuple:
 class TestCoerceEnumeration:
     def test_coerce_enumeration(self):
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
-        e1 = pu.as1.Enumeration(elements=(a, b, a, a, e, e,), strip_duplicates=True)
-        e2 = pu.as1.Enumeration(elements=(a, b, e,), strip_duplicates=True)
-        e3 = pu.as1.Enumeration(elements=e1, strip_duplicates=True)
+        e1 = pu.as1.Enumeration(e=(a, b, a, a, e, e,), strip_duplicates=True)
+        e2 = pu.as1.Enumeration(e=(a, b, e,), strip_duplicates=True)
+        e3 = pu.as1.Enumeration(e=e1, strip_duplicates=True)
         assert pu.as1.is_formula_equivalent(phi=e1, psi=e3)
         assert pu.as1.is_formula_equivalent(phi=e2, psi=e3)
         assert pu.as1.is_formula_equivalent(phi=e1, psi=e2)
@@ -848,7 +848,7 @@ class TestAxiomatization:
         assert pu.as1.is_well_formed_axiom(a=axiom_ok_2)
 
         # simple case
-        e1 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2,))
+        e1 = pu.as1.Enumeration(e=(axiom_ok_1, axiom_ok_2,))
         e1 = pu.as1.Axiomatization(d=e1)
         assert pu.as1.is_well_formed_axiomatization(a=e1)
 
@@ -859,7 +859,7 @@ class TestAxiomatization:
         a1 = pu.as1.Axiomatization(d=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
 
         # bad case: an enumeration with a non-axiom
-        e3 = pu.as1.Enumeration(elements=(axiom_ok_1, axiom_ok_2, star1(e),))
+        e3 = pu.as1.Enumeration(e=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(a=e3)
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_062):
             a2 = pu.as1.Axiomatization(d=e3)  # raise an e123 exception

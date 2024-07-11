@@ -330,19 +330,19 @@ def coerce_enumeration_OBSOLETE(e: FlexibleEnumeration, strip_duplicates: bool =
     elif isinstance(e, Formula) and is_well_formed_enumeration(e=e):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(elements=e, strip_duplicates=strip_duplicates)
+        return Enumeration(e=e, strip_duplicates=strip_duplicates)
     elif interpret_none_as_empty and e is None:
-        return Enumeration(elements=None, strip_duplicates=strip_duplicates)
+        return Enumeration(e=None, strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Generator) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(elements=tuple(element for element in e), strip_duplicates=strip_duplicates)
+        return Enumeration(e=tuple(element for element in e), strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Iterable) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(elements=e, strip_duplicates=strip_duplicates)
+        return Enumeration(e=e, strip_duplicates=strip_duplicates)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
 
@@ -357,21 +357,21 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False,
     elif is_well_formed_enumeration(e=e):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(elements=e)
+        return Enumeration(e=e)
     elif interpret_none_as_empty and e is None:
-        return Enumeration(elements=None)
+        return Enumeration(e=None)
     elif canonic_conversion and is_well_formed_formula(phi=e):
         return transform_formula_to_enumeration(phi=e, strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Generator) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(elements=tuple(element for element in e), strip_duplicates=strip_duplicates)
+        return Enumeration(e=tuple(element for element in e), strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Iterable) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(elements=e, strip_duplicates=strip_duplicates)
+        return Enumeration(e=e, strip_duplicates=strip_duplicates)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_008,
@@ -415,7 +415,7 @@ def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
     e2 = Enumeration()
     for element in e:
         element = coerce_variable(x=element)
-        e2 = Enumeration(elements=(*e2, element,))
+        e2 = Enumeration(e=(*e2, element,))
     return e2
 
 
@@ -440,7 +440,7 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
     """
     phi: Enumeration = coerce_enumeration_OBSOLETE(e=phi)
     psi: Enumeration = coerce_enumeration_OBSOLETE(e=psi)
-    e: Enumeration = Enumeration(elements=(*phi, *psi,), strip_duplicates=True)
+    e: Enumeration = Enumeration(e=(*phi, *psi,), strip_duplicates=True)
     return e
 
 
@@ -874,7 +874,7 @@ def formula_to_tuple(phi: FlexibleFormula) -> Enumeration:
     :return: The enumeration of the formula terms.
     """
     phi = coerce_formula(phi=phi)
-    return Enumeration(elements=phi)
+    return Enumeration(e=phi)
 
 
 def let_x_be_a_binary_connective(
@@ -1477,7 +1477,7 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
         return e
     else:
         # "x" is not an element of "e":
-        extended_enumeration: Enumeration = Enumeration(elements=(*e, x,))
+        extended_enumeration: Enumeration = Enumeration(e=(*e, x,))
         return extended_enumeration
 
 
@@ -1645,25 +1645,25 @@ class Enumeration(Formula):
 
     """
 
-    def __new__(cls, elements: FlexibleEnumeration = None,
+    def __new__(cls, e: FlexibleEnumeration = None,
                 strip_duplicates: bool = False, **kwargs):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         global _connectives
         if strip_duplicates:
-            elements = strip_duplicate_formulas_in_python_tuple(t=elements)
-        o: tuple = super().__new__(cls, c=_connectives.enumeration, t=elements, **kwargs)
+            e = strip_duplicate_formulas_in_python_tuple(t=e)
+        o: tuple = super().__new__(cls, c=_connectives.enumeration, t=e, **kwargs)
         return o
 
-    def __init__(self, elements: FlexibleEnumeration = None,
+    def __init__(self, e: FlexibleEnumeration = None,
                  strip_duplicates: bool = False, **kwargs):
         global _connectives
         if strip_duplicates:
-            elements = strip_duplicate_formulas_in_python_tuple(t=elements)
-        super().__init__(c=_connectives.enumeration, t=elements, **kwargs)
+            e = strip_duplicate_formulas_in_python_tuple(t=e)
+        super().__init__(c=_connectives.enumeration, t=e, **kwargs)
         if not is_well_formed_enumeration(e=self):
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_029, elements_type=type(elements), elements=elements)
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_029, elements_type=type(e), elements=e)
 
 
 enumeration = Enumeration
@@ -1680,11 +1680,11 @@ class EmptyEnumeration(Enumeration):
     def __new__(cls):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        return super().__new__(cls=cls, elements=None)
+        return super().__new__(cls=cls, e=None)
 
     def __init__(self):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        super().__init__(elements=None)
+        super().__init__(e=None)
 
 
 class SingletonEnumeration(Enumeration):
@@ -1695,12 +1695,12 @@ class SingletonEnumeration(Enumeration):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         element: Formula = coerce_formula(phi=element)
-        return super().__new__(cls=cls, elements=(element,))
+        return super().__new__(cls=cls, e=(element,))
 
     def __init__(self, element: FlexibleFormula):
         # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
         element: Formula = coerce_formula(phi=element)
-        super().__init__(elements=element)
+        super().__init__(e=element)
 
 
 class Transformation(Formula):
@@ -2362,7 +2362,7 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
     else:
         generator = itertools.permutations(iterate_enumeration_elements(e=e), n)
         for python_tuple in generator:
-            permutation: Enumeration = Enumeration(elements=python_tuple)
+            permutation: Enumeration = Enumeration(e=python_tuple)
             yield permutation
         return
 
@@ -2426,7 +2426,7 @@ def are_valid_statements_in_theory_with_variables(
     free_variables: Enumeration = Enumeration()
     for x in iterate_enumeration_elements(e=variables):
         if not is_in_map_domain(phi=x, m=variables_values):
-            free_variables: Enumeration = Enumeration(elements=(*free_variables, x,))
+            free_variables: Enumeration = Enumeration(e=(*free_variables, x,))
 
     if debug:
         u1.log_info(f'are_valid_statements_in_theory_with_variables: free-variables:{free_variables}')
@@ -3036,8 +3036,8 @@ FlexibleInference = typing.Optional[typing.Union[Inference]]
 def inverse_map(m: FlexibleMap) -> Map:
     """If a map is a function, generate the inverse map."""
     m: Map = coerce_map(m=m)
-    codomain = Enumeration(elements=m.domain)
-    domain = Enumeration(elements=m.codomain)
+    codomain = Enumeration(e=m.domain)
+    domain = Enumeration(e=m.codomain)
     if len(codomain) != len(domain):
         assert u1.ApplicativeError(msg='Cannot inverse map if it is not a function!')
     m2: Map = Map(d=domain, c=codomain)
@@ -3179,7 +3179,7 @@ class Theory(Formula):
         d: Enumeration = coerce_enumeration_OBSOLETE(
             e=(coerce_derivation(d=p) for p in d))
         if t is not None:
-            d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
+            d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
         # try:
         #    pass
         # except Exception as error:
@@ -3210,7 +3210,7 @@ class Theory(Formula):
         d: Enumeration = coerce_enumeration_OBSOLETE(
             e=(coerce_derivation(d=p) for p in d))
         if t is not None:
-            d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
+            d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
 
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         super().__init__(c=c, t=d, **kwargs)
@@ -3236,7 +3236,7 @@ class Theory(Formula):
         """Return an enumeration of all axioms in the theory.
 
         Note: order is preserved."""
-        return Enumeration(elements=tuple(self.iterate_axioms()))
+        return Enumeration(e=tuple(self.iterate_axioms()))
 
     @property
     def heuristics(self) -> set[Heuristic, ...] | set[{}]:
@@ -3250,14 +3250,14 @@ class Theory(Formula):
     def valid_statements(self) -> Enumeration:
         """Return an enumeration of all axiom and theorem valid-statements in the theory, preserving order."""
         python_tuple: tuple = tuple(self.iterate_valid_statements())
-        e: Enumeration = Enumeration(elements=python_tuple)
+        e: Enumeration = Enumeration(e=python_tuple)
         return e
 
     @property
     def inference_rules(self) -> Enumeration:
         """Return an enumeration of all inference-rules in the theory, preserving order, filtering out axioms and
         theorems."""
-        return Enumeration(elements=tuple(self.iterate_inference_rules()))
+        return Enumeration(e=tuple(self.iterate_inference_rules()))
 
     def iterate_axioms(self) -> typing.Iterator[Axiom]:
         """Iterates over all axioms in the theory, preserving order, filtering out inference-rules and theorems."""
@@ -3295,13 +3295,13 @@ class Theory(Formula):
     @property
     def derivations(self) -> Enumeration:
         """Return an enumeration of all derivations in the theory, preserving order."""
-        return Enumeration(elements=tuple(self.iterate_derivations()))
+        return Enumeration(e=tuple(self.iterate_derivations()))
 
     @property
     def theorems(self) -> Enumeration:
         """Return an enumeration of all theorems in the theory, preserving order, filtering out axioms and
         inference-rules."""
-        return Enumeration(elements=tuple(self.iterate_theorems()))
+        return Enumeration(e=tuple(self.iterate_theorems()))
 
 
 FlexibleTheory = typing.Optional[
@@ -3411,7 +3411,7 @@ def transform_formula_to_enumeration(phi: FlexibleFormula, strip_duplicates: boo
     if isinstance(phi, Enumeration):
         return phi
     else:
-        return Enumeration(elements=iterate_formula_terms(phi=phi), strip_duplicates=strip_duplicates)
+        return Enumeration(e=iterate_formula_terms(phi=phi), strip_duplicates=strip_duplicates)
 
 
 def transform_theory_to_enumeration(t: FlexibleTheory) -> Enumeration:
@@ -3461,9 +3461,9 @@ class Axiomatization(Formula):
             a: Axiomatization = coerce_axiomatization(a=a)
             # Duplicate derivations are not allowed in axiomatizations, so strip duplicates during merge.
             # The first occurrence is maintained, and the second occurrence is stripped.
-            d: Enumeration = Enumeration(elements=(*a, *d), strip_duplicates=True)
+            d: Enumeration = Enumeration(e=(*a, *d), strip_duplicates=True)
         # coerce all elements of the enumeration to axioms or inference-rules.
-        coerced_derivations: Enumeration = Enumeration(elements=None)
+        coerced_derivations: Enumeration = Enumeration(e=None)
         for x in iterate_enumeration_elements(e=d):
             if is_well_formed_inference_rule(i=x):
                 # This is an inference-rule.
@@ -3553,7 +3553,7 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: Enumeration = None) -> Enumerati
     """
     phi: Formula = coerce_formula(phi=phi)
     if eb is None:
-        eb: Enumeration = Enumeration(elements=None)
+        eb: Enumeration = Enumeration(e=None)
     if not is_element_of_enumeration(x=phi, e=eb) and is_leaf_formula(phi=phi):
         eb = append_element_to_enumeration(x=phi, e=eb)
     else:
@@ -3830,7 +3830,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         unknown_variable_values: Enumeration = Enumeration()
         for x in i.transformation.variables:
             if not is_element_of_enumeration(x=x, e=known_variable_values.domain):
-                unknown_variable_values = Enumeration(elements=(*unknown_variable_values, x,))
+                unknown_variable_values = Enumeration(e=(*unknown_variable_values, x,))
 
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
@@ -3979,7 +3979,7 @@ def auto_derive_4(
 
     # To prevent infinite loops, populate an exclusion list of conjectures that are already
     # being searched in higher recursions.
-    conjecture_exclusion_list = Enumeration(elements=(*conjecture_exclusion_list, conjecture,))
+    conjecture_exclusion_list = Enumeration(e=(*conjecture_exclusion_list, conjecture,))
 
     max_recursion = max_recursion - 1
     if max_recursion < 1:
@@ -4014,7 +4014,7 @@ def auto_derive_4(
             free_variables: Enumeration = Enumeration()
             for x in inference_rule.transformation.variables:
                 if not is_element_of_enumeration(x=x, e=m.domain):
-                    free_variables = Enumeration(elements=(*free_variables, x,))
+                    free_variables = Enumeration(e=(*free_variables, x,))
             # u1.log_info(f'\t\t free-variables: {free_variables}')
 
             # now that we know what are the necessary variable values, we can determine what
