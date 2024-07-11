@@ -316,7 +316,8 @@ def coerce_variable(x: FlexibleFormula) -> Formula:
     return x
 
 
-def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -> Enumeration:
+def coerce_enumeration_OBSOLETE(e: FlexibleEnumeration, strip_duplicates: bool = False,
+                                interpret_none_as_empty: bool = True) -> Enumeration:
     """Coerce elements to an enumeration.
     If elements is None, coerce it to an empty enumeration."""
     if strip_duplicates:
@@ -330,7 +331,7 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
         return Enumeration(elements=e, strip_duplicates=strip_duplicates)
-    elif e is None:
+    elif interpret_none_as_empty and e is None:
         return Enumeration(elements=None, strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Generator) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
@@ -344,6 +345,41 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
         return Enumeration(elements=e, strip_duplicates=strip_duplicates)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
+
+
+def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False,
+                       interpret_none_as_empty: bool = False,
+                       canonic_conversion: bool = False) -> Enumeration:
+    """Coerce "e" to an enumeration.
+    """
+    if isinstance(e, Enumeration):
+        return e
+    elif is_well_formed_enumeration(e=e):
+        # phi is a well-formed enumeration,
+        # it can be safely re-instantiated as an Enumeration and returned.
+        return Enumeration(elements=e)
+    elif interpret_none_as_empty and e is None:
+        return Enumeration(elements=None)
+    elif canonic_conversion and is_well_formed_formula(phi=e):
+        return transform_formula_to_enumeration(phi=e, strip_duplicates=strip_duplicates)
+    elif isinstance(e, typing.Generator) and not isinstance(e, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitly convert this to an enumeration
+        whose elements are the elements of the iterable."""
+        return Enumeration(elements=tuple(element for element in e), strip_duplicates=strip_duplicates)
+    elif isinstance(e, typing.Iterable) and not isinstance(e, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitly convert this to an enumeration
+        whose elements are the elements of the iterable."""
+        return Enumeration(elements=e, strip_duplicates=strip_duplicates)
+    else:
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_008,
+            msg='"e" cannot be coerced to an enumeration.',
+            e=e,
+            interpret_none_as_empty=interpret_none_as_empty,
+            canonic_conversion=canonic_conversion,
+            strip_duplicates=strip_duplicates)
 
 
 def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic_conversion: bool = False) -> Tupl:
@@ -375,7 +411,7 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic
 
 
 def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
-    e = coerce_enumeration(e=e)
+    e = coerce_enumeration_OBSOLETE(e=e)
     e2 = Enumeration()
     for element in e:
         element = coerce_variable(x=element)
@@ -402,8 +438,8 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
      - Idempotent: (phi ∪-formula phi) ~formula phi.
      - Not symmetric if some element of psi are elements of phi: because of order.
     """
-    phi: Enumeration = coerce_enumeration(e=phi)
-    psi: Enumeration = coerce_enumeration(e=psi)
+    phi: Enumeration = coerce_enumeration_OBSOLETE(e=phi)
+    psi: Enumeration = coerce_enumeration_OBSOLETE(e=psi)
     e: Enumeration = Enumeration(elements=(*phi, *psi,), strip_duplicates=True)
     return e
 
@@ -445,7 +481,7 @@ def coerce_map(m: FlexibleMap) -> Map:
         return Map(d=m[Map.DOMAIN_INDEX], c=m[Map.CODOMAIN_INDEX])
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
-        domain: Enumeration = coerce_enumeration(e=m.keys())
+        domain: Enumeration = coerce_enumeration_OBSOLETE(e=m.keys())
         codomain: Tupl = coerce_tupl_OBSOLETE(t=m.values())
         return Map(d=domain, c=codomain)
     else:
@@ -609,7 +645,7 @@ def is_element_of_enumeration(x: FlexibleFormula, e: FlexibleEnumeration) -> boo
     :rtype: bool
     """
     x: Formula = coerce_formula(phi=x)
-    e: Enumeration = coerce_enumeration(e=e)
+    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
     return is_term_of_formula(x=x, phi=e)
 
 
@@ -680,7 +716,7 @@ def get_index_of_first_equivalent_element_in_enumeration(x: FlexibleFormula,
     but are not possible on enumerations. The two methods are algorithmically equivalent but their
     intent is distinct."""
     x: Formula = coerce_formula(phi=x)
-    e: Enumeration = coerce_enumeration(e=e)
+    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=e)
 
 
@@ -898,8 +934,8 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
     # Signature #3: provide the arguments upon which the transformation can be built upon which ...
     elif c is not None:
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True)
-        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True)
+        v: Enumeration = coerce_enumeration_OBSOLETE(e=v, strip_duplicates=True)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d, strip_duplicates=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
         if a is None:
             # Signature 3: This is a natural transformation:
@@ -1224,7 +1260,7 @@ def is_formula_equivalent_with_variables_2(
     variables_fixed_values: Map = coerce_map(m=variables_fixed_values)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
-    variables: Enumeration = coerce_enumeration(e=variables)
+    variables: Enumeration = coerce_enumeration_OBSOLETE(e=variables)
     # check that all variables are atomic formulas
     for x in variables:
         x: Formula = coerce_formula(phi=x)
@@ -1319,8 +1355,8 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
     :param psi: An enumeration.
     :return: True if phi ~enumeration psi, False otherwise.
     """
-    phi: Formula = coerce_enumeration(e=phi)
-    psi: Formula = coerce_enumeration(e=psi)
+    phi: Formula = coerce_enumeration_OBSOLETE(e=phi)
+    psi: Formula = coerce_enumeration_OBSOLETE(e=psi)
 
     test_1 = all(any(is_formula_equivalent(phi=phi_prime, psi=psi_prime) for psi_prime in psi) for phi_prime in phi)
     test_2 = all(any(is_formula_equivalent(phi=psi_prime, psi=phi_prime) for phi_prime in phi) for psi_prime in psi)
@@ -1434,7 +1470,7 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
     If "x" is an element of "e", return "e".
     If "x" is not an element of "e", and "s" is the sequence of terms in "e", return "(s, e)".
     """
-    e: Enumeration = coerce_enumeration(e=e)
+    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
     x: Formula = coerce_formula(phi=x)
     if is_element_of_enumeration(x=x, e=e):
         # "x" is an element of "e":
@@ -1519,7 +1555,7 @@ class Map(Formula):
         # __new__ runs to completion before __init__ starts.
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        d: Enumeration = coerce_enumeration(e=d)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         c: Tupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
         if len(d) != len(c):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
@@ -1533,7 +1569,7 @@ class Map(Formula):
         :param c: An enumeration denoted as the codomain of the map.
         """
         # __new__ runs to completion before __init__ starts.
-        d: Enumeration = coerce_enumeration(e=d)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         c: Tupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
         super().__init__(c=_connectives.map_formula, t=(d, c,))
 
@@ -1551,7 +1587,7 @@ class Map(Formula):
 
         The domain of a map is the enumeration of possible inputs of the get_image_from_map function.
         """
-        return coerce_enumeration(e=self[Map.DOMAIN_INDEX])
+        return coerce_enumeration_OBSOLETE(e=self[Map.DOMAIN_INDEX])
 
 
 FlexibleMap = typing.Optional[typing.Union[Map, typing.Dict[Formula, Formula]]]
@@ -1691,8 +1727,8 @@ class Transformation(Formula):
         """
         connective: Connective = coerce_connective(c=connective)
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v)
-        d: Enumeration = coerce_enumeration(e=d)
+        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         p: Tupl = coerce_tupl_OBSOLETE(t=p)
         o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
                                    t=(c, v, d, p,))
@@ -1711,8 +1747,8 @@ class Transformation(Formula):
         """
         connective: Connective = coerce_connective(c=connective)
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v)
-        d: Enumeration = coerce_enumeration(e=d)
+        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         p: Tupl = coerce_tupl_OBSOLETE(t=p)
         super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
 
@@ -1815,8 +1851,8 @@ class NaturalTransformation(Transformation):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v)
-        d: Enumeration = coerce_enumeration(e=d)
+        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         p: Tupl = coerce_tupl_OBSOLETE(t=p)
         o: tuple = super().__new__(cls, connective=_connectives.natural_transformation, c=c,
                                    v=v,
@@ -1834,8 +1870,8 @@ class NaturalTransformation(Transformation):
         :param p: A tuple of formulas denoted as the premises.
         """
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v)
-        d: Enumeration = coerce_enumeration(e=d)
+        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         p: Tupl = coerce_tupl_OBSOLETE(t=p)
         super().__init__(connective=_connectives.natural_transformation, c=c, v=v,
                          d=d, p=p)
@@ -1956,8 +1992,8 @@ class AlgorithmicTransformation(Transformation):
         """
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v)
-        d: Enumeration = coerce_enumeration(e=d)
+        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         p: Tupl = coerce_tupl_OBSOLETE(t=p)
         o: tuple = super().__new__(cls, connective=_connectives.algorithm,
                                    c=c, v=v, d=d,
@@ -1978,8 +2014,8 @@ class AlgorithmicTransformation(Transformation):
         """
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True)
-        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True)
+        v: Enumeration = coerce_enumeration_OBSOLETE(e=v, strip_duplicates=True)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d, strip_duplicates=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
         self._external_algorithm: typing.Callable = external_algorithm
         super().__init__(connective=_connectives.algorithm,
@@ -2293,7 +2329,7 @@ def iterate_enumeration_elements(e: FlexibleEnumeration) -> typing.Generator[For
     :param e:
     :return:
     """
-    e: Enumeration = coerce_enumeration(e=e)
+    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
     yield from iterate_formula_terms(phi=e)
 
 
@@ -2313,7 +2349,7 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
     :param e:
     :return:
     """
-    e: Enumeration = coerce_enumeration(e=e)
+    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
     if n > e.arity:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_033, msg='n > |e|')
     if n < 0:
@@ -2381,7 +2417,7 @@ def are_valid_statements_in_theory_with_variables(
     """
     s: Tupl = coerce_tupl_OBSOLETE(t=s)
     t: Theory = coerce_theory(t=t)
-    variables: Enumeration = coerce_enumeration(e=variables, strip_duplicates=True)
+    variables: Enumeration = coerce_enumeration_OBSOLETE(e=variables, strip_duplicates=True)
     variables_values: Map = coerce_map(m=variables_values)
 
     # list the free variables.
@@ -3138,8 +3174,8 @@ class Theory(Formula):
         """
         if t is not None:
             t: Theory = coerce_theory(t=t)
-        d: Enumeration = coerce_enumeration(e=d)
-        d: Enumeration = coerce_enumeration(
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
+        d: Enumeration = coerce_enumeration_OBSOLETE(
             e=(coerce_derivation(d=p) for p in d))
         if t is not None:
             d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
@@ -3169,8 +3205,8 @@ class Theory(Formula):
 
         if t is not None:
             t: Theory = coerce_theory(t=t)
-        d: Enumeration = coerce_enumeration(e=d)
-        d: Enumeration = coerce_enumeration(
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
+        d: Enumeration = coerce_enumeration_OBSOLETE(
             e=(coerce_derivation(d=p) for p in d))
         if t is not None:
             d: Enumeration = Enumeration(elements=(*t, *d), strip_duplicates=True)
@@ -3297,7 +3333,7 @@ def transform_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
     :param e: An enumeration.
     :return: A theory.
     """
-    e: Enumeration = coerce_enumeration(e=e)
+    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
     t: Theory = Theory(d=e)
     return t
 
@@ -3330,7 +3366,7 @@ def transform_tuple_to_theory(t: FlexibleTupl) -> Theory:
     :return: A theory.
     """
     t: Tupl = coerce_tuple(t=t)
-    e: Enumeration = coerce_enumeration(e=t, strip_duplicates=True)
+    e: Enumeration = coerce_enumeration_OBSOLETE(e=t, strip_duplicates=True)
     t2: Theory = transform_enumeration_to_theory(e=e)
     return t2
 
@@ -3354,6 +3390,29 @@ def transform_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumer
     return e
 
 
+def transform_formula_to_enumeration(phi: FlexibleFormula, strip_duplicates: bool = False) -> Enumeration:
+    """Canonical transformation from formula to enumeration.
+
+    If the terms of a formula are unique, returns an enumeration whose
+    elements are the terms of formula, preserving order.
+
+    If the terms of a formula are not unique and strip_duplicates, returns an enumeration whose
+    elements are the terms of formula, preserving order, removing duplicates by keeping
+    only the first occurrence of every term.
+
+    If the terms of a formula are not unique and not strip_duplicates, raise an error.
+
+    :param phi: A formula.
+    :param strip_duplicates:
+    :return: An enumeration.
+    """
+    phi: Formula = coerce_formula(phi=phi)
+    if isinstance(phi, Enumeration):
+        return phi
+    else:
+        return Enumeration(elements=iterate_formula_terms(phi=phi), strip_duplicates=strip_duplicates)
+
+
 def transform_theory_to_enumeration(t: FlexibleTheory) -> Enumeration:
     """Canonical function that converts a theory "t" to an enumeration.
 
@@ -3365,9 +3424,7 @@ def transform_theory_to_enumeration(t: FlexibleTheory) -> Enumeration:
     :param t: A theory.
     :return: An enumeration.
     """
-    t: Theory = coerce_theory(t=t)
-    e: Enumeration = Enumeration(d=(*t,))
-    return e
+    return transform_formula_to_enumeration(phi=t)
 
 
 def copy_theory_decorations(target: FlexibleTheory, decorations: FlexibleDecorations = None):
@@ -3398,7 +3455,7 @@ class Axiomatization(Formula):
     @staticmethod
     def _data_validation(a: FlexibleAxiomatization | None = None,
                          d: FlexibleEnumeration = None) -> tuple[Connective, Enumeration]:
-        d: Enumeration = coerce_enumeration(e=d)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         if a is not None:
             a: Axiomatization = coerce_axiomatization(a=a)
             # Duplicate derivations are not allowed in axiomatizations, so strip duplicates during merge.
@@ -3904,7 +3961,7 @@ def auto_derive_4(
     global auto_derivation_max_formula_depth_preference
     t: Theory = coerce_theory(t=t)
     conjecture: Formula = coerce_formula(phi=conjecture)
-    conjecture_exclusion_list: Enumeration = coerce_enumeration(e=conjecture_exclusion_list)
+    conjecture_exclusion_list: Enumeration = coerce_enumeration_OBSOLETE(e=conjecture_exclusion_list)
     indent: str = ' ' * (auto_derivation_max_formula_depth_preference - max_recursion + 1)
     if max_recursion == 2:
         pass
