@@ -1975,9 +1975,9 @@ class AlgorithmicTransformation(Transformation):
         """
         external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v)
-        d: Enumeration = coerce_enumeration(e=d)
-        p: Tupl = coerce_tupl(t=p)
+        v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True)
+        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
         self._external_algorithm: typing.Callable = external_algorithm
         super().__init__(connective=_connectives.algorithm,
                          c=c, v=v, d=d, p=p)
@@ -3312,13 +3312,16 @@ def convert_tuple_to_theory(t: FlexibleTupl) -> Theory:
     return t2
 
 
-def convert_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumeration:
+def transform_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumeration:
     """Canonical function that converts an axiomatization "a" to an enumeration.
 
     An axiomatization is fundamentally an enumeration of derivations, limited to axioms and inference-rules.
     This function provides the canonical conversion method from axiomatizations to enumeration,
     by returning a new enumeration "e" such that all the derivations in "a" are elements of "e",
     preserving order.
+
+    Invertibility: yes
+    Bijectivity: yes
 
     :param a: An axiomatization.
     :return: An enumeration.
