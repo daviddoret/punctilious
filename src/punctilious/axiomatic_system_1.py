@@ -346,6 +346,27 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False) -
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
 
 
+def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty) -> Tupl:
+    if isinstance(t, Tupl):
+        return t
+    elif is_well_formed_tupl(t=t, interpret_none_as_empty=interpret_none_as_empty):
+        return Tupl(elements=t)
+    elif interpret_none_as_empty and t is None:
+        return Tupl(elements=None)
+    elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitly convert this to an enumeration
+        whose elements are the elements of the iterable."""
+        return Tupl(elements=tuple(x for x in t))
+    elif isinstance(t, typing.Iterable) and not isinstance(t, Formula):
+        """A non-Formula iterable type, such as python native tuple, set, list, etc.
+        We assume here that the intention was to implicitly convert this to an enumeration
+        whose elements are the elements of the iterable."""
+        return Tupl(elements=x)
+    else:
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_065, coerced_type=Enumeration, phi_type=type(e), phi=e)
+
+
 def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
     e = coerce_enumeration(e=e)
     e2 = Enumeration()
@@ -2066,7 +2087,7 @@ def is_well_formed_formula(phi: FlexibleFormula) -> bool:
     return True
 
 
-def is_well_formed_tupl(t: FlexibleFormula) -> bool:
+def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = False) -> bool:
     """Returns True if phi is a well-formed tuple, False otherwise.
 
     Note: by definition, all formulas are also tuples. Hence, return True if phi converts smoothly to a well-formed
@@ -2076,6 +2097,8 @@ def is_well_formed_tupl(t: FlexibleFormula) -> bool:
     :return: bool
     """
     # TODO: Do we want to signal tuples formally with a dedicated connective?
+    if interpret_none_as_empty and t is None:
+        return True
     t: Formula = coerce_formula(phi=t)
     return True
 
@@ -2708,8 +2731,11 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
         t: Formula = coerce_formula(phi=t)
         return Theory(d=(*t,))
     elif canonical_conversion and is_well_formed_axiomatization(a=t):
-        t: Formula = coerce_formula(phi=t)
         return convert_axiomatization_to_theory(a=t)
+    elif canonical_conversion and is_well_formed_enumeration(e=t):
+        return convert_enumeration_to_theory(e=t)
+    elif canonical_conversion and is_well_formed_tuple(a=t):
+        return convert_tuple_to_theory(t=t)
     elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
@@ -3243,6 +3269,31 @@ def convert_axiomatization_to_theory(a: FlexibleAxiomatization) -> Theory:
     a: Axiomatization = coerce_axiomatization(a=a)
     t: Theory = Theory(d=(*a,))
     return t
+
+
+def convert_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
+    """Canonical function that converts an enumeration "e" to a theory,
+    providing that all elements "x" of "e" are well-formed derivations.
+
+    :param e: An enumeration.
+    :return: A theory.
+    """
+    e: Enumeration = coerce_enumeration(e=e)
+    t: Theory = Theory(d=e)
+    return t
+
+
+def convert_tuple_to_theory(t: FlexibleTupl) -> Theory:
+    """Canonical function that converts an enumeration "e" to a theory,
+    providing that all elements "x" of "e" are well-formed derivations.
+
+    :param e: An enumeration.
+    :return: A theory.
+    """
+    t: Tupl = coerce_tuple(t=t)
+    e: Enumeration = coerce_enumeration(e=t, strip_duplicates=True)
+    t2: Theory = convert_enumeration_to_theory(e=e)
+    return t2
 
 
 def convert_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumeration:
