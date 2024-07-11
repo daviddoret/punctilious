@@ -362,9 +362,13 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty) -> Tupl:
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Tupl(elements=x)
+        return Tupl(elements=t)
     else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_065, coerced_type=Enumeration, phi_type=type(e), phi=e)
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_065,
+            msg='No solution found to coerce "t" to tupl.',
+            t=t,
+            interpret_none_as_empty=interpret_none_as_empty)
 
 
 def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
@@ -2033,15 +2037,15 @@ class AlgorithmicTransformation(Transformation):
 FlexibleAlgorithmicTransformation = typing.Optional[typing.Union[Connective, Formula, AlgorithmicTransformation]]
 
 
-def coerce_algorithmic_transformation(a: FlexibleAlgorithmicTransformation) -> AlgorithmicTransformation:
+def coerce_algorithmic_transformation(t: FlexibleAlgorithmicTransformation) -> AlgorithmicTransformation:
     """Coerces loose argument "a" to an algorithm, strongly typed as Algorithm,
     or raises an error with code E-AS1-055 if this fails."""
-    if isinstance(a, AlgorithmicTransformation):
-        return a
+    if isinstance(t, AlgorithmicTransformation):
+        return t
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_055, coerced_type=AlgorithmicTransformation,
-                                  algorithm_type=type(a),
-                                  algorithm=a)
+                                  algorithm_type=type(t),
+                                  algorithm=t)
 
 
 def coerce_connective(c: Connective) -> Connective:
@@ -2087,19 +2091,31 @@ def is_well_formed_formula(phi: FlexibleFormula) -> bool:
     return True
 
 
-def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = False) -> bool:
+def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = False,
+                        raise_error_if_false: bool = False) -> bool:
     """Returns True if phi is a well-formed tuple, False otherwise.
 
     Note: by definition, all formulas are also tuples. Hence, return True if phi converts smoothly to a well-formed
     formula.
 
+    :param raise_error_if_false:
     :param t:
+    :param interpret_none_as_empty:
     :return: bool
     """
-    # TODO: Do we want to signal tuples formally with a dedicated connective?
     if interpret_none_as_empty and t is None:
         return True
     t: Formula = coerce_formula(phi=t)
+    if t.connective is not _connectives.tupl:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_066,
+                msg='"t" is not a well-formed tupl.',
+                t=t,
+                interpret_none_as_empty=interpret_none_as_empty,
+                raise_error_if_false=raise_error_if_false
+            )
+        return False
     return True
 
 
