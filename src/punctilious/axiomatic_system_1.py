@@ -1336,7 +1336,7 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         # recursively apply the replacement algorithm on phi terms.
         for term in phi:
             term_substitute = replace_formulas(phi=term, m=m)
-            fb: Formula = append_term_to_formula(formula=fb, term=term_substitute)
+            fb: Formula = append_term_to_formula(f=fb, t=term_substitute)
         return fb
 
 
@@ -1438,21 +1438,21 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
         return extended_enumeration
 
 
-def append_element_to_tuple(tupl: FlexibleTupl, element: FlexibleFormula) -> Tupl:
+def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> Tupl:
     """Return a new extended punctilious-tuple such that element is a new element appended to its existing elements.
     """
-    tupl: Tupl = coerce_tupl(t=tupl)
-    element: Formula = coerce_formula(phi=element)
-    extended_tupl: Tupl = Tupl(elements=(*tupl, element,))
+    t: Tupl = coerce_tupl(t=t)
+    x: Formula = coerce_formula(phi=x)
+    extended_tupl: Tupl = Tupl(elements=(*t, x,))
     return extended_tupl
 
 
-def append_term_to_formula(formula: FlexibleFormula, term: FlexibleFormula) -> Formula:
+def append_term_to_formula(f: FlexibleFormula, t: FlexibleFormula) -> Formula:
     """Return a new extended formula such that term is a new term appended to its existing terms.
     """
-    formula: Formula = coerce_formula(phi=formula)
-    term: Formula = coerce_formula(phi=term)
-    extended_formula: Formula = Formula(t=(*formula, term,), c=formula.connective)
+    f: Formula = coerce_formula(phi=f)
+    t: Formula = coerce_formula(phi=t)
+    extended_formula: Formula = Formula(t=(*f, t,), c=f.connective)
     return extended_formula
 
 
@@ -2534,10 +2534,10 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
             return False
         else:
             d: Derivation = coerce_derivation(d=d)
-            derivations: Tupl = append_element_to_tuple(tupl=derivations, element=d)
+            derivations: Tupl = append_element_to_tuple(t=derivations, x=d)
             # retrieve the formula claimed as valid from the theorem
             valid_statement: Formula = d.valid_statement
-            valid_statements: Tupl = append_element_to_tuple(tupl=valid_statements, element=valid_statement)
+            valid_statements: Tupl = append_element_to_tuple(t=valid_statements, x=valid_statement)
     # now the derivations and valid_statements have been retrieved, and proved well-formed individually,
     for i in range(0, derivations.arity):
         d = derivations[i]
