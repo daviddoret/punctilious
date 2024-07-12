@@ -2903,8 +2903,7 @@ class Derivation(Formula):
     JUSTIFICATION_INDEX: int = 1
 
     @staticmethod
-    def _data_validation(s: FlexibleFormula, j: FlexibleFormula) -> tuple[
-        Connective, Formula, Formula]:
+    def _data_validation_2(s: FlexibleFormula, j: FlexibleFormula) -> tuple[Connective, Formula, Formula]:
         c: Connective = _connectives.follows_from
         s = coerce_formula(phi=s)
         j = coerce_formula(phi=j)
@@ -2912,8 +2911,8 @@ class Derivation(Formula):
 
     def __new__(cls, s: FlexibleFormula, j: FlexibleFormula,
                 **kwargs):
-        c, s, j = Derivation._data_validation(s=s,
-                                              j=j)
+        c, s, j = Derivation._data_validation_2(s=s,
+                                                j=j)
         o: tuple = super().__new__(cls, c=c, t=(s, j,), **kwargs)
         return o
 
@@ -2925,8 +2924,8 @@ class Derivation(Formula):
         :param j: A formula that is a justification for the validity of the valid-statement.
         :param kwargs:
         """
-        c, s, j = Derivation._data_validation(s=s,
-                                              j=j)
+        c, s, j = Derivation._data_validation_2(s=s,
+                                                j=j)
         super().__init__(c=c, t=(s, j,), **kwargs)
 
     @property
@@ -3149,8 +3148,7 @@ class Theorem(Derivation):
     INFERENCE_INDEX: int = Derivation.JUSTIFICATION_INDEX
 
     @staticmethod
-    def _data_validation(s: FlexibleFormula, i: FlexibleInference) -> tuple[
-        Connective, Formula, Inference]:
+    def _data_validation(s: FlexibleFormula, i: FlexibleInference) -> tuple[Connective, Formula, Inference]:
         global _connectives
         c: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
         s: Formula = coerce_formula(phi=s)
@@ -3457,7 +3455,7 @@ def transform_tuple_to_theory(t: FlexibleTupl) -> Theory:
     """Canonical function that converts an enumeration "e" to a theory,
     providing that all elements "x" of "e" are well-formed derivations.
 
-    :param e: An enumeration.
+    :param t: A tupl.
     :return: A theory.
     """
     t: Tupl = coerce_tuple(t=t)
