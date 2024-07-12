@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -346,7 +345,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -694,9 +693,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory" />
         <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory" />
       </list>
@@ -717,14 +716,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00795" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1720495081549</created>
-      <option name="number" value="00795" />
-      <option name="presentableId" value="LOCAL-00795" />
-      <option name="project" value="LOCAL" />
-      <updated>1720495081549</updated>
     </task>
     <task id="LOCAL-00796" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1110,7 +1101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720815767185</updated>
     </task>
-    <option name="localTasksCounter" value="844" />
+    <task id="LOCAL-00844" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1720818210894</created>
+      <option name="number" value="00844" />
+      <option name="presentableId" value="LOCAL-00844" />
+      <option name="project" value="LOCAL" />
+      <updated>1720818210894</updated>
+    </task>
+    <option name="localTasksCounter" value="845" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

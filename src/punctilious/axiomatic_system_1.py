@@ -961,7 +961,7 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
 
 
 def let_x_be_an_axiom_DEPRECATED(s: FlexibleFormula):
-    return Axiom(valid_statement=s)
+    return Axiom(s=s)
 
 
 def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = None,
@@ -989,7 +989,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
             code=c1.ERROR_CODE_AS1_017,
             msg='Both "s" and "a" are None. It is mandatory to provide one of these two arguments.')
     elif s is not None:
-        a: Axiom = Axiom(valid_statement=s, **kwargs)
+        a: Axiom = Axiom(s=s, **kwargs)
 
     if isinstance(t, Axiomatization):
         t = Axiomatization(d=(*t, a,), decorations=(t,))
@@ -2763,7 +2763,7 @@ def coerce_axiom(a: FlexibleFormula) -> Axiom:
         return a
     elif isinstance(a, Formula) and is_well_formed_axiom(a=a):
         proved_formula: Formula = a.term_0
-        return Axiom(valid_statement=proved_formula)
+        return Axiom(s=proved_formula)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_040,
@@ -2804,7 +2804,7 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
     elif isinstance(t, Formula) and is_well_formed_theorem(t=t):
         proved_formula: Formula = coerce_formula(phi=t.term_0)
         inference: Inference = coerce_inference(i=t.term_1)
-        return Theorem(valid_statement=proved_formula, i=inference)
+        return Theorem(s=proved_formula, i=inference)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_042,
@@ -2910,18 +2910,24 @@ class Derivation(Formula):
         justification = coerce_formula(phi=justification)
         return c, valid_statement, justification
 
-    def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula,
+    def __new__(cls, s: FlexibleFormula, j: FlexibleFormula,
                 **kwargs):
-        c, valid_statement, justification = Derivation._data_validation(valid_statement=valid_statement,
-                                                                        justification=justification)
-        o: tuple = super().__new__(cls, c=c, t=(valid_statement, justification,), **kwargs)
+        c, s, j = Derivation._data_validation(valid_statement=s,
+                                              justification=j)
+        o: tuple = super().__new__(cls, c=c, t=(s, j,), **kwargs)
         return o
 
-    def __init__(self, valid_statement: FlexibleFormula, justification: FlexibleFormula,
+    def __init__(self, s: FlexibleFormula, j: FlexibleFormula,
                  **kwargs):
-        c, valid_statement, justification = Derivation._data_validation(valid_statement=valid_statement,
-                                                                        justification=justification)
-        super().__init__(c=c, t=(valid_statement, justification,), **kwargs)
+        """
+
+        :param s: A formula that is a valid-statement in the theory.
+        :param j: A formula that is a justification for the validity of the valid-statement.
+        :param kwargs:
+        """
+        c, s, j = Derivation._data_validation(valid_statement=s,
+                                              justification=j)
+        super().__init__(c=c, t=(s, j,), **kwargs)
 
     @property
     def valid_statement(self) -> Formula:
@@ -2970,14 +2976,14 @@ class Axiom(Derivation):
         justification: Formula = Formula(c=c)
         return c, valid_statement, justification
 
-    def __new__(cls, valid_statement: FlexibleFormula = None, **kwargs):
-        c, valid_statement, justification = Axiom._data_validation(valid_statement=valid_statement)
-        o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=justification, **kwargs)
+    def __new__(cls, s: FlexibleFormula = None, **kwargs):
+        c, s, justification = Axiom._data_validation(valid_statement=s)
+        o: tuple = super().__new__(cls, s=s, j=justification, **kwargs)
         return o
 
-    def __init__(self, valid_statement: FlexibleFormula, **kwargs):
-        c, valid_statement, justification = Axiom._data_validation(valid_statement=valid_statement)
-        super().__init__(valid_statement=valid_statement, justification=justification, **kwargs)
+    def __init__(self, s: FlexibleFormula, **kwargs):
+        c, s, justification = Axiom._data_validation(valid_statement=s)
+        super().__init__(s=s, j=justification, **kwargs)
 
 
 FlexibleAxiom = typing.Union[Axiom, Formula]
@@ -3018,12 +3024,12 @@ class InferenceRule(Derivation):
 
     def __new__(cls, t: FlexibleTransformation = None, **kwargs):
         c, t, j = InferenceRule._data_validation(t=t)
-        o: tuple = super().__new__(cls, valid_statement=t, justification=j, **kwargs)
+        o: tuple = super().__new__(cls, s=t, j=j, **kwargs)
         return o
 
     def __init__(self, t: FlexibleTransformation, **kwargs):
         c, t, j = InferenceRule._data_validation(t=t)
-        super().__init__(valid_statement=t, justification=j, **kwargs)
+        super().__init__(s=t, j=j, **kwargs)
 
     @property
     def transformation(self) -> Transformation:
@@ -3197,15 +3203,15 @@ class Theorem(Derivation):
 
         return c, valid_statement, i
 
-    def __new__(cls, valid_statement: FlexibleFormula, i: FlexibleInference):
-        c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
-        o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=i)
+    def __new__(cls, s: FlexibleFormula, i: FlexibleInference):
+        c, s, i = Theorem._data_validation(valid_statement=s, i=i)
+        o: tuple = super().__new__(cls, s=s, j=i)
         return o
 
-    def __init__(self, valid_statement: FlexibleFormula, i: FlexibleInference):
-        c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
+    def __init__(self, s: FlexibleFormula, i: FlexibleInference):
+        c, s, i = Theorem._data_validation(valid_statement=s, i=i)
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
-        super().__init__(valid_statement=valid_statement, justification=i)
+        super().__init__(s=s, j=i)
 
     @property
     def inference(self) -> Inference:
@@ -3789,7 +3795,8 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
         if not is_valid_statement_in_theory(phi=premise, t=t):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_051,
                                       msg=f'Conjecture: \n\t{c} \n...cannot be derived because premise: \n\t{premise}'
-                                          f' \n...is not a valid-statement in theory t. The inference-rule used to try this derivation was: '
+                                          f' \n...is not a valid-statement in theory t. The inference-rule used to try '
+                                          f'this derivation was: '
                                           f'\n\t{i} \nThe complete theory is: \n\t{t}', c=c, premise=premise, p=p,
                                       i=i, t=t)
 
@@ -3797,7 +3804,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     inference: Inference = Inference(p=p, a=a, i=i)
 
     # Prepare the new theorem.
-    theorem: Theorem = Theorem(valid_statement=c, i=inference)
+    theorem: Theorem = Theorem(s=c, i=inference)
 
     # Extends the theory with the new theorem.
     # The validity of the premises will be checked during theory initialization.

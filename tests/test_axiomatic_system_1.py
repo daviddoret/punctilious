@@ -566,7 +566,7 @@ class TestInferenceRule:
 
         # derivation from the axiom
         i = pu.as1.Inference(p=None, i=ir)
-        isolated_theorem = pu.as1.Theorem(valid_statement=phi, i=i)
+        isolated_theorem = pu.as1.Theorem(s=phi, i=i)
         t = pu.as1.append_to_theory(isolated_theorem, t=axiomatization)
         assert pu.as1.is_formula_equivalent(
             phi=isolated_theorem.valid_statement,
@@ -629,7 +629,7 @@ class TestTheorem:
         # For the purpose of this test,
         # build the theorem manually,
         # i.e. without using a derivation function.
-        m = pu.as1.Theorem(valid_statement=b, i=i2)
+        m = pu.as1.Theorem(s=b, i=i2)
         m = pu.as1.coerce_theorem(t=m)
         m2 = b | follows_from | i2
         assert pu.as1.is_formula_equivalent(phi=m, psi=m2)
@@ -650,7 +650,7 @@ class TestInference:
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(p=p, a=None))
         inference_rule = pu.as1.InferenceRule(t=t)
         inference = pu.as1.Inference(i=inference_rule, p=p, a=None)
-        theorem_2 = pu.as1.Theorem(valid_statement=theorem, i=inference)
+        theorem_2 = pu.as1.Theorem(s=theorem, i=inference)
         pu.as1.is_formula_equivalent(
             phi=theorem_2,
             psi=theorem | pu.as1._connectives.follows_from | pu.as1._connectives.inference(inference_rule, p,
@@ -689,7 +689,7 @@ class TestProofByInference:
         p = (a | star | b, b | star | c,)
         i = pu.as1.Inference(p=p, i=ir)
         outcome = f.apply_transformation(p=p)
-        m = pu.as1.Theorem(valid_statement=a | star | c, i=i)
+        m = pu.as1.Theorem(s=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(t=m)
         assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i)
 
@@ -843,8 +843,8 @@ class TestAxiomatization:
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         star1 = pu.as1.let_x_be_a_unary_connective(formula_ts='*1')
         star2 = pu.as1.let_x_be_a_binary_connective(formula_ts='*2')
-        axiom_ok_1 = pu.as1.Axiom(valid_statement=a | star2 | b)
-        axiom_ok_2 = pu.as1.Axiom(valid_statement=star1(c))
+        axiom_ok_1 = pu.as1.Axiom(s=a | star2 | b)
+        axiom_ok_2 = pu.as1.Axiom(s=star1(c))
         assert pu.as1.is_well_formed_axiom(a=axiom_ok_2)
 
         # simple case
@@ -915,7 +915,7 @@ class TestAutoDerivation:
         # elaborate a theory
         p = pu.as1.let_x_be_a_simple_object(formula_ts='P')
         q = pu.as1.let_x_be_a_simple_object(formula_ts='Q')
-        t1, a1 = pu.as1.let_x_be_an_axiom(t=None, a=pu.as1.Axiom(valid_statement=p))
+        t1, a1 = pu.as1.let_x_be_an_axiom(t=None, a=pu.as1.Axiom(s=p))
 
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
