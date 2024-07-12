@@ -3082,16 +3082,25 @@ class Theorem(Derivation):
     the transformation-rule that yield phi, i.e.:
     t(P) ~formula phi
     """
+    INFERENCE_INDEX = Derivation.JUSTIFICATION_INDEX
 
-    def __new__(cls, valid_statement: FlexibleFormula, i: FlexibleInference):
+    @staticmethod
+    def _data_validation(valid_statement: FlexibleFormula, i: FlexibleInference) -> tuple[
+        Connective, Formula, Inference]:
+        global _connectives
+        c: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
         valid_statement: Formula = coerce_formula(phi=valid_statement)
         i: Inference = coerce_inference(i=i)
+        # MOVE ALL DATA-VALIDATION HERE
+        return c, valid_statement, i
+
+    def __new__(cls, valid_statement: FlexibleFormula, i: FlexibleInference):
+        c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
         o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=i)
         return o
 
     def __init__(self, valid_statement: FlexibleFormula, i: FlexibleInference):
-        valid_statement: Formula = coerce_formula(phi=valid_statement)
-        i: Inference = coerce_inference(i=i)
+        c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
         self._phi: Formula = valid_statement
         self._inference: Inference = i
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
