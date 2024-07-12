@@ -1955,16 +1955,25 @@ def coerce_transformation(t: FlexibleTransformation) -> Transformation:
     elif is_well_formed_natural_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return NaturalTransformation(c=t[0], v=t[1], d=t[2], p=t[3])
+        # TODO: Move this logic to coerce_natural_transformation
+        return NaturalTransformation(c=t[NaturalTransformation.CONCLUSION_INDEX],
+                                     v=t[NaturalTransformation.VARIABLES_INDEX],
+                                     d=t[NaturalTransformation.DECLARATIONS_INDEX],
+                                     p=t[NaturalTransformation.PREMISES_INDEX])
     elif is_well_formed_algorithmic_transformation(t=t):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
-        return AlgorithmicTransformation(external_algorithm=t.external_algorithm, c=t[0], v=t[1],
-                                         d=t[2],
-                                         p=t[3])
+        # TODO: Move this logic to coerce_algorithmic_transformation
+        return AlgorithmicTransformation(external_algorithm=t.external_algorithm,
+                                         c=t[NaturalTransformation.CONCLUSION_INDEX],
+                                         v=t[NaturalTransformation.VARIABLES_INDEX],
+                                         d=t[NaturalTransformation.DECLARATIONS_INDEX],
+                                         p=t[NaturalTransformation.PREMISES_INDEX])
     else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_060, coerced_type=NaturalTransformation, m_type=type(t),
-                                  m=t)
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_060,
+            msg='"t" could not be coerced to a transformation.',
+            m=t)
 
 
 def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
@@ -1976,10 +1985,15 @@ def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
     elif isinstance(t, Formula) and is_well_formed_natural_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return NaturalTransformation(c=t[0], v=t[1], d=t[2], p=t[3])
+        return NaturalTransformation(c=t[NaturalTransformation.CONCLUSION_INDEX],
+                                     v=t[NaturalTransformation.VARIABLES_INDEX],
+                                     d=t[NaturalTransformation.DECLARATIONS_INDEX],
+                                     p=t[NaturalTransformation.PREMISES_INDEX])
     else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_031, coerced_type=NaturalTransformation, t_type=type(t),
-                                  t=t)
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_031,
+            msg='"t" could not be coerced to a natural-transformation.',
+            t=t)
 
 
 def coerce_external_algorithm(f: object) -> typing.Callable:
@@ -2131,9 +2145,9 @@ def coerce_inference(i: FlexibleFormula) -> Inference:
     if isinstance(i, Inference):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference(i=i):
-        i2: InferenceRule = coerce_inference_rule(i=i[0])
-        p: Tupl = coerce_tupl_OBSOLETE(t=i[1])
-        a: Tupl = coerce_tupl_OBSOLETE(t=i[2])
+        i2: InferenceRule = coerce_inference_rule(i=i[Inference.INFERENCE_RULE_INDEX])
+        p: Tupl = coerce_tupl_OBSOLETE(t=i[Inference.PREMISES_INDEX])
+        a: Tupl = coerce_tupl_OBSOLETE(t=i[Inference.ARGUMENTS_INDEX])
         return Inference(i=i2, p=p, a=a)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
@@ -2197,9 +2211,9 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
     i = coerce_formula(phi=i)
     if (i.connective is not _connectives.inference or
             not i.arity == 3 or
-            not is_well_formed_inference_rule(i=i[0]) or
-            not is_well_formed_tupl(t=i[1]) or
-            not is_well_formed_tupl(t=i[2])):
+            not is_well_formed_inference_rule(i=i[Inference.INFERENCE_RULE_INDEX]) or
+            not is_well_formed_tupl(t=i[Inference.PREMISES_INDEX]) or
+            not is_well_formed_tupl(t=i[Inference.ARGUMENTS_INDEX])):
         return False
     else:
         return True

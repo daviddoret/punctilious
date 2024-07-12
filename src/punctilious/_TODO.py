@@ -1,21 +1,11 @@
 """
 
-TODO: implement _data_validation in all Formula inherited classes,
-    to avoid code logic duplication between __init__ and __new__.
-
-TODO: Implement strict connectives check in coerce_functions. To do this, we must better manage
-    python-class inheritance (because this changes the connectives). Start systematically with
-    python-classes that are not inherited.
-        Map: OK
-
 
 TODO: Replace the follows-from scheme?, e.g. inference-rule(blablabla), axiom(blablabla).
     Put more thought into this before changing anything, because we need to model Derivation.
     Distinguish clearly the predicate-function is-a-well-formed-axiom(a) from the
     derivation-function which implies that the axiom is in the current theory,
     i.e. a follows-from axiom.
-
-TODO: Introduce canonical conversions (formula to enumeration, formula to tuple, etc.).
 
 TODO: KEY QUALITY CHECK: In both the Theorem.__init__ or __new__ and in the is_well_formed_theorem function,
     check that newly declared objects are not present in any precedent formula in the theory!
@@ -25,14 +15,12 @@ TODO: IDEA: Develop a three-valued logic:
  - or P is false
  - or P is not decidable in this axiomatization
 
-TODO: Implement Predicates.
+TODO: Implement Predicates. These are n-ary connectives (we can start with unary connectives)
+    that are linked to an inference-rule that returns true or false.
 
 TODO: Determine how to express predicates or classes over connectives,
     example: if blue is a predicate, to express formulas such as blue(sky),
     the truth that blue is a predicate should be expressible for example as predicate(blue).
-
-TODO: Implement index constants on all formula classes, e.g. Inference. Then replace
-    all hard-coded index positions.
 
 TODO: KEY FEATURE: Implement sub-theory
     In the parent theory:
