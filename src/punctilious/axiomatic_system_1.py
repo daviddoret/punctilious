@@ -3101,8 +3101,6 @@ class Theorem(Derivation):
 
     def __init__(self, valid_statement: FlexibleFormula, i: FlexibleInference):
         c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
-        self._phi: Formula = valid_statement
-        self._inference: Inference = i
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
@@ -3145,12 +3143,7 @@ class Theorem(Derivation):
     @property
     def inference(self) -> Inference:
         """The inference of the theorem."""
-        return self._inference
-
-    @property
-    def phi(self) -> Formula:
-        """The proven formula."""
-        return self._phi
+        return self[Theorem.INFERENCE_INDEX]
 
 
 FlexibleTheorem = typing.Union[Theorem, Formula]
