@@ -2903,17 +2903,17 @@ class Derivation(Formula):
     JUSTIFICATION_INDEX: int = 1
 
     @staticmethod
-    def _data_validation(valid_statement: FlexibleFormula, justification: FlexibleFormula) -> tuple[
+    def _data_validation(s: FlexibleFormula, j: FlexibleFormula) -> tuple[
         Connective, Formula, Formula]:
         c: Connective = _connectives.follows_from
-        valid_statement = coerce_formula(phi=valid_statement)
-        justification = coerce_formula(phi=justification)
-        return c, valid_statement, justification
+        s = coerce_formula(phi=s)
+        j = coerce_formula(phi=j)
+        return c, s, j
 
     def __new__(cls, s: FlexibleFormula, j: FlexibleFormula,
                 **kwargs):
-        c, s, j = Derivation._data_validation(valid_statement=s,
-                                              justification=j)
+        c, s, j = Derivation._data_validation(s=s,
+                                              j=j)
         o: tuple = super().__new__(cls, c=c, t=(s, j,), **kwargs)
         return o
 
@@ -2925,8 +2925,8 @@ class Derivation(Formula):
         :param j: A formula that is a justification for the validity of the valid-statement.
         :param kwargs:
         """
-        c, s, j = Derivation._data_validation(valid_statement=s,
-                                              justification=j)
+        c, s, j = Derivation._data_validation(s=s,
+                                              j=j)
         super().__init__(c=c, t=(s, j,), **kwargs)
 
     @property
@@ -2969,20 +2969,20 @@ class Axiom(Derivation):
     """
 
     @staticmethod
-    def _data_validation(valid_statement: FlexibleFormula = None) -> tuple[Connective, Formula, Formula]:
+    def _data_validation(s: FlexibleFormula = None) -> tuple[Connective, Formula, Formula]:
         global _connectives
         c: Connective = _connectives.axiom
-        valid_statement: Formula = coerce_formula(phi=valid_statement)
+        s: Formula = coerce_formula(phi=s)
         justification: Formula = Formula(c=c)
-        return c, valid_statement, justification
+        return c, s, justification
 
     def __new__(cls, s: FlexibleFormula = None, **kwargs):
-        c, s, justification = Axiom._data_validation(valid_statement=s)
+        c, s, justification = Axiom._data_validation(s=s)
         o: tuple = super().__new__(cls, s=s, j=justification, **kwargs)
         return o
 
     def __init__(self, s: FlexibleFormula, **kwargs):
-        c, s, justification = Axiom._data_validation(valid_statement=s)
+        c, s, justification = Axiom._data_validation(s=s)
         super().__init__(s=s, j=justification, **kwargs)
 
 
@@ -3149,11 +3149,11 @@ class Theorem(Derivation):
     INFERENCE_INDEX: int = Derivation.JUSTIFICATION_INDEX
 
     @staticmethod
-    def _data_validation(valid_statement: FlexibleFormula, i: FlexibleInference) -> tuple[
+    def _data_validation(s: FlexibleFormula, i: FlexibleInference) -> tuple[
         Connective, Formula, Inference]:
         global _connectives
         c: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
-        valid_statement: Formula = coerce_formula(phi=valid_statement)
+        s: Formula = coerce_formula(phi=s)
         i: Inference = coerce_inference(i=i)
 
         # check the validity of the theorem
@@ -3162,11 +3162,11 @@ class Theorem(Derivation):
         if len(i.inference_rule.transformation.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
-                is_formula_equivalent(phi=valid_statement, psi=re_derived_valid_statement, raise_event_if_false=True)
+                is_formula_equivalent(phi=s, psi=re_derived_valid_statement, raise_event_if_false=True)
             except u1.ApplicativeError as error:
                 # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
                 # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
-                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_045, error=error, valid_statement=valid_statement,
+                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_045, error=error, valid_statement=s,
                                           algorithm_output=re_derived_valid_statement,
                                           inference=i)
         else:
@@ -3176,40 +3176,40 @@ class Theorem(Derivation):
             # compare both formulas with the inference-rule conclusion and with regards to new-object-declaration
             # variables.
             success_1, m1 = is_formula_equivalent_with_variables_2(
-                phi=valid_statement,
+                phi=s,
                 psi=i.inference_rule.transformation.conclusion,
                 variables=i.inference_rule.transformation.declarations)
             if not success_1:
                 raise u1.ApplicativeError(
                     msg='The valid-statement is not consistent with the inference-rule conclusion, considering '
                         'new-object-declarations',
-                    valid_statement=valid_statement,
+                    valid_statement=s,
                     re_derived_valid_statement=re_derived_valid_statement,
                     i=i,
                     success_1=success_1,
                     m1=m1)
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
-            success_2, m2 = is_formula_equivalent_with_variables_2(phi=valid_statement,
+            success_2, m2 = is_formula_equivalent_with_variables_2(phi=s,
                                                                    psi=i.inference_rule.transformation.conclusion,
                                                                    variables=m1.domain)
             pass
-            valid_statement_reversed: Formula = replace_formulas(phi=valid_statement, m=m1_reversed)
+            valid_statement_reversed: Formula = replace_formulas(phi=s, m=m1_reversed)
             if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.inference_rule.transformation.conclusion):
                 raise u1.ApplicativeError(
                     msg='Reversing the valid-statement does not yield the inference-rule conclusion.',
                     valid_statement_reversed=valid_statement_reversed,
                     expected_conclusion=i.inference_rule.transformation.conclusion)
 
-        return c, valid_statement, i
+        return c, s, i
 
     def __new__(cls, s: FlexibleFormula, i: FlexibleInference):
-        c, s, i = Theorem._data_validation(valid_statement=s, i=i)
+        c, s, i = Theorem._data_validation(s=s, i=i)
         o: tuple = super().__new__(cls, s=s, j=i)
         return o
 
     def __init__(self, s: FlexibleFormula, i: FlexibleInference):
-        c, s, i = Theorem._data_validation(valid_statement=s, i=i)
+        c, s, i = Theorem._data_validation(s=s, i=i)
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(s=s, j=i)
 
