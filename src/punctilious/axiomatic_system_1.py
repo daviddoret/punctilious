@@ -3118,7 +3118,12 @@ class Theorem(Derivation):
             if not success_1:
                 raise u1.ApplicativeError(
                     msg='The valid-statement is not consistent with the inference-rule conclusion, considering '
-                        'new-object-declarations')
+                        'new-object-declarations',
+                    valid_statement=valid_statement,
+                    re_derived_valid_statement=re_derived_valid_statement,
+                    i=i,
+                    success_1=success_1,
+                    m1=m1)
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
             success_2, m2 = is_formula_equivalent_with_variables_2(phi=valid_statement,
