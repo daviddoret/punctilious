@@ -2968,7 +2968,7 @@ class Axiom(Derivation):
     """
 
     @staticmethod
-    def _data_validation_2(s: FlexibleFormula = None) -> tuple[Connective, Formula, Formula]:
+    def _data_validation_3(s: FlexibleFormula = None) -> tuple[Connective, Formula, Formula]:
         global _connectives
         c: Connective = _connectives.axiom
         s: Formula = coerce_formula(phi=s)
@@ -2976,12 +2976,12 @@ class Axiom(Derivation):
         return c, s, justification
 
     def __new__(cls, s: FlexibleFormula = None, **kwargs):
-        c, s, justification = Axiom._data_validation_2(s=s)
+        c, s, justification = Axiom._data_validation_3(s=s)
         o: tuple = super().__new__(cls, s=s, j=justification, **kwargs)
         return o
 
     def __init__(self, s: FlexibleFormula, **kwargs):
-        c, s, justification = Axiom._data_validation_2(s=s)
+        c, s, justification = Axiom._data_validation_3(s=s)
         super().__init__(s=s, j=justification, **kwargs)
 
 
@@ -3014,7 +3014,7 @@ class InferenceRule(Derivation):
     TRANSFORMATION_INDEX: int = Derivation.VALID_STATEMENT_INDEX
 
     @staticmethod
-    def _data_validation_2(t: FlexibleTransformation = None) -> tuple[Connective, Transformation, Formula]:
+    def _data_validation_3(t: FlexibleTransformation = None) -> tuple[Connective, Transformation, Formula]:
         global _connectives
         c: Connective = _connectives.inference_rule
         t: Transformation = coerce_transformation(t=t)
@@ -3022,12 +3022,12 @@ class InferenceRule(Derivation):
         return c, t, j
 
     def __new__(cls, t: FlexibleTransformation = None, **kwargs):
-        c, t, j = InferenceRule._data_validation_2(t=t)
+        c, t, j = InferenceRule._data_validation_3(t=t)
         o: tuple = super().__new__(cls, s=t, j=j, **kwargs)
         return o
 
     def __init__(self, t: FlexibleTransformation, **kwargs):
-        c, t, j = InferenceRule._data_validation_2(t=t)
+        c, t, j = InferenceRule._data_validation_3(t=t)
         super().__init__(s=t, j=j, **kwargs)
 
     @property
@@ -3148,7 +3148,7 @@ class Theorem(Derivation):
     INFERENCE_INDEX: int = Derivation.JUSTIFICATION_INDEX
 
     @staticmethod
-    def _data_validation(s: FlexibleFormula, i: FlexibleInference) -> tuple[Connective, Formula, Inference]:
+    def _data_validation_3(s: FlexibleFormula, i: FlexibleInference) -> tuple[Connective, Formula, Inference]:
         global _connectives
         c: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
         s: Formula = coerce_formula(phi=s)
@@ -3202,12 +3202,12 @@ class Theorem(Derivation):
         return c, s, i
 
     def __new__(cls, s: FlexibleFormula, i: FlexibleInference):
-        c, s, i = Theorem._data_validation(s=s, i=i)
+        c, s, i = Theorem._data_validation_3(s=s, i=i)
         o: tuple = super().__new__(cls, s=s, j=i)
         return o
 
     def __init__(self, s: FlexibleFormula, i: FlexibleInference):
-        c, s, i = Theorem._data_validation(s=s, i=i)
+        c, s, i = Theorem._data_validation_3(s=s, i=i)
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(s=s, j=i)
 
