@@ -1734,9 +1734,9 @@ class Transformation(Formula):
     PREMISES_INDEX: int = 3
 
     @staticmethod
-    def _data_validation(connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
-                         d: FlexibleEnumeration | None = None,
-                         p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
+    def _data_validation_2(connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                           d: FlexibleEnumeration | None = None,
+                           p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
         connective: Connective = coerce_connective(c=connective)
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
@@ -1755,7 +1755,7 @@ class Transformation(Formula):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        connective, c, v, d, p = Transformation._data_validation(connective=connective, c=c, v=v, d=d, p=p)
+        connective, c, v, d, p = Transformation._data_validation_2(connective=connective, c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
                                    t=(c, v, d, p,))
         return o
@@ -1771,7 +1771,7 @@ class Transformation(Formula):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        connective, c, v, d, p = Transformation._data_validation(connective=connective, c=c, v=v, d=d, p=p)
+        connective, c, v, d, p = Transformation._data_validation_2(connective=connective, c=c, v=v, d=d, p=p)
         super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
@@ -1861,9 +1861,9 @@ class NaturalTransformation(Transformation):
     """
 
     @staticmethod
-    def _data_validation(c: FlexibleFormula, v: FlexibleEnumeration | None = None,
-                         d: FlexibleEnumeration | None = None,
-                         p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
+    def _data_validation_3(c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                           d: FlexibleEnumeration | None = None,
+                           p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
         global _connectives
         c2: Connective = _connectives.natural_transformation
         c: Formula = coerce_formula(phi=c)
@@ -1882,7 +1882,7 @@ class NaturalTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, c, v, d, p = NaturalTransformation._data_validation(c=c, v=v, d=d, p=p)
+        c2, c, v, d, p = NaturalTransformation._data_validation_3(c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, connective=c2, c=c, v=v, d=d, p=p)
         return o
 
@@ -1896,7 +1896,7 @@ class NaturalTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, c, v, d, p = NaturalTransformation._data_validation(c=c, v=v, d=d, p=p)
+        c2, c, v, d, p = NaturalTransformation._data_validation_3(c=c, v=v, d=d, p=p)
         super().__init__(connective=c2, c=c, v=v, d=d, p=p)
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
@@ -2016,10 +2016,10 @@ class AlgorithmicTransformation(Transformation):
     Distinctively from premises, we should pass arguments to the algorithm."""
 
     @staticmethod
-    def _data_validation(external_algorithm: typing.Callable, c: FlexibleFormula,
-                         v: FlexibleEnumeration | None = None,
-                         d: FlexibleEnumeration | None = None,
-                         p: FlexibleTupl | None = None) -> tuple[
+    def _data_validation_3(external_algorithm: typing.Callable, c: FlexibleFormula,
+                           v: FlexibleEnumeration | None = None,
+                           d: FlexibleEnumeration | None = None,
+                           p: FlexibleTupl | None = None) -> tuple[
         Connective, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
         global _connectives
         c2: Connective = _connectives.algorithm
@@ -2042,7 +2042,7 @@ class AlgorithmicTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, external_algorithm, c, v, d, p = AlgorithmicTransformation._data_validation(
+        c2, external_algorithm, c, v, d, p = AlgorithmicTransformation._data_validation_3(
             external_algorithm=external_algorithm, c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, connective=c2, c=c, v=v, d=d, p=p)
         return o
@@ -2059,7 +2059,7 @@ class AlgorithmicTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, external_algorithm, c, v, d, p = AlgorithmicTransformation._data_validation(
+        c2, external_algorithm, c, v, d, p = AlgorithmicTransformation._data_validation_3(
             external_algorithm=external_algorithm, c=c, v=v, d=d, p=p)
         self._external_algorithm: typing.Callable = external_algorithm
         super().__init__(connective=_connectives.algorithm,
