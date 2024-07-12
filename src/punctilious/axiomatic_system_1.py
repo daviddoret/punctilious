@@ -1839,6 +1839,18 @@ class NaturalTransformation(Transformation):
           even though this constraint is immediately relieved by the interchange structural rule.
     """
 
+    @staticmethod
+    def _data_validation(c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                         d: FlexibleEnumeration | None = None,
+                         p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
+        global _connectives
+        c2: Connective = _connectives.natural_transformation
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
+        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
+        return c2, c, v, d, p
+
     def __new__(cls, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
@@ -1849,15 +1861,8 @@ class NaturalTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
-        # because tuple is immutable.
-        c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
-        o: tuple = super().__new__(cls, connective=_connectives.natural_transformation, c=c,
-                                   v=v,
-                                   d=d, p=p)
+        c2, c, v, d, p = NaturalTransformation._data_validation(c=c, v=v, d=d, p=p)
+        o: tuple = super().__new__(cls, connective=c2, c=c, v=v, d=d, p=p)
         return o
 
     def __init__(self, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
@@ -1870,12 +1875,8 @@ class NaturalTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
-        super().__init__(connective=_connectives.natural_transformation, c=c, v=v,
-                         d=d, p=p)
+        c2, c, v, d, p = NaturalTransformation._data_validation(c=c, v=v, d=d, p=p)
+        super().__init__(connective=c2, c=c, v=v, d=d, p=p)
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
