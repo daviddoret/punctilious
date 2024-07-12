@@ -1675,7 +1675,7 @@ class Enumeration(Formula):
     def __init__(self, e: FlexibleEnumeration = None,
                  strip_duplicates: bool = False, **kwargs):
         c, e = Enumeration._data_validation(e=e, strip_duplicates=strip_duplicates)
-        super().__init__(c=_connectives.enumeration, t=e, **kwargs)
+        super().__init__(c=c, t=e, **kwargs)
 
 
 enumeration = Enumeration
