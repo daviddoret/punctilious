@@ -2870,20 +2870,26 @@ class Derivation(Formula):
     VALID_STATEMENT_INDEX: int = 0
     JUSTIFICATION_INDEX: int = 1
 
-    def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula,
-                **kwargs):
+    @staticmethod
+    def _data_validation(valid_statement: FlexibleFormula, justification: FlexibleFormula) -> tuple[
+        Connective, Formula, Formula]:
+        c: Connective = _connectives.follows_from
         valid_statement = coerce_formula(phi=valid_statement)
         justification = coerce_formula(phi=justification)
-        c: Connective = _connectives.follows_from
+        return c, valid_statement, justification
+
+    def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula,
+                **kwargs):
+        c, valid_statement, justification = Derivation._data_validation(valid_statement=valid_statement,
+                                                                        justification=justification)
         o: tuple = super().__new__(cls, c=c, t=(valid_statement, justification,), **kwargs)
         return o
 
     def __init__(self, valid_statement: FlexibleFormula, justification: FlexibleFormula,
                  **kwargs):
-        self._valid_statement = coerce_formula(phi=valid_statement)
-        self._justification = coerce_formula(phi=justification)
-        c: Connective = _connectives.follows_from
-        super().__init__(c=c, t=(self._valid_statement, self._justification,), **kwargs)
+        c, valid_statement, justification = Derivation._data_validation(valid_statement=valid_statement,
+                                                                        justification=justification)
+        super().__init__(c=c, t=(valid_statement, justification,), **kwargs)
 
     @property
     def valid_statement(self) -> Formula:
