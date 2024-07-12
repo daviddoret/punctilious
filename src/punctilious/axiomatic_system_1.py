@@ -854,8 +854,8 @@ def let_x_be_a_simple_object(formula_ts: typing.Optional[pl1.FlexibleTypesetter]
     return SimpleObject(c=NullaryConnective(formula_ts=formula_ts))
 
 
-def let_x_be_some_simple_objects(reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[
-    SimpleObject, typing.Any, None]:
+def let_x_be_some_simple_objects(
+        reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[SimpleObject, typing.Any, None]:
     """A helper function to declare one or multiple simple-objects.
 
     :param reps: A string (or an iterable of strings) default representation for the simple-object(s).
@@ -949,7 +949,7 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
             i: InferenceRule = InferenceRule(t=t2)
         else:
             # Signature 4: This is an algorithmic transformation:
-            t2: AlgorithmicTransformation = AlgorithmicTransformation(external_algorithm=a, c=c, v=v,
+            t2: AlgorithmicTransformation = AlgorithmicTransformation(a=a, c=c, v=v,
                                                                       d=d, p=p)
             i: InferenceRule = InferenceRule(t=t2)
     else:
@@ -1842,16 +1842,16 @@ class NaturalTransformation(Transformation):
         To the contrary, if a natural-transformation contains no new-object-declarations, then it is deterministic,
         i.e.: every time it is called with the same input arguments, it creates identical formulas.
 
-    Note 2: When new-object-declarations are used, the natural-transformation declares new objects in the theory. In fact,
-        this is the only possibility for new objects to be created / declared.
+    Note 2: When new-object-declarations are used, the natural-transformation declares new objects in the theory.
+        In fact, this is the only possibility for new objects to be created / declared.
 
     Note 3: When new-object-declarations are used, note that it is not the sub-formulas that are replaced,
         but the connectives. This makes it possible to design natural-transformation that output new non
 
     Note 4: Transformations are the building blocks of inference-rules. Ses inference-rules for more details.
 
-    Note 5: The natural-transformation in an inference rule is very similar to an intuitionistic sequent (cf. Mancosu et al,
-    2021, p. 170), i.e.: "In intuitionistic-sequent, there may be at most one formula to the right of ⇒ .", with
+    Note 5: The natural-transformation in an inference rule is very similar to an intuitionistic sequent (cf. Mancosu
+    et al, 2021, p. 170), i.e.: "In intuitionistic-sequent, there may be at most one formula to the right of ⇒ .", with
     some distinctive properties:
         - a natural-transformation comprises an explicit and finite set of variables,
           while an intuitionistic-sequent uses only formula variables.
@@ -1964,7 +1964,7 @@ def coerce_transformation(t: FlexibleTransformation) -> Transformation:
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
         # TODO: Move this logic to coerce_algorithmic_transformation
-        return AlgorithmicTransformation(external_algorithm=t.external_algorithm,
+        return AlgorithmicTransformation(a=t.external_algorithm,
                                          c=t[NaturalTransformation.CONCLUSION_INDEX],
                                          v=t[NaturalTransformation.VARIABLES_INDEX],
                                          d=t[NaturalTransformation.DECLARATIONS_INDEX],
@@ -2008,60 +2008,61 @@ def coerce_external_algorithm(f: object) -> typing.Callable:
 
 
 class AlgorithmicTransformation(Transformation):
-    """A well-formed algorithmic-transformation is a derivation that justified the derivation of further theorems in a theory,
-    should bew impose conditions ex premises???
+    """A well-formed algorithmic-transformation is a derivation that justified the derivation of further theorems in
+    a theory, should bew impose conditions ex premises???
     by executing an algorithm that is external to the theory.
     The algorithm generates a new formula.
 
     Distinctively from premises, we should pass arguments to the algorithm."""
 
     @staticmethod
-    def _data_validation_3(external_algorithm: typing.Callable, c: FlexibleFormula,
-                           v: FlexibleEnumeration | None = None,
-                           d: FlexibleEnumeration | None = None,
-                           p: FlexibleTupl | None = None) -> tuple[
+    def _data_validation_3(
+            a: typing.Callable, c: FlexibleFormula,
+            v: FlexibleEnumeration | None = None,
+            d: FlexibleEnumeration | None = None,
+            p: FlexibleTupl | None = None) -> tuple[
         Connective, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
         global _connectives
         c2: Connective = _connectives.algorithm
-        external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
+        a: typing.Callable = coerce_external_algorithm(f=a)
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
         d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         p: Tupl = coerce_tupl_OBSOLETE(t=p)
-        return c2, external_algorithm, c, v, d, p
+        return c2, a, c, v, d, p
 
-    def __new__(cls, external_algorithm: typing.Callable, c: FlexibleFormula,
+    def __new__(cls, a: typing.Callable, c: FlexibleFormula,
                 v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
         """
 
-        :param external_algorithm:
+        :param a: An external algorithm.
         :param c: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, external_algorithm, c, v, d, p = AlgorithmicTransformation._data_validation_3(
-            external_algorithm=external_algorithm, c=c, v=v, d=d, p=p)
+        c2, a, c, v, d, p = AlgorithmicTransformation._data_validation_3(
+            a=a, c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, connective=c2, c=c, v=v, d=d, p=p)
         return o
 
-    def __init__(self, external_algorithm: typing.Callable,
+    def __init__(self, a: typing.Callable,
                  c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
         """
 
-        :param external_algorithm:
+        :param a:
         :param c: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, external_algorithm, c, v, d, p = AlgorithmicTransformation._data_validation_3(
-            external_algorithm=external_algorithm, c=c, v=v, d=d, p=p)
-        self._external_algorithm: typing.Callable = external_algorithm
+        c2, a, c, v, d, p = AlgorithmicTransformation._data_validation_3(
+            a=a, c=c, v=v, d=d, p=p)
+        self._external_algorithm: typing.Callable = a
         super().__init__(connective=_connectives.algorithm,
                          c=c, v=v, d=d, p=p)
 

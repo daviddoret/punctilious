@@ -68,7 +68,7 @@ def is_well_formed_theory_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | Non
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
-        external_algorithm=is_well_formed_formula_algorithm,
+        a=is_well_formed_formula_algorithm,
         c=is_well_formed_formula_predicate(t),
         v=None,
         d={t, })
@@ -93,7 +93,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
-        external_algorithm=is_well_formed_inference_rule_algorithm,
+        a=is_well_formed_inference_rule_algorithm,
         c=is_well_formed_inference_rule_predicate(t),
         v=None,
         d={t, })
@@ -118,7 +118,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
-        external_algorithm=is_well_formed_theory_algorithm,
+        a=is_well_formed_theory_algorithm,
         c=is_well_formed_theory_predicate(t),
         v={t, },
         d={t, })

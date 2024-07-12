@@ -717,7 +717,7 @@ class TestAlgorithm:
         t = as1.let_x_be_a_theory()
         m = as1.let_x_be_a_theory()
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
-            algo = as1.AlgorithmicTransformation(external_algorithm=x_is_a_theory,
+            algo = as1.AlgorithmicTransformation(a=x_is_a_theory,
                                                  c=is_well_formed_theory_predicate(x),
                                                  v={x, },
                                                  d={x, })
