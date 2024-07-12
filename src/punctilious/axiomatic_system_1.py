@@ -2987,6 +2987,17 @@ class Inference(Formula):
     PREMISES_INDEX = 1
     ARGUMENTS_INDEX = 2
 
+    @staticmethod
+    def _data_validation(
+            i: FlexibleInferenceRule,
+            p: FlexibleTupl | None = None,
+            a: FlexibleTupl | None = None) -> tuple[Connective, InferenceRule, Tupl, Tupl]:
+        c: Connective = _connectives.inference
+        i: InferenceRule = coerce_inference_rule(i=i)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
+        return c, i, p, a
+
     def __new__(cls, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
         """
 
@@ -2994,10 +3005,7 @@ class Inference(Formula):
         :param p: A tuple of formulas denoted as the premises.
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
-        i: InferenceRule = coerce_inference_rule(i=i)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
-        a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
-        c: Connective = _connectives.inference
+        c, i, p, a = Inference._data_validation(i=i, p=p, a=a)
         o: tuple = super().__new__(cls, c=c, t=(i, p, a))
         return o
 
@@ -3008,10 +3016,7 @@ class Inference(Formula):
         :param p: A tuple of formulas denoted as the premises.
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
-        i: InferenceRule = coerce_inference_rule(i=i)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
-        a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
-        c: Connective = _connectives.inference
+        c, i, p, a = Inference._data_validation(i=i, p=p, a=a)
         super().__init__(c=c, t=(i, p, a,))
 
     @property
