@@ -1715,9 +1715,20 @@ class Transformation(Formula):
     DECLARATIONS_INDEX = 2
     PREMISES_INDEX = 3
 
+    @staticmethod
+    def _data_validation(connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                         d: FlexibleEnumeration | None = None,
+                         p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
+        connective: Connective = coerce_connective(c=connective)
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
+        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        return connective, c, v, d, p
+
     def __new__(cls, connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
-                p: FlexibleTupl | None = None, ):
+                p: FlexibleTupl | None = None):
         """
 
         :param connective:
@@ -1726,11 +1737,7 @@ class Transformation(Formula):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        connective: Connective = coerce_connective(c=connective)
-        c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
+        connective, c, v, d, p = Transformation._data_validation(connective=connective, c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
                                    t=(c, v, d, p,))
         return o
@@ -1746,11 +1753,7 @@ class Transformation(Formula):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        connective: Connective = coerce_connective(c=connective)
-        c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
+        connective, c, v, d, p = Transformation._data_validation(connective=connective, c=c, v=v, d=d, p=p)
         super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
