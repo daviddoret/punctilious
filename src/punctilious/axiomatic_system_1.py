@@ -2921,6 +2921,7 @@ class Axiom(Derivation):
 
     TODO: An axiom may be viewed as an inference-rule without premises. Thus, Axiom could derive from InferenceRule.
 
+    TODO: migrate axioms to predicates of the form axiom(p).
     """
 
     @staticmethod
