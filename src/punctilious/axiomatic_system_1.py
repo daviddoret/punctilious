@@ -1645,25 +1645,37 @@ class Enumeration(Formula):
 
     """
 
+    @staticmethod
+    def _data_validation(e: FlexibleEnumeration = None,
+                         strip_duplicates: bool = False) -> tuple[Connective, tuple]:
+        global _connectives
+        c: Connective = _connectives.enumeration
+        if e is None:
+            e = tuple()
+        e_unique_only = strip_duplicate_formulas_in_python_tuple(t=e)
+        if strip_duplicates:
+            e = e_unique_only
+        if len(e) != len(e_unique_only):
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_029,
+                msg='The data-validation check failed during enumeration creation.',
+                len_e=len(e),
+                len_e_unique_only=len(e_unique_only),
+                e=e,
+                e_unique_only=e_unique_only,
+                strip_duplicates=strip_duplicates)
+        return c, e
+
     def __new__(cls, e: FlexibleEnumeration = None,
                 strip_duplicates: bool = False, **kwargs):
-        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
-        # because tuple is immutable.
-        # re-use the enumeration-builder __init__ to assure elements are unique and order is preserved.
-        global _connectives
-        if strip_duplicates:
-            e = strip_duplicate_formulas_in_python_tuple(t=e)
-        o: tuple = super().__new__(cls, c=_connectives.enumeration, t=e, **kwargs)
+        c, e = Enumeration._data_validation(e=e, strip_duplicates=strip_duplicates)
+        o: tuple = super().__new__(cls, c=c, t=e, **kwargs)
         return o
 
     def __init__(self, e: FlexibleEnumeration = None,
                  strip_duplicates: bool = False, **kwargs):
-        global _connectives
-        if strip_duplicates:
-            e = strip_duplicate_formulas_in_python_tuple(t=e)
+        c, e = Enumeration._data_validation(e=e, strip_duplicates=strip_duplicates)
         super().__init__(c=_connectives.enumeration, t=e, **kwargs)
-        if not is_well_formed_enumeration(e=self):
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_029, elements_type=type(e), elements=e)
 
 
 enumeration = Enumeration
