@@ -101,19 +101,25 @@ class Formula(tuple):
     A finite tree whose nodes are colored, and where edges are fully ordered under their edge.
     """
 
+    @staticmethod
+    def _data_validation(c: Connective, t: FlexibleTupl = None) -> tuple[Connective, tuple]:
+        if isinstance(t, collections.abc.Iterable):
+            t = tuple(coerce_formula(phi=term) for term in t)
+        elif t is None:
+            t: tuple = tuple()
+        else:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_002, c=c, t=t)
+        return c, t
+
     def __new__(cls, c: Connective, t: FlexibleTupl = None, **kwargs):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple
-        if isinstance(t, collections.abc.Iterable):
-            elements = tuple(coerce_formula(phi=term) for term in t)
-            o = super().__new__(cls, elements)
-            return o
-        elif t is None:
-            o = super().__new__(cls)
-            return o
-        else:
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_002, c=c, terms_type=type(t), terms=t)
+        c, t = Formula._data_validation(c=c, t=t)
+        if len(t) == 0:
+            return super().__new__(cls)
+        elif len(t) > 0:
+            return super().__new__(cls, t)
 
     def __init__(self, c: Connective, t: FlexibleTupl = None, **kwargs):
         super().__init__()
