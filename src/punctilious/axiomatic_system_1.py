@@ -1543,8 +1543,8 @@ class Map(Formula):
       - :py:function:`pu.as1.is_well_formed_map`
 
     """
-    DOMAIN_INDEX = 0
-    CODOMAIN_INDEX = 1
+    DOMAIN_INDEX: int = 0
+    CODOMAIN_INDEX: int = 1
 
     @staticmethod
     def _data_validation(d: FlexibleEnumeration = None, c: FlexibleTupl = None) -> tuple[Enumeration, Tupl]:
@@ -1710,10 +1710,10 @@ class Transformation(Formula):
      - natural-transformation (cf. NaturalTransformation python-class)
      - algorithmic-transformation (cf. AlgorithmicTransformation python-class)
     """
-    CONCLUSION_INDEX = 0
-    VARIABLES_INDEX = 1
-    DECLARATIONS_INDEX = 2
-    PREMISES_INDEX = 3
+    CONCLUSION_INDEX: int = 0
+    VARIABLES_INDEX: int = 1
+    DECLARATIONS_INDEX: int = 2
+    PREMISES_INDEX: int = 3
 
     @staticmethod
     def _data_validation(connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
@@ -2063,19 +2063,19 @@ class AlgorithmicTransformation(Transformation):
 
     @property
     def conclusion(self) -> Formula:
-        return self[0]
+        return self[AlgorithmicTransformation.CONCLUSION_INDEX]
 
     @property
     def declarations(self) -> Enumeration:
-        return self[2]
+        return self[AlgorithmicTransformation.DECLARATIONS_INDEX]
 
     @property
     def premises(self) -> Tupl:
-        return self[3]
+        return self[AlgorithmicTransformation.PREMISES_INDEX]
 
     @property
     def variables(self) -> Enumeration:
-        return self[1]
+        return self[AlgorithmicTransformation.VARIABLES_INDEX]
 
 
 FlexibleAlgorithmicTransformation = typing.Optional[typing.Union[Connective, Formula, AlgorithmicTransformation]]
@@ -2860,8 +2860,8 @@ class Derivation(Formula):
 
     See their respective definitions for the local and global definitions of proper-justification.
     """
-    VALID_STATEMENT_INDEX = 0
-    JUSTIFICATION_INDEX = 1
+    VALID_STATEMENT_INDEX: int = 0
+    JUSTIFICATION_INDEX: int = 1
 
     def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula,
                 **kwargs):
@@ -2952,7 +2952,7 @@ class InferenceRule(Derivation):
     Note: if an inference-rule has no premises, it is equivalent to an axiom.
 
     """
-    TRANSFORMATION_INDEX = Derivation.VALID_STATEMENT_INDEX
+    TRANSFORMATION_INDEX: int = Derivation.VALID_STATEMENT_INDEX
 
     @staticmethod
     def _data_validation(t: FlexibleTransformation = None) -> tuple[Connective, Transformation, Formula]:
@@ -2995,9 +2995,9 @@ class Inference(Formula):
 
     Semantic definition:
     An inference is a formal description of one usage of an inference-rule."""
-    INFERENCE_RULE_INDEX = 0
-    PREMISES_INDEX = 1
-    ARGUMENTS_INDEX = 2
+    INFERENCE_RULE_INDEX: int = 0
+    PREMISES_INDEX: int = 1
+    ARGUMENTS_INDEX: int = 2
 
     @staticmethod
     def _data_validation(
@@ -3086,7 +3086,7 @@ class Theorem(Derivation):
     the transformation-rule that yield phi, i.e.:
     t(P) ~formula phi
     """
-    INFERENCE_INDEX = Derivation.JUSTIFICATION_INDEX
+    INFERENCE_INDEX: int = Derivation.JUSTIFICATION_INDEX
 
     @staticmethod
     def _data_validation(valid_statement: FlexibleFormula, i: FlexibleInference) -> tuple[
