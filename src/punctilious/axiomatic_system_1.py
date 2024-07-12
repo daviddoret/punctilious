@@ -2791,7 +2791,7 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
         return transform_axiomatization_to_theory(a=t)
     elif canonical_conversion and is_well_formed_enumeration(e=t):
         return transform_enumeration_to_theory(e=t)
-    elif canonical_conversion and is_well_formed_tuple(a=t):
+    elif canonical_conversion and is_well_formed_tupl(t=t):
         return transform_tuple_to_theory(t=t)
     elif isinstance(t, typing.Generator) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
