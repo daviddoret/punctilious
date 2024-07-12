@@ -1983,6 +1983,21 @@ class AlgorithmicTransformation(Transformation):
 
     Distinctively from premises, we should pass arguments to the algorithm."""
 
+    @staticmethod
+    def _data_validation(external_algorithm: typing.Callable, c: FlexibleFormula,
+                         v: FlexibleEnumeration | None = None,
+                         d: FlexibleEnumeration | None = None,
+                         p: FlexibleTupl | None = None) -> tuple[
+        Connective, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
+        global _connectives
+        c2: Connective = _connectives.algorithm
+        external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
+        c: Formula = coerce_formula(phi=c)
+        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
+        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
+        p: Tupl = coerce_tupl_OBSOLETE(t=p)
+        return c2, external_algorithm, c, v, d, p
+
     def __new__(cls, external_algorithm: typing.Callable, c: FlexibleFormula,
                 v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
@@ -1995,14 +2010,9 @@ class AlgorithmicTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
-        c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
-        o: tuple = super().__new__(cls, connective=_connectives.algorithm,
-                                   c=c, v=v, d=d,
-                                   p=p)
+        c2, external_algorithm, c, v, d, p = AlgorithmicTransformation._data_validation(
+            external_algorithm=external_algorithm, c=c, v=v, d=d, p=p)
+        o: tuple = super().__new__(cls, connective=c2, c=c, v=v, d=d, p=p)
         return o
 
     def __init__(self, external_algorithm: typing.Callable,
@@ -2017,11 +2027,8 @@ class AlgorithmicTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        external_algorithm: typing.Callable = coerce_external_algorithm(f=external_algorithm)
-        c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration_OBSOLETE(e=v, strip_duplicates=True)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d, strip_duplicates=True)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        c2, external_algorithm, c, v, d, p = AlgorithmicTransformation._data_validation(
+            external_algorithm=external_algorithm, c=c, v=v, d=d, p=p)
         self._external_algorithm: typing.Callable = external_algorithm
         super().__init__(connective=_connectives.algorithm,
                          c=c, v=v, d=d, p=p)
