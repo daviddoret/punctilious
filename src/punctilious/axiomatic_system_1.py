@@ -2856,6 +2856,8 @@ class Derivation(Formula):
 
     See their respective definitions for the local and global definitions of proper-justification.
     """
+    VALID_STATEMENT_INDEX = 0
+    JUSTIFICATION_INDEX = 1
 
     def __new__(cls, valid_statement: FlexibleFormula, justification: FlexibleFormula,
                 **kwargs):
@@ -2880,11 +2882,11 @@ class Derivation(Formula):
 
         :return: A formula.
         """
-        return self._valid_statement
+        return self[Derivation.VALID_STATEMENT_INDEX]
 
     @property
     def justification(self) -> Formula:
-        return self._justification
+        return self[Derivation.JUSTIFICATION_INDEX]
 
 
 class Axiom(Derivation):
@@ -2946,22 +2948,28 @@ class InferenceRule(Derivation):
     Note: if an inference-rule has no premises, it is equivalent to an axiom.
 
     """
+    TRANSFORMATION_INDEX = Derivation.VALID_STATEMENT_INDEX
+
+    @staticmethod
+    def _data_validation(t: FlexibleTransformation = None) -> tuple[Connective, Transformation, Formula]:
+        global _connectives
+        c: Connective = _connectives.inference_rule
+        t: Transformation = coerce_transformation(t=t)
+        j: Formula = Formula(c=c)
+        return c, t, j
 
     def __new__(cls, t: FlexibleTransformation = None, **kwargs):
-        t: Transformation = coerce_transformation(t=t)
-        o: tuple = super().__new__(cls, valid_statement=t,
-                                   justification=_connectives.inference_rule,
-                                   **kwargs)
+        c, t, j = InferenceRule._data_validation(t=t)
+        o: tuple = super().__new__(cls, valid_statement=t, justification=j, **kwargs)
         return o
 
     def __init__(self, t: FlexibleTransformation, **kwargs):
-        self._transformation: Transformation = coerce_transformation(t=t)
-        super().__init__(valid_statement=self._transformation,
-                         justification=_connectives.inference_rule, **kwargs)
+        c, t, j = InferenceRule._data_validation(t=t)
+        super().__init__(valid_statement=t, justification=j, **kwargs)
 
     @property
     def transformation(self) -> Transformation:
-        return self._transformation
+        return self[InferenceRule.TRANSFORMATION_INDEX]
 
 
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
