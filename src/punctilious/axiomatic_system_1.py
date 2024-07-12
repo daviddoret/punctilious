@@ -3091,18 +3091,7 @@ class Theorem(Derivation):
         c: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
         valid_statement: Formula = coerce_formula(phi=valid_statement)
         i: Inference = coerce_inference(i=i)
-        # MOVE ALL DATA-VALIDATION HERE
-        return c, valid_statement, i
 
-    def __new__(cls, valid_statement: FlexibleFormula, i: FlexibleInference):
-        c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
-        o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=i)
-        return o
-
-    def __init__(self, valid_statement: FlexibleFormula, i: FlexibleInference):
-        c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
-        # complete object initialization to assure that we have a well-formed formula with connective, etc.
-        super().__init__(valid_statement=valid_statement, justification=i)
         # check the validity of the theorem
         re_derived_valid_statement: Formula = i.inference_rule.transformation.apply_transformation(p=i.premises,
                                                                                                    a=i.arguments)
@@ -3120,13 +3109,16 @@ class Theorem(Derivation):
             # If there are new-object-declarations, f_of_p is not directly comparable with valid_statements.
             # This is because transformations with new-object-declarations are non-deterministic.
             # In order to check that valid_statement is consistent with the inference-rule, we can
-            # compare both formulas with the inference-rule conclusion and with regards to new-object-declaration variables.
-            success_1, m1 = is_formula_equivalent_with_variables_2(phi=valid_statement,
-                                                                   psi=i.inference_rule.transformation.conclusion,
-                                                                   variables=i.inference_rule.transformation.declarations)
+            # compare both formulas with the inference-rule conclusion and with regards to new-object-declaration
+            # variables.
+            success_1, m1 = is_formula_equivalent_with_variables_2(
+                phi=valid_statement,
+                psi=i.inference_rule.transformation.conclusion,
+                variables=i.inference_rule.transformation.declarations)
             if not success_1:
                 raise u1.ApplicativeError(
-                    msg='The valid-statement is not consistent with the inference-rule conclusion, considering new-object-declarations')
+                    msg='The valid-statement is not consistent with the inference-rule conclusion, considering '
+                        'new-object-declarations')
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
             success_2, m2 = is_formula_equivalent_with_variables_2(phi=valid_statement,
@@ -3139,6 +3131,18 @@ class Theorem(Derivation):
                     msg='Reversing the valid-statement does not yield the inference-rule conclusion.',
                     valid_statement_reversed=valid_statement_reversed,
                     expected_conclusion=i.inference_rule.transformation.conclusion)
+
+        return c, valid_statement, i
+
+    def __new__(cls, valid_statement: FlexibleFormula, i: FlexibleInference):
+        c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
+        o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=i)
+        return o
+
+    def __init__(self, valid_statement: FlexibleFormula, i: FlexibleInference):
+        c, valid_statement, i = Theorem._data_validation(valid_statement=valid_statement, i=i)
+        # complete object initialization to assure that we have a well-formed formula with connective, etc.
+        super().__init__(valid_statement=valid_statement, justification=i)
 
     @property
     def inference(self) -> Inference:
