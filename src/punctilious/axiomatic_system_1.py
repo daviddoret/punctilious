@@ -2923,14 +2923,22 @@ class Axiom(Derivation):
 
     """
 
-    def __new__(cls, valid_statement: FlexibleFormula = None, **kwargs):
+    @staticmethod
+    def _data_validation(valid_statement: FlexibleFormula = None) -> tuple[Connective, Formula, Formula]:
+        global _connectives
+        c: Connective = _connectives.axiom
         valid_statement: Formula = coerce_formula(phi=valid_statement)
-        o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=_connectives.axiom, **kwargs)
+        justification: Formula = Formula(c=c)
+        return c, valid_statement, justification
+
+    def __new__(cls, valid_statement: FlexibleFormula = None, **kwargs):
+        c, valid_statement, justification = Axiom._data_validation(valid_statement=valid_statement)
+        o: tuple = super().__new__(cls, valid_statement=valid_statement, justification=justification, **kwargs)
         return o
 
     def __init__(self, valid_statement: FlexibleFormula, **kwargs):
-        valid_statement: Formula = coerce_formula(phi=valid_statement)
-        super().__init__(valid_statement=valid_statement, justification=_connectives.axiom, **kwargs)
+        c, valid_statement, justification = Axiom._data_validation(valid_statement=valid_statement)
+        super().__init__(valid_statement=valid_statement, justification=justification, **kwargs)
 
 
 FlexibleAxiom = typing.Union[Axiom, Formula]
