@@ -3047,10 +3047,10 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
     if isinstance(t, Theory):
         return t
     elif interpret_none_as_empty and t is None:
-        return Theory(d=None)
+        return Theory(t=None, d=None, d2=None)
     elif is_well_formed_theory(t=t):
         t: Formula = coerce_formula(phi=t)
-        return Theory(d=(*t,))
+        return Theory(t=None, d=(*t,), d2=None)
     elif canonical_conversion and is_well_formed_axiomatization(a=t):
         return transform_axiomatization_to_theory(a=t)
     elif canonical_conversion and is_well_formed_enumeration(e=t):
@@ -3061,12 +3061,12 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Theory(d=tuple(element for element in t))
+        return Theory(t=None, d=tuple(element for element in t), d2=None)
     elif isinstance(t, typing.Iterable) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Theory(d=t)
+        return Theory(t=None, d=t, d2=None)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_043,
@@ -3510,8 +3510,51 @@ class Theory(Formula):
     """
     _last_index: int = 0
 
+    @staticmethod
+    def _data_validation(c: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
+                         d2: FlexibleDerivation | None = None) -> tuple[
+        Connective, typing.Optional[Theory], typing.Optional[Enumeration], typing.Optional[Derivation]]:
+        """
+
+        :param t:
+        :param d:
+        :return:
+        """
+        if t is not None:
+            t: Theory = coerce_theory(t=t)
+        if d is not None:
+            d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True)
+        if d2 is not None:
+            d2: Derivation = coerce_derivation(d=d2)
+
+        if d is not None and d2 is not None:
+            # Invalid signature.
+            # At most one of the two arguments "d" and "d2" can be passed to the function, not both.
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_072,
+                msg='Both parameters "d" and "d2" were passed to the function but it is required that at most one of'
+                    'these two parameters be not None.',
+                t=t, d=d, d2=d2)
+        elif t is None and d is None and d2 is None:
+            # Signature #1: This is an empty theory, it is valid by definition.
+            return c, t, d, d2
+        elif t is not None and d is None and d2 is None:
+            # Signature #2: This is not an empty theory,
+            # but no new derivation is appended to the base theory.
+            return c, t, d, d2
+        elif d is None and d2 is not None:
+            # Check that this single new derivation would be valid if appended to the theory.
+            would_be_valid_derivation_in_theory(d=d2, t=t, raise_error_if_false=True)
+        elif d is not None and d2 is None:
+            # Append new derivations one by one,
+            # which will trigger a validity check every time.
+            for x in iterate_enumeration_elements(e=d):
+                t = Theory(t=t, c=c, d=None, d2=x)
+            return c, t, d, d2
+
     def __new__(cls, c: Connective | None = None,
                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
+                d2: FlexibleDerivation | None = None,
                 decorations: FlexibleDecorations = None, **kwargs):
         """
 
@@ -3537,7 +3580,7 @@ class Theory(Formula):
         return o
 
     def __init__(self, c: Connective | None = None,
-                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
+                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None, d2: FlexibleDerivation | None = None,
                  decorations: FlexibleDecorations = None, **kwargs):
         """Declares a new theory t′ such that t′ = t ∪ d, where:
          - t is a theory (or the empty theory if the argument is not provided),
