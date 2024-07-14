@@ -3,7 +3,6 @@ import sys
 
 import util_1 as u1
 import presentation_layer_1 as pl1
-import axiomatic_system_1 as as1
 from connectives_standard_library_1 import *
 
 _current_module = sys.modules[__name__]

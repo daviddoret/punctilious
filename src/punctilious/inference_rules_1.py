@@ -2,7 +2,6 @@
 import sys
 
 import presentation_layer_1 as pl1
-import axiomatic_system_1 as as1
 from connectives_standard_library_1 import *
 
 _current_module = sys.modules[__name__]
@@ -14,7 +13,7 @@ _state = dict() if not hasattr(_current_module, '_state') else getattr(_current_
 
 def _set_state(key: str, value: object):
     """An internal utility function to store module state and avoid
-    issues with global variables being re-instanciated if modules are re-loaded."""
+    issues with global variables being re-instantiated if modules are re-loaded."""
     global _state
     if key in _state.items():
         value = _state.get(key)
