@@ -1871,7 +1871,7 @@ class Transformation(Formula):
         return self[Transformation.DECLARATIONS_INDEX]
 
     @abc.abstractmethod
-    def is_derivation_candidate(self, t: FlexibleFormula) -> bool:
+    def is_compatible_with(self, t: FlexibleFormula) -> bool:
         """A computing low-cost method tha informs a calling process whether trying to use this transformation
         is worthwhile in trying to yield formula "t".
         
@@ -2029,7 +2029,7 @@ class NaturalTransformation(Transformation, ABC):
 
         return outcome
 
-    def is_derivation_candidate(self, t: FlexibleFormula) -> bool:
+    def is_compatible_with(self, t: FlexibleFormula) -> bool:
         """Performs low-cost checks and returns True if target formula "t" is compatible with the output of the
         transformation. This is useful to avoid expensive brute-force to find some derivation in a theory,
         when it is clear from the beginning that the underlying transformation.
@@ -2216,7 +2216,7 @@ class AlgorithmicTransformation(Transformation):
     def declarations(self) -> Enumeration:
         return self[AlgorithmicTransformation.DECLARATIONS_INDEX]
 
-    def is_derivation_candidate(self, t: FlexibleFormula) -> bool:
+    def is_compatible_with(self, t: FlexibleFormula) -> bool:
         """Performs low-cost checks and returns True if target formula "t" is compatible with the output of the
         transformation. This is useful to avoid expensive brute-force to find some derivation in a theory,
         when it is clear from the beginning that the underlying transformation
