@@ -704,20 +704,35 @@ class TestAlgorithm:
             p = as1.coerce_tuple(t=p)
             a = as1.coerce_tuple(t=a)
             if not a.arity == 1:
-                raise pu.u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
+                raise pu.u1.ApplicativeError(msg='wrong arguments', p=p, a=a)
             t = a[0]
             if as1.is_well_formed_theory(t=t):
                 t = as1.coerce_theory(t=t)
-                phi = is_well_formed_theory(t)
+                phi = pu.csl1.is_well_formed_theory(t)
                 return phi
             else:
-                phi = lnot(theory_predicate(t))
+                phi = lnot(pu.csl1.is_well_formed_theory(t))
                 return phi
+
+        def is_compatible(phi: as1.FlexibleFormula) -> bool:
+            with pu.as1.let_x_be_a_variable(formula_ts='x') as x:
+                solution_1 = pu.csl1.is_well_formed_theory(x)
+                test_1, _ = pu.as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
+                if test_1:
+                    return True
+            with pu.as1.let_x_be_a_variable(formula_ts='x') as x:
+                solution_2 = lnot(pu.csl1.is_well_formed_theory(x))
+                test_2, _ = pu.as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
+                if test_2:
+                    return True
+                else:
+                    return False
 
         t = as1.let_x_be_a_theory()
         m = as1.let_x_be_a_theory()
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
             algo = as1.AlgorithmicTransformation(a=x_is_a_theory,
+                                                 i=is_compatible,
                                                  c=is_well_formed_theory(x),
                                                  v={x, },
                                                  d={x, })

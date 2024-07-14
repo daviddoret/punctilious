@@ -9,6 +9,7 @@ import typing
 import sys
 # import random
 import itertools
+from abc import ABC
 
 # import constants_1 as c1
 import constants_1 as c1
@@ -1351,6 +1352,31 @@ def is_formula_equivalent_with_variables_2(
             return True, variables_fixed_values
 
 
+def is_any_formula_equivalent_with_variables(e: FlexibleEnumeration, psi: FlexibleFormula, v: FlexibleEnumeration
+                                             ) -> bool:
+    """Returns True if any of the formulas in enumeration "e" is formula-compatible-with-variables with
+    formula "psi" with regards to variables "v".
+
+    This is a shortcut function to test a series of potential equivalences. It should be useful
+    to develop is_compatible methods for algorithmic transformations and further develop meta-theory.
+
+    :param e:
+    :param psi:
+    :param v:
+    :param raise_event_if_false:
+    :return:
+    """
+    e = coerce_enumeration(e=e, strip_duplicates=True, interpret_none_as_empty=True, canonic_conversion=True)
+    psi = coerce_formula(phi=psi)
+    v = coerce_enumeration(e=v, strip_duplicates=True, interpret_none_as_empty=True, canonic_conversion=True)
+    for phi in iterate_enumeration_elements(e=e):
+        yes, _ = is_formula_equivalent_with_variables_2(phi=phi, psi=psi, variables=v,
+                                                        raise_event_if_false=False)
+        if yes:
+            return True
+    return False
+
+
 def is_tuple_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
     """Two formula or tuples phi and psi is tuple-equivalent, denoted phi ~tuple psi, if and only if:
      - |phi| = |psi|
@@ -1844,6 +1870,19 @@ class Transformation(Formula):
     def declarations(self) -> Enumeration:
         return self[Transformation.DECLARATIONS_INDEX]
 
+    @abc.abstractmethod
+    def is_derivation_candidate(self, t: FlexibleFormula) -> bool:
+        """A computing low-cost method tha informs a calling process whether trying to use this transformation
+        is worthwhile in trying to yield formula "t".
+        
+        The idea here is to make an early check on the compatibility of the transformation with a certain 
+        target formula "t", before engaging in a brute-force attempt to derive a certain statement.
+
+        :param t: A formula denoted as the target.
+        :return:
+        """
+        raise u1.ApplicativeError(msg='abstract method')
+
     @property
     def premises(self) -> Tupl:
         """A tuple of premises that are necessary conditions before the mechanism can be executed."""
@@ -1855,7 +1894,7 @@ class Transformation(Formula):
         return self[Transformation.VARIABLES_INDEX]
 
 
-class NaturalTransformation(Transformation):
+class NaturalTransformation(Transformation, ABC):
     """A natural-transformation, is a map from the class of formulas to itself.
 
     Syntactically, a natural-transformation is a formula t(c, V, D, P) where:
@@ -1990,6 +2029,17 @@ class NaturalTransformation(Transformation):
 
         return outcome
 
+    def is_derivation_candidate(self, t: FlexibleFormula) -> bool:
+        """Performs low-cost checks and returns True if target formula "t" is compatible with the output of the
+        transformation. This is useful to avoid expensive brute-force to find some derivation in a theory,
+        when it is clear from the beginning that the underlying transformation.
+
+        :param t:
+        :return:
+        """
+        is_candidate, _ = is_formula_equivalent_with_variables_2(phi=self.conclusion, psi=t, variables=self.variables)
+        return is_candidate
+
 
 FlexibleNaturalTransformation = typing.Optional[typing.Union[NaturalTransformation]]
 
@@ -2065,13 +2115,14 @@ class AlgorithmicTransformation(Transformation):
 
     @staticmethod
     def _data_validation_3(
-            a: typing.Callable, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+            a: typing.Callable, i: tying.Callable, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
             d: FlexibleEnumeration | None = None, p: FlexibleTupl | None = None) -> tuple[
-        Connective, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
+        Connective, typing.Callable, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
         :param a:
+        :param i:
         :param c:
         :param v:
         :param d:
@@ -2080,14 +2131,16 @@ class AlgorithmicTransformation(Transformation):
         """
         global _connectives
         c2: Connective = _connectives.algorithm
+        # TODO: Check "a" is callable nad has correct signature.
         a: typing.Callable = coerce_external_algorithm(f=a)
+        # TODO: Check "i" is callable nad has correct signature.
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
-        return c2, a, c, v, d, p
+        return c2, a, i, c, v, d, p
 
-    def __new__(cls, a: typing.Callable, c: FlexibleFormula,
+    def __new__(cls, a: typing.Callable, i: typing.Callable, c: FlexibleFormula,
                 v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
@@ -2099,12 +2152,11 @@ class AlgorithmicTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, a, c, v, d, p = AlgorithmicTransformation._data_validation_3(
-            a=a, c=c, v=v, d=d, p=p)
+        c2, a, i, c, v, d, p = AlgorithmicTransformation._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, connective=c2, c=c, v=v, d=d, p=p)
         return o
 
-    def __init__(self, a: typing.Callable,
+    def __init__(self, a: typing.Callable, i: typing.Callable,
                  c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
@@ -2116,11 +2168,10 @@ class AlgorithmicTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, a, c, v, d, p = AlgorithmicTransformation._data_validation_3(
-            a=a, c=c, v=v, d=d, p=p)
+        c2, a, i, c, v, d, p = AlgorithmicTransformation._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
         self._external_algorithm: typing.Callable = a
-        super().__init__(connective=_connectives.algorithm,
-                         c=c, v=v, d=d, p=p)
+        self._is_derivation_candidate = i
+        super().__init__(connective=c2, c=c, v=v, d=d, p=p)
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -2164,6 +2215,16 @@ class AlgorithmicTransformation(Transformation):
     @property
     def declarations(self) -> Enumeration:
         return self[AlgorithmicTransformation.DECLARATIONS_INDEX]
+
+    def is_derivation_candidate(self, t: FlexibleFormula) -> bool:
+        """Performs low-cost checks and returns True if target formula "t" is compatible with the output of the
+        transformation. This is useful to avoid expensive brute-force to find some derivation in a theory,
+        when it is clear from the beginning that the underlying transformation
+
+        :param t:
+        :return:
+        """
+        return self._is_derivation_candidate(t=t)
 
     @property
     def premises(self) -> Tupl:
