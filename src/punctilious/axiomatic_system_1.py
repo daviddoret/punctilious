@@ -486,8 +486,8 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> Map:
         return Map(d=m[Map.DOMAIN_INDEX], c=m[Map.CODOMAIN_INDEX])
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
-        domain: Enumeration = coerce_enumeration_OBSOLETE(e=m.keys())
-        codomain: Tupl = coerce_tupl_OBSOLETE(t=m.values())
+        domain: Enumeration = coerce_enumeration(e=m.keys())
+        codomain: Tupl = coerce_tuple(t=m.values())
         return Map(d=domain, c=codomain)
     else:
         # no coercion solution found.
@@ -650,7 +650,7 @@ def is_element_of_enumeration(x: FlexibleFormula, e: FlexibleEnumeration) -> boo
     :rtype: bool
     """
     x: Formula = coerce_formula(phi=x)
-    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
+    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     return is_term_of_formula(x=x, phi=e)
 
 
