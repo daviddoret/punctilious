@@ -3513,15 +3513,16 @@ class Theory(Formula):
     @staticmethod
     def _data_validation(c: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
                          d2: FlexibleDerivation | None = None) -> tuple[
-        Connective, typing.Optional[Theory], typing.Optional[Enumeration], typing.Optional[Derivation]]:
+        Connective, typing.Optional[Theory], typing.Optional[Enumeration]]:
         """
+        # TODO: CA NE MARCHE PAS DU TOUT, IL FAUT COMPLETEMENT REVOIR CETTE LOGIQUE DE VALIDATION.
 
         :param t:
         :param d:
         :return:
         """
         if t is not None:
-            t: Theory = coerce_theory(t=t)
+            t: Theory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
         if d is not None:
             d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True)
         if d2 is not None:
@@ -3537,20 +3538,28 @@ class Theory(Formula):
                 t=t, d=d, d2=d2)
         elif t is None and d is None and d2 is None:
             # Signature #1: This is an empty theory, it is valid by definition.
-            return c, t, d, d2
+            return c, None, None
         elif t is not None and d is None and d2 is None:
             # Signature #2: This is not an empty theory,
             # but no new derivation is appended to the base theory.
-            return c, t, d, d2
+            # t was already coerced to a theory above, so we're done.
+            return c, t, transform_theory_to_enumeration(t=t)
         elif d is None and d2 is not None:
+            # Signature #3:
             # Check that this single new derivation would be valid if appended to the theory.
             would_be_valid_derivation_in_theory(d=d2, t=t, raise_error_if_false=True)
+            return c, t, transform_theory_to_enumeration(t=t)
         elif d is not None and d2 is None:
+            # Signature #4:
             # Append new derivations one by one,
             # which will trigger a validity check every time.
             for x in iterate_enumeration_elements(e=d):
                 t = Theory(t=t, c=c, d=None, d2=x)
             return c, t, d, d2
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_073,
+            msg='Impossible condition, there must be a bug here.',
+            t=t, d=d, d2=d2)
 
     def __new__(cls, c: Connective | None = None,
                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
