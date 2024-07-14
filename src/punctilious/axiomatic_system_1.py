@@ -1267,7 +1267,7 @@ def is_formula_equivalent_with_variables_2(
     variables_fixed_values: Map = coerce_map(m=variables_fixed_values, interpret_none_as_empty=True)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
-    variables: Enumeration = coerce_enumeration_OBSOLETE(e=variables)
+    variables: Enumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True)
     # check that all variables are atomic formulas
     for x in variables:
         x: Formula = coerce_formula(phi=x)
@@ -1362,8 +1362,8 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
     :param psi: An enumeration.
     :return: True if phi ~enumeration psi, False otherwise.
     """
-    phi: Formula = coerce_enumeration_OBSOLETE(e=phi)
-    psi: Formula = coerce_enumeration_OBSOLETE(e=psi)
+    phi: Formula = coerce_enumeration(e=phi, interpret_none_as_empty=True)
+    psi: Formula = coerce_enumeration(e=psi, interpret_none_as_empty=True)
 
     test_1 = all(any(is_formula_equivalent(phi=phi_prime, psi=psi_prime) for psi_prime in psi) for phi_prime in phi)
     test_2 = all(any(is_formula_equivalent(phi=psi_prime, psi=phi_prime) for phi_prime in phi) for psi_prime in psi)
@@ -1477,7 +1477,7 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
     If "x" is an element of "e", return "e".
     If "x" is not an element of "e", and "s" is the sequence of terms in "e", return "(s, e)".
     """
-    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
+    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     x: Formula = coerce_formula(phi=x)
     if is_element_of_enumeration(x=x, e=e):
         # "x" is an element of "e":
