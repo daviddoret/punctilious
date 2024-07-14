@@ -103,6 +103,13 @@ class Formula(tuple):
 
     @staticmethod
     def _data_validation(c: Connective, t: FlexibleTupl = None) -> tuple[Connective, tuple]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param c:
+        :param t:
+        :return:
+        """
         if isinstance(t, collections.abc.Iterable):
             t = tuple(coerce_formula(phi=term) for term in t)
         elif t is None:
@@ -1555,6 +1562,13 @@ class Map(Formula):
 
     @staticmethod
     def _data_validation(d: FlexibleEnumeration = None, c: FlexibleTupl = None) -> tuple[Enumeration, Tupl]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param d:
+        :param c:
+        :return:
+        """
         d: Enumeration = coerce_enumeration(
             e=d, strip_duplicates=True, interpret_none_as_empty=True, canonic_conversion=True)
         c: Tupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
@@ -1655,6 +1669,13 @@ class Enumeration(Formula):
     @staticmethod
     def _data_validation(e: FlexibleEnumeration = None,
                          strip_duplicates: bool = False) -> tuple[Connective, tuple]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param e:
+        :param strip_duplicates:
+        :return:
+        """
         global _connectives
         c: Connective = _connectives.enumeration
         if e is None:
@@ -1738,6 +1759,16 @@ class Transformation(Formula):
     def _data_validation_2(connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                            d: FlexibleEnumeration | None = None,
                            p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param connective:
+        :param c:
+        :param v:
+        :param d:
+        :param p:
+        :return:
+        """
         connective: Connective = coerce_connective(c=connective)
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
@@ -1865,6 +1896,15 @@ class NaturalTransformation(Transformation):
     def _data_validation_3(c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                            d: FlexibleEnumeration | None = None,
                            p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param c:
+        :param v:
+        :param d:
+        :param p:
+        :return:
+        """
         global _connectives
         c2: Connective = _connectives.natural_transformation
         c: Formula = coerce_formula(phi=c)
@@ -2018,11 +2058,19 @@ class AlgorithmicTransformation(Transformation):
 
     @staticmethod
     def _data_validation_3(
-            a: typing.Callable, c: FlexibleFormula,
-            v: FlexibleEnumeration | None = None,
-            d: FlexibleEnumeration | None = None,
-            p: FlexibleTupl | None = None) -> tuple[
+            a: typing.Callable, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+            d: FlexibleEnumeration | None = None, p: FlexibleTupl | None = None) -> tuple[
         Connective, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param a:
+        :param c:
+        :param v:
+        :param d:
+        :param p:
+        :return:
+        """
         global _connectives
         c2: Connective = _connectives.algorithm
         a: typing.Callable = coerce_external_algorithm(f=a)
@@ -2911,6 +2959,13 @@ class Derivation(Formula):
 
     @staticmethod
     def _data_validation_2(s: FlexibleFormula, j: FlexibleFormula) -> tuple[Connective, Formula, Formula]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param s:
+        :param j:
+        :return:
+        """
         c: Connective = _connectives.follows_from
         s = coerce_formula(phi=s)
         j = coerce_formula(phi=j)
@@ -2976,6 +3031,12 @@ class Axiom(Derivation):
 
     @staticmethod
     def _data_validation_3(s: FlexibleFormula = None) -> tuple[Connective, Formula, Formula]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param s:
+        :return:
+        """
         global _connectives
         c: Connective = _connectives.axiom
         s: Formula = coerce_formula(phi=s)
@@ -3022,6 +3083,12 @@ class InferenceRule(Derivation):
 
     @staticmethod
     def _data_validation_3(t: FlexibleTransformation = None) -> tuple[Connective, Transformation, Formula]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param t:
+        :return:
+        """
         global _connectives
         c: Connective = _connectives.inference_rule
         t: Transformation = coerce_transformation(t=t)
@@ -3070,6 +3137,14 @@ class Inference(Formula):
             i: FlexibleInferenceRule,
             p: FlexibleTupl | None = None,
             a: FlexibleTupl | None = None) -> tuple[Connective, InferenceRule, Tupl, Tupl]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param i:
+        :param p:
+        :param a:
+        :return:
+        """
         c: Connective = _connectives.inference
         i: InferenceRule = coerce_inference_rule(i=i)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
@@ -3156,6 +3231,13 @@ class Theorem(Derivation):
 
     @staticmethod
     def _data_validation_3(s: FlexibleFormula, i: FlexibleInference) -> tuple[Connective, Formula, Inference]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param s:
+        :param i:
+        :return:
+        """
         global _connectives
         c: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
         s: Formula = coerce_formula(phi=s)
@@ -3556,6 +3638,13 @@ class Axiomatization(Formula):
     @staticmethod
     def _data_validation(a: FlexibleAxiomatization | None = None,
                          d: FlexibleEnumeration = None) -> tuple[Connective, Enumeration]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param a:
+        :param d:
+        :return:
+        """
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
         if a is not None:
             a: Axiomatization = coerce_axiomatization(a=a)
