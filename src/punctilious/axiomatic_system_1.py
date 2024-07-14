@@ -417,7 +417,7 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic
 
 
 def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
-    e = coerce_enumeration_OBSOLETE(e=e)
+    e = coerce_enumeration(e=e, interpret_none_as_empty=True)
     e2 = Enumeration()
     for element in e:
         element = coerce_variable(x=element)
@@ -444,8 +444,8 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
      - Idempotent: (phi ∪-formula phi) ~formula phi.
      - Not symmetric if some element of psi are elements of phi: because of order.
     """
-    phi: Enumeration = coerce_enumeration_OBSOLETE(e=phi)
-    psi: Enumeration = coerce_enumeration_OBSOLETE(e=psi)
+    phi: Enumeration = coerce_enumeration(e=phi, interpret_none_as_empty=True)
+    psi: Enumeration = coerce_enumeration(e=psi, interpret_none_as_empty=True)
     e: Enumeration = Enumeration(e=(*phi, *psi,), strip_duplicates=True)
     return e
 
@@ -475,11 +475,10 @@ def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> Theory:
     return t2
 
 
-def coerce_map(m: FlexibleMap) -> Map:
+def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> Map:
     if isinstance(m, Map):
-        # "m" is properly python-typed and the python-type assures well-formedness.
         return m
-    elif m is None:
+    elif interpret_none_as_empty and m is None:
         # implicit conversion of None to the empty map.
         return Map(d=None, c=None)
     elif is_well_formed_map(m=m):
@@ -1263,7 +1262,7 @@ def is_formula_equivalent_with_variables_2(
     :param raise_event_if_false:
     :return:
     """
-    variables_fixed_values: Map = coerce_map(m=variables_fixed_values)
+    variables_fixed_values: Map = coerce_map(m=variables_fixed_values, interpret_none_as_empty=True)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     variables: Enumeration = coerce_enumeration_OBSOLETE(e=variables)
@@ -1373,7 +1372,7 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
 def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     """Performs a top-down, left-to-right replacement of formulas in formula phi."""
     phi: Formula = coerce_formula(phi=phi)
-    m: Map = coerce_map(m=m)
+    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
     if is_in_map_domain(phi=phi, m=m):
         # phi must be replaced at its root.
         # the replacement algorithm stops right there (i.e.: no more recursion).
@@ -1398,7 +1397,7 @@ def replace_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     :return:
     """
     phi: Formula = coerce_formula(phi=phi)
-    m: Map = coerce_map(m=m)
+    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
     # TODO: Check that the map domain and codomains are composed of simple objects.
     c: Connective = phi.connective
     c_formula: Formula = Formula(c=c)
@@ -1452,7 +1451,7 @@ FlexibleTupl = typing.Optional[typing.Union[Tupl, typing.Iterable[FlexibleFormul
 
 def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
     """Return a new map such that the preimage is no longer an element of its domain."""
-    m: Map = coerce_map(m=m)
+    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
     preimage: Formula = coerce_formula(phi=preimage)
     if is_element_of_enumeration(x=preimage, e=m.domain):
         index: int = get_index_of_first_equivalent_term_in_formula(term=preimage, formula=m.domain)
@@ -1514,7 +1513,7 @@ def append_pair_to_map(m: FlexibleMap, preimage: FlexibleFormula, image: Flexibl
     :param image:
     :return:
     """
-    m: Map = coerce_map(m=m)
+    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
     preimage: Formula = coerce_formula(phi=preimage)
     # Reduce the map to assure the preimage is no longer an element of its domain.
     m: Map = reduce_map(m=m, preimage=preimage)
@@ -2390,8 +2389,8 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
         typing.Generator[Enumeration, None, None]:
     """Iterates all distinct tuples (order matters) of exactly n elements in enumeration e.
 
-    :param n:
-    :param e:
+    :param e: An enumeration.
+    :param n: The fixed size of the tuples to be iterated.
     :return:
     """
     e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
@@ -2420,6 +2419,11 @@ def iterate_derivations_in_theory(t: FlexibleTheory) -> typing.Generator[Formula
 
 
 def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Formula, None, None]:
+    """Generator function that iterates all the valid statements in a theory.
+
+    :param t: A theory.
+    :return:
+    """
     t = coerce_theory(t=t)
     derivations = iterate_derivations_in_theory(t=t)
     for derivation in derivations:
@@ -2463,7 +2467,7 @@ def are_valid_statements_in_theory_with_variables(
     s: Tupl = coerce_tupl_OBSOLETE(t=s)
     t: Theory = coerce_theory(t=t)
     variables: Enumeration = coerce_enumeration_OBSOLETE(e=variables, strip_duplicates=True)
-    variables_values: Map = coerce_map(m=variables_values)
+    variables_values: Map = coerce_map(m=variables_values, interpret_none_as_empty=True)
 
     # list the free variables.
     # these are the variables that are in "variables" that are not in the domain of "variables_values".
@@ -3112,7 +3116,7 @@ FlexibleInference = typing.Optional[typing.Union[Inference]]
 
 def inverse_map(m: FlexibleMap) -> Map:
     """If a map is bijective, returns the inverse map."""
-    m: Map = coerce_map(m=m)
+    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
     domain = transform_formula_to_enumeration(phi=m.codomain, strip_duplicates=True)
     codomain = transform_formula_to_tuple(phi=m.domain)
     if domain.arity != codomain.arity:
@@ -3831,7 +3835,7 @@ def is_in_formula_tree(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
     """Return True if phi is a formula in the domain of map m, False otherwise."""
     phi = coerce_formula(phi=phi)
-    m = coerce_map(m=m)
+    m = coerce_map(m=m, interpret_none_as_empty=True)
     return is_element_of_enumeration(x=phi, e=m.domain)
 
 
@@ -4318,7 +4322,7 @@ class MapTypesetter(pl1.Typesetter):
 
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: Map = coerce_map(m=phi)
+        phi: Map = coerce_map(m=phi, interpret_none_as_empty=True)
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
 
