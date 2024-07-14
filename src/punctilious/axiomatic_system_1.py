@@ -252,6 +252,7 @@ class Formula(tuple):
            defined.
          - priority 4: failsafe typesetting method.
 
+        :param ts_key:
         :param typesetter:
         :return:
         """
@@ -489,7 +490,7 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> Map:
         # implicit conversion of None to the empty map.
         return Map(d=None, c=None)
     elif is_well_formed_map(m=m):
-        # "m" is improperly python-typed but it is a well-formed map.
+        # "m" is improperly python-typed, but it is a well-formed map.
         return Map(d=m[Map.DOMAIN_INDEX], c=m[Map.CODOMAIN_INDEX])
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
@@ -1281,7 +1282,7 @@ def is_formula_equivalent_with_variables_2(
         if x.arity != 0:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_020,
                                       msg=f'the arity of variable "{x}" in variables is not equal to 0.')
-        if is_subformula_of_formula(formula=phi, subformula=x):
+        if is_subformula_of_formula(f=phi, s=x):
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_021,
                 msg=f'variable x is a sub-formula of phi.',
@@ -1407,7 +1408,7 @@ def replace_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     """
     phi: Formula = coerce_formula(phi=phi)
     m: Map = coerce_map(m=m, interpret_none_as_empty=True)
-    # TODO: Check that the map domain and codomains are composed of simple objects.
+    # TODO: Check that the map domain and codomain are composed of simple objects.
     c: Connective = phi.connective
     c_formula: Formula = Formula(c=c)
     if is_in_map_domain(phi=c_formula, m=m):
@@ -1854,8 +1855,8 @@ class NaturalTransformation(Transformation):
     Syntactically, a natural-transformation is a formula t(c, V, D, P) where:
      - t is the natural-transformation connective,
      - c is a formula called the conclusion, which gives the shape of the natural-transformation output formula.
-     - V is a enumeration whose children are simple-objects called the variables.
-     - D is a enumeration whose children are simple-objects called the new-object-declarations.
+     - V is an enumeration whose children are simple-objects called the variables.
+     - D is an enumeration whose children are simple-objects called the new-object-declarations.
      - P is an enumeration of formulas whose children are called premises.
      - The intersection V ∩ D is empty.
 
@@ -1883,7 +1884,7 @@ class NaturalTransformation(Transformation):
     Note 4: Transformations are the building blocks of inference-rules. Ses inference-rules for more details.
 
     Note 5: The natural-transformation in an inference rule is very similar to an intuitionistic sequent (cf. Mancosu
-    et al, 2021, p. 170), i.e.: "In intuitionistic-sequent, there may be at most one formula to the right of ⇒ .", with
+    et al., 2021, p. 170), i.e.: "In intuitionistic-sequent, there may be at most one formula to the right of ⇒ .", with
     some distinctive properties:
         - a natural-transformation comprises an explicit and finite set of variables,
           while an intuitionistic-sequent uses only formula variables.
@@ -2325,7 +2326,7 @@ def is_well_formed_enumeration(e: FlexibleFormula) -> bool:
         return True
     else:
         e = coerce_formula(phi=e)
-        if not e.connective is _connectives.enumeration:
+        if e.connective is not _connectives.enumeration:
             return False
         for i in range(0, e.arity):
             if i != e.arity - 1:
@@ -3122,7 +3123,7 @@ class Inference(Formula):
         inference(i, P, A)
     Where:
         - inference is the inference connective,
-        - i is an inference-rule.
+        - "i" is an inference-rule.
         - P is a tuple of formulas denoted as the premises,
         - (for algorithmic-transformations) A is a tuple of formulas denoted as the supplementary arguments.
 
@@ -3699,20 +3700,20 @@ FlexibleAxiomatization = typing.Optional[
     typing.Union[Axiomatization, typing.Iterable[typing.Union[Axiom, InferenceRule]]]]
 
 
-def is_subformula_of_formula(subformula: FlexibleFormula, formula: FlexibleFormula) -> bool:
-    """Return True if and only if formula subformula is a sub-formula of formula formula, False otherwise.
+def is_subformula_of_formula(s: FlexibleFormula, f: FlexibleFormula) -> bool:
+    """Return True if and only if formula "s" is a sub-formula of formula "f", False otherwise.
 
-    :param subformula:
-    :param formula:
+    :param s: A formula, that may be a subformula of f.
+    :param f: A formula, that may be the superformula of s.
     :return: True if and only if formula subformula is a sub-formula of formula formula, False otherwise.
     :rtype: bool
     """
-    subformula: Formula = coerce_formula(phi=subformula)
-    formula: Formula = coerce_formula(phi=formula)
-    if is_formula_equivalent(phi=subformula, psi=formula):
+    s: Formula = coerce_formula(phi=s)
+    f: Formula = coerce_formula(phi=f)
+    if is_formula_equivalent(phi=s, psi=f):
         return True
-    for term in formula:
-        if is_subformula_of_formula(subformula=subformula, formula=term):
+    for term in f:
+        if is_subformula_of_formula(s=s, f=term):
             return True
     return False
 
