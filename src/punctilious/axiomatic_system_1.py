@@ -2466,9 +2466,9 @@ def are_valid_statements_in_theory_with_variables(
     TODO: retrieve and return the final map of variable values as well? is this really needed?
 
     """
-    s: Tupl = coerce_tupl_OBSOLETE(t=s)
+    s: Tupl = coerce_tuple(t=s, interpret_none_as_empty=True)
     t: Theory = coerce_theory(t=t)
-    variables: Enumeration = coerce_enumeration_OBSOLETE(e=variables, strip_duplicates=True)
+    variables: Enumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True, strip_duplicates=True)
     variables_values: Map = coerce_map(m=variables_values, interpret_none_as_empty=True)
 
     # list the free variables.
@@ -2489,7 +2489,7 @@ def are_valid_statements_in_theory_with_variables(
         # it follows that 1) there will be no permutations,
         # and 2) are_valid_statements_in_theory() is equivalent.
         s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variables_values)
-        s_with_variable_substitution: Tupl = coerce_tupl_OBSOLETE(t=s_with_variable_substitution)
+        s_with_variable_substitution: Tupl = coerce_tuple(t=s_with_variable_substitution)
         valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
         if valid:
             return valid, s_with_variable_substitution
@@ -2501,7 +2501,7 @@ def are_valid_statements_in_theory_with_variables(
                                                                                         n=permutation_size):
             variable_substitution: Map = Map(d=free_variables, c=permutation)
             s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
-            s_with_variable_substitution: Tupl = coerce_tupl_OBSOLETE(t=s_with_variable_substitution)
+            s_with_variable_substitution: Tupl = coerce_tuple(t=s_with_variable_substitution)
             s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution,))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
@@ -3433,7 +3433,7 @@ def transform_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
     :param e: An enumeration.
     :return: A theory.
     """
-    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
+    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     t: Theory = Theory(d=e)
     return t
 
