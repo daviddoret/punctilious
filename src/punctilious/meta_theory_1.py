@@ -24,11 +24,11 @@ def is_well_formed_formula_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | No
     phi: as1.Formula = as1.coerce_formula(phi=a[0])
     if as1.is_well_formed_formula(phi=phi):
         # Necessary case.
-        phi: as1.Formula = is_well_formed_formula_predicate(phi)
+        phi: as1.Formula = is_well_formed_formula(phi)
         return phi
     else:
         # Impossible case.
-        phi: as1.Formula = lnot(is_well_formed_formula_predicate(phi))
+        phi: as1.Formula = lnot(is_well_formed_formula(phi))
         return phi
 
 
@@ -41,12 +41,12 @@ def is_well_formed_inference_rule_algorithm(p: as1.Tupl | None = None, a: as1.Tu
     i: as1.Formula = as1.coerce_formula(phi=a[0])
     if as1.is_well_formed_inference_rule(i=i):
         i: as1.InferenceRule = as1.coerce_inference_rule(i=i)
-        phi: as1.Formula = is_well_formed_inference_rule_predicate(t)
+        phi: as1.Formula = is_well_formed_inference_rule(t)
         return phi
     else:
         # This case is not possible because the punctilious framework forces the usage
         # of well-formed formulas.
-        phi: as1.Formula = lnot(is_well_formed_inference_rule_predicate(t))
+        phi: as1.Formula = lnot(is_well_formed_inference_rule(t))
         return phi
 
 
@@ -59,17 +59,17 @@ def is_well_formed_theory_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | Non
     t: as1.Formula = as1.coerce_formula(phi=a[0])
     if as1.is_well_formed_theory(t=t):
         t: as1.Theory = as1.coerce_theory(t=t)
-        phi: as1.Formula = is_well_formed_theory_predicate(t)
+        phi: as1.Formula = is_well_formed_theory(t)
         return phi
     else:
-        phi = lnot(is_well_formed_theory_predicate(t))
+        phi = lnot(is_well_formed_theory(t))
         return phi
 
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
         a=is_well_formed_formula_algorithm,
-        c=is_well_formed_formula_predicate(t),
+        c=is_well_formed_formula(t),
         v=None,
         d={t, })
     mt1: as1.InferenceRule = as1.InferenceRule(
@@ -94,7 +94,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
         a=is_well_formed_inference_rule_algorithm,
-        c=is_well_formed_inference_rule_predicate(t),
+        c=is_well_formed_inference_rule(t),
         v=None,
         d={t, })
     mt2: as1.InferenceRule = as1.InferenceRule(
@@ -119,7 +119,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
         a=is_well_formed_theory_algorithm,
-        c=is_well_formed_theory_predicate(t),
+        c=is_well_formed_theory(t),
         v={t, },
         d={t, })
     mt3: as1.InferenceRule = as1.InferenceRule(
