@@ -3459,14 +3459,15 @@ def transform_formula_to_tuple(phi: FlexibleFormula) -> Tupl:
 
 
 def transform_tuple_to_theory(t: FlexibleTupl) -> Theory:
-    """Canonical function that converts an enumeration "e" to a theory,
-    providing that all elements "x" of "e" are well-formed derivations.
+    """Canonical function that converts a tuple "t" to a theory,
+    providing that all elements "x" of "t" are well-formed derivations.
 
     :param t: A tupl.
     :return: A theory.
     """
     t: Tupl = coerce_tuple(t=t)
-    e: Enumeration = coerce_enumeration_OBSOLETE(e=t, strip_duplicates=True)
+    e: Enumeration = coerce_enumeration(e=t, strip_duplicates=True, canonic_conversion=True,
+                                        interpret_none_as_empty=True)
     t2: Theory = transform_enumeration_to_theory(e=e)
     return t2
 
@@ -3555,7 +3556,7 @@ class Axiomatization(Formula):
     @staticmethod
     def _data_validation(a: FlexibleAxiomatization | None = None,
                          d: FlexibleEnumeration = None) -> tuple[Connective, Enumeration]:
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
+        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
         if a is not None:
             a: Axiomatization = coerce_axiomatization(a=a)
             # Duplicate derivations are not allowed in axiomatizations, so strip duplicates during merge.
@@ -3790,9 +3791,9 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     # parameters validation
     t: Theory = coerce_theory(t=t)
     c: Formula = coerce_formula(phi=c)
-    p: Tupl = coerce_tupl_OBSOLETE(t=p)
+    p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
     i: InferenceRule = coerce_inference_rule(i=i)
-    a: Tupl = coerce_tupl_OBSOLETE(t=a)
+    a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
 
     for premise in p:
         # The validity of the premises is checked during theory initialization,
@@ -4020,7 +4021,7 @@ def auto_derive_3(
     :return:
     """
     t: Theory = coerce_theory(t=t)
-    conjectures: Tupl = coerce_tupl_OBSOLETE(t=conjectures)
+    conjectures: Tupl = coerce_tuple(t=conjectures, interpret_none_as_empty=True)
     for conjecture in iterate_tuple_elements(phi=conjectures):
         t, success, _ = auto_derive_2(t=t, conjecture=conjecture)
         if not success:
