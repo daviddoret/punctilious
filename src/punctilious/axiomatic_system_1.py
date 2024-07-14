@@ -721,7 +721,7 @@ def get_index_of_first_equivalent_element_in_enumeration(x: FlexibleFormula,
     but are not possible on enumerations. The two methods are algorithmically equivalent but their
     intent is distinct."""
     x: Formula = coerce_formula(phi=x)
-    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
+    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=e)
 
 
@@ -734,7 +734,7 @@ def get_index_of_first_equivalent_element_in_tuple(x: FlexibleFormula, t: Flexib
     :return: The 0-based index of "x" in "t".
     """
     x: Formula = coerce_formula(phi=x)
-    t: Tupl = coerce_tupl_OBSOLETE(t=t)
+    t: Tupl = coerce_tuple(t=t, interpret_none_as_empty=True)
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=t)
 
 
@@ -939,9 +939,11 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
     # Signature #3: provide the arguments upon which the transformation can be built upon which ...
     elif c is not None:
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration_OBSOLETE(e=v, strip_duplicates=True)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d, strip_duplicates=True)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
+                                            strip_duplicates=True)
+        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
+                                            strip_duplicates=True)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         if a is None:
             # Signature 3: This is a natural transformation:
             t2: NaturalTransformation = NaturalTransformation(c=c, v=v, d=d, p=p)
