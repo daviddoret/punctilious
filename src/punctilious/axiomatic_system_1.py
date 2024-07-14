@@ -2713,6 +2713,101 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
         return False
 
 
+def would_be_valid_derivation_in_theory(d: FlexibleFormula, t: FlexibleTheory,
+                                        raise_error_if_false: bool = False) -> bool:
+    """Given a theory "t" and a derivation "d" that is not an effective theorem of "t",
+    returns True if "d" would be a valid immediate theorem of "t" if it was appended to "t",
+    or False if it would not.
+
+    This function is useful to test whether a derivation will pass well-formedness validation before
+    attempting to effectively derive it.
+
+    :param d:
+    :param t:
+    :param raise_error_if_false:
+    :return:
+    """
+    d: Derivation = coerce_derivation(d=d)
+    p: Formula = d.valid_statement
+    t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
+
+    if is_valid_statement_in_theory(phi=p, t=t):
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_069,
+                msg='Proposition "p" of derivation "d" is already a valid proposition in theory "t".'
+                    'Function "would_be_valid_derivation_in_theory(...)" is only designed to test'
+                    'derivations whose proposition is not effectively valid in the theory.',
+                p=p, d=d, t=t)
+
+    if is_well_formed_axiom(a=d):
+        # This is an axiom.
+        # By definition, the presence of an axiom in a theory is valid.
+        return True
+    elif is_well_formed_inference_rule(i=d):
+        # This is an inference-rule.
+        # By definition, the presence of an inference-rule in a theory is valid.
+        return True
+    elif is_well_formed_theorem(t=d):
+        # This is a theorem.
+        # We must check that this theorem is a valid derivation in the theory.
+        m: Theorem = coerce_theorem(t=d)
+        i: Inference = m.inference
+        ir: InferenceRule = m.inference.inference_rule
+        # Check that the inference-rule is valid in the theory.
+        # if not any(
+        #        isinstance(ir, InferenceRule) and is_formula_equivalent(phi=i.inference_rule, psi=ir) for ir
+        #        in t):
+        # Exceptionally we cannot call is_inference_rule_of_theory because this
+        # would lead to an infinite recursion. In consequence, we must "manually"
+        # check using the above expression whether the inference-rule is in the theory.
+        # The inference-rule is absent from the theory.
+        if not is_inference_rule_of_theory(i=ir, t=t):
+            if raise_error_if_false:
+                raise u1.ApplicativeError(
+                    code=c1.ERROR_CODE_AS1_068,
+                    msg='Inference-rule "ir" is not valid in theory "t".',
+                    ir=ir,
+                    t=t)
+            return False
+        # Check that all premises are valid propositions in the theory.
+        for p in i.premises:
+            # Check that this premise is a valid proposition in the theory.
+            if not is_valid_statement_in_theory(phi=p, t=t):
+                # The premise is not a valid proposition in the theory.
+                if raise_error_if_false:
+                    raise u1.ApplicativeError(
+                        msg='Proposition "p" is not valid in theory "t".',
+                        code=c1.ERROR_CODE_AS1_036,
+                        p=p, t=t)
+                return False
+        # Finally, check that the inference-rule effectively yields the
+        # announced proposition.
+        t2: Transformation = i.inference_rule.transformation
+        p_prime = t2.apply_transformation(p=i.premises, a=i.arguments)
+        if not is_formula_equivalent(phi=p, psi=p_prime):
+            if raise_error_if_false:
+                raise u1.ApplicativeError(
+                    msg='Transformation "t2" of inference-rule "ir" does not yield "p" but it yields "p_prime".'
+                        'The inference "i" contains the premises and the arguments.'
+                        'In conclusion, derivation "d" would not be valid if it was appended to theory "t".',
+                    code=c1.ERROR_CODE_AS1_036,
+                    p=p, p_prime=p_prime, t2=t2, ir=ir, i=i, t=t)
+            return False
+        # All tests have been successfully completed, we now have the assurance
+        # that derivation "d" would be valid if appended to theory "t".
+        return True
+    else:
+        # Incorrect form.
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='Expected derivation "d" is not of a proper form (e.g. axiom, inference-rule or theorem).'
+                    'In conclusion, derivation "d" would not be valid if it was appended to theory "t".',
+                code=c1.ERROR_CODE_AS1_071,
+                d=d, t=t)
+        return False
+
+
 def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
     """Return True if phi is a well-formed theory, False otherwise.
 
@@ -3935,11 +4030,12 @@ class AutoDerivationFailure(Exception):
 
 def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
              i: FlexibleInferenceRule, a: FlexibleTupl | None = None) -> typing.Tuple[Theory, Theorem]:
-    """Given a theory t, derives a new theory t' that extends t with a new theorem derived by applying inference-rule i.
+    """Given a theory :math:`t`, derives a new theory :math:`t′` that extends :math:`t` with a new theorem :math:`c`
+    derived by applying inference-rule :math:`i`.
 
     :param t: A theory.
-    :param c: A propositional formula denoted as the conjecture.
-    :param p: A tuple of propositional formulas denoted as the premises.
+    :param c: A proposition denoted as the conjecture.
+    :param p: A tuple of propositions denoted as the premises.
     :param i: An inference-rule.
     :param a: (For algorithmic-transformations) A tuple of formulas denoted as the supplementary-arguments to be
         transmitted as input arguments to the transformation.
@@ -3951,6 +4047,14 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
     i: InferenceRule = coerce_inference_rule(i=i)
     a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
+
+    if not is_inference_rule_of_theory(i=i, t=t):
+        # The inference_rule is not in the theory,
+        # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_067,
+                                  msg=f'Derivation fails because inference-rule "i" is not valid in theory "t".',
+                                  i=i,
+                                  t=t)
 
     for premise in p:
         # The validity of the premises is checked during theory initialization,
