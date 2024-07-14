@@ -2,7 +2,8 @@
 import sys
 
 import presentation_layer_1 as pl1
-from connectives_standard_library_1 import *
+import axiomatic_system_1 as as1
+import connectives_standard_library_1 as cls1
 
 _current_module = sys.modules[__name__]
 if __name__ == '__main__':
@@ -28,11 +29,11 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
     conjunction_introduction: as1.InferenceRule = as1.InferenceRule(
         t=as1.let_x_be_a_natural_transformation(
             premises=(
-                phi | is_a | proposition,
-                psi | is_a | proposition,
+                phi | cls1.is_a | cls1.proposition,
+                psi | cls1.is_a | cls1.proposition,
                 phi,
                 psi,),
-            conclusion=phi | land | psi,
+            conclusion=phi | cls1.land | psi,
             variables=(phi, psi,)),
         ref_ts=pl1.Monospace(text='CI'))
     """The conjunction-introduction inference rule.
@@ -64,9 +65,9 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_1_rule: as1.NaturalTransformation = as1.let_x_be_a_natural_transformation(
         premises=(
-            phi | is_a | proposition,
-            psi | is_a | proposition,
-            phi | land | psi,),
+            phi | cls1.is_a | cls1.proposition,
+            psi | cls1.is_a | cls1.proposition,
+            phi | cls1.land | psi,),
         conclusion=phi,
         variables=(phi, psi,))
 simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
@@ -82,9 +83,9 @@ simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_2_rule: as1.NaturalTransformation = as1.let_x_be_a_natural_transformation(
         premises=(
-            phi | is_a | proposition,
-            psi | is_a | proposition,
-            phi | land | psi,),
+            phi | cls1.is_a | cls1.proposition,
+            psi | cls1.is_a | cls1.proposition,
+            phi | cls1.land | psi,),
         conclusion=psi,
         variables=(phi, psi,))
 simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
@@ -102,9 +103,9 @@ with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(for
     modus_ponens: as1.InferenceRule = as1.InferenceRule(
         t=as1.let_x_be_a_natural_transformation(
             premises=(
-                phi | is_a | proposition,
-                psi | is_a | proposition,
-                phi | implies | psi,
+                phi | cls1.is_a | cls1.proposition,
+                psi | cls1.is_a | cls1.proposition,
+                phi | cls1.implies | psi,
                 phi),
             conclusion=psi,
             variables=(phi, psi,)),
