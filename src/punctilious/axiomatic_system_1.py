@@ -1491,7 +1491,7 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
 def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> Tupl:
     """Return a new extended punctilious-tuple such that element is a new element appended to its existing elements.
     """
-    t: Tupl = coerce_tupl_OBSOLETE(t=t)
+    t: Tupl = coerce_tuple(t=t, interpret_none_as_empty=True)
     x: Formula = coerce_formula(phi=x)
     extended_tupl: Tupl = Tupl(elements=(*t, x,))
     return extended_tupl
@@ -1587,7 +1587,7 @@ class Map(Formula):
 
         The codomain of a map is the enumeration of possible outputs of the get_image_from_map function.
         """
-        return coerce_tupl_OBSOLETE(t=self[Map.CODOMAIN_INDEX])
+        return coerce_tuple(t=self[Map.CODOMAIN_INDEX])
 
     @property
     def domain(self) -> Enumeration:
@@ -1595,7 +1595,7 @@ class Map(Formula):
 
         The domain of a map is the enumeration of possible inputs of the get_image_from_map function.
         """
-        return coerce_enumeration_OBSOLETE(e=self[Map.DOMAIN_INDEX])
+        return coerce_enumeration(e=self[Map.DOMAIN_INDEX])
 
 
 FlexibleMap = typing.Optional[typing.Union[Map, typing.Dict[Formula, Formula]]]
@@ -1913,8 +1913,8 @@ class NaturalTransformation(Transformation):
         :param a:
         :return:
         """
-        p = coerce_tupl_OBSOLETE(t=p)
-        a = coerce_tupl_OBSOLETE(t=a)  # This argument is not used by natural-transformation.
+        p = coerce_tuple(t=p, interpret_none_as_empty=True)
+        a = coerce_tuple(t=a, interpret_none_as_empty=True)  # This argument is not used by natural-transformation.
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
