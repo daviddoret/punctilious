@@ -2026,9 +2026,9 @@ class AlgorithmicTransformation(Transformation):
         c2: Connective = _connectives.algorithm
         a: typing.Callable = coerce_external_algorithm(f=a)
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration_OBSOLETE(e=v)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
-        p: Tupl = coerce_tupl_OBSOLETE(t=p)
+        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
+        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
         return c2, a, c, v, d, p
 
     def __new__(cls, a: typing.Callable, c: FlexibleFormula,
@@ -2074,12 +2074,12 @@ class AlgorithmicTransformation(Transformation):
                              a: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param a:
-        :param p: A tuple of arguments, whose order matches the order of the transformation premises.
+        :param p: A tuple of premise arguments, whose order matches the order of the transformation premises.
+        :param a: A tuple of complementary arguments.
         :return:
         """
-        p = coerce_tupl_OBSOLETE(t=p)
-        a = coerce_tupl_OBSOLETE(t=a)
+        p = coerce_tuple(t=p, interpret_none_as_empty=True)
+        a = coerce_tuple(t=a, interpret_none_as_empty=True)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         # supported extreme case: there are no premises.
