@@ -2145,10 +2145,10 @@ def coerce_connective(c: Connective) -> Connective:
 def coerce_inference(i: FlexibleFormula) -> Inference:
     if isinstance(i, Inference):
         return i
-    elif isinstance(i, Formula) and is_well_formed_inference(i=i):
+    elif is_well_formed_inference(i=i):
         i2: InferenceRule = coerce_inference_rule(i=i[Inference.INFERENCE_RULE_INDEX])
-        p: Tupl = coerce_tupl_OBSOLETE(t=i[Inference.PREMISES_INDEX])
-        a: Tupl = coerce_tupl_OBSOLETE(t=i[Inference.ARGUMENTS_INDEX])
+        p: Tupl = coerce_tuple(t=i[Inference.PREMISES_INDEX], interpret_none_as_empty=True)
+        a: Tupl = coerce_tuple(t=i[Inference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
         return Inference(i=i2, p=p, a=a)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
@@ -2374,14 +2374,14 @@ def iterate_enumeration_elements(e: FlexibleEnumeration) -> typing.Generator[For
     :param e:
     :return:
     """
-    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
+    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     yield from iterate_formula_terms(phi=e)
 
 
 def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     """Returns True if every formula phi in enumeration s is a valid-statement in theory t, False otherwise.
     """
-    s: Tupl = coerce_tupl_OBSOLETE(t=s)
+    s: Tupl = coerce_tuple(t=s, interpret_none_as_empty=True)
     t: Theory = coerce_theory(t=t)
     return all(is_valid_statement_in_theory(phi=phi, t=t) for phi in iterate_tuple_elements(s))
 
