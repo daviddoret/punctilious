@@ -1131,6 +1131,12 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
 ))
 
 
+def get_connectives() -> Connectives:
+    """For usage in dependent python-modules."""
+    global _connectives
+    return _connectives
+
+
 def is_symbol_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
     """Two formulas phi and psi are symbol-equivalent, noted phi ~symbol psi, if and only if they are the same symbol.
 

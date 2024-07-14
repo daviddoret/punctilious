@@ -47,7 +47,7 @@ TODO: Implement analysis of theory consistency
             [m+3] h1 is inconsistent
 
 TODO: Implement hypothesis
-    In the parent theory:
+    In a theory:
         t1
             [1] ...
             [2] ...
