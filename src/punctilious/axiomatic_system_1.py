@@ -2731,14 +2731,18 @@ def would_be_valid_derivation_in_theory(d: FlexibleFormula, t: FlexibleTheory,
     p: Formula = d.valid_statement
     t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
 
-    if is_valid_statement_in_theory(phi=p, t=t):
+    if any(is_formula_equivalent(phi=d, psi=d_existing) for d_existing in iterate_derivations_in_theory(t=t)):
+        # Remember that it is possible to derive multiple times the same proposition in a theory,
+        # but derivations must be unique. This is designed to avoid useless duplicate entries in theories.
+        # If a derivation is already present in the theory, calling this function is not applicable,
+        # it follows that an error is raised.
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_069,
-                msg='Proposition "p" of derivation "d" is already a valid proposition in theory "t".'
+                msg='Derivation "d" is already present in theory "t".'
                     'Function "would_be_valid_derivation_in_theory(...)" is only designed to test'
-                    'derivations whose proposition is not effectively valid in the theory.',
-                p=p, d=d, t=t)
+                    'derivations that are not effectively present in the theory.',
+                d=d, t=t)
 
     if is_well_formed_axiom(a=d):
         # This is an axiom.
