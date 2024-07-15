@@ -2713,103 +2713,118 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
         return False
 
 
-def would_be_valid_derivation_in_theory(d: FlexibleFormula, t: FlexibleTheory,
-                                        raise_error_if_false: bool = False) -> bool:
-    """Given a theory "t" and a derivation "d" that is not an effective theorem of "t",
-    returns True if "d" would be a valid immediate theorem of "t" if it was appended to "t",
+def would_be_valid_derivation_enumeration_in_theory(e: FlexibleEnumeration, t: FlexibleTheory,
+                                                    raise_error_if_false: bool = False) -> bool:
+    """Given a theory "t" and an enumeration of derivations "e" whose elements are not (yet) effective theorems of "t",
+    returns True if "t" would be well-formed if "e" was appended to it,
     or False if it would not.
 
-    This function is useful to test whether a derivation will pass well-formedness validation before
+    This function is useful to test whether some derivations will pass well-formedness validation before
     attempting to effectively derive it.
 
-    :param d:
-    :param t:
+    :param e: An enumeration of derivations.
+    :param t: A theory.
     :param raise_error_if_false:
     :return:
     """
-    d: Derivation = coerce_derivation(d=d)
-    p: Formula = d.valid_statement
+    e: Enumeration = coerce_enumeration(e=e, strip_duplicates=True, interpret_none_as_empty=True,
+                                        canonic_conversion=True)
     t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
 
-    if any(is_formula_equivalent(phi=d, psi=d_existing) for d_existing in iterate_derivations_in_theory(t=t)):
-        # Remember that it is possible to derive multiple times the same proposition in a theory,
-        # but derivations must be unique. This is designed to avoid useless duplicate entries in theories.
-        # If a derivation is already present in the theory, calling this function is not applicable,
-        # it follows that an error is raised.
-        if raise_error_if_false:
-            raise u1.ApplicativeError(
-                code=c1.ERROR_CODE_AS1_069,
-                msg='Derivation "d" is already present in theory "t".'
-                    'Function "would_be_valid_derivation_in_theory(...)" is only designed to test'
-                    'derivations that are not effectively present in the theory.',
-                d=d, t=t)
+    # Create a complete enumeration that comprises both the derivations of the theory
+    # whose proof has been verified, and those whose proof has not been verified.
+    e2: Enumeration = union_enumeration(phi=t.derivations, psi=e)
+    # Put aside the index from which the proofs of derivations have not been verified.
+    threshold: int = len(t)
 
-    if is_well_formed_axiom(a=d):
-        # This is an axiom.
-        # By definition, the presence of an axiom in a theory is valid.
-        return True
-    elif is_well_formed_inference_rule(i=d):
-        # This is an inference-rule.
-        # By definition, the presence of an inference-rule in a theory is valid.
-        return True
-    elif is_well_formed_theorem(t=d):
-        # This is a theorem.
-        # We must check that this theorem is a valid derivation in the theory.
-        m: Theorem = coerce_theorem(t=d)
-        i: Inference = m.inference
-        ir: InferenceRule = m.inference.inference_rule
-        # Check that the inference-rule is valid in the theory.
-        # if not any(
-        #        isinstance(ir, InferenceRule) and is_formula_equivalent(phi=i.inference_rule, psi=ir) for ir
-        #        in t):
-        # Exceptionally we cannot call is_inference_rule_of_theory because this
-        # would lead to an infinite recursion. In consequence, we must "manually"
-        # check using the above expression whether the inference-rule is in the theory.
-        # The inference-rule is absent from the theory.
-        if not is_inference_rule_of_theory(i=ir, t=t):
+    # Iterate through all index positions of derivations for which the proofs must be verified.
+    for index in range(threshold, len(e2)):
+        # Retrieve the derivation whose proof must be verified.
+        d: Derivation = e2[index]
+        # Retrieve the proposition or statement announced by the derivation.
+        p: Formula = d.valid_statement
+
+        # TODO: RESUME DEVELOPMENT HERE
+
+        if any(is_formula_equivalent(phi=d, psi=d_existing) for d_existing in iterate_derivations_in_theory(t=t)):
+            # Remember that it is possible to derive multiple times the same proposition in a theory,
+            # but derivations must be unique. This is designed to avoid useless duplicate entries in theories.
+            # If a derivation is already present in the theory, calling this function is not applicable,
+            # it follows that an error is raised.
             if raise_error_if_false:
                 raise u1.ApplicativeError(
-                    code=c1.ERROR_CODE_AS1_068,
-                    msg='Inference-rule "ir" is not valid in theory "t".',
-                    ir=ir,
-                    t=t)
-            return False
-        # Check that all premises are valid propositions in the theory.
-        for p in i.premises:
-            # Check that this premise is a valid proposition in the theory.
-            if not is_valid_statement_in_theory(phi=p, t=t):
-                # The premise is not a valid proposition in the theory.
+                    code=c1.ERROR_CODE_AS1_069,
+                    msg='Derivation "d" is already present in theory "t".'
+                        'Function "would_be_valid_derivation_in_theory(...)" is only designed to test'
+                        'derivations that are not effectively present in the theory.',
+                    d=d, t=t)
+
+        if is_well_formed_axiom(a=d):
+            # This is an axiom.
+            # By definition, the presence of an axiom in a theory is valid.
+            return True
+        elif is_well_formed_inference_rule(i=d):
+            # This is an inference-rule.
+            # By definition, the presence of an inference-rule in a theory is valid.
+            return True
+        elif is_well_formed_theorem(t=d):
+            # This is a theorem.
+            # We must check that this theorem is a valid derivation in the theory.
+            m: Theorem = coerce_theorem(t=d)
+            i: Inference = m.inference
+            ir: InferenceRule = m.inference.inference_rule
+            # Check that the inference-rule is valid in the theory.
+            # if not any(
+            #        isinstance(ir, InferenceRule) and is_formula_equivalent(phi=i.inference_rule, psi=ir) for ir
+            #        in t):
+            # Exceptionally we cannot call is_inference_rule_of_theory because this
+            # would lead to an infinite recursion. In consequence, we must "manually"
+            # check using the above expression whether the inference-rule is in the theory.
+            # The inference-rule is absent from the theory.
+            if not is_inference_rule_of_theory(i=ir, t=t):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
-                        msg='Proposition "p" is not valid in theory "t".',
-                        code=c1.ERROR_CODE_AS1_036,
-                        p=p, t=t)
+                        code=c1.ERROR_CODE_AS1_068,
+                        msg='Inference-rule "ir" is not valid in theory "t".',
+                        ir=ir,
+                        t=t)
                 return False
-        # Finally, check that the inference-rule effectively yields the
-        # announced proposition.
-        t2: Transformation = i.inference_rule.transformation
-        p_prime = t2.apply_transformation(p=i.premises, a=i.arguments)
-        if not is_formula_equivalent(phi=p, psi=p_prime):
+            # Check that all premises are valid propositions in the theory.
+            for p in i.premises:
+                # Check that this premise is a valid proposition in the theory.
+                if not is_valid_statement_in_theory(phi=p, t=t):
+                    # The premise is not a valid proposition in the theory.
+                    if raise_error_if_false:
+                        raise u1.ApplicativeError(
+                            msg='Proposition "p" is not valid in theory "t".',
+                            code=c1.ERROR_CODE_AS1_036,
+                            p=p, t=t)
+                    return False
+            # Finally, check that the inference-rule effectively yields the
+            # announced proposition.
+            t2: Transformation = i.inference_rule.transformation
+            p_prime = t2.apply_transformation(p=i.premises, a=i.arguments)
+            if not is_formula_equivalent(phi=p, psi=p_prime):
+                if raise_error_if_false:
+                    raise u1.ApplicativeError(
+                        msg='Transformation "t2" of inference-rule "ir" does not yield "p" but it yields "p_prime".'
+                            'The inference "i" contains the premises and the arguments.'
+                            'In conclusion, derivation "d" would not be valid if it was appended to theory "t".',
+                        code=c1.ERROR_CODE_AS1_036,
+                        p=p, p_prime=p_prime, t2=t2, ir=ir, i=i, t=t)
+                return False
+            # All tests have been successfully completed, we now have the assurance
+            # that derivation "d" would be valid if appended to theory "t".
+            return True
+        else:
+            # Incorrect form.
             if raise_error_if_false:
                 raise u1.ApplicativeError(
-                    msg='Transformation "t2" of inference-rule "ir" does not yield "p" but it yields "p_prime".'
-                        'The inference "i" contains the premises and the arguments.'
+                    msg='Expected derivation "d" is not of a proper form (e.g. axiom, inference-rule or theorem).'
                         'In conclusion, derivation "d" would not be valid if it was appended to theory "t".',
-                    code=c1.ERROR_CODE_AS1_036,
-                    p=p, p_prime=p_prime, t2=t2, ir=ir, i=i, t=t)
+                    code=c1.ERROR_CODE_AS1_071,
+                    d=d, t=t)
             return False
-        # All tests have been successfully completed, we now have the assurance
-        # that derivation "d" would be valid if appended to theory "t".
-        return True
-    else:
-        # Incorrect form.
-        if raise_error_if_false:
-            raise u1.ApplicativeError(
-                msg='Expected derivation "d" is not of a proper form (e.g. axiom, inference-rule or theorem).'
-                    'In conclusion, derivation "d" would not be valid if it was appended to theory "t".',
-                code=c1.ERROR_CODE_AS1_071,
-                d=d, t=t)
-        return False
 
 
 def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
