@@ -902,7 +902,7 @@ class TestDemonstration:
                                         a | star | b,
                                         b | star | c,),
                                     i=ir1)
-        assert pu.as1.is_valid_statement_in_theory(phi=a | star | c, t=demo2)
+        assert pu.as1.is_valid_proposition_in_theory_1(p=a | star | c, t=demo2)
 
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_039):
             # invalid proof raise exception

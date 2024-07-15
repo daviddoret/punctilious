@@ -434,7 +434,7 @@ def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
     return e2
 
 
-def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enumeration:
+def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration, strip_duplicates: bool = True) -> Enumeration:
     """Given two enumerations phi, and psi, the union-enumeration operator, noted phi ∪-enumeration psi,
     returns a new enumeration omega such that:
     - all elements of phi are elements of omega,
@@ -453,9 +453,9 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> Enu
      - Idempotent: (phi ∪-formula phi) ~formula phi.
      - Not symmetric if some element of psi are elements of phi: because of order.
     """
-    phi: Enumeration = coerce_enumeration(e=phi, interpret_none_as_empty=True)
-    psi: Enumeration = coerce_enumeration(e=psi, interpret_none_as_empty=True)
-    e: Enumeration = Enumeration(e=(*phi, *psi,), strip_duplicates=True)
+    phi: Enumeration = coerce_enumeration(e=phi, interpret_none_as_empty=True, strip_duplicates=strip_duplicates)
+    psi: Enumeration = coerce_enumeration(e=psi, interpret_none_as_empty=True, strip_duplicates=strip_duplicates)
+    e: Enumeration = Enumeration(e=(*phi, *psi,), strip_duplicates=strip_duplicates)
     return e
 
 
@@ -2459,16 +2459,42 @@ def is_well_formed_algorithmic_transformation(t: FlexibleFormula) -> bool:
         return False
 
 
-def is_valid_statement_in_theory(phi: FlexibleFormula, t: FlexibleTheory) -> bool:
+def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory) -> bool:
     """Return True if formula phi is a valid-statement with regard to theory t, False otherwise.
 
     A formula phi is a valid-statement with regard to a theory t, if and only if:
      - phi is the valid-statement of an axiom in t,
      - or phi is the valid-statement of a theorem in t.
     """
-    phi: Formula = coerce_formula(phi=phi)
+    p: Formula = coerce_formula(phi=p)
     t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=phi, psi=valid_statement) for valid_statement in t.iterate_valid_statements())
+    return any(is_formula_equivalent(phi=p, psi=valid_statement) for valid_statement in t.iterate_valid_statements())
+
+
+def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> tuple[bool, int | None]:
+    """Given a theory "t" and a proposition "p", return a pair ("b", "i") such that:
+     - "b" is True if "p" is a valid proposition in theory "t", False otherwise,
+     - "i" is the derivation-index of the first occurrence of "p" in a derivation in "t" if "b" is True,
+        None otherwise.
+
+    This function is very similar to is_valid_proposition_in_theory_1 except that it returns
+    the index of the first occurrence of a derivation that matches p. This information is typically
+    required in function would_be_valid_derivation_enumeration_in_theory to check whether
+    some propositions are successors or predecessors to some other propositions and verify
+    derivation validity.
+
+    Definition:
+    A formula p is a valid-proposition with regard to a theory "t", if and only if:
+     - "p" is the valid-proposition of an axiom in "t",
+     - or "p" is the valid-proposition of a theorem in "t".
+    """
+
+    p: Formula = coerce_formula(phi=p)
+    t: Theory = coerce_theory(t=t)
+    for d, i in zip(iterate_derivations_in_theory(t=t), range(len(t))):
+        if is_formula_equivalent(phi=p, psi=d.valid_statement):
+            return True, i
+    return False, None
 
 
 def iterate_formula_terms(phi: FlexibleFormula) -> typing.Generator[Formula, None, None]:
@@ -2500,7 +2526,7 @@ def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     """
     s: Tupl = coerce_tuple(t=s, interpret_none_as_empty=True)
     t: Theory = coerce_theory(t=t)
-    return all(is_valid_statement_in_theory(phi=phi, t=t) for phi in iterate_tuple_elements(s))
+    return all(is_valid_proposition_in_theory_1(p=phi, t=t) for phi in iterate_tuple_elements(s))
 
 
 def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnumeration, n: int) -> \
@@ -2624,8 +2650,8 @@ def are_valid_statements_in_theory_with_variables(
         return False, None
 
 
-def is_valid_statement_with_free_variables_in_theory(phi: FlexibleFormula, t: FlexibleTheory,
-                                                     free_variables: FlexibleEnumeration) -> bool:
+def is_proposition_with_free_variables_in_theory(phi: FlexibleFormula, t: FlexibleTheory,
+                                                 free_variables: FlexibleEnumeration) -> bool:
     """Return True if formula phi is a valid-statement with regard to theory t, False otherwise.
 
     A formula phi is a valid-statement with regard to a theory t, if and only if:
@@ -2713,93 +2739,92 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
         return False
 
 
-def would_be_valid_derivation_enumeration_in_theory(e: FlexibleEnumeration, t: FlexibleTheory,
-                                                    raise_error_if_false: bool = False) -> bool:
-    """Given a theory "t" and an enumeration of derivations "e" whose elements are not (yet) effective theorems of "t",
-    returns True if "t" would be well-formed if "e" was appended to it,
-    or False if it would not.
+def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheory,
+                                         raise_error_if_false: bool = False) -> bool:
+    """Given an enumeration of presumably verified derivations "v" (e.g.: that reflects a theory "t"),
+    and a complementary enumeration of unverified derivations "u" (e.g.: whose elements are not (yet) effective
+    theorems of "t"), returns True if a theory would be well-formed if it was composed of
+    derivations "u" appended to derivations "v", or False if it would not.
 
     This function is useful to test whether some derivations will pass well-formedness validation before
     attempting to effectively derive it.
 
-    :param e: An enumeration of derivations.
-    :param t: A theory.
+    :param u: An enumeration of derivations.
+    :param v: A theory.
     :param raise_error_if_false:
     :return:
     """
-    e: Enumeration = coerce_enumeration(e=e, strip_duplicates=True, interpret_none_as_empty=True,
+    u: Enumeration = coerce_enumeration(e=u, strip_duplicates=True, interpret_none_as_empty=True,
                                         canonic_conversion=True)
-    t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
+    v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True, interpret_none_as_empty=True,
+                                        canonic_conversion=True)
 
-    # Create a complete enumeration that comprises both the derivations of the theory
-    # whose proof has been verified, and those whose proof has not been verified.
-    e2: Enumeration = union_enumeration(phi=t.derivations, psi=e)
+    # Create a complete enumeration "c" composed of derivations "u" appended to derivations "v",
+    # getting rid of duplicates if any in the process.
+    c: Enumeration = union_enumeration(phi=v, psi=u, strip_duplicates=True)
+
     # Put aside the index from which the proofs of derivations have not been verified.
-    threshold: int = len(t)
+    verification_threshold: int = len(v)
+
+    # Coerce all enumeration elements to axioms, inference-rules, and theorems.
+    c: Enumeration = Enumeration(e=coerce_derivation(d=d) for d in iterate_enumeration_elements(e=c))
 
     # Iterate through all index positions of derivations for which the proofs must be verified.
-    for index in range(threshold, len(e2)):
+    for index in range(verification_threshold, len(c)):
+
         # Retrieve the derivation whose proof must be verified.
-        d: Derivation = e2[index]
+        d: Derivation = c[index]
+
         # Retrieve the proposition or statement announced by the derivation.
         p: Formula = d.valid_statement
 
-        # TODO: RESUME DEVELOPMENT HERE
-
-        if any(is_formula_equivalent(phi=d, psi=d_existing) for d_existing in iterate_derivations_in_theory(t=t)):
-            # Remember that it is possible to derive multiple times the same proposition in a theory,
-            # but derivations must be unique. This is designed to avoid useless duplicate entries in theories.
-            # If a derivation is already present in the theory, calling this function is not applicable,
-            # it follows that an error is raised.
-            if raise_error_if_false:
-                raise u1.ApplicativeError(
-                    code=c1.ERROR_CODE_AS1_069,
-                    msg='Derivation "d" is already present in theory "t".'
-                        'Function "would_be_valid_derivation_in_theory(...)" is only designed to test'
-                        'derivations that are not effectively present in the theory.',
-                    d=d, t=t)
+        # Assume verification failure.
+        p_verification_success: bool = False
 
         if is_well_formed_axiom(a=d):
             # This is an axiom.
             # By definition, the presence of an axiom in a theory is valid.
-            return True
+            p_verification_success = True
         elif is_well_formed_inference_rule(i=d):
             # This is an inference-rule.
             # By definition, the presence of an inference-rule in a theory is valid.
-            return True
+            p_verification_success = True
         elif is_well_formed_theorem(t=d):
-            # This is a theorem.
-            # We must check that this theorem is a valid derivation in the theory.
+            # This is a well-formed theorem.
+            # Check that this theorem is a valid derivation with regard to predecessor theorems.
             m: Theorem = coerce_theorem(t=d)
             i: Inference = m.inference
             ir: InferenceRule = m.inference.inference_rule
             # Check that the inference-rule is valid in the theory.
-            # if not any(
-            #        isinstance(ir, InferenceRule) and is_formula_equivalent(phi=i.inference_rule, psi=ir) for ir
-            #        in t):
-            # Exceptionally we cannot call is_inference_rule_of_theory because this
-            # would lead to an infinite recursion. In consequence, we must "manually"
-            # check using the above expression whether the inference-rule is in the theory.
-            # The inference-rule is absent from the theory.
-            if not is_inference_rule_of_theory(i=ir, t=t):
+            if not any(
+                    is_well_formed_inference_rule(i=c[x]) and
+                    is_formula_equivalent(phi=ir, psi=c[x]) for x in range(0, index)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_068,
-                        msg='Inference-rule "ir" is not valid in theory "t".',
-                        ir=ir,
-                        t=t)
+                        msg='No element "c[x]" is a well-formed inference-rule and'
+                            'formula-equivalent to inference-rule "ir",'
+                            'where "x" < "index".',
+                        ir=ir, index=index, c=c)
                 return False
             # Check that all premises are valid propositions in the theory.
             for p in i.premises:
                 # Check that this premise is a valid proposition in the theory.
-                if not is_valid_statement_in_theory(phi=p, t=t):
+                p_validity, p_index = is_valid_proposition_in_theory_2(p=p, t=v)
+                if not p_validity:
                     # The premise is not a valid proposition in the theory.
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
                             msg='Proposition "p" is not valid in theory "t".',
-                            code=c1.ERROR_CODE_AS1_036,
-                            p=p, t=t)
+                            code=c1.ERROR_CODE_AS1_036, p_validity=p_validity,
+                            p=p, t=v)
                     return False
+                else:
+                # The premise is valid.
+                # Check that
+                # TODO: CHECK THAT THE INDEX OF THE VALID STATEMENT < THE INDEX OF P
+                XXXXX
+                is_valid, premise_index = is_valid_statement_in_theory_2(phi=p, t=v)
             # Finally, check that the inference-rule effectively yields the
             # announced proposition.
             t2: Transformation = i.inference_rule.transformation
@@ -2811,7 +2836,7 @@ def would_be_valid_derivation_enumeration_in_theory(e: FlexibleEnumeration, t: F
                             'The inference "i" contains the premises and the arguments.'
                             'In conclusion, derivation "d" would not be valid if it was appended to theory "t".',
                         code=c1.ERROR_CODE_AS1_036,
-                        p=p, p_prime=p_prime, t2=t2, ir=ir, i=i, t=t)
+                        p=p, p_prime=p_prime, t2=t2, ir=ir, i=i, t=v)
                 return False
             # All tests have been successfully completed, we now have the assurance
             # that derivation "d" would be valid if appended to theory "t".
@@ -2823,7 +2848,7 @@ def would_be_valid_derivation_enumeration_in_theory(e: FlexibleEnumeration, t: F
                     msg='Expected derivation "d" is not of a proper form (e.g. axiom, inference-rule or theorem).'
                         'In conclusion, derivation "d" would not be valid if it was appended to theory "t".',
                     code=c1.ERROR_CODE_AS1_071,
-                    d=d, t=t)
+                    d=d, t=v)
             return False
 
 
@@ -4130,7 +4155,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     for premise in p:
         # The validity of the premises is checked during theory initialization,
         # but re-checking it here "in advance" helps provide more context in the exception that is being raised.
-        if not is_valid_statement_in_theory(phi=premise, t=t):
+        if not is_valid_proposition_in_theory_1(p=premise, t=t):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_051,
                                       msg=f'Conjecture: \n\t{c} \n...cannot be derived because premise: \n\t{premise}'
                                           f' \n...is not a valid-statement in theory t. The inference-rule used to try '
@@ -4195,7 +4220,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
     c = coerce_formula(phi=c)
     if debug:
         u1.log_debug(f'auto_derive_0: start. conjecture:{c}.')
-    if is_valid_statement_in_theory(phi=c, t=t):  # this first check is superfluous
+    if is_valid_proposition_in_theory_1(p=c, t=t):  # this first check is superfluous
         # loop through derivations
         for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=c, psi=derivation.valid_statement):
@@ -4757,7 +4782,7 @@ def typeset_formula_reference(phi: FlexibleFormula, t: FlexibleTheory | None, **
             yield '.'
         yield i + 1
         yield from pl1.symbols.close_square_bracket.typeset_from_generator(**kwargs)
-    elif t is not None and is_valid_statement_in_theory(phi=phi, t=t):
+    elif t is not None and is_valid_proposition_in_theory_1(p=phi, t=t):
         # phi is a valid-statement in a theory.
         # we can use the 1-based index of the formula in the theory.
         success, d = get_theory_derivation_from_valid_statement(t=t, s=phi)
