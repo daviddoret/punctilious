@@ -2788,7 +2788,7 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
 
 
 def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheory,
-                                         raise_error_if_false: bool = False) -> tuple[bool, Enumeration]:
+                                         raise_error_if_false: bool = False) -> tuple[bool, Enumeration, Enumeration]:
     """Given an enumeration of presumably verified derivations "v" (e.g.: the derivation sequence of a theory "t"),
     and an enumeration of unverified derivations "u" (e.g.: whose elements are not (yet) effective
     theorems of "t"), returns True if a theory would be well-formed if it was composed of
@@ -2800,9 +2800,10 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
     :param u: An enumeration of derivations.
     :param v: A theory.
     :param raise_error_if_false:
-    :return: A pair (b, u′) where "b" is True if all derivations in "u" would be valid, False otherwise, and "u′" is the
-        enumeration of the newly verified derivation steps if "b" is True, None otherwise. Note that u′ = u ∖ v because
-        derivation steps must be unique to be a well-formed derivation sequence.
+    :return: A triple (b, c, u′) where "b" is True if all derivations in "u" would be valid, False otherwise,
+        c = u ∪ v if b is True, None otherwise,
+        and u′ = u ∖ v if b is True, None otherwise.
+        Note: u′ = u ∖ v because derivation steps must be unique to constitute a well-formed derivation sequence.
     """
     u: Enumeration = coerce_enumeration(e=u, strip_duplicates=True, interpret_none_as_empty=True,
                                         canonic_conversion=True)
@@ -2856,7 +2857,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
                         msg='Inference-rule "ir" is not a valid predecessor (with index strictly less than "index").'
                             ' This forbids the derivation of proposition "p" in step "d" in the derivation sequence.',
                         p=p, ir=ir, index=index, d=d, c=c)
-                return False, _
+                return False, _, _
             # Check that all premises are valid predecessor propositions in the derivation.
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
@@ -2868,7 +2869,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
                                 ' sequence.',
                             code=c1.ERROR_CODE_AS1_036,
                             p=p, q=q, index=index, d=d, c=c)
-                    return False, _
+                    return False, _, _
             # Check that the transformation of the inference-rule effectively yields the announced proposition.
             t2: Transformation = i.inference_rule.transformation
             p_prime = t2.apply_transformation(p=i.premises, a=i.arguments)
@@ -2881,7 +2882,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
                             ' Inference "i" contains the arguments (premises and the complementary arguments).',
                         code=c1.ERROR_CODE_AS1_036,
                         p=p, p_prime=p_prime, index=index, t2=t2, ir=ir, i=i, d=d, c=c)
-                return False, _
+                return False, _, _
             # All tests have been successfully completed, we now have the assurance
             # that derivation "d" would be valid if appended to theory "t".
             pass
@@ -2894,12 +2895,12 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
                         ' sequence.',
                     code=c1.ERROR_CODE_AS1_071,
                     p=p, d=d, index=index, c=c)
-            return False, _
+            return False, _, _
         # Derivation "d" is valid.
         pass
     # All unverified derivations have been verified.
     pass
-    return True, u2
+    return True, c, u2
 
 
 def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
@@ -3601,55 +3602,22 @@ class Theory(Formula):
     _last_index: int = 0
 
     @staticmethod
-    def _data_validation(c: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
-                         d2: FlexibleDerivation | None = None) -> tuple[
-        Connective, typing.Optional[Theory], typing.Optional[Enumeration]]:
+    def _data_validation(c: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None) -> tuple[
+        Connective, Enumeration]:
         """
-        # TODO: CA NE MARCHE PAS DU TOUT, IL FAUT COMPLETEMENT REVOIR CETTE LOGIQUE DE VALIDATION.
 
         :param t:
         :param d:
         :return:
         """
+        global _connectives
+        c: Connective = _connectives.theory_formula
         if t is not None:
             t: Theory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
-        if d is not None:
-            d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True)
-        if d2 is not None:
-            d2: Derivation = coerce_derivation(d=d2)
-
-        if d is not None and d2 is not None:
-            # Invalid signature.
-            # At most one of the two arguments "d" and "d2" can be passed to the function, not both.
-            raise u1.ApplicativeError(
-                code=c1.ERROR_CODE_AS1_072,
-                msg='Both parameters "d" and "d2" were passed to the function but it is required that at most one of'
-                    'these two parameters be not None.',
-                t=t, d=d, d2=d2)
-        elif t is None and d is None and d2 is None:
-            # Signature #1: This is an empty theory, it is valid by definition.
-            return c, None, None
-        elif t is not None and d is None and d2 is None:
-            # Signature #2: This is not an empty theory,
-            # but no new derivation is appended to the base theory.
-            # t was already coerced to a theory above, so we're done.
-            return c, t, transform_theory_to_enumeration(t=t)
-        elif d is None and d2 is not None:
-            # Signature #3:
-            # Check that this single new derivation would be valid if appended to the theory.
-            would_be_valid_derivation_in_theory(d=d2, t=t, raise_error_if_false=True)
-            return c, t, transform_theory_to_enumeration(t=t)
-        elif d is not None and d2 is None:
-            # Signature #4:
-            # Append new derivations one by one,
-            # which will trigger a validity check every time.
-            for x in iterate_enumeration_elements(e=d):
-                t = Theory(t=t, c=c, d=None, d2=x)
-            return c, t, d, d2
-        raise u1.ApplicativeError(
-            code=c1.ERROR_CODE_AS1_073,
-            msg='Impossible condition, there must be a bug here.',
-            t=t, d=d, d2=d2)
+        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True,
+                                            interpret_none_as_empty=True)
+        is_valid, d2, _ = would_be_valid_derivations_in_theory(u=t, v=d, raise_error_if_false=True)
+        return c, d2
 
     def __new__(cls, c: Connective | None = None,
                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
