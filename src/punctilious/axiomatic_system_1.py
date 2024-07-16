@@ -2163,7 +2163,7 @@ class AlgorithmicTransformation(Transformation):
 
     @staticmethod
     def _data_validation_3(
-            a: typing.Callable, i: tying.Callable, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+            a: typing.Callable, i: typing.Callable, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
             d: FlexibleEnumeration | None = None, p: FlexibleTupl | None = None) -> tuple[
         Connective, typing.Callable, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
@@ -2788,7 +2788,8 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
 
 
 def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheory,
-                                         raise_error_if_false: bool = False) -> tuple[bool, Enumeration, Enumeration]:
+                                         raise_error_if_false: bool = False) -> tuple[
+    bool, Enumeration | None, Enumeration | None]:
     """Given an enumeration of presumably verified derivations "v" (e.g.: the derivation sequence of a theory "t"),
     and an enumeration of unverified derivations "u" (e.g.: whose elements are not (yet) effective
     theorems of "t"), returns True if a theory would be well-formed if it was composed of
@@ -2857,7 +2858,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
                         msg='Inference-rule "ir" is not a valid predecessor (with index strictly less than "index").'
                             ' This forbids the derivation of proposition "p" in step "d" in the derivation sequence.',
                         p=p, ir=ir, index=index, d=d, c=c)
-                return False, _, _
+                return False, None, None
             # Check that all premises are valid predecessor propositions in the derivation.
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
@@ -2869,7 +2870,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
                                 ' sequence.',
                             code=c1.ERROR_CODE_AS1_036,
                             p=p, q=q, index=index, d=d, c=c)
-                    return False, _, _
+                    return False, None, None
             # Check that the transformation of the inference-rule effectively yields the announced proposition.
             t2: Transformation = i.inference_rule.transformation
             p_prime = t2.apply_transformation(p=i.premises, a=i.arguments)
@@ -2882,7 +2883,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
                             ' Inference "i" contains the arguments (premises and the complementary arguments).',
                         code=c1.ERROR_CODE_AS1_036,
                         p=p, p_prime=p_prime, index=index, t2=t2, ir=ir, i=i, d=d, c=c)
-                return False, _, _
+                return False, None, None
             # All tests have been successfully completed, we now have the assurance
             # that derivation "d" would be valid if appended to theory "t".
             pass
@@ -2895,7 +2896,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
                         ' sequence.',
                     code=c1.ERROR_CODE_AS1_071,
                     p=p, d=d, index=index, c=c)
-            return False, _, _
+            return False, None, None
         # Derivation "d" is valid.
         pass
     # All unverified derivations have been verified.
