@@ -3687,16 +3687,10 @@ class Theory(Formula):
             t: Theory = coerce_theory(t=t)
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
                                             canonic_conversion=True)
-        d: Enumeration = coerce_enumeration_OBSOLETE(
-            e=(coerce_derivation(d=p) for p in d))
         if t is not None:
             d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
-        # try:
-        #    pass
-        # except Exception as error:
-        #    # well-formedness verification failure, the theorem is ill-formed.
-        #    raise u1.ApplicativeException(code=c1.ERROR_CODE_AS1_046, error=error, derivations=d)
-        o: tuple = super().__new__(cls, c=_connectives.theory_formula, t=d, **kwargs)
+        c2, d2 = Theory._data_validation(c=c, t=t, d=d)
+        o: tuple = super().__new__(cls, c=c2, t=d2, **kwargs)
         return o
 
     def __init__(self, c: Connective | None = None,
