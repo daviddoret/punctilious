@@ -2610,24 +2610,73 @@ def iterate_derivations_in_theory(t: FlexibleTheory) -> typing.Generator[Formula
     return
 
 
+def iterate_valid_statements_in_enumeration_of_derivations(e: FlexibleEnumeration, strip_duplicates: bool = True,
+                                                           interpret_none_as_empty: bool = True,
+                                                           canonic_conversion: bool = True,
+                                                           max_index: int | None = None) -> typing.Generator[
+    Formula, None, None]:
+    """Generator function that iterates the valid-statements in an enumeration whose elements are derivations,
+    by canonical order.
+
+    :param e: An enumeration of derivations.
+    :return:
+    """
+    e: Enumeration = coerce_enumeration(e=e, strip_duplicates=strip_duplicates,
+                                        interpret_none_as_empty=interpret_none_as_empty,
+                                        canonic_conversion=canonic_conversion)
+    index: int = 0
+    for d in iterate_enumeration_elements(e=e):
+        index = index + 1
+        if max_index is not None and index >= max_index:
+            return
+        d: Derivation = coerce_derivation(d=d)
+        if is_well_formed_axiom(a=d):
+            yield d.valid_statement
+        elif is_well_formed_theorem(t=d):
+            yield d.valid_statement
+        # TODO: Question: the above is a little ambiguous. an inference-rule is also a valid-statement, no?
+        #   But an inference-rule may not really be a proposition, or is it?
+        #   The vocabulary here should be made more accurate.
+
+
+def iterate_inference_rules_in_enumeration_of_derivations(e: FlexibleEnumeration, strip_duplicates: bool = True,
+                                                          interpret_none_as_empty: bool = True,
+                                                          canonic_conversion: bool = True,
+                                                          max_index: int | None = None) -> typing.Generator[
+    Formula, None, None]:
+    """Generator function that iterates the inference-rules in an enumeration whose elements are derivations,
+    by canonical order.
+
+    Raise an error if any element of the enumeration is not coercible to a derivation.
+
+    :param e: An enumeration of derivations.
+    :param max_index: Yields derivation only up to that 0-based index (non-inclusive). If None, yield all elements.
+    :param strip_duplicates:
+    :param interpret_none_as_empty:
+    :param canonic_conversion:
+    :return:
+    """
+    e: Enumeration = coerce_enumeration(e=e, strip_duplicates=strip_duplicates,
+                                        interpret_none_as_empty=interpret_none_as_empty,
+                                        canonic_conversion=canonic_conversion)
+    index: int = 0
+    for d in iterate_enumeration_elements(e=e):
+        index = index + 1
+        if max_index is not None and index >= max_index:
+            return
+        d: Derivation = coerce_derivation(d=d)
+        if is_well_formed_inference_rule(i=d):
+            yield d.valid_statement
+
+
 def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Formula, None, None]:
-    """Generator function that iterates all the valid statements in a theory.
+    """Generator function that iterates all valid-statements in a theory by canonical order.
 
     :param t: A theory.
     :return:
     """
     t = coerce_theory(t=t)
-    derivations = iterate_derivations_in_theory(t=t)
-    for derivation in derivations:
-        if is_well_formed_axiom(a=derivation):
-            derivation: Axiom = coerce_axiom(a=derivation)
-            valid_statement: Formula = derivation.valid_statement
-            yield valid_statement
-        elif is_well_formed_theorem(t=derivation):
-            derivation: Theorem = coerce_theorem(t=derivation)
-            valid_statement: Formula = derivation.valid_statement
-            yield valid_statement
-    return
+    yield from iterate_valid_statements_in_enumeration_of_derivations(e=t.derivations)
 
 
 def iterate_inference_rules_in_theory(t: FlexibleTheory) -> typing.Generator[InferenceRule, None, None]:
@@ -2851,7 +2900,8 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
             i: Inference = m.inference
             ir: InferenceRule = m.inference.inference_rule
             # Check that the inference-rule is a valid predecessor in the derivation.
-            if not any(is_formula_equivalent(phi=ir, psi=c[x]) for x in range(0, index)):
+            if not any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in
+                       iterate_inference_rules_in_enumeration_of_derivations(e=c, max_index=index)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_068,
@@ -2862,7 +2912,8 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
             # Check that all premises are valid predecessor propositions in the derivation.
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
-                if not any(is_formula_equivalent(phi=q, psi=c[x]) for x in range(0, index)):
+                if not any(is_formula_equivalent(phi=q, psi=p2) for p2 in
+                           iterate_valid_statements_in_enumeration_of_derivations(e=c, max_index=index)):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
                             msg='Premise "q" is not a valid predecessor (with index strictly less than "index").'
@@ -3634,7 +3685,8 @@ class Theory(Formula):
         """
         if t is not None:
             t: Theory = coerce_theory(t=t)
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
+        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
+                                            canonic_conversion=True)
         d: Enumeration = coerce_enumeration_OBSOLETE(
             e=(coerce_derivation(d=p) for p in d))
         if t is not None:
