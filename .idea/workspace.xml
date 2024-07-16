@@ -7,11 +7,6 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_inference_rules_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -722,14 +717,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00828" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1720784867011</created>
-      <option name="number" value="00828" />
-      <option name="presentableId" value="LOCAL-00828" />
-      <option name="project" value="LOCAL" />
-      <updated>1720784867011</updated>
-    </task>
     <task id="LOCAL-00829" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1720785135006</created>
@@ -1114,7 +1101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721019782426</updated>
     </task>
-    <option name="localTasksCounter" value="877" />
+    <task id="LOCAL-00877" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1721074455375</created>
+      <option name="number" value="00877" />
+      <option name="presentableId" value="LOCAL-00877" />
+      <option name="project" value="LOCAL" />
+      <updated>1721074455375</updated>
+    </task>
+    <option name="localTasksCounter" value="878" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
