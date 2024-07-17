@@ -722,7 +722,7 @@ def is_inference_rule_of_theory(i: FlexibleInferenceRule, t: FlexibleTheory):
     """Return True if "i" is an inference-rule in theory "i", False otherwise."""
     i: InferenceRule = coerce_inference_rule(i=i)
     t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in iterate_inference_rules(t=t))
+    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in iterate_theory_inference_rules(t=t))
 
 
 def is_theorem_of_theory(m: FlexibleTheorem, t: FlexibleTheory):
@@ -2635,7 +2635,7 @@ def iterate_theory_derivations(t: FlexibleTheory[FlexibleDerivation] | None = No
     :param d: An enumeration of derivations. Ignored if `t` is provided.
     :param max_derivations: Yields only math:`max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
-    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raise an error otherwise.
+    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
     :return:
     """
@@ -2721,15 +2721,35 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory | None = None) -> typin
     yield from iterate_valid_statements_in_enumeration_of_derivations(e=t.derivations)
 
 
-def iterate_inference_rules(t: FlexibleTheory | None = None,
-                            d: FlexibleEnumeration[FlexibleDerivation] | None = None) -> typing.Generator[
+def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
+                                   d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                   strip_duplicates: bool = True,
+                                   interpret_none_as_empty: bool = True,
+                                   canonic_conversion: bool = True,
+                                   max_derivations: int | None = None
+                                   ) -> typing.Generator[
     InferenceRule, None, None]:
-    """Iterate through all inference-rules in theory "t", enumeration of derivations "d", or enumeration of inference
-    rules "i", following canonical order."""
-    for derivation in iterate_theory_derivations(t=t, d=d):
-        if is_well_formed_inference_rule(i=derivation):
-            inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
-            yield inference_rule
+    """Iterates through inference-rules in derivations of a theory `t` in canonical order.
+
+    Alternatively, iterates through inference-rules of an enumeration of derivations `d` in canonical order.
+
+    :param t: A theory.
+    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
+    :return:
+    """
+    for d2 in iterate_theory_derivations(t=t,
+                                         d=d,
+                                         max_derivations=max_derivations,
+                                         interpret_none_as_empty=interpret_none_as_empty,
+                                         strip_duplicates=strip_duplicates,
+                                         canonic_conversion=canonic_conversion):
+        if is_well_formed_inference_rule(i=d2):
+            i: InferenceRule = coerce_inference_rule(i=d2)
+            yield i
 
 
 def are_valid_statements_in_theory_with_variables(
@@ -4836,7 +4856,7 @@ def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory
     """
     t: Theory = coerce_theory(t=t)
     r: NaturalTransformation = coerce_natural_transformation(t=r)
-    for i in iterate_inference_rules(t=t):
+    for i in iterate_theory_inference_rules(t=t):
         i: InferenceRule
         if is_formula_equivalent(phi=r, psi=i.transformation):
             return True, i
