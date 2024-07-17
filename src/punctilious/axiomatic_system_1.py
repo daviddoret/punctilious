@@ -2631,11 +2631,11 @@ def iterate_derivations(t: FlexibleTheory | None = None, d: FlexibleEnumeration 
                                             interpret_none_as_empty=interpret_none_as_empty,
                                             canonic_conversion=canonic_conversion)
     i: int = 0
-    for d in iterate_enumeration_elements(e=d):
+    for d2 in iterate_enumeration_elements(e=d):
         if max_index is not None and i >= max_index:
             return
-        d = coerce_derivation(d=d)
-        yield d
+        d2 = coerce_derivation(d=d2)
+        yield d2
         i = i + 1
     return
 
