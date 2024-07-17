@@ -2648,13 +2648,9 @@ def iterate_derivations(t: FlexibleTheory[FlexibleDerivation] | None = None,
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=strip_duplicates,
                                             interpret_none_as_empty=interpret_none_as_empty,
                                             canonic_conversion=canonic_conversion)
-    i: int = 0
-    for d2 in iterate_enumeration_elements(e=d):
-        if max_derivations is not None and i >= max_derivations:
-            return
-        d2 = coerce_derivation(d=d2)
+    for d2 in iterate_enumeration_elements(e=d, max_elements=max_derivations):
+        d2: Derivation = coerce_derivation(d=d2)
         yield d2
-        i = i + 1
     return
 
 
