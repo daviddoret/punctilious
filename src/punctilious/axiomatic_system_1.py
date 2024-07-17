@@ -2681,36 +2681,6 @@ def iterate_valid_statements_in_enumeration_of_derivations(e: FlexibleEnumeratio
         #   The vocabulary here should be made more accurate.
 
 
-def iterate_inference_rules_in_enumeration_of_derivations(e: FlexibleEnumeration, strip_duplicates: bool = True,
-                                                          interpret_none_as_empty: bool = True,
-                                                          canonic_conversion: bool = True,
-                                                          max_index: int | None = None) -> typing.Generator[
-    Formula, None, None]:
-    """Generator function that iterates the inference-rules in an enumeration whose elements are derivations,
-    by canonical order.
-
-    Raise an error if any element of the enumeration is not coercible to a derivation.
-
-    :param e: An enumeration of derivations.
-    :param max_index: Yields derivation only up to that 0-based index (non-inclusive). If None, yield all elements.
-    :param strip_duplicates:
-    :param interpret_none_as_empty:
-    :param canonic_conversion:
-    :return:
-    """
-    e: Enumeration = coerce_enumeration(e=e, strip_duplicates=strip_duplicates,
-                                        interpret_none_as_empty=interpret_none_as_empty,
-                                        canonic_conversion=canonic_conversion)
-    index: int = 0
-    for d in iterate_enumeration_elements(e=e):
-        index = index + 1
-        if max_index is not None and index >= max_index:
-            return
-        d: Derivation = coerce_derivation(d=d)
-        if is_well_formed_inference_rule(i=d):
-            yield d.valid_statement
-
-
 def iterate_valid_statements_in_theory(t: FlexibleTheory | None = None) -> typing.Generator[Formula, None, None]:
     """Generator function that iterates all valid-statements in a theory by canonical order.
 
