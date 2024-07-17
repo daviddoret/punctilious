@@ -763,8 +763,8 @@ def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula
 
 def get_index_of_first_equivalent_element_in_enumeration(x: FlexibleFormula,
                                                          e: FlexibleEnumeration) -> int:
-    """Given a formula :math:`x` and an enumeration :math:`e`, returns the o-based index of the first occurrence
-    of an element :math:`y` in :math:`e` such that :math:`x` formula-equivalent :math:`y`.
+    """Given a formula `x` and an enumeration `e`, returns the o-based index of the first occurrence
+    of an element `y` in `e` such that `x` formula-equivalent `y`.
 
     :param x:
     :param e:
@@ -2386,10 +2386,10 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
 
 
 def is_well_formed_map(m: FlexibleFormula, raise_error_if_ill_formed: bool = False) -> bool:
-    """Returns True if and only if :math:`m` is a well-formed-map, False otherwise, i.e. it is ill-formed.
+    """Returns True if and only if `m` is a well-formed-map, False otherwise, i.e. it is ill-formed.
 
     :param m: A formula, possibly a well-formed map.
-    :param raise_error_if_ill_formed: If True, raises an AS1-061 error when :math:`m` is not a well-formed map.
+    :param raise_error_if_ill_formed: If True, raises an AS1-061 error when `m` is not a well-formed map.
     :return: bool.
     """
     m = coerce_formula(phi=m)
@@ -2539,7 +2539,7 @@ def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> t
 
     p: Formula = coerce_formula(phi=p)
     t: Theory = coerce_theory(t=t)
-    for d, i in zip(iterate_derivations(t=t), range(len(t))):
+    for d, i in zip(iterate_theory_derivations(t=t), range(len(t))):
         if is_formula_equivalent(phi=p, psi=d.valid_statement):
             return True, i
     return False, None
@@ -2577,9 +2577,9 @@ def iterate_enumeration_elements(e: FlexibleEnumeration, max_elements: int | Non
 
     :param e:
     :param max_elements: Yields only math:`max_elements` elements, or all elements if None.
-    :param canonic_conversion: Uses canonic conversion if needed when coercing :math:`e` to enumeration.
-    :param strip_duplicates: Strip duplicates when coercing :math:`e` to enumeration. Raise an error otherwise.
-    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing :math:`e` to enumeration.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing `e` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing `e` to enumeration. Raise an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `e` to enumeration.
     :return:
     """
     e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=interpret_none_as_empty,
@@ -2620,25 +2620,23 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
         return
 
 
-def iterate_derivations(t: FlexibleTheory[FlexibleDerivation] | None = None,
-                        d: FlexibleEnumeration[FlexibleDerivation] | None = None,
-                        strip_duplicates: bool = True,
-                        interpret_none_as_empty: bool = True,
-                        canonic_conversion: bool = True,
-                        max_derivations: int | None = None) -> \
+def iterate_theory_derivations(t: FlexibleTheory[FlexibleDerivation] | None = None,
+                               d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                               strip_duplicates: bool = True,
+                               interpret_none_as_empty: bool = True,
+                               canonic_conversion: bool = True,
+                               max_derivations: int | None = None) -> \
         typing.Generator[Formula, None, None]:
-    """Given a theory :math:`t`, or an enumeration :math:`d` containing derivations, iterates through derivation
-    elements.
+    """Iterates through derivations of a theory `t` in canonical order.
 
-    Note: parameters :math:`t` and :math:`d` are mutually exclusive. If both parameters are provided, :math:`t` is
-    considered and :math:`d` is discarded.
+    Alternatively, iterates through an enumeration of derivations `d` in canonical order.
 
-    :param t: A theory whose derivations need to be iterated.
-    :param d: An enumeration whose elements are derivations and need to be iterated.
+    :param t: A theory.
+    :param d: An enumeration of derivations. Ignored if `t` is provided.
     :param max_derivations: Yields only math:`max_derivations` derivations, or all derivations if None.
-    :param canonic_conversion: Uses canonic conversion if needed when coercing :math:`d` to enumeration.
-    :param strip_duplicates: Strip duplicates when coercing :math:`d` to enumeration. Raise an error otherwise.
-    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing :math:`d` to enumeration.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raise an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
     :return:
     """
     if t is not None:
@@ -2723,34 +2721,15 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory | None = None) -> typin
     yield from iterate_valid_statements_in_enumeration_of_derivations(e=t.derivations)
 
 
-def iterate_inference_rules(t: FlexibleTheory | None = None, d: FlexibleEnumeration[FlexibleDerivation] | None = None,
-                            i: FlexibleEnumeration[FlexibleInferenceRule] | None = None) -> typing.Generator[
+def iterate_inference_rules(t: FlexibleTheory | None = None,
+                            d: FlexibleEnumeration[FlexibleDerivation] | None = None) -> typing.Generator[
     InferenceRule, None, None]:
     """Iterate through all inference-rules in theory "t", enumeration of derivations "d", or enumeration of inference
     rules "i", following canonical order."""
-    generator: typing.Generator
-    if t is not None:
-        t = coerce_theory(t=t)
-        derivations = iterate_derivations(t=t)
-        for derivation in derivations:
-            if is_well_formed_inference_rule(i=derivation):
-                inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
-                yield inference_rule
-    elif d is not None:
-        d = coerce_enumeration(e=d)
-        derivations = iterate_derivations(d=d)
-        for derivation in derivations:
-            if is_well_formed_inference_rule(i=derivation):
-                inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
-                yield inference_rule
-    elif i is not None:
-        i = coerce_enumeration(e=i)
-        for ir in i:
-            if is_well_formed_inference_rule(i=ir):
-                inference_rule: InferenceRule = coerce_inference_rule(i=ir)
-                yield inference_rule
-    else:
-        raise u1.ApplicativeError(msg='ooops')
+    for derivation in iterate_theory_derivations(t=t, d=d):
+        if is_well_formed_inference_rule(i=derivation):
+            inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
+            yield inference_rule
 
 
 def are_valid_statements_in_theory_with_variables(
@@ -3136,12 +3115,12 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
 
 
 def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_ill_formed: bool = False) -> bool:
-    """Returns True if and only if :math:`a` is a well-formed axiomatization, False otherwise, i.e. it is ill-formed.
+    """Returns True if and only if `a` is a well-formed axiomatization, False otherwise, i.e. it is ill-formed.
 
     :param a: A formula, possibly a well-formed axiomatization.
-    :param raise_error_if_ill_formed: If True, raises an error when :math:`a` is not a well-formed
+    :param raise_error_if_ill_formed: If True, raises an error when `a` is not a well-formed
         axiomatization.
-    :raises ApplicativeError: with error code AS1-064 when :math:`a` is not a well-formed axiomatization and
+    :raises ApplicativeError: with error code AS1-064 when `a` is not a well-formed axiomatization and
         "raise_error_if_ill_formed" = True.
     :return: bool.
     """
@@ -3912,7 +3891,7 @@ def transform_formula_to_tuple(phi: FlexibleFormula) -> Tupl:
     """Canonical transformation of formulas to tuples.
 
     Every formula is a tuple if we don't consider its connective.
-    The canonical transformation returns a tuple if :math:`phi` is a well-formed tupl,
+    The canonical transformation returns a tuple if `phi` is a well-formed tupl,
     otherwise it returns a new tupl such that the elements of the tuple
     are the terms of the formula, preserving order.
 
@@ -4255,8 +4234,8 @@ class AutoDerivationFailure(Exception):
 
 def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
              i: FlexibleInferenceRule, a: FlexibleTupl | None = None) -> typing.Tuple[Theory, Theorem]:
-    """Given a theory :math:`t`, derives a new theory :math:`t′` that extends :math:`t` with a new theorem :math:`c`
-    derived by applying inference-rule :math:`i`.
+    """Given a theory `t`, derives a new theory `t′` that extends `t` with a new theorem `c`
+    derived by applying inference-rule `i`.
 
     :param t: A theory.
     :param c: A proposition denoted as the conjecture.
@@ -4876,7 +4855,7 @@ def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFor
     """
     t: Theory = coerce_theory(t=t)
     s: Formula = coerce_formula(phi=s)
-    for d in iterate_derivations(t=t):
+    for d in iterate_theory_derivations(t=t):
         d: Derivation
         if is_formula_equivalent(phi=s, psi=d.valid_statement):
             return True, d
