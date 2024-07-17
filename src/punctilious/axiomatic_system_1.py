@@ -2625,21 +2625,20 @@ def iterate_derivations(t: FlexibleTheory[FlexibleDerivation] | None = None,
                         strip_duplicates: bool = True,
                         interpret_none_as_empty: bool = True,
                         canonic_conversion: bool = True,
-                        max_index: int | None = None) -> \
+                        max_derivations: int | None = None) -> \
         typing.Generator[Formula, None, None]:
     """Given a theory :math:`t`, or an enumeration :math:`d` containing derivations, iterates through derivation
     elements.
 
-    Parameters :math:`t` and :math:`d` are mutually exclusive. If both parameters are provided, :math:`t` is processed
-    and :math:`d` is discarded.
+    Note: parameters :math:`t` and :math:`d` are mutually exclusive. If both parameters are provided, :math:`t` is
+    considered and :math:`d` is discarded.
 
     :param t: A theory whose derivations need to be iterated.
     :param d: An enumeration whose elements are derivations and need to be iterated.
-    :param canonic_conversion:
-    :param interpret_none_as_empty:
-    :param strip_duplicates:
-    :param max_index: Iterates up to :math:`max_index` exclusive. This parameter is practical to check the validity
-        of derivations by checking the presence of a some derivation up to a certain point on a derivation sequence.
+    :param max_derivations: Yields only math:`max_derivations` derivations, or all derivations if None.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing :math:`d` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing :math:`d` to enumeration. Raise an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing :math:`d` to enumeration.
     :return:
     """
     if t is not None:
@@ -2651,7 +2650,7 @@ def iterate_derivations(t: FlexibleTheory[FlexibleDerivation] | None = None,
                                             canonic_conversion=canonic_conversion)
     i: int = 0
     for d2 in iterate_enumeration_elements(e=d):
-        if max_index is not None and i >= max_index:
+        if max_derivations is not None and i >= max_derivations:
             return
         d2 = coerce_derivation(d=d2)
         yield d2
