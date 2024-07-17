@@ -722,7 +722,7 @@ def is_inference_rule_of_theory(i: FlexibleInferenceRule, t: FlexibleTheory):
     """Return True if "i" is an inference-rule in theory "i", False otherwise."""
     i: InferenceRule = coerce_inference_rule(i=i)
     t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in iterate_inference_rules_in_theory(t=t))
+    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in iterate_inference_rules(t=t))
 
 
 def is_theorem_of_theory(m: FlexibleTheorem, t: FlexibleTheory):
@@ -2602,7 +2602,8 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
         return
 
 
-def iterate_derivations(t: FlexibleTheory | None = None, d: FlexibleEnumeration | None = None,
+def iterate_derivations(t: FlexibleTheory[FlexibleDerivation] | None = None,
+                        d: FlexibleEnumeration[FlexibleDerivation] | None = None,
                         strip_duplicates: bool = True,
                         interpret_none_as_empty: bool = True,
                         canonic_conversion: bool = True,
@@ -2699,7 +2700,7 @@ def iterate_inference_rules_in_enumeration_of_derivations(e: FlexibleEnumeration
             yield d.valid_statement
 
 
-def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Formula, None, None]:
+def iterate_valid_statements_in_theory(t: FlexibleTheory | None = None) -> typing.Generator[Formula, None, None]:
     """Generator function that iterates all valid-statements in a theory by canonical order.
 
     :param t: A theory.
@@ -2709,7 +2710,7 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Fo
     yield from iterate_valid_statements_in_enumeration_of_derivations(e=t.derivations)
 
 
-def iterate_inference_rules_in_theory(t: FlexibleTheory) -> typing.Generator[InferenceRule, None, None]:
+def iterate_inference_rules(t: FlexibleTheory) -> typing.Generator[InferenceRule, None, None]:
     """Iterate through all inference-rules in theory "t", following canonical order."""
     t = coerce_theory(t=t)
     derivations = iterate_derivations(t=t)
@@ -4823,7 +4824,7 @@ def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory
     """
     t: Theory = coerce_theory(t=t)
     r: NaturalTransformation = coerce_natural_transformation(t=r)
-    for i in iterate_inference_rules_in_theory(t=t):
+    for i in iterate_inference_rules(t=t):
         i: InferenceRule
         if is_formula_equivalent(phi=r, psi=i.transformation):
             return True, i
