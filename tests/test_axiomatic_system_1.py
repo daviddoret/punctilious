@@ -123,6 +123,23 @@ class TestTupl:
         assert y not in c
         assert len(c) == 1
 
+    def test_iterate(self):
+        a, b, c, d, e, f = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f',))
+        phi1 = pu.as1.Tupl(elements=(a, b, c, d, e, f,))
+        assert a in phi1
+        assert len(phi1) == 6
+        assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi1))) == 6
+        assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi1, max_elements=0))) == 0
+        assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi1, max_elements=2))) == 2
+        assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi1, max_elements=6))) == 6
+        phi2 = pu.as1.Tupl(elements=(f, f, a, b, d, e, b, b, f,))
+        assert a in phi2
+        assert len(phi2) == 9
+        assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi2))) == 9
+        assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi2, max_elements=0))) == 0
+        assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi2, max_elements=2))) == 2
+        assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi2, max_elements=6))) == 6
+
 
 class TestEnumeration:
 
@@ -976,7 +993,7 @@ class TestAutoDerivation:
         pass
 
 
-class TestFormulaDepth:
+class TestFormula:
     def test_get_formula_depth(self):
         c = pu.as1.FreeArityConnective(formula_ts=pu.pl1.symbols.x_uppercase_serif_italic)
         phi1 = pu.as1.Formula(c=c, t=None)
@@ -985,6 +1002,23 @@ class TestFormulaDepth:
         assert pu.as1.get_formula_depth(phi=phi2) == 2
         phi3 = pu.as1.Formula(c=c, t=(phi1, phi2, phi1, phi2))
         assert pu.as1.get_formula_depth(phi=phi3) == 3
+
+    def test_iterate(self):
+        a, b, c, d, e, f = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f',))
+        phi1 = pu.as1.Formula(c=a, t=(a, b, c, d, e, f,))
+        assert a in phi1
+        assert len(phi1) == 6
+        assert len(tuple(pu.as1.iterate_formula_terms(phi=phi1))) == 6
+        assert len(tuple(pu.as1.iterate_formula_terms(phi=phi1, max_terms=0))) == 0
+        assert len(tuple(pu.as1.iterate_formula_terms(phi=phi1, max_terms=2))) == 2
+        assert len(tuple(pu.as1.iterate_formula_terms(phi=phi1, max_terms=6))) == 6
+        phi2 = pu.as1.Formula(c=a, t=(f, f, a, b, d, e, b, b, f,))
+        assert a in phi2
+        assert len(phi2) == 9
+        assert len(tuple(pu.as1.iterate_formula_terms(phi=phi2))) == 9
+        assert len(tuple(pu.as1.iterate_formula_terms(phi=phi2, max_terms=0))) == 0
+        assert len(tuple(pu.as1.iterate_formula_terms(phi=phi2, max_terms=2))) == 2
+        assert len(tuple(pu.as1.iterate_formula_terms(phi=phi2, max_terms=6))) == 6
 
 
 class TestMetaTheory:
