@@ -2539,7 +2539,7 @@ def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> t
 
     p: Formula = coerce_formula(phi=p)
     t: Theory = coerce_theory(t=t)
-    for d, i in zip(iterate_derivations_in_theory(t=t), range(len(t))):
+    for d, i in zip(iterate_derivations(t=t), range(len(t))):
         if is_formula_equivalent(phi=p, psi=d.valid_statement):
             return True, i
     return False, None
@@ -2602,11 +2602,41 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
         return
 
 
-def iterate_derivations_in_theory(t: FlexibleTheory) -> typing.Generator[Formula, None, None]:
-    t = coerce_theory(t=t)
-    for derivation in t:
-        derivation = coerce_derivation(d=derivation)
-        yield derivation
+def iterate_derivations(t: FlexibleTheory | None = None, d: FlexibleEnumeration | None = None,
+                        strip_duplicates: bool = True,
+                        interpret_none_as_empty: bool = True,
+                        canonic_conversion: bool = True,
+                        max_index: int | None = None) -> \
+        typing.Generator[Formula, None, None]:
+    """Given a theory :math:`t`, or an enumeration :math:`d` containing derivations, iterates through derivation
+    elements.
+
+    Parameters :math:`t` and :math:`d` are mutually exclusive. If both parameters are provided, :math:`t` is processed
+    and :math:`d` is discarded.
+
+    :param t: A theory whose derivations need to be iterated.
+    :param d: An enumeration whose elements are derivations and need to be iterated.
+    :param canonic_conversion:
+    :param interpret_none_as_empty:
+    :param strip_duplicates:
+    :param max_index: Iterates up to :math:`max_index` exclusive. This parameter is practical to check the validity
+        of derivations by checking the presence of a some derivation up to a certain point on a derivation sequence.
+    :return:
+    """
+    if t is not None:
+        coerce_theory(t=t)
+        d: Enumeration = t.derivations
+    else:
+        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=strip_duplicates,
+                                            interpret_none_as_empty=interpret_none_as_empty,
+                                            canonic_conversion=canonic_conversion)
+    i: int = 0
+    for d in iterate_enumeration_elements(e=d):
+        if max_index is not None and i >= max_index:
+            return
+        d = coerce_derivation(d=d)
+        yield d
+        i = i + 1
     return
 
 
@@ -2682,7 +2712,7 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory) -> typing.Generator[Fo
 def iterate_inference_rules_in_theory(t: FlexibleTheory) -> typing.Generator[InferenceRule, None, None]:
     """Iterate through all inference-rules in theory "t", following canonical order."""
     t = coerce_theory(t=t)
-    derivations = iterate_derivations_in_theory(t=t)
+    derivations = iterate_derivations(t=t)
     for derivation in derivations:
         if is_well_formed_inference_rule(i=derivation):
             inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
@@ -4812,7 +4842,7 @@ def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFor
     """
     t: Theory = coerce_theory(t=t)
     s: Formula = coerce_formula(phi=s)
-    for d in iterate_derivations_in_theory(t=t):
+    for d in iterate_derivations(t=t):
         d: Derivation
         if is_formula_equivalent(phi=s, psi=d.valid_statement):
             return True, d
