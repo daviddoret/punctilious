@@ -2964,7 +2964,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
             ir: InferenceRule = m.inference.inference_rule
             # Check that the inference-rule is a valid predecessor in the derivation.
             if not any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in
-                       iterate_inference_rules_in_enumeration_of_derivations(e=c, max_index=index)):
+                       iterate_theory_inference_rules(d=c, max_derivations=index + 1)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_068,
