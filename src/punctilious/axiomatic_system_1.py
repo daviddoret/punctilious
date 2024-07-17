@@ -142,7 +142,7 @@ class Formula(tuple):
         :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi'. False
           otherwise.
         """
-        return self.has_term(phi=phi)
+        return is_term_of_formula(x=phi, phi=self)
 
     def __eq__(self, other):
         """python-equality of formulas is not formula-equivalence."""
@@ -180,19 +180,6 @@ class Formula(tuple):
         :rtype: int
         """
         return get_index_of_first_equivalent_term_in_formula(term=phi, formula=self)
-
-    def has_term(self, phi: FlexibleFormula) -> bool:
-        """Return True if there exists a term psi of the current formula terms,
-        such that phi ~formula psi', False otherwise.
-
-        :param phi: A formula.
-        :type phi: FlexibleFormula
-        ...
-        :return: True if there exists a formula psi' in the current formula psi, such that phi ~formula psi2. False
-          otherwise.
-        :rtype: bool
-        """
-        return is_term_of_formula(x=phi, phi=self)
 
     @property
     def term_0(self) -> Formula:
@@ -2718,8 +2705,45 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
                                          strip_duplicates=strip_duplicates,
                                          canonic_conversion=canonic_conversion):
         if is_well_formed_inference_rule(i=d2):
+            # TODO: REVIEW THIS TO PROPERLY UNPACK THE INFERENCE-RULE
             i: InferenceRule = coerce_inference_rule(i=d2)
             yield i
+
+
+def iterate_theory_propositions(t: FlexibleTheory | None = None,
+                                d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                strip_duplicates: bool = True,
+                                interpret_none_as_empty: bool = True,
+                                canonic_conversion: bool = True,
+                                max_derivations: int | None = None
+                                ) -> typing.Generator[
+    Formula, None, None]:
+    """Iterates through propositions in derivations of a theory `t` in canonical order.
+
+    Alternatively, iterates through propositions of an enumeration of derivations `d` in canonical order.
+
+    Definitions: theory propositions
+    The valid-statements of axioms and theorems in a theory.
+
+    :param t: A theory.
+    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
+    :return:
+    """
+    for d2 in iterate_theory_derivations(t=t,
+                                         d=d,
+                                         max_derivations=max_derivations,
+                                         interpret_none_as_empty=interpret_none_as_empty,
+                                         strip_duplicates=strip_duplicates,
+                                         canonic_conversion=canonic_conversion):
+        if is_well_formed_axiom(a=d2):
+            a: Axiom = coerce_axiom(a=d2)
+            p: Formula = a.valid_statement
+            yield a
+        XXX
 
 
 def are_valid_statements_in_theory_with_variables(
