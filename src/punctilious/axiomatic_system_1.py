@@ -2545,28 +2545,46 @@ def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> t
     return False, None
 
 
-def iterate_formula_terms(phi: FlexibleFormula) -> typing.Generator[Formula, None, None]:
-    """Iterates the terms of a formula in order.
-    """
-    phi: Formula = coerce_formula(phi=phi)
-    yield from phi  # super(phi) is a native python tuple.
+def iterate_formula_terms(phi: FlexibleFormula, max_terms: int | None = None) -> typing.Generator[
+    Formula, None, None]:
+    """Iterates the terms of a formula in canonical order.
 
-
-def iterate_tuple_elements(phi: FlexibleTupl) -> typing.Generator[Formula, None, None]:
-    """Iterates the elements of a tuple in canonical order.
-    """
-    phi = coerce_tuple(t=phi)
-    yield from iterate_formula_terms(phi=phi)
-
-
-def iterate_enumeration_elements(e: FlexibleEnumeration) -> typing.Generator[Formula, None, None]:
-    """Iterates the elements of an enumeration.
-
-    :param e:
+    :param phi: A formula.
+    :param max_terms: Yields only math:`max_terms` elements, or all terms if None.
     :return:
     """
-    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
-    yield from iterate_formula_terms(phi=e)
+    phi: Formula = coerce_formula(phi=phi)
+    yield from itertools.islice(phi, max_terms)
+
+
+def iterate_tuple_elements(phi: FlexibleTupl, max_elements: int | None = None) -> typing.Generator[
+    Formula, None, None]:
+    """Iterates the elements of a tuple in canonical order.
+
+    :param phi: A formula.
+    :param max_elements: Yields only math:`max_elements` elements, or all elements if None.
+    :return:
+    """
+    phi = coerce_tuple(t=phi)
+    yield from iterate_formula_terms(phi=phi, max_terms=max_elements)
+
+
+def iterate_enumeration_elements(e: FlexibleEnumeration, max_elements: int | None = None,
+                                 interpret_none_as_empty: bool | None = None, strip_duplicates: bool | None = None,
+                                 canonic_conversion: bool | None = None) -> typing.Generator[
+    Formula, None, None]:
+    """Iterates the elements of an enumeration in canonical order.
+
+    :param e:
+    :param max_elements: Yields only math:`max_elements` elements, or all elements if None.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing :math:`e` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing :math:`e` to enumeration. Raise an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing :math:`e` to enumeration.
+    :return:
+    """
+    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=interpret_none_as_empty,
+                                        strip_duplicates=strip_duplicates, canonic_conversion=canonic_conversion)
+    yield from iterate_formula_terms(phi=e, max_terms=max_elements)
 
 
 def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
@@ -2710,14 +2728,34 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory | None = None) -> typin
     yield from iterate_valid_statements_in_enumeration_of_derivations(e=t.derivations)
 
 
-def iterate_inference_rules(t: FlexibleTheory) -> typing.Generator[InferenceRule, None, None]:
-    """Iterate through all inference-rules in theory "t", following canonical order."""
-    t = coerce_theory(t=t)
-    derivations = iterate_derivations(t=t)
-    for derivation in derivations:
-        if is_well_formed_inference_rule(i=derivation):
-            inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
-            yield inference_rule
+def iterate_inference_rules(t: FlexibleTheory | None = None, d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                            i: FlexibleEnumeration[FlexibleInferenceRule] | None = None) -> typing.Generator[
+    InferenceRule, None, None]:
+    """Iterate through all inference-rules in theory "t", enumeration of derivations "d", or enumeration of inference
+    rules "i", following canonical order."""
+    generator: typing.Generator
+    if t is not None:
+        t = coerce_theory(t=t)
+        derivations = iterate_derivations(t=t)
+        for derivation in derivations:
+            if is_well_formed_inference_rule(i=derivation):
+                inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
+                yield inference_rule
+    elif d is not None:
+        d = coerce_enumeration(e=d)
+        derivations = iterate_derivations(d=d)
+        for derivation in derivations:
+            if is_well_formed_inference_rule(i=derivation):
+                inference_rule: InferenceRule = coerce_inference_rule(i=derivation)
+                yield inference_rule
+    elif i is not None:
+        i = coerce_enumeration(e=i)
+        for ir in i:
+            if is_well_formed_inference_rule(i=ir):
+                inference_rule: InferenceRule = coerce_inference_rule(i=ir)
+                yield inference_rule
+    else:
+        raise u1.ApplicativeError(msg='ooops')
 
 
 def are_valid_statements_in_theory_with_variables(
