@@ -995,20 +995,50 @@ class TestAutoDerivation:
 
 class TestTheory:
     def test_iterate_axioms(self):
-        a, b, c, d, e, f = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f',))
+        a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
         t = pu.as1.Theory()
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
-        t2 = pu.as1.NaturalTransformation(c=f, v=None, p=None)
-        t, i = pu.as1.let_x_be_an_inference_rule(t1=t, t2=t2)
-        t, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i)
+        t, i1 = pu.as1.let_x_be_an_inference_rule(t1=t, t2=pu.as1.NaturalTransformation(c=f, v=None, p=None))
+        t, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i1)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=d)
+        t, i2 = pu.as1.let_x_be_an_inference_rule(t1=t, t2=pu.as1.NaturalTransformation(c=g, v=None, p=None))
+        t, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=e)
+
+        # iterate axioms
         assert len(tuple(pu.as1.iterate_theory_axioms(t=t))) == 4
         assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=2))) == 2
         assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=3))) == 2
         assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=4))) == 2
         assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=5))) == 3
+
+        # iterate inference-rules
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t))) == 2
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=2))) == 0
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=3))) == 1
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=4))) == 1
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=5))) == 1
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=6))) == 2
+
+        # iterate theorems
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t))) == 2
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=3))) == 0
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=4))) == 1
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=5))) == 1
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=6))) == 1
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=7))) == 2
+
+        # iterate propositions
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t))) == 6
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=0))) == 0
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=1))) == 1
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=2))) == 2
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=3))) == 2
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=4))) == 3
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=5))) == 4
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=6))) == 4
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=7))) == 5
 
 
 class TestFormula:

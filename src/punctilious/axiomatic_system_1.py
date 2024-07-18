@@ -2685,7 +2685,7 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
                           canonic_conversion: bool = True,
                           max_derivations: int | None = None
                           ) -> typing.Generator[
-    InferenceRule, None, None]:
+    Axiom, None, None]:
     """Iterates through axioms in derivations of a theory `t`, in canonical order.
 
     Alternatively, iterates through axioms of an enumeration of derivations `d`, in canonical order.
@@ -2707,6 +2707,37 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
         if is_well_formed_axiom(a=d2):
             a: Axiom = coerce_axiom(a=d2)
             yield a
+
+
+def iterate_theory_theorems(t: FlexibleTheory | None = None,
+                            d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                            strip_duplicates: bool = True,
+                            interpret_none_as_empty: bool = True,
+                            canonic_conversion: bool = True,
+                            max_derivations: int | None = None
+                            ) -> typing.Generator[
+    Theorem, None, None]:
+    """Iterates through theorems in derivations of a theory `t`, in canonical order.
+
+    Alternatively, iterates through theorems of an enumeration of derivations `d`, in canonical order.
+
+    :param t: A theory.
+    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
+    :return:
+    """
+    for d2 in iterate_theory_derivations(t=t,
+                                         d=d,
+                                         max_derivations=max_derivations,
+                                         interpret_none_as_empty=interpret_none_as_empty,
+                                         strip_duplicates=strip_duplicates,
+                                         canonic_conversion=canonic_conversion):
+        if is_well_formed_theorem(t=d2):
+            t: Theorem = coerce_theorem(t=d2)
+            yield t
 
 
 def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
@@ -2736,7 +2767,6 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
                                          strip_duplicates=strip_duplicates,
                                          canonic_conversion=canonic_conversion):
         if is_well_formed_inference_rule(i=d2):
-            # TODO: REVIEW THIS TO PROPERLY UNPACK THE INFERENCE-RULE
             i: InferenceRule = coerce_inference_rule(i=d2)
             yield i
 
@@ -2753,7 +2783,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
 
     Alternatively, iterates through propositions of an enumeration of derivations `d` in canonical order.
 
-    Definitions: theory propositions
+    Definition: theory propositions
     The valid-statements of axioms and theorems in a theory.
 
     :param t: A theory.
@@ -2773,8 +2803,11 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
         if is_well_formed_axiom(a=d2):
             a: Axiom = coerce_axiom(a=d2)
             p: Formula = a.valid_statement
-            yield a
-        XXX
+            yield p
+        elif is_well_formed_theorem(t=d2):
+            m: Theorem = coerce_theorem(t=d2)
+            p: Formula = m.valid_statement
+            yield p
 
 
 def are_valid_statements_in_theory_with_variables(
