@@ -2986,7 +2986,7 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
         return False
 
 
-def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheory,
+def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumeration,
                                          raise_error_if_false: bool = False) -> tuple[
     bool, Enumeration | None, Enumeration | None]:
     """Given an enumeration of presumably verified derivations "v" (e.g.: the derivation sequence of a theory "t"),
@@ -2997,27 +2997,27 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
     This function is useful to test whether some derivations will pass well-formedness validation before
     attempting to effectively derive it.
 
-    :param u: An enumeration of derivations.
-    :param v: A theory.
+    :param v: An enumeration of presumably verified derivations.
+    :param u: An enumeration of unverified derivations.
     :param raise_error_if_false:
-    :return: A triple (b, c, u′) where "b" is True if all derivations in "u" would be valid, False otherwise,
-        c = u ∪ v if b is True, None otherwise,
-        and u′ = u ∖ v if b is True, None otherwise.
-        Note: u′ = u ∖ v because derivation steps must be unique to constitute a well-formed derivation sequence.
+    :return: A triple `(b, v′, u′)` where:
+     `b` is `True` if all derivations in `u` would be valid, `False` otherwise,
+     `v′` = `v` with duplicates stripped out if `b` is `True`, `None` otherwise,
+     `u′` = `(u \ v)` with duplicates stripped out if `b` is `True`, `None` otherwise.
     """
     u: Enumeration = coerce_enumeration(e=u, strip_duplicates=True, interpret_none_as_empty=True,
                                         canonic_conversion=True)
     v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True, interpret_none_as_empty=True,
                                         canonic_conversion=True)
 
-    # Consider only unverified derivations that are not verified.
+    # Consider only derivations that are not elements of the verified enumeration.
     # In effect, a derivation sequence must contain unique derivations under enumeration-equivalence.
-    u2: Enumeration = difference_enumeration(phi=u, psi=v, strip_duplicates=True, interpret_none_as_empty=True,
-                                             canonic_conversion=True)
+    u: Enumeration = difference_enumeration(phi=u, psi=v, strip_duplicates=True, interpret_none_as_empty=True,
+                                            canonic_conversion=True)
 
     # Create a complete enumeration "c" composed of derivations "u" appended to derivations "v",
     # getting rid of duplicates if any in the process.
-    c: Enumeration = union_enumeration(phi=v, psi=u2, strip_duplicates=True)
+    c: Enumeration = union_enumeration(phi=v, psi=u, strip_duplicates=True)
 
     # Put aside the index from which the proofs of derivations have not been verified.
     verification_threshold: int = len(v)
@@ -3103,7 +3103,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
         pass
     # All unverified derivations have been verified.
     pass
-    return True, c, u2
+    return True, v, u
 
 
 def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
@@ -3819,8 +3819,10 @@ class Theory(Formula):
             t: Theory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True,
                                             interpret_none_as_empty=True)
-        is_valid, d2, _ = would_be_valid_derivations_in_theory(u=t, v=d, raise_error_if_false=True)
-        return c, d2
+        is_valid, v, u = would_be_valid_derivations_in_theory(v=d, u=t, raise_error_if_false=True)
+        d_old = union_enumeration(phi=v, psi=u, strip_duplicates=True)
+        d = Enumeration(e=(*v, *u,))
+        return c, d
 
     def __new__(cls, c: Connective | None = None,
                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
