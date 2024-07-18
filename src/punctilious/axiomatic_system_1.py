@@ -2762,6 +2762,49 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
             yield i
 
 
+def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
+                                    d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                    strip_duplicates: bool = True,
+                                    interpret_none_as_empty: bool = True,
+                                    canonic_conversion: bool = True,
+                                    max_derivations: int | None = None
+                                    ) -> typing.Generator[
+    Formula, None, None]:
+    """Iterates through valid-statements in derivations of a theory `t` in canonical order.
+
+    Alternatively, iterates through propositions of an enumeration of derivations `d` in canonical order.
+
+    Definition: theory valid-statements
+    The valid-statements of a theory are the propositions of its axioms and theorems and its inference-rules.
+
+    :param t: A theory.
+    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
+    :return:
+    """
+    for d2 in iterate_theory_derivations(t=t,
+                                         d=d,
+                                         max_derivations=max_derivations,
+                                         interpret_none_as_empty=interpret_none_as_empty,
+                                         strip_duplicates=strip_duplicates,
+                                         canonic_conversion=canonic_conversion):
+        if is_well_formed_axiom(a=d2):
+            a: Axiom = coerce_axiom(a=d2)
+            s: Formula = a.valid_statement
+            yield s
+        elif is_well_formed_theorem(t=d2):
+            m: Theorem = coerce_theorem(t=d2)
+            s: Formula = m.valid_statement
+            yield s
+        elif is_well_formed_inference_rule(i=d2):
+            i: InferenceRule = coerce_inference_rule(i=d2)
+            s: Formula = i.valid_statement
+            yield s
+
+
 def iterate_theory_propositions(t: FlexibleTheory | None = None,
                                 d: FlexibleEnumeration[FlexibleDerivation] | None = None,
                                 strip_duplicates: bool = True,
