@@ -2858,7 +2858,8 @@ def are_valid_statements_in_theory_with_variables(
         else:
             return valid, None
     else:
-        valid_statements = iterate_valid_statements_in_theory_OBSOLETE(t=t)
+        # valid_statements = iterate_valid_statements_in_theory_OBSOLETE(t=t)
+        valid_statements = iterate_theory_propositions(t=t)
         for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                         n=permutation_size):
             variable_substitution: Map = Map(d=free_variables, c=permutation)
@@ -4716,7 +4717,7 @@ def auto_derive_4(
                         u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
                     return t, True, derivation, conjecture_exclusion_list
             else:
-                valid_statements = iterate_valid_statements_in_theory_OBSOLETE(t=t)
+                valid_statements = iterate_theory_propositions(t=t)
                 for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                                 n=permutation_size):
                     permutation_success: bool = True
