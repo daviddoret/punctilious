@@ -2669,17 +2669,6 @@ def iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e: FlexibleE
         #   The vocabulary here should be made more accurate.
 
 
-def iterate_valid_statements_in_theory_OBSOLETE(t: FlexibleTheory | None = None) -> typing.Generator[
-    Formula, None, None]:
-    """Generator function that iterates all valid-statements in a theory by canonical order.
-
-    :param t: A theory.
-    :return:
-    """
-    t = coerce_theory(t=t)
-    yield from iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e=t.derivations)
-
-
 def iterate_theory_axioms(t: FlexibleTheory | None = None,
                           d: FlexibleEnumeration[FlexibleDerivation] | None = None,
                           strip_duplicates: bool = True,
