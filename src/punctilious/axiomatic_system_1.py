@@ -2494,16 +2494,40 @@ def is_well_formed_algorithmic_transformation(t: FlexibleFormula) -> bool:
         return False
 
 
-def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory) -> bool:
-    """Return True if formula phi is a valid-statement with regard to theory t, False otherwise.
+def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory | None = None,
+                                     d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                     strip_duplicates: bool = True,
+                                     interpret_none_as_empty: bool = True,
+                                     canonic_conversion: bool = True,
+                                     max_derivations: int | None = None) -> bool:
+    """Returns `True` if and only if proposition `p` is valid in theory `t`, `False` otherwise.
 
-    A formula phi is a valid-statement with regard to a theory t, if and only if:
-     - phi is the valid-statement of an axiom in t,
-     - or phi is the valid-statement of a theorem in t.
+    Alternatively, check validity of `p` in an enumeration of derivations `d`.
+
+    A formula :math:`\phi` is a valid-statement with regard to a theory :math:`t`, if and only if:
+     - :math:`\phi` is the valid-statement of an axiom in :math:`t`,
+     - or :math:`\phi` is the valid-statement of a theorem in :math:`t`.
+
+    :param t: A theory.
+    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param max_derivations: Verifies the validity of `p` only through the first `max_derivations` derivations
+        in canonical order, or all derivations if `None`.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
+    :return:
     """
     p: Formula = coerce_formula(phi=p)
     t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=p, psi=valid_statement) for valid_statement in t.iterate_valid_statements())
+    return any(is_formula_equivalent(phi=p, psi=valid_statement) for valid_statement in
+               iterate_theory_propositions(
+                   t=t,
+                   d=d,
+                   strip_duplicates=strip_duplicates,
+                   interpret_none_as_empty=interpret_none_as_empty,
+                   canonic_conversion=canonic_conversion,
+                   max_derivations=max_derivations))
+    # t.iterate_valid_statements())
 
 
 def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> tuple[bool, int | None]:
