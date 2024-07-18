@@ -4859,10 +4859,14 @@ class NaturalTransformationTypesetter(pl1.Typesetter):
         yield from pl1.symbols.rightwards_arrow.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from phi.conclusion.typeset_from_generator(**kwargs)
-        yield ' with variables '
-        yield from phi.variables.typeset_from_generator(**kwargs)
-        yield ' and declarations '
-        yield from phi.declarations.typeset_from_generator(**kwargs)
+        if len(phi.variables) > 0:
+            yield ' with variables '
+            yield from phi.variables.typeset_from_generator(**kwargs)
+        if len(phi.declarations) > 0:
+            if len(phi.variables) > 0:
+                yield ' and'
+            yield ' declarations '
+            yield from phi.declarations.typeset_from_generator(**kwargs)
 
         if is_sub_formula:
             yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)

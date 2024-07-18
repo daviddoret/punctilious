@@ -1040,6 +1040,36 @@ class TestTheory:
         assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=6))) == 4
         assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=7))) == 5
 
+    def test_would_be_valid(self):
+        a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
+        t = pu.as1.Theory()
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
+        t, i1 = pu.as1.let_x_be_an_inference_rule(t1=t, t2=pu.as1.NaturalTransformation(c=f, v=None, p=None))
+        t, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i1)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=d)
+        t, i2 = pu.as1.let_x_be_an_inference_rule(t1=t, t2=pu.as1.NaturalTransformation(c=g, v=None, p=None))
+        t, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=e)
+
+        u_limit_index = 2
+        v = pu.as1.Enumeration(e=t[0:u_limit_index])
+        u_ok = pu.as1.Enumeration(e=(t[u_limit_index],))
+        u_nok = pu.as1.Enumeration(e=(t[u_limit_index + 1],))
+        test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_ok)
+        assert test
+        test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_nok)
+        assert not test  # this theorem cannot be derived without the above inference-rule
+
+        u_limit_index = 5
+        v = pu.as1.Enumeration(e=t[0:u_limit_index])
+        u_ok = pu.as1.Enumeration(e=(t[u_limit_index],))
+        u_nok = pu.as1.Enumeration(e=(t[u_limit_index + 1],))
+        test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_ok)
+        assert test
+        test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_nok)
+        assert not test  # this theorem cannot be derived without the above inference-rule
+
 
 class TestFormula:
     def test_get_formula_depth(self):
