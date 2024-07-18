@@ -2663,36 +2663,6 @@ def iterate_theory_derivations(t: FlexibleTheory[FlexibleDerivation] | None = No
     return
 
 
-def iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e: FlexibleEnumeration,
-                                                                    strip_duplicates: bool = True,
-                                                                    interpret_none_as_empty: bool = True,
-                                                                    canonic_conversion: bool = True,
-                                                                    max_index: int | None = None) -> typing.Generator[
-    Formula, None, None]:
-    """Generator function that iterates the valid-statements in an enumeration whose elements are derivations,
-    by canonical order.
-
-    :param e: An enumeration of derivations.
-    :return:
-    """
-    e: Enumeration = coerce_enumeration(e=e, strip_duplicates=strip_duplicates,
-                                        interpret_none_as_empty=interpret_none_as_empty,
-                                        canonic_conversion=canonic_conversion)
-    index: int = 0
-    for d in iterate_enumeration_elements(e=e):
-        index = index + 1
-        if max_index is not None and index >= max_index:
-            return
-        d: Derivation = coerce_derivation(d=d)
-        if is_well_formed_axiom(a=d):
-            yield d.valid_statement
-        elif is_well_formed_theorem(t=d):
-            yield d.valid_statement
-        # TODO: Question: the above is a little ambiguous. an inference-rule is also a valid-statement, no?
-        #   But an inference-rule may not really be a proposition, or is it?
-        #   The vocabulary here should be made more accurate.
-
-
 def iterate_theory_axioms(t: FlexibleTheory | None = None,
                           d: FlexibleEnumeration[FlexibleDerivation] | None = None,
                           strip_duplicates: bool = True,
@@ -3092,8 +3062,9 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
             # Check that all premises are valid predecessor propositions in the derivation.
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
-                if not any(is_formula_equivalent(phi=q, psi=p2) for p2 in
-                           iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e=c, max_index=index)):
+                if not is_valid_proposition_in_theory_1(p=q, t=None, d=c, max_derivations=index):
+                    # not any(is_formula_equivalent(phi=q, psi=p2) for p2 in
+                    # iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e=c, max_index=index)):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
                             msg='Premise "q" is not a valid predecessor (with index strictly less than "index").'
