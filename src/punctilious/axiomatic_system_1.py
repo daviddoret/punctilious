@@ -2639,10 +2639,11 @@ def iterate_theory_derivations(t: FlexibleTheory[FlexibleDerivation] | None = No
     return
 
 
-def iterate_valid_statements_in_enumeration_of_derivations(e: FlexibleEnumeration, strip_duplicates: bool = True,
-                                                           interpret_none_as_empty: bool = True,
-                                                           canonic_conversion: bool = True,
-                                                           max_index: int | None = None) -> typing.Generator[
+def iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e: FlexibleEnumeration,
+                                                                    strip_duplicates: bool = True,
+                                                                    interpret_none_as_empty: bool = True,
+                                                                    canonic_conversion: bool = True,
+                                                                    max_index: int | None = None) -> typing.Generator[
     Formula, None, None]:
     """Generator function that iterates the valid-statements in an enumeration whose elements are derivations,
     by canonical order.
@@ -2668,14 +2669,15 @@ def iterate_valid_statements_in_enumeration_of_derivations(e: FlexibleEnumeratio
         #   The vocabulary here should be made more accurate.
 
 
-def iterate_valid_statements_in_theory(t: FlexibleTheory | None = None) -> typing.Generator[Formula, None, None]:
+def iterate_valid_statements_in_theory_OBSOLETE(t: FlexibleTheory | None = None) -> typing.Generator[
+    Formula, None, None]:
     """Generator function that iterates all valid-statements in a theory by canonical order.
 
     :param t: A theory.
     :return:
     """
     t = coerce_theory(t=t)
-    yield from iterate_valid_statements_in_enumeration_of_derivations(e=t.derivations)
+    yield from iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e=t.derivations)
 
 
 def iterate_theory_axioms(t: FlexibleTheory | None = None,
@@ -2856,7 +2858,7 @@ def are_valid_statements_in_theory_with_variables(
         else:
             return valid, None
     else:
-        valid_statements = iterate_valid_statements_in_theory(t=t)
+        valid_statements = iterate_valid_statements_in_theory_OBSOLETE(t=t)
         for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                         n=permutation_size):
             variable_substitution: Map = Map(d=free_variables, c=permutation)
@@ -3034,7 +3036,7 @@ def would_be_valid_derivations_in_theory(u: FlexibleEnumeration, v: FlexibleTheo
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
                 if not any(is_formula_equivalent(phi=q, psi=p2) for p2 in
-                           iterate_valid_statements_in_enumeration_of_derivations(e=c, max_index=index)):
+                           iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e=c, max_index=index)):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
                             msg='Premise "q" is not a valid predecessor (with index strictly less than "index").'
@@ -4714,7 +4716,7 @@ def auto_derive_4(
                         u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
                     return t, True, derivation, conjecture_exclusion_list
             else:
-                valid_statements = iterate_valid_statements_in_theory(t=t)
+                valid_statements = iterate_valid_statements_in_theory_OBSOLETE(t=t)
                 for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                                 n=permutation_size):
                     permutation_success: bool = True
