@@ -3824,20 +3824,19 @@ class Theory(Formula):
 
     def __new__(cls, c: Connective | None = None,
                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
-                d2: FlexibleDerivation | None = None,
                 decorations: FlexibleDecorations = None, **kwargs):
         """
 
         :param c:
         :param t: A theory that is being extended by the new theory. If None, the empty theory is assumed.
-        :param d: An enumeration of derivations for the new theory.
+        :param d: An enumeration of complementary derivations for the new theory.
         :param decorations:
         :param kwargs:
         """
-        if t is not None:
-            t: Theory = coerce_theory(t=t)
-        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
-                                            canonic_conversion=True)
+        # if t is not None:
+        #    t: Theory = coerce_theory(t=t)
+        # d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
+        #                                    canonic_conversion=True)
         if t is not None:
             d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
         c2, d2 = Theory._data_validation(c=c, t=t, d=d)
