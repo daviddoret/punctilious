@@ -3835,12 +3835,9 @@ class Theory(Formula):
         :param decorations:
         :param kwargs:
         """
-        # if t is not None:
-        #    t: Theory = coerce_theory(t=t)
-        # d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
-        #                                    canonic_conversion=True)
         if t is not None:
-            d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
+            # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
+            d = union_enumeration(phi=t, psi=d)
         c2, d2 = Theory._data_validation(c=c, t=t, d=d)
         o: tuple = super().__new__(cls, c=c2, t=d2, **kwargs)
         return o
@@ -3860,7 +3857,8 @@ class Theory(Formula):
         """
         d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         if t is not None:
-            d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
+            d = union_enumeration(phi=t, psi=d)
+            # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
 
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
 
