@@ -993,6 +993,24 @@ class TestAutoDerivation:
         pass
 
 
+class TestTheory:
+    def test_iterate_axioms(self):
+        a, b, c, d, e, f = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f',))
+        t = pu.as1.Theory()
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
+        t2 = pu.as1.NaturalTransformation(c=f, v=None, p=None)
+        t, i = pu.as1.let_x_be_an_inference_rule(t1=t, t2=t2)
+        t, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=d)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=e)
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t))) == 4
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=2))) == 2
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=3))) == 2
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=4))) == 2
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=5))) == 3
+
+
 class TestFormula:
     def test_get_formula_depth(self):
         c = pu.as1.FreeArityConnective(formula_ts=pu.pl1.symbols.x_uppercase_serif_italic)

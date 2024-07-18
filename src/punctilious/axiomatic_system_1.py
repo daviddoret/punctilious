@@ -2678,6 +2678,37 @@ def iterate_valid_statements_in_theory(t: FlexibleTheory | None = None) -> typin
     yield from iterate_valid_statements_in_enumeration_of_derivations(e=t.derivations)
 
 
+def iterate_theory_axioms(t: FlexibleTheory | None = None,
+                          d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                          strip_duplicates: bool = True,
+                          interpret_none_as_empty: bool = True,
+                          canonic_conversion: bool = True,
+                          max_derivations: int | None = None
+                          ) -> typing.Generator[
+    InferenceRule, None, None]:
+    """Iterates through axioms in derivations of a theory `t`, in canonical order.
+
+    Alternatively, iterates through axioms of an enumeration of derivations `d`, in canonical order.
+
+    :param t: A theory.
+    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
+    :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
+    :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
+    :return:
+    """
+    for d2 in iterate_theory_derivations(t=t,
+                                         d=d,
+                                         max_derivations=max_derivations,
+                                         interpret_none_as_empty=interpret_none_as_empty,
+                                         strip_duplicates=strip_duplicates,
+                                         canonic_conversion=canonic_conversion):
+        if is_well_formed_axiom(a=d2):
+            a: Axiom = coerce_axiom(a=d2)
+            yield a
+
+
 def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
                                    d: FlexibleEnumeration[FlexibleDerivation] | None = None,
                                    strip_duplicates: bool = True,
