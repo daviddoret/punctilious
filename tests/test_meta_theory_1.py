@@ -27,21 +27,31 @@ class TestMT1:
 
 class TestMT2:
     def test_mt2(self):
-        a = as1.let_x_be_a_simple_object(formula_ts='a')
+        m = as1.let_x_be_a_theory()  # The meta-theory
         t = as1.let_x_be_a_theory()
-        m = as1.let_x_be_a_theory()
         m, i = as1.let_x_be_an_inference_rule(t1=m, i=pu.mt1.mt2)
-        x = as1.is_well_formed_inference_rule(i=a)
-        # A simple-object formula is not an inference-rule
-        c = pu.mt1.is_well_formed_inference_rule(a)
-        m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(a,))
-        # TODO: BUG: The derivation should return lnot(is_well_formed_inference_rule_predicate(a)).
-        #   is_well_formed_inference_rule works properly, probably derive_1 returns c directly.
-        assert as1.is_formula_equivalent(phi=lnot(c), psi=d.valid_statement)
-        # A theory is not an inference-rule
-        c = is_well_formed_inference_rule(t)
-        m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,))
-        assert as1.is_formula_equivalent(phi=lnot(c), psi=d.valid_statement)
+
+        # Test 1: an inference-rule is an inference-rule
+        m, i2 = as1.let_x_be_an_inference_rule(t1=m, i=pu.mt1.mt3)
+        c = is_well_formed_inference_rule(i2)  # This is a formula
+        m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(i2,))
+
+        # Test 2: a simple-object is not an inference-rule
+        a = as1.let_x_be_a_simple_object(formula_ts='a')
+        c = is_well_formed_inference_rule(a)
+        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_MT1_001):
+            m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(a,))
+
+        # Test 3: using is-well-formed-inference-rule on itself.
+        # Test 1: an inference-rule is an inference-rule
+        t, i3 = as1.let_x_be_an_inference_rule(t1=t, i=pu.mt1.mt2)
+        c = is_well_formed_inference_rule(i3)  # This is a formula
+        # m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(i3,))
+        # Raises: ERROR AS1-021: variable x is a sub-formula of phi.
+        # TODO: Find a solution for the above.
+
+        # TODO: Clarify semantically Derivation of type inference-rule and inference-rule
+
         pass
 
 

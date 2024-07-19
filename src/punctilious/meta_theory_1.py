@@ -22,15 +22,20 @@ def is_well_formed_formula(p: as1.Tupl | None = None, a: as1.Tupl | None = None)
     a: as1.Tupl = as1.coerce_tuple(t=a)
     if not a.arity == 1:
         raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
-    phi: as1.Formula = as1.coerce_formula(phi=a[0])
+    a0: as1.Formula = a[0]
+    phi: as1.Formula = as1.coerce_formula(phi=a0)
     if as1.is_well_formed_formula(phi=phi):
         # Necessary case.
         phi: as1.Formula = csl1.is_well_formed_formula(phi)
         return phi
     else:
-        # Impossible case.
-        phi: as1.Formula = csl1.lnot(csl1.is_well_formed_formula(phi))
-        return phi
+        # Technically impossible case.
+        raise u1.ApplicativeError(
+            msg='The argument `a0` is not a well-formed formula. '
+                'It follows that the statement :math:`\text{is-well-formed-formula}(a_{0})` cannot be derived.',
+            code=c1.ERROR_CODE_MT1_003,
+            a0=a0
+        )
 
 
 def is_well_formed_inference_rule(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
