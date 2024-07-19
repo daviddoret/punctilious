@@ -49,10 +49,19 @@ class TestMT3:
     def test_mt3(self):
         # TODO: Implement strict connective constraints on theories and introduce a test
         #   checking that an atomic-object is not a theory.
-        t = as1.let_x_be_a_theory()
-        m = as1.let_x_be_a_theory()
+        m = as1.let_x_be_a_theory()  # meta-theory
+
+        # Proper theory t allows to derive (is-well-formed-theory(t)).
+        t = as1.let_x_be_a_theory()  # target or object theory
         m, i = as1.let_x_be_an_inference_rule(t1=m, i=pu.mt1.mt3)
-        c = is_well_formed_theory(t)
+        c = is_well_formed_theory(t)  # This is a formula
         m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,))
         assert as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
+
+        # Simple object a does not allow to derive (is-well-formed-theory(a)).
+        a = as1.let_x_be_a_simple_object(formula_ts='a')  # simple object
+        c = is_well_formed_theory(a)  # This is a formula
+        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_MT1_002):
+            m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(a,))
+
         pass

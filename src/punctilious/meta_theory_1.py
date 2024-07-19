@@ -1,6 +1,7 @@
 # import typing
 import sys
 
+import constants_1 as c1
 import util_1 as u1
 import presentation_layer_1 as pl1
 import axiomatic_system_1 as as1
@@ -38,16 +39,19 @@ def is_well_formed_inference_rule(p: as1.Tupl | None = None, a: as1.Tupl | None 
     a: as1.Tupl = as1.coerce_tuple(t=a)
     if not a.arity == 1:
         raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
-    i: as1.Formula = as1.coerce_formula(phi=a[0])
+    a0: as1.Formula = a[0]
+    i: as1.Formula = as1.coerce_formula(phi=a0)
     if as1.is_well_formed_inference_rule(i=i):
         i: as1.InferenceRule = as1.coerce_inference_rule(i=i)
         phi: as1.Formula = csl1.is_well_formed_inference_rule(t)
         return phi
     else:
-        # This case is not possible because the punctilious framework forces the usage
-        # of well-formed formulas.
-        phi: as1.Formula = csl1.lnot(csl1.is_well_formed_inference_rule(t))
-        return phi
+        raise u1.ApplicativeError(
+            msg='The argument `a0` is not a well-formed inference-rule. '
+                'It follows that the statement :math:`\text{is-well-formed-inference-rule}(a_{0})` cannot be derived.',
+            code=c1.ERROR_CODE_MT1_001,
+            a0=a0
+        )
 
 
 def is_well_formed_theory(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
@@ -56,14 +60,19 @@ def is_well_formed_theory(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     a: as1.Tupl = as1.coerce_tuple(t=a)
     if not a.arity == 1:
         raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
-    t: as1.Formula = as1.coerce_formula(phi=a[0])
+    a0: as1.Formula = a[0]
+    t: as1.Formula = as1.coerce_formula(phi=a0)
     if as1.is_well_formed_theory(t=t):
         t: as1.Theory = as1.coerce_theory(t=t)
         phi: as1.Formula = csl1.is_well_formed_theory(t)
         return phi
     else:
-        phi = csl1.lnot(csl1.is_well_formed_theory(t))
-        return phi
+        raise u1.ApplicativeError(
+            msg='The argument `a0` is not a well-formed theory. '
+                'It follows that the statement :math:`\text{is-well-formed-theory}(a_{0})` cannot be derived.',
+            code=c1.ERROR_CODE_MT1_002,
+            a0=a0
+        )
 
 
 def is_compatible_with_is_well_formed_formula(phi: as1.FlexibleFormula) -> bool:
