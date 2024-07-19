@@ -1,5 +1,10 @@
 """
 
+TODO: When a transformation creates new objects, it is not deterministic.
+    To verify the validity of derivations a posterio,
+    we must be able to re-map the new objects to the variables.
+    i think this requires a single conclusion in algorithmic transformations.
+    which would mean we need to double them all the time to have both P and not(P).
 
 TODO: Replace the follows-from scheme?, e.g. inference-rule(blablabla), axiom(blablabla).
     Put more thought into this before changing anything, because we need to model Derivation.

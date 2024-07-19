@@ -2518,7 +2518,11 @@ def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory | Non
     :return:
     """
     p: Formula = coerce_formula(phi=p)
-    t: Theory = coerce_theory(t=t)
+    if t is not None:
+        t: Theory = coerce_theory(t=t, interpret_none_as_empty=False)
+    else:
+        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
+                                            canonic_conversion=True)
     return any(is_formula_equivalent(phi=p, psi=valid_statement) for valid_statement in
                iterate_theory_propositions(
                    t=t,
@@ -3005,9 +3009,9 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
      `v′` = `v` with duplicates stripped out if `b` is `True`, `None` otherwise,
      `u′` = `(u \ v)` with duplicates stripped out if `b` is `True`, `None` otherwise.
     """
-    u: Enumeration = coerce_enumeration(e=u, strip_duplicates=True, interpret_none_as_empty=True,
-                                        canonic_conversion=True)
     v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True, interpret_none_as_empty=True,
+                                        canonic_conversion=True)
+    u: Enumeration = coerce_enumeration(e=u, strip_duplicates=True, interpret_none_as_empty=True,
                                         canonic_conversion=True)
 
     # Consider only derivations that are not elements of the verified enumeration.
@@ -3023,6 +3027,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
     verification_threshold: int = len(v)
 
     # Coerce all enumeration elements to axioms, inference-rules, and theorems.
+    # TODO: Implement a dedicated function coerce_enumeration_of_derivations().
     coerced_elements: list = [coerce_derivation(d=d) for d in iterate_enumeration_elements(e=c)]
     c: Enumeration = Enumeration(e=coerced_elements)
 
@@ -3044,8 +3049,9 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
             # By definition, the presence of an inference-rule in a theory is valid.
             pass
         elif is_well_formed_theorem(t=d):
-            # This is a well-formed theorem.
-            # Check that this theorem is a valid derivation with regard to predecessor theorems.
+            # This is a theorem.
+            # Check that this theorem is well-formed with regard to the target theory,
+            # i.e. it is a valid derivation with regard to predecessor derivations.
             m: Theorem = coerce_theorem(t=d)
             i: Inference = m.inference
             ir: InferenceRule = m.inference.inference_rule
@@ -3057,7 +3063,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                         code=c1.ERROR_CODE_AS1_068,
                         msg='Inference-rule "ir" is not a valid predecessor (with index strictly less than "index").'
                             ' This forbids the derivation of proposition "p" in step "d" in the derivation sequence.',
-                        p=p, ir=ir, index=index, d=d, c=c)
+                        p=p, ir=ir, index=index, d=d, c=c, v=v, u=u)
                 return False, None, None
             # Check that all premises are valid predecessor propositions in the derivation.
             for q in i.premises:
@@ -3067,25 +3073,61 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                     # iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e=c, max_index=index)):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
-                            msg='Premise "q" is not a valid predecessor (with index strictly less than "index").'
-                                ' This forbids the derivation of proposition "p" in step "d" in the derivation'
-                                ' sequence.',
+                            msg='Derivation `d` claims to derive `p`.'
+                                ' `q` is a premise necessary to derive `p`.'
+                                ' But `q` is not found as a valid predecessor of `p` in the derivation sequence `c`.'
+                                ' It follows that derivation `d` is not well formed.'
+                                ' `index` shows the position of `d` in `c`.'
+                                ' `v` enumerates the presumably verified derivations in the derivation sequence.'
+                                ' `u` enumerates the unverified derivations in the derivation sequence.',
                             code=c1.ERROR_CODE_AS1_036,
-                            p=p, q=q, index=index, d=d, c=c)
+                            p=p, q=q, index=index, d=d, c=c, v=v, u=u)
                     return False, None, None
             # Check that the transformation of the inference-rule effectively yields the announced proposition.
             t2: Transformation = i.inference_rule.transformation
-            p_prime = t2.apply_transformation(p=i.premises, a=i.arguments)
-            if not is_formula_equivalent(phi=p, psi=p_prime):
-                if raise_error_if_false:
-                    raise u1.ApplicativeError(
-                        msg='Transformation "t2" of inference-rule "ir" does not yield the expected proposition "p",'
-                            ' but yields "p_prime".'
-                            ' This forbids the derivation of proposition "p" in step "d" in the derivation sequence.'
-                            ' Inference "i" contains the arguments (premises and the complementary arguments).',
-                        code=c1.ERROR_CODE_AS1_036,
-                        p=p, p_prime=p_prime, index=index, t2=t2, ir=ir, i=i, d=d, c=c)
-                return False, None, None
+            if len(t2.declarations) > 0:
+                # But wait a minute...
+                # If the transformation declares/creates new objects, the inference-rule is non-deterministic.
+                # For this particular case, we must map the original objects created by the first derivation,
+                # with the expected conclusion of the inference-rule.
+                map1_test, map1 = is_formula_equivalent_with_variables_2(phi=p, psi=t2.conclusion,
+                                                                         variables=t2.declarations)
+                if not map1_test:
+                    if raise_error_if_false:
+                        raise u1.ApplicativeError(
+                            msg='TODO: Document this error.',
+                            code=c1.ERROR_CODE_AS1_074, map1_test=map1_test, map1=map1,
+                            p=p, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
+                    return False, None, None
+
+                map1_inverse = inverse_map(m=map1)
+                p_inverse = replace_formulas(phi=p, m=map1_inverse)
+
+                inverse_test = is_formula_equivalent(phi=p_inverse, psi=t2.conclusion)
+                if not inverse_test:
+                    if raise_error_if_false:
+                        raise u1.ApplicativeError(
+                            msg='TODO: Document this error.',
+                            code=c1.ERROR_CODE_AS1_075, p_inverse=p_inverse, map1_inverse=map1_inverse,
+                            map1_test=map1_test, map1=map1,
+                            p=p, p_prime=p_prime, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
+                    return False, None, None
+                pass
+            else:
+                # The simpler case is when the inference-rule does not create new objects.
+                # No remapping is necessary and the original conclusion can simply be compared
+                # with the new conclusion.
+                p_prime = t2.apply_transformation(p=i.premises, a=i.arguments)
+                if not is_formula_equivalent(phi=p, psi=p_prime):
+                    if raise_error_if_false:
+                        raise u1.ApplicativeError(
+                            msg='Inference-rule "ir" does not yield the expected proposition "p",'
+                                ' but yields "p_prime".'
+                                ' This forbids the derivation of "p" in step "d" in the derivation sequence.'
+                                ' Inference "i" contains the arguments (premises and the complementary arguments).',
+                            code=c1.ERROR_CODE_AS1_036,
+                            p=p, p_prime=p_prime, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
+                    return False, None, None
             # All tests have been successfully completed, we now have the assurance
             # that derivation "d" would be valid if appended to theory "t".
             pass
@@ -3097,7 +3139,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                         ' This forbids the derivation of proposition "p" in step "d" in the derivation'
                         ' sequence.',
                     code=c1.ERROR_CODE_AS1_071,
-                    p=p, d=d, index=index, c=c)
+                    p=p, d=d, index=index, c=c, v=v, u=u)
             return False, None, None
         # Derivation "d" is valid.
         pass
@@ -3819,9 +3861,11 @@ class Theory(Formula):
             t: Theory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True,
                                             interpret_none_as_empty=True)
-        is_valid, v, u = would_be_valid_derivations_in_theory(v=d, u=t, raise_error_if_false=True)
+        is_valid, v, u = would_be_valid_derivations_in_theory(v=t, u=d, raise_error_if_false=True)
         d = union_enumeration(phi=v, psi=u, strip_duplicates=True)
         # d = Enumeration(e=(*v, *u,))
+        # if len(v) + len(u) != len(d):
+        #    pass
         return c, d
 
     def __new__(cls, c: Connective | None = None,
@@ -3835,10 +3879,13 @@ class Theory(Formula):
         :param decorations:
         :param kwargs:
         """
-        if t is not None:
-            # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
-            d = union_enumeration(phi=t, psi=d)
-        c2, d2 = Theory._data_validation(c=c, t=t, d=d)
+        # if t is not None:
+        #    # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
+        #    d = union_enumeration(phi=t, psi=d)
+        d3 = union_enumeration(phi=t, psi=d, strip_duplicates=True, interpret_none_as_empty=True,
+                               canonic_conversion=True)
+
+        c2, d2 = Theory._data_validation(c=c, t=t, d=d3)
         o: tuple = super().__new__(cls, c=c2, t=d2, **kwargs)
         return o
 
@@ -3856,11 +3903,15 @@ class Theory(Formula):
         :param kwargs:
         """
         # d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
-        if t is not None:
-            d = union_enumeration(phi=t, psi=d)
+        # if t is not None:
+        d3 = union_enumeration(phi=t, psi=d, strip_duplicates=True, interpret_none_as_empty=True,
+                               canonic_conversion=True)
         # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
 
-        c2, d2 = Theory._data_validation(c=c, t=t, d=d)
+        c2, d2 = Theory._data_validation(c=c, t=t, d=d3)
+        c4, d4 = Theory._data_validation(c=c, t=t, d=d)
+        if not is_formula_equivalent(phi=d2, psi=d4):
+            pass
         super().__init__(c=c2, t=d2, **kwargs)
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         copy_theory_decorations(target=self, decorations=decorations)

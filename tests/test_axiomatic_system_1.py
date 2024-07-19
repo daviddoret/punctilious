@@ -640,18 +640,20 @@ class TestTheorem:
         t = pu.as1.let_x_be_a_theory()
         a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
-        i = pu.as1.InferenceRule(t=pu.as1.NaturalTransformation(c=b, p=(a,)))
-        t = pu.as1.append_to_theory(i, t=t)
-        i2 = pu.as1.Inference(p=(a,), i=i)
+        ir1 = pu.as1.InferenceRule(t=pu.as1.NaturalTransformation(c=b, p=(a,)))
+        t = pu.as1.append_to_theory(ir1, t=t)
+        if1 = pu.as1.Inference(p=(a,), i=ir1)
         # For the purpose of this test,
         # build the theorem manually,
         # i.e. without using a derivation function.
-        m = pu.as1.Theorem(s=b, i=i2)
-        m = pu.as1.coerce_theorem(t=m)
-        m2 = b | follows_from | i2
-        assert pu.as1.is_formula_equivalent(phi=m, psi=m2)
-        m2 = pu.as1.coerce_theorem(t=m2)
-        t = pu.as1.append_to_theory(m, t=t)
+        tm1 = pu.as1.Theorem(s=b, i=if1)
+        tm1 = pu.as1.coerce_theorem(t=tm1)
+
+        tm2 = b | follows_from | if1
+        assert pu.as1.is_formula_equivalent(phi=tm1, psi=tm2)
+        tm2 = pu.as1.coerce_theorem(t=tm2)
+
+        t = pu.as1.append_to_theory(tm1, t=t)
         pass
 
 
