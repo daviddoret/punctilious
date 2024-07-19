@@ -1024,7 +1024,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
     if t is None:
         t = Axiomatization(d=None)
     else:
-        t: FlexibleTheory = coerce_theory(t=t)
+        t: FlexibleTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     if s is not None and a is not None:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_016,
@@ -3166,13 +3166,12 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
     t = coerce_formula(phi=t)
 
     if isinstance(t, Theory):
-        # the Derivation class assure the well-formedness of the theory.
+        # By design, the Theory class assures the well-formedness of a theory.
+        # cf. the _data_validation_ method in the Theory class.
         return True
 
     c: Connective = t.connective
-    if (c is not _connectives.theory_formula and
-            c is not _connectives.axiomatization_formula and
-            1 == 2):
+    if c is not _connectives.theory_formula:
         # TODO: Remove the 1==2 condition above to re-implement a check of strict connectives constraints.
         #   But then we must properly manage python inheritance (Axiomatization --> Theory --> Enumeration).
         if raise_event_if_false:
@@ -3186,90 +3185,12 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                 t=t)
         return False
 
-    # check the well-formedness of the individual derivations.
-    # and retrieve the terms claimed as proven in the theory, preserving order.
-    # by the definition of a theory, these are the left term (term_0) of the formulas.
-    valid_statements: Tupl = Tupl(elements=None)
-    derivations: Tupl = Tupl(elements=None)
-    for d in t:
-        if not is_well_formed_derivation(d=d):
-            if raise_event_if_false:
-                raise u1.ApplicativeError(msg='Derivation d is not a well-formed-derivation in theory t.',
-                                          d=d, d_type=type(d), t=t)
-            return False
-        else:
-            d: Derivation = coerce_derivation(d=d)
-            derivations: Tupl = append_element_to_tuple(t=derivations, x=d)
-            # retrieve the formula claimed as valid from the theorem
-            valid_statement: Formula = d.valid_statement
-            valid_statements: Tupl = append_element_to_tuple(t=valid_statements, x=valid_statement)
-    # now the derivations and valid_statements have been retrieved, and proved well-formed individually,
-    for i in range(0, derivations.arity):
-        d = derivations[i]
-        valid_statement = valid_statements[i]
-        if is_well_formed_axiom(a=d):
-            # This is an axiom.
-            d: Axiom = coerce_axiom(a=d)
-            pass
-        elif is_well_formed_inference_rule(i=d):
-            # This is an inference-rule.
-            d: InferenceRule = coerce_inference_rule(i=d)
-            pass
-        elif is_well_formed_theorem(t=d):
-            theorem_by_inference: Theorem = coerce_theorem(t=d)
-            inference: Inference = theorem_by_inference.inference
-            for premise in inference.premises:
-                # check that premise is a proven-formula (term_0) of a predecessor
-                if not valid_statements.has_element(phi=premise):
-                    # The premise is absent from the theory
-                    if raise_event_if_false:
-                        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_036, premise=premise, premise_index=i,
-                                                  theorem=d,
-                                                  valid_statement=valid_statement)
-                    return False
-                else:
-                    premise_index = valid_statements.get_index_of_first_equivalent_element(phi=premise)
-                    if premise_index >= i:
-                        # The premise is not positioned before the conclusion.
-                        if raise_event_if_false:
-                            raise u1.ApplicativeError(
-                                code=c1.ERROR_CODE_AS1_037,
-                                msg='The premise is not positioned before the conclusion.',
-                                premise=premise, premise_index=i,
-                                theorem=d,
-                                valid_statement=valid_statement)
-                        return False
-            if not any(
-                    isinstance(ir, InferenceRule) and is_formula_equivalent(phi=inference.inference_rule, psi=ir) for ir
-                    in t):
-                # Exceptionally we cannot call is_inference_rule_of_theory because this
-                # would lead to an infinite recursion. In consequence, we must "manually"
-                # check using the above expression whether the inference-rule is in the theory.
-                # The inference-rule is absent from the theory.
-                if raise_event_if_false:
-                    raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_038,
-                                              msg='The inference-rule is absent in the theory.',
-                                              transformation_rule=inference.inference_rule,
-                                              inference=inference, premise_index=i, theorem=d,
-                                              valid_statement=valid_statement)
-                return False
-            else:
-                inference_rule_index = derivations.get_index_of_first_equivalent_element(
-                    phi=inference.inference_rule)
-                if inference_rule_index >= i:
-                    # The transformation is not positioned before the conclusion.
-                    return False
-            # Now we have the assurance that the inference-rule and all premises are valid.
-            # And finally, confirm that the inference effectively yields phi.
-            phi_prime = inference.inference_rule.transformation.apply_transformation(p=inference.premises,
-                                                                                     a=inference.arguments)
-            if not is_formula_equivalent(phi=valid_statement, psi=phi_prime):
-                return False
-        else:
-            # Incorrect form.
-            return False
-    # All tests were successful.
-    return True
+    # Check that the terms of the formula constitute an enumeration of derivations,
+    # and that derivations in this sequence of derivations is valid.
+    v: Enumeration = Enumeration(e=None)  # Assume no pre-verified derivations.
+    u: Enumeration = transform_formula_to_enumeration(phi=t, strip_duplicates=False)
+    would_be_valid, _, _ = would_be_valid_derivations_in_theory(v=None, u=u)
+    return would_be_valid
 
 
 def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_ill_formed: bool = False) -> bool:
@@ -3914,8 +3835,6 @@ class Theory(Formula):
         if pl1.DECLARATION_TS not in self.ts.keys():
             self.ts[pl1.DECLARATION_TS] = typesetters.declaration(conventional_class='theory')
 
-        is_well_formed_theory(t=self, raise_event_if_false=True)
-
         if t is None:
             # This is not an extended theory, this is a new theory.
             # Output its declaration.
@@ -4282,7 +4201,7 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
     :param t:
     :return:
     """
-    t: Theory = coerce_theory(t=t)
+    t: Theory = coerce_theory(t=t, canonical_conversion=True, interpret_none_as_empty=True)
     if args is None:
         return t
     else:
@@ -4388,7 +4307,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     :return: A python-tuple (t′, theorem)
     """
     # parameters validation
-    t: Theory = coerce_theory(t=t)
+    t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     c: Formula = coerce_formula(phi=c)
     p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
     i: InferenceRule = coerce_inference_rule(i=i)
@@ -4466,7 +4385,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[Theory, bool, typing.Optional[Derivation]]
     """
-    t = coerce_theory(t=t)
+    t = coerce_theory(t=t, canonical_conversion=True, interpret_none_as_empty=True)
     c = coerce_formula(phi=c)
     if debug:
         u1.log_debug(f'auto_derive_0: start. conjecture:{c}.')
@@ -5017,7 +4936,7 @@ def typeset_formula_reference(phi: FlexibleFormula, t: FlexibleTheory | None, **
     """
     phi = coerce_formula(phi=phi)
     if t is not None:
-        t = coerce_theory(t=t)
+        t = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     if pl1.REF_TS in phi.ts:
         # This formula has a typesetting reference, e.g. "PL01".
         yield from pl1.symbols.open_square_bracket.typeset_from_generator(**kwargs)
