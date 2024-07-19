@@ -3871,9 +3871,6 @@ class Theory(Formula):
                                             interpret_none_as_empty=True)
         is_valid, v, u = would_be_valid_derivations_in_theory(v=t, u=d, raise_error_if_false=True)
         d = union_enumeration(phi=v, psi=u, strip_duplicates=True)
-        # d = Enumeration(e=(*v, *u,))
-        # if len(v) + len(u) != len(d):
-        #    pass
         return c, d
 
     def __new__(cls, c: Connective | None = None,
@@ -3887,13 +3884,7 @@ class Theory(Formula):
         :param decorations:
         :param kwargs:
         """
-        # if t is not None:
-        #    # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
-        #    d = union_enumeration(phi=t, psi=d)
-        d3 = union_enumeration(phi=t, psi=d, strip_duplicates=True, interpret_none_as_empty=True,
-                               canonic_conversion=True)
-
-        c2, d2 = Theory._data_validation(c=c, t=t, d=d3)
+        c2, d2 = Theory._data_validation(c=c, t=t, d=d)
         o: tuple = super().__new__(cls, c=c2, t=d2, **kwargs)
         return o
 
@@ -3910,16 +3901,7 @@ class Theory(Formula):
         :param decorations: TODO: this argument is useless, get rid of it and only use theory extension.
         :param kwargs:
         """
-        # d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
-        # if t is not None:
-        d3 = union_enumeration(phi=t, psi=d, strip_duplicates=True, interpret_none_as_empty=True,
-                               canonic_conversion=True)
-        # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
-
-        c2, d2 = Theory._data_validation(c=c, t=t, d=d3)
-        c4, d4 = Theory._data_validation(c=c, t=t, d=d)
-        if not is_formula_equivalent(phi=d2, psi=d4):
-            pass
+        c2, d2 = Theory._data_validation(c=c, t=t, d=d)
         super().__init__(c=c2, t=d2, **kwargs)
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         copy_theory_decorations(target=self, decorations=decorations)
