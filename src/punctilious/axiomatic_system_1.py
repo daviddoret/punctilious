@@ -3094,8 +3094,12 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                                                                          variables=t2.declarations)
                 if not map1_test:
                     if raise_error_if_false:
+                        c2 = t2.conclusion
+                        d2 = t2.declarations
                         raise u1.ApplicativeError(
-                            msg='TODO: Document this error.',
+                            msg='Derivation `d` claims that `p` is valid in the derivation sequence `c`.'
+                                'The inference-rule `ir` has conclusion `c2` with new object declarations `d2`.'
+                                'But this conclusion is not formula-equivalent-with-variables with `p`.',
                             code=c1.ERROR_CODE_AS1_074, map1_test=map1_test, map1=map1,
                             p=p, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
                     return False, None, None
@@ -3103,14 +3107,18 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                 map1_inverse = inverse_map(m=map1)
                 p_inverse = replace_formulas(phi=p, m=map1_inverse)
 
+                # The following test is probably superfluous,
+                # as the precedent test covers the compatibility of the conclusion.
                 inverse_test = is_formula_equivalent(phi=p_inverse, psi=t2.conclusion)
                 if not inverse_test:
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
-                            msg='TODO: Document this error.',
+                            msg='Derivation `d` claims that `p` is valid in the derivation sequence `c`.'
+                                'The inference-rule `ir` has conclusion `c2` with new object declarations `d2`.'
+                                'But this conclusion is not formula-equivalent-with-variables with `p`.',
                             code=c1.ERROR_CODE_AS1_075, p_inverse=p_inverse, map1_inverse=map1_inverse,
                             map1_test=map1_test, map1=map1,
-                            p=p, p_prime=p_prime, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
+                            p=p, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
                     return False, None, None
                 pass
             else:
