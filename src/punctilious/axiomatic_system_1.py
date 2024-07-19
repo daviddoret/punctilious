@@ -3855,15 +3855,14 @@ class Theory(Formula):
         :param decorations: TODO: this argument is useless, get rid of it and only use theory extension.
         :param kwargs:
         """
-        d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
+        # d: Enumeration = coerce_enumeration_OBSOLETE(e=d)
         if t is not None:
             d = union_enumeration(phi=t, psi=d)
-            # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
-
-        self._heuristics: set[Heuristic, ...] | set[{}] = set()
+        # d: Enumeration = Enumeration(e=(*t, *d), strip_duplicates=True)
 
         c2, d2 = Theory._data_validation(c=c, t=t, d=d)
         super().__init__(c=c2, t=d2, **kwargs)
+        self._heuristics: set[Heuristic, ...] | set[{}] = set()
         copy_theory_decorations(target=self, decorations=decorations)
         if t is not None:
             copy_theory_decorations(target=self, decorations=(t,))
@@ -3874,7 +3873,7 @@ class Theory(Formula):
         if pl1.DECLARATION_TS not in self.ts.keys():
             self.ts[pl1.DECLARATION_TS] = typesetters.declaration(conventional_class='theory')
 
-        is_well_formed_theory(t=d, raise_event_if_false=True)
+        is_well_formed_theory(t=self, raise_event_if_false=True)
 
         if t is None:
             # This is not an extended theory, this is a new theory.
