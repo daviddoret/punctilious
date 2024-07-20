@@ -53,7 +53,7 @@ class Connective:
 
     def __call__(self, *args):
         """Allows pseudo formal language in python."""
-        return Formula(c=self, t=args)
+        return Formula(con=self, t=args)
 
     def __str__(self):
         return f'{id(self)}-connective'
@@ -70,7 +70,7 @@ class Connective:
         self._formula_typesetter = formula_typesetter
 
     def to_formula(self) -> Formula:
-        return Formula(c=self)
+        return Formula(con=self)
 
     @property
     def ts(self) -> dict[str, pl1.Typesetter]:
@@ -120,18 +120,18 @@ class Formula(tuple):
                 code=c1.ERROR_CODE_AS1_002, c=con, t=t)
         return con, t
 
-    def __new__(cls, c: Connective, t: FlexibleTupl = None, **kwargs):
+    def __new__(cls, con: Connective, t: FlexibleTupl = None, **kwargs):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        c, t = Formula._data_validation(con=c, t=t)
+        con, t = Formula._data_validation(con=con, t=t)
         if len(t) == 0:
             return super().__new__(cls)
         elif len(t) > 0:
             return super().__new__(cls, t)
 
-    def __init__(self, c: Connective, t: FlexibleTupl = None, **kwargs):
+    def __init__(self, con: Connective, t: FlexibleTupl = None, **kwargs):
         super().__init__()
-        self._connective = c
+        self._connective = con
         self._ts: dict[str, pl1.Typesetter] = pl1.extract_typesetters(t=kwargs)
 
     def __contains__(self, phi: FlexibleFormula):
@@ -591,11 +591,11 @@ class SimpleObject(Formula):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
         o: tuple
-        o = super().__new__(cls, c=c, t=None)
+        o = super().__new__(cls, con=c, t=None)
         return o
 
     def __init__(self, c: NullaryConnective):
-        super().__init__(c=c, t=None)
+        super().__init__(con=c, t=None)
 
 
 class UnaryConnective(FixedArityConnective):
@@ -621,7 +621,7 @@ class InfixPartialFormula:
         overloading the __or__() method that is called when | is used,
         and gluing all this together with the InfixPartialFormula class.
         """
-        return Formula(c=self._connective, t=(self.term_1, term_2,))
+        return Formula(con=self._connective, t=(self.term_1, term_2,))
 
     def __repr__(self):
         return self.typeset_as_string()
@@ -1457,7 +1457,7 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         return assigned_value
     else:
         # build the replaced formula.
-        fb: Formula = Formula(c=phi.connective)
+        fb: Formula = Formula(con=phi.connective)
         # recursively apply the replacement algorithm on phi terms.
         for term in phi:
             term_substitute = replace_formulas(phi=term, m=m)
@@ -1477,14 +1477,14 @@ def replace_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     m: Map = coerce_map(m=m, interpret_none_as_empty=True)
     # TODO: Check that the map domain and codomain are composed of simple objects.
     c: Connective = phi.connective
-    c_formula: Formula = Formula(c=c)
+    c_formula: Formula = Formula(con=c)
     if is_in_map_domain(phi=c_formula, m=m):
-        preimage: Formula = Formula(c=c)
+        preimage: Formula = Formula(con=c)
         image: Formula = get_image_from_map(m=m, preimage=preimage)
         c: Connective = image.connective
     # Build the new formula psi with the new connective,
     # and by calling replace_connectives recursively on all terms.
-    psi: Formula = Formula(c=c, t=(replace_connectives(phi=term, m=m) for term in phi))
+    psi: Formula = Formula(con=c, t=(replace_connectives(phi=term, m=m) for term in phi))
     return psi
 
 
@@ -1503,11 +1503,11 @@ class Tupl(Formula):
     def __new__(cls, elements: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple = super().__new__(cls, c=_connectives.tupl, t=elements)
+        o: tuple = super().__new__(cls, con=_connectives.tupl, t=elements)
         return o
 
     def __init__(self, elements: FlexibleTupl = None):
-        super().__init__(c=_connectives.tupl, t=elements)
+        super().__init__(con=_connectives.tupl, t=elements)
 
     def get_index_of_first_equivalent_element(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
@@ -1577,7 +1577,7 @@ def append_term_to_formula(f: FlexibleFormula, t: FlexibleFormula) -> Formula:
     """
     f: Formula = coerce_formula(phi=f)
     t: Formula = coerce_formula(phi=t)
-    extended_formula: Formula = Formula(t=(*f, t,), c=f.connective)
+    extended_formula: Formula = Formula(t=(*f, t,), con=f.connective)
     return extended_formula
 
 
@@ -1651,7 +1651,7 @@ class Map(Formula):
         :param c: An enumeration denoted as the codomain of the map.
         """
         d, c = Map._data_validation(d=d, c=c)
-        o: tuple = super().__new__(cls, c=_connectives.map_formula, t=(d, c,))
+        o: tuple = super().__new__(cls, con=_connectives.map_formula, t=(d, c,))
         return o
 
     def __init__(self, d: FlexibleEnumeration = None, c: FlexibleTupl = None):
@@ -1661,7 +1661,7 @@ class Map(Formula):
         :param c: An enumeration denoted as the codomain of the map.
         """
         d, c = Map._data_validation(d=d, c=c)
-        super().__init__(c=_connectives.map_formula, t=(d, c,))
+        super().__init__(con=_connectives.map_formula, t=(d, c,))
 
     @property
     def codomain(self) -> Tupl:
@@ -1767,13 +1767,13 @@ class Enumeration(Formula):
     def __new__(cls, e: FlexibleEnumeration = None,
                 strip_duplicates: bool = False, **kwargs):
         c, e = Enumeration._data_validation(e=e, strip_duplicates=strip_duplicates)
-        o: tuple = super().__new__(cls, c=c, t=e, **kwargs)
+        o: tuple = super().__new__(cls, con=c, t=e, **kwargs)
         return o
 
     def __init__(self, e: FlexibleEnumeration = None,
                  strip_duplicates: bool = False, **kwargs):
         c, e = Enumeration._data_validation(e=e, strip_duplicates=strip_duplicates)
-        super().__init__(c=c, t=e, **kwargs)
+        super().__init__(con=c, t=e, **kwargs)
 
 
 enumeration = Enumeration
@@ -1858,7 +1858,7 @@ class Transformation(Formula):
         :param p: A tuple of formulas denoted as the premises.
         """
         con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
-        o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
+        o: tuple = super().__new__(cls, con=_connectives.natural_transformation,
                                    t=(c, v, d, p,))
         return o
 
@@ -1874,7 +1874,7 @@ class Transformation(Formula):
         :param p: A tuple of formulas denoted as the premises.
         """
         con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
-        super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
+        super().__init__(con=_connectives.natural_transformation, t=(c, v, d, p,))
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
@@ -2056,7 +2056,7 @@ class NaturalTransformation(Transformation, ABC):
         declarations_map: Map = Map()
         for declaration in self.declarations:
             new_connective: Connective = Connective()
-            simple_formula: Formula = Formula(c=new_connective)
+            simple_formula: Formula = Formula(con=new_connective)
             # TODO: Find a way to initialize the new_connective formula_typesetter.
             # TODO: Find a way to initialize the new_connective arity.
             declarations_map: Map = append_pair_to_map(m=declarations_map, preimage=declaration, image=simple_formula)
@@ -3409,7 +3409,7 @@ class Derivation(Formula):
                 **kwargs):
         c, s, j = Derivation._data_validation_2(s=s,
                                                 j=j)
-        o: tuple = super().__new__(cls, c=c, t=(s, j,), **kwargs)
+        o: tuple = super().__new__(cls, con=c, t=(s, j,), **kwargs)
         return o
 
     def __init__(self, s: FlexibleFormula, j: FlexibleFormula,
@@ -3422,7 +3422,7 @@ class Derivation(Formula):
         """
         c, s, j = Derivation._data_validation_2(s=s,
                                                 j=j)
-        super().__init__(c=c, t=(s, j,), **kwargs)
+        super().__init__(con=c, t=(s, j,), **kwargs)
 
     @property
     def valid_statement(self) -> Formula:
@@ -3474,7 +3474,7 @@ class Axiom(Derivation):
         global _connectives
         con: Connective = _connectives.axiom
         s: Formula = coerce_formula(phi=s)
-        justification: Formula = Formula(c=con)
+        justification: Formula = Formula(con=con)
         return con, s, justification
 
     def __new__(cls, s: FlexibleFormula = None, **kwargs):
@@ -3526,7 +3526,7 @@ class InferenceRule(Derivation):
         global _connectives
         con: Connective = _connectives.inference_rule
         t: Transformation = coerce_transformation(t=t)
-        j: Formula = Formula(c=con)
+        j: Formula = Formula(con=con)
         return con, t, j
 
     def __new__(cls, t: FlexibleTransformation = None, **kwargs):
@@ -3593,7 +3593,7 @@ class Inference(Formula):
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
         c, i, p, a = Inference._data_validation(i=i, p=p, a=a)
-        o: tuple = super().__new__(cls, c=c, t=(i, p, a))
+        o: tuple = super().__new__(cls, con=c, t=(i, p, a))
         return o
 
     def __init__(self, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
@@ -3604,7 +3604,7 @@ class Inference(Formula):
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
         c, i, p, a = Inference._data_validation(i=i, p=p, a=a)
-        super().__init__(c=c, t=(i, p, a,))
+        super().__init__(con=c, t=(i, p, a,))
 
     @property
     def arguments(self) -> Tupl:
@@ -3808,7 +3808,7 @@ class Theory(Formula):
         :param kwargs:
         """
         c2, d2 = Theory._data_validation(con=con, t=t, d=d)
-        o: tuple = super().__new__(cls, c=c2, t=d2, **kwargs)
+        o: tuple = super().__new__(cls, con=c2, t=d2, **kwargs)
         return o
 
     def __init__(self, con: Connective | None = None,
@@ -3825,7 +3825,7 @@ class Theory(Formula):
         :param kwargs:
         """
         c2, d2 = Theory._data_validation(con=con, t=t, d=d)
-        super().__init__(c=c2, t=d2, **kwargs)
+        super().__init__(con=c2, t=d2, **kwargs)
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         copy_theory_decorations(target=self, decorations=decorations)
         if t is not None:
@@ -4108,7 +4108,7 @@ class Axiomatization(Formula):
     def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None,
                 decorations: FlexibleDecorations = None):
         c, t = Axiomatization._data_validation(a=a, d=d)
-        o: tuple = super().__new__(cls, c=c, t=t)
+        o: tuple = super().__new__(cls, con=c, t=t)
         return o
 
     def __init__(self, a: Axiomatization | None = None, d: FlexibleEnumeration = None,
@@ -4120,7 +4120,7 @@ class Axiomatization(Formula):
         :param decorations:
         """
         c, t = Axiomatization._data_validation(a=a, d=d)
-        super().__init__(c=c, t=t)
+        super().__init__(con=c, t=t)
         if a is not None:
             copy_theory_decorations(target=self, decorations=(a,))
 
