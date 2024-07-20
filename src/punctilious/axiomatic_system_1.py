@@ -292,10 +292,10 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
         return phi.to_formula()
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         # Implicit conversion of generators to tuple formulas.
-        return Tupl(elements=(element for element in phi))
+        return Tupl(e=(element for element in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         # Implicit conversion of iterators to tuple formulas.
-        return Tupl(elements=phi)
+        return Tupl(e=phi)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_006,
@@ -388,9 +388,9 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic
     if isinstance(t, Tupl):
         return t
     elif is_well_formed_tupl(t=t, interpret_none_as_empty=interpret_none_as_empty):
-        return Tupl(elements=t)
+        return Tupl(e=t)
     elif interpret_none_as_empty and t is None:
-        return Tupl(elements=None)
+        return Tupl(e=None)
     elif canonic_conversion and is_well_formed_formula(phi=t):
         # Every formula can be transformed to a tuple using canonical transformation.
         return transform_formula_to_tuple(phi=t)
@@ -398,12 +398,12 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Tupl(elements=tuple(x for x in t))
+        return Tupl(e=tuple(x for x in t))
     elif isinstance(t, typing.Iterable) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Tupl(elements=t)
+        return Tupl(e=t)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_065,
@@ -545,10 +545,10 @@ def coerce_tupl_OBSOLETE(t: FlexibleTupl) -> Tupl:
     if isinstance(t, Tupl):
         return t
     elif t is None:
-        return Tupl(elements=None)
+        return Tupl(e=None)
     elif isinstance(t, collections.abc.Iterable):
         """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return Tupl(elements=t)
+        return Tupl(e=t)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_010, coerced_type=Tupl, phi_type=type(t), phi=t)
 
@@ -1500,14 +1500,18 @@ class Tupl(Formula):
      Python implementation: in python, the word 'tuple' is reserved. For this reason, the word 'tupl' is used instead
      to implement this object."""
 
-    def __new__(cls, elements: FlexibleTupl = None):
+    def __new__(cls, e: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple = super().__new__(cls, con=_connectives.tupl, t=elements)
+        o: tuple = super().__new__(cls, con=_connectives.tupl, t=e)
         return o
 
-    def __init__(self, elements: FlexibleTupl = None):
-        super().__init__(con=_connectives.tupl, t=elements)
+    def __init__(self, e: FlexibleTupl = None):
+        """Creates a new tupl instance.
+
+        :param e: The elements of the tupl.
+        """
+        super().__init__(con=_connectives.tupl, t=e)
 
     def get_index_of_first_equivalent_element(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
@@ -1568,7 +1572,7 @@ def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> Tupl:
     """
     t: Tupl = coerce_tuple(t=t, interpret_none_as_empty=True)
     x: Formula = coerce_formula(phi=x)
-    extended_tupl: Tupl = Tupl(elements=(*t, x,))
+    extended_tupl: Tupl = Tupl(e=(*t, x,))
     return extended_tupl
 
 
@@ -2897,7 +2901,7 @@ def are_valid_statements_in_theory_with_variables(
             variable_substitution: Map = Map(d=free_variables, c=permutation)
             s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
             s_with_variable_substitution: Tupl = coerce_tuple(t=s_with_variable_substitution)
-            s_with_permutation: Tupl = Tupl(elements=(*s_with_variable_substitution,))
+            s_with_permutation: Tupl = Tupl(e=(*s_with_variable_substitution,))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
         return False, None
@@ -3966,7 +3970,7 @@ def transform_formula_to_tuple(phi: FlexibleFormula) -> Tupl:
         phi: Tupl = coerce_tuple(t=phi)
         return phi
     else:
-        phi: Tupl = Tupl(elements=iterate_formula_terms(phi=phi))
+        phi: Tupl = Tupl(e=iterate_formula_terms(phi=phi))
         return phi
 
 
@@ -4464,7 +4468,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
         necessary_premises: Tupl = Tupl(
-            elements=replace_formulas(phi=i.transformation.premises, m=known_variable_values))
+            e=replace_formulas(phi=i.transformation.premises, m=known_variable_values))
         # necessary_premises: Tupl = Tupl(elements=None)
         # for original_premise in inference_rule.transformation.premises:
         #    necessary_premise = replace_formulas(phi=original_premise, m=known_variable_values)
@@ -4648,7 +4652,7 @@ def auto_derive_4(
 
             # now that we know what are the necessary variable values, we can determine what
             # are the necessary premises by substituting the variable values.
-            necessary_premises: Tupl = Tupl(elements=None)
+            necessary_premises: Tupl = Tupl(e=None)
             for original_premise in inference_rule.transformation.premises:
                 # we must find a set of premises in the theory
                 # with free-variables.
@@ -4659,7 +4663,7 @@ def auto_derive_4(
                 #    and then extend this algorithm to support variables.
                 # to avoid the burden of all these conjunctions in the theory, I start with the second approach.
                 necessary_premise: Formula = replace_formulas(phi=original_premise, m=m)
-                necessary_premises: Tupl = Tupl(elements=(*necessary_premises, necessary_premise,))
+                necessary_premises: Tupl = Tupl(e=(*necessary_premises, necessary_premise,))
 
             # the following step is where auto_derive_2 is different from auto_derive_1.
             # we are not assuming that there should exist valid premises to derive the target statement,
@@ -4676,7 +4680,7 @@ def auto_derive_4(
                 # it follows that 1) there will be no permutations,
                 # and 2) are_valid_statements_in_theory() is equivalent.
                 effective_premises: Formula = replace_formulas(phi=necessary_premises, m=m)
-                effective_premises: Tupl = Tupl(elements=effective_premises)
+                effective_premises: Tupl = Tupl(e=effective_premises)
                 for premise_target_statement in effective_premises:
                     if not is_element_of_enumeration(x=premise_target_statement,
                                                      e=conjecture_exclusion_list):
@@ -4705,7 +4709,7 @@ def auto_derive_4(
                     permutation_success: bool = True
                     variable_substitution: Map = Map(d=free_variables, c=permutation)
                     effective_premises: Formula = replace_formulas(phi=necessary_premises, m=variable_substitution)
-                    effective_premises: Tupl = Tupl(elements=(*effective_premises, permutation,))
+                    effective_premises: Tupl = Tupl(e=(*effective_premises, permutation,))
                     for premise_target_statement in effective_premises:
                         if not is_element_of_enumeration(x=premise_target_statement,
                                                          e=conjecture_exclusion_list):
