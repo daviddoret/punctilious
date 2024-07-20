@@ -1754,7 +1754,9 @@ class Enumeration(Formula):
         if len(e) != len(e_unique_only):
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_029,
-                msg='The data-validation check failed during enumeration creation.',
+                msg='Enumeration declaration failure. '
+                    'The number of unique elements in `e` is not equal to the number of elements in `e`,'
+                    'but parameter `strip_duplicates = False`.',
                 len_e=len(e),
                 len_e_unique_only=len(e_unique_only),
                 e=e,
@@ -1824,54 +1826,54 @@ class Transformation(Formula):
     PREMISES_INDEX: int = 3
 
     @staticmethod
-    def _data_validation_2(connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def _data_validation_2(con: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                            d: FlexibleEnumeration | None = None,
                            p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param connective:
+        :param con:
         :param c:
         :param v:
         :param d:
         :param p:
         :return:
         """
-        connective: Connective = coerce_connective(c=connective)
+        con: Connective = coerce_connective(con=con)
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
-        return connective, c, v, d, p
+        return con, c, v, d, p
 
-    def __new__(cls, connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def __new__(cls, con: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
         """
 
-        :param connective:
+        :param con:
         :param c: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        connective, c, v, d, p = Transformation._data_validation_2(connective=connective, c=c, v=v, d=d, p=p)
+        con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, c=_connectives.natural_transformation,
                                    t=(c, v, d, p,))
         return o
 
-    def __init__(self, connective: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def __init__(self, con: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
         """
 
-        :param connective:
+        :param con:
         :param c: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        connective, c, v, d, p = Transformation._data_validation_2(connective=connective, c=c, v=v, d=d, p=p)
+        con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
         super().__init__(c=_connectives.natural_transformation, t=(c, v, d, p,))
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
@@ -2005,7 +2007,7 @@ class NaturalTransformation(Transformation, ABC):
         :param p: A tuple of formulas denoted as the premises.
         """
         c2, c, v, d, p = NaturalTransformation._data_validation_3(c=c, v=v, d=d, p=p)
-        o: tuple = super().__new__(cls, connective=c2, c=c, v=v, d=d, p=p)
+        o: tuple = super().__new__(cls, con=c2, c=c, v=v, d=d, p=p)
         return o
 
     def __init__(self, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
@@ -2019,7 +2021,7 @@ class NaturalTransformation(Transformation, ABC):
         :param p: A tuple of formulas denoted as the premises.
         """
         c2, c, v, d, p = NaturalTransformation._data_validation_3(c=c, v=v, d=d, p=p)
-        super().__init__(connective=c2, c=c, v=v, d=d, p=p)
+        super().__init__(con=c2, c=c, v=v, d=d, p=p)
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -2165,7 +2167,7 @@ class AlgorithmicTransformation(Transformation):
         :return:
         """
         global _connectives
-        c2: Connective = _connectives.algorithm
+        con: Connective = _connectives.algorithm
         # TODO: Check "a" is callable nad has correct signature.
         a: typing.Callable = coerce_external_algorithm(f=a)
         # TODO: Check "i" is callable nad has correct signature.
@@ -2173,7 +2175,7 @@ class AlgorithmicTransformation(Transformation):
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
-        return c2, a, i, c, v, d, p
+        return con, a, i, c, v, d, p
 
     def __new__(cls, a: typing.Callable, i: typing.Callable, c: FlexibleFormula,
                 v: FlexibleEnumeration | None = None,
@@ -2188,7 +2190,7 @@ class AlgorithmicTransformation(Transformation):
         :param p: A tuple of formulas denoted as the premises.
         """
         c2, a, i, c, v, d, p = AlgorithmicTransformation._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
-        o: tuple = super().__new__(cls, connective=c2, c=c, v=v, d=d, p=p)
+        o: tuple = super().__new__(cls, con=c2, c=c, v=v, d=d, p=p)
         return o
 
     def __init__(self, a: typing.Callable, i: typing.Callable,
@@ -2206,7 +2208,7 @@ class AlgorithmicTransformation(Transformation):
         c2, a, i, c, v, d, p = AlgorithmicTransformation._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
         self._external_algorithm: typing.Callable = a
         self._is_derivation_candidate = i
-        super().__init__(connective=c2, c=c, v=v, d=d, p=p)
+        super().__init__(con=c2, c=c, v=v, d=d, p=p)
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -2284,14 +2286,14 @@ def coerce_algorithmic_transformation(t: FlexibleAlgorithmicTransformation) -> A
                                   algorithm=t)
 
 
-def coerce_connective(c: Connective) -> Connective:
-    if isinstance(c, Connective):
-        return c
+def coerce_connective(con: Connective) -> Connective:
+    if isinstance(con, Connective):
+        return con
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_059,
-            msg='c could not be coerced to Connective type.',
-            c=c, c_type=type(c))
+            msg='`con` could not be coerced to a connective.',
+            c=con, c_type=type(con))
 
 
 def coerce_inference(i: FlexibleFormula) -> Inference:
@@ -3170,16 +3172,16 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
         # cf. the _data_validation_ method in the Theory class.
         return True
 
-    c: Connective = t.connective
-    if c is not _connectives.theory_formula:
+    con: Connective = t.connective
+    if con is not _connectives.theory_formula:
         # TODO: Remove the 1==2 condition above to re-implement a check of strict connectives constraints.
         #   But then we must properly manage python inheritance (Axiomatization --> Theory --> Enumeration).
         if raise_event_if_false:
             raise u1.ApplicativeError(
                 msg='The connective "c" of theory "t" is not the "theory-formula" connective. '
                     'It follows that "t" is not a well-formed-theory.',
-                c=c,
-                c_id=id(c),
+                con=con,
+                con_id=id(con),
                 theory_formula=_connectives.theory_formula,
                 theory_formula_id=id(_connectives.theory_formula),
                 t=t)
