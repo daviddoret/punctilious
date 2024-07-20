@@ -308,6 +308,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
     """
     pass
 
+modus_ponens = ir1.modus_ponens
+
 axiomatization = as1.Axiomatization(d=(pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10))
 
 extended_theory = as1.Theory(d=(*axiomatization,))
@@ -356,12 +358,22 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
     t = extend_theory_with_minimal_logic_1(t=t)
-    t, c, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='C')
-    t, d, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')
-    # TODO: Implement this as a proper hypothesis
-    # TODO: Implement short reference names
+    t, p1, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p1')
+    t, p2, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p2')
+
     # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
+    t, ok, d1 = as1.derive_2(
+        c=p1 | implies | (p1 | lor | p2),
+        t=t, i=pl07
+    )
+
     # 2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
+    t, ok, d1 = as1.derive_2(
+        c=(p1 | implies | (p1 | lor | p2)) | implies | (
+                ((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2))),
+        t=t, i=pl04
+    )
+
     # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
     # 4. ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃
     #     {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}] (axiom PL3)

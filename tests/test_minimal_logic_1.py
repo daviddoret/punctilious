@@ -4,7 +4,7 @@ import punctilious as pu
 from punctilious.connectives_standard_library_1 import *
 
 derive_0 = pu.as1.derive_0
-derive_1 = pu.as1.derive_2
+derive_2 = pu.as1.derive_2
 auto_derive_2 = pu.as1.auto_derive_2
 auto_derive_3 = pu.as1.auto_derive_3
 auto_derive_4 = pu.as1.auto_derive_4
@@ -323,7 +323,7 @@ class TestPL5:
         assert success
         assert pu.as1.is_valid_proposition_in_theory_1(p=x | implies | y, t=t4)
 
-        t5, success, _ = derive_1(t=t2, c=x | implies | y, debug=False,
+        t5, success, _ = derive_2(t=t2, c=x | implies | y, debug=False,
                                   i=pu.ir1.modus_ponens)
         assert success
         assert pu.as1.is_valid_proposition_in_theory_1(p=x | implies | y, t=t5)
@@ -342,30 +342,30 @@ class TestMancosu2021P20:
             d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
         t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p1')
         t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p2')
-        t, success, _, = derive_1(c=p1 | is_a | proposition,
+        t, success, _, = derive_2(c=p1 | is_a | proposition,
                                   i=pu.pls1.i1, t=t)
-        t, success, _, = derive_1(c=p2 | is_a | proposition,
+        t, success, _, = derive_2(c=p2 | is_a | proposition,
                                   i=pu.pls1.i1, t=t)
-        t, success, _, = derive_1(c=(p1 | lor | p2) | is_a | proposition,
+        t, success, _, = derive_2(c=(p1 | lor | p2) | is_a | proposition,
                                   i=pu.pls1.i5, t=t)
-        t, success, _, = derive_1(c=(p2 | lor | p1) | is_a | proposition,
+        t, success, _, = derive_2(c=(p2 | lor | p1) | is_a | proposition,
                                   i=pu.pls1.i5, t=t)
-        t, success, _, = derive_1(c=(p1 | implies | (p1 | lor | p2)) | is_a | proposition,
+        t, success, _, = derive_2(c=(p1 | implies | (p1 | lor | p2)) | is_a | proposition,
                                   i=pu.pls1.i4, t=t)
-        t, success, _, = derive_1(c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | is_a | proposition,
+        t, success, _, = derive_2(c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | is_a | proposition,
                                   i=pu.pls1.i4, t=t)
-        t, success, _, = derive_1(
+        t, success, _, = derive_2(
             c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (
                     p1 | implies | (p1 | lor | p2)) | is_a | proposition,
             i=pu.pls1.i4, t=t)
 
         # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
-        t, success, _, = derive_1(t=t, c=p1 | implies | (p1 | lor | p2),
+        t, success, _, = derive_2(t=t, c=p1 | implies | (p1 | lor | p2),
                                   i=pu.ml1.pl07)
         assert success
 
         # 2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
-        t, success, _, = derive_1(
+        t, success, _, = derive_2(
             t=t,
             c=(p1 | implies | (p1 | lor | p2)) | implies | (
                     ((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2))),
@@ -373,7 +373,7 @@ class TestMancosu2021P20:
         assert success
 
         # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
-        t, success, _, = derive_1(
+        t, success, _, = derive_2(
             c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2)),
             i=pu.ir1.modus_ponens, t=t, debug=False)
         assert success
@@ -394,55 +394,55 @@ class TestMancosu2021P20:
             d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
         t, c, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='C')
         t, d, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')
-        t, success, _, = derive_1(c=c | is_a | proposition,
+        t, success, _, = derive_2(c=c | is_a | proposition,
                                   i=pu.pls1.i1, t=t)
-        t, success, _, = derive_1(c=d | is_a | proposition,
+        t, success, _, = derive_2(c=d | is_a | proposition,
                                   i=pu.pls1.i1, t=t)
-        t, success, _, = derive_1(c=(c | implies | d) | is_a | proposition,
+        t, success, _, = derive_2(c=(c | implies | d) | is_a | proposition,
                                   i=pu.pls1.i4, t=t)
-        t, success, _, = derive_1(c=(d | implies | c) | is_a | proposition,
+        t, success, _, = derive_2(c=(d | implies | c) | is_a | proposition,
                                   i=pu.pls1.i4, t=t)
-        t, success, _, = derive_1(c=(d | land | d) | is_a | proposition,
+        t, success, _, = derive_2(c=(d | land | d) | is_a | proposition,
                                   i=pu.pls1.i3, t=t)
-        t, success, _, = derive_1(c=(c | land | d) | is_a | proposition,
+        t, success, _, = derive_2(c=(c | land | d) | is_a | proposition,
                                   i=pu.pls1.i3, t=t)
-        t, success, _, = derive_1(c=((d | land | d) | implies | (c | land | d)) | is_a | proposition,
+        t, success, _, = derive_2(c=((d | land | d) | implies | (c | land | d)) | is_a | proposition,
                                   i=pu.pls1.i4, t=t)
         # 1. ⊢ 𝐶(hypothesis)
         t, hypothesis = pu.as1.let_x_be_an_axiom(t=t, s=c)
         assert pu.as1.is_valid_proposition_in_theory_1(p=c, t=t)
         # 2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶)(axiom PL5)
-        t, success, _, = derive_1(c=c | implies | (d | implies | c),
+        t, success, _, = derive_2(c=c | implies | (d | implies | c),
                                   i=pu.ml1.pl05, t=t)
         assert success
         # 3. ⊢ 𝐷 ⊃ 𝐶 (mp 1, 2)
-        t, success, _, = derive_1(c=d | implies | c,
+        t, success, _, = derive_2(c=d | implies | c,
                                   i=pu.ir1.modus_ponens, t=t)
         assert success
         # 4. ⊢ (𝐷 ⊃ 𝐶) ⊃ [(𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)] (axiom PL3)
-        t, success, _, = derive_1(
+        t, success, _, = derive_2(
             c=(d | implies | c) | implies | ((d | land | d) | implies | (c | land | d)),
             i=pu.ml1.pl03, t=t)
         assert success
         # 5. ⊢ (𝐷 ∧ 𝐷) ⊃ (𝐶 ∧ 𝐷)(mp 3, 4)
-        t, success, _, = derive_1(
+        t, success, _, = derive_2(
             c=(d | land | d) | implies | (c | land | d),
             i=pu.ir1.modus_ponens, t=t)
         assert success
         # 6. ⊢ 𝐷 ⊃ (𝐷 ∧ 𝐷)(axiom PL1)
-        t, success, _, = derive_1(
+        t, success, _, = derive_2(
             c=d | implies | (d | land | d),
             i=pu.ml1.pl01, t=t)
         assert success
         # 7. ⊢ 𝐷(hypothesis)
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=d)
         # 8. ⊢ 𝐷 ∧ 𝐷(mp 6, 7)
-        t, success, _, = derive_1(
+        t, success, _, = derive_2(
             c=d | land | d,
             i=pu.ir1.modus_ponens, t=t)
         assert success
         # 9. ⊢ 𝐶 ∧ 𝐷(mp 5, 8)
-        t, success, _, = derive_1(
+        t, success, _, = derive_2(
             c=c | land | d,
             i=pu.ir1.modus_ponens, t=t, debug=False)
         assert success

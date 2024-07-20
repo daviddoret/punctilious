@@ -4479,6 +4479,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
 
 
 def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
+             raise_if_false: bool = True,
              debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """Derive a new theory t′ that extends t, where conjecture c is a new theorem derived from inference-rule i.
@@ -4506,6 +4507,13 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         u1.log_debug(
             f'derive_2: The derivation failed because the inference-rule is not contained in the theory. '
             f'conjecture:{c}. inference_rule:{i}. ')
+        if raise_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_078,
+                msg='Inference-rule `i` is not an element of theory `t`. '
+                    'It follows that proposition `c` cannot be inferred in `t` using `i`.',
+                c=c, i=i, t=t,
+            )
         return t, False, None
 
     # First try the less expansive auto_derive_0 algorithm
@@ -4555,10 +4563,25 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
             return t, True, derivation
         else:
             # The required premises are not present in theory t, report failure.
+            if raise_if_false:
+                raise u1.ApplicativeError(
+                    code=c1.ERROR_CODE_AS1_079,
+                    msg='Some premise required by inference-rule `i` are not valid propositions in theory `t`. '
+                        'It follows that proposition `c` cannot be inferred in `t` using `i`.',
+                    necessary_premises=necessary_premises,
+                    c=c, i=i, known_variable_values=known_variable_values, t=t
+                )
             return t, False, None
-
-    # The conclusion of the inference_rule is not compatible with the conjecture.
-    return t, False, None
+    else:
+        # The conclusion of the inference_rule is not compatible with the conjecture.
+        if raise_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_080,
+                msg='The candidate proposition `c` is not compatible with the conclusion of inference-rule `i`. '
+                    'It follows that proposition `c` cannot be inferred in `t` using `i`.',
+                c=c, i=i, known_variable_values=known_variable_values, t=t
+            )
+        return t, False, None
 
 
 def auto_derive_with_heuristics(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
@@ -4599,7 +4622,7 @@ def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = 
 
     # Loop through all inference_rules in theory t.
     for inference_rule in t.iterate_inference_rules():
-        t, success, d = derive_2(t=t, c=conjecture, i=inference_rule)
+        t, success, d = derive_2(t=t, c=conjecture, i=inference_rule, raise_if_false=False)
         if success:
             # Eureka, the conjecture was proven.
             return t, success, d
