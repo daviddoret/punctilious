@@ -1072,6 +1072,46 @@ class TestTheory:
         test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_nok)
         assert not test  # this theorem cannot be derived without the above inference-rule
 
+    def test_transform_to_axiomatization_and_axiomatization_equivalence(self):
+        a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
+        t1 = pu.as1.Theory()
+        t2, _ = pu.as1.let_x_be_an_axiom(t=t1, s=a)
+        t3, _ = pu.as1.let_x_be_an_axiom(t=t2, s=b)
+        t4, i1 = pu.as1.let_x_be_an_inference_rule(t1=t3, t2=pu.as1.NaturalTransformation(c=f, v=None, p=None))
+        t5, _ = pu.as1.derive_1(t=t4, c=f, p=None, i=i1)
+        t6, _ = pu.as1.let_x_be_an_axiom(t=t5, s=d)
+        t7, i2 = pu.as1.let_x_be_an_inference_rule(t1=t6, t2=pu.as1.NaturalTransformation(c=g, v=None, p=None))
+        t8, _ = pu.as1.derive_1(t=t7, c=g, p=None, i=i2)
+        t9, _ = pu.as1.let_x_be_an_axiom(t=t8, s=e)
+
+        a1 = pu.as1.transform_theory_to_axiomatization(t=t1)
+        a2 = pu.as1.transform_theory_to_axiomatization(t=t2)
+        a3 = pu.as1.transform_theory_to_axiomatization(t=t3)
+        a4 = pu.as1.transform_theory_to_axiomatization(t=t4)
+        a5 = pu.as1.transform_theory_to_axiomatization(t=t5)
+        a6 = pu.as1.transform_theory_to_axiomatization(t=t6)
+        a7 = pu.as1.transform_theory_to_axiomatization(t=t7)
+        a8 = pu.as1.transform_theory_to_axiomatization(t=t8)
+        a9 = pu.as1.transform_theory_to_axiomatization(t=t9)
+
+        assert not pu.as1.is_formula_equivalent(phi=a1, psi=a2)
+        assert not pu.as1.is_formula_equivalent(phi=a2, psi=a3)
+        assert not pu.as1.is_formula_equivalent(phi=a3, psi=a4)
+        assert pu.as1.is_formula_equivalent(phi=a4, psi=a5)
+        assert not pu.as1.is_formula_equivalent(phi=a5, psi=a6)
+        assert not pu.as1.is_formula_equivalent(phi=a6, psi=a7)
+        assert pu.as1.is_formula_equivalent(phi=a7, psi=a8)
+        assert not pu.as1.is_formula_equivalent(phi=a8, psi=a9)
+
+        assert not pu.as1.is_axiomatization_equivalent(t1=t1, t2=t2)
+        assert not pu.as1.is_axiomatization_equivalent(t1=t2, t2=t3)
+        assert not pu.as1.is_axiomatization_equivalent(t1=t3, t2=t4)
+        assert pu.as1.is_axiomatization_equivalent(t1=t4, t2=t5)
+        assert not pu.as1.is_axiomatization_equivalent(t1=t5, t2=t6)
+        assert not pu.as1.is_axiomatization_equivalent(t1=t6, t2=t7)
+        assert pu.as1.is_axiomatization_equivalent(t1=t7, t2=t8)
+        assert not pu.as1.is_axiomatization_equivalent(t1=t8, t2=t9)
+
 
 class TestFormula:
     def test_get_formula_depth(self):

@@ -1037,13 +1037,13 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         a: Axiom = Axiom(s=s, **kwargs)
 
     if isinstance(t, Axiomatization):
-        t = Axiomatization(d=(*t, a,), decorations=(t,))
-        # TODO: Copy theory decorations
+        t = Axiomatization(d=(*t, a,))
+        # TODO: Implement similar constructor than Theory A(a,d,...)
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
     elif isinstance(t, Theory):
-        t = Theory(d=(*t, a,), decorations=(t,))
-        # TODO: Copy theory decorations
+        t = Theory(d=(*t, a,))
+        # TODO: Implement similar constructor than Theory A(a,d,...)
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
     else:
@@ -3915,20 +3915,13 @@ class Theory(Formula):
         return Enumeration(e=tuple(self.iterate_theorems()))
 
 
-FlexibleTheory = typing.Optional[
-    typing.Union[Theory, typing.Iterable[FlexibleDerivation]]]
-"""FlexibleTheory is a flexible python type that may be safely coerced into a Theory."""
-
-FlexibleDecorations = typing.Optional[typing.Union[typing.Tuple[Theory, ...], typing.Tuple[()]]]
-
-
 def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> Theory:
     """Canonical function that converts an axiomatization "a" to a theory.
 
     An axiomatization is a theory whose derivations are limited to axioms and inference-rules.
     This function provides the canonical conversion method from axiomatizations to theories,
     by returning a new theory "t" such that all the derivations in "t" are derivations of "a",
-    preserving order.
+    preserving canonical order.
 
     :param a: An axiomatization.
     :return: A theory.
@@ -3936,6 +3929,75 @@ def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> Theory:
     a: Axiomatization = coerce_axiomatization(a=a)
     t: Theory = Theory(d=(*a,))
     return t
+
+
+def transform_theory_to_axiomatization(t: FlexibleTheory, interpret_none_as_empty: bool = True,
+                                       canonical_conversion: bool = True) -> Axiomatization:
+    """Canonical function that converts a theory `t` to an axiomatization.
+
+    An axiomatization is a theory whose derivations are limited to axioms and inference-rules.
+    This function provides the canonical conversion method from theories to axiomatizations,
+    by returning a new axiomatization `a` such that all the axioms and inference-rules in `t`
+    become derivations of `a`, preserving canonical order.
+
+    It follows that all theorems in `t` are discarded.
+
+    :param t: A theory.
+    :param interpret_none_as_empty: If `t` is None, interpret it as the empty-theory.
+    :param canonical_conversion: If necessary, apply canonic-conversion to coerce `t` to a theory.
+    :return: An axiomatization.
+    """
+    t: Theory = coerce_theory(t=t, interpret_none_as_empty=interpret_none_as_empty,
+                              canonical_conversion=canonical_conversion)
+    e: Enumeration = Enumeration(e=None)
+    for d in iterate_theory_derivations(t=t):
+        if is_well_formed_axiom(a=d):
+            e = append_element_to_enumeration(e=e, x=d)
+        if is_well_formed_inference_rule(i=d):
+            e = append_element_to_enumeration(e=e, x=d)
+    a: Axiomatization = Axiomatization(a=None, d=(*e,))
+    return a
+
+
+def is_axiomatization_equivalent(t1: FlexibleTheory, t2: FlexibleTheory, interpret_none_as_empty: bool = True,
+                                 raise_error_if_false: bool = False) -> bool:
+    """Returns `True` if `t1` is axiomatization-equivalent with `t2`, denoted :math:`t_1 \\sim_{a} t_2`.
+
+    Definition: axiomatization-equivalence:
+    Two theories or axiomatizations :math:`t_1` and :math:`t_2` are :math:`\\text{axiomatization-equivalent}`
+    if and only if for every axiom or inference-rule :math:`x` in :math:`t_1`, :math:`x \\in t_2`,
+    and reciprocally for every axiom or inference-rule :math:`x` in :math:`t_2`, :math:`x \\in t_1`.
+
+    :param t1: A theory or axiomatization.
+    :param t2: A theory or axiomatization.
+    :param interpret_none_as_empty: If `t1` or `t2` is None, interpret it as the empty-theory.
+    :return: An axiomatization.
+    """
+    t1: Theory = coerce_theory(t=t1, interpret_none_as_empty=interpret_none_as_empty,
+                               canonical_conversion=True)
+    t2: Theory = coerce_theory(t=t2, interpret_none_as_empty=interpret_none_as_empty,
+                               canonical_conversion=True)
+
+    a1: Axiomatization = transform_theory_to_axiomatization(t=t1)
+    a2: Axiomatization = transform_theory_to_axiomatization(t=t2)
+
+    e1: Enumeration = transform_axiomatization_to_enumeration(a=a1)
+    e2: Enumeration = transform_axiomatization_to_enumeration(a=a2)
+
+    test: bool = is_enumeration_equivalent(phi=e1, psi=e2)
+
+    if not test and raise_error_if_false:
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_077,
+            msg='`t1` is not axiomatization-equivalent with `t2`,'
+                'and argument `raise_error_if_false = True`.',
+            test=test,
+            t1=t1,
+            t2=t2,
+            a1=a1,
+            a2=a2
+        )
+    return test
 
 
 def transform_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
@@ -3999,7 +4061,7 @@ def transform_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumer
     :return: An enumeration.
     """
     a: Axiomatization = coerce_axiomatization(a=a)
-    e: Enumeration = Enumeration(d=(*a,))
+    e: Enumeration = Enumeration(e=(*a,))
     return e
 
 
@@ -4105,14 +4167,12 @@ class Axiomatization(Formula):
                                           )
         return _connectives.axiomatization_formula, coerced_derivations
 
-    def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None,
-                decorations: FlexibleDecorations = None):
+    def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None):
         c, t = Axiomatization._data_validation(a=a, d=d)
         o: tuple = super().__new__(cls, con=c, t=t)
         return o
 
-    def __init__(self, a: Axiomatization | None = None, d: FlexibleEnumeration = None,
-                 decorations: FlexibleDecorations = None):
+    def __init__(self, a: Axiomatization | None = None, d: FlexibleEnumeration = None):
         """
 
         :param a:
@@ -4127,6 +4187,19 @@ class Axiomatization(Formula):
 
 FlexibleAxiomatization = typing.Optional[
     typing.Union[Axiomatization, typing.Iterable[typing.Union[Axiom, InferenceRule]]]]
+"""A flexible python type for which coercion into type Axiomatization is supported.
+
+Note that a flexible type is not an assurance of well-formedness. Coercion assures well-formedness
+and raises an error if the object is ill-formed."""
+
+FlexibleTheory = typing.Optional[
+    typing.Union[Axiomatization, Theory, typing.Iterable[FlexibleDerivation]]]
+"""A flexible python type for which coercion into type Theory is supported.
+
+Note that a flexible type is not an assurance of well-formedness. Coercion assures well-formedness
+and raises an error if the object is ill-formed."""
+
+FlexibleDecorations = typing.Optional[typing.Union[typing.Tuple[FlexibleTheory, ...], typing.Tuple[()]]]
 
 
 def is_subformula_of_formula(s: FlexibleFormula, f: FlexibleFormula) -> bool:

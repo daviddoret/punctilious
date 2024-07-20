@@ -76,4 +76,9 @@ TODO: AccretingTheory class ??? is this a good idea ???
     Would this structure be necessary to friendly manage meta- and sub-theories?
 
 
+TODO: is-a-sub-theory-of (subset of axiomatization)
+
+TODO: meta-theorem 1:
+ if derivation d in t1 and t1 is-a-sub-theory-of t2, then d is valid in t1.
+
 """
