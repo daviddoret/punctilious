@@ -3801,14 +3801,12 @@ class Theory(Formula):
         return con, d
 
     def __new__(cls, con: Connective | None = None,
-                t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
-                decorations: FlexibleDecorations = None, **kwargs):
+                t: FlexibleTheory | None = None, d: FlexibleEnumeration = None, **kwargs):
         """
 
         :param con:
         :param t: A theory that is being extended by the new theory. If None, the empty theory is assumed.
         :param d: An enumeration of complementary derivations for the new theory.
-        :param decorations:
         :param kwargs:
         """
         c2, d2 = Theory._data_validation(con=con, t=t, d=d)
@@ -3816,8 +3814,7 @@ class Theory(Formula):
         return o
 
     def __init__(self, con: Connective | None = None,
-                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None, d2: FlexibleDerivation | None = None,
-                 decorations: FlexibleDecorations = None, **kwargs):
+                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None, **kwargs):
         """Declares a new theory t′ such that t′ = t ∪ d, where:
          - t is a theory (or the empty theory if the argument is not provided),
          - d is an enumeration of derivations (or the empty enumeration if the argument is not provided).
@@ -3825,14 +3822,13 @@ class Theory(Formula):
         :param con:
         :param t: A theory to be extended by the new theory.
         :param d: An enumerations of derivations.
-        :param decorations: TODO: this argument is useless, get rid of it and only use theory extension.
         :param kwargs:
         """
         c2, d2 = Theory._data_validation(con=con, t=t, d=d)
         super().__init__(con=c2, t=d2, **kwargs)
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
-        copy_theory_decorations(target=self, decorations=decorations)
         if t is not None:
+            # Copies the heuristics and any other decoration from the base theory
             copy_theory_decorations(target=self, decorations=(t,))
         if pl1.REF_TS not in self.ts.keys():
             Theory._last_index = Theory._last_index + 1
