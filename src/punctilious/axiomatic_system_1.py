@@ -611,8 +611,8 @@ class InfixPartialFormula:
     and gluing all this together with the InfixPartialFormula class.
     """
 
-    def __init__(self, c: Connective, term_1: FlexibleFormula):
-        self._connective = c
+    def __init__(self, con: Connective, term_1: FlexibleFormula):
+        self._connective = con
         self._term_1 = term_1
 
     def __or__(self, term_2: FlexibleFormula = None):
@@ -649,7 +649,7 @@ class BinaryConnective(FixedArityConnective):
 
     def __ror__(self, other: FlexibleFormula):
         """Pseudo math notation. x | p | ?."""
-        return InfixPartialFormula(c=self, term_1=other)
+        return InfixPartialFormula(con=self, term_1=other)
 
 
 def is_term_of_formula(x: FlexibleFormula, phi: FlexibleFormula) -> bool:
@@ -1476,15 +1476,15 @@ def replace_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     phi: Formula = coerce_formula(phi=phi)
     m: Map = coerce_map(m=m, interpret_none_as_empty=True)
     # TODO: Check that the map domain and codomain are composed of simple objects.
-    c: Connective = phi.connective
-    c_formula: Formula = Formula(con=c)
+    con: Connective = phi.connective
+    c_formula: Formula = Formula(con=con)
     if is_in_map_domain(phi=c_formula, m=m):
-        preimage: Formula = Formula(con=c)
+        preimage: Formula = Formula(con=con)
         image: Formula = get_image_from_map(m=m, preimage=preimage)
-        c: Connective = image.connective
+        con: Connective = image.connective
     # Build the new formula psi with the new connective,
     # and by calling replace_connectives recursively on all terms.
-    psi: Formula = Formula(con=c, t=(replace_connectives(phi=term, m=m) for term in phi))
+    psi: Formula = Formula(con=con, t=(replace_connectives(phi=term, m=m) for term in phi))
     return psi
 
 
@@ -1745,7 +1745,7 @@ class Enumeration(Formula):
         :return:
         """
         global _connectives
-        c: Connective = _connectives.enumeration
+        con: Connective = _connectives.enumeration
         if e is None:
             e = tuple()
         e_unique_only = strip_duplicate_formulas_in_python_tuple(t=e)
@@ -1762,7 +1762,7 @@ class Enumeration(Formula):
                 e=e,
                 e_unique_only=e_unique_only,
                 strip_duplicates=strip_duplicates)
-        return c, e
+        return con, e
 
     def __new__(cls, e: FlexibleEnumeration = None,
                 strip_duplicates: bool = False, **kwargs):
@@ -1989,12 +1989,12 @@ class NaturalTransformation(Transformation, ABC):
         :return:
         """
         global _connectives
-        c2: Connective = _connectives.natural_transformation
+        con: Connective = _connectives.natural_transformation
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
-        return c2, c, v, d, p
+        return con, c, v, d, p
 
     def __new__(cls, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
