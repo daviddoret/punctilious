@@ -103,11 +103,11 @@ class Formula(tuple):
     """
 
     @staticmethod
-    def _data_validation(c: Connective, t: FlexibleTupl = None) -> tuple[Connective, tuple]:
+    def _data_validation(con: Connective, t: FlexibleTupl = None) -> tuple[Connective, tuple]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param c:
+        :param con:
         :param t:
         :return:
         """
@@ -117,13 +117,13 @@ class Formula(tuple):
             t: tuple = tuple()
         else:
             raise u1.ApplicativeError(
-                code=c1.ERROR_CODE_AS1_002, c=c, t=t)
-        return c, t
+                code=c1.ERROR_CODE_AS1_002, c=con, t=t)
+        return con, t
 
     def __new__(cls, c: Connective, t: FlexibleTupl = None, **kwargs):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        c, t = Formula._data_validation(c=c, t=t)
+        c, t = Formula._data_validation(con=c, t=t)
         if len(t) == 0:
             return super().__new__(cls)
         elif len(t) > 0:
@@ -3400,10 +3400,10 @@ class Derivation(Formula):
         :param j:
         :return:
         """
-        c: Connective = _connectives.follows_from
+        con: Connective = _connectives.follows_from
         s = coerce_formula(phi=s)
         j = coerce_formula(phi=j)
-        return c, s, j
+        return con, s, j
 
     def __new__(cls, s: FlexibleFormula, j: FlexibleFormula,
                 **kwargs):
@@ -3472,10 +3472,10 @@ class Axiom(Derivation):
         :return:
         """
         global _connectives
-        c: Connective = _connectives.axiom
+        con: Connective = _connectives.axiom
         s: Formula = coerce_formula(phi=s)
-        justification: Formula = Formula(c=c)
-        return c, s, justification
+        justification: Formula = Formula(c=con)
+        return con, s, justification
 
     def __new__(cls, s: FlexibleFormula = None, **kwargs):
         c, s, justification = Axiom._data_validation_3(s=s)
@@ -3524,10 +3524,10 @@ class InferenceRule(Derivation):
         :return:
         """
         global _connectives
-        c: Connective = _connectives.inference_rule
+        con: Connective = _connectives.inference_rule
         t: Transformation = coerce_transformation(t=t)
-        j: Formula = Formula(c=c)
-        return c, t, j
+        j: Formula = Formula(c=con)
+        return con, t, j
 
     def __new__(cls, t: FlexibleTransformation = None, **kwargs):
         c, t, j = InferenceRule._data_validation_3(t=t)
@@ -3579,11 +3579,11 @@ class Inference(Formula):
         :param a:
         :return:
         """
-        c: Connective = _connectives.inference
+        con: Connective = _connectives.inference
         i: InferenceRule = coerce_inference_rule(i=i)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
         a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
-        return c, i, p, a
+        return con, i, p, a
 
     def __new__(cls, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
         """
@@ -3673,7 +3673,7 @@ class Theorem(Derivation):
         :return:
         """
         global _connectives
-        c: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
+        con: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
         s: Formula = coerce_formula(phi=s)
         i: Inference = coerce_inference(i=i)
 
@@ -3722,7 +3722,7 @@ class Theorem(Derivation):
                     valid_statement_reversed=valid_statement_reversed,
                     expected_conclusion=i.inference_rule.transformation.conclusion)
 
-        return c, s, i
+        return con, s, i
 
     def __new__(cls, s: FlexibleFormula, i: FlexibleInference):
         c, s, i = Theorem._data_validation_3(s=s, i=i)
@@ -3778,7 +3778,7 @@ class Theory(Formula):
     _last_index: int = 0
 
     @staticmethod
-    def _data_validation(c: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None) -> tuple[
+    def _data_validation(con: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None) -> tuple[
         Connective, Enumeration]:
         """
 
@@ -3787,44 +3787,44 @@ class Theory(Formula):
         :return:
         """
         global _connectives
-        c: Connective = _connectives.theory_formula
+        con: Connective = _connectives.theory_formula
         if t is not None:
             t: Theory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True,
                                             interpret_none_as_empty=True)
         is_valid, v, u = would_be_valid_derivations_in_theory(v=t, u=d, raise_error_if_false=True)
         d = union_enumeration(phi=v, psi=u, strip_duplicates=True)
-        return c, d
+        return con, d
 
-    def __new__(cls, c: Connective | None = None,
+    def __new__(cls, con: Connective | None = None,
                 t: FlexibleTheory | None = None, d: FlexibleEnumeration = None,
                 decorations: FlexibleDecorations = None, **kwargs):
         """
 
-        :param c:
+        :param con:
         :param t: A theory that is being extended by the new theory. If None, the empty theory is assumed.
         :param d: An enumeration of complementary derivations for the new theory.
         :param decorations:
         :param kwargs:
         """
-        c2, d2 = Theory._data_validation(c=c, t=t, d=d)
+        c2, d2 = Theory._data_validation(con=con, t=t, d=d)
         o: tuple = super().__new__(cls, c=c2, t=d2, **kwargs)
         return o
 
-    def __init__(self, c: Connective | None = None,
+    def __init__(self, con: Connective | None = None,
                  t: FlexibleTheory | None = None, d: FlexibleEnumeration = None, d2: FlexibleDerivation | None = None,
                  decorations: FlexibleDecorations = None, **kwargs):
         """Declares a new theory t′ such that t′ = t ∪ d, where:
          - t is a theory (or the empty theory if the argument is not provided),
          - d is an enumeration of derivations (or the empty enumeration if the argument is not provided).
 
-        :param c:
+        :param con:
         :param t: A theory to be extended by the new theory.
         :param d: An enumerations of derivations.
         :param decorations: TODO: this argument is useless, get rid of it and only use theory extension.
         :param kwargs:
         """
-        c2, d2 = Theory._data_validation(c=c, t=t, d=d)
+        c2, d2 = Theory._data_validation(con=con, t=t, d=d)
         super().__init__(c=c2, t=d2, **kwargs)
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         copy_theory_decorations(target=self, decorations=decorations)
