@@ -2055,8 +2055,8 @@ class NaturalTransformation(Transformation, ABC):
         # step 3: new objects declarations.
         declarations_map: Map = Map()
         for declaration in self.declarations:
-            new_connective: Connective = Connective()
-            simple_formula: Formula = Formula(con=new_connective)
+            con: Connective = Connective()
+            simple_formula: Formula = Formula(con=con)
             # TODO: Find a way to initialize the new_connective formula_typesetter.
             # TODO: Find a way to initialize the new_connective arity.
             declarations_map: Map = append_pair_to_map(m=declarations_map, preimage=declaration, image=simple_formula)
