@@ -375,21 +375,21 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
                                   i=pls1.i5, t=t, raise_error_if_false=True)
     t, success, _, = as1.derive_2(c=is_a_proposition(p2 | lor | p1),
                                   i=pls1.i5, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=(p2 | land | p2) | is_a | is_a_proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition(p2 | land | p2),
                                   i=pls1.i3, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=(p1 | land | p2) | is_a | is_a_proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition(p1 | land | p2),
                                   i=pls1.i3, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=((p2 | land | p2) | implies | (p1 | land | p2)) | is_a | is_a_proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition((p2 | land | p2) | implies | (p1 | land | p2)),
                                   i=pls1.i4, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | is_a | is_a_proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition((p1 | lor | p2) | implies | (p2 | lor | p1)),
                                   i=pls1.i4, t=t, raise_error_if_false=True)
     t, success, _, = as1.derive_2(
-        c=(p1 | implies | (p1 | lor | p2)) | is_a | is_a_proposition,
+        c=is_a_proposition(p1 | implies | (p1 | lor | p2)),
         i=pls1.i4, t=t)
     t, success, _, = as1.derive_2(
-        c=(((p1 | lor | p2) | implies | (p2 | lor | p1)) |
-           implies |
-           (p1 | implies | (p1 | lor | p2))) | is_a | is_a_proposition,
+        c=is_a_proposition(((p1 | lor | p2) | implies | (p2 | lor | p1)) |
+                           implies |
+                           (p1 | implies | (p1 | lor | p2))),
         i=pls1.i4, t=t)
 
     # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
@@ -441,17 +441,17 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     t, d = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')
     t, success, _ = as1.derive_2(c=is_a_proposition(c),
                                  i=pls1.i1, t=t)
-    t, success, _ = as1.derive_2(c=d | is_a | is_a_proposition,
+    t, success, _ = as1.derive_2(c=is_a_proposition(d),
                                  i=pls1.i1, t=t)
-    t, success, _ = as1.derive_2(c=(c | implies | d) | is_a | is_a_proposition,
+    t, success, _ = as1.derive_2(c=is_a_proposition(c | implies | d),
                                  i=pls1.i4, t=t)
-    t, success, _ = as1.derive_2(c=(d | implies | c) | is_a | is_a_proposition,
+    t, success, _ = as1.derive_2(c=is_a_proposition(d | implies | c),
                                  i=pls1.i4, t=t)
-    t, success, _ = as1.derive_2(c=(d | land | d) | is_a | is_a_proposition,
+    t, success, _ = as1.derive_2(c=is_a_proposition(d | land | d),
                                  i=pls1.i3, t=t)
-    t, success, _ = as1.derive_2(c=(c | land | d) | is_a | is_a_proposition,
+    t, success, _ = as1.derive_2(c=is_a_proposition(c | land | d),
                                  i=pls1.i3, t=t)
-    t, success, _ = as1.derive_2(c=((d | land | d) | implies | (c | land | d)) | is_a | is_a_proposition,
+    t, success, _ = as1.derive_2(c=is_a_proposition((d | land | d) | implies | (c | land | d)),
                                  i=pls1.i4, t=t)
     # 1. ⊢ 𝐶(hypothesis)
     # TODO: Implement this as a proper hypothesis

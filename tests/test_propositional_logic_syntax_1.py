@@ -60,12 +60,12 @@ class TestAxioms:
         inference = pu.as1.Inference(
             p=(is_a_proposition(p),),
             i=inference_rule)
-        claim = lnot(p) | is_a | is_a_proposition
+        claim = is_a_proposition(lnot(p))
         isolated_theorem = pu.as1.Theorem(s=claim, i=inference)
-        assert pu.as1.is_formula_equivalent(phi=lnot(p) | is_a | is_a_proposition, psi=isolated_theorem.valid_statement)
+        assert pu.as1.is_formula_equivalent(phi=is_a_proposition(lnot(p)), psi=isolated_theorem.valid_statement)
         t = pu.as1.append_to_theory(isolated_theorem, t=t)
 
-        assert pu.as1.is_valid_proposition_in_theory_1(p=lnot(p) | is_a | is_a_proposition, t=t)
+        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(lnot(p)), t=t)
 
         # declare 1 as a propositional-variable
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
@@ -87,7 +87,7 @@ class TestAxioms:
         inference = pu.as1.Inference(
             p=(is_a_proposition(p), is_a_proposition(q),),
             i=inference_rule)
-        claim = (p | land | q) | is_a | is_a_proposition
+        claim = is_a_proposition(p | land | q)
         isolated_theorem = pu.as1.Theorem(s=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.valid_statement)
         t = pu.as1.append_to_theory(isolated_theorem, t=t)
