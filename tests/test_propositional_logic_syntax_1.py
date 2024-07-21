@@ -115,7 +115,7 @@ class TestAxioms:
         t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(q))
         assert success
         assert pu.as1.is_valid_proposition_in_theory_1(p=proposition(q), t=t)
-        t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=(p | land | q) | is_a | proposition)
+        t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(p | land | q))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=(p | land | q) | is_a | proposition, t=t)
+        assert pu.as1.is_valid_proposition_in_theory_1(p=proposition(p | land | q), t=t)
         pass
