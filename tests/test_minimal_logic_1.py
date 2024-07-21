@@ -200,14 +200,14 @@ class TestPL3:
 
         # Derive: propositions
         t, _ = pu.as1.derive_1(t=t,
-                               c=(p | land | r) | is_a | is_a_proposition,
+                               c=is_a_proposition(p | land | r),
                                p=(
                                    is_a_proposition(p),
                                    is_a_proposition(r),),
                                i=pu.pls1.i3)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=(p | land | r) | is_a | is_a_proposition, t=t)
+        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | land | r), t=t)
         t, _ = pu.as1.derive_1(t=t,
-                               c=(q | land | r) | is_a | is_a_proposition,
+                               c=is_a_proposition(q | land | r),
                                p=(
                                    is_a_proposition(q),
                                    is_a_proposition(r),),

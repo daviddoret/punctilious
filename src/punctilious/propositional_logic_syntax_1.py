@@ -353,7 +353,7 @@ class PIsAProposition(as1.Heuristic):
                         # Retrieve the value assigned to Q.
                         q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=q_value | is_a | is_a_proposition, t=t)
+                        t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
                         if success:
                             # (Q is-a proposition) is proved.
                             # We can safely derive ((¬Q) is-a proposition).
@@ -377,10 +377,10 @@ class PIsAProposition(as1.Heuristic):
                         q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
                         r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=q_value | is_a | is_a_proposition, t=t)
+                        t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
                         if success:
                             # (Q is-a proposition) is proved.
-                            t, success = self.process_conjecture(conjecture=r_value | is_a | is_a_proposition, t=t)
+                            t, success = self.process_conjecture(conjecture=is_a_proposition(r_value), t=t)
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∧ R) is-a proposition).

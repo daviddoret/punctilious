@@ -12,11 +12,11 @@ class TestHeuristic:
         assert success
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p), t=t)
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
-        t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | land | q) | is_a | is_a_proposition, t=t)
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p | land | q), t=t)
         assert success
-        t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | implies | q) | is_a | is_a_proposition, t=t)
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p | implies | q), t=t)
         assert success
-        t, success = pu.as1.auto_derive_with_heuristics(conjecture=(p | lor | q) | is_a | is_a_proposition, t=t)
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p | lor | q), t=t)
         assert success
 
     def test_heuristic_complex(self):
