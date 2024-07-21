@@ -36,7 +36,7 @@ class TestAxioms:
         # retrieve some basic vocabulary
         is_a = pu.as1._connectives.is_a
         proposition = pu.as1._connectives.proposition
-        propositional_variable = pu.as1._connectives.propositional_variable
+        is_a_propositional_variable = pu.as1._connectives.is_a_propositional_variable
         land = pu.as1._connectives.land
         lnot = pu.as1._connectives.lnot
         lor = pu.as1._connectives.lor
@@ -49,7 +49,7 @@ class TestAxioms:
         t, _, = pu.as1.derive_1(t=t,
                                 c=p | is_a | proposition,
                                 p=(
-                                    p | is_a | propositional_variable,),
+                                    is_a_propositional_variable(p),),
                                 i=pu.pls1.i1)
         assert pu.as1.is_valid_proposition_in_theory_1(p=p | is_a | proposition, t=t)
 
@@ -69,7 +69,7 @@ class TestAxioms:
 
         # declare 1 as a propositional-variable
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
-        a2 = pu.as1.Axiom(s=q | is_a | propositional_variable)
+        a2 = pu.as1.Axiom(s=is_a_propositional_variable(q))
         t = pu.as1.append_to_theory(a2, t=t)
 
         # derive q is-a proposition

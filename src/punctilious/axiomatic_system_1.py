@@ -1131,7 +1131,7 @@ class Connectives(typing.NamedTuple):
     lor: BinaryConnective
     map_formula: BinaryConnective
     proposition: NullaryConnective
-    propositional_variable: NullaryConnective
+    is_a_propositional_variable: UnaryConnective
     theory_formula: FreeArityConnective
     is_well_formed_theory: UnaryConnective
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
@@ -1157,7 +1157,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     lor=let_x_be_a_binary_connective(formula_ts='∨'),
     map_formula=let_x_be_a_binary_connective(formula_ts='map'),
     proposition=NullaryConnective(formula_ts='proposition'),
-    propositional_variable=NullaryConnective(formula_ts='propositional-variable'),
+    is_a_propositional_variable=UnaryConnective(formula_ts='is-a-propositional-variable'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
     is_well_formed_theory=let_x_be_a_unary_connective(),

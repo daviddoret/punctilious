@@ -24,7 +24,7 @@ map_formula = as1.get_connectives().map_formula
 
 natural_transformation = as1.get_connectives().natural_transformation
 proposition = as1.get_connectives().proposition
-propositional_variable = as1.get_connectives().propositional_variable
+is_a_propositional_variable = as1.get_connectives().is_a_propositional_variable
 theorem = as1.get_connectives().theorem
 theory_formula = as1.get_connectives().theory_formula
 transformation = as1.get_connectives().natural_transformation

@@ -1161,7 +1161,7 @@ class TestObjectCreation:
         if 1 == 2:
             t = as1.let_x_be_a_theory()
             x = as1.let_x_be_a_new_object()
-            t2 = as1.NaturalTransformation(c=x | is_a | propositional_variable, v=(x,),
+            t2 = as1.NaturalTransformation(c=is_a_propositional_variable(x), v=(x,),
                                            d=(x,),
                                            p=None)
             # rule 1: a variable x in the enumeration of variables car either be listed in declarations,
@@ -1169,4 +1169,4 @@ class TestObjectCreation:
             # rule 2: a new object in creations must not be present in previous derivations in the theory,
             #   otherwise it would be possible to "create the same object multiple times" which doesn't make sense.
             a = as1.let_x_be_an_axiom(t=t, a=a)
-            t, _ = as1.derive_1(t=t, c=x | is_a | propositional_variable, )
+            t, _ = as1.derive_1(t=t, c=is_a_propositional_variable(x), )

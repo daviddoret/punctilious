@@ -37,7 +37,7 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i0: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            c=a | is_a | propositional_variable,
+            c=is_a_propositional_variable(a),
             v=None,
             d=(a,),
             p=None
@@ -63,7 +63,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | propositional_variable,),
+            p=(is_a_propositional_variable(a),),
             c=a | is_a | proposition,
             v=(a,)),
         ref_ts=pl1.Monospace(text='PLS1'))
@@ -233,8 +233,9 @@ def let_x_be_a_propositional_variable(
     t = as1.append_to_theory(axiomatization, t=t)
 
     x = as1.Variable(c=as1.NullaryConnective(formula_ts=formula_ts))
-    # t, _ = as1.let_x_be_an_axiom(t=t, s=x | as1._connectives.is_a | as1._connectives.propositional_variable)
-    t, _ = as1.derive_1(t=t, c=x | as1._connectives.is_a | as1._connectives.propositional_variable,
+    # t, _ = as1.derive_1(t=t, c=x | as1._connectives.is_a | as1._connectives.is_a_propositional_variable,
+    #                    p=None, i=i0)
+    t, _ = as1.derive_1(t=t, c=as1._connectives.is_a_propositional_variable(x),
                         p=None, i=i0)
 
     return t, x
@@ -278,8 +279,10 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable(t=t, formula_ts=rep) as x2:
+            # premises: as1.Enumeration = as1.append_element_to_enumeration(
+            #    e=premises, x=x2 | as1._connectives.is_a | as1._connectives.is_a_propositional_variable)
             premises: as1.Enumeration = as1.append_element_to_enumeration(
-                e=premises, x=x2 | as1._connectives.is_a | as1._connectives.propositional_variable)
+                e=premises, x=as1._connectives.is_a_propositional_variable(x2))
             variables_map: as1.Map = as1.append_pair_to_map(m=variables_map, preimage=x, image=x2)
     variables: as1.Enumeration = as1.Enumeration(e=variables_map.codomain)
 
@@ -308,6 +311,12 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
 class PIsAProposition(as1.Heuristic):
 
     def process_conjecture(self, conjecture: as1.FlexibleFormula, t: as1.FlexibleTheory) -> tuple[as1.Theory, bool,]:
+        """
+
+        :param conjecture:
+        :param t:
+        :return:
+        """
         conjecture: as1.Formula = as1.coerce_formula(phi=conjecture)
         t: as1.Theory = as1.coerce_theory(t=t)
 
@@ -327,13 +336,12 @@ class PIsAProposition(as1.Heuristic):
                 # retrieve P's value
                 p_value: as1.Formula = as1.get_image_from_map(m=m, preimage=p)
 
-                if as1.is_valid_proposition_in_theory_1(p=p_value | is_a | propositional_variable, t=t):
+                if as1.is_valid_proposition_in_theory_1(p=is_a_propositional_variable(p_value), t=t):
                     # If P is a propositional-variable:
                     # We can safely derive p | is_a | proposition
                     t, _ = as1.derive_1(
                         c=p_value | is_a | proposition,
-                        p=(
-                            p_value | is_a | propositional_variable,),
+                        p=(is_a_propositional_variable(p_value),),
                         i=i1, t=t)
 
                     return t, True

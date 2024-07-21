@@ -31,29 +31,29 @@ def c():
 @pytest.fixture
 def theory(a, b, c):
     # elaborate a theory with 3 propositions: a, b, and c
-    a1 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=a | is_a | propositional_variable)
-    a2 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=b | is_a | propositional_variable)
-    a3 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=c | is_a | propositional_variable)
+    a1 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=is_a_propositional_variable(a))
+    a2 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=is_a_propositional_variable(b))
+    a3 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=is_a_propositional_variable(c))
     t = pu.as1.Axiomatization(d=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive: a is-a proposition
     t, m = pu.as1.derive_1(t=t,
                            c=a | is_a | proposition,
-                           p=(a | is_a | propositional_variable,),
+                           p=(is_a_propositional_variable(a),),
                            i=pu.pls1.i1)
     assert as1.is_valid_proposition_in_theory_1(p=a | is_a | proposition, t=t)
 
     # derive: b is-a proposition
     t, m = pu.as1.derive_1(t=t,
                            c=b | is_a | proposition,
-                           p=(b | is_a | propositional_variable,),
+                           p=(is_a_propositional_variable(b),),
                            i=pu.pls1.i1)
     assert as1.is_valid_proposition_in_theory_1(p=b | is_a | proposition, t=t)
 
     # derive: c is-a proposition
     t, m = pu.as1.derive_1(t=t,
                            c=c | is_a | proposition,
-                           p=(c | is_a | propositional_variable,),
+                           p=(is_a_propositional_variable(c),),
                            i=pu.pls1.i1)
     assert as1.is_valid_proposition_in_theory_1(p=c | is_a | proposition, t=t)
 
@@ -74,8 +74,7 @@ class TestPL1:
         # Derive: P is-a proposition
         t, _ = pu.as1.derive_1(t=t,
                                c=p | is_a | proposition,
-                               p=(
-                                   p | is_a | propositional_variable,),
+                               p=(is_a_propositional_variable(p),),
                                i=pu.pls1.i1)
         assert pu.as1.is_valid_proposition_in_theory_1(p=p | is_a | proposition, t=t)
         pass
