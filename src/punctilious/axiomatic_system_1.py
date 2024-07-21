@@ -542,18 +542,6 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> Map:
             coerced_type=Map, m_type=type(m), m=m)
 
 
-def coerce_tupl_OBSOLETE(t: FlexibleTupl) -> Tupl:
-    if isinstance(t, Tupl):
-        return t
-    elif t is None:
-        return Tupl(e=None)
-    elif isinstance(t, collections.abc.Iterable):
-        """This may be ambiguous when we pass a single formula (that is natively iterable)."""
-        return Tupl(e=t)
-    else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_010, coerced_type=Tupl, phi_type=type(t), phi=t)
-
-
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula]]
 
 
@@ -2626,6 +2614,8 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
     :return:
     """
     e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
+    # e: Enumeration = coerce_enumeration(e=e, strip_duplicates=True, interpret_none_as_empty=True,
+    #                                    canonic_conversion=True)
     if n > e.arity:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_033, msg='n > |e|')
     if n < 0:
@@ -2895,7 +2885,6 @@ def are_valid_statements_in_theory_with_variables(
         else:
             return valid, None
     else:
-        # valid_statements = iterate_valid_statements_in_theory_OBSOLETE(t=t)
         valid_statements = iterate_theory_propositions(t=t)
         for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                         n=permutation_size):
@@ -3076,8 +3065,6 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
                 if not is_valid_proposition_in_theory_1(p=q, t=None, d=c, max_derivations=index):
-                    # not any(is_formula_equivalent(phi=q, psi=p2) for p2 in
-                    # iterate_valid_statements_in_enumeration_of_derivations_OBSOLETE(e=c, max_index=index)):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
                             msg='Derivation `d` claims to derive `p`.'
@@ -4708,7 +4695,8 @@ def auto_derive_4(
     global auto_derivation_max_formula_depth_preference
     t: Theory = coerce_theory(t=t)
     conjecture: Formula = coerce_formula(phi=conjecture)
-    conjecture_exclusion_list: Enumeration = coerce_enumeration_OBSOLETE(e=conjecture_exclusion_list)
+    conjecture_exclusion_list: Enumeration = coerce_enumeration(e=conjecture_exclusion_list,
+                                                                interpret_none_as_empty=True)
     indent: str = ' ' * (auto_derivation_max_formula_depth_preference - max_recursion + 1)
     if max_recursion == 2:
         pass

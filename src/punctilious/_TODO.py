@@ -1,6 +1,7 @@
 """
 
-TODO: Change shape "(inference-rule) follows-from inference-rule" for derivations, to "is_axiomatic_rule(inference-rule)".
+TODO: Change shape "(inference-rule) follows-from inference-rule" for derivations,
+    to "is_axiomatic_rule(inference-rule)".
 
 TODO: Change shape "(statement) follows-from axiom" for derivations, to "is_axiom(axiom)".
 
@@ -13,7 +14,7 @@ TODO: Implement predicative-connectives. these are connectives that generate pro
     this will facilitate auto-derivation of is-a proposition.
 
 TODO: When a transformation creates new objects, it is not deterministic.
-    To verify the validity of derivations a posterio,
+    To verify the validity of derivations a posteriori,
     we must be able to re-map the new objects to the variables.
     i think this requires a single conclusion in algorithmic transformations.
     which would mean we need to double them all the time to have both P and not(P).
