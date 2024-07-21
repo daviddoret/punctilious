@@ -9,6 +9,7 @@ import typing
 import sys
 # import random
 import itertools
+import re
 from abc import ABC
 
 # import constants_1 as c1
@@ -4992,6 +4993,41 @@ class MapTypesetter(pl1.Typesetter):
         yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
+class IsAPredicateTypesetter(pl1.Typesetter):
+    """A typesetter for predicate connectives.
+
+    Sample output:
+     - `phi` is a `class-name`
+     - `phi` is an `class-name`"""
+
+    def __init__(self, conventional_class: str):
+        super().__init__()
+        self._conventional_class = conventional_class
+
+    @property
+    def conventional_class(self) -> str:
+        return self._conventional_class
+
+    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Formula = coerce_formula(phi=phi)
+        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        kwargs['is_sub_formula'] = True
+
+        # TODO: Add open bracket
+        yield from phi[0].typeset_from_generator(**kwargs)
+        # TODO: Add close bracket
+        yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+        yield 'is'
+        yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+        if re.match(r'[aeiouAEIOU]', self.conventional_class[0]):
+            yield 'an'
+        else:
+            yield 'a'
+        yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+        yield from self.conventional_class
+
+
 class DeclarationTypesetter(pl1.Typesetter):
     def __init__(self, conventional_class: str | None):
         self._conventional_class = conventional_class
@@ -5181,6 +5217,9 @@ class Typesetters:
 
     def declaration(self, conventional_class: str | None) -> DeclarationTypesetter:
         return DeclarationTypesetter(conventional_class=conventional_class)
+
+    def is_a_predicate(self, conventional_class: str | None) -> IsAPredicateTypesetter:
+        return IsAPredicateTypesetter(conventional_class=conventional_class)
 
     def text(self, text: str) -> pl1.TextTypesetter:
         return pl1.typesetters.text(text=text)
