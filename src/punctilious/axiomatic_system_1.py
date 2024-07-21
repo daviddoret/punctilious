@@ -947,7 +947,8 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
                                v: FlexibleEnumeration | None = None,
                                d: FlexibleEnumeration | None = None,
                                p: FlexibleTupl | None = None,
-                               a: typing.Optional[typing.Callable] = None
+                               a: typing.Optional[typing.Callable] | None = None,
+                               i2: typing.Optional[typing.Callable] | None = None
                                ) -> tuple[Theory, InferenceRule]:
     """
 
@@ -959,6 +960,7 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
     :param d: An enumeration of variables used for new object declarations.
     :param p: A tuple of formulas denoted as premises.
     :param a: (conditional) An external algorithm.
+    :param i2: (conditional) An external algorithm.
     :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
     """
     t1: FlexibleTheory = coerce_theory(t=t1)
@@ -983,7 +985,7 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
             i: InferenceRule = InferenceRule(t=t2)
         else:
             # Signature 4: This is an algorithmic transformation:
-            t2: AlgorithmicTransformation = AlgorithmicTransformation(a=a, c=c, v=v,
+            t2: AlgorithmicTransformation = AlgorithmicTransformation(a=a, i=i2, c=c, v=v,
                                                                       d=d, p=p)
             i: InferenceRule = InferenceRule(t=t2)
     else:
@@ -2145,9 +2147,11 @@ class AlgorithmicTransformation(Transformation):
 
     @staticmethod
     def _data_validation_3(
-            a: typing.Callable, i: typing.Callable, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
-            d: FlexibleEnumeration | None = None, p: FlexibleTupl | None = None) -> tuple[
-        Connective, typing.Callable, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
+            a: typing.Callable, i: typing.Callable, c: FlexibleFormula,
+            v: FlexibleEnumeration | None = None,
+            d: FlexibleEnumeration | None = None,
+            p: FlexibleTupl | None = None
+    ) -> tuple[Connective, typing.Callable, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -2503,6 +2507,7 @@ def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory | Non
      - :math:`\phi` is the valid-statement of an axiom in :math:`t`,
      - or :math:`\phi` is the valid-statement of a theorem in :math:`t`.
 
+    :param p:
     :param t: A theory.
     :param d: An enumeration of derivations. Ignored if `t` is provided.
     :param max_derivations: Verifies the validity of `p` only through the first `max_derivations` derivations
@@ -2555,8 +2560,8 @@ def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> t
     return False, None
 
 
-def iterate_formula_terms(phi: FlexibleFormula, max_terms: int | None = None) -> typing.Generator[
-    Formula, None, None]:
+def iterate_formula_terms(phi: FlexibleFormula, max_terms: int | None = None
+                          ) -> typing.Generator[Formula, None, None]:
     """Iterates the terms of a formula in canonical order.
 
     :param phi: A formula.
@@ -2567,8 +2572,8 @@ def iterate_formula_terms(phi: FlexibleFormula, max_terms: int | None = None) ->
     yield from itertools.islice(phi, max_terms)
 
 
-def iterate_tuple_elements(phi: FlexibleTupl, max_elements: int | None = None) -> typing.Generator[
-    Formula, None, None]:
+def iterate_tuple_elements(phi: FlexibleTupl, max_elements: int | None = None
+                           ) -> typing.Generator[Formula, None, None]:
     """Iterates the elements of a tuple in canonical order.
 
     :param phi: A formula.
@@ -2581,8 +2586,8 @@ def iterate_tuple_elements(phi: FlexibleTupl, max_elements: int | None = None) -
 
 def iterate_enumeration_elements(e: FlexibleEnumeration, max_elements: int | None = None,
                                  interpret_none_as_empty: bool | None = None, strip_duplicates: bool | None = None,
-                                 canonic_conversion: bool | None = None) -> typing.Generator[
-    Formula, None, None]:
+                                 canonic_conversion: bool | None = None
+                                 ) -> typing.Generator[Formula, None, None]:
     """Iterates the elements of an enumeration in canonical order.
 
     :param e:
@@ -2670,8 +2675,7 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
                           interpret_none_as_empty: bool = True,
                           canonic_conversion: bool = True,
                           max_derivations: int | None = None
-                          ) -> typing.Generator[
-    Axiom, None, None]:
+                          ) -> typing.Generator[Axiom, None, None]:
     """Iterates through axioms in derivations of a theory `t`, in canonical order.
 
     Alternatively, iterates through axioms of an enumeration of derivations `d`, in canonical order.
@@ -2701,8 +2705,7 @@ def iterate_theory_theorems(t: FlexibleTheory | None = None,
                             interpret_none_as_empty: bool = True,
                             canonic_conversion: bool = True,
                             max_derivations: int | None = None
-                            ) -> typing.Generator[
-    Theorem, None, None]:
+                            ) -> typing.Generator[Theorem, None, None]:
     """Iterates through theorems in derivations of a theory `t`, in canonical order.
 
     Alternatively, iterates through theorems of an enumeration of derivations `d`, in canonical order.
@@ -2732,8 +2735,7 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
                                    interpret_none_as_empty: bool = True,
                                    canonic_conversion: bool = True,
                                    max_derivations: int | None = None
-                                   ) -> typing.Generator[
-    InferenceRule, None, None]:
+                                   ) -> typing.Generator[InferenceRule, None, None]:
     """Iterates through inference-rules in derivations of a theory `t` in canonical order.
 
     Alternatively, iterates through inference-rules of an enumeration of derivations `d` in canonical order.
@@ -2763,8 +2765,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
                                     interpret_none_as_empty: bool = True,
                                     canonic_conversion: bool = True,
                                     max_derivations: int | None = None
-                                    ) -> typing.Generator[
-    Formula, None, None]:
+                                    ) -> typing.Generator[Formula, None, None]:
     """Iterates through valid-statements in derivations of a theory `t` in canonical order.
 
     Alternatively, iterates through propositions of an enumeration of derivations `d` in canonical order.
@@ -2806,8 +2807,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
                                 interpret_none_as_empty: bool = True,
                                 canonic_conversion: bool = True,
                                 max_derivations: int | None = None
-                                ) -> typing.Generator[
-    Formula, None, None]:
+                                ) -> typing.Generator[Formula, None, None]:
     """Iterates through propositions in derivations of a theory `t` in canonical order.
 
     Alternatively, iterates through propositions of an enumeration of derivations `d` in canonical order.
@@ -2987,8 +2987,8 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
 
 
 def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumeration,
-                                         raise_error_if_false: bool = False) -> tuple[
-    bool, Enumeration | None, Enumeration | None]:
+                                         raise_error_if_false: bool = False
+                                         ) -> tuple[bool, Enumeration | None, Enumeration | None]:
     """Given an enumeration of presumably verified derivations "v" (e.g.: the derivation sequence of a theory `t`),
     and an enumeration of unverified derivations "u" (e.g.: whose elements are not (yet) effective
     theorems of `t`), returns True if a theory would be well-formed if it was composed of
@@ -3299,6 +3299,7 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
     """Validate that phi is a well-formed theory and returns it properly typed as Demonstration,
     or raise exception e123.
 
+    :param canonical_conversion:
     :param interpret_none_as_empty:
     :param t:
     :return:
@@ -3770,8 +3771,8 @@ class Theory(Formula):
     _last_index: int = 0
 
     @staticmethod
-    def _data_validation(con: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None) -> tuple[
-        Connective, Enumeration]:
+    def _data_validation(con: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None
+                         ) -> tuple[Connective, Enumeration]:
         """
 
         :param t:
@@ -4856,7 +4857,7 @@ class ClassicalFormulaTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
-        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        # is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
         yield from self.connective_typesetter.typeset_from_generator(**kwargs)
         yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
@@ -4942,7 +4943,7 @@ class BracketedListTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: Formula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
-        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        # is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
 
         yield from self.open_bracket.typeset_from_generator(**kwargs)
@@ -4970,7 +4971,7 @@ class MapTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Map = coerce_map(m=phi, interpret_none_as_empty=True)
-        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        # is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
 
         yield from pl1.symbols.open_curly_brace.typeset_from_generator(**kwargs)
@@ -5007,7 +5008,7 @@ class IsAPredicateTypesetter(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: Formula = coerce_formula(phi=phi)
-        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        # is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
 
         yield from pl1.symbols.open_corner_quote.typeset_from_generator(**kwargs)
@@ -5133,13 +5134,13 @@ class DerivationTypesetter(pl1.Typesetter):
             yield '\t'
             yield from phi.valid_statement.typeset_from_generator(**kwargs)
             if is_well_formed_axiom(a=phi):
-                phi: Axiom = coerce_axiom(a=phi)
+                # phi: Axiom = coerce_axiom(a=phi)
                 yield '\t\t| Axiom.'
             elif is_well_formed_inference_rule(i=phi):
-                phi: InferenceRule = coerce_inference_rule(i=phi)
+                # phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_inference(i=phi):
-                phi: InferenceRule = coerce_inference_rule(i=phi)
+                # phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: Theorem = coerce_theorem(t=phi)
@@ -5163,13 +5164,13 @@ class DerivationTypesetter(pl1.Typesetter):
             yield f'\t'
             yield from phi.valid_statement.typeset_from_generator(**kwargs)
             if is_well_formed_axiom(a=phi):
-                phi: Axiom = coerce_axiom(a=phi)
+                # phi: Axiom = coerce_axiom(a=phi)
                 yield '\t\t| Axiom.'
             elif is_well_formed_inference_rule(i=phi):
-                phi: InferenceRule = coerce_inference_rule(i=phi)
+                # phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_inference(i=phi):
-                phi: InferenceRule = coerce_inference_rule(i=phi)
+                # phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: Theorem = coerce_theorem(t=phi)
@@ -5180,9 +5181,9 @@ class DerivationTypesetter(pl1.Typesetter):
                 yield f' given '
                 first: bool = True
                 for premise in phi.inference.premises:
-                    success, derivation = get_theory_derivation_from_valid_statement(t=theory, s=premise)
+                    # success, derivation = get_theory_derivation_from_valid_statement(t=theory, s=premise)
                     derivation: Derivation
-                    i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=derivation, formula=theory)
+                    # i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=derivation, formula=theory)
                     if not first:
                         yield ', '
                     yield from typeset_formula_reference(phi=premise, t=theory, **kwargs)
