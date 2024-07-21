@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -732,14 +732,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00877" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721074455375</created>
-      <option name="number" value="00877" />
-      <option name="presentableId" value="LOCAL-00877" />
-      <option name="project" value="LOCAL" />
-      <updated>1721074455375</updated>
-    </task>
     <task id="LOCAL-00878" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1721101732861</created>
@@ -1124,7 +1116,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721531915850</updated>
     </task>
-    <option name="localTasksCounter" value="926" />
+    <task id="LOCAL-00926" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1721543035958</created>
+      <option name="number" value="00926" />
+      <option name="presentableId" value="LOCAL-00926" />
+      <option name="project" value="LOCAL" />
+      <updated>1721543035958</updated>
+    </task>
+    <option name="localTasksCounter" value="927" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

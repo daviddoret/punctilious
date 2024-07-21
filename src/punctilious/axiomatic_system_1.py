@@ -4997,8 +4997,9 @@ class IsAPredicateTypesetter(pl1.Typesetter):
     """A typesetter for predicate connectives.
 
     Sample output:
-     - `phi` is a `class-name`
-     - `phi` is an `class-name`"""
+     - ⌜`phi`⌝ is an `class-name-starting-with-a-vowel`
+     - ⌜`phi`⌝ is a `class-name-not-starting-with-a-vowel`
+     """
 
     def __init__(self, conventional_class: str):
         super().__init__()
@@ -5014,9 +5015,9 @@ class IsAPredicateTypesetter(pl1.Typesetter):
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
 
-        # TODO: Add open bracket
+        yield from pl1.symbols.open_corner_quote.typeset_from_generator(**kwargs)
         yield from phi[0].typeset_from_generator(**kwargs)
-        # TODO: Add close bracket
+        yield from pl1.symbols.close_corner_quote.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield 'is'
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)

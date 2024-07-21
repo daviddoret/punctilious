@@ -433,6 +433,8 @@ class Symbols(dict):
             Symbol(key='asterisk_operator', latex_math='\\ast', unicode_extended='∗', unicode_limited='*'))
         self._close_curly_brace = self._register(
             Symbol(key='close_curly_brace', latex_math='\\right\\}', unicode_extended='}', unicode_limited='}'))
+        self._close_corner_quote = self._register(
+            Symbol(key='close_corner_quote', latex_math='\\urcorner)', unicode_extended='⌝', unicode_limited='"'))
         self._close_parenthesis = self._register(
             Symbol(key='close_parenthesis', latex_math='\\right)', unicode_extended=')', unicode_limited=')'))
         self._close_square_bracket = self._register(
@@ -449,6 +451,8 @@ class Symbols(dict):
             Symbol(key='maps_to', latex_math='\\mapsto', unicode_extended='↦', unicode_limited='|-->'))
         self._negation = self._register(
             Symbol(key='negation', latex_math='\\lnot', unicode_extended='¬', unicode_limited='not'))
+        self._open_corner_quote = self._register(
+            Symbol(key='open_corner_quote', latex_math='\\ulcorner', unicode_extended='⌜', unicode_limited='{'))
         self._open_curly_brace = self._register(
             Symbol(key='open_curly_brace', latex_math='\\left\\{', unicode_extended='{', unicode_limited='{'))
         self._open_parenthesis = self._register(
@@ -1003,6 +1007,11 @@ class Symbols(dict):
         return self._asterisk_operator
 
     @property
+    def close_corner_quote(self) -> Symbol:
+        """Aka quine quote or quasi-quote."""
+        return self._close_corner_quote
+
+    @property
     def close_curly_brace(self) -> Symbol:
         return self._close_curly_brace
 
@@ -1037,6 +1046,11 @@ class Symbols(dict):
     @property
     def negation(self) -> Symbol:
         return self._negation
+
+    @property
+    def open_corner_quote(self) -> Symbol:
+        """Aka quine quote or quasi-quote."""
+        return self._open_corner_quote
 
     @property
     def open_curly_brace(self) -> Symbol:
