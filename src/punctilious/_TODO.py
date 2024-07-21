@@ -1,5 +1,12 @@
 """
 
+TODO: Change shape "(inference-rule) follows-from inference-rule" for derivations, to "is_axiomatic_rule(inference-rule)".
+
+TODO: Change shape "(statement) follows-from axiom" for derivations, to "is_axiom(axiom)".
+
+TODO: Change shape "(statement) follows-from (theorem-derivation)" for derivations, to "TBD???".
+
+
 TODO: Implement predicative-connectives. these are connectives that generate propositions.
     this will facilitate auto-derivation of is-a proposition.
 
