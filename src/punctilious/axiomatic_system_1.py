@@ -5191,8 +5191,10 @@ class DerivationTypesetter(pl1.Typesetter):
                     first = False
                 yield '.'
             else:
-                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_054, msg=f'Unsupported derivation "{phi}" in the '
-                                                                          f'theory.', phi=phi, theory=theory)
+                raise u1.ApplicativeError(
+                    code=c1.ERROR_CODE_AS1_054,
+                    msg=f'Unsupported derivation `phi` in the theory.',
+                    phi=phi, theory=theory)
 
 
 class Typesetters:
