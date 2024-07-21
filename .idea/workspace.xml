@@ -196,7 +196,7 @@
     "Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20_with_derivation_1.executor": "Debug",
     "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20.executor": "Run",
-    "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20_with_derivation_1.executor": "Debug",
+    "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20_with_derivation_1.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_21_with_derivation_1.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL1.test_pl1.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL2.test_pl2.executor": "Run",
@@ -709,8 +709,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20" />
         <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20_with_derivation_1" />
+        <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20" />
         <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL1.test_pl1" />
         <item itemvalue="Python.minimal_logic_1" />
       </list>
@@ -731,14 +731,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00884" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721243625477</created>
-      <option name="number" value="00884" />
-      <option name="presentableId" value="LOCAL-00884" />
-      <option name="project" value="LOCAL" />
-      <updated>1721243625477</updated>
     </task>
     <task id="LOCAL-00885" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1124,7 +1116,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721589658180</updated>
     </task>
-    <option name="localTasksCounter" value="933" />
+    <task id="LOCAL-00933" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1721590178252</created>
+      <option name="number" value="00933" />
+      <option name="presentableId" value="LOCAL-00933" />
+      <option name="project" value="LOCAL" />
+      <updated>1721590178253</updated>
+    </task>
+    <option name="localTasksCounter" value="934" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1223,18 +1223,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>373</line>
-          <option name="timeStamp" value="682" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
-          <line>378</line>
-          <option name="timeStamp" value="683" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
           <line>393</line>
           <option name="timeStamp" value="684" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
+          <line>373</line>
+          <option name="timeStamp" value="685" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

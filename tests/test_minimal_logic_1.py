@@ -351,12 +351,6 @@ class TestMancosu2021P20:
                                   i=pu.pls1.i5, t=t)
         t, success, _, = derive_2(c=is_a_proposition(p1 | implies | (p1 | lor | p2)),
                                   i=pu.pls1.i4, t=t)
-        t, success, _, = derive_2(c=is_a_proposition((p1 | lor | p2) | implies | (p2 | lor | p1)),
-                                  i=pu.pls1.i4, t=t)
-        t, success, _, = derive_2(
-            c=is_a_proposition(((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (
-                    p1 | implies | (p1 | lor | p2))),
-            i=pu.pls1.i4, t=t)
 
         # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
         t, success, _, = derive_2(t=t, c=p1 | implies | (p1 | lor | p2),
@@ -364,6 +358,12 @@ class TestMancosu2021P20:
         assert success
 
         # 2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
+        t, success, _, = derive_2(c=is_a_proposition((p1 | lor | p2) | implies | (p2 | lor | p1)),
+                                  i=pu.pls1.i4, t=t)
+        t, success, _, = derive_2(
+            c=is_a_proposition(((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (
+                    p1 | implies | (p1 | lor | p2))),
+            i=pu.pls1.i4, t=t)
         t, success, _, = derive_2(
             t=t,
             c=(p1 | implies | (p1 | lor | p2)) | implies | (

@@ -6,6 +6,8 @@ TODO: Change shape "(statement) follows-from axiom" for derivations, to "is_axio
 
 TODO: Change shape "(statement) follows-from (theorem-derivation)" for derivations, to "TBD???".
 
+TODO: Consider meta connective "symbol(phi)" which returns the unique symbol of the root connective of phi.
+    This can be leveraged to meta compare the connectives of two formulas, with symbol(phi)=symbol(psi).
 
 TODO: Implement predicative-connectives. these are connectives that generate propositions.
     this will facilitate auto-derivation of is-a proposition.
