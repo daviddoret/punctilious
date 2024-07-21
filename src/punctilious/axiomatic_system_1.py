@@ -4969,6 +4969,13 @@ class BracketedListTypesetter(pl1.Typesetter):
 
 
 class MapTypesetter(pl1.Typesetter):
+    """A typesetter for the map connective.
+
+    Sample output:
+     - an empty map: {}
+     - a non-empty map: {x ↦ a, y ↦ b, z ↦ c}
+     """
+
     def __init__(self):
         super().__init__()
 
@@ -4978,7 +4985,7 @@ class MapTypesetter(pl1.Typesetter):
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
 
-        yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.open_curly_brace.typeset_from_generator(**kwargs)
         first = True
         for domain_element, codomain_element in zip(phi.domain, phi.codomain):
             if not first:
@@ -4990,11 +4997,11 @@ class MapTypesetter(pl1.Typesetter):
             yield from pl1.symbols.maps_to.typeset_from_generator(**kwargs)
             yield from pl1.symbols.space.typeset_from_generator(**kwargs)
             yield from codomain_element.typeset_from_generator(**kwargs)
-        yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.close_curly_brace.typeset_from_generator(**kwargs)
 
 
 class IsAPredicateTypesetter(pl1.Typesetter):
-    """A typesetter for predicate connectives.
+    """A typesetter for "(some object) is a (some class)" predicate connectives.
 
     Sample output:
      - ⌜`phi`⌝ is an `class-name-starting-with-a-vowel`
