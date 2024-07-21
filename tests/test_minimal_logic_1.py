@@ -372,6 +372,7 @@ class TestMancosu2021P20:
             i=pu.ml1.pl05)
         assert success
 
+        pass
         # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
         t, success, _, = derive_2(
             c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2)),
@@ -386,8 +387,12 @@ class TestMancosu2021P20:
         # 9. ⊢ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) (mp 5, 8)
         # 10. ⊢ [((𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] ⊃ (𝑝1 ⊃ (𝑝2 ∨ 𝑝1)) (axiom PL4)
         # 11. ⊢ 𝑝1 ⊃ (𝑝2 ∨ 𝑝1)(mp 9, 10)
-
         pass
+
+    def test_mancosu_2021_page_20(self, caplog):
+        t = pu.as1.Theory()
+        t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
+        t = pu.ml1.extend_theory_with_mancosu_2021_page_20(t=t)
 
     def test_mancosu_2021_page_21_with_derivation_1(self, caplog):
         t = pu.as1.Axiomatization(

@@ -1037,7 +1037,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         a: Axiom = Axiom(s=s, **kwargs)
 
     if isinstance(t, Axiomatization):
-        t = Axiomatization(d=(*t, a,))
+        t = Axiomatization(a=t, d=(a,))
         # TODO: Implement similar constructor than Theory A(a,d,...)
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
@@ -4126,6 +4126,7 @@ class Axiomatization(Formula):
      - all element phi of the enumeration is a well-formed axiom or an inference-rule.
 
     """
+    _last_index: int = 0
 
     @staticmethod
     def _data_validation(a: FlexibleAxiomatization | None = None,
@@ -4181,8 +4182,30 @@ class Axiomatization(Formula):
         """
         c, t = Axiomatization._data_validation(a=a, d=d)
         super().__init__(con=c, t=t)
+        self._heuristics: set[Heuristic, ...] | set[{}] = set()
         if a is not None:
+            # Copies the heuristics and any other decoration from the base theory
             copy_theory_decorations(target=self, decorations=(a,))
+        if pl1.REF_TS not in self.ts.keys():
+            Theory._last_index = Axiomatization._last_index + 1
+            self.ts[pl1.REF_TS] = pl1.NaturalIndexedSymbolTypesetter(body_ts=pl1.symbols.t_uppercase_script,
+                                                                     index=Axiomatization._last_index)
+        if pl1.DECLARATION_TS not in self.ts.keys():
+            self.ts[pl1.DECLARATION_TS] = typesetters.declaration(conventional_class='axiomatization')
+
+        if t is None:
+            # This is not an extended theory, this is a new theory.
+            # Output its declaration.
+            u1.log_info(self.typeset_as_string(theory=self, ts_key=pl1.DECLARATION_TS))
+
+    @property
+    def heuristics(self) -> set[Heuristic, ...] | set[{}]:
+        """A python-set of heuristics.
+
+        Heuristics are not formally part of an axiomatization. They are decorative objects used to facilitate proof
+        derivations.
+        """
+        return self._heuristics
 
 
 FlexibleAxiomatization = typing.Optional[
@@ -4479,7 +4502,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
 
 
 def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
-             raise_if_false: bool = True,
+             raise_error_if_false: bool = True,
              debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
     """Derive a new theory t′ that extends t, where conjecture c is a new theorem derived from inference-rule i.
@@ -4491,6 +4514,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
     :param t: a theory.
     :param c: the conjecture to be proven.
     :param i: the inference-rule from which the conjecture can be derived.
+    :param raise_error_if_false: raise an error if the derivation fails.
     :param debug:
     :return: A python-tuple (t′, True, derivation) if the derivation was successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[Theory, bool, typing.Optional[Derivation]]
@@ -4507,7 +4531,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         u1.log_debug(
             f'derive_2: The derivation failed because the inference-rule is not contained in the theory. '
             f'conjecture:{c}. inference_rule:{i}. ')
-        if raise_if_false:
+        if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_078,
                 msg='Inference-rule `i` is not an element of theory `t`. '
@@ -4546,10 +4570,6 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         # a more accurate set of premises can be computed, denoted necessary_premises.
         necessary_premises: Tupl = Tupl(
             e=replace_formulas(phi=i.transformation.premises, m=known_variable_values))
-        # necessary_premises: Tupl = Tupl(elements=None)
-        # for original_premise in inference_rule.transformation.premises:
-        #    necessary_premise = replace_formulas(phi=original_premise, m=known_variable_values)
-        #    necessary_premises: Tupl = Tupl(elements=(*necessary_premises, necessary_premise,))
 
         # Find a set of valid_statements in theory t, such that they match the necessary_premises.
         success, effective_premises = are_valid_statements_in_theory_with_variables(
@@ -4563,7 +4583,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
             return t, True, derivation
         else:
             # The required premises are not present in theory t, report failure.
-            if raise_if_false:
+            if raise_error_if_false:
                 raise u1.ApplicativeError(
                     code=c1.ERROR_CODE_AS1_079,
                     msg='Some premise required by inference-rule `i` are not valid propositions in theory `t`. '
@@ -4574,7 +4594,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
             return t, False, None
     else:
         # The conclusion of the inference_rule is not compatible with the conjecture.
-        if raise_if_false:
+        if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_080,
                 msg='The candidate proposition `c` is not compatible with the conclusion of inference-rule `i`. '
@@ -4622,7 +4642,7 @@ def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = 
 
     # Loop through all inference_rules in theory t.
     for inference_rule in t.iterate_inference_rules():
-        t, success, d = derive_2(t=t, c=conjecture, i=inference_rule, raise_if_false=False)
+        t, success, d = derive_2(t=t, c=conjecture, i=inference_rule, raise_error_if_false=False)
         if success:
             # Eureka, the conjecture was proven.
             return t, success, d

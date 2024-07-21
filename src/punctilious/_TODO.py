@@ -1,5 +1,8 @@
 """
 
+TODO: Implement predicative-connectives. these are connectives that generate propositions.
+    this will facilitate auto-derivation of is-a proposition.
+
 TODO: When a transformation creates new objects, it is not deterministic.
     To verify the validity of derivations a posterio,
     we must be able to re-map the new objects to the variables.

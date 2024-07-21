@@ -483,19 +483,20 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
      - the "p is-a proposition" heuristic.
 
     """
-    global propositional_logic_syntax_1
-    t = as1.append_to_theory(propositional_logic_syntax_1, t=t)
-    return t
-    # global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
-    # t: as1.Theory = as1.coerce_theory(t=t)
-    # t, _ = as1.let_x_be_an_axiom(a=i0, t=t)
-    # t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
-    # t, _ = as1.let_x_be_an_axiom(a=i2, t=t)
-    # t, _ = as1.let_x_be_an_axiom(a=i3, t=t)
-    # t, _ = as1.let_x_be_an_axiom(a=i4, t=t)
-    # t, _ = as1.let_x_be_an_axiom(a=i5, t=t)
+    # global propositional_logic_syntax_1
+    # t = as1.append_to_theory(propositional_logic_syntax_1, t=t)
     # t.heuristics.add(p_is_a_proposition_heuristic)
     # return t
+    global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
+    t: as1.Theory = as1.coerce_theory(t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i0, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i2, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i3, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i4, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=i5, t=t)
+    t.heuristics.add(p_is_a_proposition_heuristic)
+    return t
 
 
 def let_x_be_a_propositional_logic_syntax_1_theory() -> as1.Theory:

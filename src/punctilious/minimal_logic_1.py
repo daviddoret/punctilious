@@ -324,7 +324,8 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
     t: as1.Theory = as1.coerce_theory(t=t)
-    t: as1.Theory = pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
+    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=ir1.modus_ponens)
+    t = pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
     t, _ = as1.let_x_be_an_axiom(a=pl01, t=t)
     t, _ = as1.let_x_be_an_axiom(a=pl02, t=t)
     t, _ = as1.let_x_be_an_axiom(a=pl03, t=t)
@@ -361,18 +362,49 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
     t, p1, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p1')
     t, p2, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p2')
 
+    # Derive propositions
+    t, success, _, = as1.derive_2(c=p1 | is_a | proposition,
+                                  i=pls1.i1, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=p2 | is_a | proposition,
+                                  i=pls1.i1, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=(p1 | implies | p2) | is_a | proposition,
+                                  i=pls1.i4, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=(p2 | implies | p1) | is_a | proposition,
+                                  i=pls1.i4, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=(p1 | lor | p2) | is_a | proposition,
+                                  i=pls1.i5, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=(p2 | lor | p1) | is_a | proposition,
+                                  i=pls1.i5, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=(p2 | land | p2) | is_a | proposition,
+                                  i=pls1.i3, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=(p1 | land | p2) | is_a | proposition,
+                                  i=pls1.i3, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=((p2 | land | p2) | implies | (p1 | land | p2)) | is_a | proposition,
+                                  i=pls1.i4, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | is_a | proposition,
+                                  i=pls1.i4, t=t, raise_error_if_false=True)
+    t, success, _, = as1.derive_2(
+        c=(p1 | implies | (p1 | lor | p2)) | is_a | proposition,
+        i=pls1.i4, t=t)
+    t, success, _, = as1.derive_2(
+        c=(((p1 | lor | p2) | implies | (p2 | lor | p1)) |
+           implies |
+           (p1 | implies | (p1 | lor | p2))) | is_a | proposition,
+        i=pls1.i4, t=t)
+
     # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
-    t, ok, d1 = as1.derive_2(
+    t, _, d1 = as1.derive_2(
         c=p1 | implies | (p1 | lor | p2),
-        t=t, i=pl07
+        t=t, i=pl07, raise_error_if_false=True
     )
 
     # 2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
-    t, ok, d1 = as1.derive_2(
+    t, _, d1 = as1.derive_2(
         c=(p1 | implies | (p1 | lor | p2)) | implies | (
                 ((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2))),
-        t=t, i=pl04
+        t=t, i=pl05, raise_error_if_false=True
     )
+    pass
 
     # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
     # 4. ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃
