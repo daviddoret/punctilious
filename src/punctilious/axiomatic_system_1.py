@@ -706,7 +706,7 @@ def is_axiom_of_theory(a: FlexibleAxiom, t: FlexibleTheory):
 
 
 def is_inference_rule_of_theory(i: FlexibleInferenceRule, t: FlexibleTheory):
-    """Return True if "i" is an inference-rule in theory "i", False otherwise."""
+    """Return True if `i` is an inference-rule in theory `i`, False otherwise."""
     i: InferenceRule = coerce_inference_rule(i=i)
     t: Theory = coerce_theory(t=t)
     return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in iterate_theory_inference_rules(t=t))
@@ -2174,7 +2174,7 @@ class AlgorithmicTransformation(Transformation):
         con: Connective = _connectives.algorithm
         # TODO: Check `a` is callable nad has correct signature.
         a: typing.Callable = coerce_external_algorithm(f=a)
-        # TODO: Check "i" is callable nad has correct signature.
+        # TODO: Check `i` is callable nad has correct signature.
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
@@ -2541,9 +2541,9 @@ def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory | Non
 
 
 def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> tuple[bool, int | None]:
-    """Given a theory `t` and a proposition "p", return a pair ("b", "i") such that:
-     - "b" is True if "p" is a valid proposition in theory `t`, False otherwise,
-     - "i" is the derivation-index of the first occurrence of "p" in a derivation in `t` if "b" is True,
+    """Given a theory `t` and a proposition `p`, return a pair ("b", `i`) such that:
+     - "b" is True if `p` is a valid proposition in theory `t`, False otherwise,
+     - `i` is the derivation-index of the first occurrence of `p` in a derivation in `t` if "b" is True,
         None otherwise.
 
     This function is very similar to is_valid_proposition_in_theory_1 except that it returns
@@ -2554,8 +2554,8 @@ def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> t
 
     Definition:
     A formula p is a valid-proposition with regard to a theory `t`, if and only if:
-     - "p" is the valid-proposition of an axiom in `t`,
-     - or "p" is the valid-proposition of a theorem in `t`.
+     - `p` is the valid-proposition of an axiom in `t`,
+     - or `p` is the valid-proposition of a theorem in `t`.
     """
 
     p: Formula = coerce_formula(phi=p)
@@ -3067,8 +3067,8 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_068,
-                        msg='Inference-rule "ir" is not a valid predecessor (with index strictly less than "index").'
-                            ' This forbids the derivation of proposition "p" in step "d" in the derivation sequence.',
+                        msg='Inference-rule `ir` is not a valid predecessor (with index strictly less than "index").'
+                            ' This forbids the derivation of proposition `p` in step `d` in the derivation sequence.',
                         p=p, ir=ir, index=index, d=d, c=c, v=v, u=u)
                 return False, None, None
             # Check that all premises are valid predecessor propositions in the derivation.
@@ -3135,27 +3135,27 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                 if not is_formula_equivalent(phi=p, psi=p_prime):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
-                            msg='Inference-rule "ir" does not yield the expected proposition "p",'
+                            msg='Inference-rule `ir` does not yield the expected proposition `p`,'
                                 ' but yields "p_prime".'
-                                ' This forbids the derivation of "p" in step "d" in the derivation sequence.'
-                                ' Inference "i" contains the arguments (premises and the complementary arguments).',
+                                ' This forbids the derivation of `p` in step `d` in the derivation sequence.'
+                                ' Inference `i` contains the arguments (premises and the complementary arguments).',
                             code=c1.ERROR_CODE_AS1_036,
                             p=p, p_prime=p_prime, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
                     return False, None, None
             # All tests have been successfully completed, we now have the assurance
-            # that derivation "d" would be valid if appended to theory `t`.
+            # that derivation `d` would be valid if appended to theory `t`.
             pass
         else:
             # Incorrect form.
             if raise_error_if_false:
                 raise u1.ApplicativeError(
-                    msg='Expected derivation "d" is not of a proper form (e.g. axiom, inference-rule or theorem).'
-                        ' This forbids the derivation of proposition "p" in step "d" in the derivation'
+                    msg='Expected derivation `d` is not of a proper form (e.g. axiom, inference-rule or theorem).'
+                        ' This forbids the derivation of proposition `p` in step `d` in the derivation'
                         ' sequence.',
                     code=c1.ERROR_CODE_AS1_071,
                     p=p, d=d, index=index, c=c, v=v, u=u)
             return False, None, None
-        # Derivation "d" is valid.
+        # Derivation `d` is valid.
         pass
     # All unverified derivations have been verified.
     pass
@@ -3239,8 +3239,8 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_039,
-            msg=f'Argument "d" of python-type {str(type(d))} could not be coerced to a derivation of python-type '
-                f'Derivation. The string representation of "d" is: {u1.force_str(o=d)}.',
+            msg=f'Argument `d` of python-type {str(type(d))} could not be coerced to a derivation of python-type '
+                f'Derivation. The string representation of `d` is: {u1.force_str(o=d)}.',
             d=d, t_python_type=type(d))
 
 
@@ -3280,8 +3280,8 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_041,
-            msg=f'Argument "i" of python-type {str(type(i))} could not be coerced to an inference-rule of python-type '
-                f'InferenceRule. The string representation of "i" is: {u1.force_str(o=i)}.',
+            msg=f'Argument `i` of python-type {str(type(i))} could not be coerced to an inference-rule of python-type '
+                f'InferenceRule. The string representation of `i` is: {u1.force_str(o=i)}.',
             i=i, i_python_type=type(i))
 
 
@@ -3560,7 +3560,7 @@ class Inference(Formula):
         inference(i, P, A)
     Where:
         - inference is the inference connective,
-        - "i" is an inference-rule.
+        - `i` is an inference-rule.
         - P is a tuple of formulas denoted as the premises,
         - (for algorithmic-transformations) A is a tuple of formulas denoted as the supplementary arguments.
 
@@ -4160,8 +4160,8 @@ class Axiomatization(Formula):
             else:
                 # Incorrect form.
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
-                                          msg=f'Cannot append derivation "d" to axiomatization `a`, '
-                                              f'because "d" is not in proper form '
+                                          msg=f'Cannot append derivation `d` to axiomatization `a`, '
+                                              f'because `d` is not in proper form '
                                               f'(e.g.: axiom, inference-rule).',
                                           d=d,
                                           a=a
@@ -4340,7 +4340,7 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
 
 
 def append_derivation_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxiomatization) -> Axiomatization:
-    """Extend axiomatization `a` with derivation "d".
+    """Extend axiomatization `a` with derivation `d`.
 
     :param d:
     :param a:
@@ -4358,8 +4358,8 @@ def append_derivation_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxioma
             a: Axiomatization = Axiomatization(a=a, d=(extension_i,))
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
-                                  msg=f'Cannot append derivation "d" to axiomatization `a`, '
-                                      f'because "d" is not in proper form '
+                                  msg=f'Cannot append derivation `d` to axiomatization `a`, '
+                                      f'because `d` is not in proper form '
                                       f'(e.g.: axiom, inference-rule).',
                                   d=d,
                                   a=a
@@ -4415,7 +4415,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
         # The inference_rule is not in the theory,
         # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_067,
-                                  msg=f'Derivation fails because inference-rule "i" is not valid in theory `t`.',
+                                  msg=f'Derivation fails because inference-rule `i` is not valid in theory `t`.',
                                   i=i,
                                   t=t)
 
@@ -5015,7 +5015,7 @@ def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory
 
     :param t: A theory.
     :param r: A transformation-rule.
-    :return: A python-tuple (True, i) where "i" is the inference-rule if "i" is found in `t`, (False, None) otherwise.
+    :return: A python-tuple (True, i) where `i` is the inference-rule if `i` is found in `t`, (False, None) otherwise.
     """
     t: Theory = coerce_theory(t=t)
     r: NaturalTransformation = coerce_natural_transformation(t=r)
@@ -5033,7 +5033,7 @@ def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFor
 
     :param t: A theory.
     :param s: A formula that is a valid statement in `t`.
-    :return: A python-tuple (True, d) where "d" is the derivation if "s" is found in `t` valid-statements,
+    :return: A python-tuple (True, d) where `d` is the derivation if "s" is found in `t` valid-statements,
     (False, None) otherwise.
     """
     t: Theory = coerce_theory(t=t)
