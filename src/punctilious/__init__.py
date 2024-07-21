@@ -57,3 +57,5 @@ csl1.map_formula.formula_ts = as1.typesetters.map()
 csl1.follows_from.formula_ts = as1.typesetters.derivation()
 csl1.is_a_propositional_variable.formula_ts = as1.typesetters.is_a_predicate(
     conventional_class='propositional variable')
+csl1.is_a_proposition.formula_ts = as1.typesetters.is_a_predicate(
+    conventional_class='proposition')

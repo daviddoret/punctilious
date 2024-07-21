@@ -31,24 +31,24 @@ def theory(a, b, c):
 
     # derive:(a is-a proposition)
     theory, _, = pu.as1.derive_1(t=theory,
-                                 c=a | is_a | proposition,
+                                 c=is_a_proposition(a),
                                  p=(is_a_propositional_variable(a),),
                                  i=pu.pls1.i1)
-    assert pu.as1.is_valid_proposition_in_theory_1(p=a | is_a | proposition, t=theory)
+    assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(a), t=theory)
 
     # derive: (b is-a proposition)
     theory, _, = pu.as1.derive_1(t=theory,
-                                 c=b | is_a | proposition,
+                                 c=is_a_proposition(b),
                                  p=(is_a_propositional_variable(b),),
                                  i=pu.pls1.i1)
-    assert pu.as1.is_valid_proposition_in_theory_1(p=b | is_a | proposition, t=theory)
+    assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(b), t=theory)
 
     # derive: (c is-a proposition)
     theory, _, = pu.as1.derive_1(t=theory,
-                                 c=c | is_a | proposition,
+                                 c=is_a_proposition(c),
                                  p=(is_a_propositional_variable(c),),
                                  i=pu.pls1.i1)
-    assert pu.as1.is_valid_proposition_in_theory_1(p=c | is_a | proposition, t=theory)
+    assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(c), t=theory)
 
     return theory
 
@@ -63,8 +63,8 @@ class TestAdjunction:
         theory, _, = pu.as1.derive_1(t=theory,
                                      c=a | land | b,
                                      p=(
-                                         a | is_a | proposition,
-                                         b | is_a | proposition,
+                                         is_a_proposition(a),
+                                         is_a_proposition(b),
                                          a,
                                          b,),
                                      i=pu.ir1.conjunction_introduction)
@@ -76,8 +76,8 @@ class TestAdjunction:
             pu.as1.derive_1(t=theory,
                             c=a | land | c,
                             p=(
-                                a | is_a | proposition,
-                                c | is_a | proposition,
+                                is_a_proposition(a),
+                                is_a_proposition(c),
                                 a | land | c,),
                             i=pu.ir1.conjunction_introduction)
 
@@ -91,8 +91,8 @@ class TestSimplification1:
         theory, _, = pu.as1.derive_1(t=theory,
                                      c=a,
                                      p=(
-                                         a | is_a | proposition,
-                                         b | is_a | proposition,
+                                         is_a_proposition(a),
+                                         is_a_proposition(b),
                                          a | land | b,),
                                      i=pu.ir1.simplification_1_axiom)
         assert pu.as1.is_valid_proposition_in_theory_1(p=a, t=theory)
@@ -103,8 +103,8 @@ class TestSimplification1:
             pu.as1.derive_1(t=theory,
                             c=c,
                             p=(
-                                a | is_a | proposition,
-                                c | is_a | proposition,
+                                is_a_proposition(a),
+                                is_a_proposition(c),
                                 a | land | c,),
                             i=pu.ir1.simplification_1_axiom)
 
@@ -118,8 +118,8 @@ class TestSimplification2:
         theory, _, = pu.as1.derive_1(t=theory,
                                      c=b,
                                      p=(
-                                         a | is_a | proposition,
-                                         b | is_a | proposition,
+                                         is_a_proposition(a),
+                                         is_a_proposition(b),
                                          a | land | b,),
                                      i=pu.ir1.simplification_2_axiom)
         assert pu.as1.is_valid_proposition_in_theory_1(p=b, t=theory)
@@ -130,8 +130,8 @@ class TestSimplification2:
             pu.as1.derive_1(t=theory,
                             c=c,
                             p=(
-                                a | is_a | proposition,
-                                c | is_a | proposition,
+                                is_a_proposition(a),
+                                is_a_proposition(c),
                                 a | land | c,),
                             i=pu.ir1.simplification_2_axiom)
 
@@ -146,8 +146,8 @@ class TestModusPonens:
         theory, _, = pu.as1.derive_1(t=theory,
                                      c=b,
                                      p=(
-                                         a | is_a | proposition,
-                                         b | is_a | proposition,
+                                         is_a_proposition(a),
+                                         is_a_proposition(b),
                                          a | implies | b,
                                          a),
                                      i=pu.ir1.modus_ponens)
@@ -156,14 +156,14 @@ class TestModusPonens:
         # extend the theory to perform a second test
         # using a single propositional-variable
         theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a | implies | (a | land | a))
-        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=(a | land | a) | is_a | proposition)
+        theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=is_a_proposition(a | land | a))
 
         # derive a new theorem from the target inference-rule
         theory, _, = pu.as1.derive_1(t=theory,
                                      c=a | land | a,
                                      p=(
-                                         a | is_a | proposition,
-                                         (a | land | a) | is_a | proposition,
+                                         is_a_proposition(a),
+                                         is_a_proposition(a | land | a),
                                          a | implies | (a | land | a),
                                          a),
                                      i=pu.ir1.modus_ponens)
@@ -175,8 +175,8 @@ class TestModusPonens:
             pu.as1.derive_1(t=theory,
                             c=c,
                             p=(
-                                a | is_a | proposition,
-                                c | is_a | proposition,
+                                is_a_proposition(a),
+                                is_a_proposition(c),
                                 a | implies | c,
                                 c),
                             i=pu.ir1.modus_ponens.transformation)

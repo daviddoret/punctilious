@@ -23,7 +23,7 @@ map_formula = as1.get_connectives().map_formula
 """The connective dedicated to signaling map formulas. Cf. Map python-class."""
 
 natural_transformation = as1.get_connectives().natural_transformation
-proposition = as1.get_connectives().proposition
+is_a_proposition = as1.get_connectives().is_a_proposition
 is_a_propositional_variable = as1.get_connectives().is_a_propositional_variable
 theorem = as1.get_connectives().theorem
 theory_formula = as1.get_connectives().theory_formula

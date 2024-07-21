@@ -48,7 +48,7 @@ import propositional_logic_syntax_1 as pls1
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     pl01: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,),
+            p=(is_a_proposition(a),),
             c=a | implies | (a | land | a),
             v=(a,)),
         ref_ts=pl1.Monospace(text='PL1'))
@@ -71,8 +71,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     pl02: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition,),
+            p=(is_a_proposition(a),
+               is_a_proposition(b),),
             c=(a | land | b) | implies | (b | land | a),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL2'))
@@ -97,9 +97,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
         formula_ts='B') as b, as1.let_x_be_a_variable(formula_ts='C') as c:
     pl03: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition,
-               c | is_a | proposition),
+            p=(is_a_proposition(a),
+               is_a_proposition(b),
+               is_a_proposition(c)),
             c=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)),
             v=(a, b, c,)),
         ref_ts=pl1.Monospace(text='PL3'))
@@ -125,9 +125,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
         formula_ts='B') as b, as1.let_x_be_a_variable(formula_ts='C') as c:
     pl04: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition,
-               c | is_a | proposition),
+            p=(is_a_proposition(a),
+               is_a_proposition(b),
+               is_a_proposition(c)),
             c=((a | implies | b) | land | (b | implies | c) | implies | (a | implies | c)),
             v=(a, b, c,)),
         ref_ts=pl1.Monospace(text='PL4'))
@@ -153,8 +153,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl05: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition),
+            p=(is_a_proposition(a),
+               is_a_proposition(b)),
             c=b | implies | (a | implies | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL5'))
@@ -179,8 +179,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl06: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition),
+            p=(is_a_proposition(a),
+               is_a_proposition(b)),
             c=(b | land | (a | implies | b)) | implies | b,
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL6'))
@@ -205,8 +205,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl07: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition),
+            p=(is_a_proposition(a),
+               is_a_proposition(b)),
             c=a | implies | (a | lor | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL7'))
@@ -231,8 +231,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl08: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition),
+            p=(is_a_proposition(a),
+               is_a_proposition(b)),
             c=(a | lor | b) | implies | (b | lor | a),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL8'))
@@ -257,9 +257,9 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl09: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition,
-               c | is_a | proposition),
+            p=(is_a_proposition(a),
+               is_a_proposition(b),
+               is_a_proposition(c)),
             c=((a | implies | c) | land | (b | implies | c)) | implies | ((a | lor | b) | implies | c),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL9'))
@@ -285,8 +285,8 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl10: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition),
+            p=(is_a_proposition(a),
+               is_a_proposition(b)),
             c=((a | implies | b) | land | (a | implies | lnot(b))) | implies | lnot(a),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL10'))
@@ -363,33 +363,33 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
     t, p2, = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p2')
 
     # Derive propositions
-    t, success, _, = as1.derive_2(c=p1 | is_a | proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition(p1),
                                   i=pls1.i1, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=p2 | is_a | proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition(p2),
                                   i=pls1.i1, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=(p1 | implies | p2) | is_a | proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition(p1 | implies | p2),
                                   i=pls1.i4, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=(p2 | implies | p1) | is_a | proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition(p2 | implies | p1),
                                   i=pls1.i4, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=(p1 | lor | p2) | is_a | proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition(p1 | lor | p2),
                                   i=pls1.i5, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=(p2 | lor | p1) | is_a | proposition,
+    t, success, _, = as1.derive_2(c=is_a_proposition(p2 | lor | p1),
                                   i=pls1.i5, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=(p2 | land | p2) | is_a | proposition,
+    t, success, _, = as1.derive_2(c=(p2 | land | p2) | is_a | is_a_proposition,
                                   i=pls1.i3, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=(p1 | land | p2) | is_a | proposition,
+    t, success, _, = as1.derive_2(c=(p1 | land | p2) | is_a | is_a_proposition,
                                   i=pls1.i3, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=((p2 | land | p2) | implies | (p1 | land | p2)) | is_a | proposition,
+    t, success, _, = as1.derive_2(c=((p2 | land | p2) | implies | (p1 | land | p2)) | is_a | is_a_proposition,
                                   i=pls1.i4, t=t, raise_error_if_false=True)
-    t, success, _, = as1.derive_2(c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | is_a | proposition,
+    t, success, _, = as1.derive_2(c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | is_a | is_a_proposition,
                                   i=pls1.i4, t=t, raise_error_if_false=True)
     t, success, _, = as1.derive_2(
-        c=(p1 | implies | (p1 | lor | p2)) | is_a | proposition,
+        c=(p1 | implies | (p1 | lor | p2)) | is_a | is_a_proposition,
         i=pls1.i4, t=t)
     t, success, _, = as1.derive_2(
         c=(((p1 | lor | p2) | implies | (p2 | lor | p1)) |
            implies |
-           (p1 | implies | (p1 | lor | p2))) | is_a | proposition,
+           (p1 | implies | (p1 | lor | p2))) | is_a | is_a_proposition,
         i=pls1.i4, t=t)
 
     # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
@@ -439,19 +439,19 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     t = extend_theory_with_minimal_logic_1(t=t)
     t, c = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='C')
     t, d = pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')
-    t, success, _ = as1.derive_2(c=c | is_a | proposition,
+    t, success, _ = as1.derive_2(c=is_a_proposition(c),
                                  i=pls1.i1, t=t)
-    t, success, _ = as1.derive_2(c=d | is_a | proposition,
+    t, success, _ = as1.derive_2(c=d | is_a | is_a_proposition,
                                  i=pls1.i1, t=t)
-    t, success, _ = as1.derive_2(c=(c | implies | d) | is_a | proposition,
+    t, success, _ = as1.derive_2(c=(c | implies | d) | is_a | is_a_proposition,
                                  i=pls1.i4, t=t)
-    t, success, _ = as1.derive_2(c=(d | implies | c) | is_a | proposition,
+    t, success, _ = as1.derive_2(c=(d | implies | c) | is_a | is_a_proposition,
                                  i=pls1.i4, t=t)
-    t, success, _ = as1.derive_2(c=(d | land | d) | is_a | proposition,
+    t, success, _ = as1.derive_2(c=(d | land | d) | is_a | is_a_proposition,
                                  i=pls1.i3, t=t)
-    t, success, _ = as1.derive_2(c=(c | land | d) | is_a | proposition,
+    t, success, _ = as1.derive_2(c=(c | land | d) | is_a | is_a_proposition,
                                  i=pls1.i3, t=t)
-    t, success, _ = as1.derive_2(c=((d | land | d) | implies | (c | land | d)) | is_a | proposition,
+    t, success, _ = as1.derive_2(c=((d | land | d) | implies | (c | land | d)) | is_a | is_a_proposition,
                                  i=pls1.i4, t=t)
     # 1. ⊢ 𝐶(hypothesis)
     # TODO: Implement this as a proper hypothesis

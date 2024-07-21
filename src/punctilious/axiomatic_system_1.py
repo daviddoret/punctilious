@@ -1124,6 +1124,8 @@ class Connectives(typing.NamedTuple):
     inference: TernaryConnective
     inference_rule: UnaryConnective
     is_a: BinaryConnective
+    is_a_proposition: UnaryConnective
+    is_a_propositional_variable: UnaryConnective
     is_well_formed_formula_predicate: UnaryConnective
     is_well_formed_inference_rule_predicate: UnaryConnective
     is_well_formed_theory_predicate: UnaryConnective
@@ -1131,8 +1133,6 @@ class Connectives(typing.NamedTuple):
     lnot: UnaryConnective
     lor: BinaryConnective
     map_formula: BinaryConnective
-    proposition: NullaryConnective
-    is_a_propositional_variable: UnaryConnective
     theory_formula: FreeArityConnective
     is_well_formed_theory: UnaryConnective
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
@@ -1150,6 +1150,8 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     inference=let_x_be_a_ternary_connective(formula_ts='inference'),
     inference_rule=let_x_be_a_unary_connective(formula_ts='inference-rule'),
     is_a=let_x_be_a_binary_connective(formula_ts='is-a'),
+    is_a_proposition=UnaryConnective(formula_ts='is-a-proposition'),
+    is_a_propositional_variable=UnaryConnective(formula_ts='is-a-propositional-variable'),
     is_well_formed_formula_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-formula'),
     is_well_formed_inference_rule_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule'),
     is_well_formed_theory_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-theory'),
@@ -1157,8 +1159,6 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     lnot=let_x_be_a_unary_connective(formula_ts='¬'),
     lor=let_x_be_a_binary_connective(formula_ts='∨'),
     map_formula=let_x_be_a_binary_connective(formula_ts='map'),
-    proposition=NullaryConnective(formula_ts='proposition'),
-    is_a_propositional_variable=UnaryConnective(formula_ts='is-a-propositional-variable'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
     is_well_formed_theory=let_x_be_a_unary_connective(),
@@ -4175,11 +4175,11 @@ class Axiomatization(Formula):
         return o
 
     def __init__(self, a: Axiomatization | None = None, d: FlexibleEnumeration = None):
-        """
+        """Declares a new axiomatization.
 
-        :param a:
-        :param d:
-        :param decorations:
+        :param a: A base axiomatization. If `None`, the empty axiomatization is assumed as a base.
+        :param d: An enumeration of supplementary axioms and/or inference rules to be appended to the base
+            axiomatization.
         """
         c, t = Axiomatization._data_validation(a=a, d=d)
         super().__init__(con=c, t=t)

@@ -29,8 +29,8 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
     conjunction_introduction: as1.InferenceRule = as1.InferenceRule(
         t=as1.let_x_be_a_natural_transformation(
             premises=(
-                phi | cls1.is_a | cls1.proposition,
-                psi | cls1.is_a | cls1.proposition,
+                cls1.is_a_proposition(phi),
+                cls1.is_a_proposition(psi),
                 phi,
                 psi,),
             conclusion=phi | cls1.land | psi,
@@ -65,8 +65,8 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_1_rule: as1.NaturalTransformation = as1.let_x_be_a_natural_transformation(
         premises=(
-            phi | cls1.is_a | cls1.proposition,
-            psi | cls1.is_a | cls1.proposition,
+            cls1.is_a_proposition(phi),
+            cls1.is_a_proposition(psi),
             phi | cls1.land | psi,),
         conclusion=phi,
         variables=(phi, psi,))
@@ -83,8 +83,8 @@ simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_2_rule: as1.NaturalTransformation = as1.let_x_be_a_natural_transformation(
         premises=(
-            phi | cls1.is_a | cls1.proposition,
-            psi | cls1.is_a | cls1.proposition,
+            cls1.is_a_proposition(phi),
+            cls1.is_a_proposition(psi),
             phi | cls1.land | psi,),
         conclusion=psi,
         variables=(phi, psi,))
@@ -103,8 +103,8 @@ with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(for
     modus_ponens: as1.InferenceRule = as1.InferenceRule(
         t=as1.let_x_be_a_natural_transformation(
             premises=(
-                phi | cls1.is_a | cls1.proposition,
-                psi | cls1.is_a | cls1.proposition,
+                cls1.is_a_proposition(phi),
+                cls1.is_a_proposition(psi),
                 phi | cls1.implies | psi,
                 phi),
             conclusion=psi,

@@ -64,7 +64,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
             p=(is_a_propositional_variable(a),),
-            c=a | is_a | proposition,
+            c=is_a_proposition(a),
             v=(a,)),
         ref_ts=pl1.Monospace(text='PLS1'))
     """Axiom schema: A is-a propositional-variable ⊃ A is-a proposition.
@@ -86,8 +86,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i2: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,),
-            c=lnot(a) | is_a | proposition,
+            p=(is_a_proposition(a),),
+            c=lnot(a) | is_a | is_a_proposition,
             v=(a,)),
         ref_ts=pl1.Monospace(text='PLS2'))
     """Axiom schema: A is-a proposition ⊃ ¬A is a proposition.
@@ -109,9 +109,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i3: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition),
-            c=(a | land | b) | is_a | proposition,
+            p=(is_a_proposition(a),
+               is_a_proposition(b)),
+            c=(a | land | b) | is_a | is_a_proposition,
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS3'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition).
@@ -134,9 +134,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i4: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition),
-            c=(a | implies | b) | is_a | proposition,
+            p=(is_a_proposition(a),
+               is_a_proposition(b)),
+            c=(a | implies | b) | is_a | is_a_proposition,
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS4'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ⊃ B) is a proposition).
@@ -159,9 +159,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i5: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
-            p=(a | is_a | proposition,
-               b | is_a | proposition),
-            c=(a | lor | b) | is_a | proposition,
+            p=(is_a_proposition(a),
+               is_a_proposition(b)),
+            c=(a | lor | b) | is_a | is_a_proposition,
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS5'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∨ B) is a proposition).
@@ -185,7 +185,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     i6: as1.InferenceRule = as1.InferenceRule(
         t=as1.NaturalTransformation(
             p=None,
-            c=lnot(a | is_a | proposition),
+            c=lnot(is_a_proposition(a)),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS6'))
     """Axiom schema: ?????.
@@ -327,7 +327,7 @@ class PIsAProposition(as1.Heuristic):
 
         with as1.let_x_be_a_meta_variable(formula_ts='P') as p:
             success, m = as1.is_formula_equivalent_with_variables_2(
-                phi=conjecture, psi=p | is_a | proposition, variables=(p,))
+                phi=conjecture, psi=is_a_proposition(p), variables=(p,))
 
             if success:
                 # The conjecture is of the form (P is-a proposition).
@@ -338,9 +338,9 @@ class PIsAProposition(as1.Heuristic):
 
                 if as1.is_valid_proposition_in_theory_1(p=is_a_propositional_variable(p_value), t=t):
                     # If P is a propositional-variable:
-                    # We can safely derive p | is_a | proposition
+                    # We can safely derive proposition(p)
                     t, _ = as1.derive_1(
-                        c=p_value | is_a | proposition,
+                        c=p_value | is_a | is_a_proposition,
                         p=(is_a_propositional_variable(p_value),),
                         i=i1, t=t)
 
@@ -353,14 +353,14 @@ class PIsAProposition(as1.Heuristic):
                         # Retrieve the value assigned to Q.
                         q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
+                        t, success = self.process_conjecture(conjecture=q_value | is_a | is_a_proposition, t=t)
                         if success:
                             # (Q is-a proposition) is proved.
                             # We can safely derive ((¬Q) is-a proposition).
                             t, _ = as1.derive_1(
-                                c=lnot(q_value) | is_a | proposition,
+                                c=lnot(q_value) | is_a | is_a_proposition,
                                 p=(
-                                    q_value | is_a | proposition,),
+                                    q_value | is_a | is_a_proposition,),
                                 i=i2, t=t)
                             return t, True
                         else:
@@ -377,18 +377,18 @@ class PIsAProposition(as1.Heuristic):
                         q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
                         r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
+                        t, success = self.process_conjecture(conjecture=q_value | is_a | is_a_proposition, t=t)
                         if success:
                             # (Q is-a proposition) is proved.
-                            t, success = self.process_conjecture(conjecture=r_value | is_a | proposition, t=t)
+                            t, success = self.process_conjecture(conjecture=r_value | is_a | is_a_proposition, t=t)
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∧ R) is-a proposition).
                                 t, _ = as1.derive_1(
-                                    c=(q_value | land | r_value) | is_a | proposition,
+                                    c=(q_value | land | r_value) | is_a | is_a_proposition,
                                     p=(
-                                        q_value | is_a | proposition,
-                                        r_value | is_a | proposition,),
+                                        q_value | is_a | is_a_proposition,
+                                        r_value | is_a | is_a_proposition,),
                                     i=i3, t=t)
                                 return t, True
                             else:
@@ -408,18 +408,18 @@ class PIsAProposition(as1.Heuristic):
                         q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
                         r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
+                        t, success = self.process_conjecture(conjecture=q_value | is_a | is_a_proposition, t=t)
                         if success:
                             # (Q is-a proposition) is proved.
-                            t, success = self.process_conjecture(conjecture=r_value | is_a | proposition, t=t)
+                            t, success = self.process_conjecture(conjecture=r_value | is_a | is_a_proposition, t=t)
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ⊃ R) is-a proposition).
                                 t, _ = as1.derive_1(
-                                    c=(q_value | implies | r_value) | is_a | proposition,
+                                    c=(q_value | implies | r_value) | is_a | is_a_proposition,
                                     p=(
-                                        q_value | is_a | proposition,
-                                        r_value | is_a | proposition,),
+                                        q_value | is_a | is_a_proposition,
+                                        r_value | is_a | is_a_proposition,),
                                     i=i4, t=t)
                                 return t, True
                             else:
@@ -439,18 +439,18 @@ class PIsAProposition(as1.Heuristic):
                         q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
                         r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=q_value | is_a | proposition, t=t)
+                        t, success = self.process_conjecture(conjecture=q_value | is_a | is_a_proposition, t=t)
                         if success:
                             # (Q is-a proposition) is proved.
-                            t, success = self.process_conjecture(conjecture=r_value | is_a | proposition, t=t)
+                            t, success = self.process_conjecture(conjecture=r_value | is_a | is_a_proposition, t=t)
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∨ R) is-a proposition).
                                 t, _ = as1.derive_1(
-                                    c=(q_value | lor | r_value) | is_a | proposition,
+                                    c=(q_value | lor | r_value) | is_a | is_a_proposition,
                                     p=(
-                                        q_value | is_a | proposition,
-                                        r_value | is_a | proposition,),
+                                        q_value | is_a | is_a_proposition,
+                                        r_value | is_a | is_a_proposition,),
                                     i=i5, t=t)
                                 return t, True
                             else:
