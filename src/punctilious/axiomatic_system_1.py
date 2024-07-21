@@ -1389,7 +1389,6 @@ def is_any_formula_equivalent_with_variables(e: FlexibleEnumeration, psi: Flexib
     :param e:
     :param psi:
     :param v:
-    :param raise_event_if_false:
     :return:
     """
     e = coerce_enumeration(e=e, strip_duplicates=True, interpret_none_as_empty=True, canonic_conversion=True)
@@ -2503,9 +2502,9 @@ def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory | Non
 
     Alternatively, check validity of `p` in an enumeration of derivations `d`.
 
-    A formula :math:`\phi` is a valid-statement with regard to a theory :math:`t`, if and only if:
-     - :math:`\phi` is the valid-statement of an axiom in :math:`t`,
-     - or :math:`\phi` is the valid-statement of a theorem in :math:`t`.
+    A formula :math:`\\phi` is a valid-statement with regard to a theory :math:`t`, if and only if:
+     - :math:`\\phi` is the valid-statement of an axiom in :math:`t`,
+     - or :math:`\\phi` is the valid-statement of a theorem in :math:`t`.
 
     :param p:
     :param t: A theory.
@@ -3088,8 +3087,8 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                                                                          variables=t2.declarations)
                 if not map1_test:
                     if raise_error_if_false:
-                        c2 = t2.conclusion
-                        d2 = t2.declarations
+                        # c2 = t2.conclusion
+                        # d2 = t2.declarations
                         raise u1.ApplicativeError(
                             msg='Derivation `d` claims that `p` is valid in the derivation sequence `c`.'
                                 'The inference-rule `ir` has conclusion `c2` with new object declarations `d2`.'
