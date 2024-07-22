@@ -235,8 +235,8 @@ def let_x_be_a_propositional_variable(
     x = as1.Variable(c=as1.NullaryConnective(formula_ts=formula_ts))
     # t, _ = as1.derive_1(t=t, c=x | as1._connectives.is_a | as1._connectives.is_a_propositional_variable,
     #                    p=None, i=i0)
-    t, _ = as1.derive_1(t=t, c=as1._connectives.is_a_propositional_variable(x),
-                        p=None, i=i0)
+    t, _, _ = as1.derive_1(t=t, c=as1._connectives.is_a_propositional_variable(x),
+                           p=None, i=i0, raise_error_if_false=True)
 
     return t, x
 
@@ -339,10 +339,11 @@ class PIsAProposition(as1.Heuristic):
                 if as1.is_valid_proposition_in_theory_1(p=is_a_propositional_variable(p_value), t=t):
                     # If P is a propositional-variable:
                     # We can safely derive proposition(p)
-                    t, _ = as1.derive_1(
+                    t, _, _ = as1.derive_1(
                         c=is_a_proposition(p_value),
                         p=(is_a_propositional_variable(p_value),),
-                        i=i1, t=t)
+                        i=i1, t=t,
+                        raise_error_if_false=True)
 
                     return t, True
 
@@ -357,11 +358,11 @@ class PIsAProposition(as1.Heuristic):
                         if success:
                             # (Q is-a proposition) is proved.
                             # We can safely derive ((¬Q) is-a proposition).
-                            t, _ = as1.derive_1(
+                            t, _, _ = as1.derive_1(
                                 c=is_a_proposition(lnot(q_value)),
                                 p=(
                                     is_a_proposition(q_value),),
-                                i=i2, t=t)
+                                i=i2, t=t, raise_error_if_false=True)
                             return t, True
                         else:
                             # (Q is-a proposition) is not proved.
@@ -384,12 +385,12 @@ class PIsAProposition(as1.Heuristic):
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∧ R) is-a proposition).
-                                t, _ = as1.derive_1(
+                                t, _, _ = as1.derive_1(
                                     c=is_a_proposition(q_value | land | r_value),
                                     p=(
                                         is_a_proposition(q_value),
                                         is_a_proposition(r_value),),
-                                    i=i3, t=t)
+                                    i=i3, t=t, raise_error_if_false=True)
                                 return t, True
                             else:
                                 # (R is-a proposition) is not proved.
@@ -415,12 +416,12 @@ class PIsAProposition(as1.Heuristic):
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ⊃ R) is-a proposition).
-                                t, _ = as1.derive_1(
+                                t, _, _ = as1.derive_1(
                                     c=is_a_proposition(q_value | implies | r_value),
                                     p=(
                                         is_a_proposition(q_value),
                                         is_a_proposition(r_value),),
-                                    i=i4, t=t)
+                                    i=i4, t=t, raise_error_if_false=True)
                                 return t, True
                             else:
                                 # (R is-a proposition) is not proved.
@@ -446,12 +447,12 @@ class PIsAProposition(as1.Heuristic):
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∨ R) is-a proposition).
-                                t, _ = as1.derive_1(
+                                t, _, _ = as1.derive_1(
                                     c=is_a_proposition(q_value | lor | r_value),
                                     p=(
                                         is_a_proposition(q_value),
                                         is_a_proposition(r_value),),
-                                    i=i5, t=t)
+                                    i=i5, t=t, raise_error_if_false=True)
                                 return t, True
                             else:
                                 # (R is-a proposition) is not proved.

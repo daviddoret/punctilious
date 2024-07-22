@@ -30,24 +30,24 @@ def theory(a, b, c):
     theory = pu.as1.Axiomatization(d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive:(a is-a proposition)
-    theory, _, = pu.as1.derive_1(t=theory,
-                                 c=is_a_proposition(a),
-                                 p=(is_a_propositional_variable(a),),
-                                 i=pu.pls1.i1)
+    theory, _, _ = pu.as1.derive_1(t=theory,
+                                   c=is_a_proposition(a),
+                                   p=(is_a_propositional_variable(a),),
+                                   i=pu.pls1.i1, raise_error_if_false=True)
     assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(a), t=theory)
 
     # derive: (b is-a proposition)
-    theory, _, = pu.as1.derive_1(t=theory,
-                                 c=is_a_proposition(b),
-                                 p=(is_a_propositional_variable(b),),
-                                 i=pu.pls1.i1)
+    theory, _, _ = pu.as1.derive_1(t=theory,
+                                   c=is_a_proposition(b),
+                                   p=(is_a_propositional_variable(b),),
+                                   i=pu.pls1.i1, raise_error_if_false=True)
     assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(b), t=theory)
 
     # derive: (c is-a proposition)
-    theory, _, = pu.as1.derive_1(t=theory,
-                                 c=is_a_proposition(c),
-                                 p=(is_a_propositional_variable(c),),
-                                 i=pu.pls1.i1)
+    theory, _, _ = pu.as1.derive_1(t=theory,
+                                   c=is_a_proposition(c),
+                                   p=(is_a_propositional_variable(c),),
+                                   i=pu.pls1.i1, raise_error_if_false=True)
     assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(c), t=theory)
 
     return theory
@@ -60,14 +60,14 @@ class TestAdjunction:
         theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=b)
 
         # derive a new theorem from the target inference-rule
-        theory, _, = pu.as1.derive_1(t=theory,
-                                     c=a | land | b,
-                                     p=(
-                                         is_a_proposition(a),
-                                         is_a_proposition(b),
-                                         a,
-                                         b,),
-                                     i=pu.ir1.conjunction_introduction)
+        theory, _, _ = pu.as1.derive_1(t=theory,
+                                       c=a | land | b,
+                                       p=(
+                                           is_a_proposition(a),
+                                           is_a_proposition(b),
+                                           a,
+                                           b,),
+                                       i=pu.ir1.conjunction_introduction, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=a | land | b, t=theory)
 
         # show that wrong premises fail to derive a theorem
@@ -79,7 +79,7 @@ class TestAdjunction:
                                 is_a_proposition(a),
                                 is_a_proposition(c),
                                 a | land | c,),
-                            i=pu.ir1.conjunction_introduction)
+                            i=pu.ir1.conjunction_introduction, raise_error_if_false=True)
 
 
 class TestSimplification1:
@@ -88,13 +88,13 @@ class TestSimplification1:
         theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a | land | b)
 
         # derive a new theorem from the target inference-rule
-        theory, _, = pu.as1.derive_1(t=theory,
-                                     c=a,
-                                     p=(
-                                         is_a_proposition(a),
-                                         is_a_proposition(b),
-                                         a | land | b,),
-                                     i=pu.ir1.simplification_1_axiom)
+        theory, _, _ = pu.as1.derive_1(t=theory,
+                                       c=a,
+                                       p=(
+                                           is_a_proposition(a),
+                                           is_a_proposition(b),
+                                           a | land | b,),
+                                       i=pu.ir1.simplification_1_axiom, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=a, t=theory)
 
         # show that wrong premises fail to derive a theorem
@@ -106,7 +106,7 @@ class TestSimplification1:
                                 is_a_proposition(a),
                                 is_a_proposition(c),
                                 a | land | c,),
-                            i=pu.ir1.simplification_1_axiom)
+                            i=pu.ir1.simplification_1_axiom, raise_error_if_false=True)
 
 
 class TestSimplification2:
@@ -115,13 +115,13 @@ class TestSimplification2:
         theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a | land | b)
 
         # derive a new theorem from the target inference-rule
-        theory, _, = pu.as1.derive_1(t=theory,
-                                     c=b,
-                                     p=(
-                                         is_a_proposition(a),
-                                         is_a_proposition(b),
-                                         a | land | b,),
-                                     i=pu.ir1.simplification_2_axiom)
+        theory, _, _ = pu.as1.derive_1(t=theory,
+                                       c=b,
+                                       p=(
+                                           is_a_proposition(a),
+                                           is_a_proposition(b),
+                                           a | land | b,),
+                                       i=pu.ir1.simplification_2_axiom, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=b, t=theory)
 
         # show that wrong premises fail to derive a theorem
@@ -133,7 +133,7 @@ class TestSimplification2:
                                 is_a_proposition(a),
                                 is_a_proposition(c),
                                 a | land | c,),
-                            i=pu.ir1.simplification_2_axiom)
+                            i=pu.ir1.simplification_2_axiom, raise_error_if_false=True)
 
 
 class TestModusPonens:
@@ -143,14 +143,14 @@ class TestModusPonens:
         theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=a)
 
         # derive a new theorem from the target inference-rule
-        theory, _, = pu.as1.derive_1(t=theory,
-                                     c=b,
-                                     p=(
-                                         is_a_proposition(a),
-                                         is_a_proposition(b),
-                                         a | implies | b,
-                                         a),
-                                     i=pu.ir1.modus_ponens)
+        theory, _, _ = pu.as1.derive_1(t=theory,
+                                       c=b,
+                                       p=(
+                                           is_a_proposition(a),
+                                           is_a_proposition(b),
+                                           a | implies | b,
+                                           a),
+                                       i=pu.ir1.modus_ponens, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=b, t=theory)
 
         # extend the theory to perform a second test
@@ -159,14 +159,14 @@ class TestModusPonens:
         theory, _, = pu.as1.let_x_be_an_axiom(t=theory, s=is_a_proposition(a | land | a))
 
         # derive a new theorem from the target inference-rule
-        theory, _, = pu.as1.derive_1(t=theory,
-                                     c=a | land | a,
-                                     p=(
-                                         is_a_proposition(a),
-                                         is_a_proposition(a | land | a),
-                                         a | implies | (a | land | a),
-                                         a),
-                                     i=pu.ir1.modus_ponens)
+        theory, _, _ = pu.as1.derive_1(t=theory,
+                                       c=a | land | a,
+                                       p=(
+                                           is_a_proposition(a),
+                                           is_a_proposition(a | land | a),
+                                           a | implies | (a | land | a),
+                                           a),
+                                       i=pu.ir1.modus_ponens, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=a | land | a, t=theory)
 
         # show that wrong premises fail to derive a theorem
@@ -179,4 +179,4 @@ class TestModusPonens:
                                 is_a_proposition(c),
                                 a | implies | c,
                                 c),
-                            i=pu.ir1.modus_ponens.transformation)
+                            i=pu.ir1.modus_ponens.transformation, raise_error_if_false=True)

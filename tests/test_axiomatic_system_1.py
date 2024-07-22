@@ -758,7 +758,7 @@ class TestAlgorithm:
         i = as1.InferenceRule(t=algo)
         m, i = as1.let_x_be_an_inference_rule(t1=m, i=i)
         c = is_well_formed_theory(t)
-        m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,))
+        m, _, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,), raise_error_if_false=True)
         pass
 
 
@@ -915,12 +915,12 @@ class TestDemonstration:
                                                          v=(x, y, z,))
 
         # derive a theorem
-        demo2, _, = pu.as1.derive_1(t=theory,
-                                    c=a | star | c,
-                                    p=(
-                                        a | star | b,
-                                        b | star | c,),
-                                    i=ir1)
+        demo2, _, _ = pu.as1.derive_1(t=theory,
+                                      c=a | star | c,
+                                      p=(
+                                          a | star | b,
+                                          b | star | c,),
+                                      i=ir1, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=a | star | c, t=demo2)
 
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_039):
@@ -1002,10 +1002,10 @@ class TestTheory:
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
         t, i1 = pu.as1.let_x_be_an_inference_rule(t1=t, t2=pu.as1.NaturalTransformation(c=f, v=None, p=None))
-        t, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i1)
+        t, _, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i1, raise_error_if_false=True)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=d)
         t, i2 = pu.as1.let_x_be_an_inference_rule(t1=t, t2=pu.as1.NaturalTransformation(c=g, v=None, p=None))
-        t, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2)
+        t, _, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2, raise_error_if_false=True)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=e)
 
         # iterate axioms
@@ -1048,10 +1048,10 @@ class TestTheory:
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
         t, i1 = pu.as1.let_x_be_an_inference_rule(t1=t, t2=pu.as1.NaturalTransformation(c=f, v=None, p=None))
-        t, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i1)
+        t, _, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i1, raise_error_if_false=True)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=d)
         t, i2 = pu.as1.let_x_be_an_inference_rule(t1=t, t2=pu.as1.NaturalTransformation(c=g, v=None, p=None))
-        t, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2)
+        t, _, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2, raise_error_if_false=True)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=e)
 
         u_limit_index = 2
@@ -1078,10 +1078,10 @@ class TestTheory:
         t2, _ = pu.as1.let_x_be_an_axiom(t=t1, s=a)
         t3, _ = pu.as1.let_x_be_an_axiom(t=t2, s=b)
         t4, i1 = pu.as1.let_x_be_an_inference_rule(t1=t3, t2=pu.as1.NaturalTransformation(c=f, v=None, p=None))
-        t5, _ = pu.as1.derive_1(t=t4, c=f, p=None, i=i1)
+        t5, _, _ = pu.as1.derive_1(t=t4, c=f, p=None, i=i1, raise_error_if_false=True)
         t6, _ = pu.as1.let_x_be_an_axiom(t=t5, s=d)
         t7, i2 = pu.as1.let_x_be_an_inference_rule(t1=t6, t2=pu.as1.NaturalTransformation(c=g, v=None, p=None))
-        t8, _ = pu.as1.derive_1(t=t7, c=g, p=None, i=i2)
+        t8, _, _ = pu.as1.derive_1(t=t7, c=g, p=None, i=i2, raise_error_if_false=True)
         t9, _ = pu.as1.let_x_be_an_axiom(t=t8, s=e)
 
         a1 = pu.as1.transform_theory_to_axiomatization(t=t1)
@@ -1169,4 +1169,4 @@ class TestObjectCreation:
             # rule 2: a new object in creations must not be present in previous derivations in the theory,
             #   otherwise it would be possible to "create the same object multiple times" which doesn't make sense.
             a = as1.let_x_be_an_axiom(t=t, a=a)
-            t, _ = as1.derive_1(t=t, c=is_a_propositional_variable(x), )
+            t, _, _ = as1.derive_1(t=t, c=is_a_propositional_variable(x), raise_error_if_false=True)

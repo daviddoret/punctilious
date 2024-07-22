@@ -37,24 +37,24 @@ def theory(a, b, c):
     t = pu.as1.Axiomatization(d=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
 
     # derive: a is-a proposition
-    t, m = pu.as1.derive_1(t=t,
-                           c=is_a_proposition(a),
-                           p=(is_a_propositional_variable(a),),
-                           i=pu.pls1.i1)
+    t, _, m = pu.as1.derive_1(t=t,
+                              c=is_a_proposition(a),
+                              p=(is_a_propositional_variable(a),),
+                              i=pu.pls1.i1, raise_error_if_false=True)
     assert as1.is_valid_proposition_in_theory_1(p=is_a_proposition(a), t=t)
 
     # derive: b is-a proposition
-    t, m = pu.as1.derive_1(t=t,
-                           c=is_a_proposition(b),
-                           p=(is_a_propositional_variable(b),),
-                           i=pu.pls1.i1)
+    t, _, m = pu.as1.derive_1(t=t,
+                              c=is_a_proposition(b),
+                              p=(is_a_propositional_variable(b),),
+                              i=pu.pls1.i1, raise_error_if_false=True)
     assert as1.is_valid_proposition_in_theory_1(p=is_a_proposition(b), t=t)
 
     # derive: c is-a proposition
-    t, m = pu.as1.derive_1(t=t,
-                           c=is_a_proposition(c),
-                           p=(is_a_propositional_variable(c),),
-                           i=pu.pls1.i1)
+    t, _, m = pu.as1.derive_1(t=t,
+                              c=is_a_proposition(c),
+                              p=(is_a_propositional_variable(c),),
+                              i=pu.pls1.i1, raise_error_if_false=True)
     assert as1.is_valid_proposition_in_theory_1(p=is_a_proposition(c), t=t)
 
     return t
@@ -72,29 +72,29 @@ class TestPL1:
         t, _ = pu.as1.let_x_be_an_inference_rule(t1=t, i=pu.ml1.pl01, )
 
         # Derive: P is-a proposition
-        t, _ = pu.as1.derive_1(t=t,
-                               c=is_a_proposition(p),
-                               p=(is_a_propositional_variable(p),),
-                               i=pu.pls1.i1)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition(p),
+                                  p=(is_a_propositional_variable(p),),
+                                  i=pu.pls1.i1, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p), t=t)
         pass
 
         # Derive: P ⊃ (P ∧ P)
-        t, _ = pu.as1.derive_1(t=t,
-                               c=p | implies | (p | land | p),
-                               p=(
-                                   is_a_proposition(p),),
-                               i=pu.ml1.pl01)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=p | implies | (p | land | p),
+                                  p=(
+                                      is_a_proposition(p),),
+                                  i=pu.ml1.pl01, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=p | implies | (p | land | p), t=t)
         pass
 
         # Derive: (P ∧ P) is-a proposition
-        t, _ = pu.as1.derive_1(t=t,
-                               c=is_a_proposition(p | land | p),
-                               p=(
-                                   is_a_proposition(p),
-                                   is_a_proposition(p),),
-                               i=pu.pls1.i3)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition(p | land | p),
+                                  p=(
+                                      is_a_proposition(p),
+                                      is_a_proposition(p),),
+                                  i=pu.pls1.i3, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | land | p), t=t)
 
         # make P valid and add modus-ponens to the theory
@@ -102,14 +102,14 @@ class TestPL1:
         t, _, = pu.as1.let_x_be_an_inference_rule(t1=t, i=pu.ir1.modus_ponens)
 
         # Derive: P ∧ P from P by modus-ponens
-        t, _ = pu.as1.derive_1(t=t,
-                               c=p | land | p,
-                               p=(
-                                   is_a_proposition(p),
-                                   is_a_proposition(p | land | p),
-                                   p | implies | (p | land | p),
-                                   p,),
-                               i=pu.ir1.modus_ponens)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=p | land | p,
+                                  p=(
+                                      is_a_proposition(p),
+                                      is_a_proposition(p | land | p),
+                                      p | implies | (p | land | p),
+                                      p,),
+                                  i=pu.ir1.modus_ponens, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=p | land | p, t=t)
         pass
 
@@ -128,28 +128,28 @@ class TestPL2:
         t, _ = pu.as1.let_x_be_an_inference_rule(t1=t, i=pu.ml1.pl02, )
 
         # Derive: (P ∧ Q) ⊃ (Q ∧ P)
-        t, _ = pu.as1.derive_1(t=t,
-                               c=(p | land | q) | implies | (q | land | p),
-                               p=(
-                                   is_a_proposition(p),
-                                   is_a_proposition(q),),
-                               i=pu.ml1.pl02)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=(p | land | q) | implies | (q | land | p),
+                                  p=(
+                                      is_a_proposition(p),
+                                      is_a_proposition(q),),
+                                  i=pu.ml1.pl02, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=(p | land | q) | implies | (q | land | p), t=t)
 
         # Derive: (P ∧ Q) and (Q ∧ P) is-a proposition
-        t, _ = pu.as1.derive_1(t=t,
-                               c=is_a_proposition(p | land | q),
-                               p=(
-                                   is_a_proposition(p),
-                                   is_a_proposition(q),),
-                               i=pu.pls1.i3)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition(p | land | q),
+                                  p=(
+                                      is_a_proposition(p),
+                                      is_a_proposition(q),),
+                                  i=pu.pls1.i3, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | land | q), t=t)
-        t, _ = pu.as1.derive_1(t=t,
-                               c=is_a_proposition(q | land | p),
-                               p=(
-                                   is_a_proposition(q),
-                                   is_a_proposition(p),),
-                               i=pu.pls1.i3)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition(q | land | p),
+                                  p=(
+                                      is_a_proposition(q),
+                                      is_a_proposition(p),),
+                                  i=pu.pls1.i3, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(q | land | p), t=t)
 
         # make (P ∧ Q) valid and add modus-ponens to the theory
@@ -157,14 +157,14 @@ class TestPL2:
         t, _, = pu.as1.let_x_be_an_inference_rule(t1=t, i=pu.ir1.modus_ponens)
 
         # Derive: P ∧ P from P by modus-ponens
-        t, _ = pu.as1.derive_1(t=t,
-                               c=q | land | p,
-                               p=(
-                                   is_a_proposition(p | land | q),
-                                   is_a_proposition(q | land | p),
-                                   (p | land | q) | implies | (q | land | p),
-                                   p | land | q,),
-                               i=pu.ir1.modus_ponens)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=q | land | p,
+                                  p=(
+                                      is_a_proposition(p | land | q),
+                                      is_a_proposition(q | land | p),
+                                      (p | land | q) | implies | (q | land | p),
+                                      p | land | q,),
+                                  i=pu.ir1.modus_ponens, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=q | land | p, t=t)
         pass
 
@@ -185,47 +185,47 @@ class TestPL3:
         t, _ = pu.as1.let_x_be_an_inference_rule(t1=t, i=pu.ml1.pl03, )
 
         # Derive: (P ⊃ Q) ⊃ ((P ∧ R) ⊃ (B ∧ R))
-        t, _ = pu.as1.derive_1(t=t,
-                               c=(p | implies | q) | implies | (
-                                       (p | land | r) | implies | (q | land | r)),
-                               p=(
-                                   is_a_proposition(p),
-                                   is_a_proposition(q),
-                                   is_a_proposition(r),),
-                               i=pu.ml1.pl03)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=(p | implies | q) | implies | (
+                                          (p | land | r) | implies | (q | land | r)),
+                                  p=(
+                                      is_a_proposition(p),
+                                      is_a_proposition(q),
+                                      is_a_proposition(r),),
+                                  i=pu.ml1.pl03, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(
             p=(p | implies | q) | implies | ((p | land | r) | implies | (q | land | r)),
             t=t)
         pass
 
         # Derive: propositions
-        t, _ = pu.as1.derive_1(t=t,
-                               c=is_a_proposition(p | land | r),
-                               p=(
-                                   is_a_proposition(p),
-                                   is_a_proposition(r),),
-                               i=pu.pls1.i3)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition(p | land | r),
+                                  p=(
+                                      is_a_proposition(p),
+                                      is_a_proposition(r),),
+                                  i=pu.pls1.i3, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | land | r), t=t)
-        t, _ = pu.as1.derive_1(t=t,
-                               c=is_a_proposition(q | land | r),
-                               p=(
-                                   is_a_proposition(q),
-                                   is_a_proposition(r),),
-                               i=pu.pls1.i3)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition(q | land | r),
+                                  p=(
+                                      is_a_proposition(q),
+                                      is_a_proposition(r),),
+                                  i=pu.pls1.i3, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(q | land | r), t=t)
-        t, _ = pu.as1.derive_1(t=t,
-                               c=is_a_proposition(p | implies | q),
-                               p=(
-                                   is_a_proposition(p),
-                                   is_a_proposition(q),),
-                               i=pu.pls1.i4)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition(p | implies | q),
+                                  p=(
+                                      is_a_proposition(p),
+                                      is_a_proposition(q),),
+                                  i=pu.pls1.i4, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | implies | q), t=t)
-        t, _ = pu.as1.derive_1(t=t,
-                               c=is_a_proposition((p | land | r) | implies | (q | land | r)),
-                               p=(
-                                   is_a_proposition(p | land | r),
-                                   is_a_proposition(q | land | r),),
-                               i=pu.pls1.i4)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition((p | land | r) | implies | (q | land | r)),
+                                  p=(
+                                      is_a_proposition(p | land | r),
+                                      is_a_proposition(q | land | r),),
+                                  i=pu.pls1.i4, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(
             p=is_a_proposition((p | land | r) | implies | (q | land | r)), t=t)
 
@@ -234,14 +234,14 @@ class TestPL3:
         t, _, = pu.as1.let_x_be_an_inference_rule(t1=t, i=pu.ir1.modus_ponens)
 
         # Derive: (P ∧ R) implies (Q ∧ R)  from P by modus-ponens
-        t, _ = pu.as1.derive_1(t=t,
-                               c=(p | land | r) | implies | (q | land | r),
-                               p=(
-                                   is_a_proposition(p | implies | q),
-                                   is_a_proposition((p | land | r) | implies | (q | land | r)),
-                                   (p | implies | q) | implies | ((p | land | r) | implies | (q | land | r)),
-                                   p | implies | q,),
-                               i=pu.ir1.modus_ponens)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=(p | land | r) | implies | (q | land | r),
+                                  p=(
+                                      is_a_proposition(p | implies | q),
+                                      is_a_proposition((p | land | r) | implies | (q | land | r)),
+                                      (p | implies | q) | implies | ((p | land | r) | implies | (q | land | r)),
+                                      p | implies | q,),
+                                  i=pu.ir1.modus_ponens, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=(p | land | r) | implies | (q | land | r), t=t)
         pass
 
@@ -310,7 +310,7 @@ class TestPL5:
         assert success
         assert pu.as1.is_valid_proposition_in_theory_1(p=y | implies | (x | implies | y), t=t2)
 
-        t4, _, = pu.as1.derive_1(
+        t4, _, _ = pu.as1.derive_1(
             t=t2,
             c=x | implies | y,
             p=(
@@ -318,7 +318,7 @@ class TestPL5:
                 is_a_proposition(x | implies | y),
                 y | implies | (x | implies | y),
                 y,),
-            i=pu.ir1.modus_ponens)
+            i=pu.ir1.modus_ponens, raise_error_if_false=True)
         assert success
         assert pu.as1.is_valid_proposition_in_theory_1(p=x | implies | y, t=t4)
 

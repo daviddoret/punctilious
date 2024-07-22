@@ -46,11 +46,11 @@ class TestAxioms:
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
 
         # derive: p is-a proposition
-        t, _, = pu.as1.derive_1(t=t,
-                                c=is_a_proposition(p),
-                                p=(
-                                    is_a_propositional_variable(p),),
-                                i=pu.pls1.i1)
+        t, _, _ = pu.as1.derive_1(t=t,
+                                  c=is_a_proposition(p),
+                                  p=(
+                                      is_a_propositional_variable(p),),
+                                  i=pu.pls1.i1, raise_error_if_false=True)
         assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p), t=t)
 
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition
