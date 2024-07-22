@@ -124,7 +124,7 @@ class TestSimplification2:
 
 
 class TestModusPonens:
-    def test_modus_ponens(self, f1, a, b, c):
+    def test_modus_ponens(self, f1):
         t, a, b, c = f1
         # adapt the base theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=a | implies | b)
