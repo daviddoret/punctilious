@@ -9,8 +9,8 @@ import meta_theory_1 as mt1
 import propositional_logic_syntax_1 as pls1
 import minimal_logic_1 as ml1
 
-csl1.follows_from.formula_ts = as1.typesetters.infix_formula(
-    connective_typesetter='follows-from')
+csl1.derivation.formula_ts = as1.typesetters.infix_formula(
+    connective_typesetter='derivation')
 
 csl1.is_a.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter='is-a')
@@ -54,7 +54,7 @@ csl1.theory_formula.formula_ts = as1.typesetters.classical_formula(
 csl1.axiomatization.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='axiomatization')
 csl1.map_formula.formula_ts = as1.typesetters.map()
-csl1.follows_from.formula_ts = as1.typesetters.derivation()
+csl1.derivation.formula_ts = as1.typesetters.derivation()
 csl1.is_a_propositional_variable.formula_ts = as1.typesetters.is_a_predicate(
     conventional_class='propositional variable')
 csl1.is_a_proposition.formula_ts = as1.typesetters.is_a_predicate(

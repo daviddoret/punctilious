@@ -593,7 +593,7 @@ class TestInferenceRule:
         a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         rule = pu.as1.NaturalTransformation(c=a | f | b, v=None, d=None, p=None)
-        phi1 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
+        phi1 = rule | pu.as1._connectives.derivation | pu.as1._connectives.inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
         # incorrect connective
@@ -601,7 +601,7 @@ class TestInferenceRule:
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
-        phi3 = rule | pu.as1._connectives.follows_from | pu.as1._connectives.enumeration
+        phi3 = rule | pu.as1._connectives.derivation | pu.as1._connectives.enumeration
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -627,11 +627,11 @@ class TestProofByPostulation:
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
         rule1 = pu.as1.NaturalTransformation(c=star3(e, b, d), v=None, d=None,
                                              p=None)
-        phi1 = rule1 | pu.as1._connectives.follows_from | pu.as1._connectives.inference_rule
+        phi1 = rule1 | pu.as1._connectives.derivation | pu.as1._connectives.inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
         phi2 = rule1 | pu.as1._connectives.map_formula | pu.as1._connectives.inference_rule
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
-        phi3 = rule1 | pu.as1._connectives.follows_from | b
+        phi3 = rule1 | pu.as1._connectives.derivation | b
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -649,7 +649,7 @@ class TestTheorem:
         tm1 = pu.as1.Theorem(s=b, i=if1)
         tm1 = pu.as1.coerce_theorem(t=tm1)
 
-        tm2 = b | follows_from | if1
+        tm2 = b | derivation | if1
         assert pu.as1.is_formula_equivalent(phi=tm1, psi=tm2)
         tm2 = pu.as1.coerce_theorem(t=tm2)
 
@@ -672,8 +672,8 @@ class TestInference:
         theorem_2 = pu.as1.Theorem(s=theorem, i=inference)
         pu.as1.is_formula_equivalent(
             phi=theorem_2,
-            psi=theorem | pu.as1._connectives.follows_from | pu.as1._connectives.inference(inference_rule, p,
-                                                                                           pu.as1.Tupl()))
+            psi=theorem | pu.as1._connectives.derivation | pu.as1._connectives.inference(inference_rule, p,
+                                                                                         pu.as1.Tupl()))
 
     def test_is_well_formed_inference(self):
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
@@ -687,9 +687,9 @@ class TestInference:
         assert pu.as1.is_well_formed_inference(i=phi1)
         phi2 = pu.as1._connectives.inference(i, as1.Tupl())
         assert not pu.as1.is_well_formed_inference(i=phi2)
-        phi3 = p | pu.as1._connectives.follows_from | i
+        phi3 = p | pu.as1._connectives.derivation | i
         assert not pu.as1.is_well_formed_inference(i=phi3)
-        phi4 = f(a, a, b, b) | pu.as1._connectives.follows_from | i
+        phi4 = f(a, a, b, b) | pu.as1._connectives.derivation | i
         assert not pu.as1.is_well_formed_inference(i=phi4)
 
 
@@ -710,10 +710,10 @@ class TestProofByInference:
         outcome = f.apply_transformation(p=p)
         m = pu.as1.Theorem(s=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(t=m)
-        assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i)
+        assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.derivation | i)
 
         i2 = pu.as1.Inference(p=(a | star | b, b | star | a,), i=ir)
-        assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.follows_from | i2)
+        assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.derivation | i2)
         pass
 
 

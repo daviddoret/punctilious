@@ -1109,7 +1109,7 @@ class Connectives(typing.NamedTuple):
     axiom: UnaryConnective
     axiomatization_formula: FreeArityConnective
     enumeration: FreeArityConnective
-    follows_from: BinaryConnective
+    derivation: BinaryConnective
     implies: BinaryConnective
     inference: TernaryConnective
     inference_rule: UnaryConnective
@@ -1135,7 +1135,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     axiom=let_x_be_a_unary_connective(formula_ts='axiom'),
     axiomatization_formula=let_x_be_a_free_arity_connective(formula_ts='axiomatization'),
     enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
-    follows_from=let_x_be_a_binary_connective(formula_ts='follows-from'),
+    derivation=let_x_be_a_binary_connective(formula_ts='derivation'),
     implies=let_x_be_a_binary_connective(formula_ts='implies'),
     inference=let_x_be_a_ternary_connective(formula_ts='inference'),
     inference_rule=let_x_be_a_unary_connective(formula_ts='inference-rule'),
@@ -2447,7 +2447,7 @@ def is_well_formed_inference_rule(i: FlexibleFormula) -> bool:
     if isinstance(i, InferenceRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif (i.connective is _connectives.follows_from and
+    elif (i.connective is _connectives.derivation and
           i.arity == 2 and
           is_well_formed_transformation(t=i.term_0) and
           i.term_1.connective is _connectives.inference_rule):
@@ -2923,7 +2923,7 @@ def is_well_formed_axiom(a: FlexibleFormula) -> bool:
     a = coerce_formula(phi=a)
     if a.arity != 2:
         return False
-    if a.connective is not _connectives.follows_from:
+    if a.connective is not _connectives.derivation:
         return False
     if not is_well_formed_formula(phi=a.term_0):
         return False
@@ -2946,7 +2946,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_false: bool = Fals
     if isinstance(t, Theorem):
         # the Theorem python-type assures the well-formedness of the object.
         return True
-    if (t.connective is not _connectives.follows_from or
+    if (t.connective is not _connectives.derivation or
             not t.arity == 2 or
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_inference(i=t.term_1)):
@@ -3392,7 +3392,7 @@ class Derivation(Formula):
         :param j:
         :return:
         """
-        con: Connective = _connectives.follows_from
+        con: Connective = _connectives.derivation
         s = coerce_formula(phi=s)
         j = coerce_formula(phi=j)
         return con, s, j
