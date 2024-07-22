@@ -85,12 +85,12 @@ class Formula(tuple):
     Definition (sequence of formulas):
     "" is an empty sequence of formulas.
     If "phi" is a formula, then "phi" is a non-empty sequence of formulas.
-    If "s" is a sequence of formulas, and "phi" is a formula, then "s, phi" is a non-empty sequence of formulas.
+    If `s` is a sequence of formulas, and "phi" is a formula, then "s, phi" is a non-empty sequence of formulas.
     Nothing else is a sequence of formulas.
 
     Definition (formula):
     If "c" is a connective, then "(c())" is a nullary formula.
-    If "c" is a connective, and "s" is a non-empty sequence of formulas, then "(c(s))" is an n-ary formula.
+    If "c" is a connective, and `s` is a non-empty sequence of formulas, then "(c(s))" is an n-ary formula.
 
     Conventions:
     Assuming unambiguous representation:
@@ -996,10 +996,6 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
     return t1, i
 
 
-def let_x_be_an_axiom_DEPRECATED(s: FlexibleFormula):
-    return Axiom(s=s)
-
-
 def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = None,
                       a: typing.Optional[FlexibleAxiom] = None, **kwargs):
     """
@@ -1019,11 +1015,11 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
     if s is not None and a is not None:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_016,
-            msg='Both "s" and `a` are not None. It is mandatory to provide only one of these two arguments.')
+            msg='Both `s` and `a` are not None. It is mandatory to provide only one of these two arguments.')
     elif s is None and a is None:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_017,
-            msg='Both "s" and `a` are None. It is mandatory to provide one of these two arguments.')
+            msg='Both `s` and `a` are None. It is mandatory to provide one of these two arguments.')
     elif s is not None:
         a: Axiom = Axiom(s=s, **kwargs)
 
@@ -1545,7 +1541,7 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
     Definition (extend an enumeration "e" with an element "x"):
     Cf. the definition of enumeration.
     If "x" is an element of "e", return "e".
-    If "x" is not an element of "e", and "s" is the sequence of terms in "e", return "(s, e)".
+    If "x" is not an element of "e", and `s` is the sequence of terms in "e", return "(s, e)".
     """
     e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     x: Formula = coerce_formula(phi=x)
@@ -4221,7 +4217,7 @@ FlexibleDecorations = typing.Optional[typing.Union[typing.Tuple[FlexibleTheory, 
 
 
 def is_subformula_of_formula(s: FlexibleFormula, f: FlexibleFormula) -> bool:
-    """Return True if and only if formula "s" is a sub-formula of formula "f", False otherwise.
+    """Return True if and only if formula `s` is a sub-formula of formula "f", False otherwise.
 
     :param s: A formula, that may be a subformula of f.
     :param f: A formula, that may be the superformula of s.
@@ -5084,12 +5080,12 @@ def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory
 
 def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFormula) -> \
         tuple[bool, Formula | None]:
-    """Given a theory `t` and a valid-statement "s" in `t`, return the first occurrence of a derivation in `t` such
-    that its valid-statement is formula-equivalent to "s".
+    """Given a theory `t` and a valid-statement `s` in `t`, return the first occurrence of a derivation in `t` such
+    that its valid-statement is formula-equivalent to `s`.
 
     :param t: A theory.
     :param s: A formula that is a valid statement in `t`.
-    :return: A python-tuple (True, d) where `d` is the derivation if "s" is found in `t` valid-statements,
+    :return: A python-tuple (True, d) where `d` is the derivation if `s` is found in `t` valid-statements,
     (False, None) otherwise.
     """
     t: Theory = coerce_theory(t=t)
