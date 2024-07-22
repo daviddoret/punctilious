@@ -130,3 +130,18 @@ axiomatization = as1.Axiomatization(d=(
     simplification_1_axiom,
     simplification_2_axiom,
     modus_ponens,))
+
+
+def extend_theory_with_inference_rules_1(t: as1.FlexibleTheory) -> as1.Theory:
+    """Extends a theory with:
+     - the catalog of foundational inference-rules found in inference-rules-1.
+     - TODO: add some theory-specific heuristics?
+
+    """
+    global conjunction_introduction, simplification_1_axiom, simplification_2_axiom, modus_ponens
+    t: as1.Theory = as1.coerce_theory(t=t)
+    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=conjunction_introduction)
+    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=simplification_1_axiom)
+    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=simplification_2_axiom)
+    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=modus_ponens)
+    return t

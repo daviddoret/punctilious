@@ -10,56 +10,6 @@ auto_derive_3 = pu.as1.auto_derive_3
 auto_derive_4 = pu.as1.auto_derive_4
 
 
-@pytest.fixture
-def a():
-    a = pu.as1.let_x_be_a_simple_object(formula_ts='A')
-    return a
-
-
-@pytest.fixture
-def b():
-    b = pu.as1.let_x_be_a_simple_object(formula_ts='B')
-    return b
-
-
-@pytest.fixture
-def c():
-    c = pu.as1.let_x_be_a_simple_object(formula_ts='C')
-    return c
-
-
-@pytest.fixture
-def theory(a, b, c):
-    # elaborate a theory with 3 propositions: a, b, and c
-    a1 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=is_a_propositional_variable(a))
-    a2 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=is_a_propositional_variable(b))
-    a3 = pu.as1.let_x_be_an_axiom_DEPRECATED(s=is_a_propositional_variable(c))
-    t = pu.as1.Axiomatization(d=(*pu.ir1.axioms, *pu.pls1.axiomatization, a1, a2, a3,))
-
-    # derive: a is-a proposition
-    t, _, m = pu.as1.derive_1(t=t,
-                              c=is_a_proposition(a),
-                              p=(is_a_propositional_variable(a),),
-                              i=pu.pls1.i1, raise_error_if_false=True)
-    assert as1.is_valid_proposition_in_theory_1(p=is_a_proposition(a), t=t)
-
-    # derive: b is-a proposition
-    t, _, m = pu.as1.derive_1(t=t,
-                              c=is_a_proposition(b),
-                              p=(is_a_propositional_variable(b),),
-                              i=pu.pls1.i1, raise_error_if_false=True)
-    assert as1.is_valid_proposition_in_theory_1(p=is_a_proposition(b), t=t)
-
-    # derive: c is-a proposition
-    t, _, m = pu.as1.derive_1(t=t,
-                              c=is_a_proposition(c),
-                              p=(is_a_propositional_variable(c),),
-                              i=pu.pls1.i1, raise_error_if_false=True)
-    assert as1.is_valid_proposition_in_theory_1(p=is_a_proposition(c), t=t)
-
-    return t
-
-
 class TestPL1:
     def test_pl1(self):
         # Test PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)

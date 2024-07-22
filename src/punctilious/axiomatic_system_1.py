@@ -4504,7 +4504,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
              raise_error_if_false: bool = True,
              debug: bool = False) -> \
         typing.Tuple[Theory, bool, typing.Optional[Derivation]]:
-    """Derive a new theory t′ that extends t, where conjecture c is a new theorem derived from inference-rule i.
+    """Derives a new theory `t′` that extends `t` with a new theorem based on conjecture `c` using inference-rule `i`.
 
     Note: in contrast, derive_1 requires the explicit list of premises. derive_2 is more convenient to use because it
      automatically finds a set of premises among the valid-statements in theory t, such that conjecture c can be
