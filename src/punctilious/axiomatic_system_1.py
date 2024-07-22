@@ -1044,7 +1044,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
 def let_x_be_a_theory(d: FlexibleEnumeration | None = None,
                       m: FlexibleTheory | None = None, **kwargs) -> (
         tuple)[Theory, Theory]:
-    """Declare a new theory T in meta-theory M.
+    """Declare a new theory `t` in a meta-theory `m`.
 
     T is declared as a sub-theory of M. To formalize this relation, the following axiom is added to M:
         (T is-a theory)
@@ -1058,7 +1058,8 @@ def let_x_be_a_theory(d: FlexibleEnumeration | None = None,
     if 'formula_name_ts' not in kwargs:
         kwargs['formula_name_ts'] = pl1.Script(text='T')
 
-    t = Theory(d=d, **kwargs)
+    t = Theory(t=None, d=d, **kwargs)
+    # TODO: Declare let t be a theory in meta theory m.
 
     return t
 
@@ -3211,7 +3212,9 @@ def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_false: bool
 
 
 def coerce_derivation(d: FlexibleFormula) -> Derivation:
-    """Validate that p is a well-formed theorem and returns it properly typed as Proof, or raise exception e123.
+    """
+
+    Validate that p is a well-formed theorem and returns it properly typed as Proof, or raise exception e123.
 
     :param d:
     :return:
@@ -3226,9 +3229,11 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_039,
-            msg=f'Argument `d` of python-type {str(type(d))} could not be coerced to a derivation of python-type '
-                f'Derivation. The string representation of `d` is: {u1.force_str(o=d)}.',
-            d=d, t_python_type=type(d))
+            msg=f'Argument `d` of python-type `t` could not be coerced to a derivation of python-type '
+                f'Derivation. The string representation of `d` is given in `s`.',
+            d=d,
+            t=type(d),
+            s=u1.force_str(o=d))
 
 
 def coerce_axiom(a: FlexibleFormula) -> Axiom:
@@ -3373,10 +3378,12 @@ class Derivation(Formula):
      - follows-from is the derivation connector,
      - and psi is a proper-justification.
 
+    Intuitively, a derivation is a justification for the existence of a valid-statement in a theory.
+
     There are three mutually exclusive categories of derivations:
-     - axioms,
-     - inference-rules,
-     - theorems.
+     - derivation by axiom postulation,
+     - derivation by inference-rule inclusion,
+     - derivation by theorem proving.
 
     See their respective definitions for the local and global definitions of proper-justification.
     """
@@ -4412,17 +4419,21 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
         else:
             return t, False, None
 
-    for premise in p:
+    for q in p:
         # The validity of the premises is checked during theory initialization,
         # but re-checking it here "in advance" helps provide more context in the exception that is being raised.
-        if not is_valid_proposition_in_theory_1(p=premise, t=t):
+        if not is_valid_proposition_in_theory_1(p=q, t=t):
             if raise_error_if_false:
-                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_051,
-                                          msg=f'Conjecture: \n\t{c} \n...cannot be derived because premise: \n\t{premise}'
-                                              f' \n...is not a valid-statement in theory t. The inference-rule used to try '
-                                              f'this derivation was: '
-                                              f'\n\t{i} \nThe complete theory is: \n\t{t}', c=c, premise=premise, p=p,
-                                          i=i, t=t)
+                raise u1.ApplicativeError(
+                    code=c1.ERROR_CODE_AS1_051,
+                    msg=f'Conjecture `c` cannot be derived from inference-rule `i` because '
+                        f'premise `q` is not a valid-statement in theory `t`. '
+                        f'The was complete list of premises is provided as `p`.',
+                    c=c,
+                    q=q,
+                    i=i,
+                    p=p,
+                    t=t)
             else:
                 return t, False, None
 

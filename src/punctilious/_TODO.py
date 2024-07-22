@@ -1,17 +1,17 @@
 """
 
-TODO: Change shape "(inference-rule) follows-from inference-rule" for derivations,
-    to "is_axiomatic_rule(inference-rule)".
-
-TODO: Change shape "(statement) follows-from axiom" for derivations, to "is_axiom(axiom)".
-
-TODO: Change shape "(statement) follows-from (theorem-derivation)" for derivations, to "TBD???".
+TODO: Change shape "Derivation(inference-rule, inference-rule)" for derivations,
+    to something like "is_axiomatic_rule(inference-rule)" to make it a proposition as well.
+    Like this, is_axiomatic_rule would be a proposition similarly to axioms and theorems,
+    even though it is a bit of a meta-statement.
 
 TODO: Consider meta connective "symbol(phi)" which returns the unique symbol of the root connective of phi.
     This can be leveraged to meta compare the connectives of two formulas, with symbol(phi)=symbol(psi).
 
-TODO: Implement predicative-connectives. these are connectives that generate propositions.
-    this will facilitate auto-derivation of is-a proposition.
+TODO: Consider fundamental inference-rule: premises=(), conjecture=s is a (new) symbol, declarations={s}.
+    This would allow the declaration of the connective symbols.
+    We still don't have access to any real symbol or representation, but just of the concept
+    of a symbol and that symbol being unique, i.e. distinct from all other inferred symbols.
 
 TODO: When a transformation creates new objects, it is not deterministic.
     To verify the validity of derivations a posteriori,
@@ -32,6 +32,11 @@ TODO: IDEA: Develop a three-valued logic:
  - P is true
  - or P is false
  - or P is not decidable in this axiomatization
+
+****** PREDICATES
+
+TODO: Implement predicative-connectives or simply predicates. these are connectives that generate propositions.
+    this will facilitate auto-derivation of is-a proposition.
 
 TODO: Implement Predicates. These are n-ary connectives (we can start with unary connectives)
     that are linked to an inference-rule that returns true or false.

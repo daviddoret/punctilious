@@ -70,10 +70,10 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     """Axiom schema: A is-a propositional-variable ⊃ A is-a proposition.
     
     Premises:
-     - A is-a propositional-variable
+     - is-a-propositional-variable(A)
 
     Conclusion: 
-    A is-a proposition
+    is-a-proposition(A)
 
     Variables:
     {A}
