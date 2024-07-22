@@ -1037,42 +1037,48 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_018, msg='oops 3')
 
 
-def let_x_be_a_theory(d: FlexibleEnumeration | None = None,
-                      m: FlexibleTheory | None = None, **kwargs) -> (
+def let_x_be_a_theory(
+        t: FlexibleTheory | None = None,
+        d: FlexibleEnumeration | None = None,
+        **kwargs) -> (
         tuple)[Theory, Theory]:
-    """Declare a new theory `t` in a meta-theory `m`.
+    """Declares a new theory `t`.
+
+    :param t:
+    :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
+    :param m: (conditional) a meta-theory M such that T is a sub-theory of M.
+    :return: A python-tuple (m, t).
+    """
+    # if 'formula_name_ts' not in kwargs:
+    #    kwargs['formula_name_ts'] = pl1.Script(text='T')
+    t: Theory = Theory(t=t, d=d, **kwargs)
+
+    return t
+
+
+def let_x_be_a_meta_theory(m: FlexibleTheory | None = None,
+                           d: FlexibleEnumeration | None = None,
+                           **kwargs) -> (
+        tuple)[Theory, Theory]:
+    """Declares a new meta-theory `m`.
 
     T is declared as a sub-theory of M. To formalize this relation, the following axiom is added to M:
         (T is-a theory)
     Note that M does not self-references itself (i.e. we don't use the formula (T is-a sub-theory of M),
     this reference is implicit in (T is-a theory) because it is a derivation in M.
 
+    :param t:
     :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
     :param m: (conditional) a meta-theory M such that T is a sub-theory of M.
     :return: A python-tuple (m, t).
     """
-    if 'formula_name_ts' not in kwargs:
-        kwargs['formula_name_ts'] = pl1.Script(text='T')
+    # if 'formula_name_ts' not in kwargs:
+    #    kwargs['formula_name_ts'] = pl1.Script(text='T')
+    m: Theory = Theory(t=m, d=d)
 
-    t = Theory(t=None, d=d, **kwargs)
-    # TODO: Declare let t be a theory in meta theory m.
+    # TODO: Load automatically mt1
 
-    return t
-
-
-def let_x_be_a_meta_theory(d: FlexibleEnumeration | None = None,
-                           **kwargs) -> Theory:
-    """Declare a new meta-theory T.
-
-    :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
-    :return: A theory.
-    """
-    if 'formula_name_ts' not in kwargs:
-        kwargs['formula_name_ts'] = pl1.Script(text='M')
-
-    t = Theory(d=d, **kwargs)
-
-    return t
+    return m
 
 
 def let_x_be_a_sub_theory_of_y(t: FlexibleTheory, m: FlexibleTheory) -> Theory:
@@ -1084,7 +1090,8 @@ def let_x_be_a_sub_theory_of_y(t: FlexibleTheory, m: FlexibleTheory) -> Theory:
     """
     t = coerce_theory(t=t)
     m = coerce_theory(t=t)
-    m, a = let_x_be_an_axiom(t=m, s=t | _connectives.is_a | _connectives.theory_formula)
+    # Move this to mt1 and redevelop it to use derivation from mt1 inference-rule.
+    m, a = let_x_be_an_axiom(t=m, s=_connectives.is_well_formed_theory(t))
     return m
 
 
