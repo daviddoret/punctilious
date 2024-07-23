@@ -12,7 +12,6 @@ import itertools
 import re
 from abc import ABC
 
-# import constants_1 as c1
 import constants_1 as c1
 import util_1 as u1
 import state_1 as st1
@@ -131,6 +130,7 @@ class Formula(tuple):
             return super().__new__(cls, t)
 
     def __init__(self, con: Connective, t: FlexibleTupl = None, **kwargs):
+        con, t = Formula._data_validation(con=con, t=t)
         super().__init__()
         self._connective = con
         self._ts: dict[str, pl1.Typesetter] = pl1.extract_typesetters(t=kwargs)
@@ -527,7 +527,7 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> Map:
         # implicit conversion of None to the empty map.
         return Map(d=None, c=None)
     elif is_well_formed_map(m=m):
-        # "m" is improperly python-typed, but it is a well-formed map.
+        # `m` is improperly python-typed, but it is a well-formed map.
         return Map(d=m[Map.DOMAIN_INDEX], c=m[Map.CODOMAIN_INDEX])
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
@@ -538,7 +538,7 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> Map:
         # no coercion solution found.
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_009,
-            msg='Argument "m" could not be coerced to a map.',
+            msg='Argument `m` could not be coerced to a map.',
             coerced_type=Map, m_type=type(m), m=m)
 
 
@@ -576,6 +576,8 @@ class NullaryConnective(FixedArityConnective):
 class SimpleObject(Formula):
     """A simple-object is a formula composed of a nullary-connective."""
 
+    # TODO: Implement _data_validation(...) for the sake of consistency.
+
     def __new__(cls, c: NullaryConnective):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
@@ -593,7 +595,7 @@ class UnaryConnective(FixedArityConnective):
         super().__init__(fixed_arity_constraint=1, formula_ts=formula_ts)
 
 
-class InfixPartialLeftHandFormula:
+class InfixPartialLeftHandFormula(pl1.Typesetter):
     """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
     This is accomplished by re-purposing the | operator,
     overloading the __or__() method that is called when | is used,
@@ -622,9 +624,9 @@ class InfixPartialLeftHandFormula:
     def connective(self) -> Connective:
         return self._connective
 
-    def typeset_as_string(self, **kwargs):
-        # TODO: Nice to have: Enrich the representation of partial-formulas
-        return f'{self.connective}(???,{self.term_0})'
+    def typeset_from_generator(self, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        yield f'{self.connective}(???,{self.term_0})'
 
     @property
     def term_0(self) -> Connective:
@@ -702,7 +704,7 @@ def is_inference_rule_of_theory(i: FlexibleInferenceRule, t: FlexibleTheory):
 
 
 def is_theorem_of_theory(m: FlexibleTheorem, t: FlexibleTheory):
-    """Return True if "m" is a theorem in theory `t`, False otherwise."""
+    """Return True if `m` is a theorem in theory `t`, False otherwise."""
     m: Theorem = coerce_theorem(t=m)
     t: Theory = coerce_theory(t=t)
     return any(is_formula_equivalent(phi=m, psi=thrm2) for thrm2 in t.theorems)
@@ -1061,7 +1063,7 @@ def let_x_be_a_meta_theory(m: FlexibleTheory | None = None,
 
     T is declared as a sub-theory of M. To formalize this relation, the following axiom is added to M:
         (T is-a theory)
-    Note that M does not self-references itself (i.e. we don't use the formula (T is-a sub-theory of M),
+    Note that M does not self-references itself (i.e. we don't use the formula (T is-a sub-theory of M)),
     this reference is implicit in (T is-a theory) because it is a derivation in M.
 
     :param m: a meta-theory M such that T is a sub-theory of M.
@@ -1070,7 +1072,7 @@ def let_x_be_a_meta_theory(m: FlexibleTheory | None = None,
     """
     # if 'formula_name_ts' not in kwargs:
     #    kwargs['formula_name_ts'] = pl1.Script(text='T')
-    m: Theory = Theory(t=m, d=d)
+    m: Theory = Theory(t=m, d=d, **kwargs)
 
     # TODO: Load automatically mt1
 
@@ -1110,6 +1112,7 @@ class Connectives(typing.NamedTuple):
     axiomatization_formula: FreeArityConnective
     enumeration: FreeArityConnective
     derivation: BinaryConnective
+    hypothesis_formula: FreeArityConnective
     implies: BinaryConnective
     inference: TernaryConnective
     inference_rule: UnaryConnective
@@ -1136,6 +1139,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     axiomatization_formula=let_x_be_a_free_arity_connective(formula_ts='axiomatization'),
     enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
     derivation=let_x_be_a_binary_connective(formula_ts='derivation'),
+    hypothesis_formula=let_x_be_a_free_arity_connective(formula_ts='hypothesis'),
     implies=let_x_be_a_binary_connective(formula_ts='implies'),
     inference=let_x_be_a_ternary_connective(formula_ts='inference'),
     inference_rule=let_x_be_a_unary_connective(formula_ts='inference-rule'),
@@ -1490,6 +1494,8 @@ class Tupl(Formula):
      Python implementation: in python, the word 'tuple' is reserved. For this reason, the word 'tupl' is used instead
      to implement this object."""
 
+    # TODO: Implement _data_validation(...) for the sake of consistency.
+
     def __new__(cls, e: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
@@ -1623,7 +1629,7 @@ class Map(Formula):
     CODOMAIN_INDEX: int = 1
 
     @staticmethod
-    def _data_validation(d: FlexibleEnumeration = None, c: FlexibleTupl = None) -> tuple[Enumeration, Tupl]:
+    def _data_validation_2(d: FlexibleEnumeration = None, c: FlexibleTupl = None) -> tuple[Enumeration, Tupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -1644,7 +1650,7 @@ class Map(Formula):
         :param d: An enumeration denoted as the domain of the map.
         :param c: An enumeration denoted as the codomain of the map.
         """
-        d, c = Map._data_validation(d=d, c=c)
+        d, c = Map._data_validation_2(d=d, c=c)
         o: tuple = super().__new__(cls, con=_connectives.map_formula, t=(d, c,))
         return o
 
@@ -1654,7 +1660,7 @@ class Map(Formula):
         :param d: An enumeration denoted as the domain of the map.
         :param c: An enumeration denoted as the codomain of the map.
         """
-        d, c = Map._data_validation(d=d, c=c)
+        d, c = Map._data_validation_2(d=d, c=c)
         super().__init__(con=_connectives.map_formula, t=(d, c,))
 
     @property
@@ -1729,8 +1735,8 @@ class Enumeration(Formula):
     """
 
     @staticmethod
-    def _data_validation(e: FlexibleEnumeration = None,
-                         strip_duplicates: bool = False) -> tuple[Connective, tuple]:
+    def _data_validation_2(e: FlexibleEnumeration = None,
+                           strip_duplicates: bool = False) -> tuple[Connective, tuple]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -1760,13 +1766,13 @@ class Enumeration(Formula):
 
     def __new__(cls, e: FlexibleEnumeration = None,
                 strip_duplicates: bool = False, **kwargs):
-        c, e = Enumeration._data_validation(e=e, strip_duplicates=strip_duplicates)
+        c, e = Enumeration._data_validation_2(e=e, strip_duplicates=strip_duplicates)
         o: tuple = super().__new__(cls, con=c, t=e, **kwargs)
         return o
 
     def __init__(self, e: FlexibleEnumeration = None,
                  strip_duplicates: bool = False, **kwargs):
-        c, e = Enumeration._data_validation(e=e, strip_duplicates=strip_duplicates)
+        c, e = Enumeration._data_validation_2(e=e, strip_duplicates=strip_duplicates)
         super().__init__(con=c, t=e, **kwargs)
 
 
@@ -2386,7 +2392,7 @@ def is_well_formed_map(m: FlexibleFormula, raise_error_if_false: bool = False) -
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_061,
-                msg='"m" is not a well-formed-map.',
+                msg='`m` is not a well-formed-map.',
                 m=m
             )
         return False
@@ -3566,7 +3572,7 @@ class Inference(Formula):
     ARGUMENTS_INDEX: int = 2
 
     @staticmethod
-    def _data_validation(
+    def _data_validation_2(
             i: FlexibleInferenceRule,
             p: FlexibleTupl | None = None,
             a: FlexibleTupl | None = None) -> tuple[Connective, InferenceRule, Tupl, Tupl]:
@@ -3591,7 +3597,7 @@ class Inference(Formula):
         :param p: A tuple of formulas denoted as the premises.
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
-        c, i, p, a = Inference._data_validation(i=i, p=p, a=a)
+        c, i, p, a = Inference._data_validation_2(i=i, p=p, a=a)
         o: tuple = super().__new__(cls, con=c, t=(i, p, a))
         return o
 
@@ -3602,7 +3608,7 @@ class Inference(Formula):
         :param p: A tuple of formulas denoted as the premises.
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
-        c, i, p, a = Inference._data_validation(i=i, p=p, a=a)
+        c, i, p, a = Inference._data_validation_2(i=i, p=p, a=a)
         super().__init__(con=c, t=(i, p, a,))
 
     @property
@@ -3631,7 +3637,7 @@ def inverse_map(m: FlexibleMap) -> Map:
     codomain = transform_formula_to_tuple(phi=m.domain)
     if domain.arity != codomain.arity:
         assert u1.ApplicativeError(
-            msg='Map "m" cannot be inversed because it is not bijective.',
+            msg='Map `m` cannot be inverted because it is not bijective.',
             new_domain_arity=domain.arity,
             new_codomain_arity=codomain.arity,
             new_domain=domain,
@@ -3777,8 +3783,8 @@ class Theory(Formula):
     _last_index: int = 0
 
     @staticmethod
-    def _data_validation(con: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None
-                         ) -> tuple[Connective, Enumeration]:
+    def _data_validation_2(con: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None
+                           ) -> tuple[Connective, Enumeration]:
         """
 
         :param t:
@@ -3804,7 +3810,7 @@ class Theory(Formula):
         :param d: An enumeration of complementary derivations for the new theory.
         :param kwargs:
         """
-        c2, d2 = Theory._data_validation(con=con, t=t, d=d)
+        c2, d2 = Theory._data_validation_2(con=con, t=t, d=d)
         o: tuple = super().__new__(cls, con=c2, t=d2, **kwargs)
         return o
 
@@ -3819,7 +3825,7 @@ class Theory(Formula):
         :param d: An enumerations of derivations.
         :param kwargs:
         """
-        c2, d2 = Theory._data_validation(con=con, t=t, d=d)
+        c2, d2 = Theory._data_validation_2(con=con, t=t, d=d)
         super().__init__(con=c2, t=d2, **kwargs)
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         if t is not None:
@@ -4125,8 +4131,8 @@ class Axiomatization(Formula):
     _last_index: int = 0
 
     @staticmethod
-    def _data_validation(a: FlexibleAxiomatization | None = None,
-                         d: FlexibleEnumeration = None) -> tuple[Connective, Enumeration]:
+    def _data_validation_2(a: FlexibleAxiomatization | None = None,
+                           d: FlexibleEnumeration = None) -> tuple[Connective, Enumeration]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -4165,7 +4171,7 @@ class Axiomatization(Formula):
         return _connectives.axiomatization_formula, coerced_derivations
 
     def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None):
-        c, t = Axiomatization._data_validation(a=a, d=d)
+        c, t = Axiomatization._data_validation_2(a=a, d=d)
         o: tuple = super().__new__(cls, con=c, t=t)
         return o
 
@@ -4176,7 +4182,7 @@ class Axiomatization(Formula):
         :param d: An enumeration of supplementary axioms and/or inference rules to be appended to the base
             axiomatization.
         """
-        c, t = Axiomatization._data_validation(a=a, d=d)
+        c, t = Axiomatization._data_validation_2(a=a, d=d)
         super().__init__(con=c, t=t)
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         if a is not None:
@@ -4748,7 +4754,6 @@ def auto_derive_4(
     # Loop through all theory inference-rules to find those that could potentially prove the conjecture.
     # These are the inference-rules whose conclusions are formula-equivalent-with-variables to the conjecture.
     for inference_rule in t.iterate_inference_rules():
-        inference_rule_success: bool = False
         is_equivalent, m = is_formula_equivalent_with_variables_2(phi=conjecture,
                                                                   psi=inference_rule.transformation.conclusion,
                                                                   variables=inference_rule.transformation.variables)

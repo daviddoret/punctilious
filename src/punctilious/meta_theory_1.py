@@ -1,4 +1,4 @@
-# import typing
+import typing
 import sys
 
 import constants_1 as c1
@@ -204,5 +204,67 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     """
 
 meta_theory_1 = as1.Axiomatization(d=(mt1, mt2, mt3,))
+
+
+class Hypothesis(as1.Formula):
+    """A hypothesis is....
+
+    Syntactic definition:
+    A hypothesis is a formula of the form:
+        :math:`\\text{hypothesis}(t, a, ...)`
+    Where:
+        - :math:`t` is a theory.
+        - :math:`a` is a formula, denoted as the assumption, assumed to be true in :math:`t`.
+    """
+    THEORY_INDEX: int = 0
+    ASSUMPTION_INDEX: int = 1
+
+    @staticmethod
+    def _data_validation_2(
+            t: as1.FlexibleTheory,
+            a: as1.FlexibleFormula) -> tuple[as1.Connective, as1.Theory, as1.Formula]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param t: A theory.
+        :param a: A formula denoted as the assumption.
+        :return:
+        """
+        con: as1.Connective = as1.get_connectives().hypothesis_formula
+        t: as1.Theory = as1.coerce_theory(t=t)
+        a: as1.Formula = as1.coerce_formula(phi=a)
+        return con, t, a
+
+    def __new__(cls, t: as1.FlexibleTheory, a: as1.FlexibleFormula):
+        """
+
+        :param t: A theory.
+        :param a: A formula denoted as the assumption.
+        """
+        con, t, a = Hypothesis._data_validation_2(t=t, a=a)
+        o: tuple = super().__new__(cls, con=con, t=(t, a,))
+        return o
+
+    def __init__(self, t: as1.FlexibleTheory, a: as1.FlexibleFormula):
+        """
+
+        :param t: A theory.
+        :param a: A formula denoted as the assumption.
+        """
+        con, t, a = Hypothesis._data_validation_2(t=t, a=a)
+        super().__init__(con=con, t=(t, a,))
+
+    @property
+    def assumption(self) -> as1.Formula:
+        """A proposition assumed to be true, denoted as the assumption of the hypothesis."""
+        return self[Hypothesis.ASSUMPTION_INDEX]
+
+    @property
+    def theory(self) -> as1.Theory:
+        """The base theory of the hypothesis."""
+        return self[Hypothesis.THEORY_INDEX]
+
+
+FlexibleHypothesis = typing.Optional[typing.Union[Hypothesis]]
 
 pass
