@@ -342,6 +342,7 @@ class TestMancosu2021P20:
         t = pu.as1.Theory()
         t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
         t = pu.ml1.extend_theory_with_mancosu_2021_page_20(t=t)
+        pass
 
     def test_mancosu_2021_page_21_with_derivation_1(self, caplog):
         t = pu.as1.Axiomatization(

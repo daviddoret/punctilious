@@ -393,13 +393,13 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
         i=pls1.i4, t=t)
 
     # 1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
-    t, _, d1 = as1.derive_2(
+    t, _, _ = as1.derive_2(
         c=p1 | implies | (p1 | lor | p2),
         t=t, i=pl07, raise_error_if_false=True
     )
 
     # 2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
-    t, _, d1 = as1.derive_2(
+    t, _, _ = as1.derive_2(
         c=(p1 | implies | (p1 | lor | p2)) | implies | (
                 ((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2))),
         t=t, i=pl05, raise_error_if_false=True
@@ -407,8 +407,21 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
     pass
 
     # 3. ⊢ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) (mp 1, 2)
+    t, _, _ = as1.derive_2(
+        c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2)),
+        t=t, i=modus_ponens, raise_error_if_false=True
+    )
+
     # 4. ⊢ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] ⊃[{((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃
     #     {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))}] (axiom PL3)
+    t, _, _ = as1.derive_2(
+        c=((p1 | lor | p2) | implies | (p2 | lor | p1)) | implies | (p1 | implies | (p1 | lor | p2)) | implies |
+          ((((p1 | lor | p2) | implies | (p2 | lor | p1)) | land | (
+                  (p1 | lor | p2) | implies | (p2 | lor | p1))) | implies |
+           ((p1 | implies | (p1 | lor | p2)) | land | ((p1 | lor | p2) | implies | (p2 | lor | p1))))
+        , t=t, i=pl03, raise_error_if_false=True
+    )
+
     # 5. ⊢ {((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} ⊃ {(𝑝1 ⊃ (𝑝1 ∨ 𝑝2)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))} (mp 3, 4)
     # 6. ⊢ [(𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ∧ ((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1))] (axiom PL1)
     # 7. ⊢ (𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1) (axiom PL8)

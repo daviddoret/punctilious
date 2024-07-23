@@ -1,5 +1,16 @@
 """
 
+TODO: Implement is_sub_axiomatization
+    Necessary for the conservation inference-rule
+
+TODO: Implement monotonicity, probably as an inference-rule until we prove it with the meta-theory once
+    the meta-theory will be rich enough:
+    If 𝛤 ⊢ 𝐴 and 𝛤 ⊆ 𝛤★, then 𝛤★ ⊢ 𝐴.15 In particular, if 𝛤 is empty, then 𝐴 can also be proved using any number of additional assumptions.
+    (...)
+    This property is called monotonicity. It holds for all the logics we will investigate in this book. There are logics in which this property does not hold (non-monotonic logics), however.
+    (ref: Mancosu 2021, p. 25)
+
+
 TODO: Change shape "Derivation(inference-rule, inference-rule)" for derivations,
     to something like "is_axiomatic_rule(inference-rule)" to make it a proposition as well.
     Like this, is_axiomatic_rule would be a proposition similarly to axioms and theorems,

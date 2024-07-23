@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_minimal_logic_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,7 +197,7 @@
     "Python tests.pytest for test_minimal_logic_1.TestAdjunction.test_adjunction.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20_with_derivation_1.executor": "Debug",
-    "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20.executor": "Debug",
     "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20_with_derivation_1.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_21_with_derivation_1.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL1.test_pl1.executor": "Run",
@@ -303,7 +305,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/tests",
-    "settings.editor.selected.configurable": "build.tools",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -355,7 +357,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -703,11 +705,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_inference_rules_1.TestAdjunction.test_adjunction" />
         <item itemvalue="Python tests.pytest in test_minimal_logic_1.py" />
         <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20_with_derivation_1" />
-        <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20" />
       </list>
     </recent_temporary>
   </component>
@@ -726,14 +728,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00900" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721300468709</created>
-      <option name="number" value="00900" />
-      <option name="presentableId" value="LOCAL-00900" />
-      <option name="project" value="LOCAL" />
-      <updated>1721300468709</updated>
     </task>
     <task id="LOCAL-00901" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1119,7 +1113,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721707500713</updated>
     </task>
-    <option name="localTasksCounter" value="949" />
+    <task id="LOCAL-00949" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1721715474936</created>
+      <option name="number" value="00949" />
+      <option name="presentableId" value="LOCAL-00949" />
+      <option name="project" value="LOCAL" />
+      <updated>1721715474936</updated>
+    </task>
+    <option name="localTasksCounter" value="950" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1220,6 +1222,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
           <line>4433</line>
           <option name="timeStamp" value="124" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
+          <line>344</line>
+          <option name="timeStamp" value="128" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
