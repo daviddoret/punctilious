@@ -593,24 +593,24 @@ class UnaryConnective(FixedArityConnective):
         super().__init__(fixed_arity_constraint=1, formula_ts=formula_ts)
 
 
-class InfixPartialFormula:
+class InfixPartialLeftHandFormula:
     """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
     This is accomplished by re-purposing the | operator,
     overloading the __or__() method that is called when | is used,
     and gluing all this together with the InfixPartialFormula class.
     """
 
-    def __init__(self, con: Connective, term_1: FlexibleFormula):
+    def __init__(self, con: Connective, term_0: FlexibleFormula):
         self._connective = con
-        self._term_1 = term_1
+        self._term_0 = term_0
 
-    def __or__(self, term_2: FlexibleFormula = None):
+    def __or__(self, term_1: FlexibleFormula = None):
         """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
         This is accomplished by re-purposing the | operator,
         overloading the __or__() method that is called when | is used,
         and gluing all this together with the InfixPartialFormula class.
         """
-        return Formula(con=self._connective, t=(self.term_1, term_2,))
+        return Formula(con=self._connective, t=(self.term_0, term_1,))
 
     def __repr__(self):
         return self.typeset_as_string()
@@ -624,11 +624,11 @@ class InfixPartialFormula:
 
     def typeset_as_string(self, **kwargs):
         # TODO: Nice to have: Enrich the representation of partial-formulas
-        return f'{self.connective}(???,{self.term_1})'
+        return f'{self.connective}(???,{self.term_0})'
 
     @property
-    def term_1(self) -> Connective:
-        return self._term_1
+    def term_0(self) -> Connective:
+        return self._term_0
 
 
 class BinaryConnective(FixedArityConnective):
@@ -638,7 +638,7 @@ class BinaryConnective(FixedArityConnective):
 
     def __ror__(self, other: FlexibleFormula):
         """Pseudo math notation. x | p | ?."""
-        return InfixPartialFormula(con=self, term_1=other)
+        return InfixPartialLeftHandFormula(con=self, term_0=other)
 
 
 def is_term_of_formula(x: FlexibleFormula, phi: FlexibleFormula) -> bool:
