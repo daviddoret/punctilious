@@ -37,7 +37,7 @@ Bibliography:
 
 # import typing
 import presentation_layer_1 as pl1
-import axiomatic_system_1 as as1
+# import axiomatic_system_1 as as1
 from connectives_standard_library_1 import *
 import inference_rules_1 as ir1
 import propositional_logic_syntax_1 as pls1
@@ -47,7 +47,7 @@ import propositional_logic_syntax_1 as pls1
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     pl01: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),),
             c=a | implies | (a | land | a),
             v=(a,)),
@@ -70,7 +70,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     pl02: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b),),
             c=(a | land | b) | implies | (b | land | a),
@@ -96,7 +96,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
         formula_ts='B') as b, as1.let_x_be_a_variable(formula_ts='C') as c:
     pl03: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
@@ -124,7 +124,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
         formula_ts='B') as b, as1.let_x_be_a_variable(formula_ts='C') as c:
     pl04: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
@@ -152,7 +152,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl05: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=b | implies | (a | implies | b),
@@ -178,7 +178,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl06: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=(b | land | (a | implies | b)) | implies | b,
@@ -204,7 +204,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl07: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=a | implies | (a | lor | b),
@@ -230,7 +230,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl08: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=(a | lor | b) | implies | (b | lor | a),
@@ -256,7 +256,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl09: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
@@ -284,7 +284,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl10: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=((a | implies | b) | land | (a | implies | lnot(b))) | implies | lnot(a),
@@ -324,7 +324,7 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
     t: as1.Theory = as1.coerce_theory(t=t)
-    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=ir1.modus_ponens)
+    t, _ = as1.let_x_be_an_inference_rule(t=t, i=ir1.modus_ponens)
     t = pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
     t, _ = as1.let_x_be_an_axiom(a=pl01, t=t)
     t, _ = as1.let_x_be_an_axiom(a=pl02, t=t)

@@ -15,7 +15,7 @@ import typing
 # punctilious modules
 import util_1 as u1
 import presentation_layer_1 as pl1
-import axiomatic_system_1 as as1
+# import axiomatic_system_1 as as1
 from connectives_standard_library_1 import *
 
 # import inference_rules_1 as ir1
@@ -36,7 +36,7 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i0: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             c=is_a_propositional_variable(a),
             v=None,
             d=(a,),
@@ -62,7 +62,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_propositional_variable(a),),
             c=is_a_proposition(a),
             v=(a,)),
@@ -85,7 +85,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i2: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),),
             c=is_a_proposition(lnot(a)),
             v=(a,)),
@@ -108,7 +108,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i3: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=is_a_proposition(a | land | b),
@@ -133,7 +133,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i4: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=is_a_proposition(a | implies | b),
@@ -158,7 +158,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i5: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=is_a_proposition(a | lor | b),
@@ -183,7 +183,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i6: as1.InferenceRule = as1.InferenceRule(
-        t=as1.NaturalTransformation(
+        f=as1.NaturalTransformation(
             p=None,
             c=lnot(is_a_proposition(a)),
             v=(a, b,)),
@@ -303,7 +303,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
                                                                 v=variables)
 
     # build the inference-rule
-    inference_rule: as1.InferenceRule = as1.InferenceRule(t=rule)
+    inference_rule: as1.InferenceRule = as1.InferenceRule(f=rule)
 
     return inference_rule
 

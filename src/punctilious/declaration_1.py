@@ -1,7 +1,7 @@
 # TODO: The idea is to develop here a meta-theory that allows the usage of the := connective to declare
 #   definitions.
 
-import presentation_layer_1 as pl1
+# import presentation_layer_1 as pl1
 import axiomatic_system_1 as as1
 
 is_defined_as: as1.Connective = as1.BinaryConnective(formula_ts=':=')

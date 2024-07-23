@@ -940,9 +940,9 @@ def let_x_be_a_free_arity_connective(
     return FreeArityConnective(formula_ts=formula_ts)
 
 
-def let_x_be_an_inference_rule(t1: FlexibleTheory,
+def let_x_be_an_inference_rule(t: FlexibleTheory,
                                i: FlexibleInferenceRule | None = None,
-                               t2: FlexibleTransformation | None = None,
+                               f: FlexibleTransformation | None = None,
                                c: FlexibleFormula | None = None,
                                v: FlexibleEnumeration | None = None,
                                d: FlexibleEnumeration | None = None,
@@ -952,9 +952,9 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
                                ) -> tuple[Theory, InferenceRule]:
     """
 
-    :param t1: A theory.
+    :param t: A theory.
     :param i: An inference-rule.
-    :param t2: A transformation.
+    :param f: A transformation.
     :param c: A formula denoted as the conclusion.
     :param v: An enumeration of variables used in premises.
     :param d: An enumeration of variables used for new object declarations.
@@ -963,14 +963,14 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
     :param i2: (conditional) An external algorithm.
     :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
     """
-    t1: FlexibleTheory = coerce_theory(t=t1)
+    t: FlexibleTheory = coerce_theory(t=t)
     # Signature #1: provide the inference-rule
     if i is not None:
         i: InferenceRule = coerce_inference_rule(i=i)
     # Signature #2: provide the transformation upon which the inference-rule can be built
-    elif t2 is not None:
-        t2: Transformation = coerce_transformation(t=t2)
-        i: InferenceRule = InferenceRule(t=t2)
+    elif f is not None:
+        f: Transformation = coerce_transformation(f=f)
+        i: InferenceRule = InferenceRule(f=f)
     # Signature #3: provide the arguments upon which the transformation can be built upon which ...
     elif c is not None:
         c: Formula = coerce_formula(phi=c)
@@ -981,19 +981,19 @@ def let_x_be_an_inference_rule(t1: FlexibleTheory,
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         if a is None:
             # Signature 3: This is a natural transformation:
-            t2: NaturalTransformation = NaturalTransformation(c=c, v=v, d=d, p=p)
-            i: InferenceRule = InferenceRule(t=t2)
+            f: NaturalTransformation = NaturalTransformation(c=c, v=v, d=d, p=p)
+            i: InferenceRule = InferenceRule(f=f)
         else:
             # Signature 4: This is an algorithmic transformation:
-            t2: AlgorithmicTransformation = AlgorithmicTransformation(a=a, i=i2, c=c, v=v,
-                                                                      d=d, p=p)
-            i: InferenceRule = InferenceRule(t=t2)
+            f: AlgorithmicTransformation = AlgorithmicTransformation(a=a, i=i2, c=c, v=v,
+                                                                     d=d, p=p)
+            i: InferenceRule = InferenceRule(f=f)
     else:
         raise u1.ApplicativeError(msg='inconsistent arguments')
 
-    t1: Theory = append_to_theory(i, t=t1)
+    t: Theory = append_to_theory(i, t=t)
     # u1.log_info(i.typeset_as_string(theory=t))
-    return t1, i
+    return t, i
 
 
 def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = None,
@@ -1040,13 +1040,11 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
 def let_x_be_a_theory(
         t: FlexibleTheory | None = None,
         d: FlexibleEnumeration | None = None,
-        **kwargs) -> (
-        tuple)[Theory, Theory]:
+        **kwargs) -> Theory:
     """Declares a new theory `t`.
 
     :param t:
     :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
-    :param m: (conditional) a meta-theory M such that T is a sub-theory of M.
     :return: A python-tuple (m, t).
     """
     # if 'formula_name_ts' not in kwargs:
@@ -1058,8 +1056,7 @@ def let_x_be_a_theory(
 
 def let_x_be_a_meta_theory(m: FlexibleTheory | None = None,
                            d: FlexibleEnumeration | None = None,
-                           **kwargs) -> (
-        tuple)[Theory, Theory]:
+                           **kwargs) -> Theory:
     """Declares a new meta-theory `m`.
 
     T is declared as a sub-theory of M. To formalize this relation, the following axiom is added to M:
@@ -1067,9 +1064,8 @@ def let_x_be_a_meta_theory(m: FlexibleTheory | None = None,
     Note that M does not self-references itself (i.e. we don't use the formula (T is-a sub-theory of M),
     this reference is implicit in (T is-a theory) because it is a derivation in M.
 
-    :param t:
+    :param m: a meta-theory M such that T is a sub-theory of M.
     :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
-    :param m: (conditional) a meta-theory M such that T is a sub-theory of M.
     :return: A python-tuple (m, t).
     """
     # if 'formula_name_ts' not in kwargs:
@@ -1081,18 +1077,18 @@ def let_x_be_a_meta_theory(m: FlexibleTheory | None = None,
     return m
 
 
-def let_x_be_a_sub_theory_of_y(t: FlexibleTheory, m: FlexibleTheory) -> Theory:
+def let_x_be_a_sub_theory_of_y(m: FlexibleTheory, t: FlexibleTheory) -> tuple[Theory, Theory]:
     """
 
     :param t:
     :param m:
     :return:
     """
-    t = coerce_theory(t=t)
     m = coerce_theory(t=t)
+    t = coerce_theory(t=t)
     # Move this to mt1 and redevelop it to use derivation from mt1 inference-rule.
     m, a = let_x_be_an_axiom(t=m, s=_connectives.is_well_formed_theory(t))
-    return m
+    return m, t
 
 
 def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
@@ -2079,34 +2075,35 @@ class NaturalTransformation(Transformation, ABC):
 FlexibleNaturalTransformation = typing.Optional[typing.Union[NaturalTransformation]]
 
 
-def coerce_transformation(t: FlexibleTransformation) -> Transformation:
-    """Coerces lose argument `t` to a transformation, strongly python-typed as Transformation,
+def coerce_transformation(f: FlexibleTransformation) -> Transformation:
+    """Coerces lose argument `f` to a transformation, strongly python-typed as Transformation,
     or raises an error with code E-AS1-060 if this fails."""
-    t: Formula = coerce_formula(phi=t)
-    if isinstance(t, Transformation):
-        return t
-    elif is_well_formed_natural_transformation(t=t):
+    f: Formula = coerce_formula(phi=f)
+    if isinstance(f, Transformation):
+        return f
+    elif is_well_formed_natural_transformation(t=f):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         # TODO: Move this logic to coerce_natural_transformation
-        return NaturalTransformation(c=t[NaturalTransformation.CONCLUSION_INDEX],
-                                     v=t[NaturalTransformation.VARIABLES_INDEX],
-                                     d=t[NaturalTransformation.DECLARATIONS_INDEX],
-                                     p=t[NaturalTransformation.PREMISES_INDEX])
-    elif is_well_formed_algorithmic_transformation(t=t):
+        return NaturalTransformation(c=f[NaturalTransformation.CONCLUSION_INDEX],
+                                     v=f[NaturalTransformation.VARIABLES_INDEX],
+                                     d=f[NaturalTransformation.DECLARATIONS_INDEX],
+                                     p=f[NaturalTransformation.PREMISES_INDEX])
+    elif is_well_formed_algorithmic_transformation(t=f):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
         # TODO: Move this logic to coerce_algorithmic_transformation
-        return AlgorithmicTransformation(a=t.external_algorithm,
-                                         c=t[NaturalTransformation.CONCLUSION_INDEX],
-                                         v=t[NaturalTransformation.VARIABLES_INDEX],
-                                         d=t[NaturalTransformation.DECLARATIONS_INDEX],
-                                         p=t[NaturalTransformation.PREMISES_INDEX])
+        return AlgorithmicTransformation(a=f.external_algorithm,
+                                         i=what_the_hell,  # correct this
+                                         c=f[NaturalTransformation.CONCLUSION_INDEX],
+                                         v=f[NaturalTransformation.VARIABLES_INDEX],
+                                         d=f[NaturalTransformation.DECLARATIONS_INDEX],
+                                         p=f[NaturalTransformation.PREMISES_INDEX])
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_060,
             msg='`t` could not be coerced to a transformation.',
-            m=t)
+            m=f)
 
 
 def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
@@ -3006,7 +3003,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
     :return: A triple `(b, v′, u′)` where:
      `b` is `True` if all derivations in `u` would be valid, `False` otherwise,
      `v′` = `v` with duplicates stripped out if `b` is `True`, `None` otherwise,
-     `u′` = `(u \ v)` with duplicates stripped out if `b` is `True`, `None` otherwise.
+     `u′` = `(u \\ v)` with duplicates stripped out if `b` is `True`, `None` otherwise.
     """
     v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True, interpret_none_as_empty=True,
                                         canonic_conversion=True)
@@ -3081,14 +3078,14 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                             p=p, q=q, index=index, d=d, c=c, v=v, u=u)
                     return False, None, None
             # Check that the transformation of the inference-rule effectively yields the announced proposition.
-            t2: Transformation = i.inference_rule.transformation
-            if len(t2.declarations) > 0:
+            f: Transformation = i.inference_rule.transformation
+            if len(f.declarations) > 0:
                 # But wait a minute...
                 # If the transformation declares/creates new objects, the inference-rule is non-deterministic.
                 # For this particular case, we must map the original objects created by the first derivation,
                 # with the expected conclusion of the inference-rule.
-                map1_test, map1 = is_formula_equivalent_with_variables_2(phi=p, psi=t2.conclusion,
-                                                                         variables=t2.declarations)
+                map1_test, map1 = is_formula_equivalent_with_variables_2(phi=p, psi=f.conclusion,
+                                                                         variables=f.declarations)
                 if not map1_test:
                     if raise_error_if_false:
                         # c2 = t2.conclusion
@@ -3098,7 +3095,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                                 'The inference-rule `ir` has conclusion `c2` with new object declarations `d2`.'
                                 'But this conclusion is not formula-equivalent-with-variables with `p`.',
                             code=c1.ERROR_CODE_AS1_074, map1_test=map1_test, map1=map1,
-                            p=p, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
+                            p=p, index=index, t2=f, ir=ir, i=i, d=d, c=c, v=v, u=u)
                     return False, None, None
 
                 map1_inverse = inverse_map(m=map1)
@@ -3106,7 +3103,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
 
                 # The following test is probably superfluous,
                 # as the precedent test covers the compatibility of the conclusion.
-                inverse_test = is_formula_equivalent(phi=p_inverse, psi=t2.conclusion)
+                inverse_test = is_formula_equivalent(phi=p_inverse, psi=f.conclusion)
                 if not inverse_test:
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
@@ -3115,14 +3112,14 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                                 'But this conclusion is not formula-equivalent-with-variables with `p`.',
                             code=c1.ERROR_CODE_AS1_075, p_inverse=p_inverse, map1_inverse=map1_inverse,
                             map1_test=map1_test, map1=map1,
-                            p=p, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
+                            p=p, index=index, t2=f, ir=ir, i=i, d=d, c=c, v=v, u=u)
                     return False, None, None
                 pass
             else:
                 # The simpler case is when the inference-rule does not create new objects.
                 # No remapping is necessary and the original conclusion can simply be compared
                 # with the new conclusion.
-                p_prime = t2.apply_transformation(p=i.premises, a=i.arguments)
+                p_prime = f.apply_transformation(p=i.premises, a=i.arguments)
                 if not is_formula_equivalent(phi=p, psi=p_prime):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
@@ -3131,7 +3128,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                                 ' This forbids the derivation of `p` in step `d` in the derivation sequence.'
                                 ' Inference `i` contains the arguments (premises and the complementary arguments).',
                             code=c1.ERROR_CODE_AS1_036,
-                            p=p, p_prime=p_prime, index=index, t2=t2, ir=ir, i=i, d=d, c=c, v=v, u=u)
+                            p=p, p_prime=p_prime, index=index, t2=f, ir=ir, i=i, d=d, c=c, v=v, u=u)
                     return False, None, None
             # All tests have been successfully completed, we now have the assurance
             # that derivation `d` would be valid if appended to theory `t`.
@@ -3186,7 +3183,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
     # and that derivations in this sequence of derivations is valid.
     v: Enumeration = Enumeration(e=None)  # Assume no pre-verified derivations.
     u: Enumeration = transform_formula_to_enumeration(phi=t, strip_duplicates=False)
-    would_be_valid, _, _ = would_be_valid_derivations_in_theory(v=None, u=u)
+    would_be_valid, _, _ = would_be_valid_derivations_in_theory(v=v, u=u)
     return would_be_valid
 
 
@@ -3270,8 +3267,8 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
     if isinstance(i, InferenceRule):
         return i
     elif isinstance(i, Formula) and is_well_formed_inference_rule(i=i):
-        m: Transformation = coerce_transformation(t=i.term_0)
-        return InferenceRule(t=m)
+        f: Transformation = coerce_transformation(f=i.term_0)
+        return InferenceRule(f=f)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_041,
@@ -3518,27 +3515,27 @@ class InferenceRule(Derivation):
     TRANSFORMATION_INDEX: int = Derivation.VALID_STATEMENT_INDEX
 
     @staticmethod
-    def _data_validation_3(t: FlexibleTransformation = None) -> tuple[Connective, Transformation, Formula]:
+    def _data_validation_3(f: FlexibleTransformation = None) -> tuple[Connective, Transformation, Formula]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param t:
+        :param f:
         :return:
         """
         global _connectives
         con: Connective = _connectives.inference_rule
-        t: Transformation = coerce_transformation(t=t)
+        f: Transformation = coerce_transformation(f=f)
         j: Formula = Formula(con=con)
-        return con, t, j
+        return con, f, j
 
-    def __new__(cls, t: FlexibleTransformation = None, **kwargs):
-        c, t, j = InferenceRule._data_validation_3(t=t)
-        o: tuple = super().__new__(cls, s=t, j=j, **kwargs)
+    def __new__(cls, f: FlexibleTransformation = None, **kwargs):
+        c, f, j = InferenceRule._data_validation_3(f=f)
+        o: tuple = super().__new__(cls, s=f, j=j, **kwargs)
         return o
 
-    def __init__(self, t: FlexibleTransformation, **kwargs):
-        c, t, j = InferenceRule._data_validation_3(t=t)
-        super().__init__(s=t, j=j, **kwargs)
+    def __init__(self, f: FlexibleTransformation, **kwargs):
+        c, f, j = InferenceRule._data_validation_3(f=f)
+        super().__init__(s=f, j=j, **kwargs)
 
     @property
     def transformation(self) -> Transformation:
@@ -3713,9 +3710,9 @@ class Theorem(Derivation):
                     m1=m1)
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
-            success_2, m2 = is_formula_equivalent_with_variables_2(phi=s,
-                                                                   psi=i.inference_rule.transformation.conclusion,
-                                                                   variables=m1.domain)
+            success_2, _ = is_formula_equivalent_with_variables_2(phi=s,
+                                                                  psi=i.inference_rule.transformation.conclusion,
+                                                                  variables=m1.domain)
             pass
             valid_statement_reversed: Formula = replace_formulas(phi=s, m=m1_reversed)
             if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.inference_rule.transformation.conclusion):
@@ -3969,6 +3966,7 @@ def is_axiomatization_equivalent(t1: FlexibleTheory, t2: FlexibleTheory, interpr
     :param t1: A theory or axiomatization.
     :param t2: A theory or axiomatization.
     :param interpret_none_as_empty: If `t1` or `t2` is None, interpret it as the empty-theory.
+    :param raise_error_if_false:
     :return: An axiomatization.
     """
     t1: Theory = coerce_theory(t=t1, interpret_none_as_empty=interpret_none_as_empty,
@@ -4401,6 +4399,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     :param i: An inference-rule.
     :param a: (For algorithmic-transformations) A tuple of formulas denoted as the supplementary-arguments to be
         transmitted as input arguments to the external-algorithm.
+    :param raise_error_if_false:
     :return: A python-tuple `(t′, b, m)` where `t′` is the theory `t` with the new theorem if derived successfully,
         `b` is `True` if the derivation was successful, `False` otherwise, and `m` is the new derivation.
     """
@@ -4617,13 +4616,12 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         return t, False, None
 
 
-def auto_derive_with_heuristics(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
+def auto_derive_with_heuristics(t: FlexibleTheory, conjecture: FlexibleFormula) -> \
         typing.Tuple[Theory, bool]:
     """Attempt to derive automatically a conjecture using the heuristics attached to the theory.
 
     :param t:
     :param conjecture:
-    :param debug:
     :return: a tuple (t, success)
     """
     for heuristic in t.heuristics:

@@ -27,7 +27,7 @@ def _set_state(key: str, value: object):
 
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     conjunction_introduction: as1.InferenceRule = as1.InferenceRule(
-        t=as1.let_x_be_a_natural_transformation(
+        f=as1.let_x_be_a_natural_transformation(
             premises=(
                 cls1.is_a_proposition(phi),
                 cls1.is_a_proposition(psi),
@@ -71,7 +71,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
         conclusion=phi,
         variables=(phi, psi,))
 simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
-    t=simplification_1_rule)
+    f=simplification_1_rule)
 
 # Simplification inference rule, aka conjunction elimination:
 #   phi ∧ psi
@@ -89,7 +89,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
         conclusion=psi,
         variables=(phi, psi,))
 simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
-    t=simplification_2_rule)
+    f=simplification_2_rule)
 
 # Modus ponens inference rule:
 #   phi --> psi
@@ -101,7 +101,7 @@ simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(formula_ts='Q') as psi:
     modus_ponens: as1.InferenceRule = as1.InferenceRule(
-        t=as1.let_x_be_a_natural_transformation(
+        f=as1.let_x_be_a_natural_transformation(
             premises=(
                 cls1.is_a_proposition(phi),
                 cls1.is_a_proposition(psi),
@@ -140,8 +140,8 @@ def extend_theory_with_inference_rules_1(t: as1.FlexibleTheory) -> as1.Theory:
     """
     global conjunction_introduction, simplification_1_axiom, simplification_2_axiom, modus_ponens
     t: as1.Theory = as1.coerce_theory(t=t)
-    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=conjunction_introduction)
-    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=simplification_1_axiom)
-    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=simplification_2_axiom)
-    t, _ = as1.let_x_be_an_inference_rule(t1=t, i=modus_ponens)
+    t, _ = as1.let_x_be_an_inference_rule(t=t, i=conjunction_introduction)
+    t, _ = as1.let_x_be_an_inference_rule(t=t, i=simplification_1_axiom)
+    t, _ = as1.let_x_be_an_inference_rule(t=t, i=simplification_2_axiom)
+    t, _ = as1.let_x_be_an_inference_rule(t=t, i=modus_ponens)
     return t

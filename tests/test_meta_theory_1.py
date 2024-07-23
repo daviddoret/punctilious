@@ -1,5 +1,5 @@
 import pytest
-import logging
+# import logging
 import punctilious as pu
 from punctilious.connectives_standard_library_1 import *
 
@@ -9,7 +9,7 @@ class TestMT1:
         a = as1.let_x_be_a_simple_object(formula_ts='a')
         t = as1.let_x_be_a_theory()
         m = as1.let_x_be_a_theory()
-        m, i = as1.let_x_be_an_inference_rule(t1=m, i=pu.mt1.mt1)
+        m, i = as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1)
         c = is_well_formed_formula(a)
         m, _, d = as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(a,), raise_error_if_false=True)
         assert as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
@@ -29,10 +29,10 @@ class TestMT2:
     def test_mt2(self):
         m = as1.let_x_be_a_theory()  # The meta-theory
         t = as1.let_x_be_a_theory()
-        m, i = as1.let_x_be_an_inference_rule(t1=m, i=pu.mt1.mt2)
+        m, i = as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt2)
 
         # Test 1: an inference-rule is an inference-rule
-        m, i2 = as1.let_x_be_an_inference_rule(t1=m, i=pu.mt1.mt3)
+        m, i2 = as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt3)
         c = is_well_formed_inference_rule(i2)  # This is a formula
         m, _, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(i2,), raise_error_if_false=True)
 
@@ -44,7 +44,7 @@ class TestMT2:
 
         # Test 3: using is-well-formed-inference-rule on itself.
         # Test 1: an inference-rule is an inference-rule
-        t, i3 = as1.let_x_be_an_inference_rule(t1=t, i=pu.mt1.mt2)
+        t, i3 = as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2)
         c = is_well_formed_inference_rule(i3)  # This is a formula
         # m, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(i3,))
         # Raises: ERROR AS1-021: variable x is a sub-formula of phi.
@@ -63,7 +63,7 @@ class TestMT3:
 
         # Proper theory t allows to derive (is-well-formed-theory(t)).
         t = as1.let_x_be_a_theory()  # target or object theory
-        m, i = as1.let_x_be_an_inference_rule(t1=m, i=pu.mt1.mt3)
+        m, i = as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt3)
         c = is_well_formed_theory(t)  # This is a formula
         m, _, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,), raise_error_if_false=True)
         assert as1.is_formula_equivalent(phi=c, psi=d.valid_statement)

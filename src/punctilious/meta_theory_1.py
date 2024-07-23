@@ -39,7 +39,7 @@ def is_well_formed_formula(p: as1.Tupl | None = None, a: as1.Tupl | None = None)
 
 
 def is_well_formed_inference_rule(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
-    """A python-function that is used as a a theory external-algorithm."""
+    """A python-function that is used as a theory external-algorithm."""
     p: as1.Tupl = as1.coerce_tuple(t=p)
     a: as1.Tupl = as1.coerce_tuple(t=a)
     if not a.arity == 1:
@@ -47,7 +47,7 @@ def is_well_formed_inference_rule(p: as1.Tupl | None = None, a: as1.Tupl | None 
     a0: as1.Formula = a[0]
     i: as1.Formula = as1.coerce_formula(phi=a0)
     if as1.is_well_formed_inference_rule(i=i):
-        i: as1.InferenceRule = as1.coerce_inference_rule(i=i)
+        as1.coerce_inference_rule(i=i)
         phi: as1.Formula = csl1.is_well_formed_inference_rule(t)
         return phi
     else:
@@ -66,10 +66,10 @@ def is_well_formed_theory(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     if not a.arity == 1:
         raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
     a0: as1.Formula = a[0]
-    t: as1.Formula = as1.coerce_formula(phi=a0)
-    if as1.is_well_formed_theory(t=t):
-        t: as1.Theory = as1.coerce_theory(t=t)
-        phi: as1.Formula = csl1.is_well_formed_theory(t)
+    t1: as1.Formula = as1.coerce_formula(phi=a0)
+    if as1.is_well_formed_theory(t=t1):
+        t2: as1.Theory = as1.coerce_theory(t=t1)
+        phi: as1.Formula = csl1.is_well_formed_theory(t2)
         return phi
     else:
         raise u1.ApplicativeError(
@@ -133,7 +133,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
         v=None,
         d={t, })
     mt1: as1.InferenceRule = as1.InferenceRule(
-        t=algo,
+        f=algo,
         ref_ts=pl1.Monospace(text='MT1'))
     """The is-well-formed-formula algorithmic inference-rule.
 
@@ -159,7 +159,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
         v=None,
         d={t, })
     mt2: as1.InferenceRule = as1.InferenceRule(
-        t=algo,
+        f=algo,
         ref_ts=pl1.Monospace(text='MT2'))
     """The is-well-formed-inference-rule algorithmic inference-rule.
 
@@ -185,7 +185,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
         v={t, },
         d={t, })
     mt3: as1.InferenceRule = as1.InferenceRule(
-        t=algo,
+        f=algo,
         ref_ts=pl1.Monospace(text='MT3'))
     """The is-well-formed-theory algorithmic inference-rule.
 
