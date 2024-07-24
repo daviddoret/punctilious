@@ -75,19 +75,19 @@ class TestIsSubformulaFormula:
         c1 = pu.as1.FreeArityConnective(formula_ts='c1')
         c2 = pu.as1.FreeArityConnective(formula_ts='c2')
         c3 = pu.as1.FreeArityConnective(formula_ts='c3')
-        assert pu.as1.is_subformula_of_formula(
+        assert pu.as1.is_recursively_included_in(
             s=c1(c2, c3, c2(c1)),
             f=c1(c2, c3, c2(c1))
         )
-        assert not pu.as1.is_subformula_of_formula(
+        assert not pu.as1.is_recursively_included_in(
             s=c1(c2, c3, c2(c2)),
             f=c1(c2, c3, c2(c1))
         )
-        assert pu.as1.is_subformula_of_formula(
+        assert pu.as1.is_recursively_included_in(
             s=c2(c2),
             f=c1(c2, c3, c2(c2))
         )
-        assert pu.as1.is_subformula_of_formula(
+        assert pu.as1.is_recursively_included_in(
             s=c3(c2, c1),
             f=c1(c2, c3(c2(c1(c3(c2, c1)))), c2(c2))
         )

@@ -1319,7 +1319,7 @@ def is_formula_equivalent_with_variables_2(
         if x.arity != 0:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_020,
                                       msg=f'the arity of variable "{x}" in variables is not equal to 0.')
-        if is_subformula_of_formula(f=phi, s=x):
+        if is_recursively_included_in(f=phi, s=x):
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_021,
                 msg=f'variable x is a sub-formula of phi.',
@@ -2133,7 +2133,7 @@ def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
 
 
 def coerce_external_algorithm(f: object) -> typing.Callable:
-    """Coerces lose argument "f" to an external-algorithm, i.e. a python-function,
+    """Coerces lose argument `f` to an external-algorithm, i.e. a python-function,
     or raises an error with code E-AS1-056 if this fails."""
     if isinstance(f, typing.Callable):
         return f
@@ -4227,8 +4227,18 @@ and raises an error if the object is ill-formed."""
 FlexibleDecorations = typing.Optional[typing.Union[typing.Tuple[FlexibleTheory, ...], typing.Tuple[()]]]
 
 
-def is_subformula_of_formula(s: FlexibleFormula, f: FlexibleFormula) -> bool:
-    """Return True if and only if formula `s` is a sub-formula of formula "f", False otherwise.
+def is_recursively_included_in(s: FlexibleFormula, f: FlexibleFormula) -> bool:
+    """Returns `True` if and only if formula `s` is recursively included in formula `f`, `False` otherwise.
+
+    Symbol: ⊆⁺ (Unicode), :math:`\\subseteq^{+}` (LaTeX)
+
+    Definition: recursive inclusion (of formulas)
+    A formula :math:`s` is a recursive-sub-formula of a formula :math:`f` if and only if:
+    - :math:`s ~_{f} f`,
+    - or :math:`s ~_{f} g` where :math:`g` is a term of :math:`f`,
+    - or :math:`s ~_{f} h` where :math:`h` is a term of a recursive-sub-formula of :math:`f`.
+
+    Synonym: to be in the transitive closure of a formula with respect to the formula-equivalence relation.
 
     :param s: A formula, that may be a subformula of f.
     :param f: A formula, that may be the superformula of s.
@@ -4240,7 +4250,7 @@ def is_subformula_of_formula(s: FlexibleFormula, f: FlexibleFormula) -> bool:
     if is_formula_equivalent(phi=s, psi=f):
         return True
     for term in f:
-        if is_subformula_of_formula(s=s, f=term):
+        if is_recursively_included_in(s=s, f=term):
             return True
     return False
 
@@ -4462,19 +4472,6 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     u1.log_info(theorem.typeset_as_string(theory=t))
 
     return t, True, theorem
-
-
-def is_in_formula_tree(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
-    """Return True if phi is formula-equivalent to psi or a sub-formula of psi."""
-    phi = coerce_formula(phi=phi)
-    psi = coerce_formula(phi=psi)
-    if is_formula_equivalent(phi=phi, psi=psi):
-        return True
-    else:
-        for term in iterate_formula_terms(phi=psi):
-            if is_in_formula_tree(phi=phi, psi=term):
-                return True
-    return False
 
 
 def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:

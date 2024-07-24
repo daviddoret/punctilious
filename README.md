@@ -3,7 +3,9 @@
 <br />
 <div align="center">
   <a href="https://github.com/daviddoret/punctilious">
-    <img src="https://github.com/daviddoret/punctilious/raw/master/branding/punctilious-logo-full-light-600x600-white.png" alt="The punctilious logo" width="300" height="300">
+    <img 
+src="https://github.com/daviddoret/punctilious/raw/master/branding/punctilious-logo-full-light-600x600-white.png" 
+alt="The punctilious logo" width="300" height="300">
   </a>
 </div>
 <p align="center">
@@ -12,9 +14,9 @@
 
 ## About
 
-*Punctilious* is a *math proof assistant* open-source project developed in python. In straightforward language, it
-intends to
-facilitate the study and development of mathematical proofs by human beings.
+*Punctilious* is a *math proof assistant* open-source project developed in
+python. In straightforward language, it intends to facilitate the study and
+development of mathematical proofs by human beings.
 
 There exists multiple math proof assistants, including:
 
@@ -30,9 +32,11 @@ neither the length, nor the breadth of these time-proven systems.
 
 ### So why develop yet another math proof assistant?
 
-Besides being a fun and thrilling learning experience, the focus points of *punctilious* are:
+Besides being a fun and thrilling learning experience, the focus points of
+*punctilious* are:
 
-* Human-friendly and developer-friendly inputs (i.e.: write math as we learn it)
+* Human-friendly and developer-friendly inputs (i.e.: write math as we learn \
+  it)
 * Ease of use
 * Human-friendly and developer-friendly outputs (i.e.: readable)
 
@@ -43,12 +47,17 @@ Besides being a fun and thrilling learning experience, the focus points of *punc
 ## Source code repository
 
 The source code of the *punctilious* package lives on [GitHub](https://github.com/) here:
-<p align="center"><a href="https://github.com/daviddoret/punctilious">https://github.com/daviddoret/punctilious</a></p>
+<p align="center">
+<a href="https://github.com/daviddoret/punctilious">
+https://github.com/daviddoret/punctilious</a></p>
 
 ## Package directory
 
-The *punctilious* package is available for download from the [Python Package Index (PyPi)](https://pypi.org/) here:
-<p align="center"><a href="https://pypi.org/project/punctilious/">https://pypi.org/project/punctilious/</a></p>
+The *punctilious* package is available for download from the
+[Python Package Index (PyPi)](https://pypi.org/) here:
+<p align="center">
+<a href="https://pypi.org/project/punctilious/">
+https://pypi.org/project/punctilious/</a></p>
 
 ## Prerequisites
 
@@ -56,7 +65,8 @@ Python version 3.11 or later.
 
 ## Installation
 
-Install the latest version of the *punctilious* package, or upgrade it to the latest version if already installed:
+Install the latest version of the *punctilious* package, or upgrade it to the
+latest version if already installed:
 
 ```console
 pip install punctilious --upgrade
@@ -64,12 +74,16 @@ pip install punctilious --upgrade
 
 ## Getting started
 
-A series of samples will be provided soon once we will have published our documentation on ReadTheDocs. Please wait...
+A series of samples will be provided soon once we will have published our
+documentation on ReadTheDocs. Please wait...
 
 ## Documentation
 
-The documentation of the *punctilious* package is hosted on [ReadTheDocs](https://docs.readthedocs.io/) here:
-<p align="center"><a href="https://punctilious.readthedocs.io/en/latest/">https://punctilious.readthedocs.io/en/latest/</a></p>
+The documentation of the *punctilious* package is hosted on
+[ReadTheDocs](https://docs.readthedocs.io/) here:
+<p align="center">
+<a href="https://punctilious.readthedocs.io/en/latest/">
+https://punctilious.readthedocs.io/en/latest/</a></p>
 
 ## More links
 
@@ -80,5 +94,8 @@ The documentation of the *punctilious* package is hosted on [ReadTheDocs](https:
 
 ## Acknowledgments
 
-We express our gratitude to the wonderful projects we depend on, and their amazing contributors:
-<p align="center"><a href="https://github.com/daviddoret/punctilious/network/dependencies">Project dependencies</a></p>
+We express our gratitude to the wonderful projects we depend on, and their
+amazing contributors:
+<p align="center">
+<a href="https://github.com/daviddoret/punctilious/network/dependencies">
+Project dependencies</a></p>
