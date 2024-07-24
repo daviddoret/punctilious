@@ -1422,6 +1422,40 @@ def is_tuple_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> b
     raise NotImplementedError('To be analysed further.')
 
 
+def is_sub_enumeration(s: FlexibleEnumeration, e: FlexibleEnumeration,
+                       strip_duplicates: bool = True,
+                       interpret_none_as_empty: bool = True,
+                       canonic_conversion: bool = True) -> bool:
+    """Returns `True` if enumeration `s` is a sub-enumeration of enumeration `e`, `False` otherwise.
+
+    Notation:
+    :math:`s \\subseteq e`
+
+    Definition:
+    An enumeration `s` is a sub-enumeration of an enumeration `e` if and only if:
+     - every element of `s` is an element of `e`.
+
+    Some immediate consequences:
+    :math:`s ~_{f} f \\implies  s \\subseteq e`.
+    :math:`∅ \\subseteq e`.
+    :math:`∅ \\subseteq ∅`.
+
+    :param s: An enumeration that is possibly a sub-enumeration of `e`.
+    :param e: An enumeration.
+    :param canonic_conversion:
+    :param strip_duplicates:
+    :param interpret_none_as_empty:
+    :return:
+    """
+    s = coerce_enumeration(e=s, strip_duplicates=strip_duplicates, interpret_none_as_empty=interpret_none_as_empty,
+                           canonic_conversion=canonic_conversion)
+    e = coerce_enumeration(e=e)
+    if all(is_element_of_enumeration(x=x, e=e) for x in iterate_enumeration_elements(e=s)):
+        return True
+    else:
+        return False
+
+
 def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration) -> bool:
     """Two enumerations phi and psi are enumeration-equivalent, denoted phi ~enumeration psi, if and only if:
      - for all sub-formula phi' in phi, there exists a sub-formula psi' in psi such that phi' ~formula psi'.

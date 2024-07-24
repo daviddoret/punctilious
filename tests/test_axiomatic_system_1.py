@@ -217,6 +217,12 @@ class TestEnumeration:
         phi5 = pu.as1.Formula(con=pu.csl1.enumeration, t=(a, b, c, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi5)
 
+    def test_is_sub_enumeration(self):
+        a, b, c, d, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'x', 'y', 'z',))
+        assert pu.as1.is_sub_enumeration(s=(a, x, b, d,), e=(z, y, b, x, a, d,))
+        assert pu.as1.is_sub_enumeration(s=None, e=(z, y, b, x, a, d,))
+        assert pu.as1.is_sub_enumeration(s=None, e=None)
+
 
 class TestFormulaEquivalenceWithVariables:
     def test_is_formula_equivalent_with_variables(self):
