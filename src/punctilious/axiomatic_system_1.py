@@ -3999,10 +3999,12 @@ def is_extension_of(t2: FlexibleTheory, t1: FlexibleTheory, interpret_none_as_em
     """Given two theories or axiomatizations `t1` and `t2`, returns `True` if and only if `t2` is an extension of `t1`.
 
     Definition: theory-extension
+    ----------------------------
     A theory or axiomatization :math:`T_2` is an extension of a theory or axiomatization :math:`T_1` if and only if:
-    - every axiom and inference-rule in :math:`T_1` is present in :math:`T_2`.
+         - every axiom and inference-rule in :math:`T_1` is present in :math:`T_2`.
 
-    Notation:
+    Notation
+    --------
     :math:`T_1 \\subseteq T_2`
 
     :param t1: A theory or axiomatization.
