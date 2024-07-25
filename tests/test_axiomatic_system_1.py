@@ -219,9 +219,13 @@ class TestEnumeration:
 
     def test_is_sub_enumeration(self):
         a, b, c, d, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'x', 'y', 'z',))
+        assert pu.as1.is_sub_enumeration(s=(a,), e=(a,))
         assert pu.as1.is_sub_enumeration(s=(a, x, b, d,), e=(z, y, b, x, a, d,))
         assert pu.as1.is_sub_enumeration(s=None, e=(z, y, b, x, a, d,))
         assert pu.as1.is_sub_enumeration(s=None, e=None)
+        assert pu.as1.is_sub_enumeration(s=(a, x, b, d, z, y), e=(z, y, b, x, a, d,))
+        assert not pu.as1.is_sub_enumeration(s=(z, y, b, x, a, d,), e=None)
+        assert not pu.as1.is_sub_enumeration(s=(z, y, b, x, a, d,), e=(a, x, b, d,))
 
 
 class TestFormulaEquivalenceWithVariables:
