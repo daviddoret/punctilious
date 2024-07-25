@@ -689,25 +689,52 @@ def is_element_of_enumeration(x: FlexibleFormula, e: FlexibleEnumeration) -> boo
     return is_term_of_formula(x=x, phi=e)
 
 
-def is_axiom_of_theory(a: FlexibleAxiom, t: FlexibleTheory):
-    """Return True if `a` is an axiom in theory `t`, False otherwise."""
+def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheory, max_derivations: int | None = None) -> bool:
+    """Returns `True` if `a` is an axiom in axiomatization or theory `t`, `False` otherwise.
+
+    :param a: An axiom.
+    :param t: An axiomatization or a theory.
+    :param max_derivations: If `None`, considers all derivations in `t`. If an integer, considers only that number
+        of derivations in `t` following canonical order. This is particularly useful when analysing the consistency
+        of a theory, or dependencies between derivations.
+    :return: `True` if `a` is an axiom `t`, `False` otherwise.
+    """
     a: Axiom = coerce_axiom(a=a)
-    t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=a, psi=a2) for a2 in t.axioms)
+    t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
+    return any(
+        is_formula_equivalent(phi=a, psi=a2) for a2 in iterate_theory_axioms(t=t, max_derivations=max_derivations))
 
 
-def is_inference_rule_of_theory(i: FlexibleInferenceRule, t: FlexibleTheory):
-    """Return True if `i` is an inference-rule in theory `i`, False otherwise."""
+def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_derivations: int | None = None):
+    """Returns `True` if `i` is an inference-rule in axiomatization or theory `t`, `False` otherwise.
+
+    :param i: An inference-rule.
+    :param t: An axiomatization or a theory.
+    :param max_derivations: If `None`, considers all derivations in `t`. If an integer, considers only that number
+        of derivations in `t` following canonical order. This is particularly useful when analysing the consistency
+        of a theory, or dependencies between derivations.
+    :return: `True` if `a` is an inference-rule `t`, `False` otherwise.
+    """
     i: InferenceRule = coerce_inference_rule(i=i)
-    t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in iterate_theory_inference_rules(t=t))
+    t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
+    return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in
+               iterate_theory_inference_rules(t=t, max_derivations=max_derivations))
 
 
-def is_theorem_of_theory(m: FlexibleTheorem, t: FlexibleTheory):
-    """Return True if `m` is a theorem in theory `t`, False otherwise."""
+def is_theorem_of_theory(m: FlexibleTheorem, t: FlexibleTheory, max_derivations: int | None = None):
+    """Returns `True` if `m` is a theorem in theory `t`, `False` otherwise.
+
+    :param m: A theorem.
+    :param t: A theory.
+    :param max_derivations: If `None`, considers all derivations in `t`. If an integer, considers only that number
+        of derivations in `t` following canonical order. This is particularly useful when analysing the consistency
+        of a theory, or dependencies between derivations.
+    :return: `True` if `m` is a theorem in `t`, `False` otherwise.
+    """
     m: Theorem = coerce_theorem(t=m)
-    t: Theory = coerce_theory(t=t)
-    return any(is_formula_equivalent(phi=m, psi=thrm2) for thrm2 in t.theorems)
+    t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
+    return any(is_formula_equivalent(phi=m, psi=thrm2) for thrm2 in
+               iterate_theory_theorems(t=t, max_derivations=max_derivations))
 
 
 def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula: FlexibleFormula) -> int:
@@ -4506,15 +4533,15 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
                 copy_theory_decorations(target=t, decorations=(extension_t,))
             elif is_well_formed_axiom(a=argument):
                 extension_a: Axiom = coerce_axiom(a=argument)
-                if not is_axiom_of_theory(a=extension_a, t=t):
+                if not is_axiom_of(a=extension_a, t=t):
                     t: Theory = Theory(t=t, d=(extension_a,))
             elif is_well_formed_inference_rule(i=argument):
                 extension_i: InferenceRule = coerce_inference_rule(i=argument)
-                if not is_inference_rule_of_theory(i=extension_i, t=t):
+                if not is_inference_rule_of(i=extension_i, t=t):
                     t: Theory = Theory(t=t, d=(extension_i,))
             elif is_well_formed_inference(i=argument):
                 extension_i: InferenceRule = coerce_inference_rule(i=argument)
-                if not is_inference_rule_of_theory(i=extension_i, t=t):
+                if not is_inference_rule_of(i=extension_i, t=t):
                     t: Theory = Theory(t=t, d=(extension_i,))
             elif is_well_formed_theorem(t=argument):
                 extension_m: Theorem = coerce_theorem(t=argument)
@@ -4537,11 +4564,11 @@ def append_derivation_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxioma
     a: Axiomatization = coerce_axiomatization(a=a)
     if is_well_formed_axiom(a=d):
         extension_a: Axiom = coerce_axiom(a=d)
-        if not is_axiom_of_theory(a=extension_a, t=a):
+        if not is_axiom_of(a=extension_a, t=a):
             a: Axiomatization = Axiomatization(a=a, d=(extension_a,))
     elif is_well_formed_inference_rule(i=d):
         extension_i: InferenceRule = coerce_inference_rule(i=d)
-        if not is_inference_rule_of_theory(i=extension_i, t=a):
+        if not is_inference_rule_of(i=extension_i, t=a):
             a: Axiomatization = Axiomatization(a=a, d=(extension_i,))
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
@@ -4601,7 +4628,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     i: InferenceRule = coerce_inference_rule(i=i)
     a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
 
-    if not is_inference_rule_of_theory(i=i, t=t):
+    if not is_inference_rule_of(i=i, t=t):
         # The inference_rule is not in the theory,
         # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
         if raise_error_if_false:
@@ -4715,7 +4742,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
     if debug:
         u1.log_debug(f'derive_2: Derivation started. conjecture:{c}. inference_rule:{i}.')
 
-    if not is_inference_rule_of_theory(i=i, t=t):
+    if not is_inference_rule_of(i=i, t=t):
         # The inference_rule is not in the theory,
         # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
         u1.log_debug(
