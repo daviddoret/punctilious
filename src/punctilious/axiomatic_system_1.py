@@ -3374,12 +3374,11 @@ def coerce_derivation(d: FlexibleFormula) -> Derivation:
 
 
 def coerce_axiom(a: FlexibleFormula) -> Axiom:
-    """Validates that loosely typed argument `a` is a well-formed axiom and returns it properly typed as an instance
-    of python-class Axiom.
+    """Coerces formula `a` into a well-formed axiom, or raises an error if it fails.
 
-    :raises ApplicativeException: Raises an exception with code "E-123" if coercion fails.
-    :param a: An axiom.
-    :return: An axiom.
+    :param a: A formula that is presumably a well-formed axiom.
+    :return: A well-formed axiom.
+    :raises ApplicativeError: with code AS1-040 if coercion fails.
     """
     if isinstance(a, Axiom):
         return a
@@ -3389,17 +3388,16 @@ def coerce_axiom(a: FlexibleFormula) -> Axiom:
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_040,
-            msg=f'Argument `a` of python-type {str(type(a))} could not be coerced to an axiom of python-type Axiom. '
-                f'The string representation of `a` is: {u1.force_str(o=a)}.',
-            a=a, a_python_type=type(a))
+            msg='`a` cannot be coerced to a well-formed axiom.',
+            a=a)
 
 
 def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
-    """Validate that p is a well-formed inference-rule and returns it properly typed as an instance of InferenceRule,
-    or raise exception e123.
+    """Coerces formula `i` into a well-formed inference-rule, or raises an error if it fails.
 
-    :param i:
-    :return:
+    :param i: A formula that is presumably a well-formed inference-rule.
+    :return: A well-formed inference-rule.
+    :raises ApplicativeError: with code AS1-041 if coercion fails.
     """
     if isinstance(i, InferenceRule):
         return i
@@ -3409,17 +3407,16 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> InferenceRule:
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_041,
-            msg=f'Argument `i` of python-type {str(type(i))} could not be coerced to an inference-rule of python-type '
-                f'InferenceRule. The string representation of `i` is: {u1.force_str(o=i)}.',
-            i=i, i_python_type=type(i))
+            msg='`i` cannot be coerced to a well-formed inference-rule.',
+            i=i)
 
 
 def coerce_theorem(t: FlexibleFormula) -> Theorem:
-    """Validate that p is a well-formed theorem-by-inference and returns it properly typed as ProofByInference,
-    or raise exception e123.
+    """Coerces formula `t` into a well-formed theorem, or raises an error if it fails.
 
-    :param t:
-    :return:
+    :param t: A formula that is presumably a well-formed theorem.
+    :return: A well-formed theorem.
+    :raises ApplicativeError: with code AS1-042 if coercion fails.
     """
     if isinstance(t, Theorem):
         return t
@@ -3430,9 +3427,8 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_042,
-            msg=f'Argument `t` of python-type {str(type(t))} could not be coerced to a theorem of python-type '
-                f'Theorem. The string representation of `t` is: {u1.force_str(o=t)}.',
-            t=t, t_python_type=type(t))
+            msg='`t` cannot be coerced to a well-formed theorem.',
+            t=t)
 
 
 def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
