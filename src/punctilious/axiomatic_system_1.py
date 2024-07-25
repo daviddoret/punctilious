@@ -2334,10 +2334,11 @@ def coerce_connective(con: Connective) -> Connective:
 
 
 def coerce_hypothesis(h: FlexibleFormula) -> Hypothesis:
-    """Coerces formula `h` into a well-formed hypothesis, or raises an AS1-083 error if it fails.
+    """Coerces formula `h` into a well-formed hypothesis, or raises an error if it fails.
 
     :param h: A formula that is presumably a well-formed hypothesis.
     :return: A well-formed hypothesis.
+    :raises ApplicativeError: with code AS1-083 if coercion fails.
     """
     if isinstance(h, Hypothesis):
         return h
@@ -2354,10 +2355,11 @@ def coerce_hypothesis(h: FlexibleFormula) -> Hypothesis:
 
 
 def coerce_inference(i: FlexibleFormula) -> Inference:
-    """Coerces formula `i` into a well-formed inference, or raises an AS1-032 error if it fails.
+    """Coerces formula `i` into a well-formed inference, or raises an error if it fails.
 
     :param i: A formula that is presumably a well-formed inference.
     :return: A well-formed inference.
+    :raises ApplicativeError: with code AS1-032 if coercion fails.
     """
     if isinstance(i, Inference):
         return i
@@ -3402,13 +3404,13 @@ def coerce_theorem(t: FlexibleFormula) -> Theorem:
 
 def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
                   canonical_conversion: bool = False) -> Theory:
-    """Validate that phi is a well-formed theory and returns it properly typed as Demonstration,
-    or raise exception e123.
+    """Coerces formula `t` into a well-formed theory, or raises an error if it fails.
 
-    :param canonical_conversion:
-    :param interpret_none_as_empty:
-    :param t:
-    :return:
+    :param t: A formula that is presumably a well-formed theory.
+    :param canonical_conversion: If necessary, apply canonical conversations to transform `t` into a well-formed theory.
+    :param interpret_none_as_empty: If `t` is `None`, interpret it as the empty theory.
+    :return: A well-formed theory.
+    :raises ApplicativeError: with code AS1-043 if coercion fails.
     """
     if isinstance(t, Theory):
         return t
@@ -3419,6 +3421,8 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
         return Theory(t=None, d=(*t,), d2=None)
     elif canonical_conversion and is_well_formed_axiomatization(a=t):
         return transform_axiomatization_to_theory(a=t)
+    elif canonical_conversion and is_well_formed_hypothesis(h=t):
+        return transform_hypothesis_to_theory(h=t)
     elif canonical_conversion and is_well_formed_enumeration(e=t):
         return transform_enumeration_to_theory(e=t)
     elif canonical_conversion and is_well_formed_tupl(t=t):
@@ -3436,9 +3440,8 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_043,
-            msg=f'Argument `t` of python-type {str(type(t))} could not be coerced to a theory of python-type '
-                f'Theory. The string representation of `t` is: {u1.force_str(o=t)}.',
-            t=t, t_python_type=type(t))
+            msg='`t` cannot be coerced to a well-formed theory.',
+            t=t, )
 
 
 def coerce_axiomatization(a: FlexibleFormula, interpret_none_as_empty: bool = False) -> Axiomatization:
