@@ -1146,6 +1146,8 @@ class Connectives(typing.NamedTuple):
     is_a: BinaryConnective
     is_a_proposition: UnaryConnective
     is_a_propositional_variable: UnaryConnective
+    is_a_valid_proposition_in: BinaryConnective
+    is_inconsistent: UnaryConnective
     is_well_formed_formula_predicate: UnaryConnective
     is_well_formed_inference_rule_predicate: UnaryConnective
     is_well_formed_theory_predicate: UnaryConnective
@@ -1173,6 +1175,8 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     is_a=let_x_be_a_binary_connective(formula_ts='is-a'),
     is_a_proposition=UnaryConnective(formula_ts='is-a-proposition'),
     is_a_propositional_variable=UnaryConnective(formula_ts='is-a-propositional-variable'),
+    is_a_valid_proposition_in=BinaryConnective(formula_ts='is-a-valid-proposition-in'),
+    is_inconsistent=UnaryConnective(formula_ts='is-inconsistent'),
     is_well_formed_formula_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-formula'),
     is_well_formed_inference_rule_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule'),
     is_well_formed_theory_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-theory'),
@@ -2260,7 +2264,9 @@ class TransformationByExternalAlgorithm(Transformation):
         o: tuple = super().__new__(cls, con=c2, c=c, v=v, d=d, p=p)
         return o
 
-    def __init__(self, a: typing.Callable, i: typing.Callable,
+    def __init__(self,
+                 a: typing.Callable,
+                 i: typing.Callable | None,
                  c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
@@ -2275,7 +2281,7 @@ class TransformationByExternalAlgorithm(Transformation):
         """
         c2, a, i, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
         self._external_algorithm: typing.Callable = a
-        self._is_derivation_candidate = i
+        self._is_derivation_candidate: typing.Callable | None = i
         super().__init__(con=c2, c=c, v=v, d=d, p=p)
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
@@ -2329,7 +2335,12 @@ class TransformationByExternalAlgorithm(Transformation):
         :param t:
         :return:
         """
-        return self._is_derivation_candidate(t=t)
+        if self._is_derivation_candidate is None:
+            # TODO: This is perhaps an obsolete property, perhaps we may only use the conclussion property.
+            #   For the time being i make it nullable and we will see this later.
+            return True
+        else:
+            return self._is_derivation_candidate(t=t)
 
     @property
     def premises(self) -> Tupl:

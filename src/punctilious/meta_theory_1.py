@@ -60,7 +60,12 @@ def is_well_formed_inference_rule(p: as1.Tupl | None = None, a: as1.Tupl | None 
 
 
 def is_well_formed_theory(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
-    """A python-function used as a theory external algorithm."""
+    """A python-function used as a theory external algorithm.
+
+    :param p: Premises.
+    :param a: Complementary arguments.
+    :return:
+    """
     p: as1.Tupl = as1.coerce_tuple(t=p)
     a: as1.Tupl = as1.coerce_tuple(t=a)
     if not a.arity == 1:
@@ -73,10 +78,12 @@ def is_well_formed_theory(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
         return phi
     else:
         raise u1.ApplicativeError(
-            msg='The argument `a0` is not a well-formed theory. '
+            msg='The argument `a[0]` is not a well-formed theory. '
                 'It follows that the statement :math:`\text{is-well-formed-theory}(a_{0})` cannot be derived.',
             code=c1.ERROR_CODE_MT1_002,
-            a0=a0
+            a0=a0,
+            a=a,
+            p=p
         )
 
 
@@ -180,7 +187,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
         a=is_well_formed_theory,
-        i=is_compatible_with_is_well_formed_theory,
+        i=None,  # is_compatible_with_is_well_formed_theory,
         c=csl1.is_well_formed_theory(t),
         v={t, },
         d={t, })
@@ -203,6 +210,49 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
      - ¬(is-well-formed-theory(t))
     """
 
-meta_theory_1 = as1.Axiomatization(d=(mt1, mt2, mt3,))
+with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
+    inconsistency_1: as1.InferenceRule = as1.InferenceRule(
+        f=as1.let_x_be_a_natural_transformation(
+            premises=(
+                as1.get_connectives().is_well_formed_theory(t),
+                as1.get_connectives().is_a_proposition(p),
+                p | as1.get_connectives().is_a_valid_proposition_in | t,
+                as1.get_connectives().lnot(p) | as1.get_connectives().is_a_valid_proposition_in | t),
+            conclusion=as1.get_connectives().is_inconsistent(p),
+            variables=(p, t,)),
+        ref_ts=pl1.Monospace(text='⊥1'))
+    """The inconsistency-1 inference rule.
+
+    Abbreviation: ⊥1
+
+    Premises:
+     1. is-a-well-formed-theory(T)
+     2. P is-a-proposition-in T
+     3. T ⊢ P
+     4. T ⊢ ¬P
+
+    Conclusion: T ⊢ ⊥
+
+    References:
+    """
+    # TODO: Provide references in the doc above.
+
+meta_theory_1 = as1.Axiomatization(d=(mt1, mt2, mt3, inconsistency_1,))
+
+
+def extend_theory_with_meta_theory_1(t: as1.FlexibleTheory) -> as1.Theory:
+    """Extends a theory with:
+     - the meta-theory-1 axioms
+
+    """
+    global mt1, mt2, mt3, inconsistency_1
+    t: as1.Theory = as1.coerce_theory(t=t)
+    t, _ = as1.let_x_be_an_axiom(a=mt1, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=mt2, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=mt3, t=t)
+    t, _ = as1.let_x_be_an_axiom(a=inconsistency_1, t=t)
+    # t.heuristics.add(p_is_a_proposition_heuristic)
+    return t
+
 
 pass

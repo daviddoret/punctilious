@@ -75,3 +75,22 @@ class TestMT3:
             m, _, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
 
         pass
+
+
+class TestInconsistency1:
+    def test_inconsistency_1(self):
+        t = as1.let_x_be_a_theory()
+        t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
+        a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
+        t, _ = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='A')
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
+        t_inconsistent, _ = pu.as1.let_x_be_an_axiom(t=t, s=lnot(a))  # This is a contradiction
+
+        m = as1.let_x_be_a_theory()  # The meta-theory
+        m = pu.mt1.extend_theory_with_meta_theory_1(t=m)
+        c = is_well_formed_theory(t)  # This is a formula
+        m, _, d = as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3, a=(t,), raise_error_if_false=True)
+        assert as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
+
+        # TODO: derive: P is-a-proposition-in T
+        # TODO: derive is-inconsistent(T)

@@ -6,6 +6,8 @@ import tomllib
 import pathlib
 
 import state_1 as st1
+import util_1 as u1
+import constants_1 as c1
 
 # Pseudo-constants
 FORMULA_TS = 'formula_ts'
@@ -540,6 +542,21 @@ class Symbols(dict):
         self._r_uppercase_serif_italic = self._register(
             Symbol(key='r_uppercase_serif_italic', latex_math='\\textit{R}', unicode_extended='𝑅',
                    unicode_limited='R'))
+        self._s_uppercase_serif_italic = self._register(
+            Symbol(key='s_uppercase_serif_italic', latex_math='\\textit{S}', unicode_extended='𝑆',
+                   unicode_limited='S'))
+        self._t_uppercase_serif_italic = self._register(
+            Symbol(key='t_uppercase_serif_italic', latex_math='\\textit{T}', unicode_extended='𝑇',
+                   unicode_limited='T'))
+        self._u_uppercase_serif_italic = self._register(
+            Symbol(key='u_uppercase_serif_italic', latex_math='\\textit{U}', unicode_extended='𝑈',
+                   unicode_limited='U'))
+        self._v_uppercase_serif_italic = self._register(
+            Symbol(key='v_uppercase_serif_italic', latex_math='\\textit{V}', unicode_extended='𝑉',
+                   unicode_limited='V'))
+        self._w_uppercase_serif_italic = self._register(
+            Symbol(key='w_uppercase_serif_italic', latex_math='\\textit{W}', unicode_extended='𝑊',
+                   unicode_limited='W'))
         self._x_uppercase_serif_italic = self._register(
             Symbol(key='x_uppercase_serif_italic', latex_math='\\textit{X}', unicode_extended='𝑋',
                    unicode_limited='X'))
@@ -980,13 +997,24 @@ class Symbols(dict):
 
     def get_sans_serif_letter(self, letter: str) -> Symbol:
         if not self.is_sans_serif_letter(letter=letter):
-            raise ValueError(f'ooooops')
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_PL1_001,
+                msg='This `letter` is unknown.',
+                letter=letter
+            )
         case: str
         if letter.islower():
             case = 'lowercase'
         else:
             case = 'uppercase'
         key: str = f'{letter.lower()}_{case}_serif_italic'
+        if key not in self:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_PL1_002,
+                msg='This `key` is not present in the symbols database.',
+                key=key,
+                letter=letter
+            )
         return self[key]
 
     def get_monospace_letter(self, letter: str) -> Symbol:
@@ -1179,6 +1207,26 @@ class Symbols(dict):
     @property
     def r_uppercase_serif_italic(self) -> Symbol:
         return self._r_uppercase_serif_italic
+
+    @property
+    def s_uppercase_serif_italic(self) -> Symbol:
+        return self._s_uppercase_serif_italic
+
+    @property
+    def t_uppercase_serif_italic(self) -> Symbol:
+        return self._t_uppercase_serif_italic
+
+    @property
+    def u_uppercase_serif_italic(self) -> Symbol:
+        return self._u_uppercase_serif_italic
+
+    @property
+    def v_uppercase_serif_italic(self) -> Symbol:
+        return self._v_uppercase_serif_italic
+
+    @property
+    def w_uppercase_serif_italic(self) -> Symbol:
+        return self._w_uppercase_serif_italic
 
     @property
     def x_uppercase_serif_italic(self) -> Symbol:
