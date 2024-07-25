@@ -126,7 +126,7 @@ def is_compatible_with_is_well_formed_theory(phi: as1.FlexibleFormula) -> bool:
 
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
+    algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
         a=is_well_formed_formula,
         i=is_compatible_with_is_well_formed_formula,
         c=csl1.is_well_formed_formula(t),
@@ -152,7 +152,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     """
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
+    algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
         a=is_well_formed_inference_rule,
         i=is_compatible_with_is_well_formed_inference_rule,
         c=csl1.is_well_formed_inference_rule(t),
@@ -178,7 +178,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     """
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    algo: as1.AlgorithmicTransformation = as1.AlgorithmicTransformation(
+    algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
         a=is_well_formed_theory,
         i=is_compatible_with_is_well_formed_theory,
         c=csl1.is_well_formed_theory(t),

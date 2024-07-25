@@ -982,13 +982,13 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
                                             strip_duplicates=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         if a is None:
-            # Signature 3: This is a natural transformation:
-            f: NaturalTransformation = NaturalTransformation(c=c, v=v, d=d, p=p)
+            # Signature 3: This is a transformation-by-variable-transformation:
+            f: TransformationByVariableSubstitution = TransformationByVariableSubstitution(c=c, v=v, d=d, p=p)
             i: InferenceRule = InferenceRule(f=f)
         else:
             # Signature 4: This is an algorithmic transformation:
-            f: AlgorithmicTransformation = AlgorithmicTransformation(a=a, i=i2, c=c, v=v,
-                                                                     d=d, p=p)
+            f: TransformationByExternalAlgorithm = TransformationByExternalAlgorithm(a=a, i=i2, c=c, v=v,
+                                                                                     d=d, p=p)
             i: InferenceRule = InferenceRule(f=f)
     else:
         raise u1.ApplicativeError(msg='inconsistent arguments')
@@ -1102,8 +1102,8 @@ def let_x_be_a_natural_transformation(conclusion: FlexibleFormula,
                                       declarations: FlexibleEnumeration | None = None,
                                       premises: FlexibleTupl | None = None
                                       ):
-    return NaturalTransformation(c=conclusion, v=variables, d=declarations,
-                                 p=premises)
+    return TransformationByVariableSubstitution(c=conclusion, v=variables, d=declarations,
+                                                p=premises)
 
 
 class Connectives(typing.NamedTuple):
@@ -1156,7 +1156,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
     is_well_formed_theory=let_x_be_a_unary_connective(),
-    natural_transformation=let_x_be_a_quaternary_connective(formula_ts='natural-transformation'),
+    natural_transformation=let_x_be_a_quaternary_connective(formula_ts='transformation-by-variable-substitution'),
     tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
 
 ))
@@ -1847,11 +1847,11 @@ class SingletonEnumeration(Enumeration):
         super().__init__(e=element)
 
 
-class Transformation(Formula):
-    """A transformation is method by which new formulas may be created.
+class Transformation(Formula, abc.ABC):
+    """A transformation is a method by which new formulas may be created.
 
     The following transformations are supported:
-     - natural-transformation (cf. NaturalTransformation python-class)
+     - transformation-by-variable-substitution (cf. NaturalTransformation python-class)
      - algorithmic-transformation (cf. AlgorithmicTransformation python-class)
     """
     CONCLUSION_INDEX: int = 0
@@ -1965,19 +1965,20 @@ class Transformation(Formula):
         return self[Transformation.VARIABLES_INDEX]
 
 
-class NaturalTransformation(Transformation, ABC):
-    """A natural-transformation, is a map from the class of formulas to itself.
+class TransformationByVariableSubstitution(Transformation, ABC):
+    """A transformation-by-variable-substitution, is a map from the class of formulas to itself.
 
-    Syntactically, a natural-transformation is a formula t(c, V, D, P) where:
-     - t is the natural-transformation connective,
-     - c is a formula called the conclusion, which gives the shape of the natural-transformation output formula.
+    Syntactically, a transformation-by-variable-substitution is a formula t(c, V, D, P) where:
+     - t is the transformation-by-variable-substitution connective,
+     - c is a formula called the conclusion, which gives the shape of the transformation-by-variable-substitution output
+        formula.
      - V is an enumeration whose children are simple-objects called the variables.
      - D is an enumeration whose children are simple-objects called the new-object-declarations.
      - P is an enumeration of formulas whose children are called premises.
      - The intersection V ∩ D is empty.
 
     Algorithm:
-    The following algorithm is applied when a natural-transformation is "called":
+    The following algorithm is applied when a transformation-by-variable-substitution is "called":
      - Input argument: P_input (an enumeration of formulas that are formula-equivalent-with-variables to
        P, given variables V.
      - Procedure:
@@ -1986,25 +1987,25 @@ class NaturalTransformation(Transformation, ABC):
         3) For every new object declaration, create a new connective with a new symbol.
         4) Substitute the connectives of new object declarations in c with their newly created connectives.
 
-    Note 1: If a natural-transformation contains new-object-declarations, then it is non-deterministic,
+    Note 1: If a transformation-by-variable-substitution contains new-object-declarations, then it is non-deterministic,
         i.e.: every time it is called with the same input arguments, it creates a new unique formula.
-        To the contrary, if a natural-transformation contains no new-object-declarations, then it is deterministic,
+        To the contrary, if a transformation-by-variable-substitution contains no new-object-declarations, then it is deterministic,
         i.e.: every time it is called with the same input arguments, it creates identical formulas.
 
-    Note 2: When new-object-declarations are used, the natural-transformation declares new objects in the theory.
+    Note 2: When new-object-declarations are used, the transformation-by-variable-substitution declares new objects in the theory.
         In fact, this is the only possibility for new objects to be created / declared.
 
     Note 3: When new-object-declarations are used, note that it is not the sub-formulas that are replaced,
-        but the connectives. This makes it possible to design natural-transformation that output new non
+        but the connectives. This makes it possible to design transformation-by-variable-substitution that output new non
 
     Note 4: Transformations are the building blocks of inference-rules. Ses inference-rules for more details.
 
-    Note 5: The natural-transformation in an inference rule is very similar to an intuitionistic sequent (cf. Mancosu
+    Note 5: The transformation-by-variable-substitution in an inference rule is very similar to an intuitionistic sequent (cf. Mancosu
     et al., 2021, p. 170), i.e.: "In intuitionistic-sequent, there may be at most one formula to the right of ⇒ .", with
     some distinctive properties:
-        - a natural-transformation comprises an explicit and finite set of variables,
+        - a transformation-by-variable-substitution comprises an explicit and finite set of variables,
           while an intuitionistic-sequent uses only formula variables.
-        - the order of the premises in a natural-transformation does not matter a priori because it is an enumeration,
+        - the order of the premises in a transformation-by-variable-substitution does not matter a priori because it is an enumeration,
           while the order of the formulas in the antecedent of an intuitionistic-sequent matter a priori,
           even though this constraint is immediately relieved by the interchange structural rule.
     """
@@ -2040,7 +2041,7 @@ class NaturalTransformation(Transformation, ABC):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, c, v, d, p = NaturalTransformation._data_validation_3(c=c, v=v, d=d, p=p)
+        c2, c, v, d, p = TransformationByVariableSubstitution._data_validation_3(c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, con=c2, c=c, v=v, d=d, p=p)
         return o
 
@@ -2054,7 +2055,7 @@ class NaturalTransformation(Transformation, ABC):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, c, v, d, p = NaturalTransformation._data_validation_3(c=c, v=v, d=d, p=p)
+        c2, c, v, d, p = TransformationByVariableSubstitution._data_validation_3(c=c, v=v, d=d, p=p)
         super().__init__(con=c2, c=c, v=v, d=d, p=p)
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
@@ -2071,7 +2072,8 @@ class NaturalTransformation(Transformation, ABC):
         :return:
         """
         p = coerce_tuple(t=p, interpret_none_as_empty=True)
-        a = coerce_tuple(t=a, interpret_none_as_empty=True)  # This argument is not used by natural-transformation.
+        a = coerce_tuple(t=a,
+                         interpret_none_as_empty=True)  # This argument is not used by transformation-by-variable-substitution.
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
@@ -2079,7 +2081,7 @@ class NaturalTransformation(Transformation, ABC):
                                                                         variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_030,
-                                      msg='Applying a natural-transformation with incorrect premises.',
+                                      msg='Applying a transformation-by-variable-substitution with incorrect premises.',
                                       target_formula=p, transformation_premises=self.premises,
                                       transformation_variables=self.variables, transformation=self)
 
@@ -2112,7 +2114,7 @@ class NaturalTransformation(Transformation, ABC):
         return is_candidate
 
 
-FlexibleNaturalTransformation = typing.Optional[typing.Union[NaturalTransformation]]
+FlexibleTransformationByVariableSubstitution = typing.Optional[typing.Union[TransformationByVariableSubstitution]]
 
 
 def coerce_transformation(f: FlexibleTransformation) -> Transformation:
@@ -2125,20 +2127,20 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         # TODO: Move this logic to coerce_natural_transformation
-        return NaturalTransformation(c=f[NaturalTransformation.CONCLUSION_INDEX],
-                                     v=f[NaturalTransformation.VARIABLES_INDEX],
-                                     d=f[NaturalTransformation.DECLARATIONS_INDEX],
-                                     p=f[NaturalTransformation.PREMISES_INDEX])
+        return TransformationByVariableSubstitution(c=f[TransformationByVariableSubstitution.CONCLUSION_INDEX],
+                                                    v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
+                                                    d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
+                                                    p=f[TransformationByVariableSubstitution.PREMISES_INDEX])
     elif is_well_formed_algorithmic_transformation(t=f):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
         # TODO: Move this logic to coerce_algorithmic_transformation
-        return AlgorithmicTransformation(a=f.external_algorithm,
-                                         i=what_the_hell,  # correct this
-                                         c=f[NaturalTransformation.CONCLUSION_INDEX],
-                                         v=f[NaturalTransformation.VARIABLES_INDEX],
-                                         d=f[NaturalTransformation.DECLARATIONS_INDEX],
-                                         p=f[NaturalTransformation.PREMISES_INDEX])
+        return TransformationByExternalAlgorithm(a=f.external_algorithm,
+                                                 i=what_the_hell,  # correct this
+                                                 c=f[TransformationByVariableSubstitution.CONCLUSION_INDEX],
+                                                 v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
+                                                 d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
+                                                 p=f[TransformationByVariableSubstitution.PREMISES_INDEX])
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_060,
@@ -2146,23 +2148,23 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
             m=f)
 
 
-def coerce_natural_transformation(t: FlexibleFormula) -> NaturalTransformation:
+def coerce_transformation_by_variable_substitution(t: FlexibleFormula) -> TransformationByVariableSubstitution:
     """Coerces lose argument `t` to a transformation, strongly python-typed as Transformation,
     or raises an error with code E-AS1-031 if this fails."""
     t: Formula = coerce_formula(phi=t)
-    if isinstance(t, NaturalTransformation):
+    if isinstance(t, TransformationByVariableSubstitution):
         return t
     elif isinstance(t, Formula) and is_well_formed_natural_transformation(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return NaturalTransformation(c=t[NaturalTransformation.CONCLUSION_INDEX],
-                                     v=t[NaturalTransformation.VARIABLES_INDEX],
-                                     d=t[NaturalTransformation.DECLARATIONS_INDEX],
-                                     p=t[NaturalTransformation.PREMISES_INDEX])
+        return TransformationByVariableSubstitution(c=t[TransformationByVariableSubstitution.CONCLUSION_INDEX],
+                                                    v=t[TransformationByVariableSubstitution.VARIABLES_INDEX],
+                                                    d=t[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
+                                                    p=t[TransformationByVariableSubstitution.PREMISES_INDEX])
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_031,
-            msg='`t` could not be coerced to a natural-transformation.',
+            msg='`t` could not be coerced to a transformation-by-variable-substitution.',
             t=t)
 
 
@@ -2177,7 +2179,7 @@ def coerce_external_algorithm(f: object) -> typing.Callable:
                                   external_algorithm=f)
 
 
-class AlgorithmicTransformation(Transformation):
+class TransformationByExternalAlgorithm(Transformation):
     """A well-formed algorithmic-transformation is a derivation that justified the derivation of further theorems in
     a theory, should bew impose conditions ex premises???
     by executing an algorithm that is external to the theory.
@@ -2226,7 +2228,7 @@ class AlgorithmicTransformation(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, a, i, c, v, d, p = AlgorithmicTransformation._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
+        c2, a, i, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
         o: tuple = super().__new__(cls, con=c2, c=c, v=v, d=d, p=p)
         return o
 
@@ -2237,12 +2239,13 @@ class AlgorithmicTransformation(Transformation):
         """
 
         :param a:
+        :param i:
         :param c: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, a, i, c, v, d, p = AlgorithmicTransformation._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
+        c2, a, i, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
         self._external_algorithm: typing.Callable = a
         self._is_derivation_candidate = i
         super().__init__(con=c2, c=c, v=v, d=d, p=p)
@@ -2284,11 +2287,11 @@ class AlgorithmicTransformation(Transformation):
 
     @property
     def conclusion(self) -> Formula:
-        return self[AlgorithmicTransformation.CONCLUSION_INDEX]
+        return self[TransformationByExternalAlgorithm.CONCLUSION_INDEX]
 
     @property
     def declarations(self) -> Enumeration:
-        return self[AlgorithmicTransformation.DECLARATIONS_INDEX]
+        return self[TransformationByExternalAlgorithm.DECLARATIONS_INDEX]
 
     def is_compatible_with(self, t: FlexibleFormula) -> bool:
         """Performs low-cost checks and returns True if target formula `t` is compatible with the output of the
@@ -2302,23 +2305,25 @@ class AlgorithmicTransformation(Transformation):
 
     @property
     def premises(self) -> Tupl:
-        return self[AlgorithmicTransformation.PREMISES_INDEX]
+        return self[TransformationByExternalAlgorithm.PREMISES_INDEX]
 
     @property
     def variables(self) -> Enumeration:
-        return self[AlgorithmicTransformation.VARIABLES_INDEX]
+        return self[TransformationByExternalAlgorithm.VARIABLES_INDEX]
 
 
-FlexibleAlgorithmicTransformation = typing.Optional[typing.Union[Connective, Formula, AlgorithmicTransformation]]
+FlexibleTransformationByExternalAlgorithm = typing.Optional[
+    typing.Union[Connective, Formula, TransformationByExternalAlgorithm]]
 
 
-def coerce_algorithmic_transformation(t: FlexibleAlgorithmicTransformation) -> AlgorithmicTransformation:
+def coerce_transformation_by_external_algorithm(
+        t: FlexibleTransformationByExternalAlgorithm) -> TransformationByExternalAlgorithm:
     """Coerces loose argument `a` to an algorithm, strongly typed as Algorithm,
     or raises an error with code E-AS1-055 if this fails."""
-    if isinstance(t, AlgorithmicTransformation):
+    if isinstance(t, TransformationByExternalAlgorithm):
         return t
     else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_055, coerced_type=AlgorithmicTransformation,
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_055, coerced_type=TransformationByExternalAlgorithm,
                                   algorithm_type=type(t),
                                   algorithm=t)
 
@@ -2586,7 +2591,7 @@ def is_well_formed_algorithmic_transformation(t: FlexibleFormula) -> bool:
     :return: bool.
     """
     t = coerce_formula(phi=t)
-    if isinstance(t, AlgorithmicTransformation):
+    if isinstance(t, TransformationByExternalAlgorithm):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
     elif (t.arity == 0 and
@@ -3441,7 +3446,9 @@ def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_043,
             msg='`t` cannot be coerced to a well-formed theory.',
-            t=t, )
+            t=t,
+            interpret_none_as_empty=interpret_none_as_empty,
+            canonical_conversion=canonical_conversion)
 
 
 def coerce_axiomatization(a: FlexibleFormula, interpret_none_as_empty: bool = False) -> Axiomatization:
@@ -3648,7 +3655,8 @@ class InferenceRule(Derivation):
 
 
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
-FlexibleTransformation = typing.Union[Transformation, AlgorithmicTransformation, NaturalTransformation, Formula]
+FlexibleTransformation = typing.Union[
+    Transformation, TransformationByExternalAlgorithm, TransformationByVariableSubstitution, Formula]
 
 
 class Inference(Formula):
@@ -5164,9 +5172,9 @@ class NaturalTransformationTypesetter(pl1.Typesetter):
     def __init__(self):
         super().__init__()
 
-    def typeset_from_generator(self, phi: FlexibleNaturalTransformation, **kwargs) -> (
+    def typeset_from_generator(self, phi: FlexibleTransformationByVariableSubstitution, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: NaturalTransformation = coerce_natural_transformation(t=phi)
+        phi: TransformationByVariableSubstitution = coerce_transformation_by_variable_substitution(t=phi)
 
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
@@ -5298,7 +5306,8 @@ class DeclarationTypesetter(pl1.Typesetter):
         yield '.'
 
 
-def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory, r: FlexibleNaturalTransformation) -> \
+def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory,
+                                                               r: FlexibleTransformationByVariableSubstitution) -> \
         tuple[bool, InferenceRule | None]:
     """Given a theory `t` and a transformation-rule "r", return the first occurrence of an inference-rule in `t` such
     that its transformation-rule is formula-equivalent to "r".
@@ -5308,7 +5317,7 @@ def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory
     :return: A python-tuple (True, i) where `i` is the inference-rule if `i` is found in `t`, (False, None) otherwise.
     """
     t: Theory = coerce_theory(t=t)
-    r: NaturalTransformation = coerce_natural_transformation(t=r)
+    r: TransformationByVariableSubstitution = coerce_transformation_by_variable_substitution(t=r)
     for i in iterate_theory_inference_rules(t=t):
         i: InferenceRule
         if is_formula_equivalent(phi=r, psi=i.transformation):

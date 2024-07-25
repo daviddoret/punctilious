@@ -63,7 +63,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
-    simplification_1_rule: as1.NaturalTransformation = as1.let_x_be_a_natural_transformation(
+    simplification_1_rule: as1.TransformationByVariableSubstitution = as1.let_x_be_a_natural_transformation(
         premises=(
             cls1.is_a_proposition(phi),
             cls1.is_a_proposition(psi),
@@ -81,7 +81,7 @@ simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
-    simplification_2_rule: as1.NaturalTransformation = as1.let_x_be_a_natural_transformation(
+    simplification_2_rule: as1.TransformationByVariableSubstitution = as1.let_x_be_a_natural_transformation(
         premises=(
             cls1.is_a_proposition(phi),
             cls1.is_a_proposition(psi),

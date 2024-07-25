@@ -36,7 +36,7 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i0: as1.InferenceRule = as1.InferenceRule(
-        f=as1.NaturalTransformation(
+        f=as1.TransformationByVariableSubstitution(
             c=is_a_propositional_variable(a),
             v=None,
             d=(a,),
@@ -62,7 +62,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
-        f=as1.NaturalTransformation(
+        f=as1.TransformationByVariableSubstitution(
             p=(is_a_propositional_variable(a),),
             c=is_a_proposition(a),
             v=(a,)),
@@ -85,7 +85,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i2: as1.InferenceRule = as1.InferenceRule(
-        f=as1.NaturalTransformation(
+        f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),),
             c=is_a_proposition(lnot(a)),
             v=(a,)),
@@ -108,7 +108,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i3: as1.InferenceRule = as1.InferenceRule(
-        f=as1.NaturalTransformation(
+        f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=is_a_proposition(a | land | b),
@@ -133,7 +133,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i4: as1.InferenceRule = as1.InferenceRule(
-        f=as1.NaturalTransformation(
+        f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=is_a_proposition(a | implies | b),
@@ -158,7 +158,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i5: as1.InferenceRule = as1.InferenceRule(
-        f=as1.NaturalTransformation(
+        f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
             c=is_a_proposition(a | lor | b),
@@ -183,7 +183,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i6: as1.InferenceRule = as1.InferenceRule(
-        f=as1.NaturalTransformation(
+        f=as1.TransformationByVariableSubstitution(
             p=None,
             c=lnot(is_a_proposition(a)),
             v=(a, b,)),
@@ -299,8 +299,8 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     conclusion: as1.Formula = psi.term_1
 
     # build the rule
-    rule: as1.NaturalTransformation = as1.NaturalTransformation(p=premises, c=conclusion,
-                                                                v=variables)
+    rule: as1.TransformationByVariableSubstitution = as1.TransformationByVariableSubstitution(p=premises, c=conclusion,
+                                                                                              v=variables)
 
     # build the inference-rule
     inference_rule: as1.InferenceRule = as1.InferenceRule(f=rule)
