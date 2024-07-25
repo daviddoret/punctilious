@@ -721,7 +721,7 @@ def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_deriva
                iterate_theory_inference_rules(t=t, max_derivations=max_derivations))
 
 
-def is_theorem_of_theory(m: FlexibleTheorem, t: FlexibleTheory, max_derivations: int | None = None):
+def is_theorem_of(m: FlexibleTheorem, t: FlexibleTheory, max_derivations: int | None = None):
     """Returns `True` if `m` is a theorem in theory `t`, `False` otherwise.
 
     :param m: A theorem.
@@ -4545,7 +4545,7 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
                     t: Theory = Theory(t=t, d=(extension_i,))
             elif is_well_formed_theorem(t=argument):
                 extension_m: Theorem = coerce_theorem(t=argument)
-                if not is_theorem_of_theory(m=extension_m, t=t):
+                if not is_theorem_of(m=extension_m, t=t):
                     t: Theory = Theory(t=t, d=(extension_m,))
             else:
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_049,
