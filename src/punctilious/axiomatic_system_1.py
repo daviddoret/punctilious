@@ -3994,8 +3994,52 @@ def transform_theory_to_axiomatization(t: FlexibleTheory, interpret_none_as_empt
     return a
 
 
+def is_extension_of(t2: FlexibleTheory, t1: FlexibleTheory, interpret_none_as_empty: bool = True,
+                    canonical_conversion: bool = True, raise_error_if_false: bool = False):
+    """Given two theories or axiomatizations `t1` and `t2`, returns `True` if and only if `t2` is an extension of `t1`.
+
+    Definition: theory-extension
+    A theory or axiomatization :math:`T_2` is an extension of a theory or axiomatization :math:`T_1` if and only if:
+    - every axiom and inference-rule in :math:`T_1` is present in :math:`T_2`.
+
+    Notation:
+    :math:`T_1 \\subseteq T_2`
+
+    :param t1: A theory or axiomatization.
+    :param t2: A theory or axiomatization.
+    :param interpret_none_as_empty: If `t1` or `t2` is None, interpret it as the empty-theory.
+    :param canonical_conversion:
+    :param raise_error_if_false:
+    :return: An axiomatization.
+    """
+    t1: Theory = coerce_theory(t=t1, interpret_none_as_empty=interpret_none_as_empty,
+                               canonical_conversion=canonical_conversion)
+    t2: Theory = coerce_theory(t=t2, interpret_none_as_empty=interpret_none_as_empty,
+                               canonical_conversion=canonical_conversion)
+
+    a1: Axiomatization = transform_theory_to_axiomatization(t=t1)
+    a2: Axiomatization = transform_theory_to_axiomatization(t=t2)
+
+    e1: Enumeration = transform_axiomatization_to_enumeration(a=a1)
+    e2: Enumeration = transform_axiomatization_to_enumeration(a=a2)
+
+    ok: bool = is_sub_enumeration(s=e1, e=e2)
+
+    if not ok and raise_error_if_false:
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_081,
+            msg='Theory or axiomatization `t2` is not an extension of theory or axiomatization `t2`.',
+            ok=ok,
+            t1=t1,
+            t2=t2,
+            a1=a1,
+            a2=a2
+        )
+    return ok
+
+
 def is_axiomatization_equivalent(t1: FlexibleTheory, t2: FlexibleTheory, interpret_none_as_empty: bool = True,
-                                 raise_error_if_false: bool = False) -> bool:
+                                 canonical_conversion: bool = True, raise_error_if_false: bool = False) -> bool:
     """Returns `True` if `t1` is axiomatization-equivalent with `t2`, denoted :math:`t_1 \\sim_{a} t_2`.
 
     Definition: axiomatization-equivalence:
@@ -4006,13 +4050,14 @@ def is_axiomatization_equivalent(t1: FlexibleTheory, t2: FlexibleTheory, interpr
     :param t1: A theory or axiomatization.
     :param t2: A theory or axiomatization.
     :param interpret_none_as_empty: If `t1` or `t2` is None, interpret it as the empty-theory.
+    :param canonical_conversion:
     :param raise_error_if_false:
     :return: An axiomatization.
     """
     t1: Theory = coerce_theory(t=t1, interpret_none_as_empty=interpret_none_as_empty,
-                               canonical_conversion=True)
+                               canonical_conversion=canonical_conversion)
     t2: Theory = coerce_theory(t=t2, interpret_none_as_empty=interpret_none_as_empty,
-                               canonical_conversion=True)
+                               canonical_conversion=canonical_conversion)
 
     a1: Axiomatization = transform_theory_to_axiomatization(t=t1)
     a2: Axiomatization = transform_theory_to_axiomatization(t=t2)
@@ -4020,20 +4065,19 @@ def is_axiomatization_equivalent(t1: FlexibleTheory, t2: FlexibleTheory, interpr
     e1: Enumeration = transform_axiomatization_to_enumeration(a=a1)
     e2: Enumeration = transform_axiomatization_to_enumeration(a=a2)
 
-    test: bool = is_enumeration_equivalent(phi=e1, psi=e2)
+    ok: bool = is_enumeration_equivalent(phi=e1, psi=e2)
 
-    if not test and raise_error_if_false:
+    if not ok and raise_error_if_false:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_077,
-            msg='`t1` is not axiomatization-equivalent with `t2`,'
-                'and argument `raise_error_if_false = True`.',
-            test=test,
+            msg='`t1` is not axiomatization-equivalent with `t2`.',
+            ok=ok,
             t1=t1,
             t2=t2,
             a1=a1,
             a2=a2
         )
-    return test
+    return ok
 
 
 def transform_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:

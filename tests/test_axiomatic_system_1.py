@@ -1122,6 +1122,46 @@ class TestTheory:
         assert pu.as1.is_axiomatization_equivalent(t1=t7, t2=t8)
         assert not pu.as1.is_axiomatization_equivalent(t1=t8, t2=t9)
 
+    def test_is_extension_of(self):
+        a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
+        t1 = pu.as1.Theory()
+        t2, _ = pu.as1.let_x_be_an_axiom(t=t1, s=a)
+        t3, _ = pu.as1.let_x_be_an_axiom(t=t2, s=b)
+        t4, i1 = pu.as1.let_x_be_an_inference_rule(t=t3, f=pu.as1.NaturalTransformation(c=f, v=None, p=None))
+        t5, _, _ = pu.as1.derive_1(t=t4, c=f, p=None, i=i1, raise_error_if_false=True)
+        t6, _ = pu.as1.let_x_be_an_axiom(t=t5, s=d)
+        t7, i2 = pu.as1.let_x_be_an_inference_rule(t=t6, f=pu.as1.NaturalTransformation(c=g, v=None, p=None))
+        t8, _, _ = pu.as1.derive_1(t=t7, c=g, p=None, i=i2, raise_error_if_false=True)
+        t9, _ = pu.as1.let_x_be_an_axiom(t=t8, s=e)
+
+        assert pu.as1.is_extension_of(t2=t2, t1=t1)
+        assert pu.as1.is_extension_of(t2=t3, t1=t2)
+        assert pu.as1.is_extension_of(t2=t4, t1=t3)
+        assert pu.as1.is_extension_of(t2=t5, t1=t4)
+        assert pu.as1.is_extension_of(t2=t6, t1=t5)
+        assert pu.as1.is_extension_of(t2=t7, t1=t6)
+        assert pu.as1.is_extension_of(t2=t8, t1=t7)
+        assert pu.as1.is_extension_of(t2=t9, t1=t8)
+
+        assert pu.as1.is_extension_of(t2=t1, t1=t1)
+        assert pu.as1.is_extension_of(t2=t2, t1=t2)
+        assert pu.as1.is_extension_of(t2=t3, t1=t3)
+        assert pu.as1.is_extension_of(t2=t4, t1=t4)
+        assert pu.as1.is_extension_of(t2=t5, t1=t5)
+        assert pu.as1.is_extension_of(t2=t6, t1=t6)
+        assert pu.as1.is_extension_of(t2=t7, t1=t7)
+        assert pu.as1.is_extension_of(t2=t8, t1=t8)
+        assert pu.as1.is_extension_of(t2=t9, t1=t9)
+
+        assert not pu.as1.is_extension_of(t2=t1, t1=t2)
+        assert not pu.as1.is_extension_of(t2=t2, t1=t3)
+        assert not pu.as1.is_extension_of(t2=t3, t1=t4)
+        assert pu.as1.is_extension_of(t2=t4, t1=t5)  # t5 contains a new theorem but axiomatization is left unchanged.
+        assert not pu.as1.is_extension_of(t2=t5, t1=t6)
+        assert not pu.as1.is_extension_of(t2=t6, t1=t7)
+        assert pu.as1.is_extension_of(t2=t7, t1=t8)  # t8 contains a new theorem but axiomatization is left unchanged.
+        assert not pu.as1.is_extension_of(t2=t8, t1=t9)
+
 
 class TestFormula:
     def test_get_formula_depth(self):
