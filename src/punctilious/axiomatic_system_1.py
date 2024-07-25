@@ -2333,7 +2333,32 @@ def coerce_connective(con: Connective) -> Connective:
             c=con, c_type=type(con))
 
 
+def coerce_hypothesis(h: FlexibleFormula) -> Hypothesis:
+    """Coerces formula `h` into a well-formed hypothesis, or raises an AS1-083 error if it fails.
+
+    :param h: A formula that is presumably a well-formed hypothesis.
+    :return: A well-formed hypothesis.
+    """
+    if isinstance(h, Hypothesis):
+        return h
+    elif is_well_formed_hypothesis(h=h):
+        b: Theory = coerce_theory(t=h[Hypothesis.BASE_THEORY_INDEX], interpret_none_as_empty=True,
+                                  canonical_conversion=True)
+        a: Formula = coerce_formula(phi=h[Hypothesis.ASSUMPTION_INDEX])
+        return Hypothesis(b=b, a=a)
+    else:
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_083,
+            msg='`h` cannot be coerced to a well-formed hypothesis.',
+            h=h)
+
+
 def coerce_inference(i: FlexibleFormula) -> Inference:
+    """Coerces formula `i` into a well-formed inference, or raises an AS1-032 error if it fails.
+
+    :param i: A formula that is presumably a well-formed inference.
+    :return: A well-formed inference.
+    """
     if isinstance(i, Inference):
         return i
     elif is_well_formed_inference(i=i):
@@ -2342,7 +2367,10 @@ def coerce_inference(i: FlexibleFormula) -> Inference:
         a: Tupl = coerce_tuple(t=i[Inference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
         return Inference(i=i2, p=p, a=a)
     else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_032, coerced_type=Inference, phi_type=type(i), phi=i)
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_032,
+            msg='`i` cannot be coerced to a well-formed inference.',
+            i=i)
 
 
 def is_well_formed_formula(phi: FlexibleFormula) -> bool:
@@ -2394,10 +2422,38 @@ def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = Fals
     return True
 
 
-def is_well_formed_inference(i: FlexibleFormula) -> bool:
-    """Return True if and only if phi is a well-formed inference, False otherwise.
+def is_well_formed_hypothesis(h: FlexibleHypothesis, raise_error_if_false: bool = False) -> bool:
+    """Returns `True` if and only if `h` is a well-formed hypothesis, `False` otherwise.
 
-    :param i: A formula.
+    TODO: Check that assumption is a proposition instead of just checking it is a formula.
+
+    :param h: A formula that may or may not be a well-formed hypothesis.
+    :param raise_error_if_false: If the argument is `True`, the function raises an AS1-082 error instead of returning
+        `False`.
+    :return: bool.
+    """
+    h = coerce_formula(phi=h)
+    if (h.connective is not _connectives.hypothesis_formula or
+            not h.arity == 2 or
+            not is_well_formed_theory(t=h[Hypothesis.BASE_THEORY_INDEX]) or
+            not is_well_formed_formula(phi=h[Hypothesis.ASSUMPTION_INDEX])):
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_082,
+                msg='`h` is not a well-formed hypothesis.',
+                h=h
+            )
+        return False
+    else:
+        return True
+
+
+def is_well_formed_inference(i: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
+    """Returns `True` if and only if `i` is a well-formed inference, `False` otherwise.
+
+    :param i: A formula that may or may not be a well-formed inference.
+    :param raise_error_if_false: If the argument is `True`, the function raises an AS1-081 error instead of returning
+        `False`.
     :return: bool.
     """
     i = coerce_formula(phi=i)
@@ -2406,6 +2462,12 @@ def is_well_formed_inference(i: FlexibleFormula) -> bool:
             not is_well_formed_inference_rule(i=i[Inference.INFERENCE_RULE_INDEX]) or
             not is_well_formed_tupl(t=i[Inference.PREMISES_INDEX]) or
             not is_well_formed_tupl(t=i[Inference.ARGUMENTS_INDEX])):
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_081,
+                msg='`i` is not a well-formed inference.',
+                i=i
+            )
         return False
     else:
         return True
@@ -3966,6 +4028,26 @@ def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> Theory:
     return t
 
 
+def transform_hypothesis_to_theory(h: FlexibleHypothesis) -> Theory:
+    """Canonical function that converts a hypothesis `h` to a theory.
+
+    A hypothesis is a pair (b, a) where:
+     - `b` is a theory denoted as the base-theory,
+     - `a` is a proposition denoted as the assumption.
+
+    The canonical conversion of hypothesis into theory consists in
+    considering the assumption as an axiom.
+
+    :param h: A hypothesis.
+    :return: A theory.
+    """
+    h: Hypothesis = coerce_hypothesis(h=h)
+    b: Theory = h.base_theory
+    a: Formula = h.assumption
+    t: Theory = Theory(t=b, d=(a,))
+    return t
+
+
 def transform_theory_to_axiomatization(t: FlexibleTheory, interpret_none_as_empty: bool = True,
                                        canonical_conversion: bool = True) -> Axiomatization:
     """Canonical function that converts a theory `t` to an axiomatization.
@@ -3996,7 +4078,8 @@ def transform_theory_to_axiomatization(t: FlexibleTheory, interpret_none_as_empt
 
 def is_extension_of(t2: FlexibleTheory, t1: FlexibleTheory, interpret_none_as_empty: bool = True,
                     canonical_conversion: bool = True, raise_error_if_false: bool = False):
-    """Given two theories or axiomatizations `t1` and `t2`, returns `True` if and only if `t2` is an extension of `t1`.
+    """Given two theories or axiomatizations `t1` and `t2`, returns `True` if and only if `t2` is an extension of `t1`,
+    `False` otherwise.
 
     Definition: theory-extension
     ----------------------------
@@ -4940,6 +5023,71 @@ def auto_derive_4(
     if debug:
         u1.log_debug(f'{indent}auto_derive_3: failure. conjecture:{conjecture}.')
     return t, False, None, conjecture_exclusion_list
+
+
+# HYPOTHESIS
+
+
+class Hypothesis(Formula):
+    """A hypothesis is....
+
+    Syntactic definition:
+    A hypothesis is a formula of the form:
+        :math:`\\text{hypothesis}(t, a, ...)`
+    Where:
+        - :math:`b` is a theory, denoted as the base theory.
+        - :math:`a` is a formula, denoted as the assumption, assumed to be true in :math:`t`.
+    """
+    BASE_THEORY_INDEX: int = 0
+    ASSUMPTION_INDEX: int = 1
+
+    @staticmethod
+    def _data_validation_2(
+            b: FlexibleTheory,
+            a: FlexibleFormula) -> tuple[Connective, Theory, Formula]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param b: A theory denoted as the base theory.
+        :param a: A formula denoted as the assumption.
+        :return:
+        """
+        con: Connective = get_connectives().hypothesis_formula
+        b: Theory = coerce_theory(t=b)
+        a: Formula = coerce_formula(phi=a)
+        return con, b, a
+
+    def __new__(cls, b: FlexibleTheory, a: FlexibleFormula):
+        """
+
+        :param b: A theory denoted as the base theory.
+        :param a: A formula denoted as the assumption.
+        """
+        con, b, a = Hypothesis._data_validation_2(b=b, a=a)
+        o: tuple = super().__new__(cls, con=con, t=(b, a,))
+        return o
+
+    def __init__(self, b: FlexibleTheory, a: FlexibleFormula):
+        """
+
+        :param b: A theory denoted as the base theory.
+        :param a: A formula denoted as the assumption.
+        """
+        con, b, a = Hypothesis._data_validation_2(b=b, a=a)
+        super().__init__(con=con, t=(b, a,))
+
+    @property
+    def assumption(self) -> Formula:
+        """A proposition assumed to be true, denoted as the assumption of the hypothesis."""
+        return self[Hypothesis.ASSUMPTION_INDEX]
+
+    @property
+    def base_theory(self) -> Theory:
+        """The base theory of the hypothesis."""
+        return self[Hypothesis.BASE_THEORY_INDEX]
+
+
+FlexibleHypothesis = typing.Optional[typing.Union[Hypothesis]]
 
 
 # PRESENTATION LAYER
