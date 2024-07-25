@@ -22,10 +22,10 @@ lor = as1.get_connectives().lor
 map_formula = as1.get_connectives().map_formula
 """The connective dedicated to signaling map formulas. Cf. Map python-class."""
 
-natural_transformation = as1.get_connectives().natural_transformation
+natural_transformation = as1.get_connectives().transformation_by_variable_substitution
 is_a_proposition = as1.get_connectives().is_a_proposition
 is_a_propositional_variable = as1.get_connectives().is_a_propositional_variable
 theorem = as1.get_connectives().theorem
 theory_formula = as1.get_connectives().theory_formula
-transformation = as1.get_connectives().natural_transformation
+transformation = as1.get_connectives().transformation_by_variable_substitution
 tupl = as1.get_connectives().tupl

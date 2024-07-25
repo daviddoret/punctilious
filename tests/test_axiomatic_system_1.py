@@ -468,15 +468,17 @@ class TestNaturalTransformation:
         variables = pu.as1.Enumeration(e=(x,))
         declarations = pu.as1.Enumeration(e=None)
         premises = pu.as1.Tupl(e=(p1,))
-        phi1 = pu.as1._connectives.natural_transformation(conclusion, variables, declarations, premises)
-        assert pu.as1.is_well_formed_natural_transformation(t=phi1)
+        phi1 = pu.as1._connectives.transformation_by_variable_substitution(conclusion, variables, declarations,
+                                                                           premises)
+        assert pu.as1.is_well_formed_transformation_by_variable_substitution(t=phi1)
         phi1 = pu.as1.coerce_transformation_by_variable_substitution(t=phi1)
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(e=(x,))
         declarations = pu.as1.Enumeration(e=None)
         premises = pu.as1.Tupl(e=(platypus, platypus,))
-        phi2 = pu.as1._connectives.natural_transformation(conclusion, variables, declarations, premises, premises)
-        assert not pu.as1.is_well_formed_natural_transformation(t=phi2)
+        phi2 = pu.as1._connectives.transformation_by_variable_substitution(conclusion, variables, declarations,
+                                                                           premises, premises)
+        assert not pu.as1.is_well_formed_transformation_by_variable_substitution(t=phi2)
 
 
 class TestReplaceFormulas:

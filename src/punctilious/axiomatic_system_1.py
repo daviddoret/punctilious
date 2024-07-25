@@ -1129,7 +1129,7 @@ class Connectives(typing.NamedTuple):
     theory_formula: FreeArityConnective
     is_well_formed_theory: UnaryConnective
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
-    natural_transformation: QuaternaryConnective
+    transformation_by_variable_substitution: QuaternaryConnective
     tupl: FreeArityConnective
 
 
@@ -1156,7 +1156,8 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
     is_well_formed_theory=let_x_be_a_unary_connective(),
-    natural_transformation=let_x_be_a_quaternary_connective(formula_ts='transformation-by-variable-substitution'),
+    transformation_by_variable_substitution=let_x_be_a_quaternary_connective(
+        formula_ts='transformation-by-variable-substitution'),
     tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
 
 ))
@@ -1892,7 +1893,7 @@ class Transformation(Formula, abc.ABC):
         :param p: A tuple of formulas denoted as the premises.
         """
         con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
-        o: tuple = super().__new__(cls, con=_connectives.natural_transformation,
+        o: tuple = super().__new__(cls, con=_connectives.transformation_by_variable_substitution,
                                    t=(c, v, d, p,))
         return o
 
@@ -1908,7 +1909,7 @@ class Transformation(Formula, abc.ABC):
         :param p: A tuple of formulas denoted as the premises.
         """
         con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
-        super().__init__(con=_connectives.natural_transformation, t=(c, v, d, p,))
+        super().__init__(con=_connectives.transformation_by_variable_substitution, t=(c, v, d, p,))
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
@@ -2024,7 +2025,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :return:
         """
         global _connectives
-        con: Connective = _connectives.natural_transformation
+        con: Connective = _connectives.transformation_by_variable_substitution
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
@@ -2123,7 +2124,7 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
     f: Formula = coerce_formula(phi=f)
     if isinstance(f, Transformation):
         return f
-    elif is_well_formed_natural_transformation(t=f):
+    elif is_well_formed_transformation_by_variable_substitution(t=f):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         # TODO: Move this logic to coerce_natural_transformation
@@ -2131,7 +2132,7 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
                                                     v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
                                                     d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
                                                     p=f[TransformationByVariableSubstitution.PREMISES_INDEX])
-    elif is_well_formed_algorithmic_transformation(t=f):
+    elif is_well_formed_transformation_by_external_algorithm(t=f):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
         # TODO: Move this logic to coerce_algorithmic_transformation
@@ -2154,7 +2155,7 @@ def coerce_transformation_by_variable_substitution(t: FlexibleFormula) -> Transf
     t: Formula = coerce_formula(phi=t)
     if isinstance(t, TransformationByVariableSubstitution):
         return t
-    elif isinstance(t, Formula) and is_well_formed_natural_transformation(t=t):
+    elif isinstance(t, Formula) and is_well_formed_transformation_by_variable_substitution(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         return TransformationByVariableSubstitution(c=t[TransformationByVariableSubstitution.CONCLUSION_INDEX],
@@ -2503,14 +2504,14 @@ def is_well_formed_map(m: FlexibleFormula, raise_error_if_false: bool = False) -
         return True
 
 
-def is_well_formed_natural_transformation(t: FlexibleFormula) -> bool:
+def is_well_formed_transformation_by_variable_substitution(t: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed transformation, False otherwise.
 
     :param t: A formula.
     :return: bool.
     """
     t = coerce_formula(phi=t)
-    if (t.connective is not _connectives.natural_transformation or
+    if (t.connective is not _connectives.transformation_by_variable_substitution or
             t.arity != 4 or
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_enumeration(e=t.term_1) or
@@ -2576,15 +2577,15 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
     if isinstance(t, Transformation):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif is_well_formed_natural_transformation(t=t):
+    elif is_well_formed_transformation_by_variable_substitution(t=t):
         return True
-    elif is_well_formed_algorithmic_transformation(t=t):
+    elif is_well_formed_transformation_by_external_algorithm(t=t):
         return True
     else:
         return False
 
 
-def is_well_formed_algorithmic_transformation(t: FlexibleFormula) -> bool:
+def is_well_formed_transformation_by_external_algorithm(t: FlexibleFormula) -> bool:
     """Return True if and only if phi is a well-formed algorithm, False otherwise.
 
     :param t: A formula.
@@ -5168,7 +5169,7 @@ class InfixFormulaTypesetter(pl1.Typesetter):
             yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
-class NaturalTransformationTypesetter(pl1.Typesetter):
+class TransformationByVariableSubstitutionTypesetter(pl1.Typesetter):
     def __init__(self):
         super().__init__()
 
@@ -5498,8 +5499,8 @@ class Typesetters:
     def map(self) -> MapTypesetter:
         return MapTypesetter()
 
-    def natural_transformation(self) -> NaturalTransformationTypesetter:
-        return NaturalTransformationTypesetter()
+    def transformation_by_variable_substitution(self) -> TransformationByVariableSubstitutionTypesetter:
+        return TransformationByVariableSubstitutionTypesetter()
 
     def derivation(self) -> DerivationTypesetter:
         return DerivationTypesetter()
