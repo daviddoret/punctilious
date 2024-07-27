@@ -739,20 +739,20 @@ class TestAlgorithm:
             t = a[0]
             if as1.is_well_formed_theory(t=t):
                 t = as1.coerce_theory(t=t)
-                phi = pu.csl1.is_well_formed_theory(t)
+                phi = pu.csl1.is_well_formed_theory_predicate(t)
                 return phi
             else:
-                phi = lnot(pu.csl1.is_well_formed_theory(t))
+                phi = lnot(pu.csl1.is_well_formed_theory_predicate(t))
                 return phi
 
         def is_compatible(phi: as1.FlexibleFormula) -> bool:
             with pu.as1.let_x_be_a_variable(formula_ts='x') as x:
-                solution_1 = pu.csl1.is_well_formed_theory(x)
+                solution_1 = pu.csl1.is_well_formed_theory_predicate(x)
                 test_1, _ = pu.as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
                 if test_1:
                     return True
             with pu.as1.let_x_be_a_variable(formula_ts='x') as x:
-                solution_2 = lnot(pu.csl1.is_well_formed_theory(x))
+                solution_2 = lnot(pu.csl1.is_well_formed_theory_predicate(x))
                 test_2, _ = pu.as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
                 if test_2:
                     return True
@@ -764,12 +764,12 @@ class TestAlgorithm:
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
             algo = as1.TransformationByExternalAlgorithm(a=x_is_a_theory,
                                                          i=is_compatible,
-                                                         c=is_well_formed_theory(x),
+                                                         c=is_well_formed_theory_predicate(x),
                                                          v={x, },
                                                          d={x, })
         i = as1.InferenceRule(f=algo)
         m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
-        c = is_well_formed_theory(t)
+        c = is_well_formed_theory_predicate(t)
         m, _, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,), raise_error_if_false=True)
         pass
 

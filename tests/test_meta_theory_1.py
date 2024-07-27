@@ -90,7 +90,7 @@ class TestTProvesP:
         m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3, a=(t,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
-        c = t | pu.as1.get_connectives().syntactic_entailment_2 | a
+        c = t | pu.as1.get_connectives().proves | a
         p = (pu.as1.get_connectives().is_well_formed_theory_predicate(t),)
         m, _, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.t_proves_p, a=(t, a,),
                                   raise_error_if_false=True)

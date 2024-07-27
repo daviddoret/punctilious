@@ -12,13 +12,13 @@ implies = as1.get_connectives().implies
 inference = as1.get_connectives().inference
 inference_rule = as1.get_connectives().inference_rule
 is_a = as1.get_connectives().is_a
-is_well_formed_formula = as1.get_connectives().is_well_formed_formula_predicate
-is_well_formed_inference_rule = as1.get_connectives().is_well_formed_inference_rule_predicate
-is_well_formed_theory = as1.get_connectives().is_well_formed_theory_predicate
+is_well_formed_formula_predicate = as1.get_connectives().is_well_formed_formula_predicate
+is_well_formed_inference_rule_predicate = as1.get_connectives().is_well_formed_inference_rule_predicate
+is_well_formed_theory_predicate = as1.get_connectives().is_well_formed_theory_predicate
 land = as1.get_connectives().land
 lnot = as1.get_connectives().lnot
 lor = as1.get_connectives().lor
-proves = as1.get_connectives().syntactic_entailment_2
+proves = as1.get_connectives().proves
 
 map_formula = as1.get_connectives().map_formula
 """The connective dedicated to signaling map formulas. Cf. Map python-class."""

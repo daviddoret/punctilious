@@ -1174,7 +1174,7 @@ class Connectives(typing.NamedTuple):
     lnot: UnaryConnective
     lor: BinaryConnective
     map_formula: BinaryConnective
-    syntactic_entailment_2: BinaryConnective
+    proves: BinaryConnective
     theory_formula: FreeArityConnective
     is_well_formed_theory: UnaryConnective  # TODO: DUPLICATE WITH is_well_formed_theory_predicate???
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
@@ -1207,7 +1207,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
     is_well_formed_theory=let_x_be_a_unary_connective(),
-    syntactic_entailment_2=let_x_be_a_binary_connective(formula_ts='⊢'),
+    proves=let_x_be_a_binary_connective(formula_ts='⊢'),
     transformation_by_variable_substitution=let_x_be_a_quaternary_connective(
         formula_ts='transformation-by-variable-substitution'),
     tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
@@ -1268,7 +1268,7 @@ def is_connective_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool
     return phi.connective is psi.connective
 
 
-def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
+def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
     """Two formulas phi and psi are formula-equivalent, noted phi ~formula psi, if and only if:
     Base case:
      - phi ~connective psi
@@ -1289,7 +1289,7 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_even
 
     :param phi: A formula.
     :param psi: A formula.
-    :param raise_event_if_false:
+    :param raise_error_if_false:
     :return: True if phi ~formula psi. False otherwise.
     """
     phi: Formula = coerce_formula(phi=phi)
@@ -1303,8 +1303,13 @@ def is_formula_equivalent(phi: FlexibleFormula, psi: FlexibleFormula, raise_even
         return True
     else:
         # Extreme case
-        if raise_event_if_false:
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_019, phi=phi, psi=psi)
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_019,
+                msg='`phi` is not formula-equivalent to `psi`.',
+                phi=phi,
+                psi=psi,
+                raise_error_if_false=raise_error_if_false)
         return False
 
 
@@ -3867,18 +3872,23 @@ class Theorem(Derivation):
         i: Inference = coerce_inference(i=i)
 
         # check the validity of the theorem
-        re_derived_valid_statement: Formula = i.inference_rule.transformation.apply_transformation(p=i.premises,
-                                                                                                   a=i.arguments)
+        algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(p=i.premises,
+                                                                                         a=i.arguments)
         if len(i.inference_rule.transformation.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
-                is_formula_equivalent(phi=s, psi=re_derived_valid_statement, raise_event_if_false=True)
+                is_formula_equivalent(phi=s, psi=algorithm_output, raise_error_if_false=True)
             except u1.ApplicativeError as error:
                 # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
                 # raise an exception to prevent the creation of this ill-formed theorem-by-inference.
-                raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_045, error=error, valid_statement=s,
-                                          algorithm_output=re_derived_valid_statement,
-                                          inference=i)
+                raise u1.ApplicativeError(
+                    code=c1.ERROR_CODE_AS1_045,
+                    msg='`s` is not formula-equivalent to `algorithm_output`.',
+                    s=s,
+                    algorithm_output=algorithm_output,
+                    inference=i,
+                    source_error=error
+                )
         else:
             # If there are new-object-declarations, f_of_p is not directly comparable with valid_statements.
             # This is because transformations with new-object-declarations are non-deterministic.
