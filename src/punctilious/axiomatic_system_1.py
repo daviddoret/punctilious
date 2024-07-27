@@ -42,7 +42,8 @@ class Connective:
     Equivalent definition:
     A node color in a formula tree."""
 
-    def __init__(self, formula_ts: pl1.FlexibleTypesetter = None, **kwargs):
+    def __init__(self, formula_ts: pl1.FlexibleTypesetter | None = None,
+                 **kwargs):
         """
 
         :param formula_ts: A default text representation.
@@ -232,7 +233,7 @@ class Formula(tuple):
         return self._ts
 
     def get_typesetter(self, typesetter: typing.Optional[pl1.FlexibleTypesetter] = None,
-                       ts_key: str | None = None) -> pl1.Typesetter:
+                       ts_key: str | None = None, **kwargs) -> pl1.Typesetter:
         """
 
          - priority 1: parameter typesetter is passed explicitly.
@@ -250,8 +251,14 @@ class Formula(tuple):
             if ts_key is not None and ts_key in self.ts:
                 # If ts_key argument was provided, return the typesetter from the
                 return self.ts.get(ts_key)
-            # Otherwise return the typesetter attached to the formula's connective.
-            typesetter: pl1.Typesetter = self.connective.formula_ts
+            is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+            if is_sub_formula and pl1.REF_TS in self.ts:
+                # This is a sub-formula and there is a reference that can be used
+                # to make long formulas more readable.
+                return self.ts.get(pl1.REF_TS)
+            else:
+                # Otherwise return the typesetter attached to the formula's connective.
+                typesetter: pl1.Typesetter = self.connective.formula_ts
         return typesetter
 
     def typeset_as_string(self, ts: typing.Optional[pl1.Typesetter] = None, ts_key: str | None = None, **kwargs) -> str:
@@ -261,7 +268,7 @@ class Formula(tuple):
         If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
         loading all the content in memory.
         """
-        ts = self.get_typesetter(typesetter=ts, ts_key=ts_key)
+        ts = self.get_typesetter(typesetter=ts, ts_key=ts_key, **kwargs)
         return ts.typeset_as_string(phi=self, **kwargs)
 
     def typeset_from_generator(self, ts: typing.Optional[pl1.Typesetter] = None,
@@ -273,7 +280,7 @@ class Formula(tuple):
         If the typesetting-method returns too lengthy content, you may prefer typeset_from_generator() to avoid
         loading all the content in memory.
         """
-        ts = self.get_typesetter(typesetter=ts, ts_key=ts_key)
+        ts = self.get_typesetter(typesetter=ts, ts_key=ts_key, **kwargs)
         yield from ts.typeset_from_generator(phi=self, **kwargs)
 
 
@@ -5548,3 +5555,5 @@ class Typesetters:
 
 
 typesetters = Typesetters()
+"""OBSOLETE: replace by declaring typesetters as module global variables.
+"""
