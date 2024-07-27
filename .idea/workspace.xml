@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="version 2.0: re-starting from scratch with a new data model.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" afterDir="false" />
@@ -199,6 +201,7 @@
     "Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestAdjunction.test_adjunction.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20_with_derivation_1.executor": "Debug",
@@ -362,7 +365,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -569,7 +572,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_meta_theory_1.TestMT1.test_mt1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -582,11 +585,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration&quot;" />
+      <option name="_new_target" value="&quot;test_meta_theory_1.TestMT1.test_mt1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestTheory.test_x" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_meta_theory_1.TestMT2.test_mt2" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -599,11 +602,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestTheory.test_x&quot;" />
+      <option name="_new_target" value="&quot;test_meta_theory_1.TestMT2.test_mt2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.test_is_extension" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_meta_theory_1.TestMT3.test_mt3" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -616,11 +619,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.test_is_extension&quot;" />
+      <option name="_new_target" value="&quot;test_meta_theory_1.TestMT3.test_mt3&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -633,7 +636,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_meta_theory_1.TestInconsistency1.test_inconsistency_1&quot;" />
+      <option name="_new_target" value="&quot;test_meta_theory_1.TestTProvesP.test_t_proves_p&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -699,10 +702,10 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_x" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.test_is_extension" />
-      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1" />
+      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1" />
+      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2" />
+      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3" />
+      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -710,11 +713,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1" />
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_x" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.test_is_extension" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration" />
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p" />
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2" />
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1" />
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3" />
       </list>
     </recent_temporary>
   </component>
@@ -733,14 +736,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00914" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721443183649</created>
-      <option name="number" value="00914" />
-      <option name="presentableId" value="LOCAL-00914" />
-      <option name="project" value="LOCAL" />
-      <updated>1721443183650</updated>
     </task>
     <task id="LOCAL-00915" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
@@ -1126,7 +1121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721888862132</updated>
     </task>
-    <option name="localTasksCounter" value="963" />
+    <task id="LOCAL-00963" summary="version 2.0: re-starting from scratch with a new data model.">
+      <option name="closed" value="true" />
+      <created>1721939092074</created>
+      <option name="number" value="00963" />
+      <option name="presentableId" value="LOCAL-00963" />
+      <option name="project" value="LOCAL" />
+      <updated>1721939092074</updated>
+    </task>
+    <option name="localTasksCounter" value="964" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1225,13 +1228,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>4652</line>
+          <line>4659</line>
           <option name="timeStamp" value="124" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_minimal_logic_1.py</url>
           <line>344</line>
           <option name="timeStamp" value="128" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_meta_theory_1.py</url>
+          <line>94</line>
+          <option name="timeStamp" value="132" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
+          <line>3856</line>
+          <option name="timeStamp" value="135" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

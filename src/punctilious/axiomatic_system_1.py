@@ -1155,8 +1155,9 @@ class Connectives(typing.NamedTuple):
     lnot: UnaryConnective
     lor: BinaryConnective
     map_formula: BinaryConnective
+    syntactic_entailment_2: BinaryConnective
     theory_formula: FreeArityConnective
-    is_well_formed_theory: UnaryConnective
+    is_well_formed_theory: UnaryConnective  # TODO: DUPLICATE WITH is_well_formed_theory_predicate???
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
     transformation_by_variable_substitution: QuaternaryConnective
     tupl: FreeArityConnective
@@ -1187,6 +1188,7 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
     is_well_formed_theory=let_x_be_a_unary_connective(),
+    syntactic_entailment_2=let_x_be_a_binary_connective(formula_ts='⊢'),
     transformation_by_variable_substitution=let_x_be_a_quaternary_connective(
         formula_ts='transformation-by-variable-substitution'),
     tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
@@ -1907,9 +1909,11 @@ class Transformation(Formula, abc.ABC):
         """
         con: Connective = coerce_connective(con=con)
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
-        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
+                                            strip_duplicates=True)
+        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
+                                            strip_duplicates=True)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         return con, c, v, d, p
 
     def __new__(cls, con: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
@@ -2243,9 +2247,11 @@ class TransformationByExternalAlgorithm(Transformation):
         a: typing.Callable = coerce_external_algorithm(f=a)
         # TODO: Check `i` is callable nad has correct signature.
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
-        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
+                                            strip_duplicates=True)
+        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
+                                            strip_duplicates=True)
+        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         return con, a, i, c, v, d, p
 
     def __new__(cls, a: typing.Callable, i: typing.Callable, c: FlexibleFormula,
@@ -2307,7 +2313,7 @@ class TransformationByExternalAlgorithm(Transformation):
         if not success:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_050,
                                       msg='Applying an algorithm with incorrect premises.',
-                                      target_formula=p, transformation_premises=self.premises,
+                                      p=p, transformation_premises=self.premises,
                                       transformation_variables=self.variables, transformation=self)
 
         # call the external-algorithm
@@ -3815,8 +3821,8 @@ class Theorem(Derivation):
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param s:
-        :param i:
+        :param s: A proposition denoted as the theorem valid-statement.
+        :param i: An inference.
         :return:
         """
         global _connectives
@@ -3849,13 +3855,14 @@ class Theorem(Derivation):
                 variables=i.inference_rule.transformation.declarations)
             if not success_1:
                 raise u1.ApplicativeError(
-                    msg='The valid-statement is not consistent with the inference-rule conclusion, considering '
-                        'new-object-declarations',
-                    valid_statement=s,
-                    re_derived_valid_statement=re_derived_valid_statement,
-                    i=i,
-                    success_1=success_1,
-                    m1=m1)
+                    code=c1.ERROR_CODE_AS1_085,
+                    msg='Theorem initialization failure. '
+                        'The valid-statement `s` is not consistent with the conclusion of the inference-rule `i`, '
+                        'considering new object declarations.',
+                    s=s,
+                    i_conclusion=i.inference_rule.transformation.conclusion,
+                    i_declarations=i.inference_rule.transformation.declarations,
+                    success_1=success_1)
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
             success_2, _ = is_formula_equivalent_with_variables_2(phi=s,
@@ -4631,9 +4638,9 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     # parameters validation
     t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     c: Formula = coerce_formula(phi=c)
-    p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+    p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
     i: InferenceRule = coerce_inference_rule(i=i)
-    a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
+    a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True, canonic_conversion=True)
 
     if not is_inference_rule_of(i=i, t=t):
         # The inference_rule is not in the theory,

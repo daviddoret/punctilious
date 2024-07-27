@@ -18,6 +18,7 @@ is_well_formed_theory = as1.get_connectives().is_well_formed_theory_predicate
 land = as1.get_connectives().land
 lnot = as1.get_connectives().lnot
 lor = as1.get_connectives().lor
+proves = as1.get_connectives().syntactic_entailment_2
 
 map_formula = as1.get_connectives().map_formula
 """The connective dedicated to signaling map formulas. Cf. Map python-class."""

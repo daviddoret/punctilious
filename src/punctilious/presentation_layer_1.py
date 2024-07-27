@@ -465,6 +465,9 @@ class Symbols(dict):
             Symbol(key='rightwards_arrow', latex_math='\\rightarrow', unicode_extended='→', unicode_limited='-->'))
         self._space = self._register(Symbol(key='space', latex_math=' ', unicode_extended=' ', unicode_limited=' '))
         self._tilde = self._register(Symbol(key='tilde', latex_math='\\sim', unicode_extended='~', unicode_limited='~'))
+        self._turnstile = self._register(
+            Symbol(key='turnstile', latex_math='\\vdash', unicode_extended='⊢', unicode_limited='|--'))
+
         # Lowercase serif italic
         self._a_lowercase_serif_italic = self._register(
             Symbol(key='a_lowercase_serif_italic', latex_math='\\textit{a}', unicode_extended='𝑎',
@@ -1103,6 +1106,10 @@ class Symbols(dict):
     @property
     def tilde(self) -> Symbol:
         return self._tilde
+
+    @property
+    def turnstile(self) -> Symbol:
+        return self._turnstile
 
     # Lowercase serif italic
 

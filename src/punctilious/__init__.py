@@ -59,3 +59,5 @@ csl1.is_a_propositional_variable.formula_ts = as1.typesetters.is_a_predicate(
     conventional_class='propositional variable')
 csl1.is_a_proposition.formula_ts = as1.typesetters.is_a_predicate(
     conventional_class='proposition')
+csl1.proves.formula_ts = as1.typesetters.infix_formula(
+    connective_typesetter=pl1.symbols.turnstile)
