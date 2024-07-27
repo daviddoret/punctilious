@@ -216,11 +216,10 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             p=(
                 as1.get_connectives().is_well_formed_theory_predicate(t),
-                as1.get_connectives().is_a_proposition(p),
-                p | as1.get_connectives().is_a_valid_proposition_in | t,
-                as1.get_connectives().lnot(p) | as1.get_connectives().is_a_valid_proposition_in | t),
-            c=as1.get_connectives().is_inconsistent(p),
-            v=(p, t,)),
+                t | as1.get_connectives().proves | p,
+                t | as1.get_connectives().proves | as1.get_connectives().lnot(p)),
+            c=as1.get_connectives().is_inconsistent(t),
+            v={p, t, }),
         ref_ts=pl1.Monospace(text='⊥1'))
     """The inconsistency-1 inference rule: P and ¬P
 
@@ -228,9 +227,8 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
 
     Premises:
      1. is-a-well-formed-theory(T)
-     2. T ⊢ is-a-proposition(P)
-     3. T ⊢ P
-     4. T ⊢ ¬P 
+     2. T ⊢ P
+     3. T ⊢ ¬P 
 
     Conclusion: T ⊢ ⊥
 

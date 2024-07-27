@@ -19,6 +19,7 @@ land = as1.get_connectives().land
 lnot = as1.get_connectives().lnot
 lor = as1.get_connectives().lor
 proves = as1.get_connectives().proves
+is_inconsistent = as1.get_connectives().is_inconsistent
 
 map_formula = as1.get_connectives().map_formula
 """The connective dedicated to signaling map formulas. Cf. Map python-class."""

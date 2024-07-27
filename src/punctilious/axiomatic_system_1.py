@@ -3872,8 +3872,19 @@ class Theorem(Derivation):
         i: Inference = coerce_inference(i=i)
 
         # check the validity of the theorem
-        algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(p=i.premises,
-                                                                                         a=i.arguments)
+        try:
+            algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(p=i.premises,
+                                                                                             a=i.arguments)
+        except u1.ApplicativeError as err:
+            raise u1.ApplicativeError(
+                msg='Theorem initialization error. '
+                    'An error was raised when the transformation `f` '
+                    'of the inference-rule `ir` was applied to check the validity of the theorem. ',
+                f=i.inference_rule.transformation,
+                ir=i.inference_rule,
+                s=s,
+                i=i)
+
         if len(i.inference_rule.transformation.declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
@@ -4726,7 +4737,27 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     inference: Inference = Inference(p=p, a=a, i=i)
 
     # Prepare the new theorem.
-    theorem: Theorem = Theorem(s=c, i=inference)
+    try:
+        # TODO: This is inelegant. When we use an external-algorithm,
+        #   I was not able to find a simple solution to catch errors.
+        #   Some evolution of the data model is probably needed here.
+        theorem: Theorem = Theorem(s=c, i=inference)
+    except u1.ApplicativeError as error:
+        # If the initialization of the theorem fails,
+        # it means that the theorem is not valid.
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='Derivation failure. '
+                    'The initialization of the theorem failed, meaning that it is invalid. '
+                    'The inference is composed of the premises `p`, the arguments `a`, '
+                    'the inference-rule `i`.',
+                p=p,
+                a=a,
+                i=i,
+                t=t
+            )
+        else:
+            return t, False, None
 
     # Extends the theory with the new theorem.
     # The validity of the derivation will be checked again during theory initialization.
@@ -5258,6 +5289,35 @@ class InfixFormulaTypesetter(pl1.Typesetter):
             yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
+class UnaryPostfixTypesetter(pl1.Typesetter):
+    def __init__(self, connective_ts: pl1.FlexibleTypesetter):
+        super().__init__()
+        connective_ts = pl1.coerce_typesetter(ts=connective_ts)
+        self._connective_typesetter: pl1.Typesetter = connective_ts
+
+    @property
+    def connective_typesetter(self) -> pl1.Typesetter:
+        return self._connective_typesetter
+
+    @connective_typesetter.setter
+    def connective_typesetter(self, ts: pl1.FlexibleTypesetter):
+        ts = pl1.coerce_typesetter(ts=ts)
+        self._connective_typesetter = ts
+
+    def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        phi: Formula = coerce_formula(phi=phi)
+        is_sub_formula: bool = kwargs.get('is_sub_formula', False)
+        kwargs['is_sub_formula'] = True
+        if is_sub_formula:
+            yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
+        yield from phi.term_0.typeset_from_generator(**kwargs)
+        yield from pl1.symbols.space.typeset_from_generator(**kwargs)
+        yield from self.connective_typesetter.typeset_from_generator(**kwargs)
+        if is_sub_formula:
+            yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
+
+
 class TransformationByVariableSubstitutionTypesetter(pl1.Typesetter):
     def __init__(self):
         super().__init__()
@@ -5584,6 +5644,9 @@ class Typesetters:
 
     def infix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> InfixFormulaTypesetter:
         return InfixFormulaTypesetter(connective_ts=connective_typesetter)
+
+    def unary_postfix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> UnaryPostfixTypesetter:
+        return UnaryPostfixTypesetter(connective_ts=connective_typesetter)
 
     def map(self) -> MapTypesetter:
         return MapTypesetter()
