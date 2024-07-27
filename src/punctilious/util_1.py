@@ -46,7 +46,7 @@ class ApplicativeError(Exception):
         self.report = self.report + ': ' + str(msg)
         self.report = self.report + '\n\t'
         self.report = self.report + f'\n\t'.join(
-            f'{key}: {value} (type: {str(type(value))}, id: {str(id(value))})' for key, value in
+            f'{key}: {value}    | python-type: {str(type(value))}, python-id: {str(id(value))}' for key, value in
             kwargs.items())
         super().__init__(self.report)
         log_error(e=self)

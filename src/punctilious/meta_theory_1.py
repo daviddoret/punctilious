@@ -185,14 +185,15 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 
 # INFERENCE-RULE: MT3: is-well-formed-theory
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
+    _mt3: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_external_algorithm(
         a=is_well_formed_theory_external_algorithm,
-        i=None,  # is_compatible_with_is_well_formed_theory,
+        i=None,  # is_compatible_with_is_well_formed_theory
         c=as1.get_connectives().is_well_formed_theory_predicate(t),
+        p=None,
         v={t, },
         d={t, })
     mt3: as1.InferenceRule = as1.InferenceRule(
-        f=algo,
+        f=_mt3,
         ref_ts=pl1.Monospace(text='MT3'))
     """The is-well-formed-theory algorithmic inference-rule.
 
@@ -212,14 +213,14 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
     inconsistency_1: as1.InferenceRule = as1.InferenceRule(
-        f=as1.let_x_be_a_natural_transformation(
-            premises=(
+        f=as1.let_x_be_a_transformation_by_variable_substitution(
+            p=(
                 as1.get_connectives().is_well_formed_theory_predicate(t),
                 as1.get_connectives().is_a_proposition(p),
                 p | as1.get_connectives().is_a_valid_proposition_in | t,
                 as1.get_connectives().lnot(p) | as1.get_connectives().is_a_valid_proposition_in | t),
-            conclusion=as1.get_connectives().is_inconsistent(p),
-            variables=(p, t,)),
+            c=as1.get_connectives().is_inconsistent(p),
+            v=(p, t,)),
         ref_ts=pl1.Monospace(text='⊥1'))
     """The inconsistency-1 inference rule: P and ¬P
 
@@ -280,14 +281,15 @@ def theory_proves_proposition_external_algorithm(p: as1.Tupl | None = None, a: a
 
 # INFERENCE-RULE: t-proves-p: T ⊢ P
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
+    _t_proves_p: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_external_algorithm(
+        a=theory_proves_proposition_external_algorithm,
+        i=None,
+        p=(
+            as1.get_connectives().is_well_formed_theory(t),),
+        c=t | as1.get_connectives().syntactic_entailment_2 | p,
+        v=(p, t,))
     t_proves_p: as1.InferenceRule = as1.InferenceRule(
-        f=as1.TransformationByExternalAlgorithm(
-            a=theory_proves_proposition_external_algorithm,
-            i=None,
-            p=(
-                as1.get_connectives().is_well_formed_theory(t),),
-            c=t | as1.get_connectives().syntactic_entailment_2 | p,
-            v=(p, t,)),
+        f=_t_proves_p,
         ref_ts=pl1.Monospace(text='T ⊢ P'))
     """The t-proves-p inference rule: T ⊢ P
 
@@ -306,8 +308,10 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
     References:
     """
     # TODO: Provide references in the doc above.
+    pass
 
-meta_theory_1 = as1.Axiomatization(d=(mt1, mt2, mt3, inconsistency_1,))
+meta_theory_1 = as1.Axiomatization(d=(mt1, mt2, mt3, inconsistency_1, t_proves_p))
+pass
 
 
 def extend_theory_with_meta_theory_1(t: as1.FlexibleTheory) -> as1.Theory:

@@ -1131,13 +1131,25 @@ def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
     return Axiomatization(d=axioms)
 
 
-def let_x_be_a_natural_transformation(conclusion: FlexibleFormula,
-                                      variables: FlexibleEnumeration | None = None,
-                                      declarations: FlexibleEnumeration | None = None,
-                                      premises: FlexibleTupl | None = None
-                                      ):
-    return TransformationByVariableSubstitution(c=conclusion, v=variables, d=declarations,
-                                                p=premises)
+def let_x_be_a_transformation_by_variable_substitution(c: FlexibleFormula,
+                                                       v: FlexibleEnumeration | None = None,
+                                                       d: FlexibleEnumeration | None = None,
+                                                       p: FlexibleTupl | None = None
+                                                       ):
+    return TransformationByVariableSubstitution(c=c, v=v, d=d,
+                                                p=p)
+
+
+def let_x_be_a_transformation_by_external_algorithm(
+        a: typing.Callable,
+        c: FlexibleFormula,
+        i: typing.Callable = None,
+        v: FlexibleEnumeration | None = None,
+        d: FlexibleEnumeration | None = None,
+        p: FlexibleTupl | None = None
+):
+    return TransformationByExternalAlgorithm(a=a, i=i, c=c, v=v, d=d,
+                                             p=p)
 
 
 class Connectives(typing.NamedTuple):
@@ -1894,6 +1906,9 @@ class Transformation(Formula, abc.ABC):
     The following transformations are supported:
      - transformation-by-variable-substitution (cf. NaturalTransformation python-class)
      - algorithmic-transformation (cf. AlgorithmicTransformation python-class)
+
+     # TODO: Consider renaming to functor, or theory-morphism. Not sure which one is more accurate.
+
     """
     CONCLUSION_INDEX: int = 0
     VARIABLES_INDEX: int = 1
@@ -2230,6 +2245,8 @@ class TransformationByExternalAlgorithm(Transformation):
 
     Distinctively from premises, we should pass arguments to the algorithm."""
 
+    _last_index = 0
+
     @staticmethod
     def _data_validation_3(
             a: typing.Callable, i: typing.Callable, c: FlexibleFormula,
@@ -2297,6 +2314,17 @@ class TransformationByExternalAlgorithm(Transformation):
         self._is_derivation_candidate: typing.Callable | None = i
         super().__init__(con=c2, c=c, v=v, d=d, p=p)
 
+        # Default typesetting configuration
+        if pl1.REF_TS not in self.ts.keys():
+            TransformationByExternalAlgorithm._last_index = TransformationByExternalAlgorithm._last_index + 1
+            self.ts[pl1.REF_TS] = pl1.NaturalIndexedSymbolTypesetter(body_ts=pl1.symbols.g_uppercase_serif_italic,
+                                                                     index=TransformationByExternalAlgorithm._last_index)
+        if pl1.DECLARATION_TS not in self.ts.keys():
+            self.ts[pl1.DECLARATION_TS] = typesetters.declaration(
+                conventional_class='transformation-by-external-algorithm')
+
+        u1.log_info(self.typeset_as_string(theory=self, ts_key=pl1.DECLARATION_TS))
+
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
         return self.apply_transformation(p=p, a=a)
@@ -2319,9 +2347,10 @@ class TransformationByExternalAlgorithm(Transformation):
                                                                         variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_050,
-                                      msg='Applying an algorithm with incorrect premises.',
-                                      p=p, transformation_premises=self.premises,
-                                      transformation_variables=self.variables, transformation=self)
+                                      msg='Transformation failure. '
+                                          'Premises `p` are incompatible with transformation `t`.',
+                                      p=p,
+                                      t=self)
 
         # call the external-algorithm
         outcome: Formula = self.external_algorithm(p=p, a=a)
@@ -3987,6 +4016,8 @@ class Theory(Formula):
         if t is not None:
             # Copies the heuristics and any other decoration from the base theory
             copy_theory_decorations(target=self, decorations=(t,))
+
+        # Default typesetting configuration
         if pl1.REF_TS not in self.ts.keys():
             Theory._last_index = Theory._last_index + 1
             self.ts[pl1.REF_TS] = pl1.NaturalIndexedSymbolTypesetter(body_ts=pl1.symbols.t_uppercase_script,
@@ -4363,7 +4394,7 @@ class Axiomatization(Formula):
         :param d:
         :return:
         """
-        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
+        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, strip_duplicates=True)
         if a is not None:
             a: Axiomatization = coerce_axiomatization(a=a)
             # Duplicate derivations are not allowed in axiomatizations, so strip duplicates during merge.
