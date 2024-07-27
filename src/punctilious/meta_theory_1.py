@@ -266,16 +266,17 @@ def theory_proves_proposition_external_algorithm(p: as1.Tupl | None = None, a: a
     t: as1.Theory = as1.coerce_theory(t=a[0], interpret_none_as_empty=False, canonical_conversion=False)
     p2: as1.Formula = as1.coerce_formula(phi=a[1])
     if as1.is_valid_proposition_in_theory_1(p=p2, t=t):
-        phi: as1.Formula = t | as1.get_connectives().proves | p
+        phi: as1.Formula = t | as1.get_connectives().proves | p2
         return phi
     else:
         raise u1.ApplicativeError(
-            msg='Blablabla',
+            msg='Proposition `p2` is not valid in theory `t`. '
+                'It follows that `t ⊢ p` cannot be derived.',
             code=None,
-            p=p,
-            a=a,
+            p2=p2,
             t=t,
-            p2=p2
+            a=a,
+            p=p
         )
 
 
