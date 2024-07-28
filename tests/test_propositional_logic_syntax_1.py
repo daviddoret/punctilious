@@ -37,9 +37,9 @@ class TestAxioms:
         is_a = pu.as1._connectives.is_a
         is_a_proposition = pu.as1._connectives.is_a_proposition
         is_a_propositional_variable = pu.as1._connectives.is_a_propositional_variable
-        land = pu.as1._connectives.land
-        lnot = pu.as1._connectives.lnot
-        lor = pu.as1._connectives.lor
+        land = pu.as1.logical_conjunction_connective
+        lnot = pu.as1.logical_negation_connective
+        lor = pu.as1.logical_disjunction_connective
         implies = pu.as1._connectives.implies
 
         # elaborate a theory
@@ -105,7 +105,7 @@ class TestAxioms:
 
     def test_pl1_3(self):
         is_a = pu.as1._connectives.is_a
-        land = pu.as1._connectives.land
+        land = pu.as1.logical_conjunction_connective
         proposition = pu.as1._connectives.is_a_proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='X')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Y')

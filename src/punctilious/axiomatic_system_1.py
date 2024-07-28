@@ -1164,9 +1164,6 @@ class Connectives(typing.NamedTuple):
     is_a_propositional_variable: UnaryConnective
     is_a_valid_proposition_in: BinaryConnective
     is_inconsistent: UnaryConnective
-    land: BinaryConnective
-    lnot: UnaryConnective
-    lor: BinaryConnective
     map_formula: BinaryConnective
     proves: BinaryConnective
     theory_formula: FreeArityConnective
@@ -1175,12 +1172,16 @@ class Connectives(typing.NamedTuple):
     tupl: FreeArityConnective
 
 
+# Declare fundamental connectives.
 axiom_connective = let_x_be_a_unary_connective(formula_ts='axiom')
 axiomatization_connective = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
 enumeration_connective = let_x_be_a_free_arity_connective(formula_ts='enumeration')
 is_well_formed_formula_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 is_well_formed_inference_rule_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
 is_well_formed_theory_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-theory')
+logical_conjunction_connective = let_x_be_a_binary_connective(formula_ts='∧')
+logical_negation_connective = let_x_be_a_unary_connective(formula_ts='¬')
+logical_disjunction_connective = let_x_be_a_binary_connective(formula_ts='∨')
 
 _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     algorithm=NullaryConnective(formula_ts='algorithm'),
@@ -1194,9 +1195,6 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     is_a_propositional_variable=UnaryConnective(formula_ts='is-a-propositional-variable'),
     is_a_valid_proposition_in=BinaryConnective(formula_ts='is-a-valid-proposition-in'),
     is_inconsistent=UnaryConnective(formula_ts='is-inconsistent'),
-    land=let_x_be_a_binary_connective(formula_ts='∧'),
-    lnot=let_x_be_a_unary_connective(formula_ts='¬'),
-    lor=let_x_be_a_binary_connective(formula_ts='∨'),
     map_formula=let_x_be_a_binary_connective(formula_ts='map'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),

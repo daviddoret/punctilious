@@ -972,8 +972,9 @@ class TestAutoDerivation:
         with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
                 formula_ts='y') as y:
             x_y_then_x_and_y = pu.as1.InferenceRule(
-                f=pu.as1.TransformationByVariableSubstitution(c=x | pu.as1._connectives.land | y, v=(x, y,),
-                                                              d=None, p=(x, y,)))
+                f=pu.as1.TransformationByVariableSubstitution(
+                    c=x | pu.csl1.land | y, v=(x, y,),
+                    d=None, p=(x, y,)))
         t1 = pu.as1.Theory(d=(*t1, x_y_then_x_and_y,))
 
         pass
@@ -987,21 +988,25 @@ class TestAutoDerivation:
         pass
 
         # auto-derivation of a simple theorem, without some variables
-        t2, success, _, = pu.as1.auto_derive_2(t=t2, conjecture=p | pu.as1._connectives.land | q)
+        t2, success, _, = pu.as1.auto_derive_2(t=t2,
+                                               conjecture=p | pu.csl1.land | q)
         assert success
         pass
         # auto-derivation of an impossible theorem fails and raises an auto-derivation-failure
-        t2, success, _, = pu.as1.auto_derive_2(t=t2, conjecture=p | pu.as1._connectives.lor | q)
+        t2, success, _, = pu.as1.auto_derive_2(t=t2,
+                                               conjecture=p | pu.csl1.lor | q)
         assert not success
         pass
 
         # use auto-derivation-2
-        t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1, conjecture=p | pu.as1._connectives.land | q,
+        t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1,
+                                                          conjecture=p | pu.csl1.land | q,
                                                           max_recursion=8, debug=False)
         assert success
         pass
 
-        t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1, conjecture=p | pu.as1._connectives.lor | q,
+        t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1,
+                                                          conjecture=p | pu.csl1.lor | q,
                                                           max_recursion=8, debug=False)
         assert not success
         pass

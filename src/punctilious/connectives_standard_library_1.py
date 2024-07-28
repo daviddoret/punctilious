@@ -18,9 +18,9 @@ is_a = as1.get_connectives().is_a
 is_well_formed_formula = as1.is_well_formed_formula_connective
 is_well_formed_inference_rule = as1.is_well_formed_inference_rule_connective
 is_well_formed_theory = as1.is_well_formed_theory_connective
-land = as1.get_connectives().land
-lnot = as1.get_connectives().lnot
-lor = as1.get_connectives().lor
+land = as1.logical_conjunction_connective
+lnot = as1.logical_negation_connective
+lor = as1.logical_disjunction_connective
 proves = as1.get_connectives().proves
 is_inconsistent = as1.get_connectives().is_inconsistent
 

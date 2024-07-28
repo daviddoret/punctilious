@@ -1,7 +1,7 @@
 import collections
 import axiomatic_system_1 as as1
 
-land = as1._connectives.land
+land = as1._connectives.logical_conjunction_connective
 implies = as1._connectives.implies
 is_a = as1._connectives.is_a
 

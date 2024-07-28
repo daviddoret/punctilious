@@ -93,7 +93,7 @@ def is_compatible_with_is_well_formed_formula(phi: as1.FlexibleFormula) -> bool:
         if test_1:
             return True
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.get_connectives().lnot(as1.is_well_formed_formula_connective(x))
+        solution_2 = as1.logical_negation_connective(as1.is_well_formed_formula_connective(x))
         test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
         if test_2:
             return True
@@ -108,7 +108,7 @@ def is_compatible_with_is_well_formed_inference_rule(phi: as1.FlexibleFormula) -
         if test_1:
             return True
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.get_connectives().lnot(as1.is_well_formed_inference_rule_connective(x))
+        solution_2 = as1.logical_negation_connective(as1.is_well_formed_inference_rule_connective(x))
         test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
         if test_2:
             return True
@@ -123,7 +123,7 @@ def is_compatible_with_is_well_formed_theory_algorithm(phi: as1.FlexibleFormula)
         if test_1:
             return True
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.get_connectives().lnot(as1.is_well_formed_theory_connective(x))
+        solution_2 = as1.logical_negation_connective(as1.is_well_formed_theory_connective(x))
         test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
         if test_2:
             return True
@@ -217,7 +217,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
             p=(
                 as1.is_well_formed_theory_connective(t),
                 t | as1.get_connectives().proves | p,
-                t | as1.get_connectives().proves | as1.get_connectives().lnot(p)),
+                t | as1.get_connectives().proves | as1.logical_negation_connective(p)),
             c=as1.get_connectives().is_inconsistent(t),
             v={p, t, }),
         ref_ts=pl1.Monospace(text='⊥1'))

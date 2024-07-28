@@ -112,7 +112,7 @@ class TestInconsistency1:
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         t, _ = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='A')
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
-        t_inconsistent, _ = pu.as1.let_x_be_an_axiom(t=t, s=pu.as1.get_connectives().lnot(a))
+        t_inconsistent, _ = pu.as1.let_x_be_an_axiom(t=t, s=pu.as1.logical_negation_connective(a))
 
         m = pu.as1.let_x_be_a_theory()  # Declare a meta-theory
         m = pu.mt1.extend_theory_with_meta_theory_1(t=m)  # Extend it with meta-theory-1 inference-rules
@@ -126,7 +126,7 @@ class TestInconsistency1:
                                   raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=t_proves_a, psi=d.valid_statement)
 
-        not_a = pu.as1.get_connectives().lnot(a)
+        not_a = pu.as1.logical_negation_connective(a)
         t_proves_not_a = t_inconsistent | pu.as1.get_connectives().proves | not_a
         p = (pu.as1.is_well_formed_theory_connective(t_inconsistent),)
         m, _, d = pu.as1.derive_1(t=m, c=t_proves_not_a, p=p, i=pu.mt1.t_proves_p, a=(t_inconsistent, not_a,),
