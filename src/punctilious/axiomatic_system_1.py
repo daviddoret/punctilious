@@ -1123,7 +1123,7 @@ def let_x_be_a_sub_theory_of_y(m: FlexibleTheory, t: FlexibleTheory) -> tuple[Th
     m = coerce_theory(t=t)
     t = coerce_theory(t=t)
     # Move this to mt1 and redevelop it to use derivation from mt1 inference-rule.
-    m, a = let_x_be_an_axiom(t=m, s=_connectives.is_well_formed_theory(t))
+    m, a = let_x_be_an_axiom(t=m, s=is_well_formed_theory_connective(t))
     return m, t
 
 
@@ -1171,7 +1171,6 @@ class Connectives(typing.NamedTuple):
     map_formula: BinaryConnective
     proves: BinaryConnective
     theory_formula: FreeArityConnective
-    is_well_formed_theory: UnaryConnective  # TODO: DUPLICATE WITH is_well_formed_theory_predicate???
     theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
     transformation_by_variable_substitution: QuaternaryConnective
     tupl: FreeArityConnective
@@ -1202,7 +1201,6 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     map_formula=let_x_be_a_binary_connective(formula_ts='map'),
     theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
     theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
-    is_well_formed_theory=let_x_be_a_unary_connective(),
     proves=let_x_be_a_binary_connective(formula_ts='⊢'),
     transformation_by_variable_substitution=let_x_be_a_quaternary_connective(
         formula_ts='transformation-by-variable-substitution'),
