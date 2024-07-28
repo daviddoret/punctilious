@@ -1155,7 +1155,6 @@ def let_x_be_a_transformation_by_external_algorithm(
 class Connectives(typing.NamedTuple):
     algorithm: NullaryConnective
     axiom: UnaryConnective
-    axiomatization_formula: FreeArityConnective
     enumeration: FreeArityConnective
     derivation: BinaryConnective
     hypothesis_formula: FreeArityConnective
@@ -1182,10 +1181,11 @@ class Connectives(typing.NamedTuple):
     tupl: FreeArityConnective
 
 
+axiomatization_connective = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
+
 _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     algorithm=NullaryConnective(formula_ts='algorithm'),
     axiom=let_x_be_a_unary_connective(formula_ts='axiom'),
-    axiomatization_formula=let_x_be_a_free_arity_connective(formula_ts='axiomatization'),
     enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
     derivation=let_x_be_a_binary_connective(formula_ts='derivation'),
     hypothesis_formula=let_x_be_a_free_arity_connective(formula_ts='hypothesis'),
@@ -3392,8 +3392,9 @@ def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_false: bool
         `raise_error_if_false` = True.
     :return: bool.
     """
+    global axiomatization_connective
     a = coerce_formula(phi=a)
-    if (a.connective is not _connectives.axiomatization_formula or
+    if (a.connective is not axiomatization_connective or
             any(not is_well_formed_axiom(a=x) and not is_well_formed_inference_rule(i=x)
                 for x in iterate_formula_terms(phi=a))):
         if raise_error_if_false:
@@ -4415,6 +4416,7 @@ class Axiomatization(Formula):
         :param d:
         :return:
         """
+        global axiomatization_connective
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, strip_duplicates=True)
         if a is not None:
             a: Axiomatization = coerce_axiomatization(a=a)
@@ -4443,7 +4445,7 @@ class Axiomatization(Formula):
                                           d=d,
                                           a=a
                                           )
-        return _connectives.axiomatization_formula, coerced_derivations
+        return axiomatization_connective, coerced_derivations
 
     def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None):
         c, t = Axiomatization._data_validation_2(a=a, d=d)
