@@ -1154,7 +1154,6 @@ def let_x_be_a_transformation_by_external_algorithm(
 
 class Connectives(typing.NamedTuple):
     algorithm: NullaryConnective
-    axiom: UnaryConnective
     enumeration: FreeArityConnective
     derivation: BinaryConnective
     hypothesis_formula: FreeArityConnective
@@ -1182,10 +1181,10 @@ class Connectives(typing.NamedTuple):
 
 
 axiomatization_connective = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
+axiom_connective = let_x_be_a_unary_connective(formula_ts='axiom')
 
 _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     algorithm=NullaryConnective(formula_ts='algorithm'),
-    axiom=let_x_be_a_unary_connective(formula_ts='axiom'),
     enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
     derivation=let_x_be_a_binary_connective(formula_ts='derivation'),
     hypothesis_formula=let_x_be_a_free_arity_connective(formula_ts='hypothesis'),
@@ -3116,6 +3115,7 @@ def is_well_formed_axiom(a: FlexibleFormula) -> bool:
     :param a: A formula.
     :return: bool.
     """
+    global axiom_connective
     a = coerce_formula(phi=a)
     if a.arity != 2:
         return False
@@ -3125,7 +3125,7 @@ def is_well_formed_axiom(a: FlexibleFormula) -> bool:
         return False
     if a.term_1.arity != 0:
         return False
-    if a.term_1.connective != _connectives.axiom:
+    if a.term_1.connective != axiom_connective:
         return False
     # All tests were successful.
     return True
@@ -3665,8 +3665,8 @@ class Axiom(Derivation):
         :param s:
         :return:
         """
-        global _connectives
-        con: Connective = _connectives.axiom
+        global axiom_connective
+        con: Connective = axiom_connective
         s: Formula = coerce_formula(phi=s)
         justification: Formula = Formula(con=con)
         return con, s, justification

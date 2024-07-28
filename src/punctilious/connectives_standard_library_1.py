@@ -1,10 +1,13 @@
 """The connectives_standard_library_1 (aka csl1) module is a catalog of standardized mathematical connectives for easy
-reference and reuse in theory development."""
+reference and reuse in theory development.
+
+Provides short and user-friendly versions of the connectives.
+"""
 
 import axiomatic_system_1 as as1
 
 algorithm = as1.get_connectives().algorithm
-axiom = as1.get_connectives().axiom
+axiom = as1.axiom_connective
 axiomatization = as1.axiomatization_connective
 enumeration = as1.get_connectives().enumeration
 derivation = as1.get_connectives().derivation
