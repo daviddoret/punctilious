@@ -15,7 +15,7 @@ if __name__ == '__main__':
 # TODO: How to properly manage multiple output possibilities, e.g. phi() and lnot(phi())?
 #   Should the inference rule list multiple conclusions, assuming disjunction?
 
-def is_well_formed_formula_external_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
+def is_well_formed_formula_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     """A"""
     p: as1.Tupl = as1.coerce_tuple(t=p, interpret_none_as_empty=True)
     a: as1.Tupl = as1.coerce_tuple(t=a, interpret_none_as_empty=True)
@@ -37,7 +37,7 @@ def is_well_formed_formula_external_algorithm(p: as1.Tupl | None = None, a: as1.
         )
 
 
-def is_well_formed_inference_rule_external_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
+def is_well_formed_inference_rule_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     """A python-function that is used as a theory external-algorithm."""
     p: as1.Tupl = as1.coerce_tuple(t=p)
     a: as1.Tupl = as1.coerce_tuple(t=a)
@@ -58,7 +58,7 @@ def is_well_formed_inference_rule_external_algorithm(p: as1.Tupl | None = None, 
         )
 
 
-def is_well_formed_theory_external_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
+def is_well_formed_theory_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     """A python-function used as a theory external algorithm.
 
     :param p: Premises.
@@ -116,7 +116,7 @@ def is_compatible_with_is_well_formed_inference_rule(phi: as1.FlexibleFormula) -
             return False
 
 
-def is_compatible_with_is_well_formed_theory(phi: as1.FlexibleFormula) -> bool:
+def is_compatible_with_is_well_formed_theory_algorithm(phi: as1.FlexibleFormula) -> bool:
     with as1.let_x_be_a_variable(formula_ts='x') as x:
         solution_1 = as1.get_connectives().is_well_formed_theory_predicate(x)
         test_1, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
@@ -133,7 +133,7 @@ def is_compatible_with_is_well_formed_theory(phi: as1.FlexibleFormula) -> bool:
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
-        a=is_well_formed_formula_external_algorithm,
+        a=is_well_formed_formula_algorithm,
         i=is_compatible_with_is_well_formed_formula,
         c=as1.get_connectives().is_well_formed_formula_predicate(t),
         v=None,
@@ -159,7 +159,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
-        a=is_well_formed_inference_rule_external_algorithm,
+        a=is_well_formed_inference_rule_algorithm,
         i=is_compatible_with_is_well_formed_inference_rule,
         c=as1.get_connectives().is_well_formed_inference_rule_predicate(t),
         v=None,
@@ -186,7 +186,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 # INFERENCE-RULE: MT3: is-well-formed-theory
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     _mt3: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_external_algorithm(
-        a=is_well_formed_theory_external_algorithm,
+        a=is_well_formed_theory_algorithm,
         i=None,  # is_compatible_with_is_well_formed_theory
         c=as1.get_connectives().is_well_formed_theory_predicate(t),
         p=None,
@@ -260,7 +260,7 @@ def theory_proves_proposition_external_algorithm(p: as1.Tupl | None = None, a: a
     p: as1.Tupl = as1.coerce_tuple(t=p)
     a: as1.Tupl = as1.coerce_tuple(t=a)
     if not a.arity == 2:
-        raise u1.ApplicativeError(msg='wrong arguments', a=a, p=p)
+        raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
     t: as1.Theory = as1.coerce_theory(t=a[0], interpret_none_as_empty=False, canonical_conversion=False)
     p2: as1.Formula = as1.coerce_formula(phi=a[1])
     if as1.is_valid_proposition_in_theory_1(p=p2, t=t):
@@ -268,13 +268,12 @@ def theory_proves_proposition_external_algorithm(p: as1.Tupl | None = None, a: a
         return phi
     else:
         raise u1.ApplicativeError(
-            msg='Proposition `p2` is not valid in theory `t`. '
-                'It follows that `t ⊢ p` cannot be derived.',
+            msg='Blablabla',
             code=None,
-            p2=p2,
-            t=t,
+            p=p,
             a=a,
-            p=p
+            t=t,
+            p2=p2
         )
 
 

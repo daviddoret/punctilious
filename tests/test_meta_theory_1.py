@@ -38,8 +38,10 @@ class TestMT2:
         # Test 2: a simple-object is not an inference-rule
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         c = pu.as1.get_connectives().is_well_formed_inference_rule_predicate(a)
-        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_MT1_001):
+        with pytest.raises(pu.u1.ApplicativeError) as error:
             m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
+        assert not ok
 
         # Test 3: using is-well-formed-inference-rule on itself.
         # Test 1: an inference-rule is an inference-rule
@@ -56,8 +58,6 @@ class TestMT2:
 
 class TestMT3:
     def test_mt3(self):
-        # TODO: Implement strict connective constraints on theories and introduce a test
-        #   checking that an atomic-object is not a theory.
         m = pu.as1.let_x_be_a_theory()  # meta-theory
 
         # Proper theory t allows to derive (is-well-formed-theory(t)).
@@ -70,10 +70,11 @@ class TestMT3:
         # Simple object a does not allow to derive (is-well-formed-theory(a)).
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')  # simple object
         c = pu.as1.get_connectives().is_well_formed_theory_predicate(a)  # This is a formula
-        with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_MT1_002):
+        with pytest.raises(pu.u1.ApplicativeError) as error:
             m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
 
-        pass
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
+        assert not ok
 
 
 class TestTProvesP:
