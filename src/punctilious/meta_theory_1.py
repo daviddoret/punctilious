@@ -25,7 +25,7 @@ def is_well_formed_formula_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | No
     phi: as1.Formula = as1.coerce_formula(phi=a0)
     if as1.is_well_formed_formula(phi=phi):
         # Necessary case.
-        phi: as1.Formula = as1.get_connectives().is_well_formed_formula_predicate(phi)
+        phi: as1.Formula = as1.is_well_formed_formula_connective(phi)
         return phi
     else:
         # Technically impossible case.
@@ -47,7 +47,7 @@ def is_well_formed_inference_rule_algorithm(p: as1.Tupl | None = None, a: as1.Tu
     i: as1.Formula = as1.coerce_formula(phi=a0)
     if as1.is_well_formed_inference_rule(i=i):
         as1.coerce_inference_rule(i=i)
-        phi: as1.Formula = as1.get_connectives().is_well_formed_inference_rule_predicate(t)
+        phi: as1.Formula = as1.is_well_formed_inference_rule_connective(t)
         return phi
     else:
         raise u1.ApplicativeError(
@@ -73,7 +73,7 @@ def is_well_formed_theory_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | Non
     t1: as1.Formula = as1.coerce_formula(phi=a0)
     if as1.is_well_formed_theory(t=t1):
         t2: as1.Theory = as1.coerce_theory(t=t1)
-        phi: as1.Formula = as1.get_connectives().is_well_formed_theory_predicate(t2)
+        phi: as1.Formula = as1.is_well_formed_theory_connective(t2)
         return phi
     else:
         raise u1.ApplicativeError(
@@ -88,12 +88,12 @@ def is_well_formed_theory_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | Non
 
 def is_compatible_with_is_well_formed_formula(phi: as1.FlexibleFormula) -> bool:
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_1 = as1.get_connectives().is_well_formed_formula_predicate(x)
+        solution_1 = as1.is_well_formed_formula_connective(x)
         test_1, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
         if test_1:
             return True
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.get_connectives().lnot(as1.get_connectives().is_well_formed_formula_predicate(x))
+        solution_2 = as1.get_connectives().lnot(as1.is_well_formed_formula_connective(x))
         test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
         if test_2:
             return True
@@ -103,12 +103,12 @@ def is_compatible_with_is_well_formed_formula(phi: as1.FlexibleFormula) -> bool:
 
 def is_compatible_with_is_well_formed_inference_rule(phi: as1.FlexibleFormula) -> bool:
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_1 = as1.get_connectives().is_well_formed_inference_rule_predicate(x)
+        solution_1 = as1.is_well_formed_inference_rule_connective(x)
         test_1, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
         if test_1:
             return True
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.get_connectives().lnot(as1.get_connectives().is_well_formed_inference_rule_predicate(x))
+        solution_2 = as1.get_connectives().lnot(as1.is_well_formed_inference_rule_connective(x))
         test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
         if test_2:
             return True
@@ -118,12 +118,12 @@ def is_compatible_with_is_well_formed_inference_rule(phi: as1.FlexibleFormula) -
 
 def is_compatible_with_is_well_formed_theory_algorithm(phi: as1.FlexibleFormula) -> bool:
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_1 = as1.get_connectives().is_well_formed_theory_predicate(x)
+        solution_1 = as1.is_well_formed_theory_connective(x)
         test_1, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
         if test_1:
             return True
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.get_connectives().lnot(as1.get_connectives().is_well_formed_theory_predicate(x))
+        solution_2 = as1.get_connectives().lnot(as1.is_well_formed_theory_connective(x))
         test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
         if test_2:
             return True
@@ -135,7 +135,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
         a=is_well_formed_formula_algorithm,
         i=is_compatible_with_is_well_formed_formula,
-        c=as1.get_connectives().is_well_formed_formula_predicate(t),
+        c=as1.is_well_formed_formula_connective(t),
         v=None,
         d={t, })
     mt1: as1.InferenceRule = as1.InferenceRule(
@@ -161,7 +161,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
         a=is_well_formed_inference_rule_algorithm,
         i=is_compatible_with_is_well_formed_inference_rule,
-        c=as1.get_connectives().is_well_formed_inference_rule_predicate(t),
+        c=as1.is_well_formed_inference_rule_connective(t),
         v=None,
         d={t, })
     mt2: as1.InferenceRule = as1.InferenceRule(
@@ -188,7 +188,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     _mt3: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_external_algorithm(
         a=is_well_formed_theory_algorithm,
         i=None,  # is_compatible_with_is_well_formed_theory
-        c=as1.get_connectives().is_well_formed_theory_predicate(t),
+        c=as1.is_well_formed_theory_connective(t),
         p=None,
         v={t, },
         d={t, })
@@ -215,7 +215,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
     inconsistency_1: as1.InferenceRule = as1.InferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             p=(
-                as1.get_connectives().is_well_formed_theory_predicate(t),
+                as1.is_well_formed_theory_connective(t),
                 t | as1.get_connectives().proves | p,
                 t | as1.get_connectives().proves | as1.get_connectives().lnot(p)),
             c=as1.get_connectives().is_inconsistent(t),
@@ -283,7 +283,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
         a=theory_proves_proposition_external_algorithm,
         i=None,
         p=(
-            as1.get_connectives().is_well_formed_theory_predicate(t),),
+            as1.is_well_formed_theory_connective(t),),
         c=t | as1.get_connectives().proves | p,
         v=(p, t,))
     t_proves_p: as1.InferenceRule = as1.InferenceRule(

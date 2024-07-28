@@ -1165,9 +1165,6 @@ class Connectives(typing.NamedTuple):
     is_a_propositional_variable: UnaryConnective
     is_a_valid_proposition_in: BinaryConnective
     is_inconsistent: UnaryConnective
-    is_well_formed_formula_predicate: UnaryConnective
-    is_well_formed_inference_rule_predicate: UnaryConnective
-    is_well_formed_theory_predicate: UnaryConnective
     land: BinaryConnective
     lnot: UnaryConnective
     lor: BinaryConnective
@@ -1180,8 +1177,11 @@ class Connectives(typing.NamedTuple):
     tupl: FreeArityConnective
 
 
-axiomatization_connective = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
 axiom_connective = let_x_be_a_unary_connective(formula_ts='axiom')
+axiomatization_connective = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
+is_well_formed_formula_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
+is_well_formed_inference_rule_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
+is_well_formed_theory_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-theory')
 
 _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     algorithm=NullaryConnective(formula_ts='algorithm'),
@@ -1196,9 +1196,6 @@ _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     is_a_propositional_variable=UnaryConnective(formula_ts='is-a-propositional-variable'),
     is_a_valid_proposition_in=BinaryConnective(formula_ts='is-a-valid-proposition-in'),
     is_inconsistent=UnaryConnective(formula_ts='is-inconsistent'),
-    is_well_formed_formula_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-formula'),
-    is_well_formed_inference_rule_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule'),
-    is_well_formed_theory_predicate=let_x_be_a_unary_connective(formula_ts='is-well-formed-theory'),
     land=let_x_be_a_binary_connective(formula_ts='∧'),
     lnot=let_x_be_a_unary_connective(formula_ts='¬'),
     lor=let_x_be_a_binary_connective(formula_ts='∨'),
