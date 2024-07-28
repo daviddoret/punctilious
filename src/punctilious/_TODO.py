@@ -19,6 +19,8 @@ NEXT STEPS:
    it is a bit too heavy now which will make it hard to maintain moving-forward.
 
 
+**************
+
 
 
 TODO: Implement monotonicity, probably as an inference-rule until we prove it with the meta-theory once
