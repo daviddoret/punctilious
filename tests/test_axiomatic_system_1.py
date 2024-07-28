@@ -468,16 +468,16 @@ class TestNaturalTransformation:
         variables = pu.as1.Enumeration(e=(x,))
         declarations = pu.as1.Enumeration(e=None)
         premises = pu.as1.Tupl(e=(p1,))
-        phi1 = pu.as1._connectives.transformation_by_variable_substitution(conclusion, variables, declarations,
-                                                                           premises)
+        phi1 = pu.as1.transformation_by_variable_substitution_connective(conclusion, variables, declarations,
+                                                                         premises)
         assert pu.as1.is_well_formed_transformation_by_variable_substitution(t=phi1)
         phi1 = pu.as1.coerce_transformation_by_variable_substitution(t=phi1)
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(e=(x,))
         declarations = pu.as1.Enumeration(e=None)
         premises = pu.as1.Tupl(e=(platypus, platypus,))
-        phi2 = pu.as1._connectives.transformation_by_variable_substitution(conclusion, variables, declarations,
-                                                                           premises, premises)
+        phi2 = pu.as1.transformation_by_variable_substitution_connective(conclusion, variables, declarations,
+                                                                         premises, premises)
         assert not pu.as1.is_well_formed_transformation_by_variable_substitution(t=phi2)
 
 
@@ -605,15 +605,16 @@ class TestInferenceRule:
         a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         rule = pu.as1.TransformationByVariableSubstitution(c=a | f | b, v=None, d=None, p=None)
-        phi1 = rule | pu.as1._connectives.derivation | pu.as1._connectives.inference_rule
+        phi1 = rule | pu.as1.derivation_connective | pu.as1.inference_rule_connective
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
         # incorrect connective
-        phi2 = pu.as1.Formula(con=pu.as1._connectives.inference, t=(pu.as1._connectives.inference_rule, rule,))
+        phi2 = pu.as1.Formula(con=pu.as1.inference_connective,
+                              t=(pu.as1.inference_rule_connective, rule,))
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
-        phi3 = rule | pu.as1._connectives.derivation | pu.csl1.enumeration
+        phi3 = rule | pu.as1.derivation_connective | pu.csl1.enumeration
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -639,11 +640,11 @@ class TestProofByPostulation:
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
         rule1 = pu.as1.TransformationByVariableSubstitution(c=star3(e, b, d), v=None, d=None,
                                                             p=None)
-        phi1 = rule1 | pu.as1._connectives.derivation | pu.as1._connectives.inference_rule
+        phi1 = rule1 | pu.as1.derivation_connective | pu.as1.inference_rule_connective
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
-        phi2 = rule1 | pu.as1._connectives.map_formula | pu.as1._connectives.inference_rule
+        phi2 = rule1 | pu.as1.map_connective | pu.as1.inference_rule_connective
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
-        phi3 = rule1 | pu.as1._connectives.derivation | b
+        phi3 = rule1 | pu.as1.derivation_connective | b
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -684,8 +685,9 @@ class TestInference:
         theorem_2 = pu.as1.Theorem(s=theorem, i=inference)
         pu.as1.is_formula_equivalent(
             phi=theorem_2,
-            psi=theorem | pu.as1._connectives.derivation | pu.as1._connectives.inference(inference_rule, p,
-                                                                                         pu.as1.Tupl()))
+            psi=theorem | pu.as1.derivation_connective | pu.as1.inference_connective(
+                inference_rule, p,
+                pu.as1.Tupl()))
 
     def test_is_well_formed_inference(self):
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
@@ -695,13 +697,13 @@ class TestInference:
                                                         p=(x | f | y, y | f | z,))
         p = (a | f | b, b | f | c,)
         i = pu.as1.InferenceRule(f=t)
-        phi1 = pu.as1._connectives.inference(i, p, as1.Tupl())
+        phi1 = pu.as1.inference_connective(i, p, as1.Tupl())
         assert pu.as1.is_well_formed_inference(i=phi1)
-        phi2 = pu.as1._connectives.inference(i, as1.Tupl())
+        phi2 = pu.as1.inference_connective(i, as1.Tupl())
         assert not pu.as1.is_well_formed_inference(i=phi2)
-        phi3 = p | pu.as1._connectives.derivation | i
+        phi3 = p | pu.as1.derivation_connective | i
         assert not pu.as1.is_well_formed_inference(i=phi3)
-        phi4 = f(a, a, b, b) | pu.as1._connectives.derivation | i
+        phi4 = f(a, a, b, b) | pu.as1.derivation_connective | i
         assert not pu.as1.is_well_formed_inference(i=phi4)
 
 
@@ -722,10 +724,10 @@ class TestProofByInference:
         outcome = f.apply_transformation(p=p)
         m = pu.as1.Theorem(s=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(t=m)
-        assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.derivation | i)
+        assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.derivation_connective | i)
 
         i2 = pu.as1.Inference(p=(a | star | b, b | star | a,), i=ir)
-        assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1._connectives.derivation | i2)
+        assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.derivation_connective | i2)
         pass
 
 

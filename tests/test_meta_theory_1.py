@@ -91,14 +91,14 @@ class TestTProvesP:
         m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3, a=(t,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
-        c = t | pu.as1.get_connectives().proves | a
+        c = t | pu.as1.proves_connective | a
         p = (pu.as1.is_well_formed_theory_connective(t),)
         m, _, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.t_proves_p, a=(t, a,),
                                   raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
         b = pu.as1.let_x_be_a_simple_object(formula_ts='b')
-        c = t | pu.as1.get_connectives().proves | b
+        c = t | pu.as1.proves_connective | b
         p = (pu.as1.is_well_formed_theory_connective(t),)
         m, ok, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.t_proves_p, a=(t, b,),
                                    raise_error_if_false=False)
@@ -120,20 +120,20 @@ class TestInconsistency1:
         m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3, a=(t_inconsistent,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
-        t_proves_a = t_inconsistent | pu.as1.get_connectives().proves | a
+        t_proves_a = t_inconsistent | pu.as1.proves_connective | a
         p = (pu.as1.is_well_formed_theory_connective(t_inconsistent),)
         m, _, d = pu.as1.derive_1(t=m, c=t_proves_a, p=p, i=pu.mt1.t_proves_p, a=(t_inconsistent, a,),
                                   raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=t_proves_a, psi=d.valid_statement)
 
         not_a = pu.as1.logical_negation_connective(a)
-        t_proves_not_a = t_inconsistent | pu.as1.get_connectives().proves | not_a
+        t_proves_not_a = t_inconsistent | pu.as1.proves_connective | not_a
         p = (pu.as1.is_well_formed_theory_connective(t_inconsistent),)
         m, _, d = pu.as1.derive_1(t=m, c=t_proves_not_a, p=p, i=pu.mt1.t_proves_p, a=(t_inconsistent, not_a,),
                                   raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=t_proves_not_a, psi=d.valid_statement)
 
-        c = pu.as1.get_connectives().is_inconsistent(t_inconsistent)
+        c = pu.as1.is_inconsistent_connective(t_inconsistent)
         p = (pu.as1.is_well_formed_theory_connective(t_inconsistent),
              t_proves_a,
              t_proves_not_a,)

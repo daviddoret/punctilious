@@ -233,9 +233,9 @@ def let_x_be_a_propositional_variable(
     t = as1.append_to_theory(axiomatization, t=t)
 
     x = as1.Variable(c=as1.NullaryConnective(formula_ts=formula_ts))
-    # t, _ = as1.derive_1(t=t, c=x | as1._connectives.is_a | as1._connectives.is_a_propositional_variable,
+    # t, _ = as1.derive_1(t=t, c=x | as1.is_a | as1.is_a_propositional_variable,
     #                    p=None, i=i0)
-    t, _, _ = as1.derive_1(t=t, c=as1._connectives.is_a_propositional_variable(x),
+    t, _, _ = as1.derive_1(t=t, c=as1.is_a_propositional_variable_connective(x),
                            p=None, i=i0, raise_error_if_false=True)
 
     return t, x
@@ -264,7 +264,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     :return:
     """
     phi = as1.coerce_formula(phi=phi)
-    if phi.connective is not as1._connectives.implies:
+    if phi.connective is not as1.implies_connective:
         raise u1.ApplicativeError(code=ERROR_CODE_PLS1_001, msg='this is not an implication')
     # TODO: translate_implication_to_axiom: check that all sub-formulas in phi are either:
     # - valid propositional formulas (negation, conjunction, etc.)
@@ -280,9 +280,9 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable(t=t, formula_ts=rep) as x2:
             # premises: as1.Enumeration = as1.append_element_to_enumeration(
-            #    e=premises, x=x2 | as1._connectives.is_a | as1._connectives.is_a_propositional_variable)
+            #    e=premises, x=x2 | as1.is_a | as1.is_a_propositional_variable)
             premises: as1.Enumeration = as1.append_element_to_enumeration(
-                e=premises, x=as1._connectives.is_a_propositional_variable(x2))
+                e=premises, x=as1.is_a_propositional_variable_connective(x2))
             variables_map: as1.Map = as1.append_pair_to_map(m=variables_map, preimage=x, image=x2)
     variables: as1.Enumeration = as1.Enumeration(e=variables_map.codomain)
 

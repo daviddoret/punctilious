@@ -1152,30 +1152,13 @@ def let_x_be_a_transformation_by_external_algorithm(
                                              p=p)
 
 
-class Connectives(typing.NamedTuple):
-    algorithm: NullaryConnective
-    derivation: BinaryConnective
-    hypothesis_formula: FreeArityConnective
-    implies: BinaryConnective
-    inference: TernaryConnective
-    inference_rule: UnaryConnective
-    is_a: BinaryConnective
-    is_a_proposition: UnaryConnective
-    is_a_propositional_variable: UnaryConnective
-    is_a_valid_proposition_in: BinaryConnective
-    is_inconsistent: UnaryConnective
-    map_formula: BinaryConnective
-    proves: BinaryConnective
-    theory_formula: FreeArityConnective
-    theorem: FreeArityConnective  # TODO: arity is wrong, correct it.
-    transformation_by_variable_substitution: QuaternaryConnective
-    tupl: FreeArityConnective
-
-
 # Declare fundamental connectives.
 axiom_connective = let_x_be_a_unary_connective(formula_ts='axiom')
 axiomatization_connective = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
 enumeration_connective = let_x_be_a_free_arity_connective(formula_ts='enumeration')
+implies_connective = let_x_be_a_binary_connective(formula_ts='implies')
+inference_connective = let_x_be_a_ternary_connective(formula_ts='inference')
+inference_rule_connective = let_x_be_a_unary_connective(formula_ts='inference-rule')
 is_well_formed_formula_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 is_well_formed_inference_rule_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
 is_well_formed_theory_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-theory')
@@ -1183,33 +1166,22 @@ logical_conjunction_connective = let_x_be_a_binary_connective(formula_ts='∧')
 logical_negation_connective = let_x_be_a_unary_connective(formula_ts='¬')
 logical_disjunction_connective = let_x_be_a_binary_connective(formula_ts='∨')
 
-_connectives: Connectives = _set_state(key='connectives', value=Connectives(
-    algorithm=NullaryConnective(formula_ts='algorithm'),
-    derivation=let_x_be_a_binary_connective(formula_ts='derivation'),
-    hypothesis_formula=let_x_be_a_free_arity_connective(formula_ts='hypothesis'),
-    implies=let_x_be_a_binary_connective(formula_ts='implies'),
-    inference=let_x_be_a_ternary_connective(formula_ts='inference'),
-    inference_rule=let_x_be_a_unary_connective(formula_ts='inference-rule'),
-    is_a=let_x_be_a_binary_connective(formula_ts='is-a'),
-    is_a_proposition=UnaryConnective(formula_ts='is-a-proposition'),
-    is_a_propositional_variable=UnaryConnective(formula_ts='is-a-propositional-variable'),
-    is_a_valid_proposition_in=BinaryConnective(formula_ts='is-a-valid-proposition-in'),
-    is_inconsistent=UnaryConnective(formula_ts='is-inconsistent'),
-    map_formula=let_x_be_a_binary_connective(formula_ts='map'),
-    theorem=let_x_be_a_free_arity_connective(formula_ts='theorem'),
-    theory_formula=let_x_be_a_free_arity_connective(formula_ts='theory-formula'),
-    proves=let_x_be_a_binary_connective(formula_ts='⊢'),
-    transformation_by_variable_substitution=let_x_be_a_quaternary_connective(
-        formula_ts='transformation-by-variable-substitution'),
-    tupl=let_x_be_a_free_arity_connective(formula_ts='tuple'),
-
-))
-
-
-def get_connectives() -> Connectives:
-    """For usage in dependent python-modules."""
-    global _connectives
-    return _connectives
+algorithm_connective = NullaryConnective(formula_ts='algorithm')
+derivation_connective = let_x_be_a_binary_connective(formula_ts='derivation')
+hypothesis_connective = let_x_be_a_free_arity_connective(formula_ts='hypothesis')
+is_a_connective = let_x_be_a_binary_connective(formula_ts='is-a')
+is_a_proposition_connective = UnaryConnective(formula_ts='is-a-proposition')
+is_a_propositional_variable_connective = UnaryConnective(formula_ts='is-a-propositional-variable')
+is_a_valid_proposition_in_connective = BinaryConnective(formula_ts='is-a-valid-proposition-in')
+# DUPLICATE WITH PROVES...
+is_inconsistent_connective = UnaryConnective(formula_ts='is-inconsistent')
+map_connective = let_x_be_a_binary_connective(formula_ts='map')
+theorem_connective = let_x_be_a_free_arity_connective(formula_ts='theorem')
+theory_connective = let_x_be_a_free_arity_connective(formula_ts='theory-formula')
+proves_connective = let_x_be_a_binary_connective(formula_ts='⊢')
+tupl_connective = let_x_be_a_free_arity_connective(formula_ts='tuple')
+transformation_by_variable_substitution_connective = let_x_be_a_quaternary_connective(
+    formula_ts='transformation-by-variable-substitution')
 
 
 def is_symbol_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
@@ -1582,7 +1554,7 @@ class Tupl(Formula):
     def __new__(cls, e: FlexibleTupl = None):
         # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
         # because tuple is immutable.
-        o: tuple = super().__new__(cls, con=_connectives.tupl, t=e)
+        o: tuple = super().__new__(cls, con=tupl_connective, t=e)
         return o
 
     def __init__(self, e: FlexibleTupl = None):
@@ -1590,7 +1562,7 @@ class Tupl(Formula):
 
         :param e: The elements of the tupl.
         """
-        super().__init__(con=_connectives.tupl, t=e)
+        super().__init__(con=tupl_connective, t=e)
 
     def get_index_of_first_equivalent_element(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
@@ -1734,7 +1706,7 @@ class Map(Formula):
         :param c: An enumeration denoted as the codomain of the map.
         """
         d, c = Map._data_validation_2(d=d, c=c)
-        o: tuple = super().__new__(cls, con=_connectives.map_formula, t=(d, c,))
+        o: tuple = super().__new__(cls, con=map_connective, t=(d, c,))
         return o
 
     def __init__(self, d: FlexibleEnumeration = None, c: FlexibleTupl = None):
@@ -1744,7 +1716,7 @@ class Map(Formula):
         :param c: An enumeration denoted as the codomain of the map.
         """
         d, c = Map._data_validation_2(d=d, c=c)
-        super().__init__(con=_connectives.map_formula, t=(d, c,))
+        super().__init__(con=map_connective, t=(d, c,))
 
     @property
     def codomain(self) -> Tupl:
@@ -1943,7 +1915,7 @@ class Transformation(Formula, abc.ABC):
         :param p: A tuple of formulas denoted as the premises.
         """
         con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
-        o: tuple = super().__new__(cls, con=_connectives.transformation_by_variable_substitution,
+        o: tuple = super().__new__(cls, con=transformation_by_variable_substitution_connective,
                                    t=(c, v, d, p,))
         return o
 
@@ -1959,7 +1931,7 @@ class Transformation(Formula, abc.ABC):
         :param p: A tuple of formulas denoted as the premises.
         """
         con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
-        super().__init__(con=_connectives.transformation_by_variable_substitution, t=(c, v, d, p,))
+        super().__init__(con=transformation_by_variable_substitution_connective, t=(c, v, d, p,))
 
     def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
@@ -2075,7 +2047,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :return:
         """
         global _connectives
-        con: Connective = _connectives.transformation_by_variable_substitution
+        con: Connective = transformation_by_variable_substitution_connective
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
@@ -2259,7 +2231,7 @@ class TransformationByExternalAlgorithm(Transformation):
         :return:
         """
         global _connectives
-        con: Connective = _connectives.algorithm
+        con: Connective = algorithm_connective
         # TODO: Check `a` is callable nad has correct signature.
         a: typing.Callable = coerce_external_algorithm(f=a)
         # TODO: Check `i` is callable nad has correct signature.
@@ -2490,7 +2462,7 @@ def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = Fals
     if interpret_none_as_empty and t is None:
         return True
     t: Formula = coerce_formula(phi=t)
-    if t.connective is not _connectives.tupl:
+    if t.connective is not tupl_connective:
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_066,
@@ -2514,7 +2486,7 @@ def is_well_formed_hypothesis(h: FlexibleHypothesis, raise_error_if_false: bool 
     :return: bool.
     """
     h = coerce_formula(phi=h)
-    if (h.connective is not _connectives.hypothesis_formula or
+    if (h.connective is not hypothesis_connective or
             not h.arity == 2 or
             not is_well_formed_theory(t=h[Hypothesis.BASE_THEORY_INDEX]) or
             not is_well_formed_formula(phi=h[Hypothesis.ASSUMPTION_INDEX])):
@@ -2538,7 +2510,7 @@ def is_well_formed_inference(i: FlexibleFormula, raise_error_if_false: bool = Fa
     :return: bool.
     """
     i = coerce_formula(phi=i)
-    if (i.connective is not _connectives.inference or
+    if (i.connective is not inference_connective or
             not i.arity == 3 or
             not is_well_formed_inference_rule(i=i[Inference.INFERENCE_RULE_INDEX]) or
             not is_well_formed_tupl(t=i[Inference.PREMISES_INDEX]) or
@@ -2562,7 +2534,7 @@ def is_well_formed_map(m: FlexibleFormula, raise_error_if_false: bool = False) -
     :return: bool.
     """
     m = coerce_formula(phi=m)
-    if (m.connective is not _connectives.map_formula or
+    if (m.connective is not map_connective or
             not m.arity == 2 or
             not is_well_formed_enumeration(e=m[Map.DOMAIN_INDEX]) or
             not is_well_formed_tupl(t=m[Map.CODOMAIN_INDEX])):
@@ -2584,7 +2556,7 @@ def is_well_formed_transformation_by_variable_substitution(t: FlexibleFormula) -
     :return: bool.
     """
     t = coerce_formula(phi=t)
-    if (t.connective is not _connectives.transformation_by_variable_substitution or
+    if (t.connective is not transformation_by_variable_substitution_connective or
             t.arity != 4 or
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_enumeration(e=t.term_1) or
@@ -2631,10 +2603,10 @@ def is_well_formed_inference_rule(i: FlexibleFormula) -> bool:
     if isinstance(i, InferenceRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif (i.connective is _connectives.derivation and
+    elif (i.connective is derivation_connective and
           i.arity == 2 and
           is_well_formed_transformation(t=i.term_0) and
-          i.term_1.connective is _connectives.inference_rule):
+          i.term_1.connective is inference_rule_connective):
         return True
     else:
         return False
@@ -2669,7 +2641,7 @@ def is_well_formed_transformation_by_external_algorithm(t: FlexibleFormula) -> b
         # Shortcut: the class assures the well-formedness of the formula.
         return True
     elif (t.arity == 0 and
-          t.connective is _connectives.algorithm and
+          t.connective is algorithm_connective and
           hasattr(t, 'external_algorithm')):
         return True
     else:
@@ -3108,7 +3080,7 @@ def is_well_formed_axiom(a: FlexibleFormula) -> bool:
     a = coerce_formula(phi=a)
     if a.arity != 2:
         return False
-    if a.connective is not _connectives.derivation:
+    if a.connective is not derivation_connective:
         return False
     if not is_well_formed_formula(phi=a.term_0):
         return False
@@ -3131,7 +3103,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_false: bool = Fals
     if isinstance(t, Theorem):
         # the Theorem python-type assures the well-formedness of the object.
         return True
-    if (t.connective is not _connectives.derivation or
+    if (t.connective is not derivation_connective or
             not t.arity == 2 or
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_inference(i=t.term_1)):
@@ -3349,7 +3321,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
         return True
 
     con: Connective = t.connective
-    if con is not _connectives.theory_formula:
+    if con is not theory_connective:
         # TODO: Remove the 1==2 condition above to re-implement a check of strict connectives constraints.
         #   But then we must properly manage python inheritance (Axiomatization --> Theory --> Enumeration).
         if raise_event_if_false:
@@ -3358,8 +3330,8 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
                     'It follows that `t` is not a well-formed-theory.',
                 con=con,
                 con_id=id(con),
-                theory_formula=_connectives.theory_formula,
-                theory_formula_id=id(_connectives.theory_formula),
+                theory_formula=theory_connective,
+                theory_formula_id=id(theory_connective),
                 t=t)
         return False
 
@@ -3583,7 +3555,7 @@ class Derivation(Formula):
         :param j:
         :return:
         """
-        con: Connective = _connectives.derivation
+        con: Connective = derivation_connective
         s = coerce_formula(phi=s)
         j = coerce_formula(phi=j)
         return con, s, j
@@ -3707,7 +3679,7 @@ class InferenceRule(Derivation):
         :return:
         """
         global _connectives
-        con: Connective = _connectives.inference_rule
+        con: Connective = inference_rule_connective
         f: Transformation = coerce_transformation(f=f)
         j: Formula = Formula(con=con)
         return con, f, j
@@ -3729,6 +3701,41 @@ class InferenceRule(Derivation):
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
 FlexibleTransformation = typing.Union[
     Transformation, TransformationByExternalAlgorithm, TransformationByVariableSubstitution, Formula]
+
+with let_x_be_a_variable(formula_ts='P') as phi, let_x_be_a_variable(formula_ts='Q') as psi:
+    modus_ponens_inference_rule: InferenceRule = InferenceRule(
+        f=let_x_be_a_transformation_by_variable_substitution(
+            p=(
+                is_a_proposition_connective(phi),
+                is_a_proposition_connective(psi),
+                phi | implies_connective | psi,
+                phi),
+            c=psi,
+            v=(phi, psi,)),
+        ref_ts=pl1.Monospace(text='MP'))
+    """The modus-ponens inference-rule.
+
+    Abbreviation: MP
+
+# Modus ponens inference rule:
+#   phi --> psi
+#   phi
+#   ___________
+#   psi
+#
+# References:
+#  - https://en.wikipedia.org/wiki/List_of_rules_of_inference    
+
+    Premises:
+     1. phi | is_a | proposition,
+     2. psi | is_a | proposition,
+     3. phi | implies | psi,
+     4. phi
+
+    Conclusion: psi
+
+    Variables: phi, psi
+    """
 
 
 class Inference(Formula):
@@ -3763,7 +3770,7 @@ class Inference(Formula):
         :param a:
         :return:
         """
-        con: Connective = _connectives.inference
+        con: Connective = inference_connective
         i: InferenceRule = coerce_inference_rule(i=i)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
         a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
@@ -3857,7 +3864,7 @@ class Theorem(Derivation):
         :return:
         """
         global _connectives
-        con: Connective = _connectives.theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
+        con: Connective = theorem_connective  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
         s: Formula = coerce_formula(phi=s)
         i: Inference = coerce_inference(i=i)
 
@@ -3988,7 +3995,7 @@ class Theory(Formula):
         :return:
         """
         global _connectives
-        con: Connective = _connectives.theory_formula
+        con: Connective = theory_connective
         if t is not None:
             t: Theory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True,
@@ -5175,7 +5182,7 @@ class Hypothesis(Formula):
         :param a: A formula denoted as the assumption.
         :return:
         """
-        con: Connective = get_connectives().hypothesis_formula
+        con: Connective = get_connectives().hypothesis_connective
         b: Theory = coerce_theory(t=b)
         a: Formula = coerce_formula(phi=a)
         return con, b, a

@@ -91,39 +91,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
 simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
     f=simplification_2_rule)
 
-# Modus ponens inference rule:
-#   phi --> psi
-#   phi
-#   ___________
-#   psi
-#
-# References:
-#  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
-with as1.let_x_be_a_variable(formula_ts='P') as phi, as1.let_x_be_a_variable(formula_ts='Q') as psi:
-    modus_ponens: as1.InferenceRule = as1.InferenceRule(
-        f=as1.let_x_be_a_transformation_by_variable_substitution(
-            p=(
-                cls1.is_a_proposition(phi),
-                cls1.is_a_proposition(psi),
-                phi | cls1.implies | psi,
-                phi),
-            c=psi,
-            v=(phi, psi,)),
-        ref_ts=pl1.Monospace(text='MP'))
-    """The modus-ponens inference-rule.
-    
-    Abbreviation: MP
-    
-    Premises:
-     1. phi | is_a | proposition,
-     2. psi | is_a | proposition,
-     3. phi | implies | psi,
-     4. phi
-    
-    Conclusion: psi
-    
-    Variables: phi, psi
-    """
+modus_ponens = as1.modus_ponens_inference_rule
 
 axiomatization = as1.Axiomatization(d=(
     conjunction_introduction,
@@ -138,7 +106,7 @@ def extend_theory_with_inference_rules_1(t: as1.FlexibleTheory) -> as1.Theory:
      - TODO: add some theory-specific heuristics?
 
     """
-    global conjunction_introduction, simplification_1_axiom, simplification_2_axiom, modus_ponens
+    global conjunction_introduction, simplification_1_axiom, simplification_2_axiom, modus_ponens_inference_rule
     t: as1.Theory = as1.coerce_theory(t=t)
     t, _ = as1.let_x_be_an_inference_rule(t=t, i=conjunction_introduction)
     t, _ = as1.let_x_be_an_inference_rule(t=t, i=simplification_1_axiom)

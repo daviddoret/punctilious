@@ -34,13 +34,13 @@ class TestAxioms:
         # PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 
         # retrieve some basic vocabulary
-        is_a = pu.as1._connectives.is_a
-        is_a_proposition = pu.as1._connectives.is_a_proposition
-        is_a_propositional_variable = pu.as1._connectives.is_a_propositional_variable
+        is_a = pu.as1.is_a_connective
+        is_a_proposition = pu.as1.is_a_proposition_connective
+        is_a_propositional_variable = pu.as1.is_a_propositional_variable_connective
         land = pu.as1.logical_conjunction_connective
         lnot = pu.as1.logical_negation_connective
         lor = pu.as1.logical_disjunction_connective
-        implies = pu.as1._connectives.implies
+        implies = pu.as1.implies_connective
 
         # elaborate a theory
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
@@ -96,17 +96,17 @@ class TestAxioms:
         pass
 
     def test_pl1_2(self):
-        is_a = pu.as1._connectives.is_a
-        proposition = pu.as1._connectives.is_a_proposition
+        is_a = pu.as1.is_a_connective
+        proposition = pu.as1.is_a_proposition_connective
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
         t, success, _, = pu.as1.auto_derive_2(t=t, conjecture=proposition(p))
         assert success
         assert pu.as1.is_valid_proposition_in_theory_1(p=proposition(p), t=t)
 
     def test_pl1_3(self):
-        is_a = pu.as1._connectives.is_a
+        is_a = pu.as1.is_a_connective
         land = pu.as1.logical_conjunction_connective
-        proposition = pu.as1._connectives.is_a_proposition
+        proposition = pu.as1.is_a_proposition_connective
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='X')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Y')
         t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(p))
