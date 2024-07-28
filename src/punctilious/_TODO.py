@@ -1,4 +1,24 @@
 """
+NEW MILESTONE:
+
+STATUS
+This version supports:
+    is-wf-theory(T)
+    T.P
+    _______
+    (T ⊢ P)
+And:
+    T.P
+    T.(¬P)
+    ______
+    T ⊢ ⊥
+
+NEXT STEPS:
+ - Clean-up work on connectives (AS1, CSL1, etc.), this is a mess.
+ - Simplify the external-algorithm data model (transformation, inference-rule),
+   it is a bit too heavy now which will make it hard to maintain moving-forward.
+
+
 
 
 TODO: Implement monotonicity, probably as an inference-rule until we prove it with the meta-theory once
