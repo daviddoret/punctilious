@@ -7,15 +7,7 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="connectives migration">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_numbers_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_numbers_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sequences_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequences_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_meta_theory_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -734,14 +726,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00933" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721590178252</created>
-      <option name="number" value="00933" />
-      <option name="presentableId" value="LOCAL-00933" />
-      <option name="project" value="LOCAL" />
-      <updated>1721590178253</updated>
-    </task>
     <task id="LOCAL-00934" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1721590738513</created>
@@ -1126,7 +1110,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722197847463</updated>
     </task>
-    <option name="localTasksCounter" value="982" />
+    <task id="LOCAL-00982" summary="connectives migration">
+      <option name="closed" value="true" />
+      <created>1722201611105</created>
+      <option name="number" value="00982" />
+      <option name="presentableId" value="LOCAL-00982" />
+      <option name="project" value="LOCAL" />
+      <updated>1722201611105</updated>
+    </task>
+    <option name="localTasksCounter" value="983" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1239,7 +1231,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3705</line>
+          <line>3693</line>
           <option name="timeStamp" value="149" />
         </line-breakpoint>
       </breakpoints>

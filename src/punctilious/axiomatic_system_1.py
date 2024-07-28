@@ -22,18 +22,6 @@ if __name__ == '__main__':
     raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_001,
                               msg='This module does not support being directly executed as a script. '
                                   'Please use the import statement.')
-_state = dict() if not hasattr(_current_module, '_state') else getattr(_current_module, '_state')
-
-
-def _set_state(key: str, value: object):
-    """An internal utility function to store module state and avoid
-    issues with global variables being re-instantiated if modules are re-loaded."""
-    global _state
-    if key in _state.items():
-        value = _state.get(key)
-    else:
-        _state[key] = value
-    return value
 
 
 class Connective:
