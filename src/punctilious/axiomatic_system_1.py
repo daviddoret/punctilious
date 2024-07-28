@@ -1154,7 +1154,6 @@ def let_x_be_a_transformation_by_external_algorithm(
 
 class Connectives(typing.NamedTuple):
     algorithm: NullaryConnective
-    enumeration: FreeArityConnective
     derivation: BinaryConnective
     hypothesis_formula: FreeArityConnective
     implies: BinaryConnective
@@ -1178,13 +1177,13 @@ class Connectives(typing.NamedTuple):
 
 axiom_connective = let_x_be_a_unary_connective(formula_ts='axiom')
 axiomatization_connective = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
+enumeration_connective = let_x_be_a_free_arity_connective(formula_ts='enumeration')
 is_well_formed_formula_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 is_well_formed_inference_rule_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
 is_well_formed_theory_connective = let_x_be_a_unary_connective(formula_ts='is-well-formed-theory')
 
 _connectives: Connectives = _set_state(key='connectives', value=Connectives(
     algorithm=NullaryConnective(formula_ts='algorithm'),
-    enumeration=let_x_be_a_free_arity_connective(formula_ts='enumeration'),
     derivation=let_x_be_a_binary_connective(formula_ts='derivation'),
     hypothesis_formula=let_x_be_a_free_arity_connective(formula_ts='hypothesis'),
     implies=let_x_be_a_binary_connective(formula_ts='implies'),
@@ -1830,8 +1829,8 @@ class Enumeration(Formula):
         :param strip_duplicates:
         :return:
         """
-        global _connectives
-        con: Connective = _connectives.enumeration
+        global enumeration_connective
+        con: Connective = enumeration_connective
         if e is None:
             e = tuple()
         e_unique_only = strip_duplicate_formulas_in_python_tuple(t=e)
@@ -1861,9 +1860,6 @@ class Enumeration(Formula):
         c, e = Enumeration._data_validation_2(e=e, strip_duplicates=strip_duplicates)
         super().__init__(con=c, t=e, **kwargs)
 
-
-enumeration = Enumeration
-"""A shortcut for Enumeration."""
 
 FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, typing.Iterable[FlexibleFormula]]]
 """FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration."""
@@ -2609,14 +2605,14 @@ def is_well_formed_enumeration(e: FlexibleFormula) -> bool:
     :param e: A formula.
     :return: bool.
     """
-    global _connectives
+    global enumeration_connective
     if e is None:
         # This is debatable.
         # Implicit conversion of None to the empty enumeration.
         return True
     else:
         e = coerce_formula(phi=e)
-        if e.connective is not _connectives.enumeration:
+        if e.connective is not enumeration_connective:
             return False
         for i in range(0, e.arity):
             if i != e.arity - 1:

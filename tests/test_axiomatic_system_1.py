@@ -613,7 +613,7 @@ class TestInferenceRule:
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
-        phi3 = rule | pu.as1._connectives.derivation | pu.as1._connectives.enumeration
+        phi3 = rule | pu.as1._connectives.derivation | pu.csl1.enumeration
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -625,11 +625,11 @@ class TestFormulaToTuple:
         h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
         phi1 = h(e, b, d)
         e1_result = pu.as1.formula_to_tuple(phi=phi1)
-        e1_expected = pu.as1.enumeration(e=(e, b, d,))
+        e1_expected = pu.as1.Enumeration(e=(e, b, d,))
         assert pu.as1.is_formula_equivalent(phi=e1_result, psi=e1_expected)
         phi2 = h(phi1, b, g(a, f(b)))
         e2_result = pu.as1.formula_to_tuple(phi=phi2)
-        e2_expected = pu.as1.enumeration(e=(phi1, b, g(a, f(b)),))
+        e2_expected = pu.as1.Enumeration(e=(phi1, b, g(a, f(b)),))
         assert pu.as1.is_formula_equivalent(phi=e2_result, psi=e2_expected)
 
 
