@@ -49,7 +49,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     pl01: as1.InferenceRule = as1.InferenceRule(
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),),
-            c=a | implies | (a | land | a),
+            o=a | implies | (a | land | a),
             v=(a,)),
         ref_ts=pl1.Monospace(text='PL1'))
     """The PL01 axiom schema: A ⊃ (A ∧ A).
@@ -73,7 +73,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b),),
-            c=(a | land | b) | implies | (b | land | a),
+            o=(a | land | b) | implies | (b | land | a),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL2'))
     """The PL02 axiom schema: (A ∧ B) ⊃ (B ∧ A).
@@ -100,7 +100,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
             p=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
-            c=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)),
+            o=(a | implies | b) | implies | ((a | land | c) | implies | (b | land | c)),
             v=(a, b, c,)),
         ref_ts=pl1.Monospace(text='PL3'))
     """The PL03 axiom schema: (A ⊃ B) ⊃ [(A ∧ C) ⊃ (B ∧ C)].
@@ -128,7 +128,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
             p=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
-            c=((a | implies | b) | land | (b | implies | c) | implies | (a | implies | c)),
+            o=((a | implies | b) | land | (b | implies | c) | implies | (a | implies | c)),
             v=(a, b, c,)),
         ref_ts=pl1.Monospace(text='PL4'))
     """The PL04 axiom schema: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶).
@@ -155,7 +155,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
-            c=b | implies | (a | implies | b),
+            o=b | implies | (a | implies | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL5'))
     """The PL05 axiom schema: 𝐵 ⊃ (𝐴 ⊃ 𝐵).
@@ -181,7 +181,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
-            c=(b | land | (a | implies | b)) | implies | b,
+            o=(b | land | (a | implies | b)) | implies | b,
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL6'))
     """The PL06 axiom schema: (𝐴 ∧ (𝐴 ⊃ 𝐵)) ⊃ 𝐵.
@@ -207,7 +207,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
-            c=a | implies | (a | lor | b),
+            o=a | implies | (a | lor | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL7'))
     """The PL07 axiom schema: 𝐴 ⊃ (𝐴 ∨ 𝐵).
@@ -233,7 +233,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
-            c=(a | lor | b) | implies | (b | lor | a),
+            o=(a | lor | b) | implies | (b | lor | a),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL8'))
     """The PL08 axiom schema: (𝐴 ∨ 𝐵) ⊃ (𝐵 ∨ 𝐴).
@@ -260,7 +260,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
             p=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
-            c=((a | implies | c) | land | (b | implies | c)) | implies | ((a | lor | b) | implies | c),
+            o=((a | implies | c) | land | (b | implies | c)) | implies | ((a | lor | b) | implies | c),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL9'))
     """The PL09 axiom schema: [(𝐴 ⊃ 𝐶) ∧ (𝐵 ⊃ 𝐶)] ⊃ [(𝐴 ∨ 𝐵) ⊃ 𝐶].
@@ -287,7 +287,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
-            c=((a | implies | b) | land | (a | implies | lnot(b))) | implies | lnot(a),
+            o=((a | implies | b) | land | (a | implies | lnot(b))) | implies | lnot(a),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PL10'))
     """The PL10 axiom schema:  [(𝐴 ⊃ 𝐵) ∧ (𝐴 ⊃ ¬𝐵)] ⊃ ¬𝐴.

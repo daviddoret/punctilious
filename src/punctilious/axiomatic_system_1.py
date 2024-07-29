@@ -1005,11 +1005,11 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         if a is None:
             # Signature 3: This is a transformation-by-variable-transformation:
-            f: TransformationByVariableSubstitution = TransformationByVariableSubstitution(c=c, v=v, d=d, p=p)
+            f: TransformationByVariableSubstitution = TransformationByVariableSubstitution(o=c, v=v, d=d, p=p)
             i: InferenceRule = InferenceRule(f=f)
         else:
             # Signature 4: This is an algorithmic transformation:
-            f: TransformationByExternalAlgorithm = TransformationByExternalAlgorithm(algo=a, check=i2, c=c, v=v,
+            f: TransformationByExternalAlgorithm = TransformationByExternalAlgorithm(algo=a, check=i2, o=c, v=v,
                                                                                      d=d, p=p)
             i: InferenceRule = InferenceRule(f=f)
     else:
@@ -1124,7 +1124,7 @@ def let_x_be_a_transformation_by_variable_substitution(c: FlexibleFormula,
                                                        d: FlexibleEnumeration | None = None,
                                                        p: FlexibleTupl | None = None
                                                        ):
-    return TransformationByVariableSubstitution(c=c, v=v, d=d,
+    return TransformationByVariableSubstitution(o=c, v=v, d=d,
                                                 p=p)
 
 
@@ -1136,7 +1136,7 @@ def let_x_be_a_transformation_by_external_algorithm(
         d: FlexibleEnumeration | None = None,
         p: FlexibleTupl | None = None
 ):
-    return TransformationByExternalAlgorithm(algo=a, check=i, c=c, v=v, d=d,
+    return TransformationByExternalAlgorithm(algo=a, check=i, o=c, v=v, d=d,
                                              p=p)
 
 
@@ -1869,57 +1869,58 @@ class Transformation(Formula, abc.ABC):
     DECLARATIONS_INDEX: int = 2
 
     @staticmethod
-    def _data_validation_2(con: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def _data_validation_2(con: Connective, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
                            d: FlexibleEnumeration | None = None,
-                           p: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
+                           i: FlexibleTupl | None = None) -> tuple[
+        Connective, Formula, Enumeration, Enumeration, Tupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
         :param con:
-        :param c:
+        :param o: A formula denoted as the output-shape.
         :param v:
         :param d:
-        :param p:
+        :param i: A tuple of formulas denotes as the input-shapes.
         :return:
         """
         con: Connective = coerce_connective(con=con)
-        c: Formula = coerce_formula(phi=c)
+        o: Formula = coerce_formula(phi=o)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
-        return con, c, v, d, p
+        i: Tupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
+        return con, o, v, d, i
 
-    def __new__(cls, con: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def __new__(cls, con: Connective, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
         """
 
         :param con:
-        :param c: A formula denoted as the conclusion.
+        :param o: A formula denoted as the output-shape.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
+        con, o, v, d, p = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=p)
         o: tuple = super().__new__(cls, con=transformation_by_variable_substitution_connective,
-                                   t=(c, v, d, p,))
+                                   t=(o, v, d, p,))
         return o
 
-    def __init__(self, con: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def __init__(self, con: Connective, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
         """
 
         :param con:
-        :param c: A formula denoted as the conclusion.
+        :param o: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
-        super().__init__(con=transformation_by_variable_substitution_connective, t=(c, v, d, p,))
+        con, o, v, d, p = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=p)
+        super().__init__(con=transformation_by_variable_substitution_connective, t=(o, v, d, p,))
 
     def __call__(self, p: FlexibleTupl | None = None, a2: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
@@ -2053,32 +2054,32 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         return con, c, v, d, p
 
-    def __new__(cls, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def __new__(cls, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
         """
 
-        :param c: A formula denoted as the conclusion.
+        :param o: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, c, v, d, p = TransformationByVariableSubstitution._data_validation_3(c=c, v=v, d=d, p=p)
-        o: tuple = super().__new__(cls, con=c2, c=c, v=v, d=d, p=p)
+        c2, o, v, d, p = TransformationByVariableSubstitution._data_validation_3(c=o, v=v, d=d, p=p)
+        o: tuple = super().__new__(cls, con=c2, o=o, v=v, d=d, p=p)
         return o
 
-    def __init__(self, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def __init__(self, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
         """
 
-        :param c: A formula denoted as the conclusion.
+        :param o: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, c, v, d, p = TransformationByVariableSubstitution._data_validation_3(c=c, v=v, d=d, p=p)
-        super().__init__(con=c2, c=c, v=v, d=d, p=p)
+        c2, o, v, d, p = TransformationByVariableSubstitution._data_validation_3(c=o, v=v, d=d, p=p)
+        super().__init__(con=c2, o=o, v=v, d=d, p=p)
 
     def __call__(self, p: FlexibleTupl | None = None, a2: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
@@ -2149,7 +2150,7 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         # TODO: Move this logic to coerce_natural_transformation
-        return TransformationByVariableSubstitution(c=f[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
+        return TransformationByVariableSubstitution(o=f[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
                                                     v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
                                                     d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
                                                     p=f[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
@@ -2159,7 +2160,7 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
         # TODO: Move this logic to coerce_algorithmic_transformation
         return TransformationByExternalAlgorithm(algo=f.external_algorithm,
                                                  check=what_the_hell,  # correct this
-                                                 c=f[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
+                                                 o=f[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
                                                  v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
                                                  d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
                                                  p=f[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
@@ -2179,7 +2180,7 @@ def coerce_transformation_by_variable_substitution(t: FlexibleFormula) -> Transf
     elif isinstance(t, Formula) and is_well_formed_transformation_by_variable_substitution(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return TransformationByVariableSubstitution(c=t[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
+        return TransformationByVariableSubstitution(o=t[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
                                                     v=t[TransformationByVariableSubstitution.VARIABLES_INDEX],
                                                     d=t[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
                                                     p=t[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
@@ -2242,45 +2243,45 @@ class TransformationByExternalAlgorithm(Transformation):
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         return con, algo, check, c, v, d, p
 
-    def __new__(cls, algo: typing.Callable, check: typing.Callable, c: FlexibleFormula,
+    def __new__(cls, algo: typing.Callable, check: typing.Callable, o: FlexibleFormula,
                 v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
         """
 
         :param algo: An external algorithm.
-        :param c: A formula denoted as the conclusion.
+        :param o: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, algo, check, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, c=c,
+        c2, algo, check, o, v, d, p = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, c=o,
                                                                                            v=v, d=d,
                                                                                            p=p)
-        o: tuple = super().__new__(cls, con=c2, c=c, v=v, d=d, p=p)
+        o: tuple = super().__new__(cls, con=c2, o=o, v=v, d=d, p=p)
         return o
 
     def __init__(self,
                  algo: typing.Callable,
                  check: typing.Callable | None,
-                 c: FlexibleFormula, v: FlexibleEnumeration | None = None,
+                 o: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
         """
 
         :param algo:
         :param check:
-        :param c: A formula denoted as the conclusion.
+        :param o: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, algo, check, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, c=c,
+        c2, algo, check, o, v, d, p = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, c=o,
                                                                                            v=v, d=d,
                                                                                            p=p)
         self._external_algorithm: typing.Callable = algo
         self._is_derivation_candidate: typing.Callable | None = check
-        super().__init__(con=c2, c=c, v=v, d=d, p=p)
+        super().__init__(con=c2, o=o, v=v, d=d, p=p)
 
         # Default typesetting configuration
         if pl1.REF_TS not in self.ts.keys():

@@ -37,7 +37,7 @@ ERROR_CODE_PLS1_010 = 'E-PLS1-010'
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i0: as1.InferenceRule = as1.InferenceRule(
         f=as1.TransformationByVariableSubstitution(
-            c=is_a_propositional_variable(a),
+            o=is_a_propositional_variable(a),
             v=None,
             d=(a,),
             p=None
@@ -64,7 +64,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.InferenceRule = as1.InferenceRule(
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_propositional_variable(a),),
-            c=is_a_proposition(a),
+            o=is_a_proposition(a),
             v=(a,)),
         ref_ts=pl1.Monospace(text='PLS1'))
     """Axiom schema: A is-a propositional-variable ⊃ A is-a proposition.
@@ -87,7 +87,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     i2: as1.InferenceRule = as1.InferenceRule(
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),),
-            c=is_a_proposition(lnot(a)),
+            o=is_a_proposition(lnot(a)),
             v=(a,)),
         ref_ts=pl1.Monospace(text='PLS2'))
     """Axiom schema: A is-a proposition ⊃ ¬A is a proposition.
@@ -111,7 +111,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
-            c=is_a_proposition(a | land | b),
+            o=is_a_proposition(a | land | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS3'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition).
@@ -136,7 +136,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
-            c=is_a_proposition(a | implies | b),
+            o=is_a_proposition(a | implies | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS4'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ⊃ B) is a proposition).
@@ -161,7 +161,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
         f=as1.TransformationByVariableSubstitution(
             p=(is_a_proposition(a),
                is_a_proposition(b)),
-            c=is_a_proposition(a | lor | b),
+            o=is_a_proposition(a | lor | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS5'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∨ B) is a proposition).
@@ -185,7 +185,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     i6: as1.InferenceRule = as1.InferenceRule(
         f=as1.TransformationByVariableSubstitution(
             p=None,
-            c=lnot(is_a_proposition(a)),
+            o=lnot(is_a_proposition(a)),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS6'))
     """Axiom schema: ?????.
@@ -299,7 +299,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     conclusion: as1.Formula = psi.term_1
 
     # build the rule
-    rule: as1.TransformationByVariableSubstitution = as1.TransformationByVariableSubstitution(p=premises, c=conclusion,
+    rule: as1.TransformationByVariableSubstitution = as1.TransformationByVariableSubstitution(p=premises, o=conclusion,
                                                                                               v=variables)
 
     # build the inference-rule

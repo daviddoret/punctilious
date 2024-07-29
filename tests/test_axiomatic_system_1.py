@@ -446,7 +446,7 @@ class TestNaturalTransformation:
         premises = pu.as1.Enumeration(e=(p1,))
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(e=(x,))
-        f = pu.as1.TransformationByVariableSubstitution(c=conclusion, v=variables, d=None,
+        f = pu.as1.TransformationByVariableSubstitution(o=conclusion, v=variables, d=None,
                                                         p=premises)
         arguments = pu.as1.Tupl(e=(p2,))
         output = f.apply_transformation(a1=arguments)
@@ -589,7 +589,7 @@ class TestInferenceRule:
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         phi = a | f | b
-        rule = pu.as1.TransformationByVariableSubstitution(c=phi, v=None, d=None, p=None)
+        rule = pu.as1.TransformationByVariableSubstitution(o=phi, v=None, d=None, p=None)
         ir = pu.as1.InferenceRule(f=rule)
         axiomatization = pu.as1.Axiomatization(d=(ir,))
 
@@ -604,7 +604,7 @@ class TestInferenceRule:
     def test_is_well_formed_postulation(self):
         a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        rule = pu.as1.TransformationByVariableSubstitution(c=a | f | b, v=None, d=None, p=None)
+        rule = pu.as1.TransformationByVariableSubstitution(o=a | f | b, v=None, d=None, p=None)
         phi1 = rule | pu.as1.derivation_connective | pu.as1.inference_rule_connective
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
@@ -638,7 +638,7 @@ class TestProofByPostulation:
     def test_is_well_formed(self):
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
-        rule1 = pu.as1.TransformationByVariableSubstitution(c=star3(e, b, d), v=None, d=None,
+        rule1 = pu.as1.TransformationByVariableSubstitution(o=star3(e, b, d), v=None, d=None,
                                                             p=None)
         phi1 = rule1 | pu.as1.derivation_connective | pu.as1.inference_rule_connective
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
@@ -653,7 +653,7 @@ class TestTheorem:
         t = pu.as1.let_x_be_a_theory()
         a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
-        ir1 = pu.as1.InferenceRule(f=pu.as1.TransformationByVariableSubstitution(c=b, p=(a,)))
+        ir1 = pu.as1.InferenceRule(f=pu.as1.TransformationByVariableSubstitution(o=b, p=(a,)))
         t = pu.as1.append_to_theory(ir1, t=t)
         if1 = pu.as1.Inference(p=(a,), i=ir1)
         # For the purpose of this test,
@@ -675,7 +675,7 @@ class TestInference:
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        t = pu.as1.TransformationByVariableSubstitution(c=x | f | z, v=(x, y, z,), d=None,
+        t = pu.as1.TransformationByVariableSubstitution(o=x | f | z, v=(x, y, z,), d=None,
                                                         p=(x | f | y, y | f | z,), )
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
@@ -693,7 +693,7 @@ class TestInference:
         x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
-        t = pu.as1.TransformationByVariableSubstitution(c=x | f | z, v=(x, y, z,), d=None,
+        t = pu.as1.TransformationByVariableSubstitution(o=x | f | z, v=(x, y, z,), d=None,
                                                         p=(x | f | y, y | f | z,))
         p = (a | f | b, b | f | c,)
         i = pu.as1.InferenceRule(f=t)
@@ -716,7 +716,7 @@ class TestProofByInference:
         premises = pu.as1.Enumeration(e=(x | star | y, y | star | z,))
         conclusion = x | star | z
         variables = pu.as1.Enumeration(e=(x, y, z,))
-        f = pu.as1.TransformationByVariableSubstitution(c=conclusion, v=variables, d=None,
+        f = pu.as1.TransformationByVariableSubstitution(o=conclusion, v=variables, d=None,
                                                         p=premises)
         ir = pu.as1.InferenceRule(f=f)
         p = (a | star | b, b | star | c,)
@@ -766,7 +766,7 @@ class TestAlgorithm:
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
             algo = as1.TransformationByExternalAlgorithm(algo=x_is_a_theory,
                                                          check=is_compatible,
-                                                         c=is_well_formed_theory(x),
+                                                         o=is_well_formed_theory(x),
                                                          v={x, },
                                                          d={x, })
         i = as1.InferenceRule(f=algo)
@@ -968,14 +968,14 @@ class TestAutoDerivation:
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
         if_p_then_q = pu.as1.InferenceRule(
-            f=pu.as1.TransformationByVariableSubstitution(c=q, v=(), d=None, p=(p,)))
+            f=pu.as1.TransformationByVariableSubstitution(o=q, v=(), d=None, p=(p,)))
         t1 = pu.as1.append_to_theory(if_p_then_q, t=t1)
 
         with pu.as1.let_x_be_a_variable(formula_ts='x') as x, pu.as1.let_x_be_a_variable(
                 formula_ts='y') as y:
             x_y_then_x_and_y = pu.as1.InferenceRule(
                 f=pu.as1.TransformationByVariableSubstitution(
-                    c=x | pu.csl1.land | y, v=(x, y,),
+                    o=x | pu.csl1.land | y, v=(x, y,),
                     d=None, p=(x, y,)))
         t1 = pu.as1.Theory(d=(*t1, x_y_then_x_and_y,))
 
@@ -1021,11 +1021,11 @@ class TestTheory:
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
         t, i1 = pu.as1.let_x_be_an_inference_rule(t=t,
-                                                  f=pu.as1.TransformationByVariableSubstitution(c=f, v=None, p=None))
+                                                  f=pu.as1.TransformationByVariableSubstitution(o=f, v=None, p=None))
         t, _, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i1, raise_error_if_false=True)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=d)
         t, i2 = pu.as1.let_x_be_an_inference_rule(t=t,
-                                                  f=pu.as1.TransformationByVariableSubstitution(c=g, v=None, p=None))
+                                                  f=pu.as1.TransformationByVariableSubstitution(o=g, v=None, p=None))
         t, _, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2, raise_error_if_false=True)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=e)
 
@@ -1069,11 +1069,11 @@ class TestTheory:
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
         t, i1 = pu.as1.let_x_be_an_inference_rule(t=t,
-                                                  f=pu.as1.TransformationByVariableSubstitution(c=f, v=None, p=None))
+                                                  f=pu.as1.TransformationByVariableSubstitution(o=f, v=None, p=None))
         t, _, _ = pu.as1.derive_1(t=t, c=f, p=None, i=i1, raise_error_if_false=True)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=d)
         t, i2 = pu.as1.let_x_be_an_inference_rule(t=t,
-                                                  f=pu.as1.TransformationByVariableSubstitution(c=g, v=None, p=None))
+                                                  f=pu.as1.TransformationByVariableSubstitution(o=g, v=None, p=None))
         t, _, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2, raise_error_if_false=True)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=e)
 
@@ -1101,11 +1101,11 @@ class TestTheory:
         t2, _ = pu.as1.let_x_be_an_axiom(t=t1, s=a)
         t3, _ = pu.as1.let_x_be_an_axiom(t=t2, s=b)
         t4, i1 = pu.as1.let_x_be_an_inference_rule(t=t3,
-                                                   f=pu.as1.TransformationByVariableSubstitution(c=f, v=None, p=None))
+                                                   f=pu.as1.TransformationByVariableSubstitution(o=f, v=None, p=None))
         t5, _, _ = pu.as1.derive_1(t=t4, c=f, p=None, i=i1, raise_error_if_false=True)
         t6, _ = pu.as1.let_x_be_an_axiom(t=t5, s=d)
         t7, i2 = pu.as1.let_x_be_an_inference_rule(t=t6,
-                                                   f=pu.as1.TransformationByVariableSubstitution(c=g, v=None, p=None))
+                                                   f=pu.as1.TransformationByVariableSubstitution(o=g, v=None, p=None))
         t8, _, _ = pu.as1.derive_1(t=t7, c=g, p=None, i=i2, raise_error_if_false=True)
         t9, _ = pu.as1.let_x_be_an_axiom(t=t8, s=e)
 
@@ -1143,11 +1143,11 @@ class TestTheory:
         t2, _ = pu.as1.let_x_be_an_axiom(t=t1, s=a)
         t3, _ = pu.as1.let_x_be_an_axiom(t=t2, s=b)
         t4, i1 = pu.as1.let_x_be_an_inference_rule(t=t3,
-                                                   f=pu.as1.TransformationByVariableSubstitution(c=f, v=None, p=None))
+                                                   f=pu.as1.TransformationByVariableSubstitution(o=f, v=None, p=None))
         t5, _, _ = pu.as1.derive_1(t=t4, c=f, p=None, i=i1, raise_error_if_false=True)
         t6, _ = pu.as1.let_x_be_an_axiom(t=t5, s=d)
         t7, i2 = pu.as1.let_x_be_an_inference_rule(t=t6,
-                                                   f=pu.as1.TransformationByVariableSubstitution(c=g, v=None, p=None))
+                                                   f=pu.as1.TransformationByVariableSubstitution(o=g, v=None, p=None))
         t8, _, _ = pu.as1.derive_1(t=t7, c=g, p=None, i=i2, raise_error_if_false=True)
         t9, _ = pu.as1.let_x_be_an_axiom(t=t8, s=e)
 
@@ -1228,7 +1228,7 @@ class TestObjectCreation:
         if 1 == 2:
             t = as1.let_x_be_a_theory()
             x = as1.let_x_be_a_new_object()
-            t2 = as1.TransformationByVariableSubstitution(c=is_a_propositional_variable(x), v=(x,),
+            t2 = as1.TransformationByVariableSubstitution(o=is_a_propositional_variable(x), v=(x,),
                                                           d=(x,),
                                                           p=None)
             # rule 1: a variable x in the enumeration of variables car either be listed in declarations,

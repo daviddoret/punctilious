@@ -162,7 +162,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
         algo=is_well_formed_formula_algorithm,
         check=is_compatible_with_is_well_formed_formula,
-        c=as1.is_well_formed_formula_connective(t),
+        o=as1.is_well_formed_formula_connective(t),
         v=None,
         d={t, })
     mt1: as1.InferenceRule = as1.InferenceRule(
@@ -188,7 +188,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
         algo=is_well_formed_inference_rule_algorithm,
         check=is_compatible_with_is_well_formed_inference_rule,
-        c=as1.is_well_formed_inference_rule_connective(t),
+        o=as1.is_well_formed_inference_rule_connective(t),
         v=None,
         d={t, })
     mt2: as1.InferenceRule = as1.InferenceRule(
