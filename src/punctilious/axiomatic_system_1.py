@@ -1925,8 +1925,8 @@ class Transformation(Formula, abc.ABC):
     def __call__(self, i: FlexibleTupl | None = None, i2: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
 
-        :param i: A tuple of formulas denoted as the premises.
-        :param i2: A tuple of formulas denoted as the supplementary arguments.s
+        :param i: A tuple of formulas denoted as the input arguments.
+        :param i2: A tuple of formulas denoted as the complementary input arguments.
         :return:
         """
         return self.apply_transformation(i=i, i2=i2)
@@ -1938,7 +1938,7 @@ class Transformation(Formula, abc.ABC):
 
         :param i: A tuple of formulas denoted as the input arguments.
         :param i2: A tuple of formulas denoted as the complementary input arguments.
-        :return:
+        :return: A formula denoted as the output value.
         """
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
                                   msg='Abstract python method is not implemented.',
