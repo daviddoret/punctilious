@@ -14,7 +14,6 @@ And:
     T ⊢ ⊥
 
 NEXT STEPS:
- - Clean-up work on connectives (AS1, CSL1, etc.), this is a mess.
  - Simplify the external-algorithm data model (transformation, inference-rule),
    it is a bit too heavy now which will make it hard to maintain moving-forward.
 

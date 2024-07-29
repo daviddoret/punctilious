@@ -1921,14 +1921,14 @@ class Transformation(Formula, abc.ABC):
         con, c, v, d, p = Transformation._data_validation_2(con=con, c=c, v=v, d=d, p=p)
         super().__init__(con=transformation_by_variable_substitution_connective, t=(c, v, d, p,))
 
-    def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
+    def __call__(self, p: FlexibleTupl | None = None, a2: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
 
         :param p: A tuple of formulas denoted as the premises.
-        :param a: A tuple of formulas denoted as the supplementary arguments.s
+        :param a2: A tuple of formulas denoted as the supplementary arguments.s
         :return:
         """
-        return self.apply_transformation(p=p, a=a)
+        return self.apply_transformation(p=p, a=a2)
 
     @abc.abstractmethod
     def apply_transformation(self, p: FlexibleTupl | None = None,
@@ -2069,9 +2069,9 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         c2, c, v, d, p = TransformationByVariableSubstitution._data_validation_3(c=c, v=v, d=d, p=p)
         super().__init__(con=c2, c=c, v=v, d=d, p=p)
 
-    def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
+    def __call__(self, p: FlexibleTupl | None = None, a2: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=p, a=a)
+        return self.apply_transformation(p=p, a=a2)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
                              a: FlexibleTupl | None = None) -> Formula:
@@ -2278,12 +2278,12 @@ class TransformationByExternalAlgorithm(Transformation):
 
         u1.log_info(self.typeset_as_string(theory=self, ts_key=pl1.DECLARATION_TS))
 
-    def __call__(self, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None) -> Formula:
+    def __call__(self, p: FlexibleTupl | None = None, a2: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=p, a=a)
+        return self.apply_transformation(p=p, a=a2)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
-                             a: FlexibleTupl | None = None) -> Formula:
+                             a: FlexibleTupl | None = None, m: FlexibleMap | None = None) -> Formula:
         """
 
         :param p: A tuple of premise arguments, whose order matches the order of the transformation premises.

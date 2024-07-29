@@ -679,7 +679,7 @@ class TestInference:
                                                         p=(x | f | y, y | f | z,), )
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
-        pu.as1.is_formula_equivalent(phi=theorem, psi=t(p=p, a=None))
+        pu.as1.is_formula_equivalent(phi=theorem, psi=t(p=p, a2=None))
         inference_rule = pu.as1.InferenceRule(f=t)
         inference = pu.as1.Inference(i=inference_rule, p=p, a=None)
         theorem_2 = pu.as1.Theorem(s=theorem, i=inference)

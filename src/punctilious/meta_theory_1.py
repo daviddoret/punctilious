@@ -15,6 +15,33 @@ if __name__ == '__main__':
 # TODO: How to properly manage multiple output possibilities, e.g. phi() and lnot(phi())?
 #   Should the inference rule list multiple conclusions, assuming disjunction?
 
+class IsWellFormedTheoryAlgorithm(as1.TransformationByExternalAlgorithm):
+
+    def data_validation(self,
+                        p: as1.FlexibleTupl | None = None,
+                        a: as1.FlexibleTupl | None = None,
+                        m: as1.FlexibleMap | None = None) -> bool:
+        p = as1.coerce_tuple(t=p, interpret_none_as_empty=False, canonic_conversion=False)
+        a = as1.coerce_tuple(t=p, interpret_none_as_empty=False, canonic_conversion=False)
+        m = as1.coerce_map(m=m, interpret_none_as_empty=False)
+        if p.arity != 0:
+            raise u1.ApplicativeError(msg='wrong arity')
+        if a.arity != 1:
+            raise u1.ApplicativeError(msg='wrong arity')
+        # Retrieve the arguments
+        t: as1.Theory = as1.coerce_theory(t=a[0], interpret_none_as_empty=False, canonical_conversion=False)
+        pass
+
+    def execute_algorithm(self,
+                          p: as1.FlexibleTupl | None = None,
+                          a: as1.FlexibleTupl | None = None,
+                          m: as1.FlexibleMap | None = None) -> [bool, as1.Formula]:
+        p = as1.coerce_tuple(t=p, interpret_none_as_empty=False, canonic_conversion=False)
+        a = as1.coerce_tuple(t=p, interpret_none_as_empty=False, canonic_conversion=False)
+        m = as1.coerce_map(m=m, interpret_none_as_empty=False)
+        pass
+
+
 def is_well_formed_formula_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
     """A"""
     p: as1.Tupl = as1.coerce_tuple(t=p, interpret_none_as_empty=True)
