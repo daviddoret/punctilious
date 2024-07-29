@@ -1009,7 +1009,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
             i: InferenceRule = InferenceRule(f=f)
         else:
             # Signature 4: This is an algorithmic transformation:
-            f: TransformationByExternalAlgorithm = TransformationByExternalAlgorithm(a=a, i=i2, c=c, v=v,
+            f: TransformationByExternalAlgorithm = TransformationByExternalAlgorithm(algo=a, check=i2, c=c, v=v,
                                                                                      d=d, p=p)
             i: InferenceRule = InferenceRule(f=f)
     else:
@@ -1136,7 +1136,7 @@ def let_x_be_a_transformation_by_external_algorithm(
         d: FlexibleEnumeration | None = None,
         p: FlexibleTupl | None = None
 ):
-    return TransformationByExternalAlgorithm(a=a, i=i, c=c, v=v, d=d,
+    return TransformationByExternalAlgorithm(algo=a, check=i, c=c, v=v, d=d,
                                              p=p)
 
 
@@ -1863,10 +1863,10 @@ class Transformation(Formula, abc.ABC):
      # TODO: Consider renaming to functor, or theory-morphism. Not sure which one is more accurate.
 
     """
-    CONCLUSION_INDEX: int = 0
+    INPUT_SHAPES_INDEX: int = 3
+    OUTPUT_SHAPE_INDEX: int = 0
     VARIABLES_INDEX: int = 1
     DECLARATIONS_INDEX: int = 2
-    PREMISES_INDEX: int = 3
 
     @staticmethod
     def _data_validation_2(con: Connective, c: FlexibleFormula, v: FlexibleEnumeration | None = None,
@@ -1928,15 +1928,15 @@ class Transformation(Formula, abc.ABC):
         :param a2: A tuple of formulas denoted as the supplementary arguments.s
         :return:
         """
-        return self.apply_transformation(p=p, a=a2)
+        return self.apply_transformation(p=p, a2=a2)
 
     @abc.abstractmethod
     def apply_transformation(self, p: FlexibleTupl | None = None,
-                             a: FlexibleTupl | None = None) -> Formula:
+                             a2: FlexibleTupl | None = None) -> Formula:
         """
 
         :param p: A tuple of formulas denoted as the premises. Order must be identical to transformation premises.
-        :param a: A tuple of formulas denoted as the supplementary arguments.s
+        :param a2: A tuple of formulas denoted as the supplementary arguments.s
         :return:
         """
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
@@ -1945,8 +1945,12 @@ class Transformation(Formula, abc.ABC):
                                   arguments=p)
 
     @property
-    def conclusion(self) -> Formula:
-        return self[Transformation.CONCLUSION_INDEX]
+    def output_shape(self) -> Formula:
+        """The shape of the output returned by the transformation.
+
+        :return:
+        """
+        return self[Transformation.OUTPUT_SHAPE_INDEX]
 
     @property
     def declarations(self) -> Enumeration:
@@ -1966,13 +1970,16 @@ class Transformation(Formula, abc.ABC):
         raise u1.ApplicativeError(msg='abstract method')
 
     @property
-    def premises(self) -> Tupl:
-        """A tuple of premises that are necessary conditions before the mechanism can be executed."""
-        return self[Transformation.PREMISES_INDEX]
+    def input_shapes(self) -> Tupl:
+        """A tuple of formulas that provide the shape of arguments (aka input values) expected by the transformation.
+        Shapes are expressed as arbitrary formulas that may contain variables (cf. variables property).
+        The transformation formula thus declares that it expect to receive as input values a tuple of formulas
+        that are formula-equivalent-with-variables with those shapes."""
+        return self[Transformation.INPUT_SHAPES_INDEX]
 
     @property
     def variables(self) -> Enumeration:
-        """Variables used in premises and possibly the conclusion."""
+        """Variables used to express the shapes of arguments and the conclusion."""
         return self[Transformation.VARIABLES_INDEX]
 
 
@@ -2071,33 +2078,33 @@ class TransformationByVariableSubstitution(Transformation, ABC):
 
     def __call__(self, p: FlexibleTupl | None = None, a2: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=p, a=a2)
+        return self.apply_transformation(p=p, a2=a2)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
-                             a: FlexibleTupl | None = None) -> Formula:
+                             a2: FlexibleTupl | None = None) -> Formula:
         """
 
         :param p: A tuple of formulas, denoted as the premises. Order must be identical to the order or premises in the
         transformation.
-        :param a:
+        :param a2:
         :return:
         """
         p = coerce_tuple(t=p, interpret_none_as_empty=True)
-        a = coerce_tuple(t=a,
-                         interpret_none_as_empty=True)  # This argument is not used by transformation-by-variable-substitution.
+        a2 = coerce_tuple(t=a2,
+                          interpret_none_as_empty=True)  # This argument is not used by transformation-by-variable-substitution.
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
+        success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.input_shapes,
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_030,
                                       msg='Applying a transformation-by-variable-substitution with incorrect premises.',
-                                      target_formula=p, transformation_premises=self.premises,
+                                      target_formula=p, transformation_premises=self.input_shapes,
                                       transformation_variables=self.variables, transformation=self)
 
         # step 2:
-        outcome: Formula = replace_formulas(phi=self.conclusion, m=variables_map)
+        outcome: Formula = replace_formulas(phi=self.output_shape, m=variables_map)
 
         # step 3: new objects declarations.
         declarations_map: Map = Map()
@@ -2121,7 +2128,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :param t:
         :return:
         """
-        is_candidate, _ = is_formula_equivalent_with_variables_2(phi=self.conclusion, psi=t, variables=self.variables)
+        is_candidate, _ = is_formula_equivalent_with_variables_2(phi=self.output_shape, psi=t, variables=self.variables)
         return is_candidate
 
 
@@ -2138,20 +2145,20 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         # TODO: Move this logic to coerce_natural_transformation
-        return TransformationByVariableSubstitution(c=f[TransformationByVariableSubstitution.CONCLUSION_INDEX],
+        return TransformationByVariableSubstitution(c=f[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
                                                     v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
                                                     d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
-                                                    p=f[TransformationByVariableSubstitution.PREMISES_INDEX])
+                                                    p=f[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
     elif is_well_formed_transformation_by_external_algorithm(t=f):
         # phi is a well-formed algorithm,
         # it can be safely re-instantiated as an Algorithm and returned.
         # TODO: Move this logic to coerce_algorithmic_transformation
-        return TransformationByExternalAlgorithm(a=f.external_algorithm,
-                                                 i=what_the_hell,  # correct this
-                                                 c=f[TransformationByVariableSubstitution.CONCLUSION_INDEX],
+        return TransformationByExternalAlgorithm(algo=f.external_algorithm,
+                                                 check=what_the_hell,  # correct this
+                                                 c=f[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
                                                  v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
                                                  d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
-                                                 p=f[TransformationByVariableSubstitution.PREMISES_INDEX])
+                                                 p=f[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_060,
@@ -2168,10 +2175,10 @@ def coerce_transformation_by_variable_substitution(t: FlexibleFormula) -> Transf
     elif isinstance(t, Formula) and is_well_formed_transformation_by_variable_substitution(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return TransformationByVariableSubstitution(c=t[TransformationByVariableSubstitution.CONCLUSION_INDEX],
+        return TransformationByVariableSubstitution(c=t[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
                                                     v=t[TransformationByVariableSubstitution.VARIABLES_INDEX],
                                                     d=t[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
-                                                    p=t[TransformationByVariableSubstitution.PREMISES_INDEX])
+                                                    p=t[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_031,
@@ -2202,7 +2209,7 @@ class TransformationByExternalAlgorithm(Transformation):
 
     @staticmethod
     def _data_validation_3(
-            a: typing.Callable, i: typing.Callable, c: FlexibleFormula,
+            algo: typing.Callable, check: typing.Callable, c: FlexibleFormula,
             v: FlexibleEnumeration | None = None,
             d: FlexibleEnumeration | None = None,
             p: FlexibleTupl | None = None
@@ -2210,8 +2217,8 @@ class TransformationByExternalAlgorithm(Transformation):
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param a:
-        :param i:
+        :param algo:
+        :param check:
         :param c:
         :param v:
         :param d:
@@ -2221,7 +2228,7 @@ class TransformationByExternalAlgorithm(Transformation):
         global _connectives
         con: Connective = algorithm_connective
         # TODO: Check `a` is callable nad has correct signature.
-        a: typing.Callable = coerce_external_algorithm(f=a)
+        algo: typing.Callable = coerce_external_algorithm(f=algo)
         # TODO: Check `i` is callable nad has correct signature.
         c: Formula = coerce_formula(phi=c)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
@@ -2229,42 +2236,46 @@ class TransformationByExternalAlgorithm(Transformation):
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
-        return con, a, i, c, v, d, p
+        return con, algo, check, c, v, d, p
 
-    def __new__(cls, a: typing.Callable, i: typing.Callable, c: FlexibleFormula,
+    def __new__(cls, algo: typing.Callable, check: typing.Callable, c: FlexibleFormula,
                 v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
                 p: FlexibleTupl | None = None):
         """
 
-        :param a: An external algorithm.
+        :param algo: An external algorithm.
         :param c: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, a, i, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
+        c2, algo, check, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, c=c,
+                                                                                           v=v, d=d,
+                                                                                           p=p)
         o: tuple = super().__new__(cls, con=c2, c=c, v=v, d=d, p=p)
         return o
 
     def __init__(self,
-                 a: typing.Callable,
-                 i: typing.Callable | None,
+                 algo: typing.Callable,
+                 check: typing.Callable | None,
                  c: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
                  p: FlexibleTupl | None = None):
         """
 
-        :param a:
-        :param i:
+        :param algo:
+        :param check:
         :param c: A formula denoted as the conclusion.
         :param v: An enumeration of variables used in the premises.
         :param d: An enumeration of variables used for object declarations.
         :param p: A tuple of formulas denoted as the premises.
         """
-        c2, a, i, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(a=a, i=i, c=c, v=v, d=d, p=p)
-        self._external_algorithm: typing.Callable = a
-        self._is_derivation_candidate: typing.Callable | None = i
+        c2, algo, check, c, v, d, p = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, c=c,
+                                                                                           v=v, d=d,
+                                                                                           p=p)
+        self._external_algorithm: typing.Callable = algo
+        self._is_derivation_candidate: typing.Callable | None = check
         super().__init__(con=c2, c=c, v=v, d=d, p=p)
 
         # Default typesetting configuration
@@ -2280,22 +2291,22 @@ class TransformationByExternalAlgorithm(Transformation):
 
     def __call__(self, p: FlexibleTupl | None = None, a2: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(p=p, a=a2)
+        return self.apply_transformation(p=p, a2=a2)
 
     def apply_transformation(self, p: FlexibleTupl | None = None,
-                             a: FlexibleTupl | None = None, m: FlexibleMap | None = None) -> Formula:
+                             a2: FlexibleTupl | None = None, m: FlexibleMap | None = None) -> Formula:
         """
 
         :param p: A tuple of premise arguments, whose order matches the order of the transformation premises.
-        :param a: A tuple of complementary arguments.
+        :param a2: A tuple of complementary arguments.
         :return:
         """
         p = coerce_tuple(t=p, interpret_none_as_empty=True)
-        a = coerce_tuple(t=a, interpret_none_as_empty=True)
+        a2 = coerce_tuple(t=a2, interpret_none_as_empty=True)
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
         # supported extreme case: there are no premises.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.premises,
+        success, variables_map = is_formula_equivalent_with_variables_2(phi=p, psi=self.input_shapes,
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
@@ -2306,7 +2317,7 @@ class TransformationByExternalAlgorithm(Transformation):
                                       t=self)
 
         # call the external-algorithm
-        outcome: Formula = self.external_algorithm(p=p, a=a)
+        outcome: Formula = self.external_algorithm(p=p, a=a2)
 
         return outcome
 
@@ -2315,8 +2326,8 @@ class TransformationByExternalAlgorithm(Transformation):
         return self._external_algorithm
 
     @property
-    def conclusion(self) -> Formula:
-        return self[TransformationByExternalAlgorithm.CONCLUSION_INDEX]
+    def output_shape(self) -> Formula:
+        return self[TransformationByExternalAlgorithm.OUTPUT_SHAPE_INDEX]
 
     @property
     def declarations(self) -> Enumeration:
@@ -2338,8 +2349,8 @@ class TransformationByExternalAlgorithm(Transformation):
             return self._is_derivation_candidate(t=t)
 
     @property
-    def premises(self) -> Tupl:
-        return self[TransformationByExternalAlgorithm.PREMISES_INDEX]
+    def input_shapes(self) -> Tupl:
+        return self[TransformationByExternalAlgorithm.INPUT_SHAPES_INDEX]
 
     @property
     def variables(self) -> Enumeration:
@@ -3228,7 +3239,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                 # If the transformation declares/creates new objects, the inference-rule is non-deterministic.
                 # For this particular case, we must map the original objects created by the first derivation,
                 # with the expected conclusion of the inference-rule.
-                map1_test, map1 = is_formula_equivalent_with_variables_2(phi=p, psi=f.conclusion,
+                map1_test, map1 = is_formula_equivalent_with_variables_2(phi=p, psi=f.output_shape,
                                                                          variables=f.declarations)
                 if not map1_test:
                     if raise_error_if_false:
@@ -3247,7 +3258,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
 
                 # The following test is probably superfluous,
                 # as the precedent test covers the compatibility of the conclusion.
-                inverse_test = is_formula_equivalent(phi=p_inverse, psi=f.conclusion)
+                inverse_test = is_formula_equivalent(phi=p_inverse, psi=f.output_shape)
                 if not inverse_test:
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
@@ -3263,7 +3274,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                 # The simpler case is when the inference-rule does not create new objects.
                 # No remapping is necessary and the original conclusion can simply be compared
                 # with the new conclusion.
-                p_prime = f.apply_transformation(p=i.premises, a=i.arguments)
+                p_prime = f.apply_transformation(p=i.premises, a2=i.arguments)
                 if not is_formula_equivalent(phi=p, psi=p_prime):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
@@ -3859,7 +3870,7 @@ class Theorem(Derivation):
         # check the validity of the theorem
         try:
             algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(p=i.premises,
-                                                                                             a=i.arguments)
+                                                                                             a2=i.arguments)
         except u1.ApplicativeError as err:
             raise u1.ApplicativeError(
                 msg='Theorem initialization error. '
@@ -3893,7 +3904,7 @@ class Theorem(Derivation):
             # variables.
             success_1, m1 = is_formula_equivalent_with_variables_2(
                 phi=s,
-                psi=i.inference_rule.transformation.conclusion,
+                psi=i.inference_rule.transformation.output_shape,
                 variables=i.inference_rule.transformation.declarations)
             if not success_1:
                 raise u1.ApplicativeError(
@@ -3902,21 +3913,22 @@ class Theorem(Derivation):
                         'The valid-statement `s` is not consistent with the conclusion of the inference-rule `i`, '
                         'considering new object declarations.',
                     s=s,
-                    i_conclusion=i.inference_rule.transformation.conclusion,
+                    i_conclusion=i.inference_rule.transformation.output_shape,
                     i_declarations=i.inference_rule.transformation.declarations,
                     success_1=success_1)
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
             success_2, _ = is_formula_equivalent_with_variables_2(phi=s,
-                                                                  psi=i.inference_rule.transformation.conclusion,
+                                                                  psi=i.inference_rule.transformation.output_shape,
                                                                   variables=m1.domain)
             pass
             valid_statement_reversed: Formula = replace_formulas(phi=s, m=m1_reversed)
-            if not is_formula_equivalent(phi=valid_statement_reversed, psi=i.inference_rule.transformation.conclusion):
+            if not is_formula_equivalent(phi=valid_statement_reversed,
+                                         psi=i.inference_rule.transformation.output_shape):
                 raise u1.ApplicativeError(
                     msg='Reversing the valid-statement does not yield the inference-rule conclusion.',
                     valid_statement_reversed=valid_statement_reversed,
-                    expected_conclusion=i.inference_rule.transformation.conclusion)
+                    expected_conclusion=i.inference_rule.transformation.output_shape)
 
         return con, s, i
 
@@ -4849,7 +4861,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
     # Function is_formula_equivalent_with_variables_2 returns this map directly.
     conclusion_is_compatible_with_conjecture, known_variable_values = is_formula_equivalent_with_variables_2(
         phi=c,
-        psi=i.transformation.conclusion,
+        psi=i.transformation.output_shape,
         variables=i.transformation.variables,
         variables_fixed_values=None)
     if conclusion_is_compatible_with_conjecture:
@@ -4865,7 +4877,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
         necessary_premises: Tupl = Tupl(
-            e=replace_formulas(phi=i.transformation.premises, m=known_variable_values))
+            e=replace_formulas(phi=i.transformation.input_shapes, m=known_variable_values))
 
         # Find a set of valid_statements in theory t, such that they match the necessary_premises.
         success, effective_premises = are_valid_statements_in_theory_with_variables(
@@ -5033,7 +5045,7 @@ def auto_derive_4(
     # These are the inference-rules whose conclusions are formula-equivalent-with-variables to the conjecture.
     for inference_rule in t.iterate_inference_rules():
         is_equivalent, m = is_formula_equivalent_with_variables_2(phi=conjecture,
-                                                                  psi=inference_rule.transformation.conclusion,
+                                                                  psi=inference_rule.transformation.output_shape,
                                                                   variables=inference_rule.transformation.variables)
         if is_equivalent:
             # This inference-rule is compatible with the conjecture.
@@ -5045,7 +5057,7 @@ def auto_derive_4(
             # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
             # an empty map-builder:
             output, m, = is_formula_equivalent_with_variables_2(phi=conjecture,
-                                                                psi=inference_rule.transformation.conclusion,
+                                                                psi=inference_rule.transformation.output_shape,
                                                                 variables=inference_rule.transformation.variables,
                                                                 variables_fixed_values=None)
 
@@ -5060,7 +5072,7 @@ def auto_derive_4(
             # now that we know what are the necessary variable values, we can determine what
             # are the necessary premises by substituting the variable values.
             necessary_premises: Tupl = Tupl(e=None)
-            for original_premise in inference_rule.transformation.premises:
+            for original_premise in inference_rule.transformation.input_shapes:
                 # we must find a set of premises in the theory
                 # with free-variables.
                 # I see two possible strategies:
@@ -5316,11 +5328,11 @@ class TransformationByVariableSubstitutionTypesetter(pl1.Typesetter):
         kwargs['is_sub_formula'] = True
         if is_sub_formula:
             yield from pl1.symbols.open_parenthesis.typeset_from_generator(**kwargs)
-        yield from phi.premises.typeset_from_generator(**kwargs)
+        yield from phi.input_shapes.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
         yield from pl1.symbols.rightwards_arrow.typeset_from_generator(**kwargs)
         yield from pl1.symbols.space.typeset_from_generator(**kwargs)
-        yield from phi.conclusion.typeset_from_generator(**kwargs)
+        yield from phi.output_shape.typeset_from_generator(**kwargs)
         if len(phi.variables) > 0:
             yield ' with variables '
             yield from phi.variables.typeset_from_generator(**kwargs)
