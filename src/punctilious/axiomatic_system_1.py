@@ -1615,6 +1615,15 @@ def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> Tupl:
     return extended_tupl
 
 
+def append_tuple_to_tuple(t1: FlexibleTupl, t2: FlexibleTupl) -> Tupl:
+    """Return a new tuple which appends all the elements of `t2` to `t1`.
+    """
+    t1: Tupl = coerce_tuple(t=t1, interpret_none_as_empty=True, canonic_conversion=True)
+    t2: Tupl = coerce_tuple(t=t2, interpret_none_as_empty=True, canonic_conversion=True)
+    t3: Tupl = Tupl(e=(*t1, *t2,))
+    return t3
+
+
 def append_term_to_formula(f: FlexibleFormula, t: FlexibleFormula) -> Formula:
     """Return a new extended formula such that term is a new term appended to its existing terms.
     """
@@ -3752,8 +3761,9 @@ class Inference(Formula):
     Where:
         - inference is the inference connective,
         - `i` is an inference-rule.
-        - P is a tuple of formulas denoted as the premises,
-        - (for algorithmic-transformations) A is a tuple of formulas denoted as the supplementary arguments.
+        - P is a tuple of formulas denoted as the premises, that must be valid in the theory being considered,
+          in order for the inference to be valid.
+        - (for algorithmic-transformations) A is a tuple of arbitrary formulas denoted as the supplementary arguments.
 
     Semantic definition:
     An inference is a formal description of one usage of an inference-rule."""
@@ -3778,6 +3788,16 @@ class Inference(Formula):
         i: InferenceRule = coerce_inference_rule(i=i)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
         a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
+
+        # Check the consistency of the shape of the premises and complementary arguments,
+        # with the expected input-shapes of the inference-rule transformation.
+        i2 = append_tuple_to_tuple(t1=p, t2=a)
+        ok, _ = is_formula_equivalent_with_variables_2(phi=i2, psi=i.transformation.input_shapes,
+                                                       variables=i.transformation.variables)
+        if not ok:
+            pass
+            # TODO : Raise an error once migration is completed.
+
         return con, i, p, a
 
     def __new__(cls, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
@@ -3792,18 +3812,20 @@ class Inference(Formula):
         return o
 
     def __init__(self, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
-        """
+        """Initializes a new inference.
 
         :param i: An inference-rule.
-        :param p: A tuple of formulas denoted as the premises.
-        :param a: A tuple of formulas denoted as the supplementary arguments.
+        :param p: A tuple of formulas denoted as the premises, that must be valid in the theory under consideration.
+        :param a: A tuple of formulas denoted as the supplementary arguments, that may or may not be propositions,
+                  and that may or may not be valid in the theory under consideration.
         """
         c, i, p, a = Inference._data_validation_2(i=i, p=p, a=a)
         super().__init__(con=c, t=(i, p, a,))
 
     @property
     def arguments(self) -> Tupl:
-        """A tuple of supplementary arguments to be passed to the transformation as input parameters."""
+        """A tuple of supplementary arguments to be passed to the transformation as input parameters. These may or
+        may not be propositions, and may or may not be valid in the theory under consideration."""
         return self[Inference.ARGUMENTS_INDEX]
 
     @property
@@ -3813,7 +3835,8 @@ class Inference(Formula):
 
     @property
     def premises(self) -> Tupl:
-        """The premises of the inference."""
+        """The premises of the inference. All premises in the inference must be valid in the theory under
+        consideration."""
         return self[Inference.PREMISES_INDEX]
 
 
