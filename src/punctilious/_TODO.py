@@ -17,6 +17,10 @@ NEXT STEPS:
  - Simplify the external-algorithm data model (transformation, inference-rule),
    it is a bit too heavy now which will make it hard to maintain moving-forward.
 
+TODO: Add a special connective to represent the unicity of external algorithms,
+    thus making sue to avoid any ambiguity when comparing transformations
+    under formula-equivalence.
+
 TODO: PRIORITY 1: Complete the Transformation input arguments simplification.
     The inference contains the pair (premises, arguments).
     Complete the migration of Transformation which should only receive a single

@@ -113,6 +113,39 @@ def is_well_formed_theory_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | Non
         )
 
 
+def is_well_formed_theory_algorithm_2(
+        i: as1.Tupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
+    """A python-function used as a theory external algorithm.
+
+    :param i: Input values.
+    :return:
+    """
+    i: as1.Tupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    if not i.arity == 1:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(msg='wrong arguments', i=i)
+        else:
+            return False, None
+    t1: as1.Formula = as1.coerce_formula(phi=i[0])
+    if as1.is_well_formed_theory(t=t1):
+        t1: as1.Theory = as1.coerce_theory(t=t1, interpret_none_as_empty=False, canonical_conversion=False)
+        phi: as1.Formula = as1.is_well_formed_theory_connective(t1)
+        return True, phi
+    else:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='The argument `i[0]` is not a well-formed theory. '
+                    'It follows that the statement :math:`\\text{is-well-formed-theory}(a_{0})` cannot be derived.',
+                code=c1.ERROR_CODE_MT1_002,
+                i0=i[0],
+                t1=t1,
+                i=i
+            )
+        else:
+            return False, None
+
+
 def is_compatible_with_is_well_formed_formula(phi: as1.FlexibleFormula) -> bool:
     with as1.let_x_be_a_variable(formula_ts='x') as x:
         solution_1 = as1.is_well_formed_formula_connective(x)
@@ -212,13 +245,13 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 
 # INFERENCE-RULE: MT3: is-well-formed-theory
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    _mt3: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_external_algorithm(
-        algo=is_well_formed_theory_algorithm,
-        check=None,  # is_compatible_with_is_well_formed_theory
+    _mt3: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_variable_substitution(
+        va=is_well_formed_theory_algorithm_2,
+        # check=None,  # is_compatible_with_is_well_formed_theory
         o=as1.is_well_formed_theory_connective(t),
-        i=None,
+        i=(t,),
         v={t, },
-        d={t, })
+        d=None)  # {t, })
     mt3: as1.InferenceRule = as1.InferenceRule(
         f=_mt3,
         ref_ts=pl1.Monospace(text='MT3'))
