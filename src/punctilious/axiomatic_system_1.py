@@ -1119,25 +1119,42 @@ def let_x_be_a_collection_of_axioms(axioms: FlexibleEnumeration):
     return Axiomatization(d=axioms)
 
 
-def let_x_be_a_transformation_by_variable_substitution(c: FlexibleFormula,
+def let_x_be_a_transformation_by_variable_substitution(o: FlexibleFormula,
                                                        v: FlexibleEnumeration | None = None,
                                                        d: FlexibleEnumeration | None = None,
-                                                       p: FlexibleTupl | None = None
+                                                       i: FlexibleTupl | None = None
                                                        ):
-    return TransformationByVariableSubstitution(o=c, v=v, d=d,
-                                                i=p)
+    """
+
+    :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+    :param d: An enumeration of variables used to reference new object declarations in the output-shape.
+    :param i: A tuple of formulas denoted as the input-shapes.
+    :param o: A formula denoted as the output-shape.
+    :return:
+    """
+    return TransformationByVariableSubstitution(o=o, v=v, d=d, i=i)
 
 
 def let_x_be_a_transformation_by_external_algorithm(
-        a: typing.Callable,
-        c: FlexibleFormula,
-        i: typing.Callable = None,
+        algo: typing.Callable,
+        o: FlexibleFormula,
+        check: typing.Callable = None,
         v: FlexibleEnumeration | None = None,
         d: FlexibleEnumeration | None = None,
-        p: FlexibleTupl | None = None
+        i: FlexibleTupl | None = None
 ):
-    return TransformationByExternalAlgorithm(algo=a, check=i, o=c, v=v, d=d,
-                                             i=p)
+    """
+
+    :param algo:
+    :param check:
+    :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+    :param d: An enumeration of variables used to reference new object declarations in the output-shape.
+    :param i: A tuple of formulas denoted as the input-shapes.
+    :param o: A formula denoted as the output-shape.
+    :return:
+    """
+    return TransformationByExternalAlgorithm(algo=algo, check=check, o=o, v=v, d=d,
+                                             i=i)
 
 
 # Declare fundamental connectives.
@@ -1889,10 +1906,10 @@ class Transformation(Formula, abc.ABC):
         must be fully reliable and considered well-formed a priori.
 
         :param con:
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
+        :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
-        :param v:
-        :param d:
-        :param i: A tuple of formulas denotes as the input-shapes.
         :return:
         """
         con: Connective = coerce_connective(con=con)
@@ -3723,12 +3740,12 @@ FlexibleTransformation = typing.Union[
 with let_x_be_a_variable(formula_ts='P') as phi, let_x_be_a_variable(formula_ts='Q') as psi:
     modus_ponens_inference_rule: InferenceRule = InferenceRule(
         f=let_x_be_a_transformation_by_variable_substitution(
-            p=(
+            i=(
                 is_a_proposition_connective(phi),
                 is_a_proposition_connective(psi),
                 phi | implies_connective | psi,
                 phi),
-            c=psi,
+            o=psi,
             v=(phi, psi,)),
         ref_ts=pl1.Monospace(text='MP'))
     """The modus-ponens inference-rule.

@@ -213,10 +213,10 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 # INFERENCE-RULE: MT3: is-well-formed-theory
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     _mt3: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_external_algorithm(
-        a=is_well_formed_theory_algorithm,
-        i=None,  # is_compatible_with_is_well_formed_theory
-        c=as1.is_well_formed_theory_connective(t),
-        p=None,
+        algo=is_well_formed_theory_algorithm,
+        check=None,  # is_compatible_with_is_well_formed_theory
+        o=as1.is_well_formed_theory_connective(t),
+        i=None,
         v={t, },
         d={t, })
     mt3: as1.InferenceRule = as1.InferenceRule(
@@ -241,11 +241,11 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
     inconsistency_1: as1.InferenceRule = as1.InferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
-            p=(
+            i=(
                 as1.is_well_formed_theory_connective(t),
                 t | as1.proves_connective | p,
                 t | as1.proves_connective | as1.logical_negation_connective(p)),
-            c=as1.is_inconsistent_connective(t),
+            o=as1.is_inconsistent_connective(t),
             v={p, t, }),
         ref_ts=pl1.Monospace(text='⊥1'))
     """The inconsistency-1 inference rule: P and ¬P
@@ -307,11 +307,11 @@ def theory_proves_proposition_external_algorithm(p: as1.Tupl | None = None, a: a
 # INFERENCE-RULE: t-proves-p: T ⊢ P
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
     _t_proves_p: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_external_algorithm(
-        a=theory_proves_proposition_external_algorithm,
-        i=None,
-        p=(
+        algo=theory_proves_proposition_external_algorithm,
+        check=None,
+        i=(
             as1.is_well_formed_theory_connective(t),),
-        c=t | as1.proves_connective | p,
+        o=t | as1.proves_connective | p,
         v=(p, t,))
     t_proves_p: as1.InferenceRule = as1.InferenceRule(
         f=_t_proves_p,

@@ -15,12 +15,12 @@ if __name__ == '__main__':
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     conjunction_introduction: as1.InferenceRule = as1.InferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
-            p=(
+            i=(
                 cls1.is_a_proposition(phi),
                 cls1.is_a_proposition(psi),
                 phi,
                 psi,),
-            c=phi | cls1.land | psi,
+            o=phi | cls1.land | psi,
             v=(phi, psi,)),
         ref_ts=pl1.Monospace(text='CI'))
     """The conjunction-introduction inference rule.
@@ -51,11 +51,11 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_1_rule: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
-        p=(
+        i=(
             cls1.is_a_proposition(phi),
             cls1.is_a_proposition(psi),
             phi | cls1.land | psi,),
-        c=phi,
+        o=phi,
         v=(phi, psi,))
 simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
     f=simplification_1_rule)
@@ -69,11 +69,11 @@ simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_2_rule: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
-        p=(
+        i=(
             cls1.is_a_proposition(phi),
             cls1.is_a_proposition(psi),
             phi | cls1.land | psi,),
-        c=psi,
+        o=psi,
         v=(phi, psi,))
 simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
     f=simplification_2_rule)
