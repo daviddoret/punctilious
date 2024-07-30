@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup some obsolete state objects">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -725,14 +724,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00945" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721680102140</created>
-      <option name="number" value="00945" />
-      <option name="presentableId" value="LOCAL-00945" />
-      <option name="project" value="LOCAL" />
-      <updated>1721680102140</updated>
-    </task>
     <task id="LOCAL-00946" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1721681031242</created>
@@ -1117,7 +1108,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722335357874</updated>
     </task>
-    <option name="localTasksCounter" value="994" />
+    <task id="LOCAL-00994" summary="cleanup some obsolete state objects">
+      <option name="closed" value="true" />
+      <created>1722335583875</created>
+      <option name="number" value="00994" />
+      <option name="presentableId" value="LOCAL-00994" />
+      <option name="project" value="LOCAL" />
+      <updated>1722335583875</updated>
+    </task>
+    <option name="localTasksCounter" value="995" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
