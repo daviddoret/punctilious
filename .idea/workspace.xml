@@ -725,14 +725,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00943" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721680002057</created>
-      <option name="number" value="00943" />
-      <option name="presentableId" value="LOCAL-00943" />
-      <option name="project" value="LOCAL" />
-      <updated>1721680002057</updated>
-    </task>
     <task id="LOCAL-00944" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1721680029798</created>
@@ -1117,7 +1109,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722318903640</updated>
     </task>
-    <option name="localTasksCounter" value="992" />
+    <task id="LOCAL-00992" summary="cleanup some obsolete state objects">
+      <option name="closed" value="true" />
+      <created>1722319136515</created>
+      <option name="number" value="00992" />
+      <option name="presentableId" value="LOCAL-00992" />
+      <option name="project" value="LOCAL" />
+      <updated>1722319136515</updated>
+    </task>
+    <option name="localTasksCounter" value="993" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1230,7 +1230,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3799</line>
+          <line>3802</line>
           <option name="timeStamp" value="150" />
         </line-breakpoint>
       </breakpoints>

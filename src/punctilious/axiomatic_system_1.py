@@ -1872,15 +1872,18 @@ class Transformation(Formula, abc.ABC):
      # TODO: Consider renaming to functor, or theory-morphism. Not sure which one is more accurate.
 
     """
-    INPUT_SHAPES_INDEX: int = 3
-    OUTPUT_SHAPE_INDEX: int = 0
     VARIABLES_INDEX: int = 1
     DECLARATIONS_INDEX: int = 2
+    INPUT_SHAPES_INDEX: int = 3
+    OUTPUT_SHAPE_INDEX: int = 0
 
     @staticmethod
-    def _data_validation_2(con: Connective, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
-                           d: FlexibleEnumeration | None = None,
-                           i: FlexibleTupl | None = None) -> tuple[
+    def _data_validation_2(
+            con: Connective,
+            o: FlexibleFormula,
+            v: FlexibleEnumeration | None = None,
+            d: FlexibleEnumeration | None = None,
+            i: FlexibleTupl | None = None) -> tuple[
         Connective, Formula, Enumeration, Enumeration, Tupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
@@ -1907,10 +1910,10 @@ class Transformation(Formula, abc.ABC):
         """
 
         :param con:
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
+        :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
-        :param v: An enumeration of variables used in the premises.
-        :param d: An enumeration of variables used for object declarations.
-        :param i: A tuple of formulas denoted as the premises.
         """
         con, o, v, d, i = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=i)
         o: tuple = super().__new__(cls, con=transformation_by_variable_substitution_connective,
@@ -1923,7 +1926,7 @@ class Transformation(Formula, abc.ABC):
         """
 
         :param con:
-        :param v: An enumeration of variables used in the input-shapes.
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
         :param d: An enumeration of variables used to reference new object declarations in the output-shape.
         :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
@@ -2048,10 +2051,10 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param v: An enumeration of variables possibly used in the input-shapes and output-shape.
-        :param d: An enumeration of variables used for object declarations in the output-shape.
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
         :param i: A tuple of formulas denoted as the input-shapes.
-        :param o: A formula denoted as the output shape.
+        :param o: A formula denoted as the output-shape.
         :return:
         """
         con: Connective = transformation_by_variable_substitution_connective
@@ -2066,10 +2069,10 @@ class TransformationByVariableSubstitution(Transformation, ABC):
                 i: FlexibleTupl | None = None):
         """
 
-        :param v: An enumeration of variables possibly used in the input-shapes and output-shape.
-        :param d: An enumeration of variables used for object declarations in the output-shape.
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
         :param i: A tuple of formulas denoted as the input-shapes.
-        :param o: A formula denoted as the output shape.
+        :param o: A formula denoted as the output-shape.
         """
         c2, o, v, d, i = TransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i)
         o: tuple = super().__new__(cls, con=c2, o=o, v=v, d=d, i=i)
@@ -2080,10 +2083,10 @@ class TransformationByVariableSubstitution(Transformation, ABC):
                  i: FlexibleTupl | None = None):
         """
 
-        :param v: An enumeration of variables possibly used in the input-shapes and output-shape.
-        :param d: An enumeration of variables used for object declarations in the output-shape.
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
         :param i: A tuple of formulas denoted as the input-shapes.
-        :param o: A formula denoted as the output shape.
+        :param o: A formula denoted as the output-shape.
         """
         c2, o, v, d, i = TransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i)
         super().__init__(con=c2, o=o, v=v, d=d, i=i)
@@ -2225,20 +2228,20 @@ class TransformationByExternalAlgorithm(Transformation):
 
     @staticmethod
     def _data_validation_3(
-            algo: typing.Callable, check: typing.Callable, c: FlexibleFormula,
+            algo: typing.Callable, check: typing.Callable, o: FlexibleFormula,
             v: FlexibleEnumeration | None = None,
             d: FlexibleEnumeration | None = None,
-            p: FlexibleTupl | None = None
+            i: FlexibleTupl | None = None
     ) -> tuple[Connective, typing.Callable, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
         :param algo:
         :param check:
-        :param c:
-        :param v:
-        :param d:
-        :param p:
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
+        :param i: A tuple of formulas denoted as the input-shapes.
+        :param o: A formula denoted as the output-shape.
         :return:
         """
         global _connectives
@@ -2246,13 +2249,13 @@ class TransformationByExternalAlgorithm(Transformation):
         # TODO: Check `a` is callable nad has correct signature.
         algo: typing.Callable = coerce_external_algorithm(f=algo)
         # TODO: Check `i` is callable nad has correct signature.
-        c: Formula = coerce_formula(phi=c)
+        o: Formula = coerce_formula(phi=o)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
-        return con, algo, check, c, v, d, p
+        i: Tupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
+        return con, algo, check, o, v, d, i
 
     def __new__(cls, algo: typing.Callable, check: typing.Callable, o: FlexibleFormula,
                 v: FlexibleEnumeration | None = None,
@@ -2266,9 +2269,9 @@ class TransformationByExternalAlgorithm(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param i: A tuple of formulas denoted as the input-shapes.
         """
-        c2, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, c=o,
+        c2, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, o=o,
                                                                                            v=v, d=d,
-                                                                                           p=i)
+                                                                                           i=i)
         o: tuple = super().__new__(cls, con=c2, o=o, v=v, d=d, i=i)
         return o
 
@@ -2287,9 +2290,9 @@ class TransformationByExternalAlgorithm(Transformation):
         :param d: An enumeration of variables used for object declarations.
         :param i: A tuple of formulas denoted as the premises.
         """
-        c2, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, c=o,
+        c2, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, o=o,
                                                                                            v=v, d=d,
-                                                                                           p=i)
+                                                                                           i=i)
         self._external_algorithm: typing.Callable = algo
         self._is_derivation_candidate: typing.Callable | None = check
         super().__init__(con=c2, o=o, v=v, d=d, i=i)
