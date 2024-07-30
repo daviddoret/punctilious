@@ -17,6 +17,13 @@ NEXT STEPS:
  - Simplify the external-algorithm data model (transformation, inference-rule),
    it is a bit too heavy now which will make it hard to maintain moving-forward.
 
+TODO: PRIORITY 1: Complete the Transformation input arguments simplification.
+    The inference contains the pair (premises, arguments).
+    Complete the migration of Transformation which should only receive a single
+    tuple of input values.
+    In the Theorem class, this requires to merge premises and arguments
+    and pass them to the transformation.
+
 
 ***************
 
