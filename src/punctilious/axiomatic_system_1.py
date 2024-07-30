@@ -2000,14 +2000,13 @@ class Transformation(Formula, abc.ABC):
 class TransformationByVariableSubstitution(Transformation, ABC):
     """A transformation-by-variable-substitution, is a map from the class of formulas to itself.
 
-    Syntactically, a transformation-by-variable-substitution is a formula t(c, V, D, P) where:
-     - t is the transformation-by-variable-substitution connective,
-     - c is a formula called the conclusion, which gives the shape of the transformation-by-variable-substitution output
-        formula.
-     - V is an enumeration whose children are simple-objects called the variables.
-     - D is an enumeration whose children are simple-objects called the new-object-declarations.
-     - P is an enumeration of formulas whose children are called premises.
-     - The intersection V ∩ D is empty.
+    Syntactically, a transformation-by-variable-substitution is a formula :math:`f(o, V, D, I)` where:
+     - :math:`f` is the transformation-by-variable-substitution connective,
+     - :math:`o` is a formula denoted as the output-shape.
+     - :math:`V` is an enumeration whose children are simple-objects called the variables.
+     - :math:`D` is an enumeration whose children are simple-objects called the new-object-declarations.
+     - :math:`I` is a tuple of formulas denoted as the input-shapes.
+     - The intersection :math:`V ∩ D` is empty.
 
     Algorithm:
     The following algorithm is applied when a transformation-by-variable-substitution is "called":
