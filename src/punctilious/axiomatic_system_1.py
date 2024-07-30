@@ -2264,15 +2264,15 @@ class TransformationByExternalAlgorithm(Transformation):
         """
 
         :param algo: An external algorithm.
-        :param o: A formula denoted as the conclusion.
-        :param v: An enumeration of variables used in the premises.
-        :param d: An enumeration of variables used for object declarations.
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
         :param i: A tuple of formulas denoted as the input-shapes.
+        :param o: A formula denoted as the output-shape.
         """
-        c2, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, o=o,
-                                                                                           v=v, d=d,
-                                                                                           i=i)
-        o: tuple = super().__new__(cls, con=c2, o=o, v=v, d=d, i=i)
+        con, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, o=o,
+                                                                                            v=v, d=d,
+                                                                                            i=i)
+        o: tuple = super().__new__(cls, con=con, o=o, v=v, d=d, i=i)
         return o
 
     def __init__(self,
@@ -2285,10 +2285,10 @@ class TransformationByExternalAlgorithm(Transformation):
 
         :param algo:
         :param check:
-        :param o: A formula denoted as the conclusion.
-        :param v: An enumeration of variables used in the premises.
-        :param d: An enumeration of variables used for object declarations.
-        :param i: A tuple of formulas denoted as the premises.
+        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
+        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
+        :param i: A tuple of formulas denoted as the input-shapes.
+        :param o: A formula denoted as the output-shape.
         """
         c2, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, o=o,
                                                                                            v=v, d=d,
