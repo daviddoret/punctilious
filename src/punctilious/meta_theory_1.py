@@ -12,119 +12,101 @@ if __name__ == '__main__':
         'This module does not support being directly executed as a script. Please use the import statement.')
 
 
-# TODO: How to properly manage multiple output possibilities, e.g. phi() and lnot(phi())?
-#   Should the inference rule list multiple conclusions, assuming disjunction?
+def is_well_formed_formula_algorithm_2(
+        i: as1.Tupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
+    """A python-function used as a formula external algorithm to verify is-well-formed-formula of a formula.
 
-class IsWellFormedTheoryAlgorithm(as1.TransformationByExternalAlgorithm):
-
-    def data_validation(self,
-                        p: as1.FlexibleTupl | None = None,
-                        a: as1.FlexibleTupl | None = None,
-                        m: as1.FlexibleMap | None = None) -> bool:
-        p = as1.coerce_tuple(t=p, interpret_none_as_empty=False, canonic_conversion=False)
-        a = as1.coerce_tuple(t=p, interpret_none_as_empty=False, canonic_conversion=False)
-        m = as1.coerce_map(m=m, interpret_none_as_empty=False)
-        if p.arity != 0:
-            raise u1.ApplicativeError(msg='wrong arity')
-        if a.arity != 1:
-            raise u1.ApplicativeError(msg='wrong arity')
-        # Retrieve the arguments
-        t: as1.Theory = as1.coerce_theory(t=a[0], interpret_none_as_empty=False, canonical_conversion=False)
-        pass
-
-    def execute_algorithm(self,
-                          p: as1.FlexibleTupl | None = None,
-                          a: as1.FlexibleTupl | None = None,
-                          m: as1.FlexibleMap | None = None) -> [bool, as1.Formula]:
-        p = as1.coerce_tuple(t=p, interpret_none_as_empty=False, canonic_conversion=False)
-        a = as1.coerce_tuple(t=p, interpret_none_as_empty=False, canonic_conversion=False)
-        m = as1.coerce_map(m=m, interpret_none_as_empty=False)
-        pass
-
-
-def is_well_formed_formula_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
-    """A"""
-    p: as1.Tupl = as1.coerce_tuple(t=p, interpret_none_as_empty=True)
-    a: as1.Tupl = as1.coerce_tuple(t=a, interpret_none_as_empty=True)
-    if not a.arity == 1:
-        raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
-    a0: as1.Formula = a[0]
-    phi: as1.Formula = as1.coerce_formula(phi=a0)
-    if as1.is_well_formed_formula(phi=phi):
-        # Necessary case.
-        phi: as1.Formula = as1.is_well_formed_formula_connective(phi)
-        return phi
-    else:
-        # Technically impossible case.
-        raise u1.ApplicativeError(
-            msg='The argument `a0` is not a well-formed formula. '
-                'It follows that the statement :math:`\text{is-well-formed-formula}(a_{0})` cannot be derived.',
-            code=c1.ERROR_CODE_MT1_003,
-            a0=a0
-        )
-
-
-def is_well_formed_inference_rule_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
-    """A python-function that is used as a theory external-algorithm."""
-    p: as1.Tupl = as1.coerce_tuple(t=p)
-    a: as1.Tupl = as1.coerce_tuple(t=a)
-    if not a.arity == 1:
-        raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
-    a0: as1.Formula = a[0]
-    i: as1.Formula = as1.coerce_formula(phi=a0)
-    if as1.is_well_formed_inference_rule(i=i):
-        as1.coerce_inference_rule(i=i)
-        phi: as1.Formula = as1.is_well_formed_inference_rule_connective(t)
-        return phi
-    else:
-        raise u1.ApplicativeError(
-            msg='The argument `a0` is not a well-formed inference-rule. '
-                'It follows that the statement :math:`\text{is-well-formed-inference-rule}(a_{0})` cannot be derived.',
-            code=c1.ERROR_CODE_MT1_001,
-            a0=a0
-        )
-
-
-def is_well_formed_theory_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
-    """A python-function used as a theory external algorithm.
-
-    :param p: Premises.
-    :param a: Complementary arguments.
-    :return:
+    :param i: A tuple of formulas, denoted as the input values.
+    :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
+    :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
     """
-    p: as1.Tupl = as1.coerce_tuple(t=p)
-    a: as1.Tupl = as1.coerce_tuple(t=a)
-    if not a.arity == 1:
-        raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
-    a0: as1.Formula = a[0]
-    t1: as1.Formula = as1.coerce_formula(phi=a0)
-    if as1.is_well_formed_theory(t=t1):
-        t2: as1.Theory = as1.coerce_theory(t=t1)
-        phi: as1.Formula = as1.is_well_formed_theory_connective(t2)
-        return phi
+    i: as1.Tupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    if not i.arity == 1:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_MT1_007,
+                msg='is-well-formed-formula algorithm failure: '
+                    'The number of input-values provided to the algorithm is not equal to 1.',
+                i=i)
+        else:
+            return False, None
+    phi: as1.Formula = as1.coerce_formula(phi=i[0])
+    if as1.is_well_formed_formula(phi=phi):
+        phi: as1.Formula = as1.is_well_formed_formula_connective(phi)
+        return True, phi
     else:
-        raise u1.ApplicativeError(
-            msg='The argument `a[0]` is not a well-formed theory. '
-                'It follows that the statement :math:`\\text{is-well-formed-theory}(a_{0})` cannot be derived.',
-            code=c1.ERROR_CODE_MT1_002,
-            a0=a0,
-            a=a,
-            p=p
-        )
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-formula algorithm failure: '
+                    'The argument `i[0]` is not a well-formed formula. '
+                    'It follows that the statement :math:`\\text{is-well-formed-formula}(a_{0})` cannot be derived.',
+                code=c1.ERROR_CODE_MT1_008,
+                i0=i[0],
+                phi=phi,
+                i=i
+            )
+        else:
+            return False, None
+
+
+def is_well_formed_inference_rule_algorithm_2(
+        i: as1.Tupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
+    """A python-function used as a inference-rule external algorithm to verify is-well-formed-inference-rule of a formula.
+
+    :param i: A tuple of formulas, denoted as the input values.
+    :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
+    :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
+    """
+    i: as1.Tupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    if not i.arity == 1:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_MT1_005,
+                msg='is-well-formed-inference-rule algorithm failure: '
+                    'The number of input-values provided to the algorithm is not equal to 1.',
+                i=i)
+        else:
+            return False, None
+    ir: as1.Formula = as1.coerce_formula(phi=i[0])
+    if as1.is_well_formed_inference_rule(i=ir):
+        ir: as1.InferenceRule = as1.coerce_inference_rule(i=ir)
+        phi: as1.Formula = as1.is_well_formed_inference_rule_connective(ir)
+        return True, phi
+    else:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-inference-rule algorithm failure: '
+                    'The argument `i[0]` is not a well-formed inference-rule. '
+                    'It follows that the statement :math:`\\text{is-well-formed-inference-rule}(a_{0})` '
+                    'cannot be derived.',
+                code=c1.ERROR_CODE_MT1_006,
+                i0=i[0],
+                ir=ir,
+                i=i
+            )
+        else:
+            return False, None
 
 
 def is_well_formed_theory_algorithm_2(
         i: as1.Tupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
-    """A python-function used as a theory external algorithm.
+    """A python-function used as a theory external algorithm to verify is-well-formed-theory of a formula.
 
-    :param i: Input values.
-    :return:
+    :param i: A tuple of formulas, denoted as the input values.
+    :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
+    :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
     """
     i: as1.Tupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
     if not i.arity == 1:
         if raise_error_if_false:
-            raise u1.ApplicativeError(msg='wrong arguments', i=i)
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_MT1_004,
+                msg='is-well-formed-theory algorithm failure: '
+                    'The number of input-values provided to the algorithm is not equal to 1.',
+                i=i)
         else:
             return False, None
     t1: as1.Formula = as1.coerce_formula(phi=i[0])
@@ -135,7 +117,8 @@ def is_well_formed_theory_algorithm_2(
     else:
         if raise_error_if_false:
             raise u1.ApplicativeError(
-                msg='The argument `i[0]` is not a well-formed theory. '
+                msg='is-well-formed-theory algorithm failure: '
+                    'The argument `i[0]` is not a well-formed theory. '
                     'It follows that the statement :math:`\\text{is-well-formed-theory}(a_{0})` cannot be derived.',
                 code=c1.ERROR_CODE_MT1_002,
                 i0=i[0],
@@ -146,58 +129,13 @@ def is_well_formed_theory_algorithm_2(
             return False, None
 
 
-def is_compatible_with_is_well_formed_formula(phi: as1.FlexibleFormula) -> bool:
-    with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_1 = as1.is_well_formed_formula_connective(x)
-        test_1, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
-        if test_1:
-            return True
-    with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.logical_negation_connective(as1.is_well_formed_formula_connective(x))
-        test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
-        if test_2:
-            return True
-        else:
-            return False
-
-
-def is_compatible_with_is_well_formed_inference_rule(phi: as1.FlexibleFormula) -> bool:
-    with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_1 = as1.is_well_formed_inference_rule_connective(x)
-        test_1, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
-        if test_1:
-            return True
-    with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.logical_negation_connective(as1.is_well_formed_inference_rule_connective(x))
-        test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
-        if test_2:
-            return True
-        else:
-            return False
-
-
-def is_compatible_with_is_well_formed_theory_algorithm(phi: as1.FlexibleFormula) -> bool:
-    with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_1 = as1.is_well_formed_theory_connective(x)
-        test_1, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
-        if test_1:
-            return True
-    with as1.let_x_be_a_variable(formula_ts='x') as x:
-        solution_2 = as1.logical_negation_connective(as1.is_well_formed_theory_connective(x))
-        test_2, _ = as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
-        if test_2:
-            return True
-        else:
-            return False
-
-
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
-        algo=is_well_formed_formula_algorithm,
-        check=is_compatible_with_is_well_formed_formula,
+    algo: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_variable_substitution(
+        va=is_well_formed_formula_algorithm_2,
         o=as1.is_well_formed_formula_connective(t),
-        v=None,
-        d={t, })
+        i=(t,),
+        v={t, },
+        d=None)
     mt1: as1.InferenceRule = as1.InferenceRule(
         f=algo,
         ref_ts=pl1.Monospace(text='MT1'))
@@ -218,12 +156,12 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     """
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    algo: as1.TransformationByExternalAlgorithm = as1.TransformationByExternalAlgorithm(
-        algo=is_well_formed_inference_rule_algorithm,
-        check=is_compatible_with_is_well_formed_inference_rule,
+    algo: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_variable_substitution(
+        va=is_well_formed_inference_rule_algorithm_2,
         o=as1.is_well_formed_inference_rule_connective(t),
-        v=None,
-        d={t, })
+        v={t, },
+        i=(t,),
+        d=None)
     mt2: as1.InferenceRule = as1.InferenceRule(
         f=algo,
         ref_ts=pl1.Monospace(text='MT2'))
@@ -297,7 +235,9 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
     # TODO: Provide references in the doc above.
 
 
-def theory_proves_proposition_external_algorithm(p: as1.Tupl | None = None, a: as1.Tupl | None = None):
+def theory_proves_proposition_external_algorithm(
+        iv: as1.Tupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
     """An external algorithm for the t-proves-p (T ⊢ P) transformation.
 
     This algorithm is used to implement the syntactic-entailment inference-rule.
@@ -313,35 +253,38 @@ def theory_proves_proposition_external_algorithm(p: as1.Tupl | None = None, a: a
      T ⊢ P
     Otherwise raise an error.
 
-    :param p: Premises.
-    :param a: Complementary arguments.
+    :param iv: A tuple of formulas, denoted as the input-values.
     :return:
     """
-    p: as1.Tupl = as1.coerce_tuple(t=p)
-    a: as1.Tupl = as1.coerce_tuple(t=a)
-    if not a.arity == 2:
-        raise u1.ApplicativeError(msg='wrong arguments', p=p, type_p=type(p), a=a, type_a=type(a))
-    t: as1.Theory = as1.coerce_theory(t=a[0], interpret_none_as_empty=False, canonical_conversion=False)
-    p2: as1.Formula = as1.coerce_formula(phi=a[1])
-    if as1.is_valid_proposition_in_theory_1(p=p2, t=t):
-        phi: as1.Formula = t | as1.proves_connective | p2
-        return phi
+    iv: as1.Tupl = as1.coerce_tuple(t=iv)
+    if not iv.arity == 2:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(msg='wrong arguments', iv=iv)
+        else:
+            return False, None
+    t: as1.Theory = as1.coerce_theory(t=iv[0], interpret_none_as_empty=False, canonical_conversion=False)
+    p: as1.Formula = as1.coerce_formula(phi=iv[1])
+    if as1.is_valid_proposition_in_theory_1(p=p, t=t):
+        phi: as1.Formula = t | as1.proves_connective | p
+        return True, phi
     else:
-        raise u1.ApplicativeError(
-            msg='Blablabla',
-            code=None,
-            p=p,
-            a=a,
-            t=t,
-            p2=p2
-        )
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='Blablabla',
+                code=None,
+                p=iv,
+                a=a,
+                t=t,
+                p2=p
+            )
+        else:
+            return False, None
 
 
 # INFERENCE-RULE: t-proves-p: T ⊢ P
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
-    _t_proves_p: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_external_algorithm(
-        algo=theory_proves_proposition_external_algorithm,
-        check=None,
+    _t_proves_p: as1.TransformationByExternalAlgorithm = as1.let_x_be_a_transformation_by_variable_substitution(
+        va=theory_proves_proposition_external_algorithm,
         i=(
             as1.is_well_formed_theory_connective(t),),
         o=t | as1.proves_connective | p,

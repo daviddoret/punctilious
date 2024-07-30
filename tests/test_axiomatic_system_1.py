@@ -733,42 +733,25 @@ class TestProofByInference:
 
 class TestAlgorithm:
     def test_algorithm(self):
-        def x_is_a_theory(p: pu.as1.Tupl | None = None, a: pu.as1.Tupl | None = None):
-            p = as1.coerce_tuple(t=p)
-            a = as1.coerce_tuple(t=a)
-            if not a.arity == 1:
-                raise pu.u1.ApplicativeError(msg='wrong arguments', p=p, a=a)
-            t = a[0]
+        def x_is_a_theory(i: pu.as1.Tupl | None = None):
+            i = as1.coerce_tuple(t=i)
+            if not i.arity == 1:
+                raise pu.u1.ApplicativeError(msg='wrong arguments', i=i)
+            t = i[0]
             if as1.is_well_formed_theory(t=t):
                 t = as1.coerce_theory(t=t)
                 phi = pu.csl1.is_well_formed_theory(t)
-                return phi
+                return True, phi
             else:
-                phi = lnot(pu.csl1.is_well_formed_theory(t))
-                return phi
-
-        def is_compatible(phi: as1.FlexibleFormula) -> bool:
-            with pu.as1.let_x_be_a_variable(formula_ts='x') as x:
-                solution_1 = pu.csl1.is_well_formed_theory(x)
-                test_1, _ = pu.as1.is_formula_equivalent_with_variables_2(phi=solution_1, psi=phi, variables={x, })
-                if test_1:
-                    return True
-            with pu.as1.let_x_be_a_variable(formula_ts='x') as x:
-                solution_2 = lnot(pu.csl1.is_well_formed_theory(x))
-                test_2, _ = pu.as1.is_formula_equivalent_with_variables_2(phi=solution_2, psi=phi, variables={x, })
-                if test_2:
-                    return True
-                else:
-                    return False
+                raise pu.u1.ApplicativeError(msg='failed algorithm', i=i)
 
         t = as1.let_x_be_a_theory()
         m = as1.let_x_be_a_theory()
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
-            algo = as1.TransformationByExternalAlgorithm(algo=x_is_a_theory,
-                                                         check=is_compatible,
-                                                         o=is_well_formed_theory(x),
-                                                         v={x, },
-                                                         d={x, })
+            algo = as1.let_x_be_a_transformation_by_variable_substitution(va=x_is_a_theory,
+                                                                          o=is_well_formed_theory(x),
+                                                                          v={x, },
+                                                                          d={x, })
         i = as1.InferenceRule(f=algo)
         m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
         c = is_well_formed_theory(t)
