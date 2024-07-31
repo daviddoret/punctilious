@@ -1959,21 +1959,20 @@ class Transformation(Formula, abc.ABC):
         :param i2: A tuple of formulas denoted as the complementary input arguments.
         :return:
         """
-        return self.apply_transformation(iv=i, i2=i2)
+        return self.apply_transformation(i=i, i2=i2)
 
     @abc.abstractmethod
-    def apply_transformation(self, iv: FlexibleTupl | None = None,
-                             i2: FlexibleTupl | None = None) -> Formula:
+    def apply_transformation(self, i: FlexibleTupl | None = None, raise_error_if_false: bool = True) -> Formula:
         """
 
-        :param iv: A tuple of formulas denoted as the input values, or input arguments.
-        :param i2: A tuple of formulas denoted as the complementary input values.
+        :param raise_error_if_false:
+        :param i: A tuple of formulas denoted as the input values, or input arguments.
         :return: A formula denoted as the output value.
         """
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
                                   msg='Abstract python method is not implemented.',
                                   object=self, object_type=type(self),
-                                  arguments=iv)
+                                  arguments=i)
 
     @property
     def output_shape(self) -> Formula:
@@ -2117,46 +2116,47 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :param i2: OBSOLETE: A complementary tuple of formulas.
         :return:
         """
-        return self.apply_transformation(iv=i, i2=i2)
+        return self.apply_transformation(i=i, i2=i2)
 
-    def apply_transformation(self, iv: FlexibleTupl | None = None,
+    def apply_transformation(self, i: FlexibleTupl | None = None,
                              i2: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param iv: A tuple of formulas denoted as the input-values.
+        :param i: A tuple of formulas denoted as the input-values.
         :param i2: OBSOLETE: A complementary tuple of formulas.
         :return:
         """
-        iv = coerce_tuple(t=iv, interpret_none_as_empty=True)
+        i = coerce_tuple(t=i, interpret_none_as_empty=True)
         i2 = coerce_tuple(t=i2,
                           interpret_none_as_empty=True)
 
-        iv = append_tuple_to_tuple(t1=iv, t2=i2)
+        i = append_tuple_to_tuple(t1=i, t2=i2)
 
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=iv, psi=self.input_shapes,
+        success, variables_map = is_formula_equivalent_with_variables_2(phi=i, psi=self.input_shapes,
                                                                         variables=self.variables,
                                                                         variables_fixed_values=None)
         if not success:
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_030,
-                                      msg='Transformation failure. '
-                                          'The input-values `i1` are incompatible with the input-shapes `i2`, '
-                                          'of transformation `f` considering variables `v`.',
-                                      i1=iv, i2=self.input_shapes,
-                                      v=self.variables, f=self)
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_030,
+                msg='Transformation failure. '
+                    'The input-values `iv` are incompatible with the input-shapes `ih`, '
+                    'of transformation `f` considering variables `v`.',
+                iv=i, ih=self.input_shapes,
+                v=self.variables, f=self)
 
         # Step 1b: If an external-algorithm validation is configured on this transformation,
         # call it to check the validity of the input values.
         if self.validation_algorithm is not None:
-            ok, output_value = self.validation_algorithm(i=iv)
+            ok, output_value = self.validation_algorithm(iv=i)
             if not ok:
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_086,
                                           msg='Transformation failure. '
                                               'The input-values `i1` are incompatible with validation-algorithm `va`, '
                                               'of transformation `f`. '
                                               'The input-shapes `i2` and variables `v` are provided for information.',
-                                          i1=iv,
+                                          i1=i,
                                           va=self.validation_algorithm,
                                           i2=self.input_shapes,
                                           v=self.variables,
@@ -2265,182 +2265,6 @@ def coerce_external_algorithm(f: object) -> typing.Callable:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_056, coerced_type=typing.Callable,
                                   external_algorithm_type=type(f),
                                   external_algorithm=f)
-
-
-class TransformationByExternalAlgorithm(Transformation):
-    """A well-formed algorithmic-transformation is a derivation that justified the derivation of further theorems in
-    a theory, should bew impose conditions ex premises???
-    by executing an algorithm that is external to the theory.
-    The algorithm generates a new formula.
-
-    Distinctively from premises, we should pass arguments to the algorithm."""
-
-    _last_index = 0
-
-    @staticmethod
-    def _data_validation_3(
-            algo: typing.Callable, check: typing.Callable, o: FlexibleFormula,
-            v: FlexibleEnumeration | None = None,
-            d: FlexibleEnumeration | None = None,
-            i: FlexibleTupl | None = None
-    ) -> tuple[Connective, typing.Callable, typing.Callable, Formula, Enumeration, Enumeration, Tupl]:
-        """Assure the well-formedness of the object before it is created. Once created, the object
-        must be fully reliable and considered well-formed a priori.
-
-        :param algo:
-        :param check:
-        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
-        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
-        :param i: A tuple of formulas denoted as the input-shapes.
-        :param o: A formula denoted as the output-shape.
-        :return:
-        """
-        global _connectives
-        con: Connective = algorithm_connective
-        # TODO: Check `a` is callable nad has correct signature.
-        algo: typing.Callable = coerce_external_algorithm(f=algo)
-        # TODO: Check `i` is callable nad has correct signature.
-        o: Formula = coerce_formula(phi=o)
-        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
-                                            strip_duplicates=True)
-        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
-                                            strip_duplicates=True)
-        i: Tupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
-        return con, algo, check, o, v, d, i
-
-    def __new__(cls, algo: typing.Callable, check: typing.Callable, o: FlexibleFormula,
-                v: FlexibleEnumeration | None = None,
-                d: FlexibleEnumeration | None = None,
-                i: FlexibleTupl | None = None):
-        """
-
-        :param algo: An external algorithm.
-        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
-        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
-        :param i: A tuple of formulas denoted as the input-shapes.
-        :param o: A formula denoted as the output-shape.
-        """
-        con, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, o=o,
-                                                                                            v=v, d=d,
-                                                                                            i=i)
-        o: tuple = super().__new__(cls, con=con, o=o, v=v, d=d, i=i)
-        return o
-
-    def __init__(self,
-                 algo: typing.Callable,
-                 check: typing.Callable | None,
-                 o: FlexibleFormula, v: FlexibleEnumeration | None = None,
-                 d: FlexibleEnumeration | None = None,
-                 i: FlexibleTupl | None = None):
-        """
-
-        :param algo:
-        :param check:
-        :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
-        :param d: An enumeration of variables used to reference new object declarations in the output-shape.
-        :param i: A tuple of formulas denoted as the input-shapes.
-        :param o: A formula denoted as the output-shape.
-        """
-        c2, algo, check, o, v, d, i = TransformationByExternalAlgorithm._data_validation_3(algo=algo, check=check, o=o,
-                                                                                           v=v, d=d,
-                                                                                           i=i)
-        self._external_algorithm: typing.Callable = algo
-        self._is_derivation_candidate: typing.Callable | None = check
-        super().__init__(con=c2, o=o, v=v, d=d, i=i)
-
-        # Default typesetting configuration
-        if pl1.REF_TS not in self.ts.keys():
-            TransformationByExternalAlgorithm._last_index = TransformationByExternalAlgorithm._last_index + 1
-            self.ts[pl1.REF_TS] = pl1.NaturalIndexedSymbolTypesetter(body_ts=pl1.symbols.g_uppercase_serif_italic,
-                                                                     index=TransformationByExternalAlgorithm._last_index)
-        if pl1.DECLARATION_TS not in self.ts.keys():
-            self.ts[pl1.DECLARATION_TS] = typesetters.declaration(
-                conventional_class='transformation-by-external-algorithm')
-
-        u1.log_info(self.typeset_as_string(theory=self, ts_key=pl1.DECLARATION_TS))
-
-    def __call__(self, i: FlexibleTupl | None = None, i2: FlexibleTupl | None = None) -> Formula:
-        """A shortcut for self.apply_transformation()"""
-        return self.apply_transformation(iv=i, i2=i2)
-
-    def apply_transformation(self, iv: FlexibleTupl | None = None,
-                             i2: FlexibleTupl | None = None, m: FlexibleMap | None = None) -> Formula:
-        """
-
-        :param iv: A tuple of premise arguments, whose order matches the order of the transformation premises.
-        :param i2: A tuple of complementary arguments.
-        :return:
-        """
-        iv = coerce_tuple(t=iv, interpret_none_as_empty=True)
-        i2 = coerce_tuple(t=i2, interpret_none_as_empty=True)
-        # step 1: confirm every argument is compatible with its premises,
-        # and seize the opportunity to retrieve the mapped variable values.
-        # supported extreme case: there are no premises.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=iv, psi=self.input_shapes,
-                                                                        variables=self.variables,
-                                                                        variables_fixed_values=None)
-        if not success:
-            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_050,
-                                      msg='Transformation failure. '
-                                          'Premises `p` are incompatible with transformation `t`.',
-                                      p=iv,
-                                      t=self)
-
-        # call the external-algorithm
-        outcome: Formula = self.external_algorithm(p=iv, a=i2)
-
-        return outcome
-
-    @property
-    def external_algorithm(self) -> typing.Callable:
-        return self._external_algorithm
-
-    @property
-    def output_shape(self) -> Formula:
-        return self[TransformationByExternalAlgorithm.OUTPUT_SHAPE_INDEX]
-
-    @property
-    def output_declarations(self) -> Enumeration:
-        return self[TransformationByExternalAlgorithm.DECLARATIONS_INDEX]
-
-    def is_compatible_with(self, t: FlexibleFormula) -> bool:
-        """Performs low-cost checks and returns True if target formula `t` is compatible with the output of the
-        transformation. This is useful to avoid expensive brute-force to find some derivation in a theory,
-        when it is clear from the beginning that the underlying transformation
-
-        :param t:
-        :return:
-        """
-        if self._is_derivation_candidate is None:
-            # TODO: This is perhaps an obsolete property, perhaps we may only use the conclussion property.
-            #   For the time being i make it nullable and we will see this later.
-            return True
-        else:
-            return self._is_derivation_candidate(t=t)
-
-    @property
-    def input_shapes(self) -> Tupl:
-        return self[TransformationByExternalAlgorithm.INPUT_SHAPES_INDEX]
-
-    @property
-    def variables(self) -> Enumeration:
-        return self[TransformationByExternalAlgorithm.VARIABLES_INDEX]
-
-
-FlexibleTransformationByExternalAlgorithm = typing.Optional[
-    typing.Union[Connective, Formula, TransformationByExternalAlgorithm]]
-
-
-def coerce_transformation_by_external_algorithm(
-        t: FlexibleTransformationByExternalAlgorithm) -> TransformationByExternalAlgorithm:
-    """Coerces loose argument `a` to an algorithm, strongly typed as Algorithm,
-    or raises an error with code E-AS1-055 if this fails."""
-    if isinstance(t, TransformationByExternalAlgorithm):
-        return t
-    else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_055, coerced_type=TransformationByExternalAlgorithm,
-                                  algorithm_type=type(t),
-                                  algorithm=t)
 
 
 def coerce_connective(con: Connective) -> Connective:
@@ -2692,26 +2516,6 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
         # Shortcut: the class assures the well-formedness of the formula.
         return True
     elif is_well_formed_transformation_by_variable_substitution(t=t):
-        return True
-    elif is_well_formed_transformation_by_external_algorithm(t=t):
-        return True
-    else:
-        return False
-
-
-def is_well_formed_transformation_by_external_algorithm(t: FlexibleFormula) -> bool:
-    """Return True if and only if phi is a well-formed algorithm, False otherwise.
-
-    :param t: A formula.
-    :return: bool.
-    """
-    t = coerce_formula(phi=t)
-    if isinstance(t, TransformationByExternalAlgorithm):
-        # Shortcut: the class assures the well-formedness of the formula.
-        return True
-    elif (t.arity == 0 and
-          t.connective is algorithm_connective and
-          hasattr(t, 'external_algorithm')):
         return True
     else:
         return False
@@ -3344,7 +3148,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                 # The simpler case is when the inference-rule does not create new objects.
                 # No remapping is necessary and the original conclusion can simply be compared
                 # with the new conclusion.
-                p_prime = f.apply_transformation(iv=i.premises, i2=i.arguments)
+                p_prime = f.apply_transformation(i=i.premises, i2=i.arguments)
                 if not is_formula_equivalent(phi=p, psi=p_prime):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
@@ -3779,7 +3583,7 @@ class InferenceRule(Derivation):
 
 FlexibleInferenceRule = typing.Union[InferenceRule, Formula]
 FlexibleTransformation = typing.Union[
-    Transformation, TransformationByExternalAlgorithm, TransformationByVariableSubstitution, Formula]
+    Transformation, TransformationByVariableSubstitution, Formula]
 
 with let_x_be_a_variable(formula_ts='P') as phi, let_x_be_a_variable(formula_ts='Q') as psi:
     modus_ponens_inference_rule: InferenceRule = InferenceRule(
@@ -3962,8 +3766,8 @@ class Theorem(Derivation):
 
         # check the validity of the theorem
         try:
-            iv: Tupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
-            algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(iv=iv)
+            i2: Tupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
+            algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(i=i2)
             # algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(i=i.premises,
             #                                                                                 i2=i.arguments)
         except u1.ApplicativeError as err:
