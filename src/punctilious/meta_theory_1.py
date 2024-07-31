@@ -1,4 +1,4 @@
-import typing
+# import typing
 import sys
 
 import constants_1 as c1
@@ -302,7 +302,6 @@ def theory_proves_proposition_algorithm(
                 msg='Blablabla',
                 code=None,
                 iv=i,
-                a=a,
                 t=t,
                 p2=p
             )

@@ -50,6 +50,14 @@ class Connective:
     def __repr__(self):
         return f'{id(self)}-connective'
 
+    def __or__(self, other):
+        # This method will be called for "self | other"
+        return InfixPartialRightHandFormula(con=self, term_1=other)
+
+    def __ror__(self, other):
+        # This method will be called for "other | self"
+        return InfixPartialLeftHandFormula(con=self, term_0=other)
+
     @property
     def formula_ts(self) -> pl1.Typesetter:
         return self._formula_typesetter
@@ -172,6 +180,12 @@ class Formula(tuple):
 
     def __str__(self):
         return self.typeset_as_string()
+
+    def __or__(self, other):
+
+        # This method will be called for "self | other"
+        if isinstance(other, Connective):
+            return InfixPartialLeftHandFormula(con=other, term_0=self)
 
     @property
     def arity(self) -> int:
@@ -624,6 +638,7 @@ class InfixPartialLeftHandFormula(pl1.Typesetter):
     def __init__(self, con: Connective, term_0: FlexibleFormula):
         self._connective = con
         self._term_0 = term_0
+        pass
 
     def __or__(self, term_1: FlexibleFormula = None):
         """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
@@ -645,11 +660,51 @@ class InfixPartialLeftHandFormula(pl1.Typesetter):
 
     def typeset_from_generator(self, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        yield f'{self.connective}(???,{self.term_0})'
+        yield f'({self.term_0} {self.connective} ???)'
 
     @property
     def term_0(self) -> Connective:
         return self._term_0
+
+
+class InfixPartialRightHandFormula(pl1.Typesetter):
+    """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
+    This is accomplished by re-purposing the | operator,
+    overloading the __or__() method that is called when | is used,
+    and gluing all this together with the InfixPartialFormula class.
+    """
+
+    def __init__(self, con: Connective, term_1: FlexibleFormula):
+        self._connective = con
+        self._term_1 = term_1
+        pass
+
+    def __ror__(self, term_0: FlexibleFormula = None):
+        """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
+        This is accomplished by re-purposing the | operator,
+        overloading the __or__() method that is called when | is used,
+        and gluing all this together with the InfixPartialFormula class.
+        """
+        # This method will be called for "other | self"
+        return Formula(con=self._connective, t=(term_0, self.term_1,))
+
+    def __repr__(self):
+        return self.typeset_as_string()
+
+    def __str__(self):
+        return self.typeset_as_string()
+
+    @property
+    def connective(self) -> Connective:
+        return self._connective
+
+    def typeset_from_generator(self, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        yield f'(??? {self.connective} {self.term_1})'
+
+    @property
+    def term_1(self) -> Connective:
+        return self._term_1
 
 
 class BinaryConnective(FixedArityConnective):
