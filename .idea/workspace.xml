@@ -7,7 +7,6 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="inference-rule for theory inconsistency. all tests passed.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -280,7 +279,7 @@
     "Python tests.pytest in test_propositional_logic_syntax_1.py.executor": "Run",
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Debug",
+    "Python tests.pytest in tests.executor": "Run",
     "Python.__init__.executor": "Run",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
@@ -746,14 +745,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00955" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721875640035</created>
-      <option name="number" value="00955" />
-      <option name="presentableId" value="LOCAL-00955" />
-      <option name="project" value="LOCAL" />
-      <updated>1721875640036</updated>
-    </task>
     <task id="LOCAL-00956" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1721877890424</created>
@@ -1138,7 +1129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722457989547</updated>
     </task>
-    <option name="localTasksCounter" value="1004" />
+    <task id="LOCAL-01004" summary="inference-rule for theory inconsistency. all tests passed.">
+      <option name="closed" value="true" />
+      <created>1722459769111</created>
+      <option name="number" value="01004" />
+      <option name="presentableId" value="LOCAL-01004" />
+      <option name="project" value="LOCAL" />
+      <updated>1722459769112</updated>
+    </task>
+    <option name="localTasksCounter" value="1005" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -1082,15 +1082,15 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
         p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
-        if a is None:
-            # Signature 3: This is a transformation-by-variable-transformation:
-            f: TransformationByVariableSubstitution = TransformationByVariableSubstitution(o=c, v=v, d=d, i=p)
-            i: InferenceRule = InferenceRule(f=f)
-        else:
-            # Signature 4: This is an algorithmic transformation:
-            f: TransformationByExternalAlgorithm = TransformationByExternalAlgorithm(algo=a, check=i2, o=c, v=v,
-                                                                                     d=d, i=p)
-            i: InferenceRule = InferenceRule(f=f)
+        # if a is None:
+        # Signature 3: This is a transformation-by-variable-transformation:
+        f: TransformationByVariableSubstitution = TransformationByVariableSubstitution(o=c, v=v, d=d, i=p)
+        i: InferenceRule = InferenceRule(f=f)
+        # else:
+        #    # Signature 4: This is an algorithmic transformation:
+        #    f: TransformationByExternalAlgorithm = TransformationByExternalAlgorithm(algo=a, check=i2, o=c, v=v,
+        #                                                                             d=d, i=p)
+        #    i: InferenceRule = InferenceRule(f=f)
     else:
         raise u1.ApplicativeError(msg='inconsistent arguments')
 
@@ -1215,28 +1215,6 @@ def let_x_be_a_transformation_by_variable_substitution(o: FlexibleFormula,
     :return:
     """
     return TransformationByVariableSubstitution(o=o, v=v, d=d, i=i, a=a)
-
-
-def let_x_be_a_transformation_by_external_algorithm(
-        algo: typing.Callable,
-        o: FlexibleFormula,
-        check: typing.Callable = None,
-        v: FlexibleEnumeration | None = None,
-        d: FlexibleEnumeration | None = None,
-        i: FlexibleTupl | None = None
-):
-    """
-
-    :param algo:
-    :param check:
-    :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
-    :param d: An enumeration of variables used to reference new object declarations in the output-shape.
-    :param i: A tuple of formulas denoted as the input-shapes.
-    :param o: A formula denoted as the output-shape.
-    :return:
-    """
-    return TransformationByExternalAlgorithm(algo=algo, check=check, o=o, v=v, d=d,
-                                             i=i)
 
 
 # Declare fundamental connectives.
@@ -2057,7 +2035,6 @@ class Transformation(Formula, abc.ABC):
         """A shortcut for self.apply_transformation()
 
         :param i: A tuple of formulas denoted as the input arguments.
-        :param i2: A tuple of formulas denoted as the complementary input arguments.
         :return:
         """
         return self.apply_transformation(i=i)
@@ -2232,7 +2209,6 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         """A shortcut for self.apply_transformation()
 
         :param i: A tuple of formulas denoted as the input-values.
-        :param i2: OBSOLETE: A complementary tuple of formulas.
         :return:
         """
         return self.apply_transformation(i=i)
@@ -2241,7 +2217,6 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         """
 
         :param i: A tuple of formulas denoted as the input-values.
-        :param i2: OBSOLETE: A complementary tuple of formulas.
         :return:
         """
         i = coerce_tuple(t=i, interpret_none_as_empty=True)
