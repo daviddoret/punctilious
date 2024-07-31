@@ -2280,7 +2280,9 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         return is_candidate
 
     @property
-    def validation_algorithm(self) -> typing.Callable:
+    def validation_algorithm(self) -> typing.Callable[
+                                          [FlexibleEnumeration, bool], typing.Tuple[
+                                              bool, typing.Optional[FlexibleFormula]]] | None:
         """(Conditional). A transformation-by-variable-substitution may have a validation-algorithm.
 
         A validation-algorithm is a python-function that receives the input-values as input arguments
@@ -2314,16 +2316,6 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
                                                     v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
                                                     d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
                                                     i=f[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
-    elif is_well_formed_transformation_by_external_algorithm(t=f):
-        # phi is a well-formed algorithm,
-        # it can be safely re-instantiated as an Algorithm and returned.
-        # TODO: Move this logic to coerce_algorithmic_transformation
-        return TransformationByExternalAlgorithm(algo=f.external_algorithm,
-                                                 check=what_the_hell,  # correct this
-                                                 o=f[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
-                                                 v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
-                                                 d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
-                                                 i=f[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_060,
@@ -5182,7 +5174,7 @@ class Hypothesis(Formula):
         :param a: A formula denoted as the assumption.
         :return:
         """
-        con: Connective = get_connectives().hypothesis_connective
+        con: Connective = hypothesis_connective
         b: Theory = coerce_theory(t=b)
         a: Formula = coerce_formula(phi=a)
         return con, b, a
