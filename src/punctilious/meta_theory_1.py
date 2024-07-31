@@ -243,7 +243,7 @@ def theory_proves_proposition_external_algorithm(
     This algorithm is used to implement the syntactic-entailment inference-rule.
 
     Algorithm inputs:
-     T: a theory
+     q: is-well-formed-theory(T)
      P: a formula
     Algorithm:
      If T is a well-formed theory
@@ -263,9 +263,20 @@ def theory_proves_proposition_external_algorithm(
             raise u1.ApplicativeError(msg='wrong arguments', iv=iv)
         else:
             return False, None
-    t: as1.Theory = as1.coerce_theory(t=iv[0], interpret_none_as_empty=False, canonical_conversion=False)
     p: as1.Formula = as1.coerce_formula(phi=iv[1])
+    is_well_formed_theory_t: as1.Formula = as1.coerce_formula(phi=iv[0])
+    with as1.let_x_be_a_variable(formula_ts='x') as x:
+        shape: as1.Formula = as1.is_well_formed_theory_connective(x)
+        ok, m = as1.is_formula_equivalent_with_variables_2(phi=is_well_formed_theory_t,
+                                                           psi=shape,
+                                                           variables={x, })
+        if not ok:
+            raise u1.ApplicativeError(msg='wrong input value i0', is_well_formed_theory_t=is_well_formed_theory_t,
+                                      iv=iv)
+    t: as1.Formula = is_well_formed_theory_t[0]
+    t: as1.Theory = as1.coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=False)
     if as1.is_valid_proposition_in_theory_1(p=p, t=t):
+        # Proposition p is valid in the object-theory t.
         phi: as1.Formula = t | as1.proves_connective | p
         return True, phi
     else:

@@ -1952,27 +1952,26 @@ class Transformation(Formula, abc.ABC):
         con, o, v, d, i = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=i)
         super().__init__(con=transformation_by_variable_substitution_connective, t=(o, v, d, i,))
 
-    def __call__(self, i: FlexibleTupl | None = None, i2: FlexibleTupl | None = None) -> Formula:
+    def __call__(self, i: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
 
         :param i: A tuple of formulas denoted as the input arguments.
         :param i2: A tuple of formulas denoted as the complementary input arguments.
         :return:
         """
-        return self.apply_transformation(i=i, i2=i2)
+        return self.apply_transformation(i=i)
 
     @abc.abstractmethod
-    def apply_transformation(self, i: FlexibleTupl | None = None, raise_error_if_false: bool = True) -> Formula:
+    def apply_transformation(self, i: FlexibleTupl | None = None) -> Formula:
         """
 
-        :param raise_error_if_false:
         :param i: A tuple of formulas denoted as the input values, or input arguments.
         :return: A formula denoted as the output value.
         """
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_058,
-                                  msg='Abstract python method is not implemented.',
-                                  object=self, object_type=type(self),
-                                  arguments=i)
+                                  msg='Transformation failure. Abstract python method is not implemented.',
+                                  object=self,
+                                  i=i)
 
     @property
     def output_shape(self) -> Formula:
@@ -2109,17 +2108,16 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         super().__init__(con=c2, o=o, v=v, d=d, i=i)
         self._validation_algorithm = va
 
-    def __call__(self, i: FlexibleTupl | None = None, i2: FlexibleTupl | None = None) -> Formula:
+    def __call__(self, i: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
 
         :param i: A tuple of formulas denoted as the input-values.
         :param i2: OBSOLETE: A complementary tuple of formulas.
         :return:
         """
-        return self.apply_transformation(i=i, i2=i2)
+        return self.apply_transformation(i=i)
 
-    def apply_transformation(self, i: FlexibleTupl | None = None,
-                             i2: FlexibleTupl | None = None) -> Formula:
+    def apply_transformation(self, i: FlexibleTupl | None = None) -> Formula:
         """
 
         :param i: A tuple of formulas denoted as the input-values.
@@ -2127,10 +2125,6 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :return:
         """
         i = coerce_tuple(t=i, interpret_none_as_empty=True)
-        i2 = coerce_tuple(t=i2,
-                          interpret_none_as_empty=True)
-
-        i = append_tuple_to_tuple(t1=i, t2=i2)
 
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
@@ -2149,7 +2143,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         # Step 1b: If an external-algorithm validation is configured on this transformation,
         # call it to check the validity of the input values.
         if self.validation_algorithm is not None:
-            ok, output_value = self.validation_algorithm(iv=i)
+            ok, output_value = self.validation_algorithm(i=i)
             if not ok:
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_086,
                                           msg='Transformation failure. '
@@ -3148,7 +3142,8 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                 # The simpler case is when the inference-rule does not create new objects.
                 # No remapping is necessary and the original conclusion can simply be compared
                 # with the new conclusion.
-                p_prime = f.apply_transformation(i=i.premises, i2=i.arguments)
+                i3: Tupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
+                p_prime: Formula = f.apply_transformation(i=i3)
                 if not is_formula_equivalent(phi=p, psi=p_prime):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
@@ -3768,8 +3763,6 @@ class Theorem(Derivation):
         try:
             i2: Tupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
             algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(i=i2)
-            # algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(i=i.premises,
-            #                                                                                 i2=i.arguments)
         except u1.ApplicativeError as err:
             raise u1.ApplicativeError(
                 msg='Theorem initialization error. '

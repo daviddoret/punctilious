@@ -93,7 +93,8 @@ class TestTProvesP:
 
         c = t | pu.as1.proves_connective | a
         p = (pu.as1.is_well_formed_theory_connective(t),)
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.t_proves_p, a=(t, a,),
+        a = (a,)
+        m, _, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.t_proves_p, a=a,
                                   raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 

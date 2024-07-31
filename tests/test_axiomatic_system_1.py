@@ -679,7 +679,7 @@ class TestInference:
                                                         i=(x | f | y, y | f | z,), )
         p = (a | f | b, b | f | c,)
         theorem = a | f | c
-        pu.as1.is_formula_equivalent(phi=theorem, psi=t(i=p, i2=None))
+        pu.as1.is_formula_equivalent(phi=theorem, psi=t(i=p))
         inference_rule = pu.as1.InferenceRule(f=t)
         inference = pu.as1.Inference(i=inference_rule, p=p, a=None)
         theorem_2 = pu.as1.Theorem(s=theorem, i=inference)
@@ -750,8 +750,9 @@ class TestAlgorithm:
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
             algo = as1.let_x_be_a_transformation_by_variable_substitution(va=x_is_a_theory,
                                                                           o=is_well_formed_theory(x),
+                                                                          i=(x,),
                                                                           v={x, },
-                                                                          d={x, })
+                                                                          d=None)
         i = as1.InferenceRule(f=algo)
         m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
         c = is_well_formed_theory(t)
