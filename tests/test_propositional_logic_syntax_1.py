@@ -7,10 +7,10 @@ class TestHeuristic:
     def test_heuristic_basic(self):
         t = pu.pls1.let_x_be_a_propositional_logic_syntax_1_theory()
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='P')
-        assert not pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p), t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p), t=t)
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p), t=t)
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p), t=t)
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p | land | q), t=t)
         assert success
@@ -51,7 +51,7 @@ class TestAxioms:
                                   p=(
                                       is_a_propositional_variable(p),),
                                   i=pu.pls1.i1, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p), t=t)
 
         # derive: add i2: A is-a proposition ⊃ ¬A is a proposition
         # note that it is not necessary that either A or ¬A be valid
@@ -65,7 +65,7 @@ class TestAxioms:
         assert pu.as1.is_formula_equivalent(phi=is_a_proposition(lnot(p)), psi=isolated_theorem.valid_statement)
         t = pu.as1.append_to_theory(isolated_theorem, t=t)
 
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(lnot(p)), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(lnot(p)), t=t)
 
         # declare 1 as a propositional-variable
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
@@ -91,7 +91,7 @@ class TestAxioms:
         isolated_theorem = pu.as1.Theorem(s=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.valid_statement)
         t = pu.as1.append_to_theory(isolated_theorem, t=t)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=claim, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=claim, t=t)
 
         pass
 
@@ -101,7 +101,7 @@ class TestAxioms:
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
         t, success, _, = pu.as1.auto_derive_2(t=t, conjecture=proposition(p))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=proposition(p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=proposition(p), t=t)
 
     def test_pl1_3(self):
         is_a = pu.as1.is_a_connective
@@ -111,11 +111,11 @@ class TestAxioms:
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Y')
         t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(p))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=proposition(p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=proposition(p), t=t)
         t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(q))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=proposition(q), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=proposition(q), t=t)
         t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(p | land | q))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=proposition(p | land | q), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=proposition(p | land | q), t=t)
         pass

@@ -2586,15 +2586,19 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
         return False
 
 
-def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory | None = None,
-                                     d: FlexibleEnumeration[FlexibleDerivation] | None = None,
-                                     strip_duplicates: bool = True,
-                                     interpret_none_as_empty: bool = True,
-                                     canonic_conversion: bool = True,
-                                     max_derivations: int | None = None) -> bool:
-    """Returns `True` if and only if proposition `p` is valid in theory `t`, `False` otherwise.
+def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None = None,
+                                  d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                  strip_duplicates: bool = True,
+                                  interpret_none_as_empty: bool = True,
+                                  canonic_conversion: bool = True,
+                                  max_derivations: int | None = None) -> bool:
+    """Returns `True` if and only if proposition `p` is valid in theory `t`,
+    according to `t` known derivations, `False` otherwise.
 
     Alternatively, check validity of `p` in an enumeration of derivations `d`.
+
+    Note: the expression "so far" is meant to stress that more derivations may be inferred from `t`,
+    and it is a priori unknown whether such derivations would or would not prove `p`.
 
     A formula :math:`\\phi` is a valid-statement with regard to a theory :math:`t`, if and only if:
      - :math:`\\phi` is the valid-statement of an axiom in :math:`t`,
@@ -2627,11 +2631,14 @@ def is_valid_proposition_in_theory_1(p: FlexibleFormula, t: FlexibleTheory | Non
     # t.iterate_valid_statements())
 
 
-def is_valid_proposition_in_theory_2(p: FlexibleFormula, t: FlexibleTheory) -> tuple[bool, int | None]:
+def is_valid_proposition_so_far_2(p: FlexibleFormula, t: FlexibleTheory) -> tuple[bool, int | None]:
     """Given a theory `t` and a proposition `p`, return a pair ("b", `i`) such that:
      - "b" is True if `p` is a valid proposition in theory `t`, False otherwise,
      - `i` is the derivation-index of the first occurrence of `p` in a derivation in `t` if "b" is True,
         None otherwise.
+
+    Note: the expression "so far" is meant to stress that more derivations may be inferred from `t`,
+    and it is a priori unknown whether such derivations would or would not prove `p`.
 
     This function is very similar to is_valid_proposition_in_theory_1 except that it returns
     the index of the first occurrence of a derivation that matches p. This information is typically
@@ -2700,7 +2707,7 @@ def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     """
     s: Tupl = coerce_tuple(t=s, interpret_none_as_empty=True)
     t: Theory = coerce_theory(t=t)
-    return all(is_valid_proposition_in_theory_1(p=phi, t=t) for phi in iterate_tuple_elements(s))
+    return all(is_valid_proposition_so_far_1(p=phi, t=t) for phi in iterate_tuple_elements(s))
 
 
 def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnumeration, n: int) -> \
@@ -3158,7 +3165,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
             # Check that all premises are valid predecessor propositions in the derivation.
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
-                if not is_valid_proposition_in_theory_1(p=q, t=None, d=c, max_derivations=index):
+                if not is_valid_proposition_so_far_1(p=q, t=None, d=c, max_derivations=index):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
                             msg='Derivation `d` claims to derive `p`.'
@@ -4676,7 +4683,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     for q in p:
         # The validity of the premises is checked during theory initialization,
         # but re-checking it here "in advance" helps provide more context in the exception that is being raised.
-        if not is_valid_proposition_in_theory_1(p=q, t=t):
+        if not is_valid_proposition_so_far_1(p=q, t=t):
             if raise_error_if_false:
                 raise u1.ApplicativeError(
                     code=c1.ERROR_CODE_AS1_051,
@@ -4758,7 +4765,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
     c = coerce_formula(phi=c)
     if debug:
         u1.log_debug(f'derive_0: start. conjecture:{c}.')
-    if is_valid_proposition_in_theory_1(p=c, t=t):  # this first check is superfluous
+    if is_valid_proposition_so_far_1(p=c, t=t):  # this first check is superfluous
         # loop through derivations
         for derivation in t.iterate_derivations():
             if is_formula_equivalent(phi=c, psi=derivation.valid_statement):
@@ -5483,7 +5490,7 @@ def typeset_formula_reference(phi: FlexibleFormula, t: FlexibleTheory | None, **
             yield '.'
         yield i + 1
         yield from pl1.symbols.close_square_bracket.typeset_from_generator(**kwargs)
-    elif t is not None and is_valid_proposition_in_theory_1(p=phi, t=t):
+    elif t is not None and is_valid_proposition_so_far_1(p=phi, t=t):
         # phi is a valid-statement in a theory.
         # we can use the 1-based index of the formula in the theory.
         success, d = get_theory_derivation_from_valid_statement(t=t, s=phi)

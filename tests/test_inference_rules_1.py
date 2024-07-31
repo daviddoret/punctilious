@@ -17,21 +17,21 @@ def f1():
                               c=is_a_proposition(a),
                               p=(is_a_propositional_variable(a),),
                               i=pu.pls1.i1, raise_error_if_false=True)
-    assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(a), t=t)
+    assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(a), t=t)
 
     # derive: (b is-a proposition)
     t, _, _ = pu.as1.derive_1(t=t,
                               c=is_a_proposition(b),
                               p=(is_a_propositional_variable(b),),
                               i=pu.pls1.i1, raise_error_if_false=True)
-    assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(b), t=t)
+    assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(b), t=t)
 
     # derive: (c is-a proposition)
     t, _, _ = pu.as1.derive_1(t=t,
                               c=is_a_proposition(c),
                               p=(is_a_propositional_variable(c),),
                               i=pu.pls1.i1, raise_error_if_false=True)
-    assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(c), t=t)
+    assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(c), t=t)
 
     return t, a, b, c
 
@@ -52,7 +52,7 @@ class TestAdjunction:
                                       a,
                                       b,),
                                   i=pu.ir1.conjunction_introduction, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=a | land | b, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=a | land | b, t=t)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(Exception):  # , match='e105'):
@@ -81,7 +81,7 @@ class TestSimplification1:
                                       is_a_proposition(b),
                                       a | land | b,),
                                   i=pu.ir1.simplification_1_axiom, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=a, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=a, t=t)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(Exception):  # , match='e105'):
@@ -109,7 +109,7 @@ class TestSimplification2:
                                       is_a_proposition(b),
                                       a | land | b,),
                                   i=pu.ir1.simplification_2_axiom, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=b, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=b, t=t)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(Exception):  # , match='e120'):
@@ -139,7 +139,7 @@ class TestModusPonens:
                                       a | implies | b,
                                       a),
                                   i=pu.ir1.modus_ponens, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=b, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=b, t=t)
 
         # extend the theory to perform a second test
         # using a single propositional-variable
@@ -155,7 +155,7 @@ class TestModusPonens:
                                       a | implies | (a | land | a),
                                       a),
                                   i=pu.ir1.modus_ponens, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=a | land | a, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=a | land | a, t=t)
 
         # show that wrong premises fail to derive a theorem
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_041):

@@ -292,7 +292,7 @@ def theory_proves_proposition_algorithm(
                                       iv=i)
     t: as1.Formula = is_well_formed_theory_t[0]
     t: as1.Theory = as1.coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=False)
-    if as1.is_valid_proposition_in_theory_1(p=p, t=t):
+    if as1.is_valid_proposition_so_far_1(p=p, t=t):
         # Proposition p is valid in the object-theory t.
         phi: as1.Formula = t | as1.proves_connective | p
         return True, phi

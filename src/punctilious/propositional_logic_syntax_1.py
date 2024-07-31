@@ -336,7 +336,7 @@ class PIsAProposition(as1.Heuristic):
                 # retrieve P's value
                 p_value: as1.Formula = as1.get_image_from_map(m=m, preimage=p)
 
-                if as1.is_valid_proposition_in_theory_1(p=is_a_propositional_variable(p_value), t=t):
+                if as1.is_valid_proposition_so_far_1(p=is_a_propositional_variable(p_value), t=t):
                     # If P is a propositional-variable:
                     # We can safely derive proposition(p)
                     t, _, _ = as1.derive_1(

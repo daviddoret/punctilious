@@ -26,7 +26,7 @@ class TestPL1:
                                   c=is_a_proposition(p),
                                   p=(is_a_propositional_variable(p),),
                                   i=pu.pls1.i1, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p), t=t)
         pass
 
         # Derive: P ⊃ (P ∧ P)
@@ -35,7 +35,7 @@ class TestPL1:
                                   p=(
                                       is_a_proposition(p),),
                                   i=pu.ml1.pl01, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=p | implies | (p | land | p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=p | implies | (p | land | p), t=t)
         pass
 
         # Derive: (P ∧ P) is-a proposition
@@ -45,7 +45,7 @@ class TestPL1:
                                       is_a_proposition(p),
                                       is_a_proposition(p),),
                                   i=pu.pls1.i3, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | land | p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p | land | p), t=t)
 
         # make P valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=p)
@@ -60,7 +60,7 @@ class TestPL1:
                                       p | implies | (p | land | p),
                                       p,),
                                   i=pu.ir1.modus_ponens, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=p | land | p, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=p | land | p, t=t)
         pass
 
 
@@ -84,7 +84,7 @@ class TestPL2:
                                       is_a_proposition(p),
                                       is_a_proposition(q),),
                                   i=pu.ml1.pl02, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=(p | land | q) | implies | (q | land | p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=(p | land | q) | implies | (q | land | p), t=t)
 
         # Derive: (P ∧ Q) and (Q ∧ P) is-a proposition
         t, _, _ = pu.as1.derive_1(t=t,
@@ -93,14 +93,14 @@ class TestPL2:
                                       is_a_proposition(p),
                                       is_a_proposition(q),),
                                   i=pu.pls1.i3, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | land | q), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p | land | q), t=t)
         t, _, _ = pu.as1.derive_1(t=t,
                                   c=is_a_proposition(q | land | p),
                                   p=(
                                       is_a_proposition(q),
                                       is_a_proposition(p),),
                                   i=pu.pls1.i3, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(q | land | p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(q | land | p), t=t)
 
         # make (P ∧ Q) valid and add modus-ponens to the theory
         t, _, = pu.as1.let_x_be_an_axiom(t=t, s=p | land | q)
@@ -115,7 +115,7 @@ class TestPL2:
                                       (p | land | q) | implies | (q | land | p),
                                       p | land | q,),
                                   i=pu.ir1.modus_ponens, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=q | land | p, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=q | land | p, t=t)
         pass
 
 
@@ -143,7 +143,7 @@ class TestPL3:
                                       is_a_proposition(q),
                                       is_a_proposition(r),),
                                   i=pu.ml1.pl03, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(
+        assert pu.as1.is_valid_proposition_so_far_1(
             p=(p | implies | q) | implies | ((p | land | r) | implies | (q | land | r)),
             t=t)
         pass
@@ -155,28 +155,28 @@ class TestPL3:
                                       is_a_proposition(p),
                                       is_a_proposition(r),),
                                   i=pu.pls1.i3, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | land | r), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p | land | r), t=t)
         t, _, _ = pu.as1.derive_1(t=t,
                                   c=is_a_proposition(q | land | r),
                                   p=(
                                       is_a_proposition(q),
                                       is_a_proposition(r),),
                                   i=pu.pls1.i3, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(q | land | r), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(q | land | r), t=t)
         t, _, _ = pu.as1.derive_1(t=t,
                                   c=is_a_proposition(p | implies | q),
                                   p=(
                                       is_a_proposition(p),
                                       is_a_proposition(q),),
                                   i=pu.pls1.i4, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(p | implies | q), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p | implies | q), t=t)
         t, _, _ = pu.as1.derive_1(t=t,
                                   c=is_a_proposition((p | land | r) | implies | (q | land | r)),
                                   p=(
                                       is_a_proposition(p | land | r),
                                       is_a_proposition(q | land | r),),
                                   i=pu.pls1.i4, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(
+        assert pu.as1.is_valid_proposition_so_far_1(
             p=is_a_proposition((p | land | r) | implies | (q | land | r)), t=t)
 
         # make (P implies Q) valid and add modus-ponens to the theory
@@ -192,7 +192,7 @@ class TestPL3:
                                       (p | implies | q) | implies | ((p | land | r) | implies | (q | land | r)),
                                       p | implies | q,),
                                   i=pu.ir1.modus_ponens, raise_error_if_false=True)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=(p | land | r) | implies | (q | land | r), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=(p | land | r) | implies | (q | land | r), t=t)
         pass
 
 
@@ -216,7 +216,7 @@ class TestPL4:
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (p | implies | r)
         t, _, _, _ = auto_derive_4(t=t, conjecture=phi)
-        assert pu.as1.is_valid_proposition_in_theory_1(
+        assert pu.as1.is_valid_proposition_so_far_1(
             p=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (p | implies | r)),
             t=t)
@@ -241,24 +241,24 @@ class TestPL5:
         # Derive: P ⊃ Q
         t2, success, _ = auto_derive_2(t=t1, conjecture=is_a_proposition(x))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(x), t=t2)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(x), t=t2)
 
         t2, success, _ = auto_derive_2(t=t2, conjecture=is_a_proposition(y))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(y), t=t2)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(y), t=t2)
 
         t2, success, _ = auto_derive_2(t=t2, conjecture=is_a_proposition(x | implies | y))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(x | implies | y), t=t2)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(x | implies | y), t=t2)
 
         t3, success, _, _ = auto_derive_4(t=t1, conjecture=is_a_proposition(x | implies | y),
                                           max_recursion=4)
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=is_a_proposition(x | implies | y), t=t3)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(x | implies | y), t=t3)
 
         t2, success, _ = auto_derive_2(t=t2, conjecture=y | implies | (x | implies | y))
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=y | implies | (x | implies | y), t=t2)
+        assert pu.as1.is_valid_proposition_so_far_1(p=y | implies | (x | implies | y), t=t2)
 
         t4, _, _ = pu.as1.derive_1(
             t=t2,
@@ -270,12 +270,12 @@ class TestPL5:
                 y,),
             i=pu.ir1.modus_ponens, raise_error_if_false=True)
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=x | implies | y, t=t4)
+        assert pu.as1.is_valid_proposition_so_far_1(p=x | implies | y, t=t4)
 
         t5, success, _ = derive_2(t=t2, c=x | implies | y, debug=False,
                                   i=pu.ir1.modus_ponens)
         assert success
-        assert pu.as1.is_valid_proposition_in_theory_1(p=x | implies | y, t=t5)
+        assert pu.as1.is_valid_proposition_so_far_1(p=x | implies | y, t=t5)
         pass
 
         # TODO: This automatic-derivation fails.
@@ -365,7 +365,7 @@ class TestMancosu2021P20:
                                   i=pu.pls1.i4, t=t)
         # 1. ⊢ 𝐶(hypothesis)
         t, hypothesis = pu.as1.let_x_be_an_axiom(t=t, s=c)
-        assert pu.as1.is_valid_proposition_in_theory_1(p=c, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=c, t=t)
         # 2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶)(axiom PL5)
         t, success, _, = derive_2(c=c | implies | (d | implies | c),
                                   i=pu.ml1.pl05, t=t)

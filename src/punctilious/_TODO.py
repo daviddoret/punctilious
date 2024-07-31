@@ -17,17 +17,15 @@ NEXT STEPS:
  - Simplify the external-algorithm data model (transformation, inference-rule),
    it is a bit too heavy now which will make it hard to maintain moving-forward.
 
-TODO: Add a special connective to represent the unicity of external algorithms,
-    thus making sue to avoid any ambiguity when comparing transformations
-    under formula-equivalence.
+TODO: Check then remove argument `a` in inference. Should be useless now.
 
-TODO: PRIORITY 1: Complete the Transformation input arguments simplification.
-    The inference contains the pair (premises, arguments).
-    Complete the migration of Transformation which should only receive a single
-    tuple of input values.
-    In the Theorem class, this requires to merge premises and arguments
-    and pass them to the transformation.
-
+TODO: Develop native predicates. To keep things simple, start with the specialized
+    unary predicate P(phi) where P is any connector. Then link the external resolution
+    algorithm to the connector as a decoration. Every predicate should infer:
+        (is-predicate(P(phi))
+    ...and without any guarantee of success:
+        (is-valid(P(phi)))
+        "is-valid" or "is-true", not sure.
 
 ***************
 
