@@ -2141,9 +2141,9 @@ class TransformationByVariableSubstitution(Transformation, ABC):
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_030,
                 msg='Transformation failure. '
-                    'The input-values `iv` are incompatible with the input-shapes `ih`, '
+                    'The input-values `i` are incompatible with the input-shapes `s`, '
                     'of transformation `f` considering variables `v`.',
-                iv=i, ih=self.input_shapes,
+                i=i, s=self.input_shapes,
                 v=self.variables, f=self)
 
         # Step 1b: If an external-algorithm validation is configured on this transformation,
