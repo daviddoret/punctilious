@@ -2281,8 +2281,8 @@ class TransformationByVariableSubstitution(Transformation, ABC):
 
     @property
     def validation_algorithm(self) -> typing.Callable[
-                                          [FlexibleEnumeration, bool], typing.Tuple[
-                                              bool, typing.Optional[FlexibleFormula]]] | None:
+                                          [FlexibleTupl, bool], typing.Tuple[
+                                              bool, typing.Optional[Formula]]] | None:
         """(Conditional). A transformation-by-variable-substitution may have a validation-algorithm.
 
         A validation-algorithm is a python-function that receives the input-values as input arguments
