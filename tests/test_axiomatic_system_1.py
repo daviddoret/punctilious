@@ -733,30 +733,34 @@ class TestProofByInference:
 
 class TestAlgorithm:
     def test_algorithm(self):
-        def x_is_a_theory(i: pu.as1.Tupl | None = None):
-            i = as1.coerce_tuple(t=i)
-            if not i.arity == 1:
-                raise pu.u1.ApplicativeError(msg='wrong arguments', i=i)
-            t = i[0]
-            if as1.is_well_formed_theory(t=t):
-                t = as1.coerce_theory(t=t)
-                phi = pu.csl1.is_well_formed_theory(t)
-                return True, phi
-            else:
-                raise pu.u1.ApplicativeError(msg='failed algorithm', i=i)
 
         t = as1.let_x_be_a_theory()
-        m = as1.let_x_be_a_theory()
+        a = as1.let_x_be_a_simple_object(formula_ts='a')
+        b = as1.let_x_be_a_simple_object(formula_ts='b')
+        g = as1.let_x_be_a_unary_connective(formula_ts=as1.ClassicalFormulaTypesetter(connective_ts='g'))
+        t, _ = as1.let_x_be_an_axiom(t=t, s=a)
+
+        def hello_world(i: pu.as1.Tupl | None = None, raise_error_if_false: bool = False):
+            i = as1.coerce_tuple(t=i)
+            if i.arity == 1 and as1.is_formula_equivalent(phi=i[0], psi=a):
+                return True, g(a)
+            else:
+                if raise_error_if_false:
+                    raise pu.u1.ApplicativeError(msg='Test algorithm failure', i=i)
+                else:
+                    return False, None
+
+        hello_world_con = as1.ConnectiveLinkedWithAlgorithm(a=hello_world, formula_ts='hello-world')
+
         with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='x')) as x:
-            algo = as1.let_x_be_a_transformation_by_variable_substitution(va=x_is_a_theory,
-                                                                          o=is_well_formed_theory(x),
-                                                                          i=(x,),
-                                                                          v={x, },
-                                                                          d=None)
-        i = as1.InferenceRule(f=algo)
-        m, i = as1.let_x_be_an_inference_rule(t=m, i=i)
-        c = is_well_formed_theory(t)
-        m, _, d = as1.derive_1(t=m, c=c, p=None, i=i, a=(t,), raise_error_if_false=True)
+            f = as1.let_x_be_a_transformation_by_variable_substitution(a=hello_world_con,
+                                                                       o=g(x),
+                                                                       i=(x,),
+                                                                       v={x, },
+                                                                       d=None)
+        i = as1.InferenceRule(f=f)
+        t, i = as1.let_x_be_an_inference_rule(t=t, i=i)
+        m, _, d = as1.derive_1(t=t, c=g(a), p=(a,), i=i, a=None, raise_error_if_false=True)
         pass
 
 

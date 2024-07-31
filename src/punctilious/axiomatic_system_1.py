@@ -67,6 +67,31 @@ class Connective:
         return self._ts
 
 
+class ConnectiveLinkedWithAlgorithm(Connective):
+    """A connective-linked-with-algorithm is a connective that is used as a link to the universe of external-algorithms.
+
+    It comprises a complementary `algorithm` property.
+
+    Transformations that use an external algorithm references the external algorithm using this connective.
+
+    TODO: The external-algorithm is external to the theory. In order to emulate unicity,
+        consider taking a hash of the algorithm and using a central index to assure unicity
+        and non duplication of external algorithms, thus allowing a natural usage of
+        formula-equivalence for formulas containing these connectives.
+
+    """
+
+    def __init__(self, a: typing.Callable, formula_ts: pl1.FlexibleTypesetter | None = None,
+                 **kwargs):
+        self._algorithm = a
+        super().__init__(formula_ts=formula_ts, **kwargs)
+
+    @property
+    def algorithm(self) -> typing.Callable:
+        """The external-algorithm referenced by this connective."""
+        return self._algorithm
+
+
 class Formula(tuple):
     """A python-class modeling a formula.
 
@@ -1122,18 +1147,19 @@ def let_x_be_a_transformation_by_variable_substitution(o: FlexibleFormula,
                                                        v: FlexibleEnumeration | None = None,
                                                        d: FlexibleEnumeration | None = None,
                                                        i: FlexibleTupl | None = None,
-                                                       va: typing.Callable = None
+                                                       a: FlexibleConnectiveLinkedToAlgorithm | None = None
                                                        ):
     """
 
-    :param va:
+    :param a: (Conditional) A connective-linked-to-algorithm denoted as the external algorithm reference. Only
+    applicable to transformations that require an external validation algorithm.
     :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
     :param d: An enumeration of variables used to reference new object declarations in the output-shape.
     :param i: A tuple of formulas denoted as the input-shapes.
     :param o: A formula denoted as the output-shape.
     :return:
     """
-    return TransformationByVariableSubstitution(o=o, v=v, d=d, i=i, va=va)
+    return TransformationByVariableSubstitution(o=o, v=v, d=d, i=i, a=a)
 
 
 def let_x_be_a_transformation_by_external_algorithm(
@@ -1186,7 +1212,7 @@ theorem_connective = let_x_be_a_free_arity_connective(formula_ts='theorem')
 theory_connective = let_x_be_a_free_arity_connective(formula_ts='theory-formula')
 proves_connective = let_x_be_a_binary_connective(formula_ts='⊢')
 tupl_connective = let_x_be_a_free_arity_connective(formula_ts='tuple')
-transformation_by_variable_substitution_connective = let_x_be_a_quaternary_connective(
+transformation_by_variable_substitution_connective: FreeArityConnective = let_x_be_a_free_arity_connective(
     formula_ts='transformation-by-variable-substitution')
 
 
@@ -1586,6 +1612,10 @@ class Tupl(Formula):
 FlexibleTupl = typing.Optional[typing.Union[Tupl, typing.Iterable[FlexibleFormula], tuple, None]]
 """FlexibleTupl is a flexible python type that may be safely coerced into a Tupl."""
 
+FlexibleConnectiveLinkedToAlgorithm = ConnectiveLinkedWithAlgorithm
+"""FlexibleConnectiveLinkedToAlgorithm is a flexible python type that may be safely coerced into a 
+ConnectiveLinkedToAlgorithm."""
+
 
 def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
     """Return a new map such that the preimage is no longer an element of its domain."""
@@ -1901,8 +1931,9 @@ class Transformation(Formula, abc.ABC):
             o: FlexibleFormula,
             v: FlexibleEnumeration | None = None,
             d: FlexibleEnumeration | None = None,
-            i: FlexibleTupl | None = None) -> tuple[
-        Connective, Formula, Enumeration, Enumeration, Tupl]:
+            i: FlexibleTupl | None = None,
+            a: FlexibleConnectiveLinkedToAlgorithm | None = None) -> tuple[
+        Connective, Formula, Enumeration, Enumeration, Tupl, ConnectiveLinkedWithAlgorithm | None]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -1920,11 +1951,16 @@ class Transformation(Formula, abc.ABC):
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
         i: Tupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
-        return con, o, v, d, i
+        # TODO: Coerce argument `a` as well
+        return con, o, v, d, i, a
 
-    def __new__(cls, con: Connective, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def __new__(cls,
+                con: Connective,
+                o: FlexibleFormula,
+                v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
-                i: FlexibleTupl | None = None):
+                i: FlexibleTupl | None = None,
+                a: FlexibleConnectiveLinkedToAlgorithm | None = None):
         """
 
         :param con:
@@ -1933,14 +1969,21 @@ class Transformation(Formula, abc.ABC):
         :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
         """
-        con, o, v, d, i = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=i)
-        o: tuple = super().__new__(cls, con=transformation_by_variable_substitution_connective,
-                                   t=(o, v, d, i,))
+        con, o, v, d, i, a = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=i, a=a)
+        if a is None:
+            o: tuple = super().__new__(cls, con=transformation_by_variable_substitution_connective,
+                                       t=(o, v, d, i,))
+        else:
+            o: tuple = super().__new__(cls, con=transformation_by_variable_substitution_connective,
+                                       t=(o, v, d, i, a,))
         return o
 
-    def __init__(self, con: Connective, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
+    def __init__(self, con: Connective,
+                 o: FlexibleFormula,
+                 v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
-                 i: FlexibleTupl | None = None):
+                 i: FlexibleTupl | None = None,
+                 a: FlexibleConnectiveLinkedToAlgorithm | None = None):
         """
 
         :param con:
@@ -1949,8 +1992,11 @@ class Transformation(Formula, abc.ABC):
         :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
         """
-        con, o, v, d, i = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=i)
-        super().__init__(con=transformation_by_variable_substitution_connective, t=(o, v, d, i,))
+        con, o, v, d, i, a = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=i, a=a)
+        if a is None:
+            super().__init__(con=transformation_by_variable_substitution_connective, o=o, v=v, d=d, i=i)
+        else:
+            super().__init__(con=transformation_by_variable_substitution_connective, o=o, v=v, d=d, i=i, a=a)
 
     def __call__(self, i: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
@@ -2060,10 +2106,16 @@ class TransformationByVariableSubstitution(Transformation, ABC):
           even though this constraint is immediately relieved by the interchange structural rule.
     """
 
+    DATA_VALIDATION_ALGORITHM_INDEX: int = 4
+
     @staticmethod
-    def _data_validation_3(o: FlexibleFormula, v: FlexibleEnumeration | None = None,
-                           d: FlexibleEnumeration | None = None,
-                           i: FlexibleTupl | None = None) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl]:
+    def _data_validation_3(
+            o: FlexibleFormula,
+            v: FlexibleEnumeration | None = None,
+            d: FlexibleEnumeration | None = None,
+            i: FlexibleTupl | None = None,
+            a: FlexibleConnectiveLinkedToAlgorithm = None
+    ) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl, ConnectiveLinkedWithAlgorithm | None]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -2071,6 +2123,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :param d: An enumeration of variables used to reference new object declarations in the output-shape.
         :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
+        :param a: (Conditional) A formula referencing an external algorithm used to validate input-values.
         :return:
         """
         con: Connective = transformation_by_variable_substitution_connective
@@ -2078,35 +2131,47 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
         i: Tupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
-        return con, o, v, d, i
+        if a is not None:
+            pass
+            # TODO: Implement the coerce_connective_linked_with_algorithm function
+            # d: ConnectiveLinkedWithAlgorithm = coerce_connective_linked_with_algorithm(c=d)
+        return con, o, v, d, i, a
 
     def __new__(cls, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
                 d: FlexibleEnumeration | None = None,
-                i: FlexibleTupl | None = None, va: typing.Callable = None):
+                i: FlexibleTupl | None = None, a: FlexibleConnectiveLinkedToAlgorithm | None = None):
         """
 
         :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
         :param d: An enumeration of variables used to reference new object declarations in the output-shape.
         :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
+        :param a: (Conditional) A formula referencing an external algorithm used to validate input-values.
         """
-        c2, o, v, d, i = TransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i)
-        o: tuple = super().__new__(cls, con=c2, o=o, v=v, d=d, i=i)
+        con, o, v, d, i, a = TransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i, a=a)
+        o: Formula  # Why is this type not properly detected by the PyCharm IDE?
+        if a is None:
+            o: tuple = super().__new__(cls, con=con, o=o, v=v, d=d, i=i)
+        else:
+            o: tuple = super().__new__(cls, con=con, o=o, v=v, d=d, i=i, a=a)
         return o
 
     def __init__(self, o: FlexibleFormula, v: FlexibleEnumeration | None = None,
                  d: FlexibleEnumeration | None = None,
-                 i: FlexibleTupl | None = None, va: typing.Callable = None):
+                 i: FlexibleTupl | None = None, a: FlexibleConnectiveLinkedToAlgorithm | None = None):
         """
 
         :param v: An enumeration of variables that may be used in the input-shapes and output-shape.
         :param d: An enumeration of variables used to reference new object declarations in the output-shape.
         :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
+        :param a: (Conditional) A formula referencing an external algorithm used to validate input-values.
         """
-        c2, o, v, d, i = TransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i)
-        super().__init__(con=c2, o=o, v=v, d=d, i=i)
-        self._validation_algorithm = va
+        c2, o, v, d, i, a = TransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i, a=a)
+        if a is None:
+            super().__init__(con=c2, o=o, v=v, d=d, i=i)
+        else:
+            super().__init__(con=c2, o=o, v=v, d=d, i=i, a=a)
 
     def __call__(self, i: FlexibleTupl | None = None) -> Formula:
         """A shortcut for self.apply_transformation()
@@ -2193,7 +2258,13 @@ class TransformationByVariableSubstitution(Transformation, ABC):
 
         :return:
         """
-        return self._validation_algorithm
+        if self.arity == 5:
+            phi: Formula = self[TransformationByVariableSubstitution.DATA_VALIDATION_ALGORITHM_INDEX]
+            con: ConnectiveLinkedWithAlgorithm = phi.connective
+            algo = con.algorithm
+            return algo
+        else:
+            return None
 
 
 FlexibleTransformationByVariableSubstitution = typing.Optional[typing.Union[TransformationByVariableSubstitution]]

@@ -50,6 +50,12 @@ def is_well_formed_formula_algorithm(
             return False, None
 
 
+is_well_formed_formula_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_well_formed_formula_algorithm,
+    formula_ts=pl1.Monospace(text='is-well-formed-formula-algorithm')
+)
+
+
 def is_well_formed_inference_rule_algorithm(
         i: as1.Tupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
@@ -88,6 +94,12 @@ def is_well_formed_inference_rule_algorithm(
             )
         else:
             return False, None
+
+
+is_well_formed_inference_rule_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_well_formed_inference_rule_algorithm,
+    formula_ts=pl1.Monospace(text='is-well-formed-inference-rule-algorithm')
+)
 
 
 def is_well_formed_theory_algorithm(
@@ -129,12 +141,17 @@ def is_well_formed_theory_algorithm(
             return False, None
 
 
-with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
+is_well_formed_theory_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_well_formed_theory_algorithm,
+    formula_ts=pl1.Monospace(text='is-well-formed-theory-algorithm')
+)
+
+with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi:
     algo: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
-        va=is_well_formed_formula_algorithm,
-        o=as1.is_well_formed_formula_connective(t),
-        i=(t,),
-        v={t, },
+        a=is_well_formed_formula_algorithm_connective,
+        o=as1.is_well_formed_formula_connective(phi),
+        v={phi, },
+        i=(phi,),
         d=None)
     mt1: as1.InferenceRule = as1.InferenceRule(
         f=algo,
@@ -157,7 +174,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
-        va=is_well_formed_inference_rule_algorithm,
+        a=is_well_formed_inference_rule_algorithm_connective,
         o=as1.is_well_formed_inference_rule_connective(t),
         v={t, },
         i=(t,),
@@ -184,7 +201,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 # INFERENCE-RULE: MT3: is-well-formed-theory
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     _mt3: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
-        va=is_well_formed_theory_algorithm,
+        a=is_well_formed_theory_algorithm_connective,
         # check=None,  # is_compatible_with_is_well_formed_theory
         o=as1.is_well_formed_theory_connective(t),
         i=(t,),
@@ -235,7 +252,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
     # TODO: Provide references in the doc above.
 
 
-def theory_proves_proposition_external_algorithm(
+def theory_proves_proposition_algorithm(
         i: as1.Tupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
     """An external algorithm for the t-proves-p (T ⊢ P) transformation.
@@ -293,10 +310,15 @@ def theory_proves_proposition_external_algorithm(
             return False, None
 
 
+theory_proves_proposition_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=theory_proves_proposition_algorithm,
+    formula_ts=pl1.Monospace(text='theory-proves-proposition-algorithm')
+)
+
 # INFERENCE-RULE: t-proves-p: T ⊢ P
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
     _t_proves_p: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
-        va=theory_proves_proposition_external_algorithm,
+        a=theory_proves_proposition_algorithm_connective,
         i=(
             as1.is_well_formed_theory_connective(t),
             p,),
