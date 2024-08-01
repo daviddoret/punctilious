@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="inference-rule for theory inconsistency. all tests passed.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -745,14 +745,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00963" summary="version 2.0: re-starting from scratch with a new data model.">
-      <option name="closed" value="true" />
-      <created>1721939092074</created>
-      <option name="number" value="00963" />
-      <option name="presentableId" value="LOCAL-00963" />
-      <option name="project" value="LOCAL" />
-      <updated>1721939092074</updated>
-    </task>
     <task id="LOCAL-00964" summary="version 2.0: re-starting from scratch with a new data model.">
       <option name="closed" value="true" />
       <created>1722052966178</created>
@@ -1137,7 +1129,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722531992714</updated>
     </task>
-    <option name="localTasksCounter" value="1012" />
+    <task id="LOCAL-01012" summary="inference-rule for theory inconsistency. all tests passed.">
+      <option name="closed" value="true" />
+      <created>1722532103236</created>
+      <option name="number" value="01012" />
+      <option name="presentableId" value="LOCAL-01012" />
+      <option name="project" value="LOCAL" />
+      <updated>1722532103236</updated>
+    </task>
+    <option name="localTasksCounter" value="1013" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

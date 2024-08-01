@@ -2310,9 +2310,17 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         """
         if self.arity == 5:
             phi: Formula = self[TransformationByVariableSubstitution.DATA_VALIDATION_ALGORITHM_INDEX]
-            con: ConnectiveLinkedWithAlgorithm = phi.connective
-            algo = con.algorithm
-            return algo
+            con: Connective = phi.connective
+            if isinstance(con, ConnectiveLinkedWithAlgorithm):
+                con: ConnectiveLinkedWithAlgorithm = con
+                algo = con.algorithm
+                return algo
+            else:
+                raise u1.ApplicativeError(
+                    msg='Connective is not of ConnectiveLinkedWithAlgorithm type.',
+                    phi=phi,
+                    con=con,
+                    self=self)
         else:
             return None
 
