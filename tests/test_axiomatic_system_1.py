@@ -1186,19 +1186,3 @@ class TestMetaTheory:
         ## m, d = pu.as1.derive_1()
         ## TODO: Come back here and complete development.
         pass
-
-
-class TestObjectCreation:
-    def test_object_creation(self):
-        if 1 == 2:
-            t = as1.let_x_be_a_theory()
-            x = as1.let_x_be_a_new_object()
-            t2 = as1.TransformationByVariableSubstitution(o=is_a_propositional_variable(x), v=(x,),
-                                                          d=(x,),
-                                                          i=None)
-            # rule 1: a variable x in the enumeration of variables car either be listed in declarations,
-            #   exclusive-or be referenced in premises, exclusive-or not be referenced.
-            # rule 2: a new object in creations must not be present in previous derivations in the theory,
-            #   otherwise it would be possible to "create the same object multiple times" which doesn't make sense.
-            a = as1.let_x_be_an_axiom(t=t, a=a)
-            t, _, _ = as1.derive_1(t=t, c=is_a_propositional_variable(x), raise_error_if_false=True)

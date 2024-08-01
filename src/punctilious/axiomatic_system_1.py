@@ -5240,7 +5240,7 @@ FlexibleHypothesis = typing.Optional[typing.Union[Hypothesis]]
 
 
 class ClassicalFormulaTypesetter(pl1.Typesetter):
-    def __init__(self, connective_ts: pl1.Typesetter):
+    def __init__(self, connective_ts: pl1.FlexibleTypesetter):
         super().__init__()
         connective_ts = pl1.coerce_typesetter(ts=connective_ts)
         self._connective_typesetter: pl1.Typesetter = connective_ts
