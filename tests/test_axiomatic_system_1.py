@@ -37,7 +37,7 @@ class TestConnective:
         pass
 
     def test_call(self):
-        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        x, y, z = pu.as1.let_x_be_some_variables(reps=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_unary_connective(formula_ts='f')
         g = pu.as1.let_x_be_a_binary_connective(formula_ts='g')
@@ -649,7 +649,7 @@ class TestTheorem:
 
 class TestInference:
     def test_inference(self):
-        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        x, y, z = pu.as1.let_x_be_some_variables(reps=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         t = pu.as1.TransformationByVariableSubstitution(o=x | f | z, v=(x, y, z,), d=None,
@@ -667,7 +667,7 @@ class TestInference:
                 pu.as1.Tupl()))
 
     def test_is_well_formed_inference(self):
-        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        x, y, z = pu.as1.let_x_be_some_variables(reps=('x', 'y', 'z',))
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         t = pu.as1.TransformationByVariableSubstitution(o=x | f | z, v=(x, y, z,), d=None,
@@ -687,7 +687,7 @@ class TestInference:
 class TestProofByInference:
     def test_is_well_formed(self):
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
-        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        x, y, z = pu.as1.let_x_be_some_variables(reps=('x', 'y', 'z',))
         star = pu.as1.let_x_be_a_binary_connective(
             formula_ts=pu.as1.typesetters.infix_formula(connective_typesetter=pu.pl1.symbols.asterisk_operator))
         premises = pu.as1.Enumeration(e=(x | star | y, y | star | z,))
@@ -853,7 +853,7 @@ class TestAxiomatization:
     def test_is_well_formed(self):
         # elaborate a theory
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
-        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        x, y, z = pu.as1.let_x_be_some_variables(reps=('x', 'y', 'z',))
         star1 = pu.as1.let_x_be_a_unary_connective(formula_ts='*1')
         star2 = pu.as1.let_x_be_a_binary_connective(formula_ts='*2')
         axiom_ok_1 = pu.as1.Axiom(s=a | star2 | b)
@@ -883,7 +883,7 @@ class TestDemonstration:
         # elaborate a theory
         theory = pu.as1.let_x_be_a_collection_of_axioms(axioms=None)
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
-        x, y, z = pu.as1.let_x_be_a_variable(formula_ts=('x', 'y', 'z',))
+        x, y, z = pu.as1.let_x_be_some_variables(reps=('x', 'y', 'z',))
         star = pu.as1.let_x_be_a_binary_connective(formula_ts='*')
         theory, axiom_1, = pu.as1.let_x_be_an_axiom(t=theory, s=a | star | b)
         theory, axiom_2, = pu.as1.let_x_be_an_axiom(t=theory, s=b | star | c)

@@ -991,12 +991,22 @@ def let_x_be_a_simple_object(formula_ts: typing.Optional[pl1.FlexibleTypesetter]
 
 def let_x_be_some_simple_objects(
         reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[SimpleObject, typing.Any, None]:
-    """A helper function to declare one or multiple simple-objects.
+    """A helper function to declare some simple-objects.
 
-    :param reps: A string (or an iterable of strings) default representation for the simple-object(s).
-    :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
+    :param reps: An iterable of strings or typesetters, denoted as the default representation of the simple-objects.
+    :return: A python-tuple of simple-objects.
     """
     return (let_x_be_a_simple_object(formula_ts=rep) for rep in reps)
+
+
+def let_x_be_some_variables(
+        reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[Variable, typing.Any, None]:
+    """A helper function to declare some variables.
+
+    :param reps: An iterable of typesetters or strings, denoted as the default representations of the variables.
+    :return: A python-tuple of variables.
+    """
+    return (let_x_be_a_variable(formula_ts=rep) for rep in reps)
 
 
 def formula_to_tuple(phi: FlexibleFormula) -> Enumeration:
