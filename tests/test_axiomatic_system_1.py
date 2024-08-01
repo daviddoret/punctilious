@@ -602,12 +602,12 @@ class TestFormulaToTuple:
         g = pu.as1.let_x_be_a_binary_connective(formula_ts='g')
         h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
         phi1 = h(e, b, d)
-        e1_result = pu.as1.formula_to_tuple(phi=phi1)
-        e1_expected = pu.as1.Enumeration(e=(e, b, d,))
+        e1_result = pu.as1.transform_formula_to_tuple(phi=phi1)
+        e1_expected = pu.as1.Tupl(e=(e, b, d,))
         assert pu.as1.is_formula_equivalent(phi=e1_result, psi=e1_expected)
         phi2 = h(phi1, b, g(a, f(b)))
-        e2_result = pu.as1.formula_to_tuple(phi=phi2)
-        e2_expected = pu.as1.Enumeration(e=(phi1, b, g(a, f(b)),))
+        e2_result = pu.as1.transform_formula_to_tuple(phi=phi2)
+        e2_expected = pu.as1.Tupl(e=(phi1, b, g(a, f(b)),))
         assert pu.as1.is_formula_equivalent(phi=e2_result, psi=e2_expected)
 
 

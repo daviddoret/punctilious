@@ -1009,25 +1009,6 @@ def let_x_be_some_variables(
     return (let_x_be_a_variable(formula_ts=rep) for rep in reps)
 
 
-def formula_to_tuple(phi: FlexibleFormula) -> Enumeration:
-    """A canonical transformation of formulas to the tuple of the formula terms.
-
-    f:  Phi --> E
-        phi |-> e(t0, t1, ..., tn)
-    Where:
-     - Phi is the class of formulas,
-     - E is the class of enumerations,
-     - phi is a formula,
-     - e is the enumeration connective,
-     - ti is the i-th term of phi.
-
-    :param phi: A formula.
-    :return: The enumeration of the formula terms.
-    """
-    phi = coerce_formula(phi=phi)
-    return Enumeration(e=phi)
-
-
 def let_x_be_a_binary_connective(
         formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
     return BinaryConnective(formula_ts=formula_ts)
@@ -4305,23 +4286,24 @@ def transform_enumeration_to_theory(e: FlexibleEnumeration) -> Theory:
 
 
 def transform_formula_to_tuple(phi: FlexibleFormula) -> Tupl:
-    """Canonical transformation of formulas to tuples.
+    """Transforms a formula `phi` into a tupl whose terms are the terms of `phi` with order preserved.
 
-    Every formula is a tuple if we don't consider its connective.
-    The canonical transformation returns a tuple if `phi` is a well-formed tupl,
-    otherwise it returns a new tupl such that the elements of the tuple
-    are the terms of the formula, preserving order.
+    This is the canonical transformation of formulas to tuples.
+
+    Note 1: Every formula is a tuple if we don't consider its connective.
+
+    Note 2: If `phi` is a well-formed tupl, the function returns `phi`.
 
     :param phi: A formula.
-    :return: A theory.
+    :return: A tupl.
     """
     phi: Formula = coerce_formula(phi=phi)
     if is_well_formed_tupl(t=phi):
-        phi: Tupl = coerce_tuple(t=phi)
-        return phi
+        t: Tupl = coerce_tuple(t=phi)
+        return t
     else:
-        phi: Tupl = Tupl(e=iterate_formula_terms(phi=phi))
-        return phi
+        t: Tupl = Tupl(e=iterate_formula_terms(phi=phi))
+        return t
 
 
 def transform_tuple_to_theory(t: FlexibleTupl) -> Theory:
