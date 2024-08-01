@@ -5546,7 +5546,7 @@ def typeset_formula_reference(phi: FlexibleFormula, t: FlexibleTheory | None, **
         yield from phi.typeset_from_generator(**kwargs)
 
 
-class DerivationTypesetter(pl1.Typesetter):
+class TypesetterForDerivation(pl1.Typesetter):
     def __init__(self):
         super().__init__()
 
@@ -5662,8 +5662,8 @@ class Typesetters:
     def transformation_by_variable_substitution(self) -> TypesetterForTransformationByVariableSubstitution:
         return TypesetterForTransformationByVariableSubstitution()
 
-    def derivation(self) -> DerivationTypesetter:
-        return DerivationTypesetter()
+    def derivation(self) -> TypesetterForDerivation:
+        return TypesetterForDerivation()
 
 
 typesetters = Typesetters()
