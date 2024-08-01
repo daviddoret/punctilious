@@ -672,7 +672,7 @@ class TestInference:
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         t = pu.as1.TransformationByVariableSubstitution(o=x | f | z, v=(x, y, z,), d=None,
                                                         i=(x | f | y, y | f | z,))
-        p = (a | f | b, b | f | c,)
+        p = pu.as1.Tupl(e=(a | f | b, b | f | c,))
         i = pu.as1.InferenceRule(f=t)
         phi1 = pu.as1.inference_connective(i, p, as1.Tupl())
         assert pu.as1.is_well_formed_inference(i=phi1)
