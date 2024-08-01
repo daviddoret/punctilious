@@ -582,16 +582,16 @@ class TestInferenceRule:
         a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         rule = pu.as1.TransformationByVariableSubstitution(o=a | f | b, v=None, d=None, i=None)
-        phi1 = rule | pu.as1.derivation_connective | pu.as1.inference_rule_connective
+        phi1 = rule | pu.as1.connective_for_derivation | pu.as1.connective_for_inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
         # incorrect connective
-        phi2 = pu.as1.Formula(con=pu.as1.inference_connective,
-                              t=(pu.as1.inference_rule_connective, rule,))
+        phi2 = pu.as1.Formula(con=pu.as1.connective_for_inference,
+                              t=(pu.as1.connective_for_inference_rule, rule,))
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
-        phi3 = rule | pu.as1.derivation_connective | pu.csl1.enumeration
+        phi3 = rule | pu.as1.connective_for_derivation | pu.csl1.enumeration
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -617,11 +617,11 @@ class TestProofByPostulation:
         star3 = pu.as1.let_x_be_a_ternary_connective(formula_ts='*3')
         rule1 = pu.as1.TransformationByVariableSubstitution(o=star3(e, b, d), v=None, d=None,
                                                             i=None)
-        phi1 = rule1 | pu.as1.derivation_connective | pu.as1.inference_rule_connective
+        phi1 = rule1 | pu.as1.connective_for_derivation | pu.as1.connective_for_inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
-        phi2 = rule1 | pu.as1.map_connective | pu.as1.inference_rule_connective
+        phi2 = rule1 | pu.as1.map_connective | pu.as1.connective_for_inference_rule
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
-        phi3 = rule1 | pu.as1.derivation_connective | b
+        phi3 = rule1 | pu.as1.connective_for_derivation | b
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -662,7 +662,7 @@ class TestInference:
         theorem_2 = pu.as1.Theorem(s=theorem, i=inference)
         pu.as1.is_formula_equivalent(
             phi=theorem_2,
-            psi=theorem | pu.as1.derivation_connective | pu.as1.inference_connective(
+            psi=theorem | pu.as1.connective_for_derivation | pu.as1.connective_for_inference(
                 inference_rule, p,
                 pu.as1.Tupl()))
 
@@ -674,13 +674,13 @@ class TestInference:
                                                         i=(x | f | y, y | f | z,))
         p = pu.as1.Tupl(e=(a | f | b, b | f | c,))
         i = pu.as1.InferenceRule(f=t)
-        phi1 = pu.as1.inference_connective(i, p, as1.Tupl())
+        phi1 = pu.as1.connective_for_inference(i, p, as1.Tupl())
         assert pu.as1.is_well_formed_inference(i=phi1)
-        phi2 = pu.as1.inference_connective(i, as1.Tupl())
+        phi2 = pu.as1.connective_for_inference(i, as1.Tupl())
         assert not pu.as1.is_well_formed_inference(i=phi2)
-        phi3 = p | pu.as1.derivation_connective | i
+        phi3 = p | pu.as1.connective_for_derivation | i
         assert not pu.as1.is_well_formed_inference(i=phi3)
-        phi4 = f(a, a, b, b) | pu.as1.derivation_connective | i
+        phi4 = f(a, a, b, b) | pu.as1.connective_for_derivation | i
         assert not pu.as1.is_well_formed_inference(i=phi4)
 
 
@@ -701,10 +701,10 @@ class TestProofByInference:
         outcome = f.apply_transformation(i=p)
         m = pu.as1.Theorem(s=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(t=m)
-        assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.derivation_connective | i)
+        assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.connective_for_derivation | i)
 
         i2 = pu.as1.Inference(p=(a | star | b, b | star | a,), i=ir)
-        assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.derivation_connective | i2)
+        assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.connective_for_derivation | i2)
         pass
 
 

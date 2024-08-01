@@ -1,8 +1,8 @@
 import collections
 import axiomatic_system_1 as as1
 
-land = as1.logical_conjunction_connective
-implies = as1.implies_connective
+land = as1.connective_for_logical_conjunction
+implies = as1.connective_for_logical_implication
 is_a = as1.is_a_connective
 
 sequence_of_numbers = as1.let_x_be_a_simple_object(formula_ts='sequence-of-numbers')

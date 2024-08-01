@@ -264,7 +264,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     :return:
     """
     phi = as1.coerce_formula(phi=phi)
-    if phi.connective is not as1.implies_connective:
+    if phi.connective is not as1.connective_for_logical_implication:
         raise u1.ApplicativeError(code=ERROR_CODE_PLS1_001, msg='this is not an implication')
     # TODO: translate_implication_to_axiom: check that all sub-formulas in phi are either:
     # - valid propositional formulas (negation, conjunction, etc.)

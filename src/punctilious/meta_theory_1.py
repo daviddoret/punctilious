@@ -33,7 +33,7 @@ def is_well_formed_formula_algorithm(
             return False, None
     phi: as1.Formula = as1.coerce_formula(phi=i[0])
     if as1.is_well_formed_formula(phi=phi):
-        phi: as1.Formula = as1.is_well_formed_formula_connective(phi)
+        phi: as1.Formula = as1.connective_for_is_well_formed_formula(phi)
         return True, phi
     else:
         if raise_error_if_false:
@@ -78,7 +78,7 @@ def is_well_formed_inference_rule_algorithm(
     ir: as1.Formula = as1.coerce_formula(phi=i[0])
     if as1.is_well_formed_inference_rule(i=ir):
         ir: as1.InferenceRule = as1.coerce_inference_rule(i=ir)
-        phi: as1.Formula = as1.is_well_formed_inference_rule_connective(ir)
+        phi: as1.Formula = as1.connective_for_is_well_formed_inference_rule(ir)
         return True, phi
     else:
         if raise_error_if_false:
@@ -124,7 +124,7 @@ def is_well_formed_theory_algorithm(
     t1: as1.Formula = as1.coerce_formula(phi=i[0])
     if as1.is_well_formed_theory(t=t1):
         t1: as1.Theory = as1.coerce_theory(t=t1, interpret_none_as_empty=False, canonical_conversion=False)
-        phi: as1.Formula = as1.is_well_formed_theory_connective(t1)
+        phi: as1.Formula = as1.connective_for_is_well_formed_theory(t1)
         return True, phi
     else:
         if raise_error_if_false:
@@ -149,7 +149,7 @@ is_well_formed_theory_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi:
     algo: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_formula_algorithm_connective,
-        o=as1.is_well_formed_formula_connective(phi),
+        o=as1.connective_for_is_well_formed_formula(phi),
         v={phi, },
         i=(phi,),
         d=None)
@@ -175,7 +175,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     algo: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_inference_rule_algorithm_connective,
-        o=as1.is_well_formed_inference_rule_connective(t),
+        o=as1.connective_for_is_well_formed_inference_rule(t),
         v={t, },
         i=(t,),
         d=None)
@@ -203,7 +203,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     _mt3: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_theory_algorithm_connective,
         # check=None,  # is_compatible_with_is_well_formed_theory
-        o=as1.is_well_formed_theory_connective(t),
+        o=as1.connective_for_is_well_formed_theory(t),
         i=(t,),
         v={t, },
         d=None)  # {t, })
@@ -230,9 +230,9 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
     inconsistency_1: as1.InferenceRule = as1.InferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             i=(
-                as1.is_well_formed_theory_connective(t),
+                as1.connective_for_is_well_formed_theory(t),
                 t | as1.proves_connective | p,
-                t | as1.proves_connective | as1.logical_negation_connective(p)),
+                t | as1.proves_connective | as1.connective_for_logical_negation(p)),
             o=as1.is_inconsistent_connective(t),
             v={p, t, }),
         ref_ts=pl1.Monospace(text='⊥1'))
@@ -283,7 +283,7 @@ def theory_proves_proposition_algorithm(
     p: as1.Formula = as1.coerce_formula(phi=i[1])
     is_well_formed_theory_t: as1.Formula = as1.coerce_formula(phi=i[0])
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        shape: as1.Formula = as1.is_well_formed_theory_connective(x)
+        shape: as1.Formula = as1.connective_for_is_well_formed_theory(x)
         ok, m = as1.is_formula_equivalent_with_variables_2(phi=is_well_formed_theory_t,
                                                            psi=shape,
                                                            variables={x, })
@@ -319,7 +319,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
     _t_proves_p: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=theory_proves_proposition_algorithm_connective,
         i=(
-            as1.is_well_formed_theory_connective(t),
+            as1.connective_for_is_well_formed_theory(t),
             p,),
         o=t | as1.proves_connective | p,
         v=(p, t,))
