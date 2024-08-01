@@ -243,7 +243,7 @@ def let_x_be_a_propositional_variable(
 
 def let_x_be_some_propositional_variables(
         t: as1.FlexibleTheory,
-        ts: typing.Iterable[as1.FlexibleRepresentation]) -> typing.Tuple[as1.Theory, as1.Variable, ...]:
+        ts: typing.Iterable[as1.FlexibleRepresentation]) -> [as1.Theory, [as1.Variable, ...]]:
     """"""
     propositional_variables: tuple[as1.Variable, ...] = tuple()
     for ts in ts:
@@ -272,35 +272,35 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
 
     # Now we have the assurance that phi is a well-formed propositional formula.
     # Retrieve the list of propositional-variables in phi:
-    propositional_variables: as1.Enumeration = as1.get_leaf_formulas(phi=phi)
-    premises: as1.Enumeration = as1.Enumeration(e=None)
-    variables_map: as1.Map = as1.Map(d=None, c=None)
-    for x in propositional_variables:
+    l: as1.Enumeration = as1.get_leaf_formulas(phi=phi)
+    p: as1.Enumeration = as1.Enumeration(e=None)
+    m: as1.Map = as1.Map(d=None, c=None)
+    for x in l:
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
         with let_x_be_a_propositional_variable(t=t, formula_ts=rep) as x2:
             # premises: as1.Enumeration = as1.append_element_to_enumeration(
             #    e=premises, x=x2 | as1.is_a | as1.is_a_propositional_variable)
-            premises: as1.Enumeration = as1.append_element_to_enumeration(
-                e=premises, x=as1.is_a_propositional_variable_connective(x2))
-            variables_map: as1.Map = as1.append_pair_to_map(m=variables_map, preimage=x, image=x2)
-    variables: as1.Enumeration = as1.Enumeration(e=variables_map.codomain)
+            p: as1.Enumeration = as1.append_element_to_enumeration(
+                e=p, x=as1.is_a_propositional_variable_connective(x2))
+            m: as1.Map = as1.append_pair_to_map(m=m, preimage=x, image=x2)
+    v: as1.Enumeration = as1.Enumeration(e=m.codomain)
 
     # elaborate a new formula psi where all variables have been replaced with the new variables
-    psi = as1.substitute_formulas(phi=phi, m=variables_map)
+    psi = as1.substitute_formulas(phi=phi, m=m)
 
     # translate the antecedent of the implication to the main premises
     # note: we could further split conjunctions into multiple premises
     antecedent: as1.Formula = psi.term_0
-    premises: as1.Enumeration = as1.append_element_to_enumeration(
-        e=premises, x=antecedent)
+    p: as1.Enumeration = as1.append_element_to_enumeration(
+        e=p, x=antecedent)
 
     # retrieve the conclusion
     conclusion: as1.Formula = psi.term_1
 
     # build the rule
-    rule: as1.TransformationByVariableSubstitution = as1.TransformationByVariableSubstitution(i=premises, o=conclusion,
-                                                                                              v=variables)
+    rule: as1.TransformationByVariableSubstitution = as1.TransformationByVariableSubstitution(i=p, o=conclusion,
+                                                                                              v=v)
 
     # build the inference-rule
     inference_rule: as1.InferenceRule = as1.InferenceRule(f=rule)
