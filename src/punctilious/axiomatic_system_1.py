@@ -2256,7 +2256,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         # Step 1b: If an external-algorithm validation is configured on this transformation,
         # call it to check the validity of the input values.
         if self.validation_algorithm is not None:
-            ok, output_value = self.validation_algorithm(i=i)
+            ok, output_value = self.validation_algorithm(i=i, rais_error_if_false=False)
             if not ok:
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_086,
                                           msg='Transformation failure. '
