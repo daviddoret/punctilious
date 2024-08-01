@@ -294,7 +294,7 @@ class TestFormulaEquivalenceWithVariables2:
         x = pu.as1.let_x_be_a_variable(formula_ts='x')
         y = pu.as1.let_x_be_a_variable(formula_ts='y')
         is_a = pu.as1.let_x_be_a_binary_connective(
-            formula_ts=pu.as1.InfixFormulaTypesetter(connective_ts='is-a'))
+            formula_ts=pu.as1.TypesetterForInfixFormula(connective_ts='is-a'))
         human = pu.as1.let_x_be_a_simple_object(formula_ts='human')
         platypus = pu.as1.let_x_be_a_simple_object(formula_ts='platypus')
         mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
@@ -714,7 +714,7 @@ class TestAlgorithm:
         t = as1.let_x_be_a_theory()
         a = as1.let_x_be_a_simple_object(formula_ts='a')
         b = as1.let_x_be_a_simple_object(formula_ts='b')
-        g = as1.let_x_be_a_unary_connective(formula_ts=as1.ClassicalFormulaTypesetter(connective_ts='g'))
+        g = as1.let_x_be_a_unary_connective(formula_ts=as1.TypesetterForClassicalFormula(connective_ts='g'))
         t, _ = as1.let_x_be_an_axiom(t=t, s=a)
 
         def hello_world(i: pu.as1.Tupl | None = None, raise_error_if_false: bool = False):

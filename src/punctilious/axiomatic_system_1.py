@@ -628,7 +628,11 @@ class UnaryConnective(FixedArityConnective):
         super().__init__(fixed_arity_constraint=1, formula_ts=formula_ts)
 
 
-class InfixPartialLeftHandFormula(pl1.Typesetter):
+class PartialFormula:
+    pass
+
+
+class InfixPartialLeftHandFormula(PartialFormula, pl1.Typesetter):
     """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
     This is accomplished by re-purposing the | operator,
     overloading the __or__() method that is called when | is used,
@@ -667,7 +671,7 @@ class InfixPartialLeftHandFormula(pl1.Typesetter):
         return self._term_0
 
 
-class InfixPartialRightHandFormula(pl1.Typesetter):
+class InfixPartialRightHandFormula(PartialFormula, pl1.Typesetter):
     """Hack to provide support for pseudo-infix notation, as in: p |implies| q.
     This is accomplished by re-purposing the | operator,
     overloading the __or__() method that is called when | is used,
@@ -5229,7 +5233,7 @@ FlexibleHypothesis = typing.Optional[typing.Union[Hypothesis]]
 # PRESENTATION LAYER
 
 
-class ClassicalFormulaTypesetter(pl1.Typesetter):
+class TypesetterForClassicalFormula(pl1.Typesetter):
     def __init__(self, connective_ts: pl1.FlexibleTypesetter):
         super().__init__()
         connective_ts = pl1.coerce_typesetter(ts=connective_ts)
@@ -5262,7 +5266,7 @@ class ClassicalFormulaTypesetter(pl1.Typesetter):
         yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
-class InfixFormulaTypesetter(pl1.Typesetter):
+class TypesetterForInfixFormula(pl1.Typesetter):
     def __init__(self, connective_ts: pl1.FlexibleTypesetter):
         super().__init__()
         connective_ts = pl1.coerce_typesetter(ts=connective_ts)
@@ -5293,7 +5297,7 @@ class InfixFormulaTypesetter(pl1.Typesetter):
             yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
-class UnaryPostfixTypesetter(pl1.Typesetter):
+class TypesetterForUnaryPostfix(pl1.Typesetter):
     def __init__(self, connective_ts: pl1.FlexibleTypesetter):
         super().__init__()
         connective_ts = pl1.coerce_typesetter(ts=connective_ts)
@@ -5322,7 +5326,7 @@ class UnaryPostfixTypesetter(pl1.Typesetter):
             yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
-class TransformationByVariableSubstitutionTypesetter(pl1.Typesetter):
+class TypesetterForTransformationByVariableSubstitution(pl1.Typesetter):
     def __init__(self):
         super().__init__()
 
@@ -5352,7 +5356,7 @@ class TransformationByVariableSubstitutionTypesetter(pl1.Typesetter):
             yield from pl1.symbols.close_parenthesis.typeset_from_generator(**kwargs)
 
 
-class BracketedListTypesetter(pl1.Typesetter):
+class TypesetterForBracketedList(pl1.Typesetter):
     def __init__(self, open_bracket: pl1.Symbol, separator: pl1.Symbol, close_bracket: pl1.Symbol):
         self.open_bracket = open_bracket
         self.separator = separator
@@ -5376,7 +5380,7 @@ class BracketedListTypesetter(pl1.Typesetter):
         yield from self.close_bracket.typeset_from_generator(**kwargs)
 
 
-class MapTypesetter(pl1.Typesetter):
+class TypesetterForMap(pl1.Typesetter):
     """A typesetter for the map connective.
 
     Sample output:
@@ -5408,7 +5412,7 @@ class MapTypesetter(pl1.Typesetter):
         yield from pl1.symbols.close_curly_brace.typeset_from_generator(**kwargs)
 
 
-class IsAPredicateTypesetter(pl1.Typesetter):
+class TypesetterForIsAPredicate(pl1.Typesetter):
     """A typesetter for "(some object) is a (some class)" predicate connectives.
 
     Sample output:
@@ -5444,7 +5448,7 @@ class IsAPredicateTypesetter(pl1.Typesetter):
         yield from self.conventional_class
 
 
-class DeclarationTypesetter(pl1.Typesetter):
+class TypesetterForDeclaration(pl1.Typesetter):
     def __init__(self, conventional_class: str | None):
         self._conventional_class = conventional_class
         super().__init__()
@@ -5626,19 +5630,19 @@ class Typesetters:
         return st1.axiomatic_system_1_typesetters
 
     def bracketed_list(self, open_bracket: pl1.Symbol, separator: pl1.Symbol, close_bracket: pl1.Symbol):
-        return BracketedListTypesetter(open_bracket=open_bracket, separator=separator, close_bracket=close_bracket)
+        return TypesetterForBracketedList(open_bracket=open_bracket, separator=separator, close_bracket=close_bracket)
 
     def symbol(self, symbol: pl1.Symbol) -> pl1.SymbolTypesetter:
         return pl1.typesetters.symbol(symbol=symbol)
 
-    def classical_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> ClassicalFormulaTypesetter:
-        return ClassicalFormulaTypesetter(connective_ts=connective_typesetter)
+    def classical_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> TypesetterForClassicalFormula:
+        return TypesetterForClassicalFormula(connective_ts=connective_typesetter)
 
-    def declaration(self, conventional_class: str | None) -> DeclarationTypesetter:
-        return DeclarationTypesetter(conventional_class=conventional_class)
+    def declaration(self, conventional_class: str | None) -> TypesetterForDeclaration:
+        return TypesetterForDeclaration(conventional_class=conventional_class)
 
-    def is_a_predicate(self, conventional_class: str | None) -> IsAPredicateTypesetter:
-        return IsAPredicateTypesetter(conventional_class=conventional_class)
+    def is_a_predicate(self, conventional_class: str | None) -> TypesetterForIsAPredicate:
+        return TypesetterForIsAPredicate(conventional_class=conventional_class)
 
     def text(self, text: str) -> pl1.TextTypesetter:
         return pl1.typesetters.text(text=text)
@@ -5646,17 +5650,17 @@ class Typesetters:
     def indexed_symbol(self, symbol: pl1.Symbol, index: int) -> pl1.NaturalIndexedSymbolTypesetter:
         return pl1.typesetters.indexed_symbol(symbol=symbol, index=index)
 
-    def infix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> InfixFormulaTypesetter:
-        return InfixFormulaTypesetter(connective_ts=connective_typesetter)
+    def infix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> TypesetterForInfixFormula:
+        return TypesetterForInfixFormula(connective_ts=connective_typesetter)
 
-    def unary_postfix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> UnaryPostfixTypesetter:
-        return UnaryPostfixTypesetter(connective_ts=connective_typesetter)
+    def unary_postfix_formula(self, connective_typesetter: pl1.FlexibleTypesetter) -> TypesetterForUnaryPostfix:
+        return TypesetterForUnaryPostfix(connective_ts=connective_typesetter)
 
-    def map(self) -> MapTypesetter:
-        return MapTypesetter()
+    def map(self) -> TypesetterForMap:
+        return TypesetterForMap()
 
-    def transformation_by_variable_substitution(self) -> TransformationByVariableSubstitutionTypesetter:
-        return TransformationByVariableSubstitutionTypesetter()
+    def transformation_by_variable_substitution(self) -> TypesetterForTransformationByVariableSubstitution:
+        return TypesetterForTransformationByVariableSubstitution()
 
     def derivation(self) -> DerivationTypesetter:
         return DerivationTypesetter()
