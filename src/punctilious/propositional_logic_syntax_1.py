@@ -287,7 +287,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     variables: as1.Enumeration = as1.Enumeration(e=variables_map.codomain)
 
     # elaborate a new formula psi where all variables have been replaced with the new variables
-    psi = as1.replace_formulas(phi=phi, m=variables_map)
+    psi = as1.substitute_formulas(phi=phi, m=variables_map)
 
     # translate the antecedent of the implication to the main premises
     # note: we could further split conjunctions into multiple premises

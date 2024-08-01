@@ -7,51 +7,28 @@ from punctilious.connectives_standard_library_1 import *
 
 
 @pytest.fixture
-def c1():
-    return pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
+def c123():
+    c1 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
         connective_typesetter='c1'))
-
-
-@pytest.fixture
-def c2():
-    return pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
+    c2 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
         connective_typesetter='c2'))
-
-
-@pytest.fixture
-def c3():
-    return pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
+    c3 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(
         connective_typesetter='c3'))
+    return c1, c2, c3
 
 
 @pytest.fixture
-def apple():
-    return pu.as1.let_x_be_a_simple_object(formula_ts='apple')
-
-
-@pytest.fixture
-def ananas():
-    return pu.as1.let_x_be_a_simple_object(formula_ts='ananas')
-
-
-@pytest.fixture
-def strawberry():
-    return pu.as1.let_x_be_a_simple_object(formula_ts='strawberry')
-
-
-@pytest.fixture
-def blueberry():
-    return pu.as1.let_x_be_a_simple_object(formula_ts='blueberry')
-
-
-@pytest.fixture
-def fruits(apple, ananas, blueberry, strawberry):
-    fruits = pu.as1.Enumeration(e=(apple, ananas, blueberry, strawberry))
-    return fruits
+def fruits():
+    apple = pu.as1.let_x_be_a_simple_object(formula_ts='apple')
+    ananas = pu.as1.let_x_be_a_simple_object(formula_ts='ananas')
+    strawberry = pu.as1.let_x_be_a_simple_object(formula_ts='strawberry')
+    blueberry = pu.as1.let_x_be_a_simple_object(formula_ts='blueberry')
+    return apple, ananas, strawberry, blueberry
 
 
 class TestConnective:
-    def test_connective(self, c1, c2):
+    def test_connective(self, c123):
+        c1, c2, c3, = c123
         assert c1 is not c2
 
     def test_simple(self):
@@ -144,17 +121,17 @@ class TestTupl:
 class TestEnumeration:
 
     def test_is_element_of_enumeration(self):
-        c1 = pu.as1.let_x_be_a_binary_connective(formula_ts='c1')
-        c2 = pu.as1.let_x_be_a_binary_connective(formula_ts='c2')
+        ca = pu.as1.let_x_be_a_binary_connective(formula_ts='c1')
+        cb = pu.as1.let_x_be_a_binary_connective(formula_ts='c2')
         x = pu.as1.let_x_be_a_simple_object(formula_ts='x')
         y = pu.as1.let_x_be_a_simple_object(formula_ts='y')
-        phi1 = x | c1 | y
-        phi2 = x | c2 | y
-        phi3 = y | c1 | x
+        phi1 = x | ca | y
+        phi2 = x | cb | y
+        phi3 = y | ca | x
         e1 = pu.as1.Enumeration(e=(phi1, phi2, phi3,))
         assert pu.as1.is_element_of_enumeration(e=e1, x=phi1)
-        assert not pu.as1.is_element_of_enumeration(e=e1, x=x | c1 | x)
-        phi1_other_instance = x | c1 | y
+        assert not pu.as1.is_element_of_enumeration(e=e1, x=x | ca | x)
+        phi1_other_instance = x | ca | y
         assert pu.as1.is_element_of_enumeration(e=e1, x=phi1_other_instance)
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi1) == 0
         assert pu.as1.get_index_of_first_equivalent_element_in_enumeration(e=e1, x=phi2) == 1
@@ -303,7 +280,7 @@ class TestFormulaEquivalenceWithVariables:
         multilevel2 = pu.as1.Tupl(e=(a, multilevel1, a, multilevel1, c,))
         multilevel3 = pu.as1.Tupl(e=(c, multilevel2, a, multilevel1,))
         print(multilevel3)
-        test = pu.as1.replace_formulas(phi=multilevel3, m={a: e, b: d})
+        test = pu.as1.substitute_formulas(phi=multilevel3, m={a: e, b: d})
         m = pu.as1.Map()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=multilevel3, psi=test, variables=(d, e,),
                                                                          variables_fixed_values=m)
@@ -404,7 +381,7 @@ class TestFormulaEquivalenceWithVariables2:
         multilevel2 = pu.as1.Tupl(e=(a, multilevel1, a, multilevel1, c,))
         multilevel3 = pu.as1.Tupl(e=(c, multilevel2, a, multilevel1,))
         print(multilevel3)
-        test = pu.as1.replace_formulas(phi=multilevel3, m={a: e, b: d})
+        test = pu.as1.substitute_formulas(phi=multilevel3, m={a: e, b: d})
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(phi=multilevel3, psi=test, variables=(d, e,),
                                                                      variables_fixed_values=None)
         assert result
@@ -424,9 +401,9 @@ class TestReplaceConnectives:
         d4 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d4'))
         phi = c1(c2(c3, c3, c3, c1, c4(c3, c2, c1)), c3)
         m = pu.as1.Map(d=(c1, c2, c3, c4,), c=(d1, d2, d3, d4,))
-        psi = pu.as1.replace_connectives(phi=phi, m=m)
+        psi = pu.as1.substitute_connectives(phi=phi, m=m)
         n = pu.as1.Map(d=(d1, d2, d3, d4,), c=(c1, c2, c3, c4,))
-        phi2 = pu.as1.replace_connectives(phi=psi, m=n)
+        phi2 = pu.as1.substitute_connectives(phi=psi, m=n)
         assert pu.as1.is_formula_equivalent(phi=phi, psi=phi2)
         pass
 
@@ -493,20 +470,20 @@ class TestReplaceFormulas:
         mortal = pu.as1.let_x_be_a_simple_object(formula_ts='mortal')
         aristotle = pu.as1.let_x_be_a_simple_object(formula_ts='aristotle')
         assert pu.as1.is_formula_equivalent(
-            phi=pu.as1.replace_formulas(phi=x | is_a | human, m={x: aristotle}),
+            phi=pu.as1.substitute_formulas(phi=x | is_a | human, m={x: aristotle}),
             psi=aristotle | is_a | human)
         assert not pu.as1.is_formula_equivalent(
-            phi=pu.as1.replace_formulas(phi=x | is_a | human, m={x: platypus}),
+            phi=pu.as1.substitute_formulas(phi=x | is_a | human, m={x: platypus}),
             psi=aristotle | is_a | human)
         phi = aristotle | is_a | human
-        phi = pu.as1.replace_formulas(phi=phi, m={human: aristotle})
+        phi = pu.as1.substitute_formulas(phi=phi, m={human: aristotle})
         psi = aristotle | is_a | aristotle
         assert pu.as1.is_formula_equivalent(
             phi=phi,
             psi=psi)
         omega1 = (aristotle | is_a | human) | land | (platypus | is_a | animal)
-        omega2 = pu.as1.replace_formulas(phi=omega1,
-                                         m={human: aristotle})
+        omega2 = pu.as1.substitute_formulas(phi=omega1,
+                                            m={human: aristotle})
         assert pu.as1.is_formula_equivalent(
             phi=omega2,
             psi=(aristotle | is_a | aristotle) | land | (platypus | is_a | animal))
@@ -516,10 +493,10 @@ class TestReplaceFormulas:
         c1 = pu.as1.let_x_be_a_unary_connective(formula_ts='c1')
         c2 = pu.as1.let_x_be_a_binary_connective(formula_ts='c2')
         phi = a | c2 | b
-        psi = pu.as1.replace_formulas(phi=phi, m={a: c, b: d})
+        psi = pu.as1.substitute_formulas(phi=phi, m={a: c, b: d})
         assert pu.as1.is_formula_equivalent(phi=c | c2 | d, psi=psi)
         phi = (b | c2 | a) | c2 | ((a | c2 | b) | c2 | (a | c2 | a))
-        psi = pu.as1.replace_formulas(phi=phi, m={a: c, b: d})
+        psi = pu.as1.substitute_formulas(phi=phi, m={a: c, b: d})
         assert pu.as1.is_formula_equivalent(phi=(d | c2 | c) | c2 | ((c | c2 | d) | c2 | (c | c2 | c)), psi=psi)
 
 
@@ -1172,11 +1149,11 @@ class TestFormula:
     def test_get_formula_depth(self):
         c = pu.as1.FreeArityConnective(formula_ts=pu.pl1.symbols.x_uppercase_serif_italic)
         phi1 = pu.as1.Formula(con=c, t=None)
-        assert pu.as1.get_formula_depth(phi=phi1) == 1
+        assert pu.as1.rank(phi=phi1) == 1
         phi2 = pu.as1.Formula(con=c, t=(phi1, phi1,))
-        assert pu.as1.get_formula_depth(phi=phi2) == 2
+        assert pu.as1.rank(phi=phi2) == 2
         phi3 = pu.as1.Formula(con=c, t=(phi1, phi2, phi1, phi2))
-        assert pu.as1.get_formula_depth(phi=phi3) == 3
+        assert pu.as1.rank(phi=phi3) == 3
 
     def test_iterate(self):
         a, b, c, d, e, f = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f',))

@@ -1560,8 +1560,16 @@ def is_enumeration_equivalent(phi: FlexibleEnumeration, psi: FlexibleEnumeration
     return test_1 and test_2
 
 
-def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
-    """Performs a top-down, left-to-right replacement of formulas in formula phi."""
+def substitute_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
+    """Performs a top-down, left-to-right substitution of formulas in formula phi.
+
+
+
+    References:
+        - Rautenberg, Wolfgang. A Concise Introduction to Mathematical Logic - Textbook - 2nd Edition. Springer, 2006.
+            see p. 47 on substitutions.
+
+    """
     phi: Formula = coerce_formula(phi=phi)
     m: Map = coerce_map(m=m, interpret_none_as_empty=True)
     if is_in_map_domain(phi=phi, m=m):
@@ -1574,12 +1582,12 @@ def replace_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         fb: Formula = Formula(con=phi.connective)
         # recursively apply the replacement algorithm on phi terms.
         for term in phi:
-            term_substitute = replace_formulas(phi=term, m=m)
+            term_substitute = substitute_formulas(phi=term, m=m)
             fb: Formula = append_term_to_formula(f=fb, t=term_substitute)
         return fb
 
 
-def replace_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
+def substitute_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     """Given a formula phi, return a new formula psi structurally equivalent to phi,
     where all connectives are substituted according to the map m.
 
@@ -1598,7 +1606,7 @@ def replace_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
         con: Connective = image.connective
     # Build the new formula psi with the new connective,
     # and by calling replace_connectives recursively on all terms.
-    psi: Formula = Formula(con=con, t=(replace_connectives(phi=term, m=m) for term in phi))
+    psi: Formula = Formula(con=con, t=(substitute_connectives(phi=term, m=m) for term in phi))
     return psi
 
 
@@ -2252,7 +2260,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
                                           f=self)
 
         # step 2:
-        outcome: Formula = replace_formulas(phi=self.output_shape, m=variables_map)
+        outcome: Formula = substitute_formulas(phi=self.output_shape, m=variables_map)
 
         # step 3: new objects declarations.
         declarations_map: Map = Map()
@@ -2264,7 +2272,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
             declarations_map: Map = append_pair_to_map(m=declarations_map, preimage=declaration, image=simple_formula)
 
         # step 4: substitute new-object-declarations in the conclusion
-        outcome: Formula = replace_connectives(phi=outcome, m=declarations_map)
+        outcome: Formula = substitute_connectives(phi=outcome, m=declarations_map)
 
         return outcome
 
@@ -2999,7 +3007,7 @@ def are_valid_statements_in_theory_with_variables(
         # but there may be some or no variables with assigned values.
         # it follows that 1) there will be no permutations,
         # and 2) are_valid_statements_in_theory() is equivalent.
-        s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variables_values)
+        s_with_variable_substitution: Formula = substitute_formulas(phi=s, m=variables_values)
         s_with_variable_substitution: Tupl = coerce_tuple(t=s_with_variable_substitution)
         valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
         if valid:
@@ -3011,7 +3019,7 @@ def are_valid_statements_in_theory_with_variables(
         for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                         n=permutation_size):
             variable_substitution: Map = Map(d=free_variables, c=permutation)
-            s_with_variable_substitution: Formula = replace_formulas(phi=s, m=variable_substitution)
+            s_with_variable_substitution: Formula = substitute_formulas(phi=s, m=variable_substitution)
             s_with_variable_substitution: Tupl = coerce_tuple(t=s_with_variable_substitution)
             s_with_permutation: Tupl = Tupl(e=(*s_with_variable_substitution,))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
@@ -3222,7 +3230,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                     return False, None, None
 
                 map1_inverse = inverse_map(m=map1)
-                p_inverse = replace_formulas(phi=p, m=map1_inverse)
+                p_inverse = substitute_formulas(phi=p, m=map1_inverse)
 
                 # The following test is probably superfluous,
                 # as the precedent test covers the compatibility of the conclusion.
@@ -3914,7 +3922,7 @@ class Theorem(Derivation):
                                                                   psi=i.inference_rule.transformation.output_shape,
                                                                   variables=m1.domain)
             pass
-            valid_statement_reversed: Formula = replace_formulas(phi=s, m=m1_reversed)
+            valid_statement_reversed: Formula = substitute_formulas(phi=s, m=m1_reversed)
             if not is_formula_equivalent(phi=valid_statement_reversed,
                                          psi=i.inference_rule.transformation.output_shape):
                 raise u1.ApplicativeError(
@@ -4556,17 +4564,23 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: Enumeration = None) -> Enumerati
     return eb
 
 
-def get_formula_depth(phi: FlexibleFormula) -> int:
-    """The depth of a formula is the number of sub-formula layers it has.
+def rank(phi: FlexibleFormula) -> int:
+    """Return the rank of the formula `phi`.
 
-    :param phi:
-    :return:
+    Intuitively, the rank of a formula is the maximal depth of sub-formulas.
+
+        "(...) define rk φ, the rank of the formula φ, by rk π = 0 for prime formulas π
+        and rk(α ∧ β) = max{rk α, rk β} +1, rk ¬α = rk ∀xα = rk α +1."
+        -- :cite:`rautenberg_2006_conciseintroduction`
+
+    :param phi: A formula.
+    :return: The rank of the formula `phi`.
     """
     phi = coerce_formula(phi=phi)
     if phi.arity == 0:
         return 1
     else:
-        return max(get_formula_depth(phi=term) for term in phi) + 1
+        return max(rank(phi=term) for term in phi) + 1
 
 
 def append_to_theory(*args, t: FlexibleTheory) -> Theory:
@@ -4869,7 +4883,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
         necessary_premises: Tupl = Tupl(
-            e=replace_formulas(phi=i.transformation.input_shapes, m=known_variable_values))
+            e=substitute_formulas(phi=i.transformation.input_shapes, m=known_variable_values))
 
         # Find a set of valid_statements in theory t, such that they match the necessary_premises.
         success, effective_premises = are_valid_statements_in_theory_with_variables(
@@ -5073,7 +5087,7 @@ def auto_derive_4(
                 # 2) develop an algorithm that given a set of premises returns true if they are all valid,
                 #    and then extend this algorithm to support variables.
                 # to avoid the burden of all these conjunctions in the theory, I start with the second approach.
-                necessary_premise: Formula = replace_formulas(phi=original_premise, m=m)
+                necessary_premise: Formula = substitute_formulas(phi=original_premise, m=m)
                 necessary_premises: Tupl = Tupl(e=(*necessary_premises, necessary_premise,))
 
             # the following step is where auto_derive_2 is different from auto_derive_1.
@@ -5090,7 +5104,7 @@ def auto_derive_4(
                 # but there may be some or no variables with assigned values.
                 # it follows that 1) there will be no permutations,
                 # and 2) are_valid_statements_in_theory() is equivalent.
-                effective_premises: Formula = replace_formulas(phi=necessary_premises, m=m)
+                effective_premises: Formula = substitute_formulas(phi=necessary_premises, m=m)
                 effective_premises: Tupl = Tupl(e=effective_premises)
                 for premise_target_statement in effective_premises:
                     if not is_element_of_enumeration(x=premise_target_statement,
@@ -5120,7 +5134,7 @@ def auto_derive_4(
                                                                                                 n=permutation_size):
                     permutation_success: bool = True
                     variable_substitution: Map = Map(d=free_variables, c=permutation)
-                    effective_premises: Formula = replace_formulas(phi=necessary_premises, m=variable_substitution)
+                    effective_premises: Formula = substitute_formulas(phi=necessary_premises, m=variable_substitution)
                     effective_premises: Tupl = Tupl(e=(*effective_premises, permutation,))
                     for premise_target_statement in effective_premises:
                         if not is_element_of_enumeration(x=premise_target_statement,
