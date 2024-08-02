@@ -34,9 +34,9 @@ class TestAxioms:
         # PL1. 𝐴 ⊃ (𝐴 ∧ 𝐴)
 
         # retrieve some basic vocabulary
-        is_a = pu.as1.is_a_connective
+        # is_a = pu.as1.is_a_connective
         is_a_proposition = pu.as1.connective_for_is_a_proposition
-        is_a_propositional_variable = pu.as1.is_a_propositional_variable_connective
+        is_a_propositional_variable = pu.as1.connective_for_is_a_propositional_variable
         land = pu.as1.connective_for_logical_conjunction
         lnot = pu.as1.connective_for_logical_negation
         lor = pu.as1.connective_for_logical_disjunction
@@ -96,7 +96,7 @@ class TestAxioms:
         pass
 
     def test_pl1_2(self):
-        is_a = pu.as1.is_a_connective
+        # is_a = pu.as1.is_a_connective
         proposition = pu.as1.connective_for_is_a_proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
         t, success, _, = pu.as1.auto_derive_2(t=t, conjecture=proposition(p))
@@ -104,8 +104,8 @@ class TestAxioms:
         assert pu.as1.is_valid_proposition_so_far_1(p=proposition(p), t=t)
 
     def test_pl1_3(self):
-        is_a = pu.as1.is_a_connective
-        land = pu.as1.connective_for_logical_conjunction
+        # is_a = pu.as1.is_a_connective
+        # land = pu.as1.connective_for_logical_conjunction
         proposition = pu.as1.connective_for_is_a_proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='X')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Y')

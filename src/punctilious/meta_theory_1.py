@@ -231,9 +231,9 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             i=(
                 as1.connective_for_is_well_formed_theory(t),
-                t | as1.proves_connective | p,
-                t | as1.proves_connective | as1.connective_for_logical_negation(p)),
-            o=as1.is_inconsistent_connective(t),
+                t | as1.connective_for_proves | p,
+                t | as1.connective_for_proves | as1.connective_for_logical_negation(p)),
+            o=as1.connective_for_is_inconsistent(t),
             v={p, t, }),
         ref_ts=pl1.Monospace(text='⊥1'))
     """The inconsistency-1 inference rule: P and ¬P
@@ -294,7 +294,7 @@ def theory_proves_proposition_algorithm(
     t: as1.Theory = as1.coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=False)
     if as1.is_valid_proposition_so_far_1(p=p, t=t):
         # Proposition p is valid in the object-theory t.
-        phi: as1.Formula = t | as1.proves_connective | p
+        phi: as1.Formula = t | as1.connective_for_proves | p
         return True, phi
     else:
         if raise_error_if_false:
@@ -321,7 +321,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
         i=(
             as1.connective_for_is_well_formed_theory(t),
             p,),
-        o=t | as1.proves_connective | p,
+        o=t | as1.connective_for_proves | p,
         v=(p, t,))
     t_proves_p: as1.InferenceRule = as1.InferenceRule(
         f=_t_proves_p,

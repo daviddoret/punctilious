@@ -235,7 +235,7 @@ def let_x_be_a_propositional_variable(
     x = as1.Variable(c=as1.NullaryConnective(formula_ts=formula_ts))
     # t, _ = as1.derive_1(t=t, c=x | as1.is_a | as1.is_a_propositional_variable,
     #                    p=None, i=i0)
-    t, _, _ = as1.derive_1(t=t, c=as1.is_a_propositional_variable_connective(x),
+    t, _, _ = as1.derive_1(t=t, c=as1.connective_for_is_a_propositional_variable(x),
                            p=None, i=i0, raise_error_if_false=True)
 
     return t, x
@@ -282,7 +282,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
             # premises: as1.Enumeration = as1.append_element_to_enumeration(
             #    e=premises, x=x2 | as1.is_a | as1.is_a_propositional_variable)
             p: as1.Enumeration = as1.append_element_to_enumeration(
-                e=p, x=as1.is_a_propositional_variable_connective(x2))
+                e=p, x=as1.connective_for_is_a_propositional_variable(x2))
             m: as1.Map = as1.append_pair_to_map(m=m, preimage=x, image=x2)
     v: as1.Enumeration = as1.Enumeration(e=m.codomain)
 

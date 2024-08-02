@@ -619,7 +619,7 @@ class TestProofByPostulation:
                                                             i=None)
         phi1 = rule1 | pu.as1.connective_for_derivation | pu.as1.connective_for_inference_rule
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
-        phi2 = rule1 | pu.as1.map_connective | pu.as1.connective_for_inference_rule
+        phi2 = rule1 | pu.as1.connective_for_map | pu.as1.connective_for_inference_rule
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
         phi3 = rule1 | pu.as1.connective_for_derivation | b
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)

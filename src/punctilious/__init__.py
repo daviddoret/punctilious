@@ -12,8 +12,8 @@ import minimal_logic_1 as ml1
 csl1.derivation.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter='derivation')
 
-csl1.is_a.formula_ts = as1.typesetters.infix_formula(
-    connective_typesetter='is-a')
+# csl1.is_a.formula_ts = as1.typesetters.infix_formula(
+#    connective_typesetter='is-a')
 csl1.land.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter=pl1.symbols.conjunction)
 csl1.lor.formula_ts = as1.typesetters.infix_formula(
