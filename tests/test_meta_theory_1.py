@@ -142,3 +142,16 @@ class TestInconsistency1:
                                   raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
         pass
+
+    class TestHypothesis:
+        def test_hypothesis(self):
+            t = pu.as1.let_x_be_a_theory()
+            t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
+            a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
+            t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
+            t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b | pu.csl1.implies | pu.csl1.lnot(a))
+            # t, h = pu.as1.let_x_be_an_hypothesis(t=t, c=b)
+            # h, ok, _ = pu.as1.derive_2(t=h, c=pu.csl1.lnot(a), i=pu.ir1.modus_ponens)
+            # h_proves_a = t | pu.as1.connective_for_proves | a
+            # h_proves_not_a = t | pu.as1.connective_for_proves | pu.csl1.lnot(a)
+            # is_inconsistent_h = pu.csl1.is_inconsistent(h)

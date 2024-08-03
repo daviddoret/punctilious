@@ -1096,7 +1096,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
 
 def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = None,
                       a: typing.Optional[FlexibleAxiom] = None, **kwargs):
-    """
+    """Given a theory `t`, returns a new theory `t'` such that it extends `t` with axiom `a`.
 
     :param t: An axiomatization or a theory. If None, the empty axiom-collection is implicitly used.
     :param s: The statement claimed by the new axiom. Either the claim or axiom parameter
@@ -1113,7 +1113,10 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
     if s is not None and a is not None:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_016,
-            msg='Both `s` and `a` are not None. It is mandatory to provide only one of these two arguments.')
+            msg='Both `s` and `a` are not None. It is mandatory to provide only one of these two arguments.',
+            s=s,
+            a=a,
+            t=t)
     elif s is None and a is None:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_017,
@@ -1245,13 +1248,15 @@ connective_for_map = let_x_be_a_binary_connective(formula_ts='map')
 connective_for_proves = let_x_be_a_binary_connective(formula_ts='⊢')
 connective_for_theorem = let_x_be_a_free_arity_connective(formula_ts='theorem')
 connective_for_theory = let_x_be_a_free_arity_connective(formula_ts='theory-formula')
+"""The connective that signals a :math:`theory` formula.
+
+Sample formulas: :math:`\\text{tuple}\\left(d_1, d_2, \\ldots\\right)` where :math:`d_n` is a derivation.
+"""
 connective_for_tupl = let_x_be_a_free_arity_connective(formula_ts='tuple')
 """The connective that signals a :math:`tupl` formula.
 
-Sample formulas: :math:`\\text{tuple}\\left(\\phi, \\psi\\right)`, or :math:`\\left(\\phi, \\psi\\right)`
+Sample formulas: :math:`\\text{tuple}\\left(\\phi, \\psi\\right)`, abbreviated as :math:`\\left(\\phi, \\psi\\right)`.
 """
-
-# is_a_connective = let_x_be_a_binary_connective(formula_ts='is-a')
 transformation_by_variable_substitution_connective: FreeArityConnective = let_x_be_a_free_arity_connective(
     formula_ts='transformation-by-variable-substitution')
 
@@ -1280,10 +1285,11 @@ def is_symbol_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 
 
 def is_connective_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
-    """Two formulas phi and psi are connective-equivalent, noted phi ~connective psi, if and only if they have the
-    same root connective.
+    """Returns `True` if :math:`\\phi \\sim_c \\; \\psi`, `False` otherwise.
 
-    By "the same connective", we mean that the connective's reference is the same.
+    Definition:
+    Two formulas :math:`\\phi` and :math:`\\psi` are :math:`\\text{connective-equivalent}`, noted
+    :math:`\\phi \\sim_c \\; \\psi`, if and only if they have equal root connectives.
 
     Formally, ~connective is an equivalence class, that is, if phi, psi, and omega are formulas:
      - It is reflexive: phi ~connective phi.
@@ -5187,8 +5193,9 @@ class Hypothesis(Formula):
     A hypothesis is a formula of the form:
         :math:`\\text{hypothesis}(t, a, ...)`
     Where:
-        - :math:`b` is a theory, denoted as the base theory.
+        - :math:`b` is a theory, denoted as the hypothesis base theory.
         - :math:`a` is a formula, denoted as the assumption, assumed to be true in :math:`t`.
+
     """
     BASE_THEORY_INDEX: int = 0
     ASSUMPTION_INDEX: int = 1
@@ -5227,6 +5234,9 @@ class Hypothesis(Formula):
         """
         con, b, a = Hypothesis._data_validation_2(b=b, a=a)
         super().__init__(con=con, t=(b, a,))
+        # Store the extended theory e = b ∪ (a)
+        e, _ = punctilious.axiomatic_system_1.let_x_be_an_axiom(t=b, a=a)
+        self._e: Theory = e
 
     @property
     def assumption(self) -> Formula:
@@ -5237,6 +5247,17 @@ class Hypothesis(Formula):
     def base_theory(self) -> Theory:
         """The base theory of the hypothesis."""
         return self[Hypothesis.BASE_THEORY_INDEX]
+
+    @property
+    def extended_theory(self) -> Theory:
+        """The extended theory `e` of the hypothesis is the base theory `b` extended with the assumption `a`
+        postulated as an axiom.
+
+        :math:`e = \\; b \\; \\cdot \\; \\left( a \\right)`
+
+        :return: A theory.
+        """
+        return self._e
 
 
 FlexibleHypothesis = typing.Optional[typing.Union[Hypothesis]]
