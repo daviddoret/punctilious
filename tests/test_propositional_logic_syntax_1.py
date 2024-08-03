@@ -69,7 +69,7 @@ class TestAxioms:
 
         # declare 1 as a propositional-variable
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
-        a2 = pu.as1.Axiom(s=is_a_propositional_variable(q))
+        a2 = pu.as1.Axiom(p=is_a_propositional_variable(q))
         t = pu.as1.append_to_theory(a2, t=t)
 
         # derive q is-a proposition

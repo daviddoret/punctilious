@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="clean-up the obsolete is-a operator">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -374,7 +375,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -727,11 +728,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestAlgorithm.test_algorithm" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1" />
-        <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestAlgorithm.test_algorithm" />
       </list>
     </recent_temporary>
   </component>
@@ -750,14 +751,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00974" summary="new data model, still beta version, support for T ⊢ P and T ⊢ ⊥.">
-      <option name="closed" value="true" />
-      <created>1722193509053</created>
-      <option name="number" value="00974" />
-      <option name="presentableId" value="LOCAL-00974" />
-      <option name="project" value="LOCAL" />
-      <updated>1722193509053</updated>
     </task>
     <task id="LOCAL-00975" summary="new data model, still beta version, support for T ⊢ P and T ⊢ ⊥.">
       <option name="closed" value="true" />
@@ -1143,7 +1136,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722686363780</updated>
     </task>
-    <option name="localTasksCounter" value="1023" />
+    <task id="LOCAL-01023" summary="clean-up the obsolete is-a operator">
+      <option name="closed" value="true" />
+      <created>1722713312817</created>
+      <option name="number" value="01023" />
+      <option name="presentableId" value="LOCAL-01023" />
+      <option name="project" value="LOCAL" />
+      <updated>1722713312817</updated>
+    </task>
+    <option name="localTasksCounter" value="1024" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1266,11 +1267,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>644</line>
-          <option name="timeStamp" value="159" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
           <line>54</line>
           <option name="timeStamp" value="161" />
         </line-breakpoint>
@@ -1280,14 +1276,9 @@
           <option name="timeStamp" value="162" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>652</line>
-          <option name="timeStamp" value="163" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>717</line>
-          <option name="timeStamp" value="164" />
+          <line>740</line>
+          <option name="timeStamp" value="165" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

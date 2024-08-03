@@ -1122,7 +1122,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
             code=c1.ERROR_CODE_AS1_017,
             msg='Both `s` and `a` are None. It is mandatory to provide one of these two arguments.')
     elif s is not None:
-        a: Axiom = Axiom(s=s, **kwargs)
+        a: Axiom = Axiom(p=s, **kwargs)
 
     if isinstance(t, Axiomatization):
         t = Axiomatization(a=t, d=(a,))
@@ -3077,16 +3077,16 @@ def is_well_formed_axiom(a: FlexibleFormula) -> bool:
     """
     global connective_for_axiom_formula
     a = coerce_formula(phi=a)
-    if a.arity != 2:
+    if a.arity != 1:
         return False
-    if a.connective is not connective_for_derivation:
+    if a.connective is not connective_for_axiom_formula:
         return False
     if not is_well_formed_formula(phi=a.term_0):
         return False
-    if a.term_1.arity != 0:
-        return False
-    if a.term_1.connective != connective_for_axiom_formula:
-        return False
+    # if a.term_1.arity != 0:
+    #    return False
+    # if a.term_1.connective != connective_for_axiom_formula:
+    #    return False
     # All tests were successful.
     return True
 
@@ -3404,7 +3404,7 @@ def coerce_axiom(a: FlexibleFormula) -> Axiom:
         return a
     elif isinstance(a, Formula) and is_well_formed_axiom(a=a):
         proved_formula: Formula = a.term_0
-        return Axiom(s=proved_formula)
+        return Axiom(p=proved_formula)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_040,
@@ -3547,7 +3547,8 @@ class Derivation(Formula):
     JUSTIFICATION_INDEX: int = 1
 
     @staticmethod
-    def _data_validation_2(s: FlexibleFormula, j: FlexibleFormula) -> tuple[Connective, Formula, Formula]:
+    def _data_validation_2(s: FlexibleFormula, j: FlexibleFormula, con: Connective | None = None) -> tuple[
+        Connective, Formula, Formula]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -3555,19 +3556,24 @@ class Derivation(Formula):
         :param j:
         :return:
         """
-        con: Connective = connective_for_derivation
+        if con is None:
+            con: Connective = connective_for_derivation
         s = coerce_formula(phi=s)
-        j = coerce_formula(phi=j)
+        if j is not None:
+            j = coerce_formula(phi=j)
         return con, s, j
 
-    def __new__(cls, s: FlexibleFormula, j: FlexibleFormula,
+    def __new__(cls, s: FlexibleFormula, j: FlexibleFormula | None = None, con: Connective | None = None,
                 **kwargs):
-        c, s, j = Derivation._data_validation_2(s=s,
-                                                j=j)
-        o: tuple = super().__new__(cls, con=c, t=(s, j,), **kwargs)
+        con, s, j = Derivation._data_validation_2(s=s,
+                                                  j=j, con=con)
+        if j is not None:
+            o: tuple = super().__new__(cls, con=con, t=(s, j,), **kwargs)
+        else:
+            o: tuple = super().__new__(cls, con=con, t=(s,), **kwargs)
         return o
 
-    def __init__(self, s: FlexibleFormula, j: FlexibleFormula,
+    def __init__(self, s: FlexibleFormula, j: FlexibleFormula | None = None, con: Connective | None = None,
                  **kwargs):
         """
 
@@ -3575,9 +3581,12 @@ class Derivation(Formula):
         :param j: A formula that is a justification for the validity of the valid-statement.
         :param kwargs:
         """
-        c, s, j = Derivation._data_validation_2(s=s,
-                                                j=j)
-        super().__init__(con=c, t=(s, j,), **kwargs)
+        con, s, j = Derivation._data_validation_2(s=s,
+                                                  j=j, con=con)
+        if j is not None:
+            super().__init__(con=con, t=(s, j,), **kwargs)
+        else:
+            super().__init__(con=con, t=(s,), **kwargs)
 
     @property
     def valid_statement(self) -> Formula:
@@ -3618,31 +3627,39 @@ class Axiom(Derivation):
 
     TODO: An axiom may be viewed as an inference-rule without premises. Thus, Axiom could derive from InferenceRule.
 
-    TODO: migrate axioms to predicates of the form axiom(p).
     """
 
     @staticmethod
-    def _data_validation_3(s: FlexibleFormula = None) -> tuple[Connective, Formula, Formula]:
+    def _data_validation_3(p: FlexibleFormula = None) -> tuple[Connective, Formula]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param s:
+        :param p: A proposition.
         :return:
         """
         global connective_for_axiom_formula
         con: Connective = connective_for_axiom_formula
-        s: Formula = coerce_formula(phi=s)
-        justification: Formula = Formula(con=con)
-        return con, s, justification
+        p: Formula = coerce_formula(phi=p)  # TODO: use coerce_proposition instead.
+        return con, p
 
-    def __new__(cls, s: FlexibleFormula = None, **kwargs):
-        c, s, justification = Axiom._data_validation_3(s=s)
-        o: tuple = super().__new__(cls, s=s, j=justification, **kwargs)
+    def __new__(cls, p: FlexibleFormula = None, **kwargs):
+        """Creates a new axiom.
+
+        :param p: A proposition.
+        :param kwargs:
+        """
+        con, p = Axiom._data_validation_3(p=p)
+        o: tuple = super().__new__(cls, con=con, s=p, **kwargs)
         return o
 
-    def __init__(self, s: FlexibleFormula, **kwargs):
-        c, s, justification = Axiom._data_validation_3(s=s)
-        super().__init__(s=s, j=justification, **kwargs)
+    def __init__(self, p: FlexibleFormula, **kwargs):
+        """initializes a new axiom.
+
+        :param p: A proposition.
+        :param kwargs:
+        """
+        con, p = Axiom._data_validation_3(p=p)
+        super().__init__(con=con, s=p, **kwargs)
 
 
 FlexibleAxiom = typing.Union[Axiom, Formula]
