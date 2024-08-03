@@ -17,6 +17,8 @@ NEXT STEPS:
  - Simplify the external-algorithm data model (transformation, inference-rule),
    it is a bit too heavy now which will make it hard to maintain moving-forward.
 
+TODO: Add Extension as a new class of Derivation.
+
 TODO: Check then remove argument `a` in inference. Should be useless now.
 
 TODO: Develop native predicates. To keep things simple, start with the specialized

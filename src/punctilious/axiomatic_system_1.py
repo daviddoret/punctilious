@@ -1770,6 +1770,9 @@ class Map(Formula):
      - t1 is a tuple named the values tuple.
      - the cardinality of t0 is equal to the cardinality of 1.
 
+    Syntax:
+    :math:`\\text{map}\\left( \\{ i_1, i_2, \\cdots, i_n \\}, \\left( o_1, o_2, \\cdots, o_m \\right) \\right)`
+
      The empty-map is the map m(t0(), t1()).
 
      See also:
@@ -3596,6 +3599,9 @@ class Axiom(Derivation):
 
     Intuitive definition:
     An axiom is a statement that unconditionally justifies a statement.
+
+    Syntax:
+    :math:`\\text{axiom}\\left( P \\right)` where :math:`P` is a proposition.
 
     Local definition (with regard to a theory t):
     An axiom is a derivation with regard to a theory t if and only if:
