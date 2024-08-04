@@ -638,14 +638,27 @@ class NullaryConnective(FixedArityConnective):
         super().__init__(fixed_arity_constraint=0, formula_ts=formula_ts)
 
 
-class SimpleObject(Formula):
-    """A simple-object is a formula composed of a nullary-connective."""
+class WellFormedSimpleObject(Formula):
+    """A well-formed simple object is a formula of the form ⌜ :math:`\\boldsymbol{O}\\left( \\right)` ⌝ where
+    :math:`\\boldsymbol{O}` is a (nullary) connective.
 
-    # TODO: Implement _data_validation(...) for the sake of consistency.
+    Definition
+    ~~~~~~~~~~~~~~~~~~
+    A formula :math:`\\phi` is a well-formed axiom if and only if:
+     - its arity is equal to 0.
+
+    Typesetting
+    ~~~~~~~~~~~~~~~
+    - :math:`\\boldsymbol{O}\\left( \\right)`
+    - :math:`\\boldsymbol{O}` (abbreviated form)
+    """
+
+    @staticmethod
+    def _data_validation_3(con: Connective = None) -> Connective:
+        return con
 
     def __new__(cls, c: NullaryConnective):
-        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
-        # because tuple is immutable.
+        con = WellFormedSimpleObject._data_validation(con=c)
         o: tuple
         o = super().__new__(cls, con=c, t=None)
         return o
@@ -924,7 +937,7 @@ class QuaternaryConnective(FixedArityConnective):
         super().__init__(fixed_arity_constraint=4, formula_ts=formula_ts)
 
 
-class Variable(SimpleObject):
+class Variable(WellFormedSimpleObject):
     """A variable is defined as a simple-object.
 
     Question: a variable could be alternatively defined as any arbitrary formula, but using simple-objects look
@@ -962,7 +975,7 @@ class Variable(SimpleObject):
         return
 
 
-class MetaVariable(SimpleObject):
+class MetaVariable(WellFormedSimpleObject):
     """A variable is defined as a simple-object that is not declared in the theory with a "is-a" operator.
 
     The justification for a dedicated python class is the implementation of the __enter__ and __exit__ methods,
@@ -1016,17 +1029,17 @@ FlexibleMultiRepresentation = typing.Union[FlexibleRepresentation, typing.Iterab
 representation."""
 
 
-def let_x_be_a_simple_object(formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None) -> SimpleObject:
+def let_x_be_a_simple_object(formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None) -> WellFormedSimpleObject:
     """A helper function to declare one or multiple simple-objects.
 
     :param formula_ts: A string (or an iterable of strings) default representation for the simple-object(s).
     :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
     """
-    return SimpleObject(c=NullaryConnective(formula_ts=formula_ts))
+    return WellFormedSimpleObject(c=NullaryConnective(formula_ts=formula_ts))
 
 
 def let_x_be_some_simple_objects(
-        reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[SimpleObject, typing.Any, None]:
+        reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[WellFormedSimpleObject, typing.Any, None]:
     """A helper function to declare some simple-objects.
 
     :param reps: An iterable of strings or typesetters, denoted as the default representation of the simple-objects.
@@ -2449,6 +2462,26 @@ def coerce_hypothesis(h: FlexibleFormula) -> WellFormedHypothesis:
             h=h)
 
 
+def coerce_simple_object(o: FlexibleSimpleObject) -> WellFormedSimpleObject:
+    """Coerces formula `o` into a well-formed simple-object, or raises an error if it fails.
+
+    :param o: A formula that is presumably a well-formed simple-object.
+    :return: A well-formed simple-object.
+    :raises ApplicativeError: with code AS1-087 if coercion fails.
+    """
+    o: Formula = coerce_formula(phi=o)
+    if isinstance(o, WellFormedSimpleObject):
+        return o
+    elif is_well_formed_simple_object(o=o):
+        con: Connective = o.connective
+        return WellFormedSimpleObject(c=con)
+    else:
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_087,
+            msg='`o` cannot be coerced to a well-formed simple-object.',
+            o=o)
+
+
 def coerce_inference(i: FlexibleFormula) -> Inference:
     """Coerces formula `i` into a well-formed inference, or raises an error if it fails.
 
@@ -2895,7 +2928,7 @@ def iterate_theory_derivations(t: FlexibleTheory[FlexibleDerivation] | None = No
                                             interpret_none_as_empty=interpret_none_as_empty,
                                             canonic_conversion=canonic_conversion)
     for d2 in iterate_enumeration_elements(e=d, max_elements=max_derivations):
-        d2: Derivation = coerce_derivation(d=d2)
+        d2: WellFormedDerivation = coerce_derivation(d=d2)
         yield d2
     return
 
@@ -3291,7 +3324,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
     for index in range(verification_threshold, len(c)):
 
         # Retrieve the derivation whose proof must be verified.
-        d: Derivation = c[index]
+        d: WellFormedDerivation = c[index]
 
         # Retrieve the proposition or statement announced by the derivation.
         p: Formula = d.valid_statement
@@ -3449,7 +3482,10 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
 
 
 def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
-    """Returns True if and only if `a` is a well-formed axiomatization, False otherwise, i.e. it is ill-formed.
+    """Returns ``True`` if ``a`` is a well-formed axiomatization, ``False`` otherwise.
+
+    TODO: Because proposition is a local definition, add a conditional argument `t` and
+        pass it to is_well_formed_axiom which then must pass it to is_well_formed_proposition.
 
     :param a: A formula, possibly a well-formed axiomatization.
     :param raise_error_if_false: If True, raises an error when `a` is not a well-formed
@@ -3473,7 +3509,32 @@ def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_false: bool
     return True
 
 
-def coerce_derivation(d: FlexibleFormula) -> Derivation:
+def is_well_formed_simple_object(o: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
+    """Returns ``True`` if ``o`` is a well-formed simple-object, ``False`` otherwise.
+
+    See :class:`WellFormedSimpleObject` for a definition of simple-object.
+
+    :param o: A formula, possibly a well-formed simple-object.
+    :param raise_error_if_false: If ``True``, raises an error when ``o`` is not a well-formed
+        simple-object.
+    :raises ApplicativeError: with error code AS1-088 if ``raise_error_if_false`` and ``o`` is not a
+        well-formed simple-object.
+    :return: ``True`` if ``o`` is a well-formed simple-object, ``False`` otherwise.
+    """
+    o = coerce_formula(phi=o)
+    if o.arity == 0:
+        return True
+    else:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_088,
+                msg='`o` is not a well-formed simple-objects.',
+                o=o
+            )
+        return False
+
+
+def coerce_derivation(d: FlexibleFormula) -> WellFormedDerivation:
     """
 
     Validate that p is a well-formed theorem and returns it properly typed as Proof, or raise exception e123.
@@ -3622,7 +3683,7 @@ def coerce_axiomatization(a: FlexibleFormula, interpret_none_as_empty: bool = Fa
             interpret_none_as_empty=interpret_none_as_empty)
 
 
-class Derivation(Formula):
+class WellFormedDerivation(Formula):
     """A derivation has two definitions: a local definition with regard to a theory t, and a global definition.
 
     Local definition (with regard to a theory t):
@@ -3670,8 +3731,8 @@ class Derivation(Formula):
 
     def __new__(cls, s: FlexibleFormula, j: FlexibleFormula | None = None, con: Connective | None = None,
                 **kwargs):
-        con, s, j = Derivation._data_validation_2(s=s,
-                                                  j=j, con=con)
+        con, s, j = WellFormedDerivation._data_validation_2(s=s,
+                                                            j=j, con=con)
         if j is not None:
             o: tuple = super().__new__(cls, con=con, t=(s, j,), **kwargs)
         else:
@@ -3686,8 +3747,8 @@ class Derivation(Formula):
         :param j: A formula that is a justification for the validity of the valid-statement.
         :param kwargs:
         """
-        con, s, j = Derivation._data_validation_2(s=s,
-                                                  j=j, con=con)
+        con, s, j = WellFormedDerivation._data_validation_2(s=s,
+                                                            j=j, con=con)
         if j is not None:
             super().__init__(con=con, t=(s, j,), **kwargs)
         else:
@@ -3701,14 +3762,14 @@ class Derivation(Formula):
 
         :return: A formula.
         """
-        return self[Derivation.VALID_STATEMENT_INDEX]
+        return self[WellFormedDerivation.VALID_STATEMENT_INDEX]
 
     @property
     def justification(self) -> Formula:
-        return self[Derivation.JUSTIFICATION_INDEX]
+        return self[WellFormedDerivation.JUSTIFICATION_INDEX]
 
 
-class WellFormedAxiom(Derivation):
+class WellFormedAxiom(WellFormedDerivation):
     """A well-formed axiom is a formula of the form ⌜ :math:`\\text{axiom}\\left( \\boldsymbol{P} \\right)` ⌝ where
     :math:`\\boldsymbol{P}` is a proposition postulated as valid in some theoretical context.
 
@@ -3767,7 +3828,7 @@ class WellFormedAxiom(Derivation):
 FlexibleAxiom = typing.Union[WellFormedAxiom, Formula]
 
 
-class WellFormedInferenceRule(Derivation):
+class WellFormedInferenceRule(WellFormedDerivation):
     """A well-formed inference-rule is an authorization for the usage of a transformation or algorithm,
     to derive further theorems in a theory under certain conditions called premises.
 
@@ -3790,7 +3851,7 @@ class WellFormedInferenceRule(Derivation):
     Note: if an inference-rule has no premises, it is equivalent to an axiom.
 
     """
-    TRANSFORMATION_INDEX: int = Derivation.VALID_STATEMENT_INDEX
+    TRANSFORMATION_INDEX: int = WellFormedDerivation.VALID_STATEMENT_INDEX
 
     @staticmethod
     def _data_validation_3(f: FlexibleTransformation = None) -> tuple[Connective, Transformation]:
@@ -3978,7 +4039,7 @@ def inverse_map(m: FlexibleMap) -> Map:
     return m2
 
 
-class WellFormedTheorem(Derivation):
+class WellFormedTheorem(WellFormedDerivation):
     """A well-formed theorem is a proposition that is proven by a valid inference.
 
     Global definition
@@ -4003,7 +4064,7 @@ class WellFormedTheorem(Derivation):
     the transformation-rule that yield phi, i.e.:
     t(P) ~formula phi
     """
-    INFERENCE_INDEX: int = Derivation.JUSTIFICATION_INDEX
+    INFERENCE_INDEX: int = WellFormedDerivation.JUSTIFICATION_INDEX
 
     @staticmethod
     def _data_validation_3(s: FlexibleFormula, i: FlexibleInference) -> tuple[Connective, Formula, Inference]:
@@ -4261,7 +4322,7 @@ class WellFormedTheory(Formula):
             if isinstance(element, WellFormedTheorem):
                 yield element
 
-    def iterate_derivations(self) -> typing.Iterator[Derivation]:
+    def iterate_derivations(self) -> typing.Iterator[WellFormedDerivation]:
         """Iterates over all derivations, preserving order"""
         for element in self:
             yield element
@@ -4805,7 +4866,7 @@ def append_derivation_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxioma
     :param a:
     :return:
     """
-    d: Derivation = coerce_derivation(d=d)
+    d: WellFormedDerivation = coerce_derivation(d=d)
     a: WellFormedAxiomatization = coerce_axiomatization(a=a)
     if is_well_formed_axiom(a=d):
         extension_a: WellFormedAxiom = coerce_axiom(a=d)
@@ -4949,7 +5010,7 @@ def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
 
 
 def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[Derivation]]:
+        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
     The `derive_0` algorithm "proves the obvious":
@@ -4963,7 +5024,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
     :param c: A proposition, denoted as the conjecture.
     :param debug:
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
-    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[Derivation]]
+    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]
     """
     t = coerce_theory(t=t, canonical_conversion=True, interpret_none_as_empty=True)
     c = coerce_formula(phi=c)
@@ -4986,7 +5047,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
 def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
              raise_error_if_false: bool = True,
              debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[Derivation]]:
+        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]:
     """Derives a new theory `t′` that extends `t` with a new theorem based on conjecture `c` using inference-rule `i`.
 
     Note: in contrast, derive_1 requires the explicit list of premises. derive_2 is more convenient to use because it
@@ -4999,7 +5060,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
     :param raise_error_if_false: raise an error if the derivation fails.
     :param debug:
     :return: A python-tuple (t′, True, derivation) if the derivation was successful, (t, False, None) otherwise.
-    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[Derivation]]
+    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]
     """
     t = coerce_theory(t=t)
     c = coerce_formula(phi=c)
@@ -5102,7 +5163,7 @@ def auto_derive_with_heuristics(t: FlexibleTheory, conjecture: FlexibleFormula) 
 
 
 def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[Derivation]]:
+        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
     The auto_derive_2 algorithm "wide and shallow inference" builds on auto_derive_1 and:
@@ -5114,7 +5175,7 @@ def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = 
     :param conjecture:
     :param debug:
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
-    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[Derivation]]
+    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]
     """
     t = coerce_theory(t=t)
     conjecture = coerce_formula(phi=conjecture)
@@ -5157,7 +5218,7 @@ def auto_derive_3(
 def auto_derive_4(
         t: FlexibleTheory, conjecture: FlexibleFormula, max_recursion: int = 3,
         conjecture_exclusion_list: FlexibleEnumeration = None, debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[Derivation], FlexibleEnumeration]:
+        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation], FlexibleEnumeration]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
     The auto_derive_3 algorithm "wide and deep inference" builds upon auto_derive_2 and:
@@ -5183,7 +5244,7 @@ def auto_derive_4(
     :param conjecture_exclusion_list:
     :param debug:
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
-    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[Derivation]]
+    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]
     """
     global auto_derivation_max_formula_depth_preference
     t: WellFormedTheory = coerce_theory(t=t)
@@ -5678,7 +5739,7 @@ def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFor
     t: WellFormedTheory = coerce_theory(t=t)
     s: Formula = coerce_formula(phi=s)
     for d in iterate_theory_derivations(t=t):
-        d: Derivation
+        d: WellFormedDerivation
         if is_formula_equivalent(phi=s, psi=d.valid_statement):
             return True, d
     return False, None
@@ -5735,7 +5796,7 @@ class TypesetterForDerivation(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleDerivation, theory: typing.Optional[FlexibleTheory] = None,
                                **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: Derivation = coerce_derivation(d=phi)
+        phi: WellFormedDerivation = coerce_derivation(d=phi)
         if theory is None:
             yield '\t'
             yield from phi.valid_statement.typeset_from_generator(**kwargs)
@@ -5788,7 +5849,7 @@ class TypesetterForDerivation(pl1.Typesetter):
                 first: bool = True
                 for premise in phi.inference.premises:
                     # success, derivation = get_theory_derivation_from_valid_statement(t=theory, s=premise)
-                    derivation: Derivation
+                    derivation: WellFormedDerivation
                     # i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=derivation, formula=theory)
                     if not first:
                         yield ', '
