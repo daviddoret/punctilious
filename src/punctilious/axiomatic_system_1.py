@@ -841,7 +841,7 @@ def is_theorem_of(m: FlexibleTheorem, t: FlexibleTheory, max_derivations: int | 
         of a theory, or dependencies between derivations.
     :return: `True` if `m` is a theorem in `t`, `False` otherwise.
     """
-    m: Theorem = coerce_theorem(t=m)
+    m: WellFormedTheorem = coerce_theorem(t=m)
     t: Theory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     return any(is_formula_equivalent(phi=m, psi=thrm2) for thrm2 in
                iterate_theory_theorems(t=t, max_derivations=max_derivations))
@@ -2891,7 +2891,7 @@ def iterate_theory_theorems(t: FlexibleTheory | None = None,
                             interpret_none_as_empty: bool = True,
                             canonic_conversion: bool = True,
                             max_derivations: int | None = None
-                            ) -> typing.Generator[Theorem, None, None]:
+                            ) -> typing.Generator[WellFormedTheorem, None, None]:
     """Iterates through theorems in derivations of a theory `t`, in canonical order.
 
     Alternatively, iterates through theorems of an enumeration of derivations `d`, in canonical order.
@@ -2911,7 +2911,7 @@ def iterate_theory_theorems(t: FlexibleTheory | None = None,
                                          strip_duplicates=strip_duplicates,
                                          canonic_conversion=canonic_conversion):
         if is_well_formed_theorem(t=d2):
-            t: Theorem = coerce_theorem(t=d2)
+            t: WellFormedTheorem = coerce_theorem(t=d2)
             yield t
 
 
@@ -2978,7 +2978,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
             s: Formula = a.valid_statement
             yield s
         elif is_well_formed_theorem(t=d2):
-            m: Theorem = coerce_theorem(t=d2)
+            m: WellFormedTheorem = coerce_theorem(t=d2)
             s: Formula = m.valid_statement
             yield s
         elif is_well_formed_inference_rule(i=d2):
@@ -3020,7 +3020,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
             p: Formula = a.valid_statement
             yield p
         elif is_well_formed_theorem(t=d2):
-            m: Theorem = coerce_theorem(t=d2)
+            m: WellFormedTheorem = coerce_theorem(t=d2)
             p: Formula = m.valid_statement
             yield p
 
@@ -3140,10 +3140,10 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_false: bool = Fals
     :return: bool.
     """
     t = coerce_formula(phi=t)
-    if isinstance(t, Theorem):
+    if isinstance(t, WellFormedTheorem):
         # the Theorem python-type assures the well-formedness of the object.
         return True
-    if (t.connective is not connective_for_derivation or
+    if (t.connective is not connective_for_theorem or
             not t.arity == 2 or
             not is_well_formed_formula(phi=t.term_0) or
             not is_well_formed_inference(i=t.term_1)):
@@ -3244,7 +3244,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
             # This is a theorem.
             # Check that this theorem is well-formed with regard to the target theory,
             # i.e. it is a valid derivation with regard to predecessor derivations.
-            m: Theorem = coerce_theorem(t=d)
+            m: WellFormedTheorem = coerce_theorem(t=d)
             i: Inference = m.inference
             ir: WellFormedInferenceRule = m.inference.inference_rule
             # Check that the inference-rule is a valid predecessor in the derivation.
@@ -3472,19 +3472,19 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> WellFormedInferenceRule:
             i=i)
 
 
-def coerce_theorem(t: FlexibleFormula) -> Theorem:
+def coerce_theorem(t: FlexibleFormula) -> WellFormedTheorem:
     """Coerces formula `t` into a well-formed theorem, or raises an error if it fails.
 
     :param t: A formula that is presumably a well-formed theorem.
     :return: A well-formed theorem.
     :raises ApplicativeError: with code AS1-042 if coercion fails.
     """
-    if isinstance(t, Theorem):
+    if isinstance(t, WellFormedTheorem):
         return t
     elif isinstance(t, Formula) and is_well_formed_theorem(t=t):
-        proved_formula: Formula = coerce_formula(phi=t.term_0)
-        inference: Inference = coerce_inference(i=t.term_1)
-        return Theorem(s=proved_formula, i=inference)
+        p: Formula = coerce_formula(phi=t.term_0)
+        i: Inference = coerce_inference(i=t.term_1)
+        return WellFormedTheorem(s=p, i=i)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_042,
@@ -3925,8 +3925,14 @@ def inverse_map(m: FlexibleMap) -> Map:
     return m2
 
 
-class Theorem(Derivation):
-    """A theorem-by-inference is a theorem that is proven by inference.
+class WellFormedTheorem(Derivation):
+    """A well-formed theorem is a proposition that is proven by a valid inference.
+
+    Global definition
+    ~~~~~~~~~~~~~~~~~
+
+    Local definition
+    ~~~~~~~~~~~~~~~~~
 
     Syntactic definition:
     A formula is a well-formed theorem-by-inference if and only if it is a formula of the form:
@@ -3951,11 +3957,14 @@ class Theorem(Derivation):
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
+        TODO: Consider removing Inference from the data model and merging its content inside the theorem formula.
+            This is just a simplification, it is not absolutely necessary.
+
         :param s: A proposition denoted as the theorem valid-statement.
         :param i: An inference.
         :return:
         """
-        con: Connective = connective_for_theorem  # TO BE IMPLEMENTED AS A PREDICATE INSTEAD OF IS-A
+        con: Connective = connective_for_theorem
         s: Formula = coerce_formula(phi=s)
         i: Inference = coerce_inference(i=i)
 
@@ -4025,22 +4034,22 @@ class Theorem(Derivation):
         return con, s, i
 
     def __new__(cls, s: FlexibleFormula, i: FlexibleInference):
-        c, s, i = Theorem._data_validation_3(s=s, i=i)
-        o: tuple = super().__new__(cls, s=s, j=i)
+        con, s, i = WellFormedTheorem._data_validation_3(s=s, i=i)
+        o: tuple = super().__new__(cls, con=con, s=s, j=i)
         return o
 
     def __init__(self, s: FlexibleFormula, i: FlexibleInference):
-        c, s, i = Theorem._data_validation_3(s=s, i=i)
+        con, s, i = WellFormedTheorem._data_validation_3(s=s, i=i)
         # complete object initialization to assure that we have a well-formed formula with connective, etc.
-        super().__init__(s=s, j=i)
+        super().__init__(con=con, s=s, j=i)
 
     @property
     def inference(self) -> Inference:
         """The inference of the theorem."""
-        return self[Theorem.INFERENCE_INDEX]
+        return self[WellFormedTheorem.INFERENCE_INDEX]
 
 
-FlexibleTheorem = typing.Union[Theorem, Formula]
+FlexibleTheorem = typing.Union[WellFormedTheorem, Formula]
 FlexibleDerivation = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRule]
 
 
@@ -4180,8 +4189,8 @@ class Theory(Formula):
             if isinstance(derivation, WellFormedAxiom):
                 derivation: WellFormedAxiom
                 yield derivation.valid_statement
-            elif isinstance(derivation, Theorem):
-                derivation: Theorem
+            elif isinstance(derivation, WellFormedTheorem):
+                derivation: WellFormedTheorem
                 yield derivation.valid_statement
 
     def iterate_inference_rules(self) -> typing.Iterator[WellFormedInferenceRule]:
@@ -4190,10 +4199,10 @@ class Theory(Formula):
             if isinstance(element, WellFormedInferenceRule):
                 yield element
 
-    def iterate_theorems(self) -> typing.Iterator[Theorem]:
+    def iterate_theorems(self) -> typing.Iterator[WellFormedTheorem]:
         """Iterates over all theorems in the theory, preserving order, filtering out axioms and inference-rules."""
         for element in self:
-            if isinstance(element, Theorem):
+            if isinstance(element, WellFormedTheorem):
                 yield element
 
     def iterate_derivations(self) -> typing.Iterator[Derivation]:
@@ -4720,7 +4729,7 @@ def append_to_theory(*args, t: FlexibleTheory) -> Theory:
                 if not is_inference_rule_of(i=extension_i, t=t):
                     t: Theory = Theory(t=t, d=(extension_i,))
             elif is_well_formed_theorem(t=argument):
-                extension_m: Theorem = coerce_theorem(t=argument)
+                extension_m: WellFormedTheorem = coerce_theorem(t=argument)
                 if not is_theorem_of(m=extension_m, t=t):
                     t: Theory = Theory(t=t, d=(extension_m,))
             else:
@@ -4783,7 +4792,7 @@ class AutoDerivationFailure(Exception):
 
 def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
              i: FlexibleInferenceRule, a: FlexibleTupl | None = None,
-             raise_error_if_false: bool = True) -> typing.Tuple[Theory, bool, Theorem | None]:
+             raise_error_if_false: bool = True) -> typing.Tuple[Theory, bool, WellFormedTheorem | None]:
     """Given a theory `t`, derives a new theory `t′` that extends `t` with a new theorem `c`
     derived by applying inference-rule `i`.
 
@@ -4844,7 +4853,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
         # TODO: This is inelegant. When we use an external-algorithm,
         #   I was not able to find a simple solution to catch errors.
         #   Some evolution of the data model is probably needed here.
-        theorem: Theorem = Theorem(s=c, i=inference)
+        theorem: WellFormedTheorem = WellFormedTheorem(s=c, i=inference)
     except u1.ApplicativeError as error:
         # If the initialization of the theorem fails,
         # it means that the theorem is not valid.
@@ -5677,7 +5686,7 @@ class TypesetterForDerivation(pl1.Typesetter):
                 # phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
-                phi: Theorem = coerce_theorem(t=phi)
+                phi: WellFormedTheorem = coerce_theorem(t=phi)
                 inference: Inference = phi.inference
                 inference_rule: WellFormedInferenceRule = inference.inference_rule
                 yield f'\t\t| Follows from [{inference_rule}] given '
@@ -5707,7 +5716,7 @@ class TypesetterForDerivation(pl1.Typesetter):
                 # phi: InferenceRule = coerce_inference_rule(i=phi)
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
-                phi: Theorem = coerce_theorem(t=phi)
+                phi: WellFormedTheorem = coerce_theorem(t=phi)
                 inference: Inference = phi.inference
                 inference_rule: WellFormedInferenceRule = inference.inference_rule
                 yield f'\t\t| Follows from '

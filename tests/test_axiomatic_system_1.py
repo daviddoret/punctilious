@@ -572,7 +572,7 @@ class TestInferenceRule:
 
         # derivation from the axiom
         i = pu.as1.Inference(p=None, i=ir)
-        isolated_theorem = pu.as1.Theorem(s=phi, i=i)
+        isolated_theorem = pu.as1.WellFormedTheorem(s=phi, i=i)
         t = pu.as1.append_to_theory(isolated_theorem, t=axiomatization)
         assert pu.as1.is_formula_equivalent(
             phi=isolated_theorem.valid_statement,
@@ -641,10 +641,10 @@ class TestTheorem:
         # For the purpose of this test,
         # build the theorem manually,
         # i.e. without using a derivation function.
-        tm1 = pu.as1.Theorem(s=b, i=if1)
+        tm1 = pu.as1.WellFormedTheorem(s=b, i=if1)
         tm1 = pu.as1.coerce_theorem(t=tm1)
 
-        tm2 = b | derivation | if1
+        tm2 = pu.as1.connective_for_theorem(b, if1)
         assert pu.as1.is_formula_equivalent(phi=tm1, psi=tm2)
         tm2 = pu.as1.coerce_theorem(t=tm2)
 
@@ -664,7 +664,7 @@ class TestInference:
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(i=p))
         inference_rule = pu.as1.WellFormedInferenceRule(f=t)
         inference = pu.as1.Inference(i=inference_rule, p=p, a=None)
-        theorem_2 = pu.as1.Theorem(s=theorem, i=inference)
+        theorem_2 = pu.as1.WellFormedTheorem(s=theorem, i=inference)
         pu.as1.is_formula_equivalent(
             phi=theorem_2,
             psi=theorem | pu.as1.connective_for_derivation | pu.as1.connective_for_inference(
@@ -704,12 +704,12 @@ class TestProofByInference:
         p = (a | star | b, b | star | c,)
         i = pu.as1.Inference(p=p, i=ir)
         outcome = f.apply_transformation(i=p)
-        m = pu.as1.Theorem(s=a | star | c, i=i)
+        m = pu.as1.WellFormedTheorem(s=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(t=m)
-        assert pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.connective_for_derivation | i)
+        assert pu.as1.is_well_formed_theorem(t=pu.as1.connective_for_theorem(a | star | c, i))
 
         i2 = pu.as1.Inference(p=(a | star | b, b | star | a,), i=ir)
-        assert not pu.as1.is_well_formed_theorem(t=(a | star | c) | pu.as1.connective_for_derivation | i2)
+        assert not pu.as1.is_well_formed_theorem(t=pu.as1.connective_for_theorem(a | star | c, i2))
         pass
 
 
