@@ -80,21 +80,21 @@ simplification_2_axiom: as1.WellFormedInferenceRule = as1.WellFormedInferenceRul
 
 modus_ponens = as1.modus_ponens_inference_rule
 
-axiomatization = as1.Axiomatization(d=(
+axiomatization = as1.WellFormedAxiomatization(d=(
     conjunction_introduction,
     simplification_1_axiom,
     simplification_2_axiom,
     modus_ponens,))
 
 
-def extend_theory_with_inference_rules_1(t: as1.FlexibleTheory) -> as1.Theory:
+def extend_theory_with_inference_rules_1(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
     """Extends a theory with:
      - the catalog of foundational inference-rules found in inference-rules-1.
      - TODO: add some theory-specific heuristics?
 
     """
     global conjunction_introduction, simplification_1_axiom, simplification_2_axiom, modus_ponens_inference_rule
-    t: as1.Theory = as1.coerce_theory(t=t)
+    t: as1.WellFormedTheory = as1.coerce_theory(t=t)
     t, _ = as1.let_x_be_an_inference_rule(t=t, i=conjunction_introduction)
     t, _ = as1.let_x_be_an_inference_rule(t=t, i=simplification_1_axiom)
     t, _ = as1.let_x_be_an_inference_rule(t=t, i=simplification_2_axiom)

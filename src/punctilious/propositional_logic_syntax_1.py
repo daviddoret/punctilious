@@ -206,13 +206,14 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     """
     pass
 
-axiomatization = as1.Axiomatization(d=(i0, i1, i2, i3, i4, i5,))
+axiomatization = as1.WellFormedAxiomatization(d=(i0, i1, i2, i3, i4, i5,))
 
-extended_theory = as1.Theory(d=(*axiomatization,))
+extended_theory = as1.WellFormedTheory(d=(*axiomatization,))
 
 
 def let_x_be_a_propositional_variable(
-        t: as1.FlexibleTheory, formula_ts: as1.FlexibleRepresentation) -> typing.Tuple[as1.Theory, as1.Variable]:
+        t: as1.FlexibleTheory, formula_ts: as1.FlexibleRepresentation) -> typing.Tuple[
+    as1.WellFormedTheory, as1.Variable]:
     """Declare a propositional-variable in theory t.
 
     If they are not already present, all axioms of propositional-logic-syntax-1 are appended to theory t.
@@ -243,7 +244,7 @@ def let_x_be_a_propositional_variable(
 
 def let_x_be_some_propositional_variables(
         t: as1.FlexibleTheory,
-        ts: typing.Iterable[as1.FlexibleRepresentation]) -> [as1.Theory, [as1.Variable, ...]]:
+        ts: typing.Iterable[as1.FlexibleRepresentation]) -> [as1.WellFormedTheory, [as1.Variable, ...]]:
     """"""
     propositional_variables: tuple[as1.Variable, ...] = tuple()
     for ts in ts:
@@ -310,7 +311,8 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
 
 class PIsAProposition(as1.Heuristic):
 
-    def process_conjecture(self, conjecture: as1.FlexibleFormula, t: as1.FlexibleTheory) -> tuple[as1.Theory, bool,]:
+    def process_conjecture(self, conjecture: as1.FlexibleFormula, t: as1.FlexibleTheory) -> tuple[
+        as1.WellFormedTheory, bool,]:
         """
 
         :param conjecture:
@@ -318,7 +320,7 @@ class PIsAProposition(as1.Heuristic):
         :return:
         """
         conjecture: as1.Formula = as1.coerce_formula(phi=conjecture)
-        t: as1.Theory = as1.coerce_theory(t=t)
+        t: as1.WellFormedTheory = as1.coerce_theory(t=t)
 
         t, success, _ = as1.derive_0(c=conjecture, t=t)
         if success:
@@ -476,7 +478,7 @@ It is a "closed" heuristic, in the sense that it does not call general derivatio
 Instead, it only calls itself recursively.
 """
 
-propositional_logic_syntax_1: as1.Theory = as1.Theory()
+propositional_logic_syntax_1: as1.WellFormedTheory = as1.WellFormedTheory()
 propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i0, t=propositional_logic_syntax_1)
 propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i1, t=propositional_logic_syntax_1)
 propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i2, t=propositional_logic_syntax_1)
@@ -486,7 +488,7 @@ propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i5, t=propositional_lo
 propositional_logic_syntax_1.heuristics.add(p_is_a_proposition_heuristic)
 
 
-def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as1.Theory:
+def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
     """Extends a theory with:
      - the propositional-logic-syntax-1 axioms,
      - the "p is-a proposition" heuristic.
@@ -497,7 +499,7 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
     # t.heuristics.add(p_is_a_proposition_heuristic)
     # return t
     global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
-    t: as1.Theory = as1.coerce_theory(t=t)
+    t: as1.WellFormedTheory = as1.coerce_theory(t=t)
     t, _ = as1.let_x_be_an_axiom(a=i0, t=t)
     t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
     t, _ = as1.let_x_be_an_axiom(a=i2, t=t)
@@ -508,11 +510,11 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
     return t
 
 
-def let_x_be_a_propositional_logic_syntax_1_theory() -> as1.Theory:
+def let_x_be_a_propositional_logic_syntax_1_theory() -> as1.WellFormedTheory:
     """Return a new theory with:
      - the propositional-logic-syntax-1 axioms,
      - the "p is-a proposition" heuristic.
      """
-    t: as1.Theory = as1.Theory()
+    t: as1.WellFormedTheory = as1.WellFormedTheory()
     t = extend_theory_with_propositional_logic_syntax_1(t=t)
     return t

@@ -568,7 +568,7 @@ class TestInferenceRule:
         phi = a | f | b
         rule = pu.as1.TransformationByVariableSubstitution(o=phi, v=None, d=None, i=None)
         ir = pu.as1.WellFormedInferenceRule(f=rule)
-        axiomatization = pu.as1.Axiomatization(d=(ir,))
+        axiomatization = pu.as1.WellFormedAxiomatization(d=(ir,))
 
         # derivation from the axiom
         i = pu.as1.Inference(p=None, i=ir)
@@ -867,20 +867,20 @@ class TestAxiomatization:
 
         # simple case
         e1 = pu.as1.Enumeration(e=(axiom_ok_1, axiom_ok_2,))
-        e1 = pu.as1.Axiomatization(d=e1)
+        e1 = pu.as1.WellFormedAxiomatization(d=e1)
         assert pu.as1.is_well_formed_axiomatization(a=e1)
 
         # extreme case: the empty enumeration
         e2 = pu.as1.Enumeration()
-        e2 = pu.as1.Axiomatization(d=e2)
+        e2 = pu.as1.WellFormedAxiomatization(d=e2)
         assert pu.as1.is_well_formed_axiomatization(a=e2)
-        a1 = pu.as1.Axiomatization(d=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
+        a1 = pu.as1.WellFormedAxiomatization(d=(axiom_ok_1, axiom_ok_2,))  # does not raise an exception
 
         # bad case: an enumeration with a non-axiom
         e3 = pu.as1.Enumeration(e=(axiom_ok_1, axiom_ok_2, star1(e),))
         assert not pu.as1.is_well_formed_axiomatization(a=e3)
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_062):
-            a2 = pu.as1.Axiomatization(d=e3)  # raise an e123 exception
+            a2 = pu.as1.WellFormedAxiomatization(d=e3)  # raise an e123 exception
 
 
 class TestDemonstration:
@@ -909,11 +909,11 @@ class TestDemonstration:
 
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_039):
             # invalid proof raise exception
-            pu.as1.Theory(d=(axiom_1, axiom_2, a | star | e))
+            pu.as1.WellFormedTheory(d=(axiom_1, axiom_2, a | star | e))
 
         with pytest.raises(pu.u1.ApplicativeError, match=pu.c1.ERROR_CODE_AS1_039):
             # invalid proof sequence exception
-            pu.as1.Theory(d=(axiom_1, axiom_2, a | star | c, ir1,))
+            pu.as1.WellFormedTheory(d=(axiom_1, axiom_2, a | star | c, ir1,))
             pass
 
 
@@ -947,7 +947,7 @@ class TestAutoDerivation:
                 f=pu.as1.TransformationByVariableSubstitution(
                     o=x | pu.csl1.land | y, v=(x, y,),
                     d=None, i=(x, y,)))
-        t1 = pu.as1.Theory(d=(*t1, x_y_then_x_and_y,))
+        t1 = pu.as1.WellFormedTheory(d=(*t1, x_y_then_x_and_y,))
 
         pass
         # auto-derivation of an existing valid-statement
@@ -987,7 +987,7 @@ class TestAutoDerivation:
 class TestTheory:
     def test_iterate_axioms(self):
         a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
-        t = pu.as1.Theory()
+        t = pu.as1.WellFormedTheory()
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
         t, i1 = pu.as1.let_x_be_an_inference_rule(t=t,
@@ -1035,7 +1035,7 @@ class TestTheory:
 
     def test_would_be_valid(self):
         a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
-        t = pu.as1.Theory()
+        t = pu.as1.WellFormedTheory()
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b)
         t, i1 = pu.as1.let_x_be_an_inference_rule(t=t,
@@ -1067,7 +1067,7 @@ class TestTheory:
 
     def test_transform_to_axiomatization_and_axiomatization_equivalence(self):
         a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
-        t1 = pu.as1.Theory()
+        t1 = pu.as1.WellFormedTheory()
         t2, _ = pu.as1.let_x_be_an_axiom(t=t1, s=a)
         t3, _ = pu.as1.let_x_be_an_axiom(t=t2, s=b)
         t4, i1 = pu.as1.let_x_be_an_inference_rule(t=t3,
@@ -1109,7 +1109,7 @@ class TestTheory:
 
     def test_is_extension_of(self):
         a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
-        t1 = pu.as1.Theory()
+        t1 = pu.as1.WellFormedTheory()
         t2, _ = pu.as1.let_x_be_an_axiom(t=t1, s=a)
         t3, _ = pu.as1.let_x_be_an_axiom(t=t2, s=b)
         t4, i1 = pu.as1.let_x_be_an_inference_rule(t=t3,

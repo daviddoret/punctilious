@@ -123,7 +123,7 @@ def is_well_formed_theory_algorithm(
             return False, None
     t1: as1.Formula = as1.coerce_formula(phi=i[0])
     if as1.is_well_formed_theory(t=t1):
-        t1: as1.Theory = as1.coerce_theory(t=t1, interpret_none_as_empty=False, canonical_conversion=False)
+        t1: as1.WellFormedTheory = as1.coerce_theory(t=t1, interpret_none_as_empty=False, canonical_conversion=False)
         phi: as1.Formula = as1.connective_for_is_well_formed_theory(t1)
         return True, phi
     else:
@@ -291,7 +291,7 @@ def theory_proves_proposition_algorithm(
             raise u1.ApplicativeError(msg='wrong input value i0', is_well_formed_theory_t=is_well_formed_theory_t,
                                       iv=i)
     t: as1.Formula = is_well_formed_theory_t[0]
-    t: as1.Theory = as1.coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=False)
+    t: as1.WellFormedTheory = as1.coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=False)
     if as1.is_valid_proposition_so_far_1(p=p, t=t):
         # Proposition p is valid in the object-theory t.
         phi: as1.Formula = t | as1.connective_for_proves | p
@@ -345,17 +345,17 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
     # TODO: Provide references in the doc above.
     pass
 
-meta_theory_1 = as1.Axiomatization(d=(mt1, mt2, mt3, t_proves_p, inconsistency_1,))
+meta_theory_1 = as1.WellFormedAxiomatization(d=(mt1, mt2, mt3, t_proves_p, inconsistency_1,))
 pass
 
 
-def extend_theory_with_meta_theory_1(t: as1.FlexibleTheory) -> as1.Theory:
+def extend_theory_with_meta_theory_1(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
     """Extends a theory with:
      - the meta-theory-1 axioms
 
     """
     global mt1, mt2, mt3, inconsistency_1
-    t: as1.Theory = as1.coerce_theory(t=t)
+    t: as1.WellFormedTheory = as1.coerce_theory(t=t)
     t, _ = as1.let_x_be_an_axiom(a=mt1, t=t)
     t, _ = as1.let_x_be_an_axiom(a=mt2, t=t)
     t, _ = as1.let_x_be_an_axiom(a=mt3, t=t)

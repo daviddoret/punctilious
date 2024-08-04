@@ -22,6 +22,26 @@ land = as1.connective_for_logical_conjunction
 lnot = as1.connective_for_logical_negation
 lor = as1.connective_for_logical_disjunction
 proves = as1.connective_for_proves
+"""
+Synonyms:
+ - proves
+ - right-tack
+ - turnstile
+"""
+right_tack = as1.connective_for_proves
+"""
+Synonyms:
+ - proves
+ - right-tack
+ - turnstile
+"""
+turnstile = as1.connective_for_proves
+"""
+Synonyms:
+ - proves
+ - right-tack
+ - turnstile
+"""
 is_inconsistent = as1.connective_for_is_inconsistent
 
 map_formula = as1.connective_for_map

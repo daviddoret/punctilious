@@ -230,7 +230,7 @@ class TestPL5:
         # PL5. 𝐵 ⊃ (𝐴 ⊃ 𝐵).
 
         # Elaborate a basic theory with P, Q, and R as a propositional-variables
-        t1 = pu.as1.Axiomatization(d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
+        t1 = pu.as1.WellFormedAxiomatization(d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization,))
         t1, x, = pu.pls1.let_x_be_a_propositional_variable(t=t1, formula_ts='X')
         t1, y, = pu.pls1.let_x_be_a_propositional_variable(t=t1, formula_ts='Y')
         t1, _, = pu.as1.let_x_be_an_axiom(t=t1, s=y)
@@ -287,7 +287,7 @@ class TestPL5:
 
 class TestMancosu2021P20:
     def test_mancosu_2021_page_20_with_derivation_1(self, caplog):
-        t = pu.as1.Axiomatization(
+        t = pu.as1.WellFormedAxiomatization(
             d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
         t, p1, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p1')
         t, p2, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p2')
@@ -339,13 +339,13 @@ class TestMancosu2021P20:
         pass
 
     def test_mancosu_2021_page_20(self, caplog):
-        t = pu.as1.Theory()
+        t = pu.as1.WellFormedTheory()
         t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
         t = pu.ml1.extend_theory_with_mancosu_2021_page_20(t=t)
         pass
 
     def test_mancosu_2021_page_21_with_derivation_1(self, caplog):
-        t = pu.as1.Axiomatization(
+        t = pu.as1.WellFormedAxiomatization(
             d=(*pu.ir1.axiomatization, *pu.pls1.axiomatization, *pu.ml1.axiomatization,))
         t, c, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='C')
         t, d, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='D')

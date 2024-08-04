@@ -310,12 +310,12 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 
 modus_ponens = ir1.modus_ponens
 
-axiomatization = as1.Axiomatization(d=(pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10))
+axiomatization = as1.WellFormedAxiomatization(d=(pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10))
 
-extended_theory = as1.Theory(d=(*axiomatization,))
+extended_theory = as1.WellFormedTheory(d=(*axiomatization,))
 
 
-def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
+def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
     """Extends a theory with:
      - the propositional-logic-syntax-1 axioms,
      - the minimal-logic-1 axioms,
@@ -323,7 +323,7 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
 
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
-    t: as1.Theory = as1.coerce_theory(t=t)
+    t: as1.WellFormedTheory = as1.coerce_theory(t=t)
     t, _ = as1.let_x_be_an_inference_rule(t=t, i=ir1.modus_ponens)
     t = pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
     t, _ = as1.let_x_be_an_axiom(a=pl01, t=t)
@@ -339,7 +339,7 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.Theory:
     return t
 
 
-def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory:
+def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
     """Extends a theory with Mancosu et al., page 20:
     1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
     2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
@@ -433,7 +433,7 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.Theory
     return t
 
 
-def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory:
+def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
     """Extends a theory with Mancosu et al., page 22:
         1. ⊢ 𝐶 (hypothesis)
         2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶) (axiom PL5)
@@ -501,7 +501,7 @@ def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.Theory
     return t
 
 
-def let_x_be_a_minimal_logic_1_theory(**kwargs) -> as1.Theory:
+def let_x_be_a_minimal_logic_1_theory(**kwargs) -> as1.WellFormedTheory:
     """Return a new theory with:
      - the propositional-logic-syntax-1 axioms,
      - the minimal-logic-1 axioms,
@@ -509,6 +509,6 @@ def let_x_be_a_minimal_logic_1_theory(**kwargs) -> as1.Theory:
      """
     # if 'formula_name_ts' not in kwargs:
     #    kwargs['formula_name_ts'] = pl1.IndexedSymbolTypesetter(body_ts=pl1.Script(text='M'), index=0)
-    t: as1.Theory = as1.Theory(**kwargs)
+    t: as1.WellFormedTheory = as1.WellFormedTheory(**kwargs)
     t = extend_theory_with_minimal_logic_1(t=t)
     return t

@@ -5,7 +5,7 @@ from punctilious.connectives_standard_library_1 import *
 
 @pytest.fixture
 def f1():
-    t = pu.as1.Theory()
+    t = pu.as1.WellFormedTheory()
     t = pu.ir1.extend_theory_with_inference_rules_1(t=t)
     t = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
     t, a = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='A')
