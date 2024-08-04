@@ -3714,11 +3714,10 @@ class WellFormedAxiom(Derivation):
 
     Global definition
     ~~~~~~~~~~~~~~~~~~
-    A formula :math:`\\boldsymbol{\\phi}` is a well-formed axiom if and only if:
+    A formula :math:`\\phi` is a well-formed axiom if and only if:
      - its root connective is the axiom-formula connective,
      - its arity is equal to 1,
-     - its term is a well-formed formula.
-
+     - its term is a globally well-formed proposition.
 
     Local definition
     ~~~~~~~~~~~~~~~~~~
@@ -4137,6 +4136,9 @@ class WellFormedTheory(Formula):
     TODO: Consider the following data-model change: a derivation is only an axiom or an inference-rule. In
         effect, stating that in inference-rule is a derivation seems to be a bit of a semantic stretch.
 
+    TODO: Inherit from WellFormedTheoreticalContext instead of Formula.
+
+
     """
     _last_index: int = 0
 
@@ -4551,9 +4553,13 @@ class WellFormedAxiomatization(Formula):
     """An axiomatization is a theory that is only composed of axioms,
     and/or inference-rules.
 
-    Definition:
-    A formula well-formed axiomatization is an enumeration such that:
-     - all element phi of the enumeration is a well-formed axiom or an inference-rule.
+    TODO: Inherit from WellFormedTheoreticalContext instead of Formula.
+
+    Definition
+    ~~~~~~~~~~~~~~~~~~
+    A formula :math:`\\phi` is a well-formed axiomatization if and only if:
+     - its root connective is the axiomatization-formula connective,
+     - all term :math:`\\psi` is a well-formed inference-rule, or a well-formed axiom.
 
     """
     _last_index: int = 0
@@ -5328,6 +5334,9 @@ def auto_derive_4(
 
 class WellFormedHypothesis(Formula):
     """A hypothesis is....
+
+    TODO: Inherit from WellFormedTheoreticalContext instead of Formula.
+
 
     Syntactic definition:
     A hypothesis is a formula of the form:
