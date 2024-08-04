@@ -856,8 +856,8 @@ class TestAxiomatization:
         x, y, z = pu.as1.let_x_be_some_variables(reps=('x', 'y', 'z',))
         star1 = pu.as1.let_x_be_a_unary_connective(formula_ts='*1')
         star2 = pu.as1.let_x_be_a_binary_connective(formula_ts='*2')
-        axiom_ok_1 = pu.as1.Axiom(p=a | star2 | b)
-        axiom_ok_2 = pu.as1.Axiom(p=star1(c))
+        axiom_ok_1 = pu.as1.WellFormedAxiom(p=a | star2 | b)
+        axiom_ok_2 = pu.as1.WellFormedAxiom(p=star1(c))
         assert pu.as1.is_well_formed_axiom(a=axiom_ok_2)
 
         # simple case
@@ -928,7 +928,7 @@ class TestAutoDerivation:
         # elaborate a theory
         p = pu.as1.let_x_be_a_simple_object(formula_ts='P')
         q = pu.as1.let_x_be_a_simple_object(formula_ts='Q')
-        t1, a1 = pu.as1.let_x_be_an_axiom(t=None, a=pu.as1.Axiom(p=p))
+        t1, a1 = pu.as1.let_x_be_an_axiom(t=None, a=pu.as1.WellFormedAxiom(p=p))
 
         t1, success, _, = pu.as1.derive_0(t=t1, c=p)
 
