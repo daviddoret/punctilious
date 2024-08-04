@@ -13,7 +13,7 @@ if __name__ == '__main__':
 # Basic inference rules
 
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
-    conjunction_introduction: as1.InferenceRule = as1.InferenceRule(
+    conjunction_introduction: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             i=(
                 cls1.is_a_proposition(phi),
@@ -57,7 +57,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
             phi | cls1.land | psi,),
         o=phi,
         v=(phi, psi,))
-simplification_1_axiom: as1.InferenceRule = as1.InferenceRule(
+simplification_1_axiom: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
     f=simplification_1_rule)
 
 # Simplification inference rule, aka conjunction elimination:
@@ -75,7 +75,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
             phi | cls1.land | psi,),
         o=psi,
         v=(phi, psi,))
-simplification_2_axiom: as1.InferenceRule = as1.InferenceRule(
+simplification_2_axiom: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
     f=simplification_2_rule)
 
 modus_ponens = as1.modus_ponens_inference_rule

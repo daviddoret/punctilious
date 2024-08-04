@@ -77,7 +77,7 @@ def is_well_formed_inference_rule_algorithm(
             return False, None
     ir: as1.Formula = as1.coerce_formula(phi=i[0])
     if as1.is_well_formed_inference_rule(i=ir):
-        ir: as1.InferenceRule = as1.coerce_inference_rule(i=ir)
+        ir: as1.WellFormedInferenceRule = as1.coerce_inference_rule(i=ir)
         phi: as1.Formula = as1.connective_for_is_well_formed_inference_rule(ir)
         return True, phi
     else:
@@ -153,7 +153,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi
         v={phi, },
         i=(phi,),
         d=None)
-    mt1: as1.InferenceRule = as1.InferenceRule(
+    mt1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=algo,
         ref_ts=pl1.Monospace(text='MT1'))
     """The is-well-formed-formula algorithmic inference-rule.
@@ -179,7 +179,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
         v={t, },
         i=(t,),
         d=None)
-    mt2: as1.InferenceRule = as1.InferenceRule(
+    mt2: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=algo,
         ref_ts=pl1.Monospace(text='MT2'))
     """The is-well-formed-inference-rule algorithmic inference-rule.
@@ -207,7 +207,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
         i=(t,),
         v={t, },
         d=None)  # {t, })
-    mt3: as1.InferenceRule = as1.InferenceRule(
+    mt3: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=_mt3,
         ref_ts=pl1.Monospace(text='MT3'))
     """The is-well-formed-theory algorithmic inference-rule.
@@ -227,7 +227,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
-    inconsistency_1: as1.InferenceRule = as1.InferenceRule(
+    inconsistency_1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             i=(
                 as1.connective_for_is_well_formed_theory(t),
@@ -323,7 +323,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
             p,),
         o=t | as1.connective_for_proves | p,
         v=(p, t,))
-    t_proves_p: as1.InferenceRule = as1.InferenceRule(
+    t_proves_p: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=_t_proves_p,
         ref_ts=pl1.Monospace(text='T ⊢ P'))
     """The t-proves-p inference rule: T ⊢ P
