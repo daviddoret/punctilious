@@ -332,11 +332,14 @@ class WellFormedTheoreticalContext(Formula, ABC):
         """
         # Data validation is left to 1) the non-abstract derived class, and 2) the parent Formula class.
         # This method is only maintained for the sake of consistency.
+        # TODO: coerce t to tupl
+        # TODO: check that all tuple elements are either axioms, theorems, or inference rules.
         return con, t
 
     def __new__(cls, con: Connective, t: FlexibleTupl = None, **kwargs):
         con, t = Formula._data_validation(con=con, t=t)
         o = super().__new__(cls, con=con, t=t, **kwargs)
+        return o
 
     def __init__(self, con: Connective, t: FlexibleTupl = None, **kwargs):
         con, t = Formula._data_validation(con=con, t=t)
@@ -359,10 +362,10 @@ def coerce_formula(phi: FlexibleFormula) -> Formula:
         return phi.to_formula()
     elif isinstance(phi, typing.Generator) and not isinstance(phi, Formula):
         # Implicit conversion of generators to tuple formulas.
-        return Tupl(e=(element for element in phi))
+        return WellFormedTupl(e=(element for element in phi))
     elif isinstance(phi, typing.Iterable) and not isinstance(phi, Formula):
         # Implicit conversion of iterators to tuple formulas.
-        return Tupl(e=phi)
+        return WellFormedTupl(e=phi)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_006,
@@ -450,13 +453,14 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False,
             strip_duplicates=strip_duplicates)
 
 
-def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic_conversion: bool = False) -> Tupl:
-    if isinstance(t, Tupl):
+def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False,
+                 canonic_conversion: bool = False) -> WellFormedTupl:
+    if isinstance(t, WellFormedTupl):
         return t
     elif is_well_formed_tupl(t=t, interpret_none_as_empty=interpret_none_as_empty):
-        return Tupl(e=t)
+        return WellFormedTupl(e=t)
     elif interpret_none_as_empty and t is None:
-        return Tupl(e=None)
+        return WellFormedTupl(e=None)
     elif canonic_conversion and is_well_formed_formula(phi=t):
         # Every formula can be transformed to a tuple using canonical transformation.
         return transform_formula_to_tuple(phi=t)
@@ -464,12 +468,12 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False, canonic
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Tupl(e=tuple(x for x in t))
+        return WellFormedTupl(e=tuple(x for x in t))
     elif isinstance(t, typing.Iterable) and not isinstance(t, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Tupl(e=t)
+        return WellFormedTupl(e=t)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_065,
@@ -597,7 +601,7 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> Map:
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
         domain: Enumeration = coerce_enumeration(e=m.keys())
-        codomain: Tupl = coerce_tuple(t=m.values())
+        codomain: WellFormedTupl = coerce_tuple(t=m.values())
         return Map(d=domain, c=codomain)
     else:
         # no coercion solution found.
@@ -919,7 +923,7 @@ def get_index_of_first_equivalent_element_in_tuple(x: FlexibleFormula, t: Flexib
     :return: The 0-based index of "x" in `t`.
     """
     x: Formula = coerce_formula(phi=x)
-    t: Tupl = coerce_tuple(t=t, interpret_none_as_empty=True)
+    t: WellFormedTupl = coerce_tuple(t=t, interpret_none_as_empty=True)
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=t)
 
 
@@ -1121,7 +1125,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
                                             strip_duplicates=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
+        p: WellFormedTupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         # if a is None:
         # Signature 3: This is a transformation-by-variable-transformation:
         f: TransformationByVariableSubstitution = TransformationByVariableSubstitution(o=c, v=v, d=d, i=p)
@@ -1668,35 +1672,78 @@ def substitute_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     return psi
 
 
-class Tupl(Formula):
-    """A tuple is a synonym for formula.
+class WellFormedTupl(Formula):
+    """A well-formed tuple is a well-formed formula of the form ⌜ :math:`\\text{tuple}\\left( \\boldsymbol{\\phi_1},
+    \\boldsymbol{\\phi_2}, \\cdots, \\boldsymbol{\\phi_n} \\right)` ⌝ where :math:`\\boldsymbol{\\phi_i}`
+    is a well-formed formula.
 
+    Definition
+    ^^^^^^^^^^^^^^^^^^^^
+    A formula :math:`\\phi` is a well-formed axiom if and only if:
+     - it is a well-formed formula,
+     - its root connective is the tuples-formula connective.
+
+    Typesetting
+    ^^^^^^^^^^^^^^^^^^^^
+
+    Classical
+    ~~~~~~~~~~~~~~~~~~~~
+    :math:`\\text{tuple}\\left( \\boldsymbol{\\phi_1},\\boldsymbol{\\phi_2},\\cdots, \\boldsymbol{\\phi_n} \\right)`
+
+    Abbreviated
+    ~~~~~~~~~~~~~~~~~~~~
+    :math:`\\left( \\boldsymbol{\\phi_1},\\boldsymbol{\\phi_2}, \\cdots, \\boldsymbol{\\phi_n} \\right)`
+
+    Notes
+    ^^^^^^^^^^^^^^^^^^^^
+
+    Note 1
+    ~~~~~~~~~~~~~~~~~~~~
+    The formula terms of tuples are called elements.
+
+    Note 2
+    ~~~~~~~~~~~~~~~~~~~~
+    The empty-tuple is the tuple with no term, i.e.: :math:`\\left( \\right)`.
+
+    Note 3
+    ~~~~~~~~~~~~~~~~~~~~
     The rationale for a dedicated class is semantic. When considering tuples, we do not take into account the
-    root connective. Also, formula terms are called elements. Finally, notation is distinct: a formula is
-    typically denoted as f(t0, t1, ..., tn) while a tuple is denoted as (t0, t1, ..., tn).
+    root connective of the formula, but only its terms.
 
-     The empty-tuple is the tuple ().
+    Note 4
+    ~~~~~~~~~~~~~~~~~~~~
+    In Python, the word ``tuple`` is a reserved keyword. For this reason, the word ``tupl`` without the ``e``
+    is used instead.
+    """
 
-     Python implementation: in python, the word 'tuple' is reserved. For this reason, the word 'tupl' is used instead
-     to implement this object."""
-
-    # TODO: Implement _data_validation(...) for the sake of consistency.
+    @staticmethod
+    def _data_validation_2(e: FlexibleTupl) -> tuple[Connective, FlexibleTupl]:
+        con: Connective = connective_for_tupl
+        # TODO: To avoid an infinite loop, we cannot coerce `e` as a tuple here.
+        #   As a future improvement, implement here a complementary check on `e`.
+        return con, e
 
     def __new__(cls, e: FlexibleTupl = None):
-        # When we inherit from tuple, we must implement __new__ instead of __init__ to manipulate arguments,
-        # because tuple is immutable.
-        o: tuple = super().__new__(cls, con=connective_for_tupl, t=e)
+        """Creates a new instance of :class:`WellFormedTupl`.
+
+        :param e:
+        """
+        con, e = WellFormedTupl._data_validation_2(e=e)
+        o: tuple = super().__new__(cls, con=con, t=e)
         return o
 
     def __init__(self, e: FlexibleTupl = None):
-        """Creates a new tupl instance.
+        """Initializes a new instance of :class:`WellFormedTupl`.
 
         :param e: The elements of the tupl.
         """
+        con, e = WellFormedTupl._data_validation_2(e=e)
         super().__init__(con=connective_for_tupl, t=e)
 
     def get_index_of_first_equivalent_element(self, phi: Formula) -> typing.Optional[int]:
         """Returns the o-based index of the first occurrence of a formula psi in the tuple such that psi ~formula phi.
+
+        TODO: Move this to a base function and remove the method.
 
         :param phi: A formula.
         :return:
@@ -1704,11 +1751,14 @@ class Tupl(Formula):
         return self.get_index_of_first_equivalent_term(phi=phi)
 
     def has_element(self, phi: Formula) -> bool:
-        """Return True if the tuple has phi as one of its elements."""
+        """Return True if the tuple has phi as one of its elements.
+
+        TODO: Remove this method and substitute a first-level has_element function.
+        """
         return is_term_of_formula(x=phi, phi=self)
 
 
-FlexibleTupl = typing.Optional[typing.Union[Tupl, typing.Iterable[FlexibleFormula], tuple, None]]
+FlexibleTupl = typing.Optional[typing.Union[WellFormedTupl, typing.Iterable[FlexibleFormula], tuple, None]]
 """FlexibleTupl is a flexible python type that may be safely coerced into a Tupl."""
 
 FlexibleConnectiveLinkedToAlgorithm = ConnectiveLinkedWithAlgorithm
@@ -1753,21 +1803,21 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
         return extended_enumeration
 
 
-def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> Tupl:
+def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> WellFormedTupl:
     """Return a new extended punctilious-tuple such that element is a new element appended to its existing elements.
     """
-    t: Tupl = coerce_tuple(t=t, interpret_none_as_empty=True)
+    t: WellFormedTupl = coerce_tuple(t=t, interpret_none_as_empty=True)
     x: Formula = coerce_formula(phi=x)
-    extended_tupl: Tupl = Tupl(e=(*t, x,))
+    extended_tupl: WellFormedTupl = WellFormedTupl(e=(*t, x,))
     return extended_tupl
 
 
-def append_tuple_to_tuple(t1: FlexibleTupl, t2: FlexibleTupl) -> Tupl:
+def append_tuple_to_tuple(t1: FlexibleTupl, t2: FlexibleTupl) -> WellFormedTupl:
     """Return a new tuple which appends all the elements of `t2` to `t1`.
     """
-    t1: Tupl = coerce_tuple(t=t1, interpret_none_as_empty=True, canonic_conversion=True)
-    t2: Tupl = coerce_tuple(t=t2, interpret_none_as_empty=True, canonic_conversion=True)
-    t3: Tupl = Tupl(e=(*t1, *t2,))
+    t1: WellFormedTupl = coerce_tuple(t=t1, interpret_none_as_empty=True, canonic_conversion=True)
+    t2: WellFormedTupl = coerce_tuple(t=t2, interpret_none_as_empty=True, canonic_conversion=True)
+    t3: WellFormedTupl = WellFormedTupl(e=(*t1, *t2,))
     return t3
 
 
@@ -1831,7 +1881,7 @@ class Map(Formula):
     CODOMAIN_INDEX: int = 1
 
     @staticmethod
-    def _data_validation_2(d: FlexibleEnumeration = None, c: FlexibleTupl = None) -> tuple[Enumeration, Tupl]:
+    def _data_validation_2(d: FlexibleEnumeration = None, c: FlexibleTupl = None) -> tuple[Enumeration, WellFormedTupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -1841,7 +1891,7 @@ class Map(Formula):
         """
         d: Enumeration = coerce_enumeration(
             e=d, strip_duplicates=True, interpret_none_as_empty=True, canonic_conversion=True)
-        c: Tupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
+        c: WellFormedTupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
         if len(d) != len(c):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
         return d, c
@@ -1866,7 +1916,7 @@ class Map(Formula):
         super().__init__(con=connective_for_map, t=(d, c,))
 
     @property
-    def codomain(self) -> Tupl:
+    def codomain(self) -> WellFormedTupl:
         """A tuple of formulas denoted as the codomain of the map.
 
         The codomain of a map is the enumeration of possible outputs of the get_image_from_map function.
@@ -2035,7 +2085,7 @@ class Transformation(Formula, abc.ABC):
             d: FlexibleEnumeration | None = None,
             i: FlexibleTupl | None = None,
             a: FlexibleConnectiveLinkedToAlgorithm | None = None) -> tuple[
-        Connective, Formula, Enumeration, Enumeration, Tupl, ConnectiveLinkedWithAlgorithm | None]:
+        Connective, Formula, Enumeration, Enumeration, WellFormedTupl, ConnectiveLinkedWithAlgorithm | None]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -2052,7 +2102,7 @@ class Transformation(Formula, abc.ABC):
                                             strip_duplicates=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
-        i: Tupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
+        i: WellFormedTupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
         # TODO: Coerce argument `a` as well
         return con, o, v, d, i, a
 
@@ -2150,7 +2200,7 @@ class Transformation(Formula, abc.ABC):
         raise u1.ApplicativeError(msg='abstract method')
 
     @property
-    def input_shapes(self) -> Tupl:
+    def input_shapes(self) -> WellFormedTupl:
         """A tuple of formulas that provide the shape of arguments (aka input values) expected by the transformation.
         Shapes are expressed as arbitrary formulas that may contain variables (cf. variables property).
         The transformation formula thus declares that it expect to receive as input values a tuple of formulas
@@ -2216,7 +2266,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
             d: FlexibleEnumeration | None = None,
             i: FlexibleTupl | None = None,
             a: FlexibleConnectiveLinkedToAlgorithm = None
-    ) -> tuple[Connective, Formula, Enumeration, Enumeration, Tupl, ConnectiveLinkedWithAlgorithm | None]:
+    ) -> tuple[Connective, Formula, Enumeration, Enumeration, WellFormedTupl, ConnectiveLinkedWithAlgorithm | None]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -2231,7 +2281,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         o: Formula = coerce_formula(phi=o)
         v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
-        i: Tupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
+        i: WellFormedTupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
         if a is not None:
             pass
             # TODO: Implement the coerce_connective_linked_with_algorithm function
@@ -2493,8 +2543,8 @@ def coerce_inference(i: FlexibleFormula) -> Inference:
         return i
     elif is_well_formed_inference(i=i):
         i2: WellFormedInferenceRule = coerce_inference_rule(i=i[Inference.INFERENCE_RULE_INDEX])
-        p: Tupl = coerce_tuple(t=i[Inference.PREMISES_INDEX], interpret_none_as_empty=True)
-        a: Tupl = coerce_tuple(t=i[Inference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
+        p: WellFormedTupl = coerce_tuple(t=i[Inference.PREMISES_INDEX], interpret_none_as_empty=True)
+        a: WellFormedTupl = coerce_tuple(t=i[Inference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
         return Inference(i=i2, p=p, a=a)
     else:
         raise u1.ApplicativeError(
@@ -2869,7 +2919,7 @@ def iterate_enumeration_elements(e: FlexibleEnumeration, max_elements: int | Non
 def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
     """Returns True if every formula phi in enumeration s is a valid-statement in theory t, False otherwise.
     """
-    s: Tupl = coerce_tuple(t=s, interpret_none_as_empty=True)
+    s: WellFormedTupl = coerce_tuple(t=s, interpret_none_as_empty=True)
     t: WellFormedTheory = coerce_theory(t=t)
     return all(is_valid_proposition_so_far_1(p=phi, t=t) for phi in iterate_tuple_elements(s))
 
@@ -3107,7 +3157,7 @@ def are_valid_statements_in_theory_with_variables(
         s: FlexibleTupl, t: FlexibleTheory,
         variables: FlexibleEnumeration,
         variables_values: FlexibleMap, debug: bool = False) \
-        -> tuple[bool, typing.Optional[Tupl]]:
+        -> tuple[bool, typing.Optional[WellFormedTupl]]:
     """Return True if every formula phi in tuple s is a valid-statement in theory t,
     considering some variables, and some variable values.
     If a variable in variables has not an assigned value, then it is a free variable.
@@ -3119,7 +3169,7 @@ def are_valid_statements_in_theory_with_variables(
     TODO: retrieve and return the final map of variable values as well? is this really needed?
 
     """
-    s: Tupl = coerce_tuple(t=s, interpret_none_as_empty=True)
+    s: WellFormedTupl = coerce_tuple(t=s, interpret_none_as_empty=True)
     t: WellFormedTheory = coerce_theory(t=t)
     variables: Enumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True, strip_duplicates=True)
     variables_values: Map = coerce_map(m=variables_values, interpret_none_as_empty=True)
@@ -3142,7 +3192,7 @@ def are_valid_statements_in_theory_with_variables(
         # it follows that 1) there will be no permutations,
         # and 2) are_valid_statements_in_theory() is equivalent.
         s_with_variable_substitution: Formula = substitute_formulas(phi=s, m=variables_values)
-        s_with_variable_substitution: Tupl = coerce_tuple(t=s_with_variable_substitution)
+        s_with_variable_substitution: WellFormedTupl = coerce_tuple(t=s_with_variable_substitution)
         valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
         if valid:
             return valid, s_with_variable_substitution
@@ -3154,8 +3204,8 @@ def are_valid_statements_in_theory_with_variables(
                                                                                         n=permutation_size):
             variable_substitution: Map = Map(d=free_variables, c=permutation)
             s_with_variable_substitution: Formula = substitute_formulas(phi=s, m=variable_substitution)
-            s_with_variable_substitution: Tupl = coerce_tuple(t=s_with_variable_substitution)
-            s_with_permutation: Tupl = Tupl(e=(*s_with_variable_substitution,))
+            s_with_variable_substitution: WellFormedTupl = coerce_tuple(t=s_with_variable_substitution)
+            s_with_permutation: WellFormedTupl = WellFormedTupl(e=(*s_with_variable_substitution,))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
         return False, None
@@ -3412,7 +3462,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                 # The simpler case is when the inference-rule does not create new objects.
                 # No remapping is necessary and the original conclusion can simply be compared
                 # with the new conclusion.
-                i3: Tupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
+                i3: WellFormedTupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
                 p_prime: Formula = f.apply_transformation(i=i3)
                 if not is_formula_equivalent(phi=p, psi=p_prime):
                     if raise_error_if_false:
@@ -3686,12 +3736,6 @@ def coerce_axiomatization(a: FlexibleFormula, interpret_none_as_empty: bool = Fa
 class WellFormedDerivation(Formula):
     """A derivation has two definitions: a local definition with regard to a theory t, and a global definition.
 
-    Local definition (with regard to a theory t):
-    A well-formed derivation s with regard to a theory t is a formula that is:
-     - a term of theory t,
-     - a well-formed (global) derivation,
-     - and whose justification with regard to theory t is a proper-justification.
-
     Global definition:
     A well-formed derivation s is a formula of the form:
      - phi follows-from psi,
@@ -3699,6 +3743,13 @@ class WellFormedDerivation(Formula):
      - phi is a formula,
      - follows-from is the derivation connector,
      - and psi is a proper-justification.
+
+    Local definition (with regard to a theory t):
+    A well-formed derivation s with regard to a theory t is a formula that is:
+     - a term of theory t,
+     - a well-formed (global) derivation,
+     - and whose justification with regard to theory t is a proper-justification.
+
 
     Intuitively, a derivation is a justification for the existence of a valid-statement in a theory.
 
@@ -3954,7 +4005,8 @@ class Inference(Formula):
     def _data_validation_2(
             i: FlexibleInferenceRule,
             p: FlexibleTupl | None = None,
-            a: FlexibleTupl | None = None) -> tuple[Connective, WellFormedInferenceRule, Tupl, Tupl]:
+            a: FlexibleTupl | None = None) -> tuple[
+        Connective, WellFormedInferenceRule, WellFormedTupl, WellFormedTupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -3965,8 +4017,8 @@ class Inference(Formula):
         """
         con: Connective = connective_for_inference
         i: WellFormedInferenceRule = coerce_inference_rule(i=i)
-        p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True)
-        a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True)
+        p: WellFormedTupl = coerce_tuple(t=p, interpret_none_as_empty=True)
+        a: WellFormedTupl = coerce_tuple(t=a, interpret_none_as_empty=True)
 
         # Check the consistency of the shape of the premises and complementary arguments,
         # with the expected input-shapes of the inference-rule transformation.
@@ -4002,7 +4054,7 @@ class Inference(Formula):
         super().__init__(con=c, t=(i, p, a,))
 
     @property
-    def arguments(self) -> Tupl:
+    def arguments(self) -> WellFormedTupl:
         """A tuple of supplementary arguments to be passed to the transformation as input parameters. These may or
         may not be propositions, and may or may not be valid in the theory under consideration."""
         return self[Inference.ARGUMENTS_INDEX]
@@ -4013,7 +4065,7 @@ class Inference(Formula):
         return self[Inference.INFERENCE_RULE_INDEX]
 
     @property
-    def premises(self) -> Tupl:
+    def premises(self) -> WellFormedTupl:
         """The premises of the inference. All premises in the inference must be valid in the theory under
         consideration."""
         return self[Inference.PREMISES_INDEX]
@@ -4084,7 +4136,7 @@ class WellFormedTheorem(WellFormedDerivation):
 
         # check the validity of the theorem
         try:
-            i2: Tupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
+            i2: WellFormedTupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
             algorithm_output: Formula = i.inference_rule.transformation.apply_transformation(i=i2)
         except u1.ApplicativeError as err:
             raise u1.ApplicativeError(
@@ -4186,7 +4238,7 @@ class Heuristic(abc.ABC):
         pass
 
 
-class WellFormedTheory(Formula):
+class WellFormedTheory(WellFormedTheoreticalContext):
     """A theory is a justified enumeration of axioms, inference-rules, and theorems.
 
     Syntactic definition:
@@ -4212,7 +4264,6 @@ class WellFormedTheory(Formula):
         :param d:
         :return:
         """
-        global _connectives
         con: Connective = connective_for_theory
         if t is not None:
             t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
@@ -4504,7 +4555,7 @@ def transform_enumeration_to_theory(e: FlexibleEnumeration) -> WellFormedTheory:
     return t
 
 
-def transform_formula_to_tuple(phi: FlexibleFormula) -> Tupl:
+def transform_formula_to_tuple(phi: FlexibleFormula) -> WellFormedTupl:
     """Transforms a formula `phi` into a tupl whose terms are the terms of `phi` with order preserved.
 
     This is the canonical transformation of formulas to tuples.
@@ -4518,10 +4569,10 @@ def transform_formula_to_tuple(phi: FlexibleFormula) -> Tupl:
     """
     phi: Formula = coerce_formula(phi=phi)
     if is_well_formed_tupl(t=phi):
-        t: Tupl = coerce_tuple(t=phi)
+        t: WellFormedTupl = coerce_tuple(t=phi)
         return t
     else:
-        t: Tupl = Tupl(e=iterate_formula_terms(phi=phi))
+        t: WellFormedTupl = WellFormedTupl(e=iterate_formula_terms(phi=phi))
         return t
 
 
@@ -4532,7 +4583,7 @@ def transform_tuple_to_theory(t: FlexibleTupl) -> WellFormedTheory:
     :param t: A tupl.
     :return: A theory.
     """
-    t: Tupl = coerce_tuple(t=t)
+    t: WellFormedTupl = coerce_tuple(t=t)
     e: Enumeration = coerce_enumeration(e=t, strip_duplicates=True, canonic_conversion=True,
                                         interpret_none_as_empty=True)
     t2: WellFormedTheory = transform_enumeration_to_theory(e=e)
@@ -4610,17 +4661,29 @@ def copy_theory_decorations(target: FlexibleTheory, decorations: FlexibleDecorat
             target.ts.update(decorative_theory.ts | target.ts)  # Give priority to the existing
 
 
-class WellFormedAxiomatization(Formula):
-    """An axiomatization is a theory that is only composed of axioms,
-    and/or inference-rules.
+class WellFormedAxiomatization(WellFormedTheoreticalContext):
+    """A well-formed axiomatization is a :ref:`theoretical context<WellFormedTheoreticalContext>` of the form
+    ⌜ :math:`\\text{axiomatization}\\left( \\boldsymbol{d_1}, \\boldsymbol{d_2}, \\cdots, \\boldsymbol{d_n} \\right)` ⌝
+    where :math:`\\boldsymbol{d_i}` is a derivation that is a valid constituent of an axiomatic base.
 
-    TODO: Inherit from WellFormedTheoreticalContext instead of Formula.
+    See :function:`axiomatic_base` for a definition of axiomatic base.
 
     Definition
-    ~~~~~~~~~~~~~~~~~~
+    ^^^^^^^^^^^^^^^^^^^^
     A formula :math:`\\phi` is a well-formed axiomatization if and only if:
      - its root connective is the axiomatization-formula connective,
-     - all term :math:`\\psi` is a well-formed inference-rule, or a well-formed axiom.
+     - all term :math:`\\psi` in :math:`\\phi` is:
+       - either a well-formed inference rule,
+       - a well-formed axiom,
+       - or an extension of an axiomatization.
+
+    Notes
+    ^^^^^^^^^^^^^^^^^^^^
+
+    Note 1
+    ~~~~~~~~~~~~~~~~~~
+    The empty axiomatization is the axiomatization that has no terms, i.e.:
+    :math:`\\text{axiomatization}\\left( \\right)`
 
     """
     _last_index: int = 0
@@ -4930,9 +4993,9 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     # parameters validation
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     c: Formula = coerce_formula(phi=c)
-    p: Tupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
+    p: WellFormedTupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
     i: WellFormedInferenceRule = coerce_inference_rule(i=i)
-    a: Tupl = coerce_tuple(t=a, interpret_none_as_empty=True, canonic_conversion=True)
+    a: WellFormedTupl = coerce_tuple(t=a, interpret_none_as_empty=True, canonic_conversion=True)
 
     if not is_inference_rule_of(i=i, t=t):
         # The inference_rule is not in the theory,
@@ -5111,7 +5174,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
 
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
-        necessary_premises: Tupl = Tupl(
+        necessary_premises: WellFormedTupl = WellFormedTupl(
             e=substitute_formulas(phi=i.transformation.input_shapes, m=known_variable_values))
 
         # Find a set of valid_statements in theory t, such that they match the necessary_premises.
@@ -5207,7 +5270,7 @@ def auto_derive_3(
     :return:
     """
     t: WellFormedTheory = coerce_theory(t=t)
-    conjectures: Tupl = coerce_tuple(t=conjectures, interpret_none_as_empty=True)
+    conjectures: WellFormedTupl = coerce_tuple(t=conjectures, interpret_none_as_empty=True)
     for conjecture in iterate_tuple_elements(phi=conjectures):
         t, success, _ = auto_derive_2(t=t, conjecture=conjecture)
         if not success:
@@ -5306,7 +5369,7 @@ def auto_derive_4(
 
             # now that we know what are the necessary variable values, we can determine what
             # are the necessary premises by substituting the variable values.
-            necessary_premises: Tupl = Tupl(e=None)
+            necessary_premises: WellFormedTupl = WellFormedTupl(e=None)
             for original_premise in inference_rule.transformation.input_shapes:
                 # we must find a set of premises in the theory
                 # with free-variables.
@@ -5317,7 +5380,7 @@ def auto_derive_4(
                 #    and then extend this algorithm to support variables.
                 # to avoid the burden of all these conjunctions in the theory, I start with the second approach.
                 necessary_premise: Formula = substitute_formulas(phi=original_premise, m=m)
-                necessary_premises: Tupl = Tupl(e=(*necessary_premises, necessary_premise,))
+                necessary_premises: WellFormedTupl = WellFormedTupl(e=(*necessary_premises, necessary_premise,))
 
             # the following step is where auto_derive_2 is different from auto_derive_1.
             # we are not assuming that there should exist valid premises to derive the target statement,
@@ -5334,7 +5397,7 @@ def auto_derive_4(
                 # it follows that 1) there will be no permutations,
                 # and 2) are_valid_statements_in_theory() is equivalent.
                 effective_premises: Formula = substitute_formulas(phi=necessary_premises, m=m)
-                effective_premises: Tupl = Tupl(e=effective_premises)
+                effective_premises: WellFormedTupl = WellFormedTupl(e=effective_premises)
                 for premise_target_statement in effective_premises:
                     if not is_element_of_enumeration(x=premise_target_statement,
                                                      e=conjecture_exclusion_list):
@@ -5364,7 +5427,7 @@ def auto_derive_4(
                     permutation_success: bool = True
                     variable_substitution: Map = Map(d=free_variables, c=permutation)
                     effective_premises: Formula = substitute_formulas(phi=necessary_premises, m=variable_substitution)
-                    effective_premises: Tupl = Tupl(e=(*effective_premises, permutation,))
+                    effective_premises: WellFormedTupl = WellFormedTupl(e=(*effective_premises, permutation,))
                     for premise_target_statement in effective_premises:
                         if not is_element_of_enumeration(x=premise_target_statement,
                                                          e=conjecture_exclusion_list):
@@ -5393,11 +5456,16 @@ def auto_derive_4(
 # HYPOTHESIS
 
 
-class WellFormedHypothesis(Formula):
+class WellFormedHypothesis(WellFormedTheoreticalContext):
     """A hypothesis is....
 
     TODO: Inherit from WellFormedTheoreticalContext instead of Formula.
 
+    Note: Specializing hypothesis as a first class object in the axiomatic system data model is not
+    necessary. In effect, an equivalent axiomatic system may be built with only theories and no
+    hypothesis, nor axiomatization. Even theories could be stripped from the data model, considering
+    only tuples whose elements are well-formed derivations. But specializing hypothesis as a first
+    class object enriches the model and allows for more natural expression and simplified automations.
 
     Syntactic definition:
     A hypothesis is a formula of the form:

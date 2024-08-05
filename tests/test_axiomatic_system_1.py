@@ -95,21 +95,21 @@ class TestTupl:
     def test_in(self):
         x = pu.as1.let_x_be_a_variable(formula_ts='x')
         y = pu.as1.let_x_be_a_variable(formula_ts='y')
-        c = pu.as1.Tupl(e=(x,))
+        c = pu.as1.WellFormedTupl(e=(x,))
         assert x in c
         assert y not in c
         assert len(c) == 1
 
     def test_iterate(self):
         a, b, c, d, e, f = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f',))
-        phi1 = pu.as1.Tupl(e=(a, b, c, d, e, f,))
+        phi1 = pu.as1.WellFormedTupl(e=(a, b, c, d, e, f,))
         assert a in phi1
         assert len(phi1) == 6
         assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi1))) == 6
         assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi1, max_elements=0))) == 0
         assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi1, max_elements=2))) == 2
         assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi1, max_elements=6))) == 6
-        phi2 = pu.as1.Tupl(e=(f, f, a, b, d, e, b, b, f,))
+        phi2 = pu.as1.WellFormedTupl(e=(f, f, a, b, d, e, b, b, f,))
         assert a in phi2
         assert len(phi2) == 9
         assert len(tuple(pu.as1.iterate_tuple_elements(phi=phi2))) == 9
@@ -249,8 +249,8 @@ class TestFormulaEquivalenceWithVariables:
 
     def test_is_formula_equivalent_with_variables_2(self):
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
-        ab = pu.as1.Tupl(e=(a, b,))
-        cd = pu.as1.Tupl(e=(c, d,))
+        ab = pu.as1.WellFormedTupl(e=(a, b,))
+        cd = pu.as1.WellFormedTupl(e=(c, d,))
         assert not pu.as1.is_formula_equivalent(phi=ab, psi=cd)
         m = pu.as1.Map()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=ab, psi=cd, variables=(c, d,),
@@ -258,8 +258,8 @@ class TestFormulaEquivalenceWithVariables:
         assert is_equivalent
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=c), psi=a)
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=d), psi=b)
-        bba = pu.as1.Tupl(e=(b, b, a,))
-        cca = pu.as1.Tupl(e=(c, c, a,))
+        bba = pu.as1.WellFormedTupl(e=(b, b, a,))
+        cca = pu.as1.WellFormedTupl(e=(c, c, a,))
         m = pu.as1.Map()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=bba, variables=(),
                                                                          variables_fixed_values=m)
@@ -269,16 +269,16 @@ class TestFormulaEquivalenceWithVariables:
                                                                          variables_fixed_values=m)
         assert is_equivalent
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=c), psi=b)
-        ababbba = pu.as1.Tupl(e=(a, b, a, b, b, a,))
-        acaccca = pu.as1.Tupl(e=(a, c, a, c, c, a,))
+        ababbba = pu.as1.WellFormedTupl(e=(a, b, a, b, b, a,))
+        acaccca = pu.as1.WellFormedTupl(e=(a, c, a, c, c, a,))
         m = pu.as1.Map()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=ababbba, psi=acaccca, variables=(c,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=c), psi=b)
-        multilevel1 = pu.as1.Tupl(e=(a, b, a, b, b, c, c,))
-        multilevel2 = pu.as1.Tupl(e=(a, multilevel1, a, multilevel1, c,))
-        multilevel3 = pu.as1.Tupl(e=(c, multilevel2, a, multilevel1,))
+        multilevel1 = pu.as1.WellFormedTupl(e=(a, b, a, b, b, c, c,))
+        multilevel2 = pu.as1.WellFormedTupl(e=(a, multilevel1, a, multilevel1, c,))
+        multilevel3 = pu.as1.WellFormedTupl(e=(c, multilevel2, a, multilevel1,))
         print(multilevel3)
         test = pu.as1.substitute_formulas(phi=multilevel3, m={a: e, b: d})
         m = pu.as1.Map()
@@ -347,8 +347,8 @@ class TestFormulaEquivalenceWithVariables2:
 
     def test_is_formula_equivalent_with_variables_2(self):
         a, b, c, d, e, = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
-        ab = pu.as1.Tupl(e=(a, b,))
-        cd = pu.as1.Tupl(e=(c, d,))
+        ab = pu.as1.WellFormedTupl(e=(a, b,))
+        cd = pu.as1.WellFormedTupl(e=(c, d,))
         assert not pu.as1.is_formula_equivalent(phi=ab, psi=cd)
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(
             phi=ab, psi=cd,
@@ -358,8 +358,8 @@ class TestFormulaEquivalenceWithVariables2:
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=c), psi=a)
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=d), psi=b)
 
-        bba = pu.as1.Tupl(e=(b, b, a,))
-        cca = pu.as1.Tupl(e=(c, c, a,))
+        bba = pu.as1.WellFormedTupl(e=(b, b, a,))
+        cca = pu.as1.WellFormedTupl(e=(c, c, a,))
         m = pu.as1.Map()
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=bba, variables=(),
                                                                      variables_fixed_values=None)
@@ -370,16 +370,16 @@ class TestFormulaEquivalenceWithVariables2:
         assert result
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=c), psi=b)
 
-        ababbba = pu.as1.Tupl(e=(a, b, a, b, b, a,))
-        acaccca = pu.as1.Tupl(e=(a, c, a, c, c, a,))
+        ababbba = pu.as1.WellFormedTupl(e=(a, b, a, b, b, a,))
+        acaccca = pu.as1.WellFormedTupl(e=(a, c, a, c, c, a,))
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(phi=ababbba, psi=acaccca, variables=(c,),
                                                                      variables_fixed_values=None)
         assert result
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=map, preimage=c), psi=b)
 
-        multilevel1 = pu.as1.Tupl(e=(a, b, a, b, b, c, c,))
-        multilevel2 = pu.as1.Tupl(e=(a, multilevel1, a, multilevel1, c,))
-        multilevel3 = pu.as1.Tupl(e=(c, multilevel2, a, multilevel1,))
+        multilevel1 = pu.as1.WellFormedTupl(e=(a, b, a, b, b, c, c,))
+        multilevel2 = pu.as1.WellFormedTupl(e=(a, multilevel1, a, multilevel1, c,))
+        multilevel3 = pu.as1.WellFormedTupl(e=(c, multilevel2, a, multilevel1,))
         print(multilevel3)
         test = pu.as1.substitute_formulas(phi=multilevel3, m={a: e, b: d})
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(phi=multilevel3, psi=test, variables=(d, e,),
@@ -425,7 +425,7 @@ class TestNaturalTransformation:
         variables = pu.as1.Enumeration(e=(x,))
         f = pu.as1.TransformationByVariableSubstitution(o=conclusion, v=variables, d=None,
                                                         i=premises)
-        arguments = pu.as1.Tupl(e=(p2,))
+        arguments = pu.as1.WellFormedTupl(e=(p2,))
         output = f.apply_transformation(i=arguments)
         phi = aristotle | is_a | mortal
         pu.as1.is_formula_equivalent(phi=phi, psi=output)
@@ -444,7 +444,7 @@ class TestNaturalTransformation:
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(e=(x,))
         declarations = pu.as1.Enumeration(e=None)
-        premises = pu.as1.Tupl(e=(p1,))
+        premises = pu.as1.WellFormedTupl(e=(p1,))
         phi1 = pu.as1.transformation_by_variable_substitution_connective(conclusion, variables, declarations,
                                                                          premises)
         assert pu.as1.is_well_formed_transformation_by_variable_substitution(t=phi1)
@@ -452,7 +452,7 @@ class TestNaturalTransformation:
         conclusion = x | is_a | mortal
         variables = pu.as1.Enumeration(e=(x,))
         declarations = pu.as1.Enumeration(e=None)
-        premises = pu.as1.Tupl(e=(platypus, platypus,))
+        premises = pu.as1.WellFormedTupl(e=(platypus, platypus,))
         phi2 = pu.as1.transformation_by_variable_substitution_connective(conclusion, variables, declarations,
                                                                          premises, premises)
         assert not pu.as1.is_well_formed_transformation_by_variable_substitution(t=phi2)
@@ -503,7 +503,7 @@ class TestReplaceFormulas:
 class TestMap:
     def test_map(self, fruits):
         red, yellow, blue = pu.as1.let_x_be_some_simple_objects(reps=('red', 'yellow', 'blue',))
-        c = pu.as1.Tupl(e=(red, yellow, blue, red))
+        c = pu.as1.WellFormedTupl(e=(red, yellow, blue, red))
         m1 = pu.as1.Map(d=fruits, c=c)
         assert len(m1) == 2
         assert pu.as1.is_in_map_domain(phi=fruits[0], m=m1)
@@ -608,11 +608,11 @@ class TestFormulaToTuple:
         h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
         phi1 = h(e, b, d)
         e1_result = pu.as1.transform_formula_to_tuple(phi=phi1)
-        e1_expected = pu.as1.Tupl(e=(e, b, d,))
+        e1_expected = pu.as1.WellFormedTupl(e=(e, b, d,))
         assert pu.as1.is_formula_equivalent(phi=e1_result, psi=e1_expected)
         phi2 = h(phi1, b, g(a, f(b)))
         e2_result = pu.as1.transform_formula_to_tuple(phi=phi2)
-        e2_expected = pu.as1.Tupl(e=(phi1, b, g(a, f(b)),))
+        e2_expected = pu.as1.WellFormedTupl(e=(phi1, b, g(a, f(b)),))
         assert pu.as1.is_formula_equivalent(phi=e2_result, psi=e2_expected)
 
 
@@ -669,7 +669,7 @@ class TestInference:
             phi=theorem_2,
             psi=theorem | pu.as1.connective_for_derivation | pu.as1.connective_for_inference(
                 inference_rule, p,
-                pu.as1.Tupl()))
+                pu.as1.WellFormedTupl()))
 
     def test_is_well_formed_inference(self):
         x, y, z = pu.as1.let_x_be_some_variables(reps=('x', 'y', 'z',))
@@ -677,11 +677,11 @@ class TestInference:
         f = pu.as1.let_x_be_a_binary_connective(formula_ts='f')
         t = pu.as1.TransformationByVariableSubstitution(o=x | f | z, v=(x, y, z,), d=None,
                                                         i=(x | f | y, y | f | z,))
-        p = pu.as1.Tupl(e=(a | f | b, b | f | c,))
+        p = pu.as1.WellFormedTupl(e=(a | f | b, b | f | c,))
         i = pu.as1.WellFormedInferenceRule(f=t)
-        phi1 = pu.as1.connective_for_inference(i, p, as1.Tupl())
+        phi1 = pu.as1.connective_for_inference(i, p, as1.WellFormedTupl())
         assert pu.as1.is_well_formed_inference(i=phi1)
-        phi2 = pu.as1.connective_for_inference(i, as1.Tupl())
+        phi2 = pu.as1.connective_for_inference(i, as1.WellFormedTupl())
         assert not pu.as1.is_well_formed_inference(i=phi2)
         phi3 = p | pu.as1.connective_for_derivation | i
         assert not pu.as1.is_well_formed_inference(i=phi3)
@@ -722,7 +722,7 @@ class TestAlgorithm:
         g = as1.let_x_be_a_unary_connective(formula_ts=as1.TypesetterForClassicalFormula(connective_ts='g'))
         t, _ = as1.let_x_be_an_axiom(t=t, s=a)
 
-        def hello_world(i: pu.as1.Tupl | None = None, raise_error_if_false: bool = False):
+        def hello_world(i: pu.as1.WellFormedTupl | None = None, raise_error_if_false: bool = False):
             i = as1.coerce_tuple(t=i)
             if i.arity == 1 and as1.is_formula_equivalent(phi=i[0], psi=a):
                 return True, g(a)
@@ -835,10 +835,10 @@ class TestAreValidStatementsInTheoryWithVariables:
 class TestStripDuplicateFormulasInPythonTuple:
     def test_strip_duplicate_formulas_in_python_tuple(self):
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
-        t1 = pu.as1.Tupl(e=(a, b, a, a, e, e,))
-        t2 = pu.as1.Tupl(e=(a, b, e,))
+        t1 = pu.as1.WellFormedTupl(e=(a, b, a, a, e, e,))
+        t2 = pu.as1.WellFormedTupl(e=(a, b, e,))
         t3 = pu.as1.strip_duplicate_formulas_in_python_tuple(t=t1)
-        t3 = pu.as1.Tupl(e=t3)
+        t3 = pu.as1.WellFormedTupl(e=t3)
         assert not pu.as1.is_formula_equivalent(phi=t1, psi=t3)
         assert pu.as1.is_formula_equivalent(phi=t2, psi=t3)
 

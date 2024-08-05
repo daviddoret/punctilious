@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
 
 def is_well_formed_formula_algorithm(
-        i: as1.Tupl | None = None,
+        i: as1.WellFormedTupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
     """A python-function used as a formula external algorithm to verify is-well-formed-formula of a formula.
 
@@ -21,7 +21,7 @@ def is_well_formed_formula_algorithm(
     :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
     :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
     """
-    i: as1.Tupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    i: as1.WellFormedTupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
     if not i.arity == 1:
         if raise_error_if_false:
             raise u1.ApplicativeError(
@@ -57,7 +57,7 @@ is_well_formed_formula_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm =
 
 
 def is_well_formed_inference_rule_algorithm(
-        i: as1.Tupl | None = None,
+        i: as1.WellFormedTupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
     """A python-function used as a inference-rule external algorithm to verify is-well-formed-inference-rule of a formula.
 
@@ -65,7 +65,7 @@ def is_well_formed_inference_rule_algorithm(
     :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
     :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
     """
-    i: as1.Tupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    i: as1.WellFormedTupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
     if not i.arity == 1:
         if raise_error_if_false:
             raise u1.ApplicativeError(
@@ -103,7 +103,7 @@ is_well_formed_inference_rule_algorithm_connective: as1.ConnectiveLinkedWithAlgo
 
 
 def is_well_formed_theory_algorithm(
-        i: as1.Tupl | None = None,
+        i: as1.WellFormedTupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
     """A python-function used as a theory external algorithm to verify is-well-formed-theory of a formula.
 
@@ -111,7 +111,7 @@ def is_well_formed_theory_algorithm(
     :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
     :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
     """
-    i: as1.Tupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    i: as1.WellFormedTupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
     if not i.arity == 1:
         if raise_error_if_false:
             raise u1.ApplicativeError(
@@ -253,7 +253,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
 
 
 def theory_proves_proposition_algorithm(
-        i: as1.Tupl | None = None,
+        i: as1.WellFormedTupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
     """An external algorithm for the t-proves-p (T ⊢ P) transformation.
 
@@ -274,7 +274,7 @@ def theory_proves_proposition_algorithm(
     :param raise_error_if_false:
     :return:
     """
-    i: as1.Tupl = as1.coerce_tuple(t=i)
+    i: as1.WellFormedTupl = as1.coerce_tuple(t=i)
     if not i.arity == 2:
         if raise_error_if_false:
             raise u1.ApplicativeError(msg='wrong arguments', iv=i)
