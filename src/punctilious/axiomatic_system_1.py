@@ -4239,18 +4239,27 @@ class Heuristic(abc.ABC):
 
 
 class WellFormedTheory(WellFormedTheoreticalContext):
-    """A theory is a justified enumeration of axioms, inference-rules, and theorems.
+    """A well-formed theory is a :ref:`theoretical context<WellFormedTheoreticalContext>` of the form
+    ⌜ :math:`\\text{theory}\\left( \\boldsymbol{d_1}, \\boldsymbol{d_2}, \\cdots, \\boldsymbol{d_n} \\right)` ⌝
+    where :math:`\\boldsymbol{d_i}` is a valid derivation in that theory.
 
-    Syntactic definition:
-    A well-formed theory is an enumeration such that:
-     - all element phi of the enumeration is a well-formed theorem,
-     - all premises of all theorem-by-inferences are predecessors of their parent theorem-by-inference.
+    Definition
+    ^^^^^^^^^^^^^^^^^^^^
+    A formula :math:`\\phi` is a well-formed theory if and only if:
+     - its root connective is the theory-formula connective,
+     - all term :math:`\\psi` in :math:`\\phi` is:
+       - either a well-formed inference rule,
+       - a locally well-formed axiom with regard to :math:`\\phi`,
+       - a locally well-formed theorem with regard to :math:`\\phi`,
+       - or a valid extension of a theoretical context.
 
-    TODO: Consider the following data-model change: a derivation is only an axiom or an inference-rule. In
-        effect, stating that in inference-rule is a derivation seems to be a bit of a semantic stretch.
+    Notes
+    ^^^^^^^^^^^^^^^^^^^^
 
-    TODO: Inherit from WellFormedTheoreticalContext instead of Formula.
-
+    Note 1
+    ~~~~~~~~~~~~~~~~~~
+    The empty theory is the theory that has no terms, i.e.:
+    :math:`\\text{theory}\\left( \\right)`
 
     """
     _last_index: int = 0
