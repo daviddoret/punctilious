@@ -500,7 +500,7 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False,
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_065,
-            msg='No solution found to coerce `t` to tupl.',
+            msg='No solution found to coerce ``t`` to tupl.',
             t=t,
             interpret_none_as_empty=interpret_none_as_empty)
 
@@ -839,15 +839,15 @@ def is_element_of_enumeration(x: FlexibleFormula, e: FlexibleEnumeration) -> boo
     return is_term_of_formula(x=x, phi=e)
 
 
-def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheory, max_derivations: int | None = None) -> bool:
-    """Returns `True` if `a` is an axiom in axiomatization or theory `t`, `False` otherwise.
+def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheoreticalContext, max_derivations: int | None = None) -> bool:
+    """Returns ``True`` if ``a`` is an axiom in theoretical context ``t``, ``False`` otherwise.
 
     :param a: An axiom.
-    :param t: An axiomatization or a theory.
-    :param max_derivations: If `None`, considers all derivations in `t`. If an integer, considers only that number
-        of derivations in `t` following canonical order. This is particularly useful when analysing the consistency
+    :param t: A theoretical context.
+    :param max_derivations: If `None`, considers all derivations in ``t``. If an integer, considers only that number
+        of derivations in ``t`` following canonical order. This is particularly useful when analysing the consistency
         of a theory, or dependencies between derivations.
-    :return: `True` if `a` is an axiom `t`, `False` otherwise.
+    :return: ``True`` if ``a`` is an axiom ``t``, ``False`` otherwise.
     """
     a: WellFormedAxiom = coerce_axiom(a=a)
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
@@ -856,14 +856,14 @@ def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheory, max_derivations: int | None
 
 
 def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_derivations: int | None = None):
-    """Returns `True` if `i` is an inference-rule in axiomatization or theory `t`, `False` otherwise.
+    """Returns ``True`` if `i` is an inference-rule in axiomatization or theory ``t``, ``False`` otherwise.
 
     :param i: An inference-rule.
     :param t: An axiomatization or a theory.
-    :param max_derivations: If `None`, considers all derivations in `t`. If an integer, considers only that number
-        of derivations in `t` following canonical order. This is particularly useful when analysing the consistency
+    :param max_derivations: If `None`, considers all derivations in ``t``. If an integer, considers only that number
+        of derivations in ``t`` following canonical order. This is particularly useful when analysing the consistency
         of a theory, or dependencies between derivations.
-    :return: `True` if `a` is an inference-rule `t`, `False` otherwise.
+    :return: ``True`` if ``a`` is an inference-rule ``t``, ``False`` otherwise.
     """
     i: WellFormedInferenceRule = coerce_inference_rule(i=i)
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
@@ -872,14 +872,14 @@ def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_deriva
 
 
 def is_theorem_of(m: FlexibleTheorem, t: FlexibleTheory, max_derivations: int | None = None):
-    """Returns `True` if `m` is a theorem in theory `t`, `False` otherwise.
+    """Returns ``True`` if `m` is a theorem in theory ``t``, ``False`` otherwise.
 
     :param m: A theorem.
     :param t: A theory.
-    :param max_derivations: If `None`, considers all derivations in `t`. If an integer, considers only that number
-        of derivations in `t` following canonical order. This is particularly useful when analysing the consistency
+    :param max_derivations: If `None`, considers all derivations in ``t``. If an integer, considers only that number
+        of derivations in ``t`` following canonical order. This is particularly useful when analysing the consistency
         of a theory, or dependencies between derivations.
-    :return: `True` if `m` is a theorem in `t`, `False` otherwise.
+    :return: ``True`` if `m` is a theorem in ``t``, ``False`` otherwise.
     """
     m: WellFormedTheorem = coerce_theorem(t=m)
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
@@ -938,12 +938,12 @@ def get_index_of_first_equivalent_element_in_enumeration(x: FlexibleFormula,
 
 
 def get_index_of_first_equivalent_element_in_tuple(x: FlexibleFormula, t: FlexibleTupl) -> int:
-    """If formula "x" is a term of tuple `t`, return the o-based index of the first occurrence of the term "x"
-    in `t`.
+    """If formula "x" is a term of tuple ``t``, return the o-based index of the first occurrence of the term "x"
+    in ``t``.
 
     :param x: A formula.
     :param t: A tuple.
-    :return: The 0-based index of "x" in `t`.
+    :return: The 0-based index of "x" in ``t``.
     """
     x: Formula = coerce_formula(phi=x)
     t: WellFormedTupl = coerce_tuple(t=t, interpret_none_as_empty=True)
@@ -1168,7 +1168,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
 
 def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = None,
                       a: typing.Optional[FlexibleAxiom] = None, **kwargs):
-    """Given a theory `t`, returns a new theory `t'` such that it extends `t` with axiom `a`.
+    """Given a theory ``t``, returns a new theory `t'` such that it extends ``t`` with axiom ``a``.
 
     :param t: An axiomatization or a theory. If None, the empty axiom-collection is implicitly used.
     :param s: The statement claimed by the new axiom. Either the claim or axiom parameter
@@ -1176,7 +1176,7 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
     :param a: An existing axiom. Either the claim or axiom parameter must be provided,
     and not both.
     :return: a pair (t, a) where t is an extension of the input theory, with a new axiom claiming the
-    input statement, and `a` is the new axiom.
+    input statement, and ``a`` is the new axiom.
     """
     if t is None:
         t = WellFormedAxiomatization(d=None)
@@ -1185,14 +1185,14 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
     if s is not None and a is not None:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_016,
-            msg='Both `s` and `a` are not None. It is mandatory to provide only one of these two arguments.',
+            msg='Both `s` and ``a`` are not None. It is mandatory to provide only one of these two arguments.',
             s=s,
             a=a,
             t=t)
     elif s is None and a is None:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_017,
-            msg='Both `s` and `a` are None. It is mandatory to provide one of these two arguments.')
+            msg='Both `s` and ``a`` are None. It is mandatory to provide one of these two arguments.')
     elif s is not None:
         a: WellFormedAxiom = WellFormedAxiom(p=s, **kwargs)
 
@@ -1214,7 +1214,7 @@ def let_x_be_a_theory(
         t: FlexibleTheory | None = None,
         d: FlexibleEnumeration | None = None,
         **kwargs) -> WellFormedTheory:
-    """Declares a new theory `t`.
+    """Declares a new theory ``t``.
 
     :param t:
     :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
@@ -1357,7 +1357,7 @@ def is_symbol_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
 
 
 def is_connective_equivalent(phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
-    """Returns `True` if :math:`\\phi \\sim_c \\; \\psi`, `False` otherwise.
+    """Returns ``True`` if :math:`\\phi \\sim_c \\; \\psi`, ``False`` otherwise.
 
     Definition:
     Two formulas :math:`\\phi` and :math:`\\psi` are :math:`\\text{connective-equivalent}`, noted
@@ -1597,7 +1597,7 @@ def is_sub_enumeration(s: FlexibleEnumeration, e: FlexibleEnumeration,
                        strip_duplicates: bool = True,
                        interpret_none_as_empty: bool = True,
                        canonic_conversion: bool = True) -> bool:
-    """Returns `True` if enumeration `s` is a sub-enumeration of enumeration `e`, `False` otherwise.
+    """Returns ``True`` if enumeration `s` is a sub-enumeration of enumeration `e`, ``False`` otherwise.
 
     Notation:
     :math:`s \\subseteq e`
@@ -2126,7 +2126,7 @@ class Transformation(Formula, abc.ABC):
         d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                             strip_duplicates=True)
         i: WellFormedTupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
-        # TODO: Coerce argument `a` as well
+        # TODO: Coerce argument ``a`` as well
         return con, o, v, d, i, a
 
     def __new__(cls,
@@ -2212,10 +2212,10 @@ class Transformation(Formula, abc.ABC):
     @abc.abstractmethod
     def is_compatible_with(self, t: FlexibleFormula) -> bool:
         """A computing low-cost method tha informs a calling process whether trying to use this transformation
-        is worthwhile in trying to yield formula `t`.
+        is worthwhile in trying to yield formula ``t``.
         
         The idea here is to make an early check on the compatibility of the transformation with a certain 
-        target formula `t`, before engaging in a brute-force attempt to derive a certain statement.
+        target formula ``t``, before engaging in a brute-force attempt to derive a certain statement.
 
         :param t: A formula denoted as the target.
         :return:
@@ -2411,7 +2411,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         return outcome
 
     def is_compatible_with(self, t: FlexibleFormula) -> bool:
-        """Performs low-cost checks and returns True if target formula `t` is compatible with the output of the
+        """Performs low-cost checks and returns True if target formula ``t`` is compatible with the output of the
         transformation. This is useful to avoid expensive brute-force to find some derivation in a theory,
         when it is clear from the beginning that the underlying transformation.
 
@@ -2428,7 +2428,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         """(Conditional). A transformation-by-variable-substitution may have a validation-algorithm.
 
         A validation-algorithm is a python-function that receives the input-values as input arguments
-        and return `True` if these input-values are valid, and `False`otherwise.
+        and return ``True`` if these input-values are valid, and ``False``otherwise.
 
         :return:
         """
@@ -2474,7 +2474,7 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
 
 
 def coerce_transformation_by_variable_substitution(t: FlexibleFormula) -> TransformationByVariableSubstitution:
-    """Coerces lose argument `t` to a transformation, strongly python-typed as Transformation,
+    """Coerces lose argument ``t`` to a transformation, strongly python-typed as Transformation,
     or raises an error with code E-AS1-031 if this fails."""
     t: Formula = coerce_formula(phi=t)
     if isinstance(t, TransformationByVariableSubstitution):
@@ -2515,7 +2515,7 @@ def coerce_connective(con: Connective) -> Connective:
 
 
 def coerce_hypothesis(h: FlexibleFormula) -> WellFormedHypothesis:
-    """Coerces formula `h` into a well-formed hypothesis, or raises an error if it fails.
+    """Coerces formula ``h`` into a well-formed hypothesis, or raises an error if it fails.
 
     :param h: A formula that is presumably a well-formed hypothesis.
     :return: A well-formed hypothesis.
@@ -2671,13 +2671,13 @@ def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = Fals
 
 
 def is_well_formed_hypothesis(h: FlexibleHypothesis, raise_error_if_false: bool = False) -> bool:
-    """Returns `True` if and only if `h` is a well-formed hypothesis, `False` otherwise.
+    """Returns ``True`` if and only if ``h`` is a well-formed hypothesis, ``False`` otherwise.
 
     TODO: Check that assumption is a proposition instead of just checking it is a formula.
 
     :param h: A formula that may or may not be a well-formed hypothesis.
-    :param raise_error_if_false: If the argument is `True`, the function raises an AS1-082 error instead of returning
-        `False`.
+    :param raise_error_if_false: If the argument is ``True``, the function raises an AS1-082 error instead of returning
+        ``False``.
     :return: bool.
     """
     h = coerce_formula(phi=h)
@@ -2697,11 +2697,11 @@ def is_well_formed_hypothesis(h: FlexibleHypothesis, raise_error_if_false: bool 
 
 
 def is_well_formed_inference(i: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
-    """Returns `True` if and only if `i` is a well-formed inference, `False` otherwise.
+    """Returns ``True`` if and only if `i` is a well-formed inference, ``False`` otherwise.
 
     :param i: A formula that may or may not be a well-formed inference.
-    :param raise_error_if_false: If the argument is `True`, the function raises an AS1-081 error instead of returning
-        `False`.
+    :param raise_error_if_false: If the argument is ``True``, the function raises an AS1-081 error instead of returning
+        ``False``.
     :return: bool.
     """
     i = coerce_formula(phi=i)
@@ -2808,7 +2808,7 @@ def is_well_formed_inference_rule(i: FlexibleFormula) -> bool:
 
 
 def is_well_formed_transformation(t: FlexibleFormula) -> bool:
-    """Return True if and only if `t` is a well-formed transformation, False otherwise.
+    """Return True if and only if ``t`` is a well-formed transformation, False otherwise.
 
     :param t: A formula.
     :return: bool.
@@ -2829,12 +2829,12 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None =
                                   interpret_none_as_empty: bool = True,
                                   canonic_conversion: bool = True,
                                   max_derivations: int | None = None) -> bool:
-    """Returns `True` if and only if proposition `p` is valid in theory `t`,
-    according to `t` known derivations, `False` otherwise.
+    """Returns ``True`` if and only if proposition `p` is valid in theory ``t``,
+    according to ``t`` known derivations, ``False`` otherwise.
 
     Alternatively, check validity of `p` in an enumeration of derivations `d`.
 
-    Note: the expression "so far" is meant to stress that more derivations may be inferred from `t`,
+    Note: the expression "so far" is meant to stress that more derivations may be inferred from ``t``,
     and it is a priori unknown whether such derivations would or would not prove `p`.
 
     A formula :math:`\\phi` is a valid-statement with regard to a theory :math:`t`, if and only if:
@@ -2843,7 +2843,7 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None =
 
     :param p:
     :param t: A theory.
-    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Verifies the validity of `p` only through the first `max_derivations` derivations
         in canonical order, or all derivations if `None`.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
@@ -2869,12 +2869,12 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None =
 
 
 def is_valid_proposition_so_far_2(p: FlexibleFormula, t: FlexibleTheory) -> tuple[bool, int | None]:
-    """Given a theory `t` and a proposition `p`, return a pair ("b", `i`) such that:
-     - "b" is True if `p` is a valid proposition in theory `t`, False otherwise,
-     - `i` is the derivation-index of the first occurrence of `p` in a derivation in `t` if "b" is True,
+    """Given a theory ``t`` and a proposition `p`, return a pair ("b", `i`) such that:
+     - "b" is True if `p` is a valid proposition in theory ``t``, False otherwise,
+     - `i` is the derivation-index of the first occurrence of `p` in a derivation in ``t`` if "b" is True,
         None otherwise.
 
-    Note: the expression "so far" is meant to stress that more derivations may be inferred from `t`,
+    Note: the expression "so far" is meant to stress that more derivations may be inferred from ``t``,
     and it is a priori unknown whether such derivations would or would not prove `p`.
 
     This function is very similar to is_valid_proposition_in_theory_1 except that it returns
@@ -2884,9 +2884,9 @@ def is_valid_proposition_so_far_2(p: FlexibleFormula, t: FlexibleTheory) -> tupl
     derivation validity.
 
     Definition:
-    A formula p is a valid-proposition with regard to a theory `t`, if and only if:
-     - `p` is the valid-proposition of an axiom in `t`,
-     - or `p` is the valid-proposition of a theorem in `t`.
+    A formula p is a valid-proposition with regard to a theory ``t``, if and only if:
+     - `p` is the valid-proposition of an axiom in ``t``,
+     - or `p` is the valid-proposition of a theorem in ``t``.
     """
 
     p: Formula = coerce_formula(phi=p)
@@ -2981,12 +2981,12 @@ def iterate_theory_derivations(t: FlexibleTheory[FlexibleDerivation] | None = No
                                canonic_conversion: bool = True,
                                max_derivations: int | None = None) -> \
         typing.Generator[Formula, None, None]:
-    """Iterates through derivations of a theory `t` in canonical order.
+    """Iterates through derivations of a theory ``t`` in canonical order.
 
     Alternatively, iterates through an enumeration of derivations `d` in canonical order.
 
     :param t: A theory.
-    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Yields only math:`max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
@@ -3013,12 +3013,12 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
                           canonic_conversion: bool = True,
                           max_derivations: int | None = None
                           ) -> typing.Generator[WellFormedAxiom, None, None]:
-    """Iterates through axioms in derivations of a theory `t`, in canonical order.
+    """Iterates through axioms in derivations of a theory ``t``, in canonical order.
 
     Alternatively, iterates through axioms of an enumeration of derivations `d`, in canonical order.
 
     :param t: A theory.
-    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
@@ -3043,12 +3043,12 @@ def iterate_theory_theorems(t: FlexibleTheory | None = None,
                             canonic_conversion: bool = True,
                             max_derivations: int | None = None
                             ) -> typing.Generator[WellFormedTheorem, None, None]:
-    """Iterates through theorems in derivations of a theory `t`, in canonical order.
+    """Iterates through theorems in derivations of a theory ``t``, in canonical order.
 
     Alternatively, iterates through theorems of an enumeration of derivations `d`, in canonical order.
 
     :param t: A theory.
-    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
@@ -3073,12 +3073,12 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
                                    canonic_conversion: bool = True,
                                    max_derivations: int | None = None
                                    ) -> typing.Generator[WellFormedInferenceRule, None, None]:
-    """Iterates through inference-rules in derivations of a theory `t` in canonical order.
+    """Iterates through inference-rules in derivations of a theory ``t`` in canonical order.
 
     Alternatively, iterates through inference-rules of an enumeration of derivations `d` in canonical order.
 
     :param t: A theory.
-    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
@@ -3103,7 +3103,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
                                     canonic_conversion: bool = True,
                                     max_derivations: int | None = None
                                     ) -> typing.Generator[Formula, None, None]:
-    """Iterates through valid-statements in derivations of a theory `t` in canonical order.
+    """Iterates through valid-statements in derivations of a theory ``t`` in canonical order.
 
     Alternatively, iterates through propositions of an enumeration of derivations `d` in canonical order.
 
@@ -3111,7 +3111,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
     The valid-statements of a theory are the propositions of its axioms and theorems and its inference-rules.
 
     :param t: A theory.
-    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
@@ -3145,7 +3145,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
                                 canonic_conversion: bool = True,
                                 max_derivations: int | None = None
                                 ) -> typing.Generator[Formula, None, None]:
-    """Iterates through propositions in derivations of a theory `t` in canonical order.
+    """Iterates through propositions in derivations of a theory ``t`` in canonical order.
 
     Alternatively, iterates through propositions of an enumeration of derivations `d` in canonical order.
 
@@ -3153,7 +3153,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
     The valid-statements of axioms and theorems in a theory.
 
     :param t: A theory.
-    :param d: An enumeration of derivations. Ignored if `t` is provided.
+    :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
@@ -3253,15 +3253,15 @@ def is_proposition_with_free_variables_in_theory(phi: FlexibleFormula, t: Flexib
 
 
 def is_well_formed_axiom(a: FlexibleFormula, t: FlexibleTheoreticalContext | None = None) -> bool:
-    """Returns `True` if `a` is a well-formed axiom, `False` otherwise.
+    """Returns ``True`` if ``a`` is a well-formed axiom, ``False`` otherwise.
 
-    If `t` is `None`, uses the global definition of well-formed axiom.
-    If `t` is not `None`, uses the local definition of well-formed axiom with regards to theoretical-context `t`.
+    If ``t`` is ``None``, uses the global definition of well-formed axiom.
+    If ``t`` is not ``None``, uses the local definition of well-formed axiom with regards to theoretical-context ``t``.
 
 
     :param a: A formula.
     :param t: A theoretical context.
-    :return: `True` if `a` is a well-formed axiom, `False` otherwise.
+    :return: ``True`` if ``a`` is a well-formed axiom, ``False`` otherwise.
     """
     global connective_for_axiom_formula
     # Data validation,
@@ -3276,7 +3276,7 @@ def is_well_formed_axiom(a: FlexibleFormula, t: FlexibleTheoreticalContext | Non
     if not is_well_formed_formula(phi=a.term_0):
         return False
     if t is not None:
-        # Check formula against criteria for local definition of well-formed axiom, with regards to `t`.
+        # Check formula against criteria for local definition of well-formed axiom, with regards to ``t``.
         if not is_valid_proposition_so_far_1(p=connective_for_is_a_proposition(a), t=t):
             return False
     # All tests were successful.
@@ -3317,7 +3317,36 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_false: bool = Fals
 
 
 def is_well_formed_derivation(d: FlexibleFormula) -> bool:
-    """Return True if phi is a well-formed theorem, False otherwise.
+    """Return ``True`` if ``d`` is a well-formed theorem, ``False`` otherwise.
+
+    :param d: A formula.
+    :return: bool.
+    """
+    d: Formula = coerce_formula(phi=d)
+    if is_well_formed_theorem(t=d):
+        return True
+    elif is_well_formed_inference_rule(i=d):
+        return True
+    elif is_well_formed_axiom(a=d):
+        return True
+    else:
+        return False
+
+
+def is_well_formed_axiomatic_base_component(d: FlexibleFormula) -> bool:
+    """Returns ``True`` if ``d`` is a well-formed axiomatic base component, ``False`` otherwise.
+
+    Intuitive definition
+    ^^^^^^^^^^^^^^^^^^^^
+    An axiomatic base component is a formula that is a legal constitutive component for axiomatic bases, i.e.:
+     - an inference-rule,
+     - or an axiom.
+
+    Definition
+    ^^^^^^^^^^^^^^^^^^^^
+    A formula :math:`\\phi` is a well-formed axiomatic base component if and only if:
+     - it is a well-formed inference-rule,
+     - or it is a well-formed axiom.
 
     :param d: A formula.
     :return: bool.
@@ -3355,9 +3384,9 @@ def is_well_formed_theoretical_context(t: FlexibleTheoreticalContext) -> bool:
 def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumeration,
                                          raise_error_if_false: bool = False
                                          ) -> tuple[bool, Enumeration | None, Enumeration | None]:
-    """Given an enumeration of presumably verified derivations "v" (e.g.: the derivation sequence of a theory `t`),
+    """Given an enumeration of presumably verified derivations "v" (e.g.: the derivation sequence of a theory ``t``),
     and an enumeration of unverified derivations "u" (e.g.: whose elements are not (yet) effective
-    theorems of `t`), returns True if a theory would be well-formed if it was composed of
+    theorems of ``t``), returns True if a theory would be well-formed if it was composed of
     derivations "u" appended to derivations "v", or False if it would not.
 
     This function is useful to test whether some derivations will pass well-formedness validation before
@@ -3367,9 +3396,9 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
     :param u: An enumeration of unverified derivations.
     :param raise_error_if_false:
     :return: A triple `(b, v′, u′)` where:
-     `b` is `True` if all derivations in `u` would be valid, `False` otherwise,
-     `v′` = `v` with duplicates stripped out if `b` is `True`, `None` otherwise,
-     `u′` = `(u \\ v)` with duplicates stripped out if `b` is `True`, `None` otherwise.
+     `b` is ``True`` if all derivations in `u` would be valid, ``False`` otherwise,
+     `v′` = `v` with duplicates stripped out if `b` is ``True``, ``None`` otherwise,
+     `u′` = `(u \\ v)` with duplicates stripped out if `b` is ``True``, ``None`` otherwise.
     """
     v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True, interpret_none_as_empty=True,
                                         canonic_conversion=True)
@@ -3498,7 +3527,7 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
                             p=p, p_prime=p_prime, index=index, t2=f, ir=ir, i=i, d=d, c=c, v=v, u=u)
                     return False, None, None
             # All tests have been successfully completed, we now have the assurance
-            # that derivation `d` would be valid if appended to theory `t`.
+            # that derivation `d` would be valid if appended to theory ``t``.
             pass
         else:
             # Incorrect form.
@@ -3537,8 +3566,8 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
         #   But then we must properly manage python inheritance (Axiomatization --> Theory --> Enumeration).
         if raise_event_if_false:
             raise u1.ApplicativeError(
-                msg='The connective "c" of theory `t` is not the "theory-formula" connective. '
-                    'It follows that `t` is not a well-formed-theory.',
+                msg='The connective "c" of theory ``t`` is not the "theory-formula" connective. '
+                    'It follows that ``t`` is not a well-formed-theory.',
                 con=con,
                 con_id=id(con),
                 theory_formula=connective_for_theory,
@@ -3557,13 +3586,13 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
 def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
     """Returns ``True`` if ``a`` is a well-formed axiomatization, ``False`` otherwise.
 
-    TODO: Because proposition is a local definition, add a conditional argument `t` and
+    TODO: Because proposition is a local definition, add a conditional argument ``t`` and
         pass it to is_well_formed_axiom which then must pass it to is_well_formed_proposition.
 
     :param a: A formula, possibly a well-formed axiomatization.
-    :param raise_error_if_false: If True, raises an error when `a` is not a well-formed
+    :param raise_error_if_false: If True, raises an error when ``a`` is not a well-formed
         axiomatization.
-    :raises ApplicativeError: with error code AS1-064 when `a` is not a well-formed axiomatization and
+    :raises ApplicativeError: with error code AS1-064 when ``a`` is not a well-formed axiomatization and
         `raise_error_if_false` = True.
     :return: bool.
     """
@@ -3625,7 +3654,7 @@ def coerce_derivation(d: FlexibleFormula) -> WellFormedDerivation:
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_039,
-            msg=f'Argument `d` of python-type `t` could not be coerced to a derivation of python-type '
+            msg=f'Argument `d` of python-type ``t`` could not be coerced to a derivation of python-type '
                 f'Derivation. The string representation of `d` is given in `s`.',
             d=d,
             t=type(d),
@@ -3633,7 +3662,7 @@ def coerce_derivation(d: FlexibleFormula) -> WellFormedDerivation:
 
 
 def coerce_axiom(a: FlexibleFormula) -> WellFormedAxiom:
-    """Coerces formula `a` into a well-formed axiom, or raises an error if it fails.
+    """Coerces formula ``a`` into a well-formed axiom, or raises an error if it fails.
 
     :param a: A formula that is presumably a well-formed axiom.
     :return: A well-formed axiom.
@@ -3671,7 +3700,7 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> WellFormedInferenceRule:
 
 
 def coerce_theorem(t: FlexibleFormula) -> WellFormedTheorem:
-    """Coerces formula `t` into a well-formed theorem, or raises an error if it fails.
+    """Coerces formula ``t`` into a well-formed theorem, or raises an error if it fails.
 
     :param t: A formula that is presumably a well-formed theorem.
     :return: A well-formed theorem.
@@ -3692,11 +3721,11 @@ def coerce_theorem(t: FlexibleFormula) -> WellFormedTheorem:
 
 def coerce_theory(t: FlexibleTheory, interpret_none_as_empty: bool = False,
                   canonical_conversion: bool = False) -> WellFormedTheory:
-    """Coerces formula `t` into a well-formed theory, or raises an error if it fails.
+    """Coerces formula ``t`` into a well-formed theory, or raises an error if it fails.
 
     :param t: A formula that is presumably a well-formed theory.
-    :param canonical_conversion: If necessary, apply canonical conversations to transform `t` into a well-formed theory.
-    :param interpret_none_as_empty: If `t` is `None`, interpret it as the empty theory.
+    :param canonical_conversion: If necessary, apply canonical conversations to transform ``t`` into a well-formed theory.
+    :param interpret_none_as_empty: If ``t`` is ``None``, interpret it as the empty theory.
     :return: A well-formed theory.
     :raises ApplicativeError: with code AS1-043 if coercion fails.
     """
@@ -3751,7 +3780,7 @@ def coerce_axiomatization(a: FlexibleFormula, interpret_none_as_empty: bool = Fa
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_044,
-            msg=f'Argument `a` could not be coerced to an axiomatization.',
+            msg=f'Argument ``a`` could not be coerced to an axiomatization.',
             a=a,
             interpret_none_as_empty=interpret_none_as_empty)
 
@@ -4423,11 +4452,11 @@ class WellFormedTheory(WellFormedTheoreticalContext):
 
 
 def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> WellFormedTheory:
-    """Canonical function that converts an axiomatization `a` to a theory.
+    """Canonical function that converts an axiomatization ``a`` to a theory.
 
     An axiomatization is a theory whose derivations are limited to axioms and inference-rules.
     This function provides the canonical conversion method from axiomatizations to theories,
-    by returning a new theory `t` such that all the derivations in `t` are derivations of `a`,
+    by returning a new theory ``t`` such that all the derivations in ``t`` are derivations of ``a``,
     preserving canonical order.
 
     :param a: An axiomatization.
@@ -4439,11 +4468,11 @@ def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> WellFormedT
 
 
 def transform_hypothesis_to_theory(h: FlexibleHypothesis) -> WellFormedTheory:
-    """Canonical function that converts a hypothesis `h` to a theory.
+    """Canonical function that converts a hypothesis ``h`` to a theory.
 
     A hypothesis is a pair (b, a) where:
      - `b` is a theory denoted as the base-theory,
-     - `a` is a proposition denoted as the assumption.
+     - ``a`` is a proposition denoted as the assumption.
 
     The canonical conversion of hypothesis into theory consists in
     considering the assumption as an axiom.
@@ -4460,18 +4489,18 @@ def transform_hypothesis_to_theory(h: FlexibleHypothesis) -> WellFormedTheory:
 
 def transform_theory_to_axiomatization(t: FlexibleTheory, interpret_none_as_empty: bool = True,
                                        canonical_conversion: bool = True) -> WellFormedAxiomatization:
-    """Canonical function that converts a theory `t` to an axiomatization.
+    """Canonical function that converts a theory ``t`` to an axiomatization.
 
     An axiomatization is a theory whose derivations are limited to axioms and inference-rules.
     This function provides the canonical conversion method from theories to axiomatizations,
-    by returning a new axiomatization `a` such that all the axioms and inference-rules in `t`
-    become derivations of `a`, preserving canonical order.
+    by returning a new axiomatization ``a`` such that all the axioms and inference-rules in ``t``
+    become derivations of ``a``, preserving canonical order.
 
-    It follows that all theorems in `t` are discarded.
+    It follows that all theorems in ``t`` are discarded.
 
     :param t: A theory.
-    :param interpret_none_as_empty: If `t` is None, interpret it as the empty-theory.
-    :param canonical_conversion: If necessary, apply canonic-conversion to coerce `t` to a theory.
+    :param interpret_none_as_empty: If ``t`` is None, interpret it as the empty-theory.
+    :param canonical_conversion: If necessary, apply canonic-conversion to coerce ``t`` to a theory.
     :return: An axiomatization.
     """
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=interpret_none_as_empty,
@@ -4488,8 +4517,8 @@ def transform_theory_to_axiomatization(t: FlexibleTheory, interpret_none_as_empt
 
 def is_extension_of(t2: FlexibleTheory, t1: FlexibleTheory, interpret_none_as_empty: bool = True,
                     canonical_conversion: bool = True, raise_error_if_false: bool = False):
-    """Given two theories or axiomatizations `t1` and `t2`, returns `True` if and only if `t2` is an extension of `t1`,
-    `False` otherwise.
+    """Given two theories or axiomatizations `t1` and `t2`, returns ``True`` if and only if `t2` is an extension of `t1`,
+    ``False`` otherwise.
 
     Definition: theory-extension
     ----------------------------
@@ -4535,7 +4564,7 @@ def is_extension_of(t2: FlexibleTheory, t1: FlexibleTheory, interpret_none_as_em
 
 def is_axiomatization_equivalent(t1: FlexibleTheory, t2: FlexibleTheory, interpret_none_as_empty: bool = True,
                                  canonical_conversion: bool = True, raise_error_if_false: bool = False) -> bool:
-    """Returns `True` if `t1` is axiomatization-equivalent with `t2`, denoted :math:`t_1 \\sim_{a} t_2`.
+    """Returns ``True`` if `t1` is axiomatization-equivalent with `t2`, denoted :math:`t_1 \\sim_{a} t_2`.
 
     Definition: axiomatization-equivalence:
     Two theories or axiomatizations :math:`t_1` and :math:`t_2` are :math:`\\text{axiomatization-equivalent}`
@@ -4609,8 +4638,8 @@ def transform_formula_to_tuple(phi: FlexibleFormula) -> WellFormedTupl:
 
 
 def transform_tuple_to_theory(t: FlexibleTupl) -> WellFormedTheory:
-    """Canonical function that converts a tuple `t` to a theory,
-    providing that all elements "x" of `t` are well-formed derivations.
+    """Canonical function that converts a tuple ``t`` to a theory,
+    providing that all elements "x" of ``t`` are well-formed derivations.
 
     :param t: A tupl.
     :return: A theory.
@@ -4623,11 +4652,11 @@ def transform_tuple_to_theory(t: FlexibleTupl) -> WellFormedTheory:
 
 
 def transform_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumeration:
-    """Canonical function that converts an axiomatization `a` to an enumeration.
+    """Canonical function that converts an axiomatization ``a`` to an enumeration.
 
     An axiomatization is fundamentally an enumeration of derivations, limited to axioms and inference-rules.
     This function provides the canonical conversion method from axiomatizations to enumeration,
-    by returning a new enumeration "e" such that all the derivations in `a` are elements of "e",
+    by returning a new enumeration "e" such that all the derivations in ``a`` are elements of "e",
     preserving order.
 
     Invertibility: yes
@@ -4665,11 +4694,11 @@ def transform_formula_to_enumeration(phi: FlexibleFormula, strip_duplicates: boo
 
 
 def transform_theory_to_enumeration(t: FlexibleTheory) -> Enumeration:
-    """Canonical function that converts a theory `t` to an enumeration.
+    """Canonical function that converts a theory ``t`` to an enumeration.
 
     A theory is fundamentally an enumeration of derivations.
     This function provides the canonical conversion method from theory to enumeration,
-    by returning a new enumeration "e" such that all the derivations in `t` are elements of "e",
+    by returning a new enumeration "e" such that all the derivations in ``t`` are elements of "e",
     preserving order.
 
     :param t: A theory.
@@ -4753,7 +4782,7 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
             else:
                 # Incorrect form.
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
-                                          msg=f'Cannot append derivation `d` to axiomatization `a`, '
+                                          msg=f'Cannot append derivation `d` to axiomatization ``a``, '
                                               f'because `d` is not in proper form '
                                               f'(e.g.: axiom, inference-rule).',
                                           d=d,
@@ -4769,7 +4798,7 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
     def __init__(self, a: WellFormedAxiomatization | None = None, d: FlexibleEnumeration = None):
         """Declares a new axiomatization.
 
-        :param a: A base axiomatization. If `None`, the empty axiomatization is assumed as a base.
+        :param a: A base axiomatization. If ``None``, the empty axiomatization is assumed as a base.
         :param d: An enumeration of supplementary axioms and/or inference rules to be appended to the base
             axiomatization.
         """
@@ -4825,7 +4854,7 @@ FlexibleDecorations = typing.Optional[typing.Union[typing.Tuple[FlexibleTheory, 
 
 
 def is_recursively_included_in(s: FlexibleFormula, f: FlexibleFormula) -> bool:
-    """Returns `True` if and only if formula `s` is recursively included in formula `f`, `False` otherwise.
+    """Returns ``True`` if and only if formula `s` is recursively included in formula `f`, ``False`` otherwise.
 
     Symbol: ⊆⁺ (Unicode), :math:`\\subseteq^{+}` (LaTeX)
 
@@ -4955,7 +4984,7 @@ def append_to_theory(*args, t: FlexibleTheory) -> WellFormedTheory:
 
 
 def append_derivation_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxiomatization) -> WellFormedAxiomatization:
-    """Extend axiomatization `a` with derivation `d`.
+    """Extend axiomatization ``a`` with derivation `d`.
 
     :param d:
     :param a:
@@ -4973,7 +5002,7 @@ def append_derivation_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxioma
             a: WellFormedAxiomatization = WellFormedAxiomatization(a=a, d=(extension_i,))
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
-                                  msg=f'Cannot append derivation `d` to axiomatization `a`, '
+                                  msg=f'Cannot append derivation `d` to axiomatization ``a``, '
                                       f'because `d` is not in proper form '
                                       f'(e.g.: axiom, inference-rule).',
                                   d=d,
@@ -5009,7 +5038,7 @@ class AutoDerivationFailure(Exception):
 def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
              i: FlexibleInferenceRule, a: FlexibleTupl | None = None,
              raise_error_if_false: bool = True) -> typing.Tuple[WellFormedTheory, bool, WellFormedTheorem | None]:
-    """Given a theory `t`, derives a new theory `t′` that extends `t` with a new theorem `c`
+    """Given a theory ``t``, derives a new theory `t′` that extends ``t`` with a new theorem `c`
     derived by applying inference-rule `i`.
 
     :param t: A theory.
@@ -5019,8 +5048,8 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
     :param a: (For algorithmic-transformations) A tuple of formulas denoted as the supplementary-arguments to be
         transmitted as input arguments to the external-algorithm.
     :param raise_error_if_false:
-    :return: A python-tuple `(t′, b, m)` where `t′` is the theory `t` with the new theorem if derived successfully,
-        `b` is `True` if the derivation was successful, `False` otherwise, and `m` is the new derivation.
+    :return: A python-tuple `(t′, b, m)` where `t′` is the theory ``t`` with the new theorem if derived successfully,
+        `b` is ``True`` if the derivation was successful, ``False`` otherwise, and `m` is the new derivation.
     """
     # parameters validation
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
@@ -5034,7 +5063,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
         # it follows that it is impossible to derive the conjecture from that inference_rule in this theory.
         if raise_error_if_false:
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_067,
-                                      msg=f'Derivation fails because inference-rule `i` is not valid in theory `t`.',
+                                      msg=f'Derivation fails because inference-rule `i` is not valid in theory ``t``.',
                                       i=i,
                                       t=t)
         else:
@@ -5048,7 +5077,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
                 raise u1.ApplicativeError(
                     code=c1.ERROR_CODE_AS1_051,
                     msg=f'Conjecture `c` cannot be derived from inference-rule `i` because '
-                        f'premise `q` is not a valid-statement in theory `t`. '
+                        f'premise `q` is not a valid-statement in theory ``t``. '
                         f'The was complete list of premises is provided as `p`.',
                     c=c,
                     q=q,
@@ -5077,7 +5106,7 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
             raise u1.ApplicativeError(
                 msg='Derivation failure. '
                     'The initialization of the theorem failed, meaning that it is invalid. '
-                    'The inference is composed of the premises `p`, the arguments `a`, '
+                    'The inference is composed of the premises `p`, the arguments ``a``, '
                     'the inference-rule `i`.',
                 p=p,
                 a=a,
@@ -5143,7 +5172,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
              raise_error_if_false: bool = True,
              debug: bool = False) -> \
         typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]:
-    """Derives a new theory `t′` that extends `t` with a new theorem based on conjecture `c` using inference-rule `i`.
+    """Derives a new theory `t′` that extends ``t`` with a new theorem based on conjecture `c` using inference-rule `i`.
 
     Note: in contrast, derive_1 requires the explicit list of premises. derive_2 is more convenient to use because it
      automatically finds a set of premises among the valid-statements in theory t, such that conjecture c can be
@@ -5172,8 +5201,8 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_078,
-                msg='Inference-rule `i` is not an element of theory `t`. '
-                    'It follows that proposition `c` cannot be inferred in `t` using `i`.',
+                msg='Inference-rule `i` is not an element of theory ``t``. '
+                    'It follows that proposition `c` cannot be inferred in ``t`` using `i`.',
                 c=c, i=i, t=t,
             )
         return t, False, None
@@ -5224,8 +5253,8 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
             if raise_error_if_false:
                 raise u1.ApplicativeError(
                     code=c1.ERROR_CODE_AS1_079,
-                    msg='Some premise required by inference-rule `i` are not valid propositions in theory `t`. '
-                        'It follows that proposition `c` cannot be inferred in `t` using `i`.',
+                    msg='Some premise required by inference-rule `i` are not valid propositions in theory ``t``. '
+                        'It follows that proposition `c` cannot be inferred in ``t`` using `i`.',
                     necessary_premises=necessary_premises,
                     c=c, i=i, known_variable_values=known_variable_values, t=t
                 )
@@ -5236,7 +5265,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_080,
                 msg='The candidate proposition `c` is not compatible with the conclusion of inference-rule `i`. '
-                    'It follows that proposition `c` cannot be inferred in `t` using `i`.',
+                    'It follows that proposition `c` cannot be inferred in ``t`` using `i`.',
                 c=c, i=i, known_variable_values=known_variable_values, t=t
             )
         return t, False, None
@@ -5560,7 +5589,7 @@ class WellFormedHypothesis(WellFormedTheoreticalContext):
 
     @property
     def extended_theory(self) -> WellFormedTheory:
-        """The extended theory `e` of the hypothesis is the base theory `b` extended with the assumption `a`
+        """The extended theory `e` of the hypothesis is the base theory `b` extended with the assumption ``a``
         postulated as an axiom.
 
         :math:`e = \\; b \\; \\cdot \\; \\left( a \\right)`
@@ -5810,12 +5839,12 @@ class TypesetterForDeclaration(pl1.Typesetter):
 def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory,
                                                                r: FlexibleTransformationByVariableSubstitution) -> \
         tuple[bool, WellFormedInferenceRule | None]:
-    """Given a theory `t` and a transformation-rule "r", return the first occurrence of an inference-rule in `t` such
+    """Given a theory ``t`` and a transformation-rule "r", return the first occurrence of an inference-rule in ``t`` such
     that its transformation-rule is formula-equivalent to "r".
 
     :param t: A theory.
     :param r: A transformation-rule.
-    :return: A python-tuple (True, i) where `i` is the inference-rule if `i` is found in `t`, (False, None) otherwise.
+    :return: A python-tuple (True, i) where `i` is the inference-rule if `i` is found in ``t``, (False, None) otherwise.
     """
     t: WellFormedTheory = coerce_theory(t=t)
     r: TransformationByVariableSubstitution = coerce_transformation_by_variable_substitution(t=r)
@@ -5828,12 +5857,12 @@ def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory
 
 def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFormula) -> \
         tuple[bool, Formula | None]:
-    """Given a theory `t` and a valid-statement `s` in `t`, return the first occurrence of a derivation in `t` such
+    """Given a theory ``t`` and a valid-statement `s` in ``t``, return the first occurrence of a derivation in ``t`` such
     that its valid-statement is formula-equivalent to `s`.
 
     :param t: A theory.
-    :param s: A formula that is a valid statement in `t`.
-    :return: A python-tuple (True, d) where `d` is the derivation if `s` is found in `t` valid-statements,
+    :param s: A formula that is a valid statement in ``t``.
+    :return: A python-tuple (True, d) where `d` is the derivation if `s` is found in ``t`` valid-statements,
     (False, None) otherwise.
     """
     t: WellFormedTheory = coerce_theory(t=t)
