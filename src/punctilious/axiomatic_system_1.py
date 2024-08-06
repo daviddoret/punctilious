@@ -312,12 +312,35 @@ class Formula(tuple):
 
 
 class WellFormedTheoreticalContext(Formula, ABC):
-    """An abstract class for well-formed theoretical-context.
+    """A well-formed theoretical context is a formula that is either a well-formed axiomatization, theory,
+    or hypothesis. One of its defining property is to have an axiomatic base.
 
-    Subclasses:
+    .. _well_formed_theoretical_context:
+
+    Subclasses
+    ^^^^^^^^^^^^^^^^^^^^
      - :class:`WellFormedAxiomatization`
      - :class:`WellFormedTheory`
      - :class:`WellFormedHypothesis`
+
+    Definition
+    ^^^^^^^^^^^^^^^^^^^^
+    A formula :math:`\\phi` is a well-formed theoretical context if and only if:
+      - it is a well-formed axiomatization,
+      - or it is a well-formed theory,
+      - or it is a well-formed hypothesis.
+
+    Notes
+    ^^^^^^^^^^^^^^^^^^^^
+
+    Note 1
+    ~~~~~~~~~~~~~~~~~~
+    WellFormedTheoreticalContext is implemented as an abstract class.
+
+    To do list
+    ^^^^^^^^^^^^^^^^^^^^
+    - TODO: Add TheoryExtension as a new class, defined as the extension of a theoretical context.
+        do we want to distinguish TheoryDerivation as well?
 
     """
 
@@ -4239,7 +4262,7 @@ class Heuristic(abc.ABC):
 
 
 class WellFormedTheory(WellFormedTheoreticalContext):
-    """A well-formed theory is a :ref:`theoretical context<WellFormedTheoreticalContext>` of the form
+    """A well-formed theory is a :ref:`theoretical context<well_formed_theoretical_context>` of the form
     ⌜ :math:`\\text{theory}\\left( \\boldsymbol{d_1}, \\boldsymbol{d_2}, \\cdots, \\boldsymbol{d_n} \\right)` ⌝
     where :math:`\\boldsymbol{d_i}` is a valid derivation in that theory.
 
@@ -4671,7 +4694,7 @@ def copy_theory_decorations(target: FlexibleTheory, decorations: FlexibleDecorat
 
 
 class WellFormedAxiomatization(WellFormedTheoreticalContext):
-    """A well-formed axiomatization is a :ref:`theoretical context<WellFormedTheoreticalContext>` of the form
+    """A well-formed axiomatization is a :ref:`theoretical context<well_formed_theoretical_context>` of the form
     ⌜ :math:`\\text{axiomatization}\\left( \\boldsymbol{d_1}, \\boldsymbol{d_2}, \\cdots, \\boldsymbol{d_n} \\right)` ⌝
     where :math:`\\boldsymbol{d_i}` is a derivation that is a valid constituent of an axiomatic base.
 

@@ -23,4 +23,6 @@ python -m pip install --upgrade --no-cache-dir sphinx readthedocs-sphinx-ext
 
 #python -m pip install -e "$PROJECT_PATH"
 
-python -m sphinx -T -E -b html -d _build/doctrees -D language=en "$DOCS_SOURCE_PATH" "$DOCS_BUILD_PATH"
+which sphinx-quickstart
+
+#python -m sphinx -T -E -b html -d _build/doctrees -D language=en "$DOCS_SOURCE_PATH" "$DOCS_BUILD_PATH"
