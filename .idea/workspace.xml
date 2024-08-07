@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="New formula shapes for axiom, inference-rule, and theorem based on predicate syntax, e.g. axiom(P). New abstract class TheoreticalContext to simplify the smooth processing of theories, axiomatizations, and hypothesis.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -746,14 +748,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-00986" summary="cleanup some obsolete state objects">
-      <option name="closed" value="true" />
-      <created>1722283274562</created>
-      <option name="number" value="00986" />
-      <option name="presentableId" value="LOCAL-00986" />
-      <option name="project" value="LOCAL" />
-      <updated>1722283274562</updated>
-    </task>
     <task id="LOCAL-00987" summary="cleanup some obsolete state objects">
       <option name="closed" value="true" />
       <created>1722283540280</created>
@@ -1138,7 +1132,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722965844459</updated>
     </task>
-    <option name="localTasksCounter" value="1035" />
+    <task id="LOCAL-01035" summary="New formula shapes for axiom, inference-rule, and theorem based on predicate syntax, e.g. axiom(P). New abstract class TheoreticalContext to simplify the smooth processing of theories, axiomatizations, and hypothesis.">
+      <option name="closed" value="true" />
+      <created>1722966688734</created>
+      <option name="number" value="01035" />
+      <option name="presentableId" value="LOCAL-01035" />
+      <option name="project" value="LOCAL" />
+      <updated>1722966688734</updated>
+    </task>
+    <option name="localTasksCounter" value="1036" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1286,7 +1288,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>4793</line>
+          <line>4843</line>
           <option name="timeStamp" value="175" />
         </line-breakpoint>
       </breakpoints>

@@ -3333,14 +3333,39 @@ def is_well_formed_derivation(d: FlexibleFormula) -> bool:
         return False
 
 
+def is_well_formed_axiomatic_base(t: FlexibleTheoreticalContext, raise_error_if_false: bool = False) -> bool:
+    """Returns ``True`` if ``t`` is a well-formed axiomatic base, ``False`` otherwise.
+
+    Intuitive definition
+    ^^^^^^^^^^^^^^^^^^^^
+    An axiomatic base is a theoretical context that is only composed of inference-rule and or axioms.
+
+    Definition
+    ^^^^^^^^^^^^^^^^^^^^
+    A formula :math:`\\phi` is a well-formed axiomatic base if and only if:
+     - it is a well-formed theoretical context,
+     - all component :math:`d` in :math:`\\phi`:
+       - is a well-formed inference-rule,
+       - or is a well-formed axiom.
+
+    :param t: A theoretical context.
+    :param raise_error_if_false:
+    :return: bool.
+    """
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
+    for c in iterate_theory_derivations(t=t):
+        if not is_well_formed_axiomatic_base_component(d=c):
+            return False
+    return True
+
+
 def is_well_formed_axiomatic_base_component(d: FlexibleFormula) -> bool:
     """Returns ``True`` if ``d`` is a well-formed axiomatic base component, ``False`` otherwise.
 
     Intuitive definition
     ^^^^^^^^^^^^^^^^^^^^
-    An axiomatic base component is a formula that is a legal constitutive component for axiomatic bases, i.e.:
-     - an inference-rule,
-     - or an axiom.
+    An axiomatic base component is a proper component for the definition of axiomatic bases. It can be either an
+    inference rule, or an axiom.
 
     Definition
     ^^^^^^^^^^^^^^^^^^^^
@@ -3546,11 +3571,11 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
     return True, v, u
 
 
-def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False) -> bool:
+def is_well_formed_theory(t: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
     """Return True if phi is a well-formed theory, False otherwise.
 
     :param t: A formula.
-    :param raise_event_if_false:
+    :param raise_error_if_false:
     :return: bool.
     """
     t = coerce_formula(phi=t)
@@ -3564,7 +3589,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_event_if_false: bool = False
     if con is not connective_for_theory:
         # TODO: Remove the 1==2 condition above to re-implement a check of strict connectives constraints.
         #   But then we must properly manage python inheritance (Axiomatization --> Theory --> Enumeration).
-        if raise_event_if_false:
+        if raise_error_if_false:
             raise u1.ApplicativeError(
                 msg='The connective "c" of theory ``t`` is not the "theory-formula" connective. '
                     'It follows that ``t`` is not a well-formed-theory.',
@@ -3659,6 +3684,31 @@ def coerce_derivation(d: FlexibleFormula) -> WellFormedDerivation:
             d=d,
             t=type(d),
             s=u1.force_str(o=d))
+
+
+def coerce_theoretical_context(t: FlexibleTheoreticalContext,
+                               raise_error_if_false: bool = False) -> WellFormedTheoreticalContext:
+    """
+
+    Validate that t is a well-formed theoretical context and returns it properly typed as WellFormedTheoreticalContext,
+    or raise an error with code AS1-089.
+
+    :param t: A theoretical context.
+    :param raise_error_if_false:
+    :return:
+    """
+    t: Formula = coerce_formula(phi=t)
+    if is_well_formed_hypothesis(h=t, raise_error_if_false=raise_error_if_false):
+        return coerce_hypothesis(h=t)
+    elif is_well_formed_axiomatization(a=t, raise_error_if_false=raise_error_if_false):
+        return coerce_axiomatization(a=t)
+    elif is_well_formed_theory(t=t, raise_error_if_false=raise_error_if_false):
+        return coerce_theory(t=t)
+    else:
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_090,
+            msg=f'Argument `t` could not be coerced to a theoretical context of python-type WellFormedTheoreticalContext.',
+            t=t)
 
 
 def coerce_axiom(a: FlexibleFormula) -> WellFormedAxiom:
