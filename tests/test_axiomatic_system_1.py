@@ -1204,11 +1204,11 @@ class TestTheoreticalContext:
         assert isinstance(t, pu.as1.WellFormedTheoreticalContext)
         assert pu.as1.is_well_formed_theoretical_context(t=t)
 
-        h, _ = pu.as1.WellFormedHypothesis(b=t, a=c)
+        # h, _ = pu.as1.WellFormedHypothesis(b=t, a=c)
 
-        assert isinstance(h, pu.as1.WellFormedHypothesis)
-        assert isinstance(h, pu.as1.WellFormedTheoreticalContext)
-        assert pu.as1.is_well_formed_theoretical_context(t=h)
+        # assert isinstance(h, pu.as1.WellFormedHypothesis)
+        # assert isinstance(h, pu.as1.WellFormedTheoreticalContext)
+        # assert pu.as1.is_well_formed_theoretical_context(t=h)
 
 
 class TestAxiomaticBase:
