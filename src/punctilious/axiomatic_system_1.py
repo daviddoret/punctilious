@@ -3034,9 +3034,9 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
                           canonic_conversion: bool = True,
                           max_derivations: int | None = None
                           ) -> typing.Generator[WellFormedAxiom, None, None]:
-    """Iterates through axioms in derivations of a theory ``t``, in canonical order.
+    """Iterates through the axioms of a theoretical context ``t``, in canonical order.
 
-    Alternatively, iterates through axioms of an enumeration of derivations `d`, in canonical order.
+    Alternatively, iterates through axioms of an enumeration of theory components `d`, in canonical order.
 
     :param t: A theory.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
@@ -3057,18 +3057,18 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
             yield a
 
 
-def iterate_theory_theorems(t: FlexibleTheory | None = None,
+def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
                             d: FlexibleEnumeration[FlexibleDerivation] | None = None,
                             strip_duplicates: bool = True,
                             interpret_none_as_empty: bool = True,
                             canonic_conversion: bool = True,
                             max_derivations: int | None = None
                             ) -> typing.Generator[WellFormedTheorem, None, None]:
-    """Iterates through theorems in derivations of a theory ``t``, in canonical order.
+    """Iterates through the theorems of a theoretical context ``t``, in canonical order.
 
     Alternatively, iterates through theorems of an enumeration of derivations `d`, in canonical order.
 
-    :param t: A theory.
+    :param t: A theoretical context.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
@@ -3094,11 +3094,11 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
                                    canonic_conversion: bool = True,
                                    max_derivations: int | None = None
                                    ) -> typing.Generator[WellFormedInferenceRule, None, None]:
-    """Iterates through inference-rules in derivations of a theory ``t`` in canonical order.
+    """Iterates through the inference-rules of theoretical context ``t`` in canonical order.
 
     Alternatively, iterates through inference-rules of an enumeration of derivations `d` in canonical order.
 
-    :param t: A theory.
+    :param t: A theoretical context.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
@@ -3124,14 +3124,14 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
                                     canonic_conversion: bool = True,
                                     max_derivations: int | None = None
                                     ) -> typing.Generator[Formula, None, None]:
-    """Iterates through valid-statements in derivations of a theory ``t`` in canonical order.
+    """Iterates through the valid-statements of a theoretical context ``t`` in canonical order.
 
     Alternatively, iterates through propositions of an enumeration of derivations `d` in canonical order.
 
     Definition: theory valid-statements
     The valid-statements of a theory are the propositions of its axioms and theorems and its inference-rules.
 
-    :param t: A theory.
+    :param t: A theoretical context.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
@@ -3172,6 +3172,8 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
 
     Definition: theory propositions
     The valid-statements of axioms and theorems in a theory.
+
+    TODO: Is this a synonym for iterate_theory_valid_statements? Check this...
 
     :param t: A theory.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
