@@ -843,12 +843,12 @@ def is_element_of_enumeration(x: FlexibleFormula, e: FlexibleEnumeration) -> boo
     return is_term_of_formula(x=x, phi=e)
 
 
-def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheoreticalContext, max_derivations: int | None = None) -> bool:
+def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheoreticalContext, max_components: int | None = None) -> bool:
     """Returns ``True`` if ``a`` is an axiom in theoretical context ``t``, ``False`` otherwise.
 
     :param a: An axiom.
     :param t: A theoretical context.
-    :param max_derivations: If `None`, considers all derivations in ``t``. If an integer, considers only that number
+    :param max_components: If `None`, considers all derivations in ``t``. If an integer, considers only that number
         of derivations in ``t`` following canonical order. This is particularly useful when analysing the consistency
         of a theory, or dependencies between derivations.
     :return: ``True`` if ``a`` is an axiom ``t``, ``False`` otherwise.
@@ -856,15 +856,15 @@ def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheoreticalContext, max_derivations
     a: WellFormedAxiom = coerce_axiom(a=a)
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     return any(
-        is_formula_equivalent(phi=a, psi=a2) for a2 in iterate_theory_axioms(t=t, max_derivations=max_derivations))
+        is_formula_equivalent(phi=a, psi=a2) for a2 in iterate_theory_axioms(t=t, max_components=max_components))
 
 
-def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_derivations: int | None = None):
+def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_components: int | None = None):
     """Returns ``True`` if `i` is an inference-rule in axiomatization or theory ``t``, ``False`` otherwise.
 
     :param i: An inference-rule.
     :param t: An axiomatization or a theory.
-    :param max_derivations: If `None`, considers all derivations in ``t``. If an integer, considers only that number
+    :param max_components: If `None`, considers all derivations in ``t``. If an integer, considers only that number
         of derivations in ``t`` following canonical order. This is particularly useful when analysing the consistency
         of a theory, or dependencies between derivations.
     :return: ``True`` if ``a`` is an inference-rule ``t``, ``False`` otherwise.
@@ -872,15 +872,15 @@ def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_deriva
     i: WellFormedInferenceRule = coerce_inference_rule(i=i)
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in
-               iterate_theory_inference_rules(t=t, max_derivations=max_derivations))
+               iterate_theory_inference_rules(t=t, max_components=max_components))
 
 
-def is_theorem_of(m: FlexibleTheorem, t: FlexibleTheory, max_derivations: int | None = None):
+def is_theorem_of(m: FlexibleTheorem, t: FlexibleTheory, max_components: int | None = None):
     """Returns ``True`` if `m` is a theorem in theory ``t``, ``False`` otherwise.
 
     :param m: A theorem.
     :param t: A theory.
-    :param max_derivations: If `None`, considers all derivations in ``t``. If an integer, considers only that number
+    :param max_components: If `None`, considers all derivations in ``t``. If an integer, considers only that number
         of derivations in ``t`` following canonical order. This is particularly useful when analysing the consistency
         of a theory, or dependencies between derivations.
     :return: ``True`` if `m` is a theorem in ``t``, ``False`` otherwise.
@@ -888,7 +888,7 @@ def is_theorem_of(m: FlexibleTheorem, t: FlexibleTheory, max_derivations: int | 
     m: WellFormedTheorem = coerce_theorem(t=m)
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
     return any(is_formula_equivalent(phi=m, psi=thrm2) for thrm2 in
-               iterate_theory_theorems(t=t, max_derivations=max_derivations))
+               iterate_theory_theorems(t=t, max_components=max_components))
 
 
 def get_index_of_first_equivalent_term_in_formula(term: FlexibleFormula, formula: FlexibleFormula) -> int:
@@ -2849,7 +2849,7 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None =
                                   strip_duplicates: bool = True,
                                   interpret_none_as_empty: bool = True,
                                   canonic_conversion: bool = True,
-                                  max_derivations: int | None = None) -> bool:
+                                  max_components: int | None = None) -> bool:
     """Returns ``True`` if and only if proposition `p` is valid in theory ``t``,
     according to ``t`` known derivations, ``False`` otherwise.
 
@@ -2865,7 +2865,7 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None =
     :param p:
     :param t: A theory.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
-    :param max_derivations: Verifies the validity of `p` only through the first `max_derivations` derivations
+    :param max_components: Verifies the validity of `p` only through the first `max_components` derivations
         in canonical order, or all derivations if `None`.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
@@ -2885,7 +2885,7 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None =
                    strip_duplicates=strip_duplicates,
                    interpret_none_as_empty=interpret_none_as_empty,
                    canonic_conversion=canonic_conversion,
-                   max_derivations=max_derivations))
+                   max_components=max_components))
     # t.iterate_valid_statements())
 
 
@@ -3000,7 +3000,7 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleDerivation] | None = Non
                               strip_duplicates: bool = True,
                               interpret_none_as_empty: bool = True,
                               canonic_conversion: bool = True,
-                              max_derivations: int | None = None) -> \
+                              max_components: int | None = None) -> \
         typing.Generator[Formula, None, None]:
     """Iterates through derivations of a theory ``t`` in canonical order.
 
@@ -3008,7 +3008,7 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleDerivation] | None = Non
 
     :param t: A theory.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
-    :param max_derivations: Yields only math:`max_derivations` derivations, or all derivations if None.
+    :param max_components: Yields only math:``max_components`` components, or all components if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
@@ -3021,7 +3021,7 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleDerivation] | None = Non
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=strip_duplicates,
                                             interpret_none_as_empty=interpret_none_as_empty,
                                             canonic_conversion=canonic_conversion)
-    for d2 in iterate_enumeration_elements(e=d, max_elements=max_derivations):
+    for d2 in iterate_enumeration_elements(e=d, max_elements=max_components):
         d2: WellFormedTheoryComponent = coerce_theory_component(d=d2)
         yield d2
     return
@@ -3032,7 +3032,7 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
                           strip_duplicates: bool = True,
                           interpret_none_as_empty: bool = True,
                           canonic_conversion: bool = True,
-                          max_derivations: int | None = None
+                          max_components: int | None = None
                           ) -> typing.Generator[WellFormedAxiom, None, None]:
     """Iterates through the axioms of a theoretical context ``t``, in canonical order.
 
@@ -3040,7 +3040,7 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
 
     :param t: A theory.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
-    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param max_components: Considers only ``max_components`` components, or all components if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
@@ -3048,7 +3048,7 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
-                                        max_derivations=max_derivations,
+                                        max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
                                         canonic_conversion=canonic_conversion):
@@ -3062,7 +3062,7 @@ def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
                             strip_duplicates: bool = True,
                             interpret_none_as_empty: bool = True,
                             canonic_conversion: bool = True,
-                            max_derivations: int | None = None
+                            max_components: int | None = None
                             ) -> typing.Generator[WellFormedTheorem, None, None]:
     """Iterates through the theorems of a theoretical context ``t``, in canonical order.
 
@@ -3070,7 +3070,7 @@ def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
 
     :param t: A theoretical context.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
-    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param max_components: Considers only ``max_components`` components, or all components if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
@@ -3078,7 +3078,7 @@ def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
-                                        max_derivations=max_derivations,
+                                        max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
                                         canonic_conversion=canonic_conversion):
@@ -3092,7 +3092,7 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
                                    strip_duplicates: bool = True,
                                    interpret_none_as_empty: bool = True,
                                    canonic_conversion: bool = True,
-                                   max_derivations: int | None = None
+                                   max_components: int | None = None
                                    ) -> typing.Generator[WellFormedInferenceRule, None, None]:
     """Iterates through the inference-rules of theoretical context ``t`` in canonical order.
 
@@ -3100,7 +3100,7 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
 
     :param t: A theoretical context.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
-    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param max_components: Considers only ``max_components`` components, or all components if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
@@ -3108,7 +3108,7 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
-                                        max_derivations=max_derivations,
+                                        max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
                                         canonic_conversion=canonic_conversion):
@@ -3122,7 +3122,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
                                     strip_duplicates: bool = True,
                                     interpret_none_as_empty: bool = True,
                                     canonic_conversion: bool = True,
-                                    max_derivations: int | None = None
+                                    max_components: int | None = None
                                     ) -> typing.Generator[Formula, None, None]:
     """Iterates through the valid-statements of a theoretical context ``t`` in canonical order.
 
@@ -3133,7 +3133,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
 
     :param t: A theoretical context.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
-    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param max_components: Considers only ``max_components`` components, or all components if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
@@ -3141,7 +3141,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
-                                        max_derivations=max_derivations,
+                                        max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
                                         canonic_conversion=canonic_conversion):
@@ -3164,7 +3164,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
                                 strip_duplicates: bool = True,
                                 interpret_none_as_empty: bool = True,
                                 canonic_conversion: bool = True,
-                                max_derivations: int | None = None
+                                max_components: int | None = None
                                 ) -> typing.Generator[Formula, None, None]:
     """Iterates through propositions in derivations of a theory ``t`` in canonical order.
 
@@ -3177,7 +3177,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
 
     :param t: A theory.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
-    :param max_derivations: Considers only `max_derivations` derivations, or all derivations if None.
+    :param max_components: Considers only ``max_components`` components, or all components if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
@@ -3185,7 +3185,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
-                                        max_derivations=max_derivations,
+                                        max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
                                         canonic_conversion=canonic_conversion):
@@ -3496,7 +3496,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             ir: WellFormedInferenceRule = m.inference.inference_rule
             # Check that the inference-rule is a valid predecessor in the derivation.
             if not any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in
-                       iterate_theory_inference_rules(d=c, max_derivations=index + 1)):
+                       iterate_theory_inference_rules(d=c, max_components=index + 1)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_068,
@@ -3507,7 +3507,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             # Check that all premises are valid predecessor propositions in the derivation.
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
-                if not is_valid_proposition_so_far_1(p=q, t=None, d=c, max_derivations=index):
+                if not is_valid_proposition_so_far_1(p=q, t=None, d=c, max_components=index):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
                             msg='Derivation `d` claims to derive `p`.'

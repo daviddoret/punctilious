@@ -1001,37 +1001,37 @@ class TestTheory:
 
         # iterate axioms
         assert len(tuple(pu.as1.iterate_theory_axioms(t=t))) == 4
-        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=2))) == 2
-        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=3))) == 2
-        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=4))) == 2
-        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_derivations=5))) == 3
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_components=2))) == 2
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_components=3))) == 2
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_components=4))) == 2
+        assert len(tuple(pu.as1.iterate_theory_axioms(t=t, max_components=5))) == 3
 
         # iterate inference-rules
         assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t))) == 2
-        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=2))) == 0
-        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=3))) == 1
-        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=4))) == 1
-        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=5))) == 1
-        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_derivations=6))) == 2
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_components=2))) == 0
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_components=3))) == 1
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_components=4))) == 1
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_components=5))) == 1
+        assert len(tuple(pu.as1.iterate_theory_inference_rules(t=t, max_components=6))) == 2
 
         # iterate theorems
         assert len(tuple(pu.as1.iterate_theory_theorems(t=t))) == 2
-        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=3))) == 0
-        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=4))) == 1
-        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=5))) == 1
-        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=6))) == 1
-        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_derivations=7))) == 2
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_components=3))) == 0
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_components=4))) == 1
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_components=5))) == 1
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_components=6))) == 1
+        assert len(tuple(pu.as1.iterate_theory_theorems(t=t, max_components=7))) == 2
 
         # iterate propositions
         assert len(tuple(pu.as1.iterate_theory_propositions(t=t))) == 6
-        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=0))) == 0
-        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=1))) == 1
-        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=2))) == 2
-        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=3))) == 2
-        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=4))) == 3
-        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=5))) == 4
-        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=6))) == 4
-        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_derivations=7))) == 5
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_components=0))) == 0
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_components=1))) == 1
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_components=2))) == 2
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_components=3))) == 2
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_components=4))) == 3
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_components=5))) == 4
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_components=6))) == 4
+        assert len(tuple(pu.as1.iterate_theory_propositions(t=t, max_components=7))) == 5
 
     def test_would_be_valid(self):
         a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
