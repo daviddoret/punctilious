@@ -17,7 +17,7 @@ NEXT STEPS:
  - Simplify the external-algorithm data model (transformation, inference-rule),
    it is a bit too heavy now which will make it hard to maintain moving-forward.
 
-TODO: Consider renaming derivation to component speaking of theory elements. Check the litterature.
+TODO: Consider renaming "derivation" to "component" speaking of theory elements. Check the litterature.
 
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
 

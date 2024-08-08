@@ -1178,6 +1178,44 @@ class TestFormula:
         assert len(tuple(pu.as1.iterate_formula_terms(phi=phi2, max_terms=6))) == 6
 
 
+class TestTheoreticalContext:
+    def test_theoretical_context(self):
+        a, b, c, d, e, f, g = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f', 'g',))
+        ab = pu.as1.WellFormedAxiomatization()
+        ab, ax1 = pu.as1.let_x_be_an_axiom(t=ab, s=a)
+        ab, _ = pu.as1.let_x_be_an_axiom(t=ab, s=b)
+        ab, i1 = pu.as1.let_x_be_an_inference_rule(t=ab,
+                                                   f=pu.as1.TransformationByVariableSubstitution(o=f, v=None, i=None))
+
+        assert isinstance(ab, pu.as1.WellFormedAxiomatization)
+        assert isinstance(ab, pu.as1.WellFormedTheoreticalContext)
+        assert pu.as1.is_well_formed_theoretical_context(t=ab)
+        assert not pu.as1.is_well_formed_theoretical_context(t=a)
+        assert not pu.as1.is_well_formed_theoretical_context(t=ax1)
+
+        t, _, _ = pu.as1.derive_1(t=ab, c=f, p=None, i=i1, raise_error_if_false=True)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=d)
+        t, i2 = pu.as1.let_x_be_an_inference_rule(t=t,
+                                                  f=pu.as1.TransformationByVariableSubstitution(o=g, v=None, i=None))
+        t, _, _ = pu.as1.derive_1(t=t, c=g, p=None, i=i2, raise_error_if_false=True)
+        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=e)
+
+        assert isinstance(t, pu.as1.WellFormedTheory)
+        assert isinstance(t, pu.as1.WellFormedTheoreticalContext)
+        assert pu.as1.is_well_formed_theoretical_context(t=t)
+
+        h, _ = pu.as1.WellFormedHypothesis(b=t, a=c)
+
+        assert isinstance(h, pu.as1.WellFormedHypothesis)
+        assert isinstance(h, pu.as1.WellFormedTheoreticalContext)
+        assert pu.as1.is_well_formed_theoretical_context(t=h)
+
+
+class TestAxiomaticBase:
+    pass
+    # TODO: Develop this
+
+
 class TestMetaTheory:
     def test_meta_theory(self):
         t = pu.ml1.let_x_be_a_minimal_logic_1_theory()

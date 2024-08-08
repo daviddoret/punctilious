@@ -8,7 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +96,7 @@
     "Python tests.Python tests in tests.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Debug",
-    "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiom.executor": "Run",
@@ -174,6 +174,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestTerms.test_terms.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTermsBuilder.test_terms_builder.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheorem.test_coerce_theorem.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_transform_to_axiomatization.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_would_be_valid.executor": "Run",
@@ -378,7 +379,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -600,7 +601,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestInferenceRule.test_is_well_formed_postulation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -613,7 +614,24 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestInferenceRule.test_is_well_formed_postulation&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -631,23 +649,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for tests.test_axiomatic_system_1.TestInferenceRule" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.test_axiomatic_system_1.TestInferenceRule&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -713,8 +714,8 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInferenceRule.test_is_well_formed_postulation" />
-      <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context" />
       <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -724,11 +725,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context" />
         <item itemvalue="Shell Script.build_docs.sh" />
         <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestInferenceRule.test_is_well_formed_postulation" />
-        <item itemvalue="Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule" />
       </list>
     </recent_temporary>
   </component>
@@ -747,14 +748,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00987" summary="cleanup some obsolete state objects">
-      <option name="closed" value="true" />
-      <created>1722283540280</created>
-      <option name="number" value="00987" />
-      <option name="presentableId" value="LOCAL-00987" />
-      <option name="project" value="LOCAL" />
-      <updated>1722283540280</updated>
     </task>
     <task id="LOCAL-00988" summary="cleanup some obsolete state objects">
       <option name="closed" value="true" />
@@ -1140,7 +1133,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722966688734</updated>
     </task>
-    <option name="localTasksCounter" value="1036" />
+    <task id="LOCAL-01036" summary="New formula shapes for axiom, inference-rule, and theorem based on predicate syntax, e.g. axiom(P). New abstract class TheoreticalContext to simplify the smooth processing of theories, axiomatizations, and hypothesis.">
+      <option name="closed" value="true" />
+      <created>1723010948404</created>
+      <option name="number" value="01036" />
+      <option name="presentableId" value="LOCAL-01036" />
+      <option name="project" value="LOCAL" />
+      <updated>1723010948404</updated>
+    </task>
+    <option name="localTasksCounter" value="1037" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1258,7 +1259,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>755</line>
+          <line>759</line>
           <option name="timeStamp" value="156" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1282,14 +1283,14 @@
           <option name="timeStamp" value="169" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py</url>
-          <line>210</line>
-          <option name="timeStamp" value="174" />
+          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
+          <line>1183</line>
+          <option name="timeStamp" value="176" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>4843</line>
-          <option name="timeStamp" value="175" />
+          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
+          <line>804</line>
+          <option name="timeStamp" value="178" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

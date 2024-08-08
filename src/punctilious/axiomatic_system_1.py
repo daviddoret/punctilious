@@ -368,6 +368,10 @@ class WellFormedTheoreticalContext(Formula, ABC):
         con, t = Formula._data_validation(con=con, t=t)
         super().__init__(con=con, t=t, **kwargs)
 
+    @abc.abstractmethod
+    def extend_theoretical_context(self, c: WellFormedDerivation) -> WellFormedTheoreticalContext:
+        raise u1.ApplicativeError('Abstract method.')
+
 
 def yield_string_from_typesetter(x, **kwargs):
     # TODO: ?????
@@ -1133,7 +1137,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
     :param i2: (conditional) An external algorithm.
     :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
     """
-    t: FlexibleTheory = coerce_theory(t=t)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     # Signature #1: provide the inference-rule
     if i is not None:
         i: WellFormedInferenceRule = coerce_inference_rule(i=i)
@@ -1166,9 +1170,10 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
     return t, i
 
 
-def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = None,
-                      a: typing.Optional[FlexibleAxiom] = None, **kwargs):
-    """Given a theory ``t``, returns a new theory `t'` such that it extends ``t`` with axiom ``a``.
+def let_x_be_an_axiom(t: FlexibleTheoreticalContext | None = None, s: typing.Optional[FlexibleFormula] = None,
+                      a: typing.Optional[FlexibleAxiom] = None, **kwargs) -> (
+        WellFormedTheoreticalContext, WellFormedAxiom):
+    """Given a theoretical context ``t``, returns a new theoretical context ``t'`` such that it extends ``t`` with axiom ``a``.
 
     :param t: An axiomatization or a theory. If None, the empty axiom-collection is implicitly used.
     :param s: The statement claimed by the new axiom. Either the claim or axiom parameter
@@ -1178,10 +1183,8 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
     :return: a pair (t, a) where t is an extension of the input theory, with a new axiom claiming the
     input statement, and ``a`` is the new axiom.
     """
-    if t is None:
-        t = WellFormedAxiomatization(d=None)
-    else:
-        t: FlexibleTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty_theory=True)
+
     if s is not None and a is not None:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_016,
@@ -1198,16 +1201,20 @@ def let_x_be_an_axiom(t: FlexibleTheory, s: typing.Optional[FlexibleFormula] = N
 
     if isinstance(t, WellFormedAxiomatization):
         t = WellFormedAxiomatization(a=t, d=(a,))
-        # TODO: Implement similar constructor than Theory A(a,d,...)
+        u1.log_info(a.typeset_as_string(theory=t))
+        return t, a
+    elif isinstance(t, WellFormedHypothesis):
+        t = WellFormedHypothesis(d=(*t, a,))  # TODO: Redevelop this
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
     elif isinstance(t, WellFormedTheory):
         t = WellFormedTheory(d=(*t, a,))
-        # TODO: Implement similar constructor than Theory A(a,d,...)
         u1.log_info(a.typeset_as_string(theory=t))
         return t, a
     else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_018, msg='oops 3')
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_018,
+            msg='Axiom declaration error. Argument ``t`` is not of a supported type.')
 
 
 def let_x_be_a_theory(
@@ -3687,28 +3694,32 @@ def coerce_derivation(d: FlexibleFormula) -> WellFormedDerivation:
 
 
 def coerce_theoretical_context(t: FlexibleTheoreticalContext,
-                               raise_error_if_false: bool = False) -> WellFormedTheoreticalContext:
+                               interpret_none_as_empty_theory: bool = False) -> WellFormedTheoreticalContext:
     """
 
     Validate that t is a well-formed theoretical context and returns it properly typed as WellFormedTheoreticalContext,
     or raise an error with code AS1-089.
 
     :param t: A theoretical context.
-    :param raise_error_if_false:
+    :param interpret_none_as_empty_theory: If ``t`` is ``None``, returns an empty theory.
     :return:
     """
-    t: Formula = coerce_formula(phi=t)
-    if is_well_formed_hypothesis(h=t, raise_error_if_false=raise_error_if_false):
-        return coerce_hypothesis(h=t)
-    elif is_well_formed_axiomatization(a=t, raise_error_if_false=raise_error_if_false):
-        return coerce_axiomatization(a=t)
-    elif is_well_formed_theory(t=t, raise_error_if_false=raise_error_if_false):
-        return coerce_theory(t=t)
+    if t is None and interpret_none_as_empty_theory:
+        t: WellFormedTheory = WellFormedTheory()
+        return t
     else:
-        raise u1.ApplicativeError(
-            code=c1.ERROR_CODE_AS1_090,
-            msg=f'Argument `t` could not be coerced to a theoretical context of python-type WellFormedTheoreticalContext.',
-            t=t)
+        t: Formula = coerce_formula(phi=t)
+        if is_well_formed_hypothesis(h=t, raise_error_if_false=False):
+            return coerce_hypothesis(h=t)
+        elif is_well_formed_axiomatization(a=t, raise_error_if_false=False):
+            return coerce_axiomatization(a=t)
+        elif is_well_formed_theory(t=t, raise_error_if_false=False):
+            return coerce_theory(t=t)
+        else:
+            raise u1.ApplicativeError(
+                code=c1.ERROR_CODE_AS1_090,
+                msg=f'Argument `t` could not be coerced to a theoretical context of python-type WellFormedTheoreticalContext.',
+                t=t)
 
 
 def coerce_axiom(a: FlexibleFormula) -> WellFormedAxiom:
@@ -4364,6 +4375,7 @@ class WellFormedTheory(WellFormedTheoreticalContext):
     :math:`\\text{theory}\\left( \\right)`
 
     """
+
     _last_index: int = 0
 
     @staticmethod
@@ -4986,14 +4998,29 @@ def rank(phi: FlexibleFormula) -> int:
         return max(rank(phi=term) for term in phi) + 1
 
 
-def append_to_theory(*args, t: FlexibleTheory) -> WellFormedTheory:
-    """Extend theory t by appending to it whatever is passed in *args.
+def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleDerivation) -> WellFormedTheoreticalContext:
+    """Given the theoretical context ``t``, returns a new theoretical context ``t′`` that is
+    an extension of ``t`` with the component ``c``.
+
+    :param t: A theoretical context.
+    :param c: A theory component.
+    :return: A theoretical context.
+    """
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
+    c: WellFormedDerivation = coerce_derivation(d=c)
+    return t.extend_with_component(c)
+
+
+def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
+    """Extend theoretical context ``t`` by appending to it whatever components are passed in *args.
+
+    TODO: REDEVELOP THIS TO SUPPORT FLEXIBLE THEORETICAL CONTEXTS
 
     :param args:
     :param t:
     :return:
     """
-    t: WellFormedTheory = coerce_theory(t=t, canonical_conversion=True, interpret_none_as_empty=True)
+    t: FlexibleTheoreticalContext = coerce_theoretical_context(t=t)
     if args is None:
         return t
     else:
