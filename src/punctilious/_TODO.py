@@ -1,10 +1,6 @@
 """
 
-TODO: Rename Derivation to TheoryComponent
-
 TODO: Develop a new Extension Component. This is a theoretical context extending another.
-
-TODO: Consider renaming "derivation" to "component" speaking of theory elements. Check the litterature.
 
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
 
