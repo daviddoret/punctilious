@@ -1,21 +1,8 @@
 """
-NEW MILESTONE:
 
-STATUS
-This version supports:
-    is-wf-theory(T)
-    T.P
-    _______
-    (T ⊢ P)
-And:
-    T.P
-    T.(¬P)
-    ______
-    T ⊢ ⊥
+TODO: Rename Derivation to TheoryComponent
 
-NEXT STEPS:
- - Simplify the external-algorithm data model (transformation, inference-rule),
-   it is a bit too heavy now which will make it hard to maintain moving-forward.
+TODO: Develop a new Extension Component. This is a theoretical context extending another.
 
 TODO: Consider renaming "derivation" to "component" speaking of theory elements. Check the litterature.
 

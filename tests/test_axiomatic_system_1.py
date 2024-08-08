@@ -596,7 +596,7 @@ class TestInferenceRule:
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
-        phi3 = f | pu.as1.connective_for_derivation | pu.csl1.enumeration
+        phi3 = f | pu.as1.connective_for_theory_component | pu.csl1.enumeration
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -626,7 +626,7 @@ class TestProofByPostulation:
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
         phi2 = rule1 | pu.as1.connective_for_map | pu.as1.connective_for_inference_rule
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
-        phi3 = rule1 | pu.as1.connective_for_derivation | b
+        phi3 = rule1 | pu.as1.connective_for_theory_component | b
         assert not pu.as1.is_well_formed_inference_rule(i=phi3)
 
 
@@ -667,7 +667,7 @@ class TestInference:
         theorem_2 = pu.as1.WellFormedTheorem(s=theorem, i=inference)
         pu.as1.is_formula_equivalent(
             phi=theorem_2,
-            psi=theorem | pu.as1.connective_for_derivation | pu.as1.connective_for_inference(
+            psi=theorem | pu.as1.connective_for_theory_component | pu.as1.connective_for_inference(
                 inference_rule, p,
                 pu.as1.WellFormedTupl()))
 
@@ -683,9 +683,9 @@ class TestInference:
         assert pu.as1.is_well_formed_inference(i=phi1)
         phi2 = pu.as1.connective_for_inference(i, as1.WellFormedTupl())
         assert not pu.as1.is_well_formed_inference(i=phi2)
-        phi3 = p | pu.as1.connective_for_derivation | i
+        phi3 = p | pu.as1.connective_for_theory_component | i
         assert not pu.as1.is_well_formed_inference(i=phi3)
-        phi4 = f(a, a, b, b) | pu.as1.connective_for_derivation | i
+        phi4 = f(a, a, b, b) | pu.as1.connective_for_theory_component | i
         assert not pu.as1.is_well_formed_inference(i=phi4)
 
 
@@ -961,24 +961,24 @@ class TestAutoDerivation:
 
         # auto-derivation of a simple theorem, without some variables
         t2, success, _, = pu.as1.auto_derive_2(t=t2,
-                                               conjecture=p | pu.csl1.land | q)
+                                               c=p | pu.csl1.land | q)
         assert success
         pass
         # auto-derivation of an impossible theorem fails and raises an auto-derivation-failure
         t2, success, _, = pu.as1.auto_derive_2(t=t2,
-                                               conjecture=p | pu.csl1.lor | q)
+                                               c=p | pu.csl1.lor | q)
         assert not success
         pass
 
         # use auto-derivation-2
         t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1,
-                                                          conjecture=p | pu.csl1.land | q,
+                                                          c=p | pu.csl1.land | q,
                                                           max_recursion=8, debug=False)
         assert success
         pass
 
         t3, success, derivation, _ = pu.as1.auto_derive_4(t=t1,
-                                                          conjecture=p | pu.csl1.lor | q,
+                                                          c=p | pu.csl1.lor | q,
                                                           max_recursion=8, debug=False)
         assert not success
         pass
@@ -1051,18 +1051,18 @@ class TestTheory:
         v = pu.as1.Enumeration(e=t[0:u_limit_index])
         u_ok = pu.as1.Enumeration(e=(t[u_limit_index],))
         u_nok = pu.as1.Enumeration(e=(t[u_limit_index + 1],))
-        test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_ok)
+        test, _, _ = pu.as1.would_be_valid_components_in_theory(v=v, u=u_ok)
         assert test
-        test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_nok)
+        test, _, _ = pu.as1.would_be_valid_components_in_theory(v=v, u=u_nok)
         assert not test  # this theorem cannot be derived without the above inference-rule
 
         u_limit_index = 5
         v = pu.as1.Enumeration(e=t[0:u_limit_index])
         u_ok = pu.as1.Enumeration(e=(t[u_limit_index],))
         u_nok = pu.as1.Enumeration(e=(t[u_limit_index + 1],))
-        test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_ok)
+        test, _, _ = pu.as1.would_be_valid_components_in_theory(v=v, u=u_ok)
         assert test
-        test, _, _ = pu.as1.would_be_valid_derivations_in_theory(v=v, u=u_nok)
+        test, _, _ = pu.as1.would_be_valid_components_in_theory(v=v, u=u_nok)
         assert not test  # this theorem cannot be derived without the above inference-rule
 
     def test_transform_to_axiomatization_and_axiomatization_equivalence(self):

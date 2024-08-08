@@ -369,7 +369,7 @@ class WellFormedTheoreticalContext(Formula, ABC):
         super().__init__(con=con, t=t, **kwargs)
 
     @abc.abstractmethod
-    def extend_theoretical_context(self, c: WellFormedDerivation) -> WellFormedTheoreticalContext:
+    def extend_theoretical_context(self, c: WellFormedTheoryComponent) -> WellFormedTheoreticalContext:
         raise u1.ApplicativeError('Abstract method.')
 
 
@@ -1317,7 +1317,7 @@ TODO: Check if connective_for_algorithm_formula is still in use.
 """
 connective_for_axiom_formula = let_x_be_a_unary_connective(formula_ts='axiom')
 connective_for_axiomatization_formula = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
-connective_for_derivation = let_x_be_a_binary_connective(formula_ts='derivation')
+connective_for_theory_component = let_x_be_a_binary_connective(formula_ts='derivation')
 connective_for_enumeration = let_x_be_a_free_arity_connective(formula_ts='enumeration')
 connective_for_hypothesis = let_x_be_a_free_arity_connective(formula_ts='hypothesis')
 connective_for_logical_implication = let_x_be_a_binary_connective(formula_ts='implies')
@@ -2912,7 +2912,7 @@ def is_valid_proposition_so_far_2(p: FlexibleFormula, t: FlexibleTheory) -> tupl
 
     p: Formula = coerce_formula(phi=p)
     t: WellFormedTheory = coerce_theory(t=t)
-    for d, i in zip(iterate_theory_derivations(t=t), range(len(t))):
+    for d, i in zip(iterate_theory_components(t=t), range(len(t))):
         if is_formula_equivalent(phi=p, psi=d.valid_statement):
             return True, i
     return False, None
@@ -2995,12 +2995,12 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
         return
 
 
-def iterate_theory_derivations(t: FlexibleTheory[FlexibleDerivation] | None = None,
-                               d: FlexibleEnumeration[FlexibleDerivation] | None = None,
-                               strip_duplicates: bool = True,
-                               interpret_none_as_empty: bool = True,
-                               canonic_conversion: bool = True,
-                               max_derivations: int | None = None) -> \
+def iterate_theory_components(t: FlexibleTheory[FlexibleDerivation] | None = None,
+                              d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                              strip_duplicates: bool = True,
+                              interpret_none_as_empty: bool = True,
+                              canonic_conversion: bool = True,
+                              max_derivations: int | None = None) -> \
         typing.Generator[Formula, None, None]:
     """Iterates through derivations of a theory ``t`` in canonical order.
 
@@ -3015,14 +3015,14 @@ def iterate_theory_derivations(t: FlexibleTheory[FlexibleDerivation] | None = No
     :return:
     """
     if t is not None:
-        coerce_theory(t=t)
-        d: Enumeration = t.derivations
+        t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
+        d: Enumeration = t.components
     else:
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=strip_duplicates,
                                             interpret_none_as_empty=interpret_none_as_empty,
                                             canonic_conversion=canonic_conversion)
     for d2 in iterate_enumeration_elements(e=d, max_elements=max_derivations):
-        d2: WellFormedDerivation = coerce_derivation(d=d2)
+        d2: WellFormedTheoryComponent = coerce_theory_component(d=d2)
         yield d2
     return
 
@@ -3046,12 +3046,12 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
     :return:
     """
-    for d2 in iterate_theory_derivations(t=t,
-                                         d=d,
-                                         max_derivations=max_derivations,
-                                         interpret_none_as_empty=interpret_none_as_empty,
-                                         strip_duplicates=strip_duplicates,
-                                         canonic_conversion=canonic_conversion):
+    for d2 in iterate_theory_components(t=t,
+                                        d=d,
+                                        max_derivations=max_derivations,
+                                        interpret_none_as_empty=interpret_none_as_empty,
+                                        strip_duplicates=strip_duplicates,
+                                        canonic_conversion=canonic_conversion):
         if is_well_formed_axiom(a=d2):
             a: WellFormedAxiom = coerce_axiom(a=d2)
             yield a
@@ -3076,12 +3076,12 @@ def iterate_theory_theorems(t: FlexibleTheory | None = None,
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
     :return:
     """
-    for d2 in iterate_theory_derivations(t=t,
-                                         d=d,
-                                         max_derivations=max_derivations,
-                                         interpret_none_as_empty=interpret_none_as_empty,
-                                         strip_duplicates=strip_duplicates,
-                                         canonic_conversion=canonic_conversion):
+    for d2 in iterate_theory_components(t=t,
+                                        d=d,
+                                        max_derivations=max_derivations,
+                                        interpret_none_as_empty=interpret_none_as_empty,
+                                        strip_duplicates=strip_duplicates,
+                                        canonic_conversion=canonic_conversion):
         if is_well_formed_theorem(t=d2):
             t: WellFormedTheorem = coerce_theorem(t=d2)
             yield t
@@ -3106,12 +3106,12 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
     :return:
     """
-    for d2 in iterate_theory_derivations(t=t,
-                                         d=d,
-                                         max_derivations=max_derivations,
-                                         interpret_none_as_empty=interpret_none_as_empty,
-                                         strip_duplicates=strip_duplicates,
-                                         canonic_conversion=canonic_conversion):
+    for d2 in iterate_theory_components(t=t,
+                                        d=d,
+                                        max_derivations=max_derivations,
+                                        interpret_none_as_empty=interpret_none_as_empty,
+                                        strip_duplicates=strip_duplicates,
+                                        canonic_conversion=canonic_conversion):
         if is_well_formed_inference_rule(i=d2):
             i: WellFormedInferenceRule = coerce_inference_rule(i=d2)
             yield i
@@ -3139,12 +3139,12 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
     :return:
     """
-    for d2 in iterate_theory_derivations(t=t,
-                                         d=d,
-                                         max_derivations=max_derivations,
-                                         interpret_none_as_empty=interpret_none_as_empty,
-                                         strip_duplicates=strip_duplicates,
-                                         canonic_conversion=canonic_conversion):
+    for d2 in iterate_theory_components(t=t,
+                                        d=d,
+                                        max_derivations=max_derivations,
+                                        interpret_none_as_empty=interpret_none_as_empty,
+                                        strip_duplicates=strip_duplicates,
+                                        canonic_conversion=canonic_conversion):
         if is_well_formed_axiom(a=d2):
             a: WellFormedAxiom = coerce_axiom(a=d2)
             s: Formula = a.valid_statement
@@ -3181,12 +3181,12 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
     :return:
     """
-    for d2 in iterate_theory_derivations(t=t,
-                                         d=d,
-                                         max_derivations=max_derivations,
-                                         interpret_none_as_empty=interpret_none_as_empty,
-                                         strip_duplicates=strip_duplicates,
-                                         canonic_conversion=canonic_conversion):
+    for d2 in iterate_theory_components(t=t,
+                                        d=d,
+                                        max_derivations=max_derivations,
+                                        interpret_none_as_empty=interpret_none_as_empty,
+                                        strip_duplicates=strip_duplicates,
+                                        canonic_conversion=canonic_conversion):
         if is_well_formed_axiom(a=d2):
             a: WellFormedAxiom = coerce_axiom(a=d2)
             p: Formula = a.valid_statement
@@ -3374,7 +3374,7 @@ def is_well_formed_axiomatic_base(t: FlexibleTheoreticalContext, raise_error_if_
     :return: bool.
     """
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
-    for c in iterate_theory_derivations(t=t):
+    for c in iterate_theory_components(t=t):
         if not is_well_formed_axiomatic_base_component(d=c):
             return False
     return True
@@ -3427,9 +3427,9 @@ def is_well_formed_theoretical_context(t: FlexibleTheoreticalContext) -> bool:
         return False
 
 
-def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumeration,
-                                         raise_error_if_false: bool = False
-                                         ) -> tuple[bool, Enumeration | None, Enumeration | None]:
+def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeration,
+                                        raise_error_if_false: bool = False
+                                        ) -> tuple[bool, Enumeration | None, Enumeration | None]:
     """Given an enumeration of presumably verified derivations "v" (e.g.: the derivation sequence of a theory ``t``),
     and an enumeration of unverified derivations "u" (e.g.: whose elements are not (yet) effective
     theorems of ``t``), returns True if a theory would be well-formed if it was composed of
@@ -3465,14 +3465,14 @@ def would_be_valid_derivations_in_theory(v: FlexibleTheory, u: FlexibleEnumerati
 
     # Coerce all enumeration elements to axioms, inference-rules, and theorems.
     # TODO: Implement a dedicated function coerce_enumeration_of_derivations().
-    coerced_elements: list = [coerce_derivation(d=d) for d in iterate_enumeration_elements(e=c)]
+    coerced_elements: list = [coerce_theory_component(d=d) for d in iterate_enumeration_elements(e=c)]
     c: Enumeration = Enumeration(e=coerced_elements)
 
     # Iterate through all index positions of derivations for which the proofs must be verified.
     for index in range(verification_threshold, len(c)):
 
         # Retrieve the derivation whose proof must be verified.
-        d: WellFormedDerivation = c[index]
+        d: WellFormedTheoryComponent = c[index]
 
         # Retrieve the proposition or statement announced by the derivation.
         p: Formula = d.valid_statement
@@ -3625,7 +3625,7 @@ def is_well_formed_theory(t: FlexibleFormula, raise_error_if_false: bool = False
     # and that derivations in this sequence of derivations is valid.
     v: Enumeration = Enumeration(e=None)  # Assume no pre-verified derivations.
     u: Enumeration = transform_formula_to_enumeration(phi=t, strip_duplicates=False)
-    would_be_valid, _, _ = would_be_valid_derivations_in_theory(v=v, u=u)
+    would_be_valid, _, _ = would_be_valid_components_in_theory(v=v, u=u)
     return would_be_valid
 
 
@@ -3682,7 +3682,7 @@ def is_well_formed_simple_object(o: FlexibleFormula, raise_error_if_false: bool 
         return False
 
 
-def coerce_derivation(d: FlexibleFormula) -> WellFormedDerivation:
+def coerce_theory_component(d: FlexibleFormula) -> WellFormedTheoryComponent:
     """
 
     Validate that p is a well-formed theorem and returns it properly typed as Proof, or raise exception e123.
@@ -3860,7 +3860,7 @@ def coerce_axiomatization(a: FlexibleFormula, interpret_none_as_empty: bool = Fa
             interpret_none_as_empty=interpret_none_as_empty)
 
 
-class WellFormedDerivation(Formula):
+class WellFormedTheoryComponent(Formula):
     """A derivation has two definitions: a local definition with regard to a theory t, and a global definition.
 
     Global definition:
@@ -3901,7 +3901,7 @@ class WellFormedDerivation(Formula):
         :return:
         """
         if con is None:
-            con: Connective = connective_for_derivation
+            con: Connective = connective_for_theory_component
         s = coerce_formula(phi=s)
         if j is not None:
             j = coerce_formula(phi=j)
@@ -3909,8 +3909,8 @@ class WellFormedDerivation(Formula):
 
     def __new__(cls, s: FlexibleFormula, j: FlexibleFormula | None = None, con: Connective | None = None,
                 **kwargs):
-        con, s, j = WellFormedDerivation._data_validation_2(s=s,
-                                                            j=j, con=con)
+        con, s, j = WellFormedTheoryComponent._data_validation_2(s=s,
+                                                                 j=j, con=con)
         if j is not None:
             o: tuple = super().__new__(cls, con=con, t=(s, j,), **kwargs)
         else:
@@ -3925,8 +3925,8 @@ class WellFormedDerivation(Formula):
         :param j: A formula that is a justification for the validity of the valid-statement.
         :param kwargs:
         """
-        con, s, j = WellFormedDerivation._data_validation_2(s=s,
-                                                            j=j, con=con)
+        con, s, j = WellFormedTheoryComponent._data_validation_2(s=s,
+                                                                 j=j, con=con)
         if j is not None:
             super().__init__(con=con, t=(s, j,), **kwargs)
         else:
@@ -3940,14 +3940,14 @@ class WellFormedDerivation(Formula):
 
         :return: A formula.
         """
-        return self[WellFormedDerivation.VALID_STATEMENT_INDEX]
+        return self[WellFormedTheoryComponent.VALID_STATEMENT_INDEX]
 
     @property
     def justification(self) -> Formula:
-        return self[WellFormedDerivation.JUSTIFICATION_INDEX]
+        return self[WellFormedTheoryComponent.JUSTIFICATION_INDEX]
 
 
-class WellFormedAxiom(WellFormedDerivation):
+class WellFormedAxiom(WellFormedTheoryComponent):
     """A well-formed axiom is a formula of the form ⌜ :math:`\\text{axiom}\\left( \\boldsymbol{P} \\right)` ⌝ where
     :math:`\\boldsymbol{P}` is a proposition postulated as valid in some theoretical context.
 
@@ -4006,7 +4006,7 @@ class WellFormedAxiom(WellFormedDerivation):
 FlexibleAxiom = typing.Union[WellFormedAxiom, Formula]
 
 
-class WellFormedInferenceRule(WellFormedDerivation):
+class WellFormedInferenceRule(WellFormedTheoryComponent):
     """A well-formed inference-rule is an authorization for the usage of a transformation or algorithm,
     to derive further theorems in a theory under certain conditions called premises.
 
@@ -4029,7 +4029,7 @@ class WellFormedInferenceRule(WellFormedDerivation):
     Note: if an inference-rule has no premises, it is equivalent to an axiom.
 
     """
-    TRANSFORMATION_INDEX: int = WellFormedDerivation.VALID_STATEMENT_INDEX
+    TRANSFORMATION_INDEX: int = WellFormedTheoryComponent.VALID_STATEMENT_INDEX
 
     @staticmethod
     def _data_validation_3(f: FlexibleTransformation = None) -> tuple[Connective, Transformation]:
@@ -4218,7 +4218,7 @@ def inverse_map(m: FlexibleMap) -> Map:
     return m2
 
 
-class WellFormedTheorem(WellFormedDerivation):
+class WellFormedTheorem(WellFormedTheoryComponent):
     """A well-formed theorem is a proposition that is proven by a valid inference.
 
     Global definition
@@ -4243,7 +4243,7 @@ class WellFormedTheorem(WellFormedDerivation):
     the transformation-rule that yield phi, i.e.:
     t(P) ~formula phi
     """
-    INFERENCE_INDEX: int = WellFormedDerivation.JUSTIFICATION_INDEX
+    INFERENCE_INDEX: int = WellFormedTheoryComponent.JUSTIFICATION_INDEX
 
     @staticmethod
     def _data_validation_3(s: FlexibleFormula, i: FlexibleInference) -> tuple[Connective, Formula, Inference]:
@@ -4406,7 +4406,7 @@ class WellFormedTheory(WellFormedTheoreticalContext):
             t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
         d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True,
                                             interpret_none_as_empty=True)
-        is_valid, v, u = would_be_valid_derivations_in_theory(v=t, u=d, raise_error_if_false=True)
+        is_valid, v, u = would_be_valid_components_in_theory(v=t, u=d, raise_error_if_false=True)
         d = union_enumeration(phi=v, psi=u, strip_duplicates=True)
         return con, d
 
@@ -4490,13 +4490,13 @@ class WellFormedTheory(WellFormedTheoreticalContext):
 
     def iterate_valid_statements(self) -> typing.Iterator[Formula]:
         """Iterates over all axiom and theorem valid-statements in the theory, preserving order."""
-        for derivation in self.iterate_derivations():
-            if isinstance(derivation, WellFormedAxiom):
-                derivation: WellFormedAxiom
-                yield derivation.valid_statement
-            elif isinstance(derivation, WellFormedTheorem):
-                derivation: WellFormedTheorem
-                yield derivation.valid_statement
+        for c in self.iterate_components():
+            if isinstance(c, WellFormedAxiom):
+                c: WellFormedAxiom
+                yield c.valid_statement
+            elif isinstance(c, WellFormedTheorem):
+                c: WellFormedTheorem
+                yield c.valid_statement
 
     def iterate_inference_rules(self) -> typing.Iterator[WellFormedInferenceRule]:
         """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems."""
@@ -4510,15 +4510,15 @@ class WellFormedTheory(WellFormedTheoreticalContext):
             if isinstance(element, WellFormedTheorem):
                 yield element
 
-    def iterate_derivations(self) -> typing.Iterator[WellFormedDerivation]:
+    def iterate_components(self) -> typing.Iterator[WellFormedTheoryComponent]:
         """Iterates over all derivations, preserving order"""
         for element in self:
             yield element
 
     @property
-    def derivations(self) -> Enumeration:
+    def components(self) -> Enumeration:
         """Return an enumeration of all derivations in the theory, preserving order."""
-        return Enumeration(e=tuple(self.iterate_derivations()))
+        return Enumeration(e=tuple(self.iterate_components()))
 
     @property
     def theorems(self) -> Enumeration:
@@ -4582,11 +4582,11 @@ def transform_theory_to_axiomatization(t: FlexibleTheory, interpret_none_as_empt
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=interpret_none_as_empty,
                                         canonical_conversion=canonical_conversion)
     e: Enumeration = Enumeration(e=None)
-    for d in iterate_theory_derivations(t=t):
-        if is_well_formed_axiom(a=d):
-            e = append_element_to_enumeration(e=e, x=d)
-        if is_well_formed_inference_rule(i=d):
-            e = append_element_to_enumeration(e=e, x=d)
+    for c in iterate_theory_components(t=t):
+        if is_well_formed_axiom(a=c):
+            e = append_element_to_enumeration(e=e, x=c)
+        if is_well_formed_inference_rule(i=c):
+            e = append_element_to_enumeration(e=e, x=c)
     a: WellFormedAxiomatization = WellFormedAxiomatization(a=None, d=(*e,))
     return a
 
@@ -4843,18 +4843,18 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
             # The first occurrence is maintained, and the second occurrence is stripped.
             d: Enumeration = Enumeration(e=(*a, *d), strip_duplicates=True)
         # coerce all elements of the enumeration to axioms or inference-rules.
-        coerced_derivations: Enumeration = Enumeration(e=None)
+        coerced_components: Enumeration = Enumeration(e=None)
         for x in iterate_enumeration_elements(e=d):
             if is_well_formed_inference_rule(i=x):
                 # This is an inference-rule.
                 inference_rule: WellFormedInferenceRule = coerce_inference_rule(i=x)
-                coerced_derivations: Enumeration = append_element_to_enumeration(
-                    e=coerced_derivations, x=inference_rule)
+                coerced_components: Enumeration = append_element_to_enumeration(
+                    e=coerced_components, x=inference_rule)
             elif is_well_formed_axiom(a=x):
                 # This is an axiom.
                 axiom: WellFormedAxiom = coerce_axiom(a=x)
-                coerced_derivations: Enumeration = append_element_to_enumeration(
-                    e=coerced_derivations, x=axiom)
+                coerced_components: Enumeration = append_element_to_enumeration(
+                    e=coerced_components, x=axiom)
             else:
                 # Incorrect form.
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
@@ -4864,7 +4864,7 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
                                           d=d,
                                           a=a
                                           )
-        return connective_for_axiomatization_formula, coerced_derivations
+        return connective_for_axiomatization_formula, coerced_components
 
     def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None):
         c, t = WellFormedAxiomatization._data_validation_2(a=a, d=d)
@@ -5021,7 +5021,7 @@ def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleDerivation) 
     :return: A theoretical context.
     """
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
-    c: WellFormedDerivation = coerce_derivation(d=c)
+    c: WellFormedTheoryComponent = coerce_theory_component(d=c)
     return t.extend_with_component(c)
 
 
@@ -5074,14 +5074,14 @@ def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
         return t
 
 
-def append_derivation_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxiomatization) -> WellFormedAxiomatization:
+def append_component_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxiomatization) -> WellFormedAxiomatization:
     """Extend axiomatization ``a`` with derivation `d`.
 
     :param d:
     :param a:
     :return:
     """
-    d: WellFormedDerivation = coerce_derivation(d=d)
+    d: WellFormedTheoryComponent = coerce_theory_component(d=d)
     a: WellFormedAxiomatization = coerce_axiomatization(a=a)
     if is_well_formed_axiom(a=d):
         extension_a: WellFormedAxiom = coerce_axiom(a=d)
@@ -5114,7 +5114,7 @@ def append_args_to_axiomatization(*args, a: FlexibleAxiomatization) -> WellForme
         return a
     else:
         for d in args:
-            a = append_derivation_to_axiomatization(d=d, a=a)
+            a = append_component_to_axiomatization(d=d, a=a)
         return a
 
 
@@ -5225,7 +5225,7 @@ def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
 
 
 def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]:
+        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
     The `derive_0` algorithm "proves the obvious":
@@ -5239,7 +5239,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
     :param c: A proposition, denoted as the conjecture.
     :param debug:
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
-    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]
+    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]
     """
     t = coerce_theory(t=t, canonical_conversion=True, interpret_none_as_empty=True)
     c = coerce_formula(phi=c)
@@ -5247,13 +5247,13 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
         u1.log_debug(f'derive_0: start. conjecture:{c}.')
     if is_valid_proposition_so_far_1(p=c, t=t):  # this first check is superfluous
         # loop through derivations
-        for derivation in t.iterate_derivations():
-            if is_formula_equivalent(phi=c, psi=derivation.valid_statement):
+        for c2 in t.iterate_components():
+            if is_formula_equivalent(phi=c, psi=c2.valid_statement):
                 # the valid-statement of this derivation matches phi,
                 # the auto_derive is successful.
                 # if debug:
                 # u1.log_info(f'auto_derive_0 successful: {derivation}')
-                return t, True, derivation
+                return t, True, c2
     # all derivations have been tested and none matched phi,
     # it follows that the auto_derive failed.
     return t, False, None
@@ -5262,7 +5262,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
 def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
              raise_error_if_false: bool = True,
              debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]:
+        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]:
     """Derives a new theory `t′` that extends ``t`` with a new theorem based on conjecture `c` using inference-rule `i`.
 
     Note: in contrast, derive_1 requires the explicit list of premises. derive_2 is more convenient to use because it
@@ -5275,7 +5275,7 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
     :param raise_error_if_false: raise an error if the derivation fails.
     :param debug:
     :return: A python-tuple (t′, True, derivation) if the derivation was successful, (t, False, None) otherwise.
-    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]
+    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]
     """
     t = coerce_theory(t=t)
     c = coerce_formula(phi=c)
@@ -5299,9 +5299,9 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         return t, False, None
 
     # First try the less expansive auto_derive_0 algorithm
-    t, successful, derivation, = derive_0(t=t, c=c, debug=debug)
+    t, successful, c2, = derive_0(t=t, c=c, debug=debug)
     if successful:
-        return t, successful, derivation
+        return t, successful, c2
 
     # In order to list what would be the required premises to yield the conjecture,
     # the inference-rule must be "reverse-engineered".
@@ -5336,9 +5336,9 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
 
         if success:
             # All required premises are present in theory t, the conjecture can be proven.
-            t, ok, derivation = derive_1(t=t, c=c, p=effective_premises,
-                                         i=i, raise_error_if_false=True)
-            return t, True, derivation
+            t, ok, c2 = derive_1(t=t, c=c, p=effective_premises,
+                                 i=i, raise_error_if_false=True)
+            return t, True, c2
         else:
             # The required premises are not present in theory t, report failure.
             if raise_error_if_false:
@@ -5377,8 +5377,8 @@ def auto_derive_with_heuristics(t: FlexibleTheory, conjecture: FlexibleFormula) 
     return t, False
 
 
-def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]:
+def auto_derive_2(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
+        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
     The auto_derive_2 algorithm "wide and shallow inference" builds on auto_derive_1 and:
@@ -5387,19 +5387,19 @@ def auto_derive_2(t: FlexibleTheory, conjecture: FlexibleFormula, debug: bool = 
     Note: this algorithm is still trivial as it does not rely on recursion to look for solutions.
 
     :param t:
-    :param conjecture:
+    :param c:
     :param debug:
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
-    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]
+    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]
     """
     t = coerce_theory(t=t)
-    conjecture = coerce_formula(phi=conjecture)
+    c = coerce_formula(phi=c)
     if debug:
-        u1.log_debug(f'auto_derive_2: start. conjecture:{conjecture}.')
+        u1.log_debug(f'auto_derive_2: start. conjecture:{c}.')
 
     # Loop through all inference_rules in theory t.
     for inference_rule in t.iterate_inference_rules():
-        t, success, d = derive_2(t=t, c=conjecture, i=inference_rule, raise_error_if_false=False)
+        t, success, d = derive_2(t=t, c=c, i=inference_rule, raise_error_if_false=False)
         if success:
             # Eureka, the conjecture was proven.
             return t, success, d
@@ -5424,16 +5424,16 @@ def auto_derive_3(
     t: WellFormedTheory = coerce_theory(t=t)
     conjectures: WellFormedTupl = coerce_tuple(t=conjectures, interpret_none_as_empty=True)
     for conjecture in iterate_tuple_elements(phi=conjectures):
-        t, success, _ = auto_derive_2(t=t, conjecture=conjecture)
+        t, success, _ = auto_derive_2(t=t, c=conjecture)
         if not success:
             return t, False
     return t, True
 
 
 def auto_derive_4(
-        t: FlexibleTheory, conjecture: FlexibleFormula, max_recursion: int = 3,
+        t: FlexibleTheory, c: FlexibleFormula, max_recursion: int = 3,
         conjecture_exclusion_list: FlexibleEnumeration = None, debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation], FlexibleEnumeration]:
+        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent], FlexibleEnumeration]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
     The auto_derive_3 algorithm "wide and deep inference" builds upon auto_derive_2 and:
@@ -5454,47 +5454,47 @@ def auto_derive_4(
                or call auto_derive_1 to stop at the next level.
 
     :param t:
-    :param conjecture:
+    :param c:
     :param max_recursion:
     :param conjecture_exclusion_list:
     :param debug:
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
-    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedDerivation]]
+    :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]
     """
     global auto_derivation_max_formula_depth_preference
     t: WellFormedTheory = coerce_theory(t=t)
-    conjecture: Formula = coerce_formula(phi=conjecture)
+    c: Formula = coerce_formula(phi=c)
     conjecture_exclusion_list: Enumeration = coerce_enumeration(e=conjecture_exclusion_list,
                                                                 interpret_none_as_empty=True)
     indent: str = ' ' * (auto_derivation_max_formula_depth_preference - max_recursion + 1)
     if max_recursion == 2:
         pass
     if debug:
-        u1.log_debug(f'{indent}auto_derive_3: start. conjecture:{conjecture}.')
+        u1.log_debug(f'{indent}auto_derive_3: start. conjecture:{c}.')
 
     # As a first step, attempt to auto_derive the conjecture with the less powerful,
     # but less expansive auto_derive_2 method:
-    t, successful, derivation, = auto_derive_2(t=t, conjecture=conjecture)
+    t, successful, c2, = auto_derive_2(t=t, c=c)
     if successful:
         if debug:
-            u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
-        return t, successful, derivation, None
+            u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{c}.')
+        return t, successful, c2, None
 
     # To prevent infinite loops, populate an exclusion list of conjectures that are already
     # being searched in higher recursions.
-    conjecture_exclusion_list = Enumeration(e=(*conjecture_exclusion_list, conjecture,))
+    conjecture_exclusion_list = Enumeration(e=(*conjecture_exclusion_list, c,))
 
     max_recursion = max_recursion - 1
     if max_recursion < 1:
         # We reached the max_recursion threshold, it follows that auto_derive failed.
         if debug:
-            u1.log_debug(f'{indent}auto_derive_3: failure. conjecture:{conjecture}.')
+            u1.log_debug(f'{indent}auto_derive_3: failure. conjecture:{c}.')
         return t, False, None, conjecture_exclusion_list
 
     # Loop through all theory inference-rules to find those that could potentially prove the conjecture.
     # These are the inference-rules whose conclusions are formula-equivalent-with-variables to the conjecture.
     for inference_rule in t.iterate_inference_rules():
-        is_equivalent, m = is_formula_equivalent_with_variables_2(phi=conjecture,
+        is_equivalent, m = is_formula_equivalent_with_variables_2(phi=c,
                                                                   psi=inference_rule.transformation.output_shape,
                                                                   variables=inference_rule.transformation.variables)
         if is_equivalent:
@@ -5506,7 +5506,7 @@ def auto_derive_4(
             # first determine what are the necessary variable values in the transformation.
             # to do this, we have a trick, we can call is_formula_equivalent_with_variables and pass it
             # an empty map-builder:
-            output, m, = is_formula_equivalent_with_variables_2(phi=conjecture,
+            output, m, = is_formula_equivalent_with_variables_2(phi=c,
                                                                 psi=inference_rule.transformation.output_shape,
                                                                 variables=inference_rule.transformation.variables,
                                                                 variables_fixed_values=None)
@@ -5556,7 +5556,7 @@ def auto_derive_4(
                         # recursively try to auto_derive the premise
                         t, derivation_success, _, conjecture_exclusion_list = auto_derive_4(
                             t=t,
-                            conjecture=premise_target_statement,
+                            c=premise_target_statement,
                             conjecture_exclusion_list=conjecture_exclusion_list,
                             max_recursion=max_recursion - 1,
                             debug=debug)
@@ -5565,13 +5565,13 @@ def auto_derive_4(
                             break
                 if inference_rule_success:
                     # all premises have been successfully proven.
-                    t, ok, derivation = derive_1(t=t, c=conjecture,
-                                                 p=effective_premises,
-                                                 i=inference_rule,
-                                                 raise_error_if_false=True)
+                    t, ok, c2 = derive_1(t=t, c=c,
+                                         p=effective_premises,
+                                         i=inference_rule,
+                                         raise_error_if_false=True)
                     if debug:
-                        u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
-                    return t, True, derivation, conjecture_exclusion_list
+                        u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{c}.')
+                    return t, True, c2, conjecture_exclusion_list
             else:
                 valid_statements = iterate_theory_propositions(t=t)
                 for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
@@ -5585,7 +5585,7 @@ def auto_derive_4(
                                                          e=conjecture_exclusion_list):
                             # recursively try to auto_derive the premise
                             t, derivation_success, _, conjecture_exclusion_list = auto_derive_4(
-                                t=t, conjecture=premise_target_statement,
+                                t=t, c=premise_target_statement,
                                 conjecture_exclusion_list=conjecture_exclusion_list,
                                 max_recursion=max_recursion - 1, debug=debug)
                             if not derivation_success:
@@ -5593,15 +5593,15 @@ def auto_derive_4(
                                 break
                     if permutation_success:
                         # all premises have been successfully proven.
-                        t, ok, derivation = derive_1(t=t, c=conjecture,
-                                                     p=effective_premises,
-                                                     i=inference_rule,
-                                                     raise_error_if_false=True)
+                        t, ok, c2 = derive_1(t=t, c=c,
+                                             p=effective_premises,
+                                             i=inference_rule,
+                                             raise_error_if_false=True)
                         if debug:
-                            u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{conjecture}.')
-                        return t, True, derivation, conjecture_exclusion_list
+                            u1.log_debug(f'{indent}auto_derive_3: success. conjecture:{c}.')
+                        return t, True, c2, conjecture_exclusion_list
     if debug:
-        u1.log_debug(f'{indent}auto_derive_3: failure. conjecture:{conjecture}.')
+        u1.log_debug(f'{indent}auto_derive_3: failure. conjecture:{c}.')
     return t, False, None, conjecture_exclusion_list
 
 
@@ -5958,8 +5958,8 @@ def get_theory_derivation_from_valid_statement(t: FlexibleTheory, s: FlexibleFor
     """
     t: WellFormedTheory = coerce_theory(t=t)
     s: Formula = coerce_formula(phi=s)
-    for d in iterate_theory_derivations(t=t):
-        d: WellFormedDerivation
+    for d in iterate_theory_components(t=t):
+        d: WellFormedTheoryComponent
         if is_formula_equivalent(phi=s, psi=d.valid_statement):
             return True, d
     return False, None
@@ -6016,7 +6016,7 @@ class TypesetterForDerivation(pl1.Typesetter):
     def typeset_from_generator(self, phi: FlexibleDerivation, theory: typing.Optional[FlexibleTheory] = None,
                                **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: WellFormedDerivation = coerce_derivation(d=phi)
+        phi: WellFormedTheoryComponent = coerce_theory_component(d=phi)
         if theory is None:
             yield '\t'
             yield from phi.valid_statement.typeset_from_generator(**kwargs)
@@ -6069,7 +6069,7 @@ class TypesetterForDerivation(pl1.Typesetter):
                 first: bool = True
                 for premise in phi.inference.premises:
                     # success, derivation = get_theory_derivation_from_valid_statement(t=theory, s=premise)
-                    derivation: WellFormedDerivation
+                    derivation: WellFormedTheoryComponent
                     # i: int = 1 + get_index_of_first_equivalent_term_in_formula(term=derivation, formula=theory)
                     if not first:
                         yield ', '

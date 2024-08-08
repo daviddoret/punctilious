@@ -99,7 +99,7 @@ class TestAxioms:
         # is_a = pu.as1.is_a_connective
         proposition = pu.as1.connective_for_is_a_proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
-        t, success, _, = pu.as1.auto_derive_2(t=t, conjecture=proposition(p))
+        t, success, _, = pu.as1.auto_derive_2(t=t, c=proposition(p))
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=proposition(p), t=t)
 
@@ -109,13 +109,13 @@ class TestAxioms:
         proposition = pu.as1.connective_for_is_a_proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='X')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Y')
-        t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(p))
+        t, success, _ = pu.as1.auto_derive_2(t=t, c=proposition(p))
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=proposition(p), t=t)
-        t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(q))
+        t, success, _ = pu.as1.auto_derive_2(t=t, c=proposition(q))
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=proposition(q), t=t)
-        t, success, _ = pu.as1.auto_derive_2(t=t, conjecture=proposition(p | land | q))
+        t, success, _ = pu.as1.auto_derive_2(t=t, c=proposition(p | land | q))
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=proposition(p | land | q), t=t)
         pass

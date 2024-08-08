@@ -71,8 +71,8 @@ class TestPL2:
         # Elaborate a basic theory with P and Q as a propositional-variables
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
-        t, _, _, _ = auto_derive_4(t=t, conjecture=is_a_proposition(p))
-        t, _, _, _ = auto_derive_4(t=t, conjecture=is_a_proposition(q))
+        t, _, _, _ = auto_derive_4(t=t, c=is_a_proposition(p))
+        t, _, _, _ = auto_derive_4(t=t, c=is_a_proposition(q))
 
         # Add axiom PL02 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl02, )
@@ -127,9 +127,9 @@ class TestPL3:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='R')
-        t, _, _, _ = auto_derive_4(t=t, conjecture=is_a_proposition(p))
-        t, _, _, _ = auto_derive_4(t=t, conjecture=is_a_proposition(q))
-        t, _, _, _ = auto_derive_4(t=t, conjecture=is_a_proposition(r))
+        t, _, _, _ = auto_derive_4(t=t, c=is_a_proposition(p))
+        t, _, _, _ = auto_derive_4(t=t, c=is_a_proposition(q))
+        t, _, _, _ = auto_derive_4(t=t, c=is_a_proposition(r))
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl03, )
@@ -206,16 +206,16 @@ class TestPL4:
         t, p, = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
         t, q, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         t, r, = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='R')
-        t, _, _, _, = auto_derive_4(t=t, conjecture=is_a_proposition(p))
-        t, _, _, _, = auto_derive_4(t=t, conjecture=is_a_proposition(q))
-        t, _, _, _, = auto_derive_4(t=t, conjecture=is_a_proposition(r))
+        t, _, _, _, = auto_derive_4(t=t, c=is_a_proposition(p))
+        t, _, _, _, = auto_derive_4(t=t, c=is_a_proposition(q))
+        t, _, _, _, = auto_derive_4(t=t, c=is_a_proposition(r))
 
         # Add axiom PL03 to the theory
         t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.ml1.pl04, )
 
         # Derive: [(𝐴 ⊃ 𝐵) ∧ (𝐵 ⊃ 𝐶)] ⊃ (𝐴 ⊃ 𝐶)
         phi = ((p | implies | q) | land | (q | implies | r)) | implies | (p | implies | r)
-        t, _, _, _ = auto_derive_4(t=t, conjecture=phi)
+        t, _, _, _ = auto_derive_4(t=t, c=phi)
         assert pu.as1.is_valid_proposition_so_far_1(
             p=((p | implies | q) | land | (
                 (q | implies | r)) | implies | (p | implies | r)),
@@ -239,24 +239,24 @@ class TestPL5:
         t1, _ = pu.as1.let_x_be_an_inference_rule(t=t1, i=pu.ml1.pl05, )
 
         # Derive: P ⊃ Q
-        t2, success, _ = auto_derive_2(t=t1, conjecture=is_a_proposition(x))
+        t2, success, _ = auto_derive_2(t=t1, c=is_a_proposition(x))
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(x), t=t2)
 
-        t2, success, _ = auto_derive_2(t=t2, conjecture=is_a_proposition(y))
+        t2, success, _ = auto_derive_2(t=t2, c=is_a_proposition(y))
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(y), t=t2)
 
-        t2, success, _ = auto_derive_2(t=t2, conjecture=is_a_proposition(x | implies | y))
+        t2, success, _ = auto_derive_2(t=t2, c=is_a_proposition(x | implies | y))
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(x | implies | y), t=t2)
 
-        t3, success, _, _ = auto_derive_4(t=t1, conjecture=is_a_proposition(x | implies | y),
+        t3, success, _, _ = auto_derive_4(t=t1, c=is_a_proposition(x | implies | y),
                                           max_recursion=4)
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(x | implies | y), t=t3)
 
-        t2, success, _ = auto_derive_2(t=t2, conjecture=y | implies | (x | implies | y))
+        t2, success, _ = auto_derive_2(t=t2, c=y | implies | (x | implies | y))
         assert success
         assert pu.as1.is_valid_proposition_so_far_1(p=y | implies | (x | implies | y), t=t2)
 
