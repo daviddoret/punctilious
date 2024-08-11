@@ -252,7 +252,7 @@ class TestFormulaEquivalenceWithVariables:
         ab = pu.as1.WellFormedTupl(e=(a, b,))
         cd = pu.as1.WellFormedTupl(e=(c, d,))
         assert not pu.as1.is_formula_equivalent(phi=ab, psi=cd)
-        m = pu.as1.Map()
+        m = pu.as1.WellFormedMap()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=ab, psi=cd, variables=(c, d,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
@@ -260,18 +260,18 @@ class TestFormulaEquivalenceWithVariables:
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=d), psi=b)
         bba = pu.as1.WellFormedTupl(e=(b, b, a,))
         cca = pu.as1.WellFormedTupl(e=(c, c, a,))
-        m = pu.as1.Map()
+        m = pu.as1.WellFormedMap()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=bba, variables=(),
                                                                          variables_fixed_values=m)
         assert is_equivalent
-        m = pu.as1.Map()
+        m = pu.as1.WellFormedMap()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=cca, variables=(c,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
         assert pu.as1.is_formula_equivalent(phi=pu.as1.get_image_from_map(m=m, preimage=c), psi=b)
         ababbba = pu.as1.WellFormedTupl(e=(a, b, a, b, b, a,))
         acaccca = pu.as1.WellFormedTupl(e=(a, c, a, c, c, a,))
-        m = pu.as1.Map()
+        m = pu.as1.WellFormedMap()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=ababbba, psi=acaccca, variables=(c,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
@@ -281,7 +281,7 @@ class TestFormulaEquivalenceWithVariables:
         multilevel3 = pu.as1.WellFormedTupl(e=(c, multilevel2, a, multilevel1,))
         print(multilevel3)
         test = pu.as1.substitute_formulas(phi=multilevel3, m={a: e, b: d})
-        m = pu.as1.Map()
+        m = pu.as1.WellFormedMap()
         is_equivalent, m = pu.as1.is_formula_equivalent_with_variables_2(phi=multilevel3, psi=test, variables=(d, e,),
                                                                          variables_fixed_values=m)
         assert is_equivalent
@@ -360,7 +360,7 @@ class TestFormulaEquivalenceWithVariables2:
 
         bba = pu.as1.WellFormedTupl(e=(b, b, a,))
         cca = pu.as1.WellFormedTupl(e=(c, c, a,))
-        m = pu.as1.Map()
+        m = pu.as1.WellFormedMap()
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(phi=bba, psi=bba, variables=(),
                                                                      variables_fixed_values=None)
         assert result
@@ -400,9 +400,9 @@ class TestReplaceConnectives:
         d3 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d3'))
         d4 = pu.as1.Connective(formula_ts=pu.as1.typesetters.classical_formula(connective_typesetter='d4'))
         phi = c1(c2(c3, c3, c3, c1, c4(c3, c2, c1)), c3)
-        m = pu.as1.Map(d=(c1, c2, c3, c4,), c=(d1, d2, d3, d4,))
+        m = pu.as1.WellFormedMap(d=(c1, c2, c3, c4,), c=(d1, d2, d3, d4,))
         psi = pu.as1.substitute_connectives(phi=phi, m=m)
-        n = pu.as1.Map(d=(d1, d2, d3, d4,), c=(c1, c2, c3, c4,))
+        n = pu.as1.WellFormedMap(d=(d1, d2, d3, d4,), c=(c1, c2, c3, c4,))
         phi2 = pu.as1.substitute_connectives(phi=psi, m=n)
         assert pu.as1.is_formula_equivalent(phi=phi, psi=phi2)
         pass
@@ -504,7 +504,7 @@ class TestMap:
     def test_map(self, fruits):
         red, yellow, blue = pu.as1.let_x_be_some_simple_objects(reps=('red', 'yellow', 'blue',))
         c = pu.as1.WellFormedTupl(e=(red, yellow, blue, red))
-        m1 = pu.as1.Map(d=fruits, c=c)
+        m1 = pu.as1.WellFormedMap(d=fruits, c=c)
         assert len(m1) == 2
         assert pu.as1.is_in_map_domain(phi=fruits[0], m=m1)
         assert pu.as1.is_in_map_domain(phi=fruits[1], m=m1)
@@ -824,8 +824,8 @@ class TestAreValidStatementsInTheoryWithVariables:
                                                                          variables_values=None)
         assert valid
         valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c, e,), t=t, variables=(e,),
-                                                                         variables_values=pu.as1.Map(d=(e,),
-                                                                                                     c=(d,)))
+                                                                         variables_values=pu.as1.WellFormedMap(d=(e,),
+                                                                                                               c=(d,)))
         assert valid
         valid, s, = pu.as1.are_valid_statements_in_theory_with_variables(s=(a, c, e,), t=t, variables=(e,),
                                                                          variables_values=None)
@@ -1212,8 +1212,25 @@ class TestTheoreticalContext:
 
 
 class TestAxiomaticBase:
-    pass
-    # TODO: Develop this
+    def test_theoretical_context(self):
+        a, b, c, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'x', 'y', 'z',))
+        ext1 = pu.as1.WellFormedAxiomatization()
+        ext1, _ = pu.as1.let_x_be_an_axiom(t=ext1, s=a)
+        ext1, _ = pu.as1.let_x_be_an_axiom(t=ext1, s=c)
+        ext1, i1 = pu.as1.let_x_be_an_inference_rule(
+            t=ext1, f=pu.as1.TransformationByVariableSubstitution(o=x, v=None, i=(a, b,)))
+        assert isinstance(ext1, pu.as1.WellFormedAxiomatization)
+
+        ab = pu.as1.WellFormedAxiomatization()
+        ab, _ = pu.as1.let_x_be_an_axiom(t=ab, s=b)
+        ab, i2 = pu.as1.let_x_be_an_inference_rule(
+            t=ab, f=pu.as1.TransformationByVariableSubstitution(o=y, v=None, i=(a, c,)))
+
+        ab_extended, _ = pu.as1.let_x_be_an_extension(t=ab, e=ext1)
+        assert isinstance(ab_extended, pu.as1.WellFormedAxiomatization)
+
+        ab_extended, _, _ = pu.as1.derive_2(t=ab_extended, c=x, i=i1, raise_error_if_false=True)
+        ab_extended, _, _ = pu.as1.derive_2(t=ab_extended, c=y, i=i2, raise_error_if_false=True)
 
 
 class TestMetaTheory:

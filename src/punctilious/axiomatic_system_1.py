@@ -616,26 +616,26 @@ def union_theory(phi: FlexibleTheory, psi: FlexibleTheory) -> WellFormedTheory:
     return t2
 
 
-def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> Map:
-    if isinstance(m, Map):
+def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> WellFormedMap:
+    if isinstance(m, WellFormedMap):
         return m
     elif interpret_none_as_empty and m is None:
         # implicit conversion of None to the empty map.
-        return Map(d=None, c=None)
+        return WellFormedMap(d=None, c=None)
     elif is_well_formed_map(m=m):
         # `m` is improperly python-typed, but it is a well-formed map.
-        return Map(d=m[Map.DOMAIN_INDEX], c=m[Map.CODOMAIN_INDEX])
+        return WellFormedMap(d=m[WellFormedMap.DOMAIN_INDEX], c=m[WellFormedMap.CODOMAIN_INDEX])
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
         domain: Enumeration = coerce_enumeration(e=m.keys())
         codomain: WellFormedTupl = coerce_tuple(t=m.values())
-        return Map(d=domain, c=codomain)
+        return WellFormedMap(d=domain, c=codomain)
     else:
         # no coercion solution found.
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_009,
             msg='Argument `m` could not be coerced to a map.',
-            coerced_type=Map, m_type=type(m), m=m)
+            coerced_type=WellFormedMap, m_type=type(m), m=m)
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, Formula]]
@@ -968,7 +968,7 @@ class QuaternaryConnective(FixedArityConnective):
         super().__init__(fixed_arity_constraint=4, formula_ts=formula_ts)
 
 
-class Variable(WellFormedSimpleObject):
+class WellFormedVariable(WellFormedSimpleObject):
     """A variable is defined as a simple-object.
 
     Question: a variable could be alternatively defined as any arbitrary formula, but using simple-objects look
@@ -998,7 +998,7 @@ class Variable(WellFormedSimpleObject):
     def __init__(self, c: NullaryConnective):
         super().__init__(c=c)
 
-    def __enter__(self) -> Variable:
+    def __enter__(self) -> WellFormedVariable:
         return self
 
     def __exit__(self, exc_type: typing.Optional[type], exc: typing.Optional[BaseException],
@@ -1029,11 +1029,11 @@ class MetaVariable(WellFormedSimpleObject):
 
 
 def let_x_be_a_variable(formula_ts: pl1.FlexibleTypesetter) -> (
-        typing.Union)[Variable, typing.Generator[Variable, typing.Any, None]]:
+        typing.Union)[WellFormedVariable, typing.Generator[WellFormedVariable, typing.Any, None]]:
     if formula_ts is None or isinstance(formula_ts, pl1.FlexibleTypesetter):
-        return Variable(c=NullaryConnective(formula_ts=formula_ts))
+        return WellFormedVariable(c=NullaryConnective(formula_ts=formula_ts))
     elif isinstance(formula_ts, typing.Iterable):
-        return (Variable(c=NullaryConnective(formula_ts=ts)) for ts in formula_ts)
+        return (WellFormedVariable(c=NullaryConnective(formula_ts=ts)) for ts in formula_ts)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_012, msg='Non supported arguments.',
                                   formula_typesetter=formula_ts)
@@ -1080,7 +1080,7 @@ def let_x_be_some_simple_objects(
 
 
 def let_x_be_some_variables(
-        reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[Variable, typing.Any, None]:
+        reps: tuple[pl1.FlexibleTypesetter, ...]) -> typing.Generator[WellFormedVariable, typing.Any, None]:
     """A helper function to declare some variables.
 
     :param reps: An iterable of typesetters or strings, denoted as the default representations of the variables.
@@ -1231,6 +1231,24 @@ def let_x_be_an_axiom(t: FlexibleTheoreticalContext | None = None, s: typing.Opt
             msg='Axiom declaration error. Argument ``t`` is not of a supported type.')
 
 
+def let_x_be_an_extension(t: FlexibleTheoreticalContext | None = None, e: FlexibleTheoreticalContext | None = None,
+                          **kwargs) -> (
+        WellFormedTheoreticalContext, WellFormedExtension):
+    """Given a theoretical context ``t``, returns a new theoretical context ``t'`` such that it extends ``t``
+    with theoretical context ``e``.
+
+    :param t: A theoretical context. If None, the empty axiomatization is implicitly used.
+    :param e: A theoretical context. If None, the empty axiomatization is implicitly used.
+    :return: a pair ``(t', e)`` where ``t2`` is the extended theoretical context ``t'``,
+        and ``e`` is the extension.
+    """
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty_theory=True)
+    e: WellFormedTheoreticalContext = coerce_theoretical_context(t=e, interpret_none_as_empty_theory=True)
+    e: WellFormedExtension = WellFormedExtension(t=e)
+    t_prime: WellFormedTheoreticalContext = extend_with_component(t=t, c=e)
+    return t_prime, e
+
+
 def let_x_be_a_theory(
         t: FlexibleTheory | None = None,
         d: FlexibleEnumeration | None = None,
@@ -1319,6 +1337,7 @@ connective_for_axiom_formula = let_x_be_a_unary_connective(formula_ts='axiom')
 connective_for_axiomatization_formula = let_x_be_a_free_arity_connective(formula_ts='axiomatization')
 connective_for_theory_component = let_x_be_a_binary_connective(formula_ts='derivation')
 connective_for_enumeration = let_x_be_a_free_arity_connective(formula_ts='enumeration')
+connective_for_extension = let_x_be_a_free_arity_connective(formula_ts='extension')
 connective_for_hypothesis = let_x_be_a_free_arity_connective(formula_ts='hypothesis')
 connective_for_logical_implication = let_x_be_a_binary_connective(formula_ts='implies')
 connective_for_inference = let_x_be_a_ternary_connective(formula_ts='inference')
@@ -1475,7 +1494,7 @@ def is_formula_equivalent_with_variables(phi: FlexibleFormula, psi: FlexibleForm
 def is_formula_equivalent_with_variables_2(
         phi: FlexibleFormula, psi: FlexibleFormula, variables: FlexibleEnumeration,
         variables_fixed_values: FlexibleMap = None, raise_event_if_false: bool = False) -> (
-        typing.Tuple)[bool, typing.Optional[Map]]:
+        typing.Tuple)[bool, typing.Optional[WellFormedMap]]:
     """Given that:
      - phi is a formula,
      - psi is a formula,
@@ -1501,7 +1520,7 @@ def is_formula_equivalent_with_variables_2(
     :param raise_event_if_false:
     :return:
     """
-    variables_fixed_values: Map = coerce_map(m=variables_fixed_values, interpret_none_as_empty=True)
+    variables_fixed_values: WellFormedMap = coerce_map(m=variables_fixed_values, interpret_none_as_empty=True)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
     variables: Enumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True)
@@ -1546,8 +1565,8 @@ def is_formula_equivalent_with_variables_2(
             # psi is not defined in the domain of the map of fixed values
             psi_value: Formula = phi
             # extend the map of fixed values
-            variables_fixed_values: Map = Map(d=(*variables_fixed_values.domain, psi,),
-                                              c=(*variables_fixed_values.codomain, psi_value,))
+            variables_fixed_values: WellFormedMap = WellFormedMap(d=(*variables_fixed_values.domain, psi,),
+                                                                  c=(*variables_fixed_values.codomain, psi_value,))
             return True, variables_fixed_values
     else:
         # psi is not a variable
@@ -1677,7 +1696,7 @@ def substitute_formulas(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
 
     """
     phi: Formula = coerce_formula(phi=phi)
-    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
+    m: WellFormedMap = coerce_map(m=m, interpret_none_as_empty=True)
     if is_in_map_domain(phi=phi, m=m):
         # phi must be replaced at its root.
         # the replacement algorithm stops right there (i.e.: no more recursion).
@@ -1702,7 +1721,7 @@ def substitute_connectives(phi: FlexibleFormula, m: FlexibleMap) -> Formula:
     :return:
     """
     phi: Formula = coerce_formula(phi=phi)
-    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
+    m: WellFormedMap = coerce_map(m=m, interpret_none_as_empty=True)
     # TODO: Check that the map domain and codomain are composed of simple objects.
     con: Connective = phi.connective
     c_formula: Formula = Formula(con=con)
@@ -1810,15 +1829,15 @@ FlexibleConnectiveLinkedToAlgorithm = ConnectiveLinkedWithAlgorithm
 ConnectiveLinkedToAlgorithm."""
 
 
-def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> Map:
+def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> WellFormedMap:
     """Return a new map such that the preimage is no longer an element of its domain."""
-    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
+    m: WellFormedMap = coerce_map(m=m, interpret_none_as_empty=True)
     preimage: Formula = coerce_formula(phi=preimage)
     if is_element_of_enumeration(x=preimage, e=m.domain):
         index: int = get_index_of_first_equivalent_term_in_formula(term=preimage, formula=m.domain)
         reduced_domain: tuple[Formula, ...] = (*m.domain[0:index], *m.domain[index + 1:])
         reduced_codomain: tuple[Formula, ...] = (*m.codomain[0:index], *m.codomain[index + 1:])
-        reduced_map: Map = Map(d=reduced_domain, c=reduced_codomain)
+        reduced_map: WellFormedMap = WellFormedMap(d=reduced_domain, c=reduced_codomain)
         return reduced_map
     else:
         return m
@@ -1874,7 +1893,7 @@ def append_term_to_formula(f: FlexibleFormula, t: FlexibleFormula) -> Formula:
     return extended_formula
 
 
-def append_pair_to_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula) -> Map:
+def append_pair_to_map(m: FlexibleMap, preimage: FlexibleFormula, image: FlexibleFormula) -> WellFormedMap:
     """Return a new map m2 with a new (preimage, image) pair.
     If the preimage is already defined in m, replace it.
 
@@ -1883,13 +1902,13 @@ def append_pair_to_map(m: FlexibleMap, preimage: FlexibleFormula, image: Flexibl
     :param image:
     :return:
     """
-    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
+    m: WellFormedMap = coerce_map(m=m, interpret_none_as_empty=True)
     preimage: Formula = coerce_formula(phi=preimage)
     # Reduce the map to assure the preimage is no longer an element of its domain.
-    m: Map = reduce_map(m=m, preimage=preimage)
+    m: WellFormedMap = reduce_map(m=m, preimage=preimage)
     extended_domain: tuple[Formula, ...] = (*m.domain, preimage)
     extended_codomain: tuple[Formula, ...] = (*m.codomain, image)
-    m: Map = Map(d=extended_domain, c=extended_codomain)
+    m: WellFormedMap = WellFormedMap(d=extended_domain, c=extended_codomain)
     return m
 
 
@@ -1902,7 +1921,7 @@ def get_image_from_map(m: FlexibleMap, preimage: FlexibleFormula) -> Formula:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_028, msg='Map domain does not contain this element')
 
 
-class Map(Formula):
+class WellFormedMap(Formula):
     """A map is a formula m(t0(k0, k1, ..., kn), t1(l0, l1, ..., ln)) where:
      - m is a node with the map connective.
      - t0 is an enumeration named the keys' enumeration.
@@ -1946,7 +1965,7 @@ class Map(Formula):
         :param d: An enumeration denoted as the domain of the map.
         :param c: An enumeration denoted as the codomain of the map.
         """
-        d, c = Map._data_validation_2(d=d, c=c)
+        d, c = WellFormedMap._data_validation_2(d=d, c=c)
         o: tuple = super().__new__(cls, con=connective_for_map, t=(d, c,))
         return o
 
@@ -1956,7 +1975,7 @@ class Map(Formula):
         :param d: An enumeration denoted as the domain of the map.
         :param c: An enumeration denoted as the codomain of the map.
         """
-        d, c = Map._data_validation_2(d=d, c=c)
+        d, c = WellFormedMap._data_validation_2(d=d, c=c)
         super().__init__(con=connective_for_map, t=(d, c,))
 
     @property
@@ -1965,7 +1984,7 @@ class Map(Formula):
 
         The codomain of a map is the enumeration of possible outputs of the get_image_from_map function.
         """
-        return coerce_tuple(t=self[Map.CODOMAIN_INDEX])
+        return coerce_tuple(t=self[WellFormedMap.CODOMAIN_INDEX])
 
     @property
     def domain(self) -> Enumeration:
@@ -1973,10 +1992,10 @@ class Map(Formula):
 
         The domain of a map is the enumeration of possible inputs of the get_image_from_map function.
         """
-        return coerce_enumeration(e=self[Map.DOMAIN_INDEX])
+        return coerce_enumeration(e=self[WellFormedMap.DOMAIN_INDEX])
 
 
-FlexibleMap = typing.Optional[typing.Union[Map, typing.Dict[Formula, Formula]]]
+FlexibleMap = typing.Optional[typing.Union[WellFormedMap, typing.Dict[Formula, Formula]]]
 """FlexibleMap is a flexible python type that may be safely coerced into a Map."""
 
 
@@ -2418,13 +2437,14 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         outcome: Formula = substitute_formulas(phi=self.output_shape, m=variables_map)
 
         # step 3: new objects declarations.
-        declarations_map: Map = Map()
+        declarations_map: WellFormedMap = WellFormedMap()
         for declaration in self.output_declarations:
             con: Connective = Connective()
             simple_formula: Formula = Formula(con=con)
             # TODO: Find a way to initialize the new_connective formula_typesetter.
             # TODO: Find a way to initialize the new_connective arity.
-            declarations_map: Map = append_pair_to_map(m=declarations_map, preimage=declaration, image=simple_formula)
+            declarations_map: WellFormedMap = append_pair_to_map(m=declarations_map, preimage=declaration,
+                                                                 image=simple_formula)
 
         # step 4: substitute new-object-declarations in the conclusion
         outcome: Formula = substitute_connectives(phi=outcome, m=declarations_map)
@@ -2752,8 +2772,8 @@ def is_well_formed_map(m: FlexibleFormula, raise_error_if_false: bool = False) -
     m = coerce_formula(phi=m)
     if (m.connective is not connective_for_map or
             not m.arity == 2 or
-            not is_well_formed_enumeration(e=m[Map.DOMAIN_INDEX]) or
-            not is_well_formed_tupl(t=m[Map.CODOMAIN_INDEX])):
+            not is_well_formed_enumeration(e=m[WellFormedMap.DOMAIN_INDEX]) or
+            not is_well_formed_tupl(t=m[WellFormedMap.CODOMAIN_INDEX])):
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_061,
@@ -3218,7 +3238,7 @@ def are_valid_statements_in_theory_with_variables(
     s: WellFormedTupl = coerce_tuple(t=s, interpret_none_as_empty=True)
     t: WellFormedTheory = coerce_theory(t=t)
     variables: Enumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True, strip_duplicates=True)
-    variables_values: Map = coerce_map(m=variables_values, interpret_none_as_empty=True)
+    variables_values: WellFormedMap = coerce_map(m=variables_values, interpret_none_as_empty=True)
 
     # list the free variables.
     # these are the variables that are in "variables" that are not in the domain of "variables_values".
@@ -3248,7 +3268,7 @@ def are_valid_statements_in_theory_with_variables(
         valid_statements = iterate_theory_propositions(t=t)
         for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                         n=permutation_size):
-            variable_substitution: Map = Map(d=free_variables, c=permutation)
+            variable_substitution: WellFormedMap = WellFormedMap(d=free_variables, c=permutation)
             s_with_variable_substitution: Formula = substitute_formulas(phi=s, m=variable_substitution)
             s_with_variable_substitution: WellFormedTupl = coerce_tuple(t=s_with_variable_substitution)
             s_with_permutation: WellFormedTupl = WellFormedTupl(e=(*s_with_variable_substitution,))
@@ -3304,6 +3324,30 @@ def is_well_formed_axiom(a: FlexibleFormula, t: FlexibleTheoreticalContext | Non
             return False
     # All tests were successful.
     return True
+
+
+def is_well_formed_extension(e: FlexibleExtension, raise_error_if_false: bool = False) -> bool:
+    """Return ``True`` if and only if ``e`` is a well-formed theory extension, ``True`` otherwise.
+
+    # TODO: Add a second parameter t, in order to test the local definition of extension
+    #   which assures that the resulting theory is well-formed.s
+
+    :param e: A formula that may be a well-formed extension.
+    :param raise_error_if_false:
+    :return: bool.
+    """
+    e = coerce_formula(phi=e)
+    if isinstance(e, WellFormedExtension):
+        # the Theorem python-type assures the well-formedness of the object.
+        return True
+    elif (e.connective is not connective_for_extension or
+          not e.arity == 1 or
+          not is_well_formed_theoretical_context(t=e.term_0)):
+        if raise_error_if_false:
+            raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_092, e=e)
+        return False
+    else:
+        return True
 
 
 def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
@@ -3699,6 +3743,8 @@ def coerce_theory_component(d: FlexibleFormula) -> WellFormedTheoryComponent:
         return coerce_inference_rule(i=d)
     elif is_well_formed_axiom(a=d):
         return coerce_axiom(a=d)
+    elif is_well_formed_extension(e=d):
+        return coerce_extension(e=d)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_039,
@@ -3755,6 +3801,24 @@ def coerce_axiom(a: FlexibleFormula) -> WellFormedAxiom:
             code=c1.ERROR_CODE_AS1_040,
             msg='`a` cannot be coerced to a well-formed axiom.',
             a=a)
+
+
+def coerce_extension(e: FlexibleFormula) -> WellFormedExtension:
+    """Coerces formula ``e`` into a well-formed extension, or raises an error if it fails.
+
+    :param e: A formula that is presumably a well-formed extension.
+    :return: A well-formed extension.
+    :raises ApplicativeError: with code AS1-093 if coercion fails.
+    """
+    if isinstance(e, WellFormedExtension):
+        return e
+    elif is_well_formed_extension(e=e):
+        return WellFormedExtension(e=e)
+    else:
+        raise u1.ApplicativeError(
+            code=c1.ERROR_CODE_AS1_093,
+            msg='`e` cannot be coerced to a well-formed extension.',
+            e=e)
 
 
 def coerce_inference_rule(i: FlexibleInferenceRule) -> WellFormedInferenceRule:
@@ -4008,6 +4072,69 @@ class WellFormedAxiom(WellFormedTheoryComponent):
 FlexibleAxiom = typing.Union[WellFormedAxiom, Formula]
 
 
+class WellFormedExtension(WellFormedTheoryComponent):
+    """A well-formed extension is a formula of the form ⌜ :math:`\\text{extension}\\left( \\boldsymbol{T} \\right)` ⌝
+    where :math:`\\boldsymbol{T}` is a theoretical context, signaling the extension of the parent theoretical context,
+    i.e.: the theoretical context of which the extension is a component.
+
+    Global definition
+    ~~~~~~~~~~~~~~~~~~
+    A formula :math:`\\phi` is a well-formed axiom if and only if:
+     - its root connective is the axiom-formula connective,
+     - its arity is equal to 1,
+     - its term is a globally well-formed proposition.
+
+    Local definition
+    ~~~~~~~~~~~~~~~~~~
+    A formula :math:`\\boldsymbol{\\phi}` is a well-formed axiom in a theoretical context :math:`T` if and only if:
+     - it is a well-formed axiom as per the global definition above,
+     - its term is a proposition in :math:`T`.
+
+    Question: is the extension connective necessary?
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    This is an open question. An alternative design would be to consider well-formed theory the formula theory(ir1,
+    ir2, a1, a2, theory(a1, ir4, d5), ...) where theories can be directly embedded into parent theories as components.
+        This formalism and data model seem to work perfectly as well.
+        The usage of an explicit connective extension(theory(...)) may just add useless verbosity.
+        This is an open question.
+
+    """
+
+    @staticmethod
+    def _data_validation_3(t: WellFormedTheoreticalContext = None) -> tuple[Connective, WellFormedTheoreticalContext]:
+        """Assures the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param t: A theoretical context.
+        :return:
+        """
+        con: Connective = connective_for_extension
+        t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
+        return con, t
+
+    def __new__(cls, t: WellFormedTheoreticalContext = None, **kwargs):
+        """Creates a new extension.
+
+        :param t: A theoretical context.
+        :param kwargs:
+        """
+        con, t = WellFormedExtension._data_validation_3(t=t)
+        o: tuple = super().__new__(cls, con=con, s=t, **kwargs)
+        return o
+
+    def __init__(self, t: WellFormedTheoreticalContext, **kwargs):
+        """initializes a new extension.
+
+        :param t: A theoretical context.
+        :param kwargs:
+        """
+        con, p = WellFormedExtension._data_validation_3(t=t)
+        super().__init__(con=con, s=t, **kwargs)
+
+
+FlexibleExtension = typing.Union[WellFormedExtension, Formula]
+
+
 class WellFormedInferenceRule(WellFormedTheoryComponent):
     """A well-formed inference-rule is an authorization for the usage of a transformation or algorithm,
     to derive further theorems in a theory under certain conditions called premises.
@@ -4114,6 +4241,8 @@ class Inference(Formula):
     """An inference is the description of a usage of an inference-rule. Intuitively, it can be understood as an instance
     of the arguments passed to an inference-rule.
 
+    TODO: QUESTION: Do we keep it in the data model?
+
     Syntactic definition:
     An inference is a formula of the form:
         inference(i, P, A)
@@ -4203,9 +4332,9 @@ class Inference(Formula):
 FlexibleInference = typing.Optional[typing.Union[Inference]]
 
 
-def inverse_map(m: FlexibleMap) -> Map:
+def inverse_map(m: FlexibleMap) -> WellFormedMap:
     """If a map is bijective, returns the inverse map."""
-    m: Map = coerce_map(m=m, interpret_none_as_empty=True)
+    m: WellFormedMap = coerce_map(m=m, interpret_none_as_empty=True)
     domain = transform_formula_to_enumeration(phi=m.codomain, strip_duplicates=True)
     codomain = transform_formula_to_tuple(phi=m.domain)
     if domain.arity != codomain.arity:
@@ -4216,7 +4345,7 @@ def inverse_map(m: FlexibleMap) -> Map:
             new_domain=domain,
             new_codomain=codomain,
             original_map=m)
-    m2: Map = Map(d=domain, c=codomain)
+    m2: WellFormedMap = WellFormedMap(d=domain, c=codomain)
     return m2
 
 
@@ -5024,7 +5153,7 @@ def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleDerivation) 
     """
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     c: WellFormedTheoryComponent = coerce_theory_component(d=c)
-    return t.extend_with_component(c)
+    return extend_with_component(t=t, c=c)
 
 
 def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
@@ -5579,7 +5708,7 @@ def auto_derive_4(
                 for permutation in iterate_permutations_of_enumeration_elements_with_fixed_size(e=valid_statements,
                                                                                                 n=permutation_size):
                     permutation_success: bool = True
-                    variable_substitution: Map = Map(d=free_variables, c=permutation)
+                    variable_substitution: WellFormedMap = WellFormedMap(d=free_variables, c=permutation)
                     effective_premises: Formula = substitute_formulas(phi=necessary_premises, m=variable_substitution)
                     effective_premises: WellFormedTupl = WellFormedTupl(e=(*effective_premises, permutation,))
                     for premise_target_statement in effective_premises:
@@ -5858,7 +5987,7 @@ class TypesetterForMap(pl1.Typesetter):
 
     def typeset_from_generator(self, phi: FlexibleFormula, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: Map = coerce_map(m=phi, interpret_none_as_empty=True)
+        phi: WellFormedMap = coerce_map(m=phi, interpret_none_as_empty=True)
         # is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
 

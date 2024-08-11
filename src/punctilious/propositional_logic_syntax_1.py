@@ -213,7 +213,7 @@ extended_theory = as1.WellFormedTheory(d=(*axiomatization,))
 
 def let_x_be_a_propositional_variable(
         t: as1.FlexibleTheory, formula_ts: as1.FlexibleRepresentation) -> typing.Tuple[
-    as1.WellFormedTheory, as1.Variable]:
+    as1.WellFormedTheory, as1.WellFormedVariable]:
     """Declare a propositional-variable in theory t.
 
     If they are not already present, all axioms of propositional-logic-syntax-1 are appended to theory t.
@@ -233,7 +233,7 @@ def let_x_be_a_propositional_variable(
     # in the theory.
     t = as1.append_to_theory(axiomatization, t=t)
 
-    x = as1.Variable(c=as1.NullaryConnective(formula_ts=formula_ts))
+    x = as1.WellFormedVariable(c=as1.NullaryConnective(formula_ts=formula_ts))
     # t, _ = as1.derive_1(t=t, c=x | as1.is_a | as1.is_a_propositional_variable,
     #                    p=None, i=i0)
     t, _, _ = as1.derive_1(t=t, c=as1.connective_for_is_a_propositional_variable(x),
@@ -244,9 +244,9 @@ def let_x_be_a_propositional_variable(
 
 def let_x_be_some_propositional_variables(
         t: as1.FlexibleTheory,
-        ts: typing.Iterable[as1.FlexibleRepresentation]) -> [as1.WellFormedTheory, [as1.Variable, ...]]:
+        ts: typing.Iterable[as1.FlexibleRepresentation]) -> [as1.WellFormedTheory, [as1.WellFormedVariable, ...]]:
     """"""
-    propositional_variables: tuple[as1.Variable, ...] = tuple()
+    propositional_variables: tuple[as1.WellFormedVariable, ...] = tuple()
     for ts in ts:
         t, x = let_x_be_a_propositional_variable(t=t, formula_ts=ts)
         propositional_variables = propositional_variables + (x,)
@@ -275,7 +275,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     # Retrieve the list of propositional-variables in phi:
     l: as1.Enumeration = as1.get_leaf_formulas(phi=phi)
     p: as1.Enumeration = as1.Enumeration(e=None)
-    m: as1.Map = as1.Map(d=None, c=None)
+    m: as1.WellFormedMap = as1.WellFormedMap(d=None, c=None)
     for x in l:
         rep: str = x.typeset_as_string() + '\''
         # automatically append the axiom: x is-a propositional-variable
@@ -284,7 +284,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
             #    e=premises, x=x2 | as1.is_a | as1.is_a_propositional_variable)
             p: as1.Enumeration = as1.append_element_to_enumeration(
                 e=p, x=as1.connective_for_is_a_propositional_variable(x2))
-            m: as1.Map = as1.append_pair_to_map(m=m, preimage=x, image=x2)
+            m: as1.WellFormedMap = as1.append_pair_to_map(m=m, preimage=x, image=x2)
     v: as1.Enumeration = as1.Enumeration(e=m.codomain)
 
     # elaborate a new formula psi where all variables have been replaced with the new variables
