@@ -5153,13 +5153,14 @@ def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleDerivation) 
     """
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     c: WellFormedTheoryComponent = coerce_theory_component(d=c)
-    return extend_with_component(t=t, c=c)
+    return append_to_theory(c, t=t)
 
 
 def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
     """Extend theoretical context ``t`` by appending to it whatever components are passed in *args.
 
     TODO: REDEVELOP THIS TO SUPPORT FLEXIBLE THEORETICAL CONTEXTS
+        THIS IS REPLACED BY EXTEND_WITH_COMPONENT.
 
     :param args:
     :param t:
@@ -5199,6 +5200,10 @@ def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
                 extension_m: WellFormedTheorem = coerce_theorem(t=argument)
                 if not is_theorem_of(m=extension_m, t=t):
                     t: WellFormedTheory = WellFormedTheory(t=t, d=(extension_m,))
+            elif is_well_formed_extension(e=argument):
+                extension_e: WellFormedExtension = coerce_extension(e=argument)
+                # TODO: PRESERVE AXIOMATIZATION, ETC., HERE
+                t: WellFormedTheory = WellFormedTheory(t=t, d=(extension_e,))
             else:
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_049,
                                           msg=f'Invalid argument: ({type(argument)}) {argument}.')
