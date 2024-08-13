@@ -935,7 +935,7 @@ def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheoreticalContext, max_components:
         is_formula_equivalent(phi=a, psi=a2) for a2 in iterate_theory_axioms(t=t, max_components=max_components))
 
 
-def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_components: int | None = None):
+def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheoreticalContext, max_components: int | None = None):
     """Returns ``True`` if `i` is an inference-rule in axiomatization or theory ``t``, ``False`` otherwise.
 
     :param i: An inference-rule.
@@ -946,7 +946,8 @@ def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheory, max_compon
     :return: ``True`` if ``a`` is an inference-rule ``t``, ``False`` otherwise.
     """
     i: WellFormedInferenceRule = coerce_inference_rule(i=i)
-    t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
+    t: FlexibleTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=True,
+                                                               canonical_conversion=True)
     return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in
                iterate_theory_inference_rules(t=t, max_components=max_components))
 
@@ -1213,7 +1214,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
     :param i2: (conditional) An external algorithm.
     :return: A python-tuple (t,i) where t is a theory, and i and inference-rule.
     """
-    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty_theory=True)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=True)
     # Signature #1: provide the inference-rule
     if i is not None:
         i: WellFormedInferenceRule = coerce_inference_rule(i=i)
@@ -1273,7 +1274,7 @@ def let_x_be_an_axiom(t: FlexibleTheoreticalContext | None = None, s: typing.Opt
     :return: a pair (t, a) where t is an extension of the input theory, with a new axiom claiming the
     input statement, and ``a`` is the new axiom.
     """
-    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty_theory=True)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=True)
 
     if s is not None and a is not None:
         raise u1.ApplicativeError(
@@ -1318,8 +1319,8 @@ def let_x_be_an_extension(t: FlexibleTheoreticalContext | None = None, e: Flexib
     :return: a pair ``(t', e)`` where ``t2`` is the extended theoretical context ``t'``,
         and ``e`` is the extension.
     """
-    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty_theory=True)
-    e: WellFormedTheoreticalContext = coerce_theoretical_context(t=e, interpret_none_as_empty_theory=True)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=True)
+    e: WellFormedTheoreticalContext = coerce_theoretical_context(t=e, interpret_none_as_empty=True)
     e: WellFormedExtension = WellFormedExtension(t=e)
     t_prime: WellFormedTheoreticalContext = extend_with_component(t=t, c=e)
     return t_prime, e
@@ -2946,7 +2947,7 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
         return False
 
 
-def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None = None,
+def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheoreticalContext | None = None,
                                   d: FlexibleEnumeration[FlexibleComponent] | None = None,
                                   strip_duplicates: bool = True,
                                   interpret_none_as_empty: bool = True,
@@ -2976,7 +2977,7 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None =
     """
     p: Formula = coerce_formula(phi=p)
     if t is not None:
-        t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=False)
+        t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=False)
     else:
         d: WellFormedEnumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
                                                       canonic_conversion=True)
@@ -3149,8 +3150,10 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleComponent] | None = None
     for d2 in iterate_enumeration_elements(e=d, max_elements=max_components):
         d2: WellFormedTheoryComponent = coerce_theory_component(d=d2)
         if recurse_extensions and is_well_formed_extension(e=d2):
+            e: WellFormedExtension = coerce_extension(e=d2)
+            t2: WellFormedTheoreticalContext = e.theoretical_context
             yield from iterate_theory_components(
-                t=d2, recurse_extensions=recurse_extensions,
+                t=t2, recurse_extensions=recurse_extensions,
                 strip_duplicates=strip_duplicates, interpret_none_as_empty=interpret_none_as_empty,
                 canonic_conversion=canonic_conversion)
         else:
@@ -3341,7 +3344,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
 
 
 def are_valid_statements_in_theory_with_variables(
-        s: FlexibleTupl, t: FlexibleTheory,
+        s: FlexibleTupl, t: FlexibleTheoreticalContext,
         variables: FlexibleEnumeration,
         variables_values: FlexibleMap, debug: bool = False) \
         -> tuple[bool, typing.Optional[WellFormedTupl]]:
@@ -3357,7 +3360,7 @@ def are_valid_statements_in_theory_with_variables(
 
     """
     s: WellFormedTupl = coerce_tuple(t=s, interpret_none_as_empty=True)
-    t: WellFormedTheory = coerce_theory(t=t)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     variables: WellFormedEnumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True,
                                                           strip_duplicates=True)
     variables_values: WellFormedMap = coerce_map(m=variables_values, interpret_none_as_empty=True)
@@ -3908,17 +3911,18 @@ def coerce_theory_component(d: FlexibleFormula) -> WellFormedTheoryComponent:
 
 
 def coerce_theoretical_context(t: FlexibleTheoreticalContext,
-                               interpret_none_as_empty_theory: bool = False) -> WellFormedTheoreticalContext:
+                               interpret_none_as_empty: bool = False,
+                               canonical_conversion: bool = True) -> WellFormedTheoreticalContext:
     """
 
     Validate that t is a well-formed theoretical context and returns it properly typed as WellFormedTheoreticalContext,
     or raise an error with code AS1-089.
 
     :param t: A theoretical context.
-    :param interpret_none_as_empty_theory: If ``t`` is ``None``, returns an empty theory.
+    :param interpret_none_as_empty: If ``t`` is ``None``, returns an empty theory.
     :return:
     """
-    if t is None and interpret_none_as_empty_theory:
+    if t is None and interpret_none_as_empty:
         t: WellFormedTheory = WellFormedTheory()
         return t
     else:
@@ -3928,11 +3932,12 @@ def coerce_theoretical_context(t: FlexibleTheoreticalContext,
         elif is_well_formed_axiomatization(a=t, raise_error_if_false=False):
             return coerce_axiomatization(a=t)
         elif is_well_formed_theory(t=t, raise_error_if_false=False):
-            return coerce_theory(t=t)
+            return coerce_theory(t=t, canonical_conversion=canonical_conversion)
         else:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_090,
-                msg=f'Argument `t` could not be coerced to a theoretical context of python-type WellFormedTheoreticalContext.',
+                msg=f'Argument `t` could not be coerced to a theoretical context of python-type '
+                    f'WellFormedTheoreticalContext.',
                 t=t)
 
 
@@ -5504,8 +5509,8 @@ def is_in_map_domain(phi: FlexibleFormula, m: FlexibleMap) -> bool:
     return is_element_of_enumeration(x=phi, e=m.domain)
 
 
-def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]:
+def derive_0(t: FlexibleTheoreticalContext, c: FlexibleFormula, debug: bool = False) -> \
+        typing.Tuple[WellFormedTheoreticalContext, bool, typing.Optional[WellFormedTheoryComponent]]:
     """An algorithm that attempts to automatically prove a conjecture in a theory.
 
     The `derive_0` algorithm "proves the obvious":
@@ -5521,8 +5526,9 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
     :return: A python-tuple (t, True, derivation) if the derivation was successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]
     """
-    t = coerce_theory(t=t, canonical_conversion=True, interpret_none_as_empty=True)
-    c = coerce_formula(phi=c)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, canonical_conversion=True,
+                                                                 interpret_none_as_empty=True)
+    c: Formula = coerce_formula(phi=c)
     if debug:
         u1.log_debug(f'derive_0: start. conjecture:{c}.')
     if is_valid_proposition_so_far_1(p=c, t=t):  # this first check is superfluous
@@ -5542,7 +5548,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
 def derive_2(t: FlexibleTheoreticalContext, c: FlexibleFormula, i: FlexibleInferenceRule,
              raise_error_if_false: bool = True,
              debug: bool = False) -> \
-        typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]:
+        typing.Tuple[WellFormedTheoreticalContext, bool, typing.Optional[WellFormedTheoryComponent]]:
     """Derives a new theory `t′` that extends ``t`` with a new theorem based on conjecture `c` using inference-rule `i`.
 
     Note: in contrast, derive_1 requires the explicit list of premises. derive_2 is more convenient to use because it
