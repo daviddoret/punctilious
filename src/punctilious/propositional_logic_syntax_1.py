@@ -273,8 +273,8 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
 
     # Now we have the assurance that phi is a well-formed propositional formula.
     # Retrieve the list of propositional-variables in phi:
-    l: as1.Enumeration = as1.get_leaf_formulas(phi=phi)
-    p: as1.Enumeration = as1.Enumeration(e=None)
+    l: as1.WellFormedEnumeration = as1.get_leaf_formulas(phi=phi)
+    p: as1.WellFormedEnumeration = as1.WellFormedEnumeration(e=None)
     m: as1.WellFormedMap = as1.WellFormedMap(d=None, c=None)
     for x in l:
         rep: str = x.typeset_as_string() + '\''
@@ -282,10 +282,10 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
         with let_x_be_a_propositional_variable(t=t, formula_ts=rep) as x2:
             # premises: as1.Enumeration = as1.append_element_to_enumeration(
             #    e=premises, x=x2 | as1.is_a | as1.is_a_propositional_variable)
-            p: as1.Enumeration = as1.append_element_to_enumeration(
+            p: as1.WellFormedEnumeration = as1.append_element_to_enumeration(
                 e=p, x=as1.connective_for_is_a_propositional_variable(x2))
             m: as1.WellFormedMap = as1.append_pair_to_map(m=m, preimage=x, image=x2)
-    v: as1.Enumeration = as1.Enumeration(e=m.codomain)
+    v: as1.WellFormedEnumeration = as1.WellFormedEnumeration(e=m.codomain)
 
     # elaborate a new formula psi where all variables have been replaced with the new variables
     psi = as1.substitute_formulas(phi=phi, m=m)
@@ -293,7 +293,7 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
     # translate the antecedent of the implication to the main premises
     # note: we could further split conjunctions into multiple premises
     antecedent: as1.Formula = psi.term_0
-    p: as1.Enumeration = as1.append_element_to_enumeration(
+    p: as1.WellFormedEnumeration = as1.append_element_to_enumeration(
         e=p, x=antecedent)
 
     # retrieve the conclusion

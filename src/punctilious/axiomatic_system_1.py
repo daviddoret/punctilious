@@ -369,7 +369,7 @@ class WellFormedTheoreticalContext(Formula, ABC):
         super().__init__(con=con, t=t, **kwargs)
 
     @abc.abstractmethod
-    def extend_theoretical_context(self, c: WellFormedTheoryComponent) -> WellFormedTheoreticalContext:
+    def extend_with_component(self, c: FlexibleComponent, **kwargs) -> WellFormedTheoreticalContext:
         raise u1.ApplicativeError('Abstract method.')
 
 
@@ -415,7 +415,7 @@ def coerce_variable(x: FlexibleFormula) -> Formula:
 
 
 def coerce_enumeration_OBSOLETE(e: FlexibleEnumeration, strip_duplicates: bool = False,
-                                interpret_none_as_empty: bool = True) -> Enumeration:
+                                interpret_none_as_empty: bool = True) -> WellFormedEnumeration:
     """Coerce elements to an enumeration.
     If elements is None, coerce it to an empty enumeration."""
     if strip_duplicates:
@@ -423,53 +423,54 @@ def coerce_enumeration_OBSOLETE(e: FlexibleEnumeration, strip_duplicates: bool =
         # takes place in Enumeration __init__. but there must be some kind of implicit conversion
         # too early in the process which leads to an error being raised.
         e = strip_duplicate_formulas_in_python_tuple(t=e)
-    if isinstance(e, Enumeration):
+    if isinstance(e, WellFormedEnumeration):
         return e
     elif isinstance(e, Formula) and is_well_formed_enumeration(e=e):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(e=e, strip_duplicates=strip_duplicates)
+        return WellFormedEnumeration(e=e, strip_duplicates=strip_duplicates)
     elif interpret_none_as_empty and e is None:
-        return Enumeration(e=None, strip_duplicates=strip_duplicates)
+        return WellFormedEnumeration(e=None, strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Generator) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(e=tuple(element for element in e), strip_duplicates=strip_duplicates)
+        return WellFormedEnumeration(e=tuple(element for element in e), strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Iterable) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(e=e, strip_duplicates=strip_duplicates)
+        return WellFormedEnumeration(e=e, strip_duplicates=strip_duplicates)
     else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_008, coerced_type=Enumeration, phi_type=type(e), phi=e)
+        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_008, coerced_type=WellFormedEnumeration, phi_type=type(e),
+                                  phi=e)
 
 
 def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False,
                        interpret_none_as_empty: bool = False,
-                       canonic_conversion: bool = False) -> Enumeration:
+                       canonic_conversion: bool = False) -> WellFormedEnumeration:
     """Coerce "e" to an enumeration.
     """
-    if isinstance(e, Enumeration):
+    if isinstance(e, WellFormedEnumeration):
         return e
     elif is_well_formed_enumeration(e=e):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return Enumeration(e=e)
+        return WellFormedEnumeration(e=e)
     elif interpret_none_as_empty and e is None:
-        return Enumeration(e=None)
+        return WellFormedEnumeration(e=None)
     elif canonic_conversion and is_well_formed_formula(phi=e):
         return transform_formula_to_enumeration(phi=e, strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Generator) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(e=tuple(element for element in e), strip_duplicates=strip_duplicates)
+        return WellFormedEnumeration(e=tuple(element for element in e), strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Iterable) and not isinstance(e, Formula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return Enumeration(e=e, strip_duplicates=strip_duplicates)
+        return WellFormedEnumeration(e=e, strip_duplicates=strip_duplicates)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_008,
@@ -509,17 +510,17 @@ def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False,
             interpret_none_as_empty=interpret_none_as_empty)
 
 
-def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> Enumeration:
+def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> WellFormedEnumeration:
     e = coerce_enumeration(e=e, interpret_none_as_empty=True)
-    e2 = Enumeration()
+    e2 = WellFormedEnumeration()
     for element in e:
         element = coerce_variable(x=element)
-        e2 = Enumeration(e=(*e2, element,))
+        e2 = WellFormedEnumeration(e=(*e2, element,))
     return e2
 
 
 def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration, strip_duplicates: bool = True,
-                      interpret_none_as_empty: bool = True, canonic_conversion: bool = True) -> Enumeration:
+                      interpret_none_as_empty: bool = True, canonic_conversion: bool = True) -> WellFormedEnumeration:
     """Given two enumerations phi, and psi, the union-enumeration operator, noted phi ∪-enumeration psi,
     returns a new enumeration omega such that:
     - all elements of phi are elements of omega,
@@ -538,18 +539,19 @@ def union_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration, strip_
      - Idempotent: (phi ∪-formula phi) ~formula phi.
      - Not symmetric if some element of psi are elements of phi: because of order.
     """
-    phi: Enumeration = coerce_enumeration(e=phi, interpret_none_as_empty=interpret_none_as_empty,
-                                          strip_duplicates=strip_duplicates,
-                                          canonic_conversion=canonic_conversion)
-    psi: Enumeration = coerce_enumeration(e=psi, interpret_none_as_empty=interpret_none_as_empty,
-                                          strip_duplicates=strip_duplicates,
-                                          canonic_conversion=canonic_conversion)
-    e: Enumeration = Enumeration(e=(*phi, *psi,), strip_duplicates=strip_duplicates)
+    phi: WellFormedEnumeration = coerce_enumeration(e=phi, interpret_none_as_empty=interpret_none_as_empty,
+                                                    strip_duplicates=strip_duplicates,
+                                                    canonic_conversion=canonic_conversion)
+    psi: WellFormedEnumeration = coerce_enumeration(e=psi, interpret_none_as_empty=interpret_none_as_empty,
+                                                    strip_duplicates=strip_duplicates,
+                                                    canonic_conversion=canonic_conversion)
+    e: WellFormedEnumeration = WellFormedEnumeration(e=(*phi, *psi,), strip_duplicates=strip_duplicates)
     return e
 
 
 def intersection_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration, strip_duplicates: bool = True,
-                             interpret_none_as_empty: bool = True, canonic_conversion: bool = True) -> Enumeration:
+                             interpret_none_as_empty: bool = True,
+                             canonic_conversion: bool = True) -> WellFormedEnumeration:
     """Given two enumerations phi, and psi, the intersection-enumeration operator, noted phi ∩-enumeration psi,
     returns a new enumeration omega such that:
     - all elements of the resulting enumeration are elements of phi and of psi.
@@ -560,34 +562,35 @@ def intersection_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration,
      - Idempotent: (phi ∩-enumeration phi) ~enumeration phi.
      - Symmetric: (phi ∩-enumeration psi) ~enumeration (psi ∩-enumeration phi).
     """
-    phi: Enumeration = coerce_enumeration(e=phi, interpret_none_as_empty=interpret_none_as_empty,
-                                          strip_duplicates=strip_duplicates,
-                                          canonic_conversion=canonic_conversion)
-    psi: Enumeration = coerce_enumeration(e=psi, interpret_none_as_empty=interpret_none_as_empty,
-                                          strip_duplicates=strip_duplicates,
-                                          canonic_conversion=canonic_conversion)
+    phi: WellFormedEnumeration = coerce_enumeration(e=phi, interpret_none_as_empty=interpret_none_as_empty,
+                                                    strip_duplicates=strip_duplicates,
+                                                    canonic_conversion=canonic_conversion)
+    psi: WellFormedEnumeration = coerce_enumeration(e=psi, interpret_none_as_empty=interpret_none_as_empty,
+                                                    strip_duplicates=strip_duplicates,
+                                                    canonic_conversion=canonic_conversion)
     common_elements: list = [x for x in iterate_enumeration_elements(e=phi) if is_element_of_enumeration(x=x, e=psi)]
-    e: Enumeration = Enumeration(e=common_elements, strip_duplicates=strip_duplicates)
+    e: WellFormedEnumeration = WellFormedEnumeration(e=common_elements, strip_duplicates=strip_duplicates)
     return e
 
 
 def difference_enumeration(phi: FlexibleEnumeration, psi: FlexibleEnumeration, strip_duplicates: bool = True,
-                           interpret_none_as_empty: bool = True, canonic_conversion: bool = True) -> Enumeration:
+                           interpret_none_as_empty: bool = True,
+                           canonic_conversion: bool = True) -> WellFormedEnumeration:
     """Given two enumerations phi, and psi, the difference-enumeration operator, noted phi ∖-enumeration psi,
     returns a new enumeration omega such that:
     - all elements of the resulting enumeration are elements of phi but not psi.
     Order is preserved, that is:
     - the elements from phi keep their original relative order
     """
-    phi: Enumeration = coerce_enumeration(e=phi, interpret_none_as_empty=interpret_none_as_empty,
-                                          strip_duplicates=strip_duplicates,
-                                          canonic_conversion=canonic_conversion)
-    psi: Enumeration = coerce_enumeration(e=psi, interpret_none_as_empty=interpret_none_as_empty,
-                                          strip_duplicates=strip_duplicates,
-                                          canonic_conversion=canonic_conversion)
+    phi: WellFormedEnumeration = coerce_enumeration(e=phi, interpret_none_as_empty=interpret_none_as_empty,
+                                                    strip_duplicates=strip_duplicates,
+                                                    canonic_conversion=canonic_conversion)
+    psi: WellFormedEnumeration = coerce_enumeration(e=psi, interpret_none_as_empty=interpret_none_as_empty,
+                                                    strip_duplicates=strip_duplicates,
+                                                    canonic_conversion=canonic_conversion)
     different_elements: list = [x for x in iterate_enumeration_elements(e=phi) if
                                 not is_element_of_enumeration(x=x, e=psi)]
-    e: Enumeration = Enumeration(e=different_elements, strip_duplicates=strip_duplicates)
+    e: WellFormedEnumeration = WellFormedEnumeration(e=different_elements, strip_duplicates=strip_duplicates)
     return e
 
 
@@ -627,7 +630,7 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> WellFor
         return WellFormedMap(d=m[WellFormedMap.DOMAIN_INDEX], c=m[WellFormedMap.CODOMAIN_INDEX])
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
-        domain: Enumeration = coerce_enumeration(e=m.keys())
+        domain: WellFormedEnumeration = coerce_enumeration(e=m.keys())
         codomain: WellFormedTupl = coerce_tuple(t=m.values())
         return WellFormedMap(d=domain, c=codomain)
     else:
@@ -839,7 +842,7 @@ def is_element_of_enumeration(x: FlexibleFormula, e: FlexibleEnumeration) -> boo
     :rtype: bool
     """
     x: Formula = coerce_formula(phi=x)
-    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
+    e: WellFormedEnumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     return is_term_of_formula(x=x, phi=e)
 
 
@@ -937,7 +940,7 @@ def get_index_of_first_equivalent_element_in_enumeration(x: FlexibleFormula,
     but are not possible on enumerations. The two methods are algorithmically equivalent but their
     intent is distinct."""
     x: Formula = coerce_formula(phi=x)
-    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
+    e: WellFormedEnumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=e)
 
 
@@ -1148,10 +1151,10 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
     # Signature #3: provide the arguments upon which the transformation can be built upon which ...
     elif c is not None:
         c: Formula = coerce_formula(phi=c)
-        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
-                                            strip_duplicates=True)
-        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
-                                            strip_duplicates=True)
+        v: WellFormedEnumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
+                                                      strip_duplicates=True)
+        d: WellFormedEnumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
+                                                      strip_duplicates=True)
         p: WellFormedTupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
         # if a is None:
         # Signature 3: This is a transformation-by-variable-transformation:
@@ -1523,7 +1526,7 @@ def is_formula_equivalent_with_variables_2(
     variables_fixed_values: WellFormedMap = coerce_map(m=variables_fixed_values, interpret_none_as_empty=True)
     phi: Formula = coerce_formula(phi=phi)
     psi: Formula = coerce_formula(phi=psi)
-    variables: Enumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True)
+    variables: WellFormedEnumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True)
     # check that all variables are atomic formulas
     for x in variables:
         x: Formula = coerce_formula(phi=x)
@@ -1660,7 +1663,8 @@ def is_sub_enumeration(s: FlexibleEnumeration, e: FlexibleEnumeration,
     """
     s = coerce_enumeration(e=s, strip_duplicates=strip_duplicates, interpret_none_as_empty=interpret_none_as_empty,
                            canonic_conversion=canonic_conversion)
-    e = coerce_enumeration(e=e)
+    e = coerce_enumeration(e=e, strip_duplicates=strip_duplicates, interpret_none_as_empty=interpret_none_as_empty,
+                           canonic_conversion=canonic_conversion)
     if all(is_element_of_enumeration(x=x, e=e) for x in iterate_enumeration_elements(e=s)):
         return True
     else:
@@ -1843,7 +1847,7 @@ def reduce_map(m: FlexibleFormula, preimage: FlexibleFormula) -> WellFormedMap:
         return m
 
 
-def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) -> Enumeration:
+def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) -> WellFormedEnumeration:
     """Return a new enumeration e′ such that:
      - all elements of e are elements of e′,
      - x is an element of e′.
@@ -1855,14 +1859,14 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
     If "x" is an element of "e", return "e".
     If "x" is not an element of "e", and `s` is the sequence of terms in "e", return "(s, e)".
     """
-    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
+    e: WellFormedEnumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     x: Formula = coerce_formula(phi=x)
     if is_element_of_enumeration(x=x, e=e):
         # "x" is an element of "e":
         return e
     else:
         # "x" is not an element of "e":
-        extended_enumeration: Enumeration = Enumeration(e=(*e, x,))
+        extended_enumeration: WellFormedEnumeration = WellFormedEnumeration(e=(*e, x,))
         return extended_enumeration
 
 
@@ -1944,7 +1948,8 @@ class WellFormedMap(Formula):
     CODOMAIN_INDEX: int = 1
 
     @staticmethod
-    def _data_validation_2(d: FlexibleEnumeration = None, c: FlexibleTupl = None) -> tuple[Enumeration, WellFormedTupl]:
+    def _data_validation_2(d: FlexibleEnumeration = None, c: FlexibleTupl = None) -> tuple[
+        WellFormedEnumeration, WellFormedTupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -1952,7 +1957,7 @@ class WellFormedMap(Formula):
         :param c:
         :return:
         """
-        d: Enumeration = coerce_enumeration(
+        d: WellFormedEnumeration = coerce_enumeration(
             e=d, strip_duplicates=True, interpret_none_as_empty=True, canonic_conversion=True)
         c: WellFormedTupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
         if len(d) != len(c):
@@ -1987,7 +1992,7 @@ class WellFormedMap(Formula):
         return coerce_tuple(t=self[WellFormedMap.CODOMAIN_INDEX])
 
     @property
-    def domain(self) -> Enumeration:
+    def domain(self) -> WellFormedEnumeration:
         """An enumeration of formulas denoted as the domain of the map.
 
         The domain of a map is the enumeration of possible inputs of the get_image_from_map function.
@@ -2015,7 +2020,7 @@ def strip_duplicate_formulas_in_python_tuple(t: tuple[Formula, ...]) -> tuple[Fo
     return t2
 
 
-class Enumeration(Formula):
+class WellFormedEnumeration(Formula):
     """An enumeration is formula whose terms, called elements, are unique over the ~formula operator.
 
     Syntactic definition:
@@ -2063,6 +2068,9 @@ class Enumeration(Formula):
         con: Connective = connective_for_enumeration
         if e is None:
             e = tuple()
+        else:
+            e = tuple(element for element in e)
+        # e = coerce_tuple(t=e, interpret_none_as_empty=True)
         e_unique_only = strip_duplicate_formulas_in_python_tuple(t=e)
         if strip_duplicates:
             e = e_unique_only
@@ -2081,21 +2089,21 @@ class Enumeration(Formula):
 
     def __new__(cls, e: FlexibleEnumeration = None,
                 strip_duplicates: bool = False, **kwargs):
-        c, e = Enumeration._data_validation_2(e=e, strip_duplicates=strip_duplicates)
+        c, e = WellFormedEnumeration._data_validation_2(e=e, strip_duplicates=strip_duplicates)
         o: tuple = super().__new__(cls, con=c, t=e, **kwargs)
         return o
 
     def __init__(self, e: FlexibleEnumeration = None,
                  strip_duplicates: bool = False, **kwargs):
-        c, e = Enumeration._data_validation_2(e=e, strip_duplicates=strip_duplicates)
+        c, e = WellFormedEnumeration._data_validation_2(e=e, strip_duplicates=strip_duplicates)
         super().__init__(con=c, t=e, **kwargs)
 
 
-FlexibleEnumeration = typing.Optional[typing.Union[Enumeration, typing.Iterable[FlexibleFormula]]]
+FlexibleEnumeration = typing.Optional[typing.Union[WellFormedEnumeration, typing.Iterable[FlexibleFormula]]]
 """FlexibleEnumeration is a flexible python type that may be safely coerced into an Enumeration."""
 
 
-class EmptyEnumeration(Enumeration):
+class EmptyEnumeration(WellFormedEnumeration):
     """An empty-enumeration is an enumeration that has no element.
     """
 
@@ -2109,7 +2117,7 @@ class EmptyEnumeration(Enumeration):
         super().__init__(e=None)
 
 
-class SingletonEnumeration(Enumeration):
+class SingletonEnumeration(WellFormedEnumeration):
     """A singleton-enumeration is an enumeration that has exactly one element.
     """
 
@@ -2148,7 +2156,7 @@ class Transformation(Formula, abc.ABC):
             d: FlexibleEnumeration | None = None,
             i: FlexibleTupl | None = None,
             a: FlexibleConnectiveLinkedToAlgorithm | None = None) -> tuple[
-        Connective, Formula, Enumeration, Enumeration, WellFormedTupl, ConnectiveLinkedWithAlgorithm | None]:
+        Connective, Formula, WellFormedEnumeration, WellFormedEnumeration, WellFormedTupl, ConnectiveLinkedWithAlgorithm | None]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -2161,10 +2169,10 @@ class Transformation(Formula, abc.ABC):
         """
         con: Connective = coerce_connective(con=con)
         o: Formula = coerce_formula(phi=o)
-        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
-                                            strip_duplicates=True)
-        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
-                                            strip_duplicates=True)
+        v: WellFormedEnumeration = coerce_enumeration(e=v, interpret_none_as_empty=True, canonic_conversion=True,
+                                                      strip_duplicates=True)
+        d: WellFormedEnumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
+                                                      strip_duplicates=True)
         i: WellFormedTupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
         # TODO: Coerce argument ``a`` as well
         return con, o, v, d, i, a
@@ -2244,7 +2252,7 @@ class Transformation(Formula, abc.ABC):
         return self[Transformation.OUTPUT_SHAPE_INDEX]
 
     @property
-    def output_declarations(self) -> Enumeration:
+    def output_declarations(self) -> WellFormedEnumeration:
         """A list of variables that are not present in the input-shapes,
         and that correspond to newly declared objects in the transformation output."""
         return self[Transformation.DECLARATIONS_INDEX]
@@ -2271,7 +2279,7 @@ class Transformation(Formula, abc.ABC):
         return self[Transformation.INPUT_SHAPES_INDEX]
 
     @property
-    def variables(self) -> Enumeration:
+    def variables(self) -> WellFormedEnumeration:
         """Variables used to express the shapes of arguments and the conclusion."""
         return self[Transformation.VARIABLES_INDEX]
 
@@ -2329,7 +2337,8 @@ class TransformationByVariableSubstitution(Transformation, ABC):
             d: FlexibleEnumeration | None = None,
             i: FlexibleTupl | None = None,
             a: FlexibleConnectiveLinkedToAlgorithm = None
-    ) -> tuple[Connective, Formula, Enumeration, Enumeration, WellFormedTupl, ConnectiveLinkedWithAlgorithm | None]:
+    ) -> tuple[
+        Connective, Formula, WellFormedEnumeration, WellFormedEnumeration, WellFormedTupl, ConnectiveLinkedWithAlgorithm | None]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -2342,8 +2351,8 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         """
         con: Connective = transformation_by_variable_substitution_connective
         o: Formula = coerce_formula(phi=o)
-        v: Enumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
-        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
+        v: WellFormedEnumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
+        d: WellFormedEnumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
         i: WellFormedTupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
         if a is not None:
             pass
@@ -2865,7 +2874,7 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
 
 
 def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None = None,
-                                  d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                  d: FlexibleEnumeration[FlexibleComponent] | None = None,
                                   strip_duplicates: bool = True,
                                   interpret_none_as_empty: bool = True,
                                   canonic_conversion: bool = True,
@@ -2896,8 +2905,8 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheory | None =
     if t is not None:
         t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=False)
     else:
-        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
-                                            canonic_conversion=True)
+        d: WellFormedEnumeration = coerce_enumeration(e=d, strip_duplicates=True, interpret_none_as_empty=True,
+                                                      canonic_conversion=True)
     return any(is_formula_equivalent(phi=p, psi=valid_statement) for valid_statement in
                iterate_theory_propositions(
                    t=t,
@@ -2975,28 +2984,48 @@ def iterate_enumeration_elements(e: FlexibleEnumeration, max_elements: int | Non
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `e` to enumeration.
     :return:
     """
-    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=interpret_none_as_empty,
-                                        strip_duplicates=strip_duplicates, canonic_conversion=canonic_conversion)
+    e: WellFormedEnumeration = coerce_enumeration(e=e, interpret_none_as_empty=interpret_none_as_empty,
+                                                  strip_duplicates=strip_duplicates,
+                                                  canonic_conversion=canonic_conversion)
     yield from iterate_formula_terms(phi=e, max_terms=max_elements)
 
 
-def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheory) -> bool:
-    """Returns True if every formula phi in enumeration s is a valid-statement in theory t, False otherwise.
+def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheoreticalContext,
+                                   raise_error_if_false: bool = False) -> bool:
+    """Returns ``True`` if every formula ``phi`` in enumeration ``s`` is a valid-statement in theoretical context ``t``,
+    ``False`` otherwise.
+
+    :param s: A tuple of (possibly valid) statements.
+    :param t: A theoretical context.
+    :param raise_error_if_false:
+    :return: ``True`` if every formula ``phi`` in enumeration ``s`` is a valid-statement in theory ``t``, ``False``
+    otherwise.
     """
     s: WellFormedTupl = coerce_tuple(t=s, interpret_none_as_empty=True)
-    t: WellFormedTheory = coerce_theory(t=t)
-    return all(is_valid_proposition_so_far_1(p=phi, t=t) for phi in iterate_tuple_elements(s))
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
+    for phi in iterate_tuple_elements(phi=s):
+        if not is_valid_proposition_so_far_1(p=phi, t=t):
+            if raise_error_if_false:
+                raise u1.ApplicativeError(
+                    msg='Statements validity check failure. Statement `s` is not a valid statement in `t`.',
+                    s=s,
+                    t=t,
+                    raise_error_if_false=raise_error_if_false
+                )
+            else:
+                return False
+    return True
 
 
 def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnumeration, n: int) -> \
-        typing.Generator[Enumeration, None, None]:
+        typing.Generator[WellFormedEnumeration, None, None]:
     """Iterates all distinct tuples (order matters) of exactly n elements in enumeration e.
 
     :param e: An enumeration.
     :param n: The fixed size of the tuples to be iterated.
     :return:
     """
-    e: Enumeration = coerce_enumeration_OBSOLETE(e=e)
+    e: WellFormedEnumeration = coerce_enumeration_OBSOLETE(e=e)
     # e: Enumeration = coerce_enumeration(e=e, strip_duplicates=True, interpret_none_as_empty=True,
     #                                    canonic_conversion=True)
     if n > e.arity:
@@ -3010,24 +3039,27 @@ def iterate_permutations_of_enumeration_elements_with_fixed_size(e: FlexibleEnum
     else:
         generator = itertools.permutations(iterate_enumeration_elements(e=e), n)
         for python_tuple in generator:
-            permutation: Enumeration = Enumeration(e=python_tuple)
+            permutation: WellFormedEnumeration = WellFormedEnumeration(e=python_tuple)
             yield permutation
         return
 
 
-def iterate_theory_components(t: FlexibleTheory[FlexibleDerivation] | None = None,
-                              d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+def iterate_theory_components(t: FlexibleTheory[FlexibleComponent] | None = None,
+                              d: FlexibleEnumeration[FlexibleComponent] | None = None,
+                              recurse_extensions: bool = True,
                               strip_duplicates: bool = True,
                               interpret_none_as_empty: bool = True,
                               canonic_conversion: bool = True,
                               max_components: int | None = None) -> \
         typing.Generator[Formula, None, None]:
-    """Iterates through derivations of a theory ``t`` in canonical order.
+    """Iterates the components of a theoretical context ``t`` in canonical order.
 
     Alternatively, iterates through an enumeration of derivations `d` in canonical order.
 
     :param t: A theory.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
+    :param recurse_extensions: If ``True``, yields the components of the extension, yields the extension formula itself
+        otherwise.
     :param max_components: Yields only math:``max_components`` components, or all components if None.
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
@@ -3036,19 +3068,25 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleDerivation] | None = Non
     """
     if t is not None:
         t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
-        d: Enumeration = t.components
+        d: WellFormedEnumeration = transform_theoretical_context_to_enumeration(t=t)
     else:
-        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=strip_duplicates,
-                                            interpret_none_as_empty=interpret_none_as_empty,
-                                            canonic_conversion=canonic_conversion)
+        d: WellFormedEnumeration = coerce_enumeration(e=d, strip_duplicates=strip_duplicates,
+                                                      interpret_none_as_empty=interpret_none_as_empty,
+                                                      canonic_conversion=canonic_conversion)
     for d2 in iterate_enumeration_elements(e=d, max_elements=max_components):
         d2: WellFormedTheoryComponent = coerce_theory_component(d=d2)
-        yield d2
+        if recurse_extensions and is_well_formed_extension(e=d2):
+            yield from iterate_theory_components(
+                t=d2, recurse_extensions=recurse_extensions,
+                strip_duplicates=strip_duplicates, interpret_none_as_empty=interpret_none_as_empty,
+                canonic_conversion=canonic_conversion)
+        else:
+            yield d2
     return
 
 
 def iterate_theory_axioms(t: FlexibleTheory | None = None,
-                          d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                          d: FlexibleEnumeration[FlexibleComponent] | None = None,
                           strip_duplicates: bool = True,
                           interpret_none_as_empty: bool = True,
                           canonic_conversion: bool = True,
@@ -3078,7 +3116,7 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
 
 
 def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
-                            d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                            d: FlexibleEnumeration[FlexibleComponent] | None = None,
                             strip_duplicates: bool = True,
                             interpret_none_as_empty: bool = True,
                             canonic_conversion: bool = True,
@@ -3108,7 +3146,7 @@ def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
 
 
 def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
-                                   d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                   d: FlexibleEnumeration[FlexibleComponent] | None = None,
                                    strip_duplicates: bool = True,
                                    interpret_none_as_empty: bool = True,
                                    canonic_conversion: bool = True,
@@ -3138,7 +3176,7 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
 
 
 def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
-                                    d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                    d: FlexibleEnumeration[FlexibleComponent] | None = None,
                                     strip_duplicates: bool = True,
                                     interpret_none_as_empty: bool = True,
                                     canonic_conversion: bool = True,
@@ -3180,7 +3218,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
 
 
 def iterate_theory_propositions(t: FlexibleTheory | None = None,
-                                d: FlexibleEnumeration[FlexibleDerivation] | None = None,
+                                d: FlexibleEnumeration[FlexibleComponent] | None = None,
                                 strip_duplicates: bool = True,
                                 interpret_none_as_empty: bool = True,
                                 canonic_conversion: bool = True,
@@ -3237,15 +3275,16 @@ def are_valid_statements_in_theory_with_variables(
     """
     s: WellFormedTupl = coerce_tuple(t=s, interpret_none_as_empty=True)
     t: WellFormedTheory = coerce_theory(t=t)
-    variables: Enumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True, strip_duplicates=True)
+    variables: WellFormedEnumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True,
+                                                          strip_duplicates=True)
     variables_values: WellFormedMap = coerce_map(m=variables_values, interpret_none_as_empty=True)
 
     # list the free variables.
     # these are the variables that are in "variables" that are not in the domain of "variables_values".
-    free_variables: Enumeration = Enumeration()
+    free_variables: WellFormedEnumeration = WellFormedEnumeration()
     for x in iterate_enumeration_elements(e=variables):
         if not is_in_map_domain(phi=x, m=variables_values):
-            free_variables: Enumeration = Enumeration(e=(*free_variables, x,))
+            free_variables: WellFormedEnumeration = WellFormedEnumeration(e=(*free_variables, x,))
 
     if debug:
         u1.log_info(f'are_valid_statements_in_theory_with_variables: free-variables:{free_variables}')
@@ -3287,7 +3326,7 @@ def is_proposition_with_free_variables_in_theory(phi: FlexibleFormula, t: Flexib
     """
     phi: Formula = coerce_formula(phi=phi)
     t: WellFormedTheory = coerce_theory(t=t)
-    free_variables: Enumeration = coerce_enumeration_of_variables(e=free_variables)
+    free_variables: WellFormedEnumeration = coerce_enumeration_of_variables(e=free_variables)
     for valid_statement in t.iterate_valid_statements():
         output, _, = is_formula_equivalent_with_variables_2(phi=valid_statement, psi=phi, variables=free_variables)
         if output:
@@ -3438,17 +3477,29 @@ def is_well_formed_axiomatic_base_component(d: FlexibleFormula) -> bool:
     ^^^^^^^^^^^^^^^^^^^^
     A formula :math:`\\phi` is a well-formed axiomatic base component if and only if:
      - it is a well-formed inference-rule,
-     - or it is a well-formed axiom.
+     - or it is a well-formed axiom,
+     - or it is an extension and all component :math:`c` in :math:`\\phi` is a well-formed
+        axiomatic base component.
 
     :param d: A formula.
-    :return: bool.
+    :return: ``True`` if ``d`` is a well-formed axiomatic base component, ``False`` otherwise.
     """
     d: Formula = coerce_formula(phi=d)
     if is_well_formed_theorem(t=d):
-        return True
+        # Theorems are derivations, they cannot be components of an axiomatic base.
+        return False
     elif is_well_formed_inference_rule(i=d):
         return True
     elif is_well_formed_axiom(a=d):
+        return True
+    elif is_well_formed_extension(e=d):
+        e: WellFormedExtension = coerce_extension(e=d)
+        for c in iterate_theory_components(t=e.theoretical_context):
+            if not is_well_formed_axiomatic_base_component(d=c):
+                # If any component of the extension is (recursively)
+                # not a well-formed axiomatic base component, it follows that
+                # the extension itself is not a well-formed axiomatic base component.
+                return False
         return True
     else:
         return False
@@ -3475,7 +3526,7 @@ def is_well_formed_theoretical_context(t: FlexibleTheoreticalContext) -> bool:
 
 def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeration,
                                         raise_error_if_false: bool = False
-                                        ) -> tuple[bool, Enumeration | None, Enumeration | None]:
+                                        ) -> tuple[bool, WellFormedEnumeration | None, WellFormedEnumeration | None]:
     """Given an enumeration of presumably verified derivations "v" (e.g.: the derivation sequence of a theory ``t``),
     and an enumeration of unverified derivations "u" (e.g.: whose elements are not (yet) effective
     theorems of ``t``), returns True if a theory would be well-formed if it was composed of
@@ -3492,19 +3543,19 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
      `v′` = `v` with duplicates stripped out if `b` is ``True``, ``None`` otherwise,
      `u′` = `(u \\ v)` with duplicates stripped out if `b` is ``True``, ``None`` otherwise.
     """
-    v: Enumeration = coerce_enumeration(e=v, strip_duplicates=True, interpret_none_as_empty=True,
-                                        canonic_conversion=True)
-    u: Enumeration = coerce_enumeration(e=u, strip_duplicates=True, interpret_none_as_empty=True,
-                                        canonic_conversion=True)
+    v: WellFormedEnumeration = coerce_enumeration(e=v, strip_duplicates=True, interpret_none_as_empty=True,
+                                                  canonic_conversion=True)
+    u: WellFormedEnumeration = coerce_enumeration(e=u, strip_duplicates=True, interpret_none_as_empty=True,
+                                                  canonic_conversion=True)
 
     # Consider only derivations that are not elements of the verified enumeration.
     # In effect, a derivation sequence must contain unique derivations under enumeration-equivalence.
-    u: Enumeration = difference_enumeration(phi=u, psi=v, strip_duplicates=True, interpret_none_as_empty=True,
-                                            canonic_conversion=True)
+    u: WellFormedEnumeration = difference_enumeration(phi=u, psi=v, strip_duplicates=True, interpret_none_as_empty=True,
+                                                      canonic_conversion=True)
 
     # Create a complete enumeration "c" composed of derivations "u" appended to derivations "v",
     # getting rid of duplicates if any in the process.
-    c: Enumeration = union_enumeration(phi=v, psi=u, strip_duplicates=True)
+    c: WellFormedEnumeration = union_enumeration(phi=v, psi=u, strip_duplicates=True)
 
     # Put aside the index from which the proofs of derivations have not been verified.
     verification_threshold: int = len(v)
@@ -3512,7 +3563,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
     # Coerce all enumeration elements to axioms, inference-rules, and theorems.
     # TODO: Implement a dedicated function coerce_enumeration_of_derivations().
     coerced_elements: list = [coerce_theory_component(d=d) for d in iterate_enumeration_elements(e=c)]
-    c: Enumeration = Enumeration(e=coerced_elements)
+    c: WellFormedEnumeration = WellFormedEnumeration(e=coerced_elements)
 
     # Iterate through all index positions of derivations for which the proofs must be verified.
     for index in range(verification_threshold, len(c)):
@@ -3531,6 +3582,19 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             # This is an inference-rule.
             # By definition, the presence of an inference-rule in a theory is valid.
             pass
+        elif is_well_formed_extension(e=d):
+            # This is a theory extension.
+            # We must recursively check the validity of the extension components in the parent theory.
+            # An alternative approach would be to specify recurse_extensions=True in the parent loop,
+            # but this is less preferable because the extensions would not be explicitly
+            # verified with the same approach as the other classes of components.
+            if not would_be_valid_components_in_theory(v=v, u=iterate_theory_components(t=d, recurse_extensions=False)):
+                if raise_error_if_false:
+                    raise u1.ApplicativeError(
+                        code=c1.ERROR_CODE_AS1_094,
+                        msg='Some component of extension `d` would not be valid in `v`.',
+                        p=p, index=index, d=d, c=c, v=v, u=u)
+                return False, None, None
         elif is_well_formed_theorem(t=d):
             # This is a theorem.
             # Check that this theorem is well-formed with regard to the target theory,
@@ -3669,8 +3733,8 @@ def is_well_formed_theory(t: FlexibleFormula, raise_error_if_false: bool = False
 
     # Check that the terms of the formula constitute an enumeration of derivations,
     # and that derivations in this sequence of derivations is valid.
-    v: Enumeration = Enumeration(e=None)  # Assume no pre-verified derivations.
-    u: Enumeration = transform_formula_to_enumeration(phi=t, strip_duplicates=False)
+    v: WellFormedEnumeration = WellFormedEnumeration(e=None)  # Assume no pre-verified derivations.
+    u: WellFormedEnumeration = transform_formula_to_enumeration(phi=t, strip_duplicates=False)
     would_be_valid, _, _ = would_be_valid_components_in_theory(v=v, u=u)
     return would_be_valid
 
@@ -4099,6 +4163,7 @@ class WellFormedExtension(WellFormedTheoryComponent):
         This is an open question.
 
     """
+    THEORETICAL_CONTEXT_INDEX: int = 0
 
     @staticmethod
     def _data_validation_3(t: WellFormedTheoreticalContext = None) -> tuple[Connective, WellFormedTheoreticalContext]:
@@ -4130,6 +4195,14 @@ class WellFormedExtension(WellFormedTheoryComponent):
         """
         con, p = WellFormedExtension._data_validation_3(t=t)
         super().__init__(con=con, s=t, **kwargs)
+
+    @property
+    def theoretical_context(self) -> WellFormedTheoreticalContext:
+        """Returns the theoretical context :math`t` of the extension formula :math:`\\text{extension}(t)`.
+
+        :return: The theoretical context :math`t` of the extension formula :math:`\\text{extension}(t)`.
+        """
+        return self[WellFormedExtension.THEORETICAL_CONTEXT_INDEX]
 
 
 FlexibleExtension = typing.Union[WellFormedExtension, Formula]
@@ -4474,7 +4547,7 @@ class WellFormedTheorem(WellFormedTheoryComponent):
 
 
 FlexibleTheorem = typing.Union[WellFormedTheorem, Formula]
-FlexibleDerivation = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRule]
+FlexibleComponent = typing.Union[FlexibleAxiom, FlexibleTheorem, FlexibleInferenceRule, FlexibleExtension]
 
 
 class Heuristic(abc.ABC):
@@ -4525,7 +4598,7 @@ class WellFormedTheory(WellFormedTheoreticalContext):
 
     @staticmethod
     def _data_validation_2(con: Connective, t: FlexibleTheory | None = None, d: FlexibleEnumeration = None
-                           ) -> tuple[Connective, Enumeration]:
+                           ) -> tuple[Connective, WellFormedEnumeration]:
         """
 
         :param t:
@@ -4535,8 +4608,8 @@ class WellFormedTheory(WellFormedTheoreticalContext):
         con: Connective = connective_for_theory
         if t is not None:
             t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=True)
-        d: Enumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True,
-                                            interpret_none_as_empty=True)
+        d: WellFormedEnumeration = coerce_enumeration(e=d, strip_duplicates=True, canonic_conversion=True,
+                                                      interpret_none_as_empty=True)
         is_valid, v, u = would_be_valid_components_in_theory(v=t, u=d, raise_error_if_false=True)
         d = union_enumeration(phi=v, psi=u, strip_duplicates=True)
         return con, d
@@ -4585,42 +4658,67 @@ class WellFormedTheory(WellFormedTheoreticalContext):
             # Output its declaration.
             u1.log_info(self.typeset_as_string(theory=self, ts_key=pl1.DECLARATION_TS))
 
-    @property
-    def axioms(self) -> Enumeration:
-        """Return an enumeration of all axioms in the theory.
+    def extend_with_component(
+            self, c: FlexibleComponent,
+            **kwargs) -> WellFormedTheoreticalContext:
+        """Given a theory ``self`` and a theory component ``c``, returns a new theory ``self′``
+        that is an extension of ``self`` with ``c`` appended as its last component.
 
+        :param c:
+        :return:
+        """
+        c: WellFormedTheoryComponent = coerce_theory_component(d=c)
+        return WellFormedTheory(a=self, d=(c,))
+
+    @property
+    def axioms(self) -> WellFormedEnumeration:
+        """Return an enumeration of all axioms in the theory.
+        TODO: MOVE TO THEORETICAL CONTEXT???
         Note: order is preserved."""
-        return Enumeration(e=tuple(self.iterate_axioms()))
+        return WellFormedEnumeration(e=tuple(self.iterate_axioms()))
 
     @property
     def heuristics(self) -> set[Heuristic, ...] | set[{}]:
         """A python-set of heuristics.
+        TODO: MOVE TO THEORETICAL CONTEXT???
 
         Heuristics are not formally part of a theory. They are decorative objects used to facilitate proof derivations.
         """
         return self._heuristics
 
     @property
-    def valid_statements(self) -> Enumeration:
-        """Return an enumeration of all axiom and theorem valid-statements in the theory, preserving order."""
+    def valid_statements(self) -> WellFormedEnumeration:
+        """Return an enumeration of all axiom and theorem valid-statements in the theory, preserving order.
+                TODO: MOVE TO THEORETICAL CONTEXT???
+
+        """
         python_tuple: tuple = tuple(self.iterate_valid_statements())
-        e: Enumeration = Enumeration(e=python_tuple)
+        e: WellFormedEnumeration = WellFormedEnumeration(e=python_tuple)
         return e
 
     @property
-    def inference_rules(self) -> Enumeration:
+    def inference_rules(self) -> WellFormedEnumeration:
         """Return an enumeration of all inference-rules in the theory, preserving order, filtering out axioms and
-        theorems."""
-        return Enumeration(e=tuple(self.iterate_inference_rules()))
+        theorems.
+                TODO: MOVE TO THEORETICAL CONTEXT???
+
+        """
+        return WellFormedEnumeration(e=tuple(self.iterate_inference_rules()))
 
     def iterate_axioms(self) -> typing.Iterator[WellFormedAxiom]:
-        """Iterates over all axioms in the theory, preserving order, filtering out inference-rules and theorems."""
+        """Iterates over all axioms in the theory, preserving order, filtering out inference-rules and theorems.
+                TODO: MOVE TO THEORETICAL CONTEXT???
+
+        """
         for element in self:
             if isinstance(element, WellFormedAxiom):
                 yield element
 
     def iterate_valid_statements(self) -> typing.Iterator[Formula]:
-        """Iterates over all axiom and theorem valid-statements in the theory, preserving order."""
+        """Iterates over all axiom and theorem valid-statements in the theory, preserving order.
+                TODO: MOVE TO THEORETICAL CONTEXT???
+
+        """
         for c in self.iterate_components():
             if isinstance(c, WellFormedAxiom):
                 c: WellFormedAxiom
@@ -4630,32 +4728,50 @@ class WellFormedTheory(WellFormedTheoreticalContext):
                 yield c.valid_statement
 
     def iterate_inference_rules(self) -> typing.Iterator[WellFormedInferenceRule]:
-        """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems."""
+        """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems.
+
+                TODO: MOVE TO THEORETICAL CONTEXT???
+
+        """
         for element in self:
             if isinstance(element, WellFormedInferenceRule):
                 yield element
 
     def iterate_theorems(self) -> typing.Iterator[WellFormedTheorem]:
-        """Iterates over all theorems in the theory, preserving order, filtering out axioms and inference-rules."""
+        """Iterates over all theorems in the theory, preserving order, filtering out axioms and inference-rules.
+
+                TODO: MOVE TO THEORETICAL CONTEXT???
+
+        """
         for element in self:
             if isinstance(element, WellFormedTheorem):
                 yield element
 
     def iterate_components(self) -> typing.Iterator[WellFormedTheoryComponent]:
-        """Iterates over all derivations, preserving order"""
+        """Iterates over all derivations, preserving order
+
+                TODO: MOVE TO THEORETICAL CONTEXT???
+
+        """
         for element in self:
             yield element
 
     @property
-    def components(self) -> Enumeration:
-        """Return an enumeration of all derivations in the theory, preserving order."""
-        return Enumeration(e=tuple(self.iterate_components()))
+    def components(self) -> WellFormedEnumeration:
+        """Return an enumeration of all derivations in the theory, preserving order.
+
+                TODO: MOVE TO THEORETICAL CONTEXT???
+        """
+        return WellFormedEnumeration(e=tuple(self.iterate_components()))
 
     @property
-    def theorems(self) -> Enumeration:
+    def theorems(self) -> WellFormedEnumeration:
         """Return an enumeration of all theorems in the theory, preserving order, filtering out axioms and
-        inference-rules."""
-        return Enumeration(e=tuple(self.iterate_theorems()))
+        inference-rules.
+
+                TODO: MOVE TO THEORETICAL CONTEXT???
+        """
+        return WellFormedEnumeration(e=tuple(self.iterate_theorems()))
 
 
 def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> WellFormedTheory:
@@ -4712,7 +4828,7 @@ def transform_theory_to_axiomatization(t: FlexibleTheory, interpret_none_as_empt
     """
     t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=interpret_none_as_empty,
                                         canonical_conversion=canonical_conversion)
-    e: Enumeration = Enumeration(e=None)
+    e: WellFormedEnumeration = WellFormedEnumeration(e=None)
     for c in iterate_theory_components(t=t):
         if is_well_formed_axiom(a=c):
             e = append_element_to_enumeration(e=e, x=c)
@@ -4751,8 +4867,8 @@ def is_extension_of(t2: FlexibleTheory, t1: FlexibleTheory, interpret_none_as_em
     a1: WellFormedAxiomatization = transform_theory_to_axiomatization(t=t1)
     a2: WellFormedAxiomatization = transform_theory_to_axiomatization(t=t2)
 
-    e1: Enumeration = transform_axiomatization_to_enumeration(a=a1)
-    e2: Enumeration = transform_axiomatization_to_enumeration(a=a2)
+    e1: WellFormedEnumeration = transform_axiomatization_to_enumeration(a=a1)
+    e2: WellFormedEnumeration = transform_axiomatization_to_enumeration(a=a2)
 
     ok: bool = is_sub_enumeration(s=e1, e=e2)
 
@@ -4793,8 +4909,8 @@ def is_axiomatization_equivalent(t1: FlexibleTheory, t2: FlexibleTheory, interpr
     a1: WellFormedAxiomatization = transform_theory_to_axiomatization(t=t1)
     a2: WellFormedAxiomatization = transform_theory_to_axiomatization(t=t2)
 
-    e1: Enumeration = transform_axiomatization_to_enumeration(a=a1)
-    e2: Enumeration = transform_axiomatization_to_enumeration(a=a2)
+    e1: WellFormedEnumeration = transform_axiomatization_to_enumeration(a=a1)
+    e2: WellFormedEnumeration = transform_axiomatization_to_enumeration(a=a2)
 
     ok: bool = is_enumeration_equivalent(phi=e1, psi=e2)
 
@@ -4818,7 +4934,7 @@ def transform_enumeration_to_theory(e: FlexibleEnumeration) -> WellFormedTheory:
     :param e: An enumeration.
     :return: A theory.
     """
-    e: Enumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
+    e: WellFormedEnumeration = coerce_enumeration(e=e, interpret_none_as_empty=True)
     t: WellFormedTheory = WellFormedTheory(d=e)
     return t
 
@@ -4852,13 +4968,13 @@ def transform_tuple_to_theory(t: FlexibleTupl) -> WellFormedTheory:
     :return: A theory.
     """
     t: WellFormedTupl = coerce_tuple(t=t)
-    e: Enumeration = coerce_enumeration(e=t, strip_duplicates=True, canonic_conversion=True,
-                                        interpret_none_as_empty=True)
+    e: WellFormedEnumeration = coerce_enumeration(e=t, strip_duplicates=True, canonic_conversion=True,
+                                                  interpret_none_as_empty=True)
     t2: WellFormedTheory = transform_enumeration_to_theory(e=e)
     return t2
 
 
-def transform_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumeration:
+def transform_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> WellFormedEnumeration:
     """Canonical function that converts an axiomatization ``a`` to an enumeration.
 
     An axiomatization is fundamentally an enumeration of derivations, limited to axioms and inference-rules.
@@ -4873,11 +4989,11 @@ def transform_axiomatization_to_enumeration(a: FlexibleAxiomatization) -> Enumer
     :return: An enumeration.
     """
     a: WellFormedAxiomatization = coerce_axiomatization(a=a)
-    e: Enumeration = Enumeration(e=(*a,))
+    e: WellFormedEnumeration = WellFormedEnumeration(e=(*a,))
     return e
 
 
-def transform_formula_to_enumeration(phi: FlexibleFormula, strip_duplicates: bool = False) -> Enumeration:
+def transform_formula_to_enumeration(phi: FlexibleFormula, strip_duplicates: bool = False) -> WellFormedEnumeration:
     """Canonical transformation from formula to enumeration.
 
     If the terms of a formula are unique, returns an enumeration whose
@@ -4894,19 +5010,22 @@ def transform_formula_to_enumeration(phi: FlexibleFormula, strip_duplicates: boo
     :return: An enumeration.
     """
     phi: Formula = coerce_formula(phi=phi)
-    if isinstance(phi, Enumeration):
+    if isinstance(phi, WellFormedEnumeration):
         return phi
     else:
-        return Enumeration(e=iterate_formula_terms(phi=phi), strip_duplicates=strip_duplicates)
+        return WellFormedEnumeration(e=iterate_formula_terms(phi=phi), strip_duplicates=strip_duplicates)
 
 
-def transform_theory_to_enumeration(t: FlexibleTheory) -> Enumeration:
-    """Canonical function that converts a theory ``t`` to an enumeration.
+def transform_theoretical_context_to_enumeration(t: FlexibleTheoreticalContext) -> WellFormedEnumeration:
+    """Canonical function that converts a theoretical context ``t`` to an enumeration.
 
     A theory is fundamentally an enumeration of derivations.
     This function provides the canonical conversion method from theory to enumeration,
     by returning a new enumeration "e" such that all the derivations in ``t`` are elements of "e",
     preserving order.
+
+    If the theoretical context contains extensions, the extensions are not recursed but
+    returned directly.
 
     :param t: A theory.
     :return: An enumeration.
@@ -4958,7 +5077,7 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
 
     @staticmethod
     def _data_validation_2(a: FlexibleAxiomatization | None = None,
-                           d: FlexibleEnumeration = None) -> tuple[Connective, Enumeration]:
+                           d: FlexibleEnumeration = None) -> tuple[Connective, WellFormedEnumeration]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -4967,24 +5086,24 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
         :return:
         """
         global connective_for_axiomatization_formula
-        d: Enumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, strip_duplicates=True)
+        d: WellFormedEnumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, strip_duplicates=True)
         if a is not None:
             a: WellFormedAxiomatization = coerce_axiomatization(a=a)
             # Duplicate derivations are not allowed in axiomatizations, so strip duplicates during merge.
             # The first occurrence is maintained, and the second occurrence is stripped.
-            d: Enumeration = Enumeration(e=(*a, *d), strip_duplicates=True)
+            d: WellFormedEnumeration = WellFormedEnumeration(e=(*a, *d), strip_duplicates=True)
         # coerce all elements of the enumeration to axioms or inference-rules.
-        coerced_components: Enumeration = Enumeration(e=None)
+        coerced_components: WellFormedEnumeration = WellFormedEnumeration(e=None)
         for x in iterate_enumeration_elements(e=d):
             if is_well_formed_inference_rule(i=x):
                 # This is an inference-rule.
                 inference_rule: WellFormedInferenceRule = coerce_inference_rule(i=x)
-                coerced_components: Enumeration = append_element_to_enumeration(
+                coerced_components: WellFormedEnumeration = append_element_to_enumeration(
                     e=coerced_components, x=inference_rule)
             elif is_well_formed_axiom(a=x):
                 # This is an axiom.
                 axiom: WellFormedAxiom = coerce_axiom(a=x)
-                coerced_components: Enumeration = append_element_to_enumeration(
+                coerced_components: WellFormedEnumeration = append_element_to_enumeration(
                     e=coerced_components, x=axiom)
             else:
                 # Incorrect form.
@@ -5027,6 +5146,32 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
             # Output its declaration.
             u1.log_info(self.typeset_as_string(theory=self, ts_key=pl1.DECLARATION_TS))
 
+    def extend_with_component(
+            self, c: FlexibleComponent,
+            return_theory_if_necessary: bool = True, **kwargs) -> WellFormedTheoreticalContext:
+        """Given an axiomatization ``self`` and a theory component ``c``, returns a new axiomatization ``self′``
+        that is an extension of ``self`` with ``c``.
+
+        :param c:
+        :param return_theory_if_necessary: If ``c`` is a theorem,
+            or if ``c`` is an extension that contains (recursively) a theorem,
+            returns a theory instead of an axiomatization,
+            raise an error otherwise.
+        :return:
+        """
+        c: WellFormedTheoryComponent = coerce_theory_component(d=c)
+        if is_well_formed_axiomatic_base_component(d=c):
+            return WellFormedAxiomatization(a=self, d=(c,))
+        elif return_theory_if_necessary:
+            t: WellFormedTheory = transform_axiomatization_to_theory(a=self)
+            return t.extend_with_component(c=c, **kwargs)
+        else:
+            raise u1.ApplicativeError(
+                msg='Axiomatization extension failure. Axiomatization `self` could not be extended with component `c`.',
+                c=c, return_theory_if_necessary=return_theory_if_necessary,
+                kwargs=kwargs, self=self
+            )
+
     @property
     def heuristics(self) -> set[Heuristic, ...] | set[{}]:
         """A python-set of heuristics.
@@ -5045,7 +5190,7 @@ Note that a flexible type is not an assurance of well-formedness. Coercion assur
 and raises an error if the object is ill-formed."""
 
 FlexibleTheory = typing.Optional[
-    typing.Union[WellFormedAxiomatization, WellFormedTheory, typing.Iterable[FlexibleDerivation]]]
+    typing.Union[WellFormedAxiomatization, WellFormedTheory, typing.Iterable[FlexibleComponent]]]
 """A flexible python type for which coercion into type Theory is supported.
 
 Note that a flexible type is not an assurance of well-formedness. Coercion assures well-formedness
@@ -5102,7 +5247,7 @@ def is_leaf_formula(phi: FlexibleFormula) -> bool:
     return phi.arity == 0
 
 
-def get_leaf_formulas(phi: FlexibleFormula, eb: Enumeration = None) -> Enumeration:
+def get_leaf_formulas(phi: FlexibleFormula, eb: WellFormedEnumeration = None) -> WellFormedEnumeration:
     """Return the enumeration of leaf-formulas in phi.
 
     Note: if phi is a leaf-formula, return phi.
@@ -5113,7 +5258,7 @@ def get_leaf_formulas(phi: FlexibleFormula, eb: Enumeration = None) -> Enumerati
     """
     phi: Formula = coerce_formula(phi=phi)
     if eb is None:
-        eb: Enumeration = Enumeration(e=None)
+        eb: WellFormedEnumeration = WellFormedEnumeration(e=None)
     if not is_element_of_enumeration(x=phi, e=eb) and is_leaf_formula(phi=phi):
         eb = append_element_to_enumeration(x=phi, e=eb)
     else:
@@ -5143,7 +5288,7 @@ def rank(phi: FlexibleFormula) -> int:
         return max(rank(phi=term) for term in phi) + 1
 
 
-def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleDerivation) -> WellFormedTheoreticalContext:
+def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleComponent) -> WellFormedTheoreticalContext:
     """Given the theoretical context ``t``, returns a new theoretical context ``t′`` that is
     an extension of ``t`` with the component ``c``.
 
@@ -5153,14 +5298,16 @@ def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleDerivation) 
     """
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     c: WellFormedTheoryComponent = coerce_theory_component(d=c)
-    return append_to_theory(c, t=t)
 
 
 def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
     """Extend theoretical context ``t`` by appending to it whatever components are passed in *args.
 
-    TODO: REDEVELOP THIS TO SUPPORT FLEXIBLE THEORETICAL CONTEXTS
-        THIS IS REPLACED BY EXTEND_WITH_COMPONENT.
+    TODO: REDEVELOP THIS TO SUPPORT FLEXIBLE THEORETICAL CONTEXTS,
+        THIS FUNCTION MUST BE REPLACED BY EXTEND_WITH_COMPONENT,
+        AND WE MUST PRESERVE THE PYTHON TYPE OF THE ORIGINAL `T`
+        WHENEVER POSSIBLE, E.G. APPENDING AXIOMS TO AN AXIOMATIZATION
+        MUST YIELD AN AXIOMATIZATION.
 
     :param args:
     :param t:
@@ -5200,17 +5347,13 @@ def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
                 extension_m: WellFormedTheorem = coerce_theorem(t=argument)
                 if not is_theorem_of(m=extension_m, t=t):
                     t: WellFormedTheory = WellFormedTheory(t=t, d=(extension_m,))
-            elif is_well_formed_extension(e=argument):
-                extension_e: WellFormedExtension = coerce_extension(e=argument)
-                # TODO: PRESERVE AXIOMATIZATION, ETC., HERE
-                t: WellFormedTheory = WellFormedTheory(t=t, d=(extension_e,))
             else:
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_049,
                                           msg=f'Invalid argument: ({type(argument)}) {argument}.')
         return t
 
 
-def append_component_to_axiomatization(d: FlexibleDerivation, a: FlexibleAxiomatization) -> WellFormedAxiomatization:
+def append_component_to_axiomatization(d: FlexibleComponent, a: FlexibleAxiomatization) -> WellFormedAxiomatization:
     """Extend axiomatization ``a`` with derivation `d`.
 
     :param d:
@@ -5455,10 +5598,10 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
         # It is thus worth pursuing the attempt.
 
         # By contrast, the unknown variable values can be listed.
-        unknown_variable_values: Enumeration = Enumeration()
+        unknown_variable_values: WellFormedEnumeration = WellFormedEnumeration()
         for x in i.transformation.variables:
             if not is_element_of_enumeration(x=x, e=known_variable_values.domain):
-                unknown_variable_values = Enumeration(e=(*unknown_variable_values, x,))
+                unknown_variable_values = WellFormedEnumeration(e=(*unknown_variable_values, x,))
 
         # Using substitution for the known_variable_values,
         # a more accurate set of premises can be computed, denoted necessary_premises.
@@ -5600,8 +5743,8 @@ def auto_derive_4(
     global auto_derivation_max_formula_depth_preference
     t: WellFormedTheory = coerce_theory(t=t)
     c: Formula = coerce_formula(phi=c)
-    conjecture_exclusion_list: Enumeration = coerce_enumeration(e=conjecture_exclusion_list,
-                                                                interpret_none_as_empty=True)
+    conjecture_exclusion_list: WellFormedEnumeration = coerce_enumeration(e=conjecture_exclusion_list,
+                                                                          interpret_none_as_empty=True)
     indent: str = ' ' * (auto_derivation_max_formula_depth_preference - max_recursion + 1)
     if max_recursion == 2:
         pass
@@ -5618,7 +5761,7 @@ def auto_derive_4(
 
     # To prevent infinite loops, populate an exclusion list of conjectures that are already
     # being searched in higher recursions.
-    conjecture_exclusion_list = Enumeration(e=(*conjecture_exclusion_list, c,))
+    conjecture_exclusion_list = WellFormedEnumeration(e=(*conjecture_exclusion_list, c,))
 
     max_recursion = max_recursion - 1
     if max_recursion < 1:
@@ -5649,10 +5792,10 @@ def auto_derive_4(
 
             # then we list the variables for which we don't have an assigned value,
             # called the free-variables.
-            free_variables: Enumeration = Enumeration()
+            free_variables: WellFormedEnumeration = WellFormedEnumeration()
             for x in inference_rule.transformation.variables:
                 if not is_element_of_enumeration(x=x, e=m.domain):
-                    free_variables = Enumeration(e=(*free_variables, x,))
+                    free_variables = WellFormedEnumeration(e=(*free_variables, x,))
             # u1.log_info(f'\t\t free-variables: {free_variables}')
 
             # now that we know what are the necessary variable values, we can determine what
@@ -6149,7 +6292,7 @@ class TypesetterForDerivation(pl1.Typesetter):
     def __init__(self):
         super().__init__()
 
-    def typeset_from_generator(self, phi: FlexibleDerivation, theory: typing.Optional[FlexibleTheory] = None,
+    def typeset_from_generator(self, phi: FlexibleComponent, theory: typing.Optional[FlexibleTheory] = None,
                                **kwargs) -> (
             typing.Generator)[str, None, None]:
         phi: WellFormedTheoryComponent = coerce_theory_component(d=phi)
