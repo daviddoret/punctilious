@@ -1229,6 +1229,8 @@ class TestAxiomaticBase:
         ab_extended, _ = pu.as1.let_x_be_an_extension(t=ab, e=ext1)
         assert isinstance(ab_extended, pu.as1.WellFormedAxiomatization)
 
+        pass
+
         ab_extended, _, _ = pu.as1.derive_2(t=ab_extended, c=x, i=i1, raise_error_if_false=True)
         ab_extended, _, _ = pu.as1.derive_2(t=ab_extended, c=y, i=i2, raise_error_if_false=True)
 

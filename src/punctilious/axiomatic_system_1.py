@@ -372,6 +372,79 @@ class WellFormedTheoreticalContext(Formula, ABC):
     def extend_with_component(self, c: FlexibleComponent, **kwargs) -> WellFormedTheoreticalContext:
         raise u1.ApplicativeError('Abstract method.')
 
+    @property
+    def axioms(self) -> WellFormedEnumeration:
+        """Return an enumeration of all axioms in the theory.
+        TODO: MOVE TO THEORETICAL CONTEXT???
+        Note: order is preserved."""
+        return WellFormedEnumeration(e=tuple(self.iterate_axioms()))
+
+    @property
+    def heuristics(self) -> set[Heuristic, ...] | set[{}]:
+        """A python-set of heuristics.
+        TODO: MOVE TO THEORETICAL CONTEXT???
+
+        Heuristics are not formally part of a theory. They are decorative objects used to facilitate proof derivations.
+        """
+        return self._heuristics
+
+    @property
+    def valid_statements(self) -> WellFormedEnumeration:
+        """Return an enumeration of all axiom and theorem valid-statements in the theory, preserving order.
+        """
+        python_tuple: tuple = tuple(self.iterate_valid_statements())
+        e: WellFormedEnumeration = WellFormedEnumeration(e=python_tuple)
+        return e
+
+    @property
+    def inference_rules(self) -> WellFormedEnumeration:
+        """Return an enumeration of all inference-rules in the theory, preserving order, filtering out axioms and
+        theorems.
+        """
+        return WellFormedEnumeration(e=tuple(self.iterate_inference_rules()))
+
+    def iterate_axioms(self) -> typing.Iterator[WellFormedAxiom]:
+        """Iterates over all axioms in the theory, preserving order, filtering out inference-rules and theorems.
+        """
+        yield from iterate_theory_axioms(t=self)
+
+    def iterate_valid_statements(self) -> typing.Iterator[Formula]:
+        """Iterates over all axiom and theorem valid-statements in the theory, preserving order.
+        """
+        yield from iterate_theory_valid_statements(t=self)
+
+    def iterate_inference_rules(self) -> typing.Iterator[WellFormedInferenceRule]:
+        """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems.
+        """
+        yield from iterate_theory_inference_rules(t=self)
+
+    def iterate_theorems(self) -> typing.Iterator[WellFormedTheorem]:
+        """Iterates over all theorems in the theory, preserving order, filtering out axioms and inference-rules.
+        """
+        yield from iterate_theory_theorems(t=self)
+
+    def iterate_components(self) -> typing.Iterator[WellFormedTheoryComponent]:
+        """Iterates over all derivations, preserving order
+        """
+        yield from iterate_theory_components(t=self)
+
+    @property
+    def components(self) -> WellFormedEnumeration:
+        """Return an enumeration of all derivations in the theory, preserving order.
+
+                TODO: MOVE TO THEORETICAL CONTEXT???
+        """
+        return WellFormedEnumeration(e=tuple(self.iterate_components()))
+
+    @property
+    def theorems(self) -> WellFormedEnumeration:
+        """Return an enumeration of all theorems in the theory, preserving order, filtering out axioms and
+        inference-rules.
+
+                TODO: MOVE TO THEORETICAL CONTEXT???
+        """
+        return WellFormedEnumeration(e=tuple(self.iterate_theorems()))
+
 
 def yield_string_from_typesetter(x, **kwargs):
     # TODO: ?????
@@ -3087,6 +3160,7 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleComponent] | None = None
 
 def iterate_theory_axioms(t: FlexibleTheory | None = None,
                           d: FlexibleEnumeration[FlexibleComponent] | None = None,
+                          recurse_extensions: bool = True,
                           strip_duplicates: bool = True,
                           interpret_none_as_empty: bool = True,
                           canonic_conversion: bool = True,
@@ -3106,6 +3180,7 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
+                                        recurse_extensions=recurse_extensions,
                                         max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
@@ -3117,6 +3192,7 @@ def iterate_theory_axioms(t: FlexibleTheory | None = None,
 
 def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
                             d: FlexibleEnumeration[FlexibleComponent] | None = None,
+                            recurse_extensions: bool = True,
                             strip_duplicates: bool = True,
                             interpret_none_as_empty: bool = True,
                             canonic_conversion: bool = True,
@@ -3136,6 +3212,7 @@ def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
+                                        recurse_extensions=recurse_extensions,
                                         max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
@@ -3147,6 +3224,7 @@ def iterate_theory_theorems(t: FlexibleTheoreticalContext | None = None,
 
 def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
                                    d: FlexibleEnumeration[FlexibleComponent] | None = None,
+                                   recurse_extensions: bool = True,
                                    strip_duplicates: bool = True,
                                    interpret_none_as_empty: bool = True,
                                    canonic_conversion: bool = True,
@@ -3166,6 +3244,7 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
+                                        recurse_extensions=recurse_extensions,
                                         max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
@@ -3177,6 +3256,7 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
 
 def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
                                     d: FlexibleEnumeration[FlexibleComponent] | None = None,
+                                    recurse_extensions: bool = True,
                                     strip_duplicates: bool = True,
                                     interpret_none_as_empty: bool = True,
                                     canonic_conversion: bool = True,
@@ -3199,6 +3279,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
+                                        recurse_extensions=recurse_extensions,
                                         max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
@@ -3219,6 +3300,7 @@ def iterate_theory_valid_statements(t: FlexibleTheory | None = None,
 
 def iterate_theory_propositions(t: FlexibleTheory | None = None,
                                 d: FlexibleEnumeration[FlexibleComponent] | None = None,
+                                recurse_extensions: bool = True,
                                 strip_duplicates: bool = True,
                                 interpret_none_as_empty: bool = True,
                                 canonic_conversion: bool = True,
@@ -3243,6 +3325,7 @@ def iterate_theory_propositions(t: FlexibleTheory | None = None,
     """
     for d2 in iterate_theory_components(t=t,
                                         d=d,
+                                        recurse_extensions=recurse_extensions,
                                         max_components=max_components,
                                         interpret_none_as_empty=interpret_none_as_empty,
                                         strip_duplicates=strip_duplicates,
@@ -3754,9 +3837,14 @@ def is_well_formed_axiomatization(a: FlexibleFormula, raise_error_if_false: bool
     """
     global connective_for_axiomatization_formula
     a = coerce_formula(phi=a)
-    if (a.connective is not connective_for_axiomatization_formula or
-            any(not is_well_formed_axiom(a=x) and not is_well_formed_inference_rule(i=x)
-                for x in iterate_formula_terms(phi=a))):
+
+    if isinstance(a, WellFormedAxiomatization):
+        # By design, the WellFormedAxiomatization class assures the well-formedness of an axiomatization.
+        # cf. the _data_validation_ method in the Theory class.
+        return True
+    elif (a.connective is not connective_for_axiomatization_formula or
+          any(not is_well_formed_axiom(a=x) and not is_well_formed_inference_rule(i=x)
+              for x in iterate_formula_terms(phi=a))):
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_064,
@@ -4670,109 +4758,6 @@ class WellFormedTheory(WellFormedTheoreticalContext):
         c: WellFormedTheoryComponent = coerce_theory_component(d=c)
         return WellFormedTheory(a=self, d=(c,))
 
-    @property
-    def axioms(self) -> WellFormedEnumeration:
-        """Return an enumeration of all axioms in the theory.
-        TODO: MOVE TO THEORETICAL CONTEXT???
-        Note: order is preserved."""
-        return WellFormedEnumeration(e=tuple(self.iterate_axioms()))
-
-    @property
-    def heuristics(self) -> set[Heuristic, ...] | set[{}]:
-        """A python-set of heuristics.
-        TODO: MOVE TO THEORETICAL CONTEXT???
-
-        Heuristics are not formally part of a theory. They are decorative objects used to facilitate proof derivations.
-        """
-        return self._heuristics
-
-    @property
-    def valid_statements(self) -> WellFormedEnumeration:
-        """Return an enumeration of all axiom and theorem valid-statements in the theory, preserving order.
-                TODO: MOVE TO THEORETICAL CONTEXT???
-
-        """
-        python_tuple: tuple = tuple(self.iterate_valid_statements())
-        e: WellFormedEnumeration = WellFormedEnumeration(e=python_tuple)
-        return e
-
-    @property
-    def inference_rules(self) -> WellFormedEnumeration:
-        """Return an enumeration of all inference-rules in the theory, preserving order, filtering out axioms and
-        theorems.
-                TODO: MOVE TO THEORETICAL CONTEXT???
-
-        """
-        return WellFormedEnumeration(e=tuple(self.iterate_inference_rules()))
-
-    def iterate_axioms(self) -> typing.Iterator[WellFormedAxiom]:
-        """Iterates over all axioms in the theory, preserving order, filtering out inference-rules and theorems.
-                TODO: MOVE TO THEORETICAL CONTEXT???
-
-        """
-        for element in self:
-            if isinstance(element, WellFormedAxiom):
-                yield element
-
-    def iterate_valid_statements(self) -> typing.Iterator[Formula]:
-        """Iterates over all axiom and theorem valid-statements in the theory, preserving order.
-                TODO: MOVE TO THEORETICAL CONTEXT???
-
-        """
-        for c in self.iterate_components():
-            if isinstance(c, WellFormedAxiom):
-                c: WellFormedAxiom
-                yield c.valid_statement
-            elif isinstance(c, WellFormedTheorem):
-                c: WellFormedTheorem
-                yield c.valid_statement
-
-    def iterate_inference_rules(self) -> typing.Iterator[WellFormedInferenceRule]:
-        """Iterates over all inference-rules in the theory, preserving order, filtering out axioms and theorems.
-
-                TODO: MOVE TO THEORETICAL CONTEXT???
-
-        """
-        for element in self:
-            if isinstance(element, WellFormedInferenceRule):
-                yield element
-
-    def iterate_theorems(self) -> typing.Iterator[WellFormedTheorem]:
-        """Iterates over all theorems in the theory, preserving order, filtering out axioms and inference-rules.
-
-                TODO: MOVE TO THEORETICAL CONTEXT???
-
-        """
-        for element in self:
-            if isinstance(element, WellFormedTheorem):
-                yield element
-
-    def iterate_components(self) -> typing.Iterator[WellFormedTheoryComponent]:
-        """Iterates over all derivations, preserving order
-
-                TODO: MOVE TO THEORETICAL CONTEXT???
-
-        """
-        for element in self:
-            yield element
-
-    @property
-    def components(self) -> WellFormedEnumeration:
-        """Return an enumeration of all derivations in the theory, preserving order.
-
-                TODO: MOVE TO THEORETICAL CONTEXT???
-        """
-        return WellFormedEnumeration(e=tuple(self.iterate_components()))
-
-    @property
-    def theorems(self) -> WellFormedEnumeration:
-        """Return an enumeration of all theorems in the theory, preserving order, filtering out axioms and
-        inference-rules.
-
-                TODO: MOVE TO THEORETICAL CONTEXT???
-        """
-        return WellFormedEnumeration(e=tuple(self.iterate_theorems()))
-
 
 def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> WellFormedTheory:
     """Canonical function that converts an axiomatization ``a`` to a theory.
@@ -5105,6 +5090,20 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
                 axiom: WellFormedAxiom = coerce_axiom(a=x)
                 coerced_components: WellFormedEnumeration = append_element_to_enumeration(
                     e=coerced_components, x=axiom)
+            elif is_well_formed_extension(e=x):
+                # This is a theory extension.
+                e: WellFormedExtension = coerce_extension(e=x)
+                # Check that the extension is a valid axiomatic base.
+                if not is_well_formed_axiomatic_base_component(d=e):
+                    raise u1.ApplicativeError(
+                        msg='Well-formed axiomatization data validation failure. Extension `e` is not a valid'
+                            'axiomatic base.',
+                        e=e,
+                        a=a,
+                        d=d
+                    )
+                coerced_components: WellFormedEnumeration = append_element_to_enumeration(
+                    e=coerced_components, x=e)
             else:
                 # Incorrect form.
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_062,
@@ -5288,7 +5287,8 @@ def rank(phi: FlexibleFormula) -> int:
         return max(rank(phi=term) for term in phi) + 1
 
 
-def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleComponent) -> WellFormedTheoreticalContext:
+def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleComponent,
+                          **kwargs) -> WellFormedTheoreticalContext:
     """Given the theoretical context ``t``, returns a new theoretical context ``t′`` that is
     an extension of ``t`` with the component ``c``.
 
@@ -5298,6 +5298,7 @@ def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleComponent) -
     """
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     c: WellFormedTheoryComponent = coerce_theory_component(d=c)
+    return t.extend_with_component(c=c, **kwargs)
 
 
 def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
@@ -5538,7 +5539,7 @@ def derive_0(t: FlexibleTheory, c: FlexibleFormula, debug: bool = False) -> \
     return t, False, None
 
 
-def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
+def derive_2(t: FlexibleTheoreticalContext, c: FlexibleFormula, i: FlexibleInferenceRule,
              raise_error_if_false: bool = True,
              debug: bool = False) -> \
         typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]:
@@ -5556,9 +5557,9 @@ def derive_2(t: FlexibleTheory, c: FlexibleFormula, i: FlexibleInferenceRule,
     :return: A python-tuple (t′, True, derivation) if the derivation was successful, (t, False, None) otherwise.
     :rtype: typing.Tuple[WellFormedTheory, bool, typing.Optional[WellFormedTheoryComponent]]
     """
-    t = coerce_theory(t=t)
-    c = coerce_formula(phi=c)
-    i = coerce_inference_rule(i=i)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
+    c: Formula = coerce_formula(phi=c)
+    i: WellFormedInferenceRule = coerce_inference_rule(i=i)
     if debug:
         u1.log_debug(f'derive_2: Derivation started. conjecture:{c}. inference_rule:{i}.')
 

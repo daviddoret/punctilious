@@ -54,3 +54,4 @@ theorem = as1.connective_for_theorem
 theory_formula = as1.connective_for_theory
 transformation = as1.transformation_by_variable_substitution_connective
 tupl = as1.connective_for_tupl
+extends = as1.connective_for_extension

@@ -61,6 +61,6 @@ csl1.is_a_proposition.formula_ts = as1.typesetters.is_a_predicate(
     conventional_class='proposition')
 csl1.proves.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter=pl1.symbols.turnstile)
-
+csl1.extends.formula_ts = as1.typesetters.classical_formula(connective_typesetter='extends')
 # TODO: Implement a rich-string typesetter in PL1
 csl1.is_inconsistent.formula_ts = as1.typesetters.unary_postfix_formula(connective_typesetter='⊢ ⊥')
