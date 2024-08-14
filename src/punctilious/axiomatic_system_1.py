@@ -369,8 +369,19 @@ class WellFormedTheoreticalContext(Formula, ABC):
         super().__init__(con=con, t=t, **kwargs)
 
     @abc.abstractmethod
-    def extend_with_component(self, c: FlexibleComponent, **kwargs) -> WellFormedTheoreticalContext:
-        raise u1.ApplicativeError('Abstract method.')
+    def extend_with_component(self, c: FlexibleComponent, return_theory_if_necessary: bool = True,
+                              **kwargs) -> WellFormedTheoreticalContext:
+        """
+
+        :param c:
+        :param return_theory_if_necessary: If ``self`` is an axiomatization and ``c`` is either a theorem,
+            or an extension that contains (recursively) a theorem,
+            returns a theory (instead of an axiomatization),
+            raise an error otherwise.
+        :param kwargs:
+        :return:
+        """
+        raise u1.ApplicativeError(msg='Abstract method.')
 
     @property
     def axioms(self) -> WellFormedEnumeration:
@@ -2985,6 +2996,7 @@ def is_valid_proposition_so_far_1(p: FlexibleFormula, t: FlexibleTheoreticalCont
                iterate_theory_propositions(
                    t=t,
                    d=d,
+                   recurse_extensions=True,
                    strip_duplicates=strip_duplicates,
                    interpret_none_as_empty=interpret_none_as_empty,
                    canonic_conversion=canonic_conversion,
@@ -3147,15 +3159,19 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleComponent] | None = None
         d: WellFormedEnumeration = coerce_enumeration(e=d, strip_duplicates=strip_duplicates,
                                                       interpret_none_as_empty=interpret_none_as_empty,
                                                       canonic_conversion=canonic_conversion)
+    idx: int = 0
     for d2 in iterate_enumeration_elements(e=d, max_elements=max_components):
+        idx = idx + 1
         d2: WellFormedTheoryComponent = coerce_theory_component(d=d2)
         if recurse_extensions and is_well_formed_extension(e=d2):
             e: WellFormedExtension = coerce_extension(e=d2)
             t2: WellFormedTheoreticalContext = e.theoretical_context
+            sub_max_components: int | None = None if max_components is None else max_components - idx
             yield from iterate_theory_components(
                 t=t2, recurse_extensions=recurse_extensions,
                 strip_duplicates=strip_duplicates, interpret_none_as_empty=interpret_none_as_empty,
-                canonic_conversion=canonic_conversion)
+                canonic_conversion=canonic_conversion,
+                max_components=sub_max_components)
         else:
             yield d2
     return
@@ -3674,12 +3690,15 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             # An alternative approach would be to specify recurse_extensions=True in the parent loop,
             # but this is less preferable because the extensions would not be explicitly
             # verified with the same approach as the other classes of components.
-            if not would_be_valid_components_in_theory(v=v, u=iterate_theory_components(t=d, recurse_extensions=False)):
+            d: WellFormedExtension = coerce_extension(e=d)
+            t2: WellFormedTheoreticalContext = d.theoretical_context
+            if not would_be_valid_components_in_theory(v=v,
+                                                       u=iterate_theory_components(t=t2, recurse_extensions=False)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_094,
-                        msg='Some component of extension `d` would not be valid in `v`.',
-                        p=p, index=index, d=d, c=c, v=v, u=u)
+                        msg='Some component of theory ``t2`` in extension `d` would not be valid in `v`.',
+                        p=p, t2=t2, index=index, d=d, c=c, v=v, u=u)
                 return False, None, None
         elif is_well_formed_theorem(t=d):
             # This is a theorem.
@@ -3690,7 +3709,10 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             ir: WellFormedInferenceRule = m.inference.inference_rule
             # Check that the inference-rule is a valid predecessor in the derivation.
             if not any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in
-                       iterate_theory_inference_rules(d=c, max_components=index + 1)):
+                       iterate_theory_inference_rules(
+                           d=c,
+                           max_components=index + 1,
+                           recurse_extensions=True)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_068,
@@ -5157,9 +5179,9 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
         that is an extension of ``self`` with ``c``.
 
         :param c:
-        :param return_theory_if_necessary: If ``c`` is a theorem,
-            or if ``c`` is an extension that contains (recursively) a theorem,
-            returns a theory instead of an axiomatization,
+        :param return_theory_if_necessary: If ``self`` is an axiomatization and ``c`` is either a theorem,
+            or an extension that contains (recursively) a theorem,
+            returns a theory (instead of an axiomatization),
             raise an error otherwise.
         :return:
         """
@@ -5293,17 +5315,22 @@ def rank(phi: FlexibleFormula) -> int:
 
 
 def extend_with_component(t: FlexibleTheoreticalContext, c: FlexibleComponent,
+                          return_theory_if_necessary: bool = True,
                           **kwargs) -> WellFormedTheoreticalContext:
     """Given the theoretical context ``t``, returns a new theoretical context ``t′`` that is
     an extension of ``t`` with the component ``c``.
 
     :param t: A theoretical context.
     :param c: A theory component.
+    :param return_theory_if_necessary: If ``self`` is an axiomatization and ``c`` is either a theorem,
+        or an extension that contains (recursively) a theorem,
+        returns a theory (instead of an axiomatization),
+        raise an error otherwise.
     :return: A theoretical context.
     """
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     c: WellFormedTheoryComponent = coerce_theory_component(d=c)
-    return t.extend_with_component(c=c, **kwargs)
+    return t.extend_with_component(c=c, return_theory_if_necessary=return_theory_if_necessary, **kwargs)
 
 
 def append_to_theory(*args, t: FlexibleTheoreticalContext) -> WellFormedTheory:
@@ -5411,9 +5438,10 @@ class AutoDerivationFailure(Exception):
         self.kwargs = kwargs
 
 
-def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
+def derive_1(t: FlexibleTheoreticalContext, c: FlexibleFormula, p: FlexibleTupl,
              i: FlexibleInferenceRule, a: FlexibleTupl | None = None,
-             raise_error_if_false: bool = True) -> typing.Tuple[WellFormedTheory, bool, WellFormedTheorem | None]:
+             raise_error_if_false: bool = True) -> typing.Tuple[
+    WellFormedTheoreticalContext, bool, WellFormedTheorem | None]:
     """Given a theory ``t``, derives a new theory `t′` that extends ``t`` with a new theorem `c`
     derived by applying inference-rule `i`.
 
@@ -5428,7 +5456,8 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
         `b` is ``True`` if the derivation was successful, ``False`` otherwise, and `m` is the new derivation.
     """
     # parameters validation
-    t: WellFormedTheory = coerce_theory(t=t, interpret_none_as_empty=True, canonical_conversion=True)
+    t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=True,
+                                                                 canonical_conversion=True)
     c: Formula = coerce_formula(phi=c)
     p: WellFormedTupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
     i: WellFormedInferenceRule = coerce_inference_rule(i=i)
@@ -5494,7 +5523,8 @@ def derive_1(t: FlexibleTheory, c: FlexibleFormula, p: FlexibleTupl,
 
     # Extends the theory with the new theorem.
     # The validity of the derivation will be checked again during theory initialization.
-    t: WellFormedTheory = append_to_theory(theorem, t=t)
+    # t: WellFormedTheory = append_to_theory(theorem, t=t)
+    t: WellFormedTheoreticalContext = extend_with_component(t=t, c=theorem, return_theory_if_necessary=True)
     # t: Theory = Theory(t=t, d=(theorem,), decorations=(t,))
 
     u1.log_info(theorem.typeset_as_string(theory=t))
