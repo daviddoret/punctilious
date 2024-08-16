@@ -174,7 +174,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestTermsBuilder.test_terms_builder.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheorem.test_coerce_theorem.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_transform_to_axiomatization.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_would_be_valid.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_x.executor": "Run",
@@ -319,7 +319,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/continuous_integration/scripts_macos",
-    "settings.editor.selected.configurable": "vcs.Git",
+    "settings.editor.selected.configurable": "application.passwordSafe",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -378,7 +378,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -619,7 +619,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -632,7 +632,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestTheory.test_iterate_axioms&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -717,7 +717,7 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms" />
       <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -726,11 +726,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration" />
       </list>
     </recent_temporary>
   </component>
@@ -749,14 +749,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-00999" summary="updated data model for transformation">
-      <option name="closed" value="true" />
-      <created>1722392098101</created>
-      <option name="number" value="00999" />
-      <option name="presentableId" value="LOCAL-00999" />
-      <option name="project" value="LOCAL" />
-      <updated>1722392098102</updated>
     </task>
     <task id="LOCAL-01000" summary="simplified signature for transformation">
       <option name="closed" value="true" />
@@ -1142,7 +1134,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723583864004</updated>
     </task>
-    <option name="localTasksCounter" value="1048" />
+    <task id="LOCAL-01048" summary="pursue the implementation of theoretical context and extensions.">
+      <option name="closed" value="true" />
+      <created>1723607595006</created>
+      <option name="number" value="01048" />
+      <option name="presentableId" value="LOCAL-01048" />
+      <option name="project" value="LOCAL" />
+      <updated>1723607595006</updated>
+    </task>
+    <option name="localTasksCounter" value="1049" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1260,7 +1260,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>846</line>
+          <line>863</line>
           <option name="timeStamp" value="156" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1290,7 +1290,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2162</line>
+          <line>2179</line>
           <option name="timeStamp" value="180" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1300,13 +1300,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>1748</line>
+          <line>1765</line>
           <option name="timeStamp" value="183" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
           <line>1233</line>
           <option name="timeStamp" value="185" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
+          <line>994</line>
+          <option name="timeStamp" value="189" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
+          <line>5556</line>
+          <option name="timeStamp" value="191" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -367,6 +367,25 @@ class WellFormedTheoreticalContext(Formula, ABC):
     def __init__(self, con: Connective, t: FlexibleTupl = None, **kwargs):
         con, t = Formula._data_validation(con=con, t=t)
         super().__init__(con=con, t=t, **kwargs)
+        self._heuristics: set[Heuristic, ...] | set[{}] = set()
+
+    def count_components(self, recurse_extensions: bool = True,
+                         strip_duplicates: bool = False,
+                         max_components: bool | int = None) -> int:
+        """Returns the number of components in the theoretical context.
+
+        Definition: canonical theory length
+        The canonical length of a theory is the number of components it contains,
+        recursively taking into account extensions.
+
+        Definition: raw theory length
+        The raw length of a theory is the number of components it contains,
+        not taking into account extensions.
+
+        :return: The number of components in the theoretical context.
+        """
+        return count_theory_components(t=self, recurse_extensions=recurse_extensions, strip_duplicates=strip_duplicates,
+                                       max_components=max_components)
 
     @abc.abstractmethod
     def extend_with_component(self, c: FlexibleComponent, return_theory_if_necessary: bool = True,
@@ -386,14 +405,12 @@ class WellFormedTheoreticalContext(Formula, ABC):
     @property
     def axioms(self) -> WellFormedEnumeration:
         """Return an enumeration of all axioms in the theory.
-        TODO: MOVE TO THEORETICAL CONTEXT???
         Note: order is preserved."""
         return WellFormedEnumeration(e=tuple(self.iterate_axioms()))
 
     @property
     def heuristics(self) -> set[Heuristic, ...] | set[{}]:
         """A python-set of heuristics.
-        TODO: MOVE TO THEORETICAL CONTEXT???
 
         Heuristics are not formally part of a theory. They are decorative objects used to facilitate proof derivations.
         """
@@ -3027,7 +3044,7 @@ def is_valid_proposition_so_far_2(p: FlexibleFormula, t: FlexibleTheory) -> tupl
 
     p: Formula = coerce_formula(phi=p)
     t: WellFormedTheory = coerce_theory(t=t)
-    for d, i in zip(iterate_theory_components(t=t), range(len(t))):
+    for d, i in zip(iterate_theory_components(t=t), range(count_theory_components(t=t))):
         if is_formula_equivalent(phi=p, psi=d.valid_statement):
             return True, i
     return False, None
@@ -3175,6 +3192,20 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleComponent] | None = None
         else:
             yield d2
     return
+
+
+def count_theory_components(t: FlexibleTheory[FlexibleComponent] | None = None,
+                            recurse_extensions: bool = True,
+                            strip_duplicates: bool = True,
+                            interpret_none_as_empty: bool = True,
+                            max_components: int | None = None) -> int:
+    ci: int = 0  # the component index
+    for c in iterate_theory_components(t=t, recurse_extensions=recurse_extensions,
+                                       strip_duplicates=strip_duplicates,
+                                       interpret_none_as_empty=interpret_none_as_empty,
+                                       max_components=max_components):
+        ci = ci + 1
+    return ci
 
 
 def iterate_theory_axioms(t: FlexibleTheory | None = None,
@@ -4755,7 +4786,6 @@ class WellFormedTheory(WellFormedTheoreticalContext):
         """
         c2, d2 = WellFormedTheory._data_validation_2(con=con, t=t, d=d)
         super().__init__(con=c2, t=d2, **kwargs)
-        self._heuristics: set[Heuristic, ...] | set[{}] = set()
         if t is not None:
             # Copies the heuristics and any other decoration from the base theory
             copy_theory_decorations(target=self, decorations=(t,))
@@ -4783,7 +4813,7 @@ class WellFormedTheory(WellFormedTheoreticalContext):
         :return:
         """
         c: WellFormedTheoryComponent = coerce_theory_component(d=c)
-        return WellFormedTheory(a=self, d=(c,))
+        return WellFormedTheory(t=self, d=(c,))
 
 
 def transform_axiomatization_to_theory(a: FlexibleAxiomatization) -> WellFormedTheory:
