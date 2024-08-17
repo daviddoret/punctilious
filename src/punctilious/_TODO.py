@@ -2,6 +2,7 @@
 
 TODO: DEVELOP EXTENSIBLE-TUPLE and EXTENSIBLE-ENUMERATION, a generalization of
     the usage of extends(...) in theoretical-context to tuples and enumerations.
+    Then, theoretical-context may inherit from one of these two.
 
 TODO: Develop a new Extension Component. This is a theoretical context extending another.
 
