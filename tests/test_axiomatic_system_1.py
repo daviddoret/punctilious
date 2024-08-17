@@ -1212,7 +1212,8 @@ class TestTheoreticalContext:
 
 
 class TestExtension:
-    def test_extension(self):
+    def test_extension_of_axioms(self):
+        """Test various theory extensions with axioms."""
         a, b, c, d = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd',))
 
         def get_sub_theory(p):

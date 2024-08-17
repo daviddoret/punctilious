@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -754,14 +753,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01007" summary="inference-rule for theory inconsistency. all tests passed.">
-      <option name="closed" value="true" />
-      <created>1722460717820</created>
-      <option name="number" value="01007" />
-      <option name="presentableId" value="LOCAL-01007" />
-      <option name="project" value="LOCAL" />
-      <updated>1722460717820</updated>
-    </task>
     <task id="LOCAL-01008" summary="inference-rule for theory inconsistency. all tests passed.">
       <option name="closed" value="true" />
       <created>1722528772607</created>
@@ -1146,7 +1137,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723914957815</updated>
     </task>
-    <option name="localTasksCounter" value="1056" />
+    <task id="LOCAL-01056" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1723927371428</created>
+      <option name="number" value="01056" />
+      <option name="presentableId" value="LOCAL-01056" />
+      <option name="project" value="LOCAL" />
+      <updated>1723927371429</updated>
+    </task>
+    <option name="localTasksCounter" value="1057" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
