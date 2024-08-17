@@ -1,5 +1,9 @@
 """
 
+TODO: Consider a new class WFTupleExtensible which supports the extends(...) elements.
+    From which WFEnumerationExtensible follows.
+    And finally all theoretical contexts.
+
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
 
 TODO: Develop is_a_derivation_of(T) from is_a_valid_proposition_in(T)

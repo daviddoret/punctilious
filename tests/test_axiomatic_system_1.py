@@ -1211,6 +1211,75 @@ class TestTheoreticalContext:
         # assert pu.as1.is_well_formed_theoretical_context(t=h)
 
 
+class TestExtension:
+    def test_extension(self):
+        a, b, c, d = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd',))
+
+        def get_sub_theory(p):
+            t = pu.as1.WellFormedTheory()
+            t, ax = pu.as1.let_x_be_an_axiom(t=t, s=p)
+            return t, ax
+
+        ta, aa = get_sub_theory(p=a)
+        tb, ab = get_sub_theory(p=b)
+        tc, ac = get_sub_theory(p=c)
+        td, ad = get_sub_theory(p=d)
+
+        t = pu.as1.WellFormedTheory()
+        assert not pu.as1.is_valid_proposition_so_far_1(p=a, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=b, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=c, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=d, t=t)
+        assert not pu.as1.is_axiom_of(a=aa, t=t)
+        assert not pu.as1.is_axiom_of(a=ab, t=t)
+        assert not pu.as1.is_axiom_of(a=ac, t=t)
+        assert not pu.as1.is_axiom_of(a=ad, t=t)
+
+        # test a first extension t(extends(ta))
+        t, _ = pu.as1.let_x_be_an_extension(t=t, e=ta)
+        assert pu.as1.is_valid_proposition_so_far_1(p=a, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=b, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=c, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=d, t=t)
+        assert pu.as1.is_axiom_of(a=aa, t=t)
+        assert not pu.as1.is_axiom_of(a=ab, t=t)
+        assert not pu.as1.is_axiom_of(a=ac, t=t)
+        assert not pu.as1.is_axiom_of(a=ad, t=t)
+
+        # test a second extension t(extends(ta), extends(tb))
+        t, _ = pu.as1.let_x_be_an_extension(t=t, e=tb)
+        assert pu.as1.is_valid_proposition_so_far_1(p=a, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=b, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=c, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=d, t=t)
+        assert pu.as1.is_axiom_of(a=aa, t=t)
+        assert pu.as1.is_axiom_of(a=ab, t=t)
+        assert not pu.as1.is_axiom_of(a=ac, t=t)
+        assert not pu.as1.is_axiom_of(a=ad, t=t)
+
+        # the other way around: tc(extends(t(extends(ta), extends(tb)))
+        t, _ = pu.as1.let_x_be_an_extension(t=tc, e=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=a, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=b, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=c, t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=d, t=t)
+        assert pu.as1.is_axiom_of(a=aa, t=t)
+        assert pu.as1.is_axiom_of(a=ab, t=t)
+        assert pu.as1.is_axiom_of(a=ac, t=t)
+        assert not pu.as1.is_axiom_of(a=ad, t=t)
+
+        # the other way around: td(extends(tc(extends(t(extends(ta), extends(tb)))))
+        t, _ = pu.as1.let_x_be_an_extension(t=td, e=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=a, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=b, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=c, t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=d, t=t)
+        assert pu.as1.is_axiom_of(a=aa, t=t)
+        assert pu.as1.is_axiom_of(a=ab, t=t)
+        assert pu.as1.is_axiom_of(a=ac, t=t)
+        assert pu.as1.is_axiom_of(a=ad, t=t)
+
+
 class TestAxiomaticBase:
     def test_theoretical_context(self):
         a, b, c, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'x', 'y', 'z',))
