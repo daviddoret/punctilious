@@ -1,6 +1,7 @@
 """
 
-TODO: MAKE EXTENSION A GENERIC FORMULA COMPONENT ???
+TODO: DEVELOP EXTENSIBLE-TUPLE and EXTENSIBLE-ENUMERATION, a generalization of
+    the usage of extends(...) in theoretical-context to tuples and enumerations.
 
 TODO: Develop a new Extension Component. This is a theoretical context extending another.
 

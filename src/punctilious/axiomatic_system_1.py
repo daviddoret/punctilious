@@ -963,21 +963,30 @@ def is_axiom_of(a: FlexibleAxiom, t: FlexibleTheoreticalContext, max_components:
         is_formula_equivalent(phi=a, psi=a2) for a2 in iterate_theory_axioms(t=t, max_components=max_components))
 
 
-def is_inference_rule_of(i: FlexibleInferenceRule, t: FlexibleTheoreticalContext, max_components: int | None = None):
+def is_inference_rule_of(
+        i: FlexibleInferenceRule,
+        t: FlexibleTheoreticalContext | None = None,
+        d: FlexibleEnumeration[FlexibleComponent] | None = None,
+        max_components: int | None = None):
     """Returns ``True`` if `i` is an inference-rule in axiomatization or theory ``t``, ``False`` otherwise.
 
+    If ``d`` is passed instead of ``t``, an enumeration of theory components is considered. This is useful
+    to check the validity of a sequence of components without raising an error.
+
     :param i: An inference-rule.
-    :param t: An axiomatization or a theory.
+    :param t: A theoretical context.
+    :param d: An enumeration.
     :param max_components: If `None`, considers all derivations in ``t``. If an integer, considers only that number
         of derivations in ``t`` following canonical order. This is particularly useful when analysing the consistency
         of a theory, or dependencies between derivations.
     :return: ``True`` if ``a`` is an inference-rule ``t``, ``False`` otherwise.
     """
     i: WellFormedInferenceRule = coerce_inference_rule(i=i)
-    t: FlexibleTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=True,
-                                                               canonical_conversion=True)
+    if t is not None and d is not None:
+        raise u1.ApplicativeError(msg='Parameters `t` and `d` are mutually exclusive.', t=t, d=d)
     return any(is_formula_equivalent(phi=i, psi=ir2) for ir2 in
-               iterate_theory_inference_rules(t=t, max_components=max_components))
+               iterate_theory_inference_rules(t=t, d=d, max_components=max_components,
+                                              recurse_extensions=True))
 
 
 def is_theorem_of(m: FlexibleTheorem, t: FlexibleTheory, max_components: int | None = None):
@@ -3316,20 +3325,21 @@ def iterate_theory_inference_rules(t: FlexibleTheory | None = None,
     :param t: A theoretical context.
     :param d: An enumeration of derivations. Ignored if ``t`` is provided.
     :param max_components: Considers only ``max_components`` components, or all components if None.
+    :param recurse_extensions:
     :param canonic_conversion: Uses canonic conversion if needed when coercing `d` to enumeration.
     :param strip_duplicates: Strip duplicates when coercing `d` to enumeration. Raises an error otherwise.
     :param interpret_none_as_empty: Interpret None as the empty enumeration when coercing `d` to enumeration.
     :return:
     """
-    for d2 in iterate_theory_components(t=t,
-                                        d=d,
-                                        recurse_extensions=recurse_extensions,
-                                        max_components=max_components,
-                                        interpret_none_as_empty=interpret_none_as_empty,
-                                        strip_duplicates=strip_duplicates,
-                                        canonic_conversion=canonic_conversion):
-        if is_well_formed_inference_rule(i=d2):
-            i: WellFormedInferenceRule = coerce_inference_rule(i=d2)
+    for c in iterate_theory_components(t=t,
+                                       d=d,
+                                       recurse_extensions=recurse_extensions,
+                                       max_components=max_components,
+                                       interpret_none_as_empty=interpret_none_as_empty,
+                                       strip_duplicates=strip_duplicates,
+                                       canonic_conversion=canonic_conversion):
+        if is_well_formed_inference_rule(i=c):
+            i: WellFormedInferenceRule = coerce_inference_rule(i=c)
             yield i
 
 
@@ -3761,7 +3771,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_094,
-                        msg='Some component of theory ``t2`` in extension `d` would not be valid in `v`.',
+                        msg='Some component of theory `t2` in extension `d` would not be valid in `v`.',
                         p=p, t2=t2, index=index, d=d, c=c, v=v, u=u)
                 return False, None, None
         elif is_well_formed_theorem(t=d):
@@ -3772,12 +3782,12 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             i: Inference = m.inference
             ir: WellFormedInferenceRule = m.inference.inference_rule
             # Check that the inference-rule is a valid predecessor in the derivation.
-            # if not is_inference_rule_of() XXXXXXX
-            if not any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in
-                       iterate_theory_inference_rules(
-                           d=c,
-                           max_components=index + 1,  # BUG IS HERE
-                           recurse_extensions=True)):
+            if not is_inference_rule_of(i=ir, d=c, max_components=index + 1):
+                # if not any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in
+                #           iterate_theory_inference_rules(
+                #               d=c,
+                #               max_components=index + 1,  # BUG IS HERE
+                #               recurse_extensions=True)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
                         code=c1.ERROR_CODE_AS1_068,
