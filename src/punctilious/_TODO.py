@@ -1,22 +1,8 @@
 """
 
-TODO: DEVELOP EXTENSIBLE-TUPLE and EXTENSIBLE-ENUMERATION, a generalization of
-    the usage of extends(...) in theoretical-context to tuples and enumerations.
-    Then, theoretical-context may inherit from one of these two.
-
-TODO: Develop a new Extension Component. This is a theoretical context extending another.
-
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
 
-TODO: Use the notion of theoretical context as a superclass for:
-    theory
-    axiomatization
-    hypothesis
-    ...
-
 TODO: Develop is_a_derivation_of(T) from is_a_valid_proposition_in(T)
-
-TODO: Add Extension as a new class of Derivation.
 
 TODO: Check then remove argument `a` in inference. Should be useless now.
 
