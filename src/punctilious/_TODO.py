@@ -1,5 +1,7 @@
 """
 
+TODO: MAKE EXTENSION A GENERIC FORMULA COMPONENT ???
+
 TODO: Develop a new Extension Component. This is a theoretical context extending another.
 
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
