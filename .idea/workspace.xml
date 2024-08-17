@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="pursue the implementation of theoretical context and extensions.">
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +101,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiom.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiom.test_axiom_without_premises.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestCoerceEnumeration.test_coerce_enumeration.executor": "Run",
@@ -751,14 +752,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01004" summary="inference-rule for theory inconsistency. all tests passed.">
-      <option name="closed" value="true" />
-      <created>1722459769111</created>
-      <option name="number" value="01004" />
-      <option name="presentableId" value="LOCAL-01004" />
-      <option name="project" value="LOCAL" />
-      <updated>1722459769112</updated>
-    </task>
     <task id="LOCAL-01005" summary="inference-rule for theory inconsistency. all tests passed.">
       <option name="closed" value="true" />
       <created>1722460143073</created>
@@ -1143,7 +1136,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723881790101</updated>
     </task>
-    <option name="localTasksCounter" value="1053" />
+    <task id="LOCAL-01053" summary="pursue the implementation of theoretical context and extensions.">
+      <option name="closed" value="true" />
+      <created>1723881813117</created>
+      <option name="number" value="01053" />
+      <option name="presentableId" value="LOCAL-01053" />
+      <option name="project" value="LOCAL" />
+      <updated>1723881813117</updated>
+    </task>
+    <option name="localTasksCounter" value="1054" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1291,7 +1292,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3784</line>
+          <line>3783</line>
           <option name="timeStamp" value="196" />
         </line-breakpoint>
       </breakpoints>

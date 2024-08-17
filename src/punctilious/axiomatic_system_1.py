@@ -3760,9 +3760,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             # An alternative approach would be to specify recurse_extensions=True in the parent loop,
             # but this is less preferable because the extensions would not be explicitly
             # verified with the same approach as the other classes of components.
-
             # put aside the components that have been verified so far.
-
             verified_so_far: WellFormedEnumeration = WellFormedEnumeration(e=(*v, *u[0:index]))
             d: WellFormedExtension = coerce_extension(e=d)
             t2: WellFormedTheoreticalContext = d.theoretical_context
@@ -3781,8 +3779,9 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             m: WellFormedTheorem = coerce_theorem(t=d)
             i: Inference = m.inference
             ir: WellFormedInferenceRule = m.inference.inference_rule
+            verified_so_far: WellFormedEnumeration = WellFormedEnumeration(e=(*v, *u[0:index]))
             # Check that the inference-rule is a valid predecessor in the derivation.
-            if not is_inference_rule_of(i=ir, d=c, max_components=index + 1):
+            if not is_inference_rule_of(i=ir, d=verified_so_far):
                 # if not any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in
                 #           iterate_theory_inference_rules(
                 #               d=c,
@@ -3798,7 +3797,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             # Check that all premises are valid predecessor propositions in the derivation.
             for q in i.premises:
                 # Check that this premise is a valid predecessor proposition in the derivation.
-                if not is_valid_proposition_so_far_1(p=q, t=None, d=c, max_components=index):
+                if not is_valid_proposition_so_far_1(p=q, t=None, d=verified_so_far):
                     if raise_error_if_false:
                         raise u1.ApplicativeError(
                             msg='Derivation `d` claims to derive `p`.'
