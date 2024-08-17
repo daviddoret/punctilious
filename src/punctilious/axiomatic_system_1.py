@@ -3176,31 +3176,60 @@ def iterate_theory_components(t: FlexibleTheory[FlexibleComponent] | None = None
         d: WellFormedEnumeration = coerce_enumeration(e=d, strip_duplicates=strip_duplicates,
                                                       interpret_none_as_empty=interpret_none_as_empty,
                                                       canonic_conversion=canonic_conversion)
-    idx: int = 0
-    for d2 in iterate_enumeration_elements(e=d, max_elements=max_components):
-        idx = idx + 1
-        d2: WellFormedTheoryComponent = coerce_theory_component(d=d2)
-        if recurse_extensions and is_well_formed_extension(e=d2):
-            e: WellFormedExtension = coerce_extension(e=d2)
-            t2: WellFormedTheoreticalContext = e.theoretical_context
-            sub_max_components: int | None = None if max_components is None else max_components - idx
-            yield from iterate_theory_components(
-                t=t2, recurse_extensions=recurse_extensions,
-                strip_duplicates=strip_duplicates, interpret_none_as_empty=interpret_none_as_empty,
-                canonic_conversion=canonic_conversion,
-                max_components=sub_max_components)
-        else:
-            yield d2
-    return
+    if max_components is None:
+        # Yield all components without any index limit.
+        for d2 in iterate_enumeration_elements(e=d):
+            d2: WellFormedTheoryComponent = coerce_theory_component(d=d2)
+            if recurse_extensions and is_well_formed_extension(e=d2):
+                e: WellFormedExtension = coerce_extension(e=d2)
+                t2: WellFormedTheoreticalContext = e.theoretical_context
+                yield from iterate_theory_components(
+                    t=t2, recurse_extensions=recurse_extensions,
+                    strip_duplicates=strip_duplicates, interpret_none_as_empty=interpret_none_as_empty,
+                    canonic_conversion=canonic_conversion,
+                    max_components=None)
+            else:
+                yield d2
+        return
+    else:
+        # Yield all components up to some index limit.
+        i: int = 0
+        for c in iterate_theory_components(
+                t=t, d=d,
+                strip_duplicates=strip_duplicates,
+                interpret_none_as_empty=interpret_none_as_empty,
+                max_components=None):
+            i = i + 1
+            if i > max_components:
+                return
+            else:
+                yield c
+        return
 
 
 def count_theory_components(t: FlexibleTheory[FlexibleComponent] | None = None,
+                            d: FlexibleEnumeration[FlexibleComponent] | None = None,
                             recurse_extensions: bool = True,
                             strip_duplicates: bool = True,
                             interpret_none_as_empty: bool = True,
                             max_components: int | None = None) -> int:
+    """Count the components of a theoretical context ``t``, taking into account extensions.
+    Alternatively, count the components of an enumeration ``d``.
+
+    :param t:
+    :param d:
+    :param recurse_extensions:
+    :param strip_duplicates:
+    :param interpret_none_as_empty:
+    :param max_components:
+    :return:
+    """
+    if t is not None and d is not None:
+        raise u1.ApplicativeError(msg='Parameters `t` and `d` are mutually exclusive.',
+                                  t=t,
+                                  d=d)
     ci: int = 0  # the component index
-    for c in iterate_theory_components(t=t, recurse_extensions=recurse_extensions,
+    for c in iterate_theory_components(t=t, d=d, recurse_extensions=recurse_extensions,
                                        strip_duplicates=strip_duplicates,
                                        interpret_none_as_empty=interpret_none_as_empty,
                                        max_components=max_components):
@@ -3687,7 +3716,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
                                                       canonic_conversion=True)
 
     # Create a complete enumeration "c" composed of derivations "u" appended to derivations "v",
-    # getting rid of duplicates if any in the process.
+    # getting rid of duplicates in the process.
     c: WellFormedEnumeration = union_enumeration(phi=v, psi=u, strip_duplicates=True)
 
     # Put aside the index from which the proofs of derivations have not been verified.
@@ -3721,9 +3750,13 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             # An alternative approach would be to specify recurse_extensions=True in the parent loop,
             # but this is less preferable because the extensions would not be explicitly
             # verified with the same approach as the other classes of components.
+
+            # put aside the components that have been verified so far.
+
+            verified_so_far: WellFormedEnumeration = WellFormedEnumeration(e=(*v, *u[0:index]))
             d: WellFormedExtension = coerce_extension(e=d)
             t2: WellFormedTheoreticalContext = d.theoretical_context
-            if not would_be_valid_components_in_theory(v=v,
+            if not would_be_valid_components_in_theory(v=verified_so_far,
                                                        u=iterate_theory_components(t=t2, recurse_extensions=False)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
@@ -3739,10 +3772,11 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             i: Inference = m.inference
             ir: WellFormedInferenceRule = m.inference.inference_rule
             # Check that the inference-rule is a valid predecessor in the derivation.
+            # if not is_inference_rule_of() XXXXXXX
             if not any(is_formula_equivalent(phi=ir, psi=ir2) for ir2 in
                        iterate_theory_inference_rules(
                            d=c,
-                           max_components=index + 1,
+                           max_components=index + 1,  # BUG IS HERE
                            recurse_extensions=True)):
                 if raise_error_if_false:
                     raise u1.ApplicativeError(

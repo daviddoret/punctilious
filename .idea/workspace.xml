@@ -84,7 +84,9 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
+    <option name="showScratchesAndConsoles" value="false" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
@@ -174,7 +176,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestTermsBuilder.test_terms_builder.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheorem.test_coerce_theorem.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context.executor": "Run",
-    "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_transform_to_axiomatization.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_would_be_valid.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_x.executor": "Run",
@@ -378,7 +380,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -726,9 +728,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context" />
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration" />
         <item itemvalue="Python tests.pytest in test_axiomatic_system_1.py" />
       </list>
@@ -749,14 +751,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01000" summary="simplified signature for transformation">
-      <option name="closed" value="true" />
-      <created>1722394008046</created>
-      <option name="number" value="01000" />
-      <option name="presentableId" value="LOCAL-01000" />
-      <option name="project" value="LOCAL" />
-      <updated>1722394008046</updated>
     </task>
     <task id="LOCAL-01001" summary="inference-rule for theory inconsistency. all tests passed.">
       <option name="closed" value="true" />
@@ -1142,7 +1136,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723607595006</updated>
     </task>
-    <option name="localTasksCounter" value="1049" />
+    <task id="LOCAL-01049" summary="pursue the implementation of theoretical context and extensions.">
+      <option name="closed" value="true" />
+      <created>1723838923049</created>
+      <option name="number" value="01049" />
+      <option name="presentableId" value="LOCAL-01049" />
+      <option name="project" value="LOCAL" />
+      <updated>1723838923049</updated>
+    </task>
+    <option name="localTasksCounter" value="1050" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1275,33 +1277,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>745</line>
-          <option name="timeStamp" value="165" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>586</line>
-          <option name="timeStamp" value="169" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
           <line>807</line>
           <option name="timeStamp" value="179" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>2179</line>
-          <option name="timeStamp" value="180" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>203</line>
-          <option name="timeStamp" value="181" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>1765</line>
-          <option name="timeStamp" value="183" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
@@ -1315,8 +1292,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>5556</line>
-          <option name="timeStamp" value="191" />
+          <line>3775</line>
+          <option name="timeStamp" value="194" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
