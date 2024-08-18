@@ -42,9 +42,9 @@ class TestConnective:
         f = pu.as1.let_x_be_a_unary_connective(formula_ts='f')
         g = pu.as1.let_x_be_a_binary_connective(formula_ts='g')
         h = pu.as1.let_x_be_a_ternary_connective(formula_ts='h')
-        assert pu.as1.is_formula_equivalent(phi=f(), psi=pu.as1.Formula(con=f, t=None))
-        assert pu.as1.is_formula_equivalent(phi=g(x), psi=pu.as1.Formula(con=g, t=(x,)))
-        assert pu.as1.is_formula_equivalent(phi=h(x, y), psi=pu.as1.Formula(con=h, t=(x, y,)))
+        assert pu.as1.is_formula_equivalent(phi=f(), psi=pu.as1.WellFormedFormula(con=f, t=None))
+        assert pu.as1.is_formula_equivalent(phi=g(x), psi=pu.as1.WellFormedFormula(con=g, t=(x,)))
+        assert pu.as1.is_formula_equivalent(phi=h(x, y), psi=pu.as1.WellFormedFormula(con=h, t=(x, y,)))
 
 
 class TestIsSubformulaFormula:
@@ -171,27 +171,27 @@ class TestEnumeration:
         a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
         # ill-formed enumerations because of wrong connective
         star = pu.as1.FreeArityConnective(formula_ts='*')
-        phi1 = pu.as1.Formula(con=star, t=(a, b, c,))
+        phi1 = pu.as1.WellFormedFormula(con=star, t=(a, b, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi1)
-        phi2 = pu.as1.Formula(con=star, t=None)
+        phi2 = pu.as1.WellFormedFormula(con=star, t=None)
         assert not pu.as1.is_well_formed_enumeration(e=phi2)
-        phi3 = pu.as1.Formula(con=star, t=(a, a, b, c,))
+        phi3 = pu.as1.WellFormedFormula(con=star, t=(a, a, b, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi3)
-        phi4 = pu.as1.Formula(con=star, t=(a, b, b, c,))
+        phi4 = pu.as1.WellFormedFormula(con=star, t=(a, b, b, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi4)
-        phi5 = pu.as1.Formula(con=star, t=(a, b, c, c,))
+        phi5 = pu.as1.WellFormedFormula(con=star, t=(a, b, c, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi5)
         # well-formed enumerations
-        phi1 = pu.as1.Formula(con=pu.csl1.enumeration, t=(a, b, c,))
+        phi1 = pu.as1.WellFormedFormula(con=pu.csl1.enumeration, t=(a, b, c,))
         assert pu.as1.is_well_formed_enumeration(e=phi1)
-        phi2 = pu.as1.Formula(con=pu.csl1.enumeration, t=None)
+        phi2 = pu.as1.WellFormedFormula(con=pu.csl1.enumeration, t=None)
         assert pu.as1.is_well_formed_enumeration(e=phi2)
         # ill-formed enumerations because of duplicate elements
-        phi3 = pu.as1.Formula(con=pu.csl1.enumeration, t=(a, a, b, c,), )
+        phi3 = pu.as1.WellFormedFormula(con=pu.csl1.enumeration, t=(a, a, b, c,), )
         assert not pu.as1.is_well_formed_enumeration(e=phi3)
-        phi4 = pu.as1.Formula(con=pu.csl1.enumeration, t=(a, b, b, c,))
+        phi4 = pu.as1.WellFormedFormula(con=pu.csl1.enumeration, t=(a, b, b, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi4)
-        phi5 = pu.as1.Formula(con=pu.csl1.enumeration, t=(a, b, c, c,))
+        phi5 = pu.as1.WellFormedFormula(con=pu.csl1.enumeration, t=(a, b, c, c,))
         assert not pu.as1.is_well_formed_enumeration(e=phi5)
 
     def test_is_sub_enumeration(self):
@@ -587,12 +587,12 @@ class TestInferenceRule:
         assert pu.as1.is_well_formed_inference_rule(i=phi1)
 
         # incorrect connective
-        phi2 = pu.as1.Formula(con=pu.as1.connective_for_inference,
-                              t=(pu.as1.connective_for_inference_rule, f,))
+        phi2 = pu.as1.WellFormedFormula(con=pu.as1.connective_for_inference,
+                                        t=(pu.as1.connective_for_inference_rule, f,))
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect connective
-        phi2 = pu.as1.Formula(con=pu.as1.connective_for_inference_rule, t=None)
+        phi2 = pu.as1.WellFormedFormula(con=pu.as1.connective_for_inference_rule, t=None)
         assert not pu.as1.is_well_formed_inference_rule(i=phi2)
 
         # incorrect axiomatic-postulation
@@ -1153,23 +1153,23 @@ class TestTheory:
 class TestFormula:
     def test_get_formula_depth(self):
         c = pu.as1.FreeArityConnective(formula_ts=pu.pl1.symbols.x_uppercase_serif_italic)
-        phi1 = pu.as1.Formula(con=c, t=None)
+        phi1 = pu.as1.WellFormedFormula(con=c, t=None)
         assert pu.as1.rank(phi=phi1) == 1
-        phi2 = pu.as1.Formula(con=c, t=(phi1, phi1,))
+        phi2 = pu.as1.WellFormedFormula(con=c, t=(phi1, phi1,))
         assert pu.as1.rank(phi=phi2) == 2
-        phi3 = pu.as1.Formula(con=c, t=(phi1, phi2, phi1, phi2))
+        phi3 = pu.as1.WellFormedFormula(con=c, t=(phi1, phi2, phi1, phi2))
         assert pu.as1.rank(phi=phi3) == 3
 
     def test_iterate(self):
         a, b, c, d, e, f = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e', 'f',))
-        phi1 = pu.as1.Formula(con=a, t=(a, b, c, d, e, f,))
+        phi1 = pu.as1.WellFormedFormula(con=a, t=(a, b, c, d, e, f,))
         assert a in phi1
         assert len(phi1) == 6
         assert len(tuple(pu.as1.iterate_formula_terms(phi=phi1))) == 6
         assert len(tuple(pu.as1.iterate_formula_terms(phi=phi1, max_terms=0))) == 0
         assert len(tuple(pu.as1.iterate_formula_terms(phi=phi1, max_terms=2))) == 2
         assert len(tuple(pu.as1.iterate_formula_terms(phi=phi1, max_terms=6))) == 6
-        phi2 = pu.as1.Formula(con=a, t=(f, f, a, b, d, e, b, b, f,))
+        phi2 = pu.as1.WellFormedFormula(con=a, t=(f, f, a, b, d, e, b, b, f,))
         assert a in phi2
         assert len(phi2) == 9
         assert len(tuple(pu.as1.iterate_formula_terms(phi=phi2))) == 9

@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
 def is_well_formed_formula_algorithm(
         i: as1.WellFormedTupl | None = None,
-        raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
     """A python-function used as a formula external algorithm to verify is-well-formed-formula of a formula.
 
     :param i: A tuple of formulas, denoted as the input values.
@@ -31,9 +31,9 @@ def is_well_formed_formula_algorithm(
                 i=i)
         else:
             return False, None
-    phi: as1.Formula = as1.coerce_formula(phi=i[0])
+    phi: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
     if as1.is_well_formed_formula(phi=phi):
-        phi: as1.Formula = as1.connective_for_is_well_formed_formula(phi)
+        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_formula(phi)
         return True, phi
     else:
         if raise_error_if_false:
@@ -58,7 +58,7 @@ is_well_formed_formula_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm =
 
 def is_well_formed_inference_rule_algorithm(
         i: as1.WellFormedTupl | None = None,
-        raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
     """A python-function used as a inference-rule external algorithm to verify is-well-formed-inference-rule of a formula.
 
     :param i: A tuple of formulas, denoted as the input values.
@@ -75,10 +75,10 @@ def is_well_formed_inference_rule_algorithm(
                 i=i)
         else:
             return False, None
-    ir: as1.Formula = as1.coerce_formula(phi=i[0])
+    ir: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
     if as1.is_well_formed_inference_rule(i=ir):
         ir: as1.WellFormedInferenceRule = as1.coerce_inference_rule(i=ir)
-        phi: as1.Formula = as1.connective_for_is_well_formed_inference_rule(ir)
+        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_inference_rule(ir)
         return True, phi
     else:
         if raise_error_if_false:
@@ -104,7 +104,7 @@ is_well_formed_inference_rule_algorithm_connective: as1.ConnectiveLinkedWithAlgo
 
 def is_well_formed_theory_algorithm(
         i: as1.WellFormedTupl | None = None,
-        raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
     """A python-function used as a theory external algorithm to verify is-well-formed-theory of a formula.
 
     :param i: A tuple of formulas, denoted as the input values.
@@ -121,10 +121,10 @@ def is_well_formed_theory_algorithm(
                 i=i)
         else:
             return False, None
-    t1: as1.Formula = as1.coerce_formula(phi=i[0])
+    t1: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
     if as1.is_well_formed_theory(t=t1):
         t1: as1.WellFormedTheory = as1.coerce_theory(t=t1, interpret_none_as_empty=False, canonical_conversion=False)
-        phi: as1.Formula = as1.connective_for_is_well_formed_theory(t1)
+        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_theory(t1)
         return True, phi
     else:
         if raise_error_if_false:
@@ -254,7 +254,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
 
 def theory_proves_proposition_algorithm(
         i: as1.WellFormedTupl | None = None,
-        raise_error_if_false: bool = True) -> [bool, as1.Formula | None]:
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
     """An external algorithm for the t-proves-p (T ⊢ P) transformation.
 
     This algorithm is used to implement the syntactic-entailment inference-rule.
@@ -280,21 +280,21 @@ def theory_proves_proposition_algorithm(
             raise u1.ApplicativeError(msg='wrong arguments', iv=i)
         else:
             return False, None
-    p: as1.Formula = as1.coerce_formula(phi=i[1])
-    is_well_formed_theory_t: as1.Formula = as1.coerce_formula(phi=i[0])
+    p: as1.WellFormedFormula = as1.coerce_formula(phi=i[1])
+    is_well_formed_theory_t: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        shape: as1.Formula = as1.connective_for_is_well_formed_theory(x)
+        shape: as1.WellFormedFormula = as1.connective_for_is_well_formed_theory(x)
         ok, m = as1.is_formula_equivalent_with_variables_2(phi=is_well_formed_theory_t,
                                                            psi=shape,
                                                            variables={x, })
         if not ok:
             raise u1.ApplicativeError(msg='wrong input value i0', is_well_formed_theory_t=is_well_formed_theory_t,
                                       iv=i)
-    t: as1.Formula = is_well_formed_theory_t[0]
+    t: as1.WellFormedFormula = is_well_formed_theory_t[0]
     t: as1.WellFormedTheory = as1.coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=False)
     if as1.is_valid_proposition_so_far_1(p=p, t=t):
         # Proposition p is valid in the object-theory t.
-        phi: as1.Formula = t | as1.connective_for_proves | p
+        phi: as1.WellFormedFormula = t | as1.connective_for_proves | p
         return True, phi
     else:
         if raise_error_if_false:

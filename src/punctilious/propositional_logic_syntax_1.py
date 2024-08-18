@@ -292,12 +292,12 @@ def translate_implication_to_axiom(t: as1.FlexibleTheory,
 
     # translate the antecedent of the implication to the main premises
     # note: we could further split conjunctions into multiple premises
-    antecedent: as1.Formula = psi.term_0
+    antecedent: as1.WellFormedFormula = psi.term_0
     p: as1.WellFormedEnumeration = as1.append_element_to_enumeration(
         e=p, x=antecedent)
 
     # retrieve the conclusion
-    conclusion: as1.Formula = psi.term_1
+    conclusion: as1.WellFormedFormula = psi.term_1
 
     # build the rule
     rule: as1.TransformationByVariableSubstitution = as1.TransformationByVariableSubstitution(i=p, o=conclusion,
@@ -319,7 +319,7 @@ class PIsAProposition(as1.Heuristic):
         :param t:
         :return:
         """
-        conjecture: as1.Formula = as1.coerce_formula(phi=conjecture)
+        conjecture: as1.WellFormedFormula = as1.coerce_formula(phi=conjecture)
         t: as1.WellFormedTheory = as1.coerce_theory(t=t)
 
         t, success, _ = as1.derive_0(c=conjecture, t=t)
@@ -336,7 +336,7 @@ class PIsAProposition(as1.Heuristic):
                 # Make an attempt to automatically derive the conjecture.
 
                 # retrieve P's value
-                p_value: as1.Formula = as1.get_image_from_map(m=m, preimage=p)
+                p_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=p)
 
                 if as1.is_valid_proposition_so_far_1(p=is_a_propositional_variable(p_value), t=t):
                     # If P is a propositional-variable:
@@ -354,7 +354,7 @@ class PIsAProposition(as1.Heuristic):
                     if success:
                         # The conjecture (P) is of the form (¬Q).
                         # Retrieve the value assigned to Q.
-                        q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
+                        q_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=q)
                         # Recursively try to derive (Q is-a proposition).
                         t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
                         if success:
@@ -377,8 +377,8 @@ class PIsAProposition(as1.Heuristic):
                     if success:
                         # The conjecture (P) is of the form (Q ∧ R).
                         # Retrieve the values assigned to Q and R.
-                        q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
-                        r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
+                        q_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=q)
+                        r_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
                         t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
                         if success:
@@ -408,8 +408,8 @@ class PIsAProposition(as1.Heuristic):
                     if success:
                         # The conjecture (P) is of the form (Q ⊃ R).
                         # Retrieve the values assigned to Q and R.
-                        q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
-                        r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
+                        q_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=q)
+                        r_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
                         t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
                         if success:
@@ -439,8 +439,8 @@ class PIsAProposition(as1.Heuristic):
                     if success:
                         # The conjecture (P) is of the form (Q ∨ R).
                         # Retrieve the values assigned to Q and R.
-                        q_value: as1.Formula = as1.get_image_from_map(m=m, preimage=q)
-                        r_value: as1.Formula = as1.get_image_from_map(m=m, preimage=r)
+                        q_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=q)
+                        r_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
                         t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
                         if success:
