@@ -1215,6 +1215,7 @@ class TestExtension:
     def test_extension_of_axioms(self):
         """Test various theory extensions with axioms."""
         a, b, c, d = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd',))
+        x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('x', 'y', 'z',))
 
         def get_sub_theory(p):
             t = pu.as1.WellFormedTheory()
@@ -1222,8 +1223,16 @@ class TestExtension:
             return t, ax
 
         ta, aa = get_sub_theory(p=a)
+
         tb, ab = get_sub_theory(p=b)
+        tb, i1 = pu.as1.let_x_be_an_inference_rule(
+            t=tb, f=pu.as1.TransformationByVariableSubstitution(o=x, v=None, i=(a, b,)))
+        # it is not possible to derive `b` in `tb` because `a` is not in it.
+        tb, ok, _ = pu.as1.derive_2(t=tb, c=x, i=i1, raise_error_if_false=False)
+        assert not ok
+
         tc, ac = get_sub_theory(p=c)
+
         td, ad = get_sub_theory(p=d)
 
         t = pu.as1.WellFormedTheory()
@@ -1258,6 +1267,10 @@ class TestExtension:
         assert not pu.as1.is_axiom_of(a=ac, t=t)
         assert not pu.as1.is_axiom_of(a=ad, t=t)
 
+        # now it is possible to derive `b` in `t` because it contains `a` in `ta` and `b` in `tb`.
+        t, ok, _ = pu.as1.derive_2(t=t, c=x, i=i1, raise_error_if_false=False)
+        assert ok
+
         # the other way around: tc(extends(t(extends(ta), extends(tb)))
         t, _ = pu.as1.let_x_be_an_extension(t=tc, e=t)
         assert pu.as1.is_valid_proposition_so_far_1(p=a, t=t)
@@ -1279,6 +1292,11 @@ class TestExtension:
         assert pu.as1.is_axiom_of(a=ab, t=t)
         assert pu.as1.is_axiom_of(a=ac, t=t)
         assert pu.as1.is_axiom_of(a=ad, t=t)
+
+        t, i2 = pu.as1.let_x_be_an_inference_rule(
+            t=t, f=pu.as1.TransformationByVariableSubstitution(o=y, v=None, i=(a, b, c, d, x,)))
+        t, ok, _ = pu.as1.derive_2(t=t, c=y, i=i2, raise_error_if_false=False)
+        assert ok
 
 
 class TestAxiomaticBase:
