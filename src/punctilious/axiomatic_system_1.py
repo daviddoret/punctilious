@@ -1296,22 +1296,9 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         raise u1.ApplicativeError(msg='Inference rule declaration error. Inconsistent arguments.', i=i, f=f, c=c, v=v,
                                   d=d, p=p, a=a, t=t)
 
-    if isinstance(t, WellFormedAxiomatization):
-        t = WellFormedAxiomatization(a=t, d=(i,))
-        u1.log_info(i.typeset_as_string(theory=t))
-        return t, i
-    elif isinstance(t, WellFormedHypothesis):
-        t = WellFormedHypothesis(d=(*t, i,))  # TODO: Redevelop this
-        u1.log_info(i.typeset_as_string(theory=t))
-        return t, i
-    elif isinstance(t, WellFormedTheory):
-        t = WellFormedTheory(d=(*t, i,))
-        u1.log_info(i.typeset_as_string(theory=t))
-        return t, i
-    else:
-        raise u1.ApplicativeError(
-            code=c1.ERROR_CODE_AS1_091,
-            msg='Inference-rule declaration error. Argument ``t`` is not of a supported type.')
+    t = t.extend_with_component(c=i)
+    u1.log_info(i.typeset_as_string(theory=t))
+    return t, i
 
 
 def let_x_be_an_axiom(t: FlexibleTheoreticalContext | None = None, s: typing.Optional[FlexibleFormula] = None,
@@ -4410,6 +4397,8 @@ class WellFormedExtension(WellFormedTheoryComponent):
 
 
 FlexibleExtension = typing.Union[WellFormedExtension, WellFormedFormula]
+
+FlexibleSimpleObject = typing.Union[WellFormedSimpleObject, WellFormedFormula]
 
 
 class WellFormedInferenceRule(WellFormedTheoryComponent):
