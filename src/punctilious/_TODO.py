@@ -1,6 +1,9 @@
 """
+TODO: Use WellFormedProposition in WellFormedTheorem
 
-TODO: Develop WellFormedProposition, coerce_..., is_well_formed_...
+TODO: Use WellFormedProposition in WellFormedAxiom
+
+TODO: Use WellFormedProposition in WellFormedInferenceRule, i.e. premises must be propositions, and conclusion.
 
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
 

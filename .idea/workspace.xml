@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="WellFormedProposition">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -756,14 +757,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01015" summary="update dependent libraries">
-      <option name="closed" value="true" />
-      <created>1722533108108</created>
-      <option name="number" value="01015" />
-      <option name="presentableId" value="LOCAL-01015" />
-      <option name="project" value="LOCAL" />
-      <updated>1722533108108</updated>
-    </task>
     <task id="LOCAL-01016" summary="update dependent libraries">
       <option name="closed" value="true" />
       <created>1722541290421</created>
@@ -1148,7 +1141,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724039654782</updated>
     </task>
-    <option name="localTasksCounter" value="1064" />
+    <task id="LOCAL-01064" summary="WellFormedProposition">
+      <option name="closed" value="true" />
+      <created>1724040937084</created>
+      <option name="number" value="01064" />
+      <option name="presentableId" value="LOCAL-01064" />
+      <option name="project" value="LOCAL" />
+      <updated>1724040937084</updated>
+    </task>
+    <option name="localTasksCounter" value="1065" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1198,7 +1199,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;rename Formula to CompoundFormula.&#10;&#10;rename Relation to Connective.&#10;&#10;rename Parameter to Terms (in the contect of CompoundFormula).&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10;&#10;design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject" />
     <MESSAGE value="version 1.0.10:&#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
     <MESSAGE value="version 1.0.10:&#10; - new minimal metatheory to support is_provably_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
     <MESSAGE value="version 1.0.10:&#10; - new minimal metatheory to support is_declaratively_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
@@ -1223,7 +1223,8 @@
     <MESSAGE value="rename Formula to WellFormedFormula" />
     <MESSAGE value="TestExtension with inference-rules and theorems" />
     <MESSAGE value="cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="cleanup" />
+    <MESSAGE value="WellFormedProposition" />
+    <option name="LAST_COMMIT_MESSAGE" value="WellFormedProposition" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1266,7 +1267,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>896</line>
+          <line>920</line>
           <option name="timeStamp" value="156" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1291,7 +1292,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3793</line>
+          <line>3822</line>
           <option name="timeStamp" value="196" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

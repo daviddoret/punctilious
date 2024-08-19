@@ -534,6 +534,26 @@ def coerce_formula(phi: FlexibleFormula) -> WellFormedFormula:
             phi=phi)
 
 
+def coerce_proposition(p: FlexibleProposition) -> WellFormedProposition:
+    """Coerces ``p`` to a globally well-formed proposition.
+
+    TODO: Consider providing support for a conditional parameter `t`, which poses the question:
+        how to coerce statements such as is-proposition(p) on an arbitrary theory?
+
+    :param p: a presumably well-formed proposition.
+    :return: a globally well-formed proposition.
+    """
+    p: WellFormedFormula = coerce_formula(phi=p)
+    if isinstance(p, WellFormedProposition):
+        return p
+    elif is_well_formed_proposition(p=p, t=None):
+        return WellFormedProposition(con=p.connective, t=(*p,))
+    else:
+        raise u1.ApplicativeError(
+            msg='Coercion failure. `p` cannot be coerced to a well-formed proposition.'
+        )
+
+
 def coerce_variable(x: FlexibleFormula) -> WellFormedFormula:
     """Any nullary formula can be used as a variable.
 
@@ -776,6 +796,10 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> WellFor
 
 
 FlexibleFormula = typing.Optional[typing.Union[Connective, WellFormedFormula]]
+"""A flexible python type that may be coerced into :class:`WellFormedFormula`."""
+
+FlexibleProposition = typing.Optional[typing.Union[FlexibleFormula, WellFormedProposition]]
+"""A flexible python type that may be coerced into :class:`WellFormedProposition`."""
 
 
 class FreeArityConnective(Connective):
@@ -2800,17 +2824,22 @@ def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext
     ``t`` is ``None``, the local definition with regard to ``t`` is used instead.
     """
     p: WellFormedFormula = coerce_formula(phi=p)
+
+    # Global definition
+    # Condition #1: P is a well-formed formula.
+    p2: WellFormedFormula = coerce_formula(phi=p)
+
     if t is not None:
         # Local definition
         t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
+        # Condition #2: T ⊢ is-a-proposition(P).
         p_is_a_proposition: WellFormedFormula = connective_for_is_a_proposition(p)
         ok = is_valid_proposition_so_far_1(p=p_is_a_proposition, t=t)
         if not ok:
             return False
-    else:
-        # Global definition
-        p2: WellFormedFormula = coerce_formula(phi=p)
-        return True
+
+    # All necessary conditions are fulfilled.
+    return True
 
 
 def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = False,

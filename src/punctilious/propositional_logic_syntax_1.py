@@ -212,8 +212,8 @@ extended_theory = as1.WellFormedTheory(d=(*axiomatization,))
 
 
 def let_x_be_a_propositional_variable(
-        t: as1.FlexibleTheory, formula_ts: as1.FlexibleRepresentation) -> typing.Tuple[
-    as1.WellFormedTheory, as1.WellFormedVariable]:
+        t: as1.FlexibleTheoreticalContext, formula_ts: as1.FlexibleRepresentation) -> typing.Tuple[
+    as1.WellFormedTheory, as1.WellFormedProposition]:
     """Declare a propositional-variable in theory t.
 
     If they are not already present, all axioms of propositional-logic-syntax-1 are appended to theory t.
@@ -223,7 +223,7 @@ def let_x_be_a_propositional_variable(
 
     :param t:
     :param formula_ts:
-    :return:
+    :return: A newly created propositional variable.
     """
     global axiomatization
     global i0
@@ -231,11 +231,16 @@ def let_x_be_a_propositional_variable(
 
     # Include all propositional-logic-syntax-1 axioms if they are not already present
     # in the theory.
+    # TODO: Following the recent implementation of theory extensions, assure that
+    #   axioms are not appended multiple times in the theory? But this is no longer
+    #   possible because T(extension(T2), extension(T3)) is valid where both T2 and T3
+    #   contain a certain axiom A. This leads to consider using Tuples as a basis for
+    #   TheoreticalContext, rather than Enumerations, and let contexts contain duplicates.
+    #   We can then develop a canonical form which is the flattened, reproducibly ordered
+    #   version of the context.
     t = as1.append_to_theory(axiomatization, t=t)
 
-    x = as1.WellFormedVariable(c=as1.NullaryConnective(formula_ts=formula_ts))
-    # t, _ = as1.derive_1(t=t, c=x | as1.is_a | as1.is_a_propositional_variable,
-    #                    p=None, i=i0)
+    x = as1.WellFormedProposition(con=as1.NullaryConnective(formula_ts=formula_ts))
     t, _, _ = as1.derive_1(t=t, c=as1.connective_for_is_a_propositional_variable(x),
                            p=None, i=i0, raise_error_if_false=True)
 
