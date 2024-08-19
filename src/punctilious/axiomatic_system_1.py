@@ -4084,12 +4084,12 @@ def coerce_axiom(a: FlexibleFormula) -> WellFormedAxiom:
     if isinstance(a, WellFormedAxiom):
         return a
     elif isinstance(a, WellFormedFormula) and is_well_formed_axiom(a=a):
-        proved_formula: WellFormedFormula = a[WellFormedAxiom.VALID_STATEMENT_INDEX]
-        return WellFormedAxiom(p=proved_formula)
+        p: WellFormedProposition = coerce_proposition(p=a[WellFormedAxiom.PROPOSITION_INDEX])
+        return WellFormedAxiom(p=p)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_040,
-            msg='`a` cannot be coerced to a well-formed axiom.',
+            msg='Coercion failure. `a` cannot be coerced to a well-formed axiom.',
             a=a)
 
 

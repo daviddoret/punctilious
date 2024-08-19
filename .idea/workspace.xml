@@ -755,14 +755,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01019" summary="minor clean-up">
-      <option name="closed" value="true" />
-      <created>1722543422100</created>
-      <option name="number" value="01019" />
-      <option name="presentableId" value="LOCAL-01019" />
-      <option name="project" value="LOCAL" />
-      <updated>1722543422100</updated>
-    </task>
     <task id="LOCAL-01020" summary="minor clean-up">
       <option name="closed" value="true" />
       <created>1722543870484</created>
@@ -1147,7 +1139,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724065105434</updated>
     </task>
-    <option name="localTasksCounter" value="1068" />
+    <task id="LOCAL-01068" summary="Use WellFormedProposition in WellFormedAxiom">
+      <option name="closed" value="true" />
+      <created>1724065825758</created>
+      <option name="number" value="01068" />
+      <option name="presentableId" value="LOCAL-01068" />
+      <option name="project" value="LOCAL" />
+      <updated>1724065825758</updated>
+    </task>
+    <option name="localTasksCounter" value="1069" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
