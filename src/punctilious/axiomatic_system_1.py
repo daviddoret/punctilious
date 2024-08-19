@@ -1330,22 +1330,9 @@ def let_x_be_an_axiom(t: FlexibleTheoreticalContext | None = None, s: typing.Opt
     elif s is not None:
         a: WellFormedAxiom = WellFormedAxiom(p=s, **kwargs)
 
-    if isinstance(t, WellFormedAxiomatization):
-        t = WellFormedAxiomatization(a=t, d=(a,))
-        u1.log_info(a.typeset_as_string(theory=t))
-        return t, a
-    elif isinstance(t, WellFormedHypothesis):
-        t = WellFormedHypothesis(d=(*t, a,))  # TODO: Redevelop this
-        u1.log_info(a.typeset_as_string(theory=t))
-        return t, a
-    elif isinstance(t, WellFormedTheory):
-        t = WellFormedTheory(d=(*t, a,))
-        u1.log_info(a.typeset_as_string(theory=t))
-        return t, a
-    else:
-        raise u1.ApplicativeError(
-            code=c1.ERROR_CODE_AS1_018,
-            msg='Axiom declaration error. Argument ``t`` is not of a supported type.')
+    t = t.extend_with_component(c=a)
+    u1.log_info(a.typeset_as_string(theory=t))
+    return t, a
 
 
 def let_x_be_an_extension(t: FlexibleTheoreticalContext | None = None, e: FlexibleTheoreticalContext | None = None,
