@@ -1,5 +1,7 @@
 """
 
+TODO: Develop WellFormedProposition, coerce_..., is_well_formed_...
+
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
 
 TODO: Develop is_a_component_of(T) from is_a_valid_proposition_in(T)

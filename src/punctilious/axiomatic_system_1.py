@@ -327,6 +327,23 @@ class WellFormedFormula(tuple):
         yield from ts.typeset_from_generator(phi=self, **kwargs)
 
 
+class WellFormedProposition(WellFormedFormula):
+    """A well-formed proposition.
+
+    Global definition:
+    A well-formed formula :math:`P` is a well-formed proposition.
+
+    Local definition (with regard to a theory t):
+    A well-formed formula :math:`P` is a well-formed proposition with regard to a theory :math:`T` if and only if:
+     - :math:`P` is a globally well-formed proposition,
+     - :math:`T \\vdash \\text{is-proposition}\\left( P \\right)`.
+
+    Note:
+    Whether a formula is a proposition is entirely dependent on the theory.
+    """
+    pass
+
+
 class WellFormedTheoreticalContext(WellFormedFormula, ABC):
     """A well-formed theoretical context is a formula that is either a well-formed axiomatization, theory,
     or hypothesis. One of its defining property is to have an axiomatic base.
@@ -570,12 +587,12 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False,
     """
     if isinstance(e, WellFormedEnumeration):
         return e
+    elif interpret_none_as_empty and e is None:
+        return WellFormedEnumeration(e=None)
     elif is_well_formed_enumeration(e=e):
         # phi is a well-formed enumeration,
         # it can be safely re-instantiated as an Enumeration and returned.
-        return WellFormedEnumeration(e=e)
-    elif interpret_none_as_empty and e is None:
-        return WellFormedEnumeration(e=None)
+        return WellFormedEnumeration(e=(*e,))
     elif canonic_conversion and is_well_formed_formula(phi=e):
         return transform_formula_to_enumeration(phi=e, strip_duplicates=strip_duplicates)
     elif isinstance(e, typing.Generator) and not isinstance(e, WellFormedFormula):
@@ -2784,12 +2801,16 @@ def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext
     """
     p: WellFormedFormula = coerce_formula(phi=p)
     if t is not None:
+        # Local definition
         t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
         p_is_a_proposition: WellFormedFormula = connective_for_is_a_proposition(p)
         ok = is_valid_proposition_so_far_1(p=p_is_a_proposition, t=t)
         if not ok:
             return False
-    return True
+    else:
+        # Global definition
+        p2: WellFormedFormula = coerce_formula(phi=p)
+        return True
 
 
 def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = False,
@@ -4036,7 +4057,7 @@ def coerce_axiom(a: FlexibleFormula) -> WellFormedAxiom:
     if isinstance(a, WellFormedAxiom):
         return a
     elif isinstance(a, WellFormedFormula) and is_well_formed_axiom(a=a):
-        proved_formula: WellFormedFormula = a.term_0
+        proved_formula: WellFormedFormula = a[WellFormedAxiom.VALID_STATEMENT_INDEX]
         return WellFormedAxiom(p=proved_formula)
     else:
         raise u1.ApplicativeError(
@@ -4055,7 +4076,8 @@ def coerce_extension(e: FlexibleFormula) -> WellFormedExtension:
     if isinstance(e, WellFormedExtension):
         return e
     elif is_well_formed_extension(e=e):
-        return WellFormedExtension(e=e)
+        t = e[WellFormedExtension.THEORETICAL_CONTEXT_INDEX]
+        return WellFormedExtension(t=t)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_093,
@@ -4159,7 +4181,7 @@ def coerce_axiomatization(a: FlexibleFormula, interpret_none_as_empty: bool = Fa
     elif a is None and interpret_none_as_empty:
         return WellFormedAxiomatization(a=None, d=None)
     elif is_well_formed_axiomatization(a=a):
-        return WellFormedAxiomatization(d=a)
+        return WellFormedAxiomatization(d=(*a,))
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_044,
