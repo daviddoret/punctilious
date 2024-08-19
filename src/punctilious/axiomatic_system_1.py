@@ -2823,6 +2823,8 @@ def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext
     :return: ``True`` if ``p`` is a well-formed proposition, ``False`` otherwise. The global definition is used it
     ``t`` is ``None``, the local definition with regard to ``t`` is used instead.
     """
+    global connective_for_is_a_proposition
+
     p: WellFormedFormula = coerce_formula(phi=p)
 
     # Global definition
@@ -3557,21 +3559,17 @@ def is_well_formed_axiom(a: FlexibleFormula, t: FlexibleTheoreticalContext | Non
     :return: ``True`` if ``a`` is a well-formed axiom, ``False`` otherwise.
     """
     global connective_for_axiom_formula
-    # Data validation,
     a: WellFormedFormula = coerce_formula(phi=a)
     if t is not None:
         t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
-    # Check formula against criteria for global definition of well-formed axiom.
     if a.arity != 1:
         return False
     if a.connective is not connective_for_axiom_formula:
         return False
-    if not is_well_formed_formula(phi=a.term_0):
+    # Check that the axiom proposition is well-formed, with regard to `t` if `t` is not `None`.
+    # If `t` is not `None`, `is_well_formed_proposition` checks the validity of `is-a-proposition(p)` in `t`.
+    if not is_well_formed_proposition(p=a[WellFormedAxiom.PROPOSITION_INDEX], t=t):
         return False
-    if t is not None:
-        # Check formula against criteria for local definition of well-formed axiom, with regards to ``t``.
-        if not is_valid_proposition_so_far_1(p=connective_for_is_a_proposition(a), t=t):
-            return False
     # All tests were successful.
     return True
 
@@ -4328,6 +4326,11 @@ class WellFormedAxiom(WellFormedTheoryComponent):
 
     TODO: When an axiom is postulated in a theory, automatically infer is-a-well-formed-proposition(P)?
 
+    TODO: QUESTION: To be locally well-formed, the proposition of an axiom must be signaled as a proposition.
+        but this may require an initial axiom stating that the first is-a-proposition(is-a-proposition(...))
+        is a proposition, leading to an infinite loop. In practice this is not an issue but how this plays
+        out should be properly documented.
+
     """
 
     PROPOSITION_INDEX: int = 0
@@ -4360,12 +4363,14 @@ class WellFormedAxiom(WellFormedTheoryComponent):
 
         :param p: A proposition.
         :param kwargs:
+        :returns: A well-formed axiom.
         """
         con, p = WellFormedAxiom._data_validation_3(p=p)
         super().__init__(con=con, s=p, **kwargs)
 
     @property
     def proposition(self) -> WellFormedProposition:
+        """The proposition postulated as true by the axiom."""
         return self[WellFormedAxiom.PROPOSITION_INDEX]
 
 
