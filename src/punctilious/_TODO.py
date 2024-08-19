@@ -1,12 +1,8 @@
 """
 
-TODO: Consider a new class WFTupleExtensible which supports the extends(...) elements.
-    From which WFEnumerationExtensible follows.
-    And finally all theoretical contexts.
-
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
 
-TODO: Develop is_a_derivation_of(T) from is_a_valid_proposition_in(T)
+TODO: Develop is_a_component_of(T) from is_a_valid_proposition_in(T)
 
 TODO: Check then remove argument `a` in inference. Should be useless now.
 
@@ -60,10 +56,6 @@ TODO: Replace the follows-from scheme?, e.g. inference-rule(blablabla), axiom(bl
 TODO: KEY QUALITY CHECK: In both the Theorem.__init__ or __new__ and in the is_well_formed_theorem function,
     check that newly declared objects are not present in any precedent formula in the theory!
 
-TODO: IDEA: Develop a three-valued logic:
- - P is true
- - or P is false
- - or P is not decidable in this axiomatization
 
 ****** PREDICATES
 
@@ -117,18 +109,31 @@ TODO: Implement hypothesis
     And then prove not phi:
             [q] not(phi)
 
+TODO: is-a-sub-theory-of (subset of axiomatization)
 
-TODO: AccretingTheory class ??? is this a good idea ???
+TODO: meta-theorem 1:
+ if derivation d in t1 and t1 is-a-sub-theory-of t2, then d is valid in t1.
+
+NIVE-TO-HAVES
+
+TODO: NICE-TO-HAVE: Consider a new class WFTupleExtensible which supports the extends(...) elements.
+    From which WFEnumerationExtensible follows.
+    And finally all theoretical contexts.
+
+
+TODO: IDEA: Develop a three-valued logic:
+ - P is true
+ - or P is false
+ - or P is not decidable in this axiomatization
+
+QUESTIONS
+
+TODO: QUESTION: AccretingTheory class ??? is this a good idea ???
     An accreting theory is a sequence of theories T0, T1, T2, ..., Tn, such that
     T0 is a theory, and Tn+1 is a theory that is Tn with one additional derivation.
     This would allow to keep a python-object as a reference object with an inner
     Theory instance.
     Would this structure be necessary to friendly manage meta- and sub-theories?
 
-
-TODO: is-a-sub-theory-of (subset of axiomatization)
-
-TODO: meta-theorem 1:
- if derivation d in t1 and t1 is-a-sub-theory-of t2, then d is valid in t1.
 
 """

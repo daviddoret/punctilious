@@ -2701,9 +2701,8 @@ def coerce_hypothesis(h: FlexibleFormula) -> WellFormedHypothesis:
     if isinstance(h, WellFormedHypothesis):
         return h
     elif is_well_formed_hypothesis(h=h):
-        b: WellFormedTheory = coerce_theory(t=h[WellFormedHypothesis.BASE_THEORY_INDEX], interpret_none_as_empty=True,
-                                            canonical_conversion=True)
-        a: WellFormedFormula = coerce_formula(phi=h[WellFormedHypothesis.ASSUMPTION_INDEX])
+        b: WellFormedExtension = coerce_extension(e=h[WellFormedHypothesis.BASE_THEORY_INDEX])
+        a: WellFormedAxiom = coerce_axiom(a=h[WellFormedHypothesis.ASSUMPTION_INDEX])
         return WellFormedHypothesis(b=b, a=a)
     else:
         raise u1.ApplicativeError(
@@ -2860,8 +2859,8 @@ def is_well_formed_hypothesis(h: FlexibleHypothesis, raise_error_if_false: bool 
     h = coerce_formula(phi=h)
     if (h.connective is not connective_for_hypothesis or
             not h.arity == 2 or
-            not is_well_formed_theory(t=h[WellFormedHypothesis.BASE_THEORY_INDEX]) or
-            not is_well_formed_formula(phi=h[WellFormedHypothesis.ASSUMPTION_INDEX])):
+            not is_well_formed_extension(e=h[WellFormedHypothesis.BASE_THEORY_INDEX]) or
+            not is_well_formed_axiom(a=h[WellFormedHypothesis.ASSUMPTION_INDEX])):
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_082,
@@ -6017,8 +6016,6 @@ def auto_derive_4(
 class WellFormedHypothesis(WellFormedTheoreticalContext):
     """A hypothesis is....
 
-    TODO: Inherit from WellFormedTheoreticalContext instead of Formula.
-
     Note: Specializing hypothesis as a first class object in the axiomatic system data model is not
     necessary. In effect, an equivalent axiomatic system may be built with only theories and no
     hypothesis, nor axiomatization. Even theories could be stripped from the data model, considering
@@ -6038,8 +6035,9 @@ class WellFormedHypothesis(WellFormedTheoreticalContext):
 
     @staticmethod
     def _data_validation_2(
-            b: FlexibleTheory,
-            a: FlexibleFormula) -> tuple[Connective, WellFormedTheory, WellFormedFormula]:
+            b: FlexibleTheoreticalContext,
+            a: FlexibleFormula, c: FlexibleEnumeration[FlexibleComponent] | None = None) -> tuple[
+        Connective, WellFormedExtension, WellFormedAxiom, FlexibleEnumeration[FlexibleComponent] | None]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -6048,52 +6046,67 @@ class WellFormedHypothesis(WellFormedTheoreticalContext):
         :return:
         """
         con: Connective = connective_for_hypothesis
-        b: WellFormedTheory = coerce_theory(t=b)
+        b: WellFormedTheoreticalContext = coerce_theoretical_context(t=b)
+        b_extension: WellFormedExtension = WellFormedExtension(t=b)
         a: WellFormedFormula = coerce_formula(phi=a)
-        return con, b, a
+        a_axiom: WellFormedAxiom = WellFormedAxiom(p=a)
+        if c is not None:
+            c = coerce_enumeration(e=c, strip_duplicates=True, canonic_conversion=True)
+            if c.arity == 0:
+                c = None
+        return con, b_extension, a_axiom, c
 
-    def __new__(cls, b: FlexibleTheory, a: FlexibleFormula):
+    def __new__(cls, b: FlexibleTheoreticalContext, a: FlexibleFormula,
+                c: FlexibleEnumeration[FlexibleComponent] | None = None, **kwargs):
         """
 
         :param b: A theory denoted as the base theory.
-        :param a: A formula denoted as the assumption.
+        :param a: A proposition denoted as the assumption.
+        :param c: (Conditional) An enumeration of complementary theory components.
         """
-        con, b, a = WellFormedHypothesis._data_validation_2(b=b, a=a)
-        o: tuple = super().__new__(cls, con=con, t=(b, a,))
+        con, b_extension, a_axiom, c = WellFormedHypothesis._data_validation_2(b=b, a=a, c=c)
+        if c is None:
+            o: tuple = super().__new__(cls, con=con, t=(b_extension, a_axiom))
+        else:
+            o: tuple = super().__new__(cls, con=con, t=(b_extension, a_axiom, *c))
         return o
 
-    def __init__(self, b: FlexibleTheory, a: FlexibleFormula):
+    def __init__(self, b: FlexibleTheoreticalContext, a: FlexibleFormula,
+                 c: FlexibleEnumeration[FlexibleComponent] | None = None, **kwargs):
         """
 
         :param b: A theory denoted as the base theory.
         :param a: A formula denoted as the assumption.
+        :param c: (Conditional) An enumeration of complementary theory components.
+
         """
-        con, b, a = WellFormedHypothesis._data_validation_2(b=b, a=a)
-        super().__init__(con=con, t=(b, a,))
-        # Store the extended theory e = b ∪ (a)
-        e, _ = punctilious.axiomatic_system_1.let_x_be_an_axiom(t=b, a=a)
-        self._e: WellFormedTheory = e
+        con, b_extension, a_axiom, c = WellFormedHypothesis._data_validation_2(b=b, a=a, c=c)
+        if c is None:
+            super().__init__(con=con, t=(b_extension, a_axiom))
+        else:
+            super().__init__(con=con, t=(b_extension, a_axiom, *c))
 
     @property
     def assumption(self) -> WellFormedFormula:
         """A proposition assumed to be true, denoted as the assumption of the hypothesis."""
-        return self[WellFormedHypothesis.ASSUMPTION_INDEX]
+        return self[WellFormedHypothesis.ASSUMPTION_INDEX][WellFormedAxiom.VALID_STATEMENT_INDEX]
 
     @property
     def base_theory(self) -> WellFormedTheory:
         """The base theory of the hypothesis."""
-        return self[WellFormedHypothesis.BASE_THEORY_INDEX]
+        return self[WellFormedHypothesis.BASE_THEORY_INDEX][WellFormedExtension.THEORETICAL_CONTEXT_INDEX]
 
-    @property
-    def extended_theory(self) -> WellFormedTheory:
-        """The extended theory `e` of the hypothesis is the base theory `b` extended with the assumption ``a``
-        postulated as an axiom.
+    def extend_with_component(
+            self, c: FlexibleComponent,
+            **kwargs) -> WellFormedTheoreticalContext:
+        """Given a hypothesis ``self`` and a theory component ``c``, returns a new hypothesis ``self′``
+        that is an extension of ``self`` with ``c`` appended as its last component.
 
-        :math:`e = \\; b \\; \\cdot \\; \\left( a \\right)`
-
-        :return: A theory.
+        :param c:
+        :return:
         """
-        return self._e
+        c: WellFormedTheoryComponent = coerce_theory_component(d=c)
+        return WellFormedHypothesis(b=self.base_theory, a=self.assumption, c=(c,))
 
 
 FlexibleHypothesis = typing.Optional[typing.Union[WellFormedHypothesis]]

@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="rename Formula to WellFormedFormula">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="TestExtension with inference-rules and theorems">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -155,6 +157,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables_2.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises.executor": "Run",
@@ -382,7 +385,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension_of_axioms">
+  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -640,7 +643,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -653,7 +656,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestTheory.test_iterate_axioms&quot;" />
+      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestHypothesis.test_hypothesis&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -722,7 +725,7 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension_of_axioms" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms" />
+      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -730,11 +733,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension_of_axioms" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms" />
       </list>
     </recent_temporary>
   </component>
@@ -753,14 +756,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01011" summary="inference-rule for theory inconsistency. all tests passed.">
-      <option name="closed" value="true" />
-      <created>1722531992714</created>
-      <option name="number" value="01011" />
-      <option name="presentableId" value="LOCAL-01011" />
-      <option name="project" value="LOCAL" />
-      <updated>1722531992714</updated>
     </task>
     <task id="LOCAL-01012" summary="inference-rule for theory inconsistency. all tests passed.">
       <option name="closed" value="true" />
@@ -1146,7 +1141,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724008884687</updated>
     </task>
-    <option name="localTasksCounter" value="1060" />
+    <task id="LOCAL-01060" summary="TestExtension with inference-rules and theorems">
+      <option name="closed" value="true" />
+      <created>1724009576858</created>
+      <option name="number" value="01060" />
+      <option name="presentableId" value="LOCAL-01060" />
+      <option name="project" value="LOCAL" />
+      <updated>1724009576858</updated>
+    </task>
+    <option name="localTasksCounter" value="1061" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1196,7 +1199,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;rename Formula to CompoundFormula.&#10;&#10;rename Relation to Connective.&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10;&#10;design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject" />
     <MESSAGE value="version 1.0.10:&#10;&#10;feature #242: constant-declaration&#10;&#10;issue #238: alpha-equivalence&#10;&#10;issue #226: develop minimal logic (M0).&#10;&#10;lock mechanism for axiom-inclusion and axiom-interpretation.&#10;&#10;issue #229: elaborate intuitionistic logic (j0) theory.&#10;&#10;issue #231: compose the theory declaration and list the extended theories.&#10;&#10;issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10;&#10;issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10;&#10;rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10;&#10;rename Formula to CompoundFormula.&#10;&#10;rename Relation to Connective.&#10;&#10;rename Parameter to Terms (in the contect of CompoundFormula).&#10;&#10;bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10;&#10;design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject" />
     <MESSAGE value="version 1.0.10:&#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
     <MESSAGE value="version 1.0.10:&#10; - new minimal metatheory to support is_provably_member_of_class &#10; - feature #242: constant-declaration&#10; - issue #238: alpha-equivalence&#10; - issue #226: develop minimal logic (M0).&#10; - lock mechanism for axiom-inclusion and axiom-interpretation.&#10; - new class CollectionDeclaration&#10; - issue #229: elaborate intuitionistic logic (j0) theory.&#10; - issue #231: compose the theory declaration and list the extended theories.&#10; - issue #232: provide the capability to forbid the inclusion of new inference-rules in a theory.&#10; - issue #233: provide the capability to forbid the inclusion of new axioms / definitions in a theory.&#10; - rename theory-elaboration-sequence to theory-derivation which is more accurate.&#10; - rename Formula to CompoundFormula.&#10; - rename Relation to Connective.&#10; - rename Parameter to Terms (in the contect of CompoundFormula).&#10; - bug #237: formula equivalence does not account for the presence of free variables in both formula, not necessarily at the same positions.&#10; - design flaw correction: UniverseOfDiscourse inherits from TheoreticalObject, and not from SymbolicObject&#10;  - MGZ21 propositional logic." />
@@ -1221,7 +1223,8 @@
     <MESSAGE value="pursue the implementation of theoretical context and extensions." />
     <MESSAGE value="cleanup" />
     <MESSAGE value="rename Formula to WellFormedFormula" />
-    <option name="LAST_COMMIT_MESSAGE" value="rename Formula to WellFormedFormula" />
+    <MESSAGE value="TestExtension with inference-rules and theorems" />
+    <option name="LAST_COMMIT_MESSAGE" value="TestExtension with inference-rules and theorems" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1289,8 +1292,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
-          <line>3799</line>
+          <line>3798</line>
           <option name="timeStamp" value="196" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
+          <line>1339</line>
+          <option name="timeStamp" value="203" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
