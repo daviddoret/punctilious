@@ -2746,20 +2746,20 @@ def coerce_simple_object(o: FlexibleSimpleObject) -> WellFormedSimpleObject:
             o=o)
 
 
-def coerce_inference(i: FlexibleFormula) -> Inference:
+def coerce_inference(i: FlexibleFormula) -> WellFormedInference:
     """Coerces formula `i` into a well-formed inference, or raises an error if it fails.
 
     :param i: A formula that is presumably a well-formed inference.
     :return: A well-formed inference.
     :raises ApplicativeError: with code AS1-032 if coercion fails.
     """
-    if isinstance(i, Inference):
+    if isinstance(i, WellFormedInference):
         return i
     elif is_well_formed_inference(i=i):
-        i2: WellFormedInferenceRule = coerce_inference_rule(i=i[Inference.INFERENCE_RULE_INDEX])
-        p: WellFormedTupl = coerce_tuple(t=i[Inference.PREMISES_INDEX], interpret_none_as_empty=True)
-        a: WellFormedTupl = coerce_tuple(t=i[Inference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
-        return Inference(i=i2, p=p, a=a)
+        i2: WellFormedInferenceRule = coerce_inference_rule(i=i[WellFormedInference.INFERENCE_RULE_INDEX])
+        p: WellFormedTupl = coerce_tuple(t=i[WellFormedInference.PREMISES_INDEX], interpret_none_as_empty=True)
+        a: WellFormedTupl = coerce_tuple(t=i[WellFormedInference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
+        return WellFormedInference(i=i2, p=p, a=a)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_032,
@@ -2907,9 +2907,9 @@ def is_well_formed_inference(i: FlexibleFormula, raise_error_if_false: bool = Fa
     i = coerce_formula(phi=i)
     if (i.connective is not connective_for_inference or
             not i.arity == 3 or
-            not is_well_formed_inference_rule(i=i[Inference.INFERENCE_RULE_INDEX]) or
-            not is_well_formed_tupl(t=i[Inference.PREMISES_INDEX]) or
-            not is_well_formed_tupl(t=i[Inference.ARGUMENTS_INDEX])):
+            not is_well_formed_inference_rule(i=i[WellFormedInference.INFERENCE_RULE_INDEX]) or
+            not is_well_formed_tupl(t=i[WellFormedInference.PREMISES_INDEX]) or
+            not is_well_formed_tupl(t=i[WellFormedInference.ARGUMENTS_INDEX])):
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_081,
@@ -3621,7 +3621,7 @@ def is_well_formed_theorem(t: FlexibleFormula, raise_error_if_false: bool = Fals
     else:
         # TODO: Factorize the check in Theorem.__new__ or __init__,
         #   that takes into account new-object-declarations.
-        i: Inference = coerce_inference(i=t.term_1)
+        i: WellFormedInference = coerce_inference(i=t.term_1)
         recomputed_outcome: WellFormedFormula = i.inference_rule.transformation(i.premises)
         if not is_formula_equivalent(phi=t.term_0, psi=recomputed_outcome):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
@@ -3816,7 +3816,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             # Check that this theorem is well-formed with regard to the target theory,
             # i.e. it is a valid derivation with regard to predecessor derivations.
             m: WellFormedTheorem = coerce_theorem(t=d)
-            i: Inference = m.inference
+            i: WellFormedInference = m.inference
             ir: WellFormedInferenceRule = m.inference.inference_rule
             verified_so_far: WellFormedEnumeration = WellFormedEnumeration(e=(*v, *u[0:index]))
             # Check that the inference-rule is a valid predecessor in the derivation.
@@ -4144,7 +4144,7 @@ def coerce_theorem(t: FlexibleFormula) -> WellFormedTheorem:
         return t
     elif isinstance(t, WellFormedFormula) and is_well_formed_theorem(t=t):
         p: WellFormedFormula = coerce_formula(phi=t.term_0)
-        i: Inference = coerce_inference(i=t.term_1)
+        i: WellFormedInference = coerce_inference(i=t.term_1)
         return WellFormedTheorem(s=p, i=i)
     else:
         raise u1.ApplicativeError(
@@ -4541,7 +4541,7 @@ with let_x_be_a_variable(formula_ts='P') as phi, let_x_be_a_variable(formula_ts=
     """
 
 
-class Inference(WellFormedFormula):
+class WellFormedInference(WellFormedFormula):
     """An inference is the description of a usage of an inference-rule. Intuitively, it can be understood as an instance
     of the arguments passed to an inference-rule.
 
@@ -4600,7 +4600,7 @@ class Inference(WellFormedFormula):
         :param p: A tuple of formulas denoted as the premises.
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
-        c, i, p, a = Inference._data_validation_2(i=i, p=p, a=a)
+        c, i, p, a = WellFormedInference._data_validation_2(i=i, p=p, a=a)
         o: tuple = super().__new__(cls, con=c, t=(i, p, a))
         return o
 
@@ -4612,28 +4612,28 @@ class Inference(WellFormedFormula):
         :param a: A tuple of formulas denoted as the supplementary arguments, that may or may not be propositions,
                   and that may or may not be valid in the theory under consideration.
         """
-        c, i, p, a = Inference._data_validation_2(i=i, p=p, a=a)
+        c, i, p, a = WellFormedInference._data_validation_2(i=i, p=p, a=a)
         super().__init__(con=c, t=(i, p, a,))
 
     @property
     def arguments(self) -> WellFormedTupl:
         """A tuple of supplementary arguments to be passed to the transformation as input parameters. These may or
         may not be propositions, and may or may not be valid in the theory under consideration."""
-        return self[Inference.ARGUMENTS_INDEX]
+        return self[WellFormedInference.ARGUMENTS_INDEX]
 
     @property
     def inference_rule(self) -> WellFormedInferenceRule:
         """The inference-rule of the inference."""
-        return self[Inference.INFERENCE_RULE_INDEX]
+        return self[WellFormedInference.INFERENCE_RULE_INDEX]
 
     @property
     def premises(self) -> WellFormedTupl:
         """The premises of the inference. All premises in the inference must be valid in the theory under
         consideration."""
-        return self[Inference.PREMISES_INDEX]
+        return self[WellFormedInference.PREMISES_INDEX]
 
 
-FlexibleInference = typing.Optional[typing.Union[Inference]]
+FlexibleInference = typing.Optional[typing.Union[WellFormedInference]]
 
 
 def inverse_map(m: FlexibleMap) -> WellFormedMap:
@@ -4681,7 +4681,8 @@ class WellFormedTheorem(WellFormedTheoryComponent):
     INFERENCE_INDEX: int = WellFormedTheoryComponent.JUSTIFICATION_INDEX
 
     @staticmethod
-    def _data_validation_3(s: FlexibleFormula, i: FlexibleInference) -> tuple[Connective, WellFormedFormula, Inference]:
+    def _data_validation_3(s: FlexibleFormula, i: FlexibleInference) -> tuple[
+        Connective, WellFormedFormula, WellFormedInference]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -4694,7 +4695,7 @@ class WellFormedTheorem(WellFormedTheoryComponent):
         """
         con: Connective = connective_for_theorem
         s: WellFormedFormula = coerce_formula(phi=s)
-        i: Inference = coerce_inference(i=i)
+        i: WellFormedInference = coerce_inference(i=i)
 
         # check the validity of the theorem
         try:
@@ -4772,7 +4773,7 @@ class WellFormedTheorem(WellFormedTheoryComponent):
         super().__init__(con=con, s=s, j=i)
 
     @property
-    def inference(self) -> Inference:
+    def inference(self) -> WellFormedInference:
         """The inference of the theorem."""
         return self[WellFormedTheorem.INFERENCE_INDEX]
 
@@ -5611,7 +5612,7 @@ def derive_1(t: FlexibleTheoreticalContext, c: FlexibleFormula, p: FlexibleTupl,
     #   or implement complete check with ext algo arguments, object creation, etc.
 
     # Configure the inference that derives the theorem.
-    inference: Inference = Inference(p=p, a=a, i=i)
+    inference: WellFormedInference = WellFormedInference(p=p, a=a, i=i)
 
     # Prepare the new theorem.
     try:
@@ -6477,7 +6478,7 @@ class TypesetterForDerivation(pl1.Typesetter):
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: WellFormedTheorem = coerce_theorem(t=phi)
-                inference: Inference = phi.inference
+                inference: WellFormedInference = phi.inference
                 inference_rule: WellFormedInferenceRule = inference.inference_rule
                 yield f'\t\t| Follows from [{inference_rule}] given '
                 first: bool = True
@@ -6507,7 +6508,7 @@ class TypesetterForDerivation(pl1.Typesetter):
                 yield '\t\t| Inference rule.'
             elif is_well_formed_theorem(t=phi):
                 phi: WellFormedTheorem = coerce_theorem(t=phi)
-                inference: Inference = phi.inference
+                inference: WellFormedInference = phi.inference
                 inference_rule: WellFormedInferenceRule = inference.inference_rule
                 yield f'\t\t| Follows from '
                 yield from typeset_formula_reference(phi=inference_rule, t=theory, **kwargs)

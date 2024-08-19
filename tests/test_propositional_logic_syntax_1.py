@@ -57,7 +57,7 @@ class TestAxioms:
         # note that it is not necessary that either A or ¬A be valid
         t = pu.as1.append_to_theory(pu.pls1.i2, t=t)
         inference_rule = pu.as1.WellFormedInferenceRule(f=pu.pls1.i2.transformation)
-        inference = pu.as1.Inference(
+        inference = pu.as1.WellFormedInference(
             p=(is_a_proposition(p),),
             i=inference_rule)
         claim = is_a_proposition(lnot(p))
@@ -74,7 +74,7 @@ class TestAxioms:
 
         # derive q is-a proposition
         inference_rule = pu.as1.WellFormedInferenceRule(f=pu.pls1.i1.transformation)
-        inference = pu.as1.Inference(
+        inference = pu.as1.WellFormedInference(
             p=(a2.valid_statement,),
             i=inference_rule)
         claim = is_a_proposition(q)
@@ -84,7 +84,7 @@ class TestAxioms:
         # add i3: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition)
         t = pu.as1.append_to_theory(pu.pls1.i3, t=t)
         inference_rule = pu.as1.WellFormedInferenceRule(f=pu.pls1.i3.transformation)
-        inference = pu.as1.Inference(
+        inference = pu.as1.WellFormedInference(
             p=(is_a_proposition(p), is_a_proposition(q),),
             i=inference_rule)
         claim = is_a_proposition(p | land | q)
