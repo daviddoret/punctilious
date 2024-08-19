@@ -4308,7 +4308,7 @@ class WellFormedTheoryComponent(WellFormedFormula):
 
 class WellFormedAxiom(WellFormedTheoryComponent):
     """A well-formed axiom is a formula of the form ⌜ :math:`\\text{axiom}\\left( \\boldsymbol{P} \\right)` ⌝ where
-    :math:`\\boldsymbol{P}` is a proposition postulated as valid in some theoretical context.
+    :math:`\\boldsymbol{P}` is a well-formed proposition.
 
     Global definition
     ~~~~~~~~~~~~~~~~~~
@@ -4319,18 +4319,21 @@ class WellFormedAxiom(WellFormedTheoryComponent):
 
     Local definition
     ~~~~~~~~~~~~~~~~~~
-    A formula :math:`\\boldsymbol{\\phi}` is a well-formed axiom in a theoretical context :math:`T` if and only if:
-     - it is a well-formed axiom as per the global definition above,
-     - its term is a proposition in :math:`T`.
+    A formula :math:`\\boldsymbol{\\phi}` is a well-formed axiom with regard to theoretical context :math:`T`
+    if and only if:
+     - it is a globally well-formed axiom,
+     - its term is a locally well-formed proposition with regard to :math:`T`.
 
     TODO: An axiom may be viewed as an inference-rule without premises. Thus, Axiom could derive from InferenceRule.
 
-    TODO: When an axiom is postulated in a theory, automatically infer is-a-well-formed-proposition(P).
+    TODO: When an axiom is postulated in a theory, automatically infer is-a-well-formed-proposition(P)?
 
     """
 
+    PROPOSITION_INDEX: int = 0
+
     @staticmethod
-    def _data_validation_3(p: FlexibleFormula = None) -> tuple[Connective, WellFormedFormula]:
+    def _data_validation_3(p: FlexibleProposition) -> tuple[Connective, WellFormedProposition]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -4339,10 +4342,10 @@ class WellFormedAxiom(WellFormedTheoryComponent):
         """
         global connective_for_axiom_formula
         con: Connective = connective_for_axiom_formula
-        p: WellFormedFormula = coerce_formula(phi=p)  # TODO: use coerce_proposition instead.
+        p: WellFormedProposition = coerce_proposition(p=p)
         return con, p
 
-    def __new__(cls, p: FlexibleFormula = None, **kwargs):
+    def __new__(cls, p: FlexibleProposition, **kwargs):
         """Creates a new axiom.
 
         :param p: A proposition.
@@ -4352,7 +4355,7 @@ class WellFormedAxiom(WellFormedTheoryComponent):
         o: tuple = super().__new__(cls, con=con, s=p, **kwargs)
         return o
 
-    def __init__(self, p: FlexibleFormula, **kwargs):
+    def __init__(self, p: FlexibleProposition, **kwargs):
         """initializes a new axiom.
 
         :param p: A proposition.
@@ -4360,6 +4363,10 @@ class WellFormedAxiom(WellFormedTheoryComponent):
         """
         con, p = WellFormedAxiom._data_validation_3(p=p)
         super().__init__(con=con, s=p, **kwargs)
+
+    @property
+    def proposition(self) -> WellFormedProposition:
+        return self[WellFormedAxiom.PROPOSITION_INDEX]
 
 
 FlexibleAxiom = typing.Union[WellFormedAxiom, WellFormedFormula]
