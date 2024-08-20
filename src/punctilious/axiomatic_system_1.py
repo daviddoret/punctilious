@@ -4640,7 +4640,7 @@ class WellFormedInference(WellFormedFormula):
         """
         con: Connective = connective_for_inference
         i: WellFormedInferenceRule = coerce_inference_rule(i=i)
-        p: WellFormedTupl = coerce_tuple(s=p, interpret_none_as_empty=True)
+        p: WellFormedTupl[WellFormedProposition] = coerce_tuple_of_proposition(s=p, interpret_none_as_empty=True)
         a: WellFormedTupl = coerce_tuple(s=a, interpret_none_as_empty=True)
 
         # Check the consistency of the shape of the premises and complementary arguments,
@@ -4654,7 +4654,8 @@ class WellFormedInference(WellFormedFormula):
 
         return con, i, p, a
 
-    def __new__(cls, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
+    def __new__(cls, i: FlexibleInferenceRule, p: FlexibleTupl[FlexibleProposition] | None = None,
+                a: FlexibleTupl | None = None):
         """
 
         :param i: An inference-rule.
@@ -4665,7 +4666,8 @@ class WellFormedInference(WellFormedFormula):
         o: tuple = super().__new__(cls, con=c, t=(i, p, a))
         return o
 
-    def __init__(self, i: FlexibleInferenceRule, p: FlexibleTupl | None = None, a: FlexibleTupl | None = None):
+    def __init__(self, i: FlexibleInferenceRule, p: FlexibleTupl[FlexibleProposition] | None = None,
+                 a: FlexibleTupl | None = None):
         """Initializes a new inference.
 
         :param i: An inference-rule.
