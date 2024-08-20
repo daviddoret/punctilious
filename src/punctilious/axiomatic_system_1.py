@@ -2909,29 +2909,54 @@ def is_well_formed_tupl(t: FlexibleFormula, interpret_none_as_empty: bool = Fals
     return True
 
 
-def is_well_formed_hypothesis(h: FlexibleHypothesis, raise_error_if_false: bool = False) -> bool:
+def is_well_formed_hypothesis(
+        h: FlexibleHypothesis,
+        t: FlexibleTheoreticalContext | None = None,
+        raise_error_if_false: bool = False) -> bool:
     """Returns ``True`` if and only if ``h`` is a well-formed hypothesis, ``False`` otherwise.
 
     TODO: Check that assumption is a proposition instead of just checking it is a formula.
 
+    :param t:
     :param h: A formula that may or may not be a well-formed hypothesis.
     :param raise_error_if_false: If the argument is ``True``, the function raises an AS1-082 error instead of returning
         ``False``.
     :return: bool.
     """
-    h = coerce_formula(phi=h)
-    if (h.connective is not connective_for_hypothesis or
-            not h.arity == 2 or
-            not is_well_formed_extension(e=h[WellFormedHypothesis.BASE_THEORY_INDEX]) or
-            not is_well_formed_axiom(a=h[WellFormedHypothesis.ASSUMPTION_INDEX])):
+    h: WellFormedFormula = coerce_formula(phi=h)
+    if isinstance(h, WellFormedHypothesis):
+        if t is not None:
+            # Check local well-formedness.
+            ok: bool = is_axiomatization_equivalent(t1=t, t2=h.base_theory, raise_error_if_false=False)
+            if not ok:
+                if raise_error_if_false:
+                    raise u1.ApplicativeError(
+                        msg='Locally ill-formed hypothesis. `h` is a globally well-formed hypothesis but it is not locally '
+                            'well-formed with regard to `t`, because its base theory is not axiomatically equivalent to '
+                            '`t`.',
+                        h=h,
+                        t=t,
+                        raise_error_if_false=raise_error_if_false)
+                else:
+                    return False
+        return True
+    elif (h.connective is not connective_for_hypothesis or
+          not h.arity >= 2 or
+          not is_well_formed_extension(e=h[WellFormedHypothesis.BASE_THEORY_INDEX], t=t) or
+          not is_well_formed_axiom(a=h[WellFormedHypothesis.ASSUMPTION_INDEX])):
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_082,
-                msg='`h` is not a well-formed hypothesis.',
-                h=h
+                msg='Globally ill-formed hypothesis. `h` is not a globally well-formed hypothesis.',
+                h=h, t=t, raise_error_if_false=raise_error_if_false
             )
-        return False
+        else:
+            return False
     else:
+        if t is not None:
+            # Use recursion to check local well-formedness.
+            h: WellFormedHypothesis = coerce_hypothesis(h=h)
+            return is_well_formed_hypothesis(h=h, t=t, raise_error_if_false=raise_error_if_false)
         return True
 
 
@@ -3611,16 +3636,21 @@ def is_well_formed_axiom(a: FlexibleFormula, t: FlexibleTheoreticalContext | Non
     return True
 
 
-def is_well_formed_extension(e: FlexibleExtension, raise_error_if_false: bool = False) -> bool:
+def is_well_formed_extension(e: FlexibleExtension,
+                             t: FlexibleTheoreticalContext | None = None,
+                             raise_error_if_false: bool = False) -> bool:
     """Return ``True`` if and only if ``e`` is a well-formed theory extension, ``True`` otherwise.
 
-    # TODO: Add a second parameter t, in order to test the local definition of extension
     #   which assures that the resulting theory is well-formed.s
 
     :param e: A formula that may be a well-formed extension.
     :param raise_error_if_false:
     :return: bool.
     """
+
+    # TODO: Implement parameter t, in order to test the local definition of extension.
+    #   For the time being, t is not implemented.
+
     e = coerce_formula(phi=e)
     if isinstance(e, WellFormedExtension):
         # the Theorem python-type assures the well-formedness of the object.
@@ -4627,9 +4657,9 @@ class WellFormedInference(WellFormedFormula):
     @staticmethod
     def _data_validation_2(
             i: FlexibleInferenceRule,
-            p: FlexibleTupl | None = None,
+            p: FlexibleTupl[FlexibleProposition] | None = None,
             a: FlexibleTupl | None = None) -> tuple[
-        Connective, WellFormedInferenceRule, WellFormedTupl, WellFormedTupl]:
+        Connective, WellFormedInferenceRule, WellFormedTupl[WellFormedProposition], WellFormedTupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -4659,7 +4689,7 @@ class WellFormedInference(WellFormedFormula):
         """
 
         :param i: An inference-rule.
-        :param p: A tuple of formulas denoted as the premises.
+        :param p: A tuple of propositions denoted as the premises.
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
         c, i, p, a = WellFormedInference._data_validation_2(i=i, p=p, a=a)
@@ -6117,21 +6147,34 @@ def auto_derive_4(
 
 
 class WellFormedHypothesis(WellFormedTheoreticalContext):
-    """A hypothesis is....
+    """A well-formed hypothesis.
+
+    An hypothesis is a specialization of a theoretical context.
+
+    A well-formed formula :math:`\\phi` is a globally well-formed hypothesis if and only if:
+     - its root connective is the hypothesis connective,
+     - its first term is a well-formed theory extension denoted as the base theory,
+     - its second term is an axiom denoted as the hypothesis assumption,
+     - its subsequent terms, if any, are valid theory components.
+
+    A well-formed formula :math:`\\phi` is a locally well-formed hypothesis with regard to a theoretical context
+    𝒯 if and only if:
+     - it is a globally well-formed hypothesis,
+     - its base theory is axiomatically equivalent to 𝒯.
+
+    Syntax:
+    A hypothesis is a formula of the form:
+        hypothesis(extension(𝓑), 𝓐, ...)
+    Where:
+        - 𝓑 is a theoretical context, denoted as the hypothesis base theory.
+        - 𝓐 is an axiom, denoted as the assumption.
+        - ... are some (if any) valid theory components.
 
     Note: Specializing hypothesis as a first class object in the axiomatic system data model is not
     necessary. In effect, an equivalent axiomatic system may be built with only theories and no
     hypothesis, nor axiomatization. Even theories could be stripped from the data model, considering
     only tuples whose elements are well-formed derivations. But specializing hypothesis as a first
     class object enriches the model and allows for more natural expression and simplified automations.
-
-    Syntactic definition:
-    A hypothesis is a formula of the form:
-        :math:`\\text{hypothesis}(t, a, ...)`
-    Where:
-        - :math:`b` is a theory, denoted as the hypothesis base theory.
-        - :math:`a` is a formula, denoted as the assumption, assumed to be true in :math:`t`.
-
     """
     BASE_THEORY_INDEX: int = 0
     ASSUMPTION_INDEX: int = 1
