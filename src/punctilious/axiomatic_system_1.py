@@ -5623,7 +5623,7 @@ class AutoDerivationFailure(Exception):
         self.kwargs = kwargs
 
 
-def derive_1(t: FlexibleTheoreticalContext, c: FlexibleFormula, p: FlexibleTupl,
+def derive_1(t: FlexibleTheoreticalContext, c: FlexibleFormula, p: FlexibleTupl[FlexibleProposition],
              i: FlexibleInferenceRule, a: FlexibleTupl | None = None,
              raise_error_if_false: bool = True) -> typing.Tuple[
     WellFormedTheoreticalContext, bool, WellFormedTheorem | None]:
@@ -5644,7 +5644,13 @@ def derive_1(t: FlexibleTheoreticalContext, c: FlexibleFormula, p: FlexibleTupl,
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=True,
                                                                  canonical_conversion=True)
     c: WellFormedFormula = coerce_formula(phi=c)
-    p: WellFormedTupl = coerce_tuple(s=p, interpret_none_as_empty=True, canonic_conversion=True)
+    # TODO: Question: when calling coerce_tuple_of_proposition, we do not pass t=t,
+    #   and thus limit coercion to proposition global well-formedness. Otherwise,
+    #   it would be necessary to have `is-proposition(p)` for every proposition `p`,
+    #   leading to the impossibility to declare the first proposition. Global well-formedness
+    #   is thus sufficient to allow derivation of theorems, without imposing a priori
+    #   a theory of propositional syntax.
+    p: WellFormedTupl = coerce_tuple_of_proposition(s=p, t=None, interpret_none_as_empty=True, canonic_conversion=True)
     i: WellFormedInferenceRule = coerce_inference_rule(i=i)
     a: WellFormedTupl = coerce_tuple(s=a, interpret_none_as_empty=True, canonic_conversion=True)
 
