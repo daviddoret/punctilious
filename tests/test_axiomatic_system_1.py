@@ -1298,9 +1298,7 @@ class TestExtension:
         t, ok, _ = pu.as1.derive_2(t=t, c=y, i=i2, raise_error_if_false=False)
         assert ok
 
-
-class TestAxiomaticBase:
-    def test_theoretical_context(self):
+    def test_extension_2(self):
         a, b, c, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'x', 'y', 'z',))
         ext1 = pu.as1.WellFormedAxiomatization()
         ext1, _ = pu.as1.let_x_be_an_axiom(t=ext1, s=a)
@@ -1326,6 +1324,37 @@ class TestAxiomaticBase:
         assert ok
         ab_extended, ok, _ = pu.as1.derive_2(t=ab_extended, c=y, i=i2, raise_error_if_false=True)
         assert ok
+
+
+class TestAxiomaticBase:
+    """Test the axiomatization-equivalence between theoretical contexts."""
+
+    def test_theoretical_context(self):
+        a, b, c, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'x', 'y', 'z',))
+        t1 = pu.as1.WellFormedAxiomatization()
+        t1, axiom_a = pu.as1.let_x_be_an_axiom(t=t1, s=a)
+        t1, axiom_c = pu.as1.let_x_be_an_axiom(t=t1, s=c)
+        t1, i1 = pu.as1.let_x_be_an_inference_rule(
+            t=t1, f=pu.as1.TransformationByVariableSubstitution(o=x, v=None, i=(a, b,)))
+        assert isinstance(t1, pu.as1.WellFormedAxiomatization)
+
+        t2 = pu.as1.WellFormedAxiomatization()
+        t2, axiom_b = pu.as1.let_x_be_an_axiom(t=t2, s=b)
+        t2, i2 = pu.as1.let_x_be_an_inference_rule(
+            t=t2, f=pu.as1.TransformationByVariableSubstitution(o=y, v=None, i=(a, c,)))
+
+        t3, _ = pu.as1.let_x_be_an_extension(t=t2, e=t1)
+
+        t3, ok, _ = pu.as1.derive_2(t=t3, c=x, i=i1, raise_error_if_false=True)
+        t3, ok, _ = pu.as1.derive_2(t=t3, c=y, i=i2, raise_error_if_false=True)
+
+        t4 = pu.as1.WellFormedTheory(t=None, d=(i2, axiom_c, i1, axiom_a, axiom_b,))
+
+        assert not pu.as1.is_axiomatization_equivalent(t1=t2, t2=t4)
+        assert not pu.as1.is_axiomatization_equivalent(t1=t1, t2=t4)
+        assert not pu.as1.is_axiomatization_equivalent(t1=t2, t2=t3)
+        assert not pu.as1.is_axiomatization_equivalent(t1=t1, t2=t3)
+        assert pu.as1.is_axiomatization_equivalent(t1=t3, t2=t4)
 
 
 class TestHypothesis:
