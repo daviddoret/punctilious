@@ -534,23 +534,28 @@ def coerce_formula(phi: FlexibleFormula) -> WellFormedFormula:
             phi=phi)
 
 
-def coerce_proposition(p: FlexibleProposition) -> WellFormedProposition:
-    """Coerces ``p`` to a globally well-formed proposition.
+def coerce_proposition(p: FlexibleProposition,
+                       t: FlexibleTheoreticalContext | None = None) -> WellFormedProposition:
+    """Coerces ``p`` to a well-formed proposition.
 
-    TODO: Consider providing support for a conditional parameter `t`, which poses the question:
-        how to coerce statements such as is-proposition(p) on an arbitrary theory?
-
-    :param p: a presumably well-formed proposition.
-    :return: a globally well-formed proposition.
+    :param p: A presumably well-formed proposition.
+    :param t: (Conditional) If ``None``, ``p``is coerced to a globally well-formed proposition.
+        Otherwise, ``p``is coerced to a locally well-formed proposition with regard to ``t``.
+    :return: A well-formed proposition.
     """
     p: WellFormedFormula = coerce_formula(phi=p)
     if isinstance(p, WellFormedProposition):
+        if t is not None:
+            # Check local well-formedness.
+            is_well_formed_proposition(p=p, t=t, raise_error_if_false=True)
         return p
-    elif is_well_formed_proposition(p=p, t=None):
+    elif is_well_formed_proposition(p=p, t=t):
         return WellFormedProposition(con=p.connective, t=(*p,))
     else:
         raise u1.ApplicativeError(
-            msg='Coercion failure. `p` cannot be coerced to a well-formed proposition.'
+            msg='Coercion failure. `p` cannot be coerced to a well-formed proposition.',
+            p=p,
+            t=t
         )
 
 
@@ -2788,7 +2793,8 @@ def is_well_formed_formula(phi: FlexibleFormula) -> bool:
     return True
 
 
-def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext) -> bool:
+def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext | None = None,
+                               raise_error_if_false: bool = False) -> bool:
     """Returns ``True`` if it is proven that ``p`` is a well-formed proposition, ``False`` otherwise.
 
     Note 1: *Being a proposition* is a property that is relative to a theoretical context. In effect, some formula
@@ -2825,11 +2831,9 @@ def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext
     """
     global connective_for_is_a_proposition
 
-    p: WellFormedFormula = coerce_formula(phi=p)
-
     # Global definition
     # Condition #1: P is a well-formed formula.
-    p2: WellFormedFormula = coerce_formula(phi=p)
+    p: WellFormedFormula = coerce_formula(phi=p)
 
     if t is not None:
         # Local definition
@@ -2838,6 +2842,11 @@ def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext
         p_is_a_proposition: WellFormedFormula = connective_for_is_a_proposition(p)
         ok = is_valid_proposition_so_far_1(p=p_is_a_proposition, t=t)
         if not ok:
+            if raise_error_if_false:
+                raise u1.ApplicativeError(
+                    msg='Locally ill-formed proposition. `p` is not demonstrated as valid in n`t`.',
+                    p=p, t=t, raise_error_if_false=raise_error_if_false
+                )
             return False
 
     # All necessary conditions are fulfilled.
