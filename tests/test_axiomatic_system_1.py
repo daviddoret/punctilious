@@ -723,7 +723,7 @@ class TestAlgorithm:
         t, _ = as1.let_x_be_an_axiom(t=t, s=a)
 
         def hello_world(i: pu.as1.WellFormedTupl | None = None, raise_error_if_false: bool = False):
-            i = as1.coerce_tuple(t=i)
+            i = as1.coerce_tuple(s=i)
             if i.arity == 1 and as1.is_formula_equivalent(phi=i[0], psi=a):
                 return True, g(a)
             else:

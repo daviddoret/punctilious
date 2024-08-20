@@ -21,7 +21,7 @@ def is_well_formed_formula_algorithm(
     :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
     :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
     """
-    i: as1.WellFormedTupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
     if not i.arity == 1:
         if raise_error_if_false:
             raise u1.ApplicativeError(
@@ -65,7 +65,7 @@ def is_well_formed_inference_rule_algorithm(
     :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
     :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
     """
-    i: as1.WellFormedTupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
     if not i.arity == 1:
         if raise_error_if_false:
             raise u1.ApplicativeError(
@@ -111,7 +111,7 @@ def is_well_formed_theory_algorithm(
     :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
     :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
     """
-    i: as1.WellFormedTupl = as1.coerce_tuple(t=i, interpret_none_as_empty=False, canonic_conversion=False)
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
     if not i.arity == 1:
         if raise_error_if_false:
             raise u1.ApplicativeError(
@@ -274,7 +274,7 @@ def theory_proves_proposition_algorithm(
     :param raise_error_if_false:
     :return:
     """
-    i: as1.WellFormedTupl = as1.coerce_tuple(t=i)
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i)
     if not i.arity == 2:
         if raise_error_if_false:
             raise u1.ApplicativeError(msg='wrong arguments', iv=i)

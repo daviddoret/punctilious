@@ -640,33 +640,61 @@ def coerce_enumeration(e: FlexibleEnumeration, strip_duplicates: bool = False,
             strip_duplicates=strip_duplicates)
 
 
-def coerce_tuple(t: FlexibleTupl, interpret_none_as_empty: bool = False,
+def coerce_tuple(s: FlexibleTupl, interpret_none_as_empty: bool = False,
                  canonic_conversion: bool = False) -> WellFormedTupl:
-    if isinstance(t, WellFormedTupl):
-        return t
-    elif is_well_formed_tupl(t=t, interpret_none_as_empty=interpret_none_as_empty):
-        return WellFormedTupl(e=t)
-    elif interpret_none_as_empty and t is None:
+    """Coerces ``s``to a well-formed tuple.
+
+    :param s: A presumably well-formed tuple.
+    :param interpret_none_as_empty:
+    :param canonic_conversion:
+    :return: A well-formed tuple.
+    """
+    if isinstance(s, WellFormedTupl):
+        return s
+    elif is_well_formed_tupl(t=s, interpret_none_as_empty=interpret_none_as_empty):
+        return WellFormedTupl(e=s)
+    elif interpret_none_as_empty and s is None:
         return WellFormedTupl(e=None)
-    elif canonic_conversion and is_well_formed_formula(phi=t):
+    elif canonic_conversion and is_well_formed_formula(phi=s):
         # Every formula can be transformed to a tuple using canonical transformation.
-        return transform_formula_to_tuple(phi=t)
-    elif isinstance(t, typing.Generator) and not isinstance(t, WellFormedFormula):
+        return transform_formula_to_tuple(phi=s)
+    elif isinstance(s, typing.Generator) and not isinstance(s, WellFormedFormula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return WellFormedTupl(e=tuple(x for x in t))
-    elif isinstance(t, typing.Iterable) and not isinstance(t, WellFormedFormula):
+        return WellFormedTupl(e=tuple(x for x in s))
+    elif isinstance(s, typing.Iterable) and not isinstance(s, WellFormedFormula):
         """A non-Formula iterable type, such as python native tuple, set, list, etc.
         We assume here that the intention was to implicitly convert this to an enumeration
         whose elements are the elements of the iterable."""
-        return WellFormedTupl(e=t)
+        return WellFormedTupl(e=s)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_065,
             msg='No solution found to coerce ``t`` to tupl.',
-            t=t,
+            t=s,
             interpret_none_as_empty=interpret_none_as_empty)
+
+
+def coerce_tuple_of_proposition(s: FlexibleTupl[FlexibleProposition],
+                                t: FlexibleTheoreticalContext | None = None,
+                                interpret_none_as_empty: bool = False,
+                                canonic_conversion: bool = False) -> WellFormedTupl[WellFormedProposition]:
+    """Coerces ``s`` to a well-formed tuple of well-formed propositions.
+
+    :param s: A presumably well-formed tuple.
+    :param t: (Conditional) If ``None``, propositions are coerced to globally well-formed propositions.
+        Otherwise, propositions ares coerced to locally well-formed propositions with regard to ``t``.
+    :param interpret_none_as_empty:
+    :param canonic_conversion:
+    :return: A well-formed tuple of propositions.
+    """
+    s: WellFormedTupl = coerce_tuple(s=s, interpret_none_as_empty=interpret_none_as_empty,
+                                     canonic_conversion=canonic_conversion)
+    if all(is_well_formed_proposition(p=p, t=t) for p in iterate_tuple_elements(phi=s)):
+        return s
+    else:
+        return WellFormedTupl(e=(coerce_proposition(p=p, t=t) for p in iterate_tuple_elements(phi=s)))
 
 
 def coerce_enumeration_of_variables(e: FlexibleEnumeration) -> WellFormedEnumeration:
@@ -790,7 +818,7 @@ def coerce_map(m: FlexibleMap, interpret_none_as_empty: bool = False) -> WellFor
     elif isinstance(m, dict):
         # implicit conversion of python dict to Map.
         domain: WellFormedEnumeration = coerce_enumeration(e=m.keys())
-        codomain: WellFormedTupl = coerce_tuple(t=m.values())
+        codomain: WellFormedTupl = coerce_tuple(s=m.values())
         return WellFormedMap(d=domain, c=codomain)
     else:
         # no coercion solution found.
@@ -1126,7 +1154,7 @@ def get_index_of_first_equivalent_element_in_tuple(x: FlexibleFormula, t: Flexib
     :return: The 0-based index of "x" in ``t``.
     """
     x: WellFormedFormula = coerce_formula(phi=x)
-    t: WellFormedTupl = coerce_tuple(t=t, interpret_none_as_empty=True)
+    t: WellFormedTupl = coerce_tuple(s=t, interpret_none_as_empty=True)
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=t)
 
 
@@ -1328,7 +1356,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
                                                       strip_duplicates=True)
         d: WellFormedEnumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                                       strip_duplicates=True)
-        p: WellFormedTupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
+        p: WellFormedTupl = coerce_tuple(s=p, interpret_none_as_empty=True, canonic_conversion=True)
         # if a is None:
         # Signature 3: This is a transformation-by-variable-transformation:
         f: TransformationByVariableSubstitution = TransformationByVariableSubstitution(o=c, v=v, d=d, i=p)
@@ -2020,7 +2048,7 @@ def append_element_to_enumeration(e: FlexibleEnumeration, x: FlexibleFormula) ->
 def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> WellFormedTupl:
     """Return a new extended punctilious-tuple such that element is a new element appended to its existing elements.
     """
-    t: WellFormedTupl = coerce_tuple(t=t, interpret_none_as_empty=True)
+    t: WellFormedTupl = coerce_tuple(s=t, interpret_none_as_empty=True)
     x: WellFormedFormula = coerce_formula(phi=x)
     extended_tupl: WellFormedTupl = WellFormedTupl(e=(*t, x,))
     return extended_tupl
@@ -2029,8 +2057,8 @@ def append_element_to_tuple(t: FlexibleTupl, x: FlexibleFormula) -> WellFormedTu
 def append_tuple_to_tuple(t1: FlexibleTupl, t2: FlexibleTupl) -> WellFormedTupl:
     """Return a new tuple which appends all the elements of `t2` to `t1`.
     """
-    t1: WellFormedTupl = coerce_tuple(t=t1, interpret_none_as_empty=True, canonic_conversion=True)
-    t2: WellFormedTupl = coerce_tuple(t=t2, interpret_none_as_empty=True, canonic_conversion=True)
+    t1: WellFormedTupl = coerce_tuple(s=t1, interpret_none_as_empty=True, canonic_conversion=True)
+    t2: WellFormedTupl = coerce_tuple(s=t2, interpret_none_as_empty=True, canonic_conversion=True)
     t3: WellFormedTupl = WellFormedTupl(e=(*t1, *t2,))
     return t3
 
@@ -2106,7 +2134,7 @@ class WellFormedMap(WellFormedFormula):
         """
         d: WellFormedEnumeration = coerce_enumeration(
             e=d, strip_duplicates=True, interpret_none_as_empty=True, canonic_conversion=True)
-        c: WellFormedTupl = coerce_tuple(t=c, interpret_none_as_empty=True, canonic_conversion=True)
+        c: WellFormedTupl = coerce_tuple(s=c, interpret_none_as_empty=True, canonic_conversion=True)
         if len(d) != len(c):
             raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_027, msg='Map: |keys| != |values|')
         return d, c
@@ -2136,7 +2164,7 @@ class WellFormedMap(WellFormedFormula):
 
         The codomain of a map is the enumeration of possible outputs of the get_image_from_map function.
         """
-        return coerce_tuple(t=self[WellFormedMap.CODOMAIN_INDEX])
+        return coerce_tuple(s=self[WellFormedMap.CODOMAIN_INDEX])
 
     @property
     def domain(self) -> WellFormedEnumeration:
@@ -2320,7 +2348,7 @@ class Transformation(WellFormedFormula, abc.ABC):
                                                       strip_duplicates=True)
         d: WellFormedEnumeration = coerce_enumeration(e=d, interpret_none_as_empty=True, canonic_conversion=True,
                                                       strip_duplicates=True)
-        i: WellFormedTupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
+        i: WellFormedTupl = coerce_tuple(s=i, interpret_none_as_empty=True, canonic_conversion=True)
         # TODO: Coerce argument ``a`` as well
         return con, o, v, d, i, a
 
@@ -2500,7 +2528,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         o: WellFormedFormula = coerce_formula(phi=o)
         v: WellFormedEnumeration = coerce_enumeration(e=v, interpret_none_as_empty=True)
         d: WellFormedEnumeration = coerce_enumeration(e=d, interpret_none_as_empty=True)
-        i: WellFormedTupl = coerce_tuple(t=i, interpret_none_as_empty=True, canonic_conversion=True)
+        i: WellFormedTupl = coerce_tuple(s=i, interpret_none_as_empty=True, canonic_conversion=True)
         if a is not None:
             pass
             # TODO: Implement the coerce_connective_linked_with_algorithm function
@@ -2557,7 +2585,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :param i: A tuple of formulas denoted as the input-values.
         :return:
         """
-        i = coerce_tuple(t=i, interpret_none_as_empty=True)
+        i = coerce_tuple(s=i, interpret_none_as_empty=True)
 
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
@@ -2762,8 +2790,8 @@ def coerce_inference(i: FlexibleFormula) -> WellFormedInference:
         return i
     elif is_well_formed_inference(i=i):
         i2: WellFormedInferenceRule = coerce_inference_rule(i=i[WellFormedInference.INFERENCE_RULE_INDEX])
-        p: WellFormedTupl = coerce_tuple(t=i[WellFormedInference.PREMISES_INDEX], interpret_none_as_empty=True)
-        a: WellFormedTupl = coerce_tuple(t=i[WellFormedInference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
+        p: WellFormedTupl = coerce_tuple(s=i[WellFormedInference.PREMISES_INDEX], interpret_none_as_empty=True)
+        a: WellFormedTupl = coerce_tuple(s=i[WellFormedInference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
         return WellFormedInference(i=i2, p=p, a=a)
     else:
         raise u1.ApplicativeError(
@@ -3129,7 +3157,7 @@ def iterate_tuple_elements(phi: FlexibleTupl, max_elements: int | None = None
     :param max_elements: Yields only math:`max_elements` elements, or all elements if None.
     :return:
     """
-    phi = coerce_tuple(t=phi)
+    phi = coerce_tuple(s=phi)
     yield from iterate_formula_terms(phi=phi, max_terms=max_elements)
 
 
@@ -3163,7 +3191,7 @@ def are_valid_statements_in_theory(s: FlexibleTupl, t: FlexibleTheoreticalContex
     :return: ``True`` if every formula ``phi`` in enumeration ``s`` is a valid-statement in theory ``t``, ``False``
     otherwise.
     """
-    s: WellFormedTupl = coerce_tuple(t=s, interpret_none_as_empty=True)
+    s: WellFormedTupl = coerce_tuple(s=s, interpret_none_as_empty=True)
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     for phi in iterate_tuple_elements(phi=s):
         if not is_valid_proposition_so_far_1(p=phi, t=t):
@@ -3495,7 +3523,7 @@ def are_valid_statements_in_theory_with_variables(
     TODO: retrieve and return the final map of variable values as well? is this really needed?
 
     """
-    s: WellFormedTupl = coerce_tuple(t=s, interpret_none_as_empty=True)
+    s: WellFormedTupl = coerce_tuple(s=s, interpret_none_as_empty=True)
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
     variables: WellFormedEnumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True,
                                                           strip_duplicates=True)
@@ -3519,7 +3547,7 @@ def are_valid_statements_in_theory_with_variables(
         # it follows that 1) there will be no permutations,
         # and 2) are_valid_statements_in_theory() is equivalent.
         s_with_variable_substitution: WellFormedFormula = substitute_formulas(phi=s, m=variables_values)
-        s_with_variable_substitution: WellFormedTupl = coerce_tuple(t=s_with_variable_substitution)
+        s_with_variable_substitution: WellFormedTupl = coerce_tuple(s=s_with_variable_substitution)
         valid: bool = are_valid_statements_in_theory(s=s_with_variable_substitution, t=t)
         if valid:
             return valid, s_with_variable_substitution
@@ -3531,7 +3559,7 @@ def are_valid_statements_in_theory_with_variables(
                                                                                         n=permutation_size):
             variable_substitution: WellFormedMap = WellFormedMap(d=free_variables, c=permutation)
             s_with_variable_substitution: WellFormedFormula = substitute_formulas(phi=s, m=variable_substitution)
-            s_with_variable_substitution: WellFormedTupl = coerce_tuple(t=s_with_variable_substitution)
+            s_with_variable_substitution: WellFormedTupl = coerce_tuple(s=s_with_variable_substitution)
             s_with_permutation: WellFormedTupl = WellFormedTupl(e=(*s_with_variable_substitution,))
             if are_valid_statements_in_theory(s=s_with_permutation, t=t):
                 return True, s_with_permutation
@@ -4612,8 +4640,8 @@ class WellFormedInference(WellFormedFormula):
         """
         con: Connective = connective_for_inference
         i: WellFormedInferenceRule = coerce_inference_rule(i=i)
-        p: WellFormedTupl = coerce_tuple(t=p, interpret_none_as_empty=True)
-        a: WellFormedTupl = coerce_tuple(t=a, interpret_none_as_empty=True)
+        p: WellFormedTupl = coerce_tuple(s=p, interpret_none_as_empty=True)
+        a: WellFormedTupl = coerce_tuple(s=a, interpret_none_as_empty=True)
 
         # Check the consistency of the shape of the premises and complementary arguments,
         # with the expected input-shapes of the inference-rule transformation.
@@ -5120,7 +5148,7 @@ def transform_formula_to_tuple(phi: FlexibleFormula) -> WellFormedTupl:
     """
     phi: WellFormedFormula = coerce_formula(phi=phi)
     if is_well_formed_tupl(t=phi):
-        t: WellFormedTupl = coerce_tuple(t=phi)
+        t: WellFormedTupl = coerce_tuple(s=phi)
         return t
     else:
         t: WellFormedTupl = WellFormedTupl(e=iterate_formula_terms(phi=phi))
@@ -5134,7 +5162,7 @@ def transform_tuple_to_theory(t: FlexibleTupl) -> WellFormedTheory:
     :param t: A tupl.
     :return: A theory.
     """
-    t: WellFormedTupl = coerce_tuple(t=t)
+    t: WellFormedTupl = coerce_tuple(s=t)
     e: WellFormedEnumeration = coerce_enumeration(e=t, strip_duplicates=True, canonic_conversion=True,
                                                   interpret_none_as_empty=True)
     t2: WellFormedTheory = transform_enumeration_to_theory(e=e)
@@ -5614,9 +5642,9 @@ def derive_1(t: FlexibleTheoreticalContext, c: FlexibleFormula, p: FlexibleTupl,
     t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t, interpret_none_as_empty=True,
                                                                  canonical_conversion=True)
     c: WellFormedFormula = coerce_formula(phi=c)
-    p: WellFormedTupl = coerce_tuple(t=p, interpret_none_as_empty=True, canonic_conversion=True)
+    p: WellFormedTupl = coerce_tuple(s=p, interpret_none_as_empty=True, canonic_conversion=True)
     i: WellFormedInferenceRule = coerce_inference_rule(i=i)
-    a: WellFormedTupl = coerce_tuple(t=a, interpret_none_as_empty=True, canonic_conversion=True)
+    a: WellFormedTupl = coerce_tuple(s=a, interpret_none_as_empty=True, canonic_conversion=True)
 
     if not is_inference_rule_of(i=i, t=t):
         # The inference_rule is not in the theory,
@@ -5893,7 +5921,7 @@ def auto_derive_3(
     :return:
     """
     t: WellFormedTheory = coerce_theory(t=t)
-    conjectures: WellFormedTupl = coerce_tuple(t=conjectures, interpret_none_as_empty=True)
+    conjectures: WellFormedTupl = coerce_tuple(s=conjectures, interpret_none_as_empty=True)
     for conjecture in iterate_tuple_elements(phi=conjectures):
         t, success, _ = auto_derive_2(t=t, c=conjecture)
         if not success:
