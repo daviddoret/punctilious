@@ -50,7 +50,7 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
-    simplification_1_rule: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+    simplification_1_rule: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         i=(
             cls1.is_a_proposition(phi),
             cls1.is_a_proposition(psi),
@@ -68,7 +68,7 @@ simplification_1_axiom: as1.WellFormedInferenceRule = as1.WellFormedInferenceRul
 # References:
 #  - https://en.wikipedia.org/wiki/List_of_rules_of_inference
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
-    simplification_2_rule: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+    simplification_2_rule: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         i=(
             cls1.is_a_proposition(phi),
             cls1.is_a_proposition(psi),

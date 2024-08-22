@@ -147,7 +147,7 @@ is_well_formed_theory_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = 
 )
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi:
-    algo: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+    algo: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_formula_algorithm_connective,
         o=as1.connective_for_is_well_formed_formula(phi),
         v={phi, },
@@ -173,7 +173,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi
     """
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    algo: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+    algo: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_inference_rule_algorithm_connective,
         o=as1.connective_for_is_well_formed_inference_rule(t),
         v={t, },
@@ -200,7 +200,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
 
 # INFERENCE-RULE: MT3: is-well-formed-theory
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
-    _mt3: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+    _mt3: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_theory_algorithm_connective,
         # check=None,  # is_compatible_with_is_well_formed_theory
         o=as1.connective_for_is_well_formed_theory(t),
@@ -317,7 +317,7 @@ theory_proves_proposition_algorithm_connective: as1.ConnectiveLinkedWithAlgorith
 # INFERENCE-RULE: t-proves-p: T ⊢ P
 
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
-    _t_proves_p: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+    _t_proves_p: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=theory_proves_proposition_algorithm_connective,
         i=(
             as1.connective_for_is_well_formed_theory(t),

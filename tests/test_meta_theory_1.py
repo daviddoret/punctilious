@@ -155,7 +155,7 @@ class TestInconsistency1:
             m, _ = pu.as1.let_x_be_an_axiom(t=m, s=p)
             m, _ = pu.as1.let_x_be_an_axiom(t=m, s=q)
             m, i1 = pu.as1.let_x_be_an_inference_rule(
-                t=m, f=pu.as1.TransformationByVariableSubstitution(o=pu.csl1.lnot(p), v=None, i=(q, r,)))
+                t=m, f=pu.as1.WellFormedTransformationByVariableSubstitution(o=pu.csl1.lnot(p), v=None, i=(q, r,)))
 
             # Pose the `R` hypothesis
             h = pu.as1.WellFormedHypothesis(b=m, a=r)

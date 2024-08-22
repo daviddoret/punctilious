@@ -47,7 +47,7 @@ import propositional_logic_syntax_1 as pls1
 
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     pl01: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),),
             o=a | implies | (a | land | a),
             v=(a,)),
@@ -70,7 +70,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     pl02: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b),),
             o=(a | land | b) | implies | (b | land | a),
@@ -96,7 +96,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
         formula_ts='B') as b, as1.let_x_be_a_variable(formula_ts='C') as c:
     pl03: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
@@ -124,7 +124,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
         formula_ts='B') as b, as1.let_x_be_a_variable(formula_ts='C') as c:
     pl04: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
@@ -152,7 +152,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl05: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b)),
             o=b | implies | (a | implies | b),
@@ -178,7 +178,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl06: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b)),
             o=(b | land | (a | implies | b)) | implies | b,
@@ -204,7 +204,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl07: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b)),
             o=a | implies | (a | lor | b),
@@ -230,7 +230,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl08: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b)),
             o=(a | lor | b) | implies | (b | lor | a),
@@ -256,7 +256,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl09: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b),
                is_a_proposition(c)),
@@ -284,7 +284,7 @@ with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
 with as1.let_x_be_a_variable(formula_ts='a') as a, as1.let_x_be_a_variable(
         formula_ts='b') as b:
     pl10: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=as1.TransformationByVariableSubstitution(
+        f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_proposition(a),
                is_a_proposition(b)),
             o=((a | implies | b) | land | (a | implies | lnot(b))) | implies | lnot(a),

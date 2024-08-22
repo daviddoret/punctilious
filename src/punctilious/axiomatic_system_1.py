@@ -1347,7 +1347,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         i: WellFormedInferenceRule = coerce_inference_rule(i=i)
     # Signature #2: provide the transformation upon which the inference-rule can be built
     elif f is not None:
-        f: Transformation = coerce_transformation(f=f)
+        f: ABCTransformation = coerce_transformation(f=f)
         i: WellFormedInferenceRule = WellFormedInferenceRule(f=f)
     # Signature #3: provide the arguments upon which the transformation can be built upon which ...
     elif c is not None:
@@ -1359,7 +1359,8 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
         p: WellFormedTupl = coerce_tuple(s=p, interpret_none_as_empty=True, canonic_conversion=True)
         # if a is None:
         # Signature 3: This is a transformation-by-variable-transformation:
-        f: TransformationByVariableSubstitution = TransformationByVariableSubstitution(o=c, v=v, d=d, i=p)
+        f: WellFormedTransformationByVariableSubstitution = WellFormedTransformationByVariableSubstitution(o=c, v=v,
+                                                                                                           d=d, i=p)
         i: WellFormedInferenceRule = WellFormedInferenceRule(f=f)
         # else:
         #    # Signature 4: This is an algorithmic transformation:
@@ -1501,7 +1502,7 @@ def let_x_be_a_transformation_by_variable_substitution(o: FlexibleFormula,
     :param o: A formula denoted as the output-shape.
     :return:
     """
-    return TransformationByVariableSubstitution(o=o, v=v, d=d, i=i, a=a)
+    return WellFormedTransformationByVariableSubstitution(o=o, v=v, d=d, i=i, a=a)
 
 
 # Declare fundamental connectives.
@@ -2311,14 +2312,18 @@ class SingletonEnumeration(WellFormedEnumeration):
         super().__init__(e=element)
 
 
-class Transformation(WellFormedFormula, abc.ABC):
-    """A transformation is a method by which new formulas may be created.
+class ABCTransformation(WellFormedFormula, abc.ABC):
+    """Abstract class.
+
+    TODO: Consider renaming transformation to functor, or theory-morphism. Not sure which one is more accurate.
+    TODO: Consider removing this abstract class, not sure we need other transformations than variable substitution.
+
+    A transformation is a method by which new formulas may be created.
 
     The following transformations are supported:
      - transformation-by-variable-substitution (cf. NaturalTransformation python-class)
      - algorithmic-transformation (cf. AlgorithmicTransformation python-class)
 
-     # TODO: Consider renaming to functor, or theory-morphism. Not sure which one is more accurate.
 
     """
     VARIABLES_INDEX: int = 1
@@ -2370,7 +2375,7 @@ class Transformation(WellFormedFormula, abc.ABC):
         :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
         """
-        con, o, v, d, i, a = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=i, a=a)
+        con, o, v, d, i, a = ABCTransformation._data_validation_2(con=con, o=o, v=v, d=d, i=i, a=a)
         if a is None:
             o: tuple = super().__new__(cls, con=transformation_by_variable_substitution_connective,
                                        t=(o, v, d, i,))
@@ -2393,7 +2398,7 @@ class Transformation(WellFormedFormula, abc.ABC):
         :param i: A tuple of formulas denoted as the input-shapes.
         :param o: A formula denoted as the output-shape.
         """
-        con, o, v, d, i, a = Transformation._data_validation_2(con=con, o=o, v=v, d=d, i=i, a=a)
+        con, o, v, d, i, a = ABCTransformation._data_validation_2(con=con, o=o, v=v, d=d, i=i, a=a)
         if a is None:
             super().__init__(con=transformation_by_variable_substitution_connective, o=o, v=v, d=d, i=i)
         else:
@@ -2427,13 +2432,13 @@ class Transformation(WellFormedFormula, abc.ABC):
 
         :return:
         """
-        return self[Transformation.OUTPUT_SHAPE_INDEX]
+        return self[ABCTransformation.OUTPUT_SHAPE_INDEX]
 
     @property
     def output_declarations(self) -> WellFormedEnumeration:
         """A list of variables that are not present in the input-shapes,
         and that correspond to newly declared objects in the transformation output."""
-        return self[Transformation.DECLARATIONS_INDEX]
+        return self[ABCTransformation.DECLARATIONS_INDEX]
 
     @abc.abstractmethod
     def is_compatible_with(self, t: FlexibleFormula) -> bool:
@@ -2454,15 +2459,15 @@ class Transformation(WellFormedFormula, abc.ABC):
         Shapes are expressed as arbitrary formulas that may contain variables (cf. variables property).
         The transformation formula thus declares that it expect to receive as input values a tuple of formulas
         that are formula-equivalent-with-variables with those shapes."""
-        return self[Transformation.INPUT_SHAPES_INDEX]
+        return self[ABCTransformation.INPUT_SHAPES_INDEX]
 
     @property
     def variables(self) -> WellFormedEnumeration:
         """Variables used to express the shapes of arguments and the conclusion."""
-        return self[Transformation.VARIABLES_INDEX]
+        return self[ABCTransformation.VARIABLES_INDEX]
 
 
-class TransformationByVariableSubstitution(Transformation, ABC):
+class WellFormedTransformationByVariableSubstitution(ABCTransformation, ABC):
     """A transformation-by-variable-substitution, is a map from the class of formulas to itself.
 
     Syntactically, a transformation-by-variable-substitution is a formula :math:`f(o, V, D, I)` where:
@@ -2549,7 +2554,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :param o: A formula denoted as the output-shape.
         :param a: (Conditional) A formula referencing an external algorithm used to validate input-values.
         """
-        con, o, v, d, i, a = TransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i, a=a)
+        con, o, v, d, i, a = WellFormedTransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i, a=a)
         o: WellFormedFormula  # Why is this type not properly detected by the PyCharm IDE?
         if a is None:
             o: tuple = super().__new__(cls, con=con, o=o, v=v, d=d, i=i)
@@ -2568,7 +2573,7 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :param o: A formula denoted as the output-shape.
         :param a: (Conditional) A formula referencing an external algorithm used to validate input-values.
         """
-        c2, o, v, d, i, a = TransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i, a=a)
+        c2, o, v, d, i, a = WellFormedTransformationByVariableSubstitution._data_validation_3(o=o, v=v, d=d, i=i, a=a)
         if a is None:
             super().__init__(con=c2, o=o, v=v, d=d, i=i)
         else:
@@ -2661,7 +2666,8 @@ class TransformationByVariableSubstitution(Transformation, ABC):
         :return:
         """
         if self.arity == 5:
-            phi: WellFormedFormula = self[TransformationByVariableSubstitution.DATA_VALIDATION_ALGORITHM_INDEX]
+            phi: WellFormedFormula = self[
+                WellFormedTransformationByVariableSubstitution.DATA_VALIDATION_ALGORITHM_INDEX]
             con: Connective = phi.connective
             if isinstance(con, ConnectiveLinkedWithAlgorithm):
                 con: ConnectiveLinkedWithAlgorithm = con
@@ -2677,23 +2683,25 @@ class TransformationByVariableSubstitution(Transformation, ABC):
             return None
 
 
-FlexibleTransformationByVariableSubstitution = typing.Optional[typing.Union[TransformationByVariableSubstitution]]
+FlexibleTransformationByVariableSubstitution = typing.Optional[
+    typing.Union[WellFormedTransformationByVariableSubstitution]]
 
 
-def coerce_transformation(f: FlexibleTransformation) -> Transformation:
+def coerce_transformation(f: FlexibleTransformation) -> ABCTransformation:
     """Coerces lose argument `f` to a transformation, strongly python-typed as Transformation,
     or raises an error with code E-AS1-060 if this fails."""
     f: WellFormedFormula = coerce_formula(phi=f)
-    if isinstance(f, Transformation):
+    if isinstance(f, ABCTransformation):
         return f
     elif is_well_formed_transformation_by_variable_substitution(t=f):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
         # TODO: Move this logic to coerce_natural_transformation
-        return TransformationByVariableSubstitution(o=f[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
-                                                    v=f[TransformationByVariableSubstitution.VARIABLES_INDEX],
-                                                    d=f[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
-                                                    i=f[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
+        return WellFormedTransformationByVariableSubstitution(
+            o=f[WellFormedTransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
+            v=f[WellFormedTransformationByVariableSubstitution.VARIABLES_INDEX],
+            d=f[WellFormedTransformationByVariableSubstitution.DECLARATIONS_INDEX],
+            i=f[WellFormedTransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_060,
@@ -2701,19 +2709,21 @@ def coerce_transformation(f: FlexibleTransformation) -> Transformation:
             m=f)
 
 
-def coerce_transformation_by_variable_substitution(t: FlexibleFormula) -> TransformationByVariableSubstitution:
+def coerce_transformation_by_variable_substitution(
+        t: FlexibleFormula) -> WellFormedTransformationByVariableSubstitution:
     """Coerces lose argument ``t`` to a transformation, strongly python-typed as Transformation,
     or raises an error with code E-AS1-031 if this fails."""
     t: WellFormedFormula = coerce_formula(phi=t)
-    if isinstance(t, TransformationByVariableSubstitution):
+    if isinstance(t, WellFormedTransformationByVariableSubstitution):
         return t
     elif isinstance(t, WellFormedFormula) and is_well_formed_transformation_by_variable_substitution(t=t):
         # phi is a well-formed transformation,
         # it can be safely re-instantiated as a Transformation and returned.
-        return TransformationByVariableSubstitution(o=t[TransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
-                                                    v=t[TransformationByVariableSubstitution.VARIABLES_INDEX],
-                                                    d=t[TransformationByVariableSubstitution.DECLARATIONS_INDEX],
-                                                    i=t[TransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
+        return WellFormedTransformationByVariableSubstitution(
+            o=t[WellFormedTransformationByVariableSubstitution.OUTPUT_SHAPE_INDEX],
+            v=t[WellFormedTransformationByVariableSubstitution.VARIABLES_INDEX],
+            d=t[WellFormedTransformationByVariableSubstitution.DECLARATIONS_INDEX],
+            i=t[WellFormedTransformationByVariableSubstitution.INPUT_SHAPES_INDEX])
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_031,
@@ -3081,7 +3091,7 @@ def is_well_formed_transformation(t: FlexibleFormula) -> bool:
     :return: bool.
     """
     t = coerce_formula(phi=t)
-    if isinstance(t, Transformation):
+    if isinstance(t, ABCTransformation):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
     elif is_well_formed_transformation_by_variable_substitution(t=t):
@@ -3930,7 +3940,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
                             p=p, q=q, index=index, d=d, c=c, v=v, u=u)
                     return False, None, None
             # Check that the transformation of the inference-rule effectively yields the announced proposition.
-            f: Transformation = i.inference_rule.transformation
+            f: ABCTransformation = i.inference_rule.transformation
             if len(f.output_declarations) > 0:
                 # But wait a minute...
                 # If the transformation declares/creates new objects, the inference-rule is non-deterministic.
@@ -4201,7 +4211,7 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> WellFormedInferenceRule:
     if isinstance(i, WellFormedInferenceRule):
         return i
     elif isinstance(i, WellFormedFormula) and is_well_formed_inference_rule(i=i):
-        f: Transformation = coerce_transformation(f=i[WellFormedInferenceRule.TRANSFORMATION_INDEX])
+        f: ABCTransformation = coerce_transformation(f=i[WellFormedInferenceRule.TRANSFORMATION_INDEX])
         return WellFormedInferenceRule(f=f)
     else:
         raise u1.ApplicativeError(
@@ -4556,7 +4566,7 @@ class WellFormedInferenceRule(WellFormedTheoryComponent):
     TRANSFORMATION_INDEX: int = WellFormedTheoryComponent.VALID_STATEMENT_INDEX
 
     @staticmethod
-    def _data_validation_3(f: FlexibleTransformation = None) -> tuple[Connective, Transformation]:
+    def _data_validation_3(f: FlexibleTransformation = None) -> tuple[Connective, ABCTransformation]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -4564,7 +4574,7 @@ class WellFormedInferenceRule(WellFormedTheoryComponent):
         :return:
         """
         con: Connective = connective_for_inference_rule
-        f: Transformation = coerce_transformation(f=f)
+        f: ABCTransformation = coerce_transformation(f=f)
         return con, f
 
     def __new__(cls, f: FlexibleTransformation = None, **kwargs):
@@ -4588,13 +4598,13 @@ class WellFormedInferenceRule(WellFormedTheoryComponent):
         super().__init__(con=con, s=f, **kwargs)
 
     @property
-    def transformation(self) -> Transformation:
+    def transformation(self) -> ABCTransformation:
         return self[WellFormedInferenceRule.TRANSFORMATION_INDEX]
 
 
 FlexibleInferenceRule = typing.Union[WellFormedInferenceRule, WellFormedFormula]
 FlexibleTransformation = typing.Union[
-    Transformation, TransformationByVariableSubstitution, WellFormedFormula]
+    ABCTransformation, WellFormedTransformationByVariableSubstitution, WellFormedFormula]
 
 with let_x_be_a_variable(formula_ts='P') as phi, let_x_be_a_variable(formula_ts='Q') as psi:
     modus_ponens_inference_rule: WellFormedInferenceRule = WellFormedInferenceRule(
@@ -6377,7 +6387,7 @@ class TypesetterForTransformationByVariableSubstitution(pl1.Typesetter):
 
     def typeset_from_generator(self, phi: FlexibleTransformationByVariableSubstitution, **kwargs) -> (
             typing.Generator)[str, None, None]:
-        phi: TransformationByVariableSubstitution = coerce_transformation_by_variable_substitution(t=phi)
+        phi: WellFormedTransformationByVariableSubstitution = coerce_transformation_by_variable_substitution(t=phi)
 
         is_sub_formula: bool = kwargs.get('is_sub_formula', False)
         kwargs['is_sub_formula'] = True
@@ -6520,7 +6530,7 @@ def get_theory_inference_rule_from_natural_transformation_rule(t: FlexibleTheory
     :return: A python-tuple (True, i) where `i` is the inference-rule if `i` is found in ``t``, (False, None) otherwise.
     """
     t: WellFormedTheory = coerce_theory(t=t)
-    r: TransformationByVariableSubstitution = coerce_transformation_by_variable_substitution(t=r)
+    r: WellFormedTransformationByVariableSubstitution = coerce_transformation_by_variable_substitution(t=r)
     for i in iterate_theory_inference_rules(t=t):
         i: WellFormedInferenceRule
         if is_formula_equivalent(phi=r, psi=i.transformation):
