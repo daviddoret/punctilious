@@ -494,7 +494,8 @@ propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i5, t=propositional_lo
 propositional_logic_syntax_1.heuristics.add(p_is_a_proposition_heuristic)
 
 
-def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
+def extend_theory_with_propositional_logic_syntax_1(
+        t: as1.FlexibleTheoreticalContext) -> as1.WellFormedTheoreticalContext:
     """Extends a theory with:
      - the propositional-logic-syntax-1 axioms,
      - the "p is-a proposition" heuristic.
@@ -516,11 +517,11 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
     return t
 
 
-def let_x_be_a_propositional_logic_syntax_1_theory() -> as1.WellFormedTheory:
+def let_x_be_a_propositional_logic_syntax_1_theory() -> as1.WellFormedTheoreticalContext:
     """Return a new theory with:
      - the propositional-logic-syntax-1 axioms,
      - the "p is-a proposition" heuristic.
      """
-    t: as1.WellFormedTheory = as1.WellFormedTheory()
+    t: as1.WellFormedTheoreticalContext = as1.WellFormedTheory()
     t = extend_theory_with_propositional_logic_syntax_1(t=t)
     return t

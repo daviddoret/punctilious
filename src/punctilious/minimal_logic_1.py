@@ -315,7 +315,7 @@ axiomatization = as1.WellFormedAxiomatization(d=(pl01, pl02, pl03, pl04, pl05, p
 extended_theory = as1.WellFormedTheory(d=(*axiomatization,))
 
 
-def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
+def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheoreticalContext) -> as1.WellFormedTheoreticalContext:
     """Extends a theory with:
      - the propositional-logic-syntax-1 axioms,
      - the minimal-logic-1 axioms,
@@ -339,7 +339,7 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.WellFormedT
     return t
 
 
-def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
+def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheoreticalContext) -> as1.WellFormedTheoreticalContext:
     """Extends a theory with Mancosu et al., page 20:
     1. ⊢ 𝑝1 ⊃ (𝑝1 ∨ 𝑝2) (axiom PL7)
     2. ⊢ [𝑝1 ⊃ (𝑝1 ∨ 𝑝2)] ⊃ [((𝑝1 ∨ 𝑝2) ⊃ (𝑝2 ∨ 𝑝1)) ⊃ (𝑝1 ⊃ (𝑝1 ∨ 𝑝2))] (axiom PL5)
@@ -433,7 +433,7 @@ def extend_theory_with_mancosu_2021_page_20(t: as1.FlexibleTheory) -> as1.WellFo
     return t
 
 
-def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
+def extend_theory_with_mancosu_2021_page_21(t: as1.FlexibleTheoreticalContext) -> as1.WellFormedTheoreticalContext:
     """Extends a theory with Mancosu et al., page 22:
         1. ⊢ 𝐶 (hypothesis)
         2. ⊢ 𝐶 ⊃ (𝐷 ⊃ 𝐶) (axiom PL5)
