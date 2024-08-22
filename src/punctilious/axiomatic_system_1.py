@@ -1232,15 +1232,11 @@ class MetaVariable(WellFormedSimpleObject):
         return
 
 
-def let_x_be_a_variable(formula_ts: pl1.FlexibleTypesetter) -> (
+def let_x_be_a_variable(formula_ts: str | pl1.FlexibleTypesetter | None) -> (
         typing.Union)[WellFormedVariable, typing.Generator[WellFormedVariable, typing.Any, None]]:
-    if formula_ts is None or isinstance(formula_ts, pl1.FlexibleTypesetter):
-        return WellFormedVariable(c=NullaryConnective(formula_ts=formula_ts))
-    elif isinstance(formula_ts, typing.Iterable):
-        return (WellFormedVariable(c=NullaryConnective(formula_ts=ts)) for ts in formula_ts)
-    else:
-        raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_012, msg='Non supported arguments.',
-                                  formula_typesetter=formula_ts)
+    if isinstance(formula_ts, str):
+        formula_ts = pl1.SerifItalic(text=formula_ts)
+    return WellFormedVariable(c=NullaryConnective(formula_ts=formula_ts))
 
 
 def let_x_be_a_meta_variable(
@@ -1532,6 +1528,7 @@ Sample formula: :math:`\\text{is-inconsistent}\\left(\\phi\\right)`
 connective_for_is_well_formed_formula = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
 connective_for_is_well_formed_theory = let_x_be_a_unary_connective(formula_ts='is-well-formed-theory')
+connective_for_is_well_formed_transformation = let_x_be_a_unary_connective(formula_ts='is-well-formed-transformation')
 connective_for_logical_conjunction = let_x_be_a_binary_connective(formula_ts='∧')
 connective_for_logical_negation = let_x_be_a_unary_connective(formula_ts='¬')
 connective_for_logical_disjunction = let_x_be_a_binary_connective(formula_ts='∨')

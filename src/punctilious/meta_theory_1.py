@@ -160,52 +160,50 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi
 
     Abbreviation: MT1
 
-    Variables: {t}
+    Variables: {phi}
 
-    Arguments: {t}
+    Arguments: {phi}
 
     Premises:
     None
 
     Conclusion: 
-     - is-well-formed-theory(t)
-     - ¬(is-well-formed-theory(t))
+     - is-well-formed-formula(phi)
     """
 
-with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
+with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='i')) as i:
     algo: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_inference_rule_algorithm_connective,
-        o=as1.connective_for_is_well_formed_inference_rule(t),
-        v={t, },
-        i=(t,),
+        o=as1.connective_for_is_well_formed_inference_rule(i),
+        v={i, },
+        i=(i,),
         d=None)
     mt2: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=algo,
         ref_ts=pl1.Monospace(text='MT2'))
-    """The is-well-formed-inference-rule algorithmic inference-rule.
+    """The is-well-formed-inference-rule(i) inference rule.
 
     Abbreviation: MT2
 
-    Variables: {t}
+    Variables: {i}
 
-    Arguments: {t}
+    Arguments: {i}
 
     Premises:
     None
 
     Conclusion: 
-     - is-well-formed-theory(t)
-     - ¬(is-well-formed-theory(t))
+     - is-well-formed-theory(i)
     """
 
 # INFERENCE-RULE: MT3: is-well-formed-theory
-with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
+with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
     _mt3: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_theory_algorithm_connective,
         # check=None,  # is_compatible_with_is_well_formed_theory
-        o=as1.connective_for_is_well_formed_theory(t),
-        i=(t,),
-        v={t, },
+        o=as1.connective_for_is_well_formed_theory(i),
+        i=(i,),
+        v={i, },
         d=None)  # {t, })
     mt3: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=_mt3,
@@ -226,15 +224,15 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as t:
     """
 
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P
-with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
+with as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formula_ts='P') as p:
     inconsistency_1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             i=(
-                as1.connective_for_is_well_formed_theory(t),
-                t | as1.connective_for_proves | p,
-                t | as1.connective_for_proves | as1.connective_for_logical_negation(p)),
-            o=as1.connective_for_is_inconsistent(t),
-            v={p, t, }),
+                as1.connective_for_is_well_formed_theory(i),
+                i | as1.connective_for_proves | p,
+                i | as1.connective_for_proves | as1.connective_for_logical_negation(p)),
+            o=as1.connective_for_is_inconsistent(i),
+            v={p, i, }),
         ref_ts=pl1.Monospace(text='⊥1'))
     """The inconsistency-1 inference rule: P and ¬P
 
@@ -316,14 +314,14 @@ theory_proves_proposition_algorithm_connective: as1.ConnectiveLinkedWithAlgorith
 
 # INFERENCE-RULE: t-proves-p: T ⊢ P
 
-with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
+with as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formula_ts='P') as p:
     _t_proves_p: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=theory_proves_proposition_algorithm_connective,
         i=(
-            as1.connective_for_is_well_formed_theory(t),
+            as1.connective_for_is_well_formed_theory(i),
             p,),
-        o=t | as1.connective_for_proves | p,
-        v=(p, t,))
+        o=i | as1.connective_for_proves | p,
+        v=(p, i,))
     t_proves_p: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=_t_proves_p,
         ref_ts=pl1.Monospace(text='T ⊢ P'))

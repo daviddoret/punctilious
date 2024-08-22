@@ -308,6 +308,49 @@ class Monospace(Typesetter):
                 yield c
 
 
+class SerifItalic(Typesetter):
+    """A multi-format best-effort string in serif italic style.
+
+    """
+
+    def __init__(self, text: str):
+        super().__init__()
+        self._text: str = str(text)
+
+    @property
+    def text(self) -> str:
+        return self._text
+
+    def typeset_from_generator(self, **kwargs) -> (
+            typing.Generator)[str, None, None]:
+        for c in self.text:
+            c: str
+            if c in '0123456789':
+                digit_name: str = digit_names.get(c)
+                key: str = f'{digit_name}_serif_italic'
+                symbol: Symbol = symbols.get(key, c)
+                if isinstance(symbol, str):
+                    yield symbol
+                else:
+                    yield from symbol.typeset_from_generator(**kwargs)
+            elif c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+                key: str = f'{c.lower()}_uppercase_serif_italic'
+                symbol: Symbol = symbols.get(key, c)
+                if isinstance(symbol, str):
+                    yield symbol
+                else:
+                    yield from symbol.typeset_from_generator(**kwargs)
+            elif c in 'abcdefghijklmnopqrstuvwxyz':
+                key: str = f'{c}_lowercase_serif_italic'
+                symbol: Symbol = symbols.get(key, c)
+                if isinstance(symbol, str):
+                    yield symbol
+                else:
+                    yield from symbol.typeset_from_generator(**kwargs)
+            else:
+                yield c
+
+
 class Script(Typesetter):
     """A multi-format best-effort string in script style.
 
@@ -413,7 +456,7 @@ class Symbol(Typesetter):
         return self._unicode_limited
 
 
-class Symbols(dict):
+class Symbols(dict[str, Symbol]):
     """A catalog of out-of-the-box symbols.
 
     References:
@@ -986,7 +1029,7 @@ class Symbols(dict):
         self[symbol.key] = symbol
         return symbol
 
-    def is_sans_serif_letter(self, letter: str) -> bool:
+    def is_serif_italic_letter(self, letter: str) -> bool:
         if letter is None or not len(letter) == 1 or not letter.isalpha():
             return False
         else:
@@ -998,8 +1041,8 @@ class Symbols(dict):
         else:
             return True
 
-    def get_sans_serif_letter(self, letter: str) -> Symbol:
-        if not self.is_sans_serif_letter(letter=letter):
+    def get_serif_italic_letter(self, letter: str) -> Symbol:
+        if not self.is_serif_italic_letter(letter=letter):
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_PL1_001,
                 msg='This `letter` is unknown.',
@@ -1656,9 +1699,9 @@ def coerce_typesetter(ts: FlexibleTypesetter) -> Typesetter:
         return ts
     elif isinstance(ts, str):
         # temporary fix
-        if len(ts) == 1 and symbols.is_sans_serif_letter(letter=ts):
+        if len(ts) == 1 and symbols.is_serif_italic_letter(letter=ts):
             # TODO: Temporary fix for variable names.
-            ts: Typesetter = symbols.get_sans_serif_letter(letter=ts)
+            ts: Typesetter = symbols.get_serif_italic_letter(letter=ts)
             return ts
         else:
             ts: Typesetter = typesetters.text(text=ts)

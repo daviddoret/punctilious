@@ -422,10 +422,6 @@ class TestTransformation:
             d=None,
             i=(x | is_a | human,))
 
-        # Test transformation output
-        output = f.apply_transformation(i=(aristotle | is_a | human,))
-        assert pu.as1.is_formula_equivalent(phi=aristotle | is_a | mortal, psi=output)
-
         # Test well-formedness of typed object
         assert pu.as1.is_well_formed_transformation_by_variable_substitution(t=f)
 
@@ -433,6 +429,10 @@ class TestTransformation:
         f2 = pu.as1.transformation_by_variable_substitution_connective(
             x | is_a | mortal, (x,), (), (x | is_a | human,))
         assert not pu.as1.is_well_formed_transformation_by_variable_substitution(t=f2)
+
+        # Test transformation output
+        output = f.apply_transformation(i=(aristotle | is_a | human,))
+        assert pu.as1.is_formula_equivalent(phi=aristotle | is_a | mortal, psi=output)
 
 
 class TestReplaceFormulas:
