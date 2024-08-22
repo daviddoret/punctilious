@@ -2599,19 +2599,38 @@ class WellFormedTransformationByVariableSubstitution(ABCTransformation, ABC):
         """
         i = coerce_tuple(s=i, interpret_none_as_empty=True)
 
+        # step 0: re-declares all variables dynamically.
+        # this is necessary to prevent issues in meta-theories,
+        # where the variable is a sub-formula of the input.
+        # ex: is-well-formed-inference-rule(i).
+        variables = WellFormedEnumeration()
+        variables_substitution = WellFormedMap()
+        for v in iterate_enumeration_elements(e=self.variables):
+            v2 = let_x_be_a_variable(formula_ts=v.connective.formula_ts)
+            variables = append_element_to_enumeration(e=variables, x=v2)
+            variables_substitution = append_pair_to_map(m=variables_substitution, preimage=v, image=v2)
+        for d in iterate_enumeration_elements(e=self.output_declarations):
+            if not is_element_of_enumeration(x=d, e=variables):
+                d2 = let_x_be_a_variable(formula_ts=d.connective.formula_ts)
+                variables = append_element_to_enumeration(e=variables, x=d2)
+                variables_substitution = append_pair_to_map(m=variables_substitution, preimage=d, image=d2)
+        input_shapes = substitute_formulas(phi=self.input_shapes, m=variables_substitution)
+        output_shape = substitute_formulas(phi=self.output_shape, m=variables_substitution)
+        output_declarations = substitute_formulas(phi=self.output_declarations, m=variables_substitution)
+
         # step 1: confirm every argument is compatible with its premises,
         # and seize the opportunity to retrieve the mapped variable values.
-        success, variables_map = is_formula_equivalent_with_variables_2(phi=i, psi=self.input_shapes,
-                                                                        variables=self.variables,
-                                                                        variables_fixed_values=None)
+        success, variables_values = is_formula_equivalent_with_variables_2(phi=i, psi=input_shapes,
+                                                                           variables=variables,
+                                                                           variables_fixed_values=None)
         if not success:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_030,
                 msg='Transformation failure. '
                     'The input-values `i` are incompatible with the input-shapes `s`, '
                     'of transformation `f` considering variables `v`.',
-                i=i, s=self.input_shapes,
-                v=self.variables, f=self)
+                i=i, s=input_shapes,
+                v=variables, f=self)
 
         # Step 1b: If an external-algorithm validation is configured on this transformation,
         # call it to check the validity of the input values.
@@ -2625,16 +2644,16 @@ class WellFormedTransformationByVariableSubstitution(ABCTransformation, ABC):
                                               'The input-shapes `i2` and variables `v` are provided for information.',
                                           i1=i,
                                           va=self.validation_algorithm,
-                                          i2=self.input_shapes,
-                                          v=self.variables,
+                                          i2=input_shapes,
+                                          v=variables,
                                           f=self)
 
         # step 2:
-        outcome: WellFormedFormula = substitute_formulas(phi=self.output_shape, m=variables_map)
+        outcome: WellFormedFormula = substitute_formulas(phi=output_shape, m=variables_values)
 
         # step 3: new objects declarations.
         declarations_map: WellFormedMap = WellFormedMap()
-        for declaration in self.output_declarations:
+        for declaration in output_declarations:
             con: Connective = Connective()
             simple_formula: WellFormedFormula = WellFormedFormula(con=con)
             # TODO: Find a way to initialize the new_connective formula_typesetter.
