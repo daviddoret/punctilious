@@ -28,28 +28,24 @@ class TestMT2:
     def test_mt2(self):
         m = pu.as1.let_x_be_a_theory()  # The meta-theory
         t = pu.as1.let_x_be_a_theory()
-        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt2)
+        m, i1 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1)
+        m, i2 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt2)
 
         # Test 1: an inference-rule is an inference-rule
-        m, i2 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt3)
-        c = pu.as1.connective_for_is_well_formed_inference_rule(i2)  # This is a formula
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(i2,), raise_error_if_false=True)
+        c = pu.as1.connective_for_is_well_formed_inference_rule(i1)  # This is a formula
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i2, a=(i1,), raise_error_if_false=True)
+        assert ok
 
         # Test 2: a simple-object is not an inference-rule
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         c = pu.as1.connective_for_is_well_formed_inference_rule(a)
-        with pytest.raises(pu.u1.ApplicativeError) as error:
-            m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i2, a=(a,), raise_error_if_false=False)
         assert not ok
 
         # Test 3: using is-well-formed-inference-rule on itself.
-        # Test 1: an inference-rule is an inference-rule
-        t, i3 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2)
-        c = pu.as1.connective_for_is_well_formed_inference_rule(i3)  # This is a formula
-        # m, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(i3,))
-        # Raises: ERROR AS1-021: variable x is a sub-formula of phi.
-        # TODO: Find a solution for the above.
+        c = pu.as1.connective_for_is_well_formed_inference_rule(i2)  # This is a formula
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i2, a=(i2,), raise_error_if_false=False)
+        assert ok
 
         # TODO: Clarify semantically Derivation of type inference-rule and inference-rule
 

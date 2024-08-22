@@ -1707,6 +1707,25 @@ def is_formula_equivalent_with_variables_2(
     phi: WellFormedFormula = coerce_formula(phi=phi)
     psi: WellFormedFormula = coerce_formula(phi=psi)
     variables: WellFormedEnumeration = coerce_enumeration(e=variables, interpret_none_as_empty=True)
+
+    if any(is_recursively_included_in(f=phi, s=x) for x in iterate_enumeration_elements(e=variables)):
+        # If any variable x in the enumeration of variables is a sub-formula of phi,
+        # dynamically create new variables and substitute the variables in the template psi with the new ones.
+        # In effect, by the definition of a transformation and the definition of formula-equivalence-with-variables,
+        # the scope of the variables are strictly limited to the "template" formula, here psi.
+        # This avoids any conflict with the possible presence of the template variables in phi.
+        # In meta-theory, making derivations on inference-rules for examples,
+        # such as with the is-well-formed-inference-rule(i) predicate,
+        # there are situations where it is impossible to avoid the presence of such variables in phi.
+        variables_2: WellFormedEnumeration = WellFormedEnumeration()
+        variables_substitution: WellFormedMap = WellFormedMap()
+        for x in iterate_enumeration_elements(e=variables):
+            x_substitute: WellFormedVariable = let_x_be_a_variable(formula_ts=x.connective.formula_ts)
+            variables_2 = append_element_to_enumeration(e=variables, x=x)
+            variables_substitution = append_pair_to_map(m=variables_substitution, preimage=x, image=x_substitute)
+        variables = variables_2
+        psi: WellFormedFormula = substitute_formulas(phi=psi, m=variables_substitution)
+
     # check that all variables are atomic formulas
     for x in variables:
         x: WellFormedFormula = coerce_formula(phi=x)
@@ -4712,8 +4731,12 @@ class WellFormedInference(WellFormedFormula):
         ok, _ = is_formula_equivalent_with_variables_2(phi=i2, psi=i.transformation.input_shapes,
                                                        variables=i.transformation.variables)
         if not ok:
-            pass
-            # TODO : Raise an error once migration is completed.
+            raise u1.ApplicativeError(
+                msg='Well-formed inference rule validation error. ',
+                i2=i2,
+                input_shapes=i.transformation.input_shapes,
+                variables=i.transformation.variables
+            )
 
         return con, i, p, a
 
