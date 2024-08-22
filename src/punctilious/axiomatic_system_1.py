@@ -1690,6 +1690,8 @@ def is_formula_equivalent_with_variables_2(
      - and if with these substitutions phi and psi are formula-equivalent,
      Otherwise they are not formula-equivalent-with-variables.
 
+    TODO: REVIEW THIS DEFINITION TO EMBED THE DYNAMIC REPLACEMENT OF VARIABLES IN PSI.
+
      If the conditions under "given that" above are not satisfied, the result is undetermined
      and this python-function raises an exception.
 
@@ -1720,8 +1722,9 @@ def is_formula_equivalent_with_variables_2(
         variables_2: WellFormedEnumeration = WellFormedEnumeration()
         variables_substitution: WellFormedMap = WellFormedMap()
         for x in iterate_enumeration_elements(e=variables):
-            x_substitute: WellFormedVariable = let_x_be_a_variable(formula_ts=x.connective.formula_ts)
-            variables_2 = append_element_to_enumeration(e=variables, x=x)
+            x_substitute: WellFormedVariable = let_x_be_a_variable(
+                formula_ts=x.connective.formula_ts.typeset_as_string() + '′')  # TODO: Make "add prime" a function.
+            variables_2 = append_element_to_enumeration(e=variables_2, x=x_substitute)
             variables_substitution = append_pair_to_map(m=variables_substitution, preimage=x, image=x_substitute)
         variables = variables_2
         psi: WellFormedFormula = substitute_formulas(phi=psi, m=variables_substitution)

@@ -220,13 +220,10 @@ class TestFormulaEquivalenceWithVariables:
             phi=phi,
             psi=psi,
             variables=())
-        with pytest.raises(pu.u1.ApplicativeError):
-            # the following is ill-formed because the variable is an element of phi, and not of psi.
-            # reminder: formula-equivalence-with-variables is non-commutative.
-            pu.as1.is_formula_equivalent_with_variables(
-                phi=aristotle | is_a | x,
-                psi=aristotle | is_a | human,
-                variables=(x,))
+        assert not pu.as1.is_formula_equivalent_with_variables(
+            phi=aristotle | is_a | x,  # Note that `x` is "wrongly" placed in phi.
+            psi=aristotle | is_a | human,
+            variables=(x,))
         assert pu.as1.is_formula_equivalent_with_variables(
             phi=aristotle | is_a | human,
             psi=aristotle | is_a | x,
@@ -239,13 +236,10 @@ class TestFormulaEquivalenceWithVariables:
             phi=aristotle | is_a | x,
             psi=aristotle | is_a | human,
             variables=(y,))
-        with pytest.raises(pu.u1.ApplicativeError):
-            # the following is ill-formed because the variable is an element of phi, and not of psi.
-            # reminder: formula-equivalence-with-variables is non-commutative.
-            assert not pu.as1.is_formula_equivalent_with_variables(
-                phi=aristotle | is_a | x,
-                psi=platypus | is_a | human,
-                variables=(x,))
+        assert not pu.as1.is_formula_equivalent_with_variables(
+            phi=aristotle | is_a | x,  # Note that `x` is "wrongly" placed in phi.
+            psi=platypus | is_a | human,
+            variables=(x,))
 
     def test_is_formula_equivalent_with_variables_2(self):
         a, b, c, d, e = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
@@ -306,13 +300,11 @@ class TestFormulaEquivalenceWithVariables2:
             variables=())
         assert result
 
-        with pytest.raises(Exception):
-            # the following is ill-formed because the variable is an element of phi, and not of psi.
-            # reminder: formula-equivalence-with-variables is non-commutative.
-            pu.as1.is_formula_equivalent_with_variables_2(
-                phi=aristotle | is_a | x,
-                psi=aristotle | is_a | human,
-                variables=(x,))
+        result, map = pu.as1.is_formula_equivalent_with_variables_2(
+            phi=aristotle | is_a | x,  # Note that `x` is "wrongly" placed in phi.
+            psi=aristotle | is_a | human,
+            variables=(x,))
+        assert not result
 
         result, map, = pu.as1.is_formula_equivalent_with_variables_2(
             phi=aristotle | is_a | human,
@@ -339,11 +331,11 @@ class TestFormulaEquivalenceWithVariables2:
             variables=(y,))
         assert not result
 
-        with pytest.raises(Exception):
-            result, map, = pu.as1.is_formula_equivalent_with_variables_2(
-                phi=aristotle | is_a | x,
-                psi=platypus | is_a | human,
-                variables=(x,))
+        result, map, = pu.as1.is_formula_equivalent_with_variables_2(
+            phi=aristotle | is_a | x,  # Note that `x` is "wrongly" placed in phi.
+            psi=platypus | is_a | human,
+            variables=(x,))
+        assert not result
 
     def test_is_formula_equivalent_with_variables_2(self):
         a, b, c, d, e, = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd', 'e',))
