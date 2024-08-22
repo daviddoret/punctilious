@@ -145,13 +145,45 @@ class TestInconsistency1:
 
     class TestHypothesis:
         def test_hypothesis(self):
-            t = pu.as1.let_x_be_a_theory()
-            t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
-            a, b = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b',))
-            t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
-            t, _ = pu.as1.let_x_be_an_axiom(t=t, s=b | pu.csl1.implies | pu.csl1.lnot(a))
-            # t, h = pu.as1.let_x_be_an_hypothesis(t=t, c=b)
-            # h, ok, _ = pu.as1.derive_2(t=h, c=pu.csl1.lnot(a), i=pu.ir1.modus_ponens)
-            # h_proves_a = t | pu.as1.connective_for_proves | a
-            # h_proves_not_a = t | pu.as1.connective_for_proves | pu.csl1.lnot(a)
-            # is_inconsistent_h = pu.csl1.is_inconsistent(h)
+            m = pu.as1.let_x_be_a_theory()  # Declare a meta-theory
+            m = pu.mt1.extend_theory_with_meta_theory_1(t=m)  # Extend it with meta-theory-1 inference-rules
+            m = pu.ml1.extend_theory_with_minimal_logic_1(t=m)
+            m, p = pu.pls1.let_x_be_a_propositional_variable(t=m, formula_ts='P')
+            m, q = pu.pls1.let_x_be_a_propositional_variable(t=m, formula_ts='Q')
+            m, r = pu.pls1.let_x_be_a_propositional_variable(t=m, formula_ts='R')
+            # Pose `P` and `Q` as true.
+            m, _ = pu.as1.let_x_be_an_axiom(t=m, s=p)
+            m, _ = pu.as1.let_x_be_an_axiom(t=m, s=q)
+            m, i1 = pu.as1.let_x_be_an_inference_rule(
+                t=m, f=pu.as1.TransformationByVariableSubstitution(o=pu.csl1.lnot(p), v=None, i=(q, r,)))
+
+            # Pose the `R` hypothesis
+            h = pu.as1.WellFormedHypothesis(b=m, a=r)
+            # Which leads to the `lnot(P)` theorem.
+            h, ok, _ = pu.as1.derive_2(t=h, c=pu.csl1.lnot(p), i=i1, raise_error_if_false=True)
+
+            c = pu.as1.connective_for_is_well_formed_theory(h)  # This is a formula
+            m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3, a=(h,), raise_error_if_false=True)
+            assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
+
+            t_proves_a = h | pu.as1.connective_for_proves | a
+            p = (pu.as1.connective_for_is_well_formed_theory(h),)
+            m, _, d = pu.as1.derive_1(t=m, c=t_proves_a, p=p, i=pu.mt1.t_proves_p, a=(a,),
+                                      raise_error_if_false=True)
+            assert pu.as1.is_formula_equivalent(phi=t_proves_a, psi=d.valid_statement)
+
+            not_a = pu.as1.connective_for_logical_negation(a)
+            t_proves_not_a = t_inconsistent | pu.as1.connective_for_proves | not_a
+            p = (pu.as1.connective_for_is_well_formed_theory(t_inconsistent),)
+            m, _, d = pu.as1.derive_1(t=m, c=t_proves_not_a, p=p, i=pu.mt1.t_proves_p, a=(not_a,),
+                                      raise_error_if_false=True)
+            assert pu.as1.is_formula_equivalent(phi=t_proves_not_a, psi=d.valid_statement)
+
+            c = pu.as1.connective_for_is_inconsistent(t_inconsistent)
+            p = (pu.as1.connective_for_is_well_formed_theory(t_inconsistent),
+                 t_proves_a,
+                 t_proves_not_a,)
+            m, _, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.inconsistency_1, a=None,
+                                      raise_error_if_false=True)
+            assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
+            pass

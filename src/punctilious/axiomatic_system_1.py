@@ -1711,9 +1711,12 @@ def is_formula_equivalent_with_variables_2(
         if is_recursively_included_in(f=phi, s=x):
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_AS1_021,
-                msg=f'variable x is a sub-formula of phi.',
+                msg=f'Variable `x` is a sub-formula of `phi`.',
                 x=x,
-                phi=phi)
+                phi=phi,
+                psi=psi,
+                variables=variables,
+                variables_fixed_values=variables_fixed_values)
     # check that all variables in the map are atomic formulas and are correctly listed in variables
     for x in variables_fixed_values.domain:
         x: WellFormedFormula = coerce_formula(phi=x)
@@ -4115,11 +4118,8 @@ def coerce_theory_component(d: FlexibleFormula) -> WellFormedTheoryComponent:
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_039,
-            msg=f'Argument `d` of python-type ``t`` could not be coerced to a derivation of python-type '
-                f'Derivation. The string representation of `d` is given in `s`.',
-            d=d,
-            t=type(d),
-            s=u1.force_str(o=d))
+            msg=f'Coercion failure. Argument `d` could not be coerced to a theory component.',
+            d=d)
 
 
 def coerce_theoretical_context(t: FlexibleTheoreticalContext,
@@ -5717,14 +5717,31 @@ def derive_1(t: FlexibleTheoreticalContext, c: FlexibleFormula, p: FlexibleTupl[
     #   or implement complete check with ext algo arguments, object creation, etc.
 
     # Configure the inference that derives the theorem.
-    inference: WellFormedInference = WellFormedInference(p=p, a=a, i=i)
+    try:
+        i2: WellFormedInference = WellFormedInference(p=p, a=a, i=i)
+    except u1.ApplicativeError as err:
+        # If the initialization of the inference fails,
+        # it means that the inference is not valid.
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='Derivation failure. '
+                    'The initialization of the inference `inference(p, a, i)` failed and raised error `err`, '
+                    'meaning that it is invalid. ',
+                p=p,
+                a=a,
+                i=i,
+                t=t,
+                err=err
+            )
+        else:
+            return t, False, None
 
     # Prepare the new theorem.
     try:
         # TODO: This is inelegant. When we use an external-algorithm,
         #   I was not able to find a simple solution to catch errors.
         #   Some evolution of the data model is probably needed here.
-        theorem: WellFormedTheorem = WellFormedTheorem(p=c, i=inference)
+        theorem: WellFormedTheorem = WellFormedTheorem(p=c, i=i2)
     except u1.ApplicativeError as error:
         # If the initialization of the theorem fails,
         # it means that the theorem is not valid.

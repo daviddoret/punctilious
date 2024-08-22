@@ -323,7 +323,7 @@ def extend_theory_with_minimal_logic_1(t: as1.FlexibleTheory) -> as1.WellFormedT
 
     """
     global pl01, pl02, pl03, pl04, pl05, pl06, pl07, pl08, pl09, pl10
-    t: as1.WellFormedTheory = as1.coerce_theory(t=t)
+    t: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=t)
     t, _ = as1.let_x_be_an_inference_rule(t=t, i=ir1.modus_ponens)
     t = pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
     t, _ = as1.let_x_be_an_axiom(a=pl01, t=t)

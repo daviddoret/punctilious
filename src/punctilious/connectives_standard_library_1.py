@@ -11,6 +11,7 @@ axiom = as1.connective_for_axiom_formula
 axiomatization = as1.connective_for_axiomatization_formula
 enumeration = as1.connective_for_enumeration
 derivation = as1.connective_for_theory_component
+hypothesis = as1.connective_for_hypothesis
 implies = as1.connective_for_logical_implication
 inference = as1.connective_for_inference
 inference_rule = as1.connective_for_inference_rule

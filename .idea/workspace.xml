@@ -6,7 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="WellFormedHypothesis: test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_meta_theory_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,273 +95,274 @@
     <option name="showLibraryContents" value="true" />
     <option name="showScratchesAndConsoles" value="false" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;PowerShell.increment_package_version_patch.ps1.executor&quot;: &quot;Run&quot;,
-    &quot;PowerShell.release_patch.ps1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.Python tests in tests.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system.test_connective.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAxiom.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAxiom.test_axiom_without_premises.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestCoerceEnumeration.test_coerce_enumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestCollection.test_collection.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestCollection.test_in.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestConnective.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestConnective.test_call.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestConnective.test_simple.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestDemonstration.test_is_well_formed.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEmptyEnumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEmptyEnumeration.test_empty_enumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEmptyTheory.test_empty_theory.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_enumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_has_element.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_in.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_of_the_form_enumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_tupl.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_warning.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumerationAccretor.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumerationAccretor.test_del_element.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumerationBuilder.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumerationEquivalence.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestEnumerationEquivalence.test_enumeration_equivalence.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension_of_axioms.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormula.test_formula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormula.test_iterate.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormula.test_term.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormula.test_term_0.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormula.test_term_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormula.test_to_formula_builder.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_assure_term.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_set_term.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_term_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_to_formula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilderNode.test_formula_builder_node.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaDepth.test_get_formula_depth.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalence.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalence.test_is_formula_equivalent.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_sandbox.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestInferenceRule.test_is_well_formed_postulation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestIsSubformulaofFormula.test_is_subformula_of_formula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestIteratePermutationsOfEnumerationElementsWithFixedSize.test_iterate_permutations_of_enumeration_elements_with_fixed_size.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestMap.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestMetaTheory.test_meta_theory.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestObjectCreation.test_object_creation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestReplaceConnectives.test_replace_connectives.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas_two_variables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestSingletonEnumeration.test_singleton_enumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestStripDuplicateFormulasInPythonTuple.test_strip_duplicate_formulas_in_python_tuple.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTerms.test_terms.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTermsBuilder.test_terms_builder.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTheorem.test_coerce_theorem.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTheory.test_transform_to_axiomatization.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTheory.test_would_be_valid.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTheory.test_x.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTransformation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_transformation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTupl.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestTupl.test_iterate.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestUnionEnumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestUnionEnumeration.test_union_enumeration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_axiomatic_system_1.test_is_extension.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_inference_rules_1.TestAdjunction.test_adjunction.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_inference_rules_1.TestModusPonens.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_inference_rules_1.TestModusPonens.test_modus_ponens.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_inference_rules_1.TestSimplification1.test_simplification_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_inference_rules_1.TestSimplification2.test_simplification_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_meta_theory_1.TestMT1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_meta_theory_1.TestMT2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestAdjunction.test_adjunction.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20_with_derivation_1.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20_with_derivation_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_21_with_derivation_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestPL1.test_pl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestPL2.test_pl2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_connectives_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_connectives_3.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_connectives_conditional.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_declare_binary_formula.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_formulas.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1.test_propositional_variables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1ML.test_infix_formula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_pl1.TestPL1ML.test_substitute_meta_variables.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_presentation_1.TestSymbols.test_symbols.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_presentation_layer_1.TestMonospace.test_monospace.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_presentation_layer_1.TestScript.test_script.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_propositional_logic_syntax_1.TestAutoDerivation.test_auto_derivation.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic_basic.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_typesetting.TestHierarchicalClass.test_is_subclass_of.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_typesetting.TestIndexSymbol.test_to_string.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_typesetting.TestProtocolPreference.test_protocol.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_typesetting.TestSymbols.test_to_string_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_utils.TestHierarchicalEnum.test_hierarchical_enum.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for test_utils.TestTypesettingClass.test_typesetting_class.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestAxiomatization.test_is_well_formed.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestDemonstration.test_is_well_formed.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestInference.test_inference.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule.test_is_well_formed_postulation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestMetaTheory.test_meta_theory.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestTheorem.test_coerce_theorem.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_axiomatic_system_1.top_level_collect.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_fl1.TestFormalObject.test_formal_object.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_fl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_meta_theory_1.TestInconsistency1.test_inconsistency_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_meta_theory_1.TestMT1.test_mt1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_meta_theory_1.TestMT2.test_mt2.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_meta_theory_1.TestMT3.test_mt3.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_meta_theory_1.TestTProvesP.test_t_proves_p.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_minimal_logic_1.TestPL1.test_pl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_pl1.TestPL1.test_declare_binary_formula.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_pl1.TestPL1.test_formulas.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_pl1.TestPL1.test_propositional_variables.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_pl1.TestPL1ML.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_propositional_logic_syntax_1.TestAxioms.test_pl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest for tests.test_typesetting.TestProtocolPreference.test_protocol.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest in punctilious.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_axiomatic_system.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_axiomatic_system_1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_fl1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_inference_rules_1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_minimal_logic_1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_pl1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_presentation_1.py.executor&quot;: &quot;Debug&quot;,
-    &quot;Python tests.pytest in test_presentation_layer_1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_propositional_logic_syntax_1.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_typesetting.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in test_utils.py.executor&quot;: &quot;Run&quot;,
-    &quot;Python tests.pytest in tests.executor&quot;: &quot;Run&quot;,
-    &quot;Python.__init__.executor&quot;: &quot;Run&quot;,
-    &quot;Python.axiomatic_system.executor&quot;: &quot;Run&quot;,
-    &quot;Python.axiomatic_system_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.binary_tree_test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fl1_presentation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.fl1_typesetting.executor&quot;: &quot;Run&quot;,
-    &quot;Python.formal_language_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.formal_language_1_presentation_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.generate_symbols.executor&quot;: &quot;Run&quot;,
-    &quot;Python.inference_rules_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.minimal_logic_1.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.natural_numbers_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.pl1_presentation.executor&quot;: &quot;Run&quot;,
-    &quot;Python.presentation_layer_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.propositional_logic_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.propositional_logic_syntax_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.sandbox.executor&quot;: &quot;Run&quot;,
-    &quot;Python.sequences_1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test2.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.test3.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test4.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_fl1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.typesetting.executor&quot;: &quot;Run&quot;,
-    &quot;Python.zeta.executor&quot;: &quot;Run&quot;,
-    &quot;Python.zeta_2.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Shell Script.build_docs.sh.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/daviddoret/PycharmProjects/punctilious/continuous_integration/scripts_macos&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;application.passwordSafe&quot;,
-    &quot;timeTracker.activityTracker&quot;: &quot;null&quot;,
-    &quot;timeTracker.comment&quot;: &quot;&quot;,
-    &quot;timeTracker.inactivityPeriodInMills&quot;: &quot;600000&quot;,
-    &quot;timeTracker.isAutoTrackingEnable&quot;: &quot;false&quot;,
-    &quot;timeTracker.isAutoTrackingTemporaryDisabled&quot;: &quot;false&quot;,
-    &quot;timeTracker.isManualTrackingEnable&quot;: &quot;false&quot;,
-    &quot;timeTracker.isPaused&quot;: &quot;true&quot;,
-    &quot;timeTracker.isPostAfterCommitEnabled&quot;: &quot;false&quot;,
-    &quot;timeTracker.isPostedScheduled&quot;: &quot;true&quot;,
-    &quot;timeTracker.isRunning&quot;: &quot;false&quot;,
-    &quot;timeTracker.isScheduledEnabled&quot;: &quot;false&quot;,
-    &quot;timeTracker.isWhenProjectClosedEnabled&quot;: &quot;false&quot;,
-    &quot;timeTracker.issueId&quot;: &quot;Default&quot;,
-    &quot;timeTracker.issueIdReadable&quot;: &quot;Default&quot;,
-    &quot;timeTracker.pausedTime&quot;: &quot;0&quot;,
-    &quot;timeTracker.query&quot;: &quot;&quot;,
-    &quot;timeTracker.recordedTime&quot;: &quot;0&quot;,
-    &quot;timeTracker.scheduledPeriod&quot;: &quot;19:00:0&quot;,
-    &quot;timeTracker.startTime&quot;: &quot;0&quot;,
-    &quot;timeTracker.timeInMills&quot;: &quot;0&quot;,
-    &quot;timeTracker.type&quot;: &quot;Development&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "PowerShell.increment_package_version_patch.ps1.executor": "Run",
+    "PowerShell.release_patch.ps1.executor": "Run",
+    "Python tests.Python tests in tests.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAutoDerivation.test_auto_derivation.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAxiom.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAxiom.test_axiom_without_premises.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestAxiomatization.test_is_well_formed.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestCoerceEnumeration.test_coerce_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestCollection.test_collection.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestCollection.test_in.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestConnective.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestConnective.test_call.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestConnective.test_simple.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestConnectiveEquivalence.test_is_connective_equivalent.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestDemonstration.test_is_well_formed.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEmptyEnumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEmptyEnumeration.test_empty_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEmptyTheory.test_empty_theory.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_has_element.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_in.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_of_the_form_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_sub_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_is_well_formed_enumeration.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_tupl.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumeration.test_warning.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumerationAccretor.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumerationAccretor.test_del_element.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumerationBuilder.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumerationEquivalence.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestEnumerationEquivalence.test_enumeration_equivalence.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension_of_axioms.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormula.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_formula.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_iterate.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_term.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_term_0.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_term_1.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormula.test_to_formula_builder.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_assure_term.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_set_term.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_term_1.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilder.test_to_formula.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaBuilderNode.test_formula_builder_node.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaDepth.test_get_formula_depth.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalence.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalence.test_is_formula_equivalent.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_sandbox.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaEquivalenceWithVariables2.test_is_formula_equivalent_with_variables_2.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestFormulaToEnumeration.test_formula_to_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestInference.test_inference.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestInference.test_is_well_formed_inference.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestInferenceRule.test_is_well_formed_postulation.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestIsSubformulaofFormula.test_is_subformula_of_formula.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestIteratePermutationsOfEnumerationElementsWithFixedSize.test_iterate_permutations_of_enumeration_elements_with_fixed_size.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestMap.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestMap.test_map.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestMetaTheory.test_meta_theory.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestObjectCreation.test_object_creation.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestPostulation.test_is_well_formed_postulation.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestProofByInference.test_is_well_formed.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestReplaceConnectives.test_replace_connectives.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestReplaceFormulas.test_replace_formulas_two_variables.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestSingletonEnumeration.test_singleton_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestStripDuplicateFormulasInPythonTuple.test_strip_duplicate_formulas_in_python_tuple.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.TestTerms.test_terms.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTermsBuilder.test_terms_builder.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheorem.test_coerce_theorem.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheoreticalContext.test_theoretical_context.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_iterate_axioms.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_transform_to_axiomatization.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_would_be_valid.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTheory.test_x.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTransformation.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_transformation.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTupl.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestTupl.test_iterate.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestUnionEnumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestUnionEnumeration.test_union_enumeration.executor": "Run",
+    "Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable.executor": "Debug",
+    "Python tests.pytest for test_axiomatic_system_1.test_is_extension.executor": "Run",
+    "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
+    "Python tests.pytest for test_inference_rules_1.TestAdjunction.test_adjunction.executor": "Run",
+    "Python tests.pytest for test_inference_rules_1.TestModusPonens.executor": "Run",
+    "Python tests.pytest for test_inference_rules_1.TestModusPonens.test_modus_ponens.executor": "Run",
+    "Python tests.pytest for test_inference_rules_1.TestSimplification1.test_simplification_1.executor": "Run",
+    "Python tests.pytest for test_inference_rules_1.TestSimplification2.test_simplification_2.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis.executor": "Debug",
+    "Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestMT1.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestMT2.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestAdjunction.test_adjunction.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestComplete.test_mancosu_page_20_with_derivation_1.executor": "Debug",
+    "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20.executor": "Debug",
+    "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_20_with_derivation_1.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestMancosu2021P20.test_mancosu_2021_page_21_with_derivation_1.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestPL1.test_pl1.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestPL2.test_pl2.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestPL3.test_pl3.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4.executor": "Debug",
+    "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation.executor": "Run",
+    "Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation.executor": "Run",
+    "Python tests.pytest for test_pl1.TestMinimalPropositionalLogic.test_init.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_compounding_formulas_1.executor": "Debug",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_1.executor": "Debug",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_2.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_3.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_connectives_conditional.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_declare_binary_formula.executor": "Debug",
+    "Python tests.pytest for test_pl1.TestPL1.test_declare_unary_formula.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1.test_formulas.executor": "Debug",
+    "Python tests.pytest for test_pl1.TestPL1.test_propositional_variables.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1ML.test_infix_formula.executor": "Run",
+    "Python tests.pytest for test_pl1.TestPL1ML.test_substitute_meta_variables.executor": "Debug",
+    "Python tests.pytest for test_presentation_1.TestSymbols.test_symbols.executor": "Run",
+    "Python tests.pytest for test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration.executor": "Run",
+    "Python tests.pytest for test_presentation_layer_1.TestMonospace.test_monospace.executor": "Run",
+    "Python tests.pytest for test_presentation_layer_1.TestScript.test_script.executor": "Run",
+    "Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration.executor": "Run",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestAutoDerivation.test_auto_derivation.executor": "Debug",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1.executor": "Debug",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic.executor": "Run",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic_basic.executor": "Run",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1.executor": "Run",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2.executor": "Run",
+    "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3.executor": "Run",
+    "Python tests.pytest for test_typesetting.TestHierarchicalClass.test_is_subclass_of.executor": "Run",
+    "Python tests.pytest for test_typesetting.TestIndexSymbol.test_to_string.executor": "Run",
+    "Python tests.pytest for test_typesetting.TestProtocolPreference.test_protocol.executor": "Run",
+    "Python tests.pytest for test_typesetting.TestSymbols.test_to_string_2.executor": "Run",
+    "Python tests.pytest for test_utils.TestHierarchicalEnum.test_hierarchical_enum.executor": "Run",
+    "Python tests.pytest for test_utils.TestTypesettingClass.test_typesetting_class.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestAxiomatization.test_is_well_formed.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestDemonstration.test_is_well_formed.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestFormulaEquivalenceWithVariables.test_is_formula_equivalent_with_variables_2.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestInference.test_inference.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule.test_inference_rule_without_premises.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestInferenceRule.test_is_well_formed_postulation.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestMetaTheory.test_meta_theory.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestProofByPostulation.test_is_well_formed.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestTheorem.test_coerce_theorem.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.executor": "Run",
+    "Python tests.pytest for tests.test_axiomatic_system_1.top_level_collect.executor": "Run",
+    "Python tests.pytest for tests.test_fl1.TestFormalObject.test_formal_object.executor": "Run",
+    "Python tests.pytest for tests.test_fl1.executor": "Run",
+    "Python tests.pytest for tests.test_meta_theory_1.TestInconsistency1.test_inconsistency_1.executor": "Run",
+    "Python tests.pytest for tests.test_meta_theory_1.TestMT1.test_mt1.executor": "Run",
+    "Python tests.pytest for tests.test_meta_theory_1.TestMT2.test_mt2.executor": "Run",
+    "Python tests.pytest for tests.test_meta_theory_1.TestMT3.test_mt3.executor": "Run",
+    "Python tests.pytest for tests.test_meta_theory_1.TestTProvesP.test_t_proves_p.executor": "Run",
+    "Python tests.pytest for tests.test_minimal_logic_1.TestPL1.test_pl1.executor": "Run",
+    "Python tests.pytest for tests.test_pl1.TestPL1.test_declare_binary_formula.executor": "Run",
+    "Python tests.pytest for tests.test_pl1.TestPL1.test_formulas.executor": "Run",
+    "Python tests.pytest for tests.test_pl1.TestPL1.test_propositional_variables.executor": "Run",
+    "Python tests.pytest for tests.test_pl1.TestPL1ML.executor": "Run",
+    "Python tests.pytest for tests.test_propositional_logic_syntax_1.TestAxioms.test_pl1.executor": "Run",
+    "Python tests.pytest for tests.test_typesetting.TestProtocolPreference.test_protocol.executor": "Debug",
+    "Python tests.pytest in punctilious.executor": "Run",
+    "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
+    "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
+    "Python tests.pytest in test_fl1.py.executor": "Run",
+    "Python tests.pytest in test_inference_rules_1.py.executor": "Run",
+    "Python tests.pytest in test_minimal_logic_1.py.executor": "Run",
+    "Python tests.pytest in test_pl1.py.executor": "Run",
+    "Python tests.pytest in test_presentation_1.py.executor": "Debug",
+    "Python tests.pytest in test_presentation_layer_1.py.executor": "Run",
+    "Python tests.pytest in test_propositional_logic_syntax_1.py.executor": "Run",
+    "Python tests.pytest in test_typesetting.py.executor": "Run",
+    "Python tests.pytest in test_utils.py.executor": "Run",
+    "Python tests.pytest in tests.executor": "Run",
+    "Python.__init__.executor": "Run",
+    "Python.axiomatic_system.executor": "Run",
+    "Python.axiomatic_system_1.executor": "Run",
+    "Python.binary_tree_test.executor": "Run",
+    "Python.fl1.executor": "Run",
+    "Python.fl1_presentation.executor": "Run",
+    "Python.fl1_typesetting.executor": "Run",
+    "Python.formal_language_1.executor": "Run",
+    "Python.formal_language_1_presentation_1.executor": "Run",
+    "Python.generate_symbols.executor": "Run",
+    "Python.inference_rules_1.executor": "Run",
+    "Python.minimal_logic_1.executor": "Debug",
+    "Python.natural_numbers_1.executor": "Run",
+    "Python.pl1.executor": "Run",
+    "Python.pl1_presentation.executor": "Run",
+    "Python.presentation_layer_1.executor": "Run",
+    "Python.propositional_logic_1.executor": "Run",
+    "Python.propositional_logic_syntax_1.executor": "Run",
+    "Python.sandbox.executor": "Run",
+    "Python.sequences_1.executor": "Run",
+    "Python.test.executor": "Run",
+    "Python.test2.executor": "Debug",
+    "Python.test3.executor": "Run",
+    "Python.test4.executor": "Run",
+    "Python.test_fl1.executor": "Run",
+    "Python.typesetting.executor": "Run",
+    "Python.zeta.executor": "Run",
+    "Python.zeta_2.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Shell Script.build_docs.sh.executor": "Run",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/continuous_integration/scripts_macos",
+    "settings.editor.selected.configurable": "application.passwordSafe",
+    "timeTracker.activityTracker": "null",
+    "timeTracker.comment": "",
+    "timeTracker.inactivityPeriodInMills": "600000",
+    "timeTracker.isAutoTrackingEnable": "false",
+    "timeTracker.isAutoTrackingTemporaryDisabled": "false",
+    "timeTracker.isManualTrackingEnable": "false",
+    "timeTracker.isPaused": "true",
+    "timeTracker.isPostAfterCommitEnabled": "false",
+    "timeTracker.isPostedScheduled": "true",
+    "timeTracker.isRunning": "false",
+    "timeTracker.isScheduledEnabled": "false",
+    "timeTracker.isWhenProjectClosedEnabled": "false",
+    "timeTracker.issueId": "Default",
+    "timeTracker.issueIdReadable": "Default",
+    "timeTracker.pausedTime": "0",
+    "timeTracker.query": "",
+    "timeTracker.recordedTime": "0",
+    "timeTracker.scheduledPeriod": "19:00:0",
+    "timeTracker.startTime": "0",
+    "timeTracker.timeInMills": "0",
+    "timeTracker.type": "Development"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
-      &quot;directory&quot;,
-      &quot;module&quot;,
-      &quot;repository&quot;
+  "keyToStringList": {
+    "GitStage.ChangesTree.GroupingKeys": [
+      "directory",
+      "module",
+      "repository"
     ]
   }
-}</component>
+}]]></component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="2023_05_02_PyCharmProject_Maths" is-module-sdk="true">
@@ -383,7 +391,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context">
+  <component name="RunManager" selected="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -607,40 +615,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestExtension.test_extension" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestExtension.test_extension&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestExtension.test_extension_of_axioms" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestExtension.test_extension_of_axioms&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -655,6 +629,40 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_axiomatic_system_1.TestHypothesis.test_hypothesis&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_meta_theory_1.TestInconsistency1.test_inconsistency_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -720,9 +728,9 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
+      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" />
+      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension_of_axioms" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -731,11 +739,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAxiomaticBase.test_theoretical_context" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestHypothesis.test_hypothesis" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension_of_axioms" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestExtension.test_extension" />
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1" />
+        <item itemvalue="Python tests.pytest in tests" />
       </list>
     </recent_temporary>
   </component>
@@ -754,14 +762,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01027" summary="New formula shapes for axiom, inference-rule, and theorem based on predicate syntax, e.g. axiom(P). New abstract class TheoreticalContext to simplify the smooth processing of theories, axiomatizations, and hypothesis.">
-      <option name="closed" value="true" />
-      <created>1722790379365</created>
-      <option name="number" value="01027" />
-      <option name="presentableId" value="LOCAL-01027" />
-      <option name="project" value="LOCAL" />
-      <updated>1722790379365</updated>
     </task>
     <task id="LOCAL-01028" summary="New formula shapes for axiom, inference-rule, and theorem based on predicate syntax, e.g. axiom(P). New abstract class TheoreticalContext to simplify the smooth processing of theories, axiomatizations, and hypothesis.">
       <option name="closed" value="true" />
@@ -1147,7 +1147,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724151062601</updated>
     </task>
-    <option name="localTasksCounter" value="1076" />
+    <task id="LOCAL-01076" summary="WellFormedHypothesis: test">
+      <option name="closed" value="true" />
+      <created>1724151569816</created>
+      <option name="number" value="01076" />
+      <option name="presentableId" value="LOCAL-01076" />
+      <option name="project" value="LOCAL" />
+      <updated>1724151569816</updated>
+    </task>
+    <option name="localTasksCounter" value="1077" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1274,9 +1282,9 @@
           <option name="timeStamp" value="189" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_axiomatic_system_1.py</url>
-          <line>1373</line>
-          <option name="timeStamp" value="203" />
+          <url>file://$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py</url>
+          <line>5725</line>
+          <option name="timeStamp" value="207" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

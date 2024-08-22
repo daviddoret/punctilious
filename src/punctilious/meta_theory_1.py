@@ -315,6 +315,7 @@ theory_proves_proposition_algorithm_connective: as1.ConnectiveLinkedWithAlgorith
 )
 
 # INFERENCE-RULE: t-proves-p: T ⊢ P
+
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
     _t_proves_p: as1.TransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=theory_proves_proposition_algorithm_connective,

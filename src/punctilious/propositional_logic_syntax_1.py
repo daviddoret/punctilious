@@ -504,7 +504,7 @@ def extend_theory_with_propositional_logic_syntax_1(t: as1.FlexibleTheory) -> as
     # t.heuristics.add(p_is_a_proposition_heuristic)
     # return t
     global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
-    t: as1.WellFormedTheory = as1.coerce_theory(t=t)
+    t: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=t)
     t, _ = as1.let_x_be_an_axiom(a=i0, t=t)
     t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
     t, _ = as1.let_x_be_an_axiom(a=i2, t=t)

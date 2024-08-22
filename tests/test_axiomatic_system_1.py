@@ -1357,23 +1357,6 @@ class TestAxiomaticBase:
         assert pu.as1.is_axiomatization_equivalent(t1=t3, t2=t4)
 
 
-class TestHypothesis:
-    def test_hypothesis(self):
-        a, b, c, d = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'd',))
-        t = pu.as1.WellFormedAxiomatization()
-        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
-        t, _ = pu.as1.let_x_be_an_axiom(t=t, s=c)
-        t, i1 = pu.as1.let_x_be_an_inference_rule(
-            t=t, f=pu.as1.TransformationByVariableSubstitution(i=(a, b,), o=lnot(c), v=None))
-
-        h = pu.as1.WellFormedHypothesis(b=t, a=b)
-        h, _, _ = pu.as1.derive_2(t=h, c=lnot(c), i=i1)
-
-        assert pu.as1.is_valid_proposition_so_far_1(p=lnot(c), t=h)
-
-        pass
-
-
 class TestMetaTheory:
     def test_meta_theory(self):
         t = pu.ml1.let_x_be_a_minimal_logic_1_theory()
