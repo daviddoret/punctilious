@@ -1234,6 +1234,13 @@ class MetaVariable(WellFormedSimpleObject):
 
 def let_x_be_a_variable(formula_ts: str | pl1.FlexibleTypesetter | None) -> (
         typing.Union)[WellFormedVariable, typing.Generator[WellFormedVariable, typing.Any, None]]:
+    """Declares a new well-formed variable.
+
+    See :class:`WellFormedVariable` for detailed information on well-formed variables.
+
+    :param formula_ts: A name for the variable.
+    :return: A well-formed variable.
+    """
     if isinstance(formula_ts, str):
         formula_ts = pl1.SerifItalic(text=formula_ts)
     return WellFormedVariable(c=NullaryConnective(formula_ts=formula_ts))
