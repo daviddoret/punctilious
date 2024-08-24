@@ -1,4 +1,9 @@
 """
+
+TODO: We need now some basic predicate logic:
+    meta-theory algos such as is-well-formed-x(y) must be understood as well-formed propositions.
+
+
 TODO: Use WellFormedProposition in WellFormedInferenceRule, i.e. premises must be propositions, and conclusion.
 
 TODO: Develop is_axiomatic_base and get_axiomatic_base()
