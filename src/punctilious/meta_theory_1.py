@@ -102,7 +102,7 @@ is_well_formed_inference_rule_algorithm_connective: as1.ConnectiveLinkedWithAlgo
 )
 
 
-def is_well_formed_theory_algorithm(
+def is_well_formed_theoretical_context_algorithm(
         i: as1.WellFormedTupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
     """A python-function used as a theory external algorithm to verify is-well-formed-theory of a formula.
@@ -116,22 +116,23 @@ def is_well_formed_theory_algorithm(
         if raise_error_if_false:
             raise u1.ApplicativeError(
                 code=c1.ERROR_CODE_MT1_004,
-                msg='is-well-formed-theory algorithm failure: '
+                msg='is-well-formed-theoretical-context algorithm failure: '
                     'The number of input-values provided to the algorithm is not equal to 1.',
                 i=i)
         else:
             return False, None
     t1: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
-    if as1.is_well_formed_theory(t=t1):
-        t1: as1.WellFormedTheory = as1.coerce_theory(t=t1, interpret_none_as_empty=False, canonical_conversion=False)
-        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_theory(t1)
+    if as1.is_well_formed_theoretical_context(t=t1):
+        t1: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=t1, interpret_none_as_empty=False,
+                                                                              canonical_conversion=False)
+        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_theoretical_context(t1)
         return True, phi
     else:
         if raise_error_if_false:
             raise u1.ApplicativeError(
-                msg='is-well-formed-theory algorithm failure: '
-                    'The argument `i[0]` is not a well-formed theory. '
-                    'It follows that the statement :math:`\\text{is-well-formed-theory}(a_{0})` cannot be derived.',
+                msg='is-well-formed-theoretical-context algorithm failure: '
+                    'The argument `i[0]` is not a well-formed theoretical-context. '
+                    'It follows that the statement :math:`\\text{is-well-formed-theoretical-context}(a_{0})` cannot be derived.',
                 code=c1.ERROR_CODE_MT1_002,
                 i0=i[0],
                 t1=t1,
@@ -141,10 +142,11 @@ def is_well_formed_theory_algorithm(
             return False, None
 
 
-is_well_formed_theory_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
-    a=is_well_formed_theory_algorithm,
-    formula_ts=pl1.Monospace(text='is-well-formed-theory-algorithm')
-)
+is_well_formed_theoretical_context_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = (
+    as1.ConnectiveLinkedWithAlgorithm(
+        a=is_well_formed_theoretical_context_algorithm,
+        formula_ts=pl1.Monospace(text='is-well-formed-theoretical-context-algorithm')
+    ))
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi:
     algo: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
@@ -199,16 +201,15 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='i')) as i:
 # INFERENCE-RULE: MT3: is-well-formed-theory
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
     _mt3: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
-        a=is_well_formed_theory_algorithm_connective,
-        # check=None,  # is_compatible_with_is_well_formed_theory
-        o=as1.connective_for_is_well_formed_theory(i),
+        a=is_well_formed_theoretical_context_algorithm_connective,
+        o=as1.connective_for_is_well_formed_theoretical_context(i),
         i=(i,),
         v={i, },
         d=None)  # {t, })
     mt3: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=_mt3,
         ref_ts=pl1.Monospace(text='MT3'))
-    """The is-well-formed-theory algorithmic inference-rule.
+    """The is-well-formed-theoretical-context algorithmic inference-rule.
 
     Abbreviation: MT3
 
@@ -220,7 +221,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
     None
 
     Conclusion: 
-     - is-well-formed-theory(t)
+     - is-well-formed-theoretical-context(t)
     """
 
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P
@@ -228,7 +229,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formu
     inconsistency_1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             i=(
-                as1.connective_for_is_well_formed_theory(i),
+                as1.connective_for_is_well_formed_theoretical_context(i),
                 i | as1.connective_for_proves | p,
                 i | as1.connective_for_proves | as1.connective_for_logical_negation(p)),
             o=as1.connective_for_is_inconsistent(i),
@@ -250,7 +251,7 @@ with as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formu
     # TODO: Provide references in the doc above.
 
 
-def theory_proves_proposition_algorithm(
+def theoretical_context_proves_proposition_algorithm(
         i: as1.WellFormedTupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
     """An external algorithm for the t-proves-p (T ⊢ P) transformation.
@@ -275,50 +276,61 @@ def theory_proves_proposition_algorithm(
     i: as1.WellFormedTupl = as1.coerce_tuple(s=i)
     if not i.arity == 2:
         if raise_error_if_false:
-            raise u1.ApplicativeError(msg='wrong arguments', iv=i)
+            raise u1.ApplicativeError(
+                msg='Wrong input-values. This algorithm expects a tuple of input-values `i` '
+                    'of arity strictly equal to 2.',
+                i_arity=i.arity,
+                i=i)
         else:
             return False, None
-    p: as1.WellFormedFormula = as1.coerce_formula(phi=i[1])
-    is_well_formed_theory_t: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
+    i0: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])  # is-well-formed-theoretical-context(T)
+    i1: as1.WellFormedFormula = as1.coerce_formula(phi=i[1])  # P
     with as1.let_x_be_a_variable(formula_ts='x') as x:
-        shape: as1.WellFormedFormula = as1.connective_for_is_well_formed_theory(x)
-        ok, m = as1.is_formula_equivalent_with_variables_2(phi=is_well_formed_theory_t,
-                                                           psi=shape,
-                                                           variables={x, })
+        v = {x, }
+        s: as1.WellFormedFormula = as1.connective_for_is_well_formed_theoretical_context(x)
+        ok, m = as1.is_formula_equivalent_with_variables_2(phi=i0,
+                                                           psi=s,
+                                                           variables=v)
         if not ok:
-            raise u1.ApplicativeError(msg='wrong input value i0', is_well_formed_theory_t=is_well_formed_theory_t,
-                                      iv=i)
-    t: as1.WellFormedFormula = is_well_formed_theory_t[0]
-    t: as1.WellFormedTheory = as1.coerce_theory(t=t, interpret_none_as_empty=False, canonical_conversion=False)
-    if as1.is_valid_proposition_so_far_1(p=p, t=t):
+            raise u1.ApplicativeError(
+                msg='The input-value `i0` with index 0 is wrong. Its expected shape is `s` with variables `v`. '
+                    'It follows that `i0` should be formula-equivalent to `s` with variables `v` '
+                    'but this is not the case.',
+                i0=i0,
+                s=s,
+                v=v,
+                i=i)
+    t: as1.WellFormedFormula = i0[0]
+    t: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=t, interpret_none_as_empty=False,
+                                                                         canonical_conversion=False)
+    if as1.is_valid_proposition_so_far_1(p=i1, t=t):
         # Proposition p is valid in the object-theory t.
-        phi: as1.WellFormedFormula = t | as1.connective_for_proves | p
+        phi: as1.WellFormedFormula = t | as1.connective_for_proves | i1
         return True, phi
     else:
         if raise_error_if_false:
             raise u1.ApplicativeError(
-                msg='Blablabla',
-                code=None,
+                msg='`p` is not proven as a valid proposition in `t`.',
+                p=i1,
                 iv=i,
-                t=t,
-                p2=p
+                t=t
             )
         else:
             return False, None
 
 
-theory_proves_proposition_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
-    a=theory_proves_proposition_algorithm,
-    formula_ts=pl1.Monospace(text='theory-proves-proposition-algorithm')
+theoretical_context_proves_proposition_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=theoretical_context_proves_proposition_algorithm,
+    formula_ts=pl1.Monospace(text='theoretical-context-proves-proposition-algorithm')
 )
 
 # INFERENCE-RULE: t-proves-p: T ⊢ P
 
-with as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formula_ts='P') as p:
+with (as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formula_ts='P') as p):
     _t_proves_p: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
-        a=theory_proves_proposition_algorithm_connective,
+        a=theoretical_context_proves_proposition_algorithm_connective,
         i=(
-            as1.connective_for_is_well_formed_theory(i),
+            as1.connective_for_is_well_formed_theoretical_context(i),
             p,),
         o=i | as1.connective_for_proves | p,
         v=(p, i,))

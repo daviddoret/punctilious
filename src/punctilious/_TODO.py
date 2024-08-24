@@ -127,6 +127,14 @@ TODO: IDEA: Develop a three-valued logic:
  - or P is false
  - or P is not decidable in this axiomatization
 
+TODO: When typesetting tuples or enumerations or theory contexts or ...
+    when multiple is_a_predicate are listed consecutively, like:
+    ⌜𝐴⌝ is a well-formed proposition, ⌜𝐵⌝ is a well-formed proposition
+    group them together like this:
+    ⌜𝐴⌝, ⌜𝐵⌝ are well-formed propositions
+
+
+
 QUESTIONS
 
 TODO: QUESTION: AccretingTheory class ??? is this a good idea ???

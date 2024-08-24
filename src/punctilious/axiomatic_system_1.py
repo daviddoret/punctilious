@@ -1481,7 +1481,7 @@ def let_x_be_a_sub_theory_of_y(m: FlexibleTheory, t: FlexibleTheory) -> tuple[We
     m = coerce_theory(t=t)
     t = coerce_theory(t=t)
     # Move this to mt1 and redevelop it to use derivation from mt1 inference-rule.
-    m, a = let_x_be_an_axiom(t=m, s=connective_for_is_well_formed_theory(t))
+    m, a = let_x_be_an_axiom(t=m, s=connective_for_is_well_formed_theoretical_context(t))
     return m, t
 
 
@@ -1534,7 +1534,7 @@ Sample formula: :math:`\\text{is-inconsistent}\\left(\\phi\\right)`
 """
 connective_for_is_well_formed_formula = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
-connective_for_is_well_formed_theory = let_x_be_a_unary_connective(formula_ts='is-well-formed-theory')
+connective_for_is_well_formed_theoretical_context = let_x_be_a_unary_connective(formula_ts='is-well-formed-theory')
 connective_for_is_well_formed_transformation = let_x_be_a_unary_connective(formula_ts='is-well-formed-transformation')
 connective_for_logical_conjunction = let_x_be_a_binary_connective(formula_ts='∧')
 connective_for_logical_negation = let_x_be_a_unary_connective(formula_ts='¬')
@@ -2657,15 +2657,18 @@ class WellFormedTransformationByVariableSubstitution(ABCTransformation, ABC):
         # Step 1b: If an external-algorithm validation is configured on this transformation,
         # call it to check the validity of the input values.
         if self.validation_algorithm is not None:
-            ok, output_value = self.validation_algorithm(i=i, raise_error_if_false=False)
-            if not ok:
+            try:
+                ok, output_value = self.validation_algorithm(i=i, raise_error_if_false=True)
+            except u1.ApplicativeError as err:
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_086,
                                           msg='Transformation failure. '
-                                              'The input-values `i1` are incompatible with validation-algorithm `va`, '
+                                              'The tuple of input-values `i` is incompatible with '
+                                              'the validation-algorithm `a`, '
                                               'of transformation `f`. '
-                                              'The input-shapes `i2` and variables `v` are provided for information.',
-                                          i1=i,
-                                          va=self.validation_algorithm,
+                                              'The tuple of input-shapes `i2` '
+                                              'and the tuple of variables `v` are provided for information.',
+                                          i=i,
+                                          a=self.validation_algorithm,
                                           i2=input_shapes,
                                           v=variables,
                                           f=self)
