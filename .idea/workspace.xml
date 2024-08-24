@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="misc.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_meta_theory_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -766,14 +763,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01042" summary="rename max_derivations to max_components">
-      <option name="closed" value="true" />
-      <created>1723146156419</created>
-      <option name="number" value="01042" />
-      <option name="presentableId" value="LOCAL-01042" />
-      <option name="project" value="LOCAL" />
-      <updated>1723146156420</updated>
-    </task>
     <task id="LOCAL-01043" summary="rename max_derivations to max_components">
       <option name="closed" value="true" />
       <created>1723405573380</created>
@@ -1158,7 +1147,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724527658987</updated>
     </task>
-    <option name="localTasksCounter" value="1091" />
+    <task id="LOCAL-01091" summary="misc.">
+      <option name="closed" value="true" />
+      <created>1724531989356</created>
+      <option name="number" value="01091" />
+      <option name="presentableId" value="LOCAL-01091" />
+      <option name="project" value="LOCAL" />
+      <updated>1724531989356</updated>
+    </task>
+    <option name="localTasksCounter" value="1092" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

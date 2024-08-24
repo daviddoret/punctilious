@@ -81,9 +81,9 @@ class TestMT3:
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')  # simple object
         c = pu.as1.connective_for_is_well_formed_theoretical_context(a)  # This is a formula
         with pytest.raises(pu.u1.ApplicativeError) as error:
-            m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
+            m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=True)
 
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=False)
         assert not ok
 
 
