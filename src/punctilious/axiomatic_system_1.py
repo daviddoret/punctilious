@@ -1373,7 +1373,7 @@ def let_x_be_an_inference_rule(t: FlexibleTheory,
     else:
         raise u1.ApplicativeError(msg='Inference rule declaration error. Inconsistent arguments.', i=i, f=f, c=c, v=v,
                                   d=d, p=p, a=a, t=t)
-
+    i = coerce_inference_rule(i=i)
     t = t.extend_with_component(c=i)
     u1.log_info(i.typeset_as_string(theory=t))
     return t, i
@@ -1407,7 +1407,7 @@ def let_x_be_an_axiom(t: FlexibleTheoreticalContext | None = None, s: typing.Opt
             msg='Both `s` and ``a`` are None. It is mandatory to provide one of these two arguments.')
     elif s is not None:
         a: WellFormedAxiom = WellFormedAxiom(p=s, **kwargs)
-
+    coerce_axiom(a=a)
     t = t.extend_with_component(c=a)
     u1.log_info(a.typeset_as_string(theory=t))
     return t, a
@@ -1441,11 +1441,24 @@ def let_x_be_a_theory(
     :param d: an enumeration of derivations to initialize T. If None, the empty theory is implicitly assumed.
     :return: A python-tuple (m, t).
     """
-    # if 'formula_name_ts' not in kwargs:
-    #    kwargs['formula_name_ts'] = pl1.Script(text='T')
     t: WellFormedTheory = WellFormedTheory(t=t, d=d, **kwargs)
 
     return t
+
+
+def let_x_be_an_axiomatization(
+        a: FlexibleAxiomatization | None = None,
+        d: FlexibleEnumeration | None = None,
+        **kwargs) -> WellFormedAxiomatization:
+    """Declares a new well-formed axiomatization.
+
+    :param a:
+    :param d: an enumeration of derivations to initialize the axiomatization. If None, the empty theory is implicitly assumed.
+    :return: An axiomatization.
+    """
+    a: WellFormedAxiomatization = WellFormedAxiomatization(a=a, d=d, **kwargs)
+
+    return a
 
 
 def let_x_be_a_meta_theory(m: FlexibleTheory | None = None,
@@ -5419,12 +5432,12 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
                                           )
         return connective_for_axiomatization_formula, coerced_components
 
-    def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None):
+    def __new__(cls, a: FlexibleAxiomatization | None = None, d: FlexibleEnumeration = None, **kwargs):
         c, t = WellFormedAxiomatization._data_validation_2(a=a, d=d)
-        o: tuple = super().__new__(cls, con=c, t=t)
+        o: tuple = super().__new__(cls, con=c, t=t, **kwargs)
         return o
 
-    def __init__(self, a: WellFormedAxiomatization | None = None, d: FlexibleEnumeration = None):
+    def __init__(self, a: WellFormedAxiomatization | None = None, d: FlexibleEnumeration = None, **kwargs):
         """Declares a new axiomatization.
 
         :param a: A base axiomatization. If ``None``, the empty axiomatization is assumed as a base.
@@ -5432,7 +5445,7 @@ class WellFormedAxiomatization(WellFormedTheoreticalContext):
             axiomatization.
         """
         c, t = WellFormedAxiomatization._data_validation_2(a=a, d=d)
-        super().__init__(con=c, t=t)
+        super().__init__(con=c, t=t, **kwargs)
         self._heuristics: set[Heuristic, ...] | set[{}] = set()
         if a is not None:
             # Copies the heuristics and any other decoration from the base theory

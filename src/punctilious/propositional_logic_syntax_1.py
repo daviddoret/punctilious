@@ -485,12 +485,12 @@ Instead, it only calls itself recursively.
 """
 
 propositional_logic_syntax_1: as1.WellFormedTheory = as1.WellFormedTheory()
-propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i0, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i1, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i2, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i3, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i4, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_axiom(a=i5, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i0, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i1, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i2, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i3, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i4, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i5, t=propositional_logic_syntax_1)
 propositional_logic_syntax_1.heuristics.add(p_is_a_proposition_heuristic)
 
 
@@ -507,12 +507,12 @@ def extend_theory_with_propositional_logic_syntax_1(
     # return t
     global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
     t: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i0, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i1, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i2, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i3, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i4, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=i5, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=i0, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=i1, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=i2, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=i3, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=i4, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=i5, t=t)
     t.heuristics.add(p_is_a_proposition_heuristic)
     return t
 

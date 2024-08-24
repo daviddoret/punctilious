@@ -1025,6 +1025,24 @@ class Symbols(dict[str, Symbol]):
             Symbol(key='z_lowercase_script', latex_math='\\texttt{z}', unicode_extended='𝓏',
                    unicode_limited='z'))
 
+        # Greek lowercase normal
+        self._alpha_lowercase_serif_normal = self._register(
+            Symbol(key='alpha_lowercase_normal', latex_math='\\alpha', unicode_extended='α',
+                   unicode_limited='alpha'))
+
+        self._phi_lowercase_serif_normal = self._register(
+            Symbol(key='phi_lowercase_normal', latex_math='\\phi', unicode_extended='φ',
+                   unicode_limited='phi'))
+
+        # Greek lowercase bold
+        self._alpha_lowercase_serif_bold = self._register(
+            Symbol(key='alpha_lowercase_bold', latex_math='\\boldsymbol\\alpha', unicode_extended='𝛂',
+                   unicode_limited='alpha'))
+
+        self._phi_lowercase_serif_bold = self._register(
+            Symbol(key='phi_lowercase_bold', latex_math='\\boldsymbol\\phi', unicode_extended='𝛗',
+                   unicode_limited='phi'))
+
     def _register(self, symbol: Symbol):
         self[symbol.key] = symbol
         return symbol
@@ -1649,6 +1667,24 @@ class Symbols(dict[str, Symbol]):
     @property
     def z_lowercase_script(self) -> Symbol:
         return self._z_lowercase_script
+
+    # Greek serif normal
+    @property
+    def alpha_lowercase_serif_normal(self) -> Symbol:
+        return self._alpha_lowercase_serif_normal
+
+    @property
+    def phi_lowercase_serif_normal(self) -> Symbol:
+        return self._phi_lowercase_serif_normal
+
+    # Greek serif bold
+    @property
+    def alpha_lowercase_serif_bold(self) -> Symbol:
+        return self._alpha_lowercase_serif_bold
+
+    @property
+    def phi_lowercase_serif_bold(self) -> Symbol:
+        return self._phi_lowercase_serif_bold
 
 
 symbols = Symbols()

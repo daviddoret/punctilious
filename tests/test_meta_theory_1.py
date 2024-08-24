@@ -8,10 +8,10 @@ class TestMT1:
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         t = pu.as1.let_x_be_a_theory()
         m = pu.as1.let_x_be_a_theory()
-        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1)
+        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1a)
         m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1b)
         c = pu.as1.connective_for_is_well_formed_formula(a)
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(a,), raise_error_if_false=True)
+        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1a, a=(a,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
         # TODO: BUG: Testing the inference-rule does not "work" because as a formula it contains
         #   the variable that it is itself using. This is an interesting case that must be
@@ -20,7 +20,7 @@ class TestMT1:
         # m, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(pu.mt1.mt1,))
         # assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
         c = pu.as1.connective_for_is_well_formed_formula(t)
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(t,))
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1a, a=(t,))
         assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
         c = pu.as1.connective_for_is_a_proposition(c)
@@ -33,8 +33,8 @@ class TestMT1:
 class TestMT2:
     def test_mt2(self):
         m = pu.as1.let_x_be_a_theory()  # The meta-theory
-        m, i1 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1)
-        m, i2 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt2)
+        m, i1 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1a)
+        m, i2 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt2a)
 
         # Test 1: an inference-rule is an inference-rule
         c = pu.as1.connective_for_is_well_formed_inference_rule(i1)  # This is a formula
@@ -51,6 +51,10 @@ class TestMT2:
         c = pu.as1.connective_for_is_well_formed_inference_rule(i2)  # This is a formula
         m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i2, a=(i2,), raise_error_if_false=False)
         assert ok
+        c = pu.as1.connective_for_is_a_proposition(c)
+        m, ok, d = pu.as1.derive_2(t=m, c=c, i=pu.mt1.mt2b)
+        assert ok
+        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
         pass
 
@@ -61,7 +65,7 @@ class TestMT3:
 
         # Proper theory t allows to derive (is-well-formed-theory(t)).
         t = pu.as1.let_x_be_a_theory()  # target or object theory
-        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt3)
+        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt3a)
         c = pu.as1.connective_for_is_well_formed_theoretical_context(t)  # This is a formula
         m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(t,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
@@ -74,6 +78,10 @@ class TestMT3:
 
         m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
         assert not ok
+        c = pu.as1.connective_for_is_a_proposition(c)
+        m, ok, d = pu.as1.derive_2(t=m, c=c, i=pu.mt1.mt3b)
+        assert ok
+        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
 
 class TestTProvesP:
@@ -87,7 +95,7 @@ class TestTProvesP:
         m = pu.as1.let_x_be_a_theory()  # Declare a meta-theory
         m = pu.mt1.extend_theory_with_meta_theory_1(t=m)  # Extend it with meta-theory-1 inference-rules
         c = pu.as1.connective_for_is_well_formed_theoretical_context(t)  # This is a formula
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3, a=(t,), raise_error_if_false=True)
+        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(t,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
         c = t | pu.as1.connective_for_proves | a
@@ -117,7 +125,7 @@ class TestInconsistency1:
         m = pu.as1.let_x_be_a_theory()  # Declare a meta-theory
         m = pu.mt1.extend_theory_with_meta_theory_1(t=m)  # Extend it with meta-theory-1 inference-rules
         c = pu.as1.connective_for_is_well_formed_theoretical_context(t_inconsistent)  # This is a formula
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3, a=(t_inconsistent,), raise_error_if_false=True)
+        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(t_inconsistent,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
         t_proves_a = t_inconsistent | pu.as1.connective_for_proves | a
@@ -171,7 +179,7 @@ class TestInconsistency1:
             # T |-- H is wf-theory [I1]
             m, ok, d = pu.as1.derive_1(
                 t=m, c=pu.as1.connective_for_is_well_formed_theoretical_context(h),
-                p=None, i=pu.mt1.mt3, a=(h,))
+                p=None, i=pu.mt1.mt3a, a=(h,))
             assert ok
             m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_a_proposition(
                 pu.as1.connective_for_is_well_formed_theoretical_context(h)))

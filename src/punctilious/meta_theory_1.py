@@ -148,19 +148,19 @@ is_well_formed_theoretical_context_algorithm_connective: as1.ConnectiveLinkedWit
         formula_ts=pl1.Monospace(text='is-well-formed-theoretical-context-algorithm')
     ))
 
-with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi:
-    algo: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
+    _mt1a: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_formula_algorithm_connective,
         o=as1.connective_for_is_well_formed_formula(phi),
         v={phi, },
         i=(phi,),
         d=None)
-    mt1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=algo,
-        ref_ts=pl1.Monospace(text='MT1'))
-    """The is-well-formed-formula algorithmic inference-rule.
+    mt1a: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=_mt1a,
+        ref_ts=pl1.Monospace(text='MT1a'))
+    """The is-well-formed-formula inference-rule.
 
-    Abbreviation: MT1
+    Abbreviation: MT1a
 
     Variables: {phi}
 
@@ -173,7 +173,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi
      - is-well-formed-formula(phi)
     """
 
-with as1.let_x_be_a_variable(formula_ts='phi') as phi:
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
     mt1b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
             i=(as1.connective_for_is_well_formed_formula(phi),),
@@ -181,38 +181,38 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi:
             v=(phi,)),
         ref_ts=pl1.Monospace(text='MT1b'))
     """Axiom schema: 
-        :math:`\\text{is-a-well-formed-formula}(φ) \\implies 
-        \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-formula}(φ))`
+        :math:`\\text{is-a-well-formed-formula}(𝞅) \\implies 
+        \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-formula}(𝞅))`
 
     Premises:
-     - :math:`\\text{is-a-well-formed-formula}(φ)`
+     - :math:`\\text{is-a-well-formed-formula}(𝞅)`
 
     Variables:
-    :math:`{ φ }`
+    :math:`{ 𝞅 }`
 
     Conclusion: 
-    :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-formula}(φ))` 
+    :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-formula}(𝞅))` 
 
     Note 1:
     ⌜ :math:`\\text{is-a-well-formed-formula}` ⌝ is a predicate. It follows that 
-    ⌜ :math:`\\text{is-a-well-formed-formula}(φ)` ⌝, where :math:`phi` is a variable, 
+    ⌜ :math:`\\text{is-a-well-formed-formula}(𝞅)` ⌝, where :math:`𝞅` is a variable, 
     is a well-formed proposition.
     
     Note 2:
     The Punctilious package only allows the manipulation of well-formed formulas,
-    which leads to the situation that :math:`\\text{is-a-well-formed-formula}(φ)` is always valid.
+    which leads to the situation that :math:`\\text{is-a-well-formed-formula}(𝞅)` is always valid.
     """
     pass
 
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='i')) as i:
-    algo: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+    _mt2a: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_inference_rule_algorithm_connective,
         o=as1.connective_for_is_well_formed_inference_rule(i),
         v={i, },
         i=(i,),
         d=None)
-    mt2: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
-        f=algo,
+    mt2a: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=_mt2a,
         ref_ts=pl1.Monospace(text='MT2'))
     """The is-well-formed-inference-rule(i) inference rule.
 
@@ -226,8 +226,35 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='i')) as i:
     None
 
     Conclusion: 
-     - is-well-formed-theory(i)
+     - is-well-formed-inference-rule(i)
     """
+
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
+    mt2b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=as1.WellFormedTransformationByVariableSubstitution(
+            i=(as1.connective_for_is_well_formed_inference_rule(phi),),
+            o=as1.connective_for_is_a_proposition(as1.connective_for_is_well_formed_inference_rule(phi)),
+            v=(phi,)),
+        ref_ts=pl1.Monospace(text='MT2b'))
+    """Axiom schema: 
+        :math:`\\text{is-a-well-formed-inference-rule}(𝞅) \\implies 
+        \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-inference-rule}(𝞅))`
+
+    Premises:
+     - :math:`\\text{is-a-well-formed-inference-rule}(𝞅)`
+
+    Variables:
+    :math:`{ 𝞅 }`
+
+    Conclusion: 
+    :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-inference-rule}(𝞅))` 
+
+    Note 1:
+    ⌜ :math:`\\text{is-a-well-formed-inference-rule}` ⌝ is a predicate. It follows that 
+    ⌜ :math:`\\text{is-a-well-formed-inference-rule}(𝞅)` ⌝, where :math:`𝞅` is a variable, 
+    is a well-formed proposition.
+    """
+    pass
 
 # INFERENCE-RULE: MT3: is-well-formed-theory
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
@@ -237,7 +264,7 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
         i=(i,),
         v={i, },
         d=None)  # {t, })
-    mt3: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+    mt3a: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=_mt3,
         ref_ts=pl1.Monospace(text='MT3'))
     """The is-well-formed-theoretical-context algorithmic inference-rule.
@@ -254,6 +281,33 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
     Conclusion: 
      - is-well-formed-theoretical-context(t)
     """
+
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
+    mt3b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=as1.WellFormedTransformationByVariableSubstitution(
+            i=(as1.connective_for_is_well_formed_theoretical_context(phi),),
+            o=as1.connective_for_is_a_proposition(as1.connective_for_is_well_formed_theoretical_context(phi)),
+            v=(phi,)),
+        ref_ts=pl1.Monospace(text='MT3b'))
+    """Axiom schema: 
+        :math:`\\text{is-a-well-formed-theoretical-context}(𝞅) \\implies 
+        \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-theoretical-context}(𝞅))`
+
+    Premises:
+     - :math:`\\text{is-a-well-formed-theoretical-context}(𝞅)`
+
+    Variables:
+    :math:`{ 𝞅 }`
+
+    Conclusion: 
+    :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-theoretical-context}(𝞿))` 
+
+    Note 1:
+    ⌜ :math:`\\text{is-a-well-formed-theoretical-context}` ⌝ is a predicate. It follows that 
+    ⌜ :math:`\\text{is-a-well-formed-theoretical-context}(𝞅)` ⌝, where :math:`𝞅` is a variable, 
+    is a well-formed proposition.
+    """
+    pass
 
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P
 with as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formula_ts='P') as p:
@@ -387,7 +441,8 @@ with (as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(form
     # TODO: Provide references in the doc above.
     pass
 
-meta_theory_1 = as1.WellFormedAxiomatization(d=(mt1, mt2, mt3, t_proves_p, inconsistency_1,))
+meta_theory_1 = as1.let_x_be_an_axiomatization(d=(mt1a, mt1b, mt2a, mt2b, mt3a, mt3b, t_proves_p, inconsistency_1,),
+                                               formula_ts=pl1.Script(text='MT1'))
 pass
 
 
@@ -396,13 +451,13 @@ def extend_theory_with_meta_theory_1(t: as1.FlexibleTheory) -> as1.WellFormedThe
      - the meta-theory-1 axioms
 
     """
-    global mt1, mt2, mt3, inconsistency_1
+    global mt1a, mt2a, mt3a, inconsistency_1
     t: as1.WellFormedTheory = as1.coerce_theory(t=t)
-    t, _ = as1.let_x_be_an_axiom(a=mt1, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=mt2, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=mt3, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=t_proves_p, t=t)
-    t, _ = as1.let_x_be_an_axiom(a=inconsistency_1, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=mt1a, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=mt2a, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=mt3a, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=t_proves_p, t=t)
+    t, _ = as1.let_x_be_an_inference_rule(i=inconsistency_1, t=t)
     # t.heuristics.add(p_is_a_proposition_heuristic)
     return t
 
