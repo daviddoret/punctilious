@@ -32,27 +32,28 @@ class TestMT1:
 
 class TestMT2:
     def test_mt2(self):
-        m = pu.as1.let_x_be_a_theory()  # The meta-theory
-        m, i1 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1a)
-        m, i2 = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt2a)
+        t = pu.as1.let_x_be_a_theory()  # The meta-theory
+        t, i1 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt1a)
+        t, i2 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2a)
+        t, i1 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2b)
 
         # Test 1: an inference-rule is an inference-rule
         c = pu.as1.connective_for_is_well_formed_inference_rule(i1)  # This is a formula
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i2, a=(i1,), raise_error_if_false=True)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i2, a=(i1,), raise_error_if_false=True)
         assert ok
 
         # Test 2: a simple-object is not an inference-rule
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         c = pu.as1.connective_for_is_well_formed_inference_rule(a)
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i2, a=(a,), raise_error_if_false=False)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i2, a=(a,), raise_error_if_false=False)
         assert not ok
 
         # Test 3: using is-well-formed-inference-rule on itself.
         c = pu.as1.connective_for_is_well_formed_inference_rule(i2)  # This is a formula
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i2, a=(i2,), raise_error_if_false=False)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i2, a=(i2,), raise_error_if_false=False)
         assert ok
         c = pu.as1.connective_for_is_a_proposition(c)
-        m, ok, d = pu.as1.derive_2(t=m, c=c, i=pu.mt1.mt2b)
+        t, ok, d = pu.as1.derive_2(t=t, c=c, i=pu.mt1.mt2b)
         assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
