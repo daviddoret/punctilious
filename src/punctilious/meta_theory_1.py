@@ -173,6 +173,37 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='phi')) as phi
      - is-well-formed-formula(phi)
     """
 
+with as1.let_x_be_a_variable(formula_ts='phi') as phi:
+    mt1b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=as1.WellFormedTransformationByVariableSubstitution(
+            i=(as1.connective_for_is_well_formed_formula(phi),),
+            o=as1.connective_for_is_a_proposition(as1.connective_for_is_well_formed_formula(phi)),
+            v=(phi,)),
+        ref_ts=pl1.Monospace(text='MT1b'))
+    """Axiom schema: 
+        :math:`\\text{is-a-well-formed-formula}(φ) \\implies 
+        \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-formula}(φ))`
+
+    Premises:
+     - :math:`\\text{is-a-well-formed-formula}(φ)`
+
+    Variables:
+    :math:`{ φ }`
+
+    Conclusion: 
+    :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-formula}(φ))` 
+
+    Note 1:
+    ⌜ :math:`\\text{is-a-well-formed-formula}` ⌝ is a predicate. It follows that 
+    ⌜ :math:`\\text{is-a-well-formed-formula}(φ)` ⌝, where :math:`phi` is a variable, 
+    is a well-formed proposition.
+    
+    Note 2:
+    The Punctilious package only allows the manipulation of well-formed formulas,
+    which leads to the situation that :math:`\\text{is-a-well-formed-formula}(φ)` is always valid.
+    """
+    pass
+
 with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='i')) as i:
     algo: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         a=is_well_formed_inference_rule_algorithm_connective,

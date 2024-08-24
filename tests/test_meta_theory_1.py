@@ -9,6 +9,7 @@ class TestMT1:
         t = pu.as1.let_x_be_a_theory()
         m = pu.as1.let_x_be_a_theory()
         m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1)
+        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1b)
         c = pu.as1.connective_for_is_well_formed_formula(a)
         m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(a,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
@@ -19,7 +20,12 @@ class TestMT1:
         # m, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(pu.mt1.mt1,))
         # assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
         c = pu.as1.connective_for_is_well_formed_formula(t)
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(t,), raise_error_if_false=True)
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(t,))
+        assert ok
+        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
+        c = pu.as1.connective_for_is_a_proposition(c)
+        m, ok, d = pu.as1.derive_2(t=m, c=c, i=pu.mt1.mt1b)
+        assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
         pass
 
