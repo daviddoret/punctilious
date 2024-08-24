@@ -73,6 +73,11 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="NamedScopeManager">
+    <order>
+      <scope name="Limited Project" />
+    </order>
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -206,7 +211,7 @@
     "Python tests.pytest for test_meta_theory_1.TestMT1.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestMT2.executor": "Run",
-    "Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2.executor": "Debug",
     "Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestAdjunction.test_adjunction.executor": "Run",
@@ -387,7 +392,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2">
+  <component name="RunManager" selected="Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -594,23 +599,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_axiomatic_system_1.TestTransformation.test_transformation_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_axiomatic_system_1.TestTransformation.test_transformation_1&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -659,6 +647,23 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_meta_theory_1.TestMT2.test_mt2&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_meta_theory_1.TestMT3.test_mt3" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_meta_theory_1.TestMT3.test_mt3&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -724,10 +729,10 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
-      <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_transformation_1" />
       <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" />
       <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1" />
       <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2" />
+      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -735,11 +740,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" />
-        <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestTransformation.test_transformation_1" />
       </list>
     </recent_temporary>
   </component>
@@ -758,14 +763,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01040" summary="Rename the derivation class to theory component. Rationale: inference-rules are too far-fetched as &quot;derivations&quot;.">
-      <option name="closed" value="true" />
-      <created>1723145780488</created>
-      <option name="number" value="01040" />
-      <option name="presentableId" value="LOCAL-01040" />
-      <option name="project" value="LOCAL" />
-      <updated>1723145780488</updated>
     </task>
     <task id="LOCAL-01041" summary="rename max_derivations to max_components">
       <option name="closed" value="true" />
@@ -1151,7 +1148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724510860717</updated>
     </task>
-    <option name="localTasksCounter" value="1089" />
+    <task id="LOCAL-01089" summary="misc.">
+      <option name="closed" value="true" />
+      <created>1724511450689</created>
+      <option name="number" value="01089" />
+      <option name="presentableId" value="LOCAL-01089" />
+      <option name="project" value="LOCAL" />
+      <updated>1724511450690</updated>
+    </task>
+    <option name="localTasksCounter" value="1090" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1274,13 +1279,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_meta_theory_1.py</url>
-          <line>192</line>
+          <line>194</line>
           <option name="timeStamp" value="222" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_meta_theory_1.py</url>
           <line>55</line>
           <option name="timeStamp" value="227" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_meta_theory_1.py</url>
+          <line>52</line>
+          <option name="timeStamp" value="229" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -132,7 +132,8 @@ def is_well_formed_theoretical_context_algorithm(
             raise u1.ApplicativeError(
                 msg='is-well-formed-theoretical-context algorithm failure: '
                     'The argument `i[0]` is not a well-formed theoretical-context. '
-                    'It follows that the statement :math:`\\text{is-well-formed-theoretical-context}(a_{0})` cannot be derived.',
+                    'It follows that the statement :math:`\\text{is-well-formed-theoretical-context}(a_{0})` '
+                    'cannot be derived.',
                 code=c1.ERROR_CODE_MT1_002,
                 i0=i[0],
                 t1=t1,

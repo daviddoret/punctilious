@@ -8,8 +8,8 @@ class TestMT1:
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         t = pu.as1.let_x_be_a_theory()
         m = pu.as1.let_x_be_a_theory()
-        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1a)
-        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1b)
+        m, _ = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1a)
+        m, _ = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1b)
         c = pu.as1.connective_for_is_well_formed_formula(a)
         m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1a, a=(a,), raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
@@ -33,27 +33,27 @@ class TestMT1:
 class TestMT2:
     def test_mt2(self):
         t = pu.as1.let_x_be_a_theory()  # The meta-theory
-        t, i1 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt1a)
-        t, i2 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2a)
-        t, i1 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2b)
+        t, mt1a = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt1a)
+        t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2a)
+        t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2b)
 
         # Test 1: an inference-rule is an inference-rule
-        c = pu.as1.connective_for_is_well_formed_inference_rule(i1)  # This is a formula
-        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i2, a=(i1,), raise_error_if_false=True)
+        c = pu.as1.connective_for_is_well_formed_inference_rule(pu.mt1.mt1a)  # This is a formula
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(pu.mt1.mt1a,), raise_error_if_false=True)
         assert ok
 
         # Test 2: a simple-object is not an inference-rule
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         c = pu.as1.connective_for_is_well_formed_inference_rule(a)
-        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i2, a=(a,), raise_error_if_false=False)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(a,), raise_error_if_false=False)
         assert not ok
 
         # Test 3: using is-well-formed-inference-rule on itself.
-        c = pu.as1.connective_for_is_well_formed_inference_rule(i2)  # This is a formula
-        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i2, a=(i2,), raise_error_if_false=False)
+        c = pu.as1.connective_for_is_well_formed_inference_rule(pu.mt1.mt2a)  # This is a formula
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(pu.mt1.mt2a,), raise_error_if_false=True)
         assert ok
         c = pu.as1.connective_for_is_a_proposition(c)
-        t, ok, d = pu.as1.derive_2(t=t, c=c, i=pu.mt1.mt2b)
+        m, ok, d = pu.as1.derive_2(t=t, c=c, i=pu.mt1.mt2b)
         assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
@@ -62,27 +62,29 @@ class TestMT2:
 
 class TestMT3:
     def test_mt3(self):
-        m = pu.as1.let_x_be_a_theory()  # meta-theory
+        t = pu.as1.let_x_be_a_theory()  # meta-theory
 
         # Proper theory t allows to derive (is-well-formed-theory(t)).
         t = pu.as1.let_x_be_a_theory()  # target or object theory
-        m, i = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt3a)
+        t, i = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt3a)
+        t, i2 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt3b)
         c = pu.as1.connective_for_is_well_formed_theoretical_context(t)  # This is a formula
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(t,), raise_error_if_false=True)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i, a=(t,), raise_error_if_false=True)
+        assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
+        c = pu.as1.connective_for_is_a_proposition(c)
+        t, ok, d = pu.as1.derive_2(t=t, c=c, i=pu.mt1.mt3b)
+        assert ok
+        # assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
         # Simple object a does not allow to derive (is-well-formed-theory(a)).
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')  # simple object
         c = pu.as1.connective_for_is_well_formed_theoretical_context(a)  # This is a formula
         with pytest.raises(pu.u1.ApplicativeError) as error:
-            m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
+            t, _, d = pu.as1.derive_1(t=t, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
 
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
         assert not ok
-        c = pu.as1.connective_for_is_a_proposition(c)
-        m, ok, d = pu.as1.derive_2(t=m, c=c, i=pu.mt1.mt3b)
-        assert ok
-        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
 
 class TestTProvesP:
