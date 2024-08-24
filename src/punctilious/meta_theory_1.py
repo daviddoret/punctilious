@@ -447,22 +447,15 @@ meta_theory_1 = as1.let_x_be_an_axiomatization(d=(mt1a, mt1b, mt2a, mt2b, mt3a, 
 pass
 
 
-def extend_theory_with_meta_theory_1(t: as1.FlexibleTheory) -> as1.WellFormedTheory:
+def extend_theory_with_meta_theory_1(t: as1.FlexibleTheoreticalContext) -> as1.WellFormedTheoreticalContext:
     """Extends a theory with:
      - the meta-theory-1 axioms
 
     """
-    global mt1a, mt2a, mt3a, inconsistency_1
-    t: as1.WellFormedTheory = as1.coerce_theory(t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=mt1a, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=mt1b, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=mt2a, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=mt2b, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=mt3a, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=mt3b, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=t_proves_p, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=inconsistency_1, t=t)
-    # t.heuristics.add(p_is_a_proposition_heuristic)
+    global meta_theory_1
+    t: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=t)
+    x: as1.WellFormedExtension = as1.WellFormedExtension(t=meta_theory_1)
+    t = as1.extend_with_component(t=t, c=x)
     return t
 
 

@@ -62,18 +62,18 @@ class TestMT2:
 
 class TestMT3:
     def test_mt3(self):
+        m = pu.as1.let_x_be_a_theory()  # meta-theory
+        m = pu.mt1.extend_theory_with_meta_theory_1(t=m)
+
         t = pu.as1.let_x_be_a_theory()  # meta-theory
 
         # Proper theory t allows to derive (is-well-formed-theory(t)).
-        t = pu.as1.let_x_be_a_theory()  # target or object theory
-        t, i = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt3a)
-        t, i2 = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt3b)
         c = pu.as1.connective_for_is_well_formed_theoretical_context(t)  # This is a formula
-        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i, a=(t,), raise_error_if_false=True)
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(t,), raise_error_if_false=True)
         assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-        c = pu.as1.connective_for_is_a_proposition(c)
-        t, ok, d = pu.as1.derive_2(t=t, c=c, i=pu.mt1.mt3b)
+        c2 = pu.as1.connective_for_is_a_proposition(c)
+        m, ok, d = pu.as1.derive_1(t=m, c=c2, p=c, i=pu.mt1.mt3b)
         assert ok
         # assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
@@ -81,9 +81,9 @@ class TestMT3:
         a = pu.as1.let_x_be_a_simple_object(formula_ts='a')  # simple object
         c = pu.as1.connective_for_is_well_formed_theoretical_context(a)  # This is a formula
         with pytest.raises(pu.u1.ApplicativeError) as error:
-            t, _, d = pu.as1.derive_1(t=t, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
+            m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=True)
 
-        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=i, a=(a,), raise_error_if_false=False)
         assert not ok
 
 
