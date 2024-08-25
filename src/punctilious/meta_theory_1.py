@@ -178,7 +178,7 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
     mt1b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
             i=(as1.connective_for_is_well_formed_formula(phi),),
-            o=as1.connective_for_is_a_proposition(as1.connective_for_is_well_formed_formula(phi)),
+            o=as1.connective_for_is_well_formed_proposition(as1.connective_for_is_well_formed_formula(phi)),
             v=(phi,)),
         ref_ts=pl1.Monospace(text='MT1b'))
     """Axiom schema: 
@@ -234,7 +234,7 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
     mt2b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
             i=(as1.connective_for_is_well_formed_inference_rule(phi),),
-            o=as1.connective_for_is_a_proposition(as1.connective_for_is_well_formed_inference_rule(phi)),
+            o=as1.connective_for_is_well_formed_proposition(as1.connective_for_is_well_formed_inference_rule(phi)),
             v=(phi,)),
         ref_ts=pl1.Monospace(text='MT2b'))
     """Axiom schema: 
@@ -267,10 +267,10 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
         d=None)  # {t, })
     mt3a: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=_mt3,
-        ref_ts=pl1.Monospace(text='MT3'))
+        ref_ts=pl1.Monospace(text='MT3a'))
     """The is-well-formed-theoretical-context algorithmic inference-rule.
 
-    Abbreviation: MT3
+    Abbreviation: MT3a
 
     Variables: {t}
 
@@ -286,8 +286,8 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
 with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
     mt3b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
-            i=(as1.connective_for_is_well_formed_theoretical_context(phi),),
-            o=as1.connective_for_is_a_proposition(as1.connective_for_is_well_formed_theoretical_context(phi)),
+            i=(as1.connective_for_is_well_formed_theoretical_context(phi)),
+            o=as1.connective_for_is_well_formed_proposition(as1.connective_for_is_well_formed_theoretical_context(phi)),
             v=(phi,)),
         ref_ts=pl1.Monospace(text='MT3b'))
     """Axiom schema: 
@@ -295,7 +295,7 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
         \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-theoretical-context}(𝞅))`
 
     Premises:
-     - :math:`\\text{is-a-well-formed-theoretical-context}(𝞅)`
+    N/A
 
     Variables:
     :math:`{ 𝞅 }`
@@ -443,7 +443,7 @@ with (as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(form
     pass
 
 meta_theory_1 = as1.let_x_be_an_axiomatization(d=(mt1a, mt1b, mt2a, mt2b, mt3a, mt3b, t_proves_p, inconsistency_1,),
-                                               formula_ts=pl1.Script(text='MT1'))
+                                               ref_ts=pl1.Script(text='MT1'))
 pass
 
 

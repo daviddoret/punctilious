@@ -16,8 +16,8 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
     conjunction_introduction: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             i=(
-                cls1.is_a_proposition(phi),
-                cls1.is_a_proposition(psi),
+                cls1.is_well_formed_proposition(phi),
+                cls1.is_well_formed_proposition(psi),
                 phi,
                 psi,),
             o=phi | cls1.land | psi,
@@ -52,8 +52,8 @@ with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(f
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_1_rule: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         i=(
-            cls1.is_a_proposition(phi),
-            cls1.is_a_proposition(psi),
+            cls1.is_well_formed_proposition(phi),
+            cls1.is_well_formed_proposition(psi),
             phi | cls1.land | psi,),
         o=phi,
         v=(phi, psi,))
@@ -70,8 +70,8 @@ simplification_1_axiom: as1.WellFormedInferenceRule = as1.WellFormedInferenceRul
 with as1.let_x_be_a_variable(formula_ts='phi') as phi, as1.let_x_be_a_variable(formula_ts='psi') as psi:
     simplification_2_rule: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
         i=(
-            cls1.is_a_proposition(phi),
-            cls1.is_a_proposition(psi),
+            cls1.is_well_formed_proposition(phi),
+            cls1.is_well_formed_proposition(psi),
             phi | cls1.land | psi,),
         o=psi,
         v=(phi, psi,))

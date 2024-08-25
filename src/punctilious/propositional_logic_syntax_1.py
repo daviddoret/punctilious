@@ -64,7 +64,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
     i1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
             i=(is_a_propositional_variable(a),),
-            o=is_a_proposition(a),
+            o=is_well_formed_proposition(a),
             v=(a,)),
         ref_ts=pl1.Monospace(text='PLS1'))
     """Axiom schema: A is-a propositional-variable ⊃ A is-a proposition.
@@ -86,8 +86,8 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a:
     i2: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
-            i=(is_a_proposition(a),),
-            o=is_a_proposition(lnot(a)),
+            i=(is_well_formed_proposition(a),),
+            o=is_well_formed_proposition(lnot(a)),
             v=(a,)),
         ref_ts=pl1.Monospace(text='PLS2'))
     """Axiom schema: A is-a proposition ⊃ ¬A is a proposition.
@@ -109,9 +109,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a:
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i3: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
-            i=(is_a_proposition(a),
-               is_a_proposition(b)),
-            o=is_a_proposition(a | land | b),
+            i=(is_well_formed_proposition(a),
+               is_well_formed_proposition(b)),
+            o=is_well_formed_proposition(a | land | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS3'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∧ B) is a proposition).
@@ -134,9 +134,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i4: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
-            i=(is_a_proposition(a),
-               is_a_proposition(b)),
-            o=is_a_proposition(a | implies | b),
+            i=(is_well_formed_proposition(a),
+               is_well_formed_proposition(b)),
+            o=is_well_formed_proposition(a | implies | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS4'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ⊃ B) is a proposition).
@@ -159,9 +159,9 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
 with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formula_ts='B') as b:
     i5: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
-            i=(is_a_proposition(a),
-               is_a_proposition(b)),
-            o=is_a_proposition(a | lor | b),
+            i=(is_well_formed_proposition(a),
+               is_well_formed_proposition(b)),
+            o=is_well_formed_proposition(a | lor | b),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS5'))
     """Axiom schema: (A is-a proposition, B is-a proposition) ⊃ ((A ∨ B) is a proposition).
@@ -185,7 +185,7 @@ with as1.let_x_be_a_variable(formula_ts='A') as a, as1.let_x_be_a_variable(formu
     i6: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
             i=None,
-            o=lnot(is_a_proposition(a)),
+            o=lnot(is_well_formed_proposition(a)),
             v=(a, b,)),
         ref_ts=pl1.Monospace(text='PLS6'))
     """Axiom schema: ?????.
@@ -335,7 +335,7 @@ class PIsAProposition(as1.Heuristic):
 
         with as1.let_x_be_a_meta_variable(formula_ts='P') as p:
             success, m = as1.is_formula_equivalent_with_variables_2(
-                phi=conjecture, psi=is_a_proposition(p), variables=(p,))
+                phi=conjecture, psi=is_well_formed_proposition(p), variables=(p,))
 
             if success:
                 # The conjecture is of the form (P is-a proposition).
@@ -348,7 +348,7 @@ class PIsAProposition(as1.Heuristic):
                     # If P is a propositional-variable:
                     # We can safely derive proposition(p)
                     t, _, _ = as1.derive_1(
-                        c=is_a_proposition(p_value),
+                        c=is_well_formed_proposition(p_value),
                         p=(is_a_propositional_variable(p_value),),
                         i=i1, t=t,
                         raise_error_if_false=True)
@@ -362,14 +362,14 @@ class PIsAProposition(as1.Heuristic):
                         # Retrieve the value assigned to Q.
                         q_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=q)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
+                        t, success = self.process_conjecture(conjecture=is_well_formed_proposition(q_value), t=t)
                         if success:
                             # (Q is-a proposition) is proved.
                             # We can safely derive ((¬Q) is-a proposition).
                             t, _, _ = as1.derive_1(
-                                c=is_a_proposition(lnot(q_value)),
+                                c=is_well_formed_proposition(lnot(q_value)),
                                 p=(
-                                    is_a_proposition(q_value),),
+                                    is_well_formed_proposition(q_value),),
                                 i=i2, t=t, raise_error_if_false=True)
                             return t, True
                         else:
@@ -386,18 +386,18 @@ class PIsAProposition(as1.Heuristic):
                         q_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=q)
                         r_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
+                        t, success = self.process_conjecture(conjecture=is_well_formed_proposition(q_value), t=t)
                         if success:
                             # (Q is-a proposition) is proved.
-                            t, success = self.process_conjecture(conjecture=is_a_proposition(r_value), t=t)
+                            t, success = self.process_conjecture(conjecture=is_well_formed_proposition(r_value), t=t)
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∧ R) is-a proposition).
                                 t, _, _ = as1.derive_1(
-                                    c=is_a_proposition(q_value | land | r_value),
+                                    c=is_well_formed_proposition(q_value | land | r_value),
                                     p=(
-                                        is_a_proposition(q_value),
-                                        is_a_proposition(r_value),),
+                                        is_well_formed_proposition(q_value),
+                                        is_well_formed_proposition(r_value),),
                                     i=i3, t=t, raise_error_if_false=True)
                                 return t, True
                             else:
@@ -417,18 +417,18 @@ class PIsAProposition(as1.Heuristic):
                         q_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=q)
                         r_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
+                        t, success = self.process_conjecture(conjecture=is_well_formed_proposition(q_value), t=t)
                         if success:
                             # (Q is-a proposition) is proved.
-                            t, success = self.process_conjecture(conjecture=is_a_proposition(r_value), t=t)
+                            t, success = self.process_conjecture(conjecture=is_well_formed_proposition(r_value), t=t)
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ⊃ R) is-a proposition).
                                 t, _, _ = as1.derive_1(
-                                    c=is_a_proposition(q_value | implies | r_value),
+                                    c=is_well_formed_proposition(q_value | implies | r_value),
                                     p=(
-                                        is_a_proposition(q_value),
-                                        is_a_proposition(r_value),),
+                                        is_well_formed_proposition(q_value),
+                                        is_well_formed_proposition(r_value),),
                                     i=i4, t=t, raise_error_if_false=True)
                                 return t, True
                             else:
@@ -448,18 +448,18 @@ class PIsAProposition(as1.Heuristic):
                         q_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=q)
                         r_value: as1.WellFormedFormula = as1.get_image_from_map(m=m, preimage=r)
                         # Recursively try to derive (Q is-a proposition).
-                        t, success = self.process_conjecture(conjecture=is_a_proposition(q_value), t=t)
+                        t, success = self.process_conjecture(conjecture=is_well_formed_proposition(q_value), t=t)
                         if success:
                             # (Q is-a proposition) is proved.
-                            t, success = self.process_conjecture(conjecture=is_a_proposition(r_value), t=t)
+                            t, success = self.process_conjecture(conjecture=is_well_formed_proposition(r_value), t=t)
                             if success:
                                 # (R is-a proposition) is proved.
                                 # We can safely derive ((Q ∨ R) is-a proposition).
                                 t, _, _ = as1.derive_1(
-                                    c=is_a_proposition(q_value | lor | r_value),
+                                    c=is_well_formed_proposition(q_value | lor | r_value),
                                     p=(
-                                        is_a_proposition(q_value),
-                                        is_a_proposition(r_value),),
+                                        is_well_formed_proposition(q_value),
+                                        is_well_formed_proposition(r_value),),
                                     i=i5, t=t, raise_error_if_false=True)
                                 return t, True
                             else:
@@ -484,13 +484,15 @@ It is a "closed" heuristic, in the sense that it does not call general derivatio
 Instead, it only calls itself recursively.
 """
 
-propositional_logic_syntax_1: as1.WellFormedTheory = as1.WellFormedTheory()
-propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i0, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i1, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i2, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i3, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i4, t=propositional_logic_syntax_1)
-propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i5, t=propositional_logic_syntax_1)
+propositional_logic_syntax_1: as1.WellFormedAxiomatization = as1.WellFormedAxiomatization(
+    d=(i0, i1, i2, i3, i4, i5,),
+    ref_ts=pl1.Script(text='PLS1'))
+# propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i0, t=propositional_logic_syntax_1)
+# propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i1, t=propositional_logic_syntax_1)
+# propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i2, t=propositional_logic_syntax_1)
+# propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i3, t=propositional_logic_syntax_1)
+# propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i4, t=propositional_logic_syntax_1)
+# propositional_logic_syntax_1, _ = as1.let_x_be_an_inference_rule(i=i5, t=propositional_logic_syntax_1)
 propositional_logic_syntax_1.heuristics.add(p_is_a_proposition_heuristic)
 
 
@@ -507,12 +509,8 @@ def extend_theory_with_propositional_logic_syntax_1(
     # return t
     global i0, i1, i2, i3, i4, i5, p_is_a_proposition_heuristic
     t: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=i0, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=i1, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=i2, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=i3, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=i4, t=t)
-    t, _ = as1.let_x_be_an_inference_rule(i=i5, t=t)
+    x: as1.WellFormedExtension = as1.WellFormedExtension(t=propositional_logic_syntax_1)
+    t: as1.WellFormedTheoreticalContext = as1.extend_with_component(t=t, c=x)
     t.heuristics.add(p_is_a_proposition_heuristic)
     return t
 

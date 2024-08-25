@@ -1537,7 +1537,6 @@ connective_for_hypothesis = let_x_be_a_free_arity_connective(formula_ts='hypothe
 connective_for_logical_implication = let_x_be_a_binary_connective(formula_ts='implies')
 connective_for_inference = let_x_be_a_ternary_connective(formula_ts='inference')
 connective_for_inference_rule = let_x_be_a_unary_connective(formula_ts='inference-rule')
-connective_for_is_a_proposition = UnaryConnective(formula_ts='is-a-proposition')
 connective_for_is_a_propositional_variable = UnaryConnective(formula_ts='is-a-propositional-variable')
 connective_for_is_a_valid_proposition = BinaryConnective(formula_ts='is-a-valid-proposition-in')
 connective_for_is_inconsistent = UnaryConnective(formula_ts='is-inconsistent')
@@ -1547,7 +1546,9 @@ Sample formula: :math:`\\text{is-inconsistent}\\left(\\phi\\right)`
 """
 connective_for_is_well_formed_formula = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
-connective_for_is_well_formed_theoretical_context = let_x_be_a_unary_connective(formula_ts='is-well-formed-theory')
+connective_for_is_well_formed_proposition = UnaryConnective(formula_ts='is-well-formed-proposition')
+connective_for_is_well_formed_theoretical_context = let_x_be_a_unary_connective(
+    formula_ts='is-well-formed-theoretical-context')
 connective_for_is_well_formed_transformation = let_x_be_a_unary_connective(formula_ts='is-well-formed-transformation')
 connective_for_logical_conjunction = let_x_be_a_binary_connective(formula_ts='∧')
 connective_for_logical_negation = let_x_be_a_unary_connective(formula_ts='¬')
@@ -2931,7 +2932,7 @@ def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext
     :return: ``True`` if ``p`` is a well-formed proposition, ``False`` otherwise. The global definition is used it
     ``t`` is ``None``, the local definition with regard to ``t`` is used instead.
     """
-    global connective_for_is_a_proposition
+    global connective_for_is_well_formed_proposition
 
     # Global definition
     # Condition #1: P is a well-formed formula.
@@ -2941,7 +2942,7 @@ def is_well_formed_proposition(p: FlexibleFormula, t: FlexibleTheoreticalContext
         # Local definition
         t: WellFormedTheoreticalContext = coerce_theoretical_context(t=t)
         # Condition #2: T ⊢ is-a-proposition(P).
-        p_is_a_proposition: WellFormedFormula = connective_for_is_a_proposition(p)
+        p_is_a_proposition: WellFormedFormula = connective_for_is_well_formed_proposition(p)
         ok = is_valid_proposition_so_far_1(p=p_is_a_proposition, t=t)
         if not ok:
             if raise_error_if_false:
@@ -4671,8 +4672,8 @@ with let_x_be_a_variable(formula_ts='P') as phi, let_x_be_a_variable(formula_ts=
     modus_ponens_inference_rule: WellFormedInferenceRule = WellFormedInferenceRule(
         f=let_x_be_a_transformation_by_variable_substitution(
             i=(
-                connective_for_is_a_proposition(phi),
-                connective_for_is_a_proposition(psi),
+                connective_for_is_well_formed_proposition(phi),
+                connective_for_is_well_formed_proposition(psi),
                 phi | connective_for_logical_implication | psi,
                 phi),
             o=psi,

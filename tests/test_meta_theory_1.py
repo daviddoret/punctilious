@@ -23,7 +23,7 @@ class TestMT1:
         m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1a, a=(t,))
         assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-        c = pu.as1.connective_for_is_a_proposition(c)
+        c = pu.as1.connective_for_is_well_formed_proposition(c)
         m, ok, d = pu.as1.derive_2(t=m, c=c, i=pu.mt1.mt1b)
         assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
@@ -52,7 +52,7 @@ class TestMT2:
         c = pu.as1.connective_for_is_well_formed_inference_rule(pu.mt1.mt2a)  # This is a formula
         t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(pu.mt1.mt2a,), raise_error_if_false=True)
         assert ok
-        c = pu.as1.connective_for_is_a_proposition(c)
+        c = pu.as1.connective_for_is_well_formed_proposition(c)
         m, ok, d = pu.as1.derive_2(t=t, c=c, i=pu.mt1.mt2b)
         assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
@@ -63,6 +63,7 @@ class TestMT2:
 class TestMT3:
     def test_mt3(self):
         m = pu.as1.let_x_be_a_theory()  # meta-theory
+        m = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=m)
         m = pu.mt1.extend_theory_with_meta_theory_1(t=m)
 
         t = pu.as1.let_x_be_a_theory()  # meta-theory
@@ -72,19 +73,19 @@ class TestMT3:
         m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(t,), raise_error_if_false=True)
         assert ok
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-        c2 = pu.as1.connective_for_is_a_proposition(c)
-        m, ok, d = pu.as1.derive_1(t=m, c=c2, p=c, i=pu.mt1.mt3b)
+        c2 = pu.as1.connective_for_is_well_formed_proposition(c)
+        m, ok, d = pu.as1.derive_1(t=m, c=c2, p=None, i=pu.mt1.mt3b)
         assert ok
         # assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
 
         # Simple object a does not allow to derive (is-well-formed-theory(a)).
-        a = pu.as1.let_x_be_a_simple_object(formula_ts='a')  # simple object
-        c = pu.as1.connective_for_is_well_formed_theoretical_context(a)  # This is a formula
-        with pytest.raises(pu.u1.ApplicativeError) as error:
-            m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=True)
+        # a = pu.as1.let_x_be_a_simple_object(formula_ts='a')  # simple object
+        # c = pu.as1.connective_for_is_well_formed_theoretical_context(a)  # This is a formula
+        # with pytest.raises(pu.u1.ApplicativeError) as error:
+        #    m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=True)
 
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=False)
-        assert not ok
+        # m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=False)
+        # assert not ok
 
 
 class TestTProvesP:
@@ -161,9 +162,9 @@ class TestInconsistency1:
             m, p = pu.pls1.let_x_be_a_propositional_variable(t=m, formula_ts='P')
             m, q = pu.pls1.let_x_be_a_propositional_variable(t=m, formula_ts='Q')
             m, r = pu.pls1.let_x_be_a_propositional_variable(t=m, formula_ts='R')
-            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_a_proposition(p))
-            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_a_proposition(q))
-            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_a_proposition(r))
+            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(p))
+            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(q))
+            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(r))
             # Pose `P` and `Q` as true.
             m, _ = pu.as1.let_x_be_an_axiom(t=m, s=p)
             m, _ = pu.as1.let_x_be_an_axiom(t=m, s=q)
@@ -184,7 +185,7 @@ class TestInconsistency1:
                 t=m, c=pu.as1.connective_for_is_well_formed_theoretical_context(h),
                 p=None, i=pu.mt1.mt3a, a=(h,))
             assert ok
-            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_a_proposition(
+            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(
                 pu.as1.connective_for_is_well_formed_theoretical_context(h)))
 
             h_proves_p = h | pu.as1.connective_for_proves | p

@@ -7,16 +7,16 @@ class TestHeuristic:
     def test_heuristic_basic(self):
         t = pu.pls1.let_x_be_a_propositional_logic_syntax_1_theory()
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='P')
-        assert not pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p), t=t)
-        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p), t=t)
+        assert not pu.as1.is_valid_proposition_so_far_1(p=is_well_formed_proposition(p), t=t)
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_well_formed_proposition(p), t=t)
         assert success
-        assert pu.as1.is_valid_proposition_so_far_1(p=is_a_proposition(p), t=t)
+        assert pu.as1.is_valid_proposition_so_far_1(p=is_well_formed_proposition(p), t=t)
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
-        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p | land | q), t=t)
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_well_formed_proposition(p | land | q), t=t)
         assert success
-        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p | implies | q), t=t)
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_well_formed_proposition(p | implies | q), t=t)
         assert success
-        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_a_proposition(p | lor | q), t=t)
+        t, success = pu.as1.auto_derive_with_heuristics(conjecture=is_well_formed_proposition(p | lor | q), t=t)
         assert success
 
     def test_heuristic_complex(self):
@@ -24,7 +24,7 @@ class TestHeuristic:
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='P')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Q')
         t, success = pu.as1.auto_derive_with_heuristics(
-            conjecture=is_a_proposition((q | lor | q) | implies | (
+            conjecture=is_well_formed_proposition((q | lor | q) | implies | (
                     (p | land | p) | land | (p | lor | (q | implies | lnot(q))))), t=t)
         assert success
 
@@ -35,7 +35,7 @@ class TestAxioms:
 
         # retrieve some basic vocabulary
         # is_a = pu.as1.is_a_connective
-        is_a_proposition = pu.as1.connective_for_is_a_proposition
+        is_a_proposition = pu.as1.connective_for_is_well_formed_proposition
         is_a_propositional_variable = pu.as1.connective_for_is_a_propositional_variable
         land = pu.as1.connective_for_logical_conjunction
         lnot = pu.as1.connective_for_logical_negation
@@ -97,7 +97,7 @@ class TestAxioms:
 
     def test_pl1_2(self):
         # is_a = pu.as1.is_a_connective
-        proposition = pu.as1.connective_for_is_a_proposition
+        proposition = pu.as1.connective_for_is_well_formed_proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='P')
         t, success, _, = pu.as1.auto_derive_2(t=t, c=proposition(p))
         assert success
@@ -106,7 +106,7 @@ class TestAxioms:
     def test_pl1_3(self):
         # is_a = pu.as1.is_a_connective
         # land = pu.as1.connective_for_logical_conjunction
-        proposition = pu.as1.connective_for_is_a_proposition
+        proposition = pu.as1.connective_for_is_well_formed_proposition
         t, p = pu.pls1.let_x_be_a_propositional_variable(t=None, formula_ts='X')
         t, q = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='Y')
         t, success, _ = pu.as1.auto_derive_2(t=t, c=proposition(p))
