@@ -52,7 +52,9 @@ transformation = as1.transformation_by_variable_substitution_connective
 tupl = as1.connective_for_tupl
 extends = as1.connective_for_extension
 
-# PREDICATES
+# META-THEORY PREDICATES
+is_well_formed_axiom = as1.connective_for_is_well_formed_axiom
+is_well_formed_enumeration = as1.connective_for_is_well_formed_enumeration
 is_well_formed_formula = as1.connective_for_is_well_formed_formula
 is_well_formed_inference_rule = as1.connective_for_is_well_formed_inference_rule
 is_well_formed_proposition = as1.connective_for_is_well_formed_proposition

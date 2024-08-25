@@ -1544,6 +1544,8 @@ connective_for_is_inconsistent = UnaryConnective(formula_ts='is-inconsistent')
 
 Sample formula: :math:`\\text{is-inconsistent}\\left(\\phi\\right)`
 """
+connective_for_is_well_formed_axiom = let_x_be_a_unary_connective(formula_ts='is-well-formed-axiom')
+connective_for_is_well_formed_enumeration = let_x_be_a_unary_connective(formula_ts='is-well-formed-enumeration')
 connective_for_is_well_formed_formula = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
 connective_for_is_well_formed_proposition = UnaryConnective(formula_ts='is-well-formed-proposition')

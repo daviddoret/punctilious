@@ -1,5 +1,9 @@
 """
 
+TODO: Complete the implementation of the following predicates:
+    - is-well-formed-axiom
+    - is-well-formed-enumeration
+
 TODO: We need now some basic predicate logic:
     meta-theory algos such as is-well-formed-x(y) must be understood as well-formed propositions.
 

@@ -163,15 +163,18 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
 
     Abbreviation: MT1a
 
-    Variables: {phi}
+    Variables: :math:`\\{𝞅\\}`
 
-    Arguments: {phi}
+    Arguments: :math:`\\{𝞅\\}`
 
     Premises:
     None
+    
+    Algorithm:
+    :func:`is_well_formed_formula_algorithm`
 
     Conclusion: 
-     - is-well-formed-formula(phi)
+    :math:`is-well-formed-formula(𝞅)`
     """
 
 with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
