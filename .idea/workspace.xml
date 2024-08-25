@@ -7,9 +7,6 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="misc.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -766,14 +763,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01045" summary="rename max_derivations to max_components">
-      <option name="closed" value="true" />
-      <created>1723547822283</created>
-      <option name="number" value="01045" />
-      <option name="presentableId" value="LOCAL-01045" />
-      <option name="project" value="LOCAL" />
-      <updated>1723547822283</updated>
-    </task>
     <task id="LOCAL-01046" summary="pursue the implementation of theoretical context and extensions.">
       <option name="closed" value="true" />
       <created>1723582918338</created>
@@ -1158,7 +1147,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724565991973</updated>
     </task>
-    <option name="localTasksCounter" value="1094" />
+    <task id="LOCAL-01094" summary="misc.">
+      <option name="closed" value="true" />
+      <created>1724566747976</created>
+      <option name="number" value="01094" />
+      <option name="presentableId" value="LOCAL-01094" />
+      <option name="project" value="LOCAL" />
+      <updated>1724566747976</updated>
+    </task>
+    <option name="localTasksCounter" value="1095" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
