@@ -62,33 +62,8 @@ class TestMT2:
 
 
 class TestMT3:
+
     def test_mt3(self):
-        m = pu.as1.let_x_be_a_theory()  # meta-theory
-        m = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=m)
-        m = pu.mt1.extend_theory_with_meta_theory_1(t=m)
-
-        t = pu.as1.let_x_be_a_theory()  # meta-theory
-
-        # Proper theory t allows to derive (is-well-formed-theory(t)).
-        c = pu.as1.connective_for_is_well_formed_theoretical_context(t)  # This is a formula
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(t,), raise_error_if_false=True)
-        assert ok
-        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-        c2 = pu.as1.connective_for_is_well_formed_proposition(c)
-        m, ok, d = pu.as1.derive_1(t=m, c=c2, p=None, i=pu.mt1.mt3b)
-        assert ok
-        # assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-
-        # Simple object a does not allow to derive (is-well-formed-theory(a)).
-        # a = pu.as1.let_x_be_a_simple_object(formula_ts='a')  # simple object
-        # c = pu.as1.connective_for_is_well_formed_theoretical_context(a)  # This is a formula
-        # with pytest.raises(pu.u1.ApplicativeError) as error:
-        #    m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=True)
-
-        # m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=False)
-        # assert not ok
-
-    def test_mt3_new(self):
         t = pu.as1.let_x_be_a_theory()
         t = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
         t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
