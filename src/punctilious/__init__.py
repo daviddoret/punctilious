@@ -47,12 +47,6 @@ csl1.inference_rule.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='inference-rule')
 csl1.inference_rule.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='inference-rule')
-csl1.is_well_formed_formula.formula_ts = as1.typesetters.is_a_predicate(
-    conventional_class='well-formed formula')
-csl1.is_well_formed_inference_rule.formula_ts = as1.typesetters.is_a_predicate(
-    conventional_class='well-formed inference-rule')
-csl1.is_well_formed_theoretical_context.formula_ts = as1.typesetters.is_a_predicate(
-    conventional_class='well-formed theoretical context')
 csl1.theory_formula.formula_ts = as1.typesetters.classical_formula(
     connective_typesetter='theory')
 csl1.axiomatization.formula_ts = as1.typesetters.classical_formula(
@@ -63,10 +57,22 @@ csl1.map_formula.formula_ts = as1.typesetters.map()
 csl1.derivation.formula_ts = as1.typesetters.derivation()
 csl1.is_a_propositional_variable.formula_ts = as1.typesetters.is_a_predicate(
     conventional_class='well-formed propositional variable')
-csl1.is_well_formed_proposition.formula_ts = as1.typesetters.is_a_predicate(
-    conventional_class='well-formed proposition')
 csl1.proves.formula_ts = as1.typesetters.infix_formula(
     connective_typesetter=pl1.symbols.turnstile)
 csl1.extends.formula_ts = as1.typesetters.classical_formula(connective_typesetter='extends')
 # TODO: Implement a rich-string typesetter in PL1
 csl1.is_inconsistent.formula_ts = as1.typesetters.unary_postfix_formula(connective_typesetter='⊢ ⊥')
+
+# Meta-theory predicates
+csl1.is_well_formed_axiom.formula_ts = as1.typesetters.is_a_predicate(
+    conventional_class='well-formed axiom')
+csl1.is_well_formed_enumeration.formula_ts = as1.typesetters.is_a_predicate(
+    conventional_class='well-formed enumeration')
+csl1.is_well_formed_formula.formula_ts = as1.typesetters.is_a_predicate(
+    conventional_class='well-formed formula')
+csl1.is_well_formed_inference_rule.formula_ts = as1.typesetters.is_a_predicate(
+    conventional_class='well-formed inference-rule')
+csl1.is_well_formed_theoretical_context.formula_ts = as1.typesetters.is_a_predicate(
+    conventional_class='well-formed theoretical context')
+csl1.is_well_formed_proposition.formula_ts = as1.typesetters.is_a_predicate(
+    conventional_class='well-formed proposition')

@@ -50,10 +50,82 @@ def is_well_formed_formula_algorithm(
             return False, None
 
 
-is_well_formed_formula_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
-    a=is_well_formed_formula_algorithm,
-    formula_ts=pl1.Monospace(text='is-well-formed-formula-algorithm')
-)
+def is_well_formed_axiom_algorithm(
+        i: as1.WellFormedTupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
+    """An algorithm to verify is-well-formedness of axioms in meta-theories.
+
+    :param i: A tuple of formulas, denoted as the input values.
+    :param raise_error_if_false: If ``True``, raises an error instead of returning ``(False, None)``.
+    :return: ``True, o`` where ``o`` is the algorithm output formula, or ``False, None`` if the transformation is not
+        valid.
+    """
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
+    if not i.arity == 1:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-axiom-algorithm failure. '
+                    'The arity of the tuple of input-values `i` is not equal to 1.',
+                i=i,
+                raise_error_if_false=raise_error_if_false)
+        else:
+            return False, None
+    i0: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
+    if as1.is_well_formed_axiom(a=i0):
+        a: as1.WellFormedAxiom = as1.coerce_axiom(a=i0)
+        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_axiom(a)
+        return True, phi
+    else:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-axiom-algorithm failure. '
+                    'The element `i0` of the tuples of input-values `i` is not a well-formed axiom. '
+                    'It follows that the statement `is-well-formed-axiom(i0)` cannot be derived.',
+                i0=i[0],
+                i=i,
+                raise_error_if_false=raise_error_if_false
+            )
+        else:
+            return False, None
+
+
+def is_well_formed_enumeration_algorithm(
+        i: as1.WellFormedTupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
+    """An algorithm to verify is-well-formedness of enumerations in meta-theories.
+
+    :param i: A tuple of formulas, denoted as the input values.
+    :param raise_error_if_false: If ``True``, raises an error instead of returning ``(False, None)``.
+    :return: ``True, o`` where ``o`` is the algorithm output formula, or ``False, None`` if the transformation is not
+        valid.
+    """
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
+    if not i.arity == 1:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-enumeration-algorithm failure. '
+                    'The arity of the tuple of input-values `i` is not equal to 1.',
+                i=i,
+                raise_error_if_false=raise_error_if_false)
+        else:
+            return False, None
+    i0: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
+    if as1.is_well_formed_enumeration(e=i0):
+        e: as1.WellFormedEnumeration = as1.coerce_enumeration(e=i0)
+        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_enumeration(e)
+        return True, phi
+    else:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-enumeration-algorithm failure. '
+                    'The element `i0` of the tuples of input-values `i` is not a well-formed enumeration. '
+                    'It follows that the statement `is-well-formed-enumeration(i0)` cannot be derived.',
+                i0=i[0],
+                i=i,
+                raise_error_if_false=raise_error_if_false
+            )
+        else:
+            return False, None
 
 
 def is_well_formed_inference_rule_algorithm(
@@ -95,6 +167,20 @@ def is_well_formed_inference_rule_algorithm(
         else:
             return False, None
 
+
+is_well_formed_axiom_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_well_formed_axiom_algorithm,
+    formula_ts=pl1.Monospace(text='is-well-formed-axiom-algorithm')
+)
+is_well_formed_enumeration_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_well_formed_enumeration_algorithm,
+    formula_ts=pl1.Monospace(text='is-well-formed-enumeration-algorithm')
+)
+
+is_well_formed_formula_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_well_formed_formula_algorithm,
+    formula_ts=pl1.Monospace(text='is-well-formed-formula-algorithm')
+)
 
 is_well_formed_inference_rule_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
     a=is_well_formed_inference_rule_algorithm,
@@ -313,6 +399,65 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
     """
     pass
 
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
+    _mt4a: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+        a=is_well_formed_axiom_algorithm_connective,
+        o=as1.connective_for_is_well_formed_axiom(phi),
+        v={phi, },
+        i=(phi,),
+        d=None)
+    mt4a: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=_mt4a,
+        ref_ts=pl1.Monospace(text='MT4a'))
+    """The is-well-formed-axiom inference-rule.
+
+    Abbreviation: MT4a
+
+    Variables: :math:`\\{𝞅\\}`
+
+    Arguments: :math:`\\{𝞅\\}`
+
+    Premises:
+    None
+
+    Algorithm:
+    :func:`is_well_formed_axiom_algorithm`
+
+    Conclusion: 
+    :math:`is-well-formed-axiom(𝞅)`
+    """
+
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
+    mt4b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=as1.WellFormedTransformationByVariableSubstitution(
+            i=(as1.connective_for_is_well_formed_axiom(phi),),
+            o=as1.connective_for_is_well_formed_proposition(as1.connective_for_is_well_formed_axiom(phi)),
+            v=(phi,)),
+        ref_ts=pl1.Monospace(text='MT4b'))
+    """Axiom schema: 
+        :math:`\\text{is-a-well-formed-axiom}(𝞅) \\implies 
+        \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-axiom}(𝞅))`
+
+    Premises:
+     - :math:`\\text{is-a-well-formed-axiom}(𝞅)`
+
+    Variables:
+    :math:`{ 𝞅 }`
+
+    Conclusion: 
+    :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-axiom}(𝞅))` 
+
+    Note 1:
+    ⌜ :math:`\\text{is-a-well-formed-axiom}` ⌝ is a predicate. It follows that 
+    ⌜ :math:`\\text{is-a-well-formed-axiom}(𝞅)` ⌝, where :math:`𝞅` is a variable, 
+    is a well-formed proposition.
+
+    Note 2:
+    The Punctilious package only allows the manipulation of well-formed formulas,
+    which leads to the situation that :math:`\\text{is-a-well-formed-axiom}(𝞅)` is always valid.
+    """
+    pass
+
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P
 with as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formula_ts='P') as p:
     inconsistency_1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
@@ -445,8 +590,10 @@ with (as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(form
     # TODO: Provide references in the doc above.
     pass
 
-meta_theory_1 = as1.let_x_be_an_axiomatization(d=(mt1a, mt1b, mt2a, mt2b, mt3a, mt3b, t_proves_p, inconsistency_1,),
-                                               ref_ts=pl1.Script(text='MT1'))
+meta_theory_1 = as1.let_x_be_an_axiomatization(
+    d=(mt1a, mt1b, mt2a, mt2b, mt3a, mt3b, mt4a, mt4b,
+       t_proves_p, inconsistency_1,),
+    ref_ts=pl1.Script(text='MT1'))
 pass
 
 

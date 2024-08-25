@@ -88,6 +88,32 @@ class TestMT3:
         # assert not ok
 
 
+class TestMT4:
+    def test_mt4(self):
+        t = pu.as1.let_x_be_a_theory()
+        t = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
+        t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
+        t = pu.mt1.extend_theory_with_meta_theory_1(t=t)
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='P')
+        t, a = pu.as1.let_x_be_an_axiom(t=t, s=p)
+
+        # A well-formed axiom is... a well-formed axiom
+        c = pu.as1.connective_for_is_well_formed_axiom(a)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt4a, a=(a,), raise_error_if_false=True)
+        assert ok
+
+        # And the resulting predicate is a well-formed proposition
+        c2 = pu.as1.connective_for_is_well_formed_proposition(c)
+        t, ok, d = pu.as1.derive_1(t=t, c=c2, p=None, i=pu.mt1.mt4b, a=(c,), raise_error_if_false=True)
+        assert ok
+
+        # A ill-formed axiom is... not a well-formed axiom
+        b = pu.as1.let_x_be_a_simple_object(formula_ts='B')
+        c = pu.as1.connective_for_is_well_formed_axiom(b)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt4a, a=(a,), raise_error_if_false=False)
+        assert not ok
+
+
 class TestTProvesP:
     def test_t_proves_p(self):
         t = pu.as1.let_x_be_a_theory()
