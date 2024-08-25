@@ -4,60 +4,61 @@ import punctilious as pu
 
 
 class TestMT1:
+
     def test_mt1(self):
-        a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
         t = pu.as1.let_x_be_a_theory()
-        m = pu.as1.let_x_be_a_theory()
-        m, _ = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1a)
-        m, _ = pu.as1.let_x_be_an_inference_rule(t=m, i=pu.mt1.mt1b)
-        c = pu.as1.connective_for_is_well_formed_formula(a)
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1a, a=(a,), raise_error_if_false=True)
-        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-        # TODO: BUG: Testing the inference-rule does not "work" because as a formula it contains
-        #   the variable that it is itself using. This is an interesting case that must be
-        #   further investigated and solved.
-        # c = is_well_formed_formula_predicate(i)
-        # m, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1, a=(pu.mt1.mt1,))
-        # assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-        c = pu.as1.connective_for_is_well_formed_formula(t)
-        m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt1a, a=(t,))
+        t = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
+        t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
+        t = pu.mt1.extend_theory_with_meta_theory_1(t=t)
+        a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
+        e = pu.as1.WellFormedEnumeration(e=(a, b, c,))
+
+        # A well-formed formula is... a well-formed formula
+        c = pu.as1.connective_for_is_well_formed_formula(e)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt1a, a=(e,), raise_error_if_false=True)
         assert ok
-        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-        c = pu.as1.connective_for_is_well_formed_proposition(c)
-        m, ok, d = pu.as1.derive_2(t=m, c=c, i=pu.mt1.mt1b)
+
+        # And the resulting predicate is a well-formed proposition
+        c2 = pu.as1.connective_for_is_well_formed_proposition(c)
+        t, ok, d = pu.as1.derive_1(t=t, c=c2, p=None, i=pu.mt1.mt1b, a=(c,), raise_error_if_false=True)
         assert ok
-        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-        pass
+
+        # In Punctilious, every formula is a well-formed formula
+        c = pu.as1.connective_for_is_well_formed_formula(b)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt1a, a=(b,), raise_error_if_false=False)
+        assert ok
 
 
 class TestMT2:
-    def test_mt2(self):
-        t = pu.as1.let_x_be_a_theory()  # The meta-theory
-        t, mt1a = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt1a)
-        t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2a)
-        t, _ = pu.as1.let_x_be_an_inference_rule(t=t, i=pu.mt1.mt2b)
 
-        # Test 1: an inference-rule is an inference-rule
-        c = pu.as1.connective_for_is_well_formed_inference_rule(pu.mt1.mt1a)  # This is a formula
-        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(pu.mt1.mt1a,), raise_error_if_false=True)
+    def test_mt2(self):
+        t = pu.as1.let_x_be_a_theory()
+        t = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
+        t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
+        t = pu.mt1.extend_theory_with_meta_theory_1(t=t)
+
+        # A well-formed inference rule is... a well-formed inference rule
+        i = pu.ml1.pl05
+        c = pu.as1.connective_for_is_well_formed_inference_rule(i)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(i,), raise_error_if_false=True)
         assert ok
 
-        # Test 2: a simple-object is not an inference-rule
-        a = pu.as1.let_x_be_a_simple_object(formula_ts='a')
-        c = pu.as1.connective_for_is_well_formed_inference_rule(a)
-        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(a,), raise_error_if_false=False)
+        # And the resulting predicate is a well-formed proposition
+        c2 = pu.as1.connective_for_is_well_formed_proposition(c)
+        t, ok, d = pu.as1.derive_1(t=t, c=c2, p=None, i=pu.mt1.mt2b, a=(c,), raise_error_if_false=True)
+        assert ok
+
+        # An ill-formed inference rule is... not a well-formed inference rule
+        b = pu.as1.let_x_be_a_simple_object(formula_ts='B')
+        c = pu.as1.connective_for_is_well_formed_inference_rule(b)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(b,), raise_error_if_false=False)
         assert not ok
 
-        # Test 3: using is-well-formed-inference-rule on itself.
-        c = pu.as1.connective_for_is_well_formed_inference_rule(pu.mt1.mt2a)  # This is a formula
-        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(pu.mt1.mt2a,), raise_error_if_false=True)
+        # The `is well-formed inference rule` inference-rule is... a well-formed inference rule
+        i = pu.mt1.mt2a
+        c = pu.as1.connective_for_is_well_formed_inference_rule(i)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt2a, a=(i,), raise_error_if_false=True)
         assert ok
-        c = pu.as1.connective_for_is_well_formed_proposition(c)
-        m, ok, d = pu.as1.derive_2(t=t, c=c, i=pu.mt1.mt2b)
-        assert ok
-        assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
-
-        pass
 
 
 class TestMT3:
