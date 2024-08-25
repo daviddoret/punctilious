@@ -114,6 +114,31 @@ class TestMT4:
         assert not ok
 
 
+class TestMT5:
+    def test_mt5(self):
+        t = pu.as1.let_x_be_a_theory()
+        t = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
+        t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
+        t = pu.mt1.extend_theory_with_meta_theory_1(t=t)
+        a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
+        e = pu.as1.WellFormedEnumeration(e=(a, b, c,))
+
+        # A well-formed enumeration is... a well-formed enumeration
+        c = pu.as1.connective_for_is_well_formed_enumeration(e)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt5a, a=(e,), raise_error_if_false=True)
+        assert ok
+
+        # And the resulting predicate is a well-formed proposition
+        c2 = pu.as1.connective_for_is_well_formed_proposition(c)
+        t, ok, d = pu.as1.derive_1(t=t, c=c2, p=None, i=pu.mt1.mt5b, a=(c,), raise_error_if_false=True)
+        assert ok
+
+        # A ill-formed enumeration is... not a well-formed enumeration
+        c = pu.as1.connective_for_is_well_formed_enumeration(b)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt5a, a=(b,), raise_error_if_false=False)
+        assert not ok
+
+
 class TestTProvesP:
     def test_t_proves_p(self):
         t = pu.as1.let_x_be_a_theory()

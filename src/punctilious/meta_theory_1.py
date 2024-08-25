@@ -409,22 +409,22 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
     mt4a: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=_mt4a,
         ref_ts=pl1.Monospace(text='MT4a'))
-    """The is-well-formed-axiom inference-rule.
+    """The **is-well-formed-axiom** inference-rule.
 
     Abbreviation: MT4a
+
+    Axiom schema: 
+        𝞅 ⊢ :math:`\\text{is-a-well-formed-axiom}(𝞅)`
 
     Variables: :math:`\\{𝞅\\}`
 
     Arguments: :math:`\\{𝞅\\}`
 
-    Premises:
-    None
+    Premises: None
 
-    Algorithm:
-    :func:`is_well_formed_axiom_algorithm`
+    Algorithm: :func:`is_well_formed_axiom_algorithm`
 
-    Conclusion: 
-    :math:`is-well-formed-axiom(𝞅)`
+    Conclusion:  :math:`\\text{is-well-formed-axiom}(𝞅)`
     """
 
 with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
@@ -434,27 +434,84 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
             o=as1.connective_for_is_well_formed_proposition(as1.connective_for_is_well_formed_axiom(phi)),
             v=(phi,)),
         ref_ts=pl1.Monospace(text='MT4b'))
-    """Axiom schema: 
-        :math:`\\text{is-a-well-formed-axiom}(𝞅) \\implies 
+    """The **is-well-formed-axiom-is-well-formed-proposition** inference rule. 
+
+    Abbreviation: MT4b
+    
+    Axiom schema: 
+        :math:`\\text{is-a-well-formed-axiom}(𝞅) ⊢ 
         \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-axiom}(𝞅))`
 
     Premises:
      - :math:`\\text{is-a-well-formed-axiom}(𝞅)`
 
-    Variables:
-    :math:`{ 𝞅 }`
+    Variables: :math:`\\{ 𝞅 \\}`
 
-    Conclusion: 
-    :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-axiom}(𝞅))` 
+    Conclusion: :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-axiom}(𝞅))` 
 
-    Note 1:
+    Rationale:
     ⌜ :math:`\\text{is-a-well-formed-axiom}` ⌝ is a predicate. It follows that 
     ⌜ :math:`\\text{is-a-well-formed-axiom}(𝞅)` ⌝, where :math:`𝞅` is a variable, 
     is a well-formed proposition.
 
-    Note 2:
-    The Punctilious package only allows the manipulation of well-formed formulas,
-    which leads to the situation that :math:`\\text{is-a-well-formed-axiom}(𝞅)` is always valid.
+    """
+    pass
+
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
+    _mt5a: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+        a=is_well_formed_enumeration_algorithm_connective,
+        o=as1.connective_for_is_well_formed_enumeration(phi),
+        v={phi, },
+        i=(phi,),
+        d=None)
+    mt5a: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=_mt5a,
+        ref_ts=pl1.Monospace(text='MT5a'))
+    """The **is-well-formed-enumeration** inference-rule.
+
+    Abbreviation: MT5a
+
+    Axiom schema: 
+        𝞅 ⊢ :math:`\\text{is-a-well-formed-enumeration}(𝞅)`
+
+    Variables: :math:`\\{𝞅\\}`
+
+    Arguments: :math:`\\{𝞅\\}`
+
+    Premises: None
+
+    Algorithm: :func:`is_well_formed_enumeration_algorithm`
+
+    Conclusion:  :math:`\\text{is-well-formed-enumeration}(𝞅)`
+    """
+
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
+    mt5b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=as1.WellFormedTransformationByVariableSubstitution(
+            i=(as1.connective_for_is_well_formed_enumeration(phi),),
+            o=as1.connective_for_is_well_formed_proposition(as1.connective_for_is_well_formed_enumeration(phi)),
+            v=(phi,)),
+        ref_ts=pl1.Monospace(text='MT5b'))
+    """The **is-well-formed-enumeration-is-well-formed-proposition** inference rule. 
+
+    Abbreviation: MT5b
+
+    Axiom schema: 
+        :math:`\\text{is-a-well-formed-enumeration}(𝞅) ⊢ 
+        \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-enumeration}(𝞅))`
+
+    Premises:
+     - :math:`\\text{is-a-well-formed-enumeration}(𝞅)`
+
+    Variables: :math:`\\{ 𝞅 \\}`
+
+    Conclusion: :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-enumeration}(𝞅))` 
+
+    Rationale:
+    ⌜ :math:`\\text{is-a-well-formed-enumeration}` ⌝ is a predicate. It follows that 
+    ⌜ :math:`\\text{is-a-well-formed-enumeration}(𝞅)` ⌝, where :math:`𝞅` is a variable, 
+    is a well-formed proposition.
+
     """
     pass
 
@@ -591,7 +648,7 @@ with (as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(form
     pass
 
 meta_theory_1 = as1.let_x_be_an_axiomatization(
-    d=(mt1a, mt1b, mt2a, mt2b, mt3a, mt3b, mt4a, mt4b,
+    d=(mt1a, mt1b, mt2a, mt2b, mt3a, mt3b, mt4a, mt4b, mt5a, mt5b,
        t_proves_p, inconsistency_1,),
     ref_ts=pl1.Script(text='MT1'))
 pass
