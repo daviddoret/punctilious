@@ -88,6 +88,36 @@ class TestMT3:
         # m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(a,), raise_error_if_false=False)
         # assert not ok
 
+    def test_mt3_new(self):
+        t = pu.as1.let_x_be_a_theory()
+        t = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
+        t = pu.ml1.extend_theory_with_minimal_logic_1(t=t)
+        t = pu.mt1.extend_theory_with_meta_theory_1(t=t)
+
+        t2 = pu.as1.let_x_be_a_theory()
+        # t2 = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t2)
+
+        # A well-formed theory is... a well-formed theoretical context
+        c = pu.as1.connective_for_is_well_formed_theoretical_context(t2)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt3a, a=(t2,), raise_error_if_false=True)
+        assert ok
+
+        # And the resulting predicate is a well-formed proposition
+        c2 = pu.as1.connective_for_is_well_formed_proposition(c)
+        t, ok, d = pu.as1.derive_1(t=t, c=c2, p=None, i=pu.mt1.mt3b, a=(c,), raise_error_if_false=True)
+        assert ok
+
+        # An ill-formed theoretical context is... not a well-formed theoretical context
+        b = pu.as1.let_x_be_a_simple_object(formula_ts='B')
+        c = pu.as1.connective_for_is_well_formed_theoretical_context(b)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt3a, a=(b,), raise_error_if_false=False)
+        assert not ok
+
+        # The `meta-theory-1` or the current theory is... a well-formed theoretical context
+        c = pu.as1.connective_for_is_well_formed_theoretical_context(t)
+        t, ok, d = pu.as1.derive_1(t=t, c=c, p=None, i=pu.mt1.mt3a, a=(t,), raise_error_if_false=True)
+        assert ok
+
 
 class TestMT4:
     def test_mt4(self):

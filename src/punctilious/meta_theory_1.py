@@ -168,6 +168,46 @@ def is_well_formed_inference_rule_algorithm(
             return False, None
 
 
+def is_well_formed_theoretical_context_algorithm(
+        i: as1.WellFormedTupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
+    """An algorithm to verify is-well-formedness of theoretical contexts in meta-theories.
+
+    :param i: A tuple of formulas, denoted as the input values.
+    :param raise_error_if_false: If ``True``, raises an error instead of returning ``(False, None)``.
+    :return: ``True, o`` where ``o`` is the algorithm output formula, or ``False, None`` if the transformation is not
+        valid.
+    """
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
+    if not i.arity == 1:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-theoretical-context-algorithm failure. '
+                    'The arity of the tuple of input-values `i` is not equal to 1.',
+                i=i,
+                raise_error_if_false=raise_error_if_false)
+        else:
+            return False, None
+    i0: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
+    if as1.is_well_formed_theoretical_context(t=i0):
+        t: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=i0, interpret_none_as_empty=False,
+                                                                             canonical_conversion=False)
+        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_theoretical_context(t)
+        return True, phi
+    else:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-theoretical-context-algorithm failure. '
+                    'The element `i0` of the tuples of input-values `i` is not a well-formed theoretical context. '
+                    'It follows that the statement `is-well-formed-theoretical-context(i0)` cannot be derived.',
+                i0=i[0],
+                i=i,
+                raise_error_if_false=raise_error_if_false
+            )
+        else:
+            return False, None
+
+
 is_well_formed_axiom_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
     a=is_well_formed_axiom_algorithm,
     formula_ts=pl1.Monospace(text='is-well-formed-axiom-algorithm')
@@ -187,53 +227,10 @@ is_well_formed_inference_rule_algorithm_connective: as1.ConnectiveLinkedWithAlgo
     formula_ts=pl1.Monospace(text='is-well-formed-inference-rule-algorithm')
 )
 
-
-def is_well_formed_theoretical_context_algorithm(
-        i: as1.WellFormedTupl | None = None,
-        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
-    """A python-function used as a theory external algorithm to verify is-well-formed-theory of a formula.
-
-    :param i: A tuple of formulas, denoted as the input values.
-    :param raise_error_if_false: If `True`, raises an error instead of returning `False, None`.
-    :return: `True, o` where `o` is the algorithm output formula, or `False, None` if the transformation is not valid.
-    """
-    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
-    if not i.arity == 1:
-        if raise_error_if_false:
-            raise u1.ApplicativeError(
-                code=c1.ERROR_CODE_MT1_004,
-                msg='is-well-formed-theoretical-context algorithm failure: '
-                    'The number of input-values provided to the algorithm is not equal to 1.',
-                i=i)
-        else:
-            return False, None
-    t1: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
-    if as1.is_well_formed_theoretical_context(t=t1):
-        t1: as1.WellFormedTheoreticalContext = as1.coerce_theoretical_context(t=t1, interpret_none_as_empty=False,
-                                                                              canonical_conversion=False)
-        phi: as1.WellFormedFormula = as1.connective_for_is_well_formed_theoretical_context(t1)
-        return True, phi
-    else:
-        if raise_error_if_false:
-            raise u1.ApplicativeError(
-                msg='is-well-formed-theoretical-context algorithm failure: '
-                    'The argument `i[0]` is not a well-formed theoretical-context. '
-                    'It follows that the statement :math:`\\text{is-well-formed-theoretical-context}(a_{0})` '
-                    'cannot be derived.',
-                code=c1.ERROR_CODE_MT1_002,
-                i0=i[0],
-                t1=t1,
-                i=i
-            )
-        else:
-            return False, None
-
-
-is_well_formed_theoretical_context_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = (
-    as1.ConnectiveLinkedWithAlgorithm(
-        a=is_well_formed_theoretical_context_algorithm,
-        formula_ts=pl1.Monospace(text='is-well-formed-theoretical-context-algorithm')
-    ))
+is_well_formed_theoretical_context_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_well_formed_theoretical_context_algorithm,
+    formula_ts=pl1.Monospace(text='is-well-formed-theoretical-context-algorithm')
+)
 
 with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
     _mt1a: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
@@ -375,27 +372,30 @@ with as1.let_x_be_a_variable(formula_ts=as1.typesetters.text(text='t')) as i:
 with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
     mt3b: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.WellFormedTransformationByVariableSubstitution(
-            i=(as1.connective_for_is_well_formed_theoretical_context(phi)),
+            i=(as1.connective_for_is_well_formed_theoretical_context(phi),),
             o=as1.connective_for_is_well_formed_proposition(as1.connective_for_is_well_formed_theoretical_context(phi)),
             v=(phi,)),
         ref_ts=pl1.Monospace(text='MT3b'))
-    """Axiom schema: 
-        :math:`\\text{is-a-well-formed-theoretical-context}(𝞅) \\implies 
+    """The **is-well-formed-theoretical-context-is-well-formed-proposition** inference rule. 
+
+    Abbreviation: MT3b
+
+    Axiom schema: 
+        :math:`\\text{is-a-well-formed-theoretical-context}(𝞅) ⊢ 
         \\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-theoretical-context}(𝞅))`
 
     Premises:
-    N/A
+     - :math:`\\text{is-a-well-formed-theoretical-context}(𝞅)`
 
-    Variables:
-    :math:`{ 𝞅 }`
+    Variables: :math:`\\{ 𝞅 \\}`
 
-    Conclusion: 
-    :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-theoretical-context}(𝞿))` 
+    Conclusion: :math:`\\text{is-a-well-formed-proposition}(\\text{is-a-well-formed-theoretical-context}(𝞅))` 
 
-    Note 1:
+    Rationale:
     ⌜ :math:`\\text{is-a-well-formed-theoretical-context}` ⌝ is a predicate. It follows that 
     ⌜ :math:`\\text{is-a-well-formed-theoretical-context}(𝞅)` ⌝, where :math:`𝞅` is a variable, 
     is a well-formed proposition.
+
     """
     pass
 
