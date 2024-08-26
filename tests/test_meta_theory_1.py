@@ -162,9 +162,10 @@ class TestTProvesP:
         c = t | pu.as1.connective_for_proves | a
         p = (pu.as1.connective_for_is_well_formed_theoretical_context(t),)
         a = (a,)
-        m, _, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.t_proves_p, a=a,
-                                  raise_error_if_false=True)
+        m, ok, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.t_proves_p, a=a,
+                                   raise_error_if_false=True)
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
+        assert ok
 
         b = pu.as1.let_x_be_a_simple_object(formula_ts='b')
         c = t | pu.as1.connective_for_proves | b
@@ -222,10 +223,12 @@ class TestInconsistency1:
             m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(p))
             m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(q))
             m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(r))
-            # Pose `P` and `Q` as true.
+
+            # Pose `M |-- P` and `M |-- Q`.
             m, _ = pu.as1.let_x_be_an_axiom(t=m, s=p)
             m, _ = pu.as1.let_x_be_an_axiom(t=m, s=q)
-            # (Q, R) |-- not(P)
+
+            # Pose (Q, R) |-- not(P)
             m, i1 = pu.as1.let_x_be_an_inference_rule(
                 t=m, f=pu.as1.WellFormedTransformationByVariableSubstitution(o=pu.csl1.lnot(p), v=None, i=(q, r,)))
 
@@ -233,35 +236,40 @@ class TestInconsistency1:
             # H |-- R
             h = pu.as1.WellFormedHypothesis(b=m, a=r)
 
-            # Which leads to the `lnot(P)` theorem.
             # H |-- not(P) [I1]
             h, ok, _ = pu.as1.derive_2(t=h, c=pu.csl1.lnot(p), i=i1, raise_error_if_false=True)
 
-            # T |-- H is wf-theory [I1]
-            m, ok, d = pu.as1.derive_1(
-                t=m, c=pu.as1.connective_for_is_well_formed_theoretical_context(h),
-                p=None, i=pu.mt1.mt3a, a=(h,))
+            # M |-- H is wf-theory [MT3a]
+            # A well-formed theory is... a well-formed theoretical context
+            c = pu.as1.connective_for_is_well_formed_theoretical_context(h)
+            m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(h,), raise_error_if_false=True)
             assert ok
-            m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(
-                pu.as1.connective_for_is_well_formed_theoretical_context(h)))
+
+            # M |-- (H is wf-theory) is wf-proposition [MT3b]
+            c2 = pu.as1.connective_for_is_well_formed_proposition(c)
+            m, ok, d = pu.as1.derive_1(t=m, c=c2, p=None, i=pu.mt1.mt3b, a=(c,), raise_error_if_false=True)
+            assert ok
 
             h_proves_p = h | pu.as1.connective_for_proves | p
-            p = (pu.as1.connective_for_is_well_formed_theoretical_context(h),)
-            m, ok, d = pu.as1.derive_1(t=m, c=h_proves_p, p=p, i=pu.mt1.t_proves_p, a=(h,))
+            premises = (pu.as1.connective_for_is_well_formed_theoretical_context(h),)
+            a = (p,)
+            m, ok, d = pu.as1.derive_1(t=m, c=h_proves_p, p=premises, i=pu.mt1.t_proves_p, a=a,
+                                       raise_error_if_false=True)
             assert ok
 
-            not_a = pu.as1.connective_for_logical_negation(p)
-            h_proves_not_p = h | pu.as1.connective_for_proves | not_a
-            p = (pu.as1.connective_for_is_well_formed_theoretical_context(t_inconsistent),)
-            m, _, d = pu.as1.derive_1(t=m, c=h_proves_not_p, p=p, i=pu.mt1.t_proves_p, a=(not_a,),
-                                      raise_error_if_false=True)
-            assert pu.as1.is_formula_equivalent(phi=h_proves_not_p, psi=d.valid_statement)
+            h_proves_not_p = h | pu.as1.connective_for_proves | pu.csl1.lnot(p)
+            premises = (pu.as1.connective_for_is_well_formed_theoretical_context(h),)
+            a = (pu.csl1.lnot(p),)
+            m, ok, d = pu.as1.derive_1(t=m, c=h_proves_not_p, p=premises, i=pu.mt1.t_proves_p, a=a,
+                                       raise_error_if_false=True)
+            assert ok
 
-            c = pu.as1.connective_for_is_inconsistent(t_inconsistent)
-            p = (pu.as1.connective_for_is_well_formed_theoretical_context(t_inconsistent),
-                 h_proves_p,
-                 h_proves_not_p,)
-            m, _, d = pu.as1.derive_1(t=m, c=c, p=p, i=pu.mt1.inconsistency_1, a=None,
-                                      raise_error_if_false=True)
+            c = pu.as1.connective_for_is_inconsistent(h)
+            premises = (pu.as1.connective_for_is_well_formed_theoretical_context(h),
+                        h_proves_p,
+                        h_proves_not_p,)
+            m, ok, d = pu.as1.derive_1(t=m, c=c, p=premises, i=pu.mt1.inconsistency_1, a=None,
+                                       raise_error_if_false=True)
             assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
+            assert ok
             pass

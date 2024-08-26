@@ -516,15 +516,15 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
     pass
 
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P
-with as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(formula_ts='P') as p:
+with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
     inconsistency_1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
         f=as1.let_x_be_a_transformation_by_variable_substitution(
             i=(
-                as1.connective_for_is_well_formed_theoretical_context(i),
-                i | as1.connective_for_proves | p,
-                i | as1.connective_for_proves | as1.connective_for_logical_negation(p)),
-            o=as1.connective_for_is_inconsistent(i),
-            v={p, i, }),
+                as1.connective_for_is_well_formed_theoretical_context(t),
+                t | as1.connective_for_proves | p,
+                t | as1.connective_for_proves | as1.connective_for_logical_negation(p)),
+            o=as1.connective_for_is_inconsistent(t),
+            v={p, t, }),
         ref_ts=pl1.Monospace(text='⊥1'))
     """The inconsistency-1 inference rule: P and ¬P
 
@@ -634,6 +634,9 @@ with (as1.let_x_be_a_variable(formula_ts='T') as i, as1.let_x_be_a_variable(form
 
     Premises:
      1. is-a-well-formed-theory(T)
+     
+    Arguments:
+        - 
 
     *. This premise is expressed in the object-theory T, and not in the current meta-theory.
        This means that we must be able to express premises in an object-theory.
