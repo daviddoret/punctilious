@@ -284,6 +284,4 @@ class TestInconsistency1:
             assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
             assert ok
 
-            pu.mt1.XXX
-
             pass
