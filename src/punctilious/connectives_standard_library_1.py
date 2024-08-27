@@ -51,6 +51,7 @@ theory_formula = as1.connective_for_theory
 transformation = as1.transformation_by_variable_substitution_connective
 tupl = as1.connective_for_tupl
 extends = as1.connective_for_extension
+poses = as1.connective_for_poses
 
 # META-THEORY PREDICATES
 is_well_formed_axiom = as1.connective_for_is_well_formed_axiom

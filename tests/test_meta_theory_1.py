@@ -212,8 +212,12 @@ class TestInconsistency1:
         assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
         pass
 
-    class TestHypothesis:
-        def test_hypothesis(self):
+    class TestReductioAdAbsurdum:
+        def test_reduction_ad_absurdum(self):
+            """Pose a hypothesis R, proves the hypothesis leads to a contradiction, then infer ¬R.
+
+            :return:
+            """
             m = pu.as1.let_x_be_a_theory()  # Declare a meta-theory
             m = pu.mt1.extend_theory_with_meta_theory_1(t=m)  # Extend it with meta-theory-1 inference-rules
             m = pu.ml1.extend_theory_with_minimal_logic_1(t=m)
@@ -224,32 +228,36 @@ class TestInconsistency1:
             m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(q))
             m, _, _ = pu.as1.auto_derive_2(t=m, c=pu.as1.connective_for_is_well_formed_proposition(r))
 
-            # Pose `M |-- P` and `M |-- Q`.
+            # M ⊢ P
             m, _ = pu.as1.let_x_be_an_axiom(t=m, s=p)
+
+            # M ⊢ Q
             m, _ = pu.as1.let_x_be_an_axiom(t=m, s=q)
 
-            # Pose (Q, R) |-- not(P)
+            # M: (Q, R) ⊢ ¬P
             m, i1 = pu.as1.let_x_be_an_inference_rule(
                 t=m, f=pu.as1.WellFormedTransformationByVariableSubstitution(o=pu.csl1.lnot(p), v=None, i=(q, r,)))
 
             # Pose the `R` hypothesis
-            # H |-- R
+            # H ⊢ R
             h = pu.as1.WellFormedHypothesis(b=m, a=r)
 
-            # H |-- not(P) [I1]
+            # H ⊢ ¬P [I1]
             h, ok, _ = pu.as1.derive_2(t=h, c=pu.csl1.lnot(p), i=i1, raise_error_if_false=True)
+            assert ok
 
-            # M |-- H is wf-theory [MT3a]
+            # M ⊢ H is wf-theory [MT3a]
             # A well-formed theory is... a well-formed theoretical context
             c = pu.as1.connective_for_is_well_formed_theoretical_context(h)
             m, ok, d = pu.as1.derive_1(t=m, c=c, p=None, i=pu.mt1.mt3a, a=(h,), raise_error_if_false=True)
             assert ok
 
-            # M |-- (H is wf-theory) is wf-proposition [MT3b]
+            # M ⊢ (H is wf-theory) is wf-proposition [MT3b]
             c2 = pu.as1.connective_for_is_well_formed_proposition(c)
             m, ok, d = pu.as1.derive_1(t=m, c=c2, p=None, i=pu.mt1.mt3b, a=(c,), raise_error_if_false=True)
             assert ok
 
+            # M ⊢ (H ⊢ P)
             h_proves_p = h | pu.as1.connective_for_proves | p
             premises = (pu.as1.connective_for_is_well_formed_theoretical_context(h),)
             a = (p,)
@@ -257,6 +265,7 @@ class TestInconsistency1:
                                        raise_error_if_false=True)
             assert ok
 
+            # M ⊢ (H ⊢ ¬P)
             h_proves_not_p = h | pu.as1.connective_for_proves | pu.csl1.lnot(p)
             premises = (pu.as1.connective_for_is_well_formed_theoretical_context(h),)
             a = (pu.csl1.lnot(p),)
@@ -264,6 +273,8 @@ class TestInconsistency1:
                                        raise_error_if_false=True)
             assert ok
 
+            # Prove the hypothesis leads to a contradiction.
+            # M ⊢ (H ⊢ ⊥)
             c = pu.as1.connective_for_is_inconsistent(h)
             premises = (pu.as1.connective_for_is_well_formed_theoretical_context(h),
                         h_proves_p,
@@ -272,4 +283,7 @@ class TestInconsistency1:
                                        raise_error_if_false=True)
             assert pu.as1.is_formula_equivalent(phi=c, psi=d.valid_statement)
             assert ok
+
+            pu.mt1.XXX
+
             pass

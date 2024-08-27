@@ -1547,6 +1547,10 @@ Sample formula: :math:`\\text{is-inconsistent}\\left(\\phi\\right)`
 connective_for_is_well_formed_axiom = let_x_be_a_unary_connective(formula_ts='is-well-formed-axiom')
 connective_for_is_well_formed_enumeration = let_x_be_a_unary_connective(formula_ts='is-well-formed-enumeration')
 connective_for_is_well_formed_formula = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
+connective_for_is_globally_well_formed_hypothesis = let_x_be_a_unary_connective(
+    formula_ts='is-globally-well-formed-hypothesis')
+connective_for_is_locally_well_formed_hypothesis = let_x_be_a_unary_connective(
+    formula_ts='is-locally-well-formed-hypothesis')
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
 connective_for_is_well_formed_proposition = UnaryConnective(formula_ts='is-well-formed-proposition')
 connective_for_is_well_formed_theoretical_context = let_x_be_a_unary_connective(
@@ -1557,6 +1561,12 @@ connective_for_logical_negation = let_x_be_a_unary_connective(formula_ts='¬')
 connective_for_logical_disjunction = let_x_be_a_binary_connective(formula_ts='∨')
 connective_for_map = let_x_be_a_binary_connective(formula_ts='map')
 connective_for_proves = let_x_be_a_binary_connective(formula_ts='⊢')
+connective_for_poses = let_x_be_a_unary_connective(
+    formula_ts='poses')
+"""Connective for the `poses` operator. The `poses` operator signals the fact that a hypothesis poses some conjecture 
+or assumption.
+"""
+
 connective_for_theorem = let_x_be_a_free_arity_connective(formula_ts='theorem')
 connective_for_theory = let_x_be_a_free_arity_connective(formula_ts='theory-formula')
 """The connective that signals a :math:`theory` formula.
@@ -2992,12 +3002,12 @@ def is_well_formed_hypothesis(
         raise_error_if_false: bool = False) -> bool:
     """Returns ``True`` if and only if ``h`` is a well-formed hypothesis, ``False`` otherwise.
 
-    TODO: Check that assumption is a proposition instead of just checking it is a formula.
+    TODO: Check that assumption is a proposition in the parent theory instead of just checking it is a formula.
 
-    :param t:
+    :param t: (conditional) A theoretical context. Uses the local definition of well-formed hypothesis if this argument
+        is provided.
     :param h: A formula that may or may not be a well-formed hypothesis.
-    :param raise_error_if_false: If the argument is ``True``, the function raises an AS1-082 error instead of returning
-        ``False``.
+    :param raise_error_if_false: If ``True``, the function raises an error instead of returning ``False``.
     :return: bool.
     """
     h: WellFormedFormula = coerce_formula(phi=h)
@@ -3008,9 +3018,9 @@ def is_well_formed_hypothesis(
             if not ok:
                 if raise_error_if_false:
                     raise u1.ApplicativeError(
-                        msg='Locally ill-formed hypothesis. `h` is a globally well-formed hypothesis but it is not locally '
-                            'well-formed with regard to `t`, because its base theory is not axiomatically equivalent to '
-                            '`t`.',
+                        msg='Locally ill-formed hypothesis. `h` is a globally well-formed hypothesis but it is not '
+                            'locally well-formed with regard to `t`, because its base theory is not axiomatically '
+                            'equivalent to `t`.',
                         h=h,
                         t=t,
                         raise_error_if_false=raise_error_if_false)
@@ -6244,7 +6254,7 @@ def auto_derive_4(
 class WellFormedHypothesis(WellFormedTheoreticalContext):
     """A well-formed hypothesis.
 
-    An hypothesis is a specialization of a theoretical context.
+    A hypothesis is a specialization of a theoretical context.
 
     A well-formed formula :math:`\\phi` is a globally well-formed hypothesis if and only if:
      - its root connective is the hypothesis connective,
@@ -6265,11 +6275,12 @@ class WellFormedHypothesis(WellFormedTheoreticalContext):
         - 𝓐 is an axiom, denoted as the assumption.
         - ... are some (if any) valid theory components.
 
-    Note: Specializing hypothesis as a first class object in the axiomatic system data model is not
-    necessary. In effect, an equivalent axiomatic system may be built with only theories and no
-    hypothesis, nor axiomatization. Even theories could be stripped from the data model, considering
-    only tuples whose elements are well-formed derivations. But specializing hypothesis as a first
-    class object enriches the model and allows for more natural expression and simplified automations.
+    Note: Specializing hypothesis as a first class object in the axiomatic system data model (i.e. with
+    a dedicated connective signaling its presence in formulas) is not
+    strictly necessary. In effect, an equivalent axiomatic system may be built with only theories and no
+    hypothesis (nor axiomatization, for that matter). Even theories could be stripped from the data model,
+    considering only tuples whose elements are well-formed theory derivations. But specializing hypothesis
+    as a first class object improves natural readability, at the expense of increased model complexity.
     """
     BASE_THEORY_INDEX: int = 0
     ASSUMPTION_INDEX: int = 1

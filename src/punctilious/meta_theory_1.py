@@ -128,6 +128,47 @@ def is_well_formed_enumeration_algorithm(
             return False, None
 
 
+def is_globally_well_formed_hypothesis_algorithm(
+        i: as1.WellFormedTupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
+    """An algorithm to verify the global well-formedness of hypothesis in meta-theories.
+
+
+
+    :param i: A tuple of formulas, denoted as the input values which contains a single element ``h``.
+    :param raise_error_if_false: If ``True``, raises an error instead of returning ``(False, None)``.
+    :return: ``True, o`` where ``o`` is the algorithm output formula, or ``False, None`` if the transformation is not
+        valid.
+    """
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
+    if not i.arity == 1:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-hypothesis-algorithm failure. '
+                    'The arity of the tuple of input-values `i` is not equal to 1.',
+                i=i,
+                raise_error_if_false=raise_error_if_false)
+        else:
+            return False, None
+    i0: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
+    if as1.is_well_formed_hypothesis(h=i0):
+        h: as1.WellFormedHypothesis = as1.coerce_hypothesis(h=i0)
+        phi: as1.WellFormedFormula = as1.connective_for_is_globally_well_formed_hypothesis(h)
+        return True, phi
+    else:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-well-formed-hypothesis-algorithm failure. '
+                    'The element `i0` of the tuples of input-values `i` is not a well-formed hypothesis. '
+                    'It follows that the statement `is-well-formed-hypothesis(i0)` cannot be derived.',
+                i0=i[0],
+                i=i,
+                raise_error_if_false=raise_error_if_false
+            )
+        else:
+            return False, None
+
+
 def is_well_formed_inference_rule_algorithm(
         i: as1.WellFormedTupl | None = None,
         raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
@@ -215,6 +256,10 @@ is_well_formed_axiom_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = a
 is_well_formed_enumeration_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
     a=is_well_formed_enumeration_algorithm,
     formula_ts=pl1.Monospace(text='is-well-formed-enumeration-algorithm')
+)
+is_globally_well_formed_hypothesis_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_globally_well_formed_hypothesis_algorithm,
+    formula_ts=pl1.Monospace(text='is-globally-well-formed-hypothesis-algorithm')
 )
 
 is_well_formed_formula_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
@@ -515,6 +560,34 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
     """
     pass
 
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi:
+    _mt6a: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+        a=is_globally_well_formed_hypothesis_algorithm_connective,
+        o=as1.connective_for_is_globally_well_formed_hypothesis(phi),
+        v={phi, },
+        i=(phi,),
+        d=None)
+    mt6a: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=_mt5a,
+        ref_ts=pl1.Monospace(text='MT6g'))
+    """The **is-globally-well-formed-hypothesis** inference-rule.
+
+    Abbreviation: MT6g
+
+    Axiom schema: 
+        𝞅 ⊢ :math:`\\text{is-a-globally-well-formed-hypothesis}(𝞅)`
+
+    Variables: :math:`\\{𝞅\\}`
+
+    Arguments: :math:`\\{𝞅\\}`
+
+    Premises: None
+
+    Algorithm: :func:`is_globally_well_formed_hypothesis_algorithm`
+
+    Conclusion:  :math:`\\text{is-globally-well-formed-hypothesis}(𝞅)`
+    """
+
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P
 with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formula_ts='P') as p:
     inconsistency_1: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
@@ -534,6 +607,33 @@ with as1.let_x_be_a_variable(formula_ts='T') as t, as1.let_x_be_a_variable(formu
      1. is-a-well-formed-theory(T)
      2. T ⊢ P
      3. T ⊢ ¬P 
+
+    Conclusion: T ⊢ ⊥
+
+    References:
+    """
+    # TODO: Provide references in the doc above.
+
+# INFERENCE-RULE: Reduction Ad Absurdum
+with as1.let_x_be_a_variable(formula_ts='H') as h, as1.let_x_be_a_variable(formula_ts='P') as p:
+    reduction_ad_absurdum: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=as1.let_x_be_a_transformation_by_variable_substitution(
+            i=(
+                as1.connective_for_is_globally_well_formed_hypothesis(h),
+                h | as1.connective_for_poses | p,
+                as1.connective_for_is_inconsistent(h)
+            ),
+            o=as1.connective_for_logical_negation(p),
+            v={h, p, }),
+        ref_ts=pl1.Monospace(text='RAA'))
+    """The reductio ad absurdum inference rule.
+
+    Abbreviation: RAA
+
+    Premises:
+     1. is-a-well-formed-hypothesis(H)
+     2. is-a-well-formed-proposition(P)
+     3. H ⊢ ¬P 
 
     Conclusion: T ⊢ ⊥
 
