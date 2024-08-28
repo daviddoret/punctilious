@@ -1549,8 +1549,12 @@ connective_for_is_well_formed_enumeration = let_x_be_a_unary_connective(formula_
 connective_for_is_well_formed_formula = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 connective_for_is_globally_well_formed_hypothesis = let_x_be_a_unary_connective(
     formula_ts='is-globally-well-formed-hypothesis')
+"""The conventional connector for the is-globally-well-formed-hypothesis predicate.
+"""
 connective_for_is_locally_well_formed_hypothesis = let_x_be_a_unary_connective(
     formula_ts='is-locally-well-formed-hypothesis')
+"""The conventional connector for the is-locally-well-formed-hypothesis predicate.
+"""
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
 connective_for_is_well_formed_proposition = UnaryConnective(formula_ts='is-well-formed-proposition')
 connective_for_is_well_formed_theoretical_context = let_x_be_a_unary_connective(

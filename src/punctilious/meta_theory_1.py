@@ -158,10 +158,54 @@ def is_globally_well_formed_hypothesis_algorithm(
     else:
         if raise_error_if_false:
             raise u1.ApplicativeError(
-                msg='is-well-formed-hypothesis-algorithm failure. '
+                msg='is-globally-well-formed-hypothesis-algorithm failure. '
                     'The element `i0` of the tuples of input-values `i` is not a well-formed hypothesis. '
                     'It follows that the statement `is-well-formed-hypothesis(i0)` cannot be derived.',
                 i0=i[0],
+                i=i,
+                raise_error_if_false=raise_error_if_false
+            )
+        else:
+            return False, None
+
+
+def is_locally_well_formed_hypothesis_algorithm(
+        i: as1.WellFormedTupl | None = None,
+        raise_error_if_false: bool = True) -> [bool, as1.WellFormedFormula | None]:
+    """An algorithm to verify the local well-formedness of hypothesis with regard to theoretical contexts in
+    meta-theories.
+
+    :param i: A tuple of formulas, denoted as the input values which contains a single element ``h``.
+    :param raise_error_if_false: If ``True``, raises an error instead of returning ``(False, None)``.
+    :return: ``True, o`` where ``o`` is the algorithm output formula, or ``False, None`` if the transformation is not
+        valid.
+    """
+    i: as1.WellFormedTupl = as1.coerce_tuple(s=i, interpret_none_as_empty=False, canonic_conversion=False)
+    if not i.arity == 2:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-locally-well-formed-hypothesis-algorithm failure. '
+                    'The arity of the tuple of input-values `i` is not equal to 1.',
+                i=i,
+                raise_error_if_false=raise_error_if_false)
+        else:
+            return False, None
+    i0: as1.WellFormedFormula = as1.coerce_formula(phi=i[0])
+    i1: as1.WellFormedFormula = as1.coerce_formula(phi=i[1])
+    if as1.is_well_formed_hypothesis(h=i0) and as1.is_well_formed_theoretical_context(
+            t=i1) and as1.is_well_formed_hypothesis(h=i0, t=i1):
+        h: as1.WellFormedHypothesis = as1.coerce_hypothesis(h=i0)
+        phi: as1.WellFormedFormula = as1.connective_for_is_locally_well_formed_hypothesis(h)
+        return True, phi
+    else:
+        if raise_error_if_false:
+            raise u1.ApplicativeError(
+                msg='is-locally-well-formed-hypothesis-algorithm failure. '
+                    'The element `i0` of the tuples of input-values `i` is not a locally well-formed hypothesis, '
+                    'with regard to element `i1`. '
+                    'It follows that the statement `is-well-formed-hypothesis(i0)` cannot be derived.',
+                i0=i[0],
+                i1=i[1],
                 i=i,
                 raise_error_if_false=raise_error_if_false
             )
@@ -260,6 +304,10 @@ is_well_formed_enumeration_algorithm_connective: as1.ConnectiveLinkedWithAlgorit
 is_globally_well_formed_hypothesis_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
     a=is_globally_well_formed_hypothesis_algorithm,
     formula_ts=pl1.Monospace(text='is-globally-well-formed-hypothesis-algorithm')
+)
+is_locally_well_formed_hypothesis_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
+    a=is_locally_well_formed_hypothesis_algorithm,
+    formula_ts=pl1.Monospace(text='is-locally-well-formed-hypothesis-algorithm')
 )
 
 is_well_formed_formula_algorithm_connective: as1.ConnectiveLinkedWithAlgorithm = as1.ConnectiveLinkedWithAlgorithm(
@@ -586,6 +634,38 @@ with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as
     Algorithm: :func:`is_globally_well_formed_hypothesis_algorithm`
 
     Conclusion:  :math:`\\text{is-globally-well-formed-hypothesis}(𝞅)`
+    """
+
+with as1.let_x_be_a_variable(formula_ts=pl1.symbols.phi_lowercase_serif_bold) as phi, as1.let_x_be_a_variable(
+        formula_ts=pl1.symbols.psi_lowercase_serif_bold) as psi:
+    _mt6l: as1.WellFormedTransformationByVariableSubstitution = as1.let_x_be_a_transformation_by_variable_substitution(
+        a=is_locally_well_formed_hypothesis_algorithm_connective,
+        o=as1.connective_for_is_locally_well_formed_hypothesis(phi),
+        v={phi, psi, },
+        i=(phi, psi,),
+        d=None)
+    mt6l: as1.WellFormedInferenceRule = as1.WellFormedInferenceRule(
+        f=_mt5a,
+        ref_ts=pl1.Monospace(text='MT6l'))
+    """The **is-locally-well-formed-hypothesis** inference-rule.
+    
+    If 𝛙 is a theoretical context and if 𝞅 is a locally well-formed hypothesis in 𝛙, derives: 
+    :math:`\\text{is-a-locally-well-formed-hypothesis}(𝞅)` .
+
+    Abbreviation: MT6g
+
+    Axiom schema: 
+        𝞅, 𝛙 ⊢ :math:`\\text{is-a-locally-well-formed-hypothesis}(𝞅)`
+
+    Variables: :math:`\\{𝞅, 𝛙\\}`
+
+    Arguments: :math:`\\{𝞅, 𝛙\\}`
+
+    Premises: None
+
+    Algorithm: :func:`is_locally_well_formed_hypothesis_algorithm`
+
+    Conclusion:  :math:`\\text{is-locally-well-formed-hypothesis}(𝞅)`
     """
 
 # INFERENCE-RULE: ⊥1: inconsistency-1: P and ¬P

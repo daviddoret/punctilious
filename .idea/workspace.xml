@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
-      <change beforePath="$PROJECT_DIR$/tests/test_meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_meta_theory_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,6 +207,7 @@
     "Python tests.pytest for test_inference_rules_1.TestSimplification1.test_simplification_1.executor": "Run",
     "Python tests.pytest for test_inference_rules_1.TestSimplification2.test_simplification_2.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis.executor": "Run",
+    "Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestReductioAdAbsurdum.test_reduction_ad_absurdum.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestMT1.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestMT1.test_mt1.executor": "Run",
@@ -620,7 +623,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_meta_theory_1.TestMT2.test_mt2" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_meta_theory_1.TestInconsistency1.TestReductioAdAbsurdum.test_reduction_ad_absurdum" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -633,7 +636,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_meta_theory_1.TestMT2.test_mt2&quot;" />
+      <option name="_new_target" value="&quot;test_meta_theory_1.TestInconsistency1.TestReductioAdAbsurdum.test_reduction_ad_absurdum&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -734,7 +737,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" />
-      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2" />
+      <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestReductioAdAbsurdum.test_reduction_ad_absurdum" />
       <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3_new" />
       <item itemvalue="Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p" />
       <item itemvalue="Python tests.pytest in tests" />
@@ -745,10 +748,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestReductioAdAbsurdum.test_reduction_ad_absurdum" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT3.test_mt3_new" />
-        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestMT2.test_mt2" />
       </list>
     </recent_temporary>
   </component>
@@ -767,14 +770,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01054" summary="pursue the implementation of theoretical context and extensions.">
-      <option name="closed" value="true" />
-      <created>1723914581614</created>
-      <option name="number" value="01054" />
-      <option name="presentableId" value="LOCAL-01054" />
-      <option name="project" value="LOCAL" />
-      <updated>1723914581614</updated>
     </task>
     <task id="LOCAL-01055" summary="cleanup">
       <option name="closed" value="true" />
@@ -1160,7 +1155,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724787833946</updated>
     </task>
-    <option name="localTasksCounter" value="1103" />
+    <task id="LOCAL-01103" summary="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
+      <option name="closed" value="true" />
+      <created>1724787966211</created>
+      <option name="number" value="01103" />
+      <option name="presentableId" value="LOCAL-01103" />
+      <option name="project" value="LOCAL" />
+      <updated>1724787966211</updated>
+    </task>
+    <option name="localTasksCounter" value="1104" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
