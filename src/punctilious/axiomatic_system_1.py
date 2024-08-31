@@ -31,6 +31,8 @@ class Connective:
     A node color in a formula tree."""
 
     def __init__(self, formula_ts: pl1.FlexibleTypesetter | None = None,
+                 unary_predicate_lambda: typing.Callable = None,
+                 binary_predicate_lambda: typing.Callable = None,
                  **kwargs):
         """
 
@@ -39,6 +41,9 @@ class Connective:
         formula_ts: pl1.Typesetter = pl1.coerce_typesetter(ts=formula_ts)
         self._formula_typesetter: pl1.Typesetter = formula_ts
         self._ts: dict[str, pl1.Typesetter] = pl1.extract_typesetters(t=kwargs)
+
+        self._unary_predicate_lambda = unary_predicate_lambda
+        self._binary_predicate_lambda = binary_predicate_lambda
 
     def __call__(self, *args):
         """Allows pseudo formal language in python."""
@@ -57,6 +62,95 @@ class Connective:
     def __ror__(self, other):
         # This method will be called for "other | self"
         return InfixPartialLeftHandFormula(con=self, term_0=other)
+
+    def provides_canonical_algorithm_for_unary_predicate_formulas(self) -> bool:
+        """Returns ``True`` if this connective provides a canonical algorithm
+         to evaluate unary predicate formulas, ``False``otherwise.
+
+        Note
+        _____
+        When ``True``, the validity of formulas of the form ``c(phi)``,
+        where ``c`` is this connective and ``phi`` some formula,
+        can be evaluated by executing the canonical algorithm.
+        This is a very strong statement because most predicate functions cannot be evaluated by a trivial algorithm.
+        For example, meta-theoretical predicates of the form ``ìs-well-formed-CLASS(phi)``
+        where ``CLASS`` is a syntactical class of formulas,
+        and ``phi`` is a formula representing some object,
+        can often be evaluated by a trivial algorithm
+        because the definition of well-formedness is the expected syntax of ``phi``.
+
+        :return: ``True`` if this connective provides a canonical algorithm for unary predicate formulas,
+        ``False``otherwise.
+        """
+        return self.unary_predicate_lambda is not None
+
+    def provides_canonical_algorithm_for_binary_predicate_formulas(self) -> bool:
+        """Returns ``True`` if this connective provides a canonical algorithm for binary predicate formulas,
+        ``False``otherwise.
+
+        Note
+        _____
+        When ``True``, the validity of formulas of the form ``c(phi)``,
+        where ``c`` is this connective and ``phi`` some formula,
+        can be evaluated by executing the canonical algorithm.
+        This is a very strong statement because most predicate functions cannot be evaluated by a trivial algorithm.
+        For example, meta-theoretical predicates of the form ``ìs-well-formed-CLASS(phi, psi)``
+        where ``CLASS`` is a syntactical class of formulas,
+        ``phi`` is a formula representing some object,
+        and ``psi`` is a formula representing some parameter (meaning "with respect to ``psi``"),
+        can often be evaluated by a trivial algorithm
+        because the definition of well-formedness is the expected syntax of ``phi`` and ``psi``.
+        """
+        return self.binary_predicate_lambda is not None
+
+    def evaluate_unary_predicate_validity_with_algorithm(self, phi: FlexibleFormula) -> bool:
+        """If this connective provides a canonical algorithm for binary predicate formulas,
+        evaluates its validity by executing the algorithm and passing it ``phi`` as argument.
+
+        :param phi: Some formula.
+        :return: ``True`` if ``c(phi)`` is valid. ``False`` if ``c(phi)`` is invalid.
+        """
+        phi = coerce_formula(phi=phi)
+        if self.provides_canonical_algorithm_for_unary_predicate_formulas():
+            return self.unary_predicate_lambda(phi)
+        else:
+            raise u1.ApplicativeError(
+                msg='This connective does not provide a canonical algorithm for unary predicate formulas.',
+                phi=phi,
+                unary_predicate_lambda=self.unary_predicate_lambda,
+                connective=self
+            )
+
+    def evaluate_binary_predicate_validity_with_algorithm(self, phi: FlexibleFormula, psi: FlexibleFormula) -> bool:
+        """If this connective provides a canonical algorithm for binary predicate formulas,
+        evaluates its validity by executing the algorithm and passing it ``phi`` and ``psi`` as arguments.
+
+        :param phi: Some formula.
+        :param phi: Some formula.
+        :return: ``True`` if ``c(phi)`` is valid. ``False`` if ``c(phi)`` is invalid.
+        """
+        phi = coerce_formula(phi=phi)
+        psi = coerce_formula(phi=psi)
+        if self.provides_canonical_algorithm_for_binary_predicate_formulas():
+            return self.binary_predicate_lambda(phi, psi)
+        else:
+            raise u1.ApplicativeError(
+                msg='This connective does not provide a canonical algorithm for binary predicate formulas.',
+                phi=phi,
+                psi=psi,
+                binary_predicate_lambda=self.binary_predicate_lambda,
+                connective=self
+            )
+
+    @property
+    def unary_predicate_lambda(self) -> typing.Callable:
+        """The python lambda function for unary predicate."""
+        return self._unary_predicate_lambda
+
+    @property
+    def binary_predicate_lambda(self) -> typing.Callable:
+        """The python lambda function for binary predicate."""
+        return self._binary_predicate_lambda
 
     @property
     def formula_ts(self) -> pl1.Typesetter:
@@ -89,7 +183,7 @@ class ConnectiveLinkedWithAlgorithm(Connective):
 
     """
 
-    def __init__(self, a: typing.Callable, formula_ts: pl1.FlexibleTypesetter | None = None,
+    def __init__(self, a: typing.Callable = None, formula_ts: pl1.FlexibleTypesetter | None = None,
                  **kwargs):
         self._algorithm = a
         super().__init__(formula_ts=formula_ts, **kwargs)
@@ -202,6 +296,46 @@ class WellFormedFormula(tuple):
     @property
     def connective(self) -> Connective:
         return self._connective
+
+    def is_binary_predicate_supported_by_algorithm(self) -> bool:
+        """Returns ``True`` if this formula is a unary predicate supported by a canonical algorithm
+        that returns its validity, ``False``otherwise."""
+        return (self.arity == 2 and
+                self.connective.provides_canonical_algorithm_for_binary_predicate_formulas())
+
+    def is_unary_predicate_supported_by_algorithm(self) -> bool:
+        """Returns ``True`` if this formula is a binary predicate supported by a canonical algorithm
+        that returns its validity, ``False``otherwise."""
+        return (self.arity == 1 and
+                self.connective.provides_canonical_algorithm_for_unary_predicate_formulas())
+
+    def evaluate_binary_predicate_validity_with_algorithm(self) -> bool:
+        """
+
+        :return: ``True`` if ``c(phi, psi)`` is valid. ``False`` if ``c(phi, psi)`` is invalid.
+        """
+        if self.is_binary_predicate_supported_by_algorithm():
+            return self.connective.evaluate_binary_predicate_validity_with_algorithm(*self)
+        else:
+            raise u1.ApplicativeError(
+                msg='This formula does not support unary predicate evaluation by algorithm.',
+                formula=self,
+                connective=self.connective
+            )
+
+    def evaluate_unary_predicate_validity_with_algorithm(self) -> bool:
+        """
+
+        :return: ``True`` if ``c(phi)`` is valid. ``False`` if ``c(phi)`` is invalid.
+        """
+        if self.is_unary_predicate_supported_by_algorithm():
+            return self.connective.evaluate_unary_predicate_validity_with_algorithm(*self)
+        else:
+            raise u1.ApplicativeError(
+                msg='This formula does not support unary predicate evaluation by algorithm.',
+                formula=self,
+                connective=self.connective
+            )
 
     def get_index_of_first_equivalent_term(self, phi: FlexibleFormula) -> int:
         """Returns the o-based index of the first occurrence of a formula psi among the terms of the current formula,
@@ -1544,7 +1678,9 @@ connective_for_is_inconsistent = UnaryConnective(formula_ts='is-inconsistent')
 
 Sample formula: :math:`\\text{is-inconsistent}\\left(\\phi\\right)`
 """
-connective_for_is_well_formed_axiom = let_x_be_a_unary_connective(formula_ts='is-well-formed-axiom')
+connective_for_is_well_formed_axiom = Connective(
+    formula_ts='is-well-formed-axiom',
+    unary_predicate_lambda=lambda phi: is_well_formed_axiom(a=phi))
 connective_for_is_well_formed_enumeration = let_x_be_a_unary_connective(formula_ts='is-well-formed-enumeration')
 connective_for_is_well_formed_formula = let_x_be_a_unary_connective(formula_ts='is-well-formed-formula')
 connective_for_is_globally_well_formed_hypothesis = let_x_be_a_unary_connective(

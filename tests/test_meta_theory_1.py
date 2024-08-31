@@ -3,6 +3,17 @@ import pytest
 import punctilious as pu
 
 
+class TestIsWellFormedAxiom:
+    def test_is_well_formed_axiom(self):
+        t = pu.as1.let_x_be_a_theory()
+        t = pu.pls1.extend_theory_with_propositional_logic_syntax_1(t=t)
+        t, p = pu.pls1.let_x_be_a_propositional_variable(t=t, formula_ts='p')
+        t, a = pu.as1.let_x_be_an_axiom(t=t, s=p)
+        phi = pu.as1.connective_for_is_well_formed_axiom(a)
+        x = phi.evaluate_unary_predicate_validity_with_algorithm()
+        pass
+
+
 class TestMT1:
 
     def test_mt1(self):
