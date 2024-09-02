@@ -1,5 +1,10 @@
 """
 
+TODO: Implement a new TransformationByExternalAlgorithm
+    Input: a tuple of input values
+    Output: a formula
+    Align with the ABC class for transformations, some rework will be necessary
+
 TODO: We need now some basic predicate logic:
     meta-theory algos such as is-well-formed-x(y) must be understood as well-formed propositions.
 
