@@ -977,7 +977,7 @@ class FreeArityConnective(Connective):
         super().__init__(formula_ts=formula_ts)
 
 
-class FixedArityConnective(Connective):
+class ConnectiveForFixedArityFormulas(Connective):
     """A fixed-arity connective is a connective with a constraint on its arity,
     that is its number of descendant notes."""
 
@@ -991,7 +991,7 @@ class FixedArityConnective(Connective):
         return self._fixed_arity_constraint
 
 
-class NullaryConnective(FixedArityConnective):
+class ConnectiveForNullaryFormulas(ConnectiveForFixedArityFormulas):
 
     def __init__(self, formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
         super().__init__(fixed_arity_constraint=0, formula_ts=formula_ts)
@@ -1016,17 +1016,17 @@ class WellFormedSimpleObject(WellFormedFormula):
     def _data_validation_3(con: Connective = None) -> Connective:
         return con
 
-    def __new__(cls, c: NullaryConnective):
+    def __new__(cls, c: ConnectiveForNullaryFormulas):
         con = WellFormedSimpleObject._data_validation(con=c)
         o: tuple
         o = super().__new__(cls, con=c, t=None)
         return o
 
-    def __init__(self, c: NullaryConnective):
+    def __init__(self, c: ConnectiveForNullaryFormulas):
         super().__init__(con=c, t=None)
 
 
-class UnaryConnective(FixedArityConnective):
+class ConnectiveForUnaryFormulas(ConnectiveForFixedArityFormulas):
 
     def __init__(self, formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
         super().__init__(fixed_arity_constraint=1, formula_ts=formula_ts)
@@ -1115,7 +1115,7 @@ class InfixPartialRightHandFormula(PartialFormula, pl1.Typesetter):
         return self._term_1
 
 
-class BinaryConnective(FixedArityConnective):
+class ConnectiveForBinaryFormulas(ConnectiveForFixedArityFormulas):
 
     def __init__(self, formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
         super().__init__(formula_ts=formula_ts, fixed_arity_constraint=2)
@@ -1292,14 +1292,14 @@ def get_index_of_first_equivalent_element_in_tuple(x: FlexibleFormula, t: Flexib
     return get_index_of_first_equivalent_term_in_formula(term=x, formula=t)
 
 
-class TernaryConnective(FixedArityConnective):
+class ConnectiveForTernaryFormulas(ConnectiveForFixedArityFormulas):
 
     def __init__(self,
                  formula_ts: typing.Optional[pl1.Typesetter] = None):
         super().__init__(fixed_arity_constraint=3, formula_ts=formula_ts)
 
 
-class QuaternaryConnective(FixedArityConnective):
+class ConnectiveForQuaternaryFormulas(ConnectiveForFixedArityFormulas):
 
     def __init__(self,
                  formula_ts: typing.Optional[pl1.Typesetter] = None):
@@ -1328,12 +1328,12 @@ class WellFormedVariable(WellFormedSimpleObject):
             return False
         return True
 
-    def __new__(cls, c: NullaryConnective):
+    def __new__(cls, c: ConnectiveForNullaryFormulas):
         o: tuple
         o = super().__new__(cls, c=c)
         return o
 
-    def __init__(self, c: NullaryConnective):
+    def __init__(self, c: ConnectiveForNullaryFormulas):
         super().__init__(c=c)
 
     def __enter__(self) -> WellFormedVariable:
@@ -1350,12 +1350,12 @@ class MetaVariable(WellFormedSimpleObject):
     The justification for a dedicated python class is the implementation of the __enter__ and __exit__ methods,
     which allow the usage of variables with the python with statement."""
 
-    def __new__(cls, c: NullaryConnective):
+    def __new__(cls, c: ConnectiveForNullaryFormulas):
         o: tuple
         o = super().__new__(cls, c=c)
         return o
 
-    def __init__(self, c: NullaryConnective):
+    def __init__(self, c: ConnectiveForNullaryFormulas):
         super().__init__(c=c)
 
     def __enter__(self) -> MetaVariable:
@@ -1377,7 +1377,7 @@ def let_x_be_a_variable(formula_ts: str | pl1.FlexibleTypesetter | None) -> (
     """
     if isinstance(formula_ts, str):
         formula_ts = pl1.SerifItalic(text=formula_ts)
-    return WellFormedVariable(c=NullaryConnective(formula_ts=formula_ts))
+    return WellFormedVariable(c=ConnectiveForNullaryFormulas(formula_ts=formula_ts))
 
 
 def let_x_be_a_meta_variable(
@@ -1385,9 +1385,9 @@ def let_x_be_a_meta_variable(
         MetaVariable | tuple[MetaVariable, ...]):
     """A meta-variable is a nullary-connective formula (*) that is not declared in the theory with a "is-a" operator."""
     if formula_ts is None or isinstance(formula_ts, pl1.FlexibleTypesetter):
-        return MetaVariable(c=NullaryConnective(formula_ts=formula_ts))
+        return MetaVariable(c=ConnectiveForNullaryFormulas(formula_ts=formula_ts))
     elif isinstance(formula_ts, typing.Iterable):
-        return tuple(MetaVariable(c=NullaryConnective(formula_ts=ts)) for ts in formula_ts)
+        return tuple(MetaVariable(c=ConnectiveForNullaryFormulas(formula_ts=ts)) for ts in formula_ts)
     else:
         raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_013, msg='Non supported arguments.',
                                   formula_typesetter=formula_ts)
@@ -1407,7 +1407,7 @@ def let_x_be_a_simple_object(formula_ts: typing.Optional[pl1.FlexibleTypesetter]
     :param formula_ts: A string (or an iterable of strings) default representation for the simple-object(s).
     :return: A simple-object (if rep is a string), or a python-tuple of simple-objects (if rep is an iterable).
     """
-    return WellFormedSimpleObject(c=NullaryConnective(formula_ts=formula_ts))
+    return WellFormedSimpleObject(c=ConnectiveForNullaryFormulas(formula_ts=formula_ts))
 
 
 def let_x_be_some_simple_objects(
@@ -1432,22 +1432,22 @@ def let_x_be_some_variables(
 
 def let_x_be_a_binary_connective(
         formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
-    return BinaryConnective(formula_ts=formula_ts)
+    return ConnectiveForBinaryFormulas(formula_ts=formula_ts)
 
 
 def let_x_be_a_ternary_connective(
         formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
-    return TernaryConnective(formula_ts=formula_ts)
+    return ConnectiveForTernaryFormulas(formula_ts=formula_ts)
 
 
 def let_x_be_a_quaternary_connective(
         formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
-    return QuaternaryConnective(formula_ts=formula_ts)
+    return ConnectiveForQuaternaryFormulas(formula_ts=formula_ts)
 
 
 def let_x_be_a_unary_connective(
         formula_ts: typing.Optional[pl1.FlexibleTypesetter] = None):
-    return UnaryConnective(formula_ts=formula_ts)
+    return ConnectiveForUnaryFormulas(formula_ts=formula_ts)
 
 
 def let_x_be_a_free_arity_connective(
@@ -1656,7 +1656,7 @@ def let_x_be_a_transformation_by_variable_substitution(o: FlexibleFormula,
 
 
 # Declare fundamental connectives.
-connective_for_algorithm_formula = NullaryConnective(formula_ts='algorithm')
+connective_for_algorithm_formula = ConnectiveForNullaryFormulas(formula_ts='algorithm')
 """The connective that signals external algorithm formulas.
 
 TODO: Check if connective_for_algorithm_formula is still in use.
@@ -1671,9 +1671,9 @@ connective_for_hypothesis = let_x_be_a_free_arity_connective(formula_ts='hypothe
 connective_for_logical_implication = let_x_be_a_binary_connective(formula_ts='implies')
 connective_for_inference = let_x_be_a_ternary_connective(formula_ts='inference')
 connective_for_inference_rule = let_x_be_a_unary_connective(formula_ts='inference-rule')
-connective_for_is_a_propositional_variable = UnaryConnective(formula_ts='is-a-propositional-variable')
-connective_for_is_a_valid_proposition = BinaryConnective(formula_ts='is-a-valid-proposition-in')
-connective_for_is_inconsistent = UnaryConnective(formula_ts='is-inconsistent')
+connective_for_is_a_propositional_variable = ConnectiveForUnaryFormulas(formula_ts='is-a-propositional-variable')
+connective_for_is_a_valid_proposition = ConnectiveForBinaryFormulas(formula_ts='is-a-valid-proposition-in')
+connective_for_is_inconsistent = ConnectiveForUnaryFormulas(formula_ts='is-inconsistent')
 """The connective that signals the :math:`is-inconsistent` predicate.
 
 Sample formula: :math:`\\text{is-inconsistent}\\left(\\phi\\right)`
@@ -1692,7 +1692,7 @@ connective_for_is_locally_well_formed_hypothesis = let_x_be_a_unary_connective(
 """The conventional connector for the is-locally-well-formed-hypothesis predicate.
 """
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
-connective_for_is_well_formed_proposition = UnaryConnective(formula_ts='is-well-formed-proposition')
+connective_for_is_well_formed_proposition = ConnectiveForUnaryFormulas(formula_ts='is-well-formed-proposition')
 connective_for_is_well_formed_theoretical_context = let_x_be_a_unary_connective(
     formula_ts='is-well-formed-theoretical-context')
 connective_for_is_well_formed_transformation = let_x_be_a_unary_connective(formula_ts='is-well-formed-transformation')

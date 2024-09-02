@@ -73,8 +73,8 @@ class TestIsSubformulaFormula:
 class TestConnectiveEquivalence:
     def test_is_connective_equivalent(self):
         a, b, c = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c',))
-        c1 = pu.as1.BinaryConnective(formula_ts='c1')
-        c2 = pu.as1.BinaryConnective(formula_ts='c2')
+        c1 = pu.as1.ConnectiveForBinaryFormulas(formula_ts='c1')
+        c2 = pu.as1.ConnectiveForBinaryFormulas(formula_ts='c2')
         phi = a | c1 | b
         assert pu.as1.is_connective_equivalent(phi=phi, psi=phi)
         psi = b | c1 | c

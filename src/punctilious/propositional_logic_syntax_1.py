@@ -240,7 +240,7 @@ def let_x_be_a_propositional_variable(
     #   version of the context.
     t = as1.append_to_theory(axiomatization, t=t)
 
-    x = as1.WellFormedProposition(con=as1.NullaryConnective(formula_ts=formula_ts))
+    x = as1.WellFormedProposition(con=as1.ConnectiveForNullaryFormulas(formula_ts=formula_ts))
     t, _, _ = as1.derive_1(t=t, c=as1.connective_for_is_a_propositional_variable(x),
                            p=None, i=i0, raise_error_if_false=True)
 

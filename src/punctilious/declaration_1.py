@@ -4,7 +4,7 @@
 # import presentation_layer_1 as pl1
 import axiomatic_system_1 as as1
 
-is_defined_as: as1.Connective = as1.BinaryConnective(formula_ts=':=')
+is_defined_as: as1.Connective = as1.ConnectiveForBinaryFormulas(formula_ts=':=')
 
 # inference-rule:
 # premises:

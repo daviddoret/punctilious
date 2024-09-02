@@ -5,21 +5,21 @@ from punctilious.connectives_standard_library_1 import *
 
 class TestTypesettingConfiguration:
     def test_typesetting_configuration(self):
-        p = pu.as1.NullaryConnective()
+        p = pu.as1.ConnectiveForNullaryFormulas()
         p.formula_ts = pu.as1.typesetters.symbol(symbol=pu.pl1.symbols.p_uppercase_serif_italic)
         phi = pu.as1.WellFormedFormula(con=p)
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.latex_math) == '\\textit{P}'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_extended) == '𝑃'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_limited) == 'P'
 
-        q = pu.as1.NullaryConnective()
+        q = pu.as1.ConnectiveForNullaryFormulas()
         q.formula_ts = pu.as1.typesetters.symbol(symbol=pu.pl1.symbols.q_uppercase_serif_italic)
         phi = pu.as1.WellFormedFormula(con=q)
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.latex_math) == '\\textit{Q}'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_extended) == '𝑄'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_limited) == 'Q'
 
-        ast = pu.as1.BinaryConnective()
+        ast = pu.as1.ConnectiveForBinaryFormulas()
         phi = pu.as1.WellFormedFormula(con=ast, t=(p, q,))
 
         ast.formula_ts = pu.as1.typesetters.classical_formula(
@@ -36,7 +36,7 @@ class TestTypesettingConfiguration:
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_extended) == '𝑃 ∗ 𝑄'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_limited) == 'P * Q'
 
-        p1 = pu.as1.NullaryConnective()
+        p1 = pu.as1.ConnectiveForNullaryFormulas()
         p1.formula_ts = pu.as1.typesetters.indexed_symbol(symbol=pu.pl1.symbols.p_uppercase_serif_italic,
                                                           index=1)
         phi = pu.as1.WellFormedFormula(con=p1)
@@ -44,7 +44,7 @@ class TestTypesettingConfiguration:
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_extended) == '𝑃₁'
         assert phi.typeset_as_string(encoding=pu.pl1.encodings.unicode_limited) == 'P1'
 
-        p2 = pu.as1.NullaryConnective()
+        p2 = pu.as1.ConnectiveForNullaryFormulas()
         p2.formula_ts = pu.as1.typesetters.indexed_symbol(symbol=pu.pl1.symbols.p_uppercase_serif_italic,
                                                           index=2)
         phi = pu.as1.WellFormedFormula(con=p2)

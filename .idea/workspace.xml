@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="All tests OK">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_TODO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/declaration_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/declaration_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation_layer_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -399,7 +403,7 @@
       <recent name="C:\Users\David\PycharmProjects\punctilious\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_meta_theory_1.TestIsWellFormedAxiom.test_is_well_formed_axiom">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -747,8 +751,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestIsWellFormedAxiom.test_is_well_formed_axiom" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_meta_theory_1.TestIsWellFormedAxiom.test_is_well_formed_axiom" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestReductioAdAbsurdum.test_reduction_ad_absurdum" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis" />
         <item itemvalue="Python tests.pytest for test_meta_theory_1.TestTProvesP.test_t_proves_p" />
@@ -770,14 +774,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01057" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1723927428490</created>
-      <option name="number" value="01057" />
-      <option name="presentableId" value="LOCAL-01057" />
-      <option name="project" value="LOCAL" />
-      <updated>1723927428490</updated>
     </task>
     <task id="LOCAL-01058" summary="cleanup">
       <option name="closed" value="true" />
@@ -1163,7 +1159,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725141741921</updated>
     </task>
-    <option name="localTasksCounter" value="1106" />
+    <task id="LOCAL-01106" summary="All tests OK">
+      <option name="closed" value="true" />
+      <created>1725250336134</created>
+      <option name="number" value="01106" />
+      <option name="presentableId" value="LOCAL-01106" />
+      <option name="project" value="LOCAL" />
+      <updated>1725250336134</updated>
+    </task>
+    <option name="localTasksCounter" value="1107" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1213,7 +1217,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="connectives migration" />
     <MESSAGE value="cleanup some obsolete state objects" />
     <MESSAGE value="updated data model for transformation" />
     <MESSAGE value="simplified signature for transformation" />
@@ -1238,7 +1241,8 @@
     <MESSAGE value="dynamic substitution of variables in is-formula-equivalent-with-variables." />
     <MESSAGE value="misc." />
     <MESSAGE value="meta-theory predicates (&quot;is-a-well-formed-...&quot;)." />
-    <option name="LAST_COMMIT_MESSAGE" value="meta-theory predicates (&quot;is-a-well-formed-...&quot;)." />
+    <MESSAGE value="All tests OK" />
+    <option name="LAST_COMMIT_MESSAGE" value="All tests OK" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
