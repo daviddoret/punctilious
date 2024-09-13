@@ -15,6 +15,7 @@ hypothesis = as1.connective_for_hypothesis
 implies = as1.connective_for_logical_implication
 inference = as1.connective_for_inference
 inference_rule = as1.connective_for_inference_rule
+syntactic_rule = as1.connective_for_is_well_formed_syntactic_rule
 land = as1.connective_for_logical_conjunction
 lnot = as1.connective_for_logical_negation
 lor = as1.connective_for_logical_disjunction

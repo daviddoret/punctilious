@@ -1692,6 +1692,7 @@ connective_for_is_locally_well_formed_hypothesis = let_x_be_a_unary_connective(
 """The conventional connector for the is-locally-well-formed-hypothesis predicate.
 """
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
+connective_for_is_well_formed_syntactic_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-syntactic-rule')
 connective_for_is_well_formed_proposition = ConnectiveForUnaryFormulas(formula_ts='is-well-formed-proposition')
 connective_for_is_well_formed_theoretical_context = let_x_be_a_unary_connective(
     formula_ts='is-well-formed-theoretical-context')
@@ -2822,12 +2823,28 @@ class WellFormedTransformationByVariableSubstitution(ABCTransformation, ABC):
 
         # Step 1b: If an external-algorithm validation is configured on this transformation,
         # call it to check the validity of the input values.
+        # TODO: QUESTION: Should algorithm validation be moved to an apply_transformation()
+        #   method on the inference-rule and NOT on the Transformation class?
         if self.validation_algorithm is not None:
             try:
-                ok, output_value = self.validation_algorithm(i=i, raise_error_if_false=True)
+                ok = self.validation_algorithm(i=i, raise_error_if_false=True)
             except u1.ApplicativeError as err:
+                # If the error is caught with raise_error_if_false, we will have
+                # more contextual information to troubleshoot the error.
                 raise u1.ApplicativeError(code=c1.ERROR_CODE_AS1_086,
                                           msg='Transformation failure. '
+                                              'The tuple of input-values `i` is incompatible with '
+                                              'the validation-algorithm `a`, '
+                                              'of transformation `f`. '
+                                              'The tuple of input-shapes `i2` '
+                                              'and the tuple of variables `v` are provided for information.',
+                                          i=i,
+                                          a=self.validation_algorithm,
+                                          i2=input_shapes,
+                                          v=variables,
+                                          f=self)
+            if not ok:
+                raise u1.ApplicativeError(msg='Transformation failure. '
                                               'The tuple of input-values `i` is incompatible with '
                                               'the validation-algorithm `a`, '
                                               'of transformation `f`. '
@@ -4755,18 +4772,16 @@ FlexibleSimpleObject = typing.Union[WellFormedSimpleObject, WellFormedFormula]
 
 
 class WellFormedInferenceRule(WellFormedTheoryComponent):
-    """A well-formed inference-rule is an authorization for the usage of a transformation or algorithm,
+    """A well-formed inference-rule is an authorization for the usage of a transformation,
     to derive further theorems in a theory under certain conditions called premises.
 
-    Two inference-rule methods are implemented:
-     - inference-rules-based-on-transformation:
-     - inference-rules-based-on-algorithm
+    TODO: REWRITE THE DOCUMENTATION OF WellFormedInferenceRule
 
     Syntactic definition:
     A formula is a well-formed inference-rule if and only if it is of the form:
         (x follows-from inference-rule)
     Where:
-        - x is either a well-formed transformation, or an algorithm.
+        - x is either a well-formed transformation.
         - "inference-rule" is the inference-rule urelement.
         - "follows-from" is the follows-from binary connective.
 
@@ -4817,6 +4832,73 @@ class WellFormedInferenceRule(WellFormedTheoryComponent):
 
 
 FlexibleInferenceRule = typing.Union[WellFormedInferenceRule, WellFormedFormula]
+
+
+class WellFormedSyntacticRule(WellFormedTheoryComponent):
+    """A syntactic-rule is a theory component
+    that allows the derivation of theorems
+    from the execution of a syntactic-rule-algorithms
+    that returns a formula of the form psi(phi1, phi2, ..., phin)
+    where psi is a connective linked to an external algorithm,
+    if phi1, phi2, ..., phin are compliant with the syntax rules implemented by the algorithms,
+    or ¬(psi(phi1, phi2, ..., phin)) if they are not compliant.
+
+    Algorithms validating formula syntax are unambiguous and thus allows
+    the application of the excluded middle principle, that is
+    a formula phi is either well-formed as per a set of syntactic rules S,
+    or it is ill-formed.
+
+    Typical shapes:
+    is-well-formed-c(phi)   : for global well-formedness with structure c
+    is-well-formed-c(phi, psi)   : for local well-formedness with structure c
+    phi is-c-equivalent-to psi  : for syntactic equivalent classes
+s
+    Algorithms validating formula syntax must terminate with certainty within
+    finite time.
+
+    """
+    VALID_STATEMENT_INDEX: int = WellFormedTheoryComponent.VALID_STATEMENT_INDEX
+
+    @staticmethod
+    def _data_rule_3(p: FlexibleFormula = None) -> tuple[Connective, p]:
+        """Assure the well-formedness of the object before it is created. Once created, the object
+        must be fully reliable and considered well-formed a priori.
+
+        :param p: A syntactic-predicate formula of the form psi(phi1, phi2, ..., phin).
+        :return:
+        """
+        con: Connective = connective_for_syntactic_rule
+        p: WellFormedFormula = coerce_formula(phi=p)
+        # TODO:
+        return con, p
+
+    def __new__(cls, p: FlexibleFormula = None, **kwargs):
+        """
+
+        :param f: A syntactic-rule.
+
+        :param kwargs:
+        """
+        con, f = WellFormedSyntacticRule._data_rule_3(p=p)
+        o: tuple = super().__new__(cls, con=con, s=p, **kwargs)
+        return o
+
+    def __init__(self, p: FlexibleFormula, **kwargs):
+        """
+
+        :param f: A syntactic-rule.
+        :param kwargs:
+        """
+        con, p = WellFormedSyntacticRule._data_rule_3(p=p)
+        super().__init__(con=con, s=p, **kwargs)
+
+    @property
+    def transformation(self) -> ABCTransformation:
+        return self[WellFormedSyntacticRule.ALGORITHM_INDEX]
+
+
+FlexibleSyntacticRule = typing.Union[WellFormedSyntacticRule, WellFormedFormula]
+
 FlexibleTransformation = typing.Union[
     ABCTransformation, WellFormedTransformationByVariableSubstitution, WellFormedFormula]
 
@@ -5091,7 +5173,6 @@ class WellFormedTheorem(WellFormedTheoryComponent):
 
     def __init__(self, p: FlexibleProposition, i: FlexibleInference):
         con, p, i = WellFormedTheorem._data_validation_3(p=p, i=i)
-        # complete object initialization to assure that we have a well-formed formula with connective, etc.
         super().__init__(con=con, s=p, j=i)
 
     @property

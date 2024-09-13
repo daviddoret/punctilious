@@ -1,9 +1,12 @@
 """
 
-TODO: Implement a new TransformationByExternalAlgorithm
-    Input: a tuple of input values
-    Output: a formula
-    Align with the ABC class for transformations, some rework will be necessary
+TODO: Replace current meta-theoretical implementations with a new object called a syntactic-validator:
+The function that tests whether a formula is well-formed in model theory is a syntactic validator.
+It ensures that the formula adheres to the structural rules of the formal language. The function operates
+independently of any specific interpretation or model, focusing solely on the arrangement and composition
+of symbols according to the grammar of the formal system.
+
+********************
 
 TODO: We need now some basic predicate logic:
     meta-theory algos such as is-well-formed-x(y) must be understood as well-formed propositions.
