@@ -540,7 +540,7 @@ class TestInferenceRule:
         axiomatization = pu.as1.WellFormedAxiomatization(d=(ir,))
 
         # derivation from the axiom
-        i = pu.as1.WellFormedInference(p=None, i=ir)
+        i = pu.as1.WellFormedInference(p=None, r=ir)
         isolated_theorem = pu.as1.WellFormedTheorem(p=phi, i=i)
         t = pu.as1.append_to_theory(isolated_theorem, t=axiomatization)
         assert pu.as1.is_formula_equivalent(
@@ -606,7 +606,7 @@ class TestTheorem:
         t, _ = pu.as1.let_x_be_an_axiom(t=t, s=a)
         ir1 = pu.as1.WellFormedInferenceRule(f=pu.as1.WellFormedTransformationByVariableSubstitution(o=b, i=(a,)))
         t = pu.as1.append_to_theory(ir1, t=t)
-        if1 = pu.as1.WellFormedInference(p=(a,), i=ir1)
+        if1 = pu.as1.WellFormedInference(p=(a,), r=ir1)
         # For the purpose of this test,
         # build the theorem manually,
         # i.e. without using a derivation function.
@@ -632,7 +632,7 @@ class TestInference:
         theorem = a | f | c
         pu.as1.is_formula_equivalent(phi=theorem, psi=t(i=p))
         inference_rule = pu.as1.WellFormedInferenceRule(f=t)
-        inference = pu.as1.WellFormedInference(i=inference_rule, p=p, a=None)
+        inference = pu.as1.WellFormedInference(r=inference_rule, p=p, a=None)
         theorem_2 = pu.as1.WellFormedTheorem(p=theorem, i=inference)
         pu.as1.is_formula_equivalent(
             phi=theorem_2,
@@ -671,13 +671,13 @@ class TestProofByInference:
                                                                   i=premises)
         ir = pu.as1.WellFormedInferenceRule(f=f)
         p = (a | star | b, b | star | c,)
-        i = pu.as1.WellFormedInference(p=p, i=ir)
+        i = pu.as1.WellFormedInference(p=p, r=ir)
         outcome = f.apply_transformation(i=p)
         m = pu.as1.WellFormedTheorem(p=a | star | c, i=i)
         assert pu.as1.is_well_formed_theorem(m=m)
         assert pu.as1.is_well_formed_theorem(m=pu.as1.connective_for_theorem(a | star | c, i))
 
-        i2 = pu.as1.WellFormedInference(p=(a | star | b, b | star | a,), i=ir)
+        i2 = pu.as1.WellFormedInference(p=(a | star | b, b | star | a,), r=ir)
         assert not pu.as1.is_well_formed_theorem(m=pu.as1.connective_for_theorem(a | star | c, i2))
         pass
 

@@ -1,10 +1,14 @@
 """
 
 TODO: Replace current meta-theoretical implementations with a new object called a syntactic-validator:
-The function that tests whether a formula is well-formed in model theory is a syntactic validator.
-It ensures that the formula adheres to the structural rules of the formal language. The function operates
-independently of any specific interpretation or model, focusing solely on the arrangement and composition
-of symbols according to the grammar of the formal system.
+    The function that tests whether a formula is well-formed in model theory is a syntactic validator.
+    It ensures that the formula adheres to the structural rules of the formal language. The function operates
+    independently of any specific interpretation or model, focusing solely on the arrangement and composition
+    of symbols according to the grammar of the formal system.
+    Class: WellFormedSyntacticRule.
+    NEXT STEPS:
+        Check whether we re-use Theorem for the statement derived from WellFormedSyntacticRule,
+        or if we use a dedicated class for that.
 
 ********************
 

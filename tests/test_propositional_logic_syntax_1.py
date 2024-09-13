@@ -59,7 +59,7 @@ class TestAxioms:
         inference_rule = pu.as1.WellFormedInferenceRule(f=pu.pls1.i2.transformation)
         inference = pu.as1.WellFormedInference(
             p=(is_a_proposition(p),),
-            i=inference_rule)
+            r=inference_rule)
         claim = is_a_proposition(lnot(p))
         isolated_theorem = pu.as1.WellFormedTheorem(p=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=is_a_proposition(lnot(p)), psi=isolated_theorem.valid_statement)
@@ -76,7 +76,7 @@ class TestAxioms:
         inference_rule = pu.as1.WellFormedInferenceRule(f=pu.pls1.i1.transformation)
         inference = pu.as1.WellFormedInference(
             p=(a2.valid_statement,),
-            i=inference_rule)
+            r=inference_rule)
         claim = is_a_proposition(q)
         isolated_theorem = pu.as1.WellFormedTheorem(p=claim, i=inference)
         t = pu.as1.append_to_theory(isolated_theorem, t=t)
@@ -86,7 +86,7 @@ class TestAxioms:
         inference_rule = pu.as1.WellFormedInferenceRule(f=pu.pls1.i3.transformation)
         inference = pu.as1.WellFormedInference(
             p=(is_a_proposition(p), is_a_proposition(q),),
-            i=inference_rule)
+            r=inference_rule)
         claim = is_a_proposition(p | land | q)
         isolated_theorem = pu.as1.WellFormedTheorem(p=claim, i=inference)
         assert pu.as1.is_formula_equivalent(phi=claim, psi=isolated_theorem.valid_statement)

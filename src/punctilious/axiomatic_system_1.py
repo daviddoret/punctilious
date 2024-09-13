@@ -3033,10 +3033,10 @@ def coerce_inference(i: FlexibleFormula) -> WellFormedInference:
     if isinstance(i, WellFormedInference):
         return i
     elif is_well_formed_inference(i=i):
-        i2: WellFormedInferenceRule = coerce_inference_rule(i=i[WellFormedInference.INFERENCE_RULE_INDEX])
+        i2: WellFormedInferenceRule = coerce_inference_rule(i=i[WellFormedInference.RULE_INDEX])
         p: WellFormedTupl = coerce_tuple(s=i[WellFormedInference.PREMISES_INDEX], interpret_none_as_empty=True)
         a: WellFormedTupl = coerce_tuple(s=i[WellFormedInference.ARGUMENTS_INDEX], interpret_none_as_empty=True)
-        return WellFormedInference(i=i2, p=p, a=a)
+        return WellFormedInference(r=i2, p=p, a=a)
     else:
         raise u1.ApplicativeError(
             code=c1.ERROR_CODE_AS1_032,
@@ -3215,7 +3215,7 @@ def is_well_formed_inference(i: FlexibleFormula, raise_error_if_false: bool = Fa
     i = coerce_formula(phi=i)
     if (i.connective is not connective_for_inference or
             not i.arity == 3 or
-            not is_well_formed_inference_rule(i=i[WellFormedInference.INFERENCE_RULE_INDEX]) or
+            not is_well_formed_inference_rule(i=i[WellFormedInference.RULE_INDEX]) or
             not is_well_formed_tupl(t=i[WellFormedInference.PREMISES_INDEX]) or
             not is_well_formed_tupl(t=i[WellFormedInference.ARGUMENTS_INDEX])):
         if raise_error_if_false:
@@ -3309,6 +3309,25 @@ def is_well_formed_inference_rule(i: FlexibleFormula) -> bool:
     elif (i.connective is connective_for_inference_rule and
           i.arity == 1 and
           is_well_formed_transformation(t=i.term_0)
+    ):
+        return True
+    else:
+        return False
+
+
+def is_well_formed_syntactic_rule(r: FlexibleFormula) -> bool:
+    """Return True if and only if phi is a well-formed syntactic-rule, False otherwise.
+
+    :param r: A formula.
+    :return: bool.
+    """
+    r = coerce_formula(phi=r)
+    if isinstance(r, WellFormedSyntacticRule):
+        # Shortcut: the class assures the well-formedness of the formula.
+        return True
+    elif (r.connective is connective_for_is_syntactic_rule and
+          r.arity == 1
+            # TODO: Check that the syntactic-rule is well formed
     ):
         return True
     else:
@@ -3909,11 +3928,16 @@ def is_well_formed_extension(e: FlexibleExtension,
         return True
 
 
-def is_well_formed_theorem(m: FlexibleFormula, raise_error_if_false: bool = False) -> bool:
-    """Return True if and only if phi is a well-formed theorem, False otherwise.
+def is_well_formed_theorem(m: FlexibleFormula,
+                           t: FlexibleTheoreticalContext | None = None,
+                           raise_error_if_false: bool = False) -> bool:
+    """Return True if and only if phi is a well-formed theorem, False otherwise.s
+    If ``t`` is None, uses the globals definition of theorem.
+    If ``t`` is a theoretical-context, uses the local definition of theorem with regards to ``t``.
 
+    :param m: A formula denoted as the theorem.
+    :param t: (conditional) A theory.
     :param raise_error_if_false:
-    :param m: A formula.
     :return: bool.
     """
     global connective_for_theorem
@@ -3933,11 +3957,11 @@ def is_well_formed_theorem(m: FlexibleFormula, raise_error_if_false: bool = Fals
                 m=m)
         return False
     else:
-        # TODO: Factorize the check in Theorem.__new__ or __init__,
-        #   that takes into account new-object-declarations.
+        # TODO: Theorem.__new__ or __init__ takes into account new-object-declarations,
+        #   check what code must be factorized and if this needs to be supported here as well.s
         p: WellFormedProposition = coerce_proposition(p=m[WellFormedTheorem.PROPOSITION_INDEX])
         i: WellFormedInference = coerce_inference(i=m[WellFormedTheorem.INFERENCE_INDEX])
-        p2: WellFormedFormula = i.inference_rule.transformation(i.premises)
+        p2: WellFormedFormula = i.rule.transformation(i.premises)
         p2: WellFormedProposition = coerce_proposition(p=p2)
         if not is_formula_equivalent(phi=p, psi=p2):
             # the formula is ill-formed because f(p) yields a formula that is not ~formula to phi.
@@ -3951,6 +3975,10 @@ def is_well_formed_theorem(m: FlexibleFormula, raise_error_if_false: bool = Fals
                     p2=p2,
                     i=i)
             return False
+        if t is not None:
+            t = coerce_theoretical_context(t=t)
+            # TODO: Check local-definition of theorem with regards to t.
+            pass
         return True
 
 
@@ -4138,7 +4166,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
             # i.e. it is a valid derivation with regard to predecessor derivations.
             m: WellFormedTheorem = coerce_theorem(m=d)
             i: WellFormedInference = m.inference
-            ir: WellFormedInferenceRule = m.inference.inference_rule
+            ir: WellFormedInferenceRule = m.inference.rule
             verified_so_far: WellFormedEnumeration = WellFormedEnumeration(e=(*v, *u[0:index]))
             # Check that the inference-rule is a valid predecessor in the derivation.
             if not is_inference_rule_of(i=ir, d=verified_so_far):
@@ -4171,7 +4199,7 @@ def would_be_valid_components_in_theory(v: FlexibleTheory, u: FlexibleEnumeratio
                             p=p, q=q, index=index, d=d, c=c, v=v, u=u)
                     return False, None, None
             # Check that the transformation of the inference-rule effectively yields the announced proposition.
-            f: ABCTransformation = i.inference_rule.transformation
+            f: ABCTransformation = i.rule.transformation
             if len(f.output_declarations) > 0:
                 # But wait a minute...
                 # If the transformation declares/creates new objects, the inference-rule is non-deterministic.
@@ -4843,6 +4871,10 @@ class WellFormedSyntacticRule(WellFormedTheoryComponent):
     if phi1, phi2, ..., phin are compliant with the syntax rules implemented by the algorithms,
     or ¬(psi(phi1, phi2, ..., phin)) if they are not compliant.
 
+    Syntax:
+    syntactic-rule(phi)
+    where phi is an external-algorith.
+
     Algorithms validating formula syntax are unambiguous and thus allows
     the application of the excluded middle principle, that is
     a formula phi is either well-formed as per a set of syntactic rules S,
@@ -4860,7 +4892,7 @@ s
     VALID_STATEMENT_INDEX: int = WellFormedTheoryComponent.VALID_STATEMENT_INDEX
 
     @staticmethod
-    def _data_rule_3(p: FlexibleFormula = None) -> tuple[Connective, p]:
+    def _data_validation_3(p: FlexibleFormula = None) -> tuple[Connective, p]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
@@ -4879,7 +4911,7 @@ s
 
         :param kwargs:
         """
-        con, f = WellFormedSyntacticRule._data_rule_3(p=p)
+        con, f = WellFormedSyntacticRule._data_validation_3(p=p)
         o: tuple = super().__new__(cls, con=con, s=p, **kwargs)
         return o
 
@@ -4889,7 +4921,7 @@ s
         :param f: A syntactic-rule.
         :param kwargs:
         """
-        con, p = WellFormedSyntacticRule._data_rule_3(p=p)
+        con, p = WellFormedSyntacticRule._data_validation_3(p=p)
         super().__init__(con=con, s=p, **kwargs)
 
     @property
@@ -4939,8 +4971,8 @@ with let_x_be_a_variable(formula_ts='P') as phi, let_x_be_a_variable(formula_ts=
 
 
 class WellFormedInference(WellFormedFormula):
-    """An inference is the description of a usage of an inference-rule. Intuitively, it can be understood as an instance
-    of the arguments passed to an inference-rule.
+    """An inference is the description of a usage of an inference-rule or of a syntactic-rule.
+    Intuitively, it can be understood as an instance of the arguments passed to the rule.
 
     TODO: QUESTION: Do we keep it in the data model?
 
@@ -4956,67 +4988,75 @@ class WellFormedInference(WellFormedFormula):
 
     Semantic definition:
     An inference is a formal description of one usage of an inference-rule."""
-    INFERENCE_RULE_INDEX: int = 0
+    RULE_INDEX: int = 0
     PREMISES_INDEX: int = 1
     ARGUMENTS_INDEX: int = 2
 
     @staticmethod
     def _data_validation_2(
-            i: FlexibleInferenceRule,
+            r: FlexibleInferenceRule | FlexibleSyntacticRule,
             p: FlexibleTupl[FlexibleProposition] | None = None,
             a: FlexibleTupl | None = None) -> tuple[
         Connective, WellFormedInferenceRule, WellFormedTupl[WellFormedProposition], WellFormedTupl]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param i:
+        :param r:
         :param p:
         :param a:
         :return:
         """
         con: Connective = connective_for_inference
-        i: WellFormedInferenceRule = coerce_inference_rule(i=i)
+        if is_well_formed_inference_rule(i=r):
+            r: WellFormedInferenceRule = coerce_inference_rule(i=r)
+        elif is_well_formed_syntactic_rule(r=r):
+            r: WellFormedSyntacticRule = coerce_syntactic_rule(r=r)
+        else:
+            raise u1.ApplicativeError(msg='Unsupported rule',
+                                      r=r)
         p: WellFormedTupl[WellFormedProposition] = coerce_tuple_of_proposition(s=p, interpret_none_as_empty=True)
         a: WellFormedTupl = coerce_tuple(s=a, interpret_none_as_empty=True)
 
         # Check the consistency of the shape of the premises and complementary arguments,
         # with the expected input-shapes of the inference-rule transformation.
         i2 = append_tuple_to_tuple(t1=p, t2=a)
-        ok, _ = is_formula_equivalent_with_variables_2(phi=i2, psi=i.transformation.input_shapes,
-                                                       variables=i.transformation.variables)
+        ok, _ = is_formula_equivalent_with_variables_2(phi=i2, psi=r.transformation.input_shapes,
+                                                       variables=r.transformation.variables)
         if not ok:
             raise u1.ApplicativeError(
                 msg='Well-formed inference rule validation error. ',
                 i2=i2,
-                input_shapes=i.transformation.input_shapes,
-                variables=i.transformation.variables
+                input_shapes=r.transformation.input_shapes,
+                variables=r.transformation.variables
             )
 
-        return con, i, p, a
+        return con, r, p, a
 
-    def __new__(cls, i: FlexibleInferenceRule, p: FlexibleTupl[FlexibleProposition] | None = None,
+    def __new__(cls, r: FlexibleInferenceRule | FlexibleSyntacticRule,
+                p: FlexibleTupl[FlexibleProposition] | None = None,
                 a: FlexibleTupl | None = None):
         """
 
-        :param i: An inference-rule.
+        :param r: An inference-rule or a syntactic-rule.s
         :param p: A tuple of propositions denoted as the premises.
         :param a: A tuple of formulas denoted as the supplementary arguments.
         """
-        c, i, p, a = WellFormedInference._data_validation_2(i=i, p=p, a=a)
-        o: tuple = super().__new__(cls, con=c, t=(i, p, a))
+        c, r, p, a = WellFormedInference._data_validation_2(r=r, p=p, a=a)
+        o: tuple = super().__new__(cls, con=c, t=(r, p, a))
         return o
 
-    def __init__(self, i: FlexibleInferenceRule, p: FlexibleTupl[FlexibleProposition] | None = None,
+    def __init__(self, r: FlexibleInferenceRule | FlexibleSyntacticRule,
+                 p: FlexibleTupl[FlexibleProposition] | None = None,
                  a: FlexibleTupl | None = None):
         """Initializes a new inference.
 
-        :param i: An inference-rule.
+        :param r: An inference-rule or a syntactic-rule.
         :param p: A tuple of formulas denoted as the premises, that must be valid in the theory under consideration.
         :param a: A tuple of formulas denoted as the supplementary arguments, that may or may not be propositions,
                   and that may or may not be valid in the theory under consideration.
         """
-        c, i, p, a = WellFormedInference._data_validation_2(i=i, p=p, a=a)
-        super().__init__(con=c, t=(i, p, a,))
+        c, r, p, a = WellFormedInference._data_validation_2(r=r, p=p, a=a)
+        super().__init__(con=c, t=(r, p, a,))
 
     @property
     def arguments(self) -> WellFormedTupl:
@@ -5025,9 +5065,9 @@ class WellFormedInference(WellFormedFormula):
         return self[WellFormedInference.ARGUMENTS_INDEX]
 
     @property
-    def inference_rule(self) -> WellFormedInferenceRule:
-        """The inference-rule of the inference."""
-        return self[WellFormedInference.INFERENCE_RULE_INDEX]
+    def rule(self) -> WellFormedInferenceRule | WellFormedSyntacticRule:
+        """The inference-rule or syntactic-rule of the inference."""
+        return self[WellFormedInference.RULE_INDEX]
 
     @property
     def premises(self) -> WellFormedTupl:
@@ -5104,18 +5144,18 @@ class WellFormedTheorem(WellFormedTheoryComponent):
         # check the validity of the theorem
         try:
             i2: WellFormedTupl = append_tuple_to_tuple(t1=i.premises, t2=i.arguments)
-            algorithm_output: WellFormedFormula = i.inference_rule.transformation.apply_transformation(i=i2)
+            algorithm_output: WellFormedFormula = i.rule.transformation.apply_transformation(i=i2)
         except u1.ApplicativeError as err:
             raise u1.ApplicativeError(
                 msg='Theorem initialization error. '
                     'An error was raised when the transformation `f` '
                     'of the inference-rule `ir` was applied to check the validity of the theorem. ',
-                f=i.inference_rule.transformation,
-                ir=i.inference_rule,
+                f=i.rule.transformation,
+                ir=i.rule,
                 s=p,
                 i=i)
 
-        if len(i.inference_rule.transformation.output_declarations) == 0:
+        if len(i.rule.transformation.output_declarations) == 0:
             # This transformation is deterministic because it comprises no new-object-declarations.
             try:
                 is_formula_equivalent(phi=p, psi=algorithm_output, raise_error_if_false=True)
@@ -5138,8 +5178,8 @@ class WellFormedTheorem(WellFormedTheoryComponent):
             # variables.
             success_1, m1 = is_formula_equivalent_with_variables_2(
                 phi=p,
-                psi=i.inference_rule.transformation.output_shape,
-                variables=i.inference_rule.transformation.output_declarations)
+                psi=i.rule.transformation.output_shape,
+                variables=i.rule.transformation.output_declarations)
             if not success_1:
                 raise u1.ApplicativeError(
                     code=c1.ERROR_CODE_AS1_085,
@@ -5147,22 +5187,22 @@ class WellFormedTheorem(WellFormedTheoryComponent):
                         'The valid-statement `s` is not consistent with the conclusion of the inference-rule `i`, '
                         'considering new object declarations.',
                     s=p,
-                    i_conclusion=i.inference_rule.transformation.output_shape,
-                    i_declarations=i.inference_rule.transformation.output_declarations,
+                    i_conclusion=i.rule.transformation.output_shape,
+                    i_declarations=i.rule.transformation.output_declarations,
                     success_1=success_1)
             # We can reverse the map and re-test formula-equivalence-with-variables.
             m1_reversed = inverse_map(m=m1)
             success_2, _ = is_formula_equivalent_with_variables_2(phi=p,
-                                                                  psi=i.inference_rule.transformation.output_shape,
+                                                                  psi=i.rule.transformation.output_shape,
                                                                   variables=m1.domain)
             pass
             valid_statement_reversed: WellFormedFormula = substitute_formulas(phi=p, m=m1_reversed)
             if not is_formula_equivalent(phi=valid_statement_reversed,
-                                         psi=i.inference_rule.transformation.output_shape):
+                                         psi=i.rule.transformation.output_shape):
                 raise u1.ApplicativeError(
                     msg='Reversing the valid-statement does not yield the inference-rule conclusion.',
                     valid_statement_reversed=valid_statement_reversed,
-                    expected_conclusion=i.inference_rule.transformation.output_shape)
+                    expected_conclusion=i.rule.transformation.output_shape)
 
         return con, p, i
 
@@ -6027,7 +6067,7 @@ def derive_1(t: FlexibleTheoreticalContext, c: FlexibleFormula, p: FlexibleTupl[
 
     # Configure the inference that derives the theorem.
     try:
-        i2: WellFormedInference = WellFormedInference(p=p, a=a, i=i)
+        i2: WellFormedInference = WellFormedInference(p=p, a=a, r=i)
     except u1.ApplicativeError as err:
         # If the initialization of the inference fails,
         # it means that the inference is not valid.
@@ -6924,7 +6964,7 @@ class TypesetterForDerivation(pl1.Typesetter):
             elif is_well_formed_theorem(m=phi):
                 phi: WellFormedTheorem = coerce_theorem(m=phi)
                 inference: WellFormedInference = phi.inference
-                inference_rule: WellFormedInferenceRule = inference.inference_rule
+                inference_rule: WellFormedInferenceRule = inference.rule
                 yield f'\t\t| Follows from [{inference_rule}] given '
                 first: bool = True
                 for premise in phi.inference.premises:
@@ -6954,7 +6994,7 @@ class TypesetterForDerivation(pl1.Typesetter):
             elif is_well_formed_theorem(m=phi):
                 phi: WellFormedTheorem = coerce_theorem(m=phi)
                 inference: WellFormedInference = phi.inference
-                inference_rule: WellFormedInferenceRule = inference.inference_rule
+                inference_rule: WellFormedInferenceRule = inference.rule
                 yield f'\t\t| Follows from '
                 yield from typeset_formula_reference(phi=inference_rule, t=theory, **kwargs)
                 yield f' given '
