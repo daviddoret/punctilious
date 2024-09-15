@@ -1671,6 +1671,7 @@ connective_for_hypothesis = let_x_be_a_free_arity_connective(formula_ts='hypothe
 connective_for_logical_implication = let_x_be_a_binary_connective(formula_ts='implies')
 connective_for_inference = let_x_be_a_ternary_connective(formula_ts='inference')
 connective_for_inference_rule = let_x_be_a_unary_connective(formula_ts='inference-rule')
+connective_for_syntactic_rule = let_x_be_a_unary_connective(formula_ts='syntactic-rule')
 connective_for_is_a_propositional_variable = ConnectiveForUnaryFormulas(formula_ts='is-a-propositional-variable')
 connective_for_is_a_valid_proposition = ConnectiveForBinaryFormulas(formula_ts='is-a-valid-proposition-in')
 connective_for_is_inconsistent = ConnectiveForUnaryFormulas(formula_ts='is-inconsistent')
@@ -3321,17 +3322,15 @@ def is_well_formed_syntactic_rule(r: FlexibleFormula) -> bool:
     :param r: A formula.
     :return: bool.
     """
-    r = coerce_formula(phi=r)
+    r: WellFormedFormula = coerce_formula(phi=r)
     if isinstance(r, WellFormedSyntacticRule):
         # Shortcut: the class assures the well-formedness of the formula.
         return True
-    elif (r.connective is connective_for_is_syntactic_rule and
-          r.arity == 1
-            # TODO: Check that the syntactic-rule is well formed
-    ):
-        return True
-    else:
-        return False
+    if r.connective is connective_for_syntactic_rule and r.arity == 1:
+        a: WellFormedFormula = r[WellFormedSyntacticRule.ALGORITHM_INDEX]
+        if a.arity == 1 and isinstance(a.connective, ConnectiveLinkedWithAlgorithm):
+            return True
+    return False
 
 
 def is_well_formed_transformation(t: FlexibleFormula) -> bool:
@@ -4479,6 +4478,24 @@ def coerce_inference_rule(i: FlexibleInferenceRule) -> WellFormedInferenceRule:
             i=i)
 
 
+def coerce_syntactic_rule(r: FlexibleSyntacticRule) -> WellFormedSyntacticRule:
+    """Coerces formula `r` into a well-formed syntactic-rule, or raises an error if it fails.
+
+    :param r: A formula that is presumably a well-formed syntactic-rule.
+    :return: A well-formed syntactic-rule.
+    :raises ApplicativeError: if coercion fails.
+    """
+    if isinstance(r, WellFormedSyntacticRule):
+        return r
+    elif isinstance(r, WellFormedFormula) and is_well_formed_syntactic_rule(r=r):
+        a: WellFormedFormula = r[WellFormedSyntacticRule.VALID_STATEMENT_INDEX]
+        return WellFormedSyntacticRule(a=a)
+    else:
+        raise u1.ApplicativeError(
+            msg='`r` cannot be coerced to a well-formed syntactic-rule.',
+            r=r)
+
+
 def coerce_theorem(m: FlexibleFormula) -> WellFormedTheorem:
     """Coerces formula ``m`` into a well-formed theorem, or raises an error if it fails.
 
@@ -4889,43 +4906,51 @@ s
     finite time.
 
     """
-    VALID_STATEMENT_INDEX: int = WellFormedTheoryComponent.VALID_STATEMENT_INDEX
+    ALGORITHM_INDEX: int = WellFormedTheoryComponent.VALID_STATEMENT_INDEX
 
     @staticmethod
-    def _data_validation_3(p: FlexibleFormula = None) -> tuple[Connective, p]:
+    def _data_validation_3(a: FlexibleFormula = None) -> tuple[Connective, a]:
         """Assure the well-formedness of the object before it is created. Once created, the object
         must be fully reliable and considered well-formed a priori.
 
-        :param p: A syntactic-predicate formula of the form psi(phi1, phi2, ..., phin).
+        :param a: A formula of the form psi() where psi is a connective that references an external algorithm.
         :return:
         """
         con: Connective = connective_for_syntactic_rule
-        p: WellFormedFormula = coerce_formula(phi=p)
-        # TODO:
-        return con, p
+        a: WellFormedFormula = coerce_formula(phi=a)
+        if not (isinstance(a.connective, ConnectiveLinkedWithAlgorithm)):
+            raise u1.ApplicativeError(
+                msg='The `a` component of a WellFormedSyntacticRule must be of type ConnectiveLinkedWithAlgorithm.'
+                    'In effect, a WellFormedSyntacticRule is just an unambiguous reference to an external algorithm.'
+            )
+        return con, a
 
-    def __new__(cls, p: FlexibleFormula = None, **kwargs):
+    def __new__(cls, a: FlexibleFormula = None, **kwargs):
         """
 
-        :param f: A syntactic-rule.
+        :param a: A formula of the form a() that references an external algorithm.
 
         :param kwargs:
         """
-        con, f = WellFormedSyntacticRule._data_validation_3(p=p)
-        o: tuple = super().__new__(cls, con=con, s=p, **kwargs)
+        con, a = WellFormedSyntacticRule._data_validation_3(a=a)
+        o: tuple = super().__new__(cls, con=con, s=a, **kwargs)
         return o
 
-    def __init__(self, p: FlexibleFormula, **kwargs):
+    def __init__(self, a: FlexibleFormula, **kwargs):
         """
 
-        :param f: A syntactic-rule.
+        :param a: A formula of the form a() that references an external algorithm.
         :param kwargs:
         """
-        con, p = WellFormedSyntacticRule._data_validation_3(p=p)
-        super().__init__(con=con, s=p, **kwargs)
+        con, a = WellFormedSyntacticRule._data_validation_3(a=a)
+        super().__init__(con=con, s=a, **kwargs)
 
     @property
-    def transformation(self) -> ABCTransformation:
+    def algorithm(self) -> WellFormedFormula:
+        """A formula of the form phi() where phi is a connective which is a reference to an external algorithm.
+
+        :return:
+        """
         return self[WellFormedSyntacticRule.ALGORITHM_INDEX]
 
 
