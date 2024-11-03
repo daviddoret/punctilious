@@ -1693,7 +1693,32 @@ connective_for_is_locally_well_formed_hypothesis = let_x_be_a_unary_connective(
 """The conventional connector for the is-locally-well-formed-hypothesis predicate.
 """
 connective_for_is_well_formed_inference_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-inference-rule')
-connective_for_is_well_formed_syntactic_rule = let_x_be_a_unary_connective(formula_ts='is-well-formed-syntactic-rule')
+
+
+def _is_well_formed_syntactic_rule_algorithm(phi: WellFormedFormula):
+    if is_well_formed_syntactic_rule(r=phi):
+        return connective_for_is_well_formed_syntactic_rule(phi)
+    else:
+        return connective_for_logical_negation(connective_for_is_well_formed_syntactic_rule(phi))
+
+
+def _is_well_formed_enumeration_algorithm(phi: WellFormedFormula):
+    if is_well_formed_enumeration(e=phi):
+        return connective_for_is_well_formed_enumeration(phi)
+    else:
+        return connective_for_logical_negation(connective_for_is_well_formed_enumeration(phi))
+
+
+connective_for_is_well_formed_syntactic_rule_algorithm = ConnectiveLinkedWithAlgorithm(
+    a=_is_well_formed_syntactic_rule_algorithm,
+    formula_ts='is-well-formed-syntactic-rule-algorithm')
+
+connective_for_is_well_formed_enumeration_algorithm = ConnectiveLinkedWithAlgorithm(
+    a=_is_well_formed_enumeration_algorithm,
+    formula_ts='is-well-formed-enumeration-algorithm')
+
+connective_for_is_well_formed_syntactic_rule = ConnectiveForUnaryFormulas(
+    formula_ts='is-well-formed-syntactic-rule')
 connective_for_is_well_formed_proposition = ConnectiveForUnaryFormulas(formula_ts='is-well-formed-proposition')
 connective_for_is_well_formed_theoretical_context = let_x_be_a_unary_connective(
     formula_ts='is-well-formed-theoretical-context')

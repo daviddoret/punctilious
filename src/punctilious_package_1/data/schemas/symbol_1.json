@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://punctilious.ch/schemas/symbol_1.json",
+  "title": "Symbol schema #1",
+  "description": "A representable symbol",
+  "type": "object",
+  "properties": {
+    "snake_case_id": {
+      "description": "A unique identifier in snake-case format.",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9_]+$"
+    },
+    "unicode_1": {
+      "description": "A default representation of the symbol using widely supported Unicode characters.",
+      "type": "string",
+      "minLength": 1
+    },
+    "unicode_2": {
+      "description": "A default representation of the symbol using rich Unicode characters.",
+      "type": "string",
+      "minLength": 1
+    },
+    "latex_math_1": {
+      "description": "A default representation of the symbol using widely LaTeX in math mode.",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": [
+    "snake_case_id",
+    "unicode_1",
+    "unicode_2",
+    "latex_math_1"
+  ]
+}

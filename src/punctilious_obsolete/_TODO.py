@@ -10,7 +10,7 @@ TODO: Replace current meta-theoretical implementations with a new object called 
         Check whether we re-use Theorem for the statement derived from WellFormedSyntacticRule,
         or if we use a dedicated class for that.
         - Complete is_well_formed_syntactic_rule()
-        -
+    IDEA: Create a new connective external-algorithm.
 
 ********************
 

@@ -1349,3 +1349,12 @@ class TestMetaTheory:
         ## m, d = pu.as1.derive_1()
         ## TODO: Come back here and complete development.
         pass
+
+    def test_2(self):
+        # TODO: THIS IS THE NEW PROPOSED META-THEORIC MODEL FOR ALGORITHMS, COMPLETE THE IMPLEMENTATION HERE:
+        t = pu.as1.let_x_be_a_theory()
+        r = pu.as1.WellFormedSyntacticRule(a=pu.as1.connective_for_is_well_formed_enumeration_algorithm)
+        t = pu.as1.let_x_be_a_syntactic_rule(t=t, r=r)
+        a, b, c, x, y, z = pu.as1.let_x_be_some_simple_objects(reps=('a', 'b', 'c', 'x', 'y', 'z',))
+        e1 = pu.as1.WellFormedEnumeration(e=(a, b, c,))
+        t = pu.as1.derive_1(t=t, c=pu.as1.is_well_formed_enumeration(e), p=None, r=r)

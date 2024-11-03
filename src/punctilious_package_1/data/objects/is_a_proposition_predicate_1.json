@@ -1,0 +1,10 @@
+{
+  "$schema": "http://punctilious.org/schemas/symbol_1#",
+  "snake_case_id": "is_a_proposition_predicate_1",
+  "representation_method": "template_1",
+  "arity": 1,
+  "technical_1_template": "is_a_proposition_predicate_1({args[0]})",
+  "unicode_1_template": "{a1} is a proposition.",
+  "unicode_2_template": "{a1} is a proposition.",
+  "latex_math_1_template": "{a1} \\text{ is a proposition.}"
+}
