@@ -4,46 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="syntactic-rules">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/cons.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/punctilious.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_obsolete/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/objects/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/objects/conjunction_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/objects/is_a_proposition_predicate_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/object_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/symbol_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/theorem_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/generator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/p_uppercase_serif_italic_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/q_uppercase_serif_italic_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/r_uppercase_serif_italic_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/x_lowercase_serif_italic_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/y_lowercase_serif_italic_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/z_lowercase_serif_italic_1.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Trying a completely different approach, separating data from syntaxic logic.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/_TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/chars.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/chars.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/connectives_standard_library_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/constants_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/declaration_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/declaration_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/inference_rules_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/meta_theory_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/minimal_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_numbers_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/natural_numbers_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/presentation_layer_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation_layer_1.toml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/presentation_layer_1.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/propositional_logic_syntax_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sequences_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/sequences_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/state_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/state_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/unicode_utilities_obsolete.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/unicode_utilities_obsolete.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/util_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_obsolete/util_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/punctilious.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/objects/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/objects/conjunction_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/conjunction_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/objects/is_a_proposition_predicate_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_predicate_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/object_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/connector_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -831,14 +800,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01062" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1724039067741</created>
-      <option name="number" value="01062" />
-      <option name="presentableId" value="LOCAL-01062" />
-      <option name="project" value="LOCAL" />
-      <updated>1724039067741</updated>
-    </task>
     <task id="LOCAL-01063" summary="cleanup">
       <option name="closed" value="true" />
       <created>1724039654782</created>
@@ -1223,7 +1184,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726423417466</updated>
     </task>
-    <option name="localTasksCounter" value="1111" />
+    <task id="LOCAL-01111" summary="Trying a completely different approach, separating data from syntaxic logic.">
+      <option name="closed" value="true" />
+      <created>1730628967759</created>
+      <option name="number" value="01111" />
+      <option name="presentableId" value="LOCAL-01111" />
+      <option name="project" value="LOCAL" />
+      <updated>1730628967759</updated>
+    </task>
+    <option name="localTasksCounter" value="1112" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1273,7 +1242,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="simplified signature for transformation" />
     <MESSAGE value="inference-rule for theory inconsistency. all tests passed." />
     <MESSAGE value="update dependent libraries" />
     <MESSAGE value="minor clean-up" />
@@ -1298,7 +1266,8 @@
     <MESSAGE value="All tests OK" />
     <MESSAGE value="Renaming connective classes" />
     <MESSAGE value="syntactic-rules" />
-    <option name="LAST_COMMIT_MESSAGE" value="syntactic-rules" />
+    <MESSAGE value="Trying a completely different approach, separating data from syntaxic logic." />
+    <option name="LAST_COMMIT_MESSAGE" value="Trying a completely different approach, separating data from syntaxic logic." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

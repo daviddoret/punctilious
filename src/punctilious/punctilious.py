@@ -68,8 +68,8 @@ class RepresentationMethods:
         return self._representation_methods[cons.TEMPLATE_1]
 
 
-class Object:
-    SCHEMA_FILE_PATH: str = '../punctilious_package_1/data/schemas/object_1.json'
+class Connector:
+    SCHEMA_FILE_PATH: str = '../punctilious_package_1/data/schemas/connector_1.json'
     schema_file = None
 
     def __init__(self, snake_case_id: str, representation_method: str, arity: int | None,
@@ -85,17 +85,17 @@ class Object:
     @classmethod
     def from_json(cls, snake_case_id: str):
 
-        json_file_path: str = f'../punctilious_package_1/data/objects/{snake_case_id}.json'
+        json_file_path: str = f'../punctilious_package_1/data/connectors/{snake_case_id}.json'
 
         with open(json_file_path, 'r') as f:
             data = json.load(f)
 
-        if Object.schema_file is None:
-            with open(Object.SCHEMA_FILE_PATH, 'r') as f:
-                Object.schema_file = json.load(f)
+        if Connector.schema_file is None:
+            with open(Connector.SCHEMA_FILE_PATH, 'r') as f:
+                Connector.schema_file = json.load(f)
 
         try:
-            jsonschema.validate(instance=data, schema=Object.schema_file)
+            jsonschema.validate(instance=data, schema=Connector.schema_file)
 
         except jsonschema.ValidationError as e:
             raise ValueError(f'Invalid JSON data: {e.message}')
@@ -112,7 +112,7 @@ class Object:
     def __repr__(self):
         return self.snake_case_id
 
-    def rep(self, args: list[Object], format: Format) -> str:
+    def rep(self, args: list[Connector], format: Format) -> str:
         if self.representation_method == cons.TEMPLATE_1:
             if self.arity is not None:
                 if self.arity != len(args):
@@ -129,23 +129,23 @@ class Object:
             raise ValueError(f'Unsupported representation method: {self.representation_method}.')
 
 
-class Objects:
-    """An in-memory database of well-known objects, which lazy loads objects as needed."""
+class Connectors:
+    """An in-memory database of well-known connectors, which lazy loads connectors as needed."""
 
     def __init__(self):
-        self._objects = {}
+        self._connectors = {}
 
-    def __getitem__(self, snake_case_id: str) -> Object:
-        if snake_case_id not in self._objects:
-            self._objects[snake_case_id] = Object.from_json(snake_case_id=snake_case_id)
-        return self._objects[snake_case_id]
+    def __getitem__(self, snake_case_id: str) -> Connector:
+        if snake_case_id not in self._connectors:
+            self._connectors[snake_case_id] = Connector.from_json(snake_case_id=snake_case_id)
+        return self._connectors[snake_case_id]
 
     @property
-    def conjunction_1(self) -> Object:
+    def conjunction_1(self) -> Connector:
         return self['conjunction_1']
 
     @property
-    def is_a_proposition_predicate_1(self) -> Object:
+    def is_a_proposition_predicate_1(self) -> Connector:
         return self['is_a_proposition_predicate_1']
 
 
@@ -158,6 +158,13 @@ class Symbol:
         self.unicode_1: str = unicode_1
         self.unicode_2: str = unicode_2
         self.latex_math_1: str = latex_math_1
+
+    def __repr__(self):
+        return self.snake_case_id
+
+    @property
+    def technical_1(self):
+        return self.snake_case_id
 
     @classmethod
     def from_json(cls, snake_case_id: str):
@@ -184,13 +191,9 @@ class Symbol:
             latex_math_1=data.get('latex_math_1')
         )
 
-    def __repr__(self):
-        return self.snake_case_id
-
     def rep(self, format: Format) -> str:
         if format.snake_case_id == cons.TECHNICAL_1:
-            # The technical-1 representation of a symbol is its snake-case identifier.
-            return self.snake_case_id
+            return self.technical_1
         elif format.snake_case_id == cons.UNICODE_1:
             return self.unicode_1
         elif format.snake_case_id == cons.UNICODE_2:
@@ -223,3 +226,18 @@ class Symbols:
     @property
     def r_uppercase_serif_italic_1(self) -> Symbol:
         return self['r_uppercase_serif_italic_1']
+
+
+class Formula:
+    def __init__(self, root_connector: Connector, arguments: list[Formula] | None):
+        self.root_connector = root_connector
+        if arguments is None:
+            arguments = ()
+        self.arguments = arguments
+
+    def __iter__(self):
+        for argument in self.arguments:
+            yield argument
+
+    def arity(self) -> int:
+        return len(self.arguments)

@@ -7,15 +7,15 @@
     "p",
     "q"
   ],
-  "objects": {
-    "is_a_proposition": "http://punctilious.org/objects/is_a_proposition_predicate_1",
+  "connectors": {
+    "is_a_proposition_predicate_1": "http://punctilious.org/objects/is_a_proposition_predicate_1",
     "implies": "http://punctilious.org/objects/material_implication_1",
     "and": "http://punctilious.org/objects/conjunction_1"
   },
   "premises": [
-    "is_a_proposition(p)",
-    "is_a_proposition(q)",
-    "implies(p,q)"
+    "is_a_proposition_predicate_1(p)",
+    "is_a_proposition_predicate_1(q)",
+    "implication_1(p,q)"
   ],
-  "conclusion": "implies(and(p,q))"
+  "conclusion": "implication_1(and(p,q))"
 }
