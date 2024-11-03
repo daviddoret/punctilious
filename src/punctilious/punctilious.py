@@ -1,6 +1,8 @@
 from __future__ import annotations
 import json
 import jsonschema
+from lark import Lark, Transformer
+# punctilious modules
 import punctilious_package_1
 import cons
 
@@ -241,3 +243,59 @@ class Formula:
 
     def arity(self) -> int:
         return len(self.arguments)
+
+
+connectors = None
+
+
+def get_connectors():
+    global connectors
+    if connectors is None:
+        connectors = Connectors()
+    return connectors
+
+
+# Define the parser
+parser = Lark(cons.TECHNICAL_1_GRAMMAR, start='start')
+
+
+# Define a transformer to convert parse trees into a more structured format
+class ExprTransformer(Transformer):
+    def func(self, items):
+        """Transform a function with a word and optional arguments."""
+        connector_snake_case_id = items[0]
+        print(connector_snake_case_id)
+        connector = get_connectors()[connector_snake_case_id]
+        args = items[1] if len(items) > 1 else []
+        return Formula(root_connector=connector, arguments=args)
+        # word = items[0]
+        # args = items[1] if len(items) > 1 else []
+        # return {"type": "function", "name": word, "args": args}
+
+    def word(self, items):
+        """Transform a standalone word."""
+        connector_snake_case_id = items[0]
+        print(connector_snake_case_id)
+        connector = get_connectors()[connector_snake_case_id]
+        return connector
+        # return {"type": "word", "name": items[0]}
+
+    def expr_list(self, items):
+        """Transform a list of expressions into a Python list."""
+        return list(items)
+        # return Formula()
+
+
+# Example parser setup
+transformer = ExprTransformer()
+
+# Define the input expression
+input_string = "funca(arg1, func_1(), funcc(arg2, arg3))"
+input_string = "conjunction_1(is_a_proposition_predicate_1(),conjunction_1())"
+
+# Parse and transform the input
+tree = parser.parse(input_string)
+result = transformer.transform(tree)
+
+# Output the parsed structure
+print(result)

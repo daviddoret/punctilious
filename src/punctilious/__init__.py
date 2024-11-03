@@ -3,7 +3,7 @@ import punctilious as pu
 formats = pu.Formats()
 representation_methods = pu.RepresentationMethods()
 symbols = pu.Symbols()
-connectors = pu.Connectors()
+connectors = pu.get_connectors()
 
 print(symbols.p_uppercase_serif_italic_1.rep(formats.latex_math_1))
 print(symbols.q_uppercase_serif_italic_1.rep(formats.unicode_1))
