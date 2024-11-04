@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
 import jsonschema
-from lark import Lark, Transformer
+import lark
 # punctilious modules
 import punctilious_package_1
 import cons
@@ -19,12 +19,20 @@ class Format:
 
 
 class Formats:
+    _singleton = None
+
     def __init__(self):
         self._formats = {
             cons.TECHNICAL_1: Format(snake_case_id=cons.TECHNICAL_1),
             cons.UNICODE_1: Format(snake_case_id=cons.UNICODE_1),
             cons.UNICODE_2: Format(snake_case_id=cons.UNICODE_2),
             cons.LATEX_MATH_1: Format(snake_case_id=cons.LATEX_MATH_1)}
+
+    def __new__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            print('Instantiate Formats singleton.')
+            cls._singleton = super().__new__(cls)
+        return cls._singleton
 
     def __getitem__(self, item) -> Format:
         return self._formats[item]
@@ -58,12 +66,25 @@ class RepresentationMethod:
 
 
 class RepresentationMethods:
+    _singleton = None
+
     def __init__(self):
         self._representation_methods = {
+            cons.TECHNICAL_1: Format(snake_case_id=cons.TECHNICAL_1),
             cons.TEMPLATE_1: Format(snake_case_id=cons.TEMPLATE_1)}
+
+    def __new__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            print('Instantiate RepresentationMethods singleton.')
+            cls._singleton = super().__new__(cls)
+        return cls._singleton
 
     def __getitem__(self, item) -> Format:
         return self._representation_methods[item]
+
+    @property
+    def technical_1(self):
+        return self._representation_methods[cons.TECHNICAL_1]
 
     @property
     def template_1(self):
@@ -114,6 +135,9 @@ class Connector:
     def __repr__(self):
         return self.snake_case_id
 
+    def __str__(self):
+        return self.rep()
+
     def rep(self, args: list[Connector], format: Format) -> str:
         if self.representation_method == cons.TEMPLATE_1:
             if self.arity is not None:
@@ -134,8 +158,16 @@ class Connector:
 class Connectors:
     """An in-memory database of well-known connectors, which lazy loads connectors as needed."""
 
+    _singleton = None
+
     def __init__(self):
         self._connectors = {}
+
+    def __new__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            print('Instantiate Connectors singleton.')
+            cls._singleton = super().__new__(cls)
+        return cls._singleton
 
     def __getitem__(self, snake_case_id: str) -> Connector:
         if snake_case_id not in self._connectors:
@@ -208,9 +240,16 @@ class Symbol:
 
 class Symbols:
     """An in-memory database of well-known symbols, which lazy loads symbols as needed."""
+    _singleton = None
 
     def __init__(self):
         self._symbols = {}
+
+    def __new__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            print('Instantiate Symbols singleton.')
+            cls._singleton = super().__new__(cls)
+        return cls._singleton
 
     def __getitem__(self, snake_case_id: str) -> Symbol:
         if snake_case_id not in self._symbols:
@@ -241,61 +280,62 @@ class Formula:
         for argument in self.arguments:
             yield argument
 
+    def __str__(self):
+        return self.rep()
+
+    def rep(self, representation_method: RepresentationMethod | None = None, format: Format | None = None):
+        if representation_method is None:
+            representation_method = RepresentationMethods().technical_1
+            # if representation_method is RepresentationMethods().technical_1:
+        if 1 == 1:
+            return f'{self.root_connector.snake_case_id}({",".join(argument.rep(representation_method=representation_method) for argument in self.arguments)})'
+        elif self.root_connector.representation_method == cons.TEMPLATE_1:
+            if format is None:
+                format = Formats().unicode_1
+            if self.arity is not None:
+                if self.arity != len(self.arguments):
+                    raise ValueError(f'The arity of the representation method does not match the number of arguments.')
+            if format is Formats().unicode_1:
+                return self.root_connector.unicode_1_template.format(args=self.arguments)
+            elif format is Formats().unicode_2:
+                return self.root_connector.unicode_2_template.format(args=self.arguments)
+            elif format is Formats().latex_math_1:
+                return self.root_connector.latex_math_1_template.format(args=self.arguments)
+        else:
+            raise ValueError(f'Unsupported representation method: {self.representation_method}.')
+
     def arity(self) -> int:
         return len(self.arguments)
 
 
-connectors = None
-
-
-def get_connectors():
-    global connectors
-    if connectors is None:
-        connectors = Connectors()
-    return connectors
-
-
 # Define the parser
-parser = Lark(cons.TECHNICAL_1_GRAMMAR, start='start')
+technical_1_parser = lark.Lark(cons.TECHNICAL_1_GRAMMAR, start='start')
 
 
-# Define a transformer to convert parse trees into a more structured format
-class ExprTransformer(Transformer):
-    def func(self, items):
+class Technical1Transformer(lark.Transformer):
+    """Transformed the Lark tree parsed of a Technical1 input, into a proper Formula."""
+
+    def parse_function(self, items) -> Formula:
         """Transform a function with a word and optional arguments."""
         connector_snake_case_id = items[0]
-        print(connector_snake_case_id)
-        connector = get_connectors()[connector_snake_case_id]
+        connector = Connectors()[connector_snake_case_id]
         args = items[1] if len(items) > 1 else []
         return Formula(root_connector=connector, arguments=args)
-        # word = items[0]
-        # args = items[1] if len(items) > 1 else []
-        # return {"type": "function", "name": word, "args": args}
 
-    def word(self, items):
-        """Transform a standalone word."""
-        connector_snake_case_id = items[0]
-        print(connector_snake_case_id)
-        connector = get_connectors()[connector_snake_case_id]
-        return connector
-        # return {"type": "word", "name": items[0]}
-
-    def expr_list(self, items):
+    def parse_arguments(self, items):
         """Transform a list of expressions into a Python list."""
         return list(items)
-        # return Formula()
 
 
 # Example parser setup
-transformer = ExprTransformer()
+technical_1_transformer = Technical1Transformer()
 
 # Define the input expression
-input_string = "funca(arg1, func_1(), funcc(arg2, arg3))"
-input_string = "conjunction_1(is_a_proposition_predicate_1(),conjunction_1())"
+input_string = "conjunction_1(is_a_proposition_predicate_1,conjunction_1())"
 
 # Parse and transform the input
-tree = parser.parse(input_string)
-result = transformer.transform(tree)
+tree = technical_1_parser.parse(input_string)
+result = technical_1_transformer.transform(tree)
 
 # Output the parsed structure
 print(result)
