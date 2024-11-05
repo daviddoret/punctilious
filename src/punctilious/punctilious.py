@@ -1,13 +1,15 @@
 from __future__ import annotations
 import json
 import jsonschema
+# Lark
+# Documentation: https://lark-parser.readthedocs.io/en/stable/index.html
 import lark
 # punctilious modules
 import punctilious_package_1
 import cons
 
 
-class Format:
+class Encoding:
     def __init__(self, snake_case_id: str):
         self.snake_case_id: str = snake_case_id
 
@@ -18,40 +20,40 @@ class Format:
         return self.snake_case_id
 
 
-class Formats:
+class Encodings:
     _singleton = None
 
     def __init__(self):
-        self._formats = {
-            cons.TECHNICAL_1: Format(snake_case_id=cons.TECHNICAL_1),
-            cons.UNICODE_1: Format(snake_case_id=cons.UNICODE_1),
-            cons.UNICODE_2: Format(snake_case_id=cons.UNICODE_2),
-            cons.LATEX_MATH_1: Format(snake_case_id=cons.LATEX_MATH_1)}
+        self._encodings = {
+            cons.SNAKE_CASE_1: Encoding(snake_case_id=cons.SNAKE_CASE_1),
+            cons.UNICODE_1: Encoding(snake_case_id=cons.UNICODE_1),
+            cons.UNICODE_2: Encoding(snake_case_id=cons.UNICODE_2),
+            cons.LATEX_MATH_1: Encoding(snake_case_id=cons.LATEX_MATH_1)}
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
-            print('Instantiate Formats singleton.')
+            print('Instantiate Encodings singleton.')
             cls._singleton = super().__new__(cls)
         return cls._singleton
 
-    def __getitem__(self, item) -> Format:
-        return self._formats[item]
+    def __getitem__(self, item) -> Encoding:
+        return self._encodings[item]
 
     @property
     def latex_math_1(self):
-        return self._formats[cons.LATEX_MATH_1]
+        return self._encodings[cons.LATEX_MATH_1]
 
     @property
-    def technical_1(self):
-        return self._formats[cons.TECHNICAL_1]
+    def snake_case_1(self):
+        return self._encodings[cons.SNAKE_CASE_1]
 
     @property
     def unicode_1(self):
-        return self._formats[cons.UNICODE_1]
+        return self._encodings[cons.UNICODE_1]
 
     @property
     def unicode_2(self):
-        return self._formats[cons.UNICODE_2]
+        return self._encodings[cons.UNICODE_2]
 
 
 class RepresentationMethod:
@@ -70,8 +72,8 @@ class RepresentationMethods:
 
     def __init__(self):
         self._representation_methods = {
-            cons.TECHNICAL_1: Format(snake_case_id=cons.TECHNICAL_1),
-            cons.TEMPLATE_1: Format(snake_case_id=cons.TEMPLATE_1)}
+            cons.SNAKE_CASE_1: Encoding(snake_case_id=cons.SNAKE_CASE_1),
+            cons.TEMPLATE_1: Encoding(snake_case_id=cons.TEMPLATE_1)}
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
@@ -79,12 +81,12 @@ class RepresentationMethods:
             cls._singleton = super().__new__(cls)
         return cls._singleton
 
-    def __getitem__(self, item) -> Format:
+    def __getitem__(self, item) -> Encoding:
         return self._representation_methods[item]
 
     @property
     def technical_1(self):
-        return self._representation_methods[cons.TECHNICAL_1]
+        return self._representation_methods[cons.SNAKE_CASE_1]
 
     @property
     def template_1(self):
@@ -136,23 +138,7 @@ class Connector:
         return self.snake_case_id
 
     def __str__(self):
-        return self.rep()
-
-    def rep(self, args: list[Connector], format: Format) -> str:
-        if self.representation_method == cons.TEMPLATE_1:
-            if self.arity is not None:
-                if self.arity != len(args):
-                    raise ValueError(f'The arity of the representation method does not match the number of arguments.')
-            if format.snake_case_id == cons.TECHNICAL_1:
-                return self.technical_1_template.format(args=args)
-            elif format.snake_case_id == cons.UNICODE_1:
-                return self.unicode_1_template.format(args=args)
-            elif format.snake_case_id == cons.UNICODE_2:
-                return self.unicode_2_template.format(args=args)
-            elif format.snake_case_id == cons.LATEX_MATH_1:
-                return self.latex_math_1_template.format(args=args)
-        else:
-            raise ValueError(f'Unsupported representation method: {self.representation_method}.')
+        return self.snake_case_id
 
 
 class Connectors:
@@ -225,17 +211,17 @@ class Symbol:
             latex_math_1=data.get('latex_math_1')
         )
 
-    def rep(self, format: Format) -> str:
-        if format.snake_case_id == cons.TECHNICAL_1:
+    def rep(self, encoding: Encoding) -> str:
+        if encoding.snake_case_id == cons.SNAKE_CASE_1:
             return self.technical_1
-        elif format.snake_case_id == cons.UNICODE_1:
+        elif encoding.snake_case_id == cons.UNICODE_1:
             return self.unicode_1
-        elif format.snake_case_id == cons.UNICODE_2:
+        elif encoding.snake_case_id == cons.UNICODE_2:
             return self.unicode_2
-        elif format.snake_case_id == cons.LATEX_MATH_1:
+        elif encoding.snake_case_id == cons.LATEX_MATH_1:
             return self.latex_math_1
         else:
-            raise ValueError(f'Unsupported format: {format}.')
+            raise ValueError(f'Unsupported encoding: {encoding}.')
 
 
 class Symbols:
@@ -283,24 +269,24 @@ class Formula:
     def __str__(self):
         return self.rep()
 
-    def rep(self, representation_method: RepresentationMethod | None = None, format: Format | None = None):
+    def rep(self, representation_method: RepresentationMethod | None = None, encoding: Encoding | None = None):
         if representation_method is None:
             representation_method = RepresentationMethods().technical_1
             # if representation_method is RepresentationMethods().technical_1:
         if 1 == 1:
             return f'{self.root_connector.snake_case_id}({",".join(argument.rep(representation_method=representation_method) for argument in self.arguments)})'
         elif self.root_connector.representation_method == cons.TEMPLATE_1:
-            if format is None:
-                format = Formats().unicode_1
+            if encoding is None:
+                encoding = Encodings().unicode_1
             if self.arity is not None:
                 if self.arity != len(self.arguments):
                     raise ValueError(f'The arity of the representation method does not match the number of arguments.')
-            if format is Formats().unicode_1:
-                return self.root_connector.unicode_1_template.format(args=self.arguments)
-            elif format is Formats().unicode_2:
-                return self.root_connector.unicode_2_template.format(args=self.arguments)
-            elif format is Formats().latex_math_1:
-                return self.root_connector.latex_math_1_template.format(args=self.arguments)
+            if encoding is Encodings().unicode_1:
+                return self.root_connector.unicode_1_template.encoding(args=self.arguments)
+            elif encoding is Encodings().unicode_2:
+                return self.root_connector.unicode_2_template.encoding(args=self.arguments)
+            elif encoding is Encodings().latex_math_1:
+                return self.root_connector.latex_math_1_template.encoding(args=self.arguments)
         else:
             raise ValueError(f'Unsupported representation method: {self.representation_method}.')
 

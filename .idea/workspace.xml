@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Trying a completely different approach, separating data from syntaxic logic.">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark parser for the technical-1 representation-mode.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/cons.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/cons.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/parser.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/punctilious.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -803,14 +803,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01065" summary="WellFormedProposition">
-      <option name="closed" value="true" />
-      <created>1724045496071</created>
-      <option name="number" value="01065" />
-      <option name="presentableId" value="LOCAL-01065" />
-      <option name="project" value="LOCAL" />
-      <updated>1724045496071</updated>
-    </task>
     <task id="LOCAL-01066" summary="WellFormedProposition + misc.">
       <option name="closed" value="true" />
       <created>1724045641576</created>
@@ -1195,7 +1187,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730667943027</updated>
     </task>
-    <option name="localTasksCounter" value="1114" />
+    <task id="LOCAL-01114" summary="Lark parser for the technical-1 representation-mode.">
+      <option name="closed" value="true" />
+      <created>1730758681496</created>
+      <option name="number" value="01114" />
+      <option name="presentableId" value="LOCAL-01114" />
+      <option name="project" value="LOCAL" />
+      <updated>1730758681496</updated>
+    </task>
+    <option name="localTasksCounter" value="1115" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1245,7 +1245,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="inference-rule for theory inconsistency. all tests passed." />
     <MESSAGE value="update dependent libraries" />
     <MESSAGE value="minor clean-up" />
     <MESSAGE value="clean-up the obsolete is-a operator" />
@@ -1270,7 +1269,8 @@
     <MESSAGE value="Renaming connective classes" />
     <MESSAGE value="syntactic-rules" />
     <MESSAGE value="Trying a completely different approach, separating data from syntaxic logic." />
-    <option name="LAST_COMMIT_MESSAGE" value="Trying a completely different approach, separating data from syntaxic logic." />
+    <MESSAGE value="Lark parser for the technical-1 representation-mode." />
+    <option name="LAST_COMMIT_MESSAGE" value="Lark parser for the technical-1 representation-mode." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

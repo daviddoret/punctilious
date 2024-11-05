@@ -1,8 +1,6 @@
 {
   "$schema": "http://punctilious.org/schemas/theorem_1#",
   "title": "Absorption law #1",
-  "input_validation_algorithm": "input_variables_substitution_1",
-  "output_generation_algorithm": "output_variables_substitution_1",
   "variables": [
     "p",
     "q"
