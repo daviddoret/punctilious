@@ -1,0 +1,23 @@
+$schema: http://punctilious.org/schemas/connector_1#
+snake_case_id: is_a_proposition_1
+arity: 1
+representations:
+  formula:
+    localization:
+      - locale: en
+        unicode_1_template: "is-a-proposition({args[0]})"
+        unicode_2_template: "is-a-proposition({args[0]})"
+        latex_math_1_template: "is-a-proposition({args[0]})"
+      - locale: fr
+        unicode_1_template: "est-une-proposition({args[0]})"
+        unicode_2_template: "est-une-proposition({args[0]})"
+        latex_math_1_template: "est-une-proposition({args[0]})"
+  text:
+    - locale: en
+      unicode_1_template: "{args[0]} is a proposition."
+      unicode_2_template: "{args[0]} is a proposition."
+      latex_math_1_template: "{args[0]} \\text{ is a proposition."
+    - locale: fr
+      unicode_1_template: "{args[0]} est une proposition."
+      unicode_2_template: "{args[0]} est une proposition."
+      latex_math_1_template: "{args[0]} \\text{ est une proposition."

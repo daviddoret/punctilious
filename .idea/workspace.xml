@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark parser for the technical-1 representation-mode.">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/yaml_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/cons.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/cons.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/punctilious.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_predicate_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -347,7 +349,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious_package_1/data/schemas",
-    "settings.editor.selected.configurable": "preferences.keymap",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -406,7 +408,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious2" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.punctilious">
+  <component name="RunManager" selected="Python.__init__">
     <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -779,9 +781,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.__init__" />
         <item itemvalue="Python.punctilious" />
         <item itemvalue="Python.parser" />
-        <item itemvalue="Python.__init__" />
         <item itemvalue="Python.symbols (1)" />
         <item itemvalue="Python.symbols" />
       </list>
@@ -802,14 +804,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01066" summary="WellFormedProposition + misc.">
-      <option name="closed" value="true" />
-      <created>1724045641576</created>
-      <option name="number" value="01066" />
-      <option name="presentableId" value="LOCAL-01066" />
-      <option name="project" value="LOCAL" />
-      <updated>1724045641576</updated>
     </task>
     <task id="LOCAL-01067" summary="Use WellFormedProposition in WellFormedAxiom">
       <option name="closed" value="true" />
@@ -1195,7 +1189,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730758681496</updated>
     </task>
-    <option name="localTasksCounter" value="1115" />
+    <task id="LOCAL-01115" summary="Lark parser for the technical-1 representation-mode.">
+      <option name="closed" value="true" />
+      <created>1730841929024</created>
+      <option name="number" value="01115" />
+      <option name="presentableId" value="LOCAL-01115" />
+      <option name="project" value="LOCAL" />
+      <updated>1730841929024</updated>
+    </task>
+    <option name="localTasksCounter" value="1116" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

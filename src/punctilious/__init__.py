@@ -1,16 +1,11 @@
 import punctilious as pu
 
-formats = pu.Formats()
+encodings = pu.Encodings()
 representation_methods = pu.RepresentationMethods()
 symbols = pu.Symbols()
 connectors = pu.Connectors()
 
-print(symbols.p_uppercase_serif_italic_1.rep(formats.latex_math_1))
-print(symbols.q_uppercase_serif_italic_1.rep(formats.unicode_1))
-print(symbols.r_uppercase_serif_italic_1.rep(formats.unicode_2))
-print(symbols.r_uppercase_serif_italic_1.rep(formats.snake_case_1))
-
-print(connectors.conjunction_1.rep(
-    args=(symbols.p_uppercase_serif_italic_1, symbols.q_uppercase_serif_italic_1),
-    encoding=formats.unicode_1))
-print(connectors.is_a_proposition_predicate_1.unicode_1_template)
+print(symbols.p_uppercase_serif_italic_1.rep(encodings.latex_math_1))
+print(symbols.q_uppercase_serif_italic_1.rep(encodings.unicode_1))
+print(symbols.r_uppercase_serif_italic_1.rep(encodings.unicode_2))
+print(symbols.r_uppercase_serif_italic_1.rep(encodings.snake_case_1))

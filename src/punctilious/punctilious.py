@@ -4,6 +4,7 @@ import jsonschema
 # Lark
 # Documentation: https://lark-parser.readthedocs.io/en/stable/index.html
 import lark
+import yaml
 # punctilious modules
 import punctilious_package_1
 import cons
@@ -106,6 +107,25 @@ class Connector:
         self.unicode_1_template: str = unicode_1_template
         self.unicode_2_template: str = unicode_2_template
         self.latex_math_1_template: str = latex_math_1_template
+
+    @classmethod
+    def from_yaml(cls, snake_case_id: str):
+
+        yaml_file_path: str = f'../punctilious_package_1/data/connectors/{snake_case_id}.json'
+
+        with open(yaml_file_path, 'r') as file:
+            data = yaml.safe_load(file)
+
+        # TODO: Implement YAML schema validation here.
+
+        return cls(
+            snake_case_id=data['snake_case_id'],
+            representation_method=data.get('representation_method'),
+            arity=data.get('arity'),
+            unicode_1_template=data.get('unicode_1_template'),
+            unicode_2_template=data.get('unicode_2_template'),
+            latex_math_1_template=data.get('latex_math_1_template')
+        )
 
     @classmethod
     def from_json(cls, snake_case_id: str):
@@ -292,6 +312,41 @@ class Formula:
 
     def arity(self) -> int:
         return len(self.arguments)
+
+
+class Theorem:
+    SCHEMA_FILE_PATH: str = '../punctilious_package_1/data/schemas/theorem_1.json'
+    schema_file = None
+
+    def __init__(self, snake_case_id: str, title: str):
+        self.snake_case_id: str = snake_case_id
+        self.title: str = title
+
+    def __repr__(self):
+        return self.snake_case_id
+
+    @classmethod
+    def from_json(cls, snake_case_id: str):
+
+        json_file_path: str = f'../punctilious_package_1/data/theorems/{snake_case_id}.json'
+
+        with open(json_file_path, 'r') as f:
+            data = json.load(f)
+
+        if Symbol.schema_file is None:
+            with open(Symbol.SCHEMA_FILE_PATH, 'r') as f:
+                Symbol.schema_file = json.load(f)
+
+        try:
+            jsonschema.validate(instance=data, schema=Symbol.schema_file)
+
+        except jsonschema.ValidationError as e:
+            raise ValueError(f'Invalid JSON data: {e.message}')
+
+        return cls(
+            snake_case_id=data['snake_case_id'],
+            title=data.get('title')
+        )
 
 
 # Define the parser
