@@ -5,13 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark parser for the technical-1 representation-mode.">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/yaml_test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/conjunction_1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/material_implication_1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/representation_modes/symbolic_inline_en.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/punctilious.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_predicate_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -309,7 +309,7 @@
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in tests.executor": "Run",
-    "Python.__init__.executor": "Run",
+    "Python.__init__.executor": "Debug",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
     "Python.binary_tree_test.executor": "Run",
@@ -348,7 +348,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious_package_1/data/schemas",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious_package_1/data/connectors",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -394,11 +394,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/connectors" />
+      <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/representation_modes" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/schemas" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/objects" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
-      <recent name="$PROJECT_DIR$/src/punctilious2/schemas" />
-      <recent name="$PROJECT_DIR$/src/punctilious2/data/symbols" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/punctilious" />
@@ -805,14 +805,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01067" summary="Use WellFormedProposition in WellFormedAxiom">
-      <option name="closed" value="true" />
-      <created>1724065105434</created>
-      <option name="number" value="01067" />
-      <option name="presentableId" value="LOCAL-01067" />
-      <option name="project" value="LOCAL" />
-      <updated>1724065105434</updated>
-    </task>
     <task id="LOCAL-01068" summary="Use WellFormedProposition in WellFormedAxiom">
       <option name="closed" value="true" />
       <created>1724065825758</created>
@@ -1197,7 +1189,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730841929024</updated>
     </task>
-    <option name="localTasksCounter" value="1116" />
+    <task id="LOCAL-01116" summary="Lark parser for the technical-1 representation-mode.">
+      <option name="closed" value="true" />
+      <created>1730929437760</created>
+      <option name="number" value="01116" />
+      <option name="presentableId" value="LOCAL-01116" />
+      <option name="project" value="LOCAL" />
+      <updated>1730929437761</updated>
+    </task>
+    <option name="localTasksCounter" value="1117" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1342,6 +1342,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>330</line>
           <option name="timeStamp" value="244" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/__init__.py</url>
+          <line>13</line>
+          <option name="timeStamp" value="248" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,5 +1,7 @@
 from __future__ import annotations
 import json
+import pathlib
+
 import jsonschema
 # Lark
 # Documentation: https://lark-parser.readthedocs.io/en/stable/index.html
@@ -94,42 +96,62 @@ class RepresentationMethods:
         return self._representation_methods[cons.TEMPLATE_1]
 
 
+class Representation:
+    def __init__(self, mode, layout, language, encoding, template):
+        self.mode = mode
+        self.layout = layout
+        self.language = language
+        self.encoding = encoding
+        self.template = template
+
+    @classmethod
+    def from_dict(cls, d: dict):
+        return cls(
+            mode=d['mode'],
+            layout=d['layout'],
+            language=d['language'],
+            encoding=d['encoding'],
+            template=d['template']
+        )
+
+    @classmethod
+    def from_yaml_file_path(cls, yaml_file_path: pathlib.Path):
+        with open(yaml_file_path, 'r') as file:
+            d: dict = yaml.safe_load(file)
+            return cls.from_dict(d=d)
+
+
 class Connector:
     SCHEMA_FILE_PATH: str = '../punctilious_package_1/data/schemas/connector_1.json'
     schema_file = None
 
-    def __init__(self, snake_case_id: str, representation_method: str, arity: int | None,
-                 unicode_1_template: str | None,
-                 unicode_2_template: str | None, latex_math_1_template: str | None):
+    def __init__(self, snake_case_id: str, representations: tuple[Representation, ...]):
         self.snake_case_id: str = snake_case_id
-        self.representation_method: str = representation_method
-        self.arity: int | None = arity
-        self.unicode_1_template: str = unicode_1_template
-        self.unicode_2_template: str = unicode_2_template
-        self.latex_math_1_template: str = latex_math_1_template
+        self.representations: tuple[Representation, ...] = representations
 
     @classmethod
-    def from_yaml(cls, snake_case_id: str):
-
-        yaml_file_path: str = f'../punctilious_package_1/data/connectors/{snake_case_id}.json'
-
-        with open(yaml_file_path, 'r') as file:
-            data = yaml.safe_load(file)
-
-        # TODO: Implement YAML schema validation here.
-
+    def from_dict(cls, d: dict):
+        r_raw = representations = d['representations']
+        representations: tuple[Representation, ...] = tuple(Representation.from_dict(r) for r in r_raw)
         return cls(
-            snake_case_id=data['snake_case_id'],
-            representation_method=data.get('representation_method'),
-            arity=data.get('arity'),
-            unicode_1_template=data.get('unicode_1_template'),
-            unicode_2_template=data.get('unicode_2_template'),
-            latex_math_1_template=data.get('latex_math_1_template')
+            snake_case_id=d['snake_case_id'],
+            representations=representations
         )
 
     @classmethod
-    def from_json(cls, snake_case_id: str):
+    def from_yaml_file_path(cls, yaml_file_path: pathlib.Path):
+        with open(yaml_file_path, 'r') as file:
+            d: dict = yaml.safe_load(file)
+            return cls.from_dict(d=d)
 
+    @classmethod
+    def from_snake_id(cls, snake_case_id: str):
+        yaml_file_path: str = f'../punctilious_package_1/data/connectors/{snake_case_id}.yaml'
+        yaml_file_path: pathlib.Path = pathlib.Path(yaml_file_path)
+        return cls.from_yaml_file_path(yaml_file_path=yaml_file_path)
+
+    @classmethod
+    def from_json(cls, snake_case_id: str):
         json_file_path: str = f'../punctilious_package_1/data/connectors/{snake_case_id}.json'
 
         with open(json_file_path, 'r') as f:
@@ -177,7 +199,7 @@ class Connectors:
 
     def __getitem__(self, snake_case_id: str) -> Connector:
         if snake_case_id not in self._connectors:
-            self._connectors[snake_case_id] = Connector.from_json(snake_case_id=snake_case_id)
+            self._connectors[snake_case_id] = Connector.from_snake_id(snake_case_id=snake_case_id)
         return self._connectors[snake_case_id]
 
     @property
@@ -185,8 +207,12 @@ class Connectors:
         return self['conjunction_1']
 
     @property
-    def is_a_proposition_predicate_1(self) -> Connector:
-        return self['is_a_proposition_predicate_1']
+    def is_a_proposition_1(self) -> Connector:
+        return self['is_a_proposition_1']
+
+    @property
+    def material_implication_1(self) -> Connector:
+        return self['material_implication_1']
 
 
 class Symbol:
@@ -367,16 +393,15 @@ class Technical1Transformer(lark.Transformer):
         """Transform a list of expressions into a Python list."""
         return list(items)
 
-
 # Example parser setup
-technical_1_transformer = Technical1Transformer()
+# technical_1_transformer = Technical1Transformer()
 
 # Define the input expression
-input_string = "conjunction_1(is_a_proposition_predicate_1,conjunction_1())"
+# input_string = "conjunction_1(is_a_proposition_predicate_1,conjunction_1())"
 
 # Parse and transform the input
-tree = technical_1_parser.parse(input_string)
-result = technical_1_transformer.transform(tree)
+# tree = technical_1_parser.parse(input_string)
+# result = technical_1_transformer.transform(tree)
 
 # Output the parsed structure
-print(result)
+# print(result)
