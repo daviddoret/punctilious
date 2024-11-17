@@ -2,6 +2,7 @@ import uuid
 import yaml
 import pathlib
 import logging
+import jinja2
 
 
 class Logger:
@@ -36,6 +37,70 @@ class Logger:
 
 def get_logger():
     return Logger()
+
+
+class Preferences:
+    __slots__ = ('_representation_mode', '_encoding', '_language')
+    _singleton = None
+    _singleton_initialized = None
+
+    def __init__(self):
+        if self.__class__._singleton_initialized is None:
+            self._representation_mode = 'symbolic'
+            self._encoding = 'unicode_basic'
+            self._language = 'en'
+            self.__class__._singleton_initialized = True
+            get_logger().debug(
+                f'Preferences singleton ({id(self)}) initialized.')
+            get_logger().debug(f'Preferences: {str(self.to_dict())}')
+
+    def __new__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            cls._singleton = super(Preferences, cls).__new__(cls)
+            get_logger().debug(
+                f'Preferences singleton ({id(cls._singleton)}) created.')
+        return cls._singleton
+
+    @property
+    def encoding(self):
+        return self._encoding
+
+    @encoding.setter
+    def encoding(self, value):
+        self._encoding = value
+
+    @property
+    def language(self):
+        return self._language
+
+    @language.setter
+    def language(self, value):
+        self._language = value
+
+    @property
+    def representation_mode(self):
+        return self._representation_mode
+
+    @representation_mode.setter
+    def representation_mode(self, value):
+        self._representation_mode = value
+
+    def to_dict(self):
+        d = {}
+        if self.encoding is not None:
+            d['encoding'] = self.encoding
+        if self.language is not None:
+            d['language'] = self.language
+        if self.representation_mode is not None:
+            d['representation_mode'] = self.representation_mode
+        return d
+
+    def to_yaml(self, default_flow_style=True):
+        yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
+
+
+def get_preferences():
+    return Preferences()
 
 
 class Imports(tuple):
@@ -193,7 +258,7 @@ class Configuration:
         mode = d['mode'] if 'mode' in d.keys() else None
         language = d['language'] if 'language' in d.keys() else None
         encoding = d['encoding'] if 'encoding' in d.keys() else None
-        template = d['template'] if 'template' in d.keys() else None
+        template = jinja2.Template(d['template'] if 'template' in d.keys() else '')
         o = Configuration(mode=mode, language=language, encoding=encoding, template=template)
         return o
 
@@ -245,6 +310,28 @@ class Configurations(tuple):
             typed_l.append(c)
         o = Configurations(*typed_l)
         return o
+
+    def select(self, encoding=None, mode=None, language=None) -> Configuration:
+
+        encoding = get_preferences().encoding if encoding is None else encoding
+        mode = get_preferences().representation_mode if mode is None else mode
+        language = get_preferences().language if language is None else language
+
+        match = next(
+            (e for e in self if e.encoding == encoding and e.mode == mode and e.language == language),
+            None)
+        if match:
+            return match
+
+        match = next((e for e in self if e.encoding == encoding and e.mode == mode), None)
+        if match:
+            return match
+
+        match = next((e for e in self if e.encoding == encoding), None)
+        if match:
+            return match
+
+        return self[0]
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
@@ -339,6 +426,18 @@ class Representation:
                 l=d['configurations'] if 'configurations' in d else None)
             cls._in_memory[uuid4] = o
             return o
+
+    def repr(self, arguments=None, encoding=None, mode=None, language=None):
+        if arguments is None:
+            arguments = ()
+        configuration = self.configurations.select(encoding=encoding, mode=mode, language=language)
+        if self.syntactic_rules.fixed_arity is not None and len(arguments) != self.syntactic_rules.fixed_arity:
+            raise ValueError('The number of arguments does not match the fixed_arity syntactic_rule.')
+        template = configuration.template
+        placeholder_names = tuple((f'a{i}' for i in tuple(range(1, len(arguments) + 1))))
+        d = dict(zip(placeholder_names, arguments))
+        output = template.render(d)
+        return output
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)

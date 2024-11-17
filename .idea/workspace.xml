@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark + yaml">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -305,7 +307,7 @@
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in tests.executor": "Run",
-    "Python.__init__.executor": "Run",
+    "Python.__init__.executor": "Debug",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
     "Python.binary_tree_test.executor": "Run",
@@ -345,7 +347,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious_package_1/data/symbols",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -391,11 +393,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/symbols" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/test" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/connectors" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/representation_modes" />
-      <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/schemas" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/symbols" />
@@ -802,14 +804,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01074" summary="Use WellFormedProposition in WellFormedTheorem">
-      <option name="closed" value="true" />
-      <created>1724120802785</created>
-      <option name="number" value="01074" />
-      <option name="presentableId" value="LOCAL-01074" />
-      <option name="project" value="LOCAL" />
-      <updated>1724120802785</updated>
-    </task>
     <task id="LOCAL-01075" summary="WellFormedHypothesis: test">
       <option name="closed" value="true" />
       <created>1724151062601</created>
@@ -1194,7 +1188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731875823718</updated>
     </task>
-    <option name="localTasksCounter" value="1123" />
+    <task id="LOCAL-01123" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1731876076309</created>
+      <option name="number" value="01123" />
+      <option name="presentableId" value="LOCAL-01123" />
+      <option name="project" value="LOCAL" />
+      <updated>1731876076309</updated>
+    </task>
+    <option name="localTasksCounter" value="1124" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1342,7 +1344,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/__init__.py</url>
-          <line>8</line>
+          <line>16</line>
           <option name="timeStamp" value="253" />
         </line-breakpoint>
       </breakpoints>
