@@ -3,6 +3,7 @@ import yaml
 import pathlib
 import logging
 import jinja2
+import sys
 
 
 class Logger:
@@ -16,6 +17,7 @@ class Logger:
             self._native_logger.setLevel(logging.DEBUG)
             stream_handler = logging.StreamHandler()
             stream_handler.setLevel(logging.DEBUG)
+            stream_handler.flush = lambda: sys.stdout.flush()
             formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             stream_handler.setFormatter(formatter)
             self._native_logger.addHandler(stream_handler)
@@ -225,7 +227,7 @@ class SyntacticRules:
 
 class Configuration:
     """"""
-    __slots__ = ('_mode', '_language', '_encoding', '_template')
+    __slots__ = ('_mode', '_language', '_encoding', '_template', '_jinja2_template')
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
@@ -236,6 +238,7 @@ class Configuration:
         self._language = language
         self._encoding = encoding
         self._template = template
+        self._jinja2_template = jinja2.Template(self._template)
 
     def __repr__(self):
         return self.template
@@ -258,9 +261,13 @@ class Configuration:
         mode = d['mode'] if 'mode' in d.keys() else None
         language = d['language'] if 'language' in d.keys() else None
         encoding = d['encoding'] if 'encoding' in d.keys() else None
-        template = jinja2.Template(d['template'] if 'template' in d.keys() else '')
+        template = d['template'] if 'template' in d.keys() else None
         o = Configuration(mode=mode, language=language, encoding=encoding, template=template)
         return o
+
+    @property
+    def jinja2_template(self):
+        return self._jinja2_template
 
     @property
     def mode(self):
@@ -427,16 +434,15 @@ class Representation:
             cls._in_memory[uuid4] = o
             return o
 
-    def repr(self, arguments=None, encoding=None, mode=None, language=None):
-        if arguments is None:
-            arguments = ()
+    def repr(self, args=None, encoding=None, mode=None, language=None):
+        if args is None:
+            args = ()
         configuration = self.configurations.select(encoding=encoding, mode=mode, language=language)
-        if self.syntactic_rules.fixed_arity is not None and len(arguments) != self.syntactic_rules.fixed_arity:
+        if self.syntactic_rules.fixed_arity is not None and len(args) != self.syntactic_rules.fixed_arity:
             raise ValueError('The number of arguments does not match the fixed_arity syntactic_rule.')
-        template = configuration.template
-        placeholder_names = tuple((f'a{i}' for i in tuple(range(1, len(arguments) + 1))))
-        d = dict(zip(placeholder_names, arguments))
-        output = template.render(d)
+        placeholder_names = tuple((f'a{i}' for i in tuple(range(1, len(args) + 1))))
+        d = dict(zip(placeholder_names, args))
+        output = configuration.jinja2_template.render(d)
         return output
 
     def to_yaml(self, default_flow_style):
@@ -790,8 +796,3 @@ def load_yaml_file_path(yaml_file_path: pathlib.Path):
     with open(yaml_file_path, 'r') as file:
         d: dict = yaml.safe_load(file)
         return d
-
-
-p = pathlib.Path('../punctilious_package_1/data/test/test_1.yaml')
-d = Package.instantiate_from_yaml_file(yaml_file_path=p)
-print(d)
