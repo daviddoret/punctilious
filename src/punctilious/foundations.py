@@ -1,31 +1,39 @@
 import uuid
-
 import yaml
 import pathlib
 import logging
 
 
+class Logger:
+    __slots__ = ('_native_logger')
+    _singleton = None
+    _singleton_initialized = None
+
+    def __init__(self):
+        if self.__class__._singleton_initialized is None:
+            self._native_logger = logging.getLogger('punctilious')
+            self._native_logger.setLevel(logging.DEBUG)
+            stream_handler = logging.StreamHandler()
+            stream_handler.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            stream_handler.setFormatter(formatter)
+            self._native_logger.addHandler(stream_handler)
+            self.__class__._singleton_initialized = True
+
+    def __new__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            cls._singleton = super(Logger, cls).__new__(cls)
+        return cls._singleton
+
+    def debug(self, msg: str):
+        self._native_logger.debug(msg)
+
+    def info(self, msg: str):
+        self._native_logger.info(msg)
+
+
 def get_logger():
-    # create logger
-    logger = logging.getLogger('punctilious')
-    logger.setLevel(logging.DEBUG)
-
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
-
-    # create formatter
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-    # add formatter to ch
-    ch.setFormatter(formatter)
-
-    # add ch to logger
-    logger.addHandler(ch)
-    return logger
-
-
-logger = get_logger()
+    return Logger()
 
 
 class Imports(tuple):
@@ -317,7 +325,7 @@ class Representation:
         uuid4 = d['uuid4']
         if uuid4 in cls._in_memory.keys() and not reload:
             o = cls._in_memory[uuid4]
-            logger.debug(f'Reuse {str(o)}({uuid4}).')
+            get_logger().debug(f'Reuse {str(o)}({uuid4}).')
             return o
         else:
             o = Representation()
@@ -388,7 +396,7 @@ class Connector:
             d = {}
         uuid4 = d['uuid4']
         if uuid4 in cls._uuid4_index.keys() and not reload:
-            logger.debug(f'element {uuid4} skipped because it was already loaded.')
+            get_logger().debug(f'element {uuid4} skipped because it was already loaded.')
             return cls._uuid4_index[uuid4]
         else:
             slug = d['slug']
@@ -491,7 +499,7 @@ class Theorem:
             d = {}
         uuid4 = d['uuid4']
         if uuid4 in cls._uuid4_index.keys() and not reload:
-            logger.debug(f'element {uuid4} skipped because it was already loaded.')
+            get_logger().debug(f'element {uuid4} skipped because it was already loaded.')
             return cls._uuid4_index[uuid4]
         else:
             slug = d['slug']
@@ -626,7 +634,7 @@ class Package:
         uuid4 = d['uuid4']
         if uuid4 in cls._uuid4_index.keys() and not reload:
             reloaded = cls._uuid4_index[uuid4]
-            logger.debug(f'package {reloaded}({uuid4}) skipped because it was already loaded.')
+            get_logger().debug(f'package {reloaded}({uuid4}) skipped because it was already loaded.')
             return reloaded
         else:
             schema = d['schema']
@@ -653,7 +661,7 @@ class Package:
         global logger
         d = load_yaml_file_path(yaml_file_path=yaml_file_path)
         o = cls.instantiate_from_dict(d=d)
-        logger.info(f'package {yaml_file_path} loaded.')
+        get_logger().info(f'package {yaml_file_path} loaded.')
         return o
 
     @property

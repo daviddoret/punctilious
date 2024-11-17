@@ -5,3 +5,5 @@ greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.G
 print(greek_alphabet_lowercase_serif_italic.alpha.configurations[0])
 print(greek_alphabet_lowercase_serif_italic.phi.configurations[1])
 print(greek_alphabet_lowercase_serif_italic.psi.configurations[2])
+
+pass
