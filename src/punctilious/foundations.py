@@ -19,6 +19,8 @@ class Logger:
             stream_handler.setFormatter(formatter)
             self._native_logger.addHandler(stream_handler)
             self.__class__._singleton_initialized = True
+            get_logger().debug(
+                f'Logger singleton ({id(self)}) initialized.')
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:

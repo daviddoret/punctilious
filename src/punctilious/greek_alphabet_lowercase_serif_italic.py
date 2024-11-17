@@ -15,12 +15,14 @@ class GreekAlphabetLowercaseSerifItalic:
             self._phi = _package.representations['phi']
             self._psi = _package.representations['psi']
             self.__class__._singleton_initialized = True
+            _foundations.get_logger().debug(
+                f'GreekAlphabetLowercaseSerifItalic singleton ({id(self)}) initialized.')
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
             cls._singleton = super(GreekAlphabetLowercaseSerifItalic, cls).__new__(cls)
-            _foundations.get_logger().debug('GreekAlphabetLowercaseSerifItalic singleton initialized.')
-        _foundations.get_logger().debug(id(cls._singleton))
+            _foundations.get_logger().debug(
+                f'GreekAlphabetLowercaseSerifItalic singleton ({id(cls._singleton)}) created.')
         return cls._singleton
 
     @property
