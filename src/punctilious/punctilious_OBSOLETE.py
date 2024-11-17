@@ -9,7 +9,7 @@ import lark
 import yaml
 # punctilious modules
 import punctilious_package_1
-import cons
+import cons_OBSOLETE
 
 
 class Encoding:

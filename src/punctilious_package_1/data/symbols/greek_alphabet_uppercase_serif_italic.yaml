@@ -1,0 +1,46 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid4: 07605b78-08dd-4cb4-b411-0e12ef2106b7
+slug: greek_alphabet_uppercase_serif_italic
+representations:
+  - slug: alpha
+    uuid4: 3ad2f8d7-ec94-4690-ae49-2d0063573928
+    syntactic_rules:
+      fixed_arity: 0
+    configurations:
+      - mode: symbolic
+        encoding: unicode_basic
+        template: "Alpha"
+      - mode: symbolic
+        encoding: unicode_extended
+        template: "𝛢"
+      - mode: symbolic
+        encoding: latex_math
+        template: "\\Alpha"
+  - slug: phi
+    uuid4: 236c0d2c-3242-4625-9de7-3978ef0e4daf
+    syntactic_rules:
+      fixed_arity: 0
+    configurations:
+      - mode: symbolic
+        encoding: unicode_basic
+        template: "Phi"
+      - mode: symbolic
+        encoding: unicode_extended
+        template: "𝛷"
+      - mode: symbolic
+        encoding: latex_math
+        template: "\\mathit\\Phi"
+  - slug: psi
+    uuid4: 6df39475-ddc6-44f4-a95c-c94455a84de5
+    syntactic_rules:
+      fixed_arity: 0
+    configurations:
+      - mode: symbolic
+        encoding: unicode_basic
+        template: "Psi"
+      - mode: symbolic
+        encoding: unicode_extended
+        template: "𝛹"
+      - mode: symbolic
+        encoding: latex_math
+        template: "\\mathit\\Psi"

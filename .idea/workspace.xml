@@ -5,8 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark + yaml">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/greek_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/greek_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/yaml_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/yaml_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/cons.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/cons_OBSOLETE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/punctilious_OBSOLETE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/yaml_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/p_uppercase_serif_italic_1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/q_uppercase_serif_italic_1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/r_uppercase_serif_italic_1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/x_lowercase_serif_italic_1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/y_lowercase_serif_italic_1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/z_lowercase_serif_italic_1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -304,7 +317,7 @@
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in tests.executor": "Run",
-    "Python.__init__.executor": "Debug",
+    "Python.__init__.executor": "Run",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
     "Python.binary_tree_test.executor": "Run",
@@ -335,7 +348,7 @@
     "Python.test4.executor": "Run",
     "Python.test_fl1.executor": "Run",
     "Python.typesetting.executor": "Run",
-    "Python.yaml_interface.executor": "Debug",
+    "Python.yaml_interface.executor": "Run",
     "Python.zeta.executor": "Run",
     "Python.zeta_2.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -344,7 +357,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious_package_1/data/test",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious_package_1/data/symbols",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -390,21 +403,21 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/symbols" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/test" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/connectors" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/representation_modes" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/schemas" />
-      <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/objects" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/symbols" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/objects" />
       <recent name="$PROJECT_DIR$/src/punctilious2/data" />
       <recent name="$PROJECT_DIR$/trashcan" />
-      <recent name="$PROJECT_DIR$/src/punctilious2" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.yaml_interface">
+  <component name="RunManager" selected="Python.__init__">
     <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -463,6 +476,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="foundations" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/foundations.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -560,7 +595,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="punctilious" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="punctilious_OBSOLETE" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -573,7 +608,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/punctilious.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/punctilious_OBSOLETE.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -596,28 +631,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/symbols.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="yaml_interface" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/yaml_interface.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -761,10 +774,10 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.yaml_interface" />
+      <item itemvalue="Python.foundations" />
       <item itemvalue="Python.__init__" />
       <item itemvalue="Python.parser" />
-      <item itemvalue="Python.punctilious" />
+      <item itemvalue="Python.punctilious_OBSOLETE" />
       <item itemvalue="Python.symbols (1)" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
@@ -777,9 +790,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.yaml_interface" />
         <item itemvalue="Python.__init__" />
-        <item itemvalue="Python.punctilious" />
+        <item itemvalue="Python.foundations" />
+        <item itemvalue="Python.punctilious_OBSOLETE" />
         <item itemvalue="Python.parser" />
         <item itemvalue="Python.symbols (1)" />
       </list>
@@ -800,14 +813,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01071" summary="Use WellFormedProposition in WellFormedTheorem">
-      <option name="closed" value="true" />
-      <created>1724114261861</created>
-      <option name="number" value="01071" />
-      <option name="presentableId" value="LOCAL-01071" />
-      <option name="project" value="LOCAL" />
-      <updated>1724114261861</updated>
     </task>
     <task id="LOCAL-01072" summary="Use WellFormedProposition in WellFormedTheorem">
       <option name="closed" value="true" />
@@ -1193,7 +1198,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731850074354</updated>
     </task>
-    <option name="localTasksCounter" value="1120" />
+    <task id="LOCAL-01120" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1731864256076</created>
+      <option name="number" value="01120" />
+      <option name="presentableId" value="LOCAL-01120" />
+      <option name="project" value="LOCAL" />
+      <updated>1731864256076</updated>
+    </task>
+    <option name="localTasksCounter" value="1121" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1338,11 +1351,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>330</line>
           <option name="timeStamp" value="244" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/__init__.py</url>
-          <line>13</line>
-          <option name="timeStamp" value="248" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

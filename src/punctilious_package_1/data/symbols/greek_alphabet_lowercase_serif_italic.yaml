@@ -1,0 +1,48 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid4: 7edf82f0-5a28-4066-81b0-c1b6bd517199
+slug: greek_alphabet_lowercase_serif_italic
+# source:
+# https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
+representations:
+  - slug: alpha
+    uuid4: e1962144-76aa-44dc-a320-a0f3dd703dbd
+    syntactic_rules:
+      fixed_arity: 0
+    configurations:
+      - mode: symbolic
+        encoding: unicode_basic
+        template: "alpha"
+      - mode: symbolic
+        encoding: unicode_extended
+        template: "𝛼"
+      - mode: symbolic
+        encoding: latex_math
+        template: "\\alpha"
+  - slug: phi
+    uuid4: d760831d-7ebf-4716-a30a-fbbd879a85e8
+    syntactic_rules:
+      fixed_arity: 0
+    configurations:
+      - mode: symbolic
+        encoding: unicode_basic
+        template: "phi"
+      - mode: symbolic
+        encoding: unicode_extended
+        template: "𝜑"
+      - mode: symbolic
+        encoding: latex_math
+        template: "\\mathit\\phi"
+  - slug: psi
+    uuid4: b3b80eed-7dd0-467a-97d9-c05efb36af4b
+    syntactic_rules:
+      fixed_arity: 0
+    configurations:
+      - mode: symbolic
+        encoding: unicode_basic
+        template: "psi"
+      - mode: symbolic
+        encoding: unicode_extended
+        template: "𝜓"
+      - mode: symbolic
+        encoding: latex_math
+        template: "\\mathit\\psi"

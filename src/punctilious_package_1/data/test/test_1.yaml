@@ -14,13 +14,13 @@ aliases:
 representations:
   # symbols are reusable connector presentations.
   # practical for variable names, etc.
-  - slug: variable_p
-    uuid4: 4d8f91cf-67e9-4f6b-b367-a3d3a5bcf95e # assure the unicity of the symbol.
+  - slug: p_uppercase_serif_italic
+    uuid4: 4d8f91cf-67e9-4f6b-b367-a3d3a5bcf95e
     syntactic_rules:
       fixed_arity: 0
     configurations:
-      - mode: symbolic # neutral, symbolic, textual
-        encoding: unicode_basic # unicode_basic, unicode_extended, latex_math, mathml, ...
+      - mode: symbolic
+        encoding: unicode_basic
         template: "P"
       - mode: symbolic
         encoding: unicode_extended
@@ -29,7 +29,7 @@ representations:
         encoding: latex_math
         template: "\\textit{P}"
   - slug: conjunction_formula
-    uuid4: e0b65eef-9186-4c6b-97b3-ccf52df23450 # assure the unicity of the connector.
+    uuid4: e0b65eef-9186-4c6b-97b3-ccf52df23450
     syntactic_rules:
       fixed_arity: 2
       # min_arity
@@ -57,15 +57,33 @@ representations:
         encoding: unicode_basic
         template: "{{a1}} et {{a2}}"
 connectors:
-  - slug: p
-    uuid4: 7a051cb9-b5f4-4b86-9db6-06f688d9ee95 # assure the unicity of the connector.
-    syntactic_rules:
-      fixed_arity: 0
-    representation: variable_p
-  - slug: conjunction
-    uuid4: e8d2ffca-cf7e-4e62-9b5b-ce45b252b926 # assure the unicity of the connector.
+  - slug: and
+    uuid4: e8d2ffca-cf7e-4e62-9b5b-ce45b252b926
     syntactic_rules:
       fixed_arity: 2
     representation: conjunction_formula
+  - slug: entails
+    uuid4: a04a1717-ee6f-44d6-94ad-7fe344fa3c0a
+    syntactic_rules:
+      fixed_arity: 2
+    representation: entailment_formula
 theorems:
+  - slug: reductio_ad_absurdum_1
+    uuid4: c9eff868-529f-4056-a6dd-fda99017216a
+    variables:
+      - slug: phi
+        representation: variable_phi
+    assumptions:
+      - entails(phi,psi)
+      - entails(phi,not(psi)
+    statement: not(phi)
+    justifications:
+  - slug: reductio_ad_absurdum_2
+    uuid4: e60c3b8f-1e81-4451-bbf4-ca22b4ec6067
+    assumptions:
+      - entails(not(phi),psi)
+      - entails(not(phi),not(psi)
+    statement: phi
+    justifications:
+
 derivations:

@@ -1,7 +1,0 @@
-{
-  "$schema": "http://punctilious.org/schemas/symbol_1#",
-  "snake_case_id": "p_uppercase_serif_italic_1",
-  "unicode_1": "P",
-  "unicode_2": "𝑃",
-  "latex_math_1": "\\textit{P}"
-}

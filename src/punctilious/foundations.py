@@ -44,6 +44,8 @@ class Imports(tuple):
 
     @classmethod
     def instantiate_from_list(cls, l: list):
+        if l is None:
+            l = []
         typed_l = []
         for d in l:
             o = Import.instantiate_from_dict(d=d)
@@ -136,7 +138,7 @@ class SyntacticRules:
         yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
 
     @classmethod
-    def instantiate_from_list(cls, d: dict):
+    def instantiate_from_dict(cls, d: dict):
         if d is None:
             d = {}
         fixed_arity = d['fixed_arity'] if 'fixed_arity' in d.keys() else None
@@ -224,7 +226,9 @@ class Configurations(tuple):
         return '(' + ', '.join(e.template for e in self) + ')'
 
     @classmethod
-    def instantiate_from_list(cls, l: list):
+    def instantiate_from_list(cls, l: list | None):
+        if l is None:
+            l = []
         typed_l = []
         for d in l:
             c = Configuration.instantiate_from_dict(d=d)
@@ -237,11 +241,21 @@ class Configurations(tuple):
 
 
 class Representations(tuple):
+    _slug_index = {}
+    _uuid4_index = {}
 
-    def __init__(self, *args):
-        pass
+    def __getitem__(self, item):
+        if isinstance(item, str):
+            return self.get_from_slug(slug=item)
+        elif isinstance(item, uuid.UUID):
+            return self.get_from_uuid4(uuid4=item)
 
     def __new__(cls, *args, **kwargs):
+        for o in args:
+            if not isinstance(o, Representation):
+                raise TypeError('Element is not of type Representation.')
+            cls._uuid4_index[o.uuid4] = o
+            cls._slug_index[o.slug] = o
         return super().__new__(cls, args)
 
     def __repr__(self):
@@ -250,8 +264,22 @@ class Representations(tuple):
     def __str__(self):
         return '(' + ', '.join(e.slug for e in self) + ')'
 
+    def get_from_slug(self, slug):
+        if slug in self.__class__._slug_index:
+            return self.__class__._slug_index[slug]
+        else:
+            raise IndexError(f'Representation slug "{slug}" does not exist.')
+
+    def get_from_uuid4(self, uuid4):
+        if uuid4 in self.__class__._uuid4_index:
+            return self.__class__._uuid4_index[uuid4]
+        else:
+            raise IndexError(f'Representation uuid4 "{uuid4}" does not exist.')
+
     @classmethod
-    def instantiate_from_list(cls, l: list):
+    def instantiate_from_list(cls, l: list | None):
+        if l is None:
+            l = []
         typed_l = []
         for d in l:
             o = Representation.instantiate_from_dict(d=d)
@@ -295,7 +323,7 @@ class Representation:
             o = Representation()
             o.uuid4 = uuid4
             o.slug = d['slug']
-            o.syntactic_rules = SyntacticRules.instantiate_from_list(
+            o.syntactic_rules = SyntacticRules.instantiate_from_dict(
                 d=d['syntactic_rules'] if 'syntactic_rules' in d else None)
             o.configurations = Configurations.instantiate_from_list(
                 l=d['configurations'] if 'configurations' in d else None)
@@ -321,7 +349,9 @@ class Connectors(tuple):
         return '(' + ', '.join(e.slug for e in self) + ')'
 
     @classmethod
-    def instantiate_from_list(cls, l: list):
+    def instantiate_from_list(cls, l: list | None):
+        if l is None:
+            l = []
         typed_l = []
         for d in l:
             o = Connector.instantiate_from_dict(d=d)
@@ -362,7 +392,7 @@ class Connector:
             return cls._uuid4_index[uuid4]
         else:
             slug = d['slug']
-            syntactic_rules = SyntacticRules.instantiate_from_list(
+            syntactic_rules = SyntacticRules.instantiate_from_dict(
                 d=d['syntactic_rules'] if 'syntactic_rules' in d.keys() else None)
             representation = None
             o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
@@ -421,12 +451,97 @@ class Theorems(tuple):
             l = []
         typed_l = []
         for d in l:
-            o = Theorem.instanciate_from_dict(d=d)
+            o = Theorem.instantiate_from_dict(d=d)
             typed_l.append(o)
         return Connectors(*typed_l)
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+class Theorem:
+    __slots__ = ('_uuid4', '_slug', '_variables', '_assumptions', '_statement', '_justifications')
+    _uuid4_index = {}
+
+    def __hash__(self):
+        # hash only spans the properties that uniquely identify the object.
+        return hash((self.__class__, self._uuid4))
+
+    def __init__(self, uuid4=None, slug=None, variables=None, assumptions=None, statement=None, justifications=None):
+        self._uuid4 = uuid4
+        self._slug = slug
+        self._variables = variables
+        self._assumptions = assumptions
+        self._statement = statement
+        self._justifications = justifications
+
+    def __repr__(self):
+        return self.slug
+
+    def __str__(self):
+        return self.slug
+
+    @property
+    def assumptions(self):
+        return self._assumptions
+
+    @classmethod
+    def instantiate_from_dict(cls, d: dict | None, reload: bool = False):
+        if d is None:
+            d = {}
+        uuid4 = d['uuid4']
+        if uuid4 in cls._uuid4_index.keys() and not reload:
+            logger.debug(f'element {uuid4} skipped because it was already loaded.')
+            return cls._uuid4_index[uuid4]
+        else:
+            slug = d['slug']
+            variables = None
+            assumptions = None
+            statement = None
+            justifications = None
+            o = Theorem(uuid4=uuid4, slug=slug, variables=variables, assumptions=assumptions, statement=statement,
+                        justifications=justifications)
+            cls._uuid4_index[uuid4] = o
+            return o
+
+    @property
+    def justifications(self):
+        return self._justifications
+
+    @property
+    def slug(self):
+        return self._slug
+
+    @property
+    def statement(self):
+        return self._statement
+
+    @property
+    def variables(self):
+        return self._variables
+
+    def to_dict(self):
+        d = {}
+        if self.uuid4 is not None:
+            d['uuid4'] = self.uuid4
+        if self.slug is not None:
+            d['slug'] = self.slug
+        if self.variables is not None:
+            d['variables'] = self.variables
+        if self.assumptions is not None:
+            d['assumptions'] = self.assumptions
+        if self.statement is not None:
+            d['statement'] = self.statement
+        if self.justifications is not None:
+            d['justifications'] = self.justifications
+        return d
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
+
+    @property
+    def uuid4(self):
+        return self._uuid4
 
 
 class Justifications(tuple):
@@ -449,7 +564,7 @@ class Justifications(tuple):
             l = []
         typed_l = []
         for d in l:
-            o = Justification.instantiate_from_list(l=d)
+            o = Justification.instantiate_from_dict(l=d)
             typed_l.append(o)
         return Connectors(*typed_l)
 
@@ -519,7 +634,7 @@ class Package:
             slug = d['slug']
             imports = Imports.instantiate_from_list(
                 l=d['imports'] if 'imports' in d.keys() else None)
-            aliases = d['aliases']
+            aliases = None  # To be implemented
             representations = Representations.instantiate_from_list(
                 l=d['representations'] if 'representations' in d.keys() else None)
             connectors = Connectors.instantiate_from_list(
@@ -534,7 +649,7 @@ class Package:
             return o
 
     @classmethod
-    def load_from_yaml(cls, yaml_file_path: pathlib.Path):
+    def instantiate_from_yaml_file(cls, yaml_file_path: pathlib.Path):
         global logger
         d = load_yaml_file_path(yaml_file_path=yaml_file_path)
         o = cls.instantiate_from_dict(d=d)
@@ -569,6 +684,5 @@ def load_yaml_file_path(yaml_file_path: pathlib.Path):
 
 
 p = pathlib.Path('../punctilious_package_1/data/test/test_1.yaml')
-d = Package.load_from_yaml(yaml_file_path=p)
+d = Package.instantiate_from_yaml_file(yaml_file_path=p)
 print(d)
-print('goodbye')
