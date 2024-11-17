@@ -1,5 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uuid4: 54dedacd-6701-45ce-ba2c-17ab1997f85b # assure the unicity of the package.
+slug: package_test_1
 imports: # list of dependent files
   # to reference elements in a dependent file, use the dot separator, e.g.:
   # test_file_2.some_element_1
