@@ -1,0 +1,14 @@
+schema: "http://punctilious.org/schemas/theorem_1#"
+uuid4: c697d495-9034-4bf0-9a52-7f9954be0157
+slug: absorption_law_1
+title: "Absorption law #1"
+imports:
+  - slug: operators_1
+    source: punctilious:operators_representation_1.yaml
+    method: import_all_directly
+premises:
+  - is_a_proposition(p)
+  - is_a_proposition(q)
+  - p implies q
+conclusion:
+  p implies (p and q)

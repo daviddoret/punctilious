@@ -28,32 +28,7 @@ representations:
       - mode: symbolic
         encoding: latex_math
         template: "\\textit{P}"
-  - slug: conjunction_formula
-    uuid4: e0b65eef-9186-4c6b-97b3-ccf52df23450
-    syntactic_rules:
-      fixed_arity: 2
-      # min_arity
-      # max_arity
-      # ...
-    configurations:
-      - mode: symbolic # neutral, symbolic, textual
-        # layout: neutral # neutral, inline, compact, expanded
-        language: en # neutral, fr, fr_CH, ...
-        encoding: unicode_basic # unicode_basic, unicode_extended, latex_math, mathml, ...
-        template: "{{a1}} and {{a2}}"
-      - mode: symbolic
-        # layout: neutral
-        # language: neutral
-        encoding: unicode_extended
-        template: "{{a1}} ∧ {{a2}}"
-      - mode: symbolic
-        language: neutral
-        encoding: latex_math
-        template: "{{a1}} \\land {{a2}}"
-      - mode: symbolic
-        language: fr
-        encoding: unicode_basic
-        template: "{{a1}} et {{a2}}"
+
 connectors:
   - slug: and
     uuid4: e8d2ffca-cf7e-4e62-9b5b-ce45b252b926

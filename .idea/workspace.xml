@@ -5,9 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark + yaml">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/representations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/theorems/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/theorems/absorption_law_1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/operators.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/greek_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic_representation_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/greek_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic_representation_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/theorems/absorption_law_1.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -345,7 +359,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/data/connectors",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -391,18 +405,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious/data/connectors" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/symbols" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/test" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/connectors" />
-      <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/representation_modes" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
+      <recent name="$PROJECT_DIR$/src/punctilious/data/theorems" />
+      <recent name="$PROJECT_DIR$/src/punctilious/data" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/symbols" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
-      <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/objects" />
-      <recent name="$PROJECT_DIR$/src/punctilious2/data" />
-      <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
   <component name="RunManager" selected="Python.__init__">
@@ -802,14 +816,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01076" summary="WellFormedHypothesis: test">
-      <option name="closed" value="true" />
-      <created>1724151569816</created>
-      <option name="number" value="01076" />
-      <option name="presentableId" value="LOCAL-01076" />
-      <option name="project" value="LOCAL" />
-      <updated>1724151569816</updated>
-    </task>
     <task id="LOCAL-01077" summary="WellFormedHypothesis: test">
       <option name="closed" value="true" />
       <created>1724293151525</created>
@@ -1194,7 +1200,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731882303336</updated>
     </task>
-    <option name="localTasksCounter" value="1125" />
+    <task id="LOCAL-01125" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1731883256873</created>
+      <option name="number" value="01125" />
+      <option name="presentableId" value="LOCAL-01125" />
+      <option name="project" value="LOCAL" />
+      <updated>1731883256873</updated>
+    </task>
+    <option name="localTasksCounter" value="1126" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1342,7 +1356,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/__init__.py</url>
-          <line>21</line>
+          <line>26</line>
           <option name="timeStamp" value="253" />
         </line-breakpoint>
       </breakpoints>

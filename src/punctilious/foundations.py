@@ -4,6 +4,7 @@ import pathlib
 import logging
 import jinja2
 import sys
+import importlib.resources
 
 
 class Logger:
@@ -106,6 +107,7 @@ def get_preferences():
 
 
 class Imports(tuple):
+    __slots__ = ()
 
     def __init__(self, *args):
         pass
@@ -188,10 +190,12 @@ class Import:
 
 
 class SyntacticRules:
+    __slots__ = ('_fixed_arity', '_min_arity', '_max_arity')
+
     def __init__(self, fixed_arity=None, min_arity=None, max_arity=None):
-        self.fixed_arity = fixed_arity
-        self.min_arity = min_arity
-        self.max_arity = max_arity
+        self._fixed_arity = fixed_arity
+        self._min_arity = min_arity
+        self._max_arity = max_arity
 
     def __repr__(self):
         formatted_items = [f'{key}: {value}' for key, value in self.to_dict().items()]
@@ -200,6 +204,18 @@ class SyntacticRules:
     def __str__(self):
         formatted_items = [f'{key}: {value}' for key, value in self.to_dict().items()]
         return '(' + ', '.join(formatted_items) + ')'
+
+    @property
+    def fixed_arity(self):
+        return self._fixed_arity
+
+    @property
+    def max_arity(self):
+        return self._max_arity
+
+    @property
+    def min_arity(self):
+        return self._min_arity
 
     def to_dict(self):
         d = dict()
@@ -227,16 +243,17 @@ class SyntacticRules:
 
 class Configuration:
     """"""
-    __slots__ = ('_mode', '_language', '_encoding', '_template', '_jinja2_template')
+    __slots__ = ('_mode', '_language', '_encoding', '_parentheses', '_template', '_jinja2_template')
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._mode, self._language, self._encoding))
+        return hash((self.__class__, self._mode, self._language, self._encoding, self._parentheses))
 
-    def __init__(self, mode=None, language=None, encoding=None, template=None):
+    def __init__(self, mode=None, language=None, encoding=None, parentheses=None, template=None):
         self._mode = mode
         self._language = language
         self._encoding = encoding
+        self._parentheses = parentheses
         self._template = template
         self._jinja2_template = jinja2.Template(self._template)
 
@@ -261,8 +278,9 @@ class Configuration:
         mode = d['mode'] if 'mode' in d.keys() else None
         language = d['language'] if 'language' in d.keys() else None
         encoding = d['encoding'] if 'encoding' in d.keys() else None
+        parentheses = d['parentheses'] if 'parentheses' in d.keys() else None
         template = d['template'] if 'template' in d.keys() else None
-        o = Configuration(mode=mode, language=language, encoding=encoding, template=template)
+        o = Configuration(mode=mode, language=language, encoding=encoding, parentheses=parentheses, template=template)
         return o
 
     @property
@@ -272,6 +290,10 @@ class Configuration:
     @property
     def mode(self):
         return self._mode
+
+    @property
+    def parentheses(self):
+        return self._parentheses
 
     @property
     def template(self):
@@ -285,6 +307,8 @@ class Configuration:
             d['language'] = self.language
         if self.encoding is not None:
             d['encoding'] = self.encoding
+        if self.parentheses is not None:
+            d['parentheses'] = self.parentheses
         if self.template is not None:
             d['template'] = self.template
         return d
@@ -294,6 +318,7 @@ class Configuration:
 
 
 class Configurations(tuple):
+    __slots__ = ()
 
     def __init__(self, *args):
         pass
@@ -345,6 +370,7 @@ class Configurations(tuple):
 
 
 class Representations(tuple):
+    __slots__ = ()
     _slug_index = {}
     _uuid4_index = {}
 
@@ -396,6 +422,7 @@ class Representations(tuple):
 
 
 class Representation:
+    __slots__ = ('_uuid4', '_slug', '_syntactic_rules', '_configurations')
     _in_memory = {}
 
     def __hash__(self):
@@ -403,16 +430,20 @@ class Representation:
         return hash((self.__class__, self.uuid4))
 
     def __init__(self, uuid4=None, slug=None, syntactic_rules=None, configurations=None):
-        self.uuid4 = uuid4
-        self.slug = slug
-        self.syntactic_rules = syntactic_rules
-        self.configurations = configurations
+        self._uuid4 = uuid4
+        self._slug = slug
+        self._syntactic_rules = syntactic_rules
+        self._configurations = configurations
 
     def __repr__(self):
         return self.slug
 
     def __str__(self):
         return self.slug
+
+    @property
+    def configurations(self):
+        return self._configurations
 
     @classmethod
     def instantiate_from_dict(cls, d: dict | None, reload: bool = False):
@@ -424,13 +455,12 @@ class Representation:
             get_logger().debug(f'Reuse {str(o)}({uuid4}).')
             return o
         else:
-            o = Representation()
-            o.uuid4 = uuid4
-            o.slug = d['slug']
-            o.syntactic_rules = SyntacticRules.instantiate_from_dict(
+            slug = d['slug']
+            syntactic_rules = SyntacticRules.instantiate_from_dict(
                 d=d['syntactic_rules'] if 'syntactic_rules' in d else None)
-            o.configurations = Configurations.instantiate_from_list(
+            configurations = Configurations.instantiate_from_list(
                 l=d['configurations'] if 'configurations' in d else None)
+            o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, configurations=configurations)
             cls._in_memory[uuid4] = o
             return o
 
@@ -445,11 +475,24 @@ class Representation:
         output = configuration.jinja2_template.render(d)
         return output
 
+    @property
+    def slug(self):
+        return self._slug
+
+    @property
+    def syntactic_rules(self):
+        return self._syntactic_rules
+
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
+    @property
+    def uuid4(self):
+        return self._uuid4
+
 
 class Connectors(tuple):
+    __slots__ = ()
 
     def __init__(self, *args):
         pass
@@ -547,6 +590,7 @@ class Connector:
 
 
 class Theorems(tuple):
+    __slots__ = ()
 
     def __init__(self, *args):
         pass
@@ -660,6 +704,7 @@ class Theorem:
 
 
 class Justifications(tuple):
+    __slots__ = ()
 
     def __init__(self, *args):
         pass
@@ -685,6 +730,66 @@ class Justifications(tuple):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+class Packages(dict):
+    __slots__ = ()
+    _singleton = None
+    _singleton_initialized = None
+
+    def __init__(self):
+        if self.__class__._singleton_initialized is None:
+            self.__class__._singleton_initialized = True
+            get_logger().debug(
+                f'Packages singleton ({id(self)}) initialized.')
+        super().__init__()
+
+    def __new__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            cls._singleton = super(Packages, cls).__new__(cls)
+            get_logger().debug(
+                f'Packages singleton ({id(cls._singleton)}) created.')
+        return cls._singleton
+
+    def __repr__(self):
+        return '(' + ', '.join(str(e) for e in self) + ')'
+
+    def __setitem__(self, key, value):
+        """Override __setitem__ to check value type before adding to the dictionary."""
+        if not isinstance(value, Package):
+            raise TypeError(f"Value must be of type Package")
+        super().__setitem__(key, value)
+
+    def __str__(self):
+        return '(' + ', '.join(str(e) for e in self) + ')'
+
+    def import_native(self, slug):
+        """Import a native package."""
+        template_res = importlib.resources.files("data.package.templates").joinpath("template.foo")
+        with importlib.resources.as_file(template_res) as template_file:
+            XXX
+
+    def import_from_file(self):
+        """Import an external package from a file."""
+        pass
+
+    def import_from_url(self):
+        """Import an external package from a URL."""
+        pass
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self, default_flow_style=default_flow_style)
+
+    def update(self, other=None, **kwargs):
+        if isinstance(other, dict):
+            for k, v in other.items():
+                if not isinstance(v, Package):
+                    raise TypeError(f"Value must be of type Package")
+                self[k] = v
+        for k, v in kwargs.items():
+            if not isinstance(v, Package):
+                raise TypeError(f"Value must be of type Package")
+            self[k] = v
 
 
 class Package:
