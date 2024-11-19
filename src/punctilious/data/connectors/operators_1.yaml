@@ -3,8 +3,9 @@ uuid4: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
 slug: operators_1
 imports:
   - slug: operators_representations_1
-    source_type: native
-    source: operators_representation_1
+    scheme: python_package_resources
+    path: data.connectors
+    resource: operators_representation_1
     method: import_all_directly
 connectors:
   - slug: conjunction

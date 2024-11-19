@@ -9,11 +9,12 @@ class Operators:
 
     def __init__(self):
         if self.__class__._singleton_initialized is None:
-            _path = pathlib.Path('data/representations/operators_representation_1.yaml')
-            _package = _foundations.Package.instantiate_from_yaml_file(yaml_file_path=_path)
-            self._conjunction = _package.representations['conjunction']
-            self._entailment = _package.representations['entailment']
-            self._negation = _package.representations['negation']
+            path = 'data.connectors'
+            resource = 'operators_1.yaml'
+            package = _foundations.Package.instantiate_from_python_package_resource(path=path, resource=resource)
+            self._conjunction = package.representations['conjunction_representation']
+            self._entailment = package.representations['entailment_representation']
+            self._negation = package.representations['negation_representation']
             self.__class__._singleton_initialized = True
             _foundations.get_logger().debug(
                 f'GreekAlphabetLowercaseSerifItalic singleton ({id(self)}) initialized.')

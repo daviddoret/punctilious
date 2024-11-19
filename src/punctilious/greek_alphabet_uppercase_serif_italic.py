@@ -10,7 +10,7 @@ class GreekAlphabetUppercaseSerifItalic:
     def __init__(self):
         if self.__class__._singleton_initialized is None:
             _path = pathlib.Path('data/representations/greek_alphabet_uppercase_serif_italic_representation_1.yaml')
-            _package = _foundations.Package.instantiate_from_yaml_file(yaml_file_path=_path)
+            _package = _foundations.Package.instantiate_from_yaml_file(path=_path)
             self._alpha = _package.representations['alpha']
             self._phi = _package.representations['phi']
             self._psi = _package.representations['psi']

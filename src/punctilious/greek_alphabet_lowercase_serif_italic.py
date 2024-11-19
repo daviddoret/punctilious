@@ -2,18 +2,15 @@ import pathlib
 import foundations as _foundations
 
 
-class GreekAlphabetLowercaseSerifItalic:
-    __slots__ = ('_alpha', '_phi', '_psi')
+class GreekAlphabetLowercaseSerifItalic(_foundations.PythonPackage):
     _singleton = None
     _singleton_initialized = None
 
     def __init__(self):
         if self.__class__._singleton_initialized is None:
-            _path = pathlib.Path('data/representations/greek_alphabet_lowercase_serif_italic_representation_1.yaml')
-            _package = _foundations.Package.instantiate_from_yaml_file(yaml_file_path=_path)
-            self._alpha = _package.representations['alpha']
-            self._phi = _package.representations['phi']
-            self._psi = _package.representations['psi']
+            path = 'data.representations'
+            resource = 'greek_alphabet_lowercase_serif_italic_representation_1.yaml'
+            super().__init__(path=path, resource=resource)
             self.__class__._singleton_initialized = True
             _foundations.get_logger().debug(
                 f'GreekAlphabetLowercaseSerifItalic singleton ({id(self)}) initialized.')
@@ -27,12 +24,12 @@ class GreekAlphabetLowercaseSerifItalic:
 
     @property
     def alpha(self):
-        return self._alpha
+        return self.representations['alpha']
 
     @property
     def phi(self):
-        return self._phi
+        return self.representations['phi']
 
     @property
     def psi(self):
-        return self._psi
+        return self.representations['psi']

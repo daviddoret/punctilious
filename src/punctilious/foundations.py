@@ -1,3 +1,5 @@
+from __future__ import annotations
+import io
 import uuid
 import yaml
 import pathlib
@@ -5,6 +7,7 @@ import logging
 import jinja2
 import sys
 import importlib.resources
+import typing
 
 
 class Logger:
@@ -136,15 +139,17 @@ class Imports(tuple):
 
 
 class Import:
-    __slots__ = ('_slug', '_source', '_method')
+    __slots__ = ('_slug', '_scheme', '_path', '_resource', '_method')
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._slug, self._source))
+        return hash((self.__class__, self._slug, self._scheme, self._path, self._resource, self._method))
 
-    def __init__(self, slug, source, method):
+    def __init__(self, slug, scheme, path, resource, method):
         self._slug = slug
-        self._source = source
+        self._scheme = scheme
+        self._path = path
+        self._resource = resource
         self._method = method
 
     def __repr__(self):
@@ -158,9 +163,11 @@ class Import:
         if d is None:
             d = {}
         slug = d['slug'] if 'slug' in d.keys() else None
-        source = d['source'] if 'source' in d.keys() else None
+        scheme = d['scheme'] if 'scheme' in d.keys() else None
+        path = d['path'] if 'path' in d.keys() else None
+        resource = d['resource'] if 'resource' in d.keys() else None
         method = d['method'] if 'method' in d.keys() else None
-        o = Import(slug=slug, source=source, method=method)
+        o = Import(slug=slug, scheme=scheme, path=path, resource=resource, method=method)
         return o
 
     @property
@@ -168,19 +175,31 @@ class Import:
         return self._method
 
     @property
+    def path(self):
+        return self._path
+
+    @property
+    def resource(self):
+        return self._resource
+
+    @property
     def slug(self):
         return self._slug
 
     @property
-    def source(self):
-        return self._source
+    def scheme(self):
+        return self._scheme
 
     def to_dict(self):
         d = {}
         if self.slug is not None:
             d['local_name'] = self.slug
-        if self.source is not None:
-            d['source'] = self.source
+        if self.scheme is not None:
+            d['scheme'] = self.scheme
+        if self.path is not None:
+            d['path'] = self.path
+        if self.resource is not None:
+            d['resource'] = self.resource
         if self.method is not None:
             d['method'] = self.method
         return d
@@ -736,6 +755,11 @@ class Packages(dict):
     __slots__ = ()
     _singleton = None
     _singleton_initialized = None
+    _native_packages = {
+        'greek_alphabet_lowercase_serif_italic_representation_1': '/data/representations/greek_alphabet_lowercase_serif_italic_representation_1.yaml',
+        'greek_alphabet_uppercase_serif_italic_representation_1': '/data/representations/greek_alphabet_uppercase_serif_italic_representation_1.yaml',
+        'operators_representation_1': '/data/representations/operators_representation_1.yaml'
+    }
 
     def __init__(self):
         if self.__class__._singleton_initialized is None:
@@ -763,11 +787,11 @@ class Packages(dict):
     def __str__(self):
         return '(' + ', '.join(str(e) for e in self) + ')'
 
-    def import_native(self, slug):
-        """Import a native package."""
-        template_res = importlib.resources.files("data.package.templates").joinpath("template.foo")
-        with importlib.resources.as_file(template_res) as template_file:
-            XXX
+    def import_native(self, path, resource):
+        """Import a native package.
+
+        This method is called when `import.source_type=='native'`."""
+        p = Package.instantiate_from_python_package_resource(path=path, resource=resource)
 
     def import_from_file(self):
         """Import an external package from a file."""
@@ -795,7 +819,8 @@ class Packages(dict):
 class Package:
     __slots__ = ('_schema', '_uuid4', '_slug', '_imports', '_aliases', '_representations', '_connectors', '_theorems',
                  '_justifications')
-    _uuid4_index = {}
+
+    # _uuid4_index = {}
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
@@ -839,43 +864,6 @@ class Package:
     def justifications(self):
         return self._justifications
 
-    @classmethod
-    def instantiate_from_dict(cls, d: dict | None, reload: bool = False):
-        if d is None:
-            d = {}
-        uuid4 = d['uuid4']
-        if uuid4 in cls._uuid4_index.keys() and not reload:
-            reloaded = cls._uuid4_index[uuid4]
-            get_logger().debug(f'package {reloaded}({uuid4}) skipped because it was already loaded.')
-            return reloaded
-        else:
-            schema = d['schema']
-            uuid4 = d['uuid4']
-            slug = d['slug']
-            imports = Imports.instantiate_from_list(
-                l=d['imports'] if 'imports' in d.keys() else None)
-            aliases = None  # To be implemented
-            representations = Representations.instantiate_from_list(
-                l=d['representations'] if 'representations' in d.keys() else None)
-            connectors = Connectors.instantiate_from_list(
-                l=d['connectors'] if 'connectors' in d.keys() else None)
-            theorems = Theorems.instantiate_from_list(
-                l=d['theorems'] if 'theorems' in d.keys() else None)
-            justifications = Justifications.instantiate_from_list(
-                l=d['justifications'] if 'justifications' in d.keys() else None)
-            o = Package(schema=schema, uuid4=uuid4, slug=slug, imports=imports, aliases=aliases,
-                        representations=representations, connectors=connectors, theorems=theorems,
-                        justifications=justifications)
-            return o
-
-    @classmethod
-    def instantiate_from_yaml_file(cls, yaml_file_path: pathlib.Path):
-        global logger
-        d = load_yaml_file_path(yaml_file_path=yaml_file_path)
-        o = cls.instantiate_from_dict(d=d)
-        get_logger().info(f'package {yaml_file_path} loaded.')
-        return o
-
     @property
     def representations(self):
         return self._representations
@@ -897,7 +885,42 @@ class Package:
         return self._uuid4
 
 
-def load_yaml_file_path(yaml_file_path: pathlib.Path):
-    with open(yaml_file_path, 'r') as file:
-        d: dict = yaml.safe_load(file)
-        return d
+class PythonPackage(Package):
+    """A package loaded from the current python package resources."""
+
+    def __init__(self, path: str, resource: str):
+        """Import a native package.
+
+        This method is called when processing imports with `source_type: python_package_resources`.
+
+        :param path: A python importlib.resources.files folder, e.g. `data.operators`.
+        :param resource: A yaml filename, e.g. `operators_1.yaml`.
+        :return:
+        """
+        package_path = importlib.resources.files(path).joinpath(resource)
+        with importlib.resources.as_file(package_path) as file_path:
+            with open(file_path, 'r') as file:
+                file: io.TextIOBase
+                d: dict = yaml.safe_load(file)
+                # if uuid4 in cls._uuid4_index.keys() and not reload:
+                #    reloaded = cls._uuid4_index[uuid4]
+                #    get_logger().debug(f'package {reloaded}({uuid4}) skipped because it was already loaded.')
+                #    return reloaded
+                # else:
+                schema = d['schema']
+                uuid4 = d['uuid4']
+                slug = d['slug']
+                imports = Imports.instantiate_from_list(
+                    l=d['imports'] if 'imports' in d.keys() else None)
+                aliases = None  # To be implemented
+                representations = Representations.instantiate_from_list(
+                    l=d['representations'] if 'representations' in d.keys() else None)
+                connectors = Connectors.instantiate_from_list(
+                    l=d['connectors'] if 'connectors' in d.keys() else None)
+                theorems = Theorems.instantiate_from_list(
+                    l=d['theorems'] if 'theorems' in d.keys() else None)
+                justifications = Justifications.instantiate_from_list(
+                    l=d['justifications'] if 'justifications' in d.keys() else None)
+                super().__init__(schema=schema, uuid4=uuid4, slug=slug, imports=imports, aliases=aliases,
+                                 representations=representations, connectors=connectors, theorems=theorems,
+                                 justifications=justifications)
