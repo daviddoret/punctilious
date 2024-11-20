@@ -483,7 +483,7 @@ class Representation:
             cls._in_memory[uuid4] = o
             return o
 
-    def repr(self, args=None, encoding=None, mode=None, language=None):
+    def repr(self, args=None, encoding=None, mode=None, language=None) -> str:
         if args is None:
             args = ()
         configuration = self.configurations.select(encoding=encoding, mode=mode, language=language)
@@ -551,7 +551,7 @@ class Connector:
         self._uuid4 = uuid4
         self._slug = slug
         self._syntactic_rules = syntactic_rules
-        self._representation = representation
+        self._representation: Representation = representation
 
     def __repr__(self):
         return self.slug
@@ -576,8 +576,11 @@ class Connector:
             cls._uuid4_index[uuid4] = o
             return o
 
+    def repr(self, args=None, encoding=None, mode=None, language=None) -> str:
+        return self.representation.repr(args=args, encoding=encoding, mode=mode, language=language)
+
     @property
-    def representation(self):
+    def representation(self) -> Representation:
         return self._representation
 
     @property

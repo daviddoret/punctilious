@@ -23,13 +23,13 @@ class GreekAlphabetUppercaseSerifItalic(_foundations.PythonPackage):
         return cls._singleton
 
     @property
-    def alpha(self):
+    def alpha(self) -> _foundations.Representation:
         return self.representations['alpha']
 
     @property
-    def phi(self):
+    def phi(self) -> _foundations.Representation:
         return self.representations['phi']
 
     @property
-    def psi(self):
+    def psi(self) -> _foundations.Representation:
         return self.representations['psi']

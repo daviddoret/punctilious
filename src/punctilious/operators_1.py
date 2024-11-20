@@ -2,8 +2,7 @@ import pathlib
 import foundations as _foundations
 
 
-class Operators:
-    __slots__ = ('_conjunction', '_entailment', '_negation')
+class Operators(_foundations.PythonPackage):
     _singleton = None
     _singleton_initialized = None
 
@@ -11,13 +10,10 @@ class Operators:
         if self.__class__._singleton_initialized is None:
             path = 'data.connectors'
             resource = 'operators_1.yaml'
-            package = _foundations.Package.instantiate_from_python_package_resource(path=path, resource=resource)
-            self._conjunction = package.representations['conjunction_representation']
-            self._entailment = package.representations['entailment_representation']
-            self._negation = package.representations['negation_representation']
+            super().__init__(path=path, resource=resource)
             self.__class__._singleton_initialized = True
             _foundations.get_logger().debug(
-                f'GreekAlphabetLowercaseSerifItalic singleton ({id(self)}) initialized.')
+                f'Operators singleton ({id(self)}) initialized.')
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
@@ -27,13 +23,13 @@ class Operators:
         return cls._singleton
 
     @property
-    def conjunction(self):
-        return self._conjunction
+    def conjunction(self) -> _foundations.Connector:
+        return self.connectors['conjunction']
 
     @property
-    def entailment(self):
-        return self._entailment
+    def entailment(self) -> _foundations.Connector:
+        return self.connectors['entailment']
 
     @property
-    def negation(self):
-        return self._negation
+    def negation(self) -> _foundations.Connector:
+        return self.connectors['negation']
