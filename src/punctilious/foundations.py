@@ -145,12 +145,15 @@ class Import:
         # hash only spans the properties that uniquely identify the object.
         return hash((self.__class__, self._slug, self._scheme, self._path, self._resource, self._method))
 
-    def __init__(self, slug, scheme, path, resource, method):
+    def __init__(self, slug, scheme, path, resource, method, load=True):
         self._slug = slug
         self._scheme = scheme
         self._path = path
         self._resource = resource
         self._method = method
+        if load:
+            if scheme == 'python_package':
+                p = PythonPackage(path=path, resource=resource)
 
     def __repr__(self):
         return self.slug
@@ -819,6 +822,10 @@ class Packages(dict):
             self[k] = v
 
 
+def get_packages():
+    return Packages()
+
+
 class Package:
     __slots__ = ('_schema', '_uuid4', '_slug', '_imports', '_aliases', '_representations', '_connectors', '_theorems',
                  '_justifications')
@@ -844,6 +851,8 @@ class Package:
         self._connectors = connectors
         self._theorems = theorems
         self._justifications = justifications
+        p = get_packages()
+        p[slug] = self
 
     def __repr__(self):
         return self.slug

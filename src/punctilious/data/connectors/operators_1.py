@@ -1,5 +1,4 @@
-import pathlib
-import foundations as _foundations
+from ... import foundations as _foundations
 
 
 class Operators(_foundations.PythonPackage):
