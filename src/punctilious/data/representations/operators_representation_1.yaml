@@ -1,6 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uuid4: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
-slug: operators
+slug: operators_representation_1
 # source:
 # https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
 representations:

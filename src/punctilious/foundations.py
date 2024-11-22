@@ -851,8 +851,10 @@ class Package:
         self._connectors = connectors
         self._theorems = theorems
         self._justifications = justifications
+        # Reference the package in the packages singleton.s
         p = get_packages()
         p[slug] = self
+        pass
 
     def __repr__(self):
         return self.slug

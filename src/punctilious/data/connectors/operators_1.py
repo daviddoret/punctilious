@@ -1,7 +1,7 @@
 from ... import foundations as _foundations
 
 
-class Operators(_foundations.PythonPackage):
+class Operators1Package(_foundations.PythonPackage):
     _singleton = None
     _singleton_initialized = None
 
@@ -16,7 +16,7 @@ class Operators(_foundations.PythonPackage):
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
-            cls._singleton = super(Operators, cls).__new__(cls)
+            cls._singleton = super(Operators1Package, cls).__new__(cls)
             _foundations.get_logger().debug(
                 f'Operators singleton ({id(cls._singleton)}) created.')
         return cls._singleton
