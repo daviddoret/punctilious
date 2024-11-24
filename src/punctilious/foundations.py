@@ -135,44 +135,6 @@ class Slugs(dict):
         super().__setitem__(slug, value)
 
 
-class Imports(tuple):
-
-    def __init__(self, *args, **kwargs):
-        slug_index = []
-        for i in args:
-            slug_index.append(i.slug)
-        self._slug_index = tuple(slug_index)
-        super().__init__()
-
-    def __new__(cls, *args, **kwargs):
-        return super().__new__(cls, args)
-
-    def __repr__(self):
-        return '(' + ', '.join(str(e) for e in self) + ')'
-
-    def __str__(self):
-        return '(' + ', '.join(str(e) for e in self) + ')'
-
-    def get_from_slug(self, slug: str) -> Import:
-        if slug in self._slug_index:
-            return self[self._slug_index.index(slug)]
-        else:
-            raise IndexError(f'Import slug not found: "{slug}".')
-
-    @classmethod
-    def instantiate_from_list(cls, l: list):
-        if l is None:
-            l = []
-        typed_l = []
-        for d in l:
-            o = assure_import(o=d)
-            typed_l.append(o)
-        return Imports(*typed_l)
-
-    def to_yaml(self, default_flow_style):
-        return yaml.dump(self, default_flow_style=default_flow_style)
-
-
 class Import:
     __slots__ = ('_slug', '_scheme', '_path', '_resource', '_method', '_package')
 
@@ -342,6 +304,34 @@ class Configuration:
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
+
+
+class Imports(tuple):
+    """A tuple of Import instances."""
+
+    def __init__(self, *args, **kwargs):
+        self._slug_index = tuple(i.slug for i in self)
+        super().__init__()
+
+    def __new__(cls, *args, **kwargs):
+        typed_imports = tuple(assure_import(r) for r in args)
+        return super().__new__(cls, typed_imports)
+
+    def __repr__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def __str__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def get_from_slug(self, slug: str):
+        if slug in self._slug_index:
+            slug_index = self._slug_index.index(slug)
+            return self[slug_index]
+        else:
+            raise IndexError(f'Import slug not found: "{slug}".')
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self, default_flow_style=default_flow_style)
 
 
 class Representations(tuple):
@@ -917,8 +907,8 @@ class PythonPackage(Package):
                 schema = d['schema']
                 uuid4 = d['uuid4']
                 slug = d['slug']
-                imports = Imports.instantiate_from_list(
-                    l=d['imports'] if 'imports' in d.keys() else None)
+                untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
+                imports = Imports(*untyped_imports)
                 aliases = None  # To be implemented
                 untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
                 representations = Representations(*untyped_representations)

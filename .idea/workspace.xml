@@ -801,14 +801,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01089" summary="misc.">
-      <option name="closed" value="true" />
-      <created>1724511450689</created>
-      <option name="number" value="01089" />
-      <option name="presentableId" value="LOCAL-01089" />
-      <option name="project" value="LOCAL" />
-      <updated>1724511450690</updated>
-    </task>
     <task id="LOCAL-01090" summary="misc.">
       <option name="closed" value="true" />
       <created>1724527658987</created>
@@ -1193,7 +1185,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732457920429</updated>
     </task>
-    <option name="localTasksCounter" value="1138" />
+    <task id="LOCAL-01138" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1732458767386</created>
+      <option name="number" value="01138" />
+      <option name="presentableId" value="LOCAL-01138" />
+      <option name="project" value="LOCAL" />
+      <updated>1732458767386</updated>
+    </task>
+    <option name="localTasksCounter" value="1139" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
