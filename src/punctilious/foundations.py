@@ -764,8 +764,8 @@ class Packages(dict):
     _singleton = None
     _singleton_initialized = None
     _native_packages = {
-        'greek_alphabet_lowercase_serif_italic_representation_1': '/data/representations/greek_alphabet_lowercase_serif_italic_representation_1.yaml',
-        'greek_alphabet_uppercase_serif_italic_representation_1': '/data/representations/greek_alphabet_uppercase_serif_italic_representation_1.yaml',
+        'greek_alphabet_lowercase_serif_italic_representation_1': '/data/representations/greek_alphabet_lowercase_serif_italic.yaml',
+        'greek_alphabet_uppercase_serif_italic_representation_1': '/data/representations/greek_alphabet_uppercase_serif_italic.yaml',
         'operators_representation_1': '/data/representations/operators_representation_1.yaml'
     }
 

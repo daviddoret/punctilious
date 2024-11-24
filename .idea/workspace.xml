@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark + yaml">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/theorems/propositional_logic_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/theorems/absorption_law_1.yaml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -801,14 +808,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01090" summary="misc.">
-      <option name="closed" value="true" />
-      <created>1724527658987</created>
-      <option name="number" value="01090" />
-      <option name="presentableId" value="LOCAL-01090" />
-      <option name="project" value="LOCAL" />
-      <updated>1724527658987</updated>
-    </task>
     <task id="LOCAL-01091" summary="misc.">
       <option name="closed" value="true" />
       <created>1724531989356</created>
@@ -1193,7 +1192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732458767386</updated>
     </task>
-    <option name="localTasksCounter" value="1139" />
+    <task id="LOCAL-01139" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1732458937280</created>
+      <option name="number" value="01139" />
+      <option name="presentableId" value="LOCAL-01139" />
+      <option name="project" value="LOCAL" />
+      <updated>1732458937280</updated>
+    </task>
+    <option name="localTasksCounter" value="1140" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1343,11 +1350,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious/__init__.py</url>
           <line>28</line>
           <option name="timeStamp" value="253" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/__init__.py</url>
-          <line>20</line>
-          <option name="timeStamp" value="261" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
