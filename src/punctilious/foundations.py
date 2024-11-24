@@ -164,7 +164,7 @@ class Imports(tuple):
             l = []
         typed_l = []
         for d in l:
-            o = Import.instantiate_from_dict(d=d)
+            o = assure_import(o=d)
             typed_l.append(o)
         return Imports(*typed_l)
 
@@ -194,18 +194,6 @@ class Import:
 
     def __str__(self):
         return self.slug
-
-    @classmethod
-    def instantiate_from_dict(cls, d: dict | None):
-        if d is None:
-            d = {}
-        slug = d['slug'] if 'slug' in d.keys() else None
-        scheme = d['scheme'] if 'scheme' in d.keys() else None
-        path = d['path'] if 'path' in d.keys() else None
-        resource = d['resource'] if 'resource' in d.keys() else None
-        method = d['method'] if 'method' in d.keys() else None
-        o = Import(slug=slug, scheme=scheme, path=path, resource=resource, method=method)
-        return o
 
     @property
     def method(self):
@@ -321,18 +309,6 @@ class Configuration:
     def language(self):
         return self._language
 
-    @classmethod
-    def instantiate_from_dict(cls, d: dict | None):
-        if d is None:
-            d = {}
-        mode = d['mode'] if 'mode' in d.keys() else None
-        language = d['language'] if 'language' in d.keys() else None
-        encoding = d['encoding'] if 'encoding' in d.keys() else None
-        parentheses = d['parentheses'] if 'parentheses' in d.keys() else None
-        template = d['template'] if 'template' in d.keys() else None
-        o = Configuration(mode=mode, language=language, encoding=encoding, parentheses=parentheses, template=template)
-        return o
-
     @property
     def jinja2_template(self):
         return self._jinja2_template
@@ -388,7 +364,7 @@ class Configurations(tuple):
             l = []
         typed_l = []
         for d in l:
-            c = Configuration.instantiate_from_dict(d=d)
+            c = assure_configuration(o=d)
             typed_l.append(c)
         o = Configurations(*typed_l)
         return o
@@ -453,7 +429,7 @@ class Representations(tuple):
             l = []
         typed_l = []
         for d in l:
-            o = assure_representation(r=d)
+            o = assure_representation(o=d)
             typed_l.append(o)
         o = Representations(*typed_l)
         return o
@@ -462,37 +438,87 @@ class Representations(tuple):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def assure_representation(r) -> Representation:
-    """Assure that `r` is of type Representation, converting as necessary, or raise an error."""
-    if isinstance(r, Representation):
-        return r
-    elif isinstance(r, dict):
-        uuid4 = r['uuid4']
-        slug = r['slug']
-        syntactic_rules = assure_syntactic_rules(s=r['syntactic_rules'] if 'syntactic_rules' in r else None)
+def assure_configuration(o) -> Configuration:
+    """Assure that `o` is of type Import, converting as necessary, or raise an error."""
+    if isinstance(o, Configuration):
+        return o
+    elif isinstance(o, dict):
+        mode = o['mode'] if 'mode' in o.keys() else None
+        language = o['language'] if 'language' in o.keys() else None
+        encoding = o['encoding'] if 'encoding' in o.keys() else None
+        parentheses = o['parentheses'] if 'parentheses' in o.keys() else None
+        template = o['template'] if 'template' in o.keys() else None
+        o = Configuration(mode=mode, language=language, encoding=encoding, parentheses=parentheses, template=template)
+        return o
+    else:
+        raise TypeError('Configuration assurance failure.')
+
+
+def assure_import(o) -> Import:
+    """Assure that `o` is of type Import, converting as necessary, or raise an error."""
+    if isinstance(o, Import):
+        return o
+    elif isinstance(o, dict):
+        slug = o['slug'] if 'slug' in o.keys() else None
+        scheme = o['scheme'] if 'scheme' in o.keys() else None
+        path = o['path'] if 'path' in o.keys() else None
+        resource = o['resource'] if 'resource' in o.keys() else None
+        method = o['method'] if 'method' in o.keys() else None
+        o = Import(slug=slug, scheme=scheme, path=path, resource=resource, method=method)
+        return o
+    else:
+        raise TypeError('Import assurance failure.')
+
+
+def assure_representation(o) -> Representation:
+    """Assure that `o` is of type Representation, converting as necessary, or raise an error."""
+    if isinstance(o, Representation):
+        return o
+    elif isinstance(o, dict):
+        uuid4 = o['uuid4']
+        slug = o['slug']
+        syntactic_rules = assure_syntactic_rules(o=o['syntactic_rules'] if 'syntactic_rules' in o else None)
         configurations = Configurations.instantiate_from_list(
-            l=r['configurations'] if 'configurations' in r else None)
+            l=o['configurations'] if 'configurations' in o else None)
         o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, configurations=configurations)
         return o
     else:
         raise TypeError('Representation assurance failure.')
 
 
-def assure_syntactic_rules(s) -> SyntacticRules:
-    """Assure that `r` is of type SyntacticRules, converting as necessary, or raise an error."""
-    if isinstance(s, SyntacticRules):
-        return s
-    elif isinstance(s, dict):
-        fixed_arity = s['fixed_arity'] if 'fixed_arity' in s.keys() else None
-        min_arity = s['min_arity'] if 'min_arity' in s.keys() else None
-        max_arity = s['max_arity'] if 'max_arity' in s.keys() else None
+def assure_syntactic_rules(o) -> SyntacticRules:
+    """Assure that `o` is of type SyntacticRules, converting as necessary, or raise an error."""
+    if isinstance(o, SyntacticRules):
+        return o
+    elif isinstance(o, dict):
+        fixed_arity = o['fixed_arity'] if 'fixed_arity' in o.keys() else None
+        min_arity = o['min_arity'] if 'min_arity' in o.keys() else None
+        max_arity = o['max_arity'] if 'max_arity' in o.keys() else None
         o = SyntacticRules(fixed_arity=fixed_arity, min_arity=min_arity, max_arity=max_arity)
         return o
-    elif s is None:
+    elif o is None:
         # None is mapped to empty syntactic-rules.
         return SyntacticRules()
     else:
         raise TypeError('SyntacticRules assurance failure.')
+
+
+def assure_theorem(o) -> Theorem:
+    """Assure that `o` is of type Theorem, converting as necessary, or raise an error."""
+    if isinstance(o, Theorem):
+        return o
+    elif isinstance(o, dict):
+        uuid4 = o['uuid4']
+        slug = o['slug']
+        variables = None
+        assumptions = None
+        statement = None
+        justifications = None
+        o = Theorem(uuid4=uuid4, slug=slug, variables=variables, assumptions=assumptions, statement=statement,
+                    justifications=justifications)
+        return o
+    else:
+        raise TypeError('Theorem assurance failure.')
 
 
 class Representation:
@@ -641,7 +667,7 @@ class Theorems(tuple):
             l = []
         typed_l = []
         for d in l:
-            o = Theorem.instantiate_from_dict(d=d)
+            o = assure_theorem(o=d)
             typed_l.append(o)
         return Connectors(*typed_l)
 
@@ -674,25 +700,6 @@ class Theorem:
     @property
     def assumptions(self):
         return self._assumptions
-
-    @classmethod
-    def instantiate_from_dict(cls, d: dict | None, reload: bool = False):
-        if d is None:
-            d = {}
-        uuid4 = d['uuid4']
-        if uuid4 in cls._uuid4_index.keys() and not reload:
-            get_logger().debug(f'element {uuid4} skipped because it was already loaded.')
-            return cls._uuid4_index[uuid4]
-        else:
-            slug = d['slug']
-            variables = None
-            assumptions = None
-            statement = None
-            justifications = None
-            o = Theorem(uuid4=uuid4, slug=slug, variables=variables, assumptions=assumptions, statement=statement,
-                        justifications=justifications)
-            cls._uuid4_index[uuid4] = o
-            return o
 
     @property
     def justifications(self):
@@ -755,7 +762,7 @@ class Justifications(tuple):
             l = []
         typed_l = []
         for d in l:
-            o = Justification.instantiate_from_dict(l=d)
+            o = assure_justification(o=d)
             typed_l.append(o)
         return Connectors(*typed_l)
 
@@ -926,7 +933,7 @@ class PythonPackage(Package):
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
                     uuid4 = raw_connector['uuid4']
                     slug = raw_connector['slug']
-                    syntactic_rules = assure_syntactic_rules(s=
+                    syntactic_rules = assure_syntactic_rules(o=
                                                              raw_connector[
                                                                  'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
                     representation_reference = raw_connector['representation']
