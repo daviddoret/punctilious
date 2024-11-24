@@ -344,58 +344,6 @@ class Configuration:
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
 
 
-class Configurations(tuple):
-    __slots__ = ()
-
-    def __init__(self, *args):
-        pass
-
-    def __new__(cls, *args, **kwargs):
-        return super().__new__(cls, args)
-
-    def __repr__(self):
-        return '(' + ', '.join(e.template for e in self) + ')'
-
-    def __str__(self):
-        return '(' + ', '.join(e.template for e in self) + ')'
-
-    @classmethod
-    def instantiate_from_list(cls, l: list | None):
-        if l is None:
-            l = []
-        typed_l = []
-        for d in l:
-            c = assure_configuration(o=d)
-            typed_l.append(c)
-        o = Configurations(*typed_l)
-        return o
-
-    def select(self, encoding=None, mode=None, language=None) -> Configuration:
-
-        encoding = get_preferences().encoding if encoding is None else encoding
-        mode = get_preferences().representation_mode if mode is None else mode
-        language = get_preferences().language if language is None else language
-
-        match = next(
-            (e for e in self if e.encoding == encoding and e.mode == mode and e.language == language),
-            None)
-        if match:
-            return match
-
-        match = next((e for e in self if e.encoding == encoding and e.mode == mode), None)
-        if match:
-            return match
-
-        match = next((e for e in self if e.encoding == encoding), None)
-        if match:
-            return match
-
-        return self[0]
-
-    def to_yaml(self, default_flow_style):
-        return yaml.dump(self, default_flow_style=default_flow_style)
-
-
 class Representations(tuple):
     """A tuple of Representation instances."""
 
@@ -422,6 +370,49 @@ class Representations(tuple):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+class Theorems(tuple):
+    """A tuple of Theorem instances."""
+
+    def __init__(self, *args, **kwargs):
+        self._slug_index = tuple(i.slug for i in self)
+        super().__init__()
+
+    def __new__(cls, *args, **kwargs):
+        typed_representations = tuple(assure_theorem(r) for r in args)
+        return super().__new__(cls, typed_representations)
+
+    def __repr__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def __str__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def get_from_slug(self, slug: str):
+        if slug in self._slug_index:
+            slug_index = self._slug_index.index(slug)
+            return self[slug_index]
+        else:
+            raise IndexError(f'Theorem slug not found: "{slug}".')
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+def assure_connector(o) -> Connector:
+    """Assure that `o` is of type Connector, converting as necessary, or raise an error."""
+    if isinstance(o, Connector):
+        return o
+    elif isinstance(o, dict):
+        uuid4 = o['uuid4'] if 'uuid4' in o.keys() else None
+        slug = o['slug'] if 'slug' in o.keys() else None
+        syntactic_rules = o['syntactic_rules'] if 'syntactic_rules' in o.keys() else None
+        representation = o['representation'] if 'representation' in o.keys() else None
+        o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
+        return o
+    else:
+        raise TypeError('Connector assurance failure.')
 
 
 def assure_configuration(o) -> Configuration:
@@ -464,8 +455,8 @@ def assure_representation(o) -> Representation:
         uuid4 = o['uuid4']
         slug = o['slug']
         syntactic_rules = assure_syntactic_rules(o=o['syntactic_rules'] if 'syntactic_rules' in o else None)
-        configurations = Configurations.instantiate_from_list(
-            l=o['configurations'] if 'configurations' in o else None)
+        configurations = Configurations(
+            *o['configurations'] if 'configurations' in o else None)
         o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, configurations=configurations)
         return o
     else:
@@ -558,20 +549,71 @@ class Representation:
         return self._uuid4
 
 
-class Connectors(tuple):
-    __slots__ = ()
+class Configurations(tuple):
+    """A tuple of Configuration instances."""
 
-    def __init__(self, *args):
-        pass
+    def __init__(self, *args, **kwargs):
+        super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        return super().__new__(cls, args)
+        typed_configurations = tuple(assure_configuration(r) for r in args)
+        return super().__new__(cls, typed_configurations)
 
     def __repr__(self):
         return '(' + ', '.join(e.slug for e in self) + ')'
 
     def __str__(self):
         return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def select(self, encoding=None, mode=None, language=None) -> Configuration:
+
+        encoding = get_preferences().encoding if encoding is None else encoding
+        mode = get_preferences().representation_mode if mode is None else mode
+        language = get_preferences().language if language is None else language
+
+        match = next(
+            (e for e in self if e.encoding == encoding and e.mode == mode and e.language == language),
+            None)
+        if match:
+            return match
+
+        match = next((e for e in self if e.encoding == encoding and e.mode == mode), None)
+        if match:
+            return match
+
+        match = next((e for e in self if e.encoding == encoding), None)
+        if match:
+            return match
+
+        return self[0]
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+class Connectors(tuple):
+    """A tuple of Connector instances."""
+
+    def __init__(self, *args, **kwargs):
+        self._slug_index = tuple(i.slug for i in self)
+        super().__init__()
+
+    def __new__(cls, *args, **kwargs):
+        typed_connectors = tuple(assure_connector(r) for r in args)
+        return super().__new__(cls, typed_connectors)
+
+    def __repr__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def __str__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def get_from_slug(self, slug: str):
+        if slug in self._slug_index:
+            slug_index = self._slug_index.index(slug)
+            return self[slug_index]
+        else:
+            raise IndexError(f'Connector slug not found: "{slug}".')
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
@@ -630,35 +672,6 @@ class Connector:
     @property
     def uuid4(self):
         return self._uuid4
-
-
-class Theorems(tuple):
-    __slots__ = ()
-
-    def __init__(self, *args):
-        pass
-
-    def __new__(cls, *args, **kwargs):
-        return super().__new__(cls, args)
-
-    def __repr__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
-
-    def __str__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
-
-    @classmethod
-    def instantiate_from_list(cls, l: list | None):
-        if l is None:
-            l = []
-        typed_l = []
-        for d in l:
-            o = assure_theorem(o=d)
-            typed_l.append(o)
-        return Connectors(*typed_l)
-
-    def to_yaml(self, default_flow_style):
-        return yaml.dump(self, default_flow_style=default_flow_style)
 
 
 class Theorem:
@@ -901,11 +914,6 @@ class PythonPackage(Package):
             with open(file_path, 'r') as file:
                 file: io.TextIOBase
                 d: dict = yaml.safe_load(file)
-                # if uuid4 in cls._uuid4_index.keys() and not reload:
-                #    reloaded = cls._uuid4_index[uuid4]
-                #    get_logger().debug(f'package {reloaded}({uuid4}) skipped because it was already loaded.')
-                #    return reloaded
-                # else:
                 schema = d['schema']
                 uuid4 = d['uuid4']
                 slug = d['slug']
@@ -913,7 +921,6 @@ class PythonPackage(Package):
                     l=d['imports'] if 'imports' in d.keys() else None)
                 aliases = None  # To be implemented
                 untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
-                # typed_representations = tuple(assure_representation(r) for r in untyped_representations)
                 representations = Representations(*untyped_representations)
                 # Load connectors
                 typed_connectors = []
@@ -930,8 +937,8 @@ class PythonPackage(Package):
                                   representation=representation)
                     typed_connectors.append(o)
                 # Load connectors
-                theorems = Theorems.instantiate_from_list(
-                    l=d['theorems'] if 'theorems' in d.keys() else None)
+                untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
+                theorems = Theorems(*untyped_theorems)
                 justifications = Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
                 super().__init__(schema=schema, uuid4=uuid4, slug=slug, imports=imports, aliases=aliases,
