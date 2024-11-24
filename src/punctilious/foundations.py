@@ -290,16 +290,6 @@ class SyntacticRules:
     def to_yaml(self, default_flow_style):
         yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
 
-    @classmethod
-    def instantiate_from_dict(cls, d: dict):
-        if d is None:
-            d = {}
-        fixed_arity = d['fixed_arity'] if 'fixed_arity' in d.keys() else None
-        min_arity = d['min_arity'] if 'min_arity' in d.keys() else None
-        max_arity = d['max_arity'] if 'max_arity' in d.keys() else None
-        o = SyntacticRules(fixed_arity=fixed_arity, min_arity=min_arity, max_arity=max_arity)
-        return o
-
 
 class Configuration:
     """"""
@@ -463,13 +453,46 @@ class Representations(tuple):
             l = []
         typed_l = []
         for d in l:
-            o = Representation.instantiate_from_dict(d=d)
+            o = assure_representation(r=d)
             typed_l.append(o)
         o = Representations(*typed_l)
         return o
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+def assure_representation(r) -> Representation:
+    """Assure that `r` is of type Representation, converting as necessary, or raise an error."""
+    if isinstance(r, Representation):
+        return r
+    elif isinstance(r, dict):
+        uuid4 = r['uuid4']
+        slug = r['slug']
+        syntactic_rules = assure_syntactic_rules(s=r['syntactic_rules'] if 'syntactic_rules' in r else None)
+        configurations = Configurations.instantiate_from_list(
+            l=r['configurations'] if 'configurations' in r else None)
+        o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, configurations=configurations)
+        return o
+    else:
+        raise TypeError('Representation assurance failure.')
+
+
+def assure_syntactic_rules(s) -> SyntacticRules:
+    """Assure that `r` is of type SyntacticRules, converting as necessary, or raise an error."""
+    if isinstance(s, SyntacticRules):
+        return s
+    elif isinstance(s, dict):
+        fixed_arity = s['fixed_arity'] if 'fixed_arity' in s.keys() else None
+        min_arity = s['min_arity'] if 'min_arity' in s.keys() else None
+        max_arity = s['max_arity'] if 'max_arity' in s.keys() else None
+        o = SyntacticRules(fixed_arity=fixed_arity, min_arity=min_arity, max_arity=max_arity)
+        return o
+    elif s is None:
+        # None is mapped to empty syntactic-rules.
+        return SyntacticRules()
+    else:
+        raise TypeError('SyntacticRules assurance failure.')
 
 
 class Representation:
@@ -495,25 +518,6 @@ class Representation:
     @property
     def configurations(self):
         return self._configurations
-
-    @classmethod
-    def instantiate_from_dict(cls, d: dict | None, reload: bool = False):
-        if d is None:
-            d = {}
-        uuid4 = d['uuid4']
-        if uuid4 in cls._in_memory.keys() and not reload:
-            o = cls._in_memory[uuid4]
-            get_logger().debug(f'Reuse {str(o)}({uuid4}).')
-            return o
-        else:
-            slug = d['slug']
-            syntactic_rules = SyntacticRules.instantiate_from_dict(
-                d=d['syntactic_rules'] if 'syntactic_rules' in d else None)
-            configurations = Configurations.instantiate_from_list(
-                l=d['configurations'] if 'configurations' in d else None)
-            o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, configurations=configurations)
-            cls._in_memory[uuid4] = o
-            return o
 
     def repr(self, args=None, encoding=None, mode=None, language=None) -> str:
         if args is None:
@@ -922,8 +926,9 @@ class PythonPackage(Package):
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
                     uuid4 = raw_connector['uuid4']
                     slug = raw_connector['slug']
-                    syntactic_rules = SyntacticRules.instantiate_from_dict(
-                        d=raw_connector['syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
+                    syntactic_rules = assure_syntactic_rules(s=
+                                                             raw_connector[
+                                                                 'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
                     representation_reference = raw_connector['representation']
                     representation = self._resolve_package_representation_reference(ref=representation_reference,
                                                                                     i=imports, r=representations)
