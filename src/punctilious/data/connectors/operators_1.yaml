@@ -2,25 +2,24 @@ schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uuid4: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
 slug: operators_1
 imports:
-  - slug: operators_representations_1
+  - slug: operators_representation_1
     scheme: python_package
     path: data.representations
     resource: operators_representation_1.yaml
-    method: import_all_directly
 connectors:
   - slug: conjunction
     uuid4: 00f961e7-bd7a-484a-939e-bea63c31ef05
     syntactic_rules:
       fixed_arity: 2
-    representation: conjunction_representation
+    representation: operators_representation_1.conjunction_representation
   - slug: entailment
     uuid4: c3811944-b4e5-4ff5-a0de-6b18a634580f
     syntactic_rules:
       fixed_arity: 2
-    configuration: entailment_representation
+    representation: operators_representation_1.entailment_representation
   - slug: negation
     uuid4: e4333237-f9d6-4db0-a7e1-8c1699375719
     syntactic_rules:
       fixed_arity: 1
-    configurations: negation_representation
+    representation: operators_representation_1.negation_representation
 

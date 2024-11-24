@@ -17,8 +17,8 @@ packages = foundations.get_packages()
 # print(greek_alphabet_uppercase_serif_italic.phi.configurations[1])
 # print(greek_alphabet_uppercase_serif_italic.psi.configurations[2])
 
-operators = _operators.Operators1Package()
-print(operators.conjunction)
+operators: foundations.Package = _operators.Operators1Package()
+# print(operators.conjunction.representation)
 # print(operators.entailment.configurations[1])
 
 

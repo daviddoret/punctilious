@@ -8,6 +8,7 @@ import jinja2
 import sys
 import importlib.resources
 import typing
+import abc
 
 
 class Logger:
@@ -109,11 +110,38 @@ def get_preferences():
     return Preferences()
 
 
-class Imports(tuple):
-    __slots__ = ()
+def assure_slug(slug: str | Slug) -> Slug:
+    if isinstance(slug, Slug):
+        return slug
+    elif isinstance(slug, str):
+        return Slug(slug)
+    else:
+        raise ValueError(f'Invalid slug {slug}')
 
-    def __init__(self, *args):
-        pass
+
+class Slug(str):
+    pass
+
+
+class Slugs(dict):
+    def __init__(self):
+        super().__init__()
+
+    def __setitem__(self, slug, value):
+        slug = assure_slug(slug=slug)
+        if slug in self:
+            raise KeyError(f"Key '{slug}' already exists.")
+        super().__setitem__(slug, value)
+
+
+class Imports(tuple):
+
+    def __init__(self, *args, **kwargs):
+        slug_index = []
+        for i in args:
+            slug_index.append(i.slug)
+        self._slug_index = tuple(slug_index)
+        super().__init__()
 
     def __new__(cls, *args, **kwargs):
         return super().__new__(cls, args)
@@ -123,6 +151,12 @@ class Imports(tuple):
 
     def __str__(self):
         return '(' + ', '.join(str(e) for e in self) + ')'
+
+    def get_from_slug(self, slug: str) -> Import:
+        if slug in self._slug_index:
+            return self[self._slug_index.index(slug)]
+        else:
+            raise IndexError(f'Import slug not found: "{slug}".')
 
     @classmethod
     def instantiate_from_list(cls, l: list):
@@ -139,7 +173,7 @@ class Imports(tuple):
 
 
 class Import:
-    __slots__ = ('_slug', '_scheme', '_path', '_resource', '_method')
+    __slots__ = ('_slug', '_scheme', '_path', '_resource', '_method', '_package')
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
@@ -153,7 +187,7 @@ class Import:
         self._method = method
         if load:
             if scheme == 'python_package':
-                p = PythonPackage(path=path, resource=resource)
+                self._package = PythonPackage(path=path, resource=resource)
 
     def __repr__(self):
         return self.slug
@@ -176,6 +210,10 @@ class Import:
     @property
     def method(self):
         return self._method
+
+    @property
+    def package(self):
+        return self._package
 
     @property
     def path(self):
@@ -392,22 +430,18 @@ class Configurations(tuple):
 
 
 class Representations(tuple):
-    __slots__ = ()
-    _slug_index = {}
-    _uuid4_index = {}
 
-    def __getitem__(self, item):
-        if isinstance(item, str):
-            return self.get_from_slug(slug=item)
-        elif isinstance(item, uuid.UUID):
-            return self.get_from_uuid4(uuid4=item)
+    def __init__(self, *args, **kwargs):
+        slug_index = []
+        for i in args:
+            slug_index.append(i.slug)
+        self._slug_index = tuple(slug_index)
+        super().__init__()
 
     def __new__(cls, *args, **kwargs):
         for o in args:
             if not isinstance(o, Representation):
                 raise TypeError('Element is not of type Representation.')
-            cls._uuid4_index[o.uuid4] = o
-            cls._slug_index[o.slug] = o
         return super().__new__(cls, args)
 
     def __repr__(self):
@@ -416,17 +450,12 @@ class Representations(tuple):
     def __str__(self):
         return '(' + ', '.join(e.slug for e in self) + ')'
 
-    def get_from_slug(self, slug):
-        if slug in self.__class__._slug_index:
-            return self.__class__._slug_index[slug]
+    def get_from_slug(self, slug: str):
+        if slug in self._slug_index:
+            slug_index = self._slug_index.index(slug)
+            return self[slug_index]
         else:
-            raise IndexError(f'Representation slug "{slug}" does not exist.')
-
-    def get_from_uuid4(self, uuid4):
-        if uuid4 in self.__class__._uuid4_index:
-            return self.__class__._uuid4_index[uuid4]
-        else:
-            raise IndexError(f'Representation uuid4 "{uuid4}" does not exist.')
+            raise IndexError(f'Representation slug not found: "{slug}".')
 
     @classmethod
     def instantiate_from_list(cls, l: list | None):
@@ -528,16 +557,6 @@ class Connectors(tuple):
     def __str__(self):
         return '(' + ', '.join(e.slug for e in self) + ')'
 
-    @classmethod
-    def instantiate_from_list(cls, l: list | None):
-        if l is None:
-            l = []
-        typed_l = []
-        for d in l:
-            o = Connector.instantiate_from_dict(d=d)
-            typed_l.append(o)
-        return Connectors(*typed_l)
-
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
@@ -561,23 +580,6 @@ class Connector:
 
     def __str__(self):
         return self.slug
-
-    @classmethod
-    def instantiate_from_dict(cls, d: dict | None, reload: bool = False):
-        if d is None:
-            d = {}
-        uuid4 = d['uuid4']
-        if uuid4 in cls._uuid4_index.keys() and not reload:
-            get_logger().debug(f'element {uuid4} skipped because it was already loaded.')
-            return cls._uuid4_index[uuid4]
-        else:
-            slug = d['slug']
-            syntactic_rules = SyntacticRules.instantiate_from_dict(
-                d=d['syntactic_rules'] if 'syntactic_rules' in d.keys() else None)
-            representation = None
-            o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
-            cls._uuid4_index[uuid4] = o
-            return o
 
     def repr(self, args=None, encoding=None, mode=None, language=None) -> str:
         return self.representation.repr(args=args, encoding=encoding, mode=mode, language=language)
@@ -793,20 +795,6 @@ class Packages(dict):
     def __str__(self):
         return '(' + ', '.join(str(e) for e in self) + ')'
 
-    def import_native(self, path, resource):
-        """Import a native package.
-
-        This method is called when `import.source_type=='native'`."""
-        p = Package.instantiate_from_python_package_resource(path=path, resource=resource)
-
-    def import_from_file(self):
-        """Import an external package from a file."""
-        pass
-
-    def import_from_url(self):
-        """Import an external package from a URL."""
-        pass
-
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
@@ -929,12 +917,44 @@ class PythonPackage(Package):
                 aliases = None  # To be implemented
                 representations = Representations.instantiate_from_list(
                     l=d['representations'] if 'representations' in d.keys() else None)
-                connectors = Connectors.instantiate_from_list(
-                    l=d['connectors'] if 'connectors' in d.keys() else None)
+                # Load connectors
+                typed_connectors = []
+                for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
+                    uuid4 = raw_connector['uuid4']
+                    slug = raw_connector['slug']
+                    syntactic_rules = SyntacticRules.instantiate_from_dict(
+                        d=raw_connector['syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
+                    representation_reference = raw_connector['representation']
+                    representation = self._resolve_package_representation_reference(ref=representation_reference,
+                                                                                    i=imports, r=representations)
+                    o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules,
+                                  representation=representation)
+                    typed_connectors.append(o)
+                # Load connectors
                 theorems = Theorems.instantiate_from_list(
                     l=d['theorems'] if 'theorems' in d.keys() else None)
                 justifications = Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
                 super().__init__(schema=schema, uuid4=uuid4, slug=slug, imports=imports, aliases=aliases,
-                                 representations=representations, connectors=connectors, theorems=theorems,
+                                 representations=representations, connectors=typed_connectors, theorems=theorems,
                                  justifications=justifications)
+
+    def _resolve_package_representation_reference(self, ref: str, i: Imports, r: Representations):
+        """Given the reference of a representation in string format,
+        typically as the representation attribute of a connector in a YAML file,
+        finds and returns the corresponding representation object, either
+        from the local representations, or via an import."""
+        ref_tuple: tuple = tuple(ref.split('.'))
+        if len(ref_tuple) == 1:
+            # This is a local reference.
+            r = r.get_from_slug(slug=ref)
+            return r
+        elif len(ref_tuple) == 2:
+            # This is a reference in an imported YAML file.
+            p_ref = ref_tuple[0]
+            p: Package = i.get_from_slug(slug=p_ref).package
+            ref = ref_tuple[1]
+            r = p.representations.get_from_slug(slug=ref)
+            return r
+        else:
+            raise ValueError(f'Improper reference: "{ref}".')
