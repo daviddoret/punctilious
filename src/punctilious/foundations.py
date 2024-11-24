@@ -926,6 +926,7 @@ class PythonPackage(Package):
                     o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules,
                                   representation=representation)
                     typed_connectors.append(o)
+                typed_connectors = Connectors(*typed_connectors)
                 # Load connectors
                 untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
                 theorems = Theorems(*untyped_theorems)
