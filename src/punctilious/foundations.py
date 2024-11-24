@@ -399,15 +399,12 @@ class Configurations(tuple):
 class Representations(tuple):
 
     def __init__(self, *args, **kwargs):
-        slug_index = []
-        for i in args:
-            slug_index.append(i.slug)
-        self._slug_index = tuple(slug_index)
+        self._slug_index = tuple(i.slug for i in self)
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        typed = tuple(assure_representation(o=i) for i in args)
-        return super().__new__(cls, typed)
+        typed_representations = tuple(assure_representation(r) for r in args)
+        return super().__new__(cls, typed_representations)
 
     def __repr__(self):
         return '(' + ', '.join(e.slug for e in self) + ')'
@@ -915,8 +912,8 @@ class PythonPackage(Package):
                     l=d['imports'] if 'imports' in d.keys() else None)
                 aliases = None  # To be implemented
                 untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
-                typed_representations = tuple(assure_representation(r) for r in untyped_representations)
-                representations = Representations(*typed_representations)
+                # typed_representations = tuple(assure_representation(r) for r in untyped_representations)
+                representations = Representations(*untyped_representations)
                 # Load connectors
                 typed_connectors = []
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:

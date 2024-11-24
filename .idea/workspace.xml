@@ -801,14 +801,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01086" summary="dynamic substitution of variables in is-formula-equivalent-with-variables.">
-      <option name="closed" value="true" />
-      <created>1724465938333</created>
-      <option name="number" value="01086" />
-      <option name="presentableId" value="LOCAL-01086" />
-      <option name="project" value="LOCAL" />
-      <updated>1724465938333</updated>
-    </task>
     <task id="LOCAL-01087" summary="dynamic substitution of variables in is-formula-equivalent-with-variables.">
       <option name="closed" value="true" />
       <created>1724498959599</created>
@@ -1193,7 +1185,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732426967046</updated>
     </task>
-    <option name="localTasksCounter" value="1135" />
+    <task id="LOCAL-01135" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1732428461491</created>
+      <option name="number" value="01135" />
+      <option name="presentableId" value="LOCAL-01135" />
+      <option name="project" value="LOCAL" />
+      <updated>1732428461491</updated>
+    </task>
+    <option name="localTasksCounter" value="1136" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1351,15 +1351,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/foundations.py</url>
-          <line>408</line>
-          <option name="timeStamp" value="267" />
+          <line>409</line>
+          <option name="timeStamp" value="270" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/foundations.py</url>
-          <line>401</line>
-          <option name="timeStamp" value="268" />
+          <line>916</line>
+          <option name="timeStamp" value="272" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
 </project>
