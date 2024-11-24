@@ -397,6 +397,7 @@ def assure_connector(o) -> Connector:
     elif isinstance(o, dict):
         uuid4 = o['uuid4'] if 'uuid4' in o.keys() else None
         slug = o['slug'] if 'slug' in o.keys() else None
+        slug_aliases = o['slug_aliases'] if 'slug_aliases' in o.keys() else tuple()
         syntactic_rules = o['syntactic_rules'] if 'syntactic_rules' in o.keys() else None
         representation = o['representation'] if 'representation' in o.keys() else None
         o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
@@ -451,6 +452,16 @@ def assure_representation(o) -> Representation:
         return o
     else:
         raise TypeError(f'Representation assurance failure. Type: {type(o)}. Object: {o}.')
+
+
+def assure_slug_aliases(o) -> tuple[str, ...]:
+    if isinstance(o, collections.abc.Iterable):
+        o = tuple(str(i) for i in o)
+        return o
+    elif o is None:
+        return tuple()
+    else:
+        raise TypeError(f'Slug-aliases assurance failure. Type: {type(o)}. Object: {o}.')
 
 
 def assure_syntactic_rules(o) -> SyntacticRules:
@@ -585,7 +596,12 @@ class Connectors(tuple):
     """A tuple of Connector instances."""
 
     def __init__(self, *args, **kwargs):
-        self._slug_index = tuple(i.slug for i in self)
+        # prepare a dictionary that maps primary slugs to connectors
+        slug_dict = dict(zip(tuple(i.slug for i in self), tuple(i for i in self)))
+        aliases_slugs = tuple(j for i in self for j in i.slug_aliases)
+        aliases_connectors = tuple(slug_dict[i.slug] for i in self for j in i.slug_aliases)
+        alias_dict = dict(zip(aliases_slugs, aliases_connectors))
+        self._slug_index = slug_dict | alias_dict
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
@@ -599,9 +615,8 @@ class Connectors(tuple):
         return '(' + ', '.join(e.slug for e in self) + ')'
 
     def get_from_slug(self, slug: str):
-        if slug in self._slug_index:
-            slug_index = self._slug_index.index(slug)
-            return self[slug_index]
+        if slug in self._slug_index.keys():
+            return self._slug_index[slug]
         else:
             raise IndexError(f'Connector slug not found: "{slug}".')
 
@@ -620,8 +635,8 @@ class Connector:
     def __init__(self, uuid4=None, slug=None, slug_aliases=None, syntactic_rules=None, representation=None):
         self._uuid4 = uuid4
         self._slug = slug
-        self._slug_aliases = slug_aliases
-        self._syntactic_rules = syntactic_rules
+        self._slug_aliases = assure_slug_aliases(slug_aliases)
+        self._syntactic_rules = assure_syntactic_rules(syntactic_rules)
         self._representation: Representation = representation
 
     def __repr__(self):
@@ -924,13 +939,14 @@ class PythonPackage(Package):
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
                     uuid4 = raw_connector['uuid4']
                     slug = raw_connector['slug']
+                    slug_aliases = raw_connector['slug_aliases']
                     syntactic_rules = assure_syntactic_rules(o=
                                                              raw_connector[
                                                                  'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
                     representation_reference = raw_connector['representation']
                     representation = self._resolve_package_representation_reference(ref=representation_reference,
                                                                                     i=imports, r=representations)
-                    o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules,
+                    o = Connector(uuid4=uuid4, slug=slug, slug_aliases=slug_aliases, syntactic_rules=syntactic_rules,
                                   representation=representation)
                     typed_connectors.append(o)
                 typed_connectors = Connectors(*typed_connectors)
