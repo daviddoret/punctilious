@@ -9,6 +9,7 @@ import sys
 import importlib.resources
 import typing
 import abc
+import collections.abc
 
 
 class Logger:
@@ -405,10 +406,8 @@ class Representations(tuple):
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        for o in args:
-            if not isinstance(o, Representation):
-                raise TypeError('Element is not of type Representation.')
-        return super().__new__(cls, args)
+        typed = tuple(assure_representation(o=i) for i in args)
+        return super().__new__(cls, typed)
 
     def __repr__(self):
         return '(' + ', '.join(e.slug for e in self) + ')'
@@ -422,17 +421,6 @@ class Representations(tuple):
             return self[slug_index]
         else:
             raise IndexError(f'Representation slug not found: "{slug}".')
-
-    @classmethod
-    def instantiate_from_list(cls, l: list | None):
-        if l is None:
-            l = []
-        typed_l = []
-        for d in l:
-            o = assure_representation(o=d)
-            typed_l.append(o)
-        o = Representations(*typed_l)
-        return o
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
@@ -483,7 +471,7 @@ def assure_representation(o) -> Representation:
         o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, configurations=configurations)
         return o
     else:
-        raise TypeError('Representation assurance failure.')
+        raise TypeError(f'Representation assurance failure. Type: {type(o)}. Object: {o}.')
 
 
 def assure_syntactic_rules(o) -> SyntacticRules:
@@ -926,8 +914,9 @@ class PythonPackage(Package):
                 imports = Imports.instantiate_from_list(
                     l=d['imports'] if 'imports' in d.keys() else None)
                 aliases = None  # To be implemented
-                representations = Representations.instantiate_from_list(
-                    l=d['representations'] if 'representations' in d.keys() else None)
+                untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
+                typed_representations = tuple(assure_representation(r) for r in untyped_representations)
+                representations = Representations(*typed_representations)
                 # Load connectors
                 typed_connectors = []
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
