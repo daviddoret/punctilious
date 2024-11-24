@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark + yaml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious_OBSOLETE.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/punctilious_OBSOLETE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sandbox.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -807,14 +801,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01095" summary="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
-      <option name="closed" value="true" />
-      <created>1724566779154</created>
-      <option name="number" value="01095" />
-      <option name="presentableId" value="LOCAL-01095" />
-      <option name="project" value="LOCAL" />
-      <updated>1724566779154</updated>
-    </task>
     <task id="LOCAL-01096" summary="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
       <option name="closed" value="true" />
       <created>1724587600289</created>
@@ -1199,7 +1185,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732482212188</updated>
     </task>
-    <option name="localTasksCounter" value="1144" />
+    <task id="LOCAL-01144" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1732483941268</created>
+      <option name="number" value="01144" />
+      <option name="presentableId" value="LOCAL-01144" />
+      <option name="project" value="LOCAL" />
+      <updated>1732483941268</updated>
+    </task>
+    <option name="localTasksCounter" value="1145" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

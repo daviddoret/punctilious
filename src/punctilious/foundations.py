@@ -43,6 +43,11 @@ class Logger:
         self._native_logger.info(msg)
 
 
+class Formula:
+    # TODO: CONTINUE DEVELOPMENT HERE, WITH LARK PARSER FOR THEOREMS.
+    pass
+
+
 def get_logger():
     return Logger()
 
