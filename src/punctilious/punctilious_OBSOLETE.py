@@ -375,6 +375,20 @@ class Theorem:
         )
 
 
+TECHNICAL_1_GRAMMAR = """
+    ?start: expr
+
+    WORD: /[a-z]/ | /[a-z][a-z0-9_]*[a-z0-9]/
+
+    ?expr: WORD "(" [expr_list] ")"       -> parse_function
+         | WORD                            -> parse_function
+    expr_list: expr ("," expr)*            -> parse_arguments
+
+    // %import common.CNAME -> WORD
+    %import common.WS
+    %ignore WS
+"""
+
 # Define the parser
 technical_1_parser = lark.Lark(cons.TECHNICAL_1_GRAMMAR, start='start')
 

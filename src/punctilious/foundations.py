@@ -65,8 +65,6 @@ class Preferences:
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
             cls._singleton = super(Preferences, cls).__new__(cls)
-            get_logger().debug(
-                f'Preferences singleton ({id(cls._singleton)}) created.')
         return cls._singleton
 
     @property
@@ -801,8 +799,6 @@ class Packages(dict):
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
             cls._singleton = super(Packages, cls).__new__(cls)
-            get_logger().debug(
-                f'Packages singleton ({id(cls._singleton)}) created.')
         return cls._singleton
 
     def __repr__(self):

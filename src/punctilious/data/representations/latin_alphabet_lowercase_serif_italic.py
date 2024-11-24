@@ -17,8 +17,6 @@ class LatinAlphabetLowercaseSerifItalic(_foundations.PythonPackage):
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
             cls._singleton = super(LatinAlphabetLowercaseSerifItalic, cls).__new__(cls)
-            _foundations.get_logger().debug(
-                f'LatinAlphabetLowercaseSerifItalic singleton ({id(cls._singleton)}) created.')
         return cls._singleton
 
     @property
