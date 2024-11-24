@@ -1,14 +1,24 @@
 schema: "http://punctilious.org/schemas/theorem_1#"
 uuid4: afb2d3cd-b5bd-44c1-9679-6de1d05d2f26
 slug: propositional_logic_1
+imports:
+  - slug: latin_alphabet_lowercase_serif_italic
+    scheme: python_package
+    path: data.representations
+    resource: latin_alphabet_lowercase_serif_italic.yaml
+  - slug: operators_representation_1
+    scheme: python_package
+    path: data.representations
+    resource: operators_representation_1.yaml
 theorems:
   - uuid4: c697d495-9034-4bf0-9a52-7f9954be0157
-    slug: absorption_law_1
-    title: "Absorption law #1"
-    imports:
-      - slug: operators_1
-        source: punctilious:operators_representation_1.yaml
-        method: import_all_directly
+    slug: absorption_law
+    title: "Absorption law"
+    variables:
+      - slug: p
+        representation: latin_alphabet_lowercase_serif_italic.p
+      - slug: q
+        representation: latin_alphabet_lowercase_serif_italic.q
     premises:
       - is_a_proposition(p)
       - is_a_proposition(q)

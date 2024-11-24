@@ -1,0 +1,71 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid4: 47d84857-12c6-4016-8d5e-942998a6b327
+slug: operators_representation_1
+# source:
+representations:
+  - slug: is_a_proposition_representation
+    uuid4: 4eb3925a-13af-40a2-bf19-0f1b3ec0f708
+    syntactic_rules:
+      fixed_arity: 1
+    configurations:
+      - mode: symbolic
+        language: en
+        encoding: unicode_basic
+        parentheses: without
+        template: "{{a1}} is a proposition"
+      - mode: symbolic
+        language: en
+        encoding: unicode_basic
+        parentheses: with
+        template: "({{a1}}) is a proposition"
+      - mode: symbolic
+        language: en
+        encoding: unicode_extended
+        parentheses: without
+        template: "{{a1}} is a proposition"
+      - mode: symbolic
+        language: en
+        encoding: unicode_extended
+        parentheses: with
+        template: "({{a1}}) is a proposition"
+      - mode: symbolic
+        language: en
+        encoding: latex_math
+        parentheses: without
+        template: "{{a1}} \\text{{is a proposition}}"
+      - mode: symbolic
+        language: en
+        encoding: latex_math
+        parentheses: with
+        template: "\\({{a1}}\\) \\text{{is a proposition}}"
+      - mode: symbolic
+        language: fr
+        encoding: unicode_basic
+        parentheses: without
+        template: "{{a1}} est une proposition"
+      - mode: symbolic
+        language: fr
+        encoding: unicode_basic
+        parentheses: with
+        template: "({{a1}}) est une proposition"
+      - mode: symbolic
+        language: fr
+        encoding: unicode_extended
+        parentheses: without
+        template: "{{a1}} est une proposition"
+      - mode: symbolic
+        language: fr
+        encoding: unicode_extended
+        parentheses: with
+        template: "({{a1}}) est une proposition"
+      - mode: symbolic
+        language: fr
+        encoding: latex_math
+        parentheses: without
+        template: "{{a1}} \\text{{est une proposition}}"
+      - mode: symbolic
+        language: fr
+        encoding: latex_math
+        parentheses: with
+        template: "\\({{a1}}\\) \\text{{est une proposition}}"
+

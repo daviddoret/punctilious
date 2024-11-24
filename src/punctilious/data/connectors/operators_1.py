@@ -31,5 +31,17 @@ class Operators1(_foundations.PythonPackage):
         return self.connectors.get_from_slug('entailment')
 
     @property
+    def entails(self) -> _foundations.Connector:
+        return self.connectors.get_from_slug('entails')
+
+    @property
+    def land(self) -> _foundations.Connector:
+        return self.connectors.get_from_slug('and')
+
+    @property
+    def lnot(self) -> _foundations.Connector:
+        return self.connectors.get_from_slug('not')
+
+    @property
     def negation(self) -> _foundations.Connector:
         return self.connectors.get_from_slug('negation')

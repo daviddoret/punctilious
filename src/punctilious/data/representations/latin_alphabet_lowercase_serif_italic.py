@@ -1,0 +1,30 @@
+from ... import foundations as _foundations
+
+
+class LatinAlphabetLowercaseSerifItalic(_foundations.PythonPackage):
+    _singleton = None
+    _singleton_initialized = None
+
+    def __init__(self):
+        if self.__class__._singleton_initialized is None:
+            path = 'data.representations'
+            resource = 'latin_alphabet_lowercase_serif_italic.yaml'
+            super().__init__(path=path, resource=resource)
+            self.__class__._singleton_initialized = True
+            _foundations.get_logger().debug(
+                f'LatinAlphabetLowercaseSerifItalic singleton ({id(self)}) initialized.')
+
+    def __new__(cls, *args, **kwargs):
+        if cls._singleton is None:
+            cls._singleton = super(LatinAlphabetLowercaseSerifItalic, cls).__new__(cls)
+            _foundations.get_logger().debug(
+                f'LatinAlphabetLowercaseSerifItalic singleton ({id(cls._singleton)}) created.')
+        return cls._singleton
+
+    @property
+    def p(self) -> _foundations.Representation:
+        return self.representations.get_from_slug('p')
+
+    @property
+    def q(self) -> _foundations.Representation:
+        return self.representations.get_from_slug('q')

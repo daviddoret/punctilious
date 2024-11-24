@@ -1,0 +1,35 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid4: 1b9e0afa-3ecc-446b-a4a5-87390c56325f
+slug: latin_alphabet_lowercase_serif_italic
+# source:
+# https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
+representations:
+  - slug: p
+    uuid4: 57ce4f8c-c360-4c34-b162-1e547edb122b
+    syntactic_rules:
+      fixed_arity: 0
+    configurations:
+      - mode: symbolic
+        encoding: unicode_basic
+        template: "p"
+      - mode: symbolic
+        encoding: unicode_extended
+        template: "𝑝"
+      - mode: symbolic
+        encoding: latex_math
+        template: "\\textit{p}"
+  - slug: q
+    uuid4: 22e1eb61-b1bc-4e7b-b1c8-3aa56a00d38d
+    syntactic_rules:
+      fixed_arity: 0
+    configurations:
+      - mode: symbolic
+        encoding: unicode_basic
+        template: "q"
+      - mode: symbolic
+        encoding: unicode_extended
+        template: "𝑞"
+      - mode: symbolic
+        encoding: latex_math
+        template: "\\textit{q}"
+

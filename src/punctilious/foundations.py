@@ -610,16 +610,17 @@ class Connectors(tuple):
 
 
 class Connector:
-    __slots__ = ('_uuid4', '_slug', '_syntactic_rules', '_representation')
+    __slots__ = ('_uuid4', '_slug', '_slug_aliases', '_syntactic_rules', '_representation')
     _uuid4_index = {}
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
         return hash((self.__class__, self._uuid4))
 
-    def __init__(self, uuid4=None, slug=None, syntactic_rules=None, representation=None):
+    def __init__(self, uuid4=None, slug=None, slug_aliases=None, syntactic_rules=None, representation=None):
         self._uuid4 = uuid4
         self._slug = slug
+        self._slug_aliases = slug_aliases
         self._syntactic_rules = syntactic_rules
         self._representation: Representation = representation
 
@@ -641,6 +642,10 @@ class Connector:
         return self._slug
 
     @property
+    def slug_aliases(self):
+        return self._slug_aliases
+
+    @property
     def syntactic_rules(self):
         return self._syntactic_rules
 
@@ -650,6 +655,8 @@ class Connector:
             d['uuid4'] = self.uuid4
         if self.slug is not None:
             d['slug'] = self.slug
+        if self.slug_aliases is not None:
+            d['slug_aliases'] = self.slug_aliases
         if self.syntactic_rules is not None:
             d['syntactic_rules'] = self.syntactic_rules
         if self.representation is not None:
