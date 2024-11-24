@@ -801,14 +801,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01087" summary="dynamic substitution of variables in is-formula-equivalent-with-variables.">
-      <option name="closed" value="true" />
-      <created>1724498959599</created>
-      <option name="number" value="01087" />
-      <option name="presentableId" value="LOCAL-01087" />
-      <option name="project" value="LOCAL" />
-      <updated>1724498959599</updated>
-    </task>
     <task id="LOCAL-01088" summary="misc.">
       <option name="closed" value="true" />
       <created>1724510860716</created>
@@ -1193,7 +1185,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732428461491</updated>
     </task>
-    <option name="localTasksCounter" value="1136" />
+    <task id="LOCAL-01136" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1732452280729</created>
+      <option name="number" value="01136" />
+      <option name="presentableId" value="LOCAL-01136" />
+      <option name="project" value="LOCAL" />
+      <updated>1732452280730</updated>
+    </task>
+    <option name="localTasksCounter" value="1137" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1351,12 +1351,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/foundations.py</url>
-          <line>409</line>
-          <option name="timeStamp" value="270" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/foundations.py</url>
-          <line>916</line>
+          <line>914</line>
           <option name="timeStamp" value="272" />
         </line-breakpoint>
       </breakpoints>

@@ -397,6 +397,7 @@ class Configurations(tuple):
 
 
 class Representations(tuple):
+    """A tuple of Representation instances."""
 
     def __init__(self, *args, **kwargs):
         self._slug_index = tuple(i.slug for i in self)
