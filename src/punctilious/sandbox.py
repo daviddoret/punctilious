@@ -10,14 +10,14 @@ grammar = """
 
 start: formula
 
-formula: function_notation
-          | infix_operator_notation
-          | infix_operator_notation_with_parenthesis
-          | constant_notation
+formula: function_notation 
+          | infix_operator_notation 
+          | infix_operator_notation_with_parenthesis 
+          | constant_notation 
 
 connector_slug: /[a-z]/ | /[a-z][a-z0-9_]*[a-z0-9]/
 
-function_notation: connector_slug "(" formula ("," formula)* ")"
+function_notation: connector_slug "(" formula ("," formula)* ")" 
 
 infix_operator_notation: formula connector_slug formula
 
@@ -33,23 +33,28 @@ parser = Lark(grammar, start='start', parser='lalr')
 # Transformer class to convert the parse tree into a more usable format
 class TreeTransformer(Transformer):
 
-    # Convert infix expressions into a tuple: ('infix', left, slug, right)
-    def infix_expr(self, items):
-        left, slug, right = items
-        return ('infix', left, slug, right)
-
     # Convert formula expressions into a tuple: ('formula', slug, arguments)
-    def formula(self, items):
+    def parse_function_notation(self, items):
         slug = items[0]
         arguments = items[1:]
         return ('formula', slug, arguments)
 
-    def infix_expr_with_parenthesis(self, items):
+    # Convert infix expressions into a tuple: ('infix', left, slug, right)
+    def connector_slug(self, items):
+        slug = items[0]
+        return (slug)
+
+    # Convert infix expressions into a tuple: ('infix', left, slug, right)
+    def infix_operator_notation(self, items):
+        left, slug, right = items
+        return ('infix', left, slug, right)
+
+    def infix_operator_notation_with_parenthesis(self, items):
         left, slug, right = items
         return ('infix', left, slug, right)
 
     # Slugs are returned as a simple value
-    def slug(self, items):
+    def constant_notation(self, items):
         return items[0].value  # 'value' is the actual string of the slug
 
 
