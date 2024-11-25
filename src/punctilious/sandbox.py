@@ -4,24 +4,26 @@ from lark import Lark, Transformer, v_args
 
 # Define the Lark grammar
 grammar = """
-%import common.WORD  // Import the WORD token for slugs
+%import common.WORD  
 %import common.WS    // Import whitespace handling
 %ignore WS           // Ignore whitespace between elements
 
-start: expression
+start: formula
 
-expression: formula
-          | infix_expr
-          | infix_expr_with_parenthesis
-          | connector_slug
-
-formula: connector_slug "(" expression ("," expression)* ")"
-
-infix_expr: expression connector_slug expression
-
-infix_expr_with_parenthesis: "(" expression connector_slug expression ")"
+formula: function_notation
+          | infix_operator_notation
+          | infix_operator_notation_with_parenthesis
+          | constant_notation
 
 connector_slug: /[a-z]/ | /[a-z][a-z0-9_]*[a-z0-9]/
+
+function_notation: connector_slug "(" formula ("," formula)* ")"
+
+infix_operator_notation: formula connector_slug formula
+
+infix_operator_notation_with_parenthesis: "(" formula connector_slug formula ")"
+
+constant_notation: connector_slug
 """
 
 # Create the Lark parser instance

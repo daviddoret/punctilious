@@ -43,9 +43,57 @@ class Logger:
         self._native_logger.info(msg)
 
 
+def ensure_formula(o=None) -> Formula:
+    if isinstance(o, Formula):
+        return o
+    elif isinstance(o, Connector):
+        return Formula(c=o)
+    else:
+        raise ValueError('o cannot be constrained into a Formula.')
+
+
 class Formula:
-    # TODO: CONTINUE DEVELOPMENT HERE, WITH LARK PARSER FOR THEOREMS.
-    pass
+    # __slots__ = tuple('_root_connector', '_arguments', )
+
+    def __init__(self, c, *args):
+        self._root_connector = ensure_connector(c)
+        self._arguments = ensure_formula_arguments(*args)
+
+    @property
+    def arguments(self):
+        return self._arguments
+
+    @property
+    def root_connector(self):
+        return self._root_connector
+
+
+def ensure_formula_arguments(o=None) -> FormulaArguments:
+    if isinstance(o, FormulaArguments):
+        return o
+    elif isinstance(o, collections.abc.Iterable):
+        return FormulaArguments(*o)
+    elif o is None:
+        return FormulaArguments()
+    else:
+        raise ValueError('o cannot be constrained into FormulaArguments.')
+
+
+class FormulaArguments(tuple[Formula]):
+    """A tuple of formula arguments."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+
+    def __new__(cls, *args, **kwargs) -> tuple[Formula, ...]:
+        typed_arguments: tuple[Formula, ...] = tuple(ensure_formula(a) for a in args)
+        return super().__new__(cls, typed_arguments)
+
+    def __repr__(self):
+        return '(' + ', '.join(str(a) for a in self) + ')'
+
+    def __str__(self):
+        return '(' + ', '.join(str(a) for a in self) + ')'
 
 
 def get_logger():
@@ -114,13 +162,13 @@ def get_preferences():
     return Preferences()
 
 
-def assure_slug(slug: str | Slug) -> Slug:
-    if isinstance(slug, Slug):
-        return slug
-    elif isinstance(slug, str):
-        return Slug(slug)
+def ensure_slug(o: str | Slug) -> Slug:
+    if isinstance(o, Slug):
+        return o
+    elif isinstance(o, str):
+        return Slug(o)
     else:
-        raise ValueError(f'Invalid slug {slug}')
+        raise ValueError(f'Invalid slug {o}')
 
 
 class Slug(str):
@@ -132,7 +180,7 @@ class Slugs(dict):
         super().__init__()
 
     def __setitem__(self, slug, value):
-        slug = assure_slug(slug=slug)
+        slug = ensure_slug(o=slug)
         if slug in self:
             raise KeyError(f"Key '{slug}' already exists.")
         super().__setitem__(slug, value)
@@ -317,7 +365,7 @@ class Imports(tuple):
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        typed_imports = tuple(assure_import(r) for r in args)
+        typed_imports = tuple(ensure_import(r) for r in args)
         return super().__new__(cls, typed_imports)
 
     def __repr__(self):
@@ -345,7 +393,7 @@ class Representations(tuple):
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        typed_representations = tuple(assure_representation(r) for r in args)
+        typed_representations = tuple(ensure_representation(r) for r in args)
         return super().__new__(cls, typed_representations)
 
     def __repr__(self):
@@ -373,7 +421,7 @@ class Theorems(tuple):
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        typed_representations = tuple(assure_theorem(r) for r in args)
+        typed_representations = tuple(ensure_theorem(r) for r in args)
         return super().__new__(cls, typed_representations)
 
     def __repr__(self):
@@ -393,7 +441,7 @@ class Theorems(tuple):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def assure_connector(o) -> Connector:
+def ensure_connector(o) -> Connector:
     """Assure that `o` is of type Connector, converting as necessary, or raise an error."""
     if isinstance(o, Connector):
         return o
@@ -409,7 +457,7 @@ def assure_connector(o) -> Connector:
         raise TypeError('Connector assurance failure.')
 
 
-def assure_configuration(o) -> Configuration:
+def ensure_configuration(o) -> Configuration:
     """Assure that `o` is of type Import, converting as necessary, or raise an error."""
     if isinstance(o, Configuration):
         return o
@@ -425,7 +473,7 @@ def assure_configuration(o) -> Configuration:
         raise TypeError('Configuration assurance failure.')
 
 
-def assure_import(o) -> Import:
+def ensure_import(o) -> Import:
     """Assure that `o` is of type Import, converting as necessary, or raise an error."""
     if isinstance(o, Import):
         return o
@@ -441,14 +489,14 @@ def assure_import(o) -> Import:
         raise TypeError('Import assurance failure.')
 
 
-def assure_representation(o) -> Representation:
+def ensure_representation(o) -> Representation:
     """Assure that `o` is of type Representation, converting as necessary, or raise an error."""
     if isinstance(o, Representation):
         return o
     elif isinstance(o, dict):
         uuid4 = o['uuid4']
         slug = o['slug']
-        syntactic_rules = assure_syntactic_rules(o=o['syntactic_rules'] if 'syntactic_rules' in o else None)
+        syntactic_rules = ensure_syntactic_rules(o=o['syntactic_rules'] if 'syntactic_rules' in o else None)
         configurations = Configurations(
             *o['configurations'] if 'configurations' in o else None)
         o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, configurations=configurations)
@@ -457,7 +505,7 @@ def assure_representation(o) -> Representation:
         raise TypeError(f'Representation assurance failure. Type: {type(o)}. Object: {o}.')
 
 
-def assure_slug_aliases(o) -> tuple[str, ...]:
+def ensure_slug_aliases(o) -> tuple[str, ...]:
     if isinstance(o, collections.abc.Iterable):
         o = tuple(str(i) for i in o)
         return o
@@ -467,7 +515,7 @@ def assure_slug_aliases(o) -> tuple[str, ...]:
         raise TypeError(f'Slug-aliases assurance failure. Type: {type(o)}. Object: {o}.')
 
 
-def assure_syntactic_rules(o) -> SyntacticRules:
+def ensure_syntactic_rules(o) -> SyntacticRules:
     """Assure that `o` is of type SyntacticRules, converting as necessary, or raise an error."""
     if isinstance(o, SyntacticRules):
         return o
@@ -484,7 +532,7 @@ def assure_syntactic_rules(o) -> SyntacticRules:
         raise TypeError('SyntacticRules assurance failure.')
 
 
-def assure_theorem(o) -> Theorem:
+def ensure_theorem(o) -> Theorem:
     """Assure that `o` is of type Theorem, converting as necessary, or raise an error."""
     if isinstance(o, Theorem):
         return o
@@ -560,7 +608,7 @@ class Configurations(tuple):
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        typed_configurations = tuple(assure_configuration(r) for r in args)
+        typed_configurations = tuple(ensure_configuration(r) for r in args)
         return super().__new__(cls, typed_configurations)
 
     def __repr__(self):
@@ -608,7 +656,7 @@ class Connectors(tuple):
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        typed_connectors = tuple(assure_connector(r) for r in args)
+        typed_connectors = tuple(ensure_connector(r) for r in args)
         return super().__new__(cls, typed_connectors)
 
     def __repr__(self):
@@ -638,8 +686,8 @@ class Connector:
     def __init__(self, uuid4=None, slug=None, slug_aliases=None, syntactic_rules=None, representation=None):
         self._uuid4 = uuid4
         self._slug = slug
-        self._slug_aliases = assure_slug_aliases(slug_aliases)
-        self._syntactic_rules = assure_syntactic_rules(syntactic_rules)
+        self._slug_aliases = ensure_slug_aliases(slug_aliases)
+        self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
         self._representation: Representation = representation
 
     def __repr__(self):
@@ -941,7 +989,7 @@ class PythonPackage(Package):
                     uuid4 = raw_connector['uuid4']
                     slug = raw_connector['slug']
                     slug_aliases = raw_connector['slug_aliases']
-                    syntactic_rules = assure_syntactic_rules(o=
+                    syntactic_rules = ensure_syntactic_rules(o=
                                                              raw_connector[
                                                                  'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
                     representation_reference = raw_connector['representation']
