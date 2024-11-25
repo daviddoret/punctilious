@@ -2,7 +2,8 @@ import foundations
 from punctilious.data.representations import \
     greek_alphabet_lowercase_serif_italic as _greek_alphabet_lowercase_serif_italic, \
     greek_alphabet_uppercase_serif_italic as _greek_alphabet_uppercase_serif_italic, \
-    latin_alphabet_lowercase_serif_italic as _latin_alphabet_lowercase_serif_italic
+    latin_alphabet_lowercase_serif_italic as _latin_alphabet_lowercase_serif_italic, \
+    latin_alphabet_lowercase_serif_roman as _latin_alphabet_lowercase_serif_roman
 from punctilious.data.connectors import operators_1 as _operators1
 from punctilious.data.theorems import propositional_logic_1 as _propositional_logic1
 
@@ -20,6 +21,7 @@ greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.G
 # print(greek_alphabet_uppercase_serif_italic.psi.configurations[2])
 
 latin_alphabet_lowercase_serif_italic = _latin_alphabet_lowercase_serif_italic.LatinAlphabetLowercaseSerifItalic()
+latin_alphabet_lowercase_serif_roman = _latin_alphabet_lowercase_serif_roman.LatinAlphabetLowercaseSerifRoman()
 
 operators_1 = _operators1.Operators1()
 # print(operators_1.conjunction.representation.configurations[0])
