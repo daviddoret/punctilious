@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import abc
 import collections
 import collections.abc
 
@@ -16,7 +18,7 @@ class Representation:
         best_score = 0
         optimal_renderer = self.renderers[0]
         for current_renderer in self.renderers:
-            current_score = prefs.score_tags_assignment(tags=current_renderer.tags)
+            current_score = prefs.score_tags(tags=current_renderer.tags)
             if current_score > best_score:
                 optimal_renderer = current_renderer
                 best_score = current_score
@@ -32,14 +34,20 @@ class Representation:
         return renderer.rep()
 
 
-class Renderer:
+class Renderer(abc.ABC):
+    """A renderer is an object that has the capability to generate the output of a presentation."""
+
     def __init__(self, tags: TagsAssignment | collections.abc.Iterable):
+        """
+
+        :param tags: The tags for which this renderer is optimal.
+        """
         if not isinstance(tags, TagsAssignment):
             tags: TagsAssignment = TagsAssignment(*tags)
         self._tags: TagsAssignment = tags
 
-    def rep(self):
-        pass
+    def rep(self, *args, **kwargs):
+        raise NotImplementedError('This method is abstract.')
 
     @property
     def tags(self):
@@ -47,6 +55,8 @@ class Renderer:
 
 
 class RendererForStringConstant(Renderer):
+    """A renderer that generates a string from a constant."""
+
     def __init__(self, string_constant: str, tags: TagsAssignment | collections.abc.Iterable):
         super().__init__(tags)
         self._string_constant = string_constant
@@ -60,6 +70,10 @@ class RendererForStringConstant(Renderer):
 
 
 class RendererForStringTemplate(Renderer):
+    """A renderer that generates a string from a template.
+
+    """
+
     def __init__(self, string_template: str, tags: TagsAssignment | collections.abc.Iterable):
         super().__init__(tags)
         self._string_template = string_template
@@ -144,6 +158,10 @@ class TagsAssignment(tuple):
 
 
 class TagsPreferences(dict):
+    """User preferences for tags.
+
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -162,29 +180,12 @@ class TagsPreferences(dict):
         if not isinstance(value, int):
             raise TypeError(f"Value must be of type int, got {type(value).__name__} instead.")
 
-    def score_tags_assignment(self, tags: TagsAssignment):
+    def score_tags(self, tags: TagsAssignment | collections.abc.Iterable):
+        """Returns the preference score of a collection of tags.
+
+        :param tags:
+        :return:
+        """
+        if not isinstance(tags, TagsAssignment):
+            tags: TagsAssignment = TagsAssignment(*tags)
         return sum(self.get(tag, 0) for tag in tags)
-
-
-en = Tag('language', 'en')
-fr = Tag('language', 'fr')
-symbol = Tag('connector_representation', 'symbol')
-word = Tag('connector_representation', 'word')
-print(en)
-
-x = RendererForStringConstant(string_constant='and', tags=(en, word,))
-y = RendererForStringConstant(string_constant='et', tags=(fr, word,))
-z = RendererForStringConstant(string_constant='∧', tags=(symbol,))
-rep = Representation(renderers=(x, y, z,))
-
-prefs = TagsPreferences()
-prefs[en] = 6
-prefs[fr] = 9
-prefs[symbol] = 100
-prefs[word] = 1
-
-print(rep.rep(prefs=prefs))
-prefs[word] = 100
-print(rep.rep(prefs=prefs))
-prefs[en] = 500
-print(rep.rep(prefs=prefs))
