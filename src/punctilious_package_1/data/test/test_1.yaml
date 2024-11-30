@@ -18,7 +18,7 @@ representations:
     uuid4: 4d8f91cf-67e9-4f6b-b367-a3d3a5bcf95e
     syntactic_rules:
       fixed_arity: 0
-    configurations:
+    renderers:
       - mode: symbolic
         encoding: unicode_basic
         template: "P"

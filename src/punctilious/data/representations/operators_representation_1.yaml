@@ -1,31 +1,31 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uuid4: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
 slug: operators_representation_1
-renderers:
+representations:
   - slug: conjunction_connector
     uuid4: dfcadcc0-0a23-442c-8185-c7aafa1a8b69
     tags: { notation: atomic_symbol }
     syntactic_rules: { fixed_arity: 0 }
-    configurations:
-      - type: string_constant
-        template: 'and'
-        tags: { style_1: word, language: en }
-      - type: string_constant
-        template: 'et'
-        tags: { style_1: word, language: fr }
-      - type: string_constant
-        template: '∧'
-        tags: { style_1: symbol }
+    renderers:
+      - implementation: string_constant
+        string_constant: 'and'
+        tags: { connector_representation: word, language: en }
+      - implementation: string_constant
+        string_constant: 'et'
+        tags: { connector_representation: word, language: fr }
+      - implementation: string_constant
+        string_constant: '∧'
+        tags: { connector_representation: symbol }
   - slug: infix
     uuid4: 0b3a2bd9-97f6-4522-97a1-3dd36a7615ca
     syntactic_rules: { fixed_arity: 2 }
-    configurations:
-      - type: string_template
+    renderers:
+      - implementation: string_template
         template: '{a1} {connector} {a3}'
         tags: { }
-  - slug: conjunction_formula
-    uuid4: 2fb54450-e08b-4280-b603-81051a630770
-    syntactic_rules: { fixed_arity: 2 }
+#  - slug: conjunction_formula
+#    uuid4: 2fb54450-e08b-4280-b603-81051a630770
+#    syntactic_rules: { fixed_arity: 2 }
 
 
 

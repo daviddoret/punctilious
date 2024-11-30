@@ -7,7 +7,7 @@ representations:
     uuid4: 4eb3925a-13af-40a2-bf19-0f1b3ec0f708
     syntactic_rules:
       fixed_arity: 1
-    configurations:
+    renderers:
       - mode: symbolic
         language: en
         encoding: unicode_basic

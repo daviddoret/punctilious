@@ -1,12 +1,105 @@
 from __future__ import annotations
-
+# other packages
 import abc
 import collections
 import collections.abc
+import yaml
+# punctilious packages
+import util
+
+
+def ensure_tag(o) -> Tag:
+    """Ensure that `o` is of type Tag, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, Tag):
+        return o
+    elif isinstance(o, tuple) and len(o) == 2:
+        label: str = o[0]
+        value: str = o[1]
+        o = Tag(label=label, value=value)
+        return o
+    else:
+        raise TypeError(f'Tag validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def ensure_tags_assignment(o) -> TagsAssignment:
+    """Ensure that `o` is of type TagsAssignment, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, TagsAssignment):
+        return o
+    elif isinstance(o, dict):
+        tags = tuple(ensure_tag(i) for i in o.items())
+        o = TagsAssignment(*tags)
+        return o
+    else:
+        raise TypeError(f'TagsAssignment validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def ensure_renderer(o) -> Renderer:
+    """Ensure that `o` is of type Renderer, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, Renderer):
+        return o
+    elif isinstance(o, dict):
+        # conversion from dict structure.
+        implementation: str = o.get('implementation', '')
+        if implementation == 'string_constant':
+            string_constant: str = o.get('string_constant', '')
+            tags: TagsAssignment = ensure_tags_assignment(o.get('tags', []))
+            o = RendererForStringConstant(string_constant=string_constant, tags=tags)
+            return o
+        elif implementation == 'string_template':
+            string_template: str = o.get('string_template', '')
+            tags: TagsAssignment = ensure_tags_assignment(o.get('tags', {}))
+            o = RendererForStringTemplate(string_template=string_template, tags=tags)
+            return o
+    else:
+        raise TypeError(f'Representation validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def ensure_renderers(o) -> Renderers:
+    """Ensure that `o` is of type Renderers, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, Renderers):
+        return o
+    elif isinstance(o, collections.abc.Iterable):
+        renderers = tuple(ensure_renderer(i) for i in o)
+        o = Renderers(*renderers)
+        return o
+    else:
+        raise TypeError(f'Renderers validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def ensure_representation(o) -> Representation:
+    """Ensure that `o` is of type Representation, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, Representation):
+        return o
+    elif isinstance(o, dict):
+        # conversion from dict structure.
+        uuid4 = o.get('uuid4', None)
+        slug = o.get('slug', None)
+        syntactic_rules = None
+        renderers = ensure_renderers(o=o.get('renderers', []))
+        o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, renderers=renderers)
+        return o
+    else:
+        raise TypeError(f'Representation validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def ensure_representations(o) -> Representations:
+    """Ensure that `o` is of type Representations, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, Representations):
+        return o
+    elif isinstance(o, collections.abc.Iterable):
+        representations = tuple(ensure_representation(i) for i in o)
+        o = Representations(*representations)
+        return o
+    else:
+        raise TypeError(f'Representations validation failure. Type: {type(o)}. Object: {o}.')
 
 
 class Representation:
-    def __init__(self, renderers: tuple[Renderer, ...]):
+
+    def __init__(self, renderers: tuple[Renderer, ...], uuid4=None, slug=None, syntactic_rules=None, ):
+        self._uuid4 = uuid4
+        self._slug = slug
+        self._syntactic_rules = syntactic_rules
         self._renderers: tuple[Renderer, ...] = renderers
 
     def optimize_renderer(self, prefs: TagsPreferences):
@@ -32,6 +125,49 @@ class Representation:
     def rep(self, *args, prefs: TagsPreferences, **kwargs):
         renderer: Renderer = self.optimize_renderer(prefs=prefs)
         return renderer.rep()
+
+    @property
+    def slug(self):
+        return self._slug
+
+    @property
+    def syntactic_rules(self):
+        return self._syntactic_rules
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self, default_flow_style=default_flow_style)
+
+    @property
+    def uuid4(self):
+        return self._uuid4
+
+
+class Representations(tuple):
+    """A tuple of Representation instances."""
+
+    def __init__(self, *args, **kwargs):
+        self._slug_index = tuple(i.slug for i in self)
+        super().__init__()
+
+    def __new__(cls, *args, **kwargs):
+        typed_representations = tuple(ensure_representation(r) for r in args)
+        return super().__new__(cls, typed_representations)
+
+    def __repr__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def __str__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def get_from_slug(self, slug: str):
+        if slug in self._slug_index:
+            slug_index = self._slug_index.index(slug)
+            return self[slug_index]
+        else:
+            raise IndexError(f'Representation slug not found: "{slug}".')
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self, default_flow_style=default_flow_style)
 
 
 class Renderer(abc.ABC):
@@ -85,6 +221,20 @@ class RendererForStringTemplate(Renderer):
     @property
     def string_template(self):
         return self._string_template
+
+
+class Renderers(tuple):
+    """A tuple of Renderer instances."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+
+    def __new__(cls, *args, **kwargs):
+        renderers = tuple(ensure_renderer(i) for i in args)
+        return super().__new__(cls, renderers)
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self, default_flow_style=default_flow_style)
 
 
 class TagLabel(str):

@@ -8,7 +8,7 @@ representations:
     uuid4: e1962144-76aa-44dc-a320-a0f3dd703dbd
     syntactic_rules:
       fixed_arity: 0
-    configurations:
+    renderers:
       - mode: symbolic
         encoding: unicode_basic
         template: "alpha"
@@ -22,7 +22,7 @@ representations:
     uuid4: d760831d-7ebf-4716-a30a-fbbd879a85e8
     syntactic_rules:
       fixed_arity: 0
-    configurations:
+    renderers:
       - mode: symbolic
         encoding: unicode_basic
         template: "phi"
@@ -36,7 +36,7 @@ representations:
     uuid4: b3b80eed-7dd0-467a-97d9-c05efb36af4b
     syntactic_rules:
       fixed_arity: 0
-    configurations:
+    renderers:
       - mode: symbolic
         encoding: unicode_basic
         template: "psi"

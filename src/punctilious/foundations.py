@@ -293,7 +293,7 @@ class SyntacticRules:
         yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
 
 
-class Configuration:
+class Renderer:
     """"""
     __slots__ = ('_mode', '_language', '_encoding', '_parentheses', '_template', '_jinja2_template')
 
@@ -457,9 +457,9 @@ def ensure_connector(o) -> Connector:
         raise TypeError('Connector assurance failure.')
 
 
-def ensure_configuration(o) -> Configuration:
+def ensure_renderer(o) -> Renderer:
     """Assure that `o` is of type Import, converting as necessary, or raise an error."""
-    if isinstance(o, Configuration):
+    if isinstance(o, Renderer):
         return o
     elif isinstance(o, dict):
         mode = o['mode'] if 'mode' in o.keys() else None
@@ -467,7 +467,7 @@ def ensure_configuration(o) -> Configuration:
         encoding = o['encoding'] if 'encoding' in o.keys() else None
         parentheses = o['parentheses'] if 'parentheses' in o.keys() else None
         template = o['template'] if 'template' in o.keys() else None
-        o = Configuration(mode=mode, language=language, encoding=encoding, parentheses=parentheses, template=template)
+        o = Renderer(mode=mode, language=language, encoding=encoding, parentheses=parentheses, template=template)
         return o
     else:
         raise TypeError('Configuration assurance failure.')
@@ -499,7 +499,7 @@ def ensure_representation(o) -> Representation:
         syntactic_rules = ensure_syntactic_rules(o=o['syntactic_rules'] if 'syntactic_rules' in o else None)
         configurations = Configurations(
             *o['configurations'] if 'configurations' in o else None)
-        o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, configurations=configurations)
+        o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, renderers=configurations)
         return o
     else:
         raise TypeError(f'Representation assurance failure. Type: {type(o)}. Object: {o}.')
@@ -551,18 +551,18 @@ def ensure_theorem(o) -> Theorem:
 
 
 class Representation:
-    __slots__ = ('_uuid4', '_slug', '_syntactic_rules', '_configurations')
+    __slots__ = ('_uuid4', '_slug', '_syntactic_rules', '_renderers')
     _in_memory = {}
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
         return hash((self.__class__, self.uuid4))
 
-    def __init__(self, uuid4=None, slug=None, syntactic_rules=None, configurations=None):
+    def __init__(self, uuid4=None, slug=None, syntactic_rules=None, renderers=None):
         self._uuid4 = uuid4
         self._slug = slug
         self._syntactic_rules = syntactic_rules
-        self._configurations = configurations
+        self._renderers = renderers
 
     def __repr__(self):
         return self.slug
@@ -571,13 +571,13 @@ class Representation:
         return self.slug
 
     @property
-    def configurations(self):
-        return self._configurations
+    def renderers(self):
+        return self._renderers
 
     def repr(self, args=None, encoding=None, mode=None, language=None) -> str:
         if args is None:
             args = ()
-        configuration = self.configurations.select(encoding=encoding, mode=mode, language=language)
+        configuration = self.renderers.select(encoding=encoding, mode=mode, language=language)
         if self.syntactic_rules.fixed_arity is not None and len(args) != self.syntactic_rules.fixed_arity:
             raise ValueError('The number of arguments does not match the fixed_arity syntactic_rule.')
         placeholder_names = tuple((f'a{i}' for i in tuple(range(1, len(args) + 1))))
@@ -608,7 +608,7 @@ class Configurations(tuple):
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        typed_configurations = tuple(ensure_configuration(r) for r in args)
+        typed_configurations = tuple(ensure_renderer(r) for r in args)
         return super().__new__(cls, typed_configurations)
 
     def __repr__(self):
@@ -617,7 +617,7 @@ class Configurations(tuple):
     def __str__(self):
         return '(' + ', '.join(e.slug for e in self) + ')'
 
-    def select(self, encoding=None, mode=None, language=None) -> Configuration:
+    def select(self, encoding=None, mode=None, language=None) -> Renderer:
 
         encoding = get_preferences().encoding if encoding is None else encoding
         mode = get_preferences().representation_mode if mode is None else mode
