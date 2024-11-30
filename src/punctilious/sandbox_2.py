@@ -1,18 +1,50 @@
+from __future__ import annotations
 import collections
 import collections.abc
 
 
 class Renderer:
-    def __init__(self, tags):
-        self._tags = tags
+    def __init__(self, tags: TagsAssignment):
+        self._tags: TagsAssignment = tags
+
+    @property
+    def tags(self):
+        return self._tags
+
+
+class TagLabel(str):
+
+    def __init__(self, label: str):
+        super().__init__()
+
+    def __new__(cls, label: str):
+        if not isinstance(label, str):
+            # implicit conversion to assure proper equality between equal labels.
+            label: str = str(label)
+        return super().__new__(cls, label)
+
+
+class TagValue(str):
+
+    def __init__(self, value: str):
+        super().__init__()
+
+    def __new__(cls, value: str):
+        if not isinstance(value, TagValue):
+            value: str = str(value)
+        return super().__new__(cls, value)
 
 
 class Tag(tuple):
 
-    def __init__(self, label: str, value: str):
+    def __init__(self, label: TagLabel | str, value: TagValue | str):
         super().__init__()
 
-    def __new__(cls, label: str, value: str):
+    def __new__(cls, label: TagLabel | str, value: TagValue | str):
+        if not isinstance(label, TagLabel):
+            label: TagLabel = TagLabel(label)
+        if not isinstance(value, TagValue):
+            value: TagValue = TagValue(value)
         return super().__new__(cls, [label, value])
 
     @property
@@ -82,5 +114,6 @@ print(a1)
 prefs = TagsPreferences()
 prefs[en] = 6
 prefs[fr] = 9
+prefs[symbol] = 10
 
 print(prefs.score_tags_assignment(a1))
