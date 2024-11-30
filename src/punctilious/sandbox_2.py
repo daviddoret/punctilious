@@ -3,16 +3,78 @@ import collections
 import collections.abc
 
 
+class Representation:
+    def __init__(self, renderers: tuple[Renderer, ...]):
+        self._renderers: tuple[Renderer, ...] = renderers
+
+    def optimize_renderer(self, prefs: TagsPreferences):
+        """Given preferences, return the optimal renderer.
+
+        :param prefs:
+        :return:
+        """
+        best_score = 0
+        optimal_renderer = self.renderers[0]
+        for current_renderer in self.renderers:
+            current_score = prefs.score_tags_assignment(tags=current_renderer.tags)
+            if current_score > best_score:
+                optimal_renderer = current_renderer
+                best_score = current_score
+        return optimal_renderer
+
+    @property
+    def renderers(self):
+        """A tuple of renderers configured for this representation."""
+        return self._renderers
+
+    def rep(self, *args, prefs: TagsPreferences, **kwargs):
+        renderer: Renderer = self.optimize_renderer(prefs=prefs)
+        return renderer.rep()
+
+
 class Renderer:
-    def __init__(self, tags: TagsAssignment):
+    def __init__(self, tags: TagsAssignment | collections.abc.Iterable):
+        if not isinstance(tags, TagsAssignment):
+            tags: TagsAssignment = TagsAssignment(*tags)
         self._tags: TagsAssignment = tags
+
+    def rep(self):
+        pass
 
     @property
     def tags(self):
         return self._tags
 
 
+class RendererForStringConstant(Renderer):
+    def __init__(self, string_constant: str, tags: TagsAssignment | collections.abc.Iterable):
+        super().__init__(tags)
+        self._string_constant = string_constant
+
+    @property
+    def string_constant(self):
+        return self._string_constant
+
+    def rep(self, *args, **kwargs):
+        return self._string_constant
+
+
+class RendererForStringTemplate(Renderer):
+    def __init__(self, string_template: str, tags: TagsAssignment | collections.abc.Iterable):
+        super().__init__(tags)
+        self._string_template = string_template
+
+    def rep(self, *args, **kwargs):
+        # TODO: Add variable substitution logic here.
+        return self._string_template
+
+    @property
+    def string_template(self):
+        return self._string_template
+
+
 class TagLabel(str):
+    """A tag label is a category used to organize labels in groups."""
 
     def __init__(self, label: str):
         super().__init__()
@@ -25,6 +87,7 @@ class TagLabel(str):
 
 
 class TagValue(str):
+    """A tag value is a tag used to denote tags in a tag category."""
 
     def __init__(self, value: str):
         super().__init__()
@@ -36,6 +99,7 @@ class TagValue(str):
 
 
 class Tag(tuple):
+    """A tag is pair which comprises a label and a value."""
 
     def __init__(self, label: TagLabel | str, value: TagValue | str):
         super().__init__()
@@ -108,12 +172,19 @@ symbol = Tag('connector_representation', 'symbol')
 word = Tag('connector_representation', 'word')
 print(en)
 
-a1 = TagsAssignment(en, symbol)
-print(a1)
+x = RendererForStringConstant(string_constant='and', tags=(en, word,))
+y = RendererForStringConstant(string_constant='et', tags=(fr, word,))
+z = RendererForStringConstant(string_constant='∧', tags=(symbol,))
+rep = Representation(renderers=(x, y, z,))
 
 prefs = TagsPreferences()
 prefs[en] = 6
 prefs[fr] = 9
-prefs[symbol] = 10
+prefs[symbol] = 100
+prefs[word] = 1
 
-print(prefs.score_tags_assignment(a1))
+print(rep.rep(prefs=prefs))
+prefs[word] = 100
+print(rep.rep(prefs=prefs))
+prefs[en] = 500
+print(rep.rep(prefs=prefs))
