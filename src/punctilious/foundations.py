@@ -448,7 +448,7 @@ def ensure_connector(o) -> Connector:
     elif isinstance(o, dict):
         uuid4 = o['uuid4'] if 'uuid4' in o.keys() else None
         slug = o['slug'] if 'slug' in o.keys() else None
-        slug_aliases = o['slug_aliases'] if 'slug_aliases' in o.keys() else tuple()
+        tokens = o['tokens'] if 'tokens' in o.keys() else tuple()
         syntactic_rules = o['syntactic_rules'] if 'syntactic_rules' in o.keys() else None
         representation = o['representation'] if 'representation' in o.keys() else None
         o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
@@ -505,14 +505,14 @@ def ensure_representation(o) -> Representation:
         raise TypeError(f'Representation assurance failure. Type: {type(o)}. Object: {o}.')
 
 
-def ensure_slug_aliases(o) -> tuple[str, ...]:
+def ensure_tokens(o) -> tuple[str, ...]:
     if isinstance(o, collections.abc.Iterable):
         o = tuple(str(i) for i in o)
         return o
     elif o is None:
         return tuple()
     else:
-        raise TypeError(f'Slug-aliases assurance failure. Type: {type(o)}. Object: {o}.')
+        raise TypeError(f'Tokens assurance failure. Type: {type(o)}. Object: {o}.')
 
 
 def ensure_syntactic_rules(o) -> SyntacticRules:
@@ -647,11 +647,11 @@ class Connectors(tuple):
     """A tuple of Connector instances."""
 
     def __init__(self, *args, **kwargs):
-        # prepare a dictionary that maps primary slugs to connectors
+        # prepare a dictionary that maps slugs and tokens to connectors
         slug_dict = dict(zip(tuple(i.slug for i in self), tuple(i for i in self)))
-        aliases_slugs = tuple(j for i in self for j in i.slug_aliases)
-        aliases_connectors = tuple(slug_dict[i.slug] for i in self for j in i.slug_aliases)
-        alias_dict = dict(zip(aliases_slugs, aliases_connectors))
+        tokens = tuple(j for i in self for j in i.tokens)
+        aliases_connectors = tuple(slug_dict[i.slug] for i in self for j in i.tokens)
+        alias_dict = dict(zip(tokens, aliases_connectors))
         self._slug_index = slug_dict | alias_dict
         super().__init__()
 
@@ -671,22 +671,28 @@ class Connectors(tuple):
         else:
             raise IndexError(f'Connector slug not found: "{slug}".')
 
+    def get_from_token(self, slug: str):
+        if slug in self._slug_index.keys():
+            return self._slug_index[slug]
+        else:
+            raise IndexError(f'Connector slug not found: "{slug}".')
+
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
 class Connector:
-    __slots__ = ('_uuid4', '_slug', '_slug_aliases', '_syntactic_rules', '_representation')
+    __slots__ = ('_uuid4', '_slug', '_tokens', '_syntactic_rules', '_representation')
     _uuid4_index = {}
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
         return hash((self.__class__, self._uuid4))
 
-    def __init__(self, uuid4=None, slug=None, slug_aliases=None, syntactic_rules=None, representation=None):
+    def __init__(self, uuid4=None, slug=None, tokens=None, syntactic_rules=None, representation=None):
         self._uuid4 = uuid4
         self._slug = slug
-        self._slug_aliases = ensure_slug_aliases(slug_aliases)
+        self._tokens = ensure_tokens(tokens)
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
         self._representation: Representation = representation
 
@@ -708,8 +714,10 @@ class Connector:
         return self._slug
 
     @property
-    def slug_aliases(self):
-        return self._slug_aliases
+    def tokens(self):
+        """Tokens are string representations used to identify the connector in a string representation of the
+        formula."""
+        return self._tokens
 
     @property
     def syntactic_rules(self):
@@ -721,8 +729,8 @@ class Connector:
             d['uuid4'] = self.uuid4
         if self.slug is not None:
             d['slug'] = self.slug
-        if self.slug_aliases is not None:
-            d['slug_aliases'] = self.slug_aliases
+        if self.tokens is not None:
+            d['tokens'] = self.tokens
         if self.syntactic_rules is not None:
             d['syntactic_rules'] = self.syntactic_rules
         if self.representation is not None:
@@ -988,14 +996,14 @@ class PythonPackage(Package):
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
                     uuid4 = raw_connector['uuid4']
                     slug = raw_connector['slug']
-                    slug_aliases = raw_connector['slug_aliases']
+                    tokens = raw_connector['tokens']
                     syntactic_rules = ensure_syntactic_rules(o=
                                                              raw_connector[
                                                                  'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
                     representation_reference = raw_connector['representation']
                     representation = self._resolve_package_representation_reference(ref=representation_reference,
                                                                                     i=imports, r=representations)
-                    o = Connector(uuid4=uuid4, slug=slug, slug_aliases=slug_aliases, syntactic_rules=syntactic_rules,
+                    o = Connector(uuid4=uuid4, slug=slug, tokens=tokens, syntactic_rules=syntactic_rules,
                                   representation=representation)
                     typed_connectors.append(o)
                 typed_connectors = Connectors(*typed_connectors)

@@ -34,7 +34,7 @@ parser = Lark(grammar, start='start', parser='lalr')
 class TreeTransformer(Transformer):
 
     # Convert formula expressions into a tuple: ('formula', slug, arguments)
-    def parse_function_notation(self, items):
+    def function_notation(self, items):
         slug = items[0]
         arguments = items[1:]
         return ('formula', slug, arguments)

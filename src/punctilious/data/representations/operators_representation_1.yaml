@@ -1,90 +1,31 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uuid4: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
 slug: operators_representation_1
-# source:
-# https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
-representations:
-  - slug: conjunction_representation
-    uuid4: 4282c2d1-ecae-4704-ab0a-485f9f8fc804
-    syntactic_rules:
-      fixed_arity: 2
+renderers:
+  - slug: conjunction_connector
+    uuid4: dfcadcc0-0a23-442c-8185-c7aafa1a8b69
+    tags: { notation: atomic_symbol }
+    syntactic_rules: { fixed_arity: 0 }
     configurations:
-      - mode: symbolic
-        language: en
-        encoding: unicode_basic
-        template: "{{a1}} and {{a2}}"
-      - mode: symbolic
-        encoding: unicode_extended
-        template: "{{a1}} ∧ {{a2}}"
-      - mode: symbolic
-        language: neutral
-        encoding: latex_math
-        template: "{{a1}} \\land {{a2}}"
-      - mode: symbolic
-        language: fr
-        encoding: unicode_basic
-        template: "{{a1}} et {{a2}}"
-  - slug: entailment_representation
-    # source: https://en.wikipedia.org/wiki/Turnstile_(symbol)
-    uuid4: c3811944-b4e5-4ff5-a0de-6b18a634580f
-    syntactic_rules:
-      fixed_arity: 2
+      - type: string_constant
+        template: 'and'
+        tags: { style_1: word, language: en }
+      - type: string_constant
+        template: 'et'
+        tags: { style_1: word, language: fr }
+      - type: string_constant
+        template: '∧'
+        tags: { style_1: symbol }
+  - slug: infix
+    uuid4: 0b3a2bd9-97f6-4522-97a1-3dd36a7615ca
+    syntactic_rules: { fixed_arity: 2 }
     configurations:
-      - mode: symbolic
-        language: en
-        encoding: unicode_basic
-        template: "{{a1}} entails {{a2}}"
-      - mode: symbolic
-        encoding: unicode_extended
-        template: "{{a1}} ⊢ {{a2}}"
-      - mode: symbolic
-        language: neutral
-        encoding: latex_math
-        template: "{{a1}} \\vdash {{a2}}"
-      - mode: symbolic
-        language: fr
-        encoding: unicode_basic
-        template: "{{a1}} entraîne {{a2}}"
-  - slug: negation_representation
-    uuid4: e4333237-f9d6-4db0-a7e1-8c1699375719
-    syntactic_rules:
-      fixed_arity: 1
-    configurations:
-      - mode: symbolic
-        language: en
-        encoding: unicode_basic
-        parentheses: without
-        template: "not {{a1}}"
-      - mode: symbolic
-        language: en
-        encoding: unicode_basic
-        parentheses: with
-        template: "not ({{a1}})"
-      - mode: symbolic
-        encoding: unicode_extended
-        parentheses: without
-        template: "¬{{a2}}"
-      - mode: symbolic
-        encoding: unicode_extended
-        parentheses: with
-        template: "¬({{a2}})"
-      - mode: symbolic
-        language: neutral
-        encoding: latex_math
-        parentheses: without
-        template: "\\lnot{{a1}}"
-      - mode: symbolic
-        language: neutral
-        encoding: latex_math
-        parentheses: with
-        template: "\\lnot({{a1}})"
-      - mode: symbolic
-        language: fr
-        encoding: unicode_basic
-        parentheses: without
-        template: "non {{a1}}"
-      - mode: symbolic
-        language: fr
-        encoding: unicode_basic
-        parentheses: with
-        template: "non ({{a1}})"
+      - type: string_template
+        template: '{a1} {connector} {a3}'
+        tags: { }
+  - slug: conjunction_formula
+    uuid4: 2fb54450-e08b-4280-b603-81051a630770
+    syntactic_rules: { fixed_arity: 2 }
+
+
+

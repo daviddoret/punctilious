@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Lark + yaml">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/sandbox_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sandbox.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -326,6 +330,7 @@
     "Python.propositional_logic_syntax_1.executor": "Run",
     "Python.punctilious.executor": "Run",
     "Python.sandbox.executor": "Run",
+    "Python.sandbox_2.executor": "Run",
     "Python.sequences_1.executor": "Run",
     "Python.symbols (1).executor": "Run",
     "Python.symbols.executor": "Run",
@@ -404,7 +409,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/symbols" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.sandbox">
+  <component name="RunManager" selected="Python.sandbox_2">
     <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -485,28 +490,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/foundations.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="parser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/parser.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -618,6 +601,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/sandbox.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sandbox_2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/sandbox_2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -763,8 +768,8 @@
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.foundations" />
       <item itemvalue="Python.sandbox" />
+      <item itemvalue="Python.sandbox_2" />
       <item itemvalue="Python.__init__" />
-      <item itemvalue="Python.parser" />
       <item itemvalue="Python.punctilious_OBSOLETE" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
@@ -777,11 +782,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.sandbox_2" />
         <item itemvalue="Python.sandbox" />
         <item itemvalue="Python.__init__" />
         <item itemvalue="Python.foundations" />
         <item itemvalue="Python.punctilious_OBSOLETE" />
-        <item itemvalue="Python.parser" />
       </list>
     </recent_temporary>
   </component>
@@ -800,14 +805,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01099" summary="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
-      <option name="closed" value="true" />
-      <created>1724615608287</created>
-      <option name="number" value="01099" />
-      <option name="presentableId" value="LOCAL-01099" />
-      <option name="project" value="LOCAL" />
-      <updated>1724615608287</updated>
     </task>
     <task id="LOCAL-01100" summary="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
       <option name="closed" value="true" />
@@ -1193,7 +1190,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732572179246</updated>
     </task>
-    <option name="localTasksCounter" value="1148" />
+    <task id="LOCAL-01148" summary="Lark + yaml">
+      <option name="closed" value="true" />
+      <created>1732572931307</created>
+      <option name="number" value="01148" />
+      <option name="presentableId" value="LOCAL-01148" />
+      <option name="project" value="LOCAL" />
+      <updated>1732572931307</updated>
+    </task>
+    <option name="localTasksCounter" value="1149" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
