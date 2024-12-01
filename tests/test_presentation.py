@@ -32,8 +32,22 @@ def prefs(en, fr, symbol, word):
     return prefs
 
 
+@pytest.fixture
+def reps():
+    d: dict = pu.util.get_yaml_from_package(path='data.representations', resource='operators_representation_1.yaml')
+    raw = d.get('representations', [])
+    return pu.presentation.ensure_representations(o=raw)
+
+
+@pytest.fixture
+def conjunction_connector(reps):
+    return reps[0]
+
+
 class TestRepresentation:
     def test_representation(self, en, fr, word, symbol, prefs):
+        """Test of representation with multiple string-constant renderers.
+        """
         x = pu.presentation.RendererForStringConstant(string_constant='and', tags=(en, word,))
         y = pu.presentation.RendererForStringConstant(string_constant='et', tags=(fr, word,))
         z = pu.presentation.RendererForStringConstant(string_constant='∧', tags=(symbol,))
@@ -47,14 +61,9 @@ class TestRepresentation:
         prefs[en] = 500
         assert (rep.rep(prefs=prefs) == 'and')
 
-    def test_from_yaml(self, en, fr, word, symbol, prefs):
-        d: dict = pu.util.get_yaml_from_package(path='data.representations', resource='operators_representation_1.yaml')
-        assert d is not None
-        raw = d.get('representations', [])
-        reps = pu.presentation.ensure_representations(o=raw)
-
-        conjunction_connector: pu.presentation.Representation = reps[0]
-        print(conjunction_connector.rep(prefs=prefs))
+    def test_from_yaml(self, en, fr, word, symbol, conjunction_connector, prefs):
+        """Test of representation coming from aa yaml file with multiple string-constant renderers.
+        """
 
         assert (conjunction_connector.rep(prefs=prefs) == '∧')
 

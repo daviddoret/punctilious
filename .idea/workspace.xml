@@ -5,18 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="presentation renderers">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/util.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_roman.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_roman.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_representation_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -255,7 +244,7 @@
     "Python tests.pytest for test_pl1.TestPL1.test_propositional_variables.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1ML.test_infix_formula.executor": "Run",
     "Python tests.pytest for test_pl1.TestPL1ML.test_substitute_meta_variables.executor": "Debug",
-    "Python tests.pytest for test_presentation.TestRepresentation.test_from_yaml.executor": "Debug",
+    "Python tests.pytest for test_presentation.TestRepresentation.test_from_yaml.executor": "Run",
     "Python tests.pytest for test_presentation.TestRepresentation.test_representation.executor": "Debug",
     "Python tests.pytest for test_presentation_1.TestSymbols.test_symbols.executor": "Run",
     "Python tests.pytest for test_presentation_1.TestTypesettingConfiguration.test_typesetting_configuration.executor": "Run",
@@ -805,14 +794,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01104" summary="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
-      <option name="closed" value="true" />
-      <created>1724878157173</created>
-      <option name="number" value="01104" />
-      <option name="presentableId" value="LOCAL-01104" />
-      <option name="project" value="LOCAL" />
-      <updated>1724878157173</updated>
-    </task>
     <task id="LOCAL-01105" summary="meta-theory predicates (&quot;is-a-well-formed-...&quot;).">
       <option name="closed" value="true" />
       <created>1725141741920</created>
@@ -1197,7 +1178,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732991167963</updated>
     </task>
-    <option name="localTasksCounter" value="1153" />
+    <task id="LOCAL-01153" summary="presentation renderers">
+      <option name="closed" value="true" />
+      <created>1733001365136</created>
+      <option name="number" value="01153" />
+      <option name="presentableId" value="LOCAL-01153" />
+      <option name="project" value="LOCAL" />
+      <updated>1733001365137</updated>
+    </task>
+    <option name="localTasksCounter" value="1154" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
