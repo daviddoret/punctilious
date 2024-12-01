@@ -23,6 +23,16 @@ def word():
 
 
 @pytest.fixture
+def traditional_formula():
+    return pu.presentation.Tag('layout', 'traditional_formula')
+
+
+@pytest.fixture
+def infix_formula():
+    return pu.presentation.Tag('layout', 'infix_formula')
+
+
+@pytest.fixture
 def prefs(en, fr, symbol, word):
     prefs = pu.presentation.TagsPreferences()
     prefs[en] = 6
@@ -72,3 +82,14 @@ class TestRepresentation:
 
         prefs[en] = 500
         assert (conjunction_connector.rep(prefs=prefs) == 'and')
+
+    def test_template(self, traditional_formula, infix_formula, prefs):
+        x = pu.presentation.RendererForStringTemplate(string_template='{a0} {connector} {a1}', tags=(infix_formula,))
+        y = pu.presentation.RendererForStringTemplate(string_template='{connector}({a0}, {a1})',
+                                                      tags=(traditional_formula,))
+        rep = pu.presentation.Representation(renderers=(x, y,))
+
+        prefs[traditional_formula] = 10
+        prefs[infix_formula] = 20
+
+        assert (rep.rep(prefs=prefs, variables={'a0': 'a', 'a1': 'b', 'connector': 'and'}) == 'a and b')

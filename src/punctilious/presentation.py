@@ -122,9 +122,11 @@ class Representation:
         """A tuple of renderers configured for this representation."""
         return self._renderers
 
-    def rep(self, *args, prefs: TagsPreferences, **kwargs):
+    def rep(self, *args, prefs: TagsPreferences, variables: dict[str, str] = None, **kwargs):
+        if variables is None:
+            variables = {}
         renderer: Renderer = self.optimize_renderer(prefs=prefs)
-        return renderer.rep()
+        return renderer.rep(prefs=prefs, variables=variables)
 
     @property
     def slug(self):
@@ -214,9 +216,12 @@ class RendererForStringTemplate(Renderer):
         super().__init__(tags)
         self._string_template = string_template
 
-    def rep(self, *args, **kwargs):
-        # TODO: Add variable substitution logic here.
-        return self._string_template
+    def rep(self, *args, prefs: TagsPreferences = None, variables: dict[str, str] | None = None, **kwargs):
+        # TODO: Implement a custom dict class which implements __missing__ to have a default
+        #  value for missing keys.
+        if variables is None:
+            variables = {}
+        return self._string_template.format_map(variables)
 
     @property
     def string_template(self):
