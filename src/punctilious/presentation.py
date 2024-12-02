@@ -4,6 +4,7 @@ import abc
 import collections
 import collections.abc
 import yaml
+import jinja2
 # punctilious packages
 import util
 
@@ -215,13 +216,17 @@ class RendererForStringTemplate(Renderer):
     def __init__(self, string_template: str, tags: TagsAssignment | collections.abc.Iterable):
         super().__init__(tags)
         self._string_template = string_template
+        self._jinja2_template: jinja2.Template = jinja2.Template(string_template)
 
     def rep(self, *args, prefs: TagsPreferences = None, variables: dict[str, str] | None = None, **kwargs):
         # TODO: Implement a custom dict class which implements __missing__ to have a default
         #  value for missing keys.
         if variables is None:
             variables = {}
-        return self._string_template.format_map(variables)
+        # Alternative approach with str.format_map(). Pros: lightweight + performance.
+        # return self._string_template.format_map(variables)
+        # Approach with jinja2 template. Pros: expressiveness + escaping + security.
+        return self._jinja2_template.render(variables)
 
     @property
     def string_template(self):

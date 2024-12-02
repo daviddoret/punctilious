@@ -16,16 +16,13 @@ representations:
       - implementation: string_constant
         string_constant: '∧'
         tags: { connector_representation: symbol }
-  - slug: infix
+  - slug: infix_formula
     uuid4: 0b3a2bd9-97f6-4522-97a1-3dd36a7615ca
     syntactic_rules: { fixed_arity: 2 }
     renderers:
       - implementation: string_template
-        template: '{a1} {connector} {a3}'
+        template: '{{ a1 }} {{ connector }} {{ a2 }}'
         tags: { }
-#  - slug: conjunction_formula
-#    uuid4: 2fb54450-e08b-4280-b603-81051a630770
-#    syntactic_rules: { fixed_arity: 2 }
 
 
 

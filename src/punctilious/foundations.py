@@ -11,6 +11,9 @@ import typing
 import abc
 import collections.abc
 
+# punctilious modules
+import presentation
+
 
 class Logger:
     __slots__ = ('_native_logger')
@@ -457,22 +460,6 @@ def ensure_connector(o) -> Connector:
         raise TypeError('Connector assurance failure.')
 
 
-def ensure_renderer(o) -> Renderer:
-    """Assure that `o` is of type Import, converting as necessary, or raise an error."""
-    if isinstance(o, Renderer):
-        return o
-    elif isinstance(o, dict):
-        mode = o['mode'] if 'mode' in o.keys() else None
-        language = o['language'] if 'language' in o.keys() else None
-        encoding = o['encoding'] if 'encoding' in o.keys() else None
-        parentheses = o['parentheses'] if 'parentheses' in o.keys() else None
-        template = o['template'] if 'template' in o.keys() else None
-        o = Renderer(mode=mode, language=language, encoding=encoding, parentheses=parentheses, template=template)
-        return o
-    else:
-        raise TypeError('Configuration assurance failure.')
-
-
 def ensure_import(o) -> Import:
     """Assure that `o` is of type Import, converting as necessary, or raise an error."""
     if isinstance(o, Import):
@@ -608,7 +595,7 @@ class Configurations(tuple):
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
-        typed_configurations = tuple(ensure_renderer(r) for r in args)
+        typed_configurations = tuple(presentation.ensure_renderer(r) for r in args)
         return super().__new__(cls, typed_configurations)
 
     def __repr__(self):

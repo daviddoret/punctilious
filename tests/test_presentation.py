@@ -84,12 +84,13 @@ class TestRepresentation:
         assert (conjunction_connector.rep(prefs=prefs) == 'and')
 
     def test_template(self, traditional_formula, infix_formula, prefs):
-        x = pu.presentation.RendererForStringTemplate(string_template='{a0} {connector} {a1}', tags=(infix_formula,))
-        y = pu.presentation.RendererForStringTemplate(string_template='{connector}({a0}, {a1})',
+        x = pu.presentation.RendererForStringTemplate(string_template='{{ a1 }} {{ connector }} {{ a2 }}',
+                                                      tags=(infix_formula,))
+        y = pu.presentation.RendererForStringTemplate(string_template='{{ connector}}({{ a1 }}, {{ a2 }})',
                                                       tags=(traditional_formula,))
         rep = pu.presentation.Representation(renderers=(x, y,))
 
         prefs[traditional_formula] = 10
         prefs[infix_formula] = 20
 
-        assert (rep.rep(prefs=prefs, variables={'a0': 'a', 'a1': 'b', 'connector': 'and'}) == 'a and b')
+        assert (rep.rep(prefs=prefs, variables={'a1': 'a', 'a2': 'b', 'connector': 'and'}) == 'a and b')

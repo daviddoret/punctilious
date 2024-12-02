@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="presentation renderers">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/presentation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
     </list>
@@ -791,14 +793,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01106" summary="All tests OK">
-      <option name="closed" value="true" />
-      <created>1725250336134</created>
-      <option name="number" value="01106" />
-      <option name="presentableId" value="LOCAL-01106" />
-      <option name="project" value="LOCAL" />
-      <updated>1725250336134</updated>
-    </task>
     <task id="LOCAL-01107" summary="Renaming connective classes">
       <option name="closed" value="true" />
       <created>1725250764715</created>
@@ -1183,7 +1177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733077470962</updated>
     </task>
-    <option name="localTasksCounter" value="1155" />
+    <task id="LOCAL-01155" summary="presentation renderers">
+      <option name="closed" value="true" />
+      <created>1733079157823</created>
+      <option name="number" value="01155" />
+      <option name="presentableId" value="LOCAL-01155" />
+      <option name="project" value="LOCAL" />
+      <updated>1733079157851</updated>
+    </task>
+    <option name="localTasksCounter" value="1156" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
