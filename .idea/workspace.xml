@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="presentation renderers">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formulas_representation_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_roman.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_roman.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_representation_1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_representation_1.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -356,7 +350,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/tests",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/data/representations",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -402,8 +396,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
+      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/connectors" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
       <recent name="$PROJECT_DIR$/src/punctilious_package_1/data/symbols" />
@@ -416,7 +410,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.__init__">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -701,23 +695,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_presentation.TestRepresentation.test_representation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_presentation.TestRepresentation.test_representation&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_presentation.TestRepresentation.test_template" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -752,6 +729,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -767,18 +761,18 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_presentation.TestRepresentation.test_from_yaml" />
       <item itemvalue="Python tests.pytest for test_presentation.TestRepresentation.test_template" />
-      <item itemvalue="Python tests.pytest for test_presentation.TestRepresentation.test_representation" />
+      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python.__init__" />
         <item itemvalue="Python.foundations" />
         <item itemvalue="Python tests.pytest for test_presentation.TestRepresentation.test_template" />
         <item itemvalue="Python tests.pytest for test_presentation.TestRepresentation.test_from_yaml" />
-        <item itemvalue="Python tests.pytest for test_presentation.TestRepresentation.test_representation" />
       </list>
     </recent_temporary>
   </component>
@@ -797,14 +791,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01109" summary="syntactic-rules">
-      <option name="closed" value="true" />
-      <created>1726260321706</created>
-      <option name="number" value="01109" />
-      <option name="presentableId" value="LOCAL-01109" />
-      <option name="project" value="LOCAL" />
-      <updated>1726260321706</updated>
     </task>
     <task id="LOCAL-01110" summary="syntactic-rules">
       <option name="closed" value="true" />
@@ -1190,7 +1176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733190389165</updated>
     </task>
-    <option name="localTasksCounter" value="1158" />
+    <task id="LOCAL-01158" summary="presentation renderers">
+      <option name="closed" value="true" />
+      <created>1733204922438</created>
+      <option name="number" value="01158" />
+      <option name="presentableId" value="LOCAL-01158" />
+      <option name="project" value="LOCAL" />
+      <updated>1733204922438</updated>
+    </task>
+    <option name="localTasksCounter" value="1159" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

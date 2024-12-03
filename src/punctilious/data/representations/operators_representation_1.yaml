@@ -4,8 +4,6 @@ slug: operators_representation_1
 representations:
   - slug: conjunction_connector
     uuid4: dfcadcc0-0a23-442c-8185-c7aafa1a8b69
-    tags: { notation: atomic_symbol }
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - implementation: string_constant
         string_constant: 'and'
@@ -16,19 +14,6 @@ representations:
       - implementation: string_constant
         string_constant: '∧'
         tags: { connector_representation: symbol }
-  - slug: infix_formula
-    uuid4: 0b3a2bd9-97f6-4522-97a1-3dd36a7615ca
-    syntactic_rules: { fixed_arity: 2 }
-    renderers:
-      - implementation: string_template
-        template: '{{ argument[0] }} {{ connector }} {{ argument[1] }}'
-        tags: { }
-  - slug: traditional_formula
-    uuid: 3010bbea-5474-48fd-bc1e-a0278da64935
-    renderers:
-      - implementation: string_template
-        template: '{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})'
-
 
 
 
