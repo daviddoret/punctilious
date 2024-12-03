@@ -21,8 +21,14 @@ representations:
     syntactic_rules: { fixed_arity: 2 }
     renderers:
       - implementation: string_template
-        template: '{{ a1 }} {{ connector }} {{ a2 }}'
+        template: '{{ argument[0] }} {{ connector }} {{ argument[1] }}'
         tags: { }
+  - slug: traditional_formula
+    uuid: 3010bbea-5474-48fd-bc1e-a0278da64935
+    renderers:
+      - implementation: string_template
+        template: '{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})'
+
 
 
 

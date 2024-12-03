@@ -84,13 +84,21 @@ class TestRepresentation:
         assert (conjunction_connector.rep(prefs=prefs) == 'and')
 
     def test_template(self, traditional_formula, infix_formula, prefs):
-        x = pu.presentation.RendererForStringTemplate(string_template='{{ a1 }} {{ connector }} {{ a2 }}',
-                                                      tags=(infix_formula,))
-        y = pu.presentation.RendererForStringTemplate(string_template='{{ connector}}({{ a1 }}, {{ a2 }})',
-                                                      tags=(traditional_formula,))
-        rep = pu.presentation.Representation(renderers=(x, y,))
+        infix = pu.presentation.RendererForStringTemplate(
+            string_template='{{ arguments[0] }} {{ connector }} {{ arguments[1] }}',
+            tags=(infix_formula,))
+        traditional = pu.presentation.RendererForStringTemplate(
+            string_template='{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})',
+            tags=(traditional_formula,))
+        rep = pu.presentation.Representation(renderers=(infix, traditional,))
 
         prefs[traditional_formula] = 10
         prefs[infix_formula] = 20
 
-        assert (rep.rep(prefs=prefs, variables={'a1': 'a', 'a2': 'b', 'connector': 'and'}) == 'a and b')
+        assert (rep.rep(prefs=prefs, variables={'connector': 'and', 'arguments': ('a', 'b',)}) == 'a and b')
+
+        prefs[traditional_formula] = 20
+        prefs[infix_formula] = 10
+
+        assert (rep.rep(prefs=prefs,
+                        variables={'connector': 'f', 'arguments': ('a', 'b', 'c', 'd',)}) == 'f(a, b, c, d)')
