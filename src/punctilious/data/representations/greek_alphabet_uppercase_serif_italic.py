@@ -1,4 +1,5 @@
 from ... import foundations as _foundations
+from ... import presentation as _presentation
 
 
 class GreekAlphabetUppercaseSerifItalic(_foundations.PythonPackage):
@@ -20,13 +21,13 @@ class GreekAlphabetUppercaseSerifItalic(_foundations.PythonPackage):
         return cls._singleton
 
     @property
-    def alpha(self) -> _foundations.Representation:
+    def alpha(self) -> _presentation.Representation:
         return self.representations.get_from_slug('alpha')
 
     @property
-    def phi(self) -> _foundations.Representation:
+    def phi(self) -> _presentation.Representation:
         return self.representations.get_from_slug('phi')
 
     @property
-    def psi(self) -> _foundations.Representation:
+    def psi(self) -> _presentation.Representation:
         return self.representations.get_from_slug('psi')

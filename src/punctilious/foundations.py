@@ -2,13 +2,9 @@ from __future__ import annotations
 import io
 import uuid
 import yaml
-import pathlib
 import logging
-import jinja2
 import sys
 import importlib.resources
-import typing
-import abc
 import collections.abc
 
 # punctilious modules
@@ -104,6 +100,7 @@ def get_logger():
 
 
 class Preferences:
+    # The correct class for presentation preferences is presentation.TagsPreferences.
     __slots__ = ('_representation_mode', '_encoding', '_language')
     _singleton = None
     _singleton_initialized = None
@@ -296,70 +293,6 @@ class SyntacticRules:
         yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
 
 
-class Renderer:
-    """"""
-    __slots__ = ('_mode', '_language', '_encoding', '_parentheses', '_template', '_jinja2_template')
-
-    def __hash__(self):
-        # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._mode, self._language, self._encoding, self._parentheses))
-
-    def __init__(self, mode=None, language=None, encoding=None, parentheses=None, template=None):
-        self._mode = mode
-        self._language = language
-        self._encoding = encoding
-        self._parentheses = parentheses
-        self._template = template
-        self._jinja2_template = jinja2.Template(self._template)
-
-    def __repr__(self):
-        return self.template
-
-    def __str__(self):
-        return self.template
-
-    @property
-    def encoding(self):
-        return self._encoding
-
-    @property
-    def language(self):
-        return self._language
-
-    @property
-    def jinja2_template(self):
-        return self._jinja2_template
-
-    @property
-    def mode(self):
-        return self._mode
-
-    @property
-    def parentheses(self):
-        return self._parentheses
-
-    @property
-    def template(self):
-        return self._template
-
-    def to_dict(self):
-        d = {}
-        if self.mode is not None:
-            d['mode'] = self.mode
-        if self.language is not None:
-            d['language'] = self.language
-        if self.encoding is not None:
-            d['encoding'] = self.encoding
-        if self.parentheses is not None:
-            d['parentheses'] = self.parentheses
-        if self.template is not None:
-            d['template'] = self.template
-        return d
-
-    def to_yaml(self, default_flow_style):
-        return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
-
-
 class Imports(tuple):
     """A tuple of Import instances."""
 
@@ -383,34 +316,6 @@ class Imports(tuple):
             return self[slug_index]
         else:
             raise IndexError(f'Import slug not found: "{slug}".')
-
-    def to_yaml(self, default_flow_style):
-        return yaml.dump(self, default_flow_style=default_flow_style)
-
-
-class Representations(tuple):
-    """A tuple of Representation instances."""
-
-    def __init__(self, *args, **kwargs):
-        self._slug_index = tuple(i.slug for i in self)
-        super().__init__()
-
-    def __new__(cls, *args, **kwargs):
-        typed_representations = tuple(ensure_representation(r) for r in args)
-        return super().__new__(cls, typed_representations)
-
-    def __repr__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
-
-    def __str__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
-
-    def get_from_slug(self, slug: str):
-        if slug in self._slug_index:
-            slug_index = self._slug_index.index(slug)
-            return self[slug_index]
-        else:
-            raise IndexError(f'Representation slug not found: "{slug}".')
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
@@ -476,22 +381,6 @@ def ensure_import(o) -> Import:
         raise TypeError('Import assurance failure.')
 
 
-def ensure_representation(o) -> Representation:
-    """Assure that `o` is of type Representation, converting as necessary, or raise an error."""
-    if isinstance(o, Representation):
-        return o
-    elif isinstance(o, dict):
-        uuid4 = o['uuid4']
-        slug = o['slug']
-        syntactic_rules = ensure_syntactic_rules(o=o['syntactic_rules'] if 'syntactic_rules' in o else None)
-        configurations = Configurations(
-            *o['configurations'] if 'configurations' in o else None)
-        o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, renderers=configurations)
-        return o
-    else:
-        raise TypeError(f'Representation assurance failure. Type: {type(o)}. Object: {o}.')
-
-
 def ensure_tokens(o) -> tuple[str, ...]:
     if isinstance(o, collections.abc.Iterable):
         o = tuple(str(i) for i in o)
@@ -535,99 +424,6 @@ def ensure_theorem(o) -> Theorem:
         return o
     else:
         raise TypeError('Theorem assurance failure.')
-
-
-class Representation:
-    __slots__ = ('_uuid4', '_slug', '_syntactic_rules', '_renderers')
-    _in_memory = {}
-
-    def __hash__(self):
-        # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self.uuid4))
-
-    def __init__(self, uuid4=None, slug=None, syntactic_rules=None, renderers=None):
-        self._uuid4 = uuid4
-        self._slug = slug
-        self._syntactic_rules = syntactic_rules
-        self._renderers = renderers
-
-    def __repr__(self):
-        return self.slug
-
-    def __str__(self):
-        return self.slug
-
-    @property
-    def renderers(self):
-        return self._renderers
-
-    def repr(self, args=None, encoding=None, mode=None, language=None) -> str:
-        if args is None:
-            args = ()
-        configuration = self.renderers.select(encoding=encoding, mode=mode, language=language)
-        if self.syntactic_rules.fixed_arity is not None and len(args) != self.syntactic_rules.fixed_arity:
-            raise ValueError('The number of arguments does not match the fixed_arity syntactic_rule.')
-        placeholder_names = tuple((f'a{i}' for i in tuple(range(1, len(args) + 1))))
-        d = dict(zip(placeholder_names, args))
-        output = configuration.jinja2_template.render(d)
-        return output
-
-    @property
-    def slug(self):
-        return self._slug
-
-    @property
-    def syntactic_rules(self):
-        return self._syntactic_rules
-
-    def to_yaml(self, default_flow_style):
-        return yaml.dump(self, default_flow_style=default_flow_style)
-
-    @property
-    def uuid4(self):
-        return self._uuid4
-
-
-class Configurations(tuple):
-    """A tuple of Configuration instances."""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__()
-
-    def __new__(cls, *args, **kwargs):
-        typed_configurations = tuple(presentation.ensure_renderer(r) for r in args)
-        return super().__new__(cls, typed_configurations)
-
-    def __repr__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
-
-    def __str__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
-
-    def select(self, encoding=None, mode=None, language=None) -> Renderer:
-
-        encoding = get_preferences().encoding if encoding is None else encoding
-        mode = get_preferences().representation_mode if mode is None else mode
-        language = get_preferences().language if language is None else language
-
-        match = next(
-            (e for e in self if e.encoding == encoding and e.mode == mode and e.language == language),
-            None)
-        if match:
-            return match
-
-        match = next((e for e in self if e.encoding == encoding and e.mode == mode), None)
-        if match:
-            return match
-
-        match = next((e for e in self if e.encoding == encoding), None)
-        if match:
-            return match
-
-        return self[0]
-
-    def to_yaml(self, default_flow_style):
-        return yaml.dump(self, default_flow_style=default_flow_style)
 
 
 class Connectors(tuple):
@@ -681,7 +477,7 @@ class Connector:
         self._slug = slug
         self._tokens = ensure_tokens(tokens)
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
-        self._representation: Representation = representation
+        self._representation: presentation.Representation = representation
 
     def __repr__(self):
         return self.slug
@@ -693,7 +489,7 @@ class Connector:
         return self.representation.repr(args=args, encoding=encoding, mode=mode, language=language)
 
     @property
-    def representation(self) -> Representation:
+    def representation(self) -> presentation.Representation:
         return self._representation
 
     @property
@@ -977,7 +773,7 @@ class PythonPackage(Package):
                 imports = Imports(*untyped_imports)
                 aliases = None  # To be implemented
                 untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
-                representations = Representations(*untyped_representations)
+                representations = presentation.Representations(*untyped_representations)
                 # Load connectors
                 typed_connectors = []
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
@@ -1003,7 +799,7 @@ class PythonPackage(Package):
                                  representations=representations, connectors=typed_connectors, theorems=theorems,
                                  justifications=justifications)
 
-    def _resolve_package_representation_reference(self, ref: str, i: Imports, r: Representations):
+    def _resolve_package_representation_reference(self, ref: str, i: Imports, r: presentation.Representations):
         """Given the reference of a representation in string format,
         typically as the representation attribute of a connector in a YAML file,
         finds and returns the corresponding representation object, either

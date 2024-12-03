@@ -1,4 +1,5 @@
 from ... import foundations as _foundations
+from ... import presentation as _presentation
 
 
 class LatinAlphabetLowercaseSerifRoman(_foundations.PythonPackage):
@@ -20,9 +21,9 @@ class LatinAlphabetLowercaseSerifRoman(_foundations.PythonPackage):
         return cls._singleton
 
     @property
-    def p(self) -> _foundations.Representation:
+    def p(self) -> _presentation.Representation:
         return self.representations.get_from_slug('p')
 
     @property
-    def q(self) -> _foundations.Representation:
+    def q(self) -> _presentation.Representation:
         return self.representations.get_from_slug('q')

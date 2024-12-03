@@ -9,11 +9,11 @@ from punctilious.data.representations import \
 from punctilious.data.connectors import operators_1 as _operators1
 from punctilious.data.theorems import propositional_logic_1 as _propositional_logic1
 
-# preferences = foundations.get_preferences()
-# packages = foundations.get_packages()
+prefs = presentation.TagsPreferences()
+packages = foundations.get_packages()
 
-# greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
-# print(greek_alphabet_lowercase_serif_italic.alpha.configurations[0])
+greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
+print(greek_alphabet_lowercase_serif_italic.alpha.rep(prefs=prefs))
 # print(greek_alphabet_lowercase_serif_italic.phi.configurations[1])
 # print(greek_alphabet_lowercase_serif_italic.psi.configurations[2])
 
