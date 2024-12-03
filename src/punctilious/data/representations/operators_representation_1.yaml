@@ -6,14 +6,17 @@ representations:
     uuid4: dfcadcc0-0a23-442c-8185-c7aafa1a8b69
     renderers:
       - implementation: string_constant
+        string_constant: '∧'
+        tags: { technical_language: unicode_extended, connector_representation: symbol }
+      - implementation: string_constant
+        string_constant: '^'
+        tags: { technical_language: unicode_basic, connector_representation: symbol, similitude: resembling }
+      - implementation: string_constant
         string_constant: 'and'
-        tags: { connector_representation: word, language: en }
+        tags: { technical_language: unicode_basic, connector_representation: word, language: en }
       - implementation: string_constant
         string_constant: 'et'
-        tags: { connector_representation: word, language: fr }
-      - implementation: string_constant
-        string_constant: '∧'
-        tags: { connector_representation: symbol }
+        tags: { technical_language: unicode_basic, connector_representation: word, language: fr }
 
 
 

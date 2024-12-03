@@ -33,6 +33,21 @@ def infix_formula():
 
 
 @pytest.fixture
+def unicode_basic():
+    return pu.presentation.Tag('technical_language', 'unicode_basic')
+
+
+@pytest.fixture
+def unicode_extended():
+    return pu.presentation.Tag('technical_language', 'unicode_extended')
+
+
+@pytest.fixture
+def latex_math():
+    return pu.presentation.Tag('technical_language', 'latex_math')
+
+
+@pytest.fixture
 def prefs(en, fr, symbol, word):
     prefs = pu.presentation.TagsPreferences()
     prefs[en] = 6
@@ -55,7 +70,7 @@ def conjunction_connector(reps):
 
 
 class TestRepresentation:
-    def test_representation(self, en, fr, word, symbol, prefs):
+    def test_representation(self, en, fr, word, symbol, prefs, unicode_basic, unicode_extended, latex_math):
         """Test of representation with multiple string-constant renderers.
         """
         x = pu.presentation.RendererForStringConstant(string_constant='and', tags=(en, word,))
@@ -63,12 +78,28 @@ class TestRepresentation:
         z = pu.presentation.RendererForStringConstant(string_constant='∧', tags=(symbol,))
         rep = pu.presentation.Representation(renderers=(x, y, z,))
 
+        prefs[word] = 10
+        prefs[symbol] = 20
+        prefs[latex_math] = 0
+        prefs[unicode_basic] = 10
+        prefs[unicode_extended] = 20
         assert (rep.rep(prefs=prefs) == '∧')
 
-        prefs[word] = 100
+        prefs[word] = 1
+        prefs[symbol] = 20
+        prefs[latex_math] = 0
+        prefs[unicode_basic] = 20
+        prefs[unicode_extended] = 10
+        assert (rep.rep(prefs=prefs) == '∧')
+
+        prefs[word] = 20
+        prefs[symbol] = 1
+        prefs[en] = 1
+        prefs[fr] = 20
         assert (rep.rep(prefs=prefs) == 'et')
 
-        prefs[en] = 500
+        prefs[en] = 20
+        prefs[fr] = 1
         assert (rep.rep(prefs=prefs) == 'and')
 
     def test_from_yaml(self, en, fr, word, symbol, conjunction_connector, prefs):
