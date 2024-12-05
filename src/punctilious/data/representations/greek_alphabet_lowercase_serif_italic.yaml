@@ -15,7 +15,7 @@ representations:
         string_constant: '𝛼'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\alpha'
+        string_constant: '\alpha'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: beta
@@ -28,7 +28,7 @@ representations:
         string_constant: '𝛽'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\beta'
+        string_constant: '\beta'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: gamma
@@ -41,7 +41,7 @@ representations:
         string_constant: '𝛾'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\gamma'
+        string_constant: '\gamma'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: delta
@@ -54,7 +54,7 @@ representations:
         string_constant: '𝛿'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\delta'
+        string_constant: '\delta'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: epsilon
@@ -67,7 +67,7 @@ representations:
         string_constant: '𝜖'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\epsilon'
+        string_constant: '\epsilon'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: zeta
@@ -80,7 +80,7 @@ representations:
         string_constant: '𝜁'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\zeta'
+        string_constant: '\zeta'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: eta
@@ -93,7 +93,7 @@ representations:
         string_constant: '𝜂'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\eta'
+        string_constant: '\eta'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: theta
@@ -106,7 +106,7 @@ representations:
         string_constant: '𝜃'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\theta'
+        string_constant: '\theta'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: iota
@@ -119,7 +119,7 @@ representations:
         string_constant: '𝜄'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\iota'
+        string_constant: '\iota'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: kappa
@@ -132,7 +132,7 @@ representations:
         string_constant: '𝜅'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\kappa'
+        string_constant: '\kappa'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
 
@@ -146,7 +146,7 @@ representations:
         string_constant: '𝜆'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\lambda'
+        string_constant: '\lambda'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: mu
@@ -159,7 +159,7 @@ representations:
         string_constant: '𝜇'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\mu'
+        string_constant: '\mu'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: nu
@@ -172,7 +172,7 @@ representations:
         string_constant: '𝜈'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\nu'
+        string_constant: '\nu'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: xi
@@ -185,7 +185,7 @@ representations:
         string_constant: '𝜉'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\xi'
+        string_constant: '\xi'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: omicron
@@ -198,7 +198,7 @@ representations:
         string_constant: '𝜊'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\omicron'
+        string_constant: '\omicron'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: pi
@@ -211,7 +211,7 @@ representations:
         string_constant: '𝜋'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\pi'
+        string_constant: '\pi'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: rho
@@ -224,7 +224,7 @@ representations:
         string_constant: '𝜌'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\rho'
+        string_constant: '\rho'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: sigma
@@ -237,7 +237,7 @@ representations:
         string_constant: '𝜎'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\sigma'
+        string_constant: '\sigma'
         tags: { connector_representation: symbol, technical_language: latex_math }
 
   - slug: tau
@@ -250,5 +250,6 @@ representations:
         string_constant: '𝜏'
         tags: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
-        string_constant: '\\tau'
+        string_constant: '\tau'
         tags: { connector_representation: symbol, technical_language: latex_math }
+

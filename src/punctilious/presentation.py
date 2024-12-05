@@ -349,3 +349,13 @@ class TagsPreferences(dict):
         if not isinstance(tags, TagsAssignment):
             tags: TagsAssignment = TagsAssignment(*tags)
         return sum(self.get(tag, 0) for tag in tags)
+
+
+# Common labels and values.
+symbol = Tag('connector_presentation', 'symbol', )
+en = Tag('language', 'en', )
+fr = Tag('language', 'fr', )
+unicode_basic = Tag('technical_language', 'unicode_basic', )
+unicode_extended = Tag('technical_language', 'unicode_extended', )
+latex_math = Tag('technical_language', 'latex_math', )
+parenthesized = Tag('parenthesization', 'parenthesized', )

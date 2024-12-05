@@ -13,12 +13,12 @@ prefs = presentation.TagsPreferences()
 packages = foundations.get_packages()
 
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
-print(greek_alphabet_lowercase_serif_italic.alpha.rep(prefs=prefs))
+# print(greek_alphabet_lowercase_serif_italic.alpha.rep(prefs=prefs))
 # print(greek_alphabet_lowercase_serif_italic.phi.configurations[1])
 # print(greek_alphabet_lowercase_serif_italic.psi.configurations[2])
 
-# greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
-# print(greek_alphabet_uppercase_serif_italic.alpha.configurations[0])
+greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
+# print(greek_alphabet_uppercase_serif_italic.psi.rep())
 # print(greek_alphabet_uppercase_serif_italic.phi.configurations[1])
 # print(greek_alphabet_uppercase_serif_italic.psi.configurations[2])
 
