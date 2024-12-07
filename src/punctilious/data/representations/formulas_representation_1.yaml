@@ -1,9 +1,9 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid4: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
+uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
 slug: formulas_representation_1
 representations:
   - slug: infix_formula
-    uuid4: 0b3a2bd9-97f6-4522-97a1-3dd36a7615ca
+    uuid: 0b3a2bd9-97f6-4522-97a1-3dd36a7615ca
     renderers:
       - implementation: string_template
         string_template: '{{ argument[0] }} {{ connector }} {{ argument[1] }}'
@@ -12,7 +12,7 @@ representations:
         string_template: '({{ argument[0] }} {{ connector }} {{ argument[1] }})'
         tags: { technical_language: unicode_basic, parenthesization: parenthesized }
   - slug: traditional_formula
-    uuid4: 3010bbea-5474-48fd-bc1e-a0278da64935
+    uuid: 3010bbea-5474-48fd-bc1e-a0278da64935
     renderers:
       - implementation: string_template
         string_template: '{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})'

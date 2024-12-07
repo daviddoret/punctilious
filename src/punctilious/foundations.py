@@ -1,6 +1,6 @@
 from __future__ import annotations
 import io
-import uuid
+import uuid as uuid_pkg
 import yaml
 import logging
 import sys
@@ -354,12 +354,12 @@ def ensure_connector(o) -> Connector:
     if isinstance(o, Connector):
         return o
     elif isinstance(o, dict):
-        uuid4 = o['uuid4'] if 'uuid4' in o.keys() else None
+        uuid = o['uuid'] if 'uuid' in o.keys() else None
         slug = o['slug'] if 'slug' in o.keys() else None
         tokens = o['tokens'] if 'tokens' in o.keys() else tuple()
         syntactic_rules = o['syntactic_rules'] if 'syntactic_rules' in o.keys() else None
         representation = o['representation'] if 'representation' in o.keys() else None
-        o = Connector(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
+        o = Connector(uuid=uuid, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
         return o
     else:
         raise TypeError('Connector assurance failure.')
@@ -413,13 +413,13 @@ def ensure_theorem(o) -> Theorem:
     if isinstance(o, Theorem):
         return o
     elif isinstance(o, dict):
-        uuid4 = o['uuid4']
+        uuid = o['uuid']
         slug = o['slug']
         variables = None
         assumptions = None
         statement = None
         justifications = None
-        o = Theorem(uuid4=uuid4, slug=slug, variables=variables, assumptions=assumptions, statement=statement,
+        o = Theorem(uuid=uuid, slug=slug, variables=variables, assumptions=assumptions, statement=statement,
                     justifications=justifications)
         return o
     else:
@@ -465,15 +465,15 @@ class Connectors(tuple):
 
 
 class Connector:
-    __slots__ = ('_uuid4', '_slug', '_tokens', '_syntactic_rules', '_representation')
-    _uuid4_index = {}
+    __slots__ = ('_uuid', '_slug', '_tokens', '_syntactic_rules', '_representation')
+    _uuid_index = {}
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._uuid4))
+        return hash((self.__class__, self._uuid))
 
-    def __init__(self, uuid4=None, slug=None, tokens=None, syntactic_rules=None, representation=None):
-        self._uuid4 = uuid4
+    def __init__(self, uuid=None, slug=None, tokens=None, syntactic_rules=None, representation=None):
+        self._uuid = uuid
         self._slug = slug
         self._tokens = ensure_tokens(tokens)
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
@@ -508,8 +508,8 @@ class Connector:
 
     def to_dict(self):
         d = {}
-        if self.uuid4 is not None:
-            d['uuid4'] = self.uuid4
+        if self.uuid is not None:
+            d['uuid'] = self.uuid
         if self.slug is not None:
             d['slug'] = self.slug
         if self.tokens is not None:
@@ -524,20 +524,20 @@ class Connector:
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
 
     @property
-    def uuid4(self):
-        return self._uuid4
+    def uuid(self):
+        return self._uuid
 
 
 class Theorem:
-    __slots__ = ('_uuid4', '_slug', '_variables', '_assumptions', '_statement', '_justifications')
-    _uuid4_index = {}
+    __slots__ = ('_uuid', '_slug', '_variables', '_assumptions', '_statement', '_justifications')
+    _uuid_index = {}
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._uuid4))
+        return hash((self.__class__, self._uuid))
 
-    def __init__(self, uuid4=None, slug=None, variables=None, assumptions=None, statement=None, justifications=None):
-        self._uuid4 = uuid4
+    def __init__(self, uuid=None, slug=None, variables=None, assumptions=None, statement=None, justifications=None):
+        self._uuid = uuid
         self._slug = slug
         self._variables = variables
         self._assumptions = assumptions
@@ -572,8 +572,8 @@ class Theorem:
 
     def to_dict(self):
         d = {}
-        if self.uuid4 is not None:
-            d['uuid4'] = self.uuid4
+        if self.uuid is not None:
+            d['uuid'] = self.uuid
         if self.slug is not None:
             d['slug'] = self.slug
         if self.variables is not None:
@@ -590,8 +590,8 @@ class Theorem:
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
 
     @property
-    def uuid4(self):
-        return self._uuid4
+    def uuid(self):
+        return self._uuid
 
 
 class Justifications(tuple):
@@ -630,7 +630,7 @@ class Packages(dict):
     _native_packages = {
         'greek_alphabet_lowercase_serif_italic_representation_1': '/data/representations/greek_alphabet_lowercase_serif_italic.yaml',
         'greek_alphabet_uppercase_serif_italic_representation_1': '/data/representations/greek_alphabet_uppercase_serif_italic.yaml',
-        'operators_representation_1': '/data/representations/operators_representation_1.yaml'
+        'operators_representation_1': '/data/representations/operators_1_representations.yaml'
     }
 
     def __init__(self):
@@ -677,23 +677,23 @@ def get_packages():
 
 
 class Package:
-    __slots__ = ('_schema', '_uuid4', '_slug', '_imports', '_aliases', '_representations', '_connectors', '_theorems',
+    __slots__ = ('_schema', '_uuid', '_slug', '_imports', '_aliases', '_representations', '_connectors', '_theorems',
                  '_justifications')
 
-    # _uuid4_index = {}
+    # _uuid_index = {}
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._uuid4))
+        return hash((self.__class__, self._uuid))
 
-    def __init__(self, schema=None, uuid4=None, slug=None, imports=None, aliases=None, representations=None,
+    def __init__(self, schema=None, uuid=None, slug=None, imports=None, aliases=None, representations=None,
                  connectors=None, theorems=None, justifications=None):
-        if uuid4 is None:
-            uuid4 = uuid.uuid4()
+        if uuid is None:
+            uuid = uuid_pkg.uuid4()
         if slug is None:
-            slug = f'package_{str(uuid4).replace('-', '_')}'
+            slug = f'package_{str(uuid).replace('-', '_')}'
         self._schema = schema
-        self._uuid4 = uuid4
+        self._uuid = uuid
         self._slug = slug
         self._imports = imports
         self._aliases = aliases
@@ -745,8 +745,8 @@ class Package:
         return self._theorems
 
     @property
-    def uuid4(self):
-        return self._uuid4
+    def uuid(self):
+        return self._uuid
 
 
 class PythonPackage(Package):
@@ -758,7 +758,7 @@ class PythonPackage(Package):
         This method is called when processing imports with `source_type: python_package_resources`.
 
         :param path: A python importlib.resources.files folder, e.g. `data.operators`.
-        :param resource: A yaml filename, e.g. `operators_1.yaml`.
+        :param resource: A yaml filename, e.g. `operators_1_representations.yaml`.
         :return:
         """
         package_path = importlib.resources.files(path).joinpath(resource)
@@ -767,7 +767,7 @@ class PythonPackage(Package):
                 file: io.TextIOBase
                 d: dict = yaml.safe_load(file)
                 schema = d['schema']
-                uuid4 = d['uuid4']
+                uuid = d['uuid']
                 slug = d['slug']
                 untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
                 imports = Imports(*untyped_imports)
@@ -777,7 +777,7 @@ class PythonPackage(Package):
                 # Load connectors
                 typed_connectors = []
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
-                    uuid4 = raw_connector['uuid4']
+                    uuid = raw_connector['uuid']
                     slug = raw_connector['slug']
                     tokens = raw_connector['tokens']
                     syntactic_rules = ensure_syntactic_rules(o=
@@ -786,7 +786,7 @@ class PythonPackage(Package):
                     representation_reference = raw_connector['representation']
                     representation = self._resolve_package_representation_reference(ref=representation_reference,
                                                                                     i=imports, r=representations)
-                    o = Connector(uuid4=uuid4, slug=slug, tokens=tokens, syntactic_rules=syntactic_rules,
+                    o = Connector(uuid=uuid, slug=slug, tokens=tokens, syntactic_rules=syntactic_rules,
                                   representation=representation)
                     typed_connectors.append(o)
                 typed_connectors = Connectors(*typed_connectors)
@@ -795,7 +795,7 @@ class PythonPackage(Package):
                 theorems = Theorems(*untyped_theorems)
                 justifications = Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
-                super().__init__(schema=schema, uuid4=uuid4, slug=slug, imports=imports, aliases=aliases,
+                super().__init__(schema=schema, uuid=uuid, slug=slug, imports=imports, aliases=aliases,
                                  representations=representations, connectors=typed_connectors, theorems=theorems,
                                  justifications=justifications)
 

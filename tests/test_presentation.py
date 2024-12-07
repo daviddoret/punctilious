@@ -59,7 +59,7 @@ def prefs(en, fr, symbol, word):
 
 @pytest.fixture
 def reps():
-    d: dict = pu.util.get_yaml_from_package(path='data.representations', resource='operators_representation_1.yaml')
+    d: dict = pu.util.get_yaml_from_package(path='data.representations', resource='operators_1_representations.yaml')
     raw = d.get('representations', [])
     return pu.presentation.ensure_representations(o=raw)
 

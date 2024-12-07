@@ -1,5 +1,5 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid4: 54dedacd-6701-45ce-ba2c-17ab1997f85b # assure the unicity of the package.
+uuid: 54dedacd-6701-45ce-ba2c-17ab1997f85b # assure the unicity of the package.
 slug: package_test_1
 imports: # list of dependent files
   # to reference elements in a dependent file, use the dot separator, e.g.:
@@ -15,7 +15,7 @@ representations:
   # symbols are reusable connector presentations.
   # practical for variable names, etc.
   - slug: p_uppercase_serif_italic
-    uuid4: 4d8f91cf-67e9-4f6b-b367-a3d3a5bcf95e
+    uuid: 4d8f91cf-67e9-4f6b-b367-a3d3a5bcf95e
     syntactic_rules:
       fixed_arity: 0
     renderers:
@@ -31,18 +31,18 @@ representations:
 
 connectors:
   - slug: and
-    uuid4: e8d2ffca-cf7e-4e62-9b5b-ce45b252b926
+    uuid: e8d2ffca-cf7e-4e62-9b5b-ce45b252b926
     syntactic_rules:
       fixed_arity: 2
     representation: conjunction_formula
   - slug: entails
-    uuid4: a04a1717-ee6f-44d6-94ad-7fe344fa3c0a
+    uuid: a04a1717-ee6f-44d6-94ad-7fe344fa3c0a
     syntactic_rules:
       fixed_arity: 2
     representation: entailment_formula
 theorems:
   - slug: reductio_ad_absurdum_1
-    uuid4: c9eff868-529f-4056-a6dd-fda99017216a
+    uuid: c9eff868-529f-4056-a6dd-fda99017216a
     variables:
       - slug: phi
         representation: variable_phi
@@ -52,7 +52,7 @@ theorems:
     statement: not(phi)
     justifications:
   - slug: reductio_ad_absurdum_2
-    uuid4: e60c3b8f-1e81-4451-bbf4-ca22b4ec6067
+    uuid: e60c3b8f-1e81-4451-bbf4-ca22b4ec6067
     assumptions:
       - entails(not(phi),psi)
       - entails(not(phi),not(psi)

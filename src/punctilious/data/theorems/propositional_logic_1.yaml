@@ -1,5 +1,5 @@
 schema: "http://punctilious.org/schemas/theorem_1#"
-uuid4: afb2d3cd-b5bd-44c1-9679-6de1d05d2f26
+uuid: afb2d3cd-b5bd-44c1-9679-6de1d05d2f26
 slug: propositional_logic_1
 imports:
   - slug: latin_alphabet_lowercase_serif_italic
@@ -9,9 +9,9 @@ imports:
   - slug: operators_representation_1
     scheme: python_package
     path: data.representations
-    resource: operators_representation_1.yaml
+    resource: operators_1_representations.yaml
 theorems:
-  - uuid4: c697d495-9034-4bf0-9a52-7f9954be0157
+  - uuid: c697d495-9034-4bf0-9a52-7f9954be0157
     slug: absorption_law
     title: "Absorption law"
     variables:

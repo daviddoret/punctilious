@@ -1,10 +1,10 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid4: 47d84857-12c6-4016-8d5e-942998a6b327
+uuid: 47d84857-12c6-4016-8d5e-942998a6b327
 slug: operators_representation_1
 # source:
 representations:
   - slug: is_a_proposition_representation
-    uuid4: 4eb3925a-13af-40a2-bf19-0f1b3ec0f708
+    uuid: 4eb3925a-13af-40a2-bf19-0f1b3ec0f708
     syntactic_rules:
       fixed_arity: 1
     renderers:

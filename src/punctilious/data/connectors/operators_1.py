@@ -9,7 +9,7 @@ class Operators1(_foundations.PythonPackage):
     def __init__(self):
         if self.__class__._singleton_initialized is None:
             path = 'data.connectors'
-            resource = 'operators_1.yaml'
+            resource = 'operators_1_representations.yaml'
             super().__init__(path=path, resource=resource)
             self.__class__._singleton_initialized = True
             _foundations.get_logger().debug(
