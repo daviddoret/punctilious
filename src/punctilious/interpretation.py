@@ -113,6 +113,9 @@ class Interpreter:
         self._parser = lark.Lark(self._grammar, start='start', parser='earley', debug=True)
 
     def declare_lark_terminals(self, terminal_name, terminal_priority, d: dict):
+        """Returns a lark terminals declaration line.
+        Sample: TERM . 5 : "and" | "or" | "not"
+        """
         lark_terminals_declaration = ''
         if len(d.keys()) > 0:
             lark_terminals_declaration = ' | '.join(
@@ -121,6 +124,9 @@ class Interpreter:
         return lark_terminals_declaration
 
     def escape_lark_terminal_value(self, value: str):
+        """Return a doubly-quoted lark terminal value.
+        Sample: "and"
+        """
         return '"' + value.replace('"', '\\"') + '"'
 
     @property
