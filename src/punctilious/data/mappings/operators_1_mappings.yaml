@@ -4,48 +4,21 @@ slug: operators_1_mappings
 imports:
   - slug: operators_1_connectors
     scheme: python_package
+    path: data.connectors
+    resource: operators_1_connectors.yaml
+  - slug: operators_1_representations
+    scheme: python_package
     path: data.representations
-    resource: predicates_representation_1.yaml
-representations:
-  - connector: conjunction
-    uuid: dfcadcc0-0a23-442c-8185-c7aafa1a8b69
-    representations:
-  - slug: disjunction
-    uuid: 2b4f4a6a-4a4d-4b1c-8c1c-5f1f1f1f1f1f
-    interpreters:
-      - implementation: string_constant
-        string_constant: 'or'
-        tags: { connector_representation: word, language: en }
-      - implementation: string_constant
-        string_constant: 'ou'
-        tags: { connector_representation: word, language: fr }
-      - implementation: string_constant
-        string_constant: '∨'
-        tags: { connector_representation: symbol }
-  - slug: entailment
-    uuid: 2b4f4a6a-4a4d-4b1c-8c1c-5f1f1f1f1f1f
-    interpreters:
-      - implementation: string_constant
-        string_constant: 'entails'
-        tags: { connector_representation: word, language: en }
-      - implementation: string_constant
-        string_constant: 'ou'
-        tags: { connector_representation: word, language: fr }
-      - implementation: string_constant
-        string_constant: '∨'
-        tags: { connector_representation: symbol }
-  - slug: negation
-    uuid: 2b4f4a6a-4a4d-4b1c-8c1c-5f1f1f1f1f1f
-    interpreters:
-      - implementation: string_constant
-        string_constant: 'not'
-        tags: { connector_representation: word, language: en }
-      - implementation: string_constant
-        string_constant: 'non'
-        tags: { connector_representation: word, language: fr }
-      - implementation: string_constant
-        string_constant: '¬'
-        tags: { connector_representation: symbol }
+    resource: operators_1_representations.yaml
+mappings:
+  - connector: operators_1_connectors.conjunction
+    representation: operators_1_representations.conjunction
+  - connector: operators_1_connectors.disjunction
+    representation: operators_1_representations.disjunction
+  - connector: operators_1_connectors.entailment
+    representation: operators_1_representations.entailment
+  - connector: operators_1_connectors.negation
+    representation: operators_1_representations.negation
 
 
 

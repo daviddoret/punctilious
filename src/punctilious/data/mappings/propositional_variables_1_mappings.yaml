@@ -1,0 +1,23 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid: 7709b2d1-33cb-42d2-abe5-eb672295d132
+slug: operators_1_mappings
+imports:
+  - slug: propositional_logic_1_variables
+    scheme: python_package
+    path: data.variables
+    resource: propositional_logic_1_variables.yaml
+  - slug: latin_alphabet_uppercase_serif_italic
+    scheme: python_package
+    path: data.representations
+    resource: latin_alphabet_uppercase_serif_italic.yaml
+mappings:
+  - connector: propositional_logic_1_variables.p
+    representation: latin_alphabet_uppercase_serif_italic.p
+  - connector: propositional_logic_1_variables.q
+    representation: latin_alphabet_uppercase_serif_italic.q
+  - connector: propositional_logic_1_variables.r
+    representation: latin_alphabet_uppercase_serif_italic.r
+
+
+
+
