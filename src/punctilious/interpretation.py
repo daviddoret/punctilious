@@ -21,13 +21,18 @@ TECHNICAL_2_GRAMMAR = """
          | formula_expression INFIX_CONNECTOR formula_expression -> parse_infix_formula
          | PREFIX_CONNECTOR ATOMIC_CONNECTOR -> parse_prefix_formula
          | ATOMIC_CONNECTOR -> parse_atomic_formula
+         | "(" FUNCTION_CONNECTOR "(" function_formula_arguments ")" ")" -> parse_function_formula
+         | "(" formula_expression INFIX_CONNECTOR formula_expression ")" -> parse_infix_formula
+         | "(" PREFIX_CONNECTOR ATOMIC_CONNECTOR ")" -> parse_prefix_formula
+         | "(" ATOMIC_CONNECTOR ")" -> parse_atomic_formula     
          
-    function_formula_arguments : formula_expression ("," formula_expression)* -> parse_function_formula_arguments
+    function_formula_arguments . 20 : formula_expression ("," formula_expression)* -> parse_function_formula_arguments
+    parenthesized_formula_expression .10 : "(" formula_expression ")"
     
-    FUNCTION_CONNECTOR . 1 : "is-a-proposition" | "is-a-natural-number"
-    INFIX_CONNECTOR . 2 : "and" | "et" | "∧" | "^"
-    PREFIX_CONNECTOR . 3 : "not" | "non" | "¬" | "~"
-    ATOMIC_CONNECTOR . 4 : "P" | "Q" | "R"
+    FUNCTION_CONNECTOR . 4 : "not" | "non" | "¬" | "~" | "is-a-proposition" | "is-a-natural-number"
+    INFIX_CONNECTOR . 3 : "and" | "et" | "∧" | "^" | "or"
+    PREFIX_CONNECTOR . 2 : "not" | "non" | "¬" | "~"
+    ATOMIC_CONNECTOR . 1 : "P" | "Q" | "R"
     
     %import common.WS
     %ignore WS
@@ -99,5 +104,13 @@ formula = interpret_formula(input_string)
 input_string = "P and Q"
 formula = interpret_formula(input_string)
 input_string = "not P"
+formula = interpret_formula(input_string)
+input_string = "(P and Q)"
+formula = interpret_formula(input_string)
+input_string = "(P and Q) and (Q and P)"
+formula = interpret_formula(input_string)
+input_string = "not(not P)"
+formula = interpret_formula(input_string)
+input_string = "not(not (is-a-proposition(P) and Q) and (Q and P))"
 formula = interpret_formula(input_string)
 pass
