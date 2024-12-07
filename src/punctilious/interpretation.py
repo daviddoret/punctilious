@@ -17,9 +17,9 @@ TECHNICAL_1_GRAMMAR = """
 TECHNICAL_2_GRAMMAR = """
     ?start : formula_expression
 
-    ?formula_expression : [FUNCTION_CONNECTOR] "(" function_formula_arguments ")" -> parse_function_formula
-         | formula_expression [INFIX_CONNECTOR] formula_expression -> parse_infix_formula
-         | PREFIX_CONNECTOR [ATOMIC_CONNECTOR] -> parse_prefix_formula
+    ?formula_expression : FUNCTION_CONNECTOR "(" function_formula_arguments ")" -> parse_function_formula
+         | formula_expression INFIX_CONNECTOR formula_expression -> parse_infix_formula
+         | PREFIX_CONNECTOR ATOMIC_CONNECTOR -> parse_prefix_formula
          | ATOMIC_CONNECTOR -> parse_atomic_formula
          
     function_formula_arguments : formula_expression ("," formula_expression)* -> parse_function_formula_arguments
@@ -96,5 +96,8 @@ def interpret_formula(input_string: str) -> Formula:
 # Output the parsed structure
 input_string = "is-a-proposition(P)"
 formula = interpret_formula(input_string)
-
+input_string = "P and Q"
+formula = interpret_formula(input_string)
+input_string = "not P"
+formula = interpret_formula(input_string)
 pass
