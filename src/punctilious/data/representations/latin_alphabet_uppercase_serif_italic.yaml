@@ -1,190 +1,164 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: 9e7bb302-ab55-43f8-b023-1e1cd8d6493b
+uuid: b65f7b26-0b0a-46f8-92ff-5a6b69f14791
 slug: latin_alphabet_uppercase_serif_italic
 # source:
 # https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
 representations:
   - slug: a
     uuid: 392475c8-1cf2-4f4e-a095-67fea3deb2c4
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: A }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑎 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐴 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{A}' }
   - slug: b
     uuid: 61223dfd-9180-406f-ba8e-c51d57304748
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: B }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑏 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐵 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{B}' }
   - slug: c
     uuid: b51812af-1a41-4ba1-88a2-65b1a4b6350f
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: C }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑐 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐶 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{C}' }
   - slug: d
     uuid: 1b76060a-1adc-447a-8128-071d84c18a30
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: D }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑑 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐷 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{D}' }
   - slug: e
     uuid: a31b6fef-7c58-4e88-a000-df7f77ab63cc
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: E }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑒 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐸 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{E}' }
   - slug: f
     uuid: de3c5c9a-91f7-4235-bc90-552767114ade
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: F }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑓 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐹 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{F}' }
   - slug: g
     uuid: 5995ebc7-71ad-422a-8b4a-530b658ca420
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: G }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑔 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐺 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{G}' }
   - slug: h
     uuid: 3d82d947-2a02-48fc-99f9-17611cd430b8
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: H }
-      - { encoding: unicode_extended, mode: symbolic, template: ℎ }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐻 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{H}' }
   - slug: i
     uuid: 1cb67968-93f3-4ba2-8d5e-09c5de337d79
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: I }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑖 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐼 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{I}' }
   - slug: j
     uuid: 97480bbc-2b9a-4b02-8e25-32dd62b3e85a
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: J }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑗 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐽 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{J}' }
   - slug: k
     uuid: e4144251-03e1-44ff-9dc2-460aa95f918a
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: K }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑘 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐾 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{K}' }
   - slug: l
     uuid: 14021f1d-18b1-4c70-9506-6a4fb0ba88db
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: L }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑙 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝐿 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{L}' }
   - slug: m
     uuid: eb0d8b56-e2ff-40b1-9a84-41e8c5612f0c
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: M }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑚 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑀 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{M}' }
   - slug: n
     uuid: 0d042170-48b7-40b4-b83e-3bb606aeb397
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: N }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑛 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑁 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{N}' }
   - slug: o
     uuid: c173dc29-90b6-4293-9ddc-462938a23caf
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: O }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑜 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑂 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{O}' }
   - slug: p
     uuid: 597b00c2-2b49-4728-aff1-05f6a0cc6670
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: P }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑝 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑃 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{P}' }
   - slug: q
     uuid: f9bf9991-d2f4-46cc-be0e-157d5bb03a48
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: Q }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑞 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑄 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{Q}' }
   - slug: r
     uuid: 0d005ce6-2726-46f0-acc6-1bce5aefdd89
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: R }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑟 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑅 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{R}' }
   - slug: s
     uuid: f26b1782-59dc-4131-9174-a3c996c2a1c6
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: S }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑠 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑆 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{S}' }
   - slug: t
     uuid: 8f77ec81-9ff4-40da-9a3b-7d0d20f97554
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: T }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑡 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑇 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{T}' }
   - slug: u
     uuid: 58e98493-41dc-4f52-a01b-28f329d2313d
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: U }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑢 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑈 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{U}' }
   - slug: v
     uuid: f4349f29-bd18-4dfc-af27-8fb69e2417b5
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: V }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑣 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑉 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{V}' }
   - slug: w
     uuid: b6f0068c-e74a-4051-9ca0-cf0b66dc2fcd
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: W }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑤 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑊 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{W}' }
   - slug: x
     uuid: fbb76257-5d0f-456e-92d4-8e80772e14fb
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: X }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑥 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑋 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{X}' }
   - slug: y
     uuid: 4e870a36-7e0e-4198-becd-fbaa88aedefb
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: Y }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑦 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑌 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{Y}' }
   - slug: z
     uuid: f3fdc89f-4c15-4a1e-8a04-b0cfe4d96690
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: Z }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑧 }
+      - { encoding: unicode_extended, mode: symbolic, template: 𝑍 }
       - { encoding: latex_math, mode: symbolic, template: '\textit{Z}' }
 
 
