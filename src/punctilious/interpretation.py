@@ -1,4 +1,5 @@
 import lark
+import jinja2
 
 
 class Formula:
@@ -47,8 +48,17 @@ class Transformer(lark.Transformer):
         return Formula(connector=atomic_connector, arguments=arguments)
 
 
+class Connector:
+
+    def __init__(self, connector: str):
+        self.connector = connector
+
+    def __str__(self):
+        return self.connector
+
+
 class Interpreter:
-    _grammar = """
+    _GRAMMAR_TEMPLATE = """
         ?start : formula_expression
 
         ?formula_expression : FUNCTION_CONNECTOR "(" function_formula_arguments ")" -> parse_function_formula
@@ -66,18 +76,56 @@ class Interpreter:
         # OPEN_PARENTHESIS : "("
         # CLOSE_PARENTHESIS : ")"
         # COMMA : ","
-        FUNCTION_CONNECTOR . 4 : "not" | "non" | "¬" | "~" | "is-a-proposition" | "is-a-natural-number"
-        INFIX_CONNECTOR . 3 : "and" | "et" | "∧" | "^" | "or"
-        PREFIX_CONNECTOR . 2 : "not" | "non" | "¬" | "~"
-        ATOMIC_CONNECTOR . 1 : "P" | "Q" | "R"
+        {{ function_connectors }}
+        {{ infix_connectors }} 
+        {{ prefix_connectors }} 
+        {{ atomic_connectors }}
 
         %import common.WS
         %ignore WS
     """
 
-    def __init__(self):
-        self._parser = lark.Lark(Interpreter._grammar, start='start', parser='earley', debug=True)
+    def __init__(self, atomic_connectors: dict, prefix_connectors: dict, infix_connectors: dict,
+                 function_connectors: dict):
+        self._atomic_connectors = atomic_connectors
+        self._prefix_connectors = prefix_connectors
+        self._infix_connectors = infix_connectors
+        self._function_connectors = function_connectors
+        self._jinja2_template: jinja2.Template = jinja2.Template(self.__class__._GRAMMAR_TEMPLATE)
         self._transformer = Transformer()
+        atomic_connectors = self.declare_lark_terminals(terminal_name='ATOMIC_CONNECTOR',
+                                                        terminal_priority='1',
+                                                        d=atomic_connectors)
+        prefix_connectors = self.declare_lark_terminals(terminal_name='PREFIX_CONNECTOR',
+                                                        terminal_priority='2',
+                                                        d=prefix_connectors)
+        infix_connectors = self.declare_lark_terminals(terminal_name='INFIX_CONNECTOR',
+                                                       terminal_priority='3',
+                                                       d=infix_connectors)
+        function_connectors = self.declare_lark_terminals(terminal_name='FUNCTION_CONNECTOR',
+                                                          terminal_priority='4',
+                                                          d=function_connectors)
+        self._grammar = self._jinja2_template.render({
+            'atomic_connectors': atomic_connectors,
+            'prefix_connectors': prefix_connectors,
+            'infix_connectors': infix_connectors,
+            'function_connectors': function_connectors})
+        self._parser = lark.Lark(self._grammar, start='start', parser='earley', debug=True)
+
+    def declare_lark_terminals(self, terminal_name, terminal_priority, d: dict):
+        lark_terminals_declaration = ''
+        if len(d.keys()) > 0:
+            lark_terminals_declaration = ' | '.join(
+                self.escape_lark_terminal_value(connector) for connector in d.keys())
+            lark_terminals_declaration = f'{terminal_name} . {terminal_priority} : {lark_terminals_declaration}'
+        return lark_terminals_declaration
+
+    def escape_lark_terminal_value(self, value: str):
+        return '"' + value.replace('"', '\\"') + '"'
+
+    @property
+    def grammar(self):
+        return self._grammar
 
     def interpret(self, input_string: str) -> Formula:
         tree = self._parser.parse(input_string)
@@ -87,8 +135,21 @@ class Interpreter:
         return result
 
 
+p = Connector('P')
+q = Connector('Q')
+r = Connector('R')
+weird = Connector('weird')
+lnot = Connector('not')
+land = Connector('and')
+is_a_proposition = Connector('is-a-proposition')
+atomic_connectors = {'P': p, 'Q': q, 'R': r, '"weird"': weird}
+prefix_connectors = {'not': lnot}
+infix_connectors = {'and': land}
+function_connectors = {'not': lnot, 'is-a-proposition': is_a_proposition}
+
 # Output the parsed structure
-interpreter = Interpreter()
+interpreter = Interpreter(atomic_connectors=atomic_connectors, prefix_connectors=prefix_connectors,
+                          infix_connectors=infix_connectors, function_connectors=function_connectors)
 input_string = "is-a-proposition(P)"
 formula = interpreter.interpret(input_string)
 input_string = "P and Q"
@@ -103,4 +164,5 @@ input_string = "not(not P)"
 formula = interpreter.interpret(input_string)
 input_string = "not(not (is-a-proposition(P) and Q) and (Q and P))"
 formula = interpreter.interpret(input_string)
+
 pass

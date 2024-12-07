@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="interpretation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/interpretation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -324,7 +323,7 @@
     "Python.foundations.executor": "Run",
     "Python.generate_symbols.executor": "Run",
     "Python.inference_rules_1.executor": "Run",
-    "Python.interpretation.executor": "Run",
+    "Python.interpretation.executor": "Debug",
     "Python.minimal_logic_1.executor": "Debug",
     "Python.natural_numbers_1.executor": "Run",
     "Python.objects.executor": "Run",
@@ -797,14 +796,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01119" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1731850074354</created>
-      <option name="number" value="01119" />
-      <option name="presentableId" value="LOCAL-01119" />
-      <option name="project" value="LOCAL" />
-      <updated>1731850074354</updated>
-    </task>
     <task id="LOCAL-01120" summary="Lark + yaml">
       <option name="closed" value="true" />
       <created>1731864256076</created>
@@ -1189,7 +1180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733573989450</updated>
     </task>
-    <option name="localTasksCounter" value="1168" />
+    <task id="LOCAL-01168" summary="interpretation">
+      <option name="closed" value="true" />
+      <created>1733583692637</created>
+      <option name="number" value="01168" />
+      <option name="presentableId" value="LOCAL-01168" />
+      <option name="project" value="LOCAL" />
+      <updated>1733583692638</updated>
+    </task>
+    <option name="localTasksCounter" value="1169" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1344,6 +1343,11 @@
           <url>file://$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py</url>
           <line>10</line>
           <option name="timeStamp" value="280" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/interpretation.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="281" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
