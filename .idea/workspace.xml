@@ -5,8 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="interpretation integrated with foundations">
+      <change afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/cons_OBSOLETE.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/interpretation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -207,6 +209,7 @@
     "Python tests.pytest for test_inference_rules_1.TestModusPonens.test_modus_ponens.executor": "Run",
     "Python tests.pytest for test_inference_rules_1.TestSimplification1.test_simplification_1.executor": "Run",
     "Python tests.pytest for test_inference_rules_1.TestSimplification2.test_simplification_2.executor": "Run",
+    "Python tests.pytest for test_interpretation.TestRepresentation.test_representation.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestHypothesis.test_hypothesis.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestInconsistency1.TestReductioAdAbsurdum.test_reduction_ad_absurdum.executor": "Run",
     "Python tests.pytest for test_meta_theory_1.TestInconsistency1.test_inconsistency_1.executor": "Run",
@@ -355,7 +358,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/data/mappings",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/tests",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -401,10 +404,10 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/variables" />
-      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/interpretations" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -415,29 +418,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.interpretation">
-    <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/__init__.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python tests.pytest for test_interpretation.TestRepresentation.test_representation">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -683,6 +664,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_interpretation.TestRepresentation.test_representation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_interpretation.TestRepresentation.test_representation&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -758,12 +756,12 @@
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.interpretation" />
-      <item itemvalue="Python.__init__" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
+      <item itemvalue="Python tests.pytest for test_interpretation.TestRepresentation.test_representation" />
       <item itemvalue="Python tests.pytest for test_greek_alphabet_uppercase_serif_italic.TestGreekAlphabetLowercaseSerifItalic.test_greek_alphabet_lowercase_serif_italic" />
       <item itemvalue="Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py" />
       <item itemvalue="Python tests.pytest in tests" />
@@ -773,11 +771,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_interpretation.TestRepresentation.test_representation" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python.interpretation" />
         <item itemvalue="Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py" />
         <item itemvalue="Python tests.pytest for test_greek_alphabet_uppercase_serif_italic.TestGreekAlphabetLowercaseSerifItalic.test_greek_alphabet_lowercase_serif_italic" />
-        <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python.__init__" />
       </list>
     </recent_temporary>
   </component>
@@ -796,14 +794,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01128" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732140768641</created>
-      <option name="number" value="01128" />
-      <option name="presentableId" value="LOCAL-01128" />
-      <option name="project" value="LOCAL" />
-      <updated>1732140768642</updated>
     </task>
     <task id="LOCAL-01129" summary="Lark + yaml">
       <option name="closed" value="true" />
@@ -1189,7 +1179,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733645125055</updated>
     </task>
-    <option name="localTasksCounter" value="1177" />
+    <task id="LOCAL-01177" summary="interpretation integrated with foundations">
+      <option name="closed" value="true" />
+      <created>1733645217721</created>
+      <option name="number" value="01177" />
+      <option name="presentableId" value="LOCAL-01177" />
+      <option name="project" value="LOCAL" />
+      <updated>1733645217722</updated>
+    </task>
+    <option name="localTasksCounter" value="1178" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1347,8 +1345,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/interpretation.py</url>
-          <line>180</line>
+          <line>132</line>
           <option name="timeStamp" value="284" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_interpretation.py</url>
+          <line>108</line>
+          <option name="timeStamp" value="291" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_interpretation.py</url>
+          <line>110</line>
+          <option name="timeStamp" value="292" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -1,6 +1,7 @@
 import util
 import presentation
 import foundations
+import interpretation
 from punctilious.data.representations import \
     greek_alphabet_lowercase_serif_italic as _greek_alphabet_lowercase_serif_italic, \
     greek_alphabet_uppercase_serif_italic as _greek_alphabet_uppercase_serif_italic, \
