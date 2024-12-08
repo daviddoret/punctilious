@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="interpretation integrated with foundations">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules importation reorg">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formulas_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formulas_representation_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_roman.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_roman.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1_representations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1_representations.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_representation_1.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -806,14 +808,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01131" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732311102454</created>
-      <option name="number" value="01131" />
-      <option name="presentableId" value="LOCAL-01131" />
-      <option name="project" value="LOCAL" />
-      <updated>1732311102454</updated>
-    </task>
     <task id="LOCAL-01132" summary="Lark + yaml">
       <option name="closed" value="true" />
       <created>1732425128116</created>
@@ -1198,7 +1192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733670879259</updated>
     </task>
-    <option name="localTasksCounter" value="1180" />
+    <task id="LOCAL-01180" summary="modules importation reorg">
+      <option name="closed" value="true" />
+      <created>1733671696133</created>
+      <option name="number" value="01180" />
+      <option name="presentableId" value="LOCAL-01180" />
+      <option name="project" value="LOCAL" />
+      <updated>1733671696133</updated>
+    </task>
+    <option name="localTasksCounter" value="1181" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1248,7 +1250,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="New formula shapes for axiom, inference-rule, and theorem based on predicate syntax, e.g. axiom(P). New abstract class TheoreticalContext to simplify the smooth processing of theories, axiomatizations, and hypothesis." />
     <MESSAGE value="Rename the derivation class to theory component. Rationale: inference-rules are too far-fetched as &quot;derivations&quot;." />
     <MESSAGE value="rename max_derivations to max_components" />
     <MESSAGE value="pursue the implementation of theoretical context and extensions." />
@@ -1273,7 +1274,8 @@
     <MESSAGE value="cleanup" />
     <MESSAGE value="interpretation" />
     <MESSAGE value="interpretation integrated with foundations" />
-    <option name="LAST_COMMIT_MESSAGE" value="interpretation integrated with foundations" />
+    <MESSAGE value="modules importation reorg" />
+    <option name="LAST_COMMIT_MESSAGE" value="modules importation reorg" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

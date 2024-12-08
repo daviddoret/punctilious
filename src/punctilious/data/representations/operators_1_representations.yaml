@@ -3,7 +3,6 @@ uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
 slug: operators_1_representations
 representations:
   - slug: conjunction
-    uuid: 9bade04e-77fb-4040-8677-84781e8e4dd4
     renderers:
       - implementation: string_constant
         string_constant: '∧'
@@ -18,7 +17,6 @@ representations:
         string_constant: 'et'
         tags: { technical_language: unicode_basic, connector_representation: word, language: fr }
   - slug: disjunction
-    uuid: 5d5ee47b-cf0d-4fb4-9639-c71b1dbef67c
     renderers:
       - implementation: string_constant
         string_constant: '∨'
@@ -33,7 +31,6 @@ representations:
         string_constant: 'ou'
         tags: { technical_language: unicode_basic, connector_representation: word, language: fr }
   - slug: entailment
-    uuid: 093c9be7-c6c6-4be3-8595-6beb1d5d4c85
     renderers:
       - implementation: string_constant
         string_constant: '⊢'
@@ -48,7 +45,6 @@ representations:
         string_constant: 'et'
         tags: { technical_language: unicode_basic, connector_representation: word, language: fr }
   - slug: negation
-    uuid: 042bd062-1bde-4ff5-a271-b33b9517ca09
     renderers:
       - implementation: string_constant
         string_constant: '¬'

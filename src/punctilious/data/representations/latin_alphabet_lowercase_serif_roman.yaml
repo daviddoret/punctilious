@@ -5,183 +5,131 @@ slug: latin_alphabet_lowercase_serif_roman
 # https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
 representations:
   - slug: a
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: a }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐚 }
       - { encoding: latex_math, mode: symbolic, template: '\text{a}' }
   - slug: b
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: b }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐛 }
       - { encoding: latex_math, mode: symbolic, template: '\text{b}' }
   - slug: c
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: c }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐜 }
       - { encoding: latex_math, mode: symbolic, template: '\text{c}' }
   - slug: d
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: d }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐝 }
       - { encoding: latex_math, mode: symbolic, template: '\text{d}' }
   - slug: e
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: e }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐞 }
       - { encoding: latex_math, mode: symbolic, template: '\text{e}' }
   - slug: f
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: f }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐟 }
       - { encoding: latex_math, mode: symbolic, template: '\text{f}' }
   - slug: g
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: g }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐠 }
       - { encoding: latex_math, mode: symbolic, template: '\text{g}' }
   - slug: h
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: h }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐡 }
       - { encoding: latex_math, mode: symbolic, template: '\text{h}' }
   - slug: i
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: i }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐢 }
       - { encoding: latex_math, mode: symbolic, template: '\text{i}' }
   - slug: j
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: j }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐣 }
       - { encoding: latex_math, mode: symbolic, template: '\text{j}' }
   - slug: k
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: k }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐤 }
       - { encoding: latex_math, mode: symbolic, template: '\text{k}' }
   - slug: l
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: l }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐥 }
       - { encoding: latex_math, mode: symbolic, template: '\text{l}' }
   - slug: m
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: m }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐦 }
       - { encoding: latex_math, mode: symbolic, template: '\text{m}' }
   - slug: n
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: n }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐧 }
       - { encoding: latex_math, mode: symbolic, template: '\text{n}' }
   - slug: o
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: o }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐨 }
       - { encoding: latex_math, mode: symbolic, template: '\text{o}' }
   - slug: p
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: p }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐩 }
       - { encoding: latex_math, mode: symbolic, template: '\text{p}' }
   - slug: q
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: q }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐪 }
       - { encoding: latex_math, mode: symbolic, template: '\text{q}' }
   - slug: r
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: r }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐫 }
       - { encoding: latex_math, mode: symbolic, template: '\text{r}' }
   - slug: s
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: s }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐬 }
       - { encoding: latex_math, mode: symbolic, template: '\text{s}' }
   - slug: t
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: t }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐭 }
       - { encoding: latex_math, mode: symbolic, template: '\text{t}' }
   - slug: u
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: u }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐮 }
       - { encoding: latex_math, mode: symbolic, template: '\text{u}' }
   - slug: v
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: v }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐯 }
       - { encoding: latex_math, mode: symbolic, template: '\text{v}' }
   - slug: w
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: w }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐰 }
       - { encoding: latex_math, mode: symbolic, template: '\text{w}' }
   - slug: x
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: x }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐱 }
       - { encoding: latex_math, mode: symbolic, template: '\text{x}' }
   - slug: y
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: y }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐲 }
       - { encoding: latex_math, mode: symbolic, template: '\text{y}' }
   - slug: z
-    uuid:
-    syntactic_rules: { fixed_arity: 0 }
     renderers:
       - { encoding: unicode_basic, mode: symbolic, template: z }
       - { encoding: unicode_extended, mode: symbolic, template: 𝐳 }

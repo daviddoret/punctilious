@@ -4,9 +4,6 @@ slug: operators_representation_1
 # source:
 representations:
   - slug: is_a_proposition_representation
-    uuid: 4eb3925a-13af-40a2-bf19-0f1b3ec0f708
-    syntactic_rules:
-      fixed_arity: 1
     renderers:
       - mode: symbolic
         language: en
