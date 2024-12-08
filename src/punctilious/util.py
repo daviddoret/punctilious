@@ -4,6 +4,7 @@ import yaml
 import importlib.resources
 import logging
 import sys
+import jinja2
 
 
 def get_yaml_from_package(path: str, resource: str) -> dict:
@@ -21,6 +22,24 @@ def get_yaml_from_package(path: str, resource: str) -> dict:
             file: io.TextIOBase
             d: dict = yaml.safe_load(file)
             return d
+
+
+def get_jinja2_template_from_package(path: str, resource: str) -> jinja2.Template:
+    """Import a jinja2 template from a package.
+
+    This method is called when processing imports with `source_type: python_package_resources`.
+
+    :param path: A python importlib.resources.files folder, e.g. `data.operators`.
+    :param resource: A jinja2 template filename, e.g. `operators_1_representations.jinja2`.
+    :return:
+    """
+    package_path = importlib.resources.files(path).joinpath(resource)
+    with importlib.resources.as_file(package_path) as file_path:
+        with open(file_path, 'r') as file:
+            file: io.TextIOBase
+            template: str = file.read()
+            template: jinja2.Template = jinja2.Template(template)
+            return template
 
 
 class Logger:

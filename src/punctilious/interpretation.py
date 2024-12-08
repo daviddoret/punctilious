@@ -1,6 +1,7 @@
 import lark
 import jinja2
 
+import util
 from util import get_logger
 
 
@@ -98,36 +99,12 @@ class Connector:
 
 
 class Interpreter:
-    _GRAMMAR_TEMPLATE = """
-        ?start : formula_expression
-
-        ?formula_expression : FUNCTION_CONNECTOR "(" function_formula_arguments ")" -> parse_function_formula
-             | formula_expression INFIX_CONNECTOR formula_expression -> parse_infix_formula
-             | PREFIX_CONNECTOR formula_expression -> parse_prefix_formula
-             | ATOMIC_CONNECTOR -> parse_atomic_formula
-             | "(" FUNCTION_CONNECTOR "(" function_formula_arguments ")" ")" -> parse_function_formula
-             | "(" formula_expression INFIX_CONNECTOR formula_expression ")" -> parse_infix_formula
-             | "(" PREFIX_CONNECTOR formula_expression ")" -> parse_prefix_formula
-             | "(" ATOMIC_CONNECTOR ")" -> parse_atomic_formula     
-
-        function_formula_arguments . 20 : formula_expression ("," formula_expression)* -> parse_function_formula_arguments
-        parenthesized_formula_expression .10 : "(" formula_expression ")"
-
-        # OPEN_PARENTHESIS : "("
-        # CLOSE_PARENTHESIS : ")"
-        # COMMA : ","
-        {{ function_connectors }}
-        {{ infix_connectors }} 
-        {{ prefix_connectors }} 
-        {{ atomic_connectors }}
-
-        %import common.WS
-        %ignore WS
-    """
 
     def __init__(self, atomic_connectors: dict, prefix_connectors: dict, infix_connectors: dict,
                  function_connectors: dict):
-        self._jinja2_template: jinja2.Template = jinja2.Template(self.__class__._GRAMMAR_TEMPLATE)
+        # self._jinja2_template: jinja2.Template = jinja2.Template(self.__class__._GRAMMAR_TEMPLATE)
+        self._jinja2_template: jinja2.Template = util.get_jinja2_template_from_package('data.grammars',
+                                                                                       'grammar_1.jinja2')
         self._transformer = Transformer(atomic_connectors=atomic_connectors,
                                         prefix_connectors=prefix_connectors,
                                         infix_connectors=infix_connectors,
@@ -180,9 +157,9 @@ class Interpreter:
         return result
 
 
-p = Connector('P-class')
-q = Connector('Q-class')
-r = Connector('R-class')
+p = Connector('P')
+q = Connector('Q')
+r = Connector('R')
 weird = Connector('weird')
 lnot = Connector('not')
 land = Connector('and')
@@ -199,17 +176,17 @@ interpreter = Interpreter(atomic_connectors=atomic_connectors, prefix_connectors
 # formula = interpreter.interpret(input_string)
 input_string = "not P"
 formula = interpreter.interpret(input_string)
-# input_string = "is-a-proposition(P)"
-# formula = interpreter.interpret(input_string)
-# input_string = "P and Q"
-# formula = interpreter.interpret(input_string)
-# input_string = "(P and Q)"
-# formula = interpreter.interpret(input_string)
-# input_string = "(P and Q) and (Q and P)"
-# formula = interpreter.interpret(input_string)
-# input_string = "not(not P)"
-# formula = interpreter.interpret(input_string)
-# input_string = "not(not (is-a-proposition(P) and Q) and (Q and P))"
-# formula = interpreter.interpret(input_string)
+input_string = "is-a-proposition(P)"
+formula = interpreter.interpret(input_string)
+input_string = "P and Q"
+formula = interpreter.interpret(input_string)
+input_string = "(P and Q)"
+formula = interpreter.interpret(input_string)
+input_string = "(P and Q) and (Q and P)"
+formula = interpreter.interpret(input_string)
+input_string = "not(not P)"
+formula = interpreter.interpret(input_string)
+input_string = "not(not (is-a-proposition(P) and Q) and (Q and P))"
+formula = interpreter.interpret(input_string)
 
 pass
