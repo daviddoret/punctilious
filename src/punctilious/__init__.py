@@ -1,7 +1,7 @@
-import util
-import presentation
-import foundations
-import interpretation
+import _util
+import _presentation
+import _foundations
+import _interpretation
 import _greek_alphabet_lowercase_serif_italic
 import _greek_alphabet_uppercase_serif_italic
 import _latin_alphabet_lowercase_serif_italic
@@ -10,8 +10,8 @@ import _latin_alphabet_lowercase_serif_roman
 import _operators_1 as _operators1
 import _propositional_logic_1
 
-prefs = presentation.TagsPreferences()
-packages = foundations.get_packages()
+prefs = _presentation.TagsPreferences()
+packages = _foundations.get_packages()
 
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
 # print(greek_alphabet_lowercase_serif_italic.alpha.rep(prefs=prefs))

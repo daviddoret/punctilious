@@ -1,10 +1,10 @@
 import lark
 import jinja2
 
-import util
-from util import get_logger
-import foundations
-import presentation
+import _util
+from _util import get_logger
+import _foundations
+import _presentation
 
 
 class Transformer(lark.Transformer):
@@ -18,7 +18,7 @@ class Transformer(lark.Transformer):
         self._function_connectors = function_connectors
         super().__init__()
 
-    def parse_function_formula(self, items) -> foundations.Formula:
+    def parse_function_formula(self, items) -> _foundations.Formula:
         """Transform a function with a word and optional arguments."""
         function_connector_terminal = items[0]
         if function_connector_terminal not in self._function_connectors.keys():
@@ -26,7 +26,7 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown function connector: {function_connector_terminal}')
         function_connector = self._function_connectors[function_connector_terminal]
         arguments = items[1] if len(items) > 1 else []
-        phi = foundations.Formula(function_connector, arguments)
+        phi = _foundations.Formula(function_connector, arguments)
         get_logger().debug(f'Parsed function formula: {phi}\n\tSource: {items}')
         return phi
 
@@ -56,7 +56,7 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown prefix connector: {prefix_connector_terminal}')
         prefix_connector = self._prefix_connectors[prefix_connector_terminal]
         operand = items[1]
-        phi = foundations.Formula(prefix_connector, (operand,))
+        phi = _foundations.Formula(prefix_connector, (operand,))
         get_logger().debug(f'Parsed prefix formula: {phi}\n\tSource: {items}')
         return phi
 
@@ -68,7 +68,7 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown atomic connector: {atomic_connector_terminal}')
         atomic_connector = self._atomic_connectors[atomic_connector_terminal]
         # arguments = []
-        return foundations.Formula(atomic_connector)
+        return _foundations.Formula(atomic_connector)
 
 
 class Interpreter:
@@ -76,8 +76,8 @@ class Interpreter:
     def __init__(self, atomic_connectors: dict, prefix_connectors: dict, infix_connectors: dict,
                  function_connectors: dict):
         # self._jinja2_template: jinja2.Template = jinja2.Template(self.__class__._GRAMMAR_TEMPLATE)
-        self._jinja2_template: jinja2.Template = util.get_jinja2_template_from_package('data.grammars',
-                                                                                       'formula_grammar_1.jinja2')
+        self._jinja2_template: jinja2.Template = _util.get_jinja2_template_from_package('data.grammars',
+                                                                                        'formula_grammar_1.jinja2')
         self._transformer = Transformer(atomic_connectors=atomic_connectors,
                                         prefix_connectors=prefix_connectors,
                                         infix_connectors=infix_connectors,
@@ -122,7 +122,7 @@ class Interpreter:
     def grammar(self):
         return self._grammar
 
-    def interpret(self, input_string: str) -> foundations.Formula:
+    def interpret(self, input_string: str) -> _foundations.Formula:
         tree = self._parser.parse(input_string)
         print(tree)
         result = self._transformer.transform(tree)

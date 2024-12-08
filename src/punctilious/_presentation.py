@@ -6,7 +6,7 @@ import collections.abc
 import yaml
 import jinja2
 # punctilious packages
-import util
+import _util
 
 
 def ensure_tag(o) -> Tag:

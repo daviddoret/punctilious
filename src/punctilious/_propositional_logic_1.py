@@ -1,4 +1,4 @@
-import foundations as _foundations
+import _foundations as _foundations
 
 
 class PropositionalLogic1(_foundations.PythonPackage):

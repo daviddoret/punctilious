@@ -6,9 +6,9 @@ import importlib.resources
 import collections.abc
 
 # punctilious modules
-import util
-from util import get_logger
-import presentation
+import _util
+from _util import get_logger
+import _presentation
 
 
 def ensure_formula(o=None) -> Formula:
@@ -749,7 +749,7 @@ class PythonPackage(Package):
                 imports = Imports(*untyped_imports)
                 aliases = None  # To be implemented
                 untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
-                representations = presentation.Representations(*untyped_representations)
+                representations = _presentation.Representations(*untyped_representations)
                 # Load connectors
                 typed_connectors = []
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:

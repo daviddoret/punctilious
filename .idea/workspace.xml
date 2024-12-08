@@ -4,13 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules importation reorg">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules importation reorg + remove uuid attribute on non-package elements">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_roman.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_roman.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1_representations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1_representations.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_representation_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_roman.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_roman.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_operators_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_foundations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_presentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious_OBSOLETE.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,7 +324,7 @@
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in tests.executor": "Run",
-    "Python.__init__.executor": "Debug",
+    "Python.__init__.executor": "Run",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
     "Python.binary_tree_test.executor": "Run",
@@ -808,14 +816,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01132" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732425128116</created>
-      <option name="number" value="01132" />
-      <option name="presentableId" value="LOCAL-01132" />
-      <option name="project" value="LOCAL" />
-      <updated>1732425128116</updated>
-    </task>
     <task id="LOCAL-01133" summary="Lark + yaml">
       <option name="closed" value="true" />
       <created>1732426350763</created>
@@ -1200,7 +1200,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733671696133</updated>
     </task>
-    <option name="localTasksCounter" value="1181" />
+    <task id="LOCAL-01181" summary="modules importation reorg + remove uuid attribute on non-package elements">
+      <option name="closed" value="true" />
+      <created>1733672036710</created>
+      <option name="number" value="01181" />
+      <option name="presentableId" value="LOCAL-01181" />
+      <option name="project" value="LOCAL" />
+      <updated>1733672036710</updated>
+    </task>
+    <option name="localTasksCounter" value="1182" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1250,7 +1258,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Rename the derivation class to theory component. Rationale: inference-rules are too far-fetched as &quot;derivations&quot;." />
     <MESSAGE value="rename max_derivations to max_components" />
     <MESSAGE value="pursue the implementation of theoretical context and extensions." />
     <MESSAGE value="rename Formula to WellFormedFormula" />
@@ -1275,7 +1282,8 @@
     <MESSAGE value="interpretation" />
     <MESSAGE value="interpretation integrated with foundations" />
     <MESSAGE value="modules importation reorg" />
-    <option name="LAST_COMMIT_MESSAGE" value="modules importation reorg" />
+    <MESSAGE value="modules importation reorg + remove uuid attribute on non-package elements" />
+    <option name="LAST_COMMIT_MESSAGE" value="modules importation reorg + remove uuid attribute on non-package elements" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
