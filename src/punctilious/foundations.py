@@ -8,38 +8,9 @@ import importlib.resources
 import collections.abc
 
 # punctilious modules
+import util
+from util import get_logger
 import presentation
-
-
-class Logger:
-    __slots__ = ('_native_logger')
-    _singleton = None
-    _singleton_initialized = None
-
-    def __init__(self):
-        if self.__class__._singleton_initialized is None:
-            self._native_logger = logging.getLogger('punctilious')
-            self._native_logger.setLevel(logging.DEBUG)
-            stream_handler = logging.StreamHandler()
-            stream_handler.setLevel(logging.DEBUG)
-            stream_handler.flush = lambda: sys.stdout.flush()
-            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            stream_handler.setFormatter(formatter)
-            self._native_logger.addHandler(stream_handler)
-            self.__class__._singleton_initialized = True
-            get_logger().debug(
-                f'Logger singleton ({id(self)}) initialized.')
-
-    def __new__(cls, *args, **kwargs):
-        if cls._singleton is None:
-            cls._singleton = super(Logger, cls).__new__(cls)
-        return cls._singleton
-
-    def debug(self, msg: str):
-        self._native_logger.debug(msg)
-
-    def info(self, msg: str):
-        self._native_logger.info(msg)
 
 
 def ensure_formula(o=None) -> Formula:
@@ -93,10 +64,6 @@ class FormulaArguments(tuple[Formula]):
 
     def __str__(self):
         return '(' + ', '.join(str(a) for a in self) + ')'
-
-
-def get_logger():
-    return Logger()
 
 
 class Preferences:

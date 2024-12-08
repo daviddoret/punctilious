@@ -1,6 +1,8 @@
 import lark
 import jinja2
 
+from util import get_logger
+
 
 class Formula:
     def __init__(self, connector, arguments=None):
@@ -9,6 +11,9 @@ class Formula:
         self.connector = connector
         self.arguments = arguments
 
+    def __repr__(self):
+        return f'{self.connector}({", ".join(map(str, self.arguments))})'
+
     def __str__(self):
         return f'{self.connector}({", ".join(map(str, self.arguments))})'
 
@@ -16,11 +21,25 @@ class Formula:
 class Transformer(lark.Transformer):
     """Transformed the Lark tree parsed of a Technical1 input, into a proper Formula."""
 
+    def __init__(self, atomic_connectors: dict, prefix_connectors: dict, infix_connectors: dict,
+                 function_connectors: dict):
+        self._atomic_connectors = atomic_connectors
+        self._prefix_connectors = prefix_connectors
+        self._infix_connectors = infix_connectors
+        self._function_connectors = function_connectors
+        super().__init__()
+
     def parse_function_formula(self, items) -> Formula:
         """Transform a function with a word and optional arguments."""
-        function_connector = items[0]
+        function_connector_terminal = items[0]
+        if function_connector_terminal not in self._function_connectors.keys():
+            get_logger().error(f'Unknown function connector: {function_connector_terminal}')
+            raise ValueError(f'Unknown function connector: {function_connector_terminal}')
+        function_connector = self._function_connectors[function_connector_terminal]
         arguments = items[1] if len(items) > 1 else []
-        return Formula(connector=function_connector, arguments=arguments)
+        phi = Formula(connector=function_connector, arguments=arguments)
+        get_logger().debug(f'Parsed function formula: {phi}\n\tSource: {items}')
+        return phi
 
     def parse_function_formula_arguments(self, items):
         """Transform a list of expressions into a Python list."""
@@ -29,21 +48,37 @@ class Transformer(lark.Transformer):
     def parse_infix_formula(self, items):
         """Transform a list of expressions into a Python list."""
         left_operand = items[0]
-        infix_connector = items[1]
+        infix_connector_terminal = items[1]
+        if infix_connector_terminal not in self._infix_connectors.keys():
+            get_logger().error(f'Unknown infix connector: {infix_connector_terminal}')
+            raise ValueError(f'Unknown infix connector: {infix_connector_terminal}')
+        infix_connector = self._infix_connectors[infix_connector_terminal]
         right_operand = items[2]
         arguments = [left_operand, right_operand]
-        return Formula(connector=infix_connector, arguments=arguments)
+        phi = Formula(connector=infix_connector, arguments=arguments)
+        get_logger().debug(f'Parsed infix formula: {phi}\n\tSource: {items}')
+        return phi
 
     def parse_prefix_formula(self, items):
         """Transform a list of expressions into a Python list."""
-        prefix_connector = items[0]
+        prefix_connector_terminal = items[0]
+        if prefix_connector_terminal not in self._prefix_connectors.keys():
+            get_logger().error(f'Unknown prefix connector: {prefix_connector_terminal}')
+            raise ValueError(f'Unknown prefix connector: {prefix_connector_terminal}')
+        prefix_connector = self._prefix_connectors[prefix_connector_terminal]
         operand = items[1]
         arguments = [operand, ]
-        return Formula(connector=prefix_connector, arguments=arguments)
+        phi = Formula(connector=prefix_connector, arguments=arguments)
+        get_logger().debug(f'Parsed prefix formula: {phi}\n\tSource: {items}')
+        return phi
 
     def parse_atomic_formula(self, items):
         """Transform a list of expressions into a Python list."""
-        atomic_connector = items[0]
+        atomic_connector_terminal = items[0]
+        if atomic_connector_terminal not in self._atomic_connectors.keys():
+            get_logger().error(f'Unknown atomic connector: {atomic_connector_terminal}')
+            raise ValueError(f'Unknown atomic connector: {atomic_connector_terminal}')
+        atomic_connector = self._atomic_connectors[atomic_connector_terminal]
         arguments = []
         return Formula(connector=atomic_connector, arguments=arguments)
 
@@ -52,6 +87,9 @@ class Connector:
 
     def __init__(self, connector: str):
         self.connector = connector
+
+    def __repr__(self):
+        return self.connector
 
     def __str__(self):
         return self.connector
@@ -87,12 +125,11 @@ class Interpreter:
 
     def __init__(self, atomic_connectors: dict, prefix_connectors: dict, infix_connectors: dict,
                  function_connectors: dict):
-        self._atomic_connectors = atomic_connectors
-        self._prefix_connectors = prefix_connectors
-        self._infix_connectors = infix_connectors
-        self._function_connectors = function_connectors
         self._jinja2_template: jinja2.Template = jinja2.Template(self.__class__._GRAMMAR_TEMPLATE)
-        self._transformer = Transformer()
+        self._transformer = Transformer(atomic_connectors=atomic_connectors,
+                                        prefix_connectors=prefix_connectors,
+                                        infix_connectors=infix_connectors,
+                                        function_connectors=function_connectors)
         atomic_connectors = self.declare_lark_terminals(terminal_name='ATOMIC_CONNECTOR',
                                                         terminal_priority='1',
                                                         d=atomic_connectors)
@@ -141,9 +178,9 @@ class Interpreter:
         return result
 
 
-p = Connector('P')
-q = Connector('Q')
-r = Connector('R')
+p = Connector('P-class')
+q = Connector('Q-class')
+r = Connector('R-class')
 weird = Connector('weird')
 lnot = Connector('not')
 land = Connector('and')
