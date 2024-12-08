@@ -1,5 +1,7 @@
 import _util
 from _util import get_yaml_from_package
+import _identifiers
+from _identifiers import ensure_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, Identifier, Slug, SlugsDictionary
 import _presentation
 from _presentation import Representation, ensure_representations, ensure_representation, latex_math, Tag, \
     TagsPreferences, \

@@ -11,7 +11,7 @@ class Slug(str):
         return hash(self) == hash(other)
 
     def __hash__(self):
-        return hash((self.__class__, str(self),))
+        return hash((self.__class__, super().__str__(),))
 
     def __init__(self, slug: str):
         super().__init__()
@@ -23,10 +23,10 @@ class Slug(str):
         return super().__new__(cls, slug)
 
     def __repr__(self):
-        return f'"{str(super())}" slug'
+        return f'"{str(super().__str__())}" slug'
 
     def __str__(self):
-        return str(super())
+        return str(super().__str__())
 
 
 class SlugsDictionary(dict):
@@ -88,11 +88,7 @@ class Identifier(tuple):
         :param p: A package slug.
         :param s: An object slug.
         """
-        i = ensure_uuid(i)
-        p = ensure_slug(p)
-        s = ensure_slug(s)
-        phi = (i, p, s,)
-        super().__init__(phi)
+        super().__init__()
 
     def __new__(cls, i: FlexibleUUID, p: FlexibleSlug, s: FlexibleSlug):
         i = ensure_uuid(i)
@@ -106,7 +102,7 @@ class Identifier(tuple):
 
         :return:
         """
-        return f'{self[0]}.{self[2]} ({self[1]}) identifier'
+        return f'"{self[1]}.{self[2]}" ({self[0]}) identifier'
 
     def __str__(self):
         """A friendly representation of the identifier.
@@ -126,3 +122,15 @@ class Identifier(tuple):
     @property
     def slug(self) -> Slug:
         return self[2]
+
+
+FlexibleIdentifier = typing.Union[Identifier]
+
+
+def ensure_identifier(o: Identifier | str) -> Identifier:
+    """Assure `o` is of type Identifier, or implicitly convert `o` to Identifier, or raise an error if this fails.
+    """
+    if isinstance(o, Identifier):
+        return o
+    else:
+        raise ValueError(f'Invalid identifier {o}')

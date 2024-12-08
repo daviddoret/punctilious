@@ -31,7 +31,7 @@ class Formula(tuple):
         :param c: A connector.
         :param args: A (possibly empty) collection of arguments.
         """
-        pass
+        super().__init__()
 
     def __new__(cls, c, a=None):
         c = ensure_connector(c)
