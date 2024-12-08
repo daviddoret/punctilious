@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="interpretation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/foundations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -798,14 +796,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01122" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1731875823718</created>
-      <option name="number" value="01122" />
-      <option name="presentableId" value="LOCAL-01122" />
-      <option name="project" value="LOCAL" />
-      <updated>1731875823718</updated>
-    </task>
     <task id="LOCAL-01123" summary="Lark + yaml">
       <option name="closed" value="true" />
       <created>1731876076309</created>
@@ -1190,7 +1180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733591226319</updated>
     </task>
-    <option name="localTasksCounter" value="1171" />
+    <task id="LOCAL-01171" summary="interpretation">
+      <option name="closed" value="true" />
+      <created>1733638118030</created>
+      <option name="number" value="01171" />
+      <option name="presentableId" value="LOCAL-01171" />
+      <option name="project" value="LOCAL" />
+      <updated>1733638118031</updated>
+    </task>
+    <option name="localTasksCounter" value="1172" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1345,6 +1343,11 @@
           <url>file://$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py</url>
           <line>10</line>
           <option name="timeStamp" value="280" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/interpretation.py</url>
+          <line>214</line>
+          <option name="timeStamp" value="284" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

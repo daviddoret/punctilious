@@ -6,6 +6,8 @@ from util import get_logger
 
 class Formula:
     def __init__(self, connector, arguments=None):
+        if not isinstance(connector, Connector):
+            raise TypeError(f'Connector must be a Connector, not {type(connector)}')
         if arguments is None:
             arguments = []
         self.connector = connector
@@ -101,11 +103,11 @@ class Interpreter:
 
         ?formula_expression : FUNCTION_CONNECTOR "(" function_formula_arguments ")" -> parse_function_formula
              | formula_expression INFIX_CONNECTOR formula_expression -> parse_infix_formula
-             | PREFIX_CONNECTOR ATOMIC_CONNECTOR -> parse_prefix_formula
+             | PREFIX_CONNECTOR formula_expression -> parse_prefix_formula
              | ATOMIC_CONNECTOR -> parse_atomic_formula
              | "(" FUNCTION_CONNECTOR "(" function_formula_arguments ")" ")" -> parse_function_formula
              | "(" formula_expression INFIX_CONNECTOR formula_expression ")" -> parse_infix_formula
-             | "(" PREFIX_CONNECTOR ATOMIC_CONNECTOR ")" -> parse_prefix_formula
+             | "(" PREFIX_CONNECTOR formula_expression ")" -> parse_prefix_formula
              | "(" ATOMIC_CONNECTOR ")" -> parse_atomic_formula     
 
         function_formula_arguments . 20 : formula_expression ("," formula_expression)* -> parse_function_formula_arguments
@@ -193,19 +195,21 @@ function_connectors = {'not': lnot, 'is-a-proposition': is_a_proposition}
 # Output the parsed structure
 interpreter = Interpreter(atomic_connectors=atomic_connectors, prefix_connectors=prefix_connectors,
                           infix_connectors=infix_connectors, function_connectors=function_connectors)
-input_string = "is-a-proposition(P)"
-formula = interpreter.interpret(input_string)
-input_string = "P and Q"
-formula = interpreter.interpret(input_string)
+# input_string = "P"
+# formula = interpreter.interpret(input_string)
 input_string = "not P"
 formula = interpreter.interpret(input_string)
-input_string = "(P and Q)"
-formula = interpreter.interpret(input_string)
-input_string = "(P and Q) and (Q and P)"
-formula = interpreter.interpret(input_string)
-input_string = "not(not P)"
-formula = interpreter.interpret(input_string)
-input_string = "not(not (is-a-proposition(P) and Q) and (Q and P))"
-formula = interpreter.interpret(input_string)
+# input_string = "is-a-proposition(P)"
+# formula = interpreter.interpret(input_string)
+# input_string = "P and Q"
+# formula = interpreter.interpret(input_string)
+# input_string = "(P and Q)"
+# formula = interpreter.interpret(input_string)
+# input_string = "(P and Q) and (Q and P)"
+# formula = interpreter.interpret(input_string)
+# input_string = "not(not P)"
+# formula = interpreter.interpret(input_string)
+# input_string = "not(not (is-a-proposition(P) and Q) and (Q and P))"
+# formula = interpreter.interpret(input_string)
 
 pass
