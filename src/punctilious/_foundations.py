@@ -29,8 +29,7 @@ class Formula(tuple):
         :param c: A connector.
         :param args: A (possibly empty) collection of arguments.
         """
-        self._root_connector = ensure_connector(c)
-        self._arguments = ensure_formula_arguments(*args)
+        pass
 
     def __new__(cls, c, a=None):
         c = ensure_connector(c)
@@ -40,18 +39,18 @@ class Formula(tuple):
         return super().__new__(cls, phi)
 
     def __repr__(self):
-        return self._root_connector.__str__() + self._arguments.__str__()
+        return self.connector.__str__() + self.arguments.__str__()
 
     def __str__(self):
-        return self._root_connector.__str__() + self._arguments.__str__()
+        return self.connector.__str__() + self.arguments.__str__()
 
     @property
     def arguments(self):
-        return self._arguments
+        return self[1]
 
     @property
-    def root_connector(self):
-        return self._root_connector
+    def connector(self):
+        return self[0]
 
 
 def ensure_formula_arguments(o=None) -> FormulaArguments:

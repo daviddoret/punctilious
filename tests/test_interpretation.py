@@ -1,5 +1,6 @@
 import pytest
 import punctilious as pu
+from test_shared_library import create_atomic_connector, create_function
 
 
 @pytest.fixture
@@ -74,26 +75,13 @@ class TestRepresentation:
         """Test of representation with multiple string-constant renderers.
         """
 
-        def quick_atomic(c: str):
-            ren = pu.RendererForStringConstant(string_constant=c)
-            rep = pu.Representation(renderers=(ren,))
-            con = pu.Connector(slug=c, representation=rep)
-            return con
-
-        def quick_function(c: str):
-            string_template = '{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})'
-            ren = pu.RendererForStringTemplate(string_template=string_template)
-            rep = pu.Representation(renderers=(ren,))
-            con = pu.Connector(slug=c, representation=rep)
-            return con
-
-        p = quick_atomic('P')
-        q = quick_atomic('Q')
-        r = quick_atomic('R')
-        weird = quick_atomic('weird')
-        lnot = quick_function('not')
-        land = quick_function('and')
-        is_a_proposition = quick_function('is-a-proposition')
+        p = create_atomic_connector('P')
+        q = create_atomic_connector('Q')
+        r = create_atomic_connector('R')
+        weird = create_atomic_connector('weird')
+        lnot = create_function('not')
+        land = create_function('and')
+        is_a_proposition = create_function('is-a-proposition')
         atomic_connectors = {'P': p, 'Q': q, 'R': r, '"weird"': weird}
         prefix_connectors = {'not': lnot}
         infix_connectors = {'and': land}
