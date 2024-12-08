@@ -17,3 +17,12 @@ class TestFormula:
 
         phi1 = pu.Formula(p)
         assert str(phi1) == 'P()'
+
+        phi2 = pu.Formula(land, (p, q,))
+        assert str(phi2) == 'and(P(), Q())'
+
+        phi3 = pu.Formula(lnot, (p,))
+        assert str(phi3) == 'not(P())'
+
+        phi4 = pu.Formula(land, (phi3, phi2))
+        assert str(phi4) == 'and(not(P()), and(P(), Q()))'

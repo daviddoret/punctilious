@@ -1,10 +1,10 @@
 import _util
 from _util import get_yaml_from_package
 import _presentation
-from _presentation import Representation, ensure_representations, ensure_representation, Tag, \
+from _presentation import Representation, ensure_representations, ensure_representation, latex_math, Tag, \
     TagsPreferences, \
     TagsAssignment, RendererForStringTemplate, \
-    RendererForStringConstant
+    RendererForStringConstant, unicode_basic, unicode_extended
 import _foundations
 from _foundations import FormulaArguments, Formula, ensure_formula, ensure_formula_arguments, Connector, Connectors
 import _interpretation

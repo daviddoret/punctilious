@@ -44,7 +44,7 @@ class Transformer(lark.Transformer):
         infix_connector = self._infix_connectors[infix_connector_terminal]
         right_operand = items[2]
         # arguments = [left_operand, right_operand]
-        phi = foundations.Formula(infix_connector, (left_operand, right_operand,))
+        phi = _foundations.Formula(infix_connector, (left_operand, right_operand,))
         get_logger().debug(f'Parsed infix formula: {phi}\n\tSource: {items}')
         return phi
 

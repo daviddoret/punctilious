@@ -17,7 +17,7 @@ def ensure_formula(o=None) -> Formula:
     elif isinstance(o, Connector):
         return Formula(c=o)
     else:
-        raise ValueError('o cannot be constrained into a Formula.')
+        raise ValueError(f'o cannot be constrained into a Formula. {type(o)}: {o}')
 
 
 class Formula(tuple):
