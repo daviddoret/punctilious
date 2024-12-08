@@ -1,5 +1,5 @@
-import _foundations as _foundations
-import _presentation as _presentation
+import _foundations
+import _presentation
 
 
 class LatinAlphabetUppercaseSerifItalic(_foundations.PythonPackage):

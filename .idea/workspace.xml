@@ -6,19 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules importation reorg + remove uuid attribute on non-package elements">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_roman.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_roman.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_operators_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_foundations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_presentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/punctilious_OBSOLETE.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -816,14 +805,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01133" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732426350763</created>
-      <option name="number" value="01133" />
-      <option name="presentableId" value="LOCAL-01133" />
-      <option name="project" value="LOCAL" />
-      <updated>1732426350763</updated>
-    </task>
     <task id="LOCAL-01134" summary="Lark + yaml">
       <option name="closed" value="true" />
       <created>1732426967046</created>
@@ -1208,7 +1189,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733672036710</updated>
     </task>
-    <option name="localTasksCounter" value="1182" />
+    <task id="LOCAL-01182" summary="modules importation reorg + remove uuid attribute on non-package elements">
+      <option name="closed" value="true" />
+      <created>1733672218720</created>
+      <option name="number" value="01182" />
+      <option name="presentableId" value="LOCAL-01182" />
+      <option name="project" value="LOCAL" />
+      <updated>1733672218720</updated>
+    </task>
+    <option name="localTasksCounter" value="1183" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1375,13 +1364,9 @@
           <option name="timeStamp" value="292" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py</url>
-          <option name="timeStamp" value="293" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/__init__.py</url>
-          <line>7</line>
-          <option name="timeStamp" value="294" />
+          <url>file://$PROJECT_DIR$/src/punctilious/_presentation.py</url>
+          <line>78</line>
+          <option name="timeStamp" value="295" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
