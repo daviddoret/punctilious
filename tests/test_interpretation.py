@@ -4,52 +4,52 @@ import punctilious as pu
 
 @pytest.fixture
 def en():
-    return pu.presentation.Tag('language', 'en')
+    return pu.Tag('language', 'en')
 
 
 @pytest.fixture
 def fr():
-    return pu.presentation.Tag('language', 'fr')
+    return pu.Tag('language', 'fr')
 
 
 @pytest.fixture
 def symbol():
-    return pu.presentation.Tag('connector_representation', 'symbol')
+    return pu.Tag('connector_representation', 'symbol')
 
 
 @pytest.fixture
 def word():
-    return pu.presentation.Tag('connector_representation', 'word')
+    return pu.Tag('connector_representation', 'word')
 
 
 @pytest.fixture
 def traditional_formula():
-    return pu.presentation.Tag('layout', 'traditional_formula')
+    return pu.Tag('layout', 'traditional_formula')
 
 
 @pytest.fixture
 def infix_formula():
-    return pu.presentation.Tag('layout', 'infix_formula')
+    return pu.Tag('layout', 'infix_formula')
 
 
 @pytest.fixture
 def unicode_basic():
-    return pu.presentation.Tag('technical_language', 'unicode_basic')
+    return pu.Tag('technical_language', 'unicode_basic')
 
 
 @pytest.fixture
 def unicode_extended():
-    return pu.presentation.Tag('technical_language', 'unicode_extended')
+    return pu.Tag('technical_language', 'unicode_extended')
 
 
 @pytest.fixture
 def latex_math():
-    return pu.presentation.Tag('technical_language', 'latex_math')
+    return pu.Tag('technical_language', 'latex_math')
 
 
 @pytest.fixture
 def prefs(en, fr, symbol, word):
-    prefs = pu.presentation.TagsPreferences()
+    prefs = pu.TagsPreferences()
     prefs[en] = 6
     prefs[fr] = 9
     prefs[symbol] = 100
@@ -75,16 +75,16 @@ class TestRepresentation:
         """
 
         def quick_atomic(c: str):
-            ren = pu.presentation.RendererForStringConstant(string_constant=c)
-            rep = pu.presentation.Representation(renderers=(ren,))
-            con = pu.foundations.Connector(slug=c, representation=rep)
+            ren = pu.RendererForStringConstant(string_constant=c)
+            rep = pu.Representation(renderers=(ren,))
+            con = pu.Connector(slug=c, representation=rep)
             return con
 
         def quick_function(c: str):
             string_template = '{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})'
-            ren = pu.presentation.RendererForStringTemplate(string_template=string_template)
-            rep = pu.presentation.Representation(renderers=(ren,))
-            con = pu.foundations.Connector(slug=c, representation=rep)
+            ren = pu.RendererForStringTemplate(string_template=string_template)
+            rep = pu.Representation(renderers=(ren,))
+            con = pu.Connector(slug=c, representation=rep)
             return con
 
         p = quick_atomic('P')
@@ -100,10 +100,10 @@ class TestRepresentation:
         function_connectors = {'not': lnot, 'is-a-proposition': is_a_proposition}
 
         # Output the parsed structure
-        interpreter = pu.interpretation.Interpreter(atomic_connectors=atomic_connectors,
-                                                    prefix_connectors=prefix_connectors,
-                                                    infix_connectors=infix_connectors,
-                                                    function_connectors=function_connectors)
+        interpreter = pu.Interpreter(atomic_connectors=atomic_connectors,
+                                     prefix_connectors=prefix_connectors,
+                                     infix_connectors=infix_connectors,
+                                     function_connectors=function_connectors)
         input_string = "P"
         assert str(interpreter.interpret(input_string)) == 'P()'
         input_string = "not P"

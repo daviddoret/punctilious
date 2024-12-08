@@ -20,10 +20,10 @@ def ensure_formula(o=None) -> Formula:
         raise ValueError('o cannot be constrained into a Formula.')
 
 
-class Formula:
+class Formula(tuple):
     # __slots__ = tuple('_root_connector', '_arguments', )
 
-    def __init__(self, c, *args):
+    def __init__(self, c, a=None):
         """
 
         :param c: A connector.
@@ -31,6 +31,13 @@ class Formula:
         """
         self._root_connector = ensure_connector(c)
         self._arguments = ensure_formula_arguments(*args)
+
+    def __new__(cls, c, a=None):
+        c = ensure_connector(c)
+        a = FormulaArguments() if a is None else a
+        a = ensure_formula_arguments(a)
+        phi = (c, a,)
+        return super().__new__(cls, phi)
 
     def __repr__(self):
         return self._root_connector.__str__() + self._arguments.__str__()
@@ -59,7 +66,7 @@ def ensure_formula_arguments(o=None) -> FormulaArguments:
 
 
 class FormulaArguments(tuple[Formula]):
-    """A tuple of formula arguments."""
+    """A tuple of formulas. Used to represent the arguments of a non-atomic formula."""
 
     def __init__(self, *args, **kwargs):
         super().__init__()

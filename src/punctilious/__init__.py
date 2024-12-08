@@ -1,7 +1,14 @@
 import _util
+from _util import get_yaml_from_package
 import _presentation
+from _presentation import Representation, ensure_representations, ensure_representation, Tag, \
+    TagsPreferences, \
+    TagsAssignment, RendererForStringTemplate, \
+    RendererForStringConstant
 import _foundations
+from _foundations import FormulaArguments, Formula, ensure_formula, ensure_formula_arguments, Connector, Connectors
 import _interpretation
+from _interpretation import Interpreter
 import _greek_alphabet_lowercase_serif_italic
 import _greek_alphabet_uppercase_serif_italic
 import _latin_alphabet_lowercase_serif_italic
