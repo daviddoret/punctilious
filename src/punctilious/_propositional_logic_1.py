@@ -1,4 +1,4 @@
-from punctilious import foundations as _foundations
+import foundations as _foundations
 
 
 class PropositionalLogic1(_foundations.PythonPackage):

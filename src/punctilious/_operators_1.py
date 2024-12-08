@@ -1,4 +1,4 @@
-from ... import foundations as _foundations
+import foundations as _foundations
 
 
 class Operators1(_foundations.PythonPackage):
