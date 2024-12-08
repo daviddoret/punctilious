@@ -26,6 +26,11 @@ class Formula:
     # __slots__ = tuple('_root_connector', '_arguments', )
 
     def __init__(self, c, *args):
+        """
+
+        :param c: A connector.
+        :param args: A (possibly empty) collection of arguments.
+        """
         self._root_connector = ensure_connector(c)
         self._arguments = ensure_formula_arguments(*args)
 
@@ -46,7 +51,7 @@ def ensure_formula_arguments(o=None) -> FormulaArguments:
     elif o is None:
         return FormulaArguments()
     else:
-        raise ValueError('o cannot be constrained into FormulaArguments.')
+        raise ValueError(f'o cannot be constrained into FormulaArguments {FormulaArguments}. {type(o)}')
 
 
 class FormulaArguments(tuple[Formula]):

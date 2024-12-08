@@ -176,11 +176,13 @@ class Representations(tuple):
 class Renderer(abc.ABC):
     """A renderer is an object that has the capability to generate the output of a presentation."""
 
-    def __init__(self, tags: TagsAssignment | collections.abc.Iterable):
+    def __init__(self, tags: TagsAssignment | collections.abc.Iterable | None = None):
         """
 
         :param tags: The tags for which this renderer is optimal.
         """
+        if tags is None:
+            tags = TagsAssignment()
         if not isinstance(tags, TagsAssignment):
             tags: TagsAssignment = TagsAssignment(*tags)
         self._tags: TagsAssignment = tags
@@ -196,7 +198,7 @@ class Renderer(abc.ABC):
 class RendererForStringConstant(Renderer):
     """A renderer that generates a string from a constant."""
 
-    def __init__(self, string_constant: str, tags: TagsAssignment | collections.abc.Iterable):
+    def __init__(self, string_constant: str, tags: TagsAssignment | collections.abc.Iterable | None = None):
         super().__init__(tags)
         self._string_constant = string_constant
 
@@ -213,7 +215,7 @@ class RendererForStringTemplate(Renderer):
 
     """
 
-    def __init__(self, string_template: str, tags: TagsAssignment | collections.abc.Iterable):
+    def __init__(self, string_template: str, tags: TagsAssignment | collections.abc.Iterable | None = None):
         super().__init__(tags)
         self._string_template = string_template
         self._jinja2_template: jinja2.Template = jinja2.Template(string_template)

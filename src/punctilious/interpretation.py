@@ -3,11 +3,13 @@ import jinja2
 
 import util
 from util import get_logger
+import foundations
+import presentation
 
 
-class Formula:
+class Formula_OBSOLETE:
     def __init__(self, connector, arguments=None):
-        if not isinstance(connector, Connector):
+        if not isinstance(connector, foundations.Connector):
             raise TypeError(f'Connector must be a Connector, not {type(connector)}')
         if arguments is None:
             arguments = []
@@ -32,7 +34,7 @@ class Transformer(lark.Transformer):
         self._function_connectors = function_connectors
         super().__init__()
 
-    def parse_function_formula(self, items) -> Formula:
+    def parse_function_formula(self, items) -> foundations.Formula:
         """Transform a function with a word and optional arguments."""
         function_connector_terminal = items[0]
         if function_connector_terminal not in self._function_connectors.keys():
@@ -40,13 +42,13 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown function connector: {function_connector_terminal}')
         function_connector = self._function_connectors[function_connector_terminal]
         arguments = items[1] if len(items) > 1 else []
-        phi = Formula(connector=function_connector, arguments=arguments)
+        phi = foundations.Formula(function_connector, arguments)
         get_logger().debug(f'Parsed function formula: {phi}\n\tSource: {items}')
         return phi
 
     def parse_function_formula_arguments(self, items):
         """Transform a list of expressions into a Python list."""
-        return list(items)
+        return tuple(items)
 
     def parse_infix_formula(self, items):
         """Transform a list of expressions into a Python list."""
@@ -57,8 +59,8 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown infix connector: {infix_connector_terminal}')
         infix_connector = self._infix_connectors[infix_connector_terminal]
         right_operand = items[2]
-        arguments = [left_operand, right_operand]
-        phi = Formula(connector=infix_connector, arguments=arguments)
+        # arguments = [left_operand, right_operand]
+        phi = foundations.Formula(infix_connector, (left_operand, right_operand,))
         get_logger().debug(f'Parsed infix formula: {phi}\n\tSource: {items}')
         return phi
 
@@ -70,8 +72,7 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown prefix connector: {prefix_connector_terminal}')
         prefix_connector = self._prefix_connectors[prefix_connector_terminal]
         operand = items[1]
-        arguments = [operand, ]
-        phi = Formula(connector=prefix_connector, arguments=arguments)
+        phi = foundations.Formula(prefix_connector, (operand,))
         get_logger().debug(f'Parsed prefix formula: {phi}\n\tSource: {items}')
         return phi
 
@@ -82,11 +83,11 @@ class Transformer(lark.Transformer):
             get_logger().error(f'Unknown atomic connector: {atomic_connector_terminal}')
             raise ValueError(f'Unknown atomic connector: {atomic_connector_terminal}')
         atomic_connector = self._atomic_connectors[atomic_connector_terminal]
-        arguments = []
-        return Formula(connector=atomic_connector, arguments=arguments)
+        # arguments = []
+        return foundations.Formula(atomic_connector)
 
 
-class Connector:
+class Connector_OBSOLETE:
 
     def __init__(self, connector: str):
         self.connector = connector
@@ -104,7 +105,7 @@ class Interpreter:
                  function_connectors: dict):
         # self._jinja2_template: jinja2.Template = jinja2.Template(self.__class__._GRAMMAR_TEMPLATE)
         self._jinja2_template: jinja2.Template = util.get_jinja2_template_from_package('data.grammars',
-                                                                                       'grammar_1.jinja2')
+                                                                                       'formula_grammar_1.jinja2')
         self._transformer = Transformer(atomic_connectors=atomic_connectors,
                                         prefix_connectors=prefix_connectors,
                                         infix_connectors=infix_connectors,
@@ -149,7 +150,7 @@ class Interpreter:
     def grammar(self):
         return self._grammar
 
-    def interpret(self, input_string: str) -> Formula:
+    def interpret(self, input_string: str) -> foundations.Formula:
         tree = self._parser.parse(input_string)
         print(tree)
         result = self._transformer.transform(tree)
@@ -157,13 +158,28 @@ class Interpreter:
         return result
 
 
-p = Connector('P')
-q = Connector('Q')
-r = Connector('R')
-weird = Connector('weird')
-lnot = Connector('not')
-land = Connector('and')
-is_a_proposition = Connector('is-a-proposition')
+def quick_atomic(c: str):
+    ren = presentation.RendererForStringConstant(string_constant=c)
+    rep = presentation.Representation(renderers=(ren,))
+    con = foundations.Connector(slug=c, representation=rep)
+    return con
+
+
+def quick_function(c: str):
+    string_template = '{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})'
+    ren = presentation.RendererForStringTemplate(string_template=string_template)
+    rep = presentation.Representation(renderers=(ren,))
+    con = foundations.Connector(slug=c, representation=rep)
+    return con
+
+
+p = quick_atomic('P')
+q = quick_atomic('Q')
+r = quick_atomic('R')
+weird = quick_atomic('weird')
+lnot = quick_function('not')
+land = quick_function('and')
+is_a_proposition = quick_function('is-a-proposition')
 atomic_connectors = {'P': p, 'Q': q, 'R': r, '"weird"': weird}
 prefix_connectors = {'not': lnot}
 infix_connectors = {'and': land}
@@ -172,8 +188,8 @@ function_connectors = {'not': lnot, 'is-a-proposition': is_a_proposition}
 # Output the parsed structure
 interpreter = Interpreter(atomic_connectors=atomic_connectors, prefix_connectors=prefix_connectors,
                           infix_connectors=infix_connectors, function_connectors=function_connectors)
-# input_string = "P"
-# formula = interpreter.interpret(input_string)
+input_string = "P"
+formula = interpreter.interpret(input_string)
 input_string = "not P"
 formula = interpreter.interpret(input_string)
 input_string = "is-a-proposition(P)"
