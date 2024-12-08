@@ -4,9 +4,7 @@ slug: greek_alphabet_uppercase_serif_italic
 # source:
 # https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
 representations:
-
   - slug: alpha
-    uuid: e1962144-76aa-44dc-a320-a0f3dd703dbd
     renderers:
       - implementation: string_constant
         string_constant: 'Alpha'
@@ -17,9 +15,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Alpha'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: beta
-    uuid: 8afa1432-998c-4be0-ae6f-d1b0584c401d
     renderers:
       - implementation: string_constant
         string_constant: 'Beta'
@@ -30,9 +26,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Beta'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: gamma
-    uuid: e5530749-e22e-4649-9a91-be536cfa3fff
     renderers:
       - implementation: string_constant
         string_constant: 'Gamma'
@@ -43,9 +37,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Gamma'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: delta
-    uuid: 12c7ea75-b774-47fd-9858-e66e648e1487
     renderers:
       - implementation: string_constant
         string_constant: 'Delta'
@@ -56,9 +48,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Delta'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: epsilon
-    uuid: d90c0b08-bd77-433d-81e2-4f9fc999d5b0
     renderers:
       - implementation: string_constant
         string_constant: 'Epsilon'
@@ -69,9 +59,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Epsilon'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: zeta
-    uuid: f9387ef6-48d8-4465-b381-c374b53277f2
     renderers:
       - implementation: string_constant
         string_constant: 'Zeta'
@@ -82,9 +70,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Zeta'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: eta
-    uuid: e081aac6-6c4b-4008-9aed-d1b45d260eb0
     renderers:
       - implementation: string_constant
         string_constant: 'Eta'
@@ -95,9 +81,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Eta'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: theta
-    uuid: 2150d4ca-36d4-4a48-97e2-1cfda1c1b5c4
     renderers:
       - implementation: string_constant
         string_constant: 'Theta'
@@ -111,10 +95,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Theta'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
-
   - slug: iota
-    uuid: 73c5ea9a-b2a4-4d11-ae50-1e04f488ff23
     renderers:
       - implementation: string_constant
         string_constant: 'Iota'
@@ -125,9 +106,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Iota'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: kappa
-    uuid: 1fd629db-5fbc-4f9e-aed6-ac03d8e2cb47
     renderers:
       - implementation: string_constant
         string_constant: 'Kappa'
@@ -138,10 +117,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Kappa'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
-
   - slug: lambda
-    uuid: efbaeb01-e523-4d08-97ee-b6d08baa6038
     renderers:
       - implementation: string_constant
         string_constant: 'Lambda'
@@ -152,9 +128,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Lambda'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: mu
-    uuid: 64c2db7c-d125-4238-b687-94b68b93f617
     renderers:
       - implementation: string_constant
         string_constant: 'Mu'
@@ -165,9 +139,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Mu'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: nu
-    uuid: c3219ff8-fbcc-4c3b-9f42-7750087cce22
     renderers:
       - implementation: string_constant
         string_constant: 'Nu'
@@ -178,9 +150,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Nu'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: xi
-    uuid: c786398a-40ee-43df-b9a7-a10e050df4d1
     renderers:
       - implementation: string_constant
         string_constant: 'Xi'
@@ -191,9 +161,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Xi'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: omicron
-    uuid: 70717622-1d35-4fb6-9682-3c06a7c397a8
     renderers:
       - implementation: string_constant
         string_constant: 'Omicron'
@@ -204,9 +172,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Omicron'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: pi
-    uuid: 6e35b035-b7c2-46a7-92da-f3d574cbd0be
     renderers:
       - implementation: string_constant
         string_constant: 'Pi'
@@ -217,9 +183,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Pi'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: rho
-    uuid: d852d525-a68e-4b5a-b12a-35dc11270f80
     renderers:
       - implementation: string_constant
         string_constant: 'Rho'
@@ -230,9 +194,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Rho'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: sigma
-    uuid: c50925f5-6ac8-4587-b816-73aa4c1dc2e0
     renderers:
       - implementation: string_constant
         string_constant: 'Sigma'
@@ -243,9 +205,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Sigma'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: tau
-    uuid: 4ee7ef40-1ea2-450e-a648-d1a73fdf4c70
     renderers:
       - implementation: string_constant
         string_constant: 'Tau'
@@ -256,10 +216,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Tau'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
-
   - slug: upsilon
-    uuid: 1b02f0d8-4ced-4b6f-8760-ee92daeb1da2
     renderers:
       - implementation: string_constant
         string_constant: 'Upsilon'
@@ -270,10 +227,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Upsilon'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
-
   - slug: phi
-    uuid: 9f078f4e-6677-4535-9541-78d99d3d2daa
     renderers:
       - implementation: string_constant
         string_constant: 'Phi'
@@ -284,9 +238,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Phi'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: chi
-    uuid: 1b7575a9-2537-498d-9900-c4ce8334e7a1
     renderers:
       - implementation: string_constant
         string_constant: 'Chi'
@@ -297,9 +249,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Chi'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: psi
-    uuid: f8154def-7b2d-4ed1-a411-cba01738d73b
     renderers:
       - implementation: string_constant
         string_constant: 'Psi'
@@ -310,10 +260,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Psi'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
-
   - slug: omega
-    uuid: 32c0fe5e-0454-4ac9-a64e-252d45be5752
     renderers:
       - implementation: string_constant
         string_constant: 'Omega'
@@ -324,9 +271,7 @@ representations:
       - implementation: string_constant
         string_constant: '\Omega'
         tags: { connector_representation: symbol, technical_language: latex_math }
-
   - slug: nabla
-    uuid: 7681aa6d-92ba-4be1-b59b-d2067af67808
     renderers:
       - implementation: string_constant
         string_constant: 'Nabla'
