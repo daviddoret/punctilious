@@ -4,44 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules importation reorg + remove uuid attribute on non-package elements">
-      <change afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/symbols/generator.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="identifiers">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_foundations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_presentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/_TODO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/chars.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/chars.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/connectives_standard_library_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/constants_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/declaration_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/declaration_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/inference_rules_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/meta_theory_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/minimal_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/natural_numbers_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/natural_numbers_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/presentation_layer_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/presentation_layer_1.toml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/presentation_layer_1.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/propositional_logic_syntax_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/sequences_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/sequences_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/state_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/state_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/unicode_utilities_obsolete.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/unicode_utilities_obsolete.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/util_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/util_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_identifiers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/conjunction_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/conjunction_1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/conjunction_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/conjunction_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/material_implication_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/material_implication_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/representation_modes/symbolic_inline_en.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/representation_modes/symbolic_inline_en.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/connector_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/connector_1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/symbol_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/symbol_1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/theorem_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/theorem_1.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/test/test_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_2.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/test/test_2.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_operators_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -827,14 +793,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01139" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732458937280</created>
-      <option name="number" value="01139" />
-      <option name="presentableId" value="LOCAL-01139" />
-      <option name="project" value="LOCAL" />
-      <updated>1732458937280</updated>
-    </task>
     <task id="LOCAL-01140" summary="Lark + yaml">
       <option name="closed" value="true" />
       <created>1732462201620</created>
@@ -1219,7 +1177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733690362677</updated>
     </task>
-    <option name="localTasksCounter" value="1188" />
+    <task id="LOCAL-01188" summary="identifiers">
+      <option name="closed" value="true" />
+      <created>1733693312501</created>
+      <option name="number" value="01188" />
+      <option name="presentableId" value="LOCAL-01188" />
+      <option name="project" value="LOCAL" />
+      <updated>1733693312501</updated>
+    </task>
+    <option name="localTasksCounter" value="1189" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1269,7 +1235,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="rename max_derivations to max_components" />
     <MESSAGE value="pursue the implementation of theoretical context and extensions." />
     <MESSAGE value="rename Formula to WellFormedFormula" />
     <MESSAGE value="TestExtension with inference-rules and theorems" />
@@ -1294,7 +1259,8 @@
     <MESSAGE value="interpretation integrated with foundations" />
     <MESSAGE value="modules importation reorg" />
     <MESSAGE value="modules importation reorg + remove uuid attribute on non-package elements" />
-    <option name="LAST_COMMIT_MESSAGE" value="modules importation reorg + remove uuid attribute on non-package elements" />
+    <MESSAGE value="identifiers" />
+    <option name="LAST_COMMIT_MESSAGE" value="identifiers" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
