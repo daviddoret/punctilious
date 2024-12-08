@@ -7,22 +7,6 @@ import foundations
 import presentation
 
 
-class Formula_OBSOLETE:
-    def __init__(self, connector, arguments=None):
-        if not isinstance(connector, foundations.Connector):
-            raise TypeError(f'Connector must be a Connector, not {type(connector)}')
-        if arguments is None:
-            arguments = []
-        self.connector = connector
-        self.arguments = arguments
-
-    def __repr__(self):
-        return f'{self.connector}({", ".join(map(str, self.arguments))})'
-
-    def __str__(self):
-        return f'{self.connector}({", ".join(map(str, self.arguments))})'
-
-
 class Transformer(lark.Transformer):
     """Transformed the Lark tree parsed of a Technical1 input, into a proper Formula."""
 
@@ -85,18 +69,6 @@ class Transformer(lark.Transformer):
         atomic_connector = self._atomic_connectors[atomic_connector_terminal]
         # arguments = []
         return foundations.Formula(atomic_connector)
-
-
-class Connector_OBSOLETE:
-
-    def __init__(self, connector: str):
-        self.connector = connector
-
-    def __repr__(self):
-        return self.connector
-
-    def __str__(self):
-        return self.connector
 
 
 class Interpreter:

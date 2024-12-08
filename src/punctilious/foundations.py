@@ -2,8 +2,6 @@ from __future__ import annotations
 import io
 import uuid as uuid_pkg
 import yaml
-import logging
-import sys
 import importlib.resources
 import collections.abc
 
