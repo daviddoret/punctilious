@@ -34,6 +34,12 @@ class Formula:
         self._root_connector = ensure_connector(c)
         self._arguments = ensure_formula_arguments(*args)
 
+    def __repr__(self):
+        return self._root_connector.__str__() + self._arguments.__str__()
+
+    def __str__(self):
+        return self._root_connector.__str__() + self._arguments.__str__()
+
     @property
     def arguments(self):
         return self._arguments
