@@ -6,132 +6,288 @@ slug: latin_alphabet_lowercase_serif_italic
 representations:
   - slug: a
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: a }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑎 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{a}' }
+      - implementation: string_constant
+        string_constant: 'a'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑎'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{a}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: b
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: b }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑏 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{b}' }
+      - implementation: string_constant
+        string_constant: 'b'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑏'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{b}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: c
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: c }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑐 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{c}' }
+      - implementation: string_constant
+        string_constant: 'c'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑐'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{c}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: d
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: d }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑑 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{d}' }
+      - implementation: string_constant
+        string_constant: 'd'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑑'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{d}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: e
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: e }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑒 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{e}' }
+      - implementation: string_constant
+        string_constant: 'e'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑒'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{e}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: f
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: f }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑓 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{f}' }
+      - implementation: string_constant
+        string_constant: 'f'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑓'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{f}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: g
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: g }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑔 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{g}' }
+      - implementation: string_constant
+        string_constant: 'g'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑔'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{g}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: h
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: h }
-      - { encoding: unicode_extended, mode: symbolic, template: ℎ }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{h}' }
+      - implementation: string_constant
+        string_constant: 'h'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: 'ℎ' # U+210E "Planck constant"
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{h}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: i
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: i }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑖 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{i}' }
+      - implementation: string_constant
+        string_constant: 'i'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑖'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{i}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: j
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: j }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑗 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{j}' }
+      - implementation: string_constant
+        string_constant: 'j'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑗'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{j}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: k
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: k }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑘 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{k}' }
+      - implementation: string_constant
+        string_constant: 'k'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑘'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{k}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: l
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: l }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑙 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{l}' }
+      - implementation: string_constant
+        string_constant: 'l'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑙'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{l}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: m
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: m }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑚 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{m}' }
+      - implementation: string_constant
+        string_constant: 'm'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑚'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{m}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: n
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: n }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑛 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{n}' }
+      - implementation: string_constant
+        string_constant: 'n'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑛'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{n}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: o
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: o }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑜 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{o}' }
+      - implementation: string_constant
+        string_constant: 'o'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑜'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{o}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: p
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: p }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑝 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{p}' }
+      - implementation: string_constant
+        string_constant: 'p'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑝'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{p}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: q
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: q }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑞 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{q}' }
+      - implementation: string_constant
+        string_constant: 'q'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑞'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{q}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: r
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: r }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑟 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{r}' }
+      - implementation: string_constant
+        string_constant: 'r'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑟'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{r}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: s
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: s }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑠 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{s}' }
+      - implementation: string_constant
+        string_constant: 's'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑠'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{s}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: t
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: t }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑡 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{t}' }
+      - implementation: string_constant
+        string_constant: 't'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑡'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{t}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: u
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: u }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑢 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{u}' }
+      - implementation: string_constant
+        string_constant: 'u'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑢'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{u}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: v
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: v }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑣 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{v}' }
+      - implementation: string_constant
+        string_constant: 'v'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑣'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{v}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: w
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: w }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑤 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{w}' }
+      - implementation: string_constant
+        string_constant: 'w'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑤'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{w}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: x
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: x }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑥 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{x}' }
+      - implementation: string_constant
+        string_constant: 'x'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑥'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{x}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: y
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: y }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑦 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{y}' }
+      - implementation: string_constant
+        string_constant: 'y'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑦'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{y}'
+        tags: { encoding: latex_math, mode: symbolic }
   - slug: z
     renderers:
-      - { encoding: unicode_basic, mode: symbolic, template: z }
-      - { encoding: unicode_extended, mode: symbolic, template: 𝑧 }
-      - { encoding: latex_math, mode: symbolic, template: '\textit{z}' }
+      - implementation: string_constant
+        string_constant: 'z'
+        tags: { encoding: unicode_basic, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '𝑧'
+        tags: { encoding: unicode_extended, mode: symbolic }
+      - implementation: string_constant
+        string_constant: '\textit{z}'
+        tags: { encoding: latex_math, mode: symbolic }
 

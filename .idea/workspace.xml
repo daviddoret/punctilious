@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules importation reorg + remove uuid attribute on non-package elements">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -805,14 +804,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01134" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732426967046</created>
-      <option name="number" value="01134" />
-      <option name="presentableId" value="LOCAL-01134" />
-      <option name="project" value="LOCAL" />
-      <updated>1732426967046</updated>
-    </task>
     <task id="LOCAL-01135" summary="Lark + yaml">
       <option name="closed" value="true" />
       <created>1732428461491</created>
@@ -1197,7 +1188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733672218720</updated>
     </task>
-    <option name="localTasksCounter" value="1183" />
+    <task id="LOCAL-01183" summary="modules importation reorg + remove uuid attribute on non-package elements">
+      <option name="closed" value="true" />
+      <created>1733675357241</created>
+      <option name="number" value="01183" />
+      <option name="presentableId" value="LOCAL-01183" />
+      <option name="project" value="LOCAL" />
+      <updated>1733675357241</updated>
+    </task>
+    <option name="localTasksCounter" value="1184" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
