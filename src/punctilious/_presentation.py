@@ -7,6 +7,7 @@ import yaml
 import jinja2
 # punctilious packages
 import _util
+import _identifiers
 
 
 def ensure_tag(o) -> Tag:

@@ -4,10 +4,12 @@ import uuid as uuid_pkg
 import yaml
 import importlib.resources
 import collections.abc
+import re
 
 # punctilious modules
 import _util
 from _util import get_logger
+import _identifiers
 import _presentation
 
 
@@ -142,30 +144,6 @@ class Preferences:
 
 def get_preferences():
     return Preferences()
-
-
-def ensure_slug(o: str | Slug) -> Slug:
-    if isinstance(o, Slug):
-        return o
-    elif isinstance(o, str):
-        return Slug(o)
-    else:
-        raise ValueError(f'Invalid slug {o}')
-
-
-class Slug(str):
-    pass
-
-
-class Slugs(dict):
-    def __init__(self):
-        super().__init__()
-
-    def __setitem__(self, slug, value):
-        slug = ensure_slug(o=slug)
-        if slug in self:
-            raise KeyError(f"Key '{slug}' already exists.")
-        super().__setitem__(slug, value)
 
 
 class Import:

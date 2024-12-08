@@ -75,3 +75,7 @@ class Logger:
 
 def get_logger():
     return Logger()
+
+
+class Id:
+    pass

@@ -5,13 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules importation reorg + remove uuid attribute on non-package elements">
+      <change afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/symbols/generator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_foundations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_presentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/_TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/_TODO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/chars.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/chars.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/connectives_standard_library_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/connectives_standard_library_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/constants_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/declaration_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/declaration_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/inference_rules_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/inference_rules_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/meta_theory_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/meta_theory_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/minimal_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/minimal_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/natural_numbers_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/natural_numbers_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/presentation_layer_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/presentation_layer_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/presentation_layer_1.toml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/presentation_layer_1.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/propositional_logic_syntax_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/propositional_logic_syntax_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/sequences_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/sequences_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/state_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/state_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/unicode_utilities_obsolete.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/unicode_utilities_obsolete.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_obsolete/util_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_obsolete/util_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_identifiers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/conjunction_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/conjunction_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/conjunction_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/conjunction_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/connectors/material_implication_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/material_implication_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/representation_modes/symbolic_inline_en.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/representation_modes/symbolic_inline_en.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/connector_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/connector_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/symbol_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/symbol_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/schemas/theorem_1.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/theorem_1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/symbols/generator.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/test/test_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious_package_1/data/test/test_2.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/test/test_2.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -418,14 +448,14 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data/interpretations" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/trashcan" />
       <recent name="$PROJECT_DIR$/src/punctilious/data2/variables" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data2/interpretations" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_greek_alphabet_uppercase_serif_italic.py">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -773,11 +803,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_greek_alphabet_uppercase_serif_italic.py" />
         <item itemvalue="Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py" />
         <item itemvalue="Python tests.pytest in test_presentation.py" />
         <item itemvalue="Python tests.pytest in test_interpretation.py" />
-        <item itemvalue="Python tests.pytest in tests" />
       </list>
     </recent_temporary>
   </component>
@@ -796,14 +826,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01138" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732458767386</created>
-      <option name="number" value="01138" />
-      <option name="presentableId" value="LOCAL-01138" />
-      <option name="project" value="LOCAL" />
-      <updated>1732458767386</updated>
     </task>
     <task id="LOCAL-01139" summary="Lark + yaml">
       <option name="closed" value="true" />
@@ -1189,7 +1211,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733677894656</updated>
     </task>
-    <option name="localTasksCounter" value="1187" />
+    <task id="LOCAL-01187" summary="modules importation reorg + remove uuid attribute on non-package elements">
+      <option name="closed" value="true" />
+      <created>1733690362677</created>
+      <option name="number" value="01187" />
+      <option name="presentableId" value="LOCAL-01187" />
+      <option name="project" value="LOCAL" />
+      <updated>1733690362677</updated>
+    </task>
+    <option name="localTasksCounter" value="1188" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1316,22 +1346,22 @@
           <option name="timeStamp" value="237" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py</url>
+          <url>file://$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>3909</line>
           <option name="timeStamp" value="240" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py</url>
+          <url>file://$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>112</line>
           <option name="timeStamp" value="242" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py</url>
+          <url>file://$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>131</line>
           <option name="timeStamp" value="243" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious_obsolete/axiomatic_system_1.py</url>
+          <url>file://$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>330</line>
           <option name="timeStamp" value="244" />
         </line-breakpoint>
@@ -1347,7 +1377,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/_presentation.py</url>
-          <line>78</line>
+          <line>79</line>
           <option name="timeStamp" value="295" />
         </line-breakpoint>
       </breakpoints>
