@@ -1,0 +1,31 @@
+# mappings link mathematical objects (e.g.: e, sin, 0)
+# to their representations (e.g.: "e", "sin", "0").
+# this separation of concern provides flexibility
+# in representations, making it easier to adopt any
+# regional or domain specific notational convention.
+name: Some Mappings # A title for the YAML file.
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml # The current version of the YAML schema.
+uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 # A globally unique identifier for the YAML file.
+slug: some_mappings # A local unique name for the YAML file.
+imports:
+  - slug: operators_1_connectors
+    scheme: python_package
+    path: data.connectors
+    resource: operators_1.yaml
+  - slug: operators_1_representations
+    scheme: python_package
+    path: data.representations
+    resource: operators_1.yaml
+mappings:
+  - connector: operators_1_connectors.conjunction
+    representation: operators_1_representations.conjunction
+  - connector: operators_1_connectors.disjunction
+    representation: operators_1_representations.disjunction
+  - connector: operators_1_connectors.entailment
+    representation: operators_1_representations.entailment
+  - connector: operators_1_connectors.negation
+    representation: operators_1_representations.negation
+
+
+
+

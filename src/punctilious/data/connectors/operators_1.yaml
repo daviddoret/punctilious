@@ -1,17 +1,23 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 slug: operators_1_connectors
 uuid: ed3c1e47-dd75-4abc-9b43-ba3e408cfc48
+description:
+  A library of common operators.
 connectors:
+  - slug: addition
+    syntactic_rules: { fixed_arity: 2 }
   - slug: conjunction
-    uuid: 201bc4c4-3343-4055-81b6-19f606a4e923
     syntactic_rules: { fixed_arity: 2 }
   - slug: disjunction
-    uuid: 1b1252b6-77cc-4ae1-94c0-7a832efb4eb8
     syntactic_rules: { fixed_arity: 2 }
   - slug: entailment
-    uuid: e108fc06-762f-4819-a219-5d0340f696bb
+    syntactic_rules: { fixed_arity: 2 }
+  - slug: exponentiation
+    syntactic_rules: { fixed_arity: 2 }
+  - slug: multiplication
     syntactic_rules: { fixed_arity: 2 }
   - slug: negation
-    uuid: 7f73515c-8930-4907-ba9f-eb9d303a5c0f
     syntactic_rules: { fixed_arity: 1 }
+  - slug: subtraction
+    syntactic_rules: { fixed_arity: 2 }
 

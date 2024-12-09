@@ -1,7 +1,10 @@
-import _foundations as _foundations
+import _util
+import _presentation
+import _foundations
+import _packaging
 
 
-class Operators1(_foundations.PythonPackage):
+class Operators1(_packaging.PythonPackage):
     """A punctilious package of well-known mathematical operators."""
     _singleton = None
     _singleton_initialized = None
@@ -9,10 +12,10 @@ class Operators1(_foundations.PythonPackage):
     def __init__(self):
         if self.__class__._singleton_initialized is None:
             path = 'data.connectors'
-            resource = 'operators_1_connectors.yaml'
+            resource = 'operators_1.yaml'
             super().__init__(path=path, resource=resource)
             self.__class__._singleton_initialized = True
-            _foundations.get_logger().debug(
+            _util.get_logger().debug(
                 f'Operators 1 singleton ({id(self)}) initialized.')
 
     def __new__(cls, *args, **kwargs):

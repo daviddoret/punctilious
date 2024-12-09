@@ -1,0 +1,20 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid: 47d84857-12c6-4016-8d5e-942998a6b327
+slug: operators_representation_1
+# source:
+representations:
+  - slug: is_a_proposition_connector
+    renderers:
+      - implementation: string_constant
+        string_constant: 'is-a-proposition'
+        tags: { connector_representation: word, technical_language: unicode_basic }
+      - implementation: string_constant
+        string_constant: '\\textit{is-a-proposition}'
+        tags: { connector_representation: word, technical_language: latex_math }
+  - slug: is_a_proposition
+    renderers:
+      - implementation: infix_notation
+        connector: is_a_proposition_connector
+        tags: { }
+
+

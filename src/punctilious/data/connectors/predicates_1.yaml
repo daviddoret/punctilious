@@ -1,16 +1,20 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d
 slug: predicates_1
-imports:
-  - slug: predicates_representation_1
-    scheme: python_package
-    path: data.representations
-    resource: predicates_representation_1.yaml
+description:
+  A library of common predicate functions.
 connectors:
+  - slug: is_a_integer_number
+    syntactic_rules: { fixed_arity: 1 }
+  - slug: is_a_natural_number
+    syntactic_rules: { fixed_arity: 1 }
   - slug: is_a_proposition
-    uuid: 7f7c912d-c489-46fa-85b0-028f480e0ec3
-    syntactic_rules:
-      fixed_arity: 1
-    representation: predicates_representation_1.is_a_proposition_representation
+    syntactic_rules: { fixed_arity: 1 }
+  - slug: is_a_rational_number
+    syntactic_rules: { fixed_arity: 1 }
+  - slug: is_a_real_number
+    syntactic_rules: { fixed_arity: 1 }
+  - slug: is_a_set
+    syntactic_rules: { fixed_arity: 1 }
 
 

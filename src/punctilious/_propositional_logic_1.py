@@ -1,7 +1,10 @@
-import _foundations as _foundations
+import _util
+import _presentation
+import _foundations
+import _packaging
 
 
-class PropositionalLogic1(_foundations.PythonPackage):
+class PropositionalLogic1(_packaging.PythonPackage):
     """A punctilious package of well-known mathematical operators."""
     _singleton = None
     _singleton_initialized = None
@@ -12,7 +15,7 @@ class PropositionalLogic1(_foundations.PythonPackage):
             resource = 'propositional_logic_1.yaml'
             super().__init__(path=path, resource=resource)
             self.__class__._singleton_initialized = True
-            _foundations.get_logger().debug(
+            _util.get_logger().debug(
                 f'Propositional Logic 1 singleton ({id(self)}) initialized.')
 
     def __new__(cls, *args, **kwargs):

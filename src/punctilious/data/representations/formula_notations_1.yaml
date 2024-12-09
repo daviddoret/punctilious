@@ -1,0 +1,22 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
+slug: formulas_representation_1
+representations:
+  - slug: function_notation
+    renderers:
+      - implementation: string_template
+        string_template: '{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})'
+        tags: { technical_language: unicode_basic }
+  - slug: infix_notation
+    renderers:
+      - implementation: string_template
+        string_template: '{{ argument[0] }} {{ connector }} {{ argument[1] }}'
+        tags: { technical_language: unicode_basic }
+  - slug: prefix_notation
+    renderers:
+      - implementation: string_template
+        string_template: '{{ connector }} {{ argument[0] }}'
+        tags: { technical_language: unicode_basic }
+
+
+

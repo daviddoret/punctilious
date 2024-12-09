@@ -1,8 +1,10 @@
-import _foundations
+import _util
 import _presentation
+import _foundations
+import _packaging
 
 
-class LatinAlphabetUppercaseSerifItalic(_foundations.PythonPackage):
+class LatinAlphabetUppercaseSerifItalic(_packaging.PythonPackage):
     _singleton = None
     _singleton_initialized = None
 
@@ -12,7 +14,7 @@ class LatinAlphabetUppercaseSerifItalic(_foundations.PythonPackage):
             resource = 'latin_alphabet_uppercase_serif_italic.yaml'
             super().__init__(path=path, resource=resource)
             self.__class__._singleton_initialized = True
-            _foundations.get_logger().debug(
+            _util.get_logger().debug(
                 f'LatinAlphabetUppercaseSerifItalic singleton ({id(self)}) initialized.')
 
     def __new__(cls, *args, **kwargs):

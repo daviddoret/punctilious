@@ -5,11 +5,11 @@ imports:
   - slug: operators_1_connectors
     scheme: python_package
     path: data.connectors
-    resource: operators_1_connectors.yaml
+    resource: operators_1.yaml
   - slug: operators_1_representations
     scheme: python_package
     path: data.representations
-    resource: operators_1_representations.yaml
+    resource: operators_1.yaml
 mappings:
   - connector: operators_1_connectors.conjunction
     representation: operators_1_representations.conjunction

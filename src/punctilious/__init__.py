@@ -11,6 +11,7 @@ import _foundations
 from _foundations import FormulaArguments, Formula, ensure_formula, ensure_formula_arguments, Connector, Connectors
 import _interpretation
 from _interpretation import Interpreter
+import _packaging
 import _greek_alphabet_lowercase_serif_italic
 import _greek_alphabet_uppercase_serif_italic
 import _latin_alphabet_lowercase_serif_italic
@@ -20,7 +21,7 @@ import _operators_1 as _operators1
 import _propositional_logic_1
 
 prefs = _presentation.TagsPreferences()
-packages = _foundations.get_packages()
+packages = _packaging.get_packages()
 
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
 greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
