@@ -4,29 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="identifiers">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/_packaging.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/documentation.yaml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules cleanup">
+      <change afterPath="$PROJECT_DIR$/tests/test_packaging.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_foundations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_roman.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_roman.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_operators_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_packaging.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_packaging.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1_connectors.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/predicates_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/predicates_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1_mappings.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formulas_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1_representations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_representation_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/theorems/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/theorems/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -383,7 +374,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/data/mappings",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/tests",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -429,8 +420,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
       <recent name="$PROJECT_DIR$/tests" />
+      <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/variables" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/interpretations" />
@@ -443,7 +434,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_identifiers.TestSlug.test_identifier">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -791,10 +782,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_identifiers.TestSlug.test_identifier" />
         <item itemvalue="Python tests.pytest for test_identifiers.TestIdentifiers.test_slug" />
         <item itemvalue="Python tests.pytest in test_identifiers.py" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_greek_alphabet_uppercase_serif_italic.py" />
       </list>
     </recent_temporary>
@@ -814,14 +805,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01142" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732477021549</created>
-      <option name="number" value="01142" />
-      <option name="presentableId" value="LOCAL-01142" />
-      <option name="project" value="LOCAL" />
-      <updated>1732477021550</updated>
     </task>
     <task id="LOCAL-01143" summary="Lark + yaml">
       <option name="closed" value="true" />
@@ -1207,7 +1190,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733697931447</updated>
     </task>
-    <option name="localTasksCounter" value="1191" />
+    <task id="LOCAL-01191" summary="modules cleanup">
+      <option name="closed" value="true" />
+      <created>1733726990376</created>
+      <option name="number" value="01191" />
+      <option name="presentableId" value="LOCAL-01191" />
+      <option name="project" value="LOCAL" />
+      <updated>1733726990376</updated>
+    </task>
+    <option name="localTasksCounter" value="1192" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1257,7 +1248,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="pursue the implementation of theoretical context and extensions." />
     <MESSAGE value="rename Formula to WellFormedFormula" />
     <MESSAGE value="TestExtension with inference-rules and theorems" />
     <MESSAGE value="WellFormedProposition" />
@@ -1282,7 +1272,8 @@
     <MESSAGE value="modules importation reorg" />
     <MESSAGE value="modules importation reorg + remove uuid attribute on non-package elements" />
     <MESSAGE value="identifiers" />
-    <option name="LAST_COMMIT_MESSAGE" value="identifiers" />
+    <MESSAGE value="modules cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="modules cleanup" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

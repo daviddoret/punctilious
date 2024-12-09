@@ -1,6 +1,6 @@
 import _util
 import _presentation
-import _foundations
+import _formal_language
 import _packaging
 
 
@@ -24,25 +24,25 @@ class Operators1(_packaging.PythonPackage):
         return cls._singleton
 
     @property
-    def conjunction(self) -> _foundations.Connector:
+    def conjunction(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('conjunction')
 
     @property
-    def entailment(self) -> _foundations.Connector:
+    def entailment(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('entailment')
 
     @property
-    def entails(self) -> _foundations.Connector:
+    def entails(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('entails')
 
     @property
-    def land(self) -> _foundations.Connector:
+    def land(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('and')
 
     @property
-    def lnot(self) -> _foundations.Connector:
+    def lnot(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('not')
 
     @property
-    def negation(self) -> _foundations.Connector:
+    def negation(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('negation')

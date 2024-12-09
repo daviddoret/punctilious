@@ -3,7 +3,7 @@ import jinja2
 
 import _util
 from _util import get_logger
-import _foundations
+import _formal_language
 import _presentation
 
 
@@ -18,7 +18,7 @@ class Transformer(lark.Transformer):
         self._function_connectors = function_connectors
         super().__init__()
 
-    def parse_function_formula(self, items) -> _foundations.Formula:
+    def parse_function_formula(self, items) -> _formal_language.Formula:
         """Transform a function with a word and optional arguments."""
         function_connector_terminal = items[0]
         if function_connector_terminal not in self._function_connectors.keys():
@@ -26,7 +26,7 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown function connector: {function_connector_terminal}')
         function_connector = self._function_connectors[function_connector_terminal]
         arguments = items[1] if len(items) > 1 else []
-        phi = _foundations.Formula(function_connector, arguments)
+        phi = _formal_language.Formula(function_connector, arguments)
         get_logger().debug(f'Parsed function formula: {phi}\n\tSource: {items}')
         return phi
 
@@ -44,7 +44,7 @@ class Transformer(lark.Transformer):
         infix_connector = self._infix_connectors[infix_connector_terminal]
         right_operand = items[2]
         # arguments = [left_operand, right_operand]
-        phi = _foundations.Formula(infix_connector, (left_operand, right_operand,))
+        phi = _formal_language.Formula(infix_connector, (left_operand, right_operand,))
         get_logger().debug(f'Parsed infix formula: {phi}\n\tSource: {items}')
         return phi
 
@@ -56,7 +56,7 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown prefix connector: {prefix_connector_terminal}')
         prefix_connector = self._prefix_connectors[prefix_connector_terminal]
         operand = items[1]
-        phi = _foundations.Formula(prefix_connector, (operand,))
+        phi = _formal_language.Formula(prefix_connector, (operand,))
         get_logger().debug(f'Parsed prefix formula: {phi}\n\tSource: {items}')
         return phi
 
@@ -68,7 +68,7 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown atomic connector: {atomic_connector_terminal}')
         atomic_connector = self._atomic_connectors[atomic_connector_terminal]
         # arguments = []
-        return _foundations.Formula(atomic_connector)
+        return _formal_language.Formula(atomic_connector)
 
 
 class Interpreter:
@@ -122,7 +122,7 @@ class Interpreter:
     def grammar(self):
         return self._grammar
 
-    def interpret(self, input_string: str) -> _foundations.Formula:
+    def interpret(self, input_string: str) -> _formal_language.Formula:
         tree = self._parser.parse(input_string)
         print(tree)
         result = self._transformer.transform(tree)

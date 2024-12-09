@@ -1,6 +1,6 @@
 import _util
 import _presentation
-import _foundations
+import _formal_language
 import _packaging
 
 
@@ -24,5 +24,5 @@ class PropositionalLogic1(_packaging.PythonPackage):
         return cls._singleton
 
     @property
-    def absorption_law(self) -> _foundations.Connector:
+    def absorption_law(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('absorption_law')

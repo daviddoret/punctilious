@@ -2,7 +2,7 @@ import importlib
 import yaml
 import _util
 import _presentation
-import _foundations
+import _formal_language
 
 
 class Packages(dict):
@@ -152,7 +152,7 @@ class PythonPackage(Package):
                 uuid = d['uuid']
                 slug = d['slug']
                 untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
-                imports = _foundations.Imports(*untyped_imports)
+                imports = _formal_language.Imports(*untyped_imports)
                 aliases = None  # To be implemented
                 untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
                 representations = _presentation.Representations(*untyped_representations)
@@ -162,26 +162,26 @@ class PythonPackage(Package):
                     uuid = raw_connector['uuid']
                     slug = raw_connector['slug']
                     tokens = raw_connector['tokens']
-                    syntactic_rules = _foundations.ensure_syntactic_rules(o=
-                                                                          raw_connector[
-                                                                              'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
+                    syntactic_rules = _formal_language.ensure_syntactic_rules(o=
+                                                                              raw_connector[
+                                                                                  'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
                     representation_reference = raw_connector['representation']
                     representation = self._resolve_package_representation_reference(ref=representation_reference,
                                                                                     i=imports, r=representations)
-                    o = _foundations.Connector(uuid=uuid, slug=slug, tokens=tokens, syntactic_rules=syntactic_rules,
-                                               representation=representation)
+                    o = _formal_language.Connector(uuid=uuid, slug=slug, tokens=tokens, syntactic_rules=syntactic_rules,
+                                                   representation=representation)
                     typed_connectors.append(o)
-                typed_connectors = _foundations.Connectors(*typed_connectors)
+                typed_connectors = _formal_language.Connectors(*typed_connectors)
                 # Load connectors
                 untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
-                theorems = _foundations.Theorems(*untyped_theorems)
-                justifications = _foundations.Justifications.instantiate_from_list(
+                theorems = _formal_language.Theorems(*untyped_theorems)
+                justifications = _formal_language.Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
                 super().__init__(schema=schema, uuid=uuid, slug=slug, imports=imports, aliases=aliases,
                                  representations=representations, connectors=typed_connectors, theorems=theorems,
                                  justifications=justifications)
 
-    def _resolve_package_representation_reference(self, ref: str, i: _foundations.Imports,
+    def _resolve_package_representation_reference(self, ref: str, i: _formal_language.Imports,
                                                   r: _presentation.Representations):
         """Given the reference of a representation in string format,
         typically as the representation attribute of a connector in a YAML file,

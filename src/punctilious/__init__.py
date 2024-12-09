@@ -7,8 +7,8 @@ from _presentation import Representation, ensure_representations, ensure_represe
     TagsPreferences, \
     TagsAssignment, RendererForStringTemplate, \
     RendererForStringConstant, unicode_basic, unicode_extended
-import _foundations
-from _foundations import FormulaArguments, Formula, ensure_formula, ensure_formula_arguments, Connector, Connectors
+import _formal_language
+from _formal_language import FormulaArguments, Formula, ensure_formula, ensure_formula_arguments, Connector, Connectors
 import _interpretation
 from _interpretation import Interpreter
 import _packaging
