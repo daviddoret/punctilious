@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules cleanup">
-      <change afterPath="$PROJECT_DIR$/tests/test_packaging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_foundations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_roman.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_roman.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_operators_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_packaging.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_packaging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules cleanup" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -89,7 +75,7 @@
     </order>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -375,7 +361,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/tests",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "settings.qodana",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -806,14 +792,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01143" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732482212188</created>
-      <option name="number" value="01143" />
-      <option name="presentableId" value="LOCAL-01143" />
-      <option name="project" value="LOCAL" />
-      <updated>1732482212188</updated>
-    </task>
     <task id="LOCAL-01144" summary="Lark + yaml">
       <option name="closed" value="true" />
       <created>1732483941268</created>
@@ -1198,7 +1176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733726990376</updated>
     </task>
-    <option name="localTasksCounter" value="1192" />
+    <task id="LOCAL-01192" summary="modules cleanup">
+      <option name="closed" value="true" />
+      <created>1733727454870</created>
+      <option name="number" value="01192" />
+      <option name="presentableId" value="LOCAL-01192" />
+      <option name="project" value="LOCAL" />
+      <updated>1733727454870</updated>
+    </task>
+    <option name="localTasksCounter" value="1193" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
