@@ -392,10 +392,9 @@ class Connectors(tuple):
     def __init__(self, *args, **kwargs):
         # prepare a dictionary that maps slugs and tokens to connectors
         slug_dict = dict(zip(tuple(i.slug for i in self), tuple(i for i in self)))
-        tokens = tuple(j for i in self for j in i.tokens)
-        aliases_connectors = tuple(slug_dict[i.slug] for i in self for j in i.tokens)
-        alias_dict = dict(zip(tokens, aliases_connectors))
-        self._slug_index = slug_dict | alias_dict
+        # aliases_connectors = tuple(slug_dict[i.slug] for i in self for j in i.tokens)
+        # alias_dict = dict(zip(tokens, aliases_connectors))
+        # self._slug_index = slug_dict | alias_dict
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
@@ -425,19 +424,19 @@ class Connectors(tuple):
 
 
 class Connector:
-    __slots__ = ('_uuid', '_slug', '_tokens', '_syntactic_rules', '_representation')
-    _uuid_index = {}
+    # __slots__ = ('_uuid', '_slug', '_tokens', '_syntactic_rules', '_representation')
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._uuid))
+        return hash((self.package, self.slug))
 
-    def __init__(self, uuid=None, slug=None, tokens=None, syntactic_rules=None, representation=None):
-        self._uuid = uuid
+    def __init__(self, package=None, slug=None, syntactic_rules=None, connector_representation=None,
+                 formula_representation=None):
+        self._package = package
         self._slug = slug
-        self._tokens = ensure_tokens(tokens)
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
-        self._representation: _presentation.Representation = representation
+        self._connector_representation: _presentation.Representation = connector_representation
+        self._formula_representation: _presentation.Representation = formula_representation
 
     def __repr__(self):
         return self.slug
@@ -445,22 +444,24 @@ class Connector:
     def __str__(self):
         return self.slug
 
+    @property
+    def connector_representation(self) -> _presentation.Representation:
+        return self._connector_representation
+
+    @property
+    def formula_representation(self) -> _presentation.Representation:
+        return self._formula_representation
+
+    @property
+    def package(self):
+        return self._package
+
     def repr(self, args=None, encoding=None, mode=None, language=None) -> str:
         return self.representation.repr(args=args, encoding=encoding, mode=mode, language=language)
 
     @property
-    def representation(self) -> _presentation.Representation:
-        return self._representation
-
-    @property
     def slug(self):
         return self._slug
-
-    @property
-    def tokens(self):
-        """Tokens are string representations used to identify the connector in a string representation of the
-        formula."""
-        return self._tokens
 
     @property
     def syntactic_rules(self):
@@ -468,16 +469,14 @@ class Connector:
 
     def to_dict(self):
         d = {}
-        if self.uuid is not None:
-            d['uuid'] = self.uuid
         if self.slug is not None:
             d['slug'] = self.slug
-        if self.tokens is not None:
-            d['tokens'] = self.tokens
         if self.syntactic_rules is not None:
             d['syntactic_rules'] = self.syntactic_rules
-        if self.representation is not None:
-            d['representation'] = self.representation
+        if self.connector_representation is not None:
+            d['connector_representation'] = self.connector_representation
+        if self.formula_representation is not None:
+            d['formula_representation'] = self.formula_representation
         return d
 
     def to_yaml(self, default_flow_style):

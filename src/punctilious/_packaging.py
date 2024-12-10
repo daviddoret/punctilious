@@ -159,17 +159,22 @@ class PythonPackage(Package):
                 # Load connectors
                 typed_connectors = []
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
-                    uuid = raw_connector['uuid']
                     slug = raw_connector['slug']
-                    tokens = raw_connector['tokens']
                     syntactic_rules = _formal_language.ensure_syntactic_rules(o=
                                                                               raw_connector[
                                                                                   'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
-                    representation_reference = raw_connector['representation']
-                    representation = self._resolve_package_representation_reference(ref=representation_reference,
-                                                                                    i=imports, r=representations)
-                    o = _formal_language.Connector(uuid=uuid, slug=slug, tokens=tokens, syntactic_rules=syntactic_rules,
-                                                   representation=representation)
+                    connector_representation_reference = raw_connector.get('connector_representation', None)
+                    connector_representation = self._resolve_package_representation_reference(
+                        ref=connector_representation_reference,
+                        i=imports, r=representations) if connector_representation_reference is not None else None
+                    formula_representation_reference = raw_connector.get('formula_representation', None)
+                    formula_representation = self._resolve_package_representation_reference(
+                        ref=formula_representation_reference,
+                        i=imports, r=representations) if formula_representation_reference is not None else None
+                    o = _formal_language.Connector(package=self, slug=slug,
+                                                   syntactic_rules=syntactic_rules,
+                                                   connector_representation=connector_representation,
+                                                   formula_representation=formula_representation)
                     typed_connectors.append(o)
                 typed_connectors = _formal_language.Connectors(*typed_connectors)
                 # Load connectors
@@ -186,7 +191,13 @@ class PythonPackage(Package):
         """Given the reference of a representation in string format,
         typically as the representation attribute of a connector in a YAML file,
         finds and returns the corresponding representation object, either
-        from the local representations, or via an import."""
+        from the local representations, or via an import.
+
+        :param ref:
+        :param i: The package imports.
+        :param r: The package representations.
+        :return:
+        """
         ref_tuple: tuple = tuple(ref.split('.'))
         if len(ref_tuple) == 1:
             # This is a local reference.
