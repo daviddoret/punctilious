@@ -1,0 +1,22 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d
+slug: propositional_logic_1
+description:
+  A library of connectors dedicated to propositional logic.
+connectors:
+  - slug: is_propositional_variable
+    syntactic_rules: { fixed_arity: 1 }
+  - slug: is_well_formed_atomic_formula
+    syntactic_rules: { fixed_arity: 1 }
+  - slug: is_well_formed_formula
+    syntactic_rules: { fixed_arity: 1 }
+  - slug: is_well_formed_sub_formula
+    syntactic_rules: { fixed_arity: 2 }
+  - slug: degree
+    syntactic_rules: { fixed_arity: 1 }
+bibliography:
+  - citation: mancosu_etal_2021
+    reference:
+      "Mancosu, Paolo, Sergio Galvan, and Richard Zach. An Introduction to Proof Theory: Normalization, Cut-Elimination, and Consistency Proofs. 1st ed. Oxford University PressOxford, 2021."
+
+

@@ -14,6 +14,8 @@ connectors:
     syntactic_rules: { fixed_arity: 2 }
   - slug: exponentiation
     syntactic_rules: { fixed_arity: 2 }
+  - slug: implication
+    syntactic_rules: { fixed_arity: 2 }
   - slug: multiplication
     syntactic_rules: { fixed_arity: 2 }
   - slug: negation

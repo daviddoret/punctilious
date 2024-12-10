@@ -1,6 +1,11 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
-slug: operators_1_representations
+slug: operators_1
+imports:
+  - slug: formula_notations_1
+    scheme: python_package
+    path: data.representations
+    resource: formula_notations.yaml
 representations:
   - slug: conjunction
     renderers:

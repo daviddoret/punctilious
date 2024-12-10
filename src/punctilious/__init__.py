@@ -17,7 +17,8 @@ import _greek_alphabet_uppercase_serif_italic
 import _latin_alphabet_lowercase_serif_italic
 import _latin_alphabet_uppercase_serif_italic
 import _latin_alphabet_lowercase_serif_roman
-import _operators_1 as _operators1
+import _formula_notations
+import _operators_1
 import _propositional_logic_1
 
 prefs = _presentation.TagsPreferences()
@@ -26,7 +27,10 @@ packages = _packaging.get_packages()
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
 greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
 latin_alphabet_uppercase_serif_italic = _latin_alphabet_uppercase_serif_italic.LatinAlphabetUppercaseSerifItalic()
-# operators_1 = _operators1.Operators1()
+
+formula_notations = _formula_notations.FormulaNotations()
+
+operators_1 = _operators_1.Operators1()
 
 # pl1 = _propositional_logic1.PropositionalLogic1()
 

@@ -4,7 +4,116 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules cleanup" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules cleanup">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/_formula_notations.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/propositional_logic_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base_symbols_database.csv" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/base_symbols_database.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base_symbols_database.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/base_symbols_database.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/references/latex-unicode.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/references/latex-unicode.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/references/stix-tbl.asc98feb26.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/references/stix-tbl.asc98feb26.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/references/unicode-latex (converted).txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/references/unicode-latex (converted).txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/references/unicode-latex.json" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/references/unicode-latex.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/references/unicode.xml" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/references/unicode.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_classical_logic_k0_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_classical_logic_k0_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_classical_logic_k0_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_classical_logic_k0_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_classical_logic_k0_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_minimal_logic_m0_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_minimal_logic_m0_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_minimal_logic_m0_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_mgz_2021_minimal_logic_m0_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_minimal_logic_m0_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_absorption_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_absorption_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_absorption_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_absorption_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_axiom_interpretation_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_axiom_interpretation_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_axiom_interpretation_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_axiom_interpretation_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_biconditional_elimination_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_biconditional_elimination_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_biconditional_elimination_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_elimination_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_biconditional_elimination_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_biconditional_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_biconditional_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_biconditional_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_conjunction_elimination_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_conjunction_elimination_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_conjunction_elimination_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_elimination_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_conjunction_elimination_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_conjunction_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_conjunction_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_conjunction_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_constructive_dilemma_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_constructive_dilemma_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_constructive_dilemma_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_constructive_dilemma_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_definition_interpretation_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_definition_interpretation_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_definition_interpretation_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_definition_interpretation_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_destructive_dilemma_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_destructive_dilemma_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_destructive_dilemma_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_destructive_dilemma_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunction_introduction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunction_introduction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunction_introduction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunction_introduction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunction_introduction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_resolution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_resolution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_resolution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_resolution_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_syllogism_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_syllogism_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_syllogism_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_disjunctive_syllogism_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_syllogism_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_elimination_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_double_negation_elimination_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_elimination_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_double_negation_elimination_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_introduction_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_double_negation_introduction_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_double_negation_introduction_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_double_negation_introduction_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_equal_terms_substitution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equal_terms_substitution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_equal_terms_substitution_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_equality_commutativity_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_equality_commutativity_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_equality_commutativity_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_export_all_articles_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_export_all_articles_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_export_all_articles_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_export_all_articles_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_hypothesis_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothesis_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_hypothesis_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothetical_syllogism_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_hypothetical_syllogism_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_hypothetical_syllogism_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_hypothetical_syllogism_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_3_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_inconsistency_introduction_3_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_3_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_ponens_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_modus_ponens_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_ponens_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_modus_ponens_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_tollens_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_modus_tollens_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_modus_tollens_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_modus_tollens_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_pet_theory_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_pet_theory_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_pet_theory_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_pet_theory_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_proof_by_contradiction_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_proof_by_contradiction_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_proof_by_contradiction_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_contradiction_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_proof_by_contradiction_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_proof_by_refutation_1_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_1_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_proof_by_refutation_1_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_proof_by_refutation_2_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_proof_by_refutation_2_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_proof_by_refutation_2_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_sandbox_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_sandbox_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_sandbox_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_sandbox_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_variable_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_variable_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_variable_substitution_plaintext.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_variable_substitution_plaintext.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_variable_substitution_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_variable_substitution_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/sample_variable_unicode.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/data/sample_variable_unicode.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sandbox/generate_symbols.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/sandbox/generate_symbols.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sandbox/script.txt" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/sandbox/script.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sandbox/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/trashcan/sandbox/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_operators_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/predicates_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/predicates_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -75,7 +184,7 @@
     </order>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -314,7 +423,7 @@
     "Python tests.pytest in test_propositional_logic_syntax_1.py.executor": "Run",
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Run",
+    "Python tests.pytest in tests.executor": "Debug",
     "Python.__init__.executor": "Run",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
@@ -360,7 +469,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/tests",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious",
     "settings.editor.selected.configurable": "settings.qodana",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -404,13 +513,31 @@
     <option name="ciType" value="GITHUB" />
     <option name="path" value="$PROJECT_DIR$/.github/workflows/code_quality.yml" />
   </component>
+  <component name="QodanaCloudProjectLink">
+    <option name="lastReportId" value="JjJBx" />
+    <option name="linkedProjectId" value="p01Q5" />
+    <option name="linkedProjectName" value="punctilious" />
+    <option name="organizationId" value="3PZVk" />
+    <option name="userId" value="3yE6e" />
+  </component>
+  <component name="QodanaHighlightedReportService">
+    <option name="cloudReportPersistedInfo">
+      <CloudReportPersistedInfo>
+        <option name="projectId" value="p01Q5" />
+        <option name="reportId" value="JjJBx" />
+      </CloudReportPersistedInfo>
+    </option>
+  </component>
+  <component name="QodanaIsSelectedPersistenceService">
+    <option name="selectedOrLoading" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious" />
+      <recent name="$PROJECT_DIR$/src/punctilious/data/connectors" />
       <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/variables" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/interpretations" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/trashcan" />
@@ -791,14 +918,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01144" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732483941268</created>
-      <option name="number" value="01144" />
-      <option name="presentableId" value="LOCAL-01144" />
-      <option name="project" value="LOCAL" />
-      <updated>1732483941268</updated>
     </task>
     <task id="LOCAL-01145" summary="Lark + yaml">
       <option name="closed" value="true" />
@@ -1184,7 +1303,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733727454870</updated>
     </task>
-    <option name="localTasksCounter" value="1193" />
+    <task id="LOCAL-01193" summary="modules cleanup">
+      <option name="closed" value="true" />
+      <created>1733727788062</created>
+      <option name="number" value="01193" />
+      <option name="presentableId" value="LOCAL-01193" />
+      <option name="project" value="LOCAL" />
+      <updated>1733727788062</updated>
+    </task>
+    <option name="localTasksCounter" value="1194" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1339,6 +1466,11 @@
           <url>file://$PROJECT_DIR$/tests/test_identifiers.py</url>
           <line>32</line>
           <option name="timeStamp" value="296" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/__init__.py</url>
+          <line>36</line>
+          <option name="timeStamp" value="297" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

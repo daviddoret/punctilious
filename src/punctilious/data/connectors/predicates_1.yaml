@@ -8,8 +8,6 @@ connectors:
     syntactic_rules: { fixed_arity: 1 }
   - slug: is_a_natural_number
     syntactic_rules: { fixed_arity: 1 }
-  - slug: is_a_proposition
-    syntactic_rules: { fixed_arity: 1 }
   - slug: is_a_rational_number
     syntactic_rules: { fixed_arity: 1 }
   - slug: is_a_real_number

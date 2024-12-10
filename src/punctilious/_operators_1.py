@@ -28,20 +28,12 @@ class Operators1(_packaging.PythonPackage):
         return self.connectors.get_from_slug('conjunction')
 
     @property
+    def disjunction(self) -> _formal_language.Connector:
+        return self.connectors.get_from_slug('disjunction')
+
+    @property
     def entailment(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('entailment')
-
-    @property
-    def entails(self) -> _formal_language.Connector:
-        return self.connectors.get_from_slug('entails')
-
-    @property
-    def land(self) -> _formal_language.Connector:
-        return self.connectors.get_from_slug('and')
-
-    @property
-    def lnot(self) -> _formal_language.Connector:
-        return self.connectors.get_from_slug('not')
 
     @property
     def negation(self) -> _formal_language.Connector:

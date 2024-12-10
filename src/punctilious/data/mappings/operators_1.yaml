@@ -2,23 +2,31 @@ schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
 slug: operators_1_mappings
 imports:
-  - slug: operators_1_connectors
+  - slug: notations
+    scheme: python_package
+    path: data.representations
+    resource: formula_notations.yaml
+  - slug: connectors
     scheme: python_package
     path: data.connectors
     resource: operators_1.yaml
-  - slug: operators_1_representations
+  - slug: representations
     scheme: python_package
     path: data.representations
     resource: operators_1.yaml
 mappings:
-  - connector: operators_1_connectors.conjunction
-    representation: operators_1_representations.conjunction
-  - connector: operators_1_connectors.disjunction
-    representation: operators_1_representations.disjunction
-  - connector: operators_1_connectors.entailment
-    representation: operators_1_representations.entailment
-  - connector: operators_1_connectors.negation
-    representation: operators_1_representations.negation
+  - connector: connectors.conjunction
+    connector_representation: representations.conjunction
+    formula_representation: notations.infix_notation
+  - connector: connectors.disjunction
+    connector_representation: representations.disjunction
+    formula_representation: notations.infix_notation
+  - connector: connectors.entailment
+    connector_representation: representations.entailment
+    formula_representation: notations.infix_notation
+  - connector: connectors.negation
+    connector_representation: representations.negation
+    formula_representation: notations.infix_notation
 
 
 
