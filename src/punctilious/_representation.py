@@ -188,7 +188,7 @@ class Renderer(abc.ABC):
             tags: TagsAssignment = TagsAssignment(*tags)
         self._tags: TagsAssignment = tags
 
-    def rep(self, *args, **kwargs):
+    def rep(self, config: TagsPreferences | None = None, variables=None):
         raise NotImplementedError('This method is abstract.')
 
     @property
@@ -207,7 +207,15 @@ class RendererForStringConstant(Renderer):
     def string_constant(self):
         return self._string_constant
 
-    def rep(self, *args, **kwargs):
+    def rep(self, config: TagsPreferences | None = None, variables=None):
+        """Represent the string constant.
+
+        For RendererForStringConstant, parameters have no effect.
+
+        :param config: this parameter has no effect.
+        :param variables: this parameter has no effect.
+        :return: the string representation of the string constant.
+        """
         return self._string_constant
 
 
@@ -221,7 +229,13 @@ class RendererForStringTemplate(Renderer):
         self._string_template = string_template
         self._jinja2_template: jinja2.Template = jinja2.Template(string_template)
 
-    def rep(self, *args, prefs: TagsPreferences = None, variables: dict[str, str] | None = None, **kwargs):
+    def rep(self, config: TagsPreferences = None, variables: dict[str, str] | None = None):
+        """
+
+        :param config:
+        :param variables: Variables are passed to the jinja2 template.
+        :return:
+        """
         # TODO: Implement a custom dict class which implements __missing__ to have a default
         #  value for missing keys.
         if variables is None:

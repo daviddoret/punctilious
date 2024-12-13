@@ -1,7 +1,7 @@
 import importlib
 import yaml
 import _util
-import _presentation
+import _representation
 import _formal_language
 
 
@@ -155,7 +155,7 @@ class PythonPackage(Package):
                 imports = _formal_language.Imports(*untyped_imports)
                 aliases = None  # To be implemented
                 untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
-                representations = _presentation.Representations(*untyped_representations)
+                representations = _representation.Representations(*untyped_representations)
                 # Load connectors
                 typed_connectors = []
                 for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
@@ -187,7 +187,7 @@ class PythonPackage(Package):
                                  justifications=justifications)
 
     def _resolve_package_representation_reference(self, ref: str, i: _formal_language.Imports,
-                                                  r: _presentation.Representations):
+                                                  r: _representation.Representations):
         """Given the reference of a representation in string format,
         typically as the representation attribute of a connector in a YAML file,
         finds and returns the corresponding representation object, either

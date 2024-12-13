@@ -1,5 +1,5 @@
 import _util
-import _presentation
+import _representation
 import _formal_language
 import _packaging
 
@@ -23,17 +23,17 @@ class FormulaNotations(_packaging.PythonPackage):
         return cls._singleton
 
     @property
-    def atomic_formula(self) -> _presentation.Representation:
+    def atomic_formula(self) -> _representation.Representation:
         return self.representations.get_from_slug('atomic_formula')
 
     @property
-    def function_formula(self) -> _presentation.Representation:
+    def function_formula(self) -> _representation.Representation:
         return self.representations.get_from_slug('function_formula')
 
     @property
-    def infix_formula(self) -> _presentation.Representation:
+    def infix_formula(self) -> _representation.Representation:
         return self.representations.get_from_slug('infix_formula')
 
     @property
-    def prefix_formula(self) -> _presentation.Representation:
+    def prefix_formula(self) -> _representation.Representation:
         return self.representations.get_from_slug('prefix_formula')

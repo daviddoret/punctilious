@@ -9,9 +9,9 @@ class TestGreekAlphabetLowercaseSerifItalic:
         pass
         prefs = pu.TagsPreferences()
         prefs[pu.unicode_basic] = 2
-        assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(prefs=prefs) == 'lambda')
+        assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(config=prefs) == 'lambda')
         prefs[pu.unicode_extended] = 3
-        assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(prefs=prefs) == '𝜆')
+        assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(config=prefs) == '𝜆')
         prefs[pu.latex_math] = 4
-        assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(prefs=prefs) == '\\lambda')
+        assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(config=prefs) == '\\lambda')
         pass

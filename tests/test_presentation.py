@@ -106,13 +106,13 @@ class TestRepresentation:
         """Test of representation coming from aa yaml file with multiple string-constant renderers.
         """
 
-        assert (conjunction_connector.rep(prefs=prefs) == '∧')
+        assert (conjunction_connector.rep(config=prefs) == '∧')
 
         prefs[word] = 100
-        assert (conjunction_connector.rep(prefs=prefs) == 'et')
+        assert (conjunction_connector.rep(config=prefs) == 'et')
 
         prefs[en] = 500
-        assert (conjunction_connector.rep(prefs=prefs) == 'and')
+        assert (conjunction_connector.rep(config=prefs) == 'and')
 
     def test_template(self, traditional_formula, infix_formula, prefs):
         infix = pu.RendererForStringTemplate(

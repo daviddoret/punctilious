@@ -10,7 +10,7 @@ import re
 import _util
 from _util import get_logger
 import _identifiers
-import _presentation
+import _representation
 
 
 def ensure_formula(o=None) -> Formula:
@@ -65,6 +65,11 @@ class Formula(tuple):
     @property
     def connector(self):
         return self[0]
+
+    @property
+    def represent(self):
+        XXX
+        return self._representation_function
 
 
 def ensure_formula_arguments(o=None) -> FormulaArguments:
@@ -464,16 +469,27 @@ class Connector:
     def connector_representation(self) -> _presentation.Representation:
         return self._connector_representation
 
+    @connector_representation.setter
+    def connector_representation(self, connector_representation):
+        self._connector_representation = connector_representation
+
     @property
     def formula_representation(self) -> _presentation.Representation:
         return self._formula_representation
+
+    @formula_representation.setter
+    def formula_representation(self, formula_representation):
+        self._formula_representation = formula_representation
 
     @property
     def package(self):
         return self._package
 
-    def repr(self, args=None, encoding=None, mode=None, language=None) -> str:
-        return self.representation.repr(args=args, encoding=encoding, mode=mode, language=language)
+    def rep(self, **kwargs) -> str:
+        return self.connector_representation.rep(**kwargs)
+
+    def rep_formula(self, **kwargs):
+        return self.formula_representation.rep()
 
     @property
     def slug(self):
@@ -497,10 +513,6 @@ class Connector:
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
-
-    @property
-    def uuid(self):
-        return self._uuid
 
 
 class Theorem:

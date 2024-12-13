@@ -4,7 +4,7 @@ import jinja2
 import _util
 from _util import get_logger
 import _formal_language
-import _presentation
+import _representation
 
 
 class Transformer(lark.Transformer):
