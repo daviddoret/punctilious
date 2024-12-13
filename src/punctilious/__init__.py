@@ -8,7 +8,8 @@ from _presentation import Representation, ensure_representations, ensure_represe
     TagsAssignment, RendererForStringTemplate, \
     RendererForStringConstant, unicode_basic, unicode_extended
 import _formal_language
-from _formal_language import FormulaArguments, Formula, ensure_formula, ensure_formula_arguments, Connector, Connectors
+from _formal_language import Connector, Connectors, declare_variable, ensure_formula, ensure_formula_arguments, \
+    FormulaArguments, Formula
 import _interpretation
 from _interpretation import Interpreter
 import _packaging

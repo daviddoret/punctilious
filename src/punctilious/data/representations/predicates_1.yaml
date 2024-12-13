@@ -13,8 +13,13 @@ representations:
         tags: { connector_representation: word, technical_language: latex_math }
   - slug: is_a_proposition
     renderers:
-      - implementation: infix_notation
+      - implementation: function_notation
         connector: is_a_proposition_connector
+        tags: { }
+  - slug: is_a_variable
+    renderers:
+      - implementation: function_notation
+        connector: is_a_variable_connector
         tags: { }
 
 

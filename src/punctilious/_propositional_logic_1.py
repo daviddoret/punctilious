@@ -26,3 +26,7 @@ class PropositionalLogic1(_packaging.PythonPackage):
     @property
     def absorption_law(self) -> _formal_language.Connector:
         return self.connectors.get_from_slug('absorption_law')
+
+    def declare_variable(self, rep: _presentation.Representation) -> _formal_language.Variable:
+        v = _formal_language.declare_variable(rep=rep)
+        return v

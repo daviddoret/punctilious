@@ -18,6 +18,19 @@ def ensure_formula(o=None) -> Formula:
         return o
     elif isinstance(o, Connector):
         return Formula(c=o)
+    elif isinstance(o, collections.abc.Iterable):
+        # If o is an iterable, the assumption is that it is of the shape:
+        # singleton (c) where c is a connector,
+        # or pair (c, a) where c is a connector, and a is an n-tuple of argument sub-formulas.
+        t = tuple(o)
+        if len(t) == 1:
+            return Formula(c=t[0])
+        elif len(t) == 2:
+            c = ensure_connector(t[0])
+            a = ensure_formula_arguments(t[1])
+            return Formula(c=c, a=a)
+        else:
+            raise ValueError(f'Formula must be a 1-tuple, or 2-tuple. {t}')
     else:
         raise ValueError(f'o cannot be constrained into a Formula. {type(o)}: {o}')
 
@@ -34,10 +47,9 @@ class Formula(tuple):
         super().__init__()
 
     def __new__(cls, c, a=None):
-        c = ensure_connector(c)
-        a = FormulaArguments() if a is None else a
-        a = ensure_formula_arguments(a)
-        phi = (c, a,)
+        c: Connector = ensure_connector(c)
+        a: FormulaArguments = ensure_formula_arguments(a)
+        phi: tuple = (c, a,)
         return super().__new__(cls, phi)
 
     def __repr__(self):
@@ -392,6 +404,7 @@ class Connectors(tuple):
     def __init__(self, *args, **kwargs):
         # prepare a dictionary that maps slugs and tokens to connectors
         slug_dict = dict(zip(tuple(i.slug for i in self), tuple(i for i in self)))
+        self._slug_index = slug_dict
         # aliases_connectors = tuple(slug_dict[i.slug] for i in self for j in i.tokens)
         # alias_dict = dict(zip(tokens, aliases_connectors))
         # self._slug_index = slug_dict | alias_dict
@@ -425,6 +438,9 @@ class Connectors(tuple):
 
 class Connector:
     # __slots__ = ('_uuid', '_slug', '_tokens', '_syntactic_rules', '_representation')
+
+    def __call__(self, *args):
+        return Formula(c=self, a=args)
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
@@ -580,3 +596,26 @@ class Justifications(tuple):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+class Variable(Formula):
+    """
+
+    Global definition: formula of the form v().
+
+    Local definition: a formula of the form v() with the following theorem:
+    is_variable(v()).
+    """
+
+    def __init__(self, c):
+        """
+
+        :param c: A connector.
+        """
+        super().__init__(c=c, a=None)
+
+
+def declare_variable(rep: _presentation.Representation):
+    # Create a new connector.
+    c = Connector(connector_representation=rep)
+    return Variable(c=c)
