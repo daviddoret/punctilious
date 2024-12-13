@@ -104,16 +104,18 @@ class Representation:
         self._syntactic_rules = syntactic_rules
         self._renderers: tuple[Renderer, ...] = renderers
 
-    def optimize_renderer(self, prefs: TagsPreferences):
+    def optimize_renderer(self, config: TagsPreferences = None):
         """Given preferences, return the optimal renderer.
 
-        :param prefs:
+        :param config:
         :return:
         """
+        if config == None:
+            config = TagsPreferences()
         best_score = 0
         optimal_renderer = self.renderers[0]
         for current_renderer in self.renderers:
-            current_score = prefs.score_tags(tags=current_renderer.tags)
+            current_score = config.score_tags(tags=current_renderer.tags)
             if current_score > best_score:
                 optimal_renderer = current_renderer
                 best_score = current_score
@@ -124,11 +126,11 @@ class Representation:
         """A tuple of renderers configured for this representation."""
         return self._renderers
 
-    def rep(self, *args, prefs: TagsPreferences, variables: dict[str, str] = None, **kwargs):
+    def rep(self, config: TagsPreferences = None, variables: dict[str, str] = None):
         if variables is None:
             variables = {}
-        renderer: Renderer = self.optimize_renderer(prefs=prefs)
-        return renderer.rep(prefs=prefs, variables=variables)
+        renderer: Renderer = self.optimize_renderer(config=config)
+        return renderer.rep(config=config, variables=variables)
 
     @property
     def slug(self):
@@ -188,6 +190,13 @@ class Renderer(abc.ABC):
             tags: TagsAssignment = TagsAssignment(*tags)
         self._tags: TagsAssignment = tags
 
+    def __repr__(self):
+        raise NotImplementedError('This method is abstract.')
+
+    def __str__(self):
+        raise NotImplementedError('This method is abstract.')
+
+    @abc.abstractmethod
     def rep(self, config: TagsPreferences | None = None, variables=None):
         raise NotImplementedError('This method is abstract.')
 
@@ -202,6 +211,12 @@ class RendererForStringConstant(Renderer):
     def __init__(self, string_constant: str, tags: TagsAssignment | collections.abc.Iterable | None = None):
         super().__init__(tags)
         self._string_constant = string_constant
+
+    def __repr__(self):
+        return f'"{self._string_constant}" string constant.'
+
+    def __str__(self):
+        return f'"{self._string_constant}" string constant.'
 
     @property
     def string_constant(self):
@@ -228,6 +243,12 @@ class RendererForStringTemplate(Renderer):
         super().__init__(tags)
         self._string_template = string_template
         self._jinja2_template: jinja2.Template = jinja2.Template(string_template)
+
+    def __repr__(self):
+        return f'"{self._string_template}" string template.'
+
+    def __str__(self):
+        return f'"{self._string_template}" string template.'
 
     def rep(self, config: TagsPreferences = None, variables: dict[str, str] | None = None):
         """
