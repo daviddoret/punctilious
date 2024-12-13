@@ -27,6 +27,7 @@ packages = _packaging.get_packages()
 
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
 greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
+latin_alphabet_lowercase_serif_italic = _latin_alphabet_lowercase_serif_italic.LatinAlphabetLowercaseSerifItalic()
 latin_alphabet_uppercase_serif_italic = _latin_alphabet_uppercase_serif_italic.LatinAlphabetUppercaseSerifItalic()
 
 formula_notations = _formula_notations.FormulaNotations()

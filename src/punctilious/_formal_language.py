@@ -616,6 +616,13 @@ class Variable(Formula):
 
 
 def declare_variable(rep: _presentation.Representation):
+    """Declare a new variable.
+
+    A variable is a connector that takes no arguments that is designated as a variable.
+
+    :param rep:
+    :return:
+    """
     # Create a new connector.
     c = Connector(connector_representation=rep)
     return Variable(c=c)
