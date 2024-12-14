@@ -4,7 +4,7 @@ import _formal_language
 import _packaging
 
 
-class PropositionalLogic1(_packaging.PythonPackage):
+class PropositionalLogic1(_packaging.YamlFileBundle):
     """A punctilious package of well-known mathematical operators."""
     _singleton = None
     _singleton_initialized = None

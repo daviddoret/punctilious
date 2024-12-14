@@ -1,0 +1,16 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid: 7f0162cf-ca5d-4ce6-b9b7-b33027e74bc2
+slug: packages_1
+description:
+  A catalog of native packages.
+packages:
+  - slug: greek_alphabet_lowercase_serif_italic_representation_1
+    path: '/data/representations/greek_alphabet_lowercase_serif_italic.yaml'
+  - slug: greek_alphabet_uppercase_serif_italic_representation_1
+    path: '/data/representations/greek_alphabet_uppercase_serif_italic.yaml'
+  - slug: operators_representation_1
+    path: '/data/representations/operators_1.yaml'
+  - slug: tao_analysis_1_2006_representations
+    path: '/data/representations/tao_analysis_1_2006.yaml'
+
+

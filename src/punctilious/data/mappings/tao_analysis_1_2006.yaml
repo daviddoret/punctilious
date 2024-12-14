@@ -1,0 +1,26 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid: 20a3dfe2-9048-401f-962a-8662935affc8
+slug: tao_analysis_1_2006_mappings
+imports:
+  - slug: notations
+    scheme: python_package
+    path: data.representations
+    resource: formula_notations.yaml
+  - slug: connectors
+    scheme: python_package
+    path: data.connectors
+    resource: tao_analysis_1_2006.yaml
+  - slug: representations
+    scheme: python_package
+    path: data.representations
+    resource: tao_analysis_1_2006.yaml
+mappings:
+  - connector: connectors.zero
+    connector_representation: representations.zero
+    formula_representation: notations.atomic_formula
+  - connector: connectors.successor
+    connector_representation: representations.successor
+    formula_representation: notations.prefix_notation
+
+
+

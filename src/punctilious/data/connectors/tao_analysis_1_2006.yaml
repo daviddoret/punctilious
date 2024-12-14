@@ -6,6 +6,8 @@ description:
 connectors:
   - slug: successor
     syntactic_rules: { fixed_arity: 1 }
+  - slug: zero
+    syntactic_rules: { fixed_arity: 0 }
 bibliography:
   - slug: tao_2006
     citation: Tao, 2006

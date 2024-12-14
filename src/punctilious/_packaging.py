@@ -1,11 +1,15 @@
 import importlib
+import importlib.resources
 import yaml
+import io
+import uuid as uuid_pkg
+import itertools
 import _util
 import _representation
 import _formal_language
 
 
-class Packages(dict):
+class Bundles(dict):
     __slots__ = ()
     _singleton = None
     _singleton_initialized = None
@@ -24,7 +28,7 @@ class Packages(dict):
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
-            cls._singleton = super(Packages, cls).__new__(cls)
+            cls._singleton = super(Bundles, cls).__new__(cls)
         return cls._singleton
 
     def __repr__(self):
@@ -32,7 +36,7 @@ class Packages(dict):
 
     def __setitem__(self, key, value):
         """Override __setitem__ to check value type before adding to the dictionary."""
-        if not isinstance(value, Package):
+        if not isinstance(value, Bundle):
             raise TypeError(f"Value must be of type Package")
         super().__setitem__(key, value)
 
@@ -45,24 +49,23 @@ class Packages(dict):
     def update(self, other=None, **kwargs):
         if isinstance(other, dict):
             for k, v in other.items():
-                if not isinstance(v, Package):
+                if not isinstance(v, Bundle):
                     raise TypeError(f"Value must be of type Package")
                 self[k] = v
         for k, v in kwargs.items():
-            if not isinstance(v, Package):
+            if not isinstance(v, Bundle):
                 raise TypeError(f"Value must be of type Package")
             self[k] = v
 
 
 def get_packages():
-    return Packages()
+    return Bundles()
 
 
-class Package:
-    __slots__ = ('_schema', '_uuid', '_slug', '_imports', '_aliases', '_representations', '_connectors', '_theorems',
-                 '_justifications')
+class Bundle:
+    """Inherit from tuple and make it immutable..
 
-    # _uuid_index = {}
+    """
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
@@ -131,8 +134,8 @@ class Package:
         return self._uuid
 
 
-class PythonPackage(Package):
-    """A package loaded from the current python package resources."""
+class YamlFileBundle(Bundle):
+    """A package loaded from a single yaml file."""
 
     def __init__(self, path: str, resource: str):
         """Import a native package.
@@ -206,9 +209,16 @@ class PythonPackage(Package):
         elif len(ref_tuple) == 2:
             # This is a reference in an imported YAML file.
             p_ref = ref_tuple[0]
-            p: Package = i.get_from_slug(slug=p_ref).package
+            p: Bundle = i.get_from_slug(slug=p_ref).package
             ref = ref_tuple[1]
             r = p.representations.get_from_slug(slug=ref)
             return r
         else:
             raise ValueError(f'Improper reference: "{ref}".')
+
+
+class MultiYamlFileBundle(Bundle):
+    def __init__(self, yaml_files: tuple[YamlFileBundle, ...]):
+        connectors = tuple(itertools.chain.from_iterable(d.connectors for d in yaml_files))
+        representations = tuple(itertools.chain.from_iterable(d.representations for d in yaml_files))
+        super().__init__(connectors=connectors, representations=representations)

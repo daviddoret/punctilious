@@ -21,6 +21,7 @@ import _latin_alphabet_lowercase_serif_roman
 import _formula_notations
 import _operators_1
 import _propositional_logic_1
+import _tao_analysis_1_2006
 
 prefs = _representation.TagsPreferences()
 packages = _packaging.get_packages()
@@ -34,6 +35,5 @@ formula_notations = _formula_notations.FormulaNotations()
 
 operators_1 = _operators_1.Operators1()
 
-# pl1 = _propositional_logic1.PropositionalLogic1()
-
+tao_analysis_1_2006 = _tao_analysis_1_2006.TaoAnalysis12006()
 pass

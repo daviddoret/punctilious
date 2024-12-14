@@ -4,7 +4,7 @@ import _formal_language
 import _packaging
 
 
-class GreekAlphabetUppercaseSerifItalic(_packaging.PythonPackage):
+class GreekAlphabetUppercaseSerifItalic(_packaging.YamlFileBundle):
     _singleton = None
     _singleton_initialized = None
 

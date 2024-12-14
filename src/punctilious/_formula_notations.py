@@ -4,7 +4,7 @@ import _formal_language
 import _packaging
 
 
-class FormulaNotations(_packaging.PythonPackage):
+class FormulaNotations(_packaging.YamlFileBundle):
     _singleton = None
     _singleton_initialized = None
 
