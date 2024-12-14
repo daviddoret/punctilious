@@ -1,0 +1,14 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+slug: tao_analysis_1_2006_connectors
+uuid: 74768b09-c0a0-464c-b351-08d597555d58
+description:
+  Connectors used in (Tao, 2006).
+connectors:
+  - slug: successor
+    syntactic_rules: { fixed_arity: 1 }
+bibliography:
+  - slug: tao_2006
+    citation: Tao, 2006
+    reference:
+      Tao, Terence. Analysis I. 2006.
+

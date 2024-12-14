@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="formula-notations">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/tao_analysis_1_2006.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/theorems/tao_analysis_1_2006.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_notations.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -375,7 +376,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/tests",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/data/connectors",
     "settings.editor.selected.configurable": "settings.qodana",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
@@ -439,11 +440,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious/data/connectors" />
+      <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
+      <recent name="$PROJECT_DIR$/src/punctilious/data/theorems" />
       <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/connectors" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/trashcan" />
@@ -453,7 +454,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -801,11 +802,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_prefix_notation" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_infix_notation" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notations" />
-        <item itemvalue="Python tests.pytest in tests" />
       </list>
     </recent_temporary>
   </component>
@@ -824,14 +825,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01151" summary="presentation renderers">
-      <option name="closed" value="true" />
-      <created>1732985035821</created>
-      <option name="number" value="01151" />
-      <option name="presentableId" value="LOCAL-01151" />
-      <option name="project" value="LOCAL" />
-      <updated>1732985035821</updated>
     </task>
     <task id="LOCAL-01152" summary="presentation renderers">
       <option name="closed" value="true" />
@@ -1217,7 +1210,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734128918241</updated>
     </task>
-    <option name="localTasksCounter" value="1200" />
+    <task id="LOCAL-01200" summary="formula-notations">
+      <option name="closed" value="true" />
+      <created>1734163671549</created>
+      <option name="number" value="01200" />
+      <option name="presentableId" value="LOCAL-01200" />
+      <option name="project" value="LOCAL" />
+      <updated>1734163671549</updated>
+    </task>
+    <option name="localTasksCounter" value="1201" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

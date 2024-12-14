@@ -1,0 +1,20 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uuid: 4bb42d13-1e72-4192-bf40-efeeee858705
+slug: tao_analysis_1_2006_representations
+imports:
+  - slug: formula_notations_1
+    scheme: python_package
+    path: data.representations
+    resource: formula_notations.yaml
+representations:
+  - slug: zero
+    renderers:
+      - implementation: string_constant
+        string_constant: '0'
+        tags: { technical_language: unicode_basic, connector_representation: symbol }
+bibliography:
+  - slug: tao_2006
+    citation: Tao, 2006
+    reference:
+      Tao, Terence. Analysis I. 2006.
+
