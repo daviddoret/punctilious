@@ -31,5 +31,5 @@ class TestFormulaNotations:
 
     def test_prefix_notation(self):
         assert pu.formula_notations.prefix_formula.rep(
-            variables={'connector': 'f', 'argument': ('x',)}) == 'f x'
+            variables={'connector': '++', 'argument': ('x',)}) == '++x'
         pass
