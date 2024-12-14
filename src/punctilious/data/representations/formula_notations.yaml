@@ -6,22 +6,30 @@ representations:
     renderers:
       - implementation: string_template
         string_template: '{{ connector }}'
-        tags: { }
+        tags: { parenthesization: not_required }
   - slug: function_formula
     renderers:
       - implementation: string_template
         string_template: '{{ connector }}({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %})'
-        tags: { technical_language: unicode_basic }
+        tags: { technical_language: unicode_basic, parenthesization: not_required }
+      - implementation: string_template
+        string_template: '{{ connector }}\left({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}\right)'
+        tags: { technical_language: latex_math, parenthesization: not_required }
   - slug: infix_formula
     renderers:
       - implementation: string_template
         string_template: '{{ argument[0] }} {{ connector }} {{ argument[1] }}'
-        tags: { technical_language: unicode_basic }
+        tags: { technical_language: unicode_basic, parenthesization: required_if_ambiguous }
   - slug: prefix_formula
     renderers:
       - implementation: string_template
-        string_template: '{{ connector }} {{ argument[0] }}'
-        tags: { technical_language: unicode_basic }
+        string_template: '{{ connector }}{{ argument[0] }}'
+        tags: { technical_language: unicode_basic, parenthesization: required_if_ambiguous }
+  - slug: postfix_formula
+    renderers:
+      - implementation: string_template
+        string_template: '{{ argument[0] }}{{ connector }}'
+        tags: { technical_language: unicode_basic, parenthesization: required_if_ambiguous }
 
 
 

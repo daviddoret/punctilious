@@ -35,6 +35,23 @@ def ensure_tags_assignment(o) -> TagsAssignment:
         raise TypeError(f'TagsAssignment validation failure. Type: {type(o)}. Object: {o}.')
 
 
+def ensure_tags_preferences(o) -> TagsPreferences:
+    """Ensure that `o` is of type TagsPreferences, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, TagsPreferences):
+        return o
+    elif isinstance(o, dict):
+        o_typed = TagsPreferences()
+        for i in o.items():
+            tag = ensure_tag(i[0])
+            value = i[1]  # TODO: define a TagPreferenceValue class and apply validation
+            o_typed[tag] = value
+        return o_typed
+    elif o is None:
+        return TagsPreferences()
+    else:
+        raise TypeError(f'TagsPreferences validation failure. Type: {type(o)}. Object: {o}.')
+
+
 def ensure_renderer(o) -> Renderer:
     """Ensure that `o` is of type Renderer, converting it if necessary, or raise an error if it fails."""
     if isinstance(o, Renderer):
@@ -126,8 +143,10 @@ class Representation:
         """A tuple of renderers configured for this representation."""
         return self._renderers
 
-    def rep(self, config: TagsPreferences = None, variables: dict[str, str] = None):
+    def rep(self, variables: dict[str, str] = None, config: TagsPreferences = None):
+        config = ensure_tags_preferences(config)
         if variables is None:
+            # TODO: Use a RepresentationVariable class and apply proper validation
             variables = {}
         renderer: Renderer = self.optimize_renderer(config=config)
         return renderer.rep(config=config, variables=variables)

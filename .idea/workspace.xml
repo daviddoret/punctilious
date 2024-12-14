@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="formula-notations">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/theorems/tao_analysis_1_2006.yaml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="first theorem implementation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_representation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_notations.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -454,7 +455,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -802,8 +803,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_prefix_notation" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_infix_notation" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notations" />
@@ -825,14 +826,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01152" summary="presentation renderers">
-      <option name="closed" value="true" />
-      <created>1732991167963</created>
-      <option name="number" value="01152" />
-      <option name="presentableId" value="LOCAL-01152" />
-      <option name="project" value="LOCAL" />
-      <updated>1732991167963</updated>
     </task>
     <task id="LOCAL-01153" summary="presentation renderers">
       <option name="closed" value="true" />
@@ -1218,7 +1211,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734163671549</updated>
     </task>
-    <option name="localTasksCounter" value="1201" />
+    <task id="LOCAL-01201" summary="first theorem implementation">
+      <option name="closed" value="true" />
+      <created>1734165814977</created>
+      <option name="number" value="01201" />
+      <option name="presentableId" value="LOCAL-01201" />
+      <option name="project" value="LOCAL" />
+      <updated>1734165814977</updated>
+    </task>
+    <option name="localTasksCounter" value="1202" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1268,7 +1269,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="TestExtension with inference-rules and theorems" />
     <MESSAGE value="WellFormedProposition" />
     <MESSAGE value="WellFormedProposition + misc." />
     <MESSAGE value="Use WellFormedProposition in WellFormedAxiom" />
@@ -1293,7 +1293,8 @@
     <MESSAGE value="identifiers" />
     <MESSAGE value="modules cleanup" />
     <MESSAGE value="formula-notations" />
-    <option name="LAST_COMMIT_MESSAGE" value="formula-notations" />
+    <MESSAGE value="first theorem implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="first theorem implementation" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1376,8 +1377,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/_representation.py</url>
-          <line>129</line>
-          <option name="timeStamp" value="303" />
+          <line>12</line>
+          <option name="timeStamp" value="312" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
