@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="formula-notations">
-      <change afterPath="$PROJECT_DIR$/tests/test_formula_notations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_notations.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +201,10 @@
     "Python tests.pytest for test_axiomatic_system_1.test_is_extension.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_formula.executor": "Run",
+    "Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation.executor": "Run",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notations.executor": "Run",
+    "Python tests.pytest for test_formula_notations.TestFormulaNotations.test_infix_notation.executor": "Run",
+    "Python tests.pytest for test_formula_notations.TestFormulaNotations.test_prefix_notation.executor": "Run",
     "Python tests.pytest for test_greek.TestGreekAlphabetLowercaseSerifItalic.test_greek_alphabet_lowercase_serif_italic.executor": "Run",
     "Python tests.pytest for test_greek_alphabet_uppercase_serif_italic.TestGreekAlphabetLowercaseSerifItalic.test_greek_alphabet_lowercase_serif_italic.executor": "Run",
     "Python tests.pytest for test_identifiers.TestIdentifiers.test_slug.executor": "Run",
@@ -310,6 +312,7 @@
     "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
     "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
     "Python tests.pytest in test_fl1.py.executor": "Run",
+    "Python tests.pytest in test_formula_notations.py.executor": "Run",
     "Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py.executor": "Run",
     "Python tests.pytest in test_greek_alphabet_uppercase_serif_italic.py.executor": "Run",
     "Python tests.pytest in test_identifiers.py.executor": "Run",
@@ -450,7 +453,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notations">
+  <component name="RunManager" selected="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -657,6 +660,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_formula_notations.TestFormulaNotations.test_formula_notation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_formula_notations.TestFormulaNotations.test_formula_notation&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_formula_notations.TestFormulaNotations.test_formula_notations" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -671,6 +691,40 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_formula_notations.TestFormulaNotations.test_formula_notations&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_formula_notations.TestFormulaNotations.test_infix_notation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_formula_notations.TestFormulaNotations.test_infix_notation&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_formula_notations.TestFormulaNotations.test_prefix_notation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_formula_notations.TestFormulaNotations.test_prefix_notation&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -691,40 +745,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_representations.TestRendererForStringTemplate.test_renderer_for_string_template&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_representations.TestRepresentation.test_representation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_representations.TestRepresentation.test_representation&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest in punctilious" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -739,23 +759,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in test_representations.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_representations.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -787,10 +790,10 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
+      <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation" />
       <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notations" />
-      <item itemvalue="Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template" />
-      <item itemvalue="Python tests.pytest for test_representations.TestRepresentation.test_representation" />
-      <item itemvalue="Python tests.pytest in test_representations.py" />
+      <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_infix_notation" />
+      <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_prefix_notation" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -798,10 +801,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation" />
+        <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_prefix_notation" />
+        <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_infix_notation" />
         <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notations" />
-        <item itemvalue="Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template" />
-        <item itemvalue="Python tests.pytest in test_representations.py" />
-        <item itemvalue="Python tests.pytest for test_representations.TestRepresentation.test_representation" />
         <item itemvalue="Python tests.pytest in tests" />
       </list>
     </recent_temporary>
@@ -821,14 +824,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01150" summary="Lark + yaml">
-      <option name="closed" value="true" />
-      <created>1732979006393</created>
-      <option name="number" value="01150" />
-      <option name="presentableId" value="LOCAL-01150" />
-      <option name="project" value="LOCAL" />
-      <updated>1732979006393</updated>
     </task>
     <task id="LOCAL-01151" summary="presentation renderers">
       <option name="closed" value="true" />
@@ -1214,7 +1209,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734126805459</updated>
     </task>
-    <option name="localTasksCounter" value="1199" />
+    <task id="LOCAL-01199" summary="formula-notations">
+      <option name="closed" value="true" />
+      <created>1734128918241</created>
+      <option name="number" value="01199" />
+      <option name="presentableId" value="LOCAL-01199" />
+      <option name="project" value="LOCAL" />
+      <updated>1734128918241</updated>
+    </task>
+    <option name="localTasksCounter" value="1200" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1371,9 +1374,9 @@
           <option name="timeStamp" value="296" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_formula_notations.py</url>
-          <line>12</line>
-          <option name="timeStamp" value="301" />
+          <url>file://$PROJECT_DIR$/src/punctilious/_representation.py</url>
+          <line>129</line>
+          <option name="timeStamp" value="303" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

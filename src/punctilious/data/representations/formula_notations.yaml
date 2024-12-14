@@ -10,7 +10,7 @@ representations:
   - slug: function_formula
     renderers:
       - implementation: string_template
-        string_template: '{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})'
+        string_template: '{{ connector }}({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %})'
         tags: { technical_language: unicode_basic }
   - slug: infix_formula
     renderers:
