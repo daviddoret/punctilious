@@ -3,7 +3,7 @@ import _formal_language
 import _bundling
 
 
-class TaoAnalysis12006(_bundling.MultiYamlFileBundle):
+class TaoAnalysis12006(_bundling.MultiBundle):
     """A punctilious package of well-known mathematical operators."""
     _singleton = None
     _singleton_initialized = None
@@ -16,8 +16,8 @@ class TaoAnalysis12006(_bundling.MultiYamlFileBundle):
                                                        resource='tao_analysis_1_2006.yaml')
             mappings = _bundling.YamlFileBundle(path='data.mappings',
                                                 resource='tao_analysis_1_2006.yaml')
-            yaml_files = (connectors, representations, mappings,)
-            super().__init__(yaml_files=yaml_files)
+            bundles = (connectors, representations, mappings,)
+            super().__init__(bundles=bundles)
             self.__class__._singleton_initialized = True
             _util.get_logger().debug(
                 f'Tao Analysis 1 (2006) singleton ({id(self)}) initialized.')

@@ -1,5 +1,12 @@
+"""Bundling refers to the capability to bundle together formal language components,
+store them in YAML files or other containers, and reload them from these.
+
+"""
+
 import importlib
 import importlib.resources
+import typing
+
 import yaml
 import io
 import uuid as uuid_pkg
@@ -326,8 +333,14 @@ class YamlFileBundle(Bundle):
             raise ValueError(f'Improper reference: "{ref}".')
 
 
-class MultiYamlFileBundle(Bundle):
-    def __init__(self, yaml_files: tuple[YamlFileBundle, ...]):
-        connectors = tuple(itertools.chain.from_iterable(d.connectors for d in yaml_files))
-        representations = tuple(itertools.chain.from_iterable(d.representations for d in yaml_files))
+class MultiBundle(Bundle):
+    """A bundle composed of multiple sub-bundles.
+
+    """
+
+    def __init__(self, bundles: tuple[Bundle, ...]):
+        # IMPROVEMENT: Validate first that there are no duplicates.
+        connectors = tuple(itertools.chain.from_iterable(d.connectors for d in bundles))
+        representations = tuple(itertools.chain.from_iterable(d.representations for d in bundles))
+        # theorems = tuple(itertools.chain.from_iterable(d.theorems for d in bundles))
         super().__init__(connectors=connectors, representations=representations)
