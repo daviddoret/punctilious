@@ -1,10 +1,10 @@
 import _util
 import _representation
 import _formal_language
-import _packaging
+import _bundling
 
 
-class PropositionalLogic1(_packaging.YamlFileBundle):
+class PropositionalLogic1(_bundling.YamlFileBundle):
     """A punctilious package of well-known mathematical operators."""
     _singleton = None
     _singleton_initialized = None

@@ -4,7 +4,7 @@ from test_shared_library import create_atomic_connector, create_function
 
 
 class TestPackaging:
-    def test_packaging(self):
+    def test_bundling(self):
         p = create_atomic_connector('P')
         q = create_atomic_connector('Q')
         r = create_atomic_connector('R')

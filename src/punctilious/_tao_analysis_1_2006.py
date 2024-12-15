@@ -1,21 +1,21 @@
 import _util
 import _formal_language
-import _packaging
+import _bundling
 
 
-class TaoAnalysis12006(_packaging.MultiYamlFileBundle):
+class TaoAnalysis12006(_bundling.MultiYamlFileBundle):
     """A punctilious package of well-known mathematical operators."""
     _singleton = None
     _singleton_initialized = None
 
     def __init__(self):
         if self.__class__._singleton_initialized is None:
-            connectors = _packaging.YamlFileBundle(path='data.connectors',
-                                                   resource='tao_analysis_1_2006.yaml')
-            representations = _packaging.YamlFileBundle(path='data.representations',
-                                                        resource='tao_analysis_1_2006.yaml')
-            mappings = _packaging.YamlFileBundle(path='data.mappings',
-                                                 resource='tao_analysis_1_2006.yaml')
+            connectors = _bundling.YamlFileBundle(path='data.connectors',
+                                                  resource='tao_analysis_1_2006.yaml')
+            representations = _bundling.YamlFileBundle(path='data.representations',
+                                                       resource='tao_analysis_1_2006.yaml')
+            mappings = _bundling.YamlFileBundle(path='data.mappings',
+                                                resource='tao_analysis_1_2006.yaml')
             yaml_files = (connectors, representations, mappings,)
             super().__init__(yaml_files=yaml_files)
             self.__class__._singleton_initialized = True

@@ -1,10 +1,10 @@
 import _util
 import _representation
 import _formal_language
-import _packaging
+import _bundling
 
 
-class GreekAlphabetLowercaseSerifItalic(_packaging.YamlFileBundle):
+class GreekAlphabetLowercaseSerifItalic(_bundling.YamlFileBundle):
     _singleton = None
     _singleton_initialized = None
 

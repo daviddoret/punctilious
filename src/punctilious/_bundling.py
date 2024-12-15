@@ -134,6 +134,115 @@ class Bundle:
         return self._uuid
 
 
+class Import:
+    __slots__ = ('_slug', '_scheme', '_path', '_resource', '_method', '_package')
+
+    def __hash__(self):
+        # hash only spans the properties that uniquely identify the object.
+        return hash((self.__class__, self._slug, self._scheme, self._path, self._resource, self._method))
+
+    def __init__(self, slug, scheme, path, resource, method, load=True):
+        self._slug = slug
+        self._scheme = scheme
+        self._path = path
+        self._resource = resource
+        self._method = method
+        if load:
+            if scheme == 'python_package':
+                self._package = YamlFileBundle(path=path, resource=resource)
+
+    def __repr__(self):
+        return self.slug
+
+    def __str__(self):
+        return self.slug
+
+    @property
+    def method(self):
+        return self._method
+
+    @property
+    def package(self):
+        return self._package
+
+    @property
+    def path(self):
+        return self._path
+
+    @property
+    def resource(self):
+        return self._resource
+
+    @property
+    def slug(self):
+        return self._slug
+
+    @property
+    def scheme(self):
+        return self._scheme
+
+    def to_dict(self):
+        d = {}
+        if self.slug is not None:
+            d['local_name'] = self.slug
+        if self.scheme is not None:
+            d['scheme'] = self.scheme
+        if self.path is not None:
+            d['path'] = self.path
+        if self.resource is not None:
+            d['resource'] = self.resource
+        if self.method is not None:
+            d['method'] = self.method
+        return d
+
+    def to_yaml(self, default_flow_style):
+        yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
+
+
+def ensure_import(o) -> Import:
+    """Assure that `o` is of type Import, converting as necessary, or raise an error."""
+    if isinstance(o, Import):
+        return o
+    elif isinstance(o, dict):
+        slug = o['slug'] if 'slug' in o.keys() else None
+        scheme = o['scheme'] if 'scheme' in o.keys() else None
+        path = o['path'] if 'path' in o.keys() else None
+        resource = o['resource'] if 'resource' in o.keys() else None
+        method = o['method'] if 'method' in o.keys() else None
+        o = Import(slug=slug, scheme=scheme, path=path, resource=resource, method=method)
+        return o
+    else:
+        raise TypeError('Import assurance failure.')
+
+
+class Imports(tuple):
+    """A tuple of Import instances."""
+
+    def __init__(self, *args, **kwargs):
+        self._slug_index = tuple(i.slug for i in self)
+        super().__init__()
+
+    def __new__(cls, *args, **kwargs):
+        typed_imports = tuple(ensure_import(r) for r in args)
+        return super().__new__(cls, typed_imports)
+
+    def __repr__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def __str__(self):
+        return '(' + ', '.join(e.slug for e in self) + ')'
+
+    def get_from_slug(self, slug: str):
+        if slug in self._slug_index:
+            slug_index = self._slug_index.index(slug)
+            return self[slug_index]
+        else:
+            raise IndexError(f'Import slug not found: "{slug}".')
+
+    def to_yaml(self, default_flow_style):
+        return yaml.dump(self, default_flow_style=default_flow_style)
+
+
 class YamlFileBundle(Bundle):
     """A package loaded from a single yaml file."""
 
@@ -155,7 +264,7 @@ class YamlFileBundle(Bundle):
                 uuid = d['uuid']
                 slug = d['slug']
                 untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
-                imports = _formal_language.Imports(*untyped_imports)
+                imports = Imports(*untyped_imports)
                 aliases = None  # To be implemented
                 untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
                 representations = _representation.Representations(*untyped_representations)
@@ -189,7 +298,7 @@ class YamlFileBundle(Bundle):
                                  representations=representations, connectors=typed_connectors, theorems=theorems,
                                  justifications=justifications)
 
-    def _resolve_package_representation_reference(self, ref: str, i: _formal_language.Imports,
+    def _resolve_package_representation_reference(self, ref: str, i: Imports,
                                                   r: _representation.Representations):
         """Given the reference of a representation in string format,
         typically as the representation attribute of a connector in a YAML file,

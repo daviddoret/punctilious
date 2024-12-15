@@ -12,7 +12,7 @@ from _formal_language import Connector, Connectors, declare_variable, ensure_for
     FormulaArguments, Formula
 import _interpretation
 from _interpretation import Interpreter
-import _packaging
+import _bundling
 import _greek_alphabet_lowercase_serif_italic
 import _greek_alphabet_uppercase_serif_italic
 import _latin_alphabet_lowercase_serif_italic
@@ -24,7 +24,7 @@ import _propositional_logic_1
 import _tao_analysis_1_2006
 
 prefs = _representation.TagsPreferences()
-packages = _packaging.get_packages()
+packages = _bundling.get_packages()
 
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
 greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
