@@ -106,8 +106,7 @@ def ensure_representations(o) -> Representations:
     if isinstance(o, Representations):
         return o
     elif isinstance(o, collections.abc.Iterable):
-        representations = tuple(ensure_representation(i) for i in o)
-        o = Representations(*representations)
+        o = Representations(*o)
         return o
     else:
         raise TypeError(f'Representations validation failure. Type: {type(o)}. Object: {o}.')

@@ -83,6 +83,28 @@ def ensure_formula_arguments(o=None) -> FormulaArguments:
         raise ValueError(f'o cannot be constrained into FormulaArguments {FormulaArguments}. {type(o)}')
 
 
+def ensure_connectors(o=None) -> Connectors:
+    if isinstance(o, Connectors):
+        return o
+    elif isinstance(o, collections.abc.Iterable):
+        return Connectors(*o)
+    elif o is None:
+        return Connectors()
+    else:
+        raise ValueError(f'o cannot be constrained into Connectors: {o}. {type(o)}')
+
+
+def ensure_theorems(o=None) -> Theorems:
+    if isinstance(o, Theorems):
+        return o
+    elif isinstance(o, collections.abc.Iterable):
+        return Theorems(*o)
+    elif o is None:
+        return Theorems()
+    else:
+        raise ValueError(f'o cannot be constrained into Theorems: {o}. {type(o)}')
+
+
 class FormulaArguments(tuple[Formula]):
     """A tuple of formulas. Used to represent the arguments of a non-atomic formula."""
 
@@ -203,7 +225,6 @@ class SyntacticRules:
 
     def to_yaml(self, default_flow_style):
         yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
-
 
 
 class Theorems(tuple):

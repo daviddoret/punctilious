@@ -7,8 +7,8 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="first theorem implementation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_tao_analysis_1_2006.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_representation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -330,7 +330,7 @@
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in test_variable.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Run",
+    "Python tests.pytest in tests.executor": "Debug",
     "Python.__init__.executor": "Debug",
     "Python._latin_alphabet_lowercase_serif_roman.executor": "Debug",
     "Python._packaging.executor": "Run",
@@ -457,7 +457,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006">
     <configuration name="__init__" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -820,8 +820,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python._tao_analysis_1_2006" />
         <item itemvalue="Python.__init__" />
         <item itemvalue="Python._bundling" />
@@ -843,14 +843,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01157" summary="presentation renderers">
-      <option name="closed" value="true" />
-      <created>1733190389165</created>
-      <option name="number" value="01157" />
-      <option name="presentableId" value="LOCAL-01157" />
-      <option name="project" value="LOCAL" />
-      <updated>1733190389165</updated>
     </task>
     <task id="LOCAL-01158" summary="presentation renderers">
       <option name="closed" value="true" />
@@ -1236,7 +1228,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734245735451</updated>
     </task>
-    <option name="localTasksCounter" value="1206" />
+    <task id="LOCAL-01206" summary="first theorem implementation">
+      <option name="closed" value="true" />
+      <created>1734246760731</created>
+      <option name="number" value="01206" />
+      <option name="presentableId" value="LOCAL-01206" />
+      <option name="project" value="LOCAL" />
+      <updated>1734246760731</updated>
+    </task>
+    <option name="localTasksCounter" value="1207" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1383,16 +1383,6 @@
           <option name="timeStamp" value="244" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py</url>
-          <line>10</line>
-          <option name="timeStamp" value="280" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_identifiers.py</url>
-          <line>32</line>
-          <option name="timeStamp" value="296" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/_representation.py</url>
           <line>12</line>
           <option name="timeStamp" value="312" />
@@ -1401,6 +1391,16 @@
           <url>file://$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py</url>
           <line>11</line>
           <option name="timeStamp" value="314" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py</url>
+          <line>10</line>
+          <option name="timeStamp" value="316" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py</url>
+          <line>8</line>
+          <option name="timeStamp" value="317" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

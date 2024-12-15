@@ -89,8 +89,11 @@ class Bundle:
         self._slug = slug
         self._imports = imports
         self._aliases = aliases
+        representations = _representation.ensure_representations(representations)
         self._representations = representations
+        connectors = _formal_language.ensure_connectors(connectors)
         self._connectors = connectors
+        theorems = _formal_language.ensure_theorems(theorems)
         self._theorems = theorems
         self._justifications = justifications
         # Reference the package in the packages singleton.s
