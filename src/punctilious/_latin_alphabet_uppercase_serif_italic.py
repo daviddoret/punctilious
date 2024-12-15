@@ -24,104 +24,104 @@ class LatinAlphabetUppercaseSerifItalic(_bundling.YamlFileBundle):
 
     @property
     def a(self) -> _representation.Representation:
-        return self.representations.get_from_slug('a')
+        return self.representations.get_from_identifier('a')
 
     @property
     def b(self) -> _representation.Representation:
-        return self.representations.get_from_slug('b')
+        return self.representations.get_from_identifier('b')
 
     @property
     def c(self) -> _representation.Representation:
-        return self.representations.get_from_slug('c')
+        return self.representations.get_from_identifier('c')
 
     @property
     def d(self) -> _representation.Representation:
-        return self.representations.get_from_slug('d')
+        return self.representations.get_from_identifier('d')
 
     @property
     def e(self) -> _representation.Representation:
-        return self.representations.get_from_slug('e')
+        return self.representations.get_from_identifier('e')
 
     @property
     def f(self) -> _representation.Representation:
-        return self.representations.get_from_slug('f')
+        return self.representations.get_from_identifier('f')
 
     @property
     def g(self) -> _representation.Representation:
-        return self.representations.get_from_slug('g')
+        return self.representations.get_from_identifier('g')
 
     @property
     def h(self) -> _representation.Representation:
-        return self.representations.get_from_slug('h')
+        return self.representations.get_from_identifier('h')
 
     @property
     def i(self) -> _representation.Representation:
-        return self.representations.get_from_slug('i')
+        return self.representations.get_from_identifier('i')
 
     @property
     def j(self) -> _representation.Representation:
-        return self.representations.get_from_slug('j')
+        return self.representations.get_from_identifier('j')
 
     @property
     def k(self) -> _representation.Representation:
-        return self.representations.get_from_slug('k')
+        return self.representations.get_from_identifier('k')
 
     @property
     def l(self) -> _representation.Representation:
-        return self.representations.get_from_slug('l')
+        return self.representations.get_from_identifier('l')
 
     @property
     def m(self) -> _representation.Representation:
-        return self.representations.get_from_slug('m')
+        return self.representations.get_from_identifier('m')
 
     @property
     def n(self) -> _representation.Representation:
-        return self.representations.get_from_slug('n')
+        return self.representations.get_from_identifier('n')
 
     @property
     def o(self) -> _representation.Representation:
-        return self.representations.get_from_slug('o')
+        return self.representations.get_from_identifier('o')
 
     @property
     def p(self) -> _representation.Representation:
-        return self.representations.get_from_slug('p')
+        return self.representations.get_from_identifier('p')
 
     @property
     def q(self) -> _representation.Representation:
-        return self.representations.get_from_slug('q')
+        return self.representations.get_from_identifier('q')
 
     @property
     def r(self) -> _representation.Representation:
-        return self.representations.get_from_slug('r')
+        return self.representations.get_from_identifier('r')
 
     @property
     def s(self) -> _representation.Representation:
-        return self.representations.get_from_slug('s')
+        return self.representations.get_from_identifier('s')
 
     @property
     def t(self) -> _representation.Representation:
-        return self.representations.get_from_slug('t')
+        return self.representations.get_from_identifier('t')
 
     @property
     def u(self) -> _representation.Representation:
-        return self.representations.get_from_slug('u')
+        return self.representations.get_from_identifier('u')
 
     @property
     def v(self) -> _representation.Representation:
-        return self.representations.get_from_slug('v')
+        return self.representations.get_from_identifier('v')
 
     @property
     def w(self) -> _representation.Representation:
-        return self.representations.get_from_slug('w')
+        return self.representations.get_from_identifier('w')
 
     @property
     def x(self) -> _representation.Representation:
-        return self.representations.get_from_slug('x')
+        return self.representations.get_from_identifier('x')
 
     @property
     def y(self) -> _representation.Representation:
-        return self.representations.get_from_slug('y')
+        return self.representations.get_from_identifier('y')
 
     @property
     def z(self) -> _representation.Representation:
-        return self.representations.get_from_slug('z')
+        return self.representations.get_from_identifier('z')

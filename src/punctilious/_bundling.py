@@ -11,7 +11,9 @@ import yaml
 import io
 import uuid as uuid_pkg
 import itertools
+# punctilious modules
 import _util
+import _identifiers
 import _representation
 import _formal_language
 
@@ -78,15 +80,10 @@ class Bundle:
         # hash only spans the properties that uniquely identify the object.
         return hash((self.__class__, self._uuid))
 
-    def __init__(self, schema=None, uuid=None, slug=None, imports=None, aliases=None, representations=None,
+    def __init__(self, schema=None, identifier=None, imports=None, aliases=None, representations=None,
                  connectors=None, theorems=None, justifications=None):
-        if uuid is None:
-            uuid = uuid_pkg.uuid4()
-        if slug is None:
-            slug = f'package_{str(uuid).replace('-', '_')}'
         self._schema = schema
-        self._uuid = uuid
-        self._slug = slug
+        self._identifier = _identifiers.ensure_identifier(identifier)
         self._imports = imports
         self._aliases = aliases
         representations = _representation.ensure_representations(representations)
@@ -98,7 +95,7 @@ class Bundle:
         self._justifications = justifications
         # Reference the package in the packages singleton.s
         p = get_packages()
-        p[slug] = self
+        p[self._identifier] = self
         pass
 
     def __repr__(self):
@@ -116,6 +113,10 @@ class Bundle:
         return self._connectors
 
     @property
+    def identifier(self):
+        return self._identifier
+
+    @property
     def imports(self):
         return self._imports
 
@@ -130,10 +131,6 @@ class Bundle:
     @property
     def schema(self):
         return self._schema
-
-    @property
-    def slug(self):
-        return self._slug
 
     @property
     def theorems(self):
@@ -268,45 +265,52 @@ class YamlFileBundle(Bundle):
         package_path = importlib.resources.files(path).joinpath(resource)
         with importlib.resources.as_file(package_path) as file_path:
             with open(file_path, 'r') as file:
-                file: io.TextIOBase
-                d: dict = yaml.safe_load(file)
-                schema = d['schema']
-                uuid = d['uuid']
-                slug = d['slug']
-                untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
-                imports = Imports(*untyped_imports)
-                aliases = None  # To be implemented
-                untyped_representations = d['representations'] if 'representations' in d.keys() else tuple()
-                representations = _representation.Representations(*untyped_representations)
-                # Load connectors
-                typed_connectors = []
-                for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
-                    slug = raw_connector['slug']
-                    syntactic_rules = _formal_language.ensure_syntactic_rules(o=
-                                                                              raw_connector[
-                                                                                  'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
-                    connector_representation_reference = raw_connector.get('connector_representation', None)
-                    connector_representation = self._resolve_package_representation_reference(
-                        ref=connector_representation_reference,
-                        i=imports, r=representations) if connector_representation_reference is not None else None
-                    formula_representation_reference = raw_connector.get('formula_representation', None)
-                    formula_representation = self._resolve_package_representation_reference(
-                        ref=formula_representation_reference,
-                        i=imports, r=representations) if formula_representation_reference is not None else None
-                    o = _formal_language.Connector(package=self, slug=slug,
-                                                   syntactic_rules=syntactic_rules,
-                                                   connector_representation=connector_representation,
-                                                   formula_representation=formula_representation)
-                    typed_connectors.append(o)
-                typed_connectors = _formal_language.Connectors(*typed_connectors)
-                # Load connectors
-                untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
-                theorems = _formal_language.Theorems(*untyped_theorems)
-                justifications = _formal_language.Justifications.instantiate_from_list(
-                    l=d['justifications'] if 'justifications' in d.keys() else None)
-                super().__init__(schema=schema, uuid=uuid, slug=slug, imports=imports, aliases=aliases,
-                                 representations=representations, connectors=typed_connectors, theorems=theorems,
-                                 justifications=justifications)
+                try:
+                    file: io.TextIOBase
+                    d: dict = yaml.safe_load(file)
+                    schema = d['schema']
+                    identifier: _identifiers.Identifier = _identifiers.ensure_identifier(d['identifier'])
+                    untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
+                    imports = Imports(*untyped_imports)
+                    aliases = None  # To be implemented
+                    representations: _representation.Representations = _representation.ensure_representations(
+                        d.get('representations', tuple()))
+                    # Load connectors
+                    typed_connectors = []
+                    for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
+                        # TODO: Resume from here. A Connector contains modifiable representation
+                        #   properties.
+                        #   These properties may be further enriched at any moment.
+                        #   But read-only properties must be checked for consistency,
+                        #   and maintained read-only.
+                        identifier = _identifiers.ensure_identifier(raw_connector['identifier'])
+                        syntactic_rules = _formal_language.ensure_syntactic_rules(o=
+                                                                                  raw_connector[
+                                                                                      'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
+                        connector_representation_reference = raw_connector.get('connector_representation', None)
+                        connector_representation = self._resolve_package_representation_reference(
+                            ref=connector_representation_reference,
+                            i=imports, r=representations) if connector_representation_reference is not None else None
+                        formula_representation_reference = raw_connector.get('formula_representation', None)
+                        formula_representation = self._resolve_package_representation_reference(
+                            ref=formula_representation_reference,
+                            i=imports, r=representations) if formula_representation_reference is not None else None
+                        o = _formal_language.Connector(package=self, identifier=identifier,
+                                                       syntactic_rules=syntactic_rules,
+                                                       connector_representation=connector_representation,
+                                                       formula_representation=formula_representation)
+                        typed_connectors.append(o)
+                    typed_connectors = _formal_language.Connectors(*typed_connectors)
+                    # Load connectors
+                    untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
+                    theorems = _formal_language.Theorems(*untyped_theorems)
+                    justifications = _formal_language.Justifications.instantiate_from_list(
+                        l=d['justifications'] if 'justifications' in d.keys() else None)
+                    super().__init__(schema=schema, identifier=id, imports=imports, aliases=aliases,
+                                     representations=representations, connectors=typed_connectors, theorems=theorems,
+                                     justifications=justifications)
+                except Exception as e:
+                    raise ValueError(f'Error when loading YAML file {file_path}: {e}')
 
     def _resolve_package_representation_reference(self, ref: str, i: Imports,
                                                   r: _representation.Representations):
@@ -323,14 +327,14 @@ class YamlFileBundle(Bundle):
         ref_tuple: tuple = tuple(ref.split('.'))
         if len(ref_tuple) == 1:
             # This is a local reference.
-            r = r.get_from_slug(slug=ref)
+            r = r.get_from_identifier(slug=ref)
             return r
         elif len(ref_tuple) == 2:
             # This is a reference in an imported YAML file.
             p_ref = ref_tuple[0]
             p: Bundle = i.get_from_slug(slug=p_ref).package
             ref = ref_tuple[1]
-            r = p.representations.get_from_slug(slug=ref)
+            r = p.representations.get_from_identifier(slug=ref)
             return r
         else:
             raise ValueError(f'Improper reference: "{ref}".')

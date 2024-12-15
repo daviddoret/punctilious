@@ -1,13 +1,14 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
-slug: formulas_notations
+identifier: { slug: formulas_notations, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
+description:
+  en: A catalog of formula representations.
 representations:
-  - slug: atomic_formula
+  - identifier: { slug: atomic_formula, uuid: f6bd05d7-ee5b-4480-9d59-ea9fa3a13516 }
     renderers:
       - implementation: string_template
         string_template: '{{ connector }}'
         tags: { parenthesization: not_required }
-  - slug: function_formula
+  - identifier: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 }
     renderers:
       - implementation: string_template
         string_template: '{{ connector }}({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %})'
@@ -15,17 +16,17 @@ representations:
       - implementation: string_template
         string_template: '{{ connector }}\left({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}\right)'
         tags: { technical_language: latex_math, parenthesization: not_required }
-  - slug: infix_formula
+  - identifier: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 }
     renderers:
       - implementation: string_template
         string_template: '{{ argument[0] }} {{ connector }} {{ argument[1] }}'
         tags: { technical_language: unicode_basic, parenthesization: required_if_ambiguous }
-  - slug: prefix_formula
+  - identifier: { slug: prefix_formula, uuid: ca64ae2f-f8a7-4a87-a99d-57d86a8ba0ad }
     renderers:
       - implementation: string_template
         string_template: '{{ connector }}{{ argument[0] }}'
         tags: { technical_language: unicode_basic, parenthesization: required_if_ambiguous }
-  - slug: postfix_formula
+  - identifier: { slug: postfix_formula, uuid: af99c47e-c6b8-43e0-a8f4-6331ba79e8fd }
     renderers:
       - implementation: string_template
         string_template: '{{ argument[0] }}{{ connector }}'

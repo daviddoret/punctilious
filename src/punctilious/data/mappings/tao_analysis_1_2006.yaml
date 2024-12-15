@@ -1,26 +1,20 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: 20a3dfe2-9048-401f-962a-8662935affc8
-slug: tao_analysis_1_2006_mappings
-imports:
-  - slug: notations
-    scheme: python_package
-    path: data.representations
-    resource: formula_notations.yaml
-  - slug: connectors
-    scheme: python_package
-    path: data.connectors
-    resource: tao_analysis_1_2006.yaml
-  - slug: representations
-    scheme: python_package
-    path: data.representations
-    resource: tao_analysis_1_2006.yaml
-mappings:
-  - connector: connectors.zero
-    connector_representation: representations.zero
-    formula_representation: notations.atomic_formula
-  - connector: connectors.successor
-    connector_representation: representations.successor
-    formula_representation: notations.prefix_notation
+identifier: { slug: tao_analysis_1_2006_mappings, uuid: 20a3dfe2-9048-401f-962a-8662935affc8 }
+description:
+  en: Maps the connectors to their representations, according to (Tao, 2006).
+connectors:
+  - identifier: { slug: successor, uuid: f85163bf-381d-41fa-bdbb-70cd28bb826b }
+    connector_representation: { slug: zero, uuid: 328cbbbf-7331-44b3-88c3-5d7ea912a213 }
+    formula_representation: { slug: prefix_formula, uuid: ca64ae2f-f8a7-4a87-a99d-57d86a8ba0ad }
+  - identifier: { slug: zero, uuid: 85927ea1-566e-4349-bab9-9845ba3a4b93 }
+    connector_representation: { slug: successor, uuid: 41c2d319-bf0c-4442-9af6-a6db82ad1f80 }
+    formula_representation: { slug: atomic_formula, uuid: f6bd05d7-ee5b-4480-9d59-ea9fa3a13516 }
+bibliography:
+  - slug: tao_2006
+    citation: Tao, 2006
+    reference:
+      Tao, Terence. Analysis I. 2006.
+
 
 
 

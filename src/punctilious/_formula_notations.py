@@ -24,16 +24,16 @@ class FormulaNotations(_bundling.YamlFileBundle):
 
     @property
     def atomic_formula(self) -> _representation.Representation:
-        return self.representations.get_from_slug('atomic_formula')
+        return self.representations.get_from_identifier('atomic_formula')
 
     @property
     def function_formula(self) -> _representation.Representation:
-        return self.representations.get_from_slug('function_formula')
+        return self.representations.get_from_identifier('function_formula')
 
     @property
     def infix_formula(self) -> _representation.Representation:
-        return self.representations.get_from_slug('infix_formula')
+        return self.representations.get_from_identifier('infix_formula')
 
     @property
     def prefix_formula(self) -> _representation.Representation:
-        return self.representations.get_from_slug('prefix_formula')
+        return self.representations.get_from_identifier('prefix_formula')

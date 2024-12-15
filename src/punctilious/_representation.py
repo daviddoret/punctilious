@@ -91,11 +91,11 @@ def ensure_representation(o) -> Representation:
         return o
     elif isinstance(o, dict):
         # conversion from dict structure.
-        uuid4 = o.get('uuid4', None)
-        slug = o.get('slug', None)
+        identifier = o['identifier']
+        identifier = _identifiers.ensure_identifier(identifier)
         syntactic_rules = None
         renderers = ensure_renderers(o=o.get('renderers', []))
-        o = Representation(uuid4=uuid4, slug=slug, syntactic_rules=syntactic_rules, renderers=renderers)
+        o = Representation(identifier=identifier, syntactic_rules=syntactic_rules, renderers=renderers)
         return o
     else:
         raise TypeError(f'Representation validation failure. Type: {type(o)}. Object: {o}.')
@@ -114,11 +114,22 @@ def ensure_representations(o) -> Representations:
 
 class Representation:
 
-    def __init__(self, renderers: tuple[Renderer, ...], uuid4=None, slug=None, syntactic_rules=None, ):
-        self._uuid4 = uuid4
-        self._slug = slug
+    def __init__(self, identifier: _identifiers.FlexibleIdentifier,
+                 renderers: tuple[Renderer, ...],
+                 syntactic_rules=None):
+        self._identifier: _identifiers.Identifier = _identifiers.ensure_identifier(identifier)
         self._syntactic_rules = syntactic_rules
         self._renderers: tuple[Renderer, ...] = renderers
+
+    def __repr__(self):
+        return f'{self.identifier.slug} ({self.identifier.uuid}) representation'
+
+    def __str__(self):
+        return f'{self.identifier.slug} representation'
+
+    @property
+    def identifier(self):
+        return self._identifier
 
     def optimize_renderer(self, config: TagsPreferences = None):
         """Given preferences, return the optimal renderer.
@@ -151,44 +162,37 @@ class Representation:
         return renderer.rep(config=config, variables=variables)
 
     @property
-    def slug(self):
-        return self._slug
-
-    @property
     def syntactic_rules(self):
         return self._syntactic_rules
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
-    @property
-    def uuid4(self):
-        return self._uuid4
-
 
 class Representations(tuple):
     """A tuple of Representation instances."""
 
-    def __init__(self, *args, **kwargs):
-        self._slug_index = tuple(i.slug for i in self)
+    def __init__(self, *args):
+        self._index = tuple(i.identifier for i in self)
         super().__init__()
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args):
         typed_representations = tuple(ensure_representation(r) for r in args)
         return super().__new__(cls, typed_representations)
 
     def __repr__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
+        return '(' + ', '.join(e.identifier.slug for e in self) + ')'
 
     def __str__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
+        return '(' + ', '.join(e.identifier.slug for e in self) + ')'
 
-    def get_from_slug(self, slug: str):
-        if slug in self._slug_index:
-            slug_index = self._slug_index.index(slug)
-            return self[slug_index]
+    def get_from_identifier(self, identifier: _identifiers.FlexibleIdentifier):
+        identifier: _identifiers.Identifier = _identifiers.ensure_identifier(identifier)
+        if identifier in self._index:
+            identifier_index = self._index.index(identifier)
+            return self[identifier_index]
         else:
-            raise IndexError(f'Representation slug not found: "{slug}".')
+            raise IndexError(f'Representation identifier not found: "{identifier}".')
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)

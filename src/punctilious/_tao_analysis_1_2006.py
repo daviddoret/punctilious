@@ -10,12 +10,15 @@ class TaoAnalysis12006(_bundling.MultiBundle):
 
     def __init__(self):
         if self.__class__._singleton_initialized is None:
-            connectors = _bundling.YamlFileBundle(path='data.connectors',
-                                                  resource='tao_analysis_1_2006.yaml')
-            representations = _bundling.YamlFileBundle(path='data.representations',
-                                                       resource='tao_analysis_1_2006.yaml')
-            mappings = _bundling.YamlFileBundle(path='data.mappings',
-                                                resource='tao_analysis_1_2006.yaml')
+            connectors: _bundling.YamlFileBundle = _bundling.YamlFileBundle(
+                path='data.connectors',
+                resource='tao_analysis_1_2006.yaml')
+            representations: _bundling.YamlFileBundle = _bundling.YamlFileBundle(
+                path='data.representations',
+                resource='tao_analysis_1_2006.yaml')
+            mappings: _bundling.YamlFileBundle = _bundling.YamlFileBundle(
+                path='data.mappings',
+                resource='tao_analysis_1_2006.yaml')
             bundles = (connectors, representations, mappings,)
             super().__init__(bundles=bundles)
             self.__class__._singleton_initialized = True
@@ -29,8 +32,8 @@ class TaoAnalysis12006(_bundling.MultiBundle):
 
     @property
     def successor(self) -> _formal_language.Connector:
-        return self.connectors.get_from_slug('successor')
+        return self.connectors.get_from_identifier('successor')
 
     @property
     def zero(self) -> _formal_language.Connector:
-        return self.connectors.get_from_slug('zero')
+        return self.connectors.get_from_identifier('zero')

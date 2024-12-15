@@ -49,7 +49,7 @@ class Formula(tuple):
     def __new__(cls, c, a=None):
         c: Connector = ensure_connector(c)
         a: FormulaArguments = ensure_formula_arguments(a)
-        phi: tuple = (c, a,)
+        phi: tuple[Connector, FormulaArguments] = (c, a,)
         return super().__new__(cls, phi)
 
     def __repr__(self):
@@ -59,17 +59,16 @@ class Formula(tuple):
         return self.connector.__str__() + self.arguments.__str__()
 
     @property
-    def arguments(self):
+    def arguments(self) -> FormulaArguments:
         return self[1]
 
     @property
-    def connector(self):
+    def connector(self) -> Connector:
         return self[0]
 
     @property
     def represent(self):
-        XXX
-        return self._representation_function
+        return self.connector.rep_formula(argument=self.arguments)
 
 
 def ensure_formula_arguments(o=None) -> FormulaArguments:
@@ -319,34 +318,31 @@ def ensure_theorem(o) -> Theorem:
 class Connectors(tuple):
     """A tuple of Connector instances."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args):
         # prepare a dictionary that maps slugs and tokens to connectors
-        slug_dict = dict(zip(tuple(i.slug for i in self), tuple(i for i in self)))
-        self._slug_index = slug_dict
-        # aliases_connectors = tuple(slug_dict[i.slug] for i in self for j in i.tokens)
-        # alias_dict = dict(zip(tokens, aliases_connectors))
-        # self._slug_index = slug_dict | alias_dict
+        index = dict(zip(tuple(i.slug for i in self), tuple(i for i in self)))
+        self._index = index
         super().__init__()
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args):
         typed_connectors = tuple(ensure_connector(r) for r in args)
         return super().__new__(cls, typed_connectors)
 
     def __repr__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
+        return '(' + ', '.join(e.identifier.slug for e in self) + ')'
 
     def __str__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
+        return '(' + ', '.join(e.identifier.slug for e in self) + ')'
 
-    def get_from_slug(self, slug: str):
-        if slug in self._slug_index.keys():
-            return self._slug_index[slug]
+    def get_from_identifier(self, identifier: str):
+        if identifier in self._index.keys():
+            return self._index[identifier]
         else:
-            raise IndexError(f'Connector slug not found: "{slug}".')
+            raise IndexError(f'Connector identifier not found: "{identifier}".')
 
     def get_from_token(self, slug: str):
-        if slug in self._slug_index.keys():
-            return self._slug_index[slug]
+        if slug in self._index.keys():
+            return self._index[slug]
         else:
             raise IndexError(f'Connector slug not found: "{slug}".')
 
@@ -362,15 +358,15 @@ class Connector:
 
     def __hash__(self):
         # hash only spans the properties that uniquely identify the object.
-        return hash((self.package, self.slug))
+        return hash((self.__class__, self.identifier,))
 
-    def __init__(self, package=None, slug=None, syntactic_rules=None, connector_representation=None,
+    def __init__(self, package=None, identifier=None, syntactic_rules=None, connector_representation=None,
                  formula_representation=None):
         self._package = package
-        self._slug = slug
+        self._identifier = _identifiers.ensure_identifier(identifier)
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
-        self._connector_representation: _presentation.Representation = connector_representation
-        self._formula_representation: _presentation.Representation = formula_representation
+        self._connector_representation: _representation.Representation = connector_representation
+        self._formula_representation: _representation.Representation = formula_representation
 
     def __repr__(self):
         return self.slug
@@ -379,7 +375,7 @@ class Connector:
         return self.slug
 
     @property
-    def connector_representation(self) -> _presentation.Representation:
+    def connector_representation(self) -> _representation.Representation:
         return self._connector_representation
 
     @connector_representation.setter
@@ -387,12 +383,16 @@ class Connector:
         self._connector_representation = connector_representation
 
     @property
-    def formula_representation(self) -> _presentation.Representation:
+    def formula_representation(self) -> _representation.Representation:
         return self._formula_representation
 
     @formula_representation.setter
     def formula_representation(self, formula_representation):
         self._formula_representation = formula_representation
+
+    @property
+    def identifier(self) -> _identifiers.Identifier:
+        return self._identifier
 
     @property
     def package(self):
@@ -401,12 +401,17 @@ class Connector:
     def rep(self, **kwargs) -> str:
         return self.connector_representation.rep(**kwargs)
 
-    def rep_formula(self, **kwargs):
-        return self.formula_representation.rep()
-
-    @property
-    def slug(self):
-        return self._slug
+    def rep_formula(self, argument: FormulaArguments | None = None):
+        """Returns the string representation of the formula *(a1, a2, ..., an),
+        where:
+         - * is this connector,
+         - a1, a2, ..., an are the formula arguments.
+        """
+        if self.formula_representation is None:
+            raise ValueError(f'Connector {self.slug} has no formula representation.')
+        argument = ensure_formula_arguments(argument)
+        variables = {'connector': self, 'argument': argument}
+        return self.formula_representation.rep(variables=variables)
 
     @property
     def syntactic_rules(self):
@@ -414,8 +419,8 @@ class Connector:
 
     def to_dict(self):
         d = {}
-        if self.slug is not None:
-            d['slug'] = self.slug
+        if self.identifier is not None:
+            d['identifier'] = self.identifier
         if self.syntactic_rules is not None:
             d['syntactic_rules'] = self.syntactic_rules
         if self.connector_representation is not None:
@@ -540,7 +545,7 @@ class Variable(Formula):
         super().__init__(c=c, a=None)
 
 
-def declare_variable(rep: _presentation.Representation):
+def declare_variable(rep: _representation.Representation):
     """Declare a new variable.
 
     A variable is a connector that takes no arguments that is designated as a variable.

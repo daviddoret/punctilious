@@ -1,5 +1,10 @@
 from __future__ import annotations
+
+import collections.abc
 import io
+import typing
+import uuid as uuid_pkg
+
 import yaml
 import importlib.resources
 import logging
@@ -75,7 +80,3 @@ class Logger:
 
 def get_logger():
     return Logger()
-
-
-class Id:
-    pass
