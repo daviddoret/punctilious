@@ -1,6 +1,7 @@
 import abc
 import collections.abc
 import re
+import uuid
 import uuid as uuid_pkg
 import typing
 
@@ -76,47 +77,66 @@ def ensure_uuid(o: FlexibleUUID) -> uuid_pkg.UUID:
 
 
 class Identifier(tuple):
+    """An immutable globally unique identifier composed of a UUID and a slug.
+    """
 
     def __eq__(self, other):
         return hash(self) == hash(other)
 
     def __hash__(self):
-        # The hash only takes the uuid into account.
-        # The slug may potentially be modified.
+        """Returns a hash for the identifier.
+
+        Only the uuid component is taken into consideration because the slug could be modified.
+
+        :return:
+        """
         return hash((self.__class__, self[1],))
 
     def __init__(self, slug: FlexibleSlug, uuid: FlexibleUUID):
-        """A globally unique identifier composed of a UUID and a slug.
+        """Initializes a new identifier.
 
-        :param i: A uuid.
-        :param p: A package slug.
-        :param s: An object slug.
+        :param slug: A slug.
+        :param uuid: A UUID.
         """
         super().__init__()
 
     def __new__(cls, slug: FlexibleSlug, uuid: FlexibleUUID):
+        global _index
         slug = ensure_slug(slug)
         uuid = ensure_uuid(uuid)
         t = (slug, uuid,)
-        return super().__new__(cls, t)
+        new_identifier = super().__new__(cls, t)
+        if new_identifier in _index.keys():
+            raise ValueError(f'Identifier already exists: {new_identifier}')
+        return
 
     def __repr__(self):
         """An unambiguous technical representation of the identifier.
 
         :return:
         """
-        return f'"{self[1]}" ({self[1]}) identifier'
+        return f'{self.unambiguous_reference} identifier'
 
     def __str__(self):
         """A friendly representation of the identifier.
 
         :return:
         """
-        return f'{self[0]}.{self[1]}'
+        return f'{self.friendly_reference} identifier'
+
+    @property
+    def friendly_reference(self) -> str:
+        """Returns a friendly reference to the identifier (i.e. its slug). This reference may not be unique."""
+        return str(self.slug)
 
     @property
     def slug(self) -> Slug:
         return self[0]
+
+    @property
+    def unambiguous_reference(self) -> str:
+        """Returns an unambiguous reference to the identifier. This reference is unique."""
+        return f'{str(self.slug)} ({str(self.uuid)})'
 
     @property
     def uuid(self) -> uuid_pkg.UUID:
@@ -141,9 +161,9 @@ def ensure_identifier(o: FlexibleIdentifier) -> Identifier:
         return Identifier(slug=slug, uuid=uuid)
     if isinstance(o, str):
         # IMPROVEMENT: Add support for string representations.
-        raise NotImplementedError(f'Invalid identifier {o} ({type(o)})')
+        raise NotImplementedError(f'Identifier string representation not supported: {o} ({type(o)})')
     else:
-        raise ValueError(f'Invalid identifier {o} ({type(o)})')
+        raise ValueError(f'Invalid identifier: {o} ({type(o)})')
 
 
 class Identifiable(abc.ABC):
@@ -154,26 +174,37 @@ class Identifiable(abc.ABC):
         raise NotImplementedError('This is an abstract property.')
 
 
-_index: dict[Identifier, Identifiable] = {}
+_index: dict[uuid.UUID, tuple[Identifier, Identifiable | None] | None] = {}
 
 
 def check_identifier_uniqueness(o: Identifiable):
+    """Checks that the identifier of an object is unique."""
     global _index
-    if o.identifier not in _index.keys():
+    existing_identifiable: Identifiable | None = get_identifiable(identifier=o.identifier, raise_not_found_error=False)
+    if existing_identifiable is None:
         # stores the new object in the index
-        _index[o.identifier] = o
+        _index[o.identifier.uuid] = (o.identifier, o,)
     else:
-        # retrieve the existing object from the index
-        existing = _index[o.identifier]
-        if not o is existing:
+        if o is not existing_identifiable:
             raise ValueError(
                 f'Duplicate object identifiers: new object: {o} ({o.identifier}) ({type(o)}), existing object: {existing} ({existing.identifier}) ({type(existing)})')
 
 
-def get_from_identifier(identifier: FlexibleIdentifier) -> Identifiable:
+def get_identifiable(identifier: FlexibleIdentifier, raise_not_found_error: bool = False) -> Identifiable | None:
+    """Returns an identifiable from an identifier.
+    Returns None or raises an error if the identifiable is not found.
+    """
     global _index
     identifier = ensure_identifier(identifier)
-    if identifier in _index.keys():
-        return _index[identifier]
-    else:
+    existing_identifiable: Identifiable | None = None
+    if identifier.uuid in _index.keys():
+        t: tuple[Identifier, Identifiable | None] | None = _index[identifier.uuid]
+        if t is None:
+            # The identifier was not present in the index,
+            # add it to the index even though we don't know what the identifiable is.
+            t = (identifier, None,)
+            _index[identifier.uuid] = t
+        existing_identifiable = t[1]
+    if existing_identifiable is None and raise_not_found_error:
         raise KeyError(f'Identifier not found: {identifier}')
+    return existing_identifiable

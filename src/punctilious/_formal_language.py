@@ -369,10 +369,10 @@ class Connector:
         self._formula_representation: _representation.Representation = formula_representation
 
     def __repr__(self):
-        return self.slug
+        return f'{self.identifier.slug} connector'
 
     def __str__(self):
-        return self.slug
+        return f'{self.identifier} connector'
 
     @property
     def connector_representation(self) -> _representation.Representation:
