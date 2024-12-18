@@ -91,11 +91,11 @@ def ensure_representation(o) -> Representation:
         return o
     elif isinstance(o, dict):
         # conversion from dict structure.
-        identifier = o['identifier']
-        identifier = _identifiers.ensure_identifier(identifier)
+        uid = o['uid']
+        uid = _identifiers.ensure_unique_identifier(uid)
         syntactic_rules = None
         renderers = ensure_renderers(o=o.get('renderers', []))
-        o = Representation(identifier=identifier, syntactic_rules=syntactic_rules, renderers=renderers)
+        o = Representation(uid=uid, syntactic_rules=syntactic_rules, renderers=renderers)
         return o
     else:
         raise TypeError(f'Representation validation failure. Type: {type(o)}. Object: {o}.')
@@ -112,24 +112,20 @@ def ensure_representations(o) -> Representations:
         raise TypeError(f'Representations validation failure. Type: {type(o)}. Object: {o}.')
 
 
-class Representation:
+class Representation(_identifiers.UniqueIdentifiable):
 
-    def __init__(self, identifier: _identifiers.FlexibleIdentifier,
+    def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
                  renderers: tuple[Renderer, ...],
                  syntactic_rules=None):
-        self._identifier: _identifiers.Identifier = _identifiers.ensure_identifier(identifier)
         self._syntactic_rules = syntactic_rules
         self._renderers: tuple[Renderer, ...] = renderers
+        super().__init__(uid=uid)
 
     def __repr__(self):
-        return f'{self.identifier.slug} ({self.identifier.uuid}) representation'
+        return f'{self.uid.slug} ({self.uid.uuid}) representation'
 
     def __str__(self):
-        return f'{self.identifier.slug} representation'
-
-    @property
-    def identifier(self):
-        return self._identifier
+        return f'{self.uid.slug} representation'
 
     def optimize_renderer(self, config: TagsPreferences = None):
         """Given preferences, return the optimal renderer.
@@ -173,7 +169,7 @@ class Representations(tuple):
     """A tuple of Representation instances."""
 
     def __init__(self, *args):
-        self._index = tuple(i.identifier for i in self)
+        self._index = tuple(i.uid for i in self)
         super().__init__()
 
     def __new__(cls, *args):
@@ -181,13 +177,13 @@ class Representations(tuple):
         return super().__new__(cls, typed_representations)
 
     def __repr__(self):
-        return '(' + ', '.join(e.identifier.slug for e in self) + ')'
+        return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
     def __str__(self):
-        return '(' + ', '.join(e.identifier.slug for e in self) + ')'
+        return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
-    def get_from_identifier(self, identifier: _identifiers.FlexibleIdentifier):
-        identifier: _identifiers.Identifier = _identifiers.ensure_identifier(identifier)
+    def get_from_identifier(self, identifier: _identifiers.FlexibleUniqueIdentifier):
+        identifier: _identifiers.UniqueIdentifier = _identifiers.ensure_identifier(identifier)
         if identifier in self._index:
             identifier_index = self._index.index(identifier)
             return self[identifier_index]

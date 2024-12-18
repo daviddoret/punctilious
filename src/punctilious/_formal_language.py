@@ -94,7 +94,7 @@ def ensure_connectors(o=None, overwrite_mutable_properties: bool = False) -> Con
     if isinstance(o, Connectors):
         return o
     elif isinstance(o, collections.abc.Iterable):
-        return Connectors(*o, overwrite_modifiable_propertie=overwrite_mutable_properties)
+        return Connectors(*o, overwrite_mutable_properties=overwrite_mutable_properties)
     elif o is None:
         return Connectors()
     else:
@@ -360,10 +360,10 @@ class Connectors(tuple):
         return super().__new__(cls, typed_connectors)
 
     def __repr__(self):
-        return '(' + ', '.join(e.identifier.slug for e in self) + ')'
+        return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
     def __str__(self):
-        return '(' + ', '.join(e.identifier.slug for e in self) + ')'
+        return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
     def get_from_identifier(self, identifier: str):
         if identifier in self._index.keys():
@@ -381,29 +381,25 @@ class Connectors(tuple):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-class Connector:
+class Connector(_identifiers.UniqueIdentifiable):
     # __slots__ = ('_uuid', '_slug', '_tokens', '_syntactic_rules', '_representation')
 
     def __call__(self, *args):
         return Formula(c=self, a=args)
 
-    def __hash__(self):
-        # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self.identifier,))
-
-    def __init__(self, package=None, identifier=None, syntactic_rules=None, connector_representation=None,
+    def __init__(self, package=None, uid=None, syntactic_rules=None, connector_representation=None,
                  formula_representation=None):
         self._package = package
-        self._identifier = _identifiers.ensure_identifier(identifier)
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
         self._connector_representation: _representation.Representation = connector_representation
         self._formula_representation: _representation.Representation = formula_representation
+        super().__init__(uid=uid)
 
     def __repr__(self):
-        return f'{self.identifier.slug} connector'
+        return f'{self.uid.slug} connector'
 
     def __str__(self):
-        return f'{self.identifier} connector'
+        return f'{self.uid} connector'
 
     @property
     def connector_representation(self) -> _representation.Representation:
@@ -420,10 +416,6 @@ class Connector:
     @formula_representation.setter
     def formula_representation(self, formula_representation):
         self._formula_representation = formula_representation
-
-    @property
-    def identifier(self) -> _identifiers.Identifier:
-        return self._identifier
 
     @property
     def package(self):
@@ -450,8 +442,8 @@ class Connector:
 
     def to_dict(self):
         d = {}
-        if self.identifier is not None:
-            d['identifier'] = self.identifier
+        if self.uid is not None:
+            d['identifier'] = self.uid
         if self.syntactic_rules is not None:
             d['syntactic_rules'] = self.syntactic_rules
         if self.connector_representation is not None:

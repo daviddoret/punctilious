@@ -1,6 +1,5 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d
-slug: predicates_1
+uid: { slug: predicates_1, uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d }
 description:
   A library of common predicate functions.
 connectors:

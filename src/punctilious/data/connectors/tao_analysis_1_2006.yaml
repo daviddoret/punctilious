@@ -1,11 +1,11 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-identifier: { slug: tao_analysis_1_2006_connectors, uuid: 74768b09-c0a0-464c-b351-08d597555d58 }
+uid: { slug: tao_analysis_1_2006_connectors, uuid: 74768b09-c0a0-464c-b351-08d597555d58 }
 description:
   Connectors used in (Tao, 2006).
 connectors:
-  - identifier: { slug: successor, uuid: f85163bf-381d-41fa-bdbb-70cd28bb826b }
+  - uid: { slug: successor, uuid: f85163bf-381d-41fa-bdbb-70cd28bb826b }
     syntactic_rules: { fixed_arity: 1 }
-  - identifier: { slug: zero, uuid: 85927ea1-566e-4349-bab9-9845ba3a4b93 }
+  - uid: { slug: zero, uuid: 85927ea1-566e-4349-bab9-9845ba3a4b93 }
     syntactic_rules: { fixed_arity: 0 }
 bibliography:
   - slug: tao_2006

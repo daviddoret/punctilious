@@ -269,7 +269,7 @@ class YamlFileBundle(Bundle):
                 file: io.TextIOBase
                 d: dict = yaml.safe_load(file)
                 schema = d['schema']
-                identifier: _identifiers.Identifier = _identifiers.ensure_identifier(d['identifier'])
+                uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(d['uid'])
                 untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
                 imports = Imports(*untyped_imports)
                 aliases = None  # To be implemented
@@ -309,7 +309,7 @@ class YamlFileBundle(Bundle):
                 theorems = _formal_language.Theorems(*untyped_theorems)
                 justifications = _formal_language.Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
-                super().__init__(schema=schema, identifier=identifier, imports=imports, aliases=aliases,
+                super().__init__(schema=schema, identifier=uid, imports=imports, aliases=aliases,
                                  representations=representations, connectors=typed_connectors, theorems=theorems,
                                  justifications=justifications)
 

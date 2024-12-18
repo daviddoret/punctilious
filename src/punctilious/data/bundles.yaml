@@ -1,6 +1,5 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: 7f0162cf-ca5d-4ce6-b9b7-b33027e74bc2
-slug: packages_1
+uid: { slug: packages_1, uuid: 7f0162cf-ca5d-4ce6-b9b7-b33027e74bc2 }
 description:
   A catalog of native packages.
 packages:

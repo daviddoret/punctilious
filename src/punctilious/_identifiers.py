@@ -75,8 +75,8 @@ def ensure_uuid(o: FlexibleUUID) -> uuid_pkg.UUID:
         raise ValueError(f'Invalid uuid {o}')
 
 
-class Identifier(tuple):
-    """An immutable globally unique identifier composed of a UUID and a slug.
+class UniqueIdentifier(tuple):
+    """An immutable globally unique identifier composed of a UUID and a friendly slug.
     """
 
     def __eq__(self, other):
@@ -89,39 +89,55 @@ class Identifier(tuple):
 
         :return:
         """
-        return hash((self.__class__, self[1],))
+        return hash((UniqueIdentifier, self[1],))
 
-    def __init__(self, slug: FlexibleSlug, uuid: FlexibleUUID):
+    def __init__(self, slug: FlexibleSlug, uuid: FlexibleUUID, raises_error_if_exists: bool = False):
         """Initializes a new identifier.
 
         :param slug: A slug.
         :param uuid: A UUID.
         """
+        global _unique_identifier_index
         super().__init__()
+        uuid = ensure_uuid(uuid)
+        if uuid not in _unique_identifier_index.keys():
+            _unique_identifier_index[uuid] = self
 
-    def __new__(cls, slug: FlexibleSlug, uuid: FlexibleUUID):
-        global _index
+    def __new__(cls, slug: FlexibleSlug, uuid: FlexibleUUID, raises_error_if_exists: bool = False):
+        global _unique_identifier_index
         slug = ensure_slug(slug)
         uuid = ensure_uuid(uuid)
-        t = (slug, uuid,)
-        new_identifier = super().__new__(cls, t)
-        if new_identifier in _index.keys():
-            raise ValueError(f'Identifier already exists: {new_identifier}')
-        return new_identifier
+        if uuid in _unique_identifier_index.keys():
+            if raises_error_if_exists:
+                raise ValueError(f'UniqueIdentifier already exists. Uuid: {uuid}.')
+            else:
+                # Reuse existing identifier.
+                existing_identifier: UniqueIdentifier = _unique_identifier_index[uuid]
+                if slug != existing_identifier.slug:
+                    raise ValueError(
+                        f'UniqueIdentifier has inconsistent slug. New slug: `{slug}`, existing slug: `{existing_identifier.slug}`, uuid: {uuid}')
+                else:
+                    # Return existing identifier.
+                    return existing_identifier
+        else:
+            # Instantiates a new UniqueIdentifier.
+            t = (slug, uuid,)
+            uid = super().__new__(cls, t)
+            return uid
 
     def __repr__(self):
         """An unambiguous technical representation of the identifier.
 
         :return:
         """
-        return f'{self.unambiguous_reference} identifier'
+        return f'{self.unambiguous_reference} UniqueIdentifier'
 
     def __str__(self):
         """A friendly representation of the identifier.
 
         :return:
         """
-        return f'{self.friendly_reference} identifier'
+        return f'{self.friendly_reference} UniqueIdentifier'
 
     @property
     def friendly_reference(self) -> str:
@@ -142,22 +158,22 @@ class Identifier(tuple):
         return self[1]
 
 
-FlexibleIdentifier = typing.Union[Identifier]
+FlexibleUniqueIdentifier = typing.Union[UniqueIdentifier, collections.abc.Mapping, collections.abc.Iterable]
 
 
-def ensure_identifier(o: FlexibleIdentifier) -> Identifier:
+def ensure_unique_identifier(o: FlexibleUniqueIdentifier) -> UniqueIdentifier:
     """Assure `o` is of type Identifier, or implicitly convert `o` to Identifier, or raise an error if this fails.
     """
-    if isinstance(o, Identifier):
+    if isinstance(o, UniqueIdentifier):
         return o
     if isinstance(o, collections.abc.Mapping):
         slug: FlexibleSlug = o['slug']
         uuid: FlexibleUUID = o['uuid']
-        return Identifier(slug=slug, uuid=uuid)
+        return UniqueIdentifier(slug=slug, uuid=uuid)
     if isinstance(o, collections.abc.Iterable) and len(o) == 2:
         slug: FlexibleSlug = o[0]
         uuid: FlexibleUUID = o[1]
-        return Identifier(slug=slug, uuid=uuid)
+        return UniqueIdentifier(slug=slug, uuid=uuid)
     if isinstance(o, str):
         # IMPROVEMENT: Add support for string representations.
         raise NotImplementedError(f'Identifier string representation not supported: {o} ({type(o)})')
@@ -166,45 +182,64 @@ def ensure_identifier(o: FlexibleIdentifier) -> Identifier:
 
 
 class UniqueIdentifiable(abc.ABC):
+    """A UniqueIdentifiable is an object:
+     - that is uniquely identified by a UniqueIdentifier,
+     - that when loaded is indexed in a central index to assure it has no duplicate,
+     - that may have some immutable properties,
+     - that may have some mutable properties.
+
+    """
+
+    def __hash__(self):
+        """
+
+        :return:
+        """
+        return hash((UniqueIdentifiable, self.uid,))
+
+    def __init__(self, uid: FlexibleUniqueIdentifier):
+        """
+        
+        Raises an error if a UniqueIdentifiable with the same UniqueIdentifier already exists.
+        
+        :param uid: 
+        """""
+        # Add the identifier to the global index
+        global _unique_identifiable_index
+        uid: UniqueIdentifier = ensure_unique_identifier(uid)
+        self._uid = uid
+        if uid.uuid not in _unique_identifiable_index.keys():
+            _unique_identifiable_index[uid.uuid] = self
+        else:
+            raise ValueError(f"UniqueIdentifiable with UniqueIdentifier '{uid}' already exists.")
+        super().__init__()
 
     @property
-    @abc.abstractmethod
-    def identifier(self) -> Identifier:
-        raise NotImplementedError('This is an abstract property.')
+    def uid(self) -> UniqueIdentifier:
+        return self._uid
 
 
-_index: dict[uuid_pkg.UUID, tuple[Identifier, UniqueIdentifiable | None] | None] = {}
+_unique_identifier_index: dict[uuid_pkg.UUID, UniqueIdentifier | None] = {}
+_unique_identifiable_index: dict[uuid_pkg.UUID, UniqueIdentifiable | None] = {}
 
 
-def check_uniqueness_or_index_identifier(o: UniqueIdentifiable):
-    """Checks that the identifier of an object is unique, or index it if not already done."""
-    global _index
-    existing_identifiable: UniqueIdentifiable | None = get_identifiable(identifier=o.identifier,
-                                                                        raise_not_found_error=False)
-    if existing_identifiable is None:
-        # stores the new object in the index
-        _index[o.identifier.uuid] = (o.identifier, o,)
-    else:
-        if o is not existing_identifiable:
-            raise ValueError(
-                f'Duplicate object identifiers: new object: {o} ({o.identifier}) ({type(o)}), existing object: {existing} ({existing.identifier}) ({type(existing)})')
+def get_unique_identifiable(uid: FlexibleUniqueIdentifier | None,
+                            uuid: FlexibleUUID | None = None) -> UniqueIdentifiable | None:
+    """Returns the existing UniqueIdentifiable with the given uid or UUID if it exists.
+    Returns None otherwise.
 
-
-def get_identifiable(identifier: FlexibleIdentifier, raise_not_found_error: bool = False) -> UniqueIdentifiable | None:
-    """Returns an identifiable from an identifier.
-    Returns None or raises an error if the identifiable is not found.
+    :param uid: The UniqueIdentifier of the UniqueIdentifiable to return.
+    :param uuid: Alternatively, the UUID of the UniqueIdentifiable to return.
+    :return: The UniqueIdentifiable or None if it does not exist.
     """
-    global _index
-    identifier = ensure_identifier(identifier)
-    existing_identifiable: UniqueIdentifiable | None = None
-    if identifier.uuid in _index.keys():
-        t: tuple[Identifier, UniqueIdentifiable | None] | None = _index[identifier.uuid]
-        if t is None:
-            # The identifier was not present in the index,
-            # add it to the index even though we don't know what the identifiable is.
-            t = (identifier, None,)
-            _index[identifier.uuid] = t
-        existing_identifiable = t[1]
-    if existing_identifiable is None and raise_not_found_error:
-        raise KeyError(f'Identifier not found: {identifier}')
-    return existing_identifiable
+    global _unique_identifiable_index
+    if uid is None and uuid is None:
+        raise ValueError('Either uid or uuid must be provided.')
+    if uid is not None:
+        uid = ensure_unique_identifier(uid)
+        uuid = uid.uuid
+    uuid: uuid_pkg.UUID = ensure_uuid(uuid)
+    if uuid in _unique_identifiable_index.keys():
+        return _unique_identifiable_index[uuid]
+    else:
+        return None

@@ -1,12 +1,12 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-identifier: { slug: tao_analysis_1_2006_representations, uuid: 4bb42d13-1e72-4192-bf40-efeeee858705 }
+uid: { slug: tao_analysis_1_2006_representations, uuid: 4bb42d13-1e72-4192-bf40-efeeee858705 }
 representations:
-  - identifier: { slug: zero, uuid: 328cbbbf-7331-44b3-88c3-5d7ea912a213 }
+  - uid: { slug: zero, uuid: 328cbbbf-7331-44b3-88c3-5d7ea912a213 }
     renderers:
       - implementation: string_constant
         string_constant: '0'
         tags: { technical_language: unicode_basic, connector_representation: symbol }
-  - identifier: { slug: successor, uuid: 41c2d319-bf0c-4442-9af6-a6db82ad1f80 }
+  - uid: { slug: successor, uuid: 41c2d319-bf0c-4442-9af6-a6db82ad1f80 }
     renderers:
       - implementation: string_constant
         string_constant: '++'

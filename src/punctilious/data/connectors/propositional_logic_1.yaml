@@ -1,18 +1,17 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d
-slug: propositional_logic_1
+uid: { slug: propositional_logic_1, uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d }
 description:
   A library of connectors dedicated to propositional logic.
 connectors:
-  - slug: is_propositional_variable
+  - uid: { slug: is_propositional_variable, uuid: 81277fd4-280d-4436-a465-79b4e83aadf5 }
     syntactic_rules: { fixed_arity: 1 }
-  - slug: is_well_formed_atomic_formula
+  - uid: { slug: is_well_formed_atomic_formula, uuid: 4261f81e-2f21-4b2d-a840-0421c1cd6680 }
     syntactic_rules: { fixed_arity: 1 }
-  - slug: is_well_formed_formula
+  - uid: { slug: is_well_formed_formula, uuid: 1d49c209-3484-4225-971a-2594c40dec51 }
     syntactic_rules: { fixed_arity: 1 }
-  - slug: is_well_formed_sub_formula
+  - uid: { slug: is_well_formed_sub_formula, uuid: 5b398bdf-de73-4b72-91a3-481221af0d6a }
     syntactic_rules: { fixed_arity: 2 }
-  - slug: degree
+  - uid: { slug: degree, uuid: 5c035e41-1c14-446a-8b38-17f9ec139d7a }
     syntactic_rules: { fixed_arity: 1 }
 bibliography:
   - citation: mancosu_etal_2021
