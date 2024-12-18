@@ -82,11 +82,19 @@ def ensure_formula_arguments(o=None) -> FormulaArguments:
         raise ValueError(f'o cannot be constrained into FormulaArguments {FormulaArguments}. {type(o)}')
 
 
-def ensure_connectors(o=None) -> Connectors:
+def ensure_connectors(o=None, overwrite_mutable_properties: bool = False) -> Connectors:
+    """
+
+    :param o:
+    :param overwrite_mutable_properties: If `o` is in a raw format such as a dictionary (e.g.: read from a YAML file),
+    and if `o` is a UniqueIdentifiable that is already loaded in memory, overwrite its mutable properties (i.e.: update
+    `o`).
+    :return:
+    """
     if isinstance(o, Connectors):
         return o
     elif isinstance(o, collections.abc.Iterable):
-        return Connectors(*o)
+        return Connectors(*o, overwrite_modifiable_propertie=overwrite_mutable_properties)
     elif o is None:
         return Connectors()
     else:
@@ -254,14 +262,22 @@ class Theorems(tuple):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def ensure_connector(o) -> Connector:
-    """Assure that `o` is of type Connector, converting as necessary, or raise an error."""
+def ensure_connector(o, overwrite_mutable_properties: bool = False) -> Connector:
+    """Assure that `o` is of type Connector, converting as necessary, or raise an error.
+
+    :param o:
+    :param overwrite_mutable_properties: If `o` is in a raw format such as a dictionary (e.g.: read from a YAML file),
+    and if `o` is a UniqueIdentifiable that is already loaded in memory, overwrite its mutable properties (i.e.: update
+    `o`).
+    :return:
+    """
     if isinstance(o, Connector):
         return o
     elif isinstance(o, dict):
         uuid = o['uuid'] if 'uuid' in o.keys() else None
         slug = o['slug'] if 'slug' in o.keys() else None
-        tokens = o['tokens'] if 'tokens' in o.keys() else tuple()
+
+        # tokens = o['tokens'] if 'tokens' in o.keys() else tuple()
         syntactic_rules = o['syntactic_rules'] if 'syntactic_rules' in o.keys() else None
         representation = o['representation'] if 'representation' in o.keys() else None
         o = Connector(uuid=uuid, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
@@ -318,14 +334,29 @@ def ensure_theorem(o) -> Theorem:
 class Connectors(tuple):
     """A tuple of Connector instances."""
 
-    def __init__(self, *args):
+    def __init__(self, *args, overwrite_mutable_properties: bool = False):
+        """
+
+        :param args:
+        :param overwrite_mutable_properties: If `o` is in a raw format such as a dictionary (e.g.: read from a YAML file),
+        and if `o` is a UniqueIdentifiable that is already loaded in memory, overwrite its mutable properties (i.e.: update
+        `o`).
+        """
         # prepare a dictionary that maps slugs and tokens to connectors
         index = dict(zip(tuple(i.slug for i in self), tuple(i for i in self)))
         self._index = index
         super().__init__()
 
-    def __new__(cls, *args):
-        typed_connectors = tuple(ensure_connector(r) for r in args)
+    def __new__(cls, *args, overwrite_modifiable_properties: bool = False):
+        """
+
+        :param args:
+        :param overwrite_mutable_properties: If `o` is in a raw format such as a dictionary (e.g.: read from a YAML file),
+        and if `o` is a UniqueIdentifiable that is already loaded in memory, overwrite its mutable properties (i.e.: update
+        `o`).
+        """
+        typed_connectors = tuple(
+            ensure_connector(r, overwrite_mutable_properties=overwrite_modifiable_properties) for r in args)
         return super().__new__(cls, typed_connectors)
 
     def __repr__(self):

@@ -1,7 +1,6 @@
 import abc
 import collections.abc
 import re
-import uuid
 import uuid as uuid_pkg
 import typing
 
@@ -108,7 +107,7 @@ class Identifier(tuple):
         new_identifier = super().__new__(cls, t)
         if new_identifier in _index.keys():
             raise ValueError(f'Identifier already exists: {new_identifier}')
-        return
+        return new_identifier
 
     def __repr__(self):
         """An unambiguous technical representation of the identifier.
@@ -166,7 +165,7 @@ def ensure_identifier(o: FlexibleIdentifier) -> Identifier:
         raise ValueError(f'Invalid identifier: {o} ({type(o)})')
 
 
-class Identifiable(abc.ABC):
+class UniqueIdentifiable(abc.ABC):
 
     @property
     @abc.abstractmethod
@@ -174,13 +173,14 @@ class Identifiable(abc.ABC):
         raise NotImplementedError('This is an abstract property.')
 
 
-_index: dict[uuid.UUID, tuple[Identifier, Identifiable | None] | None] = {}
+_index: dict[uuid_pkg.UUID, tuple[Identifier, UniqueIdentifiable | None] | None] = {}
 
 
-def check_identifier_uniqueness(o: Identifiable):
-    """Checks that the identifier of an object is unique."""
+def check_uniqueness_or_index_identifier(o: UniqueIdentifiable):
+    """Checks that the identifier of an object is unique, or index it if not already done."""
     global _index
-    existing_identifiable: Identifiable | None = get_identifiable(identifier=o.identifier, raise_not_found_error=False)
+    existing_identifiable: UniqueIdentifiable | None = get_identifiable(identifier=o.identifier,
+                                                                        raise_not_found_error=False)
     if existing_identifiable is None:
         # stores the new object in the index
         _index[o.identifier.uuid] = (o.identifier, o,)
@@ -190,15 +190,15 @@ def check_identifier_uniqueness(o: Identifiable):
                 f'Duplicate object identifiers: new object: {o} ({o.identifier}) ({type(o)}), existing object: {existing} ({existing.identifier}) ({type(existing)})')
 
 
-def get_identifiable(identifier: FlexibleIdentifier, raise_not_found_error: bool = False) -> Identifiable | None:
+def get_identifiable(identifier: FlexibleIdentifier, raise_not_found_error: bool = False) -> UniqueIdentifiable | None:
     """Returns an identifiable from an identifier.
     Returns None or raises an error if the identifiable is not found.
     """
     global _index
     identifier = ensure_identifier(identifier)
-    existing_identifiable: Identifiable | None = None
+    existing_identifiable: UniqueIdentifiable | None = None
     if identifier.uuid in _index.keys():
-        t: tuple[Identifier, Identifiable | None] | None = _index[identifier.uuid]
+        t: tuple[Identifier, UniqueIdentifiable | None] | None = _index[identifier.uuid]
         if t is None:
             # The identifier was not present in the index,
             # add it to the index even though we don't know what the identifiable is.

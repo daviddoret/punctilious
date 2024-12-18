@@ -265,52 +265,56 @@ class YamlFileBundle(Bundle):
         package_path = importlib.resources.files(path).joinpath(resource)
         with importlib.resources.as_file(package_path) as file_path:
             with open(file_path, 'r') as file:
-                try:
-                    file: io.TextIOBase
-                    d: dict = yaml.safe_load(file)
-                    schema = d['schema']
-                    identifier: _identifiers.Identifier = _identifiers.ensure_identifier(d['identifier'])
-                    untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
-                    imports = Imports(*untyped_imports)
-                    aliases = None  # To be implemented
-                    representations: _representation.Representations = _representation.ensure_representations(
-                        d.get('representations', tuple()))
-                    # Load connectors
-                    typed_connectors = []
-                    for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
-                        # TODO: Resume from here. A Connector contains modifiable representation
-                        #   properties.
-                        #   These properties may be further enriched at any moment.
-                        #   But read-only properties must be checked for consistency,
-                        #   and maintained read-only.
-                        identifier = _identifiers.ensure_identifier(raw_connector['identifier'])
-                        syntactic_rules = _formal_language.ensure_syntactic_rules(o=
-                                                                                  raw_connector[
-                                                                                      'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
-                        connector_representation_reference = raw_connector.get('connector_representation', None)
-                        connector_representation = self._resolve_package_representation_reference(
-                            ref=connector_representation_reference,
-                            i=imports, r=representations) if connector_representation_reference is not None else None
-                        formula_representation_reference = raw_connector.get('formula_representation', None)
-                        formula_representation = self._resolve_package_representation_reference(
-                            ref=formula_representation_reference,
-                            i=imports, r=representations) if formula_representation_reference is not None else None
-                        o = _formal_language.Connector(package=self, identifier=identifier,
-                                                       syntactic_rules=syntactic_rules,
-                                                       connector_representation=connector_representation,
-                                                       formula_representation=formula_representation)
-                        typed_connectors.append(o)
-                    typed_connectors = _formal_language.Connectors(*typed_connectors)
-                    # Load connectors
-                    untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
-                    theorems = _formal_language.Theorems(*untyped_theorems)
-                    justifications = _formal_language.Justifications.instantiate_from_list(
-                        l=d['justifications'] if 'justifications' in d.keys() else None)
-                    super().__init__(schema=schema, identifier=id, imports=imports, aliases=aliases,
-                                     representations=representations, connectors=typed_connectors, theorems=theorems,
-                                     justifications=justifications)
-                except Exception as e:
-                    raise ValueError(f'Error when loading YAML file {file_path}: {e}')
+                #                try:
+                file: io.TextIOBase
+                d: dict = yaml.safe_load(file)
+                schema = d['schema']
+                identifier: _identifiers.Identifier = _identifiers.ensure_identifier(d['identifier'])
+                untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
+                imports = Imports(*untyped_imports)
+                aliases = None  # To be implemented
+                representations: _representation.Representations = _representation.ensure_representations(
+                    d.get('representations', tuple()))
+                # Load connectors
+                connectors = _formal_language.ensure_connectors(d.get('connectors', tuple()),
+                                                                overwrite_mutable_properties=True)
+                pass
+                #                typed_connectors = []
+                #                for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
+                #                    # TODO: Resume from here. A Connector contains modifiable representation
+                #                    #   properties.
+                #                    #   These properties may be further enriched at any moment.
+                #                    #   But read-only properties must be checked for consistency,
+                #                    #   and maintained read-only.
+                #                    identifier = _identifiers.ensure_identifier(raw_connector['identifier'])
+                #                    syntactic_rules = _formal_language.ensure_syntactic_rules(o=
+                #                                                                              raw_connector[
+                #                                                                                  'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
+                #                    connector_representation_reference = raw_connector.get('connector_representation', None)
+                #                    connector_representation = self._resolve_package_representation_reference(
+                #                        ref=connector_representation_reference,
+                #                        i=imports, r=representations) if connector_representation_reference is not None else None
+                #                    formula_representation_reference = raw_connector.get('formula_representation', None)
+                #                    formula_representation = self._resolve_package_representation_reference(
+                #                        ref=formula_representation_reference,
+                #                        i=imports, r=representations) if formula_representation_reference is not None else None
+                #                    o = _formal_language.Connector(package=self, identifier=identifier,
+                #                                                   syntactic_rules=syntactic_rules,
+                #                                                   connector_representation=connector_representation,
+                #                                                  formula_representation=formula_representation)
+                #                    typed_connectors.append(o)
+                #               typed_connectors = _formal_language.Connectors(*typed_connectors)
+                # Load connectors
+                untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
+                theorems = _formal_language.Theorems(*untyped_theorems)
+                justifications = _formal_language.Justifications.instantiate_from_list(
+                    l=d['justifications'] if 'justifications' in d.keys() else None)
+                super().__init__(schema=schema, identifier=identifier, imports=imports, aliases=aliases,
+                                 representations=representations, connectors=typed_connectors, theorems=theorems,
+                                 justifications=justifications)
+
+    #                except Exception as e:
+    #                   raise ValueError(f'Error when loading YAML file {file_path}: {e}')
 
     def _resolve_package_representation_reference(self, ref: str, i: Imports,
                                                   r: _representation.Representations):
