@@ -57,7 +57,7 @@ class Formula(tuple):
         return self.connector.__str__() + self.arguments.__str__()
 
     def __str__(self):
-        return self.connector.__str__() + self.arguments.__str__()
+        return self.represent()
 
     @property
     def arguments(self) -> FormulaArguments:
@@ -67,7 +67,6 @@ class Formula(tuple):
     def connector(self) -> Connector:
         return self[0]
 
-    @property
     def represent(self):
         return self.connector.rep_formula(argument=self.arguments)
 
@@ -428,9 +427,11 @@ class Connector(_identifiers.UniqueIdentifiable):
          - a1, a2, ..., an are the formula arguments.
         """
         if self.formula_representation is None:
-            raise ValueError(f'Connector {self.slug} has no formula representation.')
+            raise ValueError(f'Connector {self.uid} has no formula representation.')
+        connector: str = self.rep()
         argument = ensure_formula_arguments(argument)
-        variables = {'connector': self, 'argument': argument}
+        argument_representations = tuple(a.represent() for a in argument)
+        variables = {'connector': connector, 'argument': argument_representations}
         return self.formula_representation.rep(variables=variables)
 
     @property

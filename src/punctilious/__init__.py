@@ -21,6 +21,7 @@ import _latin_alphabet_lowercase_serif_italic
 import _latin_alphabet_uppercase_serif_italic
 # import _latin_alphabet_lowercase_serif_roman
 import _operators_1
+import _operators_1_representations
 
 # import _propositional_logic_1
 # import _tao_analysis_1_2006
@@ -34,7 +35,10 @@ greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.G
 greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
 latin_alphabet_lowercase_serif_italic = _latin_alphabet_lowercase_serif_italic.LatinAlphabetLowercaseSerifItalic()
 latin_alphabet_uppercase_serif_italic = _latin_alphabet_uppercase_serif_italic.LatinAlphabetUppercaseSerifItalic()
+
 operators_1 = _operators_1.Operators1()
+# TODO: Resume here to assure operators are enriched with representations.
+operators_1_representations = _operators_1_representations.Operators1Representations()
 
 # tao_analysis_1_2006 = _tao_analysis_1_2006.TaoAnalysis12006()
 pass
