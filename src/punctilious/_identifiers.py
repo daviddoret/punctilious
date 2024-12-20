@@ -82,6 +82,9 @@ class UniqueIdentifier(tuple):
     def __eq__(self, other):
         return hash(self) == hash(other)
 
+    def __ne__(self, other):
+        return not self == other
+
     def __hash__(self):
         """Returns a hash for the identifier.
 

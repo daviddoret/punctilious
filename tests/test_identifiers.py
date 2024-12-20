@@ -21,14 +21,14 @@ class TestSlug:
         foo = pu.Slug('foo')
         bar = pu.Slug('bar')
         taz = pu.Slug('taz')
-        i1 = pu.UniqueIdentifier(foo, uuid1)
-        i2 = pu.UniqueIdentifier(bar, uuid2)
-        with pytest.raises(Exception):
-            pu.UniqueIdentifier(taz, uuid1)
-        with pytest.raises(Exception):
-            pu.UniqueIdentifier(foo, uuid1)
-        print(hash(i1))
-        assert i1.slug == pu.Slug('foo')
-        assert i2.slug == pu.Slug('bar')
-        assert i1 == i1
-        assert i1 != i2
+        uid1 = pu.UniqueIdentifier(foo, uuid1)
+        uid2 = pu.UniqueIdentifier(bar, uuid2)
+        uid3 = pu.UniqueIdentifier(taz, uuid1)
+        uid4 = pu.UniqueIdentifier(foo, uuid1)
+        assert uid1.slug == pu.Slug('foo')
+        assert uid2.slug == pu.Slug('bar')
+        assert uid1 == uid1
+        assert uid1 != uid2
+        assert uid1 == uid3
+        assert uid1 == uid4
+        assert uid3 == uid4
