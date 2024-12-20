@@ -613,6 +613,9 @@ class Variable(Formula):
         super().__init__(c=c, a=None)
 
 
+_variable_counter = 0
+
+
 def declare_variable(rep: _representation.Representation):
     """Declare a new variable.
 
@@ -622,5 +625,9 @@ def declare_variable(rep: _representation.Representation):
     :return:
     """
     # Create a new connector.
-    c = Connector(connector_representation=rep)
+    global _variable_counter
+    _variable_counter = _variable_counter + 1
+    c = Connector(
+        uid=_identifiers.create_uid(slug=f'variable_{_variable_counter}'),
+        connector_representation=rep)
     return Variable(c=c)

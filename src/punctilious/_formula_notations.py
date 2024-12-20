@@ -24,16 +24,16 @@ class FormulaNotations(_bundling.YamlFileBundle):
 
     @property
     def atomic_formula(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('atomic_formula')
+        return self.representations.get_from_uuid('f6bd05d7-ee5b-4480-9d59-ea9fa3a13516')
 
     @property
     def function_formula(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('function_formula')
+        return self.representations.get_from_uuid('cd1df2f9-f04d-4321-8430-5191082da985')
 
     @property
     def infix_formula(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('infix_formula')
+        return self.representations.get_from_uuid('d83bd1a4-97cf-4a7e-975d-21711333b971')
 
     @property
     def prefix_formula(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('prefix_formula')
+        return self.representations.get_from_uuid('af99c47e-c6b8-43e0-a8f4-6331ba79e8fd')

@@ -32,8 +32,8 @@ class TaoAnalysis12006(_bundling.MultiBundle):
 
     @property
     def successor(self) -> _formal_language.Connector:
-        return self.connectors.get_from_identifier('successor')
+        return self.connectors.get_from_uuid('successor')
 
     @property
     def zero(self) -> _formal_language.Connector:
-        return self.connectors.get_from_identifier('zero')
+        return self.connectors.get_from_uuid('zero')

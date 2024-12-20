@@ -273,11 +273,12 @@ class YamlFileBundle(Bundle):
                 untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
                 imports = Imports(*untyped_imports)
                 aliases = None  # To be implemented
-                representations: _representation.Representations = _representation.ensure_representations(
-                    d.get('representations', tuple()))
+                representations: _representation.Representations = _representation.load_representations(
+                    d.get('representations', None),
+                    overwrite_mutable_properties=True)
                 # Load connectors
                 connectors: _formal_language.Connectors = _formal_language.load_connectors(
-                    o=d.get('connectors', None),
+                    d.get('connectors', None),
                     overwrite_mutable_properties=True)
                 pass
                 untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
@@ -306,14 +307,14 @@ class YamlFileBundle(Bundle):
         ref_tuple: tuple = tuple(ref.split('.'))
         if len(ref_tuple) == 1:
             # This is a local reference.
-            r = r.get_from_identifier(slug=ref)
+            r = r.get_from_uuid(slug=ref)
             return r
         elif len(ref_tuple) == 2:
             # This is a reference in an imported YAML file.
             p_ref = ref_tuple[0]
             p: Bundle = i.get_from_slug(slug=p_ref).package
             ref = ref_tuple[1]
-            r = p.representations.get_from_identifier(slug=ref)
+            r = p.representations.get_from_uuid(slug=ref)
             return r
         else:
             raise ValueError(f'Improper reference: "{ref}".')

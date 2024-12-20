@@ -19,7 +19,7 @@ class Slug(str):
         super().__init__()
 
     def __new__(cls, slug: str):
-        pattern = r"^[a-zA-Z][a-zA-Z0-9]+(?:_[a-zA-Z0-9]+)*[a-zA-Z0-9]$"
+        pattern = r'^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$'
         if not bool(re.fullmatch(pattern, slug)):
             raise ValueError(f'Invalid slug: "{slug}".')
         return super().__new__(cls, slug)
@@ -97,22 +97,22 @@ class UniqueIdentifier(tuple):
         :param slug: A slug.
         :param uuid: A UUID.
         """
-        global _unique_identifier_index
+        # global _unique_identifier_index
         super().__init__()
         uuid = ensure_uuid(uuid)
-        _unique_identifier_index[uuid] = self
+        # _unique_identifier_index[uuid] = self
 
     def __new__(cls, slug: FlexibleSlug, uuid: FlexibleUUID):
-        global _unique_identifier_index
+        # global _unique_identifier_index
         slug = ensure_slug(slug)
         uuid = ensure_uuid(uuid)
-        if uuid in _unique_identifier_index.keys():
-            raise ValueError(f'UniqueIdentifier already exists. Uuid: {uuid}.')
-        else:
-            # Instantiates a new UniqueIdentifier.
-            t = (slug, uuid,)
-            uid = super().__new__(cls, t)
-            return uid
+        # if uuid in _unique_identifier_index.keys():
+        #    raise ValueError(f'UniqueIdentifier already exists. Uuid: {uuid}.')
+        # else:
+        # Instantiates a new UniqueIdentifier.
+        t = (slug, uuid,)
+        uid = super().__new__(cls, t)
+        return uid
 
     def __repr__(self):
         """An unambiguous technical representation of the identifier.
@@ -230,7 +230,7 @@ class UniqueIdentifiable(abc.ABC):
         return self._uid
 
 
-_unique_identifier_index: dict[uuid_pkg.UUID, UniqueIdentifier | None] = {}
+# _unique_identifier_index: dict[uuid_pkg.UUID, UniqueIdentifier | None] = {}
 _unique_identifiable_index: dict[uuid_pkg.UUID, UniqueIdentifiable | None] = {}
 
 

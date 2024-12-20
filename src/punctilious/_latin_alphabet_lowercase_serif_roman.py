@@ -24,104 +24,104 @@ class LatinAlphabetLowercaseSerifRoman(_bundling.YamlFileBundle):
 
     @property
     def a(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('a')
+        return self.representations.get_from_uuid('a')
 
     @property
     def b(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('b')
+        return self.representations.get_from_uuid('b')
 
     @property
     def c(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('c')
+        return self.representations.get_from_uuid('c')
 
     @property
     def d(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('d')
+        return self.representations.get_from_uuid('d')
 
     @property
     def e(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('e')
+        return self.representations.get_from_uuid('e')
 
     @property
     def f(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('f')
+        return self.representations.get_from_uuid('f')
 
     @property
     def g(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('g')
+        return self.representations.get_from_uuid('g')
 
     @property
     def h(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('h')
+        return self.representations.get_from_uuid('h')
 
     @property
     def i(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('i')
+        return self.representations.get_from_uuid('i')
 
     @property
     def j(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('j')
+        return self.representations.get_from_uuid('j')
 
     @property
     def k(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('k')
+        return self.representations.get_from_uuid('k')
 
     @property
     def l(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('l')
+        return self.representations.get_from_uuid('l')
 
     @property
     def m(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('m')
+        return self.representations.get_from_uuid('m')
 
     @property
     def n(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('n')
+        return self.representations.get_from_uuid('n')
 
     @property
     def o(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('o')
+        return self.representations.get_from_uuid('o')
 
     @property
     def p(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('p')
+        return self.representations.get_from_uuid('p')
 
     @property
     def q(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('q')
+        return self.representations.get_from_uuid('q')
 
     @property
     def r(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('r')
+        return self.representations.get_from_uuid('r')
 
     @property
     def s(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('s')
+        return self.representations.get_from_uuid('s')
 
     @property
     def t(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('t')
+        return self.representations.get_from_uuid('t')
 
     @property
     def u(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('u')
+        return self.representations.get_from_uuid('u')
 
     @property
     def v(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('v')
+        return self.representations.get_from_uuid('v')
 
     @property
     def w(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('w')
+        return self.representations.get_from_uuid('w')
 
     @property
     def x(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('x')
+        return self.representations.get_from_uuid('x')
 
     @property
     def y(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('y')
+        return self.representations.get_from_uuid('y')
 
     @property
     def z(self) -> _representation.Representation:
-        return self.representations.get_from_identifier('z')
+        return self.representations.get_from_uuid('z')

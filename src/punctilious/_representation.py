@@ -189,8 +189,25 @@ def load_representation(o: typing.Mapping, overwrite_mutable_properties: bool = 
     return representation
 
 
-class Representations(tuple):
+class Representations(tuple[Representation, ...]):
     """A tuple of Representation instances."""
+
+    def __getitem__(self, key) -> Representation:
+        if isinstance(key, int):
+            # Default behavior for integer keys
+            return super().__getitem__(key)
+        if isinstance(key, _identifiers.FlexibleUUID):
+            # Custom behavior for uuid keys
+            item: Representation | None = self.get_from_uuid(uuid=key, raise_error_if_not_found=False)
+            if item is not None:
+                return item
+        if isinstance(key, _identifiers.FlexibleUniqueIdentifier):
+            # Custom behavior for UniqueIdentifier keys
+            item: Representation | None = self.get_from_uid(uid=key, raise_error_if_not_found=False)
+            if item is not None:
+                return item
+        else:
+            raise TypeError(f'Unsupported key type: {type(key).__name__}')
 
     def __init__(self, *args):
         self._index = tuple(i.uid for i in self)
@@ -206,13 +223,37 @@ class Representations(tuple):
     def __str__(self):
         return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
-    def get_from_identifier(self, identifier: _identifiers.FlexibleUniqueIdentifier):
-        identifier: _identifiers.UniqueIdentifier = _identifiers.ensure_identifier(identifier)
-        if identifier in self._index:
-            identifier_index = self._index.index(identifier)
-            return self[identifier_index]
+    def get_from_uid(self, uid: _identifiers.FlexibleUniqueIdentifier,
+                     raise_error_if_not_found: bool = False) -> Representation | None:
+        """Return a representation by its UniqueIdentifier.
+
+        :param uid: a UniqueIdentifier.
+        :param raise_error_if_not_found:
+        :return:
+        """
+        uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(uid)
+        item: Representation | None = next((item for item in self if item.uid == uid), None)
+        if item is None and raise_error_if_not_found:
+            raise IndexError(f'Representation not found. UID: "{uid}".')
         else:
-            raise IndexError(f'Representation identifier not found: "{identifier}".')
+            return item
+
+    def get_from_uuid(self, uuid: _identifiers.FlexibleUUID,
+                      raise_error_if_not_found: bool = False) -> Representation | None:
+        """Return a representation by its UUID.
+
+        :param uuid: a UUID.
+        :param raise_error_if_not_found:
+        :return:
+        """
+        uuid: _identifiers.uuid_pkg.UUID = _identifiers.ensure_uuid(uuid)
+        if uuid in self._index:
+            identifier_index = self._index.index(uuid)
+            return self[identifier_index]
+        elif raise_error_if_not_found:
+            raise IndexError(f'Representation not found. UUID: "{uuid}".')
+        else:
+            return None
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
