@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="first theorem implementation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_formula_notations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -832,14 +835,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01173" summary="interpretation">
-      <option name="closed" value="true" />
-      <created>1733639004305</created>
-      <option name="number" value="01173" />
-      <option name="presentableId" value="LOCAL-01173" />
-      <option name="project" value="LOCAL" />
-      <updated>1733639004305</updated>
-    </task>
     <task id="LOCAL-01174" summary="interpretation">
       <option name="closed" value="true" />
       <created>1733639416240</created>
@@ -1224,7 +1219,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734725666913</updated>
     </task>
-    <option name="localTasksCounter" value="1222" />
+    <task id="LOCAL-01222" summary="first theorem implementation">
+      <option name="closed" value="true" />
+      <created>1734725759821</created>
+      <option name="number" value="01222" />
+      <option name="presentableId" value="LOCAL-01222" />
+      <option name="project" value="LOCAL" />
+      <updated>1734725759821</updated>
+    </task>
+    <option name="localTasksCounter" value="1223" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

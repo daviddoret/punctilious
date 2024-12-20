@@ -36,4 +36,8 @@ class FormulaNotations(_bundling.YamlFileBundle):
 
     @property
     def prefix_formula(self) -> _representation.Representation:
+        return self.representations.get_from_uuid('ca64ae2f-f8a7-4a87-a99d-57d86a8ba0ad', raise_error_if_not_found=True)
+
+    @property
+    def postfix_formula(self) -> _representation.Representation:
         return self.representations.get_from_uuid('af99c47e-c6b8-43e0-a8f4-6331ba79e8fd', raise_error_if_not_found=True)
