@@ -1,8 +1,8 @@
 import _util
 from _util import get_yaml_from_package
 import _identifiers
-from _identifiers import ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, get_unique_identifiable, \
-    UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
+from _identifiers import ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
+    load_unique_identifier, load_unique_identifiable, UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
 import _representation
 from _representation import Representation, ensure_representations, ensure_representation, latex_math, Tag, \
     TagsPreferences, \
@@ -20,9 +20,10 @@ import _formula_notations
 # import _latin_alphabet_lowercase_serif_italic
 # import _latin_alphabet_uppercase_serif_italic
 # import _latin_alphabet_lowercase_serif_roman
-# import _operators_1
+import _operators_1
+
 # import _propositional_logic_1
-import _tao_analysis_1_2006
+# import _tao_analysis_1_2006
 
 prefs = _representation.TagsPreferences()
 packages = _bundling.get_packages()
@@ -35,5 +36,5 @@ formula_notations = _formula_notations.FormulaNotations()
 # latin_alphabet_uppercase_serif_italic = _latin_alphabet_uppercase_serif_italic.LatinAlphabetUppercaseSerifItalic()
 # operators_1 = _operators_1.Operators1()
 
-tao_analysis_1_2006 = _tao_analysis_1_2006.TaoAnalysis12006()
+# tao_analysis_1_2006 = _tao_analysis_1_2006.TaoAnalysis12006()
 pass

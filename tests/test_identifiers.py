@@ -15,22 +15,20 @@ class TestSlug:
         assert s1 != s2
         assert s1 == s3
 
-    def test_identifier(self):
+    def test_unique_identifier(self):
         uuid1 = uuid.uuid4()
         uuid2 = uuid.uuid4()
         foo = pu.Slug('foo')
         bar = pu.Slug('bar')
         taz = pu.Slug('taz')
-        i1 = pu.UniqueIdentifier(uuid1, foo, bar)
-        i2 = pu.UniqueIdentifier(uuid2, foo, bar)
-        i3 = pu.UniqueIdentifier(uuid1, foo, bar)
-        i4 = pu.UniqueIdentifier(uuid1, foo, taz)
+        i1 = pu.UniqueIdentifier(foo, uuid1)
+        i2 = pu.UniqueIdentifier(bar, uuid2)
+        with pytest.raises(Exception):
+            pu.UniqueIdentifier(taz, uuid1)
+        with pytest.raises(Exception):
+            pu.UniqueIdentifier(foo, uuid1)
         print(hash(i1))
-        print(hash(i4))
-        assert i1.package_slug == pu.Slug('foo')
-        assert i1.package_uuid == uuid1
-        assert i1.slug == pu.Slug('bar')
-        assert i4.slug == pu.Slug('taz')
+        assert i1.slug == pu.Slug('foo')
+        assert i2.slug == pu.Slug('bar')
+        assert i1 == i1
         assert i1 != i2
-        assert i1 == i3
-        assert i1 != i4

@@ -5,6 +5,7 @@ import yaml
 import importlib.resources
 import collections.abc
 import re
+import typing
 
 # punctilious modules
 import _util
@@ -82,7 +83,7 @@ def ensure_formula_arguments(o=None) -> FormulaArguments:
         raise ValueError(f'o cannot be constrained into FormulaArguments {FormulaArguments}. {type(o)}')
 
 
-def ensure_connectors(o=None, overwrite_mutable_properties: bool = False) -> Connectors:
+def ensure_connectors(o=None) -> Connectors:
     """
 
     :param o:
@@ -94,7 +95,7 @@ def ensure_connectors(o=None, overwrite_mutable_properties: bool = False) -> Con
     if isinstance(o, Connectors):
         return o
     elif isinstance(o, collections.abc.Iterable):
-        return Connectors(*o, overwrite_mutable_properties=overwrite_mutable_properties)
+        return Connectors(*o)
     elif o is None:
         return Connectors()
     else:
@@ -262,30 +263,6 @@ class Theorems(tuple):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def ensure_connector(o, overwrite_mutable_properties: bool = False) -> Connector:
-    """Assure that `o` is of type Connector, converting as necessary, or raise an error.
-
-    :param o:
-    :param overwrite_mutable_properties: If `o` is in a raw format such as a dictionary (e.g.: read from a YAML file),
-    and if `o` is a UniqueIdentifiable that is already loaded in memory, overwrite its mutable properties (i.e.: update
-    `o`).
-    :return:
-    """
-    if isinstance(o, Connector):
-        return o
-    elif isinstance(o, dict):
-        uuid = o['uuid'] if 'uuid' in o.keys() else None
-        slug = o['slug'] if 'slug' in o.keys() else None
-
-        # tokens = o['tokens'] if 'tokens' in o.keys() else tuple()
-        syntactic_rules = o['syntactic_rules'] if 'syntactic_rules' in o.keys() else None
-        representation = o['representation'] if 'representation' in o.keys() else None
-        o = Connector(uuid=uuid, slug=slug, syntactic_rules=syntactic_rules, representation=representation)
-        return o
-    else:
-        raise TypeError('Connector assurance failure.')
-
-
 def ensure_tokens(o) -> tuple[str, ...]:
     if isinstance(o, collections.abc.Iterable):
         o = tuple(str(i) for i in o)
@@ -334,7 +311,7 @@ def ensure_theorem(o) -> Theorem:
 class Connectors(tuple):
     """A tuple of Connector instances."""
 
-    def __init__(self, *args, overwrite_mutable_properties: bool = False):
+    def __init__(self, *args):
         """
 
         :param args:
@@ -347,7 +324,7 @@ class Connectors(tuple):
         self._index = index
         super().__init__()
 
-    def __new__(cls, *args, overwrite_modifiable_properties: bool = False):
+    def __new__(cls, *args):
         """
 
         :param args:
@@ -356,7 +333,7 @@ class Connectors(tuple):
         `o`).
         """
         typed_connectors = tuple(
-            ensure_connector(r, overwrite_mutable_properties=overwrite_modifiable_properties) for r in args)
+            ensure_connector(r) for r in args)
         return super().__new__(cls, typed_connectors)
 
     def __repr__(self):
@@ -454,6 +431,74 @@ class Connector(_identifiers.UniqueIdentifiable):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
+
+
+FlexibleConnector = typing.Union[Connector, collections.abc.Mapping, collections.abc.Iterable]
+
+
+def ensure_connector(o: FlexibleConnector) -> Connector:
+    """Assure that `o` is of type Connector, converting as necessary, or raise an error.
+
+    :param o:
+    :return:
+    """
+    if isinstance(o, Connector):
+        return o
+    elif isinstance(o, typing.Mapping):
+        uid = o['uid'] if 'uid' in o.keys() else None
+        syntactic_rules = o['syntactic_rules'] if 'syntactic_rules' in o.keys() else None
+        connector_representation = o['connector_representation'] if 'connector_representation' in o.keys() else None
+        formula_representation = o['formula_representation'] if 'formula_representation' in o.keys() else None
+        o = Connector(uid=uid, syntactic_rules=syntactic_rules, connector_representation=connector_representation,
+                      formula_representation=formula_representation)
+        return o
+    else:
+        raise TypeError('Connector assurance failure.')
+
+
+def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> Connector:
+    """Receives a dictionary representation of a Connector, typically from a YAML file,
+    and returns a Connector instance.
+
+    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
+        `connector_representation`, and `formula_representation`.
+    :param o: a dictionary representation of a Connector.
+    :return: a Connector instance.
+    """
+    connector: Connector | None = _identifiers.load_unique_identifiable(o)
+    if connector is None:
+        # The connector does not exist in memory.
+        connector = ensure_connector(o)
+    else:
+        # The connector exists in memory.
+        if overwrite_mutable_properties:
+            if overwrite_mutable_properties:
+                # Overwrite the mutable properties.
+                if 'connector_representation' in o.keys():
+                    connector.connector_representation = _representation.ensure_representation(
+                        o['connector_representation'])
+                if 'formula_representation' in o.keys():
+                    connector.formula_representation = _representation.ensure_representation(
+                        o['formula_representation'])
+    return connector
+
+
+def load_connectors(o: typing.Iterable | None, overwrite_mutable_properties: bool = False) -> Connectors:
+    """Receives a dictionary representation of a Connectors collection, typically from a YAML file,
+    and returns a Connectors instance.
+
+    :param overwrite_mutable_properties: if connectors are already loaded in memory, overwrite their mutable properties:
+        `connector_representation`, and `formula_representation`.
+    :param o: a dictionary representation of a Connectors collection.
+    :return: a Connectors instance.
+    """
+    if o is None:
+        o = []
+    connectors: list[Connector] = []
+    for i in o:
+        connector: Connector = load_connector(i, overwrite_mutable_properties=overwrite_mutable_properties)
+        connectors.append(connector)
+    return Connectors(*connectors)
 
 
 class Theorem:

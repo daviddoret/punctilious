@@ -83,7 +83,7 @@ class Bundle:
     def __init__(self, schema=None, identifier=None, imports=None, aliases=None, representations=None,
                  connectors=None, theorems=None, justifications=None):
         self._schema = schema
-        self._identifier = _identifiers.ensure_identifier(identifier)
+        self._identifier = _identifiers.ensure_unique_identifier(identifier)
         self._imports = imports
         self._aliases = aliases
         representations = _representation.ensure_representations(representations)
@@ -276,41 +276,16 @@ class YamlFileBundle(Bundle):
                 representations: _representation.Representations = _representation.ensure_representations(
                     d.get('representations', tuple()))
                 # Load connectors
-                connectors = _formal_language.ensure_connectors(d.get('connectors', tuple()),
-                                                                overwrite_mutable_properties=True)
+                connectors: _formal_language.Connectors = _formal_language.load_connectors(
+                    o=d.get('connectors', None),
+                    overwrite_mutable_properties=True)
                 pass
-                #                typed_connectors = []
-                #                for raw_connector in d['connectors'] if 'connectors' in d.keys() else []:
-                #                    # TODO: Resume from here. A Connector contains modifiable representation
-                #                    #   properties.
-                #                    #   These properties may be further enriched at any moment.
-                #                    #   But read-only properties must be checked for consistency,
-                #                    #   and maintained read-only.
-                #                    identifier = _identifiers.ensure_identifier(raw_connector['identifier'])
-                #                    syntactic_rules = _formal_language.ensure_syntactic_rules(o=
-                #                                                                              raw_connector[
-                #                                                                                  'syntactic_rules'] if 'syntactic_rules' in raw_connector.keys() else None)
-                #                    connector_representation_reference = raw_connector.get('connector_representation', None)
-                #                    connector_representation = self._resolve_package_representation_reference(
-                #                        ref=connector_representation_reference,
-                #                        i=imports, r=representations) if connector_representation_reference is not None else None
-                #                    formula_representation_reference = raw_connector.get('formula_representation', None)
-                #                    formula_representation = self._resolve_package_representation_reference(
-                #                        ref=formula_representation_reference,
-                #                        i=imports, r=representations) if formula_representation_reference is not None else None
-                #                    o = _formal_language.Connector(package=self, identifier=identifier,
-                #                                                   syntactic_rules=syntactic_rules,
-                #                                                   connector_representation=connector_representation,
-                #                                                  formula_representation=formula_representation)
-                #                    typed_connectors.append(o)
-                #               typed_connectors = _formal_language.Connectors(*typed_connectors)
-                # Load connectors
                 untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
                 theorems = _formal_language.Theorems(*untyped_theorems)
                 justifications = _formal_language.Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
                 super().__init__(schema=schema, identifier=uid, imports=imports, aliases=aliases,
-                                 representations=representations, connectors=typed_connectors, theorems=theorems,
+                                 representations=representations, connectors=connectors, theorems=theorems,
                                  justifications=justifications)
 
     #                except Exception as e:
