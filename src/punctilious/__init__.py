@@ -1,7 +1,7 @@
 import _util
 from _util import get_yaml_from_package
 import _identifiers
-from _identifiers import ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
+from _identifiers import create_uid, ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
     load_unique_identifier, load_unique_identifiable, UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
 import _representation
 from _representation import Representation, ensure_representations, ensure_representation, latex_math, Tag, \

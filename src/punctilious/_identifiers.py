@@ -234,6 +234,16 @@ _unique_identifier_index: dict[uuid_pkg.UUID, UniqueIdentifier | None] = {}
 _unique_identifiable_index: dict[uuid_pkg.UUID, UniqueIdentifiable | None] = {}
 
 
+def create_uid(slug: FlexibleSlug) -> UniqueIdentifier:
+    """Creates a new UniqueIdentifier.
+
+    :param slug: A slug.
+    :return: A new UniqueIdentifier.
+    """
+    uuid: uuid_pkg.UUID = uuid_pkg.uuid4()
+    return UniqueIdentifier(slug=slug, uuid=uuid)
+
+
 def load_unique_identifiable(o: typing.Mapping) -> UniqueIdentifiable | None:
     """Returns the existing UniqueIdentifiable if it exists.
     Returns None otherwise.

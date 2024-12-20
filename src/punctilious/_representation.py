@@ -94,9 +94,8 @@ def ensure_representation(o) -> Representation:
         # conversion from dict structure.
         uid = o['uid']
         uid = _identifiers.ensure_unique_identifier(uid)
-        syntactic_rules = None
         renderers = ensure_renderers(o=o.get('renderers', []))
-        o = Representation(uid=uid, syntactic_rules=syntactic_rules, renderers=renderers)
+        o = Representation(uid=uid, renderers=renderers)
         return o
     else:
         raise TypeError(f'Representation validation failure. Type: {type(o)}. Object: {o}.')
