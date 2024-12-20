@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="first theorem implementation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -462,7 +460,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_identifiers.TestSlug.test_unique_identifier">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -737,7 +735,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_formula.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in test_greek_alphabet_lowercase_serif_italic.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -750,7 +748,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_formula.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -801,8 +799,8 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_identifiers.TestSlug" />
       <item itemvalue="Python tests.pytest for test_identifiers.TestSlug.test_unique_identifier" />
+      <item itemvalue="Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py" />
       <item itemvalue="Python tests.pytest in tests" />
-      <item itemvalue="Python tests.pytest in test_formula.py" />
       <item itemvalue="Python tests.pytest in test_representations.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -810,11 +808,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py" />
         <item itemvalue="Python tests.pytest for test_identifiers.TestSlug.test_unique_identifier" />
         <item itemvalue="Python tests.pytest for test_identifiers.TestSlug" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_representations.py" />
-        <item itemvalue="Python tests.pytest in test_formula.py" />
       </list>
     </recent_temporary>
   </component>
@@ -833,14 +831,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01172" summary="interpretation">
-      <option name="closed" value="true" />
-      <created>1733638409731</created>
-      <option name="number" value="01172" />
-      <option name="presentableId" value="LOCAL-01172" />
-      <option name="project" value="LOCAL" />
-      <updated>1733638409731</updated>
     </task>
     <task id="LOCAL-01173" summary="interpretation">
       <option name="closed" value="true" />
@@ -1226,7 +1216,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734720449314</updated>
     </task>
-    <option name="localTasksCounter" value="1221" />
+    <task id="LOCAL-01221" summary="first theorem implementation">
+      <option name="closed" value="true" />
+      <created>1734725666913</created>
+      <option name="number" value="01221" />
+      <option name="presentableId" value="LOCAL-01221" />
+      <option name="project" value="LOCAL" />
+      <updated>1734725666913</updated>
+    </task>
+    <option name="localTasksCounter" value="1222" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
