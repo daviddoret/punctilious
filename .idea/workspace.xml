@@ -7,8 +7,8 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="first theorem implementation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -429,7 +429,9 @@
     <option name="path" value="$PROJECT_DIR$/.github/workflows/code_quality.yml" />
   </component>
   <component name="QodanaCloudProjectLink">
+    <option name="lastReportId" value="JjJBx" />
     <option name="linkedProjectId" value="p01Q5" />
+    <option name="linkedProjectName" value="punctilious" />
     <option name="organizationId" value="3PZVk" />
     <option name="userId" value="3yE6e" />
   </component>
@@ -832,14 +834,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01170" summary="interpretation">
-      <option name="closed" value="true" />
-      <created>1733591226319</created>
-      <option name="number" value="01170" />
-      <option name="presentableId" value="LOCAL-01170" />
-      <option name="project" value="LOCAL" />
-      <updated>1733591226319</updated>
-    </task>
     <task id="LOCAL-01171" summary="interpretation">
       <option name="closed" value="true" />
       <created>1733638118030</created>
@@ -1224,7 +1218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734698240155</updated>
     </task>
-    <option name="localTasksCounter" value="1219" />
+    <task id="LOCAL-01219" summary="first theorem implementation">
+      <option name="closed" value="true" />
+      <created>1734699073292</created>
+      <option name="number" value="01219" />
+      <option name="presentableId" value="LOCAL-01219" />
+      <option name="project" value="LOCAL" />
+      <updated>1734699073292</updated>
+    </task>
+    <option name="localTasksCounter" value="1220" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
