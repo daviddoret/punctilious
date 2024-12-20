@@ -5,6 +5,7 @@ import collections
 import collections.abc
 import yaml
 import jinja2
+import typing
 # punctilious packages
 import _util
 import _identifiers
@@ -115,9 +116,7 @@ def ensure_representations(o) -> Representations:
 class Representation(_identifiers.UniqueIdentifiable):
 
     def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
-                 renderers: tuple[Renderer, ...],
-                 syntactic_rules=None):
-        self._syntactic_rules = syntactic_rules
+                 renderers: tuple[Renderer, ...]):
         self._renderers: tuple[Renderer, ...] = renderers
         super().__init__(uid=uid)
 
@@ -133,7 +132,7 @@ class Representation(_identifiers.UniqueIdentifiable):
         :param config:
         :return:
         """
-        if config == None:
+        if config is None:
             config = TagsPreferences()
         best_score = 0
         optimal_renderer = self.renderers[0]
@@ -146,8 +145,16 @@ class Representation(_identifiers.UniqueIdentifiable):
 
     @property
     def renderers(self):
-        """A tuple of renderers configured for this representation."""
+        """A tuple of renderers configured for this representation.
+
+        This is a mutable property, renderers can be reloaded.
+        """
         return self._renderers
+
+    @renderers.setter
+    def renderers(self, renderers: FlexibleRenderers):
+        renderers = ensure_renderers(renderers)
+        self._renderers = renderers
 
     def rep(self, variables: dict[str, str] = None, config: TagsPreferences = None):
         config = ensure_tags_preferences(config)
@@ -157,12 +164,30 @@ class Representation(_identifiers.UniqueIdentifiable):
         renderer: Renderer = self.optimize_renderer(config=config)
         return renderer.rep(config=config, variables=variables)
 
-    @property
-    def syntactic_rules(self):
-        return self._syntactic_rules
-
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+def load_representation(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> Representation:
+    """Receives a raw Representation, typically from a YAML file, and returns a typed Representation instance.
+
+    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
+        `renderers`.
+    :param o: a raw Representation.
+    :return: a typed Representation instance.
+    """
+    representation: Representation | None = _identifiers.load_unique_identifiable(o)
+    if representation is None:
+        # The representation does not exist in memory.
+        representation = ensure_representation(o)
+    else:
+        # The representation exists in memory.
+        if overwrite_mutable_properties:
+            if overwrite_mutable_properties:
+                # Overwrite the mutable properties.
+                if 'renderers' in o.keys():
+                    representation.renderers = ensure_renderers(o['renderers'])
+    return representation
 
 
 class Representations(tuple):
@@ -192,6 +217,25 @@ class Representations(tuple):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+def load_representations(o: typing.Iterable | None, overwrite_mutable_properties: bool = False) -> Representations:
+    """Receives a raw Representations collection, typically from a YAML file,
+    and returns a typed Representations instance.
+
+    :param overwrite_mutable_properties: if representations are already loaded in memory,
+        overwrite their mutable properties: `renderers`.
+    :param o: a raw Representations collection.
+    :return: a typed Representations instance.
+    """
+    if o is None:
+        o = []
+    representations: list[Representation] = []
+    for i in o:
+        representation: Representation = load_representation(
+            i, overwrite_mutable_properties=overwrite_mutable_properties)
+        representations.append(representation)
+    return Representations(*representations)
 
 
 class Renderer(abc.ABC):
@@ -301,6 +345,10 @@ class Renderers(tuple):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
+
+
+FlexibleRenderer = typing.Union[Renderer, collections.abc.Mapping, collections.abc.Iterable]
+FlexibleRenderers = typing.Union[Renderers, collections.abc.Iterable]
 
 
 class TagLabel(str):

@@ -434,6 +434,7 @@ class Connector(_identifiers.UniqueIdentifiable):
 
 
 FlexibleConnector = typing.Union[Connector, collections.abc.Mapping, collections.abc.Iterable]
+FlexibleConnectors = typing.Union[Connectors, collections.abc.Iterable]
 
 
 def ensure_connector(o: FlexibleConnector) -> Connector:
@@ -457,13 +458,12 @@ def ensure_connector(o: FlexibleConnector) -> Connector:
 
 
 def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> Connector:
-    """Receives a dictionary representation of a Connector, typically from a YAML file,
-    and returns a Connector instance.
+    """Receives a raw Connector, typically from a YAML file, and returns a typed Connector instance.
 
     :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
         `connector_representation`, and `formula_representation`.
-    :param o: a dictionary representation of a Connector.
-    :return: a Connector instance.
+    :param o: a raw Connector.
+    :return: a typed Connector instance.
     """
     connector: Connector | None = _identifiers.load_unique_identifiable(o)
     if connector is None:
@@ -484,13 +484,13 @@ def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False
 
 
 def load_connectors(o: typing.Iterable | None, overwrite_mutable_properties: bool = False) -> Connectors:
-    """Receives a dictionary representation of a Connectors collection, typically from a YAML file,
-    and returns a Connectors instance.
+    """Receives a raw Connectors collection, typically from a YAML file,
+    and returns a typed Connectors instance.
 
     :param overwrite_mutable_properties: if connectors are already loaded in memory, overwrite their mutable properties:
         `connector_representation`, and `formula_representation`.
-    :param o: a dictionary representation of a Connectors collection.
-    :return: a Connectors instance.
+    :param o: a raw Connectors collection.
+    :return: a typed Connectors instance.
     """
     if o is None:
         o = []
