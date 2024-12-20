@@ -16,7 +16,7 @@ from _interpretation import Interpreter
 import _bundling
 import _formula_notations
 import _greek_alphabet_lowercase_serif_italic
-# import _greek_alphabet_uppercase_serif_italic
+import _greek_alphabet_uppercase_serif_italic
 import _latin_alphabet_lowercase_serif_italic
 import _latin_alphabet_uppercase_serif_italic
 # import _latin_alphabet_lowercase_serif_roman
@@ -31,7 +31,7 @@ packages = _bundling.get_packages()
 formula_notations = _formula_notations.FormulaNotations()
 
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
-# greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
+greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
 latin_alphabet_lowercase_serif_italic = _latin_alphabet_lowercase_serif_italic.LatinAlphabetLowercaseSerifItalic()
 latin_alphabet_uppercase_serif_italic = _latin_alphabet_uppercase_serif_italic.LatinAlphabetUppercaseSerifItalic()
 operators_1 = _operators_1.Operators1()
