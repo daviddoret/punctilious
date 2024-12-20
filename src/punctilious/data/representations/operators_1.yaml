@@ -1,13 +1,12 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
-slug: operators_1
+uid: { slug: operators_1, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
 imports:
   - slug: formula_notations_1
     scheme: python_package
     path: data.representations
     resource: formula_notations.yaml
 representations:
-  - slug: conjunction
+  - uid: { slug: conjunction, uuid: 8be8dfc0-375f-463d-9334-d2b8ad5ffef0 }
     renderers:
       - implementation: string_constant
         string_constant: '∧'
@@ -21,7 +20,7 @@ representations:
       - implementation: string_constant
         string_constant: 'et'
         tags: { technical_language: unicode_basic, connector_representation: word, language: fr }
-  - slug: disjunction
+  - uid: { slug: disjunction, uuid: 0e05a190-ee37-46df-bc78-002f2a9cf0c5 }
     renderers:
       - implementation: string_constant
         string_constant: '∨'
@@ -35,7 +34,7 @@ representations:
       - implementation: string_constant
         string_constant: 'ou'
         tags: { technical_language: unicode_basic, connector_representation: word, language: fr }
-  - slug: entailment
+  - uid: { slug: entailment, uuid: 67bf6c68-32f8-41d7-b8e0-056bdae65536 }
     renderers:
       - implementation: string_constant
         string_constant: '⊢'
@@ -49,7 +48,7 @@ representations:
       - implementation: string_constant
         string_constant: 'et'
         tags: { technical_language: unicode_basic, connector_representation: word, language: fr }
-  - slug: negation
+  - uid: { slug: negation, uuid: 8c86e402-085a-4d9c-b4db-bbf2c6cd36ed }
     renderers:
       - implementation: string_constant
         string_constant: '¬'

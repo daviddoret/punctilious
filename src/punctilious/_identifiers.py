@@ -86,10 +86,11 @@ class UniqueIdentifier(tuple):
         """Returns a hash for the identifier.
 
         Only the uuid component is taken into consideration because the slug could be modified.
+        In consequence, a UniqueIdentifier has the same hash as its UUID.
 
         :return:
         """
-        return hash((UniqueIdentifier, self[1],))
+        return hash(self[1])
 
     def __init__(self, slug: FlexibleSlug, uuid: FlexibleUUID):
         """Initializes a new identifier.

@@ -25,16 +25,16 @@ class Operators1(_bundling.YamlFileBundle):
 
     @property
     def conjunction(self) -> _formal_language.Connector:
-        return self.connectors.get_from_uuid('conjunction')
+        return self.connectors.get_from_uuid('b5a16d91-9974-48fa-901e-b777eb38e290', raise_error_if_not_found=True)
 
     @property
     def disjunction(self) -> _formal_language.Connector:
-        return self.connectors.get_from_uuid('disjunction')
+        return self.connectors.get_from_uuid('0fbb1b71-8ffb-483c-9a11-ea990c7f6a2a', raise_error_if_not_found=True)
 
     @property
     def entailment(self) -> _formal_language.Connector:
-        return self.connectors.get_from_uuid('entailment')
+        return self.connectors.get_from_uuid('edf63cea-9f29-4bce-aae1-ea8565d69e08', raise_error_if_not_found=True)
 
     @property
     def negation(self) -> _formal_language.Connector:
-        return self.connectors.get_from_uuid('negation')
+        return self.connectors.get_from_uuid('1341a021-0f42-4024-bf87-5fa7767be0ac', raise_error_if_not_found=True)

@@ -311,29 +311,29 @@ def ensure_theorem(o) -> Theorem:
 class Connectors(tuple):
     """A tuple of Connector instances."""
 
-    def __init__(self, *args):
-        """
+    def __getitem__(self, key) -> Connector:
+        if isinstance(key, int):
+            # Default behavior for integer keys
+            return super().__getitem__(key)
+        if isinstance(key, _identifiers.FlexibleUUID):
+            # Custom behavior for uuid keys
+            item: Connector | None = self.get_from_uuid(uuid=key, raise_error_if_not_found=False)
+            if item is not None:
+                return item
+        if isinstance(key, _identifiers.FlexibleUniqueIdentifier):
+            # Custom behavior for UniqueIdentifier keys
+            item: Connector | None = self.get_from_uid(uid=key, raise_error_if_not_found=False)
+            if item is not None:
+                return item
+        else:
+            raise TypeError(f'Unsupported key type: {type(key).__name__}')
 
-        :param args:
-        :param overwrite_mutable_properties: If `o` is in a raw format such as a dictionary (e.g.: read from a YAML file),
-        and if `o` is a UniqueIdentifiable that is already loaded in memory, overwrite its mutable properties (i.e.: update
-        `o`).
-        """
-        # prepare a dictionary that maps slugs and tokens to connectors
-        index = dict(zip(tuple(i.slug for i in self), tuple(i for i in self)))
-        self._index = index
+    def __init__(self, *args):
+        self._index = tuple(i.uid for i in self)
         super().__init__()
 
     def __new__(cls, *args):
-        """
-
-        :param args:
-        :param overwrite_mutable_properties: If `o` is in a raw format such as a dictionary (e.g.: read from a YAML file),
-        and if `o` is a UniqueIdentifiable that is already loaded in memory, overwrite its mutable properties (i.e.: update
-        `o`).
-        """
-        typed_connectors = tuple(
-            ensure_connector(r) for r in args)
+        typed_connectors = tuple(ensure_connector(r) for r in args)
         return super().__new__(cls, typed_connectors)
 
     def __repr__(self):
@@ -342,17 +342,37 @@ class Connectors(tuple):
     def __str__(self):
         return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
-    def get_from_identifier(self, identifier: str):
-        if identifier in self._index.keys():
-            return self._index[identifier]
-        else:
-            raise IndexError(f'Connector identifier not found: "{identifier}".')
+    def get_from_uid(self, uid: _identifiers.FlexibleUniqueIdentifier,
+                     raise_error_if_not_found: bool = False) -> Connector | None:
+        """Return a Connector by its UniqueIdentifier.
 
-    def get_from_token(self, slug: str):
-        if slug in self._index.keys():
-            return self._index[slug]
+        :param uid: a UniqueIdentifier.
+        :param raise_error_if_not_found:
+        :return:
+        """
+        uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(uid)
+        item: Connector | None = next((item for item in self if item.uid == uid), None)
+        if item is None and raise_error_if_not_found:
+            raise IndexError(f'Connector not found. UID: "{uid}".')
         else:
-            raise IndexError(f'Connector slug not found: "{slug}".')
+            return item
+
+    def get_from_uuid(self, uuid: _identifiers.FlexibleUUID,
+                      raise_error_if_not_found: bool = False) -> Connector | None:
+        """Return a Connector by its UUID.
+
+        :param uuid: a UUID.
+        :param raise_error_if_not_found:
+        :return:
+        """
+        uuid: _identifiers.uuid_pkg.UUID = _identifiers.ensure_uuid(uuid)
+        if uuid in self._index:
+            identifier_index = self._index.index(uuid)
+            return self[identifier_index]
+        elif raise_error_if_not_found:
+            raise IndexError(f'Connector not found. UUID: "{uuid}".')
+        else:
+            return None
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
@@ -454,7 +474,7 @@ def ensure_connector(o: FlexibleConnector) -> Connector:
                       formula_representation=formula_representation)
         return o
     else:
-        raise TypeError('Connector assurance failure.')
+        raise TypeError(f'Connector assurance failure. o: {str(o)}, type: {type(o).__name__}.')
 
 
 def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> Connector:
