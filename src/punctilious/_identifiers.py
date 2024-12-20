@@ -18,6 +18,9 @@ class Slug(str):
     def __init__(self, slug: str):
         super().__init__()
 
+    def __ne__(self, other):
+        return not (self == other)
+
     def __new__(cls, slug: str):
         pattern = r'^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$'
         if not bool(re.fullmatch(pattern, slug)):
@@ -83,7 +86,7 @@ class UniqueIdentifier(tuple):
         return hash(self) == hash(other)
 
     def __ne__(self, other):
-        return not self == other
+        return not (self == other)
 
     def __hash__(self):
         """Returns a hash for the identifier.
