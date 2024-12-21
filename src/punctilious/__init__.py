@@ -6,6 +6,7 @@ from _identifiers import create_uid, ensure_unique_identifier, ensure_slug, Flex
 import _representation
 from _representation import AbstractRepresentation, ensure_abstract_representations, ensure_abstract_representation, \
     latex_math, \
+    load_abstract_representation, load_abstract_representations, \
     Tag, \
     TagsPreferences, \
     TagsAssignment, RendererForStringTemplate, \
