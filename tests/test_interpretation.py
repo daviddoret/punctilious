@@ -60,9 +60,9 @@ def prefs(en, fr, symbol, word):
 
 @pytest.fixture
 def reps():
-    d: dict = pu.util.get_yaml_from_package(path='data.representations', resource='operators_1.yaml')
+    d: dict = pu.get_yaml_from_package(path='data.representations', resource='operators_1.yaml')
     raw = d.get('representations', [])
-    return pu.presentation.ensure_abstract_representations(o=raw)
+    return pu.ensure_abstract_representations(o=raw)
 
 
 @pytest.fixture
@@ -78,11 +78,11 @@ class TestRepresentation:
         p = create_atomic_connector('P')
         q = create_atomic_connector('Q')
         r = create_atomic_connector('R')
-        weird = create_atomic_connector('weird')
-        lnot = create_function('not')
-        land = create_function('and')
+        # weird = create_atomic_connector('weird')
+        lnot = pu.operators_1_connectors.negation
+        land = pu.operators_1_connectors.conjunction
         is_a_proposition = create_function('is-a-proposition')
-        atomic_connectors = {'P': p, 'Q': q, 'R': r, '"weird"': weird}
+        atomic_connectors = {'P': p, 'Q': q, 'R': r}
         prefix_connectors = {'not': lnot}
         infix_connectors = {'and': land}
         function_connectors = {'not': lnot, 'is-a-proposition': is_a_proposition}
@@ -93,9 +93,9 @@ class TestRepresentation:
                                      infix_connectors=infix_connectors,
                                      function_connectors=function_connectors)
         input_string = "P"
-        assert str(interpreter.interpret(input_string)) == 'P()'
+        assert str(interpreter.interpret(input_string)) == 'P'
         input_string = "not P"
-        assert str(interpreter.interpret(input_string)) == 'not(P())'
+        assert str(interpreter.interpret(input_string)) == '¬P'
         input_string = "is-a-proposition(P)"
         assert str(interpreter.interpret(input_string)) == 'is-a-proposition(P())'
         input_string = "P and Q"

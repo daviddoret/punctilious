@@ -1,0 +1,19 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uid: { slug: propositional_logic_1, uuid: d0d3b21b-d243-4528-bd60-36faebf8d5ae }
+dependencies:
+  - bundle: { slug: formulas_notations, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
+    scheme: python_package
+    path: data.representations
+    resource: formula_notations.yaml
+  - bundle: { slug: propositional_logic_1, uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d }
+    scheme: python_package
+    path: data.connectors
+    resource: operators_1.yaml
+  - bundle: { slug: operators_1, uuid: 7fe7669a-b7c0-4667-94c9-33c7971179b4 }
+    scheme: python_package
+    path: data.representations
+    resource: operators_1.yaml
+connectors:
+  - uid: { slug: is_propositional_variable, uuid: 81277fd4-280d-4436-a465-79b4e83aadf5 }
+    connector_representation: { uid: { slug: conjunction, uuid: 8be8dfc0-375f-463d-9334-d2b8ad5ffef0 } }
+    formula_representation: { uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 } }
