@@ -1,6 +1,7 @@
 import pytest
 import punctilious as pu
 from test_shared_library import create_atomic_connector, create_function
+import punctilious.propositional_logic_1 as pl1
 
 
 @pytest.fixture
@@ -81,7 +82,7 @@ class TestRepresentation:
         # weird = create_atomic_connector('weird')
         lnot = pu.operators_1_connectors.negation
         land = pu.operators_1_connectors.conjunction
-        is_a_proposition = create_function('is-a-proposition')
+        is_a_proposition = pl1.is_a_propositional_variable
         atomic_connectors = {'P': p, 'Q': q, 'R': r}
         prefix_connectors = {'not': lnot}
         infix_connectors = {'and': land}
@@ -96,7 +97,7 @@ class TestRepresentation:
         assert str(interpreter.interpret(input_string)) == 'P'
         input_string = "not P"
         assert str(interpreter.interpret(input_string)) == '¬P'
-        input_string = "is-a-proposition(P)"
+        input_string = "Let P be a propositional variable."
         assert str(interpreter.interpret(input_string)) == 'is-a-proposition(P())'
         input_string = "P and Q"
         assert str(interpreter.interpret(input_string)) == 'and(P(), Q())'

@@ -15,5 +15,5 @@ dependencies:
     resource: operators_1.yaml
 connectors:
   - uid: { slug: is_propositional_variable, uuid: 81277fd4-280d-4436-a465-79b4e83aadf5 }
-    connector_representation: { uid: { slug: conjunction, uuid: 8be8dfc0-375f-463d-9334-d2b8ad5ffef0 } }
-    formula_representation: { uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 } }
+    connector_representation: { uid: { slug: conjunction, uuid: 639885d1-acd6-4c66-9a9c-fb14e65b2ddc } }
+    formula_representation: { uid: { slug: infix_formula, uuid: 2957ffe0-8077-4262-b766-0a0e4b38dfd9 } }
