@@ -1,4 +1,4 @@
-"""Standard mappings for the operators in operators_1."""
+"""Standard representation mappings for the operators in the `operators_1` connectors bundle."""
 
 import _bundling
 
