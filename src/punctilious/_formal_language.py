@@ -378,13 +378,16 @@ class Connectors(tuple):
 
 
 class Connector(_identifiers.UniqueIdentifiable):
-    # __slots__ = ('_uuid', '_slug', '_tokens', '_syntactic_rules', '_representation')
+    """
+    TODO: Inherit from tuple to manage immutable properties.
+    """
 
     def __call__(self, *args):
         return Formula(c=self, a=args)
 
-    def __init__(self, package=None, uid=None, syntactic_rules=None, connector_representation=None,
-                 formula_representation=None):
+    def __init__(self, package=None, uid=None, syntactic_rules=None,
+                 connector_representation: _representation.Representation | None = None,
+                 formula_representation: _representation.Representation | None = None):
         self._package = package
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
         self._connector_representation: _representation.Representation = connector_representation
@@ -421,13 +424,12 @@ class Connector(_identifiers.UniqueIdentifiable):
         return self.connector_representation.rep(**kwargs)
 
     def rep_formula(self, argument: FormulaArguments | None = None):
-        """Returns the string representation of the formula *(a1, a2, ..., an),
-        where:
-         - * is this connector,
-         - a1, a2, ..., an are the formula arguments.
+        """Returns the string representation of the formula.
         """
+        if self.connector_representation is None:
+            raise ValueError(f'Connector {self.uid.__repr__()} has no connector representation.')
         if self.formula_representation is None:
-            raise ValueError(f'Connector {self.uid} has no formula representation.')
+            raise ValueError(f'Connector {self.uid.__repr__()} has no formula representation.')
         connector: str = self.rep()
         argument = ensure_formula_arguments(argument)
         argument_representations = tuple(a.represent() for a in argument)
@@ -496,10 +498,10 @@ def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False
             if overwrite_mutable_properties:
                 # Overwrite the mutable properties.
                 if 'connector_representation' in o.keys():
-                    connector.connector_representation = _representation.ensure_representation(
+                    connector.connector_representation = _representation.load_representation(
                         o['connector_representation'])
                 if 'formula_representation' in o.keys():
-                    connector.formula_representation = _representation.ensure_representation(
+                    connector.formula_representation = _representation.load_representation(
                         o['formula_representation'])
     return connector
 

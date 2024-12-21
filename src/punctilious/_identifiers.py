@@ -259,5 +259,8 @@ def load_unique_identifiable(o: typing.Mapping) -> UniqueIdentifiable | None:
     :return: The UniqueIdentifiable or None if it does not exist.
     """
     global _unique_identifiable_index
-    uid = ensure_unique_identifier(o['uid'])
+    uid = o.get('uid', None)
+    if uid is None:
+        raise ValueError(f'Missing `uid` key in `o`. o: {o}. type(o): {type(o).__name__}')
+    uid = ensure_unique_identifier(uid)
     return _unique_identifiable_index.get(uid.uuid, None)

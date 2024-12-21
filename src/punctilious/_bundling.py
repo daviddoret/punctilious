@@ -275,7 +275,7 @@ class YamlFileBundle(Bundle):
                 aliases = None  # To be implemented
                 representations: _representation.Representations = _representation.load_representations(
                     d.get('representations', None),
-                    overwrite_mutable_properties=True)
+                    append_representation_renderers=True)
                 # Load connectors
                 connectors: _formal_language.Connectors = _formal_language.load_connectors(
                     d.get('connectors', None),

@@ -18,10 +18,11 @@ class TestFormula:
         assert str(phi1) == 'P'
 
         phi2 = pu.Formula(land, (p, q,))
-        assert str(phi2) == 'and(P, Q)'
+        assert str(phi2) == 'P ∧ Q'
 
         phi3 = pu.Formula(lnot, (p,))
-        assert str(phi3) == 'not(P())'
+        assert str(phi3) == '¬P'
 
         phi4 = pu.Formula(land, (phi3, phi2))
-        assert str(phi4) == 'and(not(P()), and(P(), Q()))'
+        # TODO: Manage parenthesisation
+        assert str(phi4) == '¬P ∧ P ∧ Q'

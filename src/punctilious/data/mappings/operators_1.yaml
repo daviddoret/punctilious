@@ -1,32 +1,31 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1
-slug: operators_1_mappings
-imports:
-  - slug: notations
+uid: { slug: operators_1_mappings, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
+dependencies:
+  - bundle: { slug: formulas_notations, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
     scheme: python_package
     path: data.representations
     resource: formula_notations.yaml
-  - slug: connectors
+  - bundle: { slug: operators_1_connectors, uuid: ed3c1e47-dd75-4abc-9b43-ba3e408cfc48 }
     scheme: python_package
     path: data.connectors
     resource: operators_1.yaml
-  - slug: representations
+  - bundle: { slug: operators_1, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
     scheme: python_package
     path: data.representations
     resource: operators_1.yaml
-mappings:
-  - connector: connectors.conjunction
-    connector_representation: representations.conjunction
-    formula_representation: notations.infix_notation
-  - connector: connectors.disjunction
-    connector_representation: representations.disjunction
-    formula_representation: notations.infix_notation
-  - connector: connectors.entailment
-    connector_representation: representations.entailment
-    formula_representation: notations.infix_notation
-  - connector: connectors.negation
-    connector_representation: representations.negation
-    formula_representation: notations.infix_notation
+connectors:
+  - uid: { slug: conjunction, uuid: b5a16d91-9974-48fa-901e-b777eb38e290 }
+    connector_representation: { uid: { slug: conjunction, uuid: 8be8dfc0-375f-463d-9334-d2b8ad5ffef0 } }
+    formula_representation: { uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 } }
+  - uid: { slug: disjunction, uuid: 0fbb1b71-8ffb-483c-9a11-ea990c7f6a2a }
+    connector_representation: { uid: { slug: disjunction, uuid: 0e05a190-ee37-46df-bc78-002f2a9cf0c5 } }
+    formula_representation: { uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 } }
+  - uid: { slug: entailment, uuid: edf63cea-9f29-4bce-aae1-ea8565d69e08 }
+    connector_representation: { uid: { slug: entailment, uuid: 67bf6c68-32f8-41d7-b8e0-056bdae65536 } }
+    formula_representation: { uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 } }
+  - uid: { slug: negation, uuid: 1341a021-0f42-4024-bf87-5fa7767be0ac }
+    connector_representation: { uid: { slug: negation, uuid: 8c86e402-085a-4d9c-b4db-bbf2c6cd36ed } }
+    formula_representation: { uid: { slug: prefix_formula, uuid: ca64ae2f-f8a7-4a87-a99d-57d86a8ba0ad } }
 
 
 

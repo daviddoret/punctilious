@@ -167,11 +167,11 @@ class Representation(_identifiers.UniqueIdentifiable):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def load_representation(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> Representation:
+def load_representation(o: typing.Mapping, append_representation_renderers: bool = False) -> Representation:
     """Receives a raw Representation, typically from a YAML file, and returns a typed Representation instance.
 
-    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
-        `renderers`.
+    :param append_representation_renderers: if the representation is already loaded in memory,
+        append new renderers to it.
     :param o: a raw Representation.
     :return: a typed Representation instance.
     """
@@ -181,11 +181,14 @@ def load_representation(o: typing.Mapping, overwrite_mutable_properties: bool = 
         representation = ensure_representation(o)
     else:
         # The representation exists in memory.
-        if overwrite_mutable_properties:
-            if overwrite_mutable_properties:
-                # Overwrite the mutable properties.
-                if 'renderers' in o.keys():
-                    representation.renderers = ensure_renderers(o['renderers'])
+        if append_representation_renderers:
+            # Overwrite the mutable properties.
+            if 'renderers' in o.keys():
+                new_renderers = ensure_renderers(o['renderers'])
+                _util.get_logger().debug('new_renderers: {new_renderers}')
+                merged_renderers = set(representation.renderers + new_renderers)
+                merged_renderers = Renderers(*merged_renderers)
+                representation.renderers = merged_renderers
     return representation
 
 
@@ -259,12 +262,12 @@ class Representations(tuple[Representation, ...]):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def load_representations(o: typing.Iterable | None, overwrite_mutable_properties: bool = False) -> Representations:
+def load_representations(o: typing.Iterable | None, append_representation_renderers: bool = False) -> Representations:
     """Receives a raw Representations collection, typically from a YAML file,
     and returns a typed Representations instance.
 
-    :param overwrite_mutable_properties: if representations are already loaded in memory,
-        overwrite their mutable properties: `renderers`.
+    :param append_representation_renderers: if representations are already loaded in memory,
+        append new renderers to the existing representations.
     :param o: a raw Representations collection.
     :return: a typed Representations instance.
     """
@@ -273,7 +276,7 @@ def load_representations(o: typing.Iterable | None, overwrite_mutable_properties
     representations: list[Representation] = []
     for i in o:
         representation: Representation = load_representation(
-            i, overwrite_mutable_properties=overwrite_mutable_properties)
+            i, append_representation_renderers=append_representation_renderers)
         representations.append(representation)
     return Representations(*representations)
 
