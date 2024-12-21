@@ -67,8 +67,8 @@ class Formula(tuple):
     def connector(self) -> Connector:
         return self[0]
 
-    def represent(self):
-        return self.connector.rep_formula(argument=self.arguments)
+    def represent(self, is_subformula: bool = False) -> str:
+        return self.connector.rep_formula(argument=self.arguments, is_subformula=is_subformula)
 
 
 def ensure_formula_arguments(o=None) -> FormulaArguments:
@@ -386,12 +386,12 @@ class Connector(_identifiers.UniqueIdentifiable):
         return Formula(c=self, a=args)
 
     def __init__(self, package=None, uid=None, syntactic_rules=None,
-                 connector_representation: _representation.Representation | None = None,
-                 formula_representation: _representation.Representation | None = None):
+                 connector_representation: _representation.AbstractRepresentation | None = None,
+                 formula_representation: _representation.AbstractRepresentation | None = None):
         self._package = package
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
-        self._connector_representation: _representation.Representation = connector_representation
-        self._formula_representation: _representation.Representation = formula_representation
+        self._connector_representation: _representation.AbstractRepresentation = connector_representation
+        self._formula_representation: _representation.AbstractRepresentation = formula_representation
         super().__init__(uid=uid)
 
     def __repr__(self):
@@ -401,7 +401,7 @@ class Connector(_identifiers.UniqueIdentifiable):
         return f'{self.uid} connector'
 
     @property
-    def connector_representation(self) -> _representation.Representation:
+    def connector_representation(self) -> _representation.AbstractRepresentation:
         return self._connector_representation
 
     @connector_representation.setter
@@ -409,7 +409,7 @@ class Connector(_identifiers.UniqueIdentifiable):
         self._connector_representation = connector_representation
 
     @property
-    def formula_representation(self) -> _representation.Representation:
+    def formula_representation(self) -> _representation.AbstractRepresentation:
         return self._formula_representation
 
     @formula_representation.setter
@@ -423,7 +423,7 @@ class Connector(_identifiers.UniqueIdentifiable):
     def rep(self, **kwargs) -> str:
         return self.connector_representation.rep(**kwargs)
 
-    def rep_formula(self, argument: FormulaArguments | None = None):
+    def rep_formula(self, argument: FormulaArguments | None = None, is_subformula: bool = False) -> str:
         """Returns the string representation of the formula.
         """
         if self.connector_representation is None:
@@ -432,9 +432,17 @@ class Connector(_identifiers.UniqueIdentifiable):
             raise ValueError(f'Connector {self.uid.__repr__()} has no formula representation.')
         connector: str = self.rep()
         argument = ensure_formula_arguments(argument)
-        argument_representations = tuple(a.represent() for a in argument)
-        variables = {'connector': connector, 'argument': argument_representations}
-        return self.formula_representation.rep(variables=variables)
+        argument_representations = tuple(a.represent(is_subformula=True) for a in argument)
+        variables = {
+            'connector': connector,
+            'argument': argument_representations,
+            'is_subformula': is_subformula}
+        # IDEA: Find a way to manage connector precedences, and pass parent and child connector
+        #   precedences as a variables to the jinja2 template to manage with more accuracy the
+        #   parenthesization. Precedence should not be a static connector property, but should
+        #   rather be a property of the representation, or possibly of the mapping.w
+        rep = self.formula_representation.rep(variables=variables)
+        return rep
 
     @property
     def syntactic_rules(self):
@@ -498,10 +506,10 @@ def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False
             if overwrite_mutable_properties:
                 # Overwrite the mutable properties.
                 if 'connector_representation' in o.keys():
-                    connector.connector_representation = _representation.load_representation(
+                    connector.connector_representation = _representation.load_abstract_representation(
                         o['connector_representation'])
                 if 'formula_representation' in o.keys():
-                    connector.formula_representation = _representation.load_representation(
+                    connector.formula_representation = _representation.load_abstract_representation(
                         o['formula_representation'])
     return connector
 
@@ -639,7 +647,7 @@ class Variable(Formula):
 _variable_counter = 0
 
 
-def declare_variable(rep: _representation.Representation):
+def declare_variable(rep: _representation.AbstractRepresentation):
     """Declare a new variable.
 
     A variable is a connector that takes no arguments that is designated as a variable.

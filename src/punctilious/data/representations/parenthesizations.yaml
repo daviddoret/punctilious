@@ -1,0 +1,28 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uid: { slug: parenthesizations, uuid: 751fecd9-1ecd-499e-aba2-eaae86e982bb }
+description:
+  en: A catalog of formula representations.
+representations:
+  - uid: { slug: no_parentheses, uuid: dc198ebb-1629-40da-bf01-45ce8411e596 }
+    renderers:
+      - implementation: string_template
+        string_template: '{{ formula }}'
+        tags: { }
+  - uid: { slug: parentheses, uuid: 34b6c4e4-5894-49df-a72e-77c10968b6ad }
+    renderers:
+      - implementation: string_template
+        string_template: '({{ formula }})'
+        tags: { technical_language: unicode_basic }
+      - implementation: string_template
+        string_template: '\left({{ formula }}\right)'
+        tags: { technical_language: latex_math }
+# Square Brackets: [ ]
+# Curly Braces: { }
+# Angle Brackets: ⟨ ⟩
+# Double Brackets: ⟦ ⟧
+# Vertical Bars: | |
+# Double Vertical Bars: ‖ ‖
+# Ceiling: ⌈ ⌉
+# Floor: ⌊ ⌋
+
+

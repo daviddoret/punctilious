@@ -27,6 +27,6 @@ class PropositionalLogic1(_bundling.YamlFileBundle):
     def absorption_law(self) -> _formal_language.Connector:
         return self.connectors.get_from_uuid('absorption_law')
 
-    def declare_variable(self, rep: _representation.Representation) -> _formal_language.Variable:
+    def declare_variable(self, rep: _representation.AbstractRepresentation) -> _formal_language.Variable:
         v = _formal_language.declare_variable(rep=rep)
         return v

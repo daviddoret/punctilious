@@ -61,7 +61,7 @@ def prefs(en, fr, symbol, word):
 def reps():
     d: dict = pu.get_yaml_from_package(path='data.representations', resource='operators_1.yaml')
     raw = d.get('representations', [])
-    return pu.ensure_representations(o=raw)
+    return pu.ensure_abstract_representations(o=raw)
 
 
 @pytest.fixture
@@ -76,7 +76,7 @@ class TestRepresentation:
         x = pu.RendererForStringConstant(string_constant='and', tags=(en, word,))
         y = pu.RendererForStringConstant(string_constant='et', tags=(fr, word,))
         z = pu.RendererForStringConstant(string_constant='∧', tags=(symbol,))
-        rep = pu.Representation(pu.create_uid('rep'), renderers=(x, y, z,))
+        rep = pu.AbstractRepresentation(pu.create_uid('rep'), renderers=(x, y, z,))
 
         prefs[word] = 10
         prefs[symbol] = 20
@@ -121,7 +121,7 @@ class TestRepresentation:
         traditional = pu.RendererForStringTemplate(
             string_template='{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})',
             tags=(traditional_formula,))
-        rep = pu.Representation(uid=pu.create_uid('rep'), renderers=(infix, traditional,))
+        rep = pu.AbstractRepresentation(uid=pu.create_uid('rep'), renderers=(infix, traditional,))
 
         prefs[traditional_formula] = 10
         prefs[infix_formula] = 20

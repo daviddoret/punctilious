@@ -4,7 +4,9 @@ import _identifiers
 from _identifiers import create_uid, ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
     load_unique_identifier, load_unique_identifiable, UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
 import _representation
-from _representation import Representation, ensure_representations, ensure_representation, latex_math, Tag, \
+from _representation import AbstractRepresentation, ensure_abstract_representations, ensure_abstract_representation, \
+    latex_math, \
+    Tag, \
     TagsPreferences, \
     TagsAssignment, RendererForStringTemplate, \
     RendererForStringConstant, unicode_basic, unicode_extended

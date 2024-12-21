@@ -86,33 +86,36 @@ def ensure_renderers(o) -> Renderers:
         raise TypeError(f'Renderers validation failure. Type: {type(o)}. Object: {o}.')
 
 
-def ensure_representation(o) -> Representation:
-    """Ensure that `o` is of type Representation, converting it if necessary, or raise an error if it fails."""
-    if isinstance(o, Representation):
+def ensure_abstract_representation(o) -> AbstractRepresentation:
+    """Ensure that `o` is of type AbstractRepresentation, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, AbstractRepresentation):
         return o
     elif isinstance(o, dict):
         # conversion from dict structure.
         uid = o['uid']
         uid = _identifiers.ensure_unique_identifier(uid)
         renderers = ensure_renderers(o=o.get('renderers', []))
-        o = Representation(uid=uid, renderers=renderers)
+        o = AbstractRepresentation(uid=uid, renderers=renderers)
         return o
     else:
         raise TypeError(f'Representation validation failure. Type: {type(o)}. Object: {o}.')
 
 
-def ensure_representations(o) -> Representations:
+def ensure_abstract_representations(o) -> AbstractRepresentations:
     """Ensure that `o` is of type Representations, converting it if necessary, or raise an error if it fails."""
-    if isinstance(o, Representations):
+    if isinstance(o, AbstractRepresentations):
         return o
     elif isinstance(o, collections.abc.Iterable):
-        o = Representations(*o)
+        o = AbstractRepresentations(*o)
         return o
     else:
         raise TypeError(f'Representations validation failure. Type: {type(o)}. Object: {o}.')
 
 
-class Representation(_identifiers.UniqueIdentifiable):
+class AbstractRepresentation(_identifiers.UniqueIdentifiable):
+    """An AbstractRepresentation is an object that, given the expected input parameters,
+    has the capability to generate ConcreteRepresentations.
+    """
 
     def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
                  renderers: tuple[Renderer, ...]):
@@ -120,10 +123,10 @@ class Representation(_identifiers.UniqueIdentifiable):
         super().__init__(uid=uid)
 
     def __repr__(self):
-        return f'{self.uid.slug} ({self.uid.uuid}) representation'
+        return f'{self.uid.slug} ({self.uid.uuid}) representation builder'
 
     def __str__(self):
-        return f'{self.uid.slug} representation'
+        return f'{self.uid.slug} representation builder'
 
     def optimize_renderer(self, config: TagsPreferences = None):
         """Given preferences, return the optimal renderer.
@@ -167,7 +170,8 @@ class Representation(_identifiers.UniqueIdentifiable):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def load_representation(o: typing.Mapping, append_representation_renderers: bool = False) -> Representation:
+def load_abstract_representation(o: typing.Mapping,
+                                 append_representation_renderers: bool = False) -> AbstractRepresentation:
     """Receives a raw Representation, typically from a YAML file, and returns a typed Representation instance.
 
     :param append_representation_renderers: if the representation is already loaded in memory,
@@ -175,10 +179,10 @@ def load_representation(o: typing.Mapping, append_representation_renderers: bool
     :param o: a raw Representation.
     :return: a typed Representation instance.
     """
-    representation: Representation | None = _identifiers.load_unique_identifiable(o)
+    representation: AbstractRepresentation | None = _identifiers.load_unique_identifiable(o)
     if representation is None:
         # The representation does not exist in memory.
-        representation = ensure_representation(o)
+        representation = ensure_abstract_representation(o)
     else:
         # The representation exists in memory.
         if append_representation_renderers:
@@ -192,21 +196,21 @@ def load_representation(o: typing.Mapping, append_representation_renderers: bool
     return representation
 
 
-class Representations(tuple[Representation, ...]):
-    """A tuple of Representation instances."""
+class AbstractRepresentations(tuple[AbstractRepresentation, ...]):
+    """A tuple of AbstractRepresentation instances."""
 
-    def __getitem__(self, key) -> Representation:
+    def __getitem__(self, key) -> AbstractRepresentation:
         if isinstance(key, int):
             # Default behavior for integer keys
             return super().__getitem__(key)
         if isinstance(key, _identifiers.FlexibleUUID):
             # Custom behavior for uuid keys
-            item: Representation | None = self.get_from_uuid(uuid=key, raise_error_if_not_found=False)
+            item: AbstractRepresentation | None = self.get_from_uuid(uuid=key, raise_error_if_not_found=False)
             if item is not None:
                 return item
         if isinstance(key, _identifiers.FlexibleUniqueIdentifier):
             # Custom behavior for UniqueIdentifier keys
-            item: Representation | None = self.get_from_uid(uid=key, raise_error_if_not_found=False)
+            item: AbstractRepresentation | None = self.get_from_uid(uid=key, raise_error_if_not_found=False)
             if item is not None:
                 return item
         else:
@@ -217,7 +221,7 @@ class Representations(tuple[Representation, ...]):
         super().__init__()
 
     def __new__(cls, *args):
-        typed_representations = tuple(ensure_representation(r) for r in args)
+        typed_representations = tuple(ensure_abstract_representation(r) for r in args)
         return super().__new__(cls, typed_representations)
 
     def __repr__(self):
@@ -227,7 +231,7 @@ class Representations(tuple[Representation, ...]):
         return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
     def get_from_uid(self, uid: _identifiers.FlexibleUniqueIdentifier,
-                     raise_error_if_not_found: bool = False) -> Representation | None:
+                     raise_error_if_not_found: bool = False) -> AbstractRepresentation | None:
         """Return a representation by its UniqueIdentifier.
 
         :param uid: a UniqueIdentifier.
@@ -235,14 +239,14 @@ class Representations(tuple[Representation, ...]):
         :return:
         """
         uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(uid)
-        item: Representation | None = next((item for item in self if item.uid == uid), None)
+        item: AbstractRepresentation | None = next((item for item in self if item.uid == uid), None)
         if item is None and raise_error_if_not_found:
             raise IndexError(f'Representation not found. UID: "{uid}".')
         else:
             return item
 
     def get_from_uuid(self, uuid: _identifiers.FlexibleUUID,
-                      raise_error_if_not_found: bool = False) -> Representation | None:
+                      raise_error_if_not_found: bool = False) -> AbstractRepresentation | None:
         """Return a representation by its UUID.
 
         :param uuid: a UUID.
@@ -262,7 +266,8 @@ class Representations(tuple[Representation, ...]):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def load_representations(o: typing.Iterable | None, append_representation_renderers: bool = False) -> Representations:
+def load_abstract_representations(o: typing.Iterable | None,
+                                  append_representation_renderers: bool = False) -> AbstractRepresentations:
     """Receives a raw Representations collection, typically from a YAML file,
     and returns a typed Representations instance.
 
@@ -273,12 +278,12 @@ def load_representations(o: typing.Iterable | None, append_representation_render
     """
     if o is None:
         o = []
-    representations: list[Representation] = []
+    representations: list[AbstractRepresentation] = []
     for i in o:
-        representation: Representation = load_representation(
+        representation: AbstractRepresentation = load_abstract_representation(
             i, append_representation_renderers=append_representation_renderers)
         representations.append(representation)
-    return Representations(*representations)
+    return AbstractRepresentations(*representations)
 
 
 class Renderer(abc.ABC):

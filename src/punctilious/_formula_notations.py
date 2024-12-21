@@ -23,7 +23,7 @@ class FormulaNotations(_bundling.YamlFileBundle):
         return cls._singleton
 
     @property
-    def atomic_formula(self) -> _representation.Representation:
+    def atomic_formula(self) -> _representation.AbstractRepresentation:
         """A formula representation for atomic formulas of the form: `𝗖` where 𝗖 is the connector.
 
         :return: A formula representation.
@@ -31,7 +31,7 @@ class FormulaNotations(_bundling.YamlFileBundle):
         return self.representations.get_from_uuid('f6bd05d7-ee5b-4480-9d59-ea9fa3a13516', raise_error_if_not_found=True)
 
     @property
-    def function_formula(self) -> _representation.Representation:
+    def function_formula(self) -> _representation.AbstractRepresentation:
         """A formula representation for function formulas of the form: `𝗖(𝗮₁, 𝗮₂, …, 𝗮ₙ)` where 𝗖 is the connector and 𝗮ᵢ
         is an argument.
 
@@ -40,7 +40,7 @@ class FormulaNotations(_bundling.YamlFileBundle):
         return self.representations.get_from_uuid('cd1df2f9-f04d-4321-8430-5191082da985', raise_error_if_not_found=True)
 
     @property
-    def infix_formula(self) -> _representation.Representation:
+    def infix_formula(self) -> _representation.AbstractRepresentation:
         """A formula representation for infix formulas of the form: `𝗮₁ 𝗖 𝗮₂` where 𝗖 is the connector and 𝗮ᵢ
         is an argument.
 
@@ -49,7 +49,7 @@ class FormulaNotations(_bundling.YamlFileBundle):
         return self.representations.get_from_uuid('d83bd1a4-97cf-4a7e-975d-21711333b971', raise_error_if_not_found=True)
 
     @property
-    def prefix_formula(self) -> _representation.Representation:
+    def prefix_formula(self) -> _representation.AbstractRepresentation:
         """A formula representation for infix formulas of the form: `𝗖𝗮₁` where 𝗖 is the connector and 𝗮ᵢ
         is an argument.
 
@@ -58,7 +58,7 @@ class FormulaNotations(_bundling.YamlFileBundle):
         return self.representations.get_from_uuid('ca64ae2f-f8a7-4a87-a99d-57d86a8ba0ad', raise_error_if_not_found=True)
 
     @property
-    def postfix_formula(self) -> _representation.Representation:
+    def postfix_formula(self) -> _representation.AbstractRepresentation:
         """A formula representation for infix formulas of the form: `𝗮₁𝗖` where 𝗖 is the connector and 𝗮ᵢ
         is an argument.
 
@@ -67,7 +67,7 @@ class FormulaNotations(_bundling.YamlFileBundle):
         return self.representations.get_from_uuid('af99c47e-c6b8-43e0-a8f4-6331ba79e8fd', raise_error_if_not_found=True)
 
     @property
-    def system_formula(self) -> _representation.Representation:
+    def system_formula(self) -> _representation.AbstractRepresentation:
         """A formula representation for system formulas of the form: `(𝗖, (𝗮₁, 𝗮₂, …, 𝗮ₙ))` where 𝗖 is the connector
         and 𝗮ᵢ is an argument.
 

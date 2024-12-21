@@ -86,7 +86,7 @@ class Bundle:
         self._identifier = _identifiers.ensure_unique_identifier(identifier)
         self._imports = imports
         self._aliases = aliases
-        representations = _representation.ensure_representations(representations)
+        representations = _representation.ensure_abstract_representations(representations)
         self._representations = representations
         connectors = _formal_language.ensure_connectors(connectors)
         self._connectors = connectors
@@ -273,7 +273,7 @@ class YamlFileBundle(Bundle):
                 untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
                 imports = Imports(*untyped_imports)
                 aliases = None  # To be implemented
-                representations: _representation.Representations = _representation.load_representations(
+                representations: _representation.AbstractRepresentations = _representation.load_abstract_representations(
                     d.get('representations', None),
                     append_representation_renderers=True)
                 # Load connectors
@@ -293,7 +293,7 @@ class YamlFileBundle(Bundle):
     #                   raise ValueError(f'Error when loading YAML file {file_path}: {e}')
 
     def _resolve_package_representation_reference(self, ref: str, i: Imports,
-                                                  r: _representation.Representations):
+                                                  r: _representation.AbstractRepresentations):
         """Given the reference of a representation in string format,
         typically as the representation attribute of a connector in a YAML file,
         finds and returns the corresponding representation object, either
