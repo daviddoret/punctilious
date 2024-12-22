@@ -22,7 +22,7 @@ import greek_alphabet_lowercase_serif_italic
 import greek_alphabet_uppercase_serif_italic
 import latin_alphabet_lowercase_serif_italic
 import latin_alphabet_uppercase_serif_italic
-# import _latin_alphabet_lowercase_serif_roman
+import latin_alphabet_lowercase_serif_bold
 import operators_1_connectors
 import operators_1_representations
 import operators_1_mappings
