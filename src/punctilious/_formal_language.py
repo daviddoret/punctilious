@@ -642,23 +642,3 @@ class Variable(Formula):
         :param c: A connector.
         """
         super().__init__(c=c, a=None)
-
-
-_variable_counter = 0
-
-
-def declare_variable(rep: _representation.AbstractRepresentation):
-    """Declare a new variable.
-
-    A variable is a connector that takes no arguments that is designated as a variable.
-
-    :param rep:
-    :return:
-    """
-    # Create a new connector.
-    global _variable_counter
-    _variable_counter = _variable_counter + 1
-    c = Connector(
-        uid=_identifiers.create_uid(slug=f'variable_{_variable_counter}'),
-        connector_representation=rep)
-    return Variable(c=c)

@@ -12,7 +12,7 @@ from _representation import AbstractRepresentation, ensure_abstract_representati
     TagsAssignment, RendererForStringTemplate, \
     RendererForStringConstant, unicode_basic, unicode_extended
 import _formal_language
-from _formal_language import Connector, Connectors, declare_variable, ensure_formula, ensure_formula_arguments, \
+from _formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
     FormulaArguments, Formula
 import _interpretation
 from _interpretation import Interpreter
@@ -20,12 +20,15 @@ import _bundling
 import formula_notations
 import _greek_alphabet_lowercase_serif_italic
 import _greek_alphabet_uppercase_serif_italic
-import _latin_alphabet_lowercase_serif_italic
+import latin_alphabet_lowercase_serif_italic
 import _latin_alphabet_uppercase_serif_italic
 # import _latin_alphabet_lowercase_serif_roman
 import operators_1_connectors
 import operators_1_representations
 import operators_1_mappings
+
+import _declarations
+from _declarations import declare_variable, declare_function
 
 # import _propositional_logic_1
 # import _tao_analysis_1_2006
@@ -37,8 +40,9 @@ packages = _bundling.get_packages()
 
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
 greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
-latin_alphabet_lowercase_serif_italic = _latin_alphabet_lowercase_serif_italic.LatinAlphabetLowercaseSerifItalic()
 latin_alphabet_uppercase_serif_italic = _latin_alphabet_uppercase_serif_italic.LatinAlphabetUppercaseSerifItalic()
+
+from _declarations import declare_variable, declare_function
 
 # tao_analysis_1_2006 = _tao_analysis_1_2006.TaoAnalysis12006()
 pass

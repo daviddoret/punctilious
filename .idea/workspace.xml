@@ -5,16 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="first theorem implementation">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/operators_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/_declarations.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_operators_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_operators_1_representations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_propositional_logic_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_representations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_representations.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -843,14 +840,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01183" summary="modules importation reorg + remove uuid attribute on non-package elements">
-      <option name="closed" value="true" />
-      <created>1733675357241</created>
-      <option name="number" value="01183" />
-      <option name="presentableId" value="LOCAL-01183" />
-      <option name="project" value="LOCAL" />
-      <updated>1733675357241</updated>
-    </task>
     <task id="LOCAL-01184" summary="modules importation reorg + remove uuid attribute on non-package elements">
       <option name="closed" value="true" />
       <created>1733675927574</created>
@@ -1235,7 +1224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734820933648</updated>
     </task>
-    <option name="localTasksCounter" value="1232" />
+    <task id="LOCAL-01232" summary="first theorem implementation">
+      <option name="closed" value="true" />
+      <created>1734821701793</created>
+      <option name="number" value="01232" />
+      <option name="presentableId" value="LOCAL-01232" />
+      <option name="project" value="LOCAL" />
+      <updated>1734821701793</updated>
+    </task>
+    <option name="localTasksCounter" value="1233" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

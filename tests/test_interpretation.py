@@ -82,11 +82,12 @@ class TestRepresentation:
         # weird = create_atomic_connector('weird')
         lnot = pu.operators_1_connectors.negation
         land = pu.operators_1_connectors.conjunction
-        is_a_proposition = pl1.is_a_propositional_variable
+        f = pu.declare_function('f')
+        g = pu.declare_function('g')
         atomic_connectors = {'P': p, 'Q': q, 'R': r}
         prefix_connectors = {'not': lnot}
         infix_connectors = {'and': land}
-        function_connectors = {'not': lnot, 'is-a-proposition': is_a_proposition}
+        function_connectors = {'not': lnot, 'f': f, 'g': g}
 
         # Output the parsed structure
         interpreter = pu.Interpreter(atomic_connectors=atomic_connectors,
@@ -97,12 +98,12 @@ class TestRepresentation:
         assert str(interpreter.interpret(input_string)) == 'P'
         input_string = "not P"
         assert str(interpreter.interpret(input_string)) == '¬P'
-        input_string = "Let P be a propositional variable."
-        assert str(interpreter.interpret(input_string)) == 'is-a-proposition(P())'
+        input_string = "f(P)"
+        assert str(interpreter.interpret(input_string)) == 'f(P)'
         input_string = "P and Q"
-        assert str(interpreter.interpret(input_string)) == 'and(P(), Q())'
+        assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
         input_string = "(P and Q)"
-        assert str(interpreter.interpret(input_string)) == 'and(P(), Q())'
+        assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
         input_string = "(P and Q) and (Q and P)"
         assert str(interpreter.interpret(input_string)) == 'and(and(P(), Q()), and(Q(), P()))'
         input_string = "not(not P)"
