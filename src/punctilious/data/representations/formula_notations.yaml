@@ -19,26 +19,26 @@ representations:
   - uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 }
     renderers:
       - implementation: string_template
-        string_template: '{% if is_sub_formula %}({% endif %}{{ argument[0] }} {{ connector }} {{ argument[1] }}{% if is_sub_formula %}){% endif %}'
+        string_template: '{% if is_subformula %}({% endif %}{{ argument[0] }} {{ connector }} {{ argument[1] }}{% if is_subformula %}){% endif %}'
         tags: { technical_language: unicode_basic }
       - implementation: string_template
-        string_template: '{% if is_sub_formula %}\left({% endif %}{{ argument[0] }} {{ connector }} {{ argument[1] }}{% if is_sub_formula %}\right){% endif %}'
+        string_template: '{% if is_subformula %}\left({% endif %}{{ argument[0] }} {{ connector }} {{ argument[1] }}{% if is_subformula %}\right){% endif %}'
         tags: { technical_language: latex_math }
   - uid: { slug: prefix_formula, uuid: ca64ae2f-f8a7-4a87-a99d-57d86a8ba0ad }
     renderers:
       - implementation: string_template
-        string_template: '{% if is_sub_formula %}({% endif %}{{ connector }}{{ argument[0] }}{% if is_sub_formula %}){% endif %}'
+        string_template: '{% if is_subformula %}({% endif %}{{ connector }}{{ argument[0] }}{% if is_subformula %}){% endif %}'
         tags: { technical_language: unicode_basic }
       - implementation: string_template
-        string_template: '{% if is_sub_formula %}\left({% endif %}{{ connector }}{{ argument[0] }}{% if is_sub_formula %}\right){% endif %}'
+        string_template: '{% if is_subformula %}\left({% endif %}{{ connector }}{{ argument[0] }}{% if is_subformula %}\right){% endif %}'
         tags: { technical_language: latex_math }
   - uid: { slug: postfix_formula, uuid: af99c47e-c6b8-43e0-a8f4-6331ba79e8fd }
     renderers:
       - implementation: string_template
-        string_template: '{% if is_sub_formula %}({% endif %}{{ argument[0] }}{{ connector }}{% if is_sub_formula %}){% endif %}'
+        string_template: '{% if is_subformula %}({% endif %}{{ argument[0] }}{{ connector }}{% if is_subformula %}){% endif %}'
         tags: { technical_language: unicode_basic }
       - implementation: string_template
-        string_template: '{% if is_sub_formula %}\left({% endif %}{{ argument[0] }}{{ connector }}{% if is_sub_formula %}\right){% endif %}'
+        string_template: '{% if is_subformula %}\left({% endif %}{{ argument[0] }}{{ connector }}{% if is_subformula %}\right){% endif %}'
         tags: { technical_language: latex_math }
   - uid: { slug: system_formula, uuid: 8df8b738-3efc-4da5-928a-ea4d7d053598 }
     renderers:

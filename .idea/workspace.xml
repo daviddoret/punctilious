@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="first theorem implementation">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/_declarations.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -391,7 +388,7 @@
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "debugger.stepping",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -468,7 +465,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_interpretation.TestRepresentation.test_representation">
+  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_formula">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -675,6 +672,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_formula.TestFormula.test_formula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_formula.TestFormula.test_formula&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_interpretation.TestRepresentation.test_representation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -760,23 +774,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_representations.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_representations.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -805,22 +802,22 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
+      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
       <item itemvalue="Python tests.pytest for test_interpretation.TestRepresentation.test_representation" />
       <item itemvalue="Python tests.pytest in test_formula_notations.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Python tests.pytest in test_packaging.py" />
-      <item itemvalue="Python tests.pytest in test_representations.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestRepresentation.test_representation" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_packaging.py" />
         <item itemvalue="Python tests.pytest in test_formula_notations.py" />
-        <item itemvalue="Python tests.pytest in test_representations.py" />
       </list>
     </recent_temporary>
   </component>
@@ -839,14 +836,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01184" summary="modules importation reorg + remove uuid attribute on non-package elements">
-      <option name="closed" value="true" />
-      <created>1733675927574</created>
-      <option name="number" value="01184" />
-      <option name="presentableId" value="LOCAL-01184" />
-      <option name="project" value="LOCAL" />
-      <updated>1733675927574</updated>
     </task>
     <task id="LOCAL-01185" summary="modules importation reorg + remove uuid attribute on non-package elements">
       <option name="closed" value="true" />
@@ -1232,7 +1221,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734821701793</updated>
     </task>
-    <option name="localTasksCounter" value="1233" />
+    <task id="LOCAL-01233" summary="first theorem implementation">
+      <option name="closed" value="true" />
+      <created>1734855603190</created>
+      <option name="number" value="01233" />
+      <option name="presentableId" value="LOCAL-01233" />
+      <option name="project" value="LOCAL" />
+      <updated>1734855603190</updated>
+    </task>
+    <option name="localTasksCounter" value="1234" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1333,75 +1330,80 @@
           <line>17</line>
           <option name="timeStamp" value="120" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/tests/test_minimal_logic_1.py</url>
           <line>344</line>
           <option name="timeStamp" value="128" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/tests/test_axiomatic_system_1.py</url>
           <line>776</line>
           <option name="timeStamp" value="179" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/tests/test_axiomatic_system_1.py</url>
           <line>964</line>
           <option name="timeStamp" value="189" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/tests/test_axiomatic_system_1.py</url>
           <line>425</line>
           <option name="timeStamp" value="210" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/tests/test_meta_theory_1.py</url>
           <line>86</line>
           <option name="timeStamp" value="237" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>3909</line>
           <option name="timeStamp" value="240" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>112</line>
           <option name="timeStamp" value="242" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>131</line>
           <option name="timeStamp" value="243" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py</url>
           <line>330</line>
           <option name="timeStamp" value="244" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py</url>
           <line>11</line>
           <option name="timeStamp" value="314" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py</url>
           <line>10</line>
           <option name="timeStamp" value="316" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py</url>
           <line>8</line>
           <option name="timeStamp" value="317" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/sandbox/sandbox.py</url>
           <line>35</line>
           <option name="timeStamp" value="325" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+        <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/_latin_alphabet_uppercase_serif_italic.py</url>
           <line>86</line>
           <option name="timeStamp" value="328" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/_formal_language.py</url>
+          <line>428</line>
+          <option name="timeStamp" value="345" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -437,10 +437,11 @@ class Connector(_identifiers.UniqueIdentifiable):
             'connector': connector,
             'argument': argument_representations,
             'is_subformula': is_subformula}
-        # IDEA: Find a way to manage connector precedences, and pass parent and child connector
+        # TODO: NICE_TO_HAVE: Find a way to manage connector precedences, and pass parent and
+        #   child connector
         #   precedences as a variables to the jinja2 template to manage with more accuracy the
         #   parenthesization. Precedence should not be a static connector property, but should
-        #   rather be a property of the representation, or possibly of the mapping.w
+        #   rather be a property of the representation, or possibly of the mapping.
         rep = self.formula_representation.rep(variables=variables)
         return rep
 

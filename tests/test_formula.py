@@ -24,5 +24,7 @@ class TestFormula:
         assert str(phi3) == '¬P'
 
         phi4 = pu.Formula(land, (phi3, phi2))
-        # TODO: Manage parenthesisation
-        assert str(phi4) == '¬P ∧ P ∧ Q'
+        assert str(phi4) == '(¬P) ∧ (P ∧ Q)'
+
+        phi5 = pu.Formula(land, (phi2, phi2))
+        assert phi5.represent() == '(P ∧ Q) ∧ (P ∧ Q)'
