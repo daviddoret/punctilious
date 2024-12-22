@@ -105,9 +105,9 @@ class TestRepresentation:
         input_string = "(P and Q)"
         assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
         input_string = "(P and Q) and (Q and P)"
-        assert str(interpreter.interpret(input_string)) == 'and(and(P(), Q()), and(Q(), P()))'
+        assert str(interpreter.interpret(input_string)) == '(P ∧ Q) ∧ (Q ∧ P)'
         input_string = "not(not P)"
-        assert str(interpreter.interpret(input_string)) == 'not(not(P()))'
-        input_string = "not(not (is-a-proposition(P) and Q) and (Q and P))"
+        assert str(interpreter.interpret(input_string)) == '¬(¬P)'
+        input_string = "not(not (f(P) and Q) and (Q and P))"
         assert str(
-            interpreter.interpret(input_string)) == 'not(and(not(and(is-a-proposition(P()), Q())), and(Q(), P())))'
+            interpreter.interpret(input_string)) == '¬((¬(f(P) ∧ Q)) ∧ (Q ∧ P))'
