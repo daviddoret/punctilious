@@ -21,7 +21,7 @@ import formula_notations
 import _greek_alphabet_lowercase_serif_italic
 import _greek_alphabet_uppercase_serif_italic
 import latin_alphabet_lowercase_serif_italic
-import _latin_alphabet_uppercase_serif_italic
+import latin_alphabet_uppercase_serif_italic
 # import _latin_alphabet_lowercase_serif_roman
 import operators_1_connectors
 import operators_1_representations
@@ -40,7 +40,6 @@ packages = _bundling.get_packages()
 
 greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
 greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
-latin_alphabet_uppercase_serif_italic = _latin_alphabet_uppercase_serif_italic.LatinAlphabetUppercaseSerifItalic()
 
 from _declarations import declare_variable, declare_function
 
