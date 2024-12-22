@@ -5,15 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="first theorem implementation">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_formula_notations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_notations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_tao_analysis_1_2006.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -470,7 +467,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_formula">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -818,8 +815,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestRepresentation.test_representation" />
         <item itemvalue="Python tests.pytest in test_packaging.py" />
         <item itemvalue="Python tests.pytest in test_formula_notations.py" />
@@ -841,14 +838,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01188" summary="identifiers">
-      <option name="closed" value="true" />
-      <created>1733693312501</created>
-      <option name="number" value="01188" />
-      <option name="presentableId" value="LOCAL-01188" />
-      <option name="project" value="LOCAL" />
-      <updated>1733693312501</updated>
     </task>
     <task id="LOCAL-01189" summary="identifiers">
       <option name="closed" value="true" />
@@ -1234,7 +1223,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734858323019</updated>
     </task>
-    <option name="localTasksCounter" value="1237" />
+    <task id="LOCAL-01237" summary="first theorem implementation">
+      <option name="closed" value="true" />
+      <created>1734869320468</created>
+      <option name="number" value="01237" />
+      <option name="presentableId" value="LOCAL-01237" />
+      <option name="project" value="LOCAL" />
+      <updated>1734869320468</updated>
+    </task>
+    <option name="localTasksCounter" value="1238" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

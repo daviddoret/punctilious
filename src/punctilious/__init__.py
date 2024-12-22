@@ -31,7 +31,7 @@ import _declarations
 from _declarations import declare_variable, declare_function
 
 # import _propositional_logic_1
-# import _tao_analysis_1_2006
+import tao_analysis_1_2006
 
 prefs = _representation.TagsPreferences()
 packages = _bundling.get_packages()
