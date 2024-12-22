@@ -18,8 +18,8 @@ import _interpretation
 from _interpretation import Interpreter
 import _bundling
 import formula_notations
-import _greek_alphabet_lowercase_serif_italic
-import _greek_alphabet_uppercase_serif_italic
+import greek_alphabet_lowercase_serif_italic
+import greek_alphabet_uppercase_serif_italic
 import latin_alphabet_lowercase_serif_italic
 import latin_alphabet_uppercase_serif_italic
 # import _latin_alphabet_lowercase_serif_roman
@@ -35,11 +35,6 @@ from _declarations import declare_variable, declare_function
 
 prefs = _representation.TagsPreferences()
 packages = _bundling.get_packages()
-
-# formula_notations = _formula_notations.FormulaNotations()
-
-greek_alphabet_lowercase_serif_italic = _greek_alphabet_lowercase_serif_italic.GreekAlphabetLowercaseSerifItalic()
-greek_alphabet_uppercase_serif_italic = _greek_alphabet_uppercase_serif_italic.GreekAlphabetUppercaseSerifItalic()
 
 from _declarations import declare_variable, declare_function
 

@@ -1,3 +1,7 @@
+"""This module provides a catalog of abstract representations for various formula notations.
+
+"""
+
 import _bundling
 
 bundle = _bundling.YamlFileBundle(path='data.representations',
