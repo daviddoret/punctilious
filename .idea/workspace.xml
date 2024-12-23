@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="foundations">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="foundations" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -841,14 +838,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01192" summary="modules cleanup">
-      <option name="closed" value="true" />
-      <created>1733727454870</created>
-      <option name="number" value="01192" />
-      <option name="presentableId" value="LOCAL-01192" />
-      <option name="project" value="LOCAL" />
-      <updated>1733727454870</updated>
-    </task>
     <task id="LOCAL-01193" summary="modules cleanup">
       <option name="closed" value="true" />
       <created>1733727788062</created>
@@ -1233,7 +1222,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734929196807</updated>
     </task>
-    <option name="localTasksCounter" value="1241" />
+    <task id="LOCAL-01241" summary="foundations">
+      <option name="closed" value="true" />
+      <created>1734929221887</created>
+      <option name="number" value="01241" />
+      <option name="presentableId" value="LOCAL-01241" />
+      <option name="project" value="LOCAL" />
+      <updated>1734929221887</updated>
+    </task>
+    <option name="localTasksCounter" value="1242" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
