@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="foundations">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -471,7 +464,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.constants_1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -805,27 +798,27 @@
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
-      <item itemvalue="Python.constants_1" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Shell Script.pytest tests" />
-      <item itemvalue="Shell Script.pytest" />
-      <item itemvalue="Shell Script.python -m build" />
+      <item itemvalue="Python.constants_1" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
-      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
-      <item itemvalue="Python tests.pytest for test_interpretation.TestRepresentation.test_representation" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest in test_packaging.py" />
+      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
+      <item itemvalue="Python tests.pytest for test_interpretation.TestRepresentation.test_representation" />
       <item itemvalue="Python tests.pytest in tests" />
+      <item itemvalue="Python tests.pytest in test_packaging.py" />
+      <item itemvalue="Shell Script.pytest tests" />
+      <item itemvalue="Shell Script.pytest" />
+      <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.constants_1" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python.constants_1" />
         <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestRepresentation.test_representation" />
         <item itemvalue="Python tests.pytest in test_packaging.py" />
@@ -847,14 +840,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01191" summary="modules cleanup">
-      <option name="closed" value="true" />
-      <created>1733726990376</created>
-      <option name="number" value="01191" />
-      <option name="presentableId" value="LOCAL-01191" />
-      <option name="project" value="LOCAL" />
-      <updated>1733726990376</updated>
     </task>
     <task id="LOCAL-01192" summary="modules cleanup">
       <option name="closed" value="true" />
@@ -1240,7 +1225,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734901219818</updated>
     </task>
-    <option name="localTasksCounter" value="1240" />
+    <task id="LOCAL-01240" summary="foundations">
+      <option name="closed" value="true" />
+      <created>1734929196807</created>
+      <option name="number" value="01240" />
+      <option name="presentableId" value="LOCAL-01240" />
+      <option name="project" value="LOCAL" />
+      <updated>1734929196807</updated>
+    </task>
+    <option name="localTasksCounter" value="1241" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -1,4 +1,3 @@
-import _util
 import _formal_language
 import _bundling
 
