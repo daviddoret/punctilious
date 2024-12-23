@@ -426,9 +426,12 @@ class Connector(_identifiers.UniqueIdentifiable):
     def __call__(self, *args):
         return Formula(c=self, a=args)
 
-    def __init__(self, package=None, uid=None, syntactic_rules=None,
+    def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
+                 package=None,
+                 syntactic_rules=SyntacticRules(),
                  connector_representation: _representation.AbstractRepresentation | None = None,
-                 formula_representation: _representation.AbstractRepresentation | None = None):
+                 formula_representation: _representation.AbstractRepresentation | None = None
+                 ):
         self._package = package
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
         self._connector_representation: _representation.AbstractRepresentation = connector_representation

@@ -11,8 +11,8 @@ class TestFormula:
         p = create_atomic_connector('P')
         q = create_atomic_connector('Q')
         r = create_atomic_connector('R')
-        land = pu.operators_1_connectors.conjunction
-        lnot = pu.operators_1_connectors.negation
+        land = pu.operators_1.conjunction
+        lnot = pu.operators_1.negation
 
         phi1 = pu.Formula(p)
         assert str(phi1) == 'P'

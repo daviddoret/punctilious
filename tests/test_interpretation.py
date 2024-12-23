@@ -80,8 +80,8 @@ class TestRepresentation:
         q = create_atomic_connector('Q')
         r = create_atomic_connector('R')
         # weird = create_atomic_connector('weird')
-        lnot = pu.operators_1_connectors.negation
-        land = pu.operators_1_connectors.conjunction
+        lnot = pu.operators_1.negation
+        land = pu.operators_1.conjunction
         f = pu.declare_function('f')
         g = pu.declare_function('g')
         atomic_connectors = {'P': p, 'Q': q, 'R': r}

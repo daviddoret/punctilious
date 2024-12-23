@@ -309,7 +309,9 @@ def load_bundle_from_dict(d: dict) -> Bundle:
     """Load a bundle from a raw dictionary.
     """
     bundle: Bundle | None = _identifiers.load_unique_identifiable(o=d)
-    if bundle is None:
+    if bundle is not None:
+        _util.get_logger().debug(f'Bundle already loaded: {bundle}.')
+    else:
         # The connector does not exist in memory.
 
         schema = d['schema']
