@@ -1,14 +1,9 @@
 from __future__ import annotations
-import io
-import uuid as uuid_pkg
 import yaml
-import importlib.resources
 import collections.abc
-import re
 import typing
 
 # punctilious modules
-import _util
 from _util import get_logger
 import _identifiers
 import _representation
@@ -613,7 +608,7 @@ class Theorem(_identifiers.UniqueIdentifiable):
 
     def to_dict(self):
         d = {}
-        if self.uuid is not None:
+        if self.uid is not None:
             d['uid'] = self.uid
         if self.variables is not None:
             d['variables'] = self.variables

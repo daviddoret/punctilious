@@ -10,7 +10,6 @@ import os
 import yaml
 import io
 import itertools
-import typing
 # punctilious modules
 import _util
 import _identifiers

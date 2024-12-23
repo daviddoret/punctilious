@@ -177,29 +177,6 @@ def ensure_unique_identifier(o: FlexibleUniqueIdentifier) -> UniqueIdentifier:
         raise ValueError(f'Invalid identifier: {o} ({type(o)})')
 
 
-def load_unique_identifier(o: typing.Mapping) -> UniqueIdentifier:
-    """Returns the corresponding UniqueIdentifier if it exists,
-    or instantiates, indexes, and returns a new one otherwise.
-
-    :param o: A dictionary representing the unique identifier.
-    :return:
-    """
-    uuid: uuid_pkg.UUID = ensure_uuid(o['uuid'])
-    slug: Slug = ensure_slug(o['slug'])
-    if uuid in _unique_identifier_index.keys():
-        # The unique identifier already exists.
-        uid: UniqueIdentifier = _unique_identifier_index[uuid]
-        if uid.slug != slug:
-            raise ValueError(f'Inconsistent slugs')
-        return uid
-    else:
-        # The unique identifier does not exist.
-        # __new__ will re-check it does not exist.
-        # __init__ will add it to the index.
-        uid: UniqueIdentifier = UniqueIdentifier(slug=slug, uuid=uuid)
-        return uid
-
-
 class UniqueIdentifiable(abc.ABC):
     """A UniqueIdentifiable is an object:
      - that is uniquely identified by a UniqueIdentifier,
