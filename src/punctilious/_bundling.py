@@ -5,12 +5,12 @@ store them in YAML files or other containers, and reload them from these.
 
 import importlib
 import importlib.resources
-import typing
 
+import os
 import yaml
 import io
-import uuid as uuid_pkg
 import itertools
+import typing
 # punctilious modules
 import _util
 import _identifiers
@@ -71,19 +71,16 @@ def get_packages():
     return Bundles()
 
 
-class Bundle:
+class Bundle(_identifiers.UniqueIdentifiable):
     """Inherit from tuple and make it immutable..
 
     """
 
-    def __hash__(self):
-        # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._uuid))
-
-    def __init__(self, schema=None, identifier=None, imports=None, aliases=None, representations=None,
-                 connectors=None, theorems=None, justifications=None):
+    def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier, schema=None, imports=None,
+                 aliases=None,
+                 representations=None, connectors=None, theorems=None, justifications=None):
+        super().__init__(uid=uid)
         self._schema = schema
-        self._identifier = _identifiers.ensure_unique_identifier(identifier)
         self._imports = imports
         self._aliases = aliases
         representations = _representation.ensure_abstract_representations(representations)
@@ -95,14 +92,12 @@ class Bundle:
         self._justifications = justifications
         # Reference the package in the packages singleton.s
         p = get_packages()
-        p[self._identifier] = self
-        pass
 
     def __repr__(self):
-        return self.slug
+        return f'{self.uid.slug} bundle'
 
     def __str__(self):
-        return self.slug
+        return f'{self.uid.slug} bundle'
 
     @property
     def aliases(self):
@@ -111,10 +106,6 @@ class Bundle:
     @property
     def connectors(self):
         return self._connectors
-
-    @property
-    def identifier(self):
-        return self._identifier
 
     @property
     def imports(self):
@@ -135,10 +126,6 @@ class Bundle:
     @property
     def theorems(self):
         return self._theorems
-
-    @property
-    def uuid(self):
-        return self._uuid
 
 
 class Import:
@@ -284,39 +271,9 @@ class YamlFileBundle(Bundle):
                 theorems = _formal_language.load_theorems(d.get('theorems', None))
                 justifications = _formal_language.Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
-                super().__init__(schema=schema, identifier=uid, imports=imports, aliases=aliases,
+                super().__init__(schema=schema, uid=uid, imports=imports, aliases=aliases,
                                  representations=representations, connectors=connectors, theorems=theorems,
                                  justifications=justifications)
-
-    #                except Exception as e:
-    #                   raise ValueError(f'Error when loading YAML file {file_path}: {e}')
-
-    def _resolve_package_representation_reference(self, ref: str, i: Imports,
-                                                  r: _representation.AbstractRepresentations):
-        """Given the reference of a representation in string format,
-        typically as the representation attribute of a connector in a YAML file,
-        finds and returns the corresponding representation object, either
-        from the local representations, or via an import.
-
-        :param ref:
-        :param i: The package imports.
-        :param r: The package representations.
-        :return:
-        """
-        ref_tuple: tuple = tuple(ref.split('.'))
-        if len(ref_tuple) == 1:
-            # This is a local reference.
-            r = r.get_from_uuid(slug=ref)
-            return r
-        elif len(ref_tuple) == 2:
-            # This is a reference in an imported YAML file.
-            p_ref = ref_tuple[0]
-            p: Bundle = i.get_from_slug(slug=p_ref).package
-            ref = ref_tuple[1]
-            r = p.representations.get_from_uuid(slug=ref)
-            return r
-        else:
-            raise ValueError(f'Improper reference: "{ref}".')
 
 
 class MultiBundle(Bundle):
@@ -330,3 +287,47 @@ class MultiBundle(Bundle):
         representations = tuple(itertools.chain.from_iterable(d.representations for d in bundles))
         # theorems = tuple(itertools.chain.from_iterable(d.theorems for d in bundles))
         super().__init__(connectors=connectors, representations=representations)
+
+
+def load_bundle_from_yaml_file_resource(path: str, resource: str) -> Bundle:
+    """Load a bundle from a YAML file in the current Python package resource files.
+    """
+    package_path = importlib.resources.files(path).joinpath(resource)
+    with importlib.resources.as_file(package_path) as yaml_file_path:
+        return load_bundle_from_yaml_file(yaml_file_path)
+
+
+def load_bundle_from_yaml_file(yaml_file_path: int | str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> Bundle:
+    """Load a bundle from a YAML file.
+    """
+    with open(yaml_file_path, 'r') as yaml_file:
+        d: dict = yaml.safe_load(yaml_file)
+        return load_bundle_from_dict(d=d)
+
+
+def load_bundle_from_dict(d: dict) -> Bundle:
+    """Load a bundle from a raw dictionary.
+    """
+    bundle: Bundle | None = _identifiers.load_unique_identifiable(o=d)
+    if bundle is None:
+        # The connector does not exist in memory.
+
+        schema = d['schema']
+        uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(d['uid'])
+        untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
+        imports = Imports(*untyped_imports)
+        aliases = None  # To be implemented
+        representations: _representation.AbstractRepresentations = _representation.load_abstract_representations(
+            d.get('representations', None),
+            append_representation_renderers=True)
+        # Load connectors
+        connectors: _formal_language.Connectors = _formal_language.load_connectors(
+            d.get('connectors', None),
+            overwrite_mutable_properties=True)
+        theorems = _formal_language.load_theorems(d.get('theorems', None))
+        justifications = _formal_language.Justifications.instantiate_from_list(
+            l=d['justifications'] if 'justifications' in d.keys() else None)
+        bundle: Bundle = Bundle(schema=schema, uid=uid, imports=imports, aliases=aliases,
+                                representations=representations, connectors=connectors, theorems=theorems,
+                                justifications=justifications)
+    return bundle

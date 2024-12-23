@@ -2,5 +2,5 @@
 
 import _bundling
 
-bundle = _bundling.YamlFileBundle(path='data.representations',
-                                  resource='operators_1.yaml')
+_bundling.load_bundle_from_yaml_file_resource(path='data.representations',
+                                              resource='operators_1.yaml')

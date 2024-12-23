@@ -1,8 +1,9 @@
 import _representation
 import _bundling
 
-_greek_alphabet_lowercase_serif_italic = _bundling.YamlFileBundle(path='data.representations',
-                                                                  resource='greek_alphabet_lowercase_serif_italic.yaml')
+_greek_alphabet_lowercase_serif_italic = _bundling.load_bundle_from_yaml_file_resource(
+    path='data.representations',
+    resource='greek_alphabet_lowercase_serif_italic.yaml')
 
 alpha: _representation.AbstractRepresentation = _greek_alphabet_lowercase_serif_italic.representations.get_from_uuid(
     'af966a34-70de-4a6a-b558-7abbf2446863', raise_error_if_not_found=True)

@@ -1,11 +1,11 @@
 import _representation
 import _bundling
 
-_greek_alphabet_uppercase_serif_italic = _bundling.YamlFileBundle(path='data.representations',
-                                                                  resource='greek_alphabet_uppercase_serif_italic.yaml')
+_greek_alphabet_uppercase_serif_italic = _bundling.load_bundle_from_yaml_file_resource(path='data.representations',
+                                                                                       resource='greek_alphabet_uppercase_serif_italic.yaml')
 
 alpha: _representation.AbstractRepresentation = _greek_alphabet_uppercase_serif_italic.representations.get_from_uuid(
-    'af05e251-1c4a-4f64-99ec-aa96c6e3842e', raise_error_if_not_found=True)
+    '0b78780f-1eba-47b6-bb20-36e688abe69e', raise_error_if_not_found=True)
 
 beta: _representation.AbstractRepresentation = _greek_alphabet_uppercase_serif_italic.representations.get_from_uuid(
     '955fbd94-208b-41ed-80d8-af76b0165a4c', raise_error_if_not_found=True)

@@ -1,16 +1,16 @@
 import _formal_language
 import _bundling
 
-yaml_file_1 = _bundling.YamlFileBundle(path='data.connectors',
-                                       resource='constants_1.yaml')
-yaml_file_2 = _bundling.YamlFileBundle(path='data.connectors',
-                                       resource='operators_1.yaml')
-_bundling.YamlFileBundle(path='data.representations',
-                         resource='tao_analysis_1_2006.yaml')
-_bundling.YamlFileBundle(path='data.mappings',
-                         resource='tao_analysis_1_2006.yaml')
-_theorems = _bundling.YamlFileBundle(path='data.theorems',
-                                     resource='tao_analysis_1_2006.yaml')
+yaml_file_1 = _bundling.load_bundle_from_yaml_file_resource(path='data.connectors',
+                                                            resource='constants_1.yaml')
+yaml_file_2 = _bundling.load_bundle_from_yaml_file_resource(path='data.connectors',
+                                                            resource='operators_1.yaml')
+_bundling.load_bundle_from_yaml_file_resource(path='data.representations',
+                                              resource='tao_analysis_1_2006.yaml')
+_bundling.load_bundle_from_yaml_file_resource(path='data.mappings',
+                                              resource='tao_analysis_1_2006.yaml')
+_theorems = _bundling.load_bundle_from_yaml_file_resource(path='data.theorems',
+                                                          resource='tao_analysis_1_2006.yaml')
 
 successor: _formal_language.Connector = yaml_file_2.connectors.get_from_uuid(
     'f85163bf-381d-41fa-bdbb-70cd28bb826b', raise_error_if_not_found=True)

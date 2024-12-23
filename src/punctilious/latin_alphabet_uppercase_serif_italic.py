@@ -4,8 +4,9 @@
 import _representation
 import _bundling
 
-_latin_alphabet_uppercase_serif_italic = _bundling.YamlFileBundle(path='data.representations',
-                                                                  resource='latin_alphabet_uppercase_serif_italic.yaml')
+_latin_alphabet_uppercase_serif_italic = _bundling.load_bundle_from_yaml_file_resource(
+    path='data.representations',
+    resource='latin_alphabet_uppercase_serif_italic.yaml')
 
 a: _representation.AbstractRepresentation = _latin_alphabet_uppercase_serif_italic.representations.get_from_uuid(
     '6e051a5e-b506-4987-8abc-52a874db5167',

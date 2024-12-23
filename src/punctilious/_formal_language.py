@@ -436,7 +436,7 @@ class Connector(_identifiers.UniqueIdentifiable):
         super().__init__(uid=uid)
 
     def __repr__(self):
-        return f'{self.uid} connector'
+        return f'{self.uid.slug} connector'
 
     def __str__(self):
         return f'{self.uid.slug} connector'
@@ -468,9 +468,9 @@ class Connector(_identifiers.UniqueIdentifiable):
         """Returns the string representation of the formula.
         """
         if self.connector_representation is None:
-            raise ValueError(f'Connector {self.uid.__repr__()} has no connector representation.')
+            raise ValueError(f'{self.__repr__()} has no connector representation.')
         if self.formula_representation is None:
-            raise ValueError(f'Connector {self.uid.__repr__()} has no formula representation.')
+            raise ValueError(f'{self.__repr__()} has no formula representation.')
         connector: str = self.rep()
         argument = ensure_formula_arguments(argument)
         argument_representations = tuple(a.represent(is_subformula=True) for a in argument)

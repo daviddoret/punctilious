@@ -1,9 +1,9 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uid: { slug: greek_alphabet_uppercase_serif_italic, uuid: 7edf82f0-5a28-4066-81b0-c1b6bd517199 }
+uid: { slug: greek_alphabet_uppercase_serif_italic, uuid: 7f1fec54-95d9-4fb7-9ede-82c47a917cfc }
 # source:
 # https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
 representations:
-  - uid: { slug: alpha, uuid: af05e251-1c4a-4f64-99ec-aa96c6e3842e }
+  - uid: { slug: alpha, uuid: 0b78780f-1eba-47b6-bb20-36e688abe69e }
     renderers:
       - implementation: string_constant
         string_constant: 'Alpha'

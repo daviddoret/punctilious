@@ -228,7 +228,9 @@ class UniqueIdentifiable(abc.ABC):
         uid: UniqueIdentifier = ensure_unique_identifier(uid)
         self._uid = uid
         if uid.uuid in _unique_identifiable_index.keys():
-            raise ValueError(f"UniqueIdentifiable with UniqueIdentifier '{uid}' already exists.")
+            existing = _unique_identifiable_index[uid.uuid]
+            raise ValueError(f"UniqueIdentifiable with UniqueIdentifier '{uid.unambiguous_reference}' already exists. "
+                             f"Existing object: {existing}.")
         _unique_identifiable_index[uid.uuid] = self
         super().__init__()
 

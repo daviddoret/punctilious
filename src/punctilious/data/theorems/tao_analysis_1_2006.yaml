@@ -7,8 +7,8 @@ theorems:
     title: "Axiom 2.1"
     conclusion:
       0 is a natural number
-  - uid: { slug: axiom_2_1, uuid: 31118628-5cbc-4053-8c19-3997e4b5765b }
-    title: "Axiom 2.1"
+  - uid: { slug: axiom_2_2, uuid: 31118628-5cbc-4053-8c19-3997e4b5765b }
+    title: "Axiom 2.2"
     references:
       - { source: tao_2006, pages: 18 }
     variables:
