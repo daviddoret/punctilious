@@ -1,0 +1,8 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uid: { slug: constants_1_representations, uuid: 9e5e9701-65b1-4cc0-90cf-30773eb069d8 }
+representations:
+  - uid: { slug: zero, uuid: 328cbbbf-7331-44b3-88c3-5d7ea912a213 }
+    renderers:
+      - implementation: string_constant
+        string_constant: '0'
+        tags: { technical_language: unicode_basic, connector_representation: symbol }

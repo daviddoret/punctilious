@@ -1,0 +1,15 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uid: { slug: constants_1_connectors, uuid: 7b835ed9-a6fd-4c84-a0ea-c803e75e79ab }
+description:
+  en: A catalog of well-known constants.
+connectors:
+  - uid: { slug: e, uuid: 62d659a0-7af5-459b-a252-60d84b809d95 }
+    syntactic_rules: { fixed_arity: 0 }
+  - uid: { slug: i, uuid: 33bc7cc2-4688-426e-a1c9-13e02b1dde34 }
+    syntactic_rules: { fixed_arity: 0 }
+  - uid: { slug: one, uuid: 91280a8d-3d89-4aad-a4b5-261631c738d2 }
+    syntactic_rules: { fixed_arity: 0 }
+  - uid: { slug: pi, uuid: bc149ea9-b5fe-488b-b6f6-d99e073993ff }
+    syntactic_rules: { fixed_arity: 0 }
+  - uid: { slug: zero, uuid: 85927ea1-566e-4349-bab9-9845ba3a4b93 }
+    syntactic_rules: { fixed_arity: 0 }

@@ -26,6 +26,7 @@ import latin_alphabet_lowercase_serif_bold
 import operators_1_connectors
 import operators_1_representations
 import operators_1_mappings
+import constants_1
 
 import _declarations
 from _declarations import declare_variable, declare_function

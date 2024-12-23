@@ -21,4 +21,7 @@ connectors:
     syntactic_rules: { fixed_arity: 1 }
   - uid: { slug: subtraction, uuid: 3ba18470-7111-43a6-9204-0be6267ffe8c }
     syntactic_rules: { fixed_arity: 2 }
+  - uid: { slug: successor, uuid: f85163bf-381d-41fa-bdbb-70cd28bb826b }
+    syntactic_rules: { fixed_arity: 1 }
+
 

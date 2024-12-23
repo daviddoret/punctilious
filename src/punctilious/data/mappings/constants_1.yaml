@@ -1,0 +1,12 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uid: { slug: constants_1, uuid: a9ef6e53-e6f2-48ad-b00d-66b7f02a7695 }
+description:
+  en: A default mapping of constants to their abstract representations.
+connectors:
+  - uid: { slug: zero, uuid: 85927ea1-566e-4349-bab9-9845ba3a4b93 }
+    connector_representation: { uid: { slug: zero, uuid: 328cbbbf-7331-44b3-88c3-5d7ea912a213 } }
+    formula_representation: { uid: { slug: atomic_formula, uuid: f6bd05d7-ee5b-4480-9d59-ea9fa3a13516 } }
+
+
+
+
