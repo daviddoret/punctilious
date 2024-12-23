@@ -1,4 +1,3 @@
-import _util
 import _representation
 import _bundling
 

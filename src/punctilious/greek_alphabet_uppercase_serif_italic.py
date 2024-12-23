@@ -1,6 +1,4 @@
-import _util
 import _representation
-import _formal_language
 import _bundling
 
 _greek_alphabet_uppercase_serif_italic = _bundling.YamlFileBundle(path='data.representations',

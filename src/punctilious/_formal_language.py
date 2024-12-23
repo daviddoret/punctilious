@@ -237,26 +237,68 @@ class SyntacticRules:
 class Theorems(tuple):
     """A tuple of Theorem instances."""
 
-    def __init__(self, *args, **kwargs):
-        self._slug_index = tuple(i.slug for i in self)
+    def __getitem__(self, key) -> Theorem:
+        if isinstance(key, int):
+            # Default behavior for integer keys
+            return super().__getitem__(key)
+        if isinstance(key, _identifiers.FlexibleUUID):
+            # Custom behavior for uuid keys
+            item: Theorem | None = self.get_from_uuid(uuid=key, raise_error_if_not_found=False)
+            if item is not None:
+                return item
+        if isinstance(key, _identifiers.FlexibleUniqueIdentifier):
+            # Custom behavior for UniqueIdentifier keys
+            item: Theorem | None = self.get_from_uid(uid=key, raise_error_if_not_found=False)
+            if item is not None:
+                return item
+        else:
+            raise TypeError(f'Unsupported key type: {type(key).__name__}')
+
+    def __init__(self, *args):
+        self._index = tuple(i.uid for i in self)
         super().__init__()
 
-    def __new__(cls, *args, **kwargs):
-        typed_representations = tuple(ensure_theorem(r) for r in args)
-        return super().__new__(cls, typed_representations)
+    def __new__(cls, *args):
+        typed_theorems = tuple(ensure_theorem(r) for r in args)
+        return super().__new__(cls, typed_theorems)
 
     def __repr__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
+        return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
     def __str__(self):
-        return '(' + ', '.join(e.slug for e in self) + ')'
+        return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
-    def get_from_slug(self, slug: str):
-        if slug in self._slug_index:
-            slug_index = self._slug_index.index(slug)
-            return self[slug_index]
+    def get_from_uid(self, uid: _identifiers.FlexibleUniqueIdentifier,
+                     raise_error_if_not_found: bool = False) -> Theorem | None:
+        """Return a Theorem by its UniqueIdentifier.
+
+        :param uid: a UniqueIdentifier.
+        :param raise_error_if_not_found:
+        :return:
+        """
+        uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(uid)
+        item: Theorem | None = next((item for item in self if item.uid == uid), None)
+        if item is None and raise_error_if_not_found:
+            raise IndexError(f'Theorem not found. UID: "{uid}".')
         else:
-            raise IndexError(f'Theorem slug not found: "{slug}".')
+            return item
+
+    def get_from_uuid(self, uuid: _identifiers.FlexibleUUID,
+                      raise_error_if_not_found: bool = False) -> Theorem | None:
+        """Return a Theorem by its UUID.
+
+        :param uuid: a UUID.
+        :param raise_error_if_not_found:
+        :return:
+        """
+        uuid: _identifiers.uuid_pkg.UUID = _identifiers.ensure_uuid(uuid)
+        if uuid in self._index:
+            identifier_index = self._index.index(uuid)
+            return self[identifier_index]
+        elif raise_error_if_not_found:
+            raise IndexError(f'Theorem not found. UUID: "{uuid}".')
+        else:
+            return None
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
@@ -294,13 +336,12 @@ def ensure_theorem(o) -> Theorem:
     if isinstance(o, Theorem):
         return o
     elif isinstance(o, dict):
-        uuid = o['uuid']
-        slug = o['slug']
+        uid = o['uid']
         variables = None
         assumptions = None
         statement = None
         justifications = None
-        o = Theorem(uuid=uuid, slug=slug, variables=variables, assumptions=assumptions, statement=statement,
+        o = Theorem(uid=uid, variables=variables, assumptions=assumptions, statement=statement,
                     justifications=justifications)
         return o
     else:
@@ -395,10 +436,10 @@ class Connector(_identifiers.UniqueIdentifiable):
         super().__init__(uid=uid)
 
     def __repr__(self):
-        return f'{self.uid.slug} connector'
+        return f'{self.uid} connector'
 
     def __str__(self):
-        return f'{self.uid} connector'
+        return f'{self.uid.slug} connector'
 
     @property
     def connector_representation(self) -> _representation.AbstractRepresentation:
@@ -504,14 +545,13 @@ def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False
     else:
         # The connector exists in memory.
         if overwrite_mutable_properties:
-            if overwrite_mutable_properties:
-                # Overwrite the mutable properties.
-                if 'connector_representation' in o.keys():
-                    connector.connector_representation = _representation.load_abstract_representation(
-                        o['connector_representation'])
-                if 'formula_representation' in o.keys():
-                    connector.formula_representation = _representation.load_abstract_representation(
-                        o['formula_representation'])
+            # Overwrite the mutable properties.
+            if 'connector_representation' in o.keys():
+                connector.connector_representation = _representation.load_abstract_representation(
+                    o['connector_representation'])
+            if 'formula_representation' in o.keys():
+                connector.formula_representation = _representation.load_abstract_representation(
+                    o['formula_representation'])
     return connector
 
 
@@ -533,27 +573,20 @@ def load_connectors(o: typing.Iterable | None, overwrite_mutable_properties: boo
     return Connectors(*connectors)
 
 
-class Theorem:
-    __slots__ = ('_uuid', '_slug', '_variables', '_assumptions', '_statement', '_justifications')
-    _uuid_index = {}
+class Theorem(_identifiers.UniqueIdentifiable):
 
-    def __hash__(self):
-        # hash only spans the properties that uniquely identify the object.
-        return hash((self.__class__, self._uuid))
-
-    def __init__(self, uuid=None, slug=None, variables=None, assumptions=None, statement=None, justifications=None):
-        self._uuid = uuid
-        self._slug = slug
+    def __init__(self, uid=None, variables=None, assumptions=None, statement=None, justifications=None):
         self._variables = variables
         self._assumptions = assumptions
         self._statement = statement
         self._justifications = justifications
+        super().__init__(uid=uid)
 
     def __repr__(self):
-        return self.slug
+        return f'{self.uid} theorem'
 
     def __str__(self):
-        return self.slug
+        return f'{self.uid.slug} theorem'
 
     @property
     def assumptions(self):
@@ -564,12 +597,12 @@ class Theorem:
         return self._justifications
 
     @property
-    def slug(self):
-        return self._slug
-
-    @property
     def statement(self):
         return self._statement
+
+    @property
+    def uid(self):
+        return self._uid
 
     @property
     def variables(self):
@@ -578,9 +611,7 @@ class Theorem:
     def to_dict(self):
         d = {}
         if self.uuid is not None:
-            d['uuid'] = self.uuid
-        if self.slug is not None:
-            d['slug'] = self.slug
+            d['uid'] = self.uid
         if self.variables is not None:
             d['variables'] = self.variables
         if self.assumptions is not None:
@@ -594,9 +625,42 @@ class Theorem:
     def to_yaml(self, default_flow_style):
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
 
-    @property
-    def uuid(self):
-        return self._uuid
+
+def load_theorem(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> Theorem:
+    """Receives a raw Theorem, typically from a YAML file, and returns a typed Theorem instance.
+
+    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
+        `connector_representation`, and `formula_representation`.
+    :param o: a raw Connector.
+    :return: a typed Connector instance.
+    """
+    theorem: Theorem | None = _identifiers.load_unique_identifiable(o)
+    if theorem is None:
+        # The connector does not exist in memory.
+        theorem: Theorem = ensure_theorem(o)
+    else:
+        # The connector exists in memory.
+        if overwrite_mutable_properties:
+            pass
+    return theorem
+
+
+def load_theorems(o: typing.Iterable | None, overwrite_mutable_properties: bool = False) -> Theorems:
+    """Receives a raw Theorems collection, typically from a YAML file,
+    and returns a typed Theorems instance.
+
+    :param overwrite_mutable_properties: if theorems are already loaded in memory, overwrite their mutable properties:
+        `connector_representation`, and `formula_representation`.
+    :param o: a raw Theorems collection.
+    :return: a typed Theorems instance.
+    """
+    if o is None:
+        o = []
+    theorems: list[Theorem] = []
+    for i in o:
+        theorem: Theorem = load_theorem(i, overwrite_mutable_properties=overwrite_mutable_properties)
+        theorems.append(theorem)
+    return Theorems(*theorems)
 
 
 class Justifications(tuple):

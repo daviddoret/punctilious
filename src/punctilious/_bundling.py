@@ -281,8 +281,7 @@ class YamlFileBundle(Bundle):
                     d.get('connectors', None),
                     overwrite_mutable_properties=True)
                 pass
-                untyped_theorems = d['theorems'] if 'theorems' in d.keys() else tuple()
-                theorems = _formal_language.Theorems(*untyped_theorems)
+                theorems = _formal_language.load_theorems(d.get('theorems', None))
                 justifications = _formal_language.Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
                 super().__init__(schema=schema, identifier=uid, imports=imports, aliases=aliases,

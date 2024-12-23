@@ -1,21 +1,22 @@
 schema: "http://punctilious.org/schemas/theorem_1#"
-uuid: 5af93ab1-e602-4cb0-8df7-a2d45b3925e2
-slug: tao_analysis_1_2006_theorems
+uid: { slug: tao_analysis_1_2006_theorems, uuid: 5af93ab1-e602-4cb0-8df7-a2d45b3925e2 }
+interpretation:
+  add-something-here
 theorems:
-  - slug: axiom_2_1
+  - uid: { slug: axiom_2_1, uuid: ab42a66f-ab12-4497-8505-b0ddce9abb8d }
     title: "Axiom 2.1"
     conclusion:
-      is-a-natural-number(0)
-  - slug: axiom_2_1
+      0 is a natural number
+  - uid: { slug: axiom_2_1, uuid: 31118628-5cbc-4053-8c19-3997e4b5765b }
     title: "Axiom 2.1"
     references:
       - { source: tao_2006, pages: 18 }
     variables:
       - x
     premises:
-      - is-a-natural-number(x)
+      - x is a natural number
     conclusion:
-      is-a-natural-number(x++)
+      x++ is a natural number
 bibliography:
   - slug: tao_2006
     citation: Tao, 2006

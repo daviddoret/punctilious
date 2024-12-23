@@ -1,9 +1,7 @@
 """The latin alphabet in lowercase, serif, and italic.
 
 """
-import _util
 import _representation
-import _formal_language
 import _bundling
 
 _latin_alphabet_lowercase_serif_italic = _bundling.YamlFileBundle(path='data.representations',
