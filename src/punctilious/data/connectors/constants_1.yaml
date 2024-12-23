@@ -7,6 +7,8 @@ connectors:
     syntactic_rules: { fixed_arity: 0 }
   - uid: { slug: i, uuid: 33bc7cc2-4688-426e-a1c9-13e02b1dde34 }
     syntactic_rules: { fixed_arity: 0 }
+  - uid: { slug: n, uuid: 8cd28cf2-236b-40db-83e8-be83b888a029 }
+    syntactic_rules: { fixed_arity: 0 }
   - uid: { slug: one, uuid: 91280a8d-3d89-4aad-a4b5-261631c738d2 }
     syntactic_rules: { fixed_arity: 0 }
   - uid: { slug: pi, uuid: bc149ea9-b5fe-488b-b6f6-d99e073993ff }

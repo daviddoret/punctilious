@@ -20,6 +20,9 @@ connectors:
   - uid: { slug: disjunction, uuid: 0fbb1b71-8ffb-483c-9a11-ea990c7f6a2a }
     connector_representation: { uid: { slug: disjunction, uuid: 0e05a190-ee37-46df-bc78-002f2a9cf0c5 } }
     formula_representation: { uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 } }
+  - uid: { slug: element_of, uuid: bbdb3df8-f516-4605-b3f6-011508ef685c }
+    connector_representation: { uid: { slug: element_of, uuid: f9719243-c7d1-41ab-915a-362323c744e5 } }
+    formula_representation: { uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 } }
   - uid: { slug: entailment, uuid: edf63cea-9f29-4bce-aae1-ea8565d69e08 }
     connector_representation: { uid: { slug: entailment, uuid: 67bf6c68-32f8-41d7-b8e0-056bdae65536 } }
     formula_representation: { uid: { slug: infix_formula, uuid: d83bd1a4-97cf-4a7e-975d-21711333b971 } }

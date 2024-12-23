@@ -10,6 +10,10 @@ _bundling.load_bundle_from_yaml_file_resource(path='data.representations',
 _bundling.load_bundle_from_yaml_file_resource(path='data.mappings',
                                               resource='constants_1.yaml')
 
+n: _formal_language.Connector = _constants_1.connectors.get_from_uuid(
+    '8cd28cf2-236b-40db-83e8-be83b888a029', raise_error_if_not_found=True)
+"""The set of the natural numbers."""
+
 successor: _formal_language.Connector = _operators_1.connectors.get_from_uuid(
     'f85163bf-381d-41fa-bdbb-70cd28bb826b', raise_error_if_not_found=True)
 

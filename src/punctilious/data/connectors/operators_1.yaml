@@ -9,6 +9,8 @@ connectors:
     syntactic_rules: { fixed_arity: 2 }
   - uid: { slug: disjunction, uuid: 0fbb1b71-8ffb-483c-9a11-ea990c7f6a2a }
     syntactic_rules: { fixed_arity: 2 }
+  - uid: { slug: element_of, uuid: bbdb3df8-f516-4605-b3f6-011508ef685c }
+    syntactic_rules: { fixed_arity: 2 }
   - uid: { slug: entailment, uuid: edf63cea-9f29-4bce-aae1-ea8565d69e08 }
     syntactic_rules: { fixed_arity: 2 }
   - uid: { slug: exponentiation, uuid: 52b3cbdb-dff6-4fc3-b505-ab5bcbaa699f }

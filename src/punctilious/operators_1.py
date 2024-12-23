@@ -10,6 +10,9 @@ conjunction = _connectors.connectors.get_from_uuid('b5a16d91-9974-48fa-901e-b777
 
 disjunction = _connectors.connectors.get_from_uuid('0fbb1b71-8ffb-483c-9a11-ea990c7f6a2a',
                                                    raise_error_if_not_found=True)
+element_of = _connectors.connectors.get_from_uuid(
+    'bbdb3df8-f516-4605-b3f6-011508ef685c',
+    raise_error_if_not_found=True)
 
 entailment = _connectors.connectors.get_from_uuid('edf63cea-9f29-4bce-aae1-ea8565d69e08', raise_error_if_not_found=True)
 

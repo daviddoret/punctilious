@@ -6,12 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="foundations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_identifiers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/constants_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/theorems/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/theorems/tao_analysis_1_2006.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_representations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_representations.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -460,7 +464,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_formula">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -808,8 +812,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_formula.py" />
         <item itemvalue="Python tests.pytest in test_formula_notations.py" />
         <item itemvalue="Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py" />
@@ -831,14 +835,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01198" summary="formula-notations">
-      <option name="closed" value="true" />
-      <created>1734126805459</created>
-      <option name="number" value="01198" />
-      <option name="presentableId" value="LOCAL-01198" />
-      <option name="project" value="LOCAL" />
-      <updated>1734126805459</updated>
     </task>
     <task id="LOCAL-01199" summary="formula-notations">
       <option name="closed" value="true" />
@@ -1224,7 +1220,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734986886027</updated>
     </task>
-    <option name="localTasksCounter" value="1247" />
+    <task id="LOCAL-01247" summary="foundations">
+      <option name="closed" value="true" />
+      <created>1734988535692</created>
+      <option name="number" value="01247" />
+      <option name="presentableId" value="LOCAL-01247" />
+      <option name="project" value="LOCAL" />
+      <updated>1734988535692</updated>
+    </task>
+    <option name="localTasksCounter" value="1248" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1379,21 +1383,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py</url>
           <line>69</line>
           <option name="timeStamp" value="328" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/operators_1.py</url>
-          <line>25</line>
-          <option name="timeStamp" value="346" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/operators_1.py</url>
-          <line>18</line>
-          <option name="timeStamp" value="349" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/operators_1.py</url>
-          <line>22</line>
-          <option name="timeStamp" value="350" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/_bundling.py</url>
