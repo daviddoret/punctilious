@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestOptions:
     def test_technical_language(self):
-        """Test of representation with multiple string-constant renderers.
+        """Test various values of the technical_language option.
         """
         pass
         prefs = pu.OptionsPreferences()
