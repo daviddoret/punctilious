@@ -5,27 +5,27 @@ representations:
     renderers:
       - implementation: string_constant
         string_constant: 'propositional variable'
-        tags: { technical_language: unicode_basic, connector_representation: sentence, language: en }
+        options: { technical_language: unicode_basic, connector_representation: sentence, language: en }
       - implementation: string_constant
         string_constant: '\text{propositional variable}'
-        tags: { technical_language: latex_math, connector_representation: sentence, language: en }
+        options: { technical_language: latex_math, connector_representation: sentence, language: en }
       - implementation: string_constant
         string_constant: 'variable propositionnelle'
-        tags: { technical_language: unicode_extended, connector_representation: sentence, language: fr }
+        options: { technical_language: unicode_extended, connector_representation: sentence, language: fr }
       - implementation: string_constant
         string_constant: '\text{variable propositionnelle}'
-        tags: { technical_language: latex_math, connector_representation: sentence, language: fr }
+        options: { technical_language: latex_math, connector_representation: sentence, language: fr }
   - uid: { slug: declaration, uuid: 2957ffe0-8077-4262-b766-0a0e4b38dfd9 }
     renderers:
       - implementation: string_template
         string_template: 'Let {{ argument[0] }} be a {{ connector }}.'
-        tags: { technical_language: unicode_basic, connector_representation: sentence, language: en }
+        options: { technical_language: unicode_basic, connector_representation: sentence, language: en }
       - implementation: string_template
         string_template: '\text{Let }{{ argument[0] }}\text{ be a {{ connector }}.}'
-        tags: { technical_language: latex_math, connector_representation: sentence, language: en }
+        options: { technical_language: latex_math, connector_representation: sentence, language: en }
       - implementation: string_template
         string_template: 'Soit {{ argument[0] }} une {{ connector }}.'
-        tags: { technical_language: unicode_extended, connector_representation: sentence, language: fr }
+        options: { technical_language: unicode_extended, connector_representation: sentence, language: fr }
       - implementation: string_template
         string_template: '\text{Soit }{{ argument[0] }}\text{ une {{ connector }}.}'
-        tags: { technical_language: latex_math, connector_representation: sentence, language: fr }
+        options: { technical_language: latex_math, connector_representation: sentence, language: fr }

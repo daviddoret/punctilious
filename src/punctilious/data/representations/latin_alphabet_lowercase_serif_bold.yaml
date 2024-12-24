@@ -8,285 +8,285 @@ representations:
     renderers:
       - implementation: string_constant
         string_constant: 'a'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐚'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{a}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: b, uuid: fa676069-09a3-4423-a4b4-9ce2a70b270b }
     renderers:
       - implementation: string_constant
         string_constant: 'b'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐛'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{b}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: c, uuid: c0c98727-d806-4d94-aba5-78f54fddd20b }
     renderers:
       - implementation: string_constant
         string_constant: 'c'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐜'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{c}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: d, uuid: 5ce74683-43d9-47d9-bb81-e449d73f20bd }
     renderers:
       - implementation: string_constant
         string_constant: 'd'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐝'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{d}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: e, uuid: 38ea17ef-91e1-4990-9f14-4b7d8db6fdab }
     renderers:
       - implementation: string_constant
         string_constant: 'e'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐞'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{e}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: f, uuid: 80b9c503-766b-4d4e-8e72-16823b3f6303 }
     renderers:
       - implementation: string_constant
         string_constant: 'f'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐟'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{f}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: g, uuid: 5657ebe5-945f-4c75-addc-359408c0ea4d }
     renderers:
       - implementation: string_constant
         string_constant: 'g'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐠'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{g}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: h, uuid: e297f5f6-8ce2-4d35-aeb2-9139de51c34b }
     renderers:
       - implementation: string_constant
         string_constant: 'h'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐡'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{h}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: i, uuid: 29d5d1ee-8223-41fc-88c3-5428c8df3175 }
     renderers:
       - implementation: string_constant
         string_constant: 'i'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐢'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{i}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: j, uuid: 4233a1b5-b800-4e46-aeee-d815f77feeb8 }
     renderers:
       - implementation: string_constant
         string_constant: 'j'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐣'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{j}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: k, uuid: 94125edd-41e4-4179-874d-3efcef65e1fb }
     renderers:
       - implementation: string_constant
         string_constant: 'k'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐤'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{k}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: l, uuid: ae268ed6-8527-43aa-b6e0-569e4332c581 }
     renderers:
       - implementation: string_constant
         string_constant: 'l'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐥'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{l}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: m, uuid: 55a078ec-a18b-4baf-860b-f9c6a9fbc4ab }
     renderers:
       - implementation: string_constant
         string_constant: 'm'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐦'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{m}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: n, uuid: 5f42bd83-c078-4bc4-aa58-6a8c54cb77e2 }
     renderers:
       - implementation: string_constant
         string_constant: 'n'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐧'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{n}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: o, uuid: 5b48ef44-ffcf-4fa4-91d6-d9986ff3be91 }
     renderers:
       - implementation: string_constant
         string_constant: 'o'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐨'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{o}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: p, uuid: a223f8ca-5fa4-4a09-8a61-52422a5de09f }
     renderers:
       - implementation: string_constant
         string_constant: 'p'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐩'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{p}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: q, uuid: 499c9ccf-4814-4f27-bf96-684dc5c77ed4 }
     renderers:
       - implementation: string_constant
         string_constant: 'q'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐪'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{q}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: r, uuid: 624756d9-a896-42b8-bb77-d58c36004dd6 }
     renderers:
       - implementation: string_constant
         string_constant: 'r'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐫'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{r}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: s, uuid: 735c262b-8116-498b-a029-e9d7e0bb25fa }
     renderers:
       - implementation: string_constant
         string_constant: 's'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐬'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{s}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: t, uuid: c362261c-fda1-4bc3-9867-580a4e2329f2 }
     renderers:
       - implementation: string_constant
         string_constant: 't'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐭'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{t}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: u, uuid: 59c0f877-287e-4155-912d-11a6b640de8a }
     renderers:
       - implementation: string_constant
         string_constant: 'u'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐮'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{u}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: v, uuid: fb9ce8dd-f18c-4a64-a1c2-9b849a29783c }
     renderers:
       - implementation: string_constant
         string_constant: 'v'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐯'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{v}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: w, uuid: 0e75f4af-4d40-4f13-8714-1a1874b6b2b7 }
     renderers:
       - implementation: string_constant
         string_constant: 'w'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐰'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{w}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: x, uuid: db32652b-c562-4b76-a4c6-55da2647f8b2 }
     renderers:
       - implementation: string_constant
         string_constant: 'x'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐱'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{x}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: y, uuid: 08a07f8a-a8ff-4421-9522-e39eca19b3d0 }
     renderers:
       - implementation: string_constant
         string_constant: 'y'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐲'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{y}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }
   - uid: { slug: z, uuid: e29bc832-b331-4c6d-b49e-460dad19b9d2 }
     renderers:
       - implementation: string_constant
         string_constant: 'z'
-        tags: { encoding: unicode_basic, mode: symbolic }
+        options: { encoding: unicode_basic, mode: symbolic }
       - implementation: string_constant
         string_constant: '𝐳'
-        tags: { encoding: unicode_extended, mode: symbolic }
+        options: { encoding: unicode_extended, mode: symbolic }
       - implementation: string_constant
         string_constant: '\mathbf{z}'
-        tags: { encoding: latex_math, mode: symbolic }
+        options: { encoding: latex_math, mode: symbolic }

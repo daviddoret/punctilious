@@ -7,19 +7,19 @@ representations:
     renderers:
       - implementation: string_constant
         string_constant: 'is-a-proposition'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '\\textit{is-a-proposition}'
-        tags: { connector_representation: word, technical_language: latex_math }
+        options: { connector_representation: word, technical_language: latex_math }
   - slug: is_a_proposition
     renderers:
       - implementation: function_notation
         connector: is_a_proposition_connector
-        tags: { }
+        options: { }
   - slug: is_a_variable
     renderers:
       - implementation: function_notation
         connector: is_a_variable_connector
-        tags: { }
+        options: { }
 
 

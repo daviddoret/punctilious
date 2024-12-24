@@ -7,49 +7,49 @@ representations:
     interpreters:
       - implementation: string_constant
         string_constant: 'and'
-        tags: { connector_representation: word, language: en }
+        options: { connector_representation: word, language: en }
       - implementation: string_constant
         string_constant: 'et'
-        tags: { connector_representation: word, language: fr }
+        options: { connector_representation: word, language: fr }
       - implementation: string_constant
         string_constant: '∧'
-        tags: { connector_representation: symbol }
+        options: { connector_representation: symbol }
   - slug: disjunction
     uuid: 9d614367-b634-4b6e-9d0a-6afb5c4d6c0b
     interpreters:
       - implementation: string_constant
         string_constant: 'or'
-        tags: { connector_representation: word, language: en }
+        options: { connector_representation: word, language: en }
       - implementation: string_constant
         string_constant: 'ou'
-        tags: { connector_representation: word, language: fr }
+        options: { connector_representation: word, language: fr }
       - implementation: string_constant
         string_constant: '∨'
-        tags: { connector_representation: symbol }
+        options: { connector_representation: symbol }
   - slug: entailment
     uuid: ff27b11d-57f7-4655-a7d9-49d3d1ee2998
     interpreters:
       - implementation: string_constant
         string_constant: 'entails'
-        tags: { connector_representation: word, language: en }
+        options: { connector_representation: word, language: en }
       - implementation: string_constant
         string_constant: 'dérive'
-        tags: { connector_representation: word, language: fr }
+        options: { connector_representation: word, language: fr }
       - implementation: string_constant
         string_constant: '⊢'
-        tags: { connector_representation: symbol }
+        options: { connector_representation: symbol }
   - slug: negation
     uuid: d8f75270-99f9-46e6-be9c-75a70443c599
     interpreters:
       - implementation: string_constant
         string_constant: 'not'
-        tags: { connector_representation: word, language: en }
+        options: { connector_representation: word, language: en }
       - implementation: string_constant
         string_constant: 'non'
-        tags: { connector_representation: word, language: fr }
+        options: { connector_representation: word, language: fr }
       - implementation: string_constant
         string_constant: '¬'
-        tags: { connector_representation: symbol }
+        options: { connector_representation: symbol }
 
 
 

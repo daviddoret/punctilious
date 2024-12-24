@@ -5,52 +5,52 @@ from test_shared_library import create_atomic_connector
 
 @pytest.fixture
 def en():
-    return pu.Tag('language', 'en')
+    return pu.Option('language', 'en')
 
 
 @pytest.fixture
 def fr():
-    return pu.Tag('language', 'fr')
+    return pu.Option('language', 'fr')
 
 
 @pytest.fixture
 def symbol():
-    return pu.Tag('connector_representation', 'symbol')
+    return pu.Option('connector_representation', 'symbol')
 
 
 @pytest.fixture
 def word():
-    return pu.Tag('connector_representation', 'word')
+    return pu.Option('connector_representation', 'word')
 
 
 @pytest.fixture
 def traditional_formula():
-    return pu.Tag('layout', 'traditional_formula')
+    return pu.Option('layout', 'traditional_formula')
 
 
 @pytest.fixture
 def infix_formula():
-    return pu.Tag('layout', 'infix_formula')
+    return pu.Option('layout', 'infix_formula')
 
 
 @pytest.fixture
 def unicode_basic():
-    return pu.Tag('technical_language', 'unicode_basic')
+    return pu.Option('technical_language', 'unicode_basic')
 
 
 @pytest.fixture
 def unicode_extended():
-    return pu.Tag('technical_language', 'unicode_extended')
+    return pu.Option('technical_language', 'unicode_extended')
 
 
 @pytest.fixture
 def latex_math():
-    return pu.Tag('technical_language', 'latex_math')
+    return pu.Option('technical_language', 'latex_math')
 
 
 @pytest.fixture
 def prefs(en, fr, symbol, word):
-    prefs = pu.TagsPreferences()
+    prefs = pu.OptionsPreferences()
     prefs[en] = 6
     prefs[fr] = 9
     prefs[symbol] = 100

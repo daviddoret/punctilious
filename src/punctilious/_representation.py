@@ -6,51 +6,54 @@ import collections.abc
 import yaml
 import jinja2
 import typing
+
+from click import option
+
 # punctilious packages
 import punctilious._util as _util
 import punctilious._identifiers as _identifiers
 
 
-def ensure_tag(o) -> Tag:
-    """Ensure that `o` is of type Tag, converting it if necessary, or raise an error if it fails."""
-    if isinstance(o, Tag):
+def ensure_option(o) -> Option:
+    """Ensure that `o` is of type Option, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, Option):
         return o
     elif isinstance(o, tuple) and len(o) == 2:
         label: str = o[0]
         value: str = o[1]
-        o = Tag(label=label, value=value)
+        o = Option(label=label, value=value)
         return o
     else:
-        raise TypeError(f'Tag validation failure. Type: {type(o)}. Object: {o}.')
+        raise TypeError(f'Option validation failure. Type: {type(o)}. Object: {o}.')
 
 
-def ensure_tags_assignment(o) -> TagsAssignment:
-    """Ensure that `o` is of type TagsAssignment, converting it if necessary, or raise an error if it fails."""
-    if isinstance(o, TagsAssignment):
+def ensure_options_assignment(o) -> OptionsAssignment:
+    """Ensure that `o` is of type OptionsAssignment, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, OptionsAssignment):
         return o
     elif isinstance(o, dict):
-        tags = tuple(ensure_tag(i) for i in o.items())
-        o = TagsAssignment(*tags)
+        options = tuple(ensure_option(i) for i in o.items())
+        o = OptionsAssignment(*options)
         return o
     else:
-        raise TypeError(f'TagsAssignment validation failure. Type: {type(o)}. Object: {o}.')
+        raise TypeError(f'OptionsAssignment validation failure. Type: {type(o)}. Object: {o}.')
 
 
-def ensure_tags_preferences(o) -> TagsPreferences:
-    """Ensure that `o` is of type TagsPreferences, converting it if necessary, or raise an error if it fails."""
-    if isinstance(o, TagsPreferences):
+def ensure_options_preferences(o) -> OptionsPreferences:
+    """Ensure that `o` is of type OptionsPreferences, converting it if necessary, or raise an error if it fails."""
+    if isinstance(o, OptionsPreferences):
         return o
     elif isinstance(o, dict):
-        o_typed = TagsPreferences()
+        o_typed = OptionsPreferences()
         for i in o.items():
-            tag = ensure_tag(i[0])
-            value = i[1]  # TODO: define a TagPreferenceValue class and apply validation
-            o_typed[tag] = value
+            option = ensure_option(i[0])
+            value = i[1]  # TODO: define a OptionPreferenceValue class and apply validation
+            o_typed[option] = value
         return o_typed
     elif o is None:
-        return TagsPreferences()
+        return OptionsPreferences()
     else:
-        raise TypeError(f'TagsPreferences validation failure. Type: {type(o)}. Object: {o}.')
+        raise TypeError(f'OptionsPreferences validation failure. Type: {type(o)}. Object: {o}.')
 
 
 def ensure_renderer(o) -> Renderer:
@@ -62,13 +65,13 @@ def ensure_renderer(o) -> Renderer:
         implementation: str = o.get('implementation', '')
         if implementation == 'string_constant':
             string_constant: str = o.get('string_constant', '')
-            tags: TagsAssignment = ensure_tags_assignment(o.get('tags', []))
-            o = RendererForStringConstant(string_constant=string_constant, tags=tags)
+            options: OptionsAssignment = ensure_options_assignment(o.get('options', []))
+            o = RendererForStringConstant(string_constant=string_constant, options=options)
             return o
         elif implementation == 'string_template':
             string_template: str = o.get('string_template', '')
-            tags: TagsAssignment = ensure_tags_assignment(o.get('tags', {}))
-            o = RendererForStringTemplate(string_template=string_template, tags=tags)
+            options: OptionsAssignment = ensure_options_assignment(o.get('options', {}))
+            o = RendererForStringTemplate(string_template=string_template, options=options)
             return o
     else:
         raise TypeError(f'Representation validation failure. Type: {type(o)}. Object: {o}.')
@@ -128,18 +131,18 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
     def __str__(self):
         return f'{self.uid.slug} representation builder'
 
-    def optimize_renderer(self, config: TagsPreferences = None):
+    def optimize_renderer(self, config: OptionsPreferences = None):
         """Given preferences, return the optimal renderer.
 
         :param config:
         :return:
         """
         if config is None:
-            config = TagsPreferences()
+            config = OptionsPreferences()
         best_score = 0
         optimal_renderer = self.renderers[0]
         for current_renderer in self.renderers:
-            current_score = config.score_tags(tags=current_renderer.tags)
+            current_score = config.score_options(options=current_renderer.options)
             if current_score > best_score:
                 optimal_renderer = current_renderer
                 best_score = current_score
@@ -158,8 +161,8 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
         renderers = ensure_renderers(renderers)
         self._renderers = renderers
 
-    def rep(self, variables: dict[str, str] = None, config: TagsPreferences = None):
-        config = ensure_tags_preferences(config)
+    def rep(self, variables: dict[str, str] = None, config: OptionsPreferences = None):
+        config = ensure_options_preferences(config)
         if variables is None:
             # TODO: Use a RepresentationVariable class and apply proper validation
             variables = {}
@@ -289,16 +292,16 @@ def load_abstract_representations(o: typing.Iterable | None,
 class Renderer(abc.ABC):
     """A renderer is an object that has the capability to generate the output of a presentation."""
 
-    def __init__(self, tags: TagsAssignment | collections.abc.Iterable | None = None):
+    def __init__(self, options: OptionsAssignment | collections.abc.Iterable | None = None):
         """
 
-        :param tags: The tags for which this renderer is optimal.
+        :param options: The options for which this renderer is optimal.
         """
-        if tags is None:
-            tags = TagsAssignment()
-        if not isinstance(tags, TagsAssignment):
-            tags: TagsAssignment = TagsAssignment(*tags)
-        self._tags: TagsAssignment = tags
+        if options is None:
+            options = OptionsAssignment()
+        if not isinstance(options, OptionsAssignment):
+            options: OptionsAssignment = OptionsAssignment(*options)
+        self._options: OptionsAssignment = options
 
     def __repr__(self):
         raise NotImplementedError('This method is abstract.')
@@ -307,19 +310,19 @@ class Renderer(abc.ABC):
         raise NotImplementedError('This method is abstract.')
 
     @abc.abstractmethod
-    def rep(self, config: TagsPreferences | None = None, variables=None):
+    def rep(self, config: OptionsPreferences | None = None, variables=None):
         raise NotImplementedError('This method is abstract.')
 
     @property
-    def tags(self):
-        return self._tags
+    def options(self):
+        return self._options
 
 
 class RendererForStringConstant(Renderer):
     """A renderer that generates a string from a constant."""
 
-    def __init__(self, string_constant: str, tags: TagsAssignment | collections.abc.Iterable | None = None):
-        super().__init__(tags)
+    def __init__(self, string_constant: str, options: OptionsAssignment | collections.abc.Iterable | None = None):
+        super().__init__(options)
         self._string_constant = string_constant
 
     def __repr__(self):
@@ -332,7 +335,7 @@ class RendererForStringConstant(Renderer):
     def string_constant(self):
         return self._string_constant
 
-    def rep(self, config: TagsPreferences | None = None, variables=None):
+    def rep(self, config: OptionsPreferences | None = None, variables=None):
         """Represent the string constant.
 
         For RendererForStringConstant, parameters have no effect.
@@ -349,8 +352,8 @@ class RendererForStringTemplate(Renderer):
 
     """
 
-    def __init__(self, string_template: str, tags: TagsAssignment | collections.abc.Iterable | None = None):
-        super().__init__(tags)
+    def __init__(self, string_template: str, options: OptionsAssignment | collections.abc.Iterable | None = None):
+        super().__init__(options)
         self._string_template = string_template
         self._jinja2_template: jinja2.Template = jinja2.Template(string_template)
 
@@ -360,7 +363,7 @@ class RendererForStringTemplate(Renderer):
     def __str__(self):
         return f'"{self._string_template}" string template.'
 
-    def rep(self, config: TagsPreferences = None, variables: dict[str, str] | None = None):
+    def rep(self, config: OptionsPreferences = None, variables: dict[str, str] | None = None):
         """
 
         :param config:
@@ -399,8 +402,8 @@ FlexibleRenderer = typing.Union[Renderer, collections.abc.Mapping, collections.a
 FlexibleRenderers = typing.Union[Renderers, collections.abc.Iterable]
 
 
-class TagLabel(str):
-    """A tag label is a category used to organize labels in groups."""
+class OptionLabel(str):
+    """A option label is a category used to organize labels in groups."""
 
     def __init__(self, label: str):
         super().__init__()
@@ -412,29 +415,29 @@ class TagLabel(str):
         return super().__new__(cls, label)
 
 
-class TagValue(str):
-    """A tag value is a tag used to denote tags in a tag category."""
+class OptionValue(str):
+    """A option value is a option used to denote options in a option category."""
 
     def __init__(self, value: str):
         super().__init__()
 
     def __new__(cls, value: str):
-        if not isinstance(value, TagValue):
+        if not isinstance(value, OptionValue):
             value: str = str(value)
         return super().__new__(cls, value)
 
 
-class Tag(tuple):
-    """A tag is pair which comprises a label and a value."""
+class Option(tuple):
+    """A option is pair which comprises a label and a value."""
 
-    def __init__(self, label: TagLabel | str, value: TagValue | str):
+    def __init__(self, label: OptionLabel | str, value: OptionValue | str):
         super().__init__()
 
-    def __new__(cls, label: TagLabel | str, value: TagValue | str):
-        if not isinstance(label, TagLabel):
-            label: TagLabel = TagLabel(label)
-        if not isinstance(value, TagValue):
-            value: TagValue = TagValue(value)
+    def __new__(cls, label: OptionLabel | str, value: OptionValue | str):
+        if not isinstance(label, OptionLabel):
+            label: OptionLabel = OptionLabel(label)
+        if not isinstance(value, OptionValue):
+            value: OptionValue = OptionValue(value)
         return super().__new__(cls, [label, value])
 
     @property
@@ -446,31 +449,31 @@ class Tag(tuple):
         return self[1]
 
 
-class TagsAssignment(tuple):
-    """A canonically sorted tuple of tags whose labels are unique."""
+class OptionsAssignment(tuple):
+    """A canonically sorted tuple of options whose labels are unique."""
 
-    def __init__(self, *tags: tuple[Tag, ...]):
+    def __init__(self, *options: tuple[Option, ...]):
         super().__init__()
 
-    def __new__(cls, *tags: tuple[Tag, ...]):
+    def __new__(cls, *options: tuple[Option, ...]):
         # validate that every label is unique
-        labels = tuple(sub[0] for sub in tags)
+        labels = tuple(sub[0] for sub in options)
         unique_labels = tuple(set(labels))
         if not len(labels) == len(unique_labels):
             raise ValueError('some labels are not unique')
         # sort the tuple
-        tags_sorted = tuple(sorted(tags, key=lambda tag: tag.label))
-        return super().__new__(cls, tags_sorted)
+        options_sorted = tuple(sorted(options, key=lambda option: option.label))
+        return super().__new__(cls, options_sorted)
 
     def labels(self) -> collections.abc.Iterable:
-        return (tag.label for tag in self)
+        return (option.label for option in self)
 
     def values(self) -> collections.abc.Iterable:
-        return (tag.value for tag in self)
+        return (option.value for option in self)
 
 
-class TagsPreferences(dict):
-    """User preferences for tags.
+class OptionsPreferences(dict):
+    """User preferences for options.
 
     """
 
@@ -487,27 +490,27 @@ class TagsPreferences(dict):
         super().update(*args, **kwargs)
 
     def _validate_key_value(self, key, value):
-        if not isinstance(key, Tag):
-            raise TypeError(f"Key must be of type Tag, got {type(key).__name__} instead.")
+        if not isinstance(key, Option):
+            raise TypeError(f"Key must be of type Option, got {type(key).__name__} instead.")
         if not isinstance(value, int):
             raise TypeError(f"Value must be of type int, got {type(value).__name__} instead.")
 
-    def score_tags(self, tags: TagsAssignment | collections.abc.Iterable):
-        """Returns the preference score of a collection of tags.
+    def score_options(self, options: OptionsAssignment | collections.abc.Iterable):
+        """Returns the preference score of a collection of options.
 
-        :param tags:
+        :param options:
         :return:
         """
-        if not isinstance(tags, TagsAssignment):
-            tags: TagsAssignment = TagsAssignment(*tags)
-        return sum(self.get(tag, 0) for tag in tags)
+        if not isinstance(options, OptionsAssignment):
+            options: OptionsAssignment = OptionsAssignment(*options)
+        return sum(self.get(option, 0) for option in options)
 
 
 # Common labels and values.
-symbol = Tag('connector_presentation', 'symbol', )
-en = Tag('language', 'en', )
-fr = Tag('language', 'fr', )
-unicode_basic = Tag('technical_language', 'unicode_basic', )
-unicode_extended = Tag('technical_language', 'unicode_extended', )
-latex_math = Tag('technical_language', 'latex_math', )
-parenthesized = Tag('parenthesization', 'parenthesized', )
+symbol = Option('connector_presentation', 'symbol', )
+en = Option('language', 'en', )
+fr = Option('language', 'fr', )
+unicode_basic = Option('technical_language', 'unicode_basic', )
+unicode_extended = Option('technical_language', 'unicode_extended', )
+latex_math = Option('technical_language', 'latex_math', )
+parenthesized = Option('parenthesization', 'parenthesized', )

@@ -6,11 +6,11 @@ from punctilious._representation import AbstractRepresentation, ensure_abstract_
     ensure_abstract_representation, \
     latex_math, \
     load_abstract_representation, load_abstract_representations, \
-    Tag, \
-    TagsPreferences, \
-    TagsAssignment, RendererForStringTemplate, \
+    Option, \
+    OptionsPreferences, \
+    OptionsAssignment, RendererForStringTemplate, \
     RendererForStringConstant, unicode_basic, unicode_extended
-# import tags.language
+import punctilious.tags as tags
 from punctilious._formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
     FormulaArguments, Formula
 from punctilious._interpretation import Interpreter
@@ -29,7 +29,7 @@ from punctilious._declarations import declare_variable, declare_function
 # import _propositional_logic_1
 import punctilious.tao_analysis_1_2006 as tao_analysis_1_2006
 
-prefs = _representation.TagsPreferences()
+prefs = _representation.OptionsPreferences()
 packages = _bundling.get_packages()
 
 pass

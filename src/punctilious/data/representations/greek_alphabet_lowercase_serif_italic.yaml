@@ -7,263 +7,263 @@ representations:
     renderers:
       - implementation: string_constant
         string_constant: 'alpha'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝛼'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\alpha'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: beta, uuid: 469ec9d4-2e12-476f-8481-31c6af81aca3 }
     renderers:
       - implementation: string_constant
         string_constant: 'beta'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝛽'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\beta'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: gamma, uuid: b1ac97b8-a6e7-4b67-80eb-f81ef9eb9063 }
     renderers:
       - implementation: string_constant
         string_constant: 'gamma'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝛾'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\gamma'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: delta, uuid: 16bf14cd-9afc-4440-b357-fab02b9b5e42 }
     renderers:
       - implementation: string_constant
         string_constant: 'delta'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝛿'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\delta'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: epsilon, uuid: 22a3f9c5-c551-4995-a9c5-fc9d1ab8ddcc }
     renderers:
       - implementation: string_constant
         string_constant: 'epsilon'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜖'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\epsilon'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: zeta, uuid: 1ee46da0-9965-4c7e-802c-5febde2de5ba }
     renderers:
       - implementation: string_constant
         string_constant: 'zeta'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜁'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\zeta'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: eta, uuid: 6d026717-63e1-4d4c-a501-e5e928ab44b8 }
     renderers:
       - implementation: string_constant
         string_constant: 'eta'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜂'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\eta'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: theta, uuid: a3c8444d-6b51-4ab4-8576-769f4dd6510c }
     renderers:
       - implementation: string_constant
         string_constant: 'theta'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜃'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\theta'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: iota, uuid: 6950e5e9-ebcc-425f-b893-cbb627c3e053 }
     renderers:
       - implementation: string_constant
         string_constant: 'iota'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜄'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\iota'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: kappa, uuid: c723f39a-a6d9-4714-a1f3-b5a95d34c8b6 }
     renderers:
       - implementation: string_constant
         string_constant: 'kappa'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜅'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\kappa'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: lambda, uuid: 2a7b543b-451a-4dd4-a5fc-1bb04d1c5df5 }
     renderers:
       - implementation: string_constant
         string_constant: 'lambda'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜆'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\lambda'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: mu, uuid: 76680bec-be5e-47fa-ae3b-7e284a718d1d }
     renderers:
       - implementation: string_constant
         string_constant: 'mu'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜇'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\mu'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: nu, uuid: 17017741-7ff0-4610-a01e-288f2ff0ad8a }
     renderers:
       - implementation: string_constant
         string_constant: 'nu'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜈'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\nu'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: xi, uuid: bcd97e99-bab4-4a7b-a0d9-cb563cec365b }
     renderers:
       - implementation: string_constant
         string_constant: 'xi'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜉'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\xi'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: omicron, uuid: 8ccf8abe-9b59-4155-8baf-4e35dea6617b }
     renderers:
       - implementation: string_constant
         string_constant: 'omicron'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜊'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\omicron'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: pi, uuid: f1baf6d1-899b-46ee-859f-16f2684aa097 }
     renderers:
       - implementation: string_constant
         string_constant: 'pi'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜋'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\pi'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: rho, uuid: 3ef4b18e-5e14-4199-bd56-1e1003f87059 }
     renderers:
       - implementation: string_constant
         string_constant: 'rho'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜌'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\rho'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: sigma, uuid: 4cb54736-72c0-4d11-b0d3-d8a734c83037 }
     renderers:
       - implementation: string_constant
         string_constant: 'sigma'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜎'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\sigma'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: tau, uuid: 86f864be-9374-4a12-b0c3-ae5fef923afb }
     renderers:
       - implementation: string_constant
         string_constant: 'tau'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜏'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\tau'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: upsilon, uuid: 7c79a352-903d-4662-beb3-32b664fb2682 }
     renderers:
       - implementation: string_constant
         string_constant: 'upsilon'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜐'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\upsilon'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: phi, uuid: 8359a003-5e6a-47be-bc05-51a3959b237c }
     renderers:
       - implementation: string_constant
         string_constant: 'phi'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜑'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\phi'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: chi, uuid: 5ead0605-09d5-4d3c-9115-17e91523ba88 }
     renderers:
       - implementation: string_constant
         string_constant: 'chi'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜒'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\chi'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: psi, uuid: 4321183d-3c52-4194-9730-2ff00067d767 }
     renderers:
       - implementation: string_constant
         string_constant: 'psi'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜓'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\psi'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }
   - uid: { slug: omega, uuid: 7f7cd2bb-be7b-49e4-8a4a-ac087a568111 }
     renderers:
       - implementation: string_constant
         string_constant: 'omega'
-        tags: { connector_representation: word, technical_language: unicode_basic }
+        options: { connector_representation: word, technical_language: unicode_basic }
       - implementation: string_constant
         string_constant: '𝜔'
-        tags: { connector_representation: symbol, technical_language: unicode_extended }
+        options: { connector_representation: symbol, technical_language: unicode_extended }
       - implementation: string_constant
         string_constant: '\omega'
-        tags: { connector_representation: symbol, technical_language: latex_math }
+        options: { connector_representation: symbol, technical_language: latex_math }

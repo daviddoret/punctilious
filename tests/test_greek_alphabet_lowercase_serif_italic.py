@@ -7,7 +7,7 @@ class TestGreekAlphabetLowercaseSerifItalic:
         """Test of representation with multiple string-constant renderers.
         """
         pass
-        prefs = pu.TagsPreferences()
+        prefs = pu.OptionsPreferences()
         prefs[pu.unicode_basic] = 2
         assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(config=prefs) == 'lambda')
         prefs[pu.unicode_extended] = 3
