@@ -3,7 +3,7 @@ import punctilious as pu
 
 class TestFormulaNotations:
     def test_infix_notation(self):
-        prefs = pu.OptionsPreferences()
+        prefs = pu.Preferences()
         tag = pu.Option('technical_language', 'unicode_basic')
         prefs[tag] = 100
         assert pu.formula_notations.infix_formula.rep(
@@ -11,7 +11,7 @@ class TestFormulaNotations:
             prefs=prefs) == 'x f y'
 
     def test_formula_notation(self):
-        prefs = pu.OptionsPreferences()
+        prefs = pu.Preferences()
         tag = pu.Option('technical_language', 'unicode_basic')
         prefs[tag] = 100
 
@@ -36,7 +36,7 @@ class TestFormulaNotations:
             prefs=prefs) == 'f\\left(x\\right)'
 
     def test_prefix_notation(self):
-        prefs = pu.OptionsPreferences()
+        prefs = pu.Preferences()
         tag = pu.Option('technical_language', 'unicode_basic')
         prefs[tag] = 100
 

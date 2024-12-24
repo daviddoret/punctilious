@@ -48,7 +48,7 @@ def get_jinja2_template_from_package(path: str, resource: str) -> jinja2.Templat
 
 
 class Logger:
-    __slots__ = ('_native_logger')
+    # __slots__ = ('_native_logger')
     _singleton = None
     _singleton_initialized = None
 

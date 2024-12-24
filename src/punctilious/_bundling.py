@@ -71,7 +71,7 @@ def get_packages():
 
 
 class Bundle(_identifiers.UniqueIdentifiable):
-    """Inherit from tuple and make it immutable..
+    """Inherit from tuple and make it immutable.
 
     """
 

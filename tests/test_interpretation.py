@@ -50,7 +50,7 @@ def latex_math():
 
 @pytest.fixture
 def prefs(en, fr, symbol, word):
-    prefs = pu.OptionsPreferences()
+    prefs = pu.Preferences()
     prefs[en] = 6
     prefs[fr] = 9
     prefs[symbol] = 100

@@ -29,7 +29,7 @@ class TestFormula:
         assert phi5.represent() == '(P ∧ Q) ∧ (P ∧ Q)'
 
     def test_formula_2(self):
-        prefs = pu.OptionsPreferences()
+        prefs = pu.Preferences()
         # tag = pu.Tag('technical_language', 'unicode_extended')
         prefs[pu.options.technical_language.unicode_extended] = 3
         prefs[pu.options.technical_language.unicode_extended] = 4

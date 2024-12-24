@@ -6,7 +6,7 @@ class TestGreekAlphabetLowercaseSerifItalic:
         """Test of representation with multiple string-constant renderers.
         """
         pass
-        prefs = pu.OptionsPreferences()
+        prefs = pu.Preferences()
         prefs[pu.unicode_basic] = 2
         assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(prefs=prefs) == 'Phi')
         prefs[pu.unicode_extended] = 3

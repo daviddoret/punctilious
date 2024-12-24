@@ -37,19 +37,19 @@ def ensure_options_assignment(o) -> OptionsAssignment:
         raise TypeError(f'OptionsAssignment validation failure. Type: {type(o)}. Object: {o}.')
 
 
-def ensure_options_preferences(o) -> OptionsPreferences:
+def ensure_options_preferences(o) -> Preferences:
     """Ensure that `o` is of type OptionsPreferences, converting it if necessary, or raise an error if it fails."""
-    if isinstance(o, OptionsPreferences):
+    if isinstance(o, Preferences):
         return o
     elif isinstance(o, dict):
-        o_typed = OptionsPreferences()
+        o_typed = Preferences()
         for i in o.items():
             option = ensure_option(i[0])
             value = i[1]  # TODO: define a OptionPreferenceValue class and apply validation
             o_typed[option] = value
         return o_typed
     elif o is None:
-        return OptionsPreferences()
+        return Preferences()
     else:
         raise TypeError(f'OptionsPreferences validation failure. Type: {type(o)}. Object: {o}.')
 
@@ -129,21 +129,21 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
     def __str__(self):
         return f'{self.uid.slug} representation builder'
 
-    def optimize_renderer(self, prefs: OptionsPreferences = None):
-        """Given preferences, return the optimal renderer.
+    def optimize_renderer(self, prefs: Preferences = None):
+        """Given some preferences, return the optimal renderer.
 
         :param prefs:
         :return:
         """
         if prefs is None:
-            prefs = OptionsPreferences()
+            prefs = Preferences()
         best_score = 0
         optimal_renderer = self.renderers[0]
         for current_renderer in self.renderers:
-            current_score = prefs.score_options(options=current_renderer.options)
-            if current_score > best_score:
+            value, forbidden = prefs.score_options(options=current_renderer.options)
+            if forbidden == 0 and value > best_score:
                 optimal_renderer = current_renderer
-                best_score = current_score
+                best_score = value
         return optimal_renderer
 
     @property
@@ -159,7 +159,7 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
         renderers = ensure_renderers(renderers)
         self._renderers = renderers
 
-    def rep(self, variables: dict[str, str] = None, prefs: OptionsPreferences = None):
+    def rep(self, variables: dict[str, str] = None, prefs: Preferences = None):
         prefs = ensure_options_preferences(prefs)
         if variables is None:
             # TODO: Use a RepresentationVariable class and apply proper validation
@@ -308,7 +308,7 @@ class Renderer(abc.ABC):
         raise NotImplementedError('This method is abstract.')
 
     @abc.abstractmethod
-    def rep(self, config: OptionsPreferences | None = None, variables=None, prefs=None):
+    def rep(self, config: Preferences | None = None, variables=None, prefs=None):
         raise NotImplementedError('This method is abstract.')
 
     @property
@@ -333,11 +333,12 @@ class RendererForStringConstant(Renderer):
     def string_constant(self):
         return self._string_constant
 
-    def rep(self, config: OptionsPreferences | None = None, variables=None, prefs=None):
+    def rep(self, config: Preferences | None = None, variables=None, prefs=None):
         """Represent the string constant.
 
         For RendererForStringConstant, parameters have no effect.
 
+        :param prefs:
         :param config: this parameter has no effect.
         :param variables: this parameter has no effect.
         :return: the string representation of the string constant.
@@ -361,9 +362,10 @@ class RendererForStringTemplate(Renderer):
     def __str__(self):
         return f'"{self._string_template}" string template.'
 
-    def rep(self, config: OptionsPreferences = None, variables: dict[str, str] | None = None, prefs=None):
+    def rep(self, config: Preferences = None, variables: dict[str, str] | None = None, prefs=None):
         """
 
+        :param prefs:
         :param config:
         :param variables: Variables are passed to the jinja2 template.
         :return:
@@ -401,7 +403,7 @@ FlexibleRenderers = typing.Union[Renderers, collections.abc.Iterable]
 
 
 class OptionLabel(str):
-    """A option label is a category used to organize labels in groups."""
+    """An option label is a category used to organize labels in groups."""
 
     def __init__(self, label: str):
         super().__init__()
@@ -414,7 +416,7 @@ class OptionLabel(str):
 
 
 class OptionValue(str):
-    """A option value is a option used to denote options in a option category."""
+    """An option value is an option used to denote options in an option category."""
 
     def __init__(self, value: str):
         super().__init__()
@@ -426,7 +428,7 @@ class OptionValue(str):
 
 
 class Option(tuple):
-    """A option is pair which comprises a label and a value."""
+    """An option is pair which comprises a label and a value."""
 
     def __init__(self, label: OptionLabel | str, value: OptionValue | str):
         super().__init__()
@@ -470,8 +472,31 @@ class OptionsAssignment(tuple):
         return (option.value for option in self)
 
 
-class OptionsPreferences(dict):
-    """User preferences for options.
+class BasePriority(tuple):
+    """An abstract class to store option priorities."""
+
+    def __new__(cls, value: int | None = None, is_mandatory: bool = False, is_forbidden: bool = False):
+        if (value is not None and (is_mandatory is not None or is_forbidden is not None)) \
+                or (is_mandatory is not None and (value is not None or is_forbidden is not None)) \
+                or (is_forbidden is not None and (value is not None or is_mandatory is not None)):
+            raise ValueError('Only one of value, is_mandatory and is_forbidden can be set.')
+        return super().__new__(cls, (value, is_mandatory, is_forbidden,))
+
+    @property
+    def is_forbidden(self) -> bool | None:
+        return self[2]
+
+    @property
+    def is_mandatory(self) -> bool | None:
+        return self[1]
+
+    @property
+    def value(self) -> int | None:
+        return self[0]
+
+
+class Preferences(dict[Option, BasePriority]):
+    """A set of option preferences.
 
     """
 
@@ -479,19 +504,13 @@ class OptionsPreferences(dict):
         super().__init__()
 
     def __setitem__(self, key, value):
-        self._validate_key_value(key, value)
+        key = ensure_option(key)
+        value = ensure_base_priority(value)
         super().__setitem__(key, value)
 
     def update(self, **kwargs):
         for key, value in dict(**kwargs).items():
-            self._validate_key_value(key, value)
-        super().update(**kwargs)
-
-    def _validate_key_value(self, key, value):
-        if not isinstance(key, Option):
-            raise TypeError(f"Key must be of type Option, got {type(key).__name__} instead.")
-        if not isinstance(value, int):
-            raise TypeError(f"Value must be of type int, got {type(value).__name__} instead.")
+            self[key] = value
 
     def score_options(self, options: OptionsAssignment | collections.abc.Iterable):
         """Returns the preference score of a collection of options.
@@ -501,7 +520,12 @@ class OptionsPreferences(dict):
         """
         if not isinstance(options, OptionsAssignment):
             options: OptionsAssignment = OptionsAssignment(*options)
-        return sum(self.get(option, 0) for option in options)
+
+        value: int = sum(i.value for i in self.items() if isinstance(i, Priority) and i in options)
+        # mandatory: int = sum(1 for i in self.items() if isinstance(i, Mandatory) and i in options)
+        forbidden: int = sum(1 for i in self.items() if isinstance(i, Forbidden) and i in options)
+
+        return value, forbidden
 
 
 # Common labels and values.
@@ -512,3 +536,117 @@ unicode_basic = Option('technical_language', 'unicode_basic', )
 unicode_extended = Option('technical_language', 'unicode_extended', )
 latex_math = Option('technical_language', 'latex_math', )
 parenthesized = Option('parenthesization', 'parenthesized', )
+
+_forbidden: Forbidden | None = None
+
+
+# _mandatory: Mandatory | None = None
+
+
+class Forbidden(BasePriority):
+    """A class to store the forbidden option priority.
+
+    This priority means that the option is unconditionally filtered out when looking for the best option."""
+
+    def __new__(cls):
+        global _forbidden
+        if _forbidden is None:
+            _forbidden = super().__new__(cls, is_forbidden=True)
+        else:
+            return _forbidden
+
+    def __repr__(self):
+        return f'forbidden'
+
+    def __str__(self):
+        return f'forbidden'
+
+
+class Mandatory(BasePriority):
+    """A class to store the mandatory option priority.
+
+    This priority means that the option is unconditionally chosen when looking for the best option."""
+
+    def __new__(cls):
+        global _mandatory
+        if _mandatory is None:
+            _mandatory = super().__new__(cls, is_mandatory=True)
+        else:
+            return _mandatory
+
+    def __repr__(self):
+        return f'mandatory'
+
+    def __str__(self):
+        return f'mandatory'
+
+
+def get_forbidden() -> Forbidden:
+    return Forbidden()
+
+
+def get_mandatory() -> Mandatory:
+    return Mandatory()
+
+
+class Priority(BasePriority):
+    """A priority value for an option."""
+
+    def __int__(self):
+        return self.value
+
+    def __new__(cls, value: int):
+        instance = super().__new__(cls, value)
+        return instance
+
+    def __repr__(self):
+        return f'priority #{self.value}'
+
+    def __str__(self):
+        return f'priority #{self.value}'
+
+
+FlexiblePriority = typing.Union[Priority, int]
+FlexibleMandatory = typing.Union[Mandatory, str]
+FlexibleForbidden = typing.Union[Forbidden, str]
+FlexibleBasePriority = typing.Union[Priority, Mandatory, Forbidden]
+
+
+def ensure_priority(o: FlexiblePriority) -> Priority:
+    if isinstance(o, Priority):
+        return o
+    elif isinstance(o, int):
+        return Priority(o)
+    else:
+        raise TypeError(f'Priority validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def ensure_mandatory(o: FlexibleMandatory) -> Mandatory:
+    if isinstance(o, Mandatory):
+        return o
+    elif str(o) == 'mandatory':
+        return get_mandatory()
+    else:
+        raise TypeError(f'Mandatory validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def ensure_forbidden(o: FlexibleForbidden) -> Forbidden:
+    if isinstance(o, Forbidden):
+        return o
+    elif str(o) == 'forbidden':
+        return get_forbidden()
+    else:
+        raise TypeError(f'Forbidden validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def ensure_base_priority(o: FlexibleBasePriority) -> BasePriority:
+    if isinstance(o, BasePriority):
+        return o
+    elif isinstance(o, int):
+        return Priority(o)
+    elif str(o) == 'mandatory':
+        return get_mandatory()
+    elif str(o) == 'forbidden':
+        return get_forbidden()
+    else:
+        raise TypeError(f'BasePriority validation failure. Type: {type(o)}. Object: {o}.')

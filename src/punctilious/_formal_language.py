@@ -17,7 +17,7 @@ def ensure_formula(o=None) -> Formula:
     elif isinstance(o, collections.abc.Iterable):
         # If o is an iterable, the assumption is that it is of the shape:
         # singleton (c) where c is a connector,
-        # or pair (c, a) where c is a connector, and a is an n-tuple of argument sub-formulas.
+        # or pair (c, a) where c is a connector, and `a` is an n-tuple of argument sub-formulas.
         t = tuple(o)
         if len(t) == 1:
             return Formula(c=t[0])
@@ -81,7 +81,6 @@ def ensure_connectors(o=None) -> Connectors:
     """
 
     :param o:
-    :param overwrite_mutable_properties: If `o` is in a raw format such as a dictionary (e.g.: read from a YAML file),
     and if `o` is a UniqueIdentifiable that is already loaded in memory, overwrite its mutable properties (i.e.: update
     `o`).
     :return:

@@ -37,21 +37,21 @@ class TreeTransformer(Transformer):
     def function_notation(self, items):
         slug = items[0]
         arguments = items[1:]
-        return ('formula', slug, arguments)
+        return 'formula', slug, arguments
 
     # Convert infix expressions into a tuple: ('infix', left, slug, right)
     def connector_slug(self, items):
         slug = items[0]
-        return (slug)
+        return slug,
 
     # Convert infix expressions into a tuple: ('infix', left, slug, right)
     def infix_operator_notation(self, items):
         left, slug, right = items
-        return ('infix', left, slug, right)
+        return 'infix', left, slug, right,
 
     def infix_operator_notation_with_parenthesis(self, items):
         left, slug, right = items
-        return ('infix', left, slug, right)
+        return 'infix', left, slug, right,
 
     # Slugs are returned as a simple value
     def constant_notation(self, items):

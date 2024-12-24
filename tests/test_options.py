@@ -6,7 +6,7 @@ class TestOptions:
         """Test various values of the technical_language option.
         """
         pass
-        prefs = pu.OptionsPreferences()
+        prefs = pu.Preferences()
         prefs[pu.options.technical_language.unicode_basic] = 2
         assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(prefs=prefs) == 'lambda')
         prefs[pu.options.technical_language.unicode_extended] = 3
@@ -19,7 +19,7 @@ class TestOptions:
         """Test various values of the technical_language option.
         """
         pass
-        prefs = pu.OptionsPreferences()
+        prefs = pu.Preferences()
         prefs[pu.options.technical_language.unicode_basic] = 2
         assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == 'in')
         prefs[pu.options.technical_language.unicode_extended] = 3

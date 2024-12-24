@@ -7,7 +7,7 @@ from punctilious._representation import AbstractRepresentation, ensure_abstract_
     latex_math, \
     load_abstract_representation, load_abstract_representations, \
     Option, \
-    OptionsPreferences, \
+    Preferences, \
     OptionsAssignment, RendererForStringTemplate, \
     RendererForStringConstant, unicode_basic, unicode_extended
 import punctilious.options as options
@@ -29,7 +29,7 @@ from punctilious._declarations import declare_variable, declare_function
 # import _propositional_logic_1
 import punctilious.tao_analysis_1_2006 as tao_analysis_1_2006
 
-prefs = _representation.OptionsPreferences()
+prefs = _representation.Preferences()
 packages = _bundling.get_packages()
 
 pass
