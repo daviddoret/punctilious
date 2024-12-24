@@ -7,8 +7,6 @@ import yaml
 import jinja2
 import typing
 
-from click import option
-
 # punctilious packages
 import punctilious._util as _util
 import punctilious._identifiers as _identifiers
@@ -484,10 +482,10 @@ class OptionsPreferences(dict):
         self._validate_key_value(key, value)
         super().__setitem__(key, value)
 
-    def update(self, *args, **kwargs):
-        for key, value in dict(*args, **kwargs).items():
+    def update(self, **kwargs):
+        for key, value in dict(**kwargs).items():
             self._validate_key_value(key, value)
-        super().update(*args, **kwargs)
+        super().update(**kwargs)
 
     def _validate_key_value(self, key, value):
         if not isinstance(key, Option):

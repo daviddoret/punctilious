@@ -1,4 +1,3 @@
-import pytest
 import punctilious as pu
 
 

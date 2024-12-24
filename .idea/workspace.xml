@@ -5,6 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="renaming tags to options">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_representation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_notations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_options.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_options.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -833,14 +839,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01203" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734186594526</created>
-      <option name="number" value="01203" />
-      <option name="presentableId" value="LOCAL-01203" />
-      <option name="project" value="LOCAL" />
-      <updated>1734186594527</updated>
-    </task>
     <task id="LOCAL-01204" summary="first theorem implementation">
       <option name="closed" value="true" />
       <created>1734212326987</created>
@@ -1225,7 +1223,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735025595863</updated>
     </task>
-    <option name="localTasksCounter" value="1252" />
+    <task id="LOCAL-01252" summary="renaming tags to options">
+      <option name="closed" value="true" />
+      <created>1735025628777</created>
+      <option name="number" value="01252" />
+      <option name="presentableId" value="LOCAL-01252" />
+      <option name="project" value="LOCAL" />
+      <updated>1735025628778</updated>
+    </task>
+    <option name="localTasksCounter" value="1253" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

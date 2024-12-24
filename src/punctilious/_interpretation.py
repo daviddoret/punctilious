@@ -1,6 +1,7 @@
 import lark
 import jinja2
 
+import punctilious._util as _util
 from punctilious._util import get_logger
 import punctilious._formal_language as _formal_language
 
