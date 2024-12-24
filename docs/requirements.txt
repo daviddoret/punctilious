@@ -81,7 +81,7 @@ pickleshare==0.7.5
 platformdirs==3.10.0
     # via virtualenv
 pre-commit==3.4.0
-    # via sphinx-tags
+    # via sphinx-options
 prompt-toolkit==3.0.39
     # via ipython
 pure-eval==0.2.2
@@ -120,7 +120,7 @@ sphinx==4.3.0
     #   sphinx-favicon
     #   sphinx-rtd-theme
     #   sphinx-tabs
-    #   sphinx-tags
+    #   sphinx-options
     #   sphinx-togglebutton
     #   sphinxcontrib-bibtex
     #   sphinxcontrib-inlinesyntaxhighlight

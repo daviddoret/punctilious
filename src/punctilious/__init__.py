@@ -10,7 +10,7 @@ from punctilious._representation import AbstractRepresentation, ensure_abstract_
     OptionsPreferences, \
     OptionsAssignment, RendererForStringTemplate, \
     RendererForStringConstant, unicode_basic, unicode_extended
-import punctilious.tags as tags
+import punctilious.options as options
 from punctilious._formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
     FormulaArguments, Formula
 from punctilious._interpretation import Interpreter
