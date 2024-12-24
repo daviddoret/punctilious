@@ -44,4 +44,6 @@ class TestOptions:
         assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == '∈')
         prefs[pu.options.technical_language.latex_math] = 4
         assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == '\\in')
+        prefs[pu.options.technical_language.latex_math] = pu._representation.get_forbidden()
+        assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == '∈')
         pass
