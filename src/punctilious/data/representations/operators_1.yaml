@@ -32,14 +32,14 @@ representations:
   - uid: { slug: element_of, uuid: f9719243-c7d1-41ab-915a-362323c744e5 }
     renderers:
       - implementation: string_constant
-        string_constant: '\in'
-        tags: { technical_language: latex_math, connector_representation: symbol }
+        string_constant: 'in'
+        tags: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '∈'
         tags: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
-        string_constant: 'in'
-        tags: { technical_language: unicode_basic, connector_representation: symbol }
+        string_constant: '\in'
+        tags: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: entailment, uuid: 67bf6c68-32f8-41d7-b8e0-056bdae65536 }
     renderers:
       - implementation: string_constant

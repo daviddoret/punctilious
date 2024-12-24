@@ -1,11 +1,11 @@
 """The latin alphabet in lowercase, serif, and italic.
 
 """
-import _representation
-import _bundling
+import punctilious._representation as _representation
+import punctilious._bundling as _bundling
 
 _latin_alphabet_lowercase_serif_italic = _bundling.load_bundle_from_yaml_file_resource(
-    path='data.representations',
+    path='punctilious.data.representations',
     resource='latin_alphabet_lowercase_serif_italic.yaml')
 
 a: _representation.AbstractRepresentation = _latin_alphabet_lowercase_serif_italic.representations.get_from_uuid(

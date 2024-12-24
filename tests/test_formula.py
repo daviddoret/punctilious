@@ -31,7 +31,7 @@ class TestFormula:
     def test_formula_2(self):
         prefs = pu.TagsPreferences()
         tag = pu.Tag('technical_language', 'unicode_extended')
-        prefs[tag] = 100
+        prefs[tag] = 100000
 
         x = create_atomic_connector('x')
         element_of = pu.operators_1.element_of

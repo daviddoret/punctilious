@@ -1,8 +1,8 @@
-import _representation
-import _bundling
+import punctilious._representation as _representation
+import punctilious._bundling as _bundling
 
 _latin_alphabet_lowercase_serif_bold = _bundling.load_bundle_from_yaml_file_resource(
-    path='data.representations',
+    path='punctilious.data.representations',
     resource='latin_alphabet_lowercase_serif_bold.yaml')
 
 a: _representation.AbstractRepresentation = _latin_alphabet_lowercase_serif_bold.representations.get_from_uuid(

@@ -7,8 +7,8 @@ import yaml
 import jinja2
 import typing
 # punctilious packages
-import _util
-import _identifiers
+import punctilious._util as _util
+import punctilious._identifiers as _identifiers
 
 
 def ensure_tag(o) -> Tag:

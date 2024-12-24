@@ -1,41 +1,35 @@
-import _util
-from _util import get_yaml_from_package
-import _identifiers
-from _identifiers import create_uid, ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
+import punctilious._util as _util
+from punctilious._util import get_yaml_from_package
+from punctilious._identifiers import create_uid, ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
     load_unique_identifiable, UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
-import _representation
-from _representation import AbstractRepresentation, ensure_abstract_representations, ensure_abstract_representation, \
+from punctilious._representation import AbstractRepresentation, ensure_abstract_representations, \
+    ensure_abstract_representation, \
     latex_math, \
     load_abstract_representation, load_abstract_representations, \
     Tag, \
     TagsPreferences, \
     TagsAssignment, RendererForStringTemplate, \
     RendererForStringConstant, unicode_basic, unicode_extended
-import _formal_language
-from _formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
+# import tags.language
+from punctilious._formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
     FormulaArguments, Formula
-import _interpretation
-from _interpretation import Interpreter
-import _bundling
-import formula_notations
-import greek_alphabet_lowercase_serif_italic
-import greek_alphabet_uppercase_serif_italic
-import latin_alphabet_lowercase_serif_italic
-import latin_alphabet_uppercase_serif_italic
-import latin_alphabet_lowercase_serif_bold
-import operators_1
-import constants_1
+from punctilious._interpretation import Interpreter
+import punctilious._bundling as _bundling
+import punctilious.formula_notations as formula_notations
+import punctilious.greek_alphabet_lowercase_serif_italic as greek_alphabet_lowercase_serif_italic
+import punctilious.greek_alphabet_uppercase_serif_italic as greek_alphabet_uppercase_serif_italic
+import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
+import punctilious.latin_alphabet_uppercase_serif_italic as latin_alphabet_uppercase_serif_italic
+import punctilious.latin_alphabet_lowercase_serif_bold as latin_alphabet_lowercase_serif_bold
+import punctilious.operators_1 as operators_1
+import punctilious.constants_1 as constants_1
 
-import _declarations
-from _declarations import declare_variable, declare_function
+from punctilious._declarations import declare_variable, declare_function
 
 # import _propositional_logic_1
-import tao_analysis_1_2006
+import punctilious.tao_analysis_1_2006 as tao_analysis_1_2006
 
 prefs = _representation.TagsPreferences()
 packages = _bundling.get_packages()
 
-from _declarations import declare_variable, declare_function
-
-# tao_analysis_1_2006 = _tao_analysis_1_2006.TaoAnalysis12006()
 pass

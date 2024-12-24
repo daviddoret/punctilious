@@ -1,8 +1,9 @@
-import _representation
-import _bundling
+import punctilious._representation as _representation
+import punctilious._bundling as _bundling
 
-_greek_alphabet_uppercase_serif_italic = _bundling.load_bundle_from_yaml_file_resource(path='data.representations',
-                                                                                       resource='greek_alphabet_uppercase_serif_italic.yaml')
+_greek_alphabet_uppercase_serif_italic = _bundling.load_bundle_from_yaml_file_resource(
+    path='punctilious.data.representations',
+    resource='greek_alphabet_uppercase_serif_italic.yaml')
 
 alpha: _representation.AbstractRepresentation = _greek_alphabet_uppercase_serif_italic.representations.get_from_uuid(
     '0b78780f-1eba-47b6-bb20-36e688abe69e', raise_error_if_not_found=True)

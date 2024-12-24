@@ -4,9 +4,9 @@ import collections.abc
 import typing
 
 # punctilious modules
-from _util import get_logger
-import _identifiers
-import _representation
+from punctilious._util import get_logger
+import punctilious._identifiers as _identifiers
+import punctilious._representation as _representation
 
 
 def ensure_formula(o=None) -> Formula:

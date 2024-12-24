@@ -2,9 +2,9 @@
 
 """
 
-import _bundling
+import punctilious._bundling as _bundling
 
-_formula_notations = _bundling.load_bundle_from_yaml_file_resource(path='data.representations',
+_formula_notations = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
                                                                    resource='formula_notations.yaml')
 
 atomic_formula = _formula_notations.representations.get_from_uuid('f6bd05d7-ee5b-4480-9d59-ea9fa3a13516',

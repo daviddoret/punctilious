@@ -6,7 +6,7 @@ theorems:
   - uid: { slug: axiom_2_1, uuid: ab42a66f-ab12-4497-8505-b0ddce9abb8d }
     title: "Axiom 2.1"
     conclusion:
-      is-a-natural-number(0)
+      0 ∈ ℕ
   - uid: { slug: axiom_2_2, uuid: 31118628-5cbc-4053-8c19-3997e4b5765b }
     title: "Axiom 2.2"
     references:
@@ -14,9 +14,9 @@ theorems:
     variables:
       - x
     premises:
-      - is-a-natural-number(x)
+      - x ∈ ℕ
     conclusion:
-      x++ is a natural number.
+      x++ ∈ ℕ
 bibliography:
   - slug: tao_2006
     citation: Tao, 2006

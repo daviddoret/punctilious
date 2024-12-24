@@ -1,13 +1,13 @@
-import _formal_language
-import _bundling
+import punctilious._formal_language as _formal_language
+import punctilious._bundling as _bundling
 
-_constants_1 = _bundling.load_bundle_from_yaml_file_resource(path='data.connectors',
+_constants_1 = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                              resource='constants_1.yaml')
-_operators_1 = _bundling.load_bundle_from_yaml_file_resource(path='data.connectors',
+_operators_1 = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                              resource='operators_1.yaml')
-_bundling.load_bundle_from_yaml_file_resource(path='data.representations',
+_bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
                                               resource='constants_1.yaml')
-_bundling.load_bundle_from_yaml_file_resource(path='data.mappings',
+_bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
                                               resource='constants_1.yaml')
 
 n: _formal_language.Connector = _constants_1.connectors.get_from_uuid(

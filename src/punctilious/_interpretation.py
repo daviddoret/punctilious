@@ -1,10 +1,8 @@
 import lark
 import jinja2
 
-import _util
-from _util import get_logger
-import _formal_language
-import _representation
+from punctilious._util import get_logger
+import punctilious._formal_language as _formal_language
 
 
 class Transformer(lark.Transformer):

@@ -1,11 +1,11 @@
 import string
 import uuid as uuid_pkg
-import _util
-import _identifiers
-import _representation
-import _formal_language
-import latin_alphabet_lowercase_serif_italic
-import formula_notations
+# punctilious modules
+import punctilious._identifiers as _identifiers
+import punctilious._representation as _representation
+import punctilious._formal_language as _formal_language
+import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
+import punctilious.formula_notations as formula_notations
 
 _variable_counter = 0
 
