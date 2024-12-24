@@ -129,18 +129,18 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
     def __str__(self):
         return f'{self.uid.slug} representation builder'
 
-    def optimize_renderer(self, config: OptionsPreferences = None):
+    def optimize_renderer(self, prefs: OptionsPreferences = None):
         """Given preferences, return the optimal renderer.
 
-        :param config:
+        :param prefs:
         :return:
         """
-        if config is None:
-            config = OptionsPreferences()
+        if prefs is None:
+            prefs = OptionsPreferences()
         best_score = 0
         optimal_renderer = self.renderers[0]
         for current_renderer in self.renderers:
-            current_score = config.score_options(options=current_renderer.options)
+            current_score = prefs.score_options(options=current_renderer.options)
             if current_score > best_score:
                 optimal_renderer = current_renderer
                 best_score = current_score
@@ -159,13 +159,13 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
         renderers = ensure_renderers(renderers)
         self._renderers = renderers
 
-    def rep(self, variables: dict[str, str] = None, config: OptionsPreferences = None):
-        config = ensure_options_preferences(config)
+    def rep(self, variables: dict[str, str] = None, prefs: OptionsPreferences = None):
+        prefs = ensure_options_preferences(prefs)
         if variables is None:
             # TODO: Use a RepresentationVariable class and apply proper validation
             variables = {}
-        renderer: Renderer = self.optimize_renderer(config=config)
-        return renderer.rep(config=config, variables=variables)
+        renderer: Renderer = self.optimize_renderer(prefs=prefs)
+        return renderer.rep(prefs=prefs, variables=variables)
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
@@ -308,7 +308,7 @@ class Renderer(abc.ABC):
         raise NotImplementedError('This method is abstract.')
 
     @abc.abstractmethod
-    def rep(self, config: OptionsPreferences | None = None, variables=None):
+    def rep(self, config: OptionsPreferences | None = None, variables=None, prefs=None):
         raise NotImplementedError('This method is abstract.')
 
     @property
@@ -333,7 +333,7 @@ class RendererForStringConstant(Renderer):
     def string_constant(self):
         return self._string_constant
 
-    def rep(self, config: OptionsPreferences | None = None, variables=None):
+    def rep(self, config: OptionsPreferences | None = None, variables=None, prefs=None):
         """Represent the string constant.
 
         For RendererForStringConstant, parameters have no effect.
@@ -361,7 +361,7 @@ class RendererForStringTemplate(Renderer):
     def __str__(self):
         return f'"{self._string_template}" string template.'
 
-    def rep(self, config: OptionsPreferences = None, variables: dict[str, str] | None = None):
+    def rep(self, config: OptionsPreferences = None, variables: dict[str, str] | None = None, prefs=None):
         """
 
         :param config:

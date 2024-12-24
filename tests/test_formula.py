@@ -31,10 +31,12 @@ class TestFormula:
     def test_formula_2(self):
         prefs = pu.OptionsPreferences()
         # tag = pu.Tag('technical_language', 'unicode_extended')
-        prefs[pu.tags.technical_language.unicode_extended] = 100000
+        prefs[pu.options.technical_language.unicode_extended] = 3
+        prefs[pu.options.technical_language.unicode_extended] = 4
+        prefs[pu.options.technical_language.latex_math] = 0
 
         x = create_atomic_connector('x')
         element_of = pu.operators_1.element_of
         n = pu.constants_1.n
         phi6 = pu.Formula(element_of, (x, n))
-        assert phi6.represent() == 'x ∈ N'
+        assert phi6.represent(prefs=prefs) == 'x ∈ ℕ'

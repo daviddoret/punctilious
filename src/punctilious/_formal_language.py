@@ -62,8 +62,8 @@ class Formula(tuple):
     def connector(self) -> Connector:
         return self[0]
 
-    def represent(self, is_subformula: bool = False) -> str:
-        return self.connector.rep_formula(argument=self.arguments, is_subformula=is_subformula)
+    def represent(self, is_subformula: bool = False, prefs=None) -> str:
+        return self.connector.rep_formula(argument=self.arguments, is_subformula=is_subformula, prefs=prefs)
 
 
 def ensure_formula_arguments(o=None) -> FormulaArguments:
@@ -459,19 +459,19 @@ class Connector(_identifiers.UniqueIdentifiable):
     def package(self):
         return self._package
 
-    def rep(self, **kwargs) -> str:
-        return self.connector_representation.rep(**kwargs)
+    def rep_connector(self, prefs=None, **kwargs) -> str:
+        return self.connector_representation.rep(prefs=prefs, **kwargs)
 
-    def rep_formula(self, argument: FormulaArguments | None = None, is_subformula: bool = False) -> str:
+    def rep_formula(self, argument: FormulaArguments | None = None, is_subformula: bool = False, prefs=None) -> str:
         """Returns the string representation of the formula.
         """
         if self.connector_representation is None:
             raise ValueError(f'{self.__repr__()} has no connector representation.')
         if self.formula_representation is None:
             raise ValueError(f'{self.__repr__()} has no formula representation.')
-        connector: str = self.rep()
+        connector: str = self.rep_connector(prefs=prefs)
         argument = ensure_formula_arguments(argument)
-        argument_representations = tuple(a.represent(is_subformula=True) for a in argument)
+        argument_representations = tuple(a.represent(is_subformula=True, prefs=prefs) for a in argument)
         variables = {
             'connector': connector,
             'argument': argument_representations,
@@ -481,7 +481,7 @@ class Connector(_identifiers.UniqueIdentifiable):
         #   precedences as a variables to the jinja2 template to manage with more accuracy the
         #   parenthesization. Precedence should not be a static connector property, but should
         #   rather be a property of the representation, or possibly of the mapping.
-        rep = self.formula_representation.rep(variables=variables)
+        rep = self.formula_representation.rep(variables=variables, prefs=prefs)
         return rep
 
     @property

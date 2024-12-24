@@ -8,7 +8,7 @@ class TestFormulaNotations:
         prefs[tag] = 100
         assert pu.formula_notations.infix_formula.rep(
             variables={'connector': 'f', 'argument': ('x', 'y',)},
-            config=prefs) == 'x f y'
+            prefs=prefs) == 'x f y'
 
     def test_formula_notation(self):
         prefs = pu.OptionsPreferences()
@@ -17,23 +17,23 @@ class TestFormulaNotations:
 
         assert pu.formula_notations.function_formula.rep(
             variables={'connector': 'f', 'argument': ()},
-            config=prefs) == 'f()'
+            prefs=prefs) == 'f()'
         assert pu.formula_notations.function_formula.rep(
             variables={'connector': 'f', 'argument': ('x',)},
-            config=prefs) == 'f(x)'
+            prefs=prefs) == 'f(x)'
         assert pu.formula_notations.function_formula.rep(
             variables={'connector': 'f', 'argument': ('x', 'y',)},
-            config=prefs) == 'f(x, y)'
+            prefs=prefs) == 'f(x, y)'
         assert pu.formula_notations.function_formula.rep(
             variables={'connector': 'f', 'argument': ('x', 'y', 'z',)},
-            config=prefs) == 'f(x, y, z)'
+            prefs=prefs) == 'f(x, y, z)'
 
         tag = pu.Option('technical_language', 'latex_math')
         prefs[tag] = 200
 
         assert pu.formula_notations.function_formula.rep(
             variables={'connector': 'f', 'argument': ('x',)},
-            config=prefs) == 'f\\left(x\\right)'
+            prefs=prefs) == 'f\\left(x\\right)'
 
     def test_prefix_notation(self):
         prefs = pu.OptionsPreferences()
@@ -42,5 +42,5 @@ class TestFormulaNotations:
 
         assert pu.formula_notations.prefix_formula.rep(
             variables={'connector': '++', 'argument': ('x',)},
-            config=prefs) == '++x'
+            prefs=prefs) == '++x'
         pass

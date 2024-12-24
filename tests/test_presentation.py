@@ -83,36 +83,36 @@ class TestRepresentation:
         prefs[latex_math] = 0
         prefs[unicode_basic] = 10
         prefs[unicode_extended] = 20
-        assert (rep.rep(config=prefs) == '∧')
+        assert (rep.rep(prefs=prefs) == '∧')
 
         prefs[word] = 1
         prefs[symbol] = 20
         prefs[latex_math] = 0
         prefs[unicode_basic] = 20
         prefs[unicode_extended] = 10
-        assert (rep.rep(config=prefs) == '∧')
+        assert (rep.rep(prefs=prefs) == '∧')
 
         prefs[word] = 20
         prefs[symbol] = 1
         prefs[en] = 1
         prefs[fr] = 20
-        assert (rep.rep(config=prefs) == 'et')
+        assert (rep.rep(prefs=prefs) == 'et')
 
         prefs[en] = 20
         prefs[fr] = 1
-        assert (rep.rep(config=prefs) == 'and')
+        assert (rep.rep(prefs=prefs) == 'and')
 
     def test_from_yaml(self, en, fr, word, symbol, conjunction_connector, prefs):
         """Test of representation coming from aa yaml file with multiple string-constant renderers.
         """
 
-        assert (conjunction_connector.rep(config=prefs) == '∧')
+        assert (conjunction_connector.rep(prefs=prefs) == '∧')
 
         prefs[word] = 100
-        assert (conjunction_connector.rep(config=prefs) == 'et')
+        assert (conjunction_connector.rep(prefs=prefs) == 'et')
 
         prefs[en] = 500
-        assert (conjunction_connector.rep(config=prefs) == 'and')
+        assert (conjunction_connector.rep(prefs=prefs) == 'and')
 
     def test_template(self, traditional_formula, infix_formula, prefs):
         infix = pu.RendererForStringTemplate(
@@ -126,10 +126,10 @@ class TestRepresentation:
         prefs[traditional_formula] = 10
         prefs[infix_formula] = 20
 
-        assert (rep.rep(config=prefs, variables={'connector': 'and', 'arguments': ('a', 'b',)}) == 'a and b')
+        assert (rep.rep(prefs=prefs, variables={'connector': 'and', 'arguments': ('a', 'b',)}) == 'a and b')
 
         prefs[traditional_formula] = 20
         prefs[infix_formula] = 10
 
-        assert (rep.rep(config=prefs,
+        assert (rep.rep(prefs=prefs,
                         variables={'connector': 'f', 'arguments': ('a', 'b', 'c', 'd',)}) == 'f(a, b, c, d)')

@@ -8,9 +8,9 @@ class TestGreekAlphabetLowercaseSerifItalic:
         pass
         prefs = pu.OptionsPreferences()
         prefs[pu.unicode_basic] = 2
-        assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(config=prefs) == 'Phi')
+        assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(prefs=prefs) == 'Phi')
         prefs[pu.unicode_extended] = 3
-        assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(config=prefs) == '𝛷')
+        assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(prefs=prefs) == '𝛷')
         prefs[pu.latex_math] = 4
-        assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(config=prefs) == '\\Phi')
+        assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(prefs=prefs) == '\\Phi')
         pass
