@@ -475,19 +475,11 @@ class OptionsAssignment(tuple):
 class BasePriority(tuple):
     """An abstract class to store option priorities."""
 
-    def __new__(cls, value: int | None = None, is_mandatory: bool = False, is_forbidden: bool = False):
-        if (value is not None and (is_mandatory is not None or is_forbidden is not None)) \
-                or (is_mandatory is not None and (value is not None or is_forbidden is not None)) \
-                or (is_forbidden is not None and (value is not None or is_mandatory is not None)):
-            raise ValueError('Only one of value, is_mandatory and is_forbidden can be set.')
-        return super().__new__(cls, (value, is_mandatory, is_forbidden,))
+    def __new__(cls, o: collections.abc.Iterable):
+        return super().__new__(cls, o)
 
     @property
     def is_forbidden(self) -> bool | None:
-        return self[2]
-
-    @property
-    def is_mandatory(self) -> bool | None:
         return self[1]
 
     @property
@@ -521,9 +513,8 @@ class Preferences(dict[Option, BasePriority]):
         if not isinstance(options, OptionsAssignment):
             options: OptionsAssignment = OptionsAssignment(*options)
 
-        value: int = sum(i.value for i in self.items() if isinstance(i, Priority) and i in options)
-        # mandatory: int = sum(1 for i in self.items() if isinstance(i, Mandatory) and i in options)
-        forbidden: int = sum(1 for i in self.items() if isinstance(i, Forbidden) and i in options)
+        value: int = sum(v.value for k, v in self.items() if isinstance(v, Priority) and k in options)
+        forbidden: int = sum(1 for k, v in self.items() if isinstance(v, Forbidden) and k in options)
 
         return value, forbidden
 
@@ -551,42 +542,18 @@ class Forbidden(BasePriority):
     def __new__(cls):
         global _forbidden
         if _forbidden is None:
-            _forbidden = super().__new__(cls, is_forbidden=True)
-        else:
-            return _forbidden
+            _forbidden = super().__new__(cls, (None, True,))
+        return _forbidden
 
     def __repr__(self):
         return f'forbidden'
 
     def __str__(self):
         return f'forbidden'
-
-
-class Mandatory(BasePriority):
-    """A class to store the mandatory option priority.
-
-    This priority means that the option is unconditionally chosen when looking for the best option."""
-
-    def __new__(cls):
-        global _mandatory
-        if _mandatory is None:
-            _mandatory = super().__new__(cls, is_mandatory=True)
-        else:
-            return _mandatory
-
-    def __repr__(self):
-        return f'mandatory'
-
-    def __str__(self):
-        return f'mandatory'
 
 
 def get_forbidden() -> Forbidden:
     return Forbidden()
-
-
-def get_mandatory() -> Mandatory:
-    return Mandatory()
 
 
 class Priority(BasePriority):
@@ -596,7 +563,7 @@ class Priority(BasePriority):
         return self.value
 
     def __new__(cls, value: int):
-        instance = super().__new__(cls, value)
+        instance = super().__new__(cls, (value, False,))
         return instance
 
     def __repr__(self):
@@ -607,9 +574,8 @@ class Priority(BasePriority):
 
 
 FlexiblePriority = typing.Union[Priority, int]
-FlexibleMandatory = typing.Union[Mandatory, str]
 FlexibleForbidden = typing.Union[Forbidden, str]
-FlexibleBasePriority = typing.Union[Priority, Mandatory, Forbidden]
+FlexibleBasePriority = typing.Union[Priority, Forbidden]
 
 
 def ensure_priority(o: FlexiblePriority) -> Priority:
@@ -619,15 +585,6 @@ def ensure_priority(o: FlexiblePriority) -> Priority:
         return Priority(o)
     else:
         raise TypeError(f'Priority validation failure. Type: {type(o)}. Object: {o}.')
-
-
-def ensure_mandatory(o: FlexibleMandatory) -> Mandatory:
-    if isinstance(o, Mandatory):
-        return o
-    elif str(o) == 'mandatory':
-        return get_mandatory()
-    else:
-        raise TypeError(f'Mandatory validation failure. Type: {type(o)}. Object: {o}.')
 
 
 def ensure_forbidden(o: FlexibleForbidden) -> Forbidden:
@@ -640,12 +597,12 @@ def ensure_forbidden(o: FlexibleForbidden) -> Forbidden:
 
 
 def ensure_base_priority(o: FlexibleBasePriority) -> BasePriority:
-    if isinstance(o, BasePriority):
+    if isinstance(o, Priority):
         return o
     elif isinstance(o, int):
         return Priority(o)
-    elif str(o) == 'mandatory':
-        return get_mandatory()
+    elif isinstance(o, Forbidden):
+        return o
     elif str(o) == 'forbidden':
         return get_forbidden()
     else:
