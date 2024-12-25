@@ -1,5 +1,5 @@
-import punctilious._representation as _representation
-import punctilious._bundling as _bundling
+import punctilious.representation as _representation
+import punctilious.bundling as _bundling
 
 _greek_alphabet_uppercase_serif_italic = _bundling.load_bundle_from_yaml_file_resource(
     path='punctilious.data.representations',

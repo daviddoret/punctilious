@@ -1,5 +1,5 @@
-import punctilious._formal_language as _formal_language
-import punctilious._bundling as _bundling
+import punctilious.formal_language as _formal_language
+import punctilious.bundling as _bundling
 
 _constants_1 = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                              resource='constants_1.yaml')

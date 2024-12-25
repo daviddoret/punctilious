@@ -1,9 +1,9 @@
 import lark
 import jinja2
 import uuid as uuid_package
-import punctilious._util as _util
-from punctilious._util import get_logger
-import punctilious._formal_language as _formal_language
+import punctilious.util as _util
+from punctilious.util import get_logger
+import punctilious.formal_language as _formal_language
 
 
 class Transformer(lark.Transformer):

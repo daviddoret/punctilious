@@ -1,4 +1,4 @@
-import punctilious._representation as _representation
+import punctilious.representation as _representation
 
 unicode_basic = _representation.Option('technical_language', 'unicode_basic')
 """The representation is made using a subset of well-supported Unicode characters.

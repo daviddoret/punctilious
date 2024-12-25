@@ -8,8 +8,8 @@ import jinja2
 import typing
 
 # punctilious packages
-import punctilious._util as _util
-import punctilious._identifiers as _identifiers
+import punctilious.util as _util
+import punctilious.identifiers as _identifiers
 
 
 def ensure_option(o) -> Option:

@@ -1,9 +1,9 @@
 import string
 import uuid as uuid_pkg
 # punctilious modules
-import punctilious._identifiers as _identifiers
-import punctilious._representation as _representation
-import punctilious._formal_language as _formal_language
+import punctilious.identifiers as _identifiers
+import punctilious.representation as _representation
+import punctilious.formal_language as _formal_language
 import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
 import punctilious.formula_notations as formula_notations
 

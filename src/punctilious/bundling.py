@@ -11,10 +11,10 @@ import yaml
 import io
 import itertools
 # punctilious modules
-import punctilious._util as _util
-import punctilious._identifiers as _identifiers
-import punctilious._representation as _representation
-import punctilious._formal_language as _formal_language
+import punctilious.util as _util
+import punctilious.identifiers as _identifiers
+import punctilious.representation as _representation
+import punctilious.formal_language as _formal_language
 
 
 class Bundles(dict):

@@ -1,9 +1,9 @@
 """A catalog of useful interpreters to parse mathematical formulas."""
 
-import punctilious._representation as _representation
-import punctilious._formal_language as _formal_language
-import punctilious._bundling as _bundling
-import punctilious._interpretation as _interpretation
+import punctilious.representation as _representation
+import punctilious.formal_language as _formal_language
+import punctilious.bundling as _bundling
+import punctilious.interpretation as _interpretation
 import punctilious.options as options
 import punctilious.formula_notations as formula_notations
 import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
