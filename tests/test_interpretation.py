@@ -70,22 +70,26 @@ class TestInterpretation:
             interpreter.interpret(input_string)) == '¬((¬(f(P) ∧ Q)) ∧ (Q ∧ P))'
 
     def test_interpretation_2(self):
+        prefs = pu._representation.Preferences()
+        prefs[pu.options.technical_language.unicode_basic] = 1
+        prefs[pu.options.technical_language.unicode_extended] = 2
+        prefs[pu.options.technical_language.latex_math] = pu._representation.get_forbidden()
+
         interpreter = interpreters.generate_interpreter()
         pass
         input_string = "𝑃"
-        assert str(interpreter.interpret(input_string)) == '𝑃'
+        assert interpreter.interpret(input_string).represent(prefs=prefs) == '𝑃'
         input_string = "¬𝑃"
-        assert str(interpreter.interpret(input_string)) == '¬𝑃'
+        assert interpreter.interpret(input_string).represent(prefs=prefs) == '¬𝑃'
         input_string = "¬(𝑃)"
-        assert str(interpreter.interpret(input_string)) == '¬𝑃'
+        assert interpreter.interpret(input_string).represent(prefs=prefs) == '¬𝑃'
         input_string = "𝑃 ∧ 𝑄"
-        assert str(interpreter.interpret(input_string)) == '𝑃 ∧ 𝑄'
+        assert interpreter.interpret(input_string).represent(prefs=prefs) == '𝑃 ∧ 𝑄'
         input_string = "(𝑃 ∧ 𝑄)"
-        assert str(interpreter.interpret(input_string)) == '𝑃 ∧ 𝑄'
+        assert interpreter.interpret(input_string).represent(prefs=prefs) == '𝑃 ∧ 𝑄'
         input_string = "(𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)"
-        assert str(interpreter.interpret(input_string)) == '(𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)'
+        assert interpreter.interpret(input_string).represent(prefs=prefs) == '(𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)'
         input_string = "¬(¬ 𝑃)"
-        assert str(interpreter.interpret(input_string)) == '¬(¬𝑃)'
+        assert interpreter.interpret(input_string).represent(prefs=prefs) == '¬(¬𝑃)'
         input_string = "¬(¬((𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)))"
-        assert str(
-            interpreter.interpret(input_string)) == '¬(¬((𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)))'
+        assert interpreter.interpret(input_string).represent(prefs=prefs) == '¬(¬((𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)))'
