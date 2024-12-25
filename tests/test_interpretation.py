@@ -1,6 +1,7 @@
 import pytest
 import punctilious as pu
 from test_shared_library import create_atomic_connector
+import punctilious.interpreters as interpreters
 
 
 @pytest.fixture
@@ -25,9 +26,9 @@ def conjunction_connector(reps):
     return reps[0]
 
 
-class TestRepresentation:
-    def test_representation(self):
-        """Test of representation with multiple string-constant renderers.
+class TestInterpretation:
+    def test_interpretation_1(self):
+        """test with a manually designed interpreter.
         """
 
         p = create_atomic_connector('P')
@@ -67,3 +68,24 @@ class TestRepresentation:
         input_string = "not(not (f(P) and Q) and (Q and P))"
         assert str(
             interpreter.interpret(input_string)) == '¬((¬(f(P) ∧ Q)) ∧ (Q ∧ P))'
+
+    def test_interpretation_2(self):
+        interpreter = interpreters.generate_interpreter()
+        pass
+        input_string = "P"
+        assert str(interpreter.interpret(input_string)) == 'P'
+        input_string = "¬P"
+        assert str(interpreter.interpret(input_string)) == '¬P'
+        input_string = "¬(P)"
+        assert str(interpreter.interpret(input_string)) == '¬P'
+        input_string = "P ∧ Q"
+        assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
+        input_string = "(P ∧ Q)"
+        assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
+        input_string = "(P ∧ Q) ∧ (Q ∧ P)"
+        assert str(interpreter.interpret(input_string)) == '(P ∧ Q) ∧ (Q ∧ P)'
+        input_string = "¬(¬ P)"
+        assert str(interpreter.interpret(input_string)) == '¬(¬P)'
+        input_string = "¬(¬((P ∧ Q) ∧ (Q ∧ P)))"
+        assert str(
+            interpreter.interpret(input_string)) == '¬(¬((P ∧ Q) ∧ (Q ∧ P)))'

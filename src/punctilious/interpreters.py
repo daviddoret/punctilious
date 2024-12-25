@@ -15,24 +15,35 @@ def generate_interpreter():
     prefs[options.technical_language.unicode_extended] = 2
     prefs[options.technical_language.latex_math] = _representation.get_forbidden()
 
-    connectors = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
-                                                               resource='operators_1.yaml')
+    operators_1_connectors = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
+                                                                           resource='operators_1.yaml')
+    variables_1_connectors = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
+                                                                           resource='variables_1.yaml')
+    constants_1_connectors = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
+                                                                           resource='constants_1.yaml')
     representations = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
                                                                     resource='operators_1.yaml')
     mappings = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
                                                              resource='operators_1.yaml')
+
     # generate infix connectors
-    variable_connectors = {}
+    # variable_connectors = {}
     atomic_connectors = {}
     infix_connectors = {}
     function_connectors = {}
     prefix_connectors = {}
-    for connector in connectors.connectors:
+
+    # Load variables from variables_1_connectors
+    for connector in variables_1_connectors.connectors:
         connector: _formal_language.Connector
-        if connector.formula_representation is formula_notations.variable_formula:
+        if connector.formula_representation is formula_notations.atomic_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
-            variable_connectors[rep] = connector
-        elif connector.formula_representation is formula_notations.atomic_formula:
+            atomic_connectors[rep] = connector
+
+    # Load operators from operators_1_connectors
+    for connector in operators_1_connectors.connectors:
+        connector: _formal_language.Connector
+        if connector.formula_representation is formula_notations.atomic_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
             atomic_connectors[rep] = connector
         elif connector.formula_representation is formula_notations.infix_formula:
@@ -45,8 +56,15 @@ def generate_interpreter():
             rep = connector.connector_representation.rep(prefs=prefs)
             prefix_connectors[rep] = connector
 
+    # Load constants (atomic connectors) from constants_1_connectors
+    for connector in constants_1_connectors.connectors:
+        connector: _formal_language.Connector
+        if connector.formula_representation is formula_notations.atomic_formula:
+            rep = connector.connector_representation.rep(prefs=prefs)
+            atomic_connectors[rep] = connector
+
     interpreter = _interpretation.Interpreter(
-        variable_connectors={},
+        # variable_connectors=variable_connectors,
         atomic_connectors=atomic_connectors,
         prefix_connectors=prefix_connectors,
         infix_connectors=infix_connectors,
