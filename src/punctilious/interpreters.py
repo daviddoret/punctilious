@@ -2,19 +2,19 @@
 
 import punctilious.representation as _representation
 import punctilious.formal_language as _formal_language
-import punctilious.bundling as _bundling
+import punctilious._bundling as _bundling
 import punctilious.interpretation as _interpretation
-import punctilious.options as options
-import punctilious.formula_notations as formula_notations
-import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
-import punctilious.latin_alphabet_uppercase_serif_italic as latin_alphabet_uppercase_serif_italic
+import punctilious.options as _options
+import punctilious.formula_notations as _formula_notations
+import punctilious.latin_alphabet_lowercase_serif_italic as _latin_alphabet_lowercase_serif_italic
+import punctilious.latin_alphabet_uppercase_serif_italic as _latin_alphabet_uppercase_serif_italic
 
 
 def generate_interpreter():
     prefs = _representation.Preferences()
-    prefs[options.technical_language.unicode_basic] = 1
-    prefs[options.technical_language.unicode_extended] = 2
-    prefs[options.technical_language.latex_math] = _representation.get_forbidden()
+    prefs[_options.technical_language.unicode_basic] = 1
+    prefs[_options.technical_language.unicode_extended] = 2
+    prefs[_options.technical_language.latex_math] = _representation.get_forbidden()
 
     operators_1_connectors = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                                            resource='operators_1.yaml')
@@ -47,30 +47,30 @@ def generate_interpreter():
     # Load variables from variables_1_connectors
     for connector in variables_1_connectors.connectors:
         connector: _formal_language.Connector
-        if connector.formula_representation is formula_notations.atomic_formula:
+        if connector.formula_representation is _formula_notations.atomic_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
             atomic_connectors[rep] = connector
 
     # Load operators from operators_1_connectors
     for connector in operators_1_connectors.connectors:
         connector: _formal_language.Connector
-        if connector.formula_representation is formula_notations.atomic_formula:
+        if connector.formula_representation is _formula_notations.atomic_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
             atomic_connectors[rep] = connector
-        elif connector.formula_representation is formula_notations.infix_formula:
+        elif connector.formula_representation is _formula_notations.infix_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
             infix_connectors[rep] = connector
-        elif connector.formula_representation is formula_notations.function_formula:
+        elif connector.formula_representation is _formula_notations.function_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
             function_connectors[rep] = connector
-        elif connector.formula_representation is formula_notations.prefix_formula:
+        elif connector.formula_representation is _formula_notations.prefix_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
             prefix_connectors[rep] = connector
 
     # Load constants (atomic connectors) from constants_1_connectors
     for connector in constants_1_connectors.connectors:
         connector: _formal_language.Connector
-        if connector.formula_representation is formula_notations.atomic_formula:
+        if connector.formula_representation is _formula_notations.atomic_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
             atomic_connectors[rep] = connector
 

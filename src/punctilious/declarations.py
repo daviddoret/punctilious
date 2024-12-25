@@ -4,8 +4,8 @@ import uuid as uuid_pkg
 import punctilious.identifiers as _identifiers
 import punctilious.representation as _representation
 import punctilious.formal_language as _formal_language
-import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
-import punctilious.formula_notations as formula_notations
+import punctilious.latin_alphabet_lowercase_serif_italic as _latin_alphabet_lowercase_serif_italic
+import punctilious.formula_notations as _formula_notations
 
 _variable_counter = 0
 
@@ -39,14 +39,14 @@ def declare_function(
     :return:
     """
     if rep is None:
-        rep = latin_alphabet_lowercase_serif_italic.f
+        rep = _latin_alphabet_lowercase_serif_italic.f
     if isinstance(rep, str) and rep in string.ascii_lowercase:
-        rep = latin_alphabet_lowercase_serif_italic.get_letter(rep)
+        rep = _latin_alphabet_lowercase_serif_italic.get_letter(rep)
     uuid: uuid_pkg.UUID = uuid_pkg.uuid4()
     slug: _identifiers.Slug = _identifiers.Slug('custom_connector')
     uid: _identifiers.UniqueIdentifier = _identifiers.UniqueIdentifier(uuid=uuid, slug=slug)
     connector: _formal_language.Connector = _formal_language.Connector(
         uid=uid,
         connector_representation=rep,
-        formula_representation=formula_notations.function_formula)
+        formula_representation=_formula_notations.function_formula)
     return connector

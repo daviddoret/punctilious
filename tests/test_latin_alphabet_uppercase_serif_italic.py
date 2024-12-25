@@ -12,5 +12,5 @@ class TestLatinAlphabetLowercaseSerifItalic:
         assert (pu.latin_alphabet_uppercase_serif_italic.p.rep(prefs=prefs) == '𝑃')
         prefs[pu.options.technical_language.latex_math] = 4
         assert (pu.latin_alphabet_uppercase_serif_italic.p.rep(prefs=prefs) == '\\textit{P}')
-        prefs[pu.options.technical_language.latex_math] = pu._representation.get_forbidden()
+        prefs[pu.options.technical_language.latex_math] = pu.representation.get_forbidden()
         assert (pu.latin_alphabet_uppercase_serif_italic.p.rep(prefs=prefs) == '𝑃')

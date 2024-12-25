@@ -12,5 +12,5 @@ class TestGreekAlphabetLowercaseSerifItalic:
         assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(prefs=prefs) == '𝛷')
         prefs[pu.options.technical_language.latex_math] = 4
         assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(prefs=prefs) == '\\Phi')
-        prefs[pu.options.technical_language.latex_math] = pu._representation.get_forbidden()
+        prefs[pu.options.technical_language.latex_math] = pu.representation.get_forbidden()
         assert (pu.greek_alphabet_uppercase_serif_italic.phi.rep(prefs=prefs) == '𝛷')

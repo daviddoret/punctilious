@@ -1,6 +1,6 @@
 """A catalog of well-known mathematical operators."""
 
-import bundling
+import punctilious._bundling as _bundling
 
 bundle = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                        resource='operators_1.yaml')

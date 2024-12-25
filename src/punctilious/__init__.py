@@ -13,7 +13,7 @@ import punctilious.options as options
 from punctilious.formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
     FormulaArguments, Formula
 from punctilious.interpretation import Interpreter
-import punctilious.bundling as _bundling
+import punctilious._bundling as _bundling
 import punctilious.formula_notations as formula_notations
 import punctilious.greek_alphabet_lowercase_serif_italic as greek_alphabet_lowercase_serif_italic
 import punctilious.greek_alphabet_uppercase_serif_italic as greek_alphabet_uppercase_serif_italic
@@ -28,7 +28,7 @@ from punctilious.declarations import declare_variable, declare_function
 # import _propositional_logic_1
 import punctilious.tao_analysis_1_2006 as tao_analysis_1_2006
 
-prefs = _representation.Preferences()
+prefs = representation.Preferences()
 packages = _bundling.get_packages()
 
 pass
