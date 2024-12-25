@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="rename theorem to statement">
-      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/interpreters.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/interpreters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="interpretation" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -98,6 +92,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "PowerShell.increment_package_version_patch.ps1.executor": "Run",
     "PowerShell.release_patch.ps1.executor": "Run",
     "Python tests.Python tests in tests.executor": "Run",
@@ -855,14 +850,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01212" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734668797296</created>
-      <option name="number" value="01212" />
-      <option name="presentableId" value="LOCAL-01212" />
-      <option name="project" value="LOCAL" />
-      <updated>1734668797296</updated>
-    </task>
     <task id="LOCAL-01213" summary="first theorem implementation">
       <option name="closed" value="true" />
       <created>1734682891361</created>
@@ -1247,7 +1234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735120320584</updated>
     </task>
-    <option name="localTasksCounter" value="1261" />
+    <task id="LOCAL-01261" summary="interpretation">
+      <option name="closed" value="true" />
+      <created>1735122710589</created>
+      <option name="number" value="01261" />
+      <option name="presentableId" value="LOCAL-01261" />
+      <option name="project" value="LOCAL" />
+      <updated>1735122710589</updated>
+    </task>
+    <option name="localTasksCounter" value="1262" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1306,7 +1301,6 @@
     <MESSAGE value="Lark parser for the technical-1 representation-mode." />
     <MESSAGE value="Lark + yaml" />
     <MESSAGE value="presentation renderers" />
-    <MESSAGE value="interpretation" />
     <MESSAGE value="interpretation integrated with foundations" />
     <MESSAGE value="modules importation reorg" />
     <MESSAGE value="modules importation reorg + remove uuid attribute on non-package elements" />
@@ -1322,7 +1316,8 @@
     <MESSAGE value="forbidden option" />
     <MESSAGE value="interpretation with variables" />
     <MESSAGE value="rename theorem to statement" />
-    <option name="LAST_COMMIT_MESSAGE" value="rename theorem to statement" />
+    <MESSAGE value="interpretation" />
+    <option name="LAST_COMMIT_MESSAGE" value="interpretation" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
