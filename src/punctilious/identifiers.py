@@ -193,7 +193,7 @@ class UniqueIdentifiable(abc.ABC):
         """
         return hash((UniqueIdentifiable, self.uid,))
 
-    def __init__(self, uid: FlexibleUniqueIdentifier):
+    def __init__(self, uid: FlexibleUniqueIdentifier | None):
         """
         
         Raises an error if a UniqueIdentifiable with the same UniqueIdentifier already exists.

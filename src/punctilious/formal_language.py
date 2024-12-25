@@ -44,6 +44,14 @@ class Formula(tuple):
 
     def __new__(cls, c, a=None):
         c: Connector = ensure_connector(c)
+
+        # TODO: If the connector is a meta-operator,
+        #   and if the python class is not of the proper class,
+        #   substitute the formula with an instance
+        #   of the correct type? e.g. Statement?
+        if c is _get_statement_connector() or c is _get_variables_connector() or c is _get_premises_connector() or c is _get_conclusion_connector():
+            get_logger().warn('meta-operator WARNING')
+
         a: FormulaArguments = ensure_formula_arguments(a)
         phi: tuple[Connector, FormulaArguments] = (c, a,)
         return super().__new__(cls, phi)
@@ -331,11 +339,11 @@ def ensure_statement(o) -> Statement:
         return o
     elif isinstance(o, dict):
         uid = o['uid']
-        variables = None
-        assumptions = None
-        statement = None
+        variables = o.get('variables', None)
+        premises = o.get('premises', None)
+        conclusion = o.get('conclusion', None)
         justifications = None
-        o = Statement(uid=uid, variables=variables, assumptions=assumptions, conclusion=statement,
+        o = Statement(uid=uid, variables=variables, premises=premises, conclusion=conclusion,
                       justifications=justifications)
         return o
     else:
@@ -506,6 +514,65 @@ class Connector(_identifiers.UniqueIdentifiable):
 FlexibleConnector = typing.Union[Connector, collections.abc.Mapping, collections.abc.Iterable]
 FlexibleConnectors = typing.Union[Connectors, collections.abc.Iterable]
 
+_statement_connector: Connector | None = None
+
+
+def _get_statement_connector() -> Connector:
+    """Return the `statement` meta-operator.
+    """
+    global _statement_connector
+    if _statement_connector is None:
+        _statement_connector = _identifiers.load_unique_identifiable(
+            {'uid': {'slug': 'statement', 'uuid': 'c138b200-111a-4a40-ac3c-c8afa8e615fb'},
+             'syntactic_rules': {'fixed_arity': 3}}
+        )
+    return _statement_connector
+
+
+_variables_connector: Connector | None = None
+
+
+def _get_variables_connector() -> Connector:
+    """Return the `variables` meta-operator.
+    """
+    global _variables_connector
+    if _variables_connector is None:
+        _variables_connector = _identifiers.load_unique_identifiable(
+            {'uid': {'slug': 'variables', 'uuid': '0489e6f7-022e-48a4-82bf-dcb5907653b7'},
+             'syntactic_rules': {'fixed_arity': 3}}
+        )
+    return _variables_connector
+
+
+_premises_connector: Connector | None = None
+
+
+def _get_premises_connector() -> Connector:
+    """Return the `premises` meta-operator.
+    """
+    global _premises_connector
+    if _premises_connector is None:
+        _premises_connector = _identifiers.load_unique_identifiable(
+            {'uid': {'slug': 'premises', 'uuid': 'b78ed901-37d2-4a97-a7a8-588b69dab20a'},
+             'syntactic_rules': {}}
+        )
+    return _premises_connector
+
+
+_conclusion_connector: Connector | None = None
+
+
+def _get_conclusion_connector() -> Connector:
+    """Return the `conclusion` meta-operator.
+    """
+    global _conclusion_connector
+    if _conclusion_connector is None:
+        _conclusion_connector = _identifiers.load_unique_identifiable(
+            {'uid': {'slug': 'conclusion', 'uuid': '3dccc8f5-81cf-446a-9f3c-7673514f2117'},
+             'syntactic_rules': {}}
+        )
+    return _conclusion_connector
+
 
 def ensure_connector(o: FlexibleConnector) -> Connector:
     """Assure that `o` is of type Connector, converting as necessary, or raise an error.
@@ -577,10 +644,12 @@ class Statement(_identifiers.UniqueIdentifiable):
         This means that the meta operators must be mandatorily pre-loaded.
     """
 
-    def __init__(self, uid=None, variables=None, assumptions=None, conclusion=None, justifications=None):
+    def __init__(self, uid=None, variables=None, premises=None, conclusion=None, justifications=None):
+        # Immutable properties
         self._variables = variables
-        self._assumptions = assumptions
+        self._premises = premises
         self._conclusion = conclusion
+        # Mutable properties
         self._justifications = justifications
         super().__init__(uid=uid)
 
@@ -591,16 +660,16 @@ class Statement(_identifiers.UniqueIdentifiable):
         return f'{self.uid.slug} statement'
 
     @property
-    def assumptions(self):
-        return self._assumptions
+    def conclusion(self):
+        return self._conclusion
 
     @property
     def justifications(self):
         return self._justifications
 
     @property
-    def conclusion(self):
-        return self._conclusion
+    def premises(self):
+        return self._premises
 
     @property
     def uid(self):
@@ -616,8 +685,8 @@ class Statement(_identifiers.UniqueIdentifiable):
             d['uid'] = self.uid
         if self.variables is not None:
             d['variables'] = self.variables
-        if self.assumptions is not None:
-            d['assumptions'] = self.assumptions
+        if self.premises is not None:
+            d['premises'] = self.premises
         if self.conclusion is not None:
             d['conclusion'] = self.conclusion
         if self.justifications is not None:
