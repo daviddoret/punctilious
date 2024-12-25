@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="forbidden option">
-      <change afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_2.jinja2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/interpretations/propositional_logic_1.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/options/connector_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/interpretations/operators_1_interpretations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/interpretations/operators_1_interpretations_OBSOLETE.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/options/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/options/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/options/technical_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/options/technical_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="interpretation with variables" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -334,7 +323,7 @@
     "Python tests.pytest in test_greek_alphabet_uppercase_serif_italic.py.executor": "Run",
     "Python tests.pytest in test_identifiers.py.executor": "Run",
     "Python tests.pytest in test_inference_rules_1.py.executor": "Run",
-    "Python tests.pytest in test_interpretation.py.executor": "Debug",
+    "Python tests.pytest in test_interpretation.py.executor": "Run",
     "Python tests.pytest in test_minimal_logic_1.py.executor": "Run",
     "Python tests.pytest in test_packaging.py.executor": "Run",
     "Python tests.pytest in test_pl1.py.executor": "Run",
@@ -852,14 +841,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01209" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734352135290</created>
-      <option name="number" value="01209" />
-      <option name="presentableId" value="LOCAL-01209" />
-      <option name="project" value="LOCAL" />
-      <updated>1734352135290</updated>
-    </task>
     <task id="LOCAL-01210" summary="first theorem implementation">
       <option name="closed" value="true" />
       <created>1734506429566</created>
@@ -1244,7 +1225,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735075387165</updated>
     </task>
-    <option name="localTasksCounter" value="1258" />
+    <task id="LOCAL-01258" summary="interpretation with variables">
+      <option name="closed" value="true" />
+      <created>1735111837651</created>
+      <option name="number" value="01258" />
+      <option name="presentableId" value="LOCAL-01258" />
+      <option name="project" value="LOCAL" />
+      <updated>1735111837652</updated>
+    </task>
+    <option name="localTasksCounter" value="1259" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1294,7 +1283,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="dynamic replacement of variables in transformations to enable transformations of theories that contain inference-rule variables." />
     <MESSAGE value="dynamic substitution of variables in is-formula-equivalent-with-variables." />
     <MESSAGE value="misc." />
     <MESSAGE value="meta-theory predicates (&quot;is-a-well-formed-...&quot;)." />
@@ -1319,7 +1307,8 @@
     <MESSAGE value="cleanup" />
     <MESSAGE value="prefs argument consistency" />
     <MESSAGE value="forbidden option" />
-    <option name="LAST_COMMIT_MESSAGE" value="forbidden option" />
+    <MESSAGE value="interpretation with variables" />
+    <option name="LAST_COMMIT_MESSAGE" value="interpretation with variables" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
