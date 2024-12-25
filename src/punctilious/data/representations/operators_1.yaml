@@ -49,10 +49,10 @@ representations:
         string_constant: '|--'
         options: { technical_language: unicode_basic, connector_representation: symbol, similitude: resembling }
       - implementation: string_constant
-        string_constant: 'and'
+        string_constant: 'entails'
         options: { technical_language: unicode_basic, connector_representation: word, language: en }
       - implementation: string_constant
-        string_constant: 'et'
+        string_constant: 'entraîne'
         options: { technical_language: unicode_basic, connector_representation: word, language: fr }
   - uid: { slug: negation, uuid: 8c86e402-085a-4d9c-b4db-bbf2c6cd36ed }
     renderers:

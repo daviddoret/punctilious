@@ -9,8 +9,8 @@ _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representat
                                               resource='tao_analysis_1_2006.yaml')
 _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
                                               resource='tao_analysis_1_2006.yaml')
-_theorems = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.theorems',
-                                                          resource='tao_analysis_1_2006.yaml')
+_statements = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.statements',
+                                                            resource='tao_analysis_1_2006.yaml')
 
 successor: _formal_language.Connector = yaml_file_2.connectors.get_from_uuid(
     'f85163bf-381d-41fa-bdbb-70cd28bb826b', raise_error_if_not_found=True)

@@ -5,4 +5,4 @@ interpretations:
     variable_connectors:
       - string_constant: 'P'
     atomic_connectors:
-      - string_constant: 'Q'
+      - { string_constant: '∧', connector: { uid: { slug: conjunction, uuid: b5a16d91-9974-48fa-901e-b777eb38e290 } } }

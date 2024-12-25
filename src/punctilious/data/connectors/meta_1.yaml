@@ -1,0 +1,19 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uid: { slug: meta_1_connectors, uuid: 77dfed98-6eb9-4c57-8922-cca8105d5bd2 }
+description:
+  A library of common meta operator.
+connectors:
+  - uid: { slug: statement, uuid: c138b200-111a-4a40-ac3c-c8afa8e615fb }
+    syntactic_rules: { fixed_arity: 3 }
+    description:
+      en: "The `statement` meta operato is an axiom, a theorem, or an hypothesis."
+  - uid: { slug: variables, uuid: 0489e6f7-022e-48a4-82bf-dcb5907653b7 }
+    syntactic_rules: { }
+    description:
+      en: "The `variables` meta operator is used to define the variables in a theorem."
+  - uid: { slug: premises, uuid: b78ed901-37d2-4a97-a7a8-588b69dab20a }
+    syntactic_rules: { }
+  - uid: { slug: conclusion, uuid: 3dccc8f5-81cf-446a-9f3c-7673514f2117 }
+    syntactic_rules: { }
+
+

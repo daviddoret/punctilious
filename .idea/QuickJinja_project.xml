@@ -3,7 +3,7 @@
   <component name="de.achimonline.quickjinja.settings.QuickJinjaProjectSettingsState">
     <option name="settings">
       <QuickJinjaProjectSettings>
-        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_2.jinja2" />
+        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" />
       </QuickJinjaProjectSettings>
     </option>
   </component>

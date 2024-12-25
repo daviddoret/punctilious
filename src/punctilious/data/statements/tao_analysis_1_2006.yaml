@@ -1,8 +1,8 @@
-schema: "http://punctilious.org/schemas/theorem_1#"
-uid: { slug: tao_analysis_1_2006_theorems, uuid: 5af93ab1-e602-4cb0-8df7-a2d45b3925e2 }
+schema: "http://punctilious.org/schemas/statement_1#"
+uid: { slug: tao_analysis_1_2006_statements, uuid: 5af93ab1-e602-4cb0-8df7-a2d45b3925e2 }
 interpretation:
   add-something-here
-theorems:
+statements:
   - uid: { slug: axiom_2_1, uuid: ab42a66f-ab12-4497-8505-b0ddce9abb8d }
     title: "Axiom 2.1"
     conclusion:

@@ -77,7 +77,7 @@ class Bundle(_identifiers.UniqueIdentifiable):
 
     def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier, schema=None, imports=None,
                  aliases=None,
-                 representations=None, connectors=None, theorems=None, justifications=None):
+                 representations=None, connectors=None, statements=None, justifications=None):
         super().__init__(uid=uid)
         self._schema = schema
         self._imports = imports
@@ -86,8 +86,8 @@ class Bundle(_identifiers.UniqueIdentifiable):
         self._representations = representations
         connectors = _formal_language.ensure_connectors(connectors)
         self._connectors = connectors
-        theorems = _formal_language.ensure_theorems(theorems)
-        self._theorems = theorems
+        statements = _formal_language.ensure_statements(statements)
+        self._statements = statements
         self._justifications = justifications
         # Reference the package in the packages singleton.s
         p = get_packages()
@@ -123,8 +123,8 @@ class Bundle(_identifiers.UniqueIdentifiable):
         return self._schema
 
     @property
-    def theorems(self):
-        return self._theorems
+    def statements(self):
+        return self._statements
 
 
 class Import:
@@ -267,11 +267,11 @@ class YamlFileBundle(Bundle):
                     d.get('connectors', None),
                     overwrite_mutable_properties=True)
                 pass
-                theorems = _formal_language.load_theorems(d.get('theorems', None))
+                statements = _formal_language.load_statements(d.get('statements', None))
                 justifications = _formal_language.Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
                 super().__init__(schema=schema, uid=uid, imports=imports, aliases=aliases,
-                                 representations=representations, connectors=connectors, theorems=theorems,
+                                 representations=representations, connectors=connectors, statements=statements,
                                  justifications=justifications)
 
 
@@ -284,7 +284,7 @@ class MultiBundle(Bundle):
         # IMPROVEMENT: Validate first that there are no duplicates.
         connectors = tuple(itertools.chain.from_iterable(d.connectors for d in bundles))
         representations = tuple(itertools.chain.from_iterable(d.representations for d in bundles))
-        # theorems = tuple(itertools.chain.from_iterable(d.theorems for d in bundles))
+        # statements = tuple(itertools.chain.from_iterable(d.statements for d in bundles))
         super().__init__(connectors=connectors, representations=representations)
 
 
@@ -325,10 +325,10 @@ def load_bundle_from_dict(d: dict) -> Bundle:
         connectors: _formal_language.Connectors = _formal_language.load_connectors(
             d.get('connectors', None),
             overwrite_mutable_properties=True)
-        theorems = _formal_language.load_theorems(d.get('theorems', None))
+        statements = _formal_language.load_statements(d.get('statements', None))
         justifications = _formal_language.Justifications.instantiate_from_list(
             l=d['justifications'] if 'justifications' in d.keys() else None)
         bundle: Bundle = Bundle(schema=schema, uid=uid, imports=imports, aliases=aliases,
-                                representations=representations, connectors=connectors, theorems=theorems,
+                                representations=representations, connectors=connectors, statements=statements,
                                 justifications=justifications)
     return bundle
