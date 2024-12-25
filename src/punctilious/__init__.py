@@ -4,12 +4,11 @@ from punctilious._identifiers import create_uid, ensure_unique_identifier, ensur
     load_unique_identifiable, UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
 from punctilious._representation import AbstractRepresentation, ensure_abstract_representations, \
     ensure_abstract_representation, \
-    latex_math, \
     load_abstract_representation, load_abstract_representations, \
     Option, \
     Preferences, \
     OptionsAssignment, RendererForStringTemplate, \
-    RendererForStringConstant, unicode_basic, unicode_extended
+    RendererForStringConstant
 import punctilious.options as options
 from punctilious._formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
     FormulaArguments, Formula

@@ -7,286 +7,286 @@ representations:
     renderers:
       - implementation: string_constant
         string_constant: 'a'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑎'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{a}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: b, uuid: a8537227-dc4e-44f4-aa7e-5ca77ff7f52a }
     renderers:
       - implementation: string_constant
         string_constant: 'b'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑏'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{b}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: c, uuid: 7eb064c5-04aa-4e50-97ed-2b668740b297 }
     renderers:
       - implementation: string_constant
         string_constant: 'c'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑐'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{c}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: d, uuid: 61e53ead-071f-4ee9-8034-26bbcf473adf }
     renderers:
       - implementation: string_constant
         string_constant: 'd'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑑'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{d}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: e, uuid: c7127341-bf02-4906-8ce2-4e5214659aba }
     renderers:
       - implementation: string_constant
         string_constant: 'e'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑒'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{e}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: f, uuid: 9fdf65e4-6767-4aab-8bae-9eca8fdaeab3 }
     renderers:
       - implementation: string_constant
         string_constant: 'f'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑓'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{f}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: g, uuid: 976458ce-e635-4fc6-9ed3-e51d99262486 }
     renderers:
       - implementation: string_constant
         string_constant: 'g'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑔'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{g}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: h, uuid: 3c5552ce-137e-4335-bb4b-f4264c0c67f5 }
     renderers:
       - implementation: string_constant
         string_constant: 'h'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: 'ℎ' # U+210E "Planck constant"
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{h}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: i, uuid: f3d34f76-4d13-4c4f-8bf0-7918987ead7b }
     renderers:
       - implementation: string_constant
         string_constant: 'i'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑖'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{i}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: j, uuid: 9ca1e589-9154-4d3e-9f43-d1b987420d40 }
     renderers:
       - implementation: string_constant
         string_constant: 'j'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑗'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{j}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: k, uuid: 661fcb36-39bc-4b86-bce2-13f74eb6187a }
     renderers:
       - implementation: string_constant
         string_constant: 'k'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑘'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{k}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: l, uuid: 514e35c2-59fa-4447-9a3d-1dfd538fed4e }
     renderers:
       - implementation: string_constant
         string_constant: 'l'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑙'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{l}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: m, uuid: ae96c043-2614-45f2-9654-dce8e798863a }
     renderers:
       - implementation: string_constant
         string_constant: 'm'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑚'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{m}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: n, uuid: 39839448-063c-44be-967d-f62e55006bca }
     renderers:
       - implementation: string_constant
         string_constant: 'n'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑛'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{n}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: o, uuid: c70a20c6-0b0e-482e-a921-54bf940d6fef }
     renderers:
       - implementation: string_constant
         string_constant: 'o'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑜'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{o}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: p, uuid: 811efd48-e609-4a2a-9e7f-81f1c785a621 }
     renderers:
       - implementation: string_constant
         string_constant: 'p'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑝'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{p}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: q, uuid: a6345c88-0b14-4765-97c4-2bc76a39a7be }
     renderers:
       - implementation: string_constant
         string_constant: 'q'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑞'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{q}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: r, uuid: 9b273681-8a5e-4294-bda3-9782ec0735ff }
     renderers:
       - implementation: string_constant
         string_constant: 'r'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑟'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{r}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: s, uuid: 181b27c0-0126-4853-90c2-a0ce2aaedd23 }
     renderers:
       - implementation: string_constant
         string_constant: 's'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑠'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{s}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: t, uuid: dd9ac12f-adc0-41bb-bc31-89398526b11c }
     renderers:
       - implementation: string_constant
         string_constant: 't'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑡'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{t}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: u, uuid: 40188d9a-aaa7-439d-a1ca-3a65c2e0ccd5 }
     renderers:
       - implementation: string_constant
         string_constant: 'u'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑢'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{u}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: v, uuid: cebf8c41-eeb6-4a3c-aa7f-d15decf723d3 }
     renderers:
       - implementation: string_constant
         string_constant: 'v'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑣'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{v}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: w, uuid: cc26acea-2398-4205-bffa-7dfbf3d7f3fd }
     renderers:
       - implementation: string_constant
         string_constant: 'w'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑤'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{w}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: x, uuid: 5cc6cc25-11ed-421e-b453-d1afb8c16c99 }
     renderers:
       - implementation: string_constant
         string_constant: 'x'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑥'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{x}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: y, uuid: 45de23e4-815c-4ed6-a4f8-f4446d145edc }
     renderers:
       - implementation: string_constant
         string_constant: 'y'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑦'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{y}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
   - uid: { slug: z, uuid: 726f2faf-8169-428c-9a2e-46c76989ea57 }
     renderers:
       - implementation: string_constant
         string_constant: 'z'
-        options: { encoding: unicode_basic, mode: symbolic }
+        options: { technical_language: unicode_basic, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '𝑧'
-        options: { encoding: unicode_extended, mode: symbolic }
+        options: { technical_language: unicode_extended, connector_representation: symbol }
       - implementation: string_constant
         string_constant: '\textit{z}'
-        options: { encoding: latex_math, mode: symbolic }
+        options: { technical_language: latex_math, connector_representation: symbol }
 

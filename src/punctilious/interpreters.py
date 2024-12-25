@@ -6,7 +6,8 @@ import punctilious._bundling as _bundling
 import punctilious._interpretation as _interpretation
 import punctilious.options as options
 import punctilious.formula_notations as formula_notations
-import punctilious.variables_1 as variables_1
+import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
+import punctilious.latin_alphabet_uppercase_serif_italic as latin_alphabet_uppercase_serif_italic
 
 
 def generate_interpreter():
@@ -25,6 +26,16 @@ def generate_interpreter():
                                                                     resource='operators_1.yaml')
     mappings = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
                                                              resource='operators_1.yaml')
+    alpha2 = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
+                                                           resource='latin_alphabet_uppercase_serif_italic.yaml')
+    alpha1 = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
+                                                           resource='latin_alphabet_lowercase_serif_italic.yaml')
+    _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
+                                                  resource='variables_1.yaml')
+
+    # TODO: NICE_TO_HAVE: When building the interpreter, read programmatically the mappings,
+    #   to populate the tokens, to prevent a situation where some representations are enriched
+    #   in memory, leading to inconsistencies in the interpretation.
 
     # generate infix connectors
     # variable_connectors = {}

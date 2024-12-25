@@ -519,15 +519,6 @@ class Preferences(dict[Option, BasePriority]):
         return value, forbidden
 
 
-# Common labels and values.
-symbol = Option('connector_presentation', 'symbol', )
-en = Option('language', 'en', )
-fr = Option('language', 'fr', )
-unicode_basic = Option('technical_language', 'unicode_basic', )
-unicode_extended = Option('technical_language', 'unicode_extended', )
-latex_math = Option('technical_language', 'latex_math', )
-parenthesized = Option('parenthesization', 'parenthesized', )
-
 _forbidden: Forbidden | None = None
 
 

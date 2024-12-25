@@ -1,12 +1,12 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: meta_1_connectors, uuid: 77dfed98-6eb9-4c57-8922-cca8105d5bd2 }
 description:
-  A library of common meta operator.
+  A library of common meta operators.
 connectors:
   - uid: { slug: statement, uuid: c138b200-111a-4a40-ac3c-c8afa8e615fb }
     syntactic_rules: { fixed_arity: 3 }
     description:
-      en: "The `statement` meta operato is an axiom, a theorem, or an hypothesis."
+      en: "The `statement` meta operator is an axiom, a theorem, or an hypothesis."
   - uid: { slug: variables, uuid: 0489e6f7-022e-48a4-82bf-dcb5907653b7 }
     syntactic_rules: { }
     description:

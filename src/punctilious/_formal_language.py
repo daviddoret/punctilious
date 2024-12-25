@@ -571,6 +571,11 @@ def load_connectors(o: typing.Iterable | None, overwrite_mutable_properties: boo
 
 
 class Statement(_identifiers.UniqueIdentifiable):
+    """
+    TODO: A Statement should be both a proper object, e.g. when we load it from a YAML file,
+        but also a formula, i.e. of the form `statement(variables(x(),y(),z()),premises(...),conclusion(...))`.
+        This means that the meta operators must be mandatorily pre-loaded.
+    """
 
     def __init__(self, uid=None, variables=None, assumptions=None, conclusion=None, justifications=None):
         self._variables = variables

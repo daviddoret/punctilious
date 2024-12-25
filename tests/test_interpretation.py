@@ -46,7 +46,7 @@ class TestInterpretation:
 
         # Output the parsed structure
         interpreter = pu.Interpreter(
-            variable_connectors={},
+            # variable_connectors={},
             atomic_connectors=atomic_connectors,
             prefix_connectors=prefix_connectors,
             infix_connectors=infix_connectors,
@@ -72,20 +72,20 @@ class TestInterpretation:
     def test_interpretation_2(self):
         interpreter = interpreters.generate_interpreter()
         pass
-        input_string = "P"
-        assert str(interpreter.interpret(input_string)) == 'P'
-        input_string = "¬P"
-        assert str(interpreter.interpret(input_string)) == '¬P'
-        input_string = "¬(P)"
-        assert str(interpreter.interpret(input_string)) == '¬P'
-        input_string = "P ∧ Q"
-        assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
-        input_string = "(P ∧ Q)"
-        assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
-        input_string = "(P ∧ Q) ∧ (Q ∧ P)"
-        assert str(interpreter.interpret(input_string)) == '(P ∧ Q) ∧ (Q ∧ P)'
-        input_string = "¬(¬ P)"
-        assert str(interpreter.interpret(input_string)) == '¬(¬P)'
-        input_string = "¬(¬((P ∧ Q) ∧ (Q ∧ P)))"
+        input_string = "𝑃"
+        assert str(interpreter.interpret(input_string)) == '𝑃'
+        input_string = "¬𝑃"
+        assert str(interpreter.interpret(input_string)) == '¬𝑃'
+        input_string = "¬(𝑃)"
+        assert str(interpreter.interpret(input_string)) == '¬𝑃'
+        input_string = "𝑃 ∧ 𝑄"
+        assert str(interpreter.interpret(input_string)) == '𝑃 ∧ 𝑄'
+        input_string = "(𝑃 ∧ 𝑄)"
+        assert str(interpreter.interpret(input_string)) == '𝑃 ∧ 𝑄'
+        input_string = "(𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)"
+        assert str(interpreter.interpret(input_string)) == '(𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)'
+        input_string = "¬(¬ 𝑃)"
+        assert str(interpreter.interpret(input_string)) == '¬(¬𝑃)'
+        input_string = "¬(¬((𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)))"
         assert str(
-            interpreter.interpret(input_string)) == '¬(¬((P ∧ Q) ∧ (Q ∧ P)))'
+            interpreter.interpret(input_string)) == '¬(¬((𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)))'

@@ -3,7 +3,7 @@
   <component name="de.achimonline.quickjinja.settings.QuickJinjaProjectSettingsState">
     <option name="settings">
       <QuickJinjaProjectSettings>
-        <option name="templateFilePath" value="$PROJECT_DIR$/tests/test_interpretation.py" />
+        <option name="templateFilePath" value="$PROJECT_DIR$/tests/test_latin_alphabet_uppercase_serif_italic.py" />
       </QuickJinjaProjectSettings>
     </option>
   </component>
