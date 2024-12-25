@@ -5,8 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="forbidden option">
+      <change afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_2.jinja2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/interpretations/propositional_logic_1.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/options/connector_representation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_options.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_options.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/interpretations/operators_1_interpretations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/interpretations/operators_1_interpretations_OBSOLETE.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/options/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/options/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/options/technical_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/options/technical_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -326,7 +334,7 @@
     "Python tests.pytest in test_greek_alphabet_uppercase_serif_italic.py.executor": "Run",
     "Python tests.pytest in test_identifiers.py.executor": "Run",
     "Python tests.pytest in test_inference_rules_1.py.executor": "Run",
-    "Python tests.pytest in test_interpretation.py.executor": "Run",
+    "Python tests.pytest in test_interpretation.py.executor": "Debug",
     "Python tests.pytest in test_minimal_logic_1.py.executor": "Run",
     "Python tests.pytest in test_packaging.py.executor": "Run",
     "Python tests.pytest in test_pl1.py.executor": "Run",
@@ -393,9 +401,9 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/tags",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/data/interpretations",
     "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "debugger.stepping",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -458,11 +466,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious/data/interpretations" />
+      <recent name="$PROJECT_DIR$/src/punctilious/data/grammars" />
+      <recent name="$PROJECT_DIR$/src/punctilious/options" />
       <recent name="$PROJECT_DIR$/src/punctilious/tags" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/connectors" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/trashcan" />
@@ -472,7 +480,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_options.TestOptions.test_technical_language_2">
+  <component name="RunManager" selected="Python tests.pytest in test_interpretation.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -730,23 +738,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_options.TestOptions.test_technical_language" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_options.TestOptions.test_technical_language&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_options.TestOptions.test_technical_language_2" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -781,6 +772,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_interpretation.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_interpretation.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -811,8 +819,8 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula_2" />
       <item itemvalue="Python tests.pytest for test_options.TestOptions.test_abstract_options" />
-      <item itemvalue="Python tests.pytest for test_options.TestOptions.test_technical_language" />
       <item itemvalue="Python tests.pytest for test_options.TestOptions.test_technical_language_2" />
+      <item itemvalue="Python tests.pytest in test_interpretation.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -820,11 +828,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in test_interpretation.py" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_options.TestOptions.test_technical_language_2" />
         <item itemvalue="Python tests.pytest for test_options.TestOptions.test_abstract_options" />
         <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula_2" />
-        <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_options.TestOptions.test_technical_language" />
       </list>
     </recent_temporary>
   </component>
@@ -843,14 +851,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01208" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734295014586</created>
-      <option name="number" value="01208" />
-      <option name="presentableId" value="LOCAL-01208" />
-      <option name="project" value="LOCAL" />
-      <updated>1734295014586</updated>
     </task>
     <task id="LOCAL-01209" summary="first theorem implementation">
       <option name="closed" value="true" />
@@ -1236,7 +1236,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735075288682</updated>
     </task>
-    <option name="localTasksCounter" value="1257" />
+    <task id="LOCAL-01257" summary="forbidden option">
+      <option name="closed" value="true" />
+      <created>1735075387164</created>
+      <option name="number" value="01257" />
+      <option name="presentableId" value="LOCAL-01257" />
+      <option name="project" value="LOCAL" />
+      <updated>1735075387165</updated>
+    </task>
+    <option name="localTasksCounter" value="1258" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -1,6 +1,6 @@
 import lark
 import jinja2
-
+import uuid as uuid_package
 import punctilious._util as _util
 from punctilious._util import get_logger
 import punctilious._formal_language as _formal_language
@@ -9,8 +9,10 @@ import punctilious._formal_language as _formal_language
 class Transformer(lark.Transformer):
     """Transformed the Lark tree parsed of a Technical1 input, into a proper Formula."""
 
-    def __init__(self, atomic_connectors: dict, prefix_connectors: dict, infix_connectors: dict,
+    def __init__(self, variable_connectors: dict, atomic_connectors: dict, prefix_connectors: dict,
+                 infix_connectors: dict,
                  function_connectors: dict):
+        self._variable_connectors = variable_connectors
         self._atomic_connectors = atomic_connectors
         self._prefix_connectors = prefix_connectors
         self._infix_connectors = infix_connectors
@@ -69,35 +71,53 @@ class Transformer(lark.Transformer):
         # arguments = []
         return _formal_language.Formula(atomic_connector)
 
+    def parse_variable_formula(self, items):
+        """Transform a list of expressions into a Python list."""
+        variable_connector_terminal = items[0]
+        if variable_connector_terminal not in self._atomic_connectors.keys():
+            get_logger().error(f'Unknown atomic connector: {variable_connector_terminal}')
+            raise ValueError(f'Unknown atomic connector: {variable_connector_terminal}')
+        atomic_connector = self._atomic_connectors[variable_connector_terminal]
+        return _formal_language.Formula(atomic_connector)
+
 
 class Interpreter:
 
-    def __init__(self, atomic_connectors: dict, prefix_connectors: dict, infix_connectors: dict,
+    def __init__(self, variable_connectors: dict, atomic_connectors: dict, prefix_connectors: dict,
+                 infix_connectors: dict,
                  function_connectors: dict):
-        # self._jinja2_template: jinja2.Template = jinja2.Template(self.__class__._GRAMMAR_TEMPLATE)
         self._jinja2_template: jinja2.Template = _util.get_jinja2_template_from_package('data.grammars',
-                                                                                        'formula_grammar_1.jinja2')
-        self._transformer = Transformer(atomic_connectors=atomic_connectors,
-                                        prefix_connectors=prefix_connectors,
-                                        infix_connectors=infix_connectors,
-                                        function_connectors=function_connectors)
+                                                                                        'formula_grammar_2.jinja2')
+        self._transformer = Transformer(
+            variable_connectors=variable_connectors,
+            atomic_connectors=atomic_connectors,
+            prefix_connectors=prefix_connectors,
+            infix_connectors=infix_connectors,
+            function_connectors=function_connectors)
+        variable_connectors = self.declare_lark_terminals(terminal_name='VARIABLE_CONNECTOR',
+                                                          terminal_priority='1',
+                                                          d=variable_connectors)
         atomic_connectors = self.declare_lark_terminals(terminal_name='ATOMIC_CONNECTOR',
-                                                        terminal_priority='1',
+                                                        terminal_priority='2',
                                                         d=atomic_connectors)
         prefix_connectors = self.declare_lark_terminals(terminal_name='PREFIX_CONNECTOR',
-                                                        terminal_priority='2',
+                                                        terminal_priority='3',
                                                         d=prefix_connectors)
         infix_connectors = self.declare_lark_terminals(terminal_name='INFIX_CONNECTOR',
-                                                       terminal_priority='3',
+                                                       terminal_priority='4',
                                                        d=infix_connectors)
         function_connectors = self.declare_lark_terminals(terminal_name='FUNCTION_CONNECTOR',
-                                                          terminal_priority='4',
+                                                          terminal_priority='5',
                                                           d=function_connectors)
-        self._grammar = self._jinja2_template.render({
+
+        grammar_dict = {
+            'variable_connectors': variable_connectors,
             'atomic_connectors': atomic_connectors,
             'prefix_connectors': prefix_connectors,
             'infix_connectors': infix_connectors,
-            'function_connectors': function_connectors})
+            'function_connectors': function_connectors}
+
+        self._grammar = self._jinja2_template.render(grammar_dict)
         self._parser = lark.Lark(self._grammar, start='start', parser='earley', debug=True)
 
     def declare_lark_terminals(self, terminal_name, terminal_priority, d: dict):
@@ -105,10 +125,14 @@ class Interpreter:
         Sample: TERM . 5 : "and" | "or" | "not"
         """
         lark_terminals_declaration = ''
-        if len(d.keys()) > 0:
-            lark_terminals_declaration = ' | '.join(
-                self.escape_lark_terminal_value(connector) for connector in d.keys())
-            lark_terminals_declaration = f'{terminal_name} . {terminal_priority} : {lark_terminals_declaration}'
+
+        if len(d.keys()) == 0:
+            # This is a bit ugly, create a fake dictionary to avoid a lark.exceptions.GrammarError.
+            d = {str(uuid_package.uuid4()): str(uuid_package.uuid4())}
+
+        lark_terminals_declaration = ' | '.join(
+            self.escape_lark_terminal_value(connector) for connector in d.keys())
+        lark_terminals_declaration = f'{terminal_name} . {terminal_priority} : {lark_terminals_declaration}'
         return lark_terminals_declaration
 
     def escape_lark_terminal_value(self, value: str):

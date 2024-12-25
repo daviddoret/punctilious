@@ -1,0 +1,32 @@
+?start : formula_expression
+
+?formula_expression : FUNCTION_CONNECTOR "(" function_formula_arguments ")" -> parse_function_formula
+     | formula_expression INFIX_CONNECTOR formula_expression -> parse_infix_formula
+     | PREFIX_CONNECTOR formula_expression -> parse_prefix_formula
+     | ATOMIC_CONNECTOR -> parse_atomic_formula
+     | VARIABLE_CONNECTOR -> parse_variable_formula
+     # Interpretation of parenthesized formulas
+     | "(" FUNCTION_CONNECTOR "(" function_formula_arguments ")" ")" -> parse_function_formula
+     | "(" formula_expression INFIX_CONNECTOR formula_expression ")" -> parse_infix_formula
+     | "(" PREFIX_CONNECTOR formula_expression ")" -> parse_prefix_formula
+     | "(" ATOMIC_CONNECTOR ")" -> parse_atomic_formula
+     | "(" VARIABLE_CONNECTOR ")" -> parse_variable_formula
+
+function_formula_arguments . 20 : formula_expression ("," formula_expression)* -> parse_function_formula_arguments
+parenthesized_formula_expression .10 : "(" formula_expression ")"
+
+# Using terminals for punctuation does not seem to function,
+# they are interpreted as single blocks with attached terminals
+# when they are not separated with white-space.
+# OPEN_PARENTHESIS : "("
+# CLOSE_PARENTHESIS : ")"
+# COMMA : ","
+
+{{ function_connectors }}
+{{ infix_connectors }}
+{{ prefix_connectors }}
+{{ atomic_connectors }}
+{{ variable_connectors }}
+
+%import common.WS
+%ignore WS

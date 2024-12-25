@@ -4,57 +4,12 @@ from test_shared_library import create_atomic_connector
 
 
 @pytest.fixture
-def en():
-    return pu.Option('language', 'en')
-
-
-@pytest.fixture
-def fr():
-    return pu.Option('language', 'fr')
-
-
-@pytest.fixture
-def symbol():
-    return pu.Option('connector_representation', 'symbol')
-
-
-@pytest.fixture
-def word():
-    return pu.Option('connector_representation', 'word')
-
-
-@pytest.fixture
-def traditional_formula():
-    return pu.Option('layout', 'traditional_formula')
-
-
-@pytest.fixture
-def infix_formula():
-    return pu.Option('layout', 'infix_formula')
-
-
-@pytest.fixture
-def unicode_basic():
-    return pu.Option('technical_language', 'unicode_basic')
-
-
-@pytest.fixture
-def unicode_extended():
-    return pu.Option('technical_language', 'unicode_extended')
-
-
-@pytest.fixture
-def latex_math():
-    return pu.Option('technical_language', 'latex_math')
-
-
-@pytest.fixture
-def prefs(en, fr, symbol, word):
+def prefs():
     prefs = pu.Preferences()
-    prefs[en] = 6
-    prefs[fr] = 9
-    prefs[symbol] = 100
-    prefs[word] = 1
+    prefs[pu.options.language.en] = 6
+    prefs[pu.options.language.fr] = 9
+    prefs[pu.options.connector_representation.symbol] = 100
+    prefs[pu.options.connector_representation.word] = 1
     return prefs
 
 
@@ -71,7 +26,7 @@ def conjunction_connector(reps):
 
 
 class TestRepresentation:
-    def test_representation(self, en, fr, word, symbol, prefs, unicode_basic, unicode_extended, latex_math):
+    def test_representation(self):
         """Test of representation with multiple string-constant renderers.
         """
 
@@ -89,10 +44,12 @@ class TestRepresentation:
         function_connectors = {'not': lnot, 'f': f, 'g': g}
 
         # Output the parsed structure
-        interpreter = pu.Interpreter(atomic_connectors=atomic_connectors,
-                                     prefix_connectors=prefix_connectors,
-                                     infix_connectors=infix_connectors,
-                                     function_connectors=function_connectors)
+        interpreter = pu.Interpreter(
+            variable_connectors={},
+            atomic_connectors=atomic_connectors,
+            prefix_connectors=prefix_connectors,
+            infix_connectors=infix_connectors,
+            function_connectors=function_connectors)
         input_string = "P"
         assert str(interpreter.interpret(input_string)) == 'P'
         input_string = "not P"
