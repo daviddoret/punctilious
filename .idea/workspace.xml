@@ -5,8 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta_language module">
-      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_bundling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/declarations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/declarations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_notations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_02_identifiers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/interpreters.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/interpreters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_bold.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_bold.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_05_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_operators_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_connectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1_connectors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_mappings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1_mappings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_representations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1_representations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/options/connector_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/options/connector_representation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/options/language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/options/language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/options/technical_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/options/technical_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/variables_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/variables_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -377,6 +405,7 @@
     "Python.presentation_layer_1.executor": "Run",
     "Python.propositional_logic_1.executor": "Run",
     "Python.propositional_logic_syntax_1.executor": "Run",
+    "Python.pu_05_meta_language.executor": "Run",
     "Python.punctilious.executor": "Run",
     "Python.sandbox.executor": "Run",
     "Python.sandbox_2.executor": "Run",
@@ -478,7 +507,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.meta_language">
+  <component name="RunManager" selected="Python.pu_05_meta_language">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -515,28 +544,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="meta_language" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/meta_language.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -604,6 +611,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pu_05_meta_language" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/pu_05_meta_language.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -815,7 +844,7 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.meta_language" />
+      <item itemvalue="Python.pu_05_meta_language" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
@@ -831,7 +860,7 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.meta_language" />
+        <item itemvalue="Python.pu_05_meta_language" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2" />
         <item itemvalue="Python tests.pytest for test_latin_alphabet_uppercase_serif_italic.TestLatinAlphabetLowercaseSerifItalic.test_latin_alphabet_lowercase_serif_italic" />
@@ -854,14 +883,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01221" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734725666913</created>
-      <option name="number" value="01221" />
-      <option name="presentableId" value="LOCAL-01221" />
-      <option name="project" value="LOCAL" />
-      <updated>1734725666913</updated>
     </task>
     <task id="LOCAL-01222" summary="first theorem implementation">
       <option name="closed" value="true" />
@@ -1247,7 +1268,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735231216481</updated>
     </task>
-    <option name="localTasksCounter" value="1270" />
+    <task id="LOCAL-01270" summary="meta_language module">
+      <option name="closed" value="true" />
+      <created>1735248123279</created>
+      <option name="number" value="01270" />
+      <option name="presentableId" value="LOCAL-01270" />
+      <option name="project" value="LOCAL" />
+      <updated>1735248123279</updated>
+    </task>
+    <option name="localTasksCounter" value="1271" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

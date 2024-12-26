@@ -1,5 +1,7 @@
+# special features
 from __future__ import annotations
-# other packages
+
+# external modules
 import abc
 import collections
 import collections.abc
@@ -7,9 +9,9 @@ import yaml
 import jinja2
 import typing
 
-# punctilious packages
-import punctilious.util as _util
-import punctilious.identifiers as _identifiers
+# punctilious modules
+import punctilious.pu_01_utilities as _util
+import punctilious.pu_02_identifiers as _identifiers
 
 
 def ensure_option(o) -> Option:
@@ -171,32 +173,6 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-def load_abstract_representation(o: typing.Mapping,
-                                 append_representation_renderers: bool = False) -> AbstractRepresentation:
-    """Receives a raw Representation, typically from a YAML file, and returns a typed Representation instance.
-
-    :param append_representation_renderers: if the representation is already loaded in memory,
-        append new renderers to it.
-    :param o: a raw Representation.
-    :return: a typed Representation instance.
-    """
-    representation: AbstractRepresentation | None = _identifiers.load_unique_identifiable(o)
-    if representation is None:
-        # The representation does not exist in memory.
-        representation = ensure_abstract_representation(o)
-    else:
-        # The representation exists in memory.
-        if append_representation_renderers:
-            # Overwrite the mutable properties.
-            if 'renderers' in o.keys():
-                new_renderers = ensure_renderers(o['renderers'])
-                _util.get_logger().debug('new_renderers: {new_renderers}')
-                merged_renderers = set(representation.renderers + new_renderers)
-                merged_renderers = Renderers(*merged_renderers)
-                representation.renderers = merged_renderers
-    return representation
-
-
 class AbstractRepresentations(tuple[AbstractRepresentation, ...]):
     """A tuple of AbstractRepresentation instances."""
 
@@ -265,26 +241,6 @@ class AbstractRepresentations(tuple[AbstractRepresentation, ...]):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self, default_flow_style=default_flow_style)
-
-
-def load_abstract_representations(o: typing.Iterable | None,
-                                  append_representation_renderers: bool = False) -> AbstractRepresentations:
-    """Receives a raw Representations collection, typically from a YAML file,
-    and returns a typed Representations instance.
-
-    :param append_representation_renderers: if representations are already loaded in memory,
-        append new renderers to the existing representations.
-    :param o: a raw Representations collection.
-    :return: a typed Representations instance.
-    """
-    if o is None:
-        o = []
-    representations: list[AbstractRepresentation] = []
-    for i in o:
-        representation: AbstractRepresentation = load_abstract_representation(
-            i, append_representation_renderers=append_representation_renderers)
-        representations.append(representation)
-    return AbstractRepresentations(*representations)
 
 
 class Renderer(abc.ABC):

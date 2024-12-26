@@ -1,9 +1,16 @@
+"""The interpretation module contains all the necessary logic to read and decode formal language in strings.
+This is necessary to load YAML file statements.
+"""
+
+# external modules
 import lark
 import jinja2
 import uuid as uuid_package
-import punctilious.util as _util
-from punctilious.util import get_logger
-import punctilious.formal_language as _formal_language
+
+# punctilious modules
+import punctilious.pu_01_utilities as _util
+from punctilious.pu_01_utilities import get_logger
+import punctilious.pu_04_formal_language as _formal_language
 
 
 class Transformer(lark.Transformer):

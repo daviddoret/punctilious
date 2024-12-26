@@ -1,12 +1,15 @@
+# special features
 from __future__ import annotations
+
+# external modules
 import yaml
 import collections.abc
 import typing
 
 # punctilious modules
-from punctilious.util import get_logger
-import punctilious.identifiers as _identifiers
-import punctilious.representation as _representation
+from punctilious.pu_01_utilities import get_logger
+import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_03_representation as _representation
 
 
 def ensure_formula(o=None) -> Formula:
@@ -49,8 +52,6 @@ class Formula(tuple):
         #   and if the python class is not of the proper class,
         #   substitute the formula with an instance
         #   of the correct type? e.g. Statement?
-        if c is _get_statement_connector() or c is _get_variables_connector() or c is _get_premises_connector() or c is _get_conclusion_connector():
-            get_logger().warn('meta-operator WARNING')
 
         a: FormulaArguments = ensure_formula_arguments(a)
         phi: tuple[Connector, FormulaArguments] = (c, a,)
@@ -435,46 +436,3 @@ def ensure_connector(o: FlexibleConnector) -> Connector:
         return o
     else:
         raise TypeError(f'Connector assurance failure. o: {str(o)}, type: {type(o).__name__}.')
-
-
-def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> Connector:
-    """Receives a raw Connector, typically from a YAML file, and returns a typed Connector instance.
-
-    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
-        `connector_representation`, and `formula_representation`.
-    :param o: a raw Connector.
-    :return: a typed Connector instance.
-    """
-    connector: Connector | None = _identifiers.load_unique_identifiable(o)
-    if connector is None:
-        # The connector does not exist in memory.
-        connector = ensure_connector(o)
-    else:
-        # The connector exists in memory.
-        if overwrite_mutable_properties:
-            # Overwrite the mutable properties.
-            if 'connector_representation' in o.keys():
-                connector.connector_representation = _representation.load_abstract_representation(
-                    o['connector_representation'])
-            if 'formula_representation' in o.keys():
-                connector.formula_representation = _representation.load_abstract_representation(
-                    o['formula_representation'])
-    return connector
-
-
-def load_connectors(o: typing.Iterable | None, overwrite_mutable_properties: bool = False) -> Connectors:
-    """Receives a raw Connectors collection, typically from a YAML file,
-    and returns a typed Connectors instance.
-
-    :param overwrite_mutable_properties: if connectors are already loaded in memory, overwrite their mutable properties:
-        `connector_representation`, and `formula_representation`.
-    :param o: a raw Connectors collection.
-    :return: a typed Connectors instance.
-    """
-    if o is None:
-        o = []
-    connectors: list[Connector] = []
-    for i in o:
-        connector: Connector = load_connector(i, overwrite_mutable_properties=overwrite_mutable_properties)
-        connectors.append(connector)
-    return Connectors(*connectors)

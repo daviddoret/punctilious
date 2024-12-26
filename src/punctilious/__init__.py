@@ -1,19 +1,21 @@
-import punctilious.util as _util
-from punctilious.util import get_yaml_from_package
-from punctilious.identifiers import create_uid, ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
+import punctilious.pu_01_utilities as _util
+from punctilious.pu_01_utilities import get_yaml_from_package
+from punctilious.pu_02_identifiers import create_uid, ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
     load_unique_identifiable, UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
-from punctilious.representation import AbstractRepresentation, ensure_abstract_representations, \
+import punctilious.pu_03_representation as representation
+from punctilious.pu_03_representation import AbstractRepresentation, ensure_abstract_representations, \
     ensure_abstract_representation, \
-    load_abstract_representation, load_abstract_representations, \
     Option, \
     Preferences, \
     OptionsAssignment, RendererForStringTemplate, \
     RendererForStringConstant
 import punctilious.options as options
-from punctilious.formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
+from punctilious.pu_04_formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
     FormulaArguments, Formula
-from punctilious.interpretation import Interpreter
-import punctilious.bundling as _bundling
+from punctilious.pu_06_interpretation import Interpreter
+import punctilious.pu_07_bundling as _bundling
+from punctilious.pu_07_bundling import load_abstract_representation, load_abstract_representations
+
 import punctilious.formula_notations as formula_notations
 import punctilious.greek_alphabet_lowercase_serif_italic as greek_alphabet_lowercase_serif_italic
 import punctilious.greek_alphabet_uppercase_serif_italic as greek_alphabet_uppercase_serif_italic

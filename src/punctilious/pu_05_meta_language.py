@@ -1,4 +1,4 @@
-"""
+"""The formal meta-language of the punctilious package.
 
 The meta-language module requires 1) formal-language and 2) interpretation.
 
@@ -13,10 +13,8 @@ import typing
 import yaml
 
 # punctilious modules
-import punctilious.identifiers as _identifiers
-import punctilious.formal_language as _formal_language
-import punctilious.interpretation as _interpretation
-import punctilious.meta_operators_1 as _meta_operators_1
+import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_04_formal_language as _formal_language
 
 
 class Statement(_identifiers.UniqueIdentifiable):
@@ -77,43 +75,6 @@ class Statement(_identifiers.UniqueIdentifiable):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
-
-
-def load_statement(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> Statement:
-    """Receives a raw Statement, typically from a YAML file, and returns a typed Statement instance.
-
-    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
-        `connector_representation`, and `formula_representation`.
-    :param o: a raw Connector.
-    :return: a typed Connector instance.
-    """
-    statement: Statement | None = _identifiers.load_unique_identifiable(o)
-    if statement is None:
-        # The connector does not exist in memory.
-        statement: Statement = ensure_statement(o)
-    else:
-        # The connector exists in memory.
-        if overwrite_mutable_properties:
-            pass
-    return statement
-
-
-def load_statements(o: typing.Iterable | None, overwrite_mutable_properties: bool = False) -> Statements:
-    """Receives a raw Statements collection, typically from a YAML file,
-    and returns a typed Statements instance.
-
-    :param overwrite_mutable_properties: if statements are already loaded in memory, overwrite their mutable properties:
-        `connector_representation`, and `formula_representation`.
-    :param o: a raw Statements collection.
-    :return: a typed Statements instance.
-    """
-    if o is None:
-        o = []
-    statements: list[Statement] = []
-    for i in o:
-        statement: Statement = load_statement(i, overwrite_mutable_properties=overwrite_mutable_properties)
-        statements.append(statement)
-    return Statements(*statements)
 
 
 class Justifications(tuple):
@@ -220,6 +181,23 @@ def _get_premises_connector() -> _formal_language.Connector:
              'syntactic_rules': {}}
         )
     return _premises_connector
+
+
+def ensure_justification(o) -> Justification:
+    """Assure that `o` is of type Statement, converting as necessary, or raise an error."""
+    if isinstance(o, Statement):
+        return o
+    elif isinstance(o, dict):
+        uid = o['uid']
+        variables = o.get('variables', None)
+        premises = o.get('premises', None)
+        conclusion = o.get('conclusion', None)
+        justifications = None
+        o = Statement(uid=uid, variables=variables, premises=premises, conclusion=conclusion,
+                      justifications=justifications)
+        return o
+    else:
+        raise TypeError('Statement assurance failure.')
 
 
 def ensure_statement(o) -> Statement:

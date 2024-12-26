@@ -3,18 +3,21 @@ store them in YAML files or other containers, and reload them from these.
 
 """
 
+# external modules
 import importlib
 import importlib.resources
-
 import os
 import yaml
 import io
 import itertools
+import typing
+
 # punctilious modules
-import punctilious.util as _util
-import punctilious.identifiers as _identifiers
-import punctilious.representation as _representation
-import punctilious.formal_language as _formal_language
+import punctilious.pu_01_utilities as _util
+import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_03_representation as _representation
+import punctilious.pu_04_formal_language as _formal_language
+import punctilious.pu_05_meta_language as _meta_language
 
 
 class Bundles(dict):
@@ -86,7 +89,7 @@ class Bundle(_identifiers.UniqueIdentifiable):
         self._representations = representations
         connectors = _formal_language.ensure_connectors(connectors)
         self._connectors = connectors
-        statements = _formal_language.ensure_statements(statements)
+        statements = _meta_language.ensure_statements(statements)
         self._statements = statements
         self._justifications = justifications
         # Reference the package in the packages singleton.s
@@ -259,16 +262,16 @@ class YamlFileBundle(Bundle):
                 untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
                 imports = Imports(*untyped_imports)
                 aliases = None  # To be implemented
-                representations: _representation.AbstractRepresentations = _representation.load_abstract_representations(
+                representations: _representation.AbstractRepresentations = load_abstract_representations(
                     d.get('representations', None),
                     append_representation_renderers=True)
                 # Load connectors
-                connectors: _formal_language.Connectors = _formal_language.load_connectors(
+                connectors: _formal_language.Connectors = load_connectors(
                     d.get('connectors', None),
                     overwrite_mutable_properties=True)
                 pass
-                statements = _formal_language.load_statements(d.get('statements', None))
-                justifications = _formal_language.Justifications.instantiate_from_list(
+                statements = load_statements(d.get('statements', None))
+                justifications = _meta_language.Justifications.instantiate_from_list(
                     l=d['justifications'] if 'justifications' in d.keys() else None)
                 super().__init__(schema=schema, uid=uid, imports=imports, aliases=aliases,
                                  representations=representations, connectors=connectors, statements=statements,
@@ -318,17 +321,146 @@ def load_bundle_from_dict(d: dict) -> Bundle:
         untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
         imports = Imports(*untyped_imports)
         aliases = None  # To be implemented
-        representations: _representation.AbstractRepresentations = _representation.load_abstract_representations(
+        representations: _representation.AbstractRepresentations = load_abstract_representations(
             d.get('representations', None),
             append_representation_renderers=True)
         # Load connectors
-        connectors: _formal_language.Connectors = _formal_language.load_connectors(
+        connectors: _formal_language.Connectors = load_connectors(
             d.get('connectors', None),
             overwrite_mutable_properties=True)
-        statements = _formal_language.load_statements(d.get('statements', None))
-        justifications = _formal_language.Justifications.instantiate_from_list(
+        statements = load_statements(d.get('statements', None))
+        justifications = _meta_language.Justifications.instantiate_from_list(
             l=d['justifications'] if 'justifications' in d.keys() else None)
         bundle: Bundle = Bundle(schema=schema, uid=uid, imports=imports, aliases=aliases,
                                 representations=representations, connectors=connectors, statements=statements,
                                 justifications=justifications)
     return bundle
+
+
+def load_statement(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> _meta_language.Statement:
+    """Receives a raw Statement, typically from a YAML file, and returns a typed Statement instance.
+
+    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
+        `connector_representation`, and `formula_representation`.
+    :param o: a raw Connector.
+    :return: a typed Connector instance.
+    """
+    statement: _meta_language.Statement | None = _identifiers.load_unique_identifiable(o)
+    if statement is None:
+        # The connector does not exist in memory.
+        statement: _meta_language.Statement = _meta_language.ensure_statement(o)
+    else:
+        # The connector exists in memory.
+        if overwrite_mutable_properties:
+            pass
+    return statement
+
+
+def load_statements(o: typing.Iterable | None, overwrite_mutable_properties: bool = False) -> _meta_language.Statements:
+    """Receives a raw Statements collection, typically from a YAML file,
+    and returns a typed Statements instance.
+
+    :param overwrite_mutable_properties: if statements are already loaded in memory, overwrite their mutable properties:
+        `connector_representation`, and `formula_representation`.
+    :param o: a raw Statements collection.
+    :return: a typed Statements instance.
+    """
+    if o is None:
+        o = []
+    statements: list[_meta_language.Statement] = []
+    for i in o:
+        statement: _meta_language.Statement = load_statement(i,
+                                                             overwrite_mutable_properties=overwrite_mutable_properties)
+        statements.append(statement)
+    return _meta_language.Statements(*statements)
+
+
+def load_abstract_representation(o: typing.Mapping,
+                                 append_representation_renderers: bool = False) -> _representation.AbstractRepresentation:
+    """Receives a raw Representation, typically from a YAML file, and returns a typed Representation instance.
+
+    :param append_representation_renderers: if the representation is already loaded in memory,
+        append new renderers to it.
+    :param o: a raw Representation.
+    :return: a typed Representation instance.
+    """
+    representation: _representation.AbstractRepresentation | None = _identifiers.load_unique_identifiable(o)
+    if representation is None:
+        # The representation does not exist in memory.
+        representation = _representation.ensure_abstract_representation(o)
+    else:
+        # The representation exists in memory.
+        if append_representation_renderers:
+            # Overwrite the mutable properties.
+            if 'renderers' in o.keys():
+                new_renderers = _representation.ensure_renderers(o['renderers'])
+                _util.get_logger().debug('new_renderers: {new_renderers}')
+                merged_renderers = set(representation.renderers + new_renderers)
+                merged_renderers = _representation.Renderers(*merged_renderers)
+                representation.renderers = merged_renderers
+    return representation
+
+
+def load_abstract_representations(o: typing.Iterable | None,
+                                  append_representation_renderers: bool = False) -> _representation.AbstractRepresentations:
+    """Receives a raw Representations collection, typically from a YAML file,
+    and returns a typed Representations instance.
+
+    :param append_representation_renderers: if representations are already loaded in memory,
+        append new renderers to the existing representations.
+    :param o: a raw Representations collection.
+    :return: a typed Representations instance.
+    """
+    if o is None:
+        o = []
+    representations: list[_representation.AbstractRepresentation] = []
+    for i in o:
+        representation: _representation.AbstractRepresentation = load_abstract_representation(
+            i, append_representation_renderers=append_representation_renderers)
+        representations.append(representation)
+    return _representation.AbstractRepresentations(*representations)
+
+
+def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> _formal_language.Connector:
+    """Receives a raw Connector, typically from a YAML file, and returns a typed Connector instance.
+
+    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
+        `connector_representation`, and `formula_representation`.
+    :param o: a raw Connector.
+    :return: a typed Connector instance.
+    """
+    connector: _formal_language.Connector | None = _identifiers.load_unique_identifiable(o)
+    if connector is None:
+        # The connector does not exist in memory.
+        connector = _formal_language.ensure_connector(o)
+    else:
+        # The connector exists in memory.
+        if overwrite_mutable_properties:
+            # Overwrite the mutable properties.
+            if 'connector_representation' in o.keys():
+                connector.connector_representation = load_abstract_representation(
+                    o['connector_representation'])
+            if 'formula_representation' in o.keys():
+                connector.formula_representation = load_abstract_representation(
+                    o['formula_representation'])
+    return connector
+
+
+def load_connectors(o: typing.Iterable | None,
+                    overwrite_mutable_properties: bool = False) -> _formal_language.Connectors:
+    """Receives a raw Connectors collection, typically from a YAML file,
+    and returns a typed Connectors instance.
+
+    :param overwrite_mutable_properties: if connectors are already loaded in memory, overwrite their mutable properties:
+        `connector_representation`, and `formula_representation`.
+    :param o: a raw Connectors collection.
+    :return: a typed Connectors instance.
+    """
+    if o is None:
+        o = []
+    connectors: list[_formal_language.Connector] = []
+    for i in o:
+        connector: _formal_language.Connector = load_connector(i,
+                                                               overwrite_mutable_properties=overwrite_mutable_properties)
+        connectors.append(connector)
+    return _formal_language.Connectors(*connectors)
