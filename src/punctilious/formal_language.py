@@ -49,6 +49,8 @@ class Formula(tuple):
         #   and if the python class is not of the proper class,
         #   substitute the formula with an instance
         #   of the correct type? e.g. Statement?
+        if c is _get_statement_connector() or c is _get_variables_connector() or c is _get_premises_connector() or c is _get_conclusion_connector():
+            get_logger().warn('meta-operator WARNING')
 
         a: FormulaArguments = ensure_formula_arguments(a)
         phi: tuple[Connector, FormulaArguments] = (c, a,)

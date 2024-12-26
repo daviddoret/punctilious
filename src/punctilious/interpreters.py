@@ -2,7 +2,7 @@
 
 import punctilious.representation as _representation
 import punctilious.formal_language as _formal_language
-import punctilious._bundling as _bundling
+import punctilious.bundling as _bundling
 import punctilious.interpretation as _interpretation
 import punctilious.options as _options
 import punctilious.formula_notations as _formula_notations

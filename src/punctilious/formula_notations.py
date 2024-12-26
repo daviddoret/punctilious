@@ -2,7 +2,7 @@
 
 """
 
-import punctilious._bundling as _bundling
+import punctilious.bundling as _bundling
 
 _formula_notations = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
                                                                    resource='formula_notations.yaml')

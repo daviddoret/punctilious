@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Statement class">
-      <change afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/meta_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/meta_operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/meta_operators_1.yaml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta_language module">
+      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_operators_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -859,14 +855,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01220" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734720449314</created>
-      <option name="number" value="01220" />
-      <option name="presentableId" value="LOCAL-01220" />
-      <option name="project" value="LOCAL" />
-      <updated>1734720449314</updated>
-    </task>
     <task id="LOCAL-01221" summary="first theorem implementation">
       <option name="closed" value="true" />
       <created>1734725666913</created>
@@ -1251,7 +1239,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735230223775</updated>
     </task>
-    <option name="localTasksCounter" value="1269" />
+    <task id="LOCAL-01269" summary="meta_language module">
+      <option name="closed" value="true" />
+      <created>1735231216481</created>
+      <option name="number" value="01269" />
+      <option name="presentableId" value="LOCAL-01269" />
+      <option name="project" value="LOCAL" />
+      <updated>1735231216481</updated>
+    </task>
+    <option name="localTasksCounter" value="1270" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1301,7 +1297,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Renaming connective classes" />
     <MESSAGE value="syntactic-rules" />
     <MESSAGE value="Trying a completely different approach, separating data from syntaxic logic." />
     <MESSAGE value="Lark parser for the technical-1 representation-mode." />
@@ -1326,7 +1321,8 @@
     <MESSAGE value="interpretation + latin alphabet yaml files corrections" />
     <MESSAGE value="renaming a few modules" />
     <MESSAGE value="Statement class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Statement class" />
+    <MESSAGE value="meta_language module" />
+    <option name="LAST_COMMIT_MESSAGE" value="meta_language module" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
