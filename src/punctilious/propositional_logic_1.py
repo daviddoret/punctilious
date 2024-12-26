@@ -1,6 +1,6 @@
 """A catalog of well-known mathematical operators."""
 
-import pu_07_bundling
+import punctilious.pu_07_bundling as _bundling
 
 bundle = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                        resource='propositional_logic_1.yaml')

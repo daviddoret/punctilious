@@ -6,10 +6,10 @@
 from __future__ import annotations
 
 # external modules
-import collections.abc
+# import collections.abc
 import io
-import typing
-import uuid as uuid_pkg
+# import typing
+# import uuid as uuid_pkg
 import yaml
 import importlib.resources
 import logging

@@ -3,7 +3,7 @@
   <component name="de.achimonline.quickjinja.settings.QuickJinjaProjectSettingsState">
     <option name="settings">
       <QuickJinjaProjectSettings>
-        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/declarations.py" />
+        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" />
       </QuickJinjaProjectSettings>
     </option>
   </component>
