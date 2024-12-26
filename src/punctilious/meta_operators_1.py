@@ -25,6 +25,6 @@ premises: _formal_language.Connector = _meta_operators_1.connectors.get_from_uui
 """
 
 conclusion: _formal_language.Connector = _meta_operators_1.connectors.get_from_uuid(
-    ' 3dccc8f5-81cf-446a-9f3c-7673514f2117', raise_error_if_not_found=True)
+    'd66e41ae-9989-48b5-986e-31db0995661d', raise_error_if_not_found=True)
 """The `conclusion` meta operator is used to declare the conclusion in a statement.
 """

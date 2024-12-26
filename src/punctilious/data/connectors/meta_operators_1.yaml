@@ -13,7 +13,7 @@ connectors:
       en: "The `variables` meta operator is used to define the variables in a theorem."
   - uid: { slug: premises, uuid: b78ed901-37d2-4a97-a7a8-588b69dab20a }
     syntactic_rules: { }
-  - uid: { slug: conclusion, uuid: 3dccc8f5-81cf-446a-9f3c-7673514f2117 }
+  - uid: { slug: conclusion, uuid: d66e41ae-9989-48b5-986e-31db0995661d }
     syntactic_rules: { }
 
 
