@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="renaming a few modules">
-      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Statement class">
+      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/identifiers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/variables_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/variables_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -851,14 +851,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01218" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734698240155</created>
-      <option name="number" value="01218" />
-      <option name="presentableId" value="LOCAL-01218" />
-      <option name="project" value="LOCAL" />
-      <updated>1734698240155</updated>
-    </task>
     <task id="LOCAL-01219" summary="first theorem implementation">
       <option name="closed" value="true" />
       <created>1734699073292</created>
@@ -1243,7 +1235,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735134057938</updated>
     </task>
-    <option name="localTasksCounter" value="1267" />
+    <task id="LOCAL-01267" summary="Statement class">
+      <option name="closed" value="true" />
+      <created>1735154858359</created>
+      <option name="number" value="01267" />
+      <option name="presentableId" value="LOCAL-01267" />
+      <option name="project" value="LOCAL" />
+      <updated>1735154858360</updated>
+    </task>
+    <option name="localTasksCounter" value="1268" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1293,7 +1293,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="All tests OK" />
     <MESSAGE value="Renaming connective classes" />
     <MESSAGE value="syntactic-rules" />
     <MESSAGE value="Trying a completely different approach, separating data from syntaxic logic." />
@@ -1318,7 +1317,8 @@
     <MESSAGE value="interpretation" />
     <MESSAGE value="interpretation + latin alphabet yaml files corrections" />
     <MESSAGE value="renaming a few modules" />
-    <option name="LAST_COMMIT_MESSAGE" value="renaming a few modules" />
+    <MESSAGE value="Statement class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Statement class" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
