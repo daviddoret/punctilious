@@ -1,6 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uuid: 47d84857-12c6-4016-8d5e-942998a6b327
-slug: operators_representation_1
+uid: { slug: operators_representation_1, uuid: 47d84857-12c6-4016-8d5e-942998a6b327 }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 # source:
 representations:
   - slug: is_a_proposition_connector

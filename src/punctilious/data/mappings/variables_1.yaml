@@ -2,6 +2,7 @@ schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: constants_1, uuid: c47fd0c1-da10-470c-8a69-09f07ead29c3 }
 description:
   en: A default mapping of variables to their abstract representations.
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 # TODO: Add dependency with latin_alphabet_lowercase_serif_italic + uppercase bundles
 connectors:
   - uid: { slug: proposition_1, uuid: faac89cf-2d37-4ea9-8055-4e382bf82e4d }

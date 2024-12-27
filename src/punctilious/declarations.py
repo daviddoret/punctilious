@@ -5,7 +5,7 @@ import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
 import punctilious.latin_alphabet_lowercase_serif_italic as _latin_alphabet_lowercase_serif_italic
-import punctilious.formula_notations as _formula_notations
+import punctilious.pu_09_formula_notations as _formula_notations
 
 _variable_counter = 0
 

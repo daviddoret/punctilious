@@ -2,6 +2,7 @@ schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: variables_1_connectors, uuid: 3ba43895-11ad-4089-b45b-33eda17272a4 }
 description:
   en: A catalog of well-known variables.
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 connectors:
   - uid: { slug: proposition_1, uuid: faac89cf-2d37-4ea9-8055-4e382bf82e4d }
     syntactic_rules: { fixed_arity: 0 }

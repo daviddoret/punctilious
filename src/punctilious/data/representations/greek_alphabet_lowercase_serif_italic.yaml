@@ -1,5 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: greek_alphabet_lowercase_serif_italic, uuid: 7edf82f0-5a28-4066-81b0-c1b6bd517199 }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 # source:
 # https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
 representations:

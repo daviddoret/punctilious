@@ -1,5 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: propositional_logic_1, uuid: 7fe7669a-b7c0-4667-94c9-33c7971179b4 }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 representations:
   - uid: { slug: propositional_variable, uuid: 639885d1-acd6-4c66-9a9c-fb14e65b2ddc }
     renderers:

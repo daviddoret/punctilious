@@ -5,8 +5,11 @@
 # regional or domain specific notational convention.
 name: Some Mappings # A title for the YAML file.
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml # The current version of the YAML schema.
-uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 # A globally unique identifier for the YAML file.
-slug: some_mappings # A local unique name for the YAML file.
+uid: {
+  slug: some_mappings, # A local unique name for the YAML file.
+  uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 # A globally unique identifier for the YAML file.
+}
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 imports:
   - slug: operators_1_connectors
     scheme: python_package

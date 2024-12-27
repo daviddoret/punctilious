@@ -1,5 +1,6 @@
 schema: "http://punctilious.org/schemas/statement_1#"
 uid: { slug: tao_analysis_1_2006_statements, uuid: 5af93ab1-e602-4cb0-8df7-a2d45b3925e2 }
+interpreter: { uid: { slug: default_interpreter, uuid: bda96859-9450-475c-a651-89d7dffcd2fe } }
 interpretation:
   add-something-here
 statements:

@@ -3,7 +3,7 @@
   <component name="de.achimonline.quickjinja.settings.QuickJinjaProjectSettingsState">
     <option name="settings">
       <QuickJinjaProjectSettings>
-        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/pu_07_bundling.py" />
+        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" />
       </QuickJinjaProjectSettings>
     </option>
   </component>

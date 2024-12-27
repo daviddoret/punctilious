@@ -1,6 +1,6 @@
 """Standard representation mappings for the operators in the `operators_1` connectors bundle."""
 
-import punctilious.pu_07_bundling as _bundling
+import punctilious.pu_08_bundling as _bundling
 
 _operators_1_connectors_bundle = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                                                resource='operators_1.yaml')

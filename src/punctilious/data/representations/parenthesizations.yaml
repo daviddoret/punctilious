@@ -1,5 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: parenthesizations, uuid: 751fecd9-1ecd-499e-aba2-eaae86e982bb }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 description:
   en: A catalog of formula representations.
 representations:

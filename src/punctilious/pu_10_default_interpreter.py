@@ -1,16 +1,22 @@
 """A catalog of useful interpreters to parse mathematical formulas."""
 
+import punctilious.pu_01_utilities as _utilities
+import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
-import punctilious.pu_07_bundling as _bundling
+import punctilious.pu_08_bundling as _bundling
 import punctilious.pu_06_interpretation as _interpretation
+# import punctilious.pu_10_preload_formula_notations as _preload_formula_notations
+import punctilious.pu_09_formula_notations as _formula_notations
 import punctilious.options as _options
-import punctilious.formula_notations as _formula_notations
-import punctilious.latin_alphabet_lowercase_serif_italic as _latin_alphabet_lowercase_serif_italic
-import punctilious.latin_alphabet_uppercase_serif_italic as _latin_alphabet_uppercase_serif_italic
+import punctilious.greek_alphabet_lowercase_serif_italic as greek_alphabet_lowercase_serif_italic
+import punctilious.greek_alphabet_uppercase_serif_italic as greek_alphabet_uppercase_serif_italic
+import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
+import punctilious.latin_alphabet_uppercase_serif_italic as latin_alphabet_uppercase_serif_italic
+import punctilious.latin_alphabet_lowercase_serif_bold as latin_alphabet_lowercase_serif_bold
 
 
-def generate_interpreter():
+def _generate_default_interpreter():
     prefs = _representation.Preferences()
     prefs[_options.technical_language.unicode_basic] = 1
     prefs[_options.technical_language.unicode_extended] = 2
@@ -75,7 +81,9 @@ def generate_interpreter():
             atomic_connectors[rep] = connector
 
     interpreter = _interpretation.Interpreter(
-        # variable_connectors=variable_connectors,
+        uid=_identifiers.UniqueIdentifier(
+            slug='default_interpreter',
+            uuid='bda96859-9450-475c-a651-89d7dffcd2fe'),
         atomic_connectors=atomic_connectors,
         prefix_connectors=prefix_connectors,
         infix_connectors=infix_connectors,
@@ -83,5 +91,6 @@ def generate_interpreter():
     return interpreter
 
 
-generate_interpreter()
+_default_interpreter: _interpretation.Interpreter = _generate_default_interpreter()
+
 pass

@@ -19,6 +19,7 @@ import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
 import punctilious.pu_05_meta_language as _meta_language
 import punctilious.pu_06_interpretation as _interpretation
+import punctilious.pu_07_no_interpretation_interpreter as _no_interpretation_interpreter
 
 
 class Bundles(dict):
@@ -76,7 +77,7 @@ class Bundle(_identifiers.UniqueIdentifiable):
 
     def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier, schema=None, imports=None,
                  aliases=None,
-                 representations=None, connectors=None, statements=None, justifications=None):
+                 representations=None, connectors=None, statements=None):
         super().__init__(uid=uid)
         self._schema = schema
         self._imports = imports
@@ -85,9 +86,7 @@ class Bundle(_identifiers.UniqueIdentifiable):
         self._representations = representations
         connectors = _formal_language.ensure_connectors(connectors)
         self._connectors = connectors
-        statements = _meta_language.ensure_statements(statements)
         self._statements = statements
-        self._justifications = justifications
 
     def __repr__(self):
         return f'{self.uid.slug} bundle'
@@ -106,10 +105,6 @@ class Bundle(_identifiers.UniqueIdentifiable):
     @property
     def imports(self):
         return self._imports
-
-    @property
-    def justifications(self):
-        return self._justifications
 
     @property
     def representations(self):
@@ -285,7 +280,9 @@ class MultiBundle(Bundle):
         super().__init__(connectors=connectors, representations=representations)
 
 
-def load_bundle_from_yaml_file_resource(path: str, resource: str) -> Bundle:
+def load_bundle_from_yaml_file_resource(
+        path: str,
+        resource: str) -> Bundle:
     """Load a bundle from a YAML file in the current Python package resource files.
     """
     package_path = importlib.resources.files(path).joinpath(resource)
@@ -293,7 +290,8 @@ def load_bundle_from_yaml_file_resource(path: str, resource: str) -> Bundle:
         return load_bundle_from_yaml_file(yaml_file_path)
 
 
-def load_bundle_from_yaml_file(yaml_file_path: int | str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> Bundle:
+def load_bundle_from_yaml_file(
+        yaml_file_path: int | str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> Bundle:
     """Load a bundle from a YAML file.
     """
     with open(yaml_file_path, 'r') as yaml_file:
@@ -312,6 +310,14 @@ def load_bundle_from_dict(d: dict) -> Bundle:
 
         schema = d['schema']
         uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(d['uid'])
+        _util.get_logger().debug(f'Bundle: {uid}')
+        interpreter: _interpretation.Interpreter | None
+        interpreter_uid = d.get('interpreter', None)
+        if interpreter_uid is not None:
+            interpreter: _interpretation.Interpreter = _identifiers.load_unique_identifiable(o=interpreter_uid)
+        else:
+            interpreter: _interpretation.Interpreter = _no_interpretation_interpreter.get_no_interpretation_interpreter()
+        _util.get_logger().debug(f'Interpreter: {interpreter}')
         untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
         imports = Imports(*untyped_imports)
         aliases = None  # To be implemented
@@ -322,12 +328,11 @@ def load_bundle_from_dict(d: dict) -> Bundle:
         connectors: _formal_language.Connectors = load_connectors(
             d.get('connectors', None),
             overwrite_mutable_properties=True)
-        statements = load_statements(d.get('statements', None))
+        statements = load_statements(d.get('statements', None), interpreter=interpreter)
         justifications = _meta_language.Justifications.instantiate_from_list(
             l=d['justifications'] if 'justifications' in d.keys() else None)
         bundle: Bundle = Bundle(schema=schema, uid=uid, imports=imports, aliases=aliases,
-                                representations=representations, connectors=connectors, statements=statements,
-                                justifications=justifications)
+                                representations=representations, connectors=connectors, statements=statements)
     return bundle
 
 
@@ -372,7 +377,7 @@ def load_statement(o: typing.Mapping, interpreter: _interpretation.Interpreter) 
     return phi
 
 
-def load_variables(o: typing.Iterable, interpreter: _interpretation.Interpreter) -> _formal_language.Formula:
+def load_variables(o: typing.Iterable | None, interpreter: _interpretation.Interpreter) -> _formal_language.Formula:
     """Receives a collection of raw string variables, e.g.: from a YAML file,
     and returns a formula `variables(v1, v2, ..., vn)`.
 
@@ -380,7 +385,8 @@ def load_variables(o: typing.Iterable, interpreter: _interpretation.Interpreter)
     :param o: a raw Connector.
     :return: a typed Connector instance.
     """
-
+    if o is None:
+        o = tuple()
     connector: _formal_language.Connector = _meta_language.variables_connector
     variables: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=i) for i in o)
     phi: _formal_language.Formula = _formal_language.Formula(
@@ -393,7 +399,7 @@ def load_variables(o: typing.Iterable, interpreter: _interpretation.Interpreter)
     return phi
 
 
-def load_premises(o: typing.Iterable, interpreter: _interpretation.Interpreter) -> _formal_language.Formula:
+def load_premises(o: typing.Iterable | None, interpreter: _interpretation.Interpreter) -> _formal_language.Formula:
     """Receives a collection of raw string premises, e.g.: from a YAML file,
     and returns a formula `premises(p1, p2, ..., pn)`.
 
@@ -401,7 +407,8 @@ def load_premises(o: typing.Iterable, interpreter: _interpretation.Interpreter) 
     :param o: a raw Connector.
     :return: a typed Connector instance.
     """
-
+    if o is None:
+        o = tuple()
     connector: _formal_language.Connector = _meta_language.premises_connector
     premises: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=i) for i in o)
     phi: _formal_language.Formula = _formal_language.Formula(
@@ -439,16 +446,15 @@ def load_statements(o: typing.Iterable | None, interpreter: _interpretation.Inte
     """Receives a raw Statements collection, typically from a YAML file,
     and returns a typed Statements instance.
 
-    :param overwrite_mutable_properties: if statements are already loaded in memory, overwrite their mutable properties:
-        `connector_representation`, and `formula_representation`.
+    :param interpreter:
     :param o: a raw Statements collection.
     :return: a typed Statements instance.
     """
     if o is None:
         o = []
-    statements: list[_meta_language.Statement] = []
+    statements: typing.Union[list, list[_formal_language.Formula, ...]] = []
     for i in o:
-        statement: _meta_language.Statement = load_statement(i, interpreter=interpreter)
+        statement: _formal_language.Formula = load_statement(i, interpreter=interpreter)
         statements.append(statement)
     return _meta_language.Statements(*statements)
 
@@ -538,7 +544,8 @@ def load_connectors(o: typing.Iterable | None,
         o = []
     connectors: list[_formal_language.Connector] = []
     for i in o:
-        connector: _formal_language.Connector = load_connector(i,
-                                                               overwrite_mutable_properties=overwrite_mutable_properties)
+        connector: _formal_language.Connector = load_connector(
+            i,
+            overwrite_mutable_properties=overwrite_mutable_properties)
         connectors.append(connector)
     return _formal_language.Connectors(*connectors)

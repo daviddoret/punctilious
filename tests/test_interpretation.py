@@ -1,7 +1,7 @@
 import pytest
 import punctilious as pu
 from test_shared_library import create_atomic_connector
-import punctilious.interpreters as interpreters
+import punctilious.pu_10_default_interpreter as interpreters
 
 
 @pytest.fixture
@@ -75,7 +75,7 @@ class TestInterpretation:
         prefs[pu.options.technical_language.unicode_extended] = 2
         prefs[pu.options.technical_language.latex_math] = pu.representation.get_forbidden()
 
-        interpreter = interpreters.generate_interpreter()
+        interpreter = interpreters._generate_default_interpreter()
         pass
         input_string = "𝑃"
         assert interpreter.interpret(input_string).represent(prefs=prefs) == '𝑃'

@@ -1,5 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: tao_analysis_1_2006_representations, uuid: 4bb42d13-1e72-4192-bf40-efeeee858705 }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 representations:
   - uid: { slug: successor, uuid: 41c2d319-bf0c-4442-9af6-a6db82ad1f80 }
     note:

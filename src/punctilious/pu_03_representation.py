@@ -121,7 +121,9 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
     """
 
     def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
-                 renderers: tuple[Renderer, ...]):
+                 renderers: tuple[Renderer, ...] | tuple[()] | None):
+        if renderers is None:
+            renderers = tuple()
         self._renderers: tuple[Renderer, ...] = renderers
         super().__init__(uid=uid)
 

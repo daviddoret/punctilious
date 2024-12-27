@@ -1,5 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: latin_alphabet_uppercase_serif_italic, uuid: b65f7b26-0b0a-46f8-92ff-5a6b69f14791 }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 # source:
 # https://en.wikipedia.org/wiki/Mathematical_Alphanumeric_Symbols
 representations:

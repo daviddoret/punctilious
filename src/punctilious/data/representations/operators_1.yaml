@@ -1,5 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: operators_1, uuid: fc763535-7e4f-4a7c-bbaf-782036ae14ff }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 representations:
   - uid: { slug: conjunction, uuid: 8be8dfc0-375f-463d-9334-d2b8ad5ffef0 }
     renderers:

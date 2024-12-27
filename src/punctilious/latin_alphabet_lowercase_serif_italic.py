@@ -2,7 +2,7 @@
 
 """
 import punctilious.pu_03_representation as _representation
-import punctilious.pu_07_bundling as _bundling
+import punctilious.pu_08_bundling as _bundling
 
 _latin_alphabet_lowercase_serif_italic = _bundling.load_bundle_from_yaml_file_resource(
     path='punctilious.data.representations',

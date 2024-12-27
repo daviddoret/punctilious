@@ -2,6 +2,7 @@ schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: propositional_logic_1, uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d }
 description:
   A library of connectors dedicated to propositional logic.
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 connectors:
   - uid: { slug: is_propositional_variable, uuid: 81277fd4-280d-4436-a465-79b4e83aadf5 }
     syntactic_rules: { fixed_arity: 1 }

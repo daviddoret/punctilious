@@ -2,6 +2,7 @@ schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: constants_1_connectors, uuid: 7b835ed9-a6fd-4c84-a0ea-c803e75e79ab }
 description:
   en: A catalog of well-known constants.
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 connectors:
   - uid: { slug: e, uuid: 62d659a0-7af5-459b-a252-60d84b809d95 }
     syntactic_rules: { fixed_arity: 0 }

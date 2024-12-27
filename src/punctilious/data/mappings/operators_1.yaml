@@ -1,5 +1,6 @@
 schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: operators_1_mappings, uuid: c57df5ae-2608-4ba8-8ae8-dd31bc9df5f6 }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 dependencies:
   - bundle: { slug: formulas_notations, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
     scheme: python_package
