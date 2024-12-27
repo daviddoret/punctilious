@@ -31,6 +31,6 @@ from punctilious.declarations import declare_variable, declare_function
 import punctilious.tao_analysis_1_2006 as tao_analysis_1_2006
 
 prefs = representation.Preferences()
-packages = _bundling.get_packages()
+# packages = _bundling.get_packages()
 
 pass

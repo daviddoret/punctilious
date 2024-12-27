@@ -24,11 +24,6 @@ class Bundles(dict):
     __slots__ = ()
     _singleton = None
     _singleton_initialized = None
-    _native_packages = {
-        'greek_alphabet_lowercase_serif_italic_representation_1': '/data/representations/greek_alphabet_lowercase_serif_italic.yaml',
-        'greek_alphabet_uppercase_serif_italic_representation_1': '/data/representations/greek_alphabet_uppercase_serif_italic.yaml',
-        'operators_representation_1': '/data/representations/operators_1.yaml'
-    }
 
     def __init__(self):
         if self.__class__._singleton_initialized is None:
@@ -92,8 +87,6 @@ class Bundle(_identifiers.UniqueIdentifiable):
         statements = _meta_language.ensure_statements(statements)
         self._statements = statements
         self._justifications = justifications
-        # Reference the package in the packages singleton.s
-        p = get_packages()
 
     def __repr__(self):
         return f'{self.uid.slug} bundle'
