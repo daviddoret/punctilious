@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="lark template for postfix connectors">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="lark template and interpretation improvements">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" afterDir="false" />
     </list>
@@ -856,14 +856,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01230" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734818984706</created>
-      <option name="number" value="01230" />
-      <option name="presentableId" value="LOCAL-01230" />
-      <option name="project" value="LOCAL" />
-      <updated>1734818984707</updated>
-    </task>
     <task id="LOCAL-01231" summary="first theorem implementation">
       <option name="closed" value="true" />
       <created>1734820933648</created>
@@ -1248,7 +1240,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735508000436</updated>
     </task>
-    <option name="localTasksCounter" value="1279" />
+    <task id="LOCAL-01279" summary="lark template and interpretation improvements">
+      <option name="closed" value="true" />
+      <created>1735509204648</created>
+      <option name="number" value="01279" />
+      <option name="presentableId" value="LOCAL-01279" />
+      <option name="project" value="LOCAL" />
+      <updated>1735509204648</updated>
+    </task>
+    <option name="localTasksCounter" value="1280" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1298,7 +1298,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Trying a completely different approach, separating data from syntaxic logic." />
     <MESSAGE value="Lark parser for the technical-1 representation-mode." />
     <MESSAGE value="Lark + yaml" />
     <MESSAGE value="presentation renderers" />
@@ -1323,7 +1322,8 @@
     <MESSAGE value="Statement class" />
     <MESSAGE value="meta_language module" />
     <MESSAGE value="lark template for postfix connectors" />
-    <option name="LAST_COMMIT_MESSAGE" value="lark template for postfix connectors" />
+    <MESSAGE value="lark template and interpretation improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="lark template and interpretation improvements" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1405,14 +1405,9 @@
           <option name="timeStamp" value="328" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
-          <line>49</line>
-          <option name="timeStamp" value="378" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
-          <line>84</line>
-          <option name="timeStamp" value="379" />
+          <url>file://$PROJECT_DIR$/src/punctilious/pu_08_bundling.py</url>
+          <line>464</line>
+          <option name="timeStamp" value="380" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -37,6 +37,10 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown function connector: {function_connector_terminal}')
         function_connector = self._function_connectors[function_connector_terminal]
         arguments = items[1] if len(items) > 1 else []
+        for i, a in zip(range(len(arguments), arguments)):
+            if not isinstance(a, _formal_language.Formula):
+                raise ValueError(
+                    f'Function argument #{i} was not parsed as Formula. {a}. {type(a).__name__}')
         phi = _formal_language.Formula(function_connector, arguments)
         _utilities.get_logger().debug(f'Parsed function formula: {phi}\n\tSource: {items}')
         return phi
