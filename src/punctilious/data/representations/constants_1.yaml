@@ -2,11 +2,14 @@ schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
 uid: { slug: constants_1_representations, uuid: 9e5e9701-65b1-4cc0-90cf-30773eb069d8 }
 interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 representations:
-  - uid: { slug: n, uuid: 85d03b36-0a80-4233-8c30-39519e1caa61 }
+  - uid: { slug: n_blackboard, uuid: 85d03b36-0a80-4233-8c30-39519e1caa61 }
     renderers:
       - implementation: string_constant
         string_constant: 'N'
         options: { technical_language: unicode_basic, connector_representation: symbol }
+      - implementation: string_constant
+        string_constant: 'natural numbers'
+        options: { technical_language: unicode_basic, connector_representation: sentence }
       - implementation: string_constant
         string_constant: 'ℕ'
         options: { technical_language: unicode_extended, connector_representation: symbol }

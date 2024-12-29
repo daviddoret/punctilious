@@ -1,0 +1,31 @@
+%import common.WS
+%ignore WS
+
+?start : formula_expression
+
+?formula_expression : function_formula
+     | prefix_formula
+     | postfix_formula
+     | infix_formula
+     | atomic_formula
+     | parenthesized_formula
+
+function_formula . 60 : FUNCTION_CONNECTOR _OPEN_PARENTHESIS function_formula_arguments _CLOSE_PARENTHESIS -> parse_function_formula
+prefix_formula . 40 : PREFIX_CONNECTOR formula_expression -> parse_prefix_formula
+postfix_formula . 30 : formula_expression POSTFIX_CONNECTOR -> parse_postfix_formula
+infix_formula . 25: formula_expression _SPACE? INFIX_CONNECTOR _SPACE? formula_expression -> parse_infix_formula
+function_formula_arguments . 20 : formula_expression (_SPACE? _COMMA _SPACE? formula_expression)* -> parse_function_formula_arguments
+parenthesized_formula . 15 : _OPEN_PARENTHESIS _SPACE? formula_expression _SPACE? _CLOSE_PARENTHESIS
+atomic_formula . 10 : ATOMIC_CONNECTOR -> parse_atomic_formula
+
+_OPEN_PARENTHESIS : "("
+_CLOSE_PARENTHESIS : ")"
+_COMMA : ","
+_SPACE: " "
+
+{{ function_connectors }}
+{{ infix_connectors }}
+{{ prefix_connectors }}
+{{ postfix_connectors }}
+{{ atomic_connectors }}
+

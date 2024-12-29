@@ -1,13 +1,13 @@
 ?start : formula_expression
 
 ?formula_expression : FUNCTION_CONNECTOR "(" function_formula_arguments ")" -> parse_function_formula
-     | formula_expression INFIX_CONNECTOR formula_expression -> parse_infix_formula
+     | formula_expression _SPACE? INFIX_CONNECTOR _SPACE? formula_expression -> parse_infix_formula
      | PREFIX_CONNECTOR formula_expression -> parse_prefix_formula
      | formula_expression POSTFIX_CONNECTOR -> parse_postfix_formula
      | ATOMIC_CONNECTOR -> parse_atomic_formula
      # Interpretation of parenthesized formulas
      | "(" FUNCTION_CONNECTOR "(" function_formula_arguments ")" ")" -> parse_function_formula
-     | "(" formula_expression INFIX_CONNECTOR formula_expression ")" -> parse_infix_formula
+     | "(" formula_expression _SPACE? INFIX_CONNECTOR _SPACE? formula_expression ")" -> parse_infix_formula
      | "(" PREFIX_CONNECTOR formula_expression ")" -> parse_prefix_formula
      | "(" formula_expression POSTFIX_CONNECTOR ")" -> parse_postfix_formula
      | "(" ATOMIC_CONNECTOR ")" -> parse_atomic_formula
@@ -21,6 +21,7 @@ parenthesized_formula_expression .10 : "(" formula_expression ")"
 # OPEN_PARENTHESIS : "("
 # CLOSE_PARENTHESIS : ")"
 # COMMA : ","
+_SPACE: " "
 
 {{ function_connectors }}
 {{ infix_connectors }}
@@ -30,4 +31,4 @@ parenthesized_formula_expression .10 : "(" formula_expression ")"
 
 %import common.WS
 %ignore WS
-# %ignore /\s+/  // Ignore whitespace
+%ignore /\s+/  // Ignore whitespace

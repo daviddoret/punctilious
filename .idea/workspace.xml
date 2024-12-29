@@ -4,18 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta_language module">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="lark template for postfix connectors">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_3.jinja2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_4.jinja2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_5.jinja2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_1.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_1.jinja2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_no_interpretation_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_no_interpretation_interpreter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_formula_notations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_10_default_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_10_default_interpreter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -410,9 +412,9 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious",
+    "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/data/grammars",
     "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -456,7 +458,9 @@
     <option name="path" value="$PROJECT_DIR$/.github/workflows/code_quality.yml" />
   </component>
   <component name="QodanaCloudProjectLink">
+    <option name="lastReportId" value="JjJBx" />
     <option name="linkedProjectId" value="p01Q5" />
+    <option name="linkedProjectName" value="punctilious" />
     <option name="organizationId" value="3PZVk" />
     <option name="userId" value="3yE6e" />
   </component>
@@ -473,11 +477,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/punctilious/data/grammars" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
       <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/connectors" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
-      <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/punctilious" />
@@ -487,7 +491,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_formula">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -716,7 +720,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_greek_alphabet_uppercase_serif_italic.TestGreekAlphabetLowercaseSerifItalic.test_greek_alphabet_lowercase_serif_italic" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_formula.TestFormula.test_formula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -729,7 +733,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_greek_alphabet_uppercase_serif_italic.TestGreekAlphabetLowercaseSerifItalic.test_greek_alphabet_lowercase_serif_italic&quot;" />
+      <option name="_new_target" value="&quot;test_formula.TestFormula.test_formula&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -830,7 +834,7 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_greek_alphabet_uppercase_serif_italic.TestGreekAlphabetLowercaseSerifItalic.test_greek_alphabet_lowercase_serif_italic" />
+      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
       <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2" />
       <item itemvalue="Python tests.pytest for test_latin_alphabet_uppercase_serif_italic.TestLatinAlphabetLowercaseSerifItalic.test_latin_alphabet_lowercase_serif_italic" />
       <item itemvalue="Python tests.pytest in tests" />
@@ -840,11 +844,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python.pu_05_meta_language" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2" />
         <item itemvalue="Python tests.pytest for test_latin_alphabet_uppercase_serif_italic.TestLatinAlphabetLowercaseSerifItalic.test_latin_alphabet_lowercase_serif_italic" />
-        <item itemvalue="Python tests.pytest for test_greek_alphabet_uppercase_serif_italic.TestGreekAlphabetLowercaseSerifItalic.test_greek_alphabet_lowercase_serif_italic" />
       </list>
     </recent_temporary>
   </component>
@@ -863,14 +867,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01228" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734817050563</created>
-      <option name="number" value="01228" />
-      <option name="presentableId" value="LOCAL-01228" />
-      <option name="project" value="LOCAL" />
-      <updated>1734817050563</updated>
     </task>
     <task id="LOCAL-01229" summary="first theorem implementation">
       <option name="closed" value="true" />
@@ -1256,7 +1252,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735338252883</updated>
     </task>
-    <option name="localTasksCounter" value="1277" />
+    <task id="LOCAL-01277" summary="lark template for postfix connectors">
+      <option name="closed" value="true" />
+      <created>1735489180815</created>
+      <option name="number" value="01277" />
+      <option name="presentableId" value="LOCAL-01277" />
+      <option name="project" value="LOCAL" />
+      <updated>1735489180815</updated>
+    </task>
+    <option name="localTasksCounter" value="1278" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1306,7 +1310,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="syntactic-rules" />
     <MESSAGE value="Trying a completely different approach, separating data from syntaxic logic." />
     <MESSAGE value="Lark parser for the technical-1 representation-mode." />
     <MESSAGE value="Lark + yaml" />
@@ -1331,7 +1334,8 @@
     <MESSAGE value="renaming a few modules" />
     <MESSAGE value="Statement class" />
     <MESSAGE value="meta_language module" />
-    <option name="LAST_COMMIT_MESSAGE" value="meta_language module" />
+    <MESSAGE value="lark template for postfix connectors" />
+    <option name="LAST_COMMIT_MESSAGE" value="lark template for postfix connectors" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1413,14 +1417,19 @@
           <option name="timeStamp" value="328" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py</url>
-          <line>80</line>
-          <option name="timeStamp" value="366" />
+          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
+          <line>63</line>
+          <option name="timeStamp" value="372" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py</url>
-          <line>76</line>
-          <option name="timeStamp" value="367" />
+          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
+          <line>32</line>
+          <option name="timeStamp" value="375" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
+          <line>49</line>
+          <option name="timeStamp" value="378" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

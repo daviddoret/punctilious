@@ -77,7 +77,8 @@ def _configure_tao_interpreter():
 _tao_interpreter: _interpretation.Interpreter | None = None
 
 _configure_tao_interpreter()
-test = _identifiers.load_unique_identifiable(o={'uid': {'uuid': '12af7828-364d-4943-b9ea-92553d35566e'}})
+test = _identifiers.load_unique_identifiable(
+    o={'uid': {'slug': 'tao_analysis_1_2006_interpreter', 'uuid': '12af7828-364d-4943-b9ea-92553d35566e'}})
 _statements = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.statements',
                                                             resource='tao_analysis_1_2006.yaml')
 

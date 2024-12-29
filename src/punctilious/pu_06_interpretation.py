@@ -48,13 +48,12 @@ class Transformer(lark.Transformer):
     def parse_infix_formula(self, items):
         """Transform a list of expressions into a Python list."""
         _utilities.get_logger().debug(f'parse infix formula: {items}')
-        left_operand = items[0]
-        infix_connector_terminal = items[1]
+        left_operand = items[0][0]
+        infix_connector_terminal = items[1][0]
         if infix_connector_terminal not in self._infix_connectors.keys():
-            _utilities.get_logger().error(f'Unknown infix connector: {infix_connector_terminal}')
             raise ValueError(f'Unknown infix connector: {infix_connector_terminal}')
         infix_connector = self._infix_connectors[infix_connector_terminal]
-        right_operand = items[2]
+        right_operand = items[2][0]
         # arguments = [left_operand, right_operand]
         phi = _formal_language.Formula(infix_connector, (left_operand, right_operand,))
         _utilities.get_logger().debug(f'Parsed infix formula: {phi}\n\tSource: {items}')
@@ -63,9 +62,9 @@ class Transformer(lark.Transformer):
     def parse_prefix_formula(self, items):
         """Transform a list of expressions into a Python list."""
         _utilities.get_logger().debug(f'parse prefix formula: {items}')
-        prefix_connector_terminal = items[0]
+        prefix_connector_terminal = items[0][0]
         if prefix_connector_terminal not in self._prefix_connectors.keys():
-            _utilities.get_logger().error(f'Unknown prefix connector: {prefix_connector_terminal}')
+            _utilities.get_logger().debug(f'Unknown prefix connector: {prefix_connector_terminal}')
             raise ValueError(f'Unknown prefix connector: {prefix_connector_terminal}')
         prefix_connector = self._prefix_connectors[prefix_connector_terminal]
         operand = items[1]
@@ -76,9 +75,9 @@ class Transformer(lark.Transformer):
     def parse_atomic_formula(self, items):
         """Transform a list of expressions into a Python list."""
         _utilities.get_logger().debug(f'parse atomic formula: {items}')
-        atomic_connector_terminal = items[0]
+        atomic_connector_terminal = items[0][0]
         if atomic_connector_terminal not in self._atomic_connectors.keys():
-            _utilities.get_logger().error(f'Unknown atomic connector: {atomic_connector_terminal}')
+            _utilities.get_logger().debug(f'Unknown atomic connector: {atomic_connector_terminal}')
             raise ValueError(f'Unknown atomic connector: {atomic_connector_terminal}')
         atomic_connector = self._atomic_connectors[atomic_connector_terminal]
         # arguments = []
@@ -89,8 +88,9 @@ class Interpreter(_identifiers.UniqueIdentifiable):
 
     def __init__(self, uid: _identifiers.UniqueIdentifier, atomic_connectors: dict, prefix_connectors: dict,
                  postfix_connectors: dict, infix_connectors: dict, function_connectors: dict):
-        self._jinja2_template: jinja2.Template = _utilities.get_jinja2_template_from_package('data.grammars',
-                                                                                             'formula_grammar_1.jinja2')
+        self._jinja2_template: jinja2.Template = _utilities.get_jinja2_template_from_package(
+            'data.grammars',
+            'formula_grammar_5.jinja2')
         self._transformer = Transformer(
             atomic_connectors=atomic_connectors,
             prefix_connectors=prefix_connectors,
@@ -121,6 +121,7 @@ class Interpreter(_identifiers.UniqueIdentifiable):
             'function_connectors': function_connectors}
 
         self._grammar = self._jinja2_template.render(grammar_dict)
+        # parsers: earley, lalr, cyk
         self._parser = lark.Lark(self._grammar, start='start', parser='earley', debug=True)
         _utilities.get_logger().debug(f'grammar:\n{self._grammar}')
         super().__init__(uid=uid)
@@ -158,8 +159,10 @@ class Interpreter(_identifiers.UniqueIdentifiable):
         return self._grammar
 
     def interpret(self, input_string: str) -> _formal_language.Formula:
+        input_string: str = str(input_string)
         _utilities.get_logger().debug(f'interpretation of string: `{input_string}`')
         tree = self._parser.parse(input_string)
+        _utilities.get_logger().debug(f'tree: `{tree}`')
         result = self._transformer.transform(tree)
         _utilities.get_logger().debug(f'string: `{input_string}` interpreted as: {result}')
         return result

@@ -393,7 +393,7 @@ def load_variables(o: typing.Iterable | None, interpreter: _interpretation.Inter
     if o is None:
         o = tuple()
     connector: _formal_language.Connector = _meta_language.variables_connector
-    variables: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=i) for i in o)
+    variables: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=str(i)) for i in o)
     phi: _formal_language.Formula = _formal_language.Formula(
         c=connector,
         a=variables)
@@ -415,7 +415,7 @@ def load_premises(o: typing.Iterable | None, interpreter: _interpretation.Interp
     if o is None:
         o = tuple()
     connector: _formal_language.Connector = _meta_language.premises_connector
-    premises: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=i) for i in o)
+    premises: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=str(i)) for i in o)
     phi: _formal_language.Formula = _formal_language.Formula(
         c=connector,
         a=premises)
@@ -434,12 +434,12 @@ def load_conclusion(o: str, interpreter: _interpretation.Interpreter) -> _formal
     :param o: a raw Connector.
     :return: a typed Connector instance.
     """
-
+    o: str = str(o)
     connector: _formal_language.Connector = _meta_language.conclusion_connector
-    premises: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=i) for i in o)
+    conclusion: _formal_language.Formula = interpreter.interpret(input_string=o)
     phi: _formal_language.Formula = _formal_language.Formula(
         c=connector,
-        a=premises)
+        a=(conclusion,))
 
     # validate the variables well-formedness
     # TODO: Implement ensure_premises_wellformedness(phi)
@@ -459,6 +459,7 @@ def load_statements(o: typing.Iterable | None, interpreter: _interpretation.Inte
         o = []
     statements: typing.Union[list, list[_formal_language.Formula, ...]] = []
     for i in o:
+        _util.get_logger().debug(f'statement: {i}')
         statement: _formal_language.Formula = load_statement(i, interpreter=interpreter)
         statements.append(statement)
     return _meta_language.Statements(*statements)

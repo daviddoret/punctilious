@@ -29,10 +29,11 @@ import punctilious.constants_1 as constants_1
 
 from punctilious.declarations import declare_variable, declare_function
 
+prefs = representation.Preferences()
+
 # import _propositional_logic_1
 import punctilious.tao_analysis_1_2006 as tao_analysis_1_2006
 
-prefs = representation.Preferences()
 # packages = _bundling.get_packages()
 
 pass
