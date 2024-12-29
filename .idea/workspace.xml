@@ -5,20 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="lark template for postfix connectors">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_3.jinja2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_4.jinja2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_5.jinja2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_1.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_1.jinja2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -212,7 +200,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.test_is_extension.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
-    "Python tests.pytest for test_formula.TestFormula.test_formula.executor": "Run",
+    "Python tests.pytest for test_formula.TestFormula.test_formula.executor": "Debug",
     "Python tests.pytest for test_formula.TestFormula.test_formula_2.executor": "Debug",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.executor": "Run",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation.executor": "Run",
@@ -868,14 +856,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01229" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734818788122</created>
-      <option name="number" value="01229" />
-      <option name="presentableId" value="LOCAL-01229" />
-      <option name="project" value="LOCAL" />
-      <updated>1734818788122</updated>
-    </task>
     <task id="LOCAL-01230" summary="first theorem implementation">
       <option name="closed" value="true" />
       <created>1734818984706</created>
@@ -1260,7 +1240,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735489180815</updated>
     </task>
-    <option name="localTasksCounter" value="1278" />
+    <task id="LOCAL-01278" summary="lark template for postfix connectors">
+      <option name="closed" value="true" />
+      <created>1735508000436</created>
+      <option name="number" value="01278" />
+      <option name="presentableId" value="LOCAL-01278" />
+      <option name="project" value="LOCAL" />
+      <updated>1735508000436</updated>
+    </task>
+    <option name="localTasksCounter" value="1279" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1418,18 +1406,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
-          <line>63</line>
-          <option name="timeStamp" value="372" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
-          <line>32</line>
-          <option name="timeStamp" value="375" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
           <line>49</line>
           <option name="timeStamp" value="378" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
+          <line>84</line>
+          <option name="timeStamp" value="379" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -31,7 +31,7 @@ class Transformer(lark.Transformer):
     def parse_function_formula(self, items) -> _formal_language.Formula:
         """Transform a function with a word and optional arguments."""
         _utilities.get_logger().debug(f'parse function formula: {items}')
-        function_connector_terminal = items[0]
+        function_connector_terminal = str(items[0])
         if function_connector_terminal not in self._function_connectors.keys():
             _utilities.get_logger().error(f'Unknown function connector: {function_connector_terminal}')
             raise ValueError(f'Unknown function connector: {function_connector_terminal}')
@@ -48,13 +48,18 @@ class Transformer(lark.Transformer):
     def parse_infix_formula(self, items):
         """Transform a list of expressions into a Python list."""
         _utilities.get_logger().debug(f'parse infix formula: {items}')
-        left_operand = items[0][0]
-        infix_connector_terminal = items[1][0]
+        left_operand = items[0]
+        if not isinstance(left_operand, _formal_language.Formula):
+            raise ValueError(
+                f'Infix left_operand was not parsed as Formula. {left_operand}. {type(left_operand).__name__}')
+        infix_connector_terminal = str(items[1])
         if infix_connector_terminal not in self._infix_connectors.keys():
             raise ValueError(f'Unknown infix connector: {infix_connector_terminal}')
         infix_connector = self._infix_connectors[infix_connector_terminal]
-        right_operand = items[2][0]
-        # arguments = [left_operand, right_operand]
+        right_operand = items[2]
+        if not isinstance(right_operand, _formal_language.Formula):
+            raise ValueError(
+                f'Infix right_operand was not parsed as Formula. {right_operand}. {type(right_operand).__name__}')
         phi = _formal_language.Formula(infix_connector, (left_operand, right_operand,))
         _utilities.get_logger().debug(f'Parsed infix formula: {phi}\n\tSource: {items}')
         return phi
@@ -68,8 +73,27 @@ class Transformer(lark.Transformer):
             raise ValueError(f'Unknown prefix connector: {prefix_connector_terminal}')
         prefix_connector = self._prefix_connectors[prefix_connector_terminal]
         operand = items[1]
+        if not isinstance(operand, _formal_language.Formula):
+            raise ValueError(
+                f'Prefix operand was not parsed as Formula. {operand}. {type(operand).__name__}')
         phi = _formal_language.Formula(prefix_connector, (operand,))
         _utilities.get_logger().debug(f'Parsed prefix formula: {phi}\n\tSource: {items}')
+        return phi
+
+    def parse_postfix_formula(self, items):
+        """Transform a list of expressions into a Python list."""
+        _utilities.get_logger().debug(f'parse postfix formula: {items}')
+        postfix_connector_terminal = str(items[1])
+        if postfix_connector_terminal not in self._postfix_connectors.keys():
+            _utilities.get_logger().debug(f'Unknown postfix connector: {postfix_connector_terminal}')
+            raise ValueError(f'Unknown postfix connector: {postfix_connector_terminal}')
+        postfix_connector = self._postfix_connectors[postfix_connector_terminal]
+        operand = items[0]
+        if not isinstance(operand, _formal_language.Formula):
+            raise ValueError(
+                f'Postfix operand was not parsed as Formula. {operand}. {type(operand).__name__}')
+        phi = _formal_language.Formula(postfix_connector, (operand,))
+        _utilities.get_logger().debug(f'Parsed postfix formula: {phi}\n\tSource: {items}')
         return phi
 
     def parse_atomic_formula(self, items):
