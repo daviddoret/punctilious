@@ -26,13 +26,13 @@ is an argument.
 
 prefix_formula = _formula_notations.representations.get_from_uuid('ca64ae2f-f8a7-4a87-a99d-57d86a8ba0ad',
                                                                   raise_error_if_not_found=True)
-"""A formula representation for infix formulas of the form: `𝗖𝗮₁` where 𝗖 is the connector and 𝗮ᵢ
+"""A formula representation for prefix formulas of the form: `𝗖𝗮₁` where 𝗖 is the connector and 𝗮ᵢ
 is an argument.
 """
 
 postfix_formula = _formula_notations.representations.get_from_uuid('af99c47e-c6b8-43e0-a8f4-6331ba79e8fd',
                                                                    raise_error_if_not_found=True)
-"""A formula representation for infix formulas of the form: `𝗮₁𝗖` where 𝗖 is the connector and 𝗮ᵢ
+"""A formula representation for postfix formulas of the form: `𝗮₁𝗖` where 𝗖 is the connector and 𝗮ᵢ
 is an argument.
 """
 

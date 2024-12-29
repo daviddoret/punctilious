@@ -15,6 +15,7 @@ def _generate_no_interpretation():
             uuid='ccf14265-c568-4276-bbfc-cf3eec1b625b'),
         atomic_connectors={},
         prefix_connectors={},
+        postfix_connectors={},
         infix_connectors={},
         function_connectors={})
     return interpreter

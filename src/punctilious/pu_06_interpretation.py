@@ -17,10 +17,12 @@ class Transformer(lark.Transformer):
     """Transformed the Lark tree parsed of a Technical1 input, into a proper Formula."""
 
     def __init__(self, atomic_connectors: dict, prefix_connectors: dict,
+                 postfix_connectors: dict,
                  infix_connectors: dict,
                  function_connectors: dict):
         # self._variable_connectors = variable_connectors
         self._atomic_connectors = atomic_connectors
+        self._postfix_connectors = postfix_connectors
         self._prefix_connectors = prefix_connectors
         self._infix_connectors = infix_connectors
         self._function_connectors = function_connectors
@@ -28,6 +30,7 @@ class Transformer(lark.Transformer):
 
     def parse_function_formula(self, items) -> _formal_language.Formula:
         """Transform a function with a word and optional arguments."""
+        _utilities.get_logger().debug(f'parse function formula: {items}')
         function_connector_terminal = items[0]
         if function_connector_terminal not in self._function_connectors.keys():
             _utilities.get_logger().error(f'Unknown function connector: {function_connector_terminal}')
@@ -44,6 +47,7 @@ class Transformer(lark.Transformer):
 
     def parse_infix_formula(self, items):
         """Transform a list of expressions into a Python list."""
+        _utilities.get_logger().debug(f'parse infix formula: {items}')
         left_operand = items[0]
         infix_connector_terminal = items[1]
         if infix_connector_terminal not in self._infix_connectors.keys():
@@ -58,6 +62,7 @@ class Transformer(lark.Transformer):
 
     def parse_prefix_formula(self, items):
         """Transform a list of expressions into a Python list."""
+        _utilities.get_logger().debug(f'parse prefix formula: {items}')
         prefix_connector_terminal = items[0]
         if prefix_connector_terminal not in self._prefix_connectors.keys():
             _utilities.get_logger().error(f'Unknown prefix connector: {prefix_connector_terminal}')
@@ -70,6 +75,7 @@ class Transformer(lark.Transformer):
 
     def parse_atomic_formula(self, items):
         """Transform a list of expressions into a Python list."""
+        _utilities.get_logger().debug(f'parse atomic formula: {items}')
         atomic_connector_terminal = items[0]
         if atomic_connector_terminal not in self._atomic_connectors.keys():
             _utilities.get_logger().error(f'Unknown atomic connector: {atomic_connector_terminal}')
@@ -79,55 +85,46 @@ class Transformer(lark.Transformer):
         return _formal_language.Formula(atomic_connector)
 
 
-#    def parse_variable_formula(self, items):
-#        """Transform a list of expressions into a Python list."""
-#        variable_connector_terminal = items[0]
-#        if variable_connector_terminal not in self._atomic_connectors.keys():
-#            get_logger().error(f'Unknown atomic connector: {variable_connector_terminal}')
-#            raise ValueError(f'Unknown atomic connector: {variable_connector_terminal}')
-#        atomic_connector = self._atomic_connectors[variable_connector_terminal]
-#        return _formal_language.Formula(atomic_connector)
-
-
 class Interpreter(_identifiers.UniqueIdentifiable):
 
     def __init__(self, uid: _identifiers.UniqueIdentifier, atomic_connectors: dict, prefix_connectors: dict,
-                 infix_connectors: dict, function_connectors: dict):
+                 postfix_connectors: dict, infix_connectors: dict, function_connectors: dict):
         self._jinja2_template: jinja2.Template = _utilities.get_jinja2_template_from_package('data.grammars',
                                                                                              'formula_grammar_1.jinja2')
         self._transformer = Transformer(
-            # variable_connectors=variable_connectors,
             atomic_connectors=atomic_connectors,
             prefix_connectors=prefix_connectors,
+            postfix_connectors=postfix_connectors,
             infix_connectors=infix_connectors,
             function_connectors=function_connectors)
-        # variable_connectors = self.declare_lark_terminals(terminal_name='VARIABLE_CONNECTOR',
-        #                                                  terminal_priority='1',
-        #                                                  d=variable_connectors)
         atomic_connectors = self.declare_lark_terminals(terminal_name='ATOMIC_CONNECTOR',
                                                         terminal_priority='2',
                                                         d=atomic_connectors)
+        postfix_connectors = self.declare_lark_terminals(terminal_name='POSTFIX_CONNECTOR',
+                                                         terminal_priority='3',
+                                                         d=postfix_connectors)
         prefix_connectors = self.declare_lark_terminals(terminal_name='PREFIX_CONNECTOR',
-                                                        terminal_priority='3',
+                                                        terminal_priority='4',
                                                         d=prefix_connectors)
         infix_connectors = self.declare_lark_terminals(terminal_name='INFIX_CONNECTOR',
-                                                       terminal_priority='4',
+                                                       terminal_priority='5',
                                                        d=infix_connectors)
         function_connectors = self.declare_lark_terminals(terminal_name='FUNCTION_CONNECTOR',
-                                                          terminal_priority='5',
+                                                          terminal_priority='6',
                                                           d=function_connectors)
 
         grammar_dict = {
-            # 'variable_connectors': variable_connectors,
             'atomic_connectors': atomic_connectors,
+            'postfix_connectors': postfix_connectors,
             'prefix_connectors': prefix_connectors,
             'infix_connectors': infix_connectors,
             'function_connectors': function_connectors}
 
         self._grammar = self._jinja2_template.render(grammar_dict)
         self._parser = lark.Lark(self._grammar, start='start', parser='earley', debug=True)
+        _utilities.get_logger().debug(f'grammar:\n{self._grammar}')
         super().__init__(uid=uid)
-        _utilities.get_logger().debug(f'`{self}` configured.')
+        _utilities.get_logger().debug(f'`{repr(self)}` configured.')
 
     def __repr__(self):
         return f'{self.uid.slug} ({self.uid.uuid}) interpreter'
@@ -161,10 +158,10 @@ class Interpreter(_identifiers.UniqueIdentifiable):
         return self._grammar
 
     def interpret(self, input_string: str) -> _formal_language.Formula:
+        _utilities.get_logger().debug(f'interpretation of string: `{input_string}`')
         tree = self._parser.parse(input_string)
-        print(tree)
         result = self._transformer.transform(tree)
-        print(result)
+        _utilities.get_logger().debug(f'string: `{input_string}` interpreted as: {result}')
         return result
 
 

@@ -5,57 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta_language module">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/pu_07_no_interpretation_interpreter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/meta_operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/meta_operators_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/operators_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/predicates_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/predicates_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/variables_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/variables_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/documentation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/documentation.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/propositional_logic_1.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_1.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_1.jinja2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/variables_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/mappings/variables_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_bold.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_bold.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/operators_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/parenthesizations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/parenthesizations.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/predicates_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/declarations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/declarations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_formula_notations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/interpreters.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_10_default_interpreter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_bold.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_bold.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/meta_operators_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_connectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1_connectors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_mappings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1_mappings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_representations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1_representations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_05_meta_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_no_interpretation_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_no_interpretation_interpreter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_formula_notations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_10_default_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_10_default_interpreter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/variables_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/variables_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +88,7 @@
     </order>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -495,9 +456,7 @@
     <option name="path" value="$PROJECT_DIR$/.github/workflows/code_quality.yml" />
   </component>
   <component name="QodanaCloudProjectLink">
-    <option name="lastReportId" value="JjJBx" />
     <option name="linkedProjectId" value="p01Q5" />
-    <option name="linkedProjectName" value="punctilious" />
     <option name="organizationId" value="3PZVk" />
     <option name="userId" value="3yE6e" />
   </component>
@@ -905,14 +864,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01227" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734772079501</created>
-      <option name="number" value="01227" />
-      <option name="presentableId" value="LOCAL-01227" />
-      <option name="project" value="LOCAL" />
-      <updated>1734772079501</updated>
-    </task>
     <task id="LOCAL-01228" summary="first theorem implementation">
       <option name="closed" value="true" />
       <created>1734817050563</created>
@@ -1297,7 +1248,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735301327441</updated>
     </task>
-    <option name="localTasksCounter" value="1276" />
+    <task id="LOCAL-01276" summary="meta_language module">
+      <option name="closed" value="true" />
+      <created>1735338252883</created>
+      <option name="number" value="01276" />
+      <option name="presentableId" value="LOCAL-01276" />
+      <option name="project" value="LOCAL" />
+      <updated>1735338252883</updated>
+    </task>
+    <option name="localTasksCounter" value="1277" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1454,9 +1413,14 @@
           <option name="timeStamp" value="328" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_08_bundling.py</url>
-          <line>315</line>
-          <option name="timeStamp" value="361" />
+          <url>file://$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py</url>
+          <line>80</line>
+          <option name="timeStamp" value="366" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py</url>
+          <line>76</line>
+          <option name="timeStamp" value="367" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -9,6 +9,7 @@ import punctilious.pu_06_interpretation as _interpretation
 # import punctilious.pu_10_preload_formula_notations as _preload_formula_notations
 import punctilious.pu_09_formula_notations as _formula_notations
 import punctilious.options as _options
+import punctilious.constants_1 as constants_1
 import punctilious.greek_alphabet_lowercase_serif_italic as greek_alphabet_lowercase_serif_italic
 import punctilious.greek_alphabet_uppercase_serif_italic as greek_alphabet_uppercase_serif_italic
 import punctilious.latin_alphabet_lowercase_serif_italic as latin_alphabet_lowercase_serif_italic
@@ -49,6 +50,7 @@ def _generate_default_interpreter():
     infix_connectors = {}
     function_connectors = {}
     prefix_connectors = {}
+    postfix_connectors = {}
 
     # Load variables from variables_1_connectors
     for connector in variables_1_connectors.connectors:
@@ -72,6 +74,9 @@ def _generate_default_interpreter():
         elif connector.formula_representation is _formula_notations.prefix_formula:
             rep = connector.connector_representation.rep(prefs=prefs)
             prefix_connectors[rep] = connector
+        elif connector.formula_representation is _formula_notations.postfix_formula:
+            rep = connector.connector_representation.rep(prefs=prefs)
+            postfix_connectors[rep] = connector
 
     # Load constants (atomic connectors) from constants_1_connectors
     for connector in constants_1_connectors.connectors:
@@ -85,6 +90,7 @@ def _generate_default_interpreter():
             slug='default_interpreter',
             uuid='bda96859-9450-475c-a651-89d7dffcd2fe'),
         atomic_connectors=atomic_connectors,
+        postfix_connectors=postfix_connectors,
         prefix_connectors=prefix_connectors,
         infix_connectors=infix_connectors,
         function_connectors=function_connectors)

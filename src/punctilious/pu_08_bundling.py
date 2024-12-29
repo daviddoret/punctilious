@@ -304,7 +304,8 @@ def load_bundle_from_dict(d: dict) -> Bundle:
     """
     bundle: Bundle | None = _identifiers.load_unique_identifiable(o=d)
     if bundle is not None:
-        _util.get_logger().debug(f'Bundle already loaded: {bundle}.')
+        # _util.get_logger().debug(f'Bundle already loaded: {bundle}.')
+        pass
     else:
         # The connector does not exist in memory.
 
@@ -314,10 +315,14 @@ def load_bundle_from_dict(d: dict) -> Bundle:
         interpreter: _interpretation.Interpreter | None
         interpreter_uid = d.get('interpreter', None)
         if interpreter_uid is not None:
+            # _util.get_logger().debug(f'Interpreter UID: {interpreter_uid}')
             interpreter: _interpretation.Interpreter = _identifiers.load_unique_identifiable(o=interpreter_uid)
+            if interpreter_uid is None:
+                raise ReferenceError(f'Missing interpreter: {interpreter_uid}')
         else:
+            _util.get_logger().debug(f'Interpreter UID: None')
             interpreter: _interpretation.Interpreter = _no_interpretation_interpreter.get_no_interpretation_interpreter()
-        _util.get_logger().debug(f'Interpreter: {interpreter}')
+        # _util.get_logger().debug(f'Interpreter: {interpreter}')
         untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
         imports = Imports(*untyped_imports)
         aliases = None  # To be implemented
@@ -372,7 +377,7 @@ def load_statement(o: typing.Mapping, interpreter: _interpretation.Interpreter) 
         a=(variables, premises, conclusion,))
 
     # validate the statement well-formedness
-    # TODO: Implement ensure_statement(phi)
+    # TODO: Implement ensure_statement_wellformedness(phi)
 
     return phi
 
@@ -394,7 +399,7 @@ def load_variables(o: typing.Iterable | None, interpreter: _interpretation.Inter
         a=variables)
 
     # validate the variables well-formedness
-    # TODO: Implement ensure_variables(phi)
+    # TODO: Implement ensure_variables_wellformedness(phi)
 
     return phi
 
@@ -416,7 +421,7 @@ def load_premises(o: typing.Iterable | None, interpreter: _interpretation.Interp
         a=premises)
 
     # validate the variables well-formedness
-    # TODO: Implement ensure_premises(phi)
+    # TODO: Implement ensure_premises_wellformedness(phi)
 
     return phi
 
@@ -437,7 +442,7 @@ def load_conclusion(o: str, interpreter: _interpretation.Interpreter) -> _formal
         a=premises)
 
     # validate the variables well-formedness
-    # TODO: Implement ensure_premises(phi)
+    # TODO: Implement ensure_premises_wellformedness(phi)
 
     return phi
 
@@ -478,7 +483,7 @@ def load_abstract_representation(o: typing.Mapping,
             # Overwrite the mutable properties.
             if 'renderers' in o.keys():
                 new_renderers = _representation.ensure_renderers(o['renderers'])
-                _util.get_logger().debug('new_renderers: {new_renderers}')
+                # _util.get_logger().debug('new_renderers: {new_renderers}')
                 merged_renderers = set(representation.renderers + new_renderers)
                 merged_renderers = _representation.Renderers(*merged_renderers)
                 representation.renderers = merged_renderers

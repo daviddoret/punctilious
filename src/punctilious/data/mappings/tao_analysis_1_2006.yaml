@@ -4,9 +4,18 @@ description:
   en: Maps the connectors to their representations, according to (Tao, 2006).
 interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
 connectors:
+  - uid: { slug: zero, uuid: 85927ea1-566e-4349-bab9-9845ba3a4b93 }
+    connector_representation: { uid: { slug: zero, uuid: 328cbbbf-7331-44b3-88c3-5d7ea912a213 } }
+    formula_representation: { uid: { slug: atomic_formula, uuid: f6bd05d7-ee5b-4480-9d59-ea9fa3a13516 } }
   - uid: { slug: successor, uuid: f85163bf-381d-41fa-bdbb-70cd28bb826b }
     connector_representation: { uid: { slug: successor, uuid: 41c2d319-bf0c-4442-9af6-a6db82ad1f80 } }
     formula_representation: { uid: { slug: postfix_formula, uuid: af99c47e-c6b8-43e0-a8f4-6331ba79e8fd } }
+  - uid: { slug: natural_number_1, uuid: 23880c1b-f070-4ab7-af48-46838bf4195a }
+    connector_representation: { uid: { slug: n, uuid: 39839448-063c-44be-967d-f62e55006bca } }
+    formula_representation: { uid: { slug: atomic_formula, uuid: f6bd05d7-ee5b-4480-9d59-ea9fa3a13516 } }
+  - uid: { slug: natural_number_2, uuid: ecdb9605-2dd7-4bed-bfa4-709cf48092e9 }
+    connector_representation: { uid: { slug: m, uuid: ae96c043-2614-45f2-9654-dce8e798863a } }
+    formula_representation: { uid: { slug: atomic_formula, uuid: f6bd05d7-ee5b-4480-9d59-ea9fa3a13516 } }
 bibliography:
   - slug: tao_2006
     citation: Tao, 2006
