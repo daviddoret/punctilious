@@ -1,7 +1,7 @@
 import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
-import punctilious.pu_06_interpretation as _interpretation
+import punctilious.pu_05_interpretation as _interpretation
 import punctilious.pu_08_bundling as _bundling
 import punctilious.pu_09_formula_notations as _formula_notations
 

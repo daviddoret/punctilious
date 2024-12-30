@@ -1,5 +1,8 @@
 """The interpretation module contains all the necessary logic to read and decode formal language in strings.
 This is necessary to load YAML file statements.
+
+A nice Lark parser online for troubleshooting: https://www.lark-parser.org/ide/
+
 """
 
 # external modules
@@ -194,6 +197,34 @@ class Interpreter(_identifiers.UniqueIdentifiable):
         result = self._transformer.transform(tree)
         _utilities.get_logger().debug(f'string: `{input_string}` interpreted as: {result}')
         return result
+
+
+class InterpretedFormula(_formal_language.Formula):
+    """An InterpretedFormula is a formula whose source was a string.
+
+    An Interpreter generates Formulas from strings.
+    An InterpretedFormula enriches the Formulas to ensure traceability between the original strings and the resulting formulas.
+
+    """
+
+    def __init__(self, input_string: str, interpreter: Interpreter):
+        self._input_string: str = input_string
+        self._interpreter: Interpreter = interpreter
+        formula: _formal_language.Formula = interpreter.interpret(input_string=input_string)
+        super().__init__(c=formula.c, a=formula.a)
+
+    @property
+    def input_string(self) -> str:
+        """The `input_string` is the original / raw text from which the formula was interpreted.
+
+        :return:
+        """
+        return self._input_string
+
+    @property
+    def interpreter(self) -> Interpreter:
+        """The `interpreter` is the instance of Interpreter user to input the `input_string` to an instance of Formula."""
+        return self._interpreter
 
 
 pass

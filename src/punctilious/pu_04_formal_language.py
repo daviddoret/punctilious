@@ -1,3 +1,7 @@
+# TODO: Some formulas must be IdentificableObjects and indexed,
+#   such as Statements from YAML files. THIS IS THE NEXT CRITICAL TASK.
+
+
 # special features
 from __future__ import annotations
 

@@ -12,7 +12,7 @@ from punctilious.pu_03_representation import AbstractRepresentation, ensure_abst
 import punctilious.options as options
 from punctilious.pu_04_formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
     FormulaArguments, Formula
-import punctilious.pu_06_interpretation as interpretation
+import punctilious.pu_05_interpretation as interpretation
 
 import punctilious.pu_08_bundling as _bundling
 from punctilious.pu_08_bundling import load_abstract_representation, load_abstract_representations

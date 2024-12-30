@@ -15,6 +15,7 @@ import yaml
 # punctilious modules
 import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_04_formal_language as _formal_language
+import punctilious.pu_05_interpretation as _interpretation
 
 
 class Statement(_formal_language.Formula, _identifiers.UniqueIdentifiable):
@@ -40,7 +41,7 @@ class Statement(_formal_language.Formula, _identifiers.UniqueIdentifiable):
         return f'{self.uid.slug} statement'
 
     @property
-    def conclusion(self):
+    def conclusion(self) -> _formal_language.Formula:
         return self._conclusion
 
     @property

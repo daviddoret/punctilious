@@ -5,8 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="lark template and interpretation improvements">
+      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_05_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_no_interpretation_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_no_interpretation_interpreter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_10_default_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_10_default_interpreter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +86,7 @@
     </order>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -200,7 +208,7 @@
     "Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.test_is_extension.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
-    "Python tests.pytest for test_formula.TestFormula.test_formula.executor": "Debug",
+    "Python tests.pytest for test_formula.TestFormula.test_formula.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_formula_2.executor": "Debug",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.executor": "Run",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.test_formula_notation.executor": "Run",
@@ -591,7 +599,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="pu_05_meta_language" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="pu_06_meta_language" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -604,7 +612,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/pu_05_meta_language.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -816,7 +824,7 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.pu_05_meta_language" />
+      <item itemvalue="Python.pu_06_meta_language" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
@@ -834,7 +842,7 @@
       <list>
         <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python.pu_05_meta_language" />
+        <item itemvalue="Python.pu_06_meta_language" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2" />
         <item itemvalue="Python tests.pytest for test_latin_alphabet_uppercase_serif_italic.TestLatinAlphabetLowercaseSerifItalic.test_latin_alphabet_lowercase_serif_italic" />
       </list>
@@ -855,14 +863,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01231" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734820933648</created>
-      <option name="number" value="01231" />
-      <option name="presentableId" value="LOCAL-01231" />
-      <option name="project" value="LOCAL" />
-      <updated>1734820933648</updated>
     </task>
     <task id="LOCAL-01232" summary="first theorem implementation">
       <option name="closed" value="true" />
@@ -1248,7 +1248,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735509204648</updated>
     </task>
-    <option name="localTasksCounter" value="1280" />
+    <task id="LOCAL-01280" summary="lark template and interpretation improvements">
+      <option name="closed" value="true" />
+      <created>1735509590044</created>
+      <option name="number" value="01280" />
+      <option name="presentableId" value="LOCAL-01280" />
+      <option name="project" value="LOCAL" />
+      <updated>1735509590044</updated>
+    </task>
+    <option name="localTasksCounter" value="1281" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
