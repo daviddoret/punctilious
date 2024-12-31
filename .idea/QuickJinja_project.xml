@@ -3,7 +3,7 @@
   <component name="de.achimonline.quickjinja.settings.QuickJinjaProjectSettingsState">
     <option name="settings">
       <QuickJinjaProjectSettings>
-        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" />
+        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/data/mappings/operators_1.yaml" />
       </QuickJinjaProjectSettings>
     </option>
   </component>

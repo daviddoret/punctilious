@@ -9,7 +9,7 @@ import punctilious.pu_05_interpretation as _interpretation
 
 
 def _generate_no_interpretation():
-    interpreter = _interpretation.Interpreter(
+    interpreter = _interpretation.Interpret(
         uid=_identifiers.UniqueIdentifier(
             slug='no_interpretation',
             uuid='ccf14265-c568-4276-bbfc-cf3eec1b625b'),
@@ -21,6 +21,6 @@ def _generate_no_interpretation():
     return interpreter
 
 
-_no_interpreter: _interpretation.Interpreter = _generate_no_interpretation()
+_no_interpreter: _interpretation.Interpret = _generate_no_interpretation()
 
 pass

@@ -39,6 +39,10 @@ entailment = _operators_1_connectors_bundle.connectors.get_from_uuid('edf63cea-9
 negation = _operators_1_connectors_bundle.connectors.get_from_uuid('1341a021-0f42-4024-bf87-5fa7767be0ac',
                                                                    raise_error_if_not_found=True)
 
+tuple2 = _operators_1_connectors_bundle.connectors.get_from_uuid('c138b200-111a-4a40-ac3c-c8afa8e615fb',
+                                                                 raise_error_if_not_found=True)
+"""Name `tuple2` is used instead of `tuple` to avoid conflict with the Python reserved word."""
+
 # Load default representations
 _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
                                               resource='operators_1.yaml')

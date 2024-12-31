@@ -52,22 +52,22 @@ class TestInterpretation:
             infix_connectors=infix_connectors,
             function_connectors=function_connectors)
         input_string = "P"
-        assert str(interpreter.interpret(input_string)) == 'P'
+        assert str(interpreter.interpret_formula(input_string)) == 'P'
         input_string = "not P"
-        assert str(interpreter.interpret(input_string)) == '¬P'
+        assert str(interpreter.interpret_formula(input_string)) == '¬P'
         input_string = "f(P)"
-        assert str(interpreter.interpret(input_string)) == 'f(P)'
+        assert str(interpreter.interpret_formula(input_string)) == 'f(P)'
         input_string = "P and Q"
-        assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
+        assert str(interpreter.interpret_formula(input_string)) == 'P ∧ Q'
         input_string = "(P and Q)"
-        assert str(interpreter.interpret(input_string)) == 'P ∧ Q'
+        assert str(interpreter.interpret_formula(input_string)) == 'P ∧ Q'
         input_string = "(P and Q) and (Q and P)"
-        assert str(interpreter.interpret(input_string)) == '(P ∧ Q) ∧ (Q ∧ P)'
+        assert str(interpreter.interpret_formula(input_string)) == '(P ∧ Q) ∧ (Q ∧ P)'
         input_string = "not(not P)"
-        assert str(interpreter.interpret(input_string)) == '¬(¬P)'
+        assert str(interpreter.interpret_formula(input_string)) == '¬(¬P)'
         input_string = "not(not (f(P) and Q) and (Q and P))"
         assert str(
-            interpreter.interpret(input_string)) == '¬((¬(f(P) ∧ Q)) ∧ (Q ∧ P))'
+            interpreter.interpret_formula(input_string)) == '¬((¬(f(P) ∧ Q)) ∧ (Q ∧ P))'
 
     def test_interpretation_2(self):
         prefs = pu.representation.Preferences()
@@ -78,18 +78,18 @@ class TestInterpretation:
         interpreter = interpreters._generate_default_interpreter()
         pass
         input_string = "𝑃"
-        assert interpreter.interpret(input_string).represent(prefs=prefs) == '𝑃'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '𝑃'
         input_string = "¬𝑃"
-        assert interpreter.interpret(input_string).represent(prefs=prefs) == '¬𝑃'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬𝑃'
         input_string = "¬(𝑃)"
-        assert interpreter.interpret(input_string).represent(prefs=prefs) == '¬𝑃'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬𝑃'
         input_string = "𝑃 ∧ 𝑄"
-        assert interpreter.interpret(input_string).represent(prefs=prefs) == '𝑃 ∧ 𝑄'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '𝑃 ∧ 𝑄'
         input_string = "(𝑃 ∧ 𝑄)"
-        assert interpreter.interpret(input_string).represent(prefs=prefs) == '𝑃 ∧ 𝑄'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '𝑃 ∧ 𝑄'
         input_string = "(𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)"
-        assert interpreter.interpret(input_string).represent(prefs=prefs) == '(𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '(𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)'
         input_string = "¬(¬ 𝑃)"
-        assert interpreter.interpret(input_string).represent(prefs=prefs) == '¬(¬𝑃)'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬(¬𝑃)'
         input_string = "¬(¬((𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)))"
-        assert interpreter.interpret(input_string).represent(prefs=prefs) == '¬(¬((𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)))'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬(¬((𝑃 ∧ 𝑄) ∧ (𝑄 ∧ 𝑃)))'

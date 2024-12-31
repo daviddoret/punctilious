@@ -26,5 +26,7 @@ connectors:
     syntactic_rules: { fixed_arity: 2 }
   - uid: { slug: successor, uuid: f85163bf-381d-41fa-bdbb-70cd28bb826b }
     syntactic_rules: { fixed_arity: 1 }
+  - uid: { slug: tuple, uuid: c138b200-111a-4a40-ac3c-c8afa8e615fb }
+    syntactic_rules: { }
 
 

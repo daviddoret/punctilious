@@ -126,12 +126,13 @@ class AbstractRepresentation(_identifiers.UniqueIdentifiable):
             renderers = tuple()
         self._renderers: tuple[Renderer, ...] = renderers
         super().__init__(uid=uid)
+        _util.get_logger().debug(f'AbstractRepresentation: `{repr(self)}`')
 
     def __repr__(self):
-        return f'{self.uid.slug} ({self.uid.uuid}) representation builder'
+        return f'{self.uid.slug} ({self.uid.uuid})'
 
     def __str__(self):
-        return f'{self.uid.slug} representation builder'
+        return f'{self.uid.slug}'
 
     def optimize_renderer(self, prefs: Preferences = None):
         """Given some preferences, return the optimal renderer.

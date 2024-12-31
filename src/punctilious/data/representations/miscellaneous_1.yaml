@@ -1,0 +1,9 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uid: { slug: miscellaneous_1, uuid: 13d1cb40-2e31-4852-a65b-71e990943553 }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
+representations:
+  - uid: { slug: empty_string, uuid: 68007b08-f95d-4399-9162-a81dc90e7cfa }
+    renderers:
+      - implementation: string_constant
+        string_constant: ''
+        options: { technical_language: unicode_basic, connector_representation: symbol }

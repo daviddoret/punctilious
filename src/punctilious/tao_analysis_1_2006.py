@@ -62,7 +62,7 @@ def _configure_tao_interpreter():
                 rep = connector.connector_representation.rep(prefs=prefs)
                 postfix_connectors[rep] = connector
 
-        interpreter = _interpretation.Interpreter(
+        interpreter = _interpretation.Interpret(
             uid=_identifiers.UniqueIdentifier(
                 slug='tao_analysis_1_2006_interpreter',
                 uuid='12af7828-364d-4943-b9ea-92553d35566e'),
@@ -74,7 +74,7 @@ def _configure_tao_interpreter():
         _tao_interpreter = interpreter
 
 
-_tao_interpreter: _interpretation.Interpreter | None = None
+_tao_interpreter: _interpretation.Interpret | None = None
 
 _configure_tao_interpreter()
 test = _identifiers.load_unique_identifiable(

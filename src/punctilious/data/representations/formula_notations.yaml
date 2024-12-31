@@ -49,6 +49,14 @@ representations:
       - implementation: string_template
         string_template: '\left({{ connector }}, \left({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}\right)\right)'
         options: { technical_language: latex_math, super_parenthesization: not_required }
+  - uid: { slug: tuple, uuid: 2d050cf8-bb21-4af3-879f-2faf34b35722 }
+    renderers:
+      - implementation: string_template
+        string_template: '({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %})'
+        options: { technical_language: unicode_basic, super_parenthesization: not_required }
+      - implementation: string_template
+        string_template: '\left({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}\right)'
+        options: { technical_language: latex_math, super_parenthesization: not_required }
 
 
 

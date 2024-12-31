@@ -85,7 +85,7 @@ def _generate_default_interpreter():
             rep = connector.connector_representation.rep(prefs=prefs)
             atomic_connectors[rep] = connector
 
-    interpreter = _interpretation.Interpreter(
+    interpreter = _interpretation.Interpret(
         uid=_identifiers.UniqueIdentifier(
             slug='default_interpreter',
             uuid='bda96859-9450-475c-a651-89d7dffcd2fe'),
@@ -97,6 +97,6 @@ def _generate_default_interpreter():
     return interpreter
 
 
-_default_interpreter: _interpretation.Interpreter = _generate_default_interpreter()
+_default_interpreter: _interpretation.Interpret = _generate_default_interpreter()
 
 pass

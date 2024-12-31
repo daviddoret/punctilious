@@ -115,7 +115,7 @@ class Transformer(lark.Transformer):
         return _formal_language.Formula(atomic_connector)
 
 
-class Interpreter(_identifiers.UniqueIdentifiable):
+class Interpret(_identifiers.UniqueIdentifiable):
 
     def __init__(self, uid: _identifiers.UniqueIdentifier, atomic_connectors: dict, prefix_connectors: dict,
                  postfix_connectors: dict, infix_connectors: dict, function_connectors: dict):
@@ -189,13 +189,13 @@ class Interpreter(_identifiers.UniqueIdentifiable):
     def grammar(self):
         return self._grammar
 
-    def interpret(self, input_string: str) -> _formal_language.Formula:
-        input_string: str = str(input_string)
-        _utilities.get_logger().debug(f'interpretation of string: `{input_string}`')
-        tree = self._parser.parse(input_string)
+    def interpret_formula(self, source_formula: str) -> _formal_language.Formula:
+        source_formula: str = str(source_formula)
+        _utilities.get_logger().debug(f'interpretation of string: `{source_formula}`')
+        tree = self._parser.parse(source_formula)
         _utilities.get_logger().debug(f'tree: `{tree}`')
         result = self._transformer.transform(tree)
-        _utilities.get_logger().debug(f'string: `{input_string}` interpreted as: {result}')
+        _utilities.get_logger().debug(f'string: `{source_formula}` interpreted as: {result}')
         return result
 
 
@@ -207,24 +207,25 @@ class InterpretedFormula(_formal_language.Formula):
 
     """
 
-    def __init__(self, input_string: str, interpreter: Interpreter):
-        self._input_string: str = input_string
-        self._interpreter: Interpreter = interpreter
-        formula: _formal_language.Formula = interpreter.interpret(input_string=input_string)
+    def __init__(self, original_formula: str, interpret: Interpret):
+        self._original_formula: str = original_formula
+        self._interpret: Interpret = interpret
+        formula: _formal_language.Formula = interpret.interpret_formula(source_formula=original_formula)
         super().__init__(c=formula.c, a=formula.a)
+        _utilities.get_logger().debug(f'Original formula: `{original_formula}` interpreted as `{self}`.')
 
     @property
-    def input_string(self) -> str:
-        """The `input_string` is the original / raw text from which the formula was interpreted.
+    def original_formula(self) -> str:
+        """The `original_formula` is the original formula in raw text from which the formula was interpreted.
 
         :return:
         """
-        return self._input_string
+        return self._original_formula
 
     @property
-    def interpreter(self) -> Interpreter:
-        """The `interpreter` is the instance of Interpreter user to input the `input_string` to an instance of Formula."""
-        return self._interpreter
+    def interpreter(self) -> Interpret:
+        """The `interpreter` is the instance of Interpreter used to parse and transform the `original_formula` to a Formula."""
+        return self._interpret
 
 
 pass

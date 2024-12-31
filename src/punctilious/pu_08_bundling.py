@@ -312,16 +312,16 @@ def load_bundle_from_dict(d: dict) -> Bundle:
         schema = d['schema']
         uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(d['uid'])
         _util.get_logger().debug(f'Bundle: {uid}')
-        interpreter: _interpretation.Interpreter | None
+        interpreter: _interpretation.Interpret | None
         interpreter_uid = d.get('interpreter', None)
         if interpreter_uid is not None:
             # _util.get_logger().debug(f'Interpreter UID: {interpreter_uid}')
-            interpreter: _interpretation.Interpreter = _identifiers.load_unique_identifiable(o=interpreter_uid)
+            interpreter: _interpretation.Interpret = _identifiers.load_unique_identifiable(o=interpreter_uid)
             if interpreter_uid is None:
                 raise ReferenceError(f'Missing interpreter: {interpreter_uid}')
         else:
             _util.get_logger().debug(f'Interpreter UID: None')
-            interpreter: _interpretation.Interpreter = _no_interpretation_interpreter.get_no_interpretation_interpreter()
+            interpreter: _interpretation.Interpret = _no_interpretation_interpreter.get_no_interpretation_interpreter()
         # _util.get_logger().debug(f'Interpreter: {interpreter}')
         untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
         imports = Imports(*untyped_imports)
@@ -333,121 +333,73 @@ def load_bundle_from_dict(d: dict) -> Bundle:
         connectors: _formal_language.Connectors = load_connectors(
             d.get('connectors', None),
             overwrite_mutable_properties=True)
-        statements = load_statements(d.get('statements', None), interpreter=interpreter)
-        justifications = _meta_language.Justifications.instantiate_from_list(
-            l=d['justifications'] if 'justifications' in d.keys() else None)
+        # statements = load_statements(d.get('statements', None), interpreter=interpreter)
+        # justifications = _meta_language.Justifications.instantiate_from_list(
+        #     l=d['justifications'] if 'justifications' in d.keys() else None)
         bundle: Bundle = Bundle(schema=schema, uid=uid, imports=imports, aliases=aliases,
-                                representations=representations, connectors=connectors, statements=statements)
+                                representations=representations, connectors=connectors)
     return bundle
 
 
-def load_statement_obsolete(o: typing.Mapping, overwrite_mutable_properties: bool = False) -> _meta_language.Statement:
+def load_statement(o: typing.Mapping, interpret: _interpretation.Interpret):
     """Receives a raw Statement, typically from a YAML file, and returns a typed Statement instance.
 
-    :param overwrite_mutable_properties: if `o` is already loaded in memory, overwrite its mutable properties:
-        `connector_representation`, and `formula_representation`.
+    Interpret raw strings as formulas.
+
+    :param interpret:
     :param o: a raw Connector.
     :return: a typed Connector instance.
     """
     statement: _meta_language.Statement | None = _identifiers.load_unique_identifiable(o)
     if statement is None:
-        # The connector does not exist in memory.
-        statement: _meta_language.Statement = _meta_language.ensure_statement(o)
+        # The object was not already loaded in memory.
+
+        # Interprets the formulas from the original formulas in raw string format from the YAML file.
+        variables = interpret_formulas(o=o.get('variables', None), interpret=interpret)
+        premises = interpret_formulas(o=o.get('premises', None), interpret=interpret)
+        conclusion = interpret_formula(o=o.get('conclusion', None), interpret=interpret)
+
+        # Prepares the sub-formulas.
+        variables = _formal_language.Formula(c=_meta_language.tuple2, a=variables)
+        premises = _formal_language.Formula(c=_meta_language.tuple2, a=premises)
+
+        # Prepares the statement formula.
+        statement = _formal_language.Formula(c=_meta_language.tuple2, a=(variables, premises, conclusion,))
     else:
-        # The connector exists in memory.
-        if overwrite_mutable_properties:
-            pass
+        # The representation exists in memory.
+        pass
     return statement
 
 
-def load_statement(o: typing.Mapping, interpreter: _interpretation.Interpreter) -> _formal_language.Formula:
-    """Receives a raw Statement, typically from a YAML file, and returns a typed Statement instance.
+def interpret_formula(o: str, interpret: _interpretation.Interpret) -> _interpretation.InterpretedFormula:
+    """Parse an original formula in raw string format, and transform it to an InterpretedFormula.
 
-    :param interpreter:
-    :param o: a raw Connector.
-    :return: a typed Connector instance.
+    :param o: the original formula in string format.
+    :param interpret: the Interpret able to parse and transform the original formula.
+    :return:
     """
-    # The connector does not exist in memory.
-    variables = load_variables(o.get('variables', None), interpreter=interpreter)
-    premises = load_premises(o.get('premises', None), interpreter=interpreter)
-    conclusion = load_conclusion(o.get('conclusion', None), interpreter=interpreter)
-    connector: _formal_language.Connector = _meta_language.statement_connector
-    phi: _formal_language.Formula = _formal_language.Formula(
-        c=connector,
-        a=(variables, premises, conclusion,))
-
-    # validate the statement well-formedness
-    # TODO: Implement ensure_statement_wellformedness(phi)
-
+    phi: _interpretation.InterpretedFormula = _interpretation.InterpretedFormula(original_formula=o,
+                                                                                 interpret=interpret)
     return phi
 
 
-def load_variables(o: typing.Iterable | None, interpreter: _interpretation.Interpreter) -> _formal_language.Formula:
-    """Receives a collection of raw string variables, e.g.: from a YAML file,
-    and returns a formula `variables(v1, v2, ..., vn)`.
+def interpret_formulas(o: typing.Iterable | None, interpret: _interpretation.Interpret) -> tuple[
+    _interpretation.InterpretedFormula, ...]:
+    """Receives an iterable collection of original formulas in raw string format, e.g.: from a YAML file,
+    and returns a tuple of InterpretedFormulas.
 
-    :param interpreter:
+    :param interpret:
     :param o: a raw Connector.
     :return: a typed Connector instance.
     """
     if o is None:
         o = tuple()
-    connector: _formal_language.Connector = _meta_language.variables_connector
-    variables: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=str(i)) for i in o)
-    phi: _formal_language.Formula = _formal_language.Formula(
-        c=connector,
-        a=variables)
-
-    # validate the variables well-formedness
-    # TODO: Implement ensure_variables_wellformedness(phi)
-
-    return phi
+    formulas: tuple[_interpretation.InterpretedFormula, ...] = tuple(
+        interpret_formula(o=str(i), interpret=interpret) for i in o)
+    return formulas
 
 
-def load_premises(o: typing.Iterable | None, interpreter: _interpretation.Interpreter) -> _formal_language.Formula:
-    """Receives a collection of raw string premises, e.g.: from a YAML file,
-    and returns a formula `premises(p1, p2, ..., pn)`.
-
-    :param interpreter:
-    :param o: a raw Connector.
-    :return: a typed Connector instance.
-    """
-    if o is None:
-        o = tuple()
-    connector: _formal_language.Connector = _meta_language.premises_connector
-    premises: tuple[_formal_language.Formula, ...] = tuple(interpreter.interpret(input_string=str(i)) for i in o)
-    phi: _formal_language.Formula = _formal_language.Formula(
-        c=connector,
-        a=premises)
-
-    # validate the variables well-formedness
-    # TODO: Implement ensure_premises_wellformedness(phi)
-
-    return phi
-
-
-def load_conclusion(o: str, interpreter: _interpretation.Interpreter) -> _formal_language.Formula:
-    """Receives a collection of raw string premises, e.g.: from a YAML file,
-    and returns a formula `premises(p1, p2, ..., pn)`.
-
-    :param interpreter:
-    :param o: a raw Connector.
-    :return: a typed Connector instance.
-    """
-    o: str = str(o)
-    connector: _formal_language.Connector = _meta_language.conclusion_connector
-    conclusion: _formal_language.Formula = interpreter.interpret(input_string=o)
-    phi: _formal_language.Formula = _formal_language.Formula(
-        c=connector,
-        a=(conclusion,))
-
-    # validate the variables well-formedness
-    # TODO: Implement ensure_premises_wellformedness(phi)
-
-    return phi
-
-
-def load_statements(o: typing.Iterable | None, interpreter: _interpretation.Interpreter) -> _meta_language.Statements:
+def load_statements(o: typing.Iterable | None, interpreter: _interpretation.Interpret):
     """Receives a raw Statements collection, typically from a YAML file,
     and returns a typed Statements instance.
 
@@ -460,9 +412,10 @@ def load_statements(o: typing.Iterable | None, interpreter: _interpretation.Inte
     statements: typing.Union[list, list[_formal_language.Formula, ...]] = []
     for i in o:
         _util.get_logger().debug(f'statement: {i}')
-        statement: _formal_language.Formula = load_statement(i, interpreter=interpreter)
+        statement: _formal_language.Formula = load_statement(i, interpret=interpreter)
         statements.append(statement)
-    return _meta_language.Statements(*statements)
+    # return _meta_language.Statements(*statements)
+    raise NotImplementedError('not implemented.')
 
 
 def load_abstract_representation(o: typing.Mapping,

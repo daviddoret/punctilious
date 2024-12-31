@@ -30,6 +30,9 @@ connectors:
   - uid: { slug: negation, uuid: 1341a021-0f42-4024-bf87-5fa7767be0ac }
     connector_representation: { uid: { slug: negation, uuid: 8c86e402-085a-4d9c-b4db-bbf2c6cd36ed } }
     formula_representation: { uid: { slug: prefix_formula, uuid: ca64ae2f-f8a7-4a87-a99d-57d86a8ba0ad } }
+  - uid: { slug: tuple, uuid: c138b200-111a-4a40-ac3c-c8afa8e615fb }
+    connector_representation: { uid: { slug: empty_string, uuid: 68007b08-f95d-4399-9162-a81dc90e7cfa } }
+    formula_representation: { uid: { slug: tuple, uuid: 2d050cf8-bb21-4af3-879f-2faf34b35722 } }
 
 
 
