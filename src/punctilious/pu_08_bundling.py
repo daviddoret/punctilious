@@ -315,14 +315,14 @@ def load_bundle_from_dict(d: dict) -> Bundle:
         interpreter: _interpretation.Interpret | None
         interpreter_uid = d.get('interpreter', None)
         if interpreter_uid is not None:
-            # _util.get_logger().debug(f'Interpreter UID: {interpreter_uid}')
+            # _util.get_logger().debug(f'Interpret UID: {interpreter_uid}')
             interpreter: _interpretation.Interpret = _identifiers.load_unique_identifiable(o=interpreter_uid)
             if interpreter_uid is None:
                 raise ReferenceError(f'Missing interpreter: {interpreter_uid}')
         else:
-            _util.get_logger().debug(f'Interpreter UID: None')
+            _util.get_logger().debug(f'Interpret UID: None')
             interpreter: _interpretation.Interpret = _no_interpretation_interpreter.get_no_interpretation_interpreter()
-        # _util.get_logger().debug(f'Interpreter: {interpreter}')
+        # _util.get_logger().debug(f'Interpret: {interpreter}')
         untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
         imports = Imports(*untyped_imports)
         aliases = None  # To be implemented

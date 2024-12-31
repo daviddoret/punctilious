@@ -43,14 +43,18 @@ class TestInterpretation:
         prefix_connectors = {'not': lnot}
         infix_connectors = {'and': land}
         function_connectors = {'not': lnot, 'f': f, 'g': g}
+        postfix_connectors = {}
+
+        uid = pu.identifiers.UniqueIdentifier(slug='test', uuid='f75433aa-3d3c-43ae-8387-421c25772ba1')
 
         # Output the parsed structure
-        interpreter = pu.Interpreter(
-            # variable_connectors={},
+        interpreter = pu.interpretation.Interpret(
+            uid=uid,
             atomic_connectors=atomic_connectors,
             prefix_connectors=prefix_connectors,
             infix_connectors=infix_connectors,
-            function_connectors=function_connectors)
+            function_connectors=function_connectors,
+            postfix_connectors=postfix_connectors)
         input_string = "P"
         assert str(interpreter.interpret_formula(input_string)) == 'P'
         input_string = "not P"

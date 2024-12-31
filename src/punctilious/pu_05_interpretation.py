@@ -202,7 +202,7 @@ class Interpret(_identifiers.UniqueIdentifiable):
 class InterpretedFormula(_formal_language.Formula):
     """An InterpretedFormula is a formula whose source was a string.
 
-    An Interpreter generates Formulas from strings.
+    An Interpret generates Formulas from strings.
     An InterpretedFormula enriches the Formulas to ensure traceability between the original strings and the resulting formulas.
 
     """
@@ -224,7 +224,7 @@ class InterpretedFormula(_formal_language.Formula):
 
     @property
     def interpreter(self) -> Interpret:
-        """The `interpreter` is the instance of Interpreter used to parse and transform the `original_formula` to a Formula."""
+        """The `interpreter` is the instance of Interpret used to parse and transform the `original_formula` to a Formula."""
         return self._interpret
 
 
