@@ -75,7 +75,7 @@ class TestInterpretation:
         input_string = "not(not(P))"
         assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬(¬P)'
         input_string = "not(not(f(P) and Q) and (Q and P))"
-        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬(¬(𝑓(P) ∧ Q)) ∧ (Q ∧ P)'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬((¬(𝑓(P) ∧ Q)) ∧ (Q ∧ P))'
 
     def test_interpretation_2(self):
         prefs = pu.representation.Preferences()

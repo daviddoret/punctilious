@@ -344,10 +344,10 @@ class Connector(_identifiers.UniqueIdentifiable):
         super().__init__(uid=uid)
 
     def __repr__(self):
-        return f'{self.uid.slug} connector'
+        return f'{self.uid.slug}[{self.uid.uuid}]'
 
     def __str__(self):
-        return f'{self.uid.slug} connector'
+        return f'{self.uid.slug}'
 
     @property
     def connector_representation(self) -> _representation.AbstractRepresentation:

@@ -114,6 +114,11 @@ class Transformer(lark.Transformer):
         # arguments = []
         return _formal_language.Formula(atomic_connector)
 
+    def parse_parenthesized_formula(self, items):
+        """Transform a list of expressions into a Python list."""
+        _utilities.get_logger().debug(f'parse parenthesized formula: {items}')
+        return items[0]
+
 
 class Interpret(_identifiers.UniqueIdentifiable):
 

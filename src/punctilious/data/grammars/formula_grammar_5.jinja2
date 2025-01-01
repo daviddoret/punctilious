@@ -15,7 +15,7 @@ prefix_formula . 40 : PREFIX_CONNECTOR formula_expression -> parse_prefix_formul
 postfix_formula . 30 : formula_expression POSTFIX_CONNECTOR -> parse_postfix_formula
 infix_formula . 25: formula_expression _SPACE? INFIX_CONNECTOR _SPACE? formula_expression -> parse_infix_formula
 function_formula_arguments . 20 : formula_expression (_SPACE? _COMMA _SPACE? formula_expression)* -> parse_function_formula_arguments
-parenthesized_formula . 15 : _OPEN_PARENTHESIS _SPACE? formula_expression _SPACE? _CLOSE_PARENTHESIS
+parenthesized_formula . 15 : _OPEN_PARENTHESIS _SPACE? formula_expression _SPACE? _CLOSE_PARENTHESIS -> parse_parenthesized_formula
 atomic_formula . 10 : ATOMIC_CONNECTOR -> parse_atomic_formula
 
 _OPEN_PARENTHESIS : "("

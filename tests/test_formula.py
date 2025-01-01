@@ -6,6 +6,10 @@ class TestFormula:
     def test_formula(self):
         """Test of representation with multiple string-constant renderers.
         """
+        prefs = pu.Preferences()
+        prefs[pu.options.technical_language.unicode_extended] = 3
+        prefs[pu.options.technical_language.unicode_extended] = 4
+        prefs[pu.options.technical_language.latex_math] = 0
 
         p = create_atomic_connector('P')
         q = create_atomic_connector('Q')
@@ -13,24 +17,23 @@ class TestFormula:
         land = pu.operators_1.conjunction
         lnot = pu.operators_1.negation
 
-        phi1 = pu.Formula(p)
-        assert str(phi1) == 'P'
+        phi1 = pu.formal_language.Formula(p)
+        assert phi1.represent(prefs=prefs) == 'P'
 
-        phi2 = pu.Formula(land, (p, q,))
-        assert str(phi2) == 'P ∧ Q'
+        phi2 = pu.formal_language.Formula(land, (p, q,))
+        assert phi2.represent(prefs=prefs) == 'P ∧ Q'
 
-        phi3 = pu.Formula(lnot, (p,))
-        assert str(phi3) == '¬P'
+        phi3 = pu.formal_language.Formula(lnot, (p,))
+        assert phi3.represent(prefs=prefs) == '¬P'
 
-        phi4 = pu.Formula(land, (phi3, phi2))
-        assert str(phi4) == '(¬P) ∧ (P ∧ Q)'
+        phi4 = pu.formal_language.Formula(land, (phi3, phi2))
+        assert phi4.represent(prefs=prefs) == '(¬P) ∧ (P ∧ Q)'
 
-        phi5 = pu.Formula(land, (phi2, phi2))
-        assert phi5.represent() == '(P ∧ Q) ∧ (P ∧ Q)'
+        phi5 = pu.formal_language.Formula(land, (phi2, phi2))
+        assert phi5.represent(prefs=prefs) == '(P ∧ Q) ∧ (P ∧ Q)'
 
     def test_formula_2(self):
         prefs = pu.Preferences()
-        # tag = pu.Tag('technical_language', 'unicode_extended')
         prefs[pu.options.technical_language.unicode_extended] = 3
         prefs[pu.options.technical_language.unicode_extended] = 4
         prefs[pu.options.technical_language.latex_math] = 0
@@ -38,5 +41,5 @@ class TestFormula:
         x = create_atomic_connector('x')
         element_of = pu.operators_1.element_of
         n = pu.constants_1.n
-        phi6 = pu.Formula(element_of, (x, n))
+        phi6 = pu.formal_language.Formula(element_of, (x, n))
         assert phi6.represent(prefs=prefs) == 'x ∈ ℕ'

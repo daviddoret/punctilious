@@ -7,6 +7,6 @@ class TestTaoAnalysis12006:
         """Test of representation with multiple string-constant renderers.
         """
         zero = pu.tao_analysis_1_2006.zero
-        zero_constant = pu.Formula(zero)
+        zero_constant = pu.formal_language.Formula(zero)
         zero_constant.represent()
         pass
