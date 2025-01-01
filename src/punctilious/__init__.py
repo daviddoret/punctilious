@@ -1,8 +1,7 @@
-import punctilious.pu_01_utilities as _util
-from punctilious.pu_01_utilities import get_yaml_from_package
+import punctilious.pu_01_utilities as util
 from punctilious.pu_02_identifiers import create_uid, ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
     load_unique_identifiable, UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
-import punctilious.pu_02_identifiers as identifiers
+import punctilious.pu_02_identifiers as uid
 import punctilious.pu_03_representation as representation
 from punctilious.pu_03_representation import AbstractRepresentation, ensure_abstract_representations, \
     ensure_abstract_representation, \
@@ -11,8 +10,7 @@ from punctilious.pu_03_representation import AbstractRepresentation, ensure_abst
     OptionsAssignment, RendererForStringTemplate, \
     RendererForStringConstant
 import punctilious.options as options
-from punctilious.pu_04_formal_language import Connector, Connectors, ensure_formula, ensure_formula_arguments, \
-    FormulaArguments, Formula
+import punctilious.pu_04_formal_language as formal_language
 import punctilious.pu_05_interpretation as interpretation
 
 import punctilious.pu_08_bundling as _bundling
@@ -28,7 +26,7 @@ import punctilious.latin_alphabet_lowercase_serif_bold as latin_alphabet_lowerca
 import punctilious.operators_1 as operators_1
 import punctilious.constants_1 as constants_1
 
-import punctilious.pu_10_default_interpreter as interpreters
+import punctilious.pu_10_default_interpreter as default_interpreter
 
 from punctilious.declarations import declare_variable, declare_function
 

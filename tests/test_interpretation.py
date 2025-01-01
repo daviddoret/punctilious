@@ -30,6 +30,10 @@ class TestInterpretation:
     def test_interpretation_1(self):
         """test with a manually designed interpreter.
         """
+        prefs = pu.representation.Preferences()
+        prefs[pu.options.technical_language.unicode_basic] = 1
+        prefs[pu.options.technical_language.unicode_extended] = 2
+        prefs[pu.options.technical_language.latex_math] = pu.representation.get_forbidden()
 
         p = create_atomic_connector('P')
         q = create_atomic_connector('Q')
@@ -40,12 +44,12 @@ class TestInterpretation:
         f = pu.declare_function('f')
         g = pu.declare_function('g')
         atomic_connectors = {'P': p, 'Q': q, 'R': r}
-        prefix_connectors = {'not': lnot}
+        prefix_connectors = {}
         infix_connectors = {'and': land}
         function_connectors = {'not': lnot, 'f': f, 'g': g}
         postfix_connectors = {}
 
-        uid = pu.identifiers.UniqueIdentifier(slug='test', uuid='f75433aa-3d3c-43ae-8387-421c25772ba1')
+        uid = pu.uid.UniqueIdentifier(slug='test', uuid='f75433aa-3d3c-43ae-8387-421c25772ba1')
 
         # Output the parsed structure
         interpreter = pu.interpretation.Interpret(
@@ -55,23 +59,23 @@ class TestInterpretation:
             infix_connectors=infix_connectors,
             function_connectors=function_connectors,
             postfix_connectors=postfix_connectors)
+
         input_string = "P"
-        assert str(interpreter.interpret_formula(input_string)) == 'P'
-        input_string = "not P"
-        assert str(interpreter.interpret_formula(input_string)) == '¬P'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == 'P'
+        input_string = "not(P)"
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬P'
         input_string = "f(P)"
-        assert str(interpreter.interpret_formula(input_string)) == 'f(P)'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '𝑓(P)'
         input_string = "P and Q"
-        assert str(interpreter.interpret_formula(input_string)) == 'P ∧ Q'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == 'P ∧ Q'
         input_string = "(P and Q)"
-        assert str(interpreter.interpret_formula(input_string)) == 'P ∧ Q'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == 'P ∧ Q'
         input_string = "(P and Q) and (Q and P)"
-        assert str(interpreter.interpret_formula(input_string)) == '(P ∧ Q) ∧ (Q ∧ P)'
-        input_string = "not(not P)"
-        assert str(interpreter.interpret_formula(input_string)) == '¬(¬P)'
-        input_string = "not(not (f(P) and Q) and (Q and P))"
-        assert str(
-            interpreter.interpret_formula(input_string)) == '¬((¬(f(P) ∧ Q)) ∧ (Q ∧ P))'
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '(P ∧ Q) ∧ (Q ∧ P)'
+        input_string = "not(not(P))"
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬(¬P)'
+        input_string = "not(not(f(P) and Q) and (Q and P))"
+        assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '¬(¬(𝑓(P) ∧ Q)) ∧ (Q ∧ P)'
 
     def test_interpretation_2(self):
         prefs = pu.representation.Preferences()
@@ -79,7 +83,8 @@ class TestInterpretation:
         prefs[pu.options.technical_language.unicode_extended] = 2
         prefs[pu.options.technical_language.latex_math] = pu.representation.get_forbidden()
 
-        interpreter = interpreters._generate_default_interpreter()
+        interpreter = pu.default_interpreter.default_interpreter
+
         pass
         input_string = "𝑃"
         assert interpreter.interpret_formula(input_string).represent(prefs=prefs) == '𝑃'

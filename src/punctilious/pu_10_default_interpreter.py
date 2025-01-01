@@ -6,7 +6,6 @@ import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
 import punctilious.pu_08_bundling as _bundling
 import punctilious.pu_05_interpretation as _interpretation
-# import punctilious.pu_10_preload_formula_notations as _preload_formula_notations
 import punctilious.pu_09_formula_notations as _formula_notations
 import punctilious.options as _options
 import punctilious.constants_1 as constants_1
@@ -97,6 +96,6 @@ def _generate_default_interpreter():
     return interpreter
 
 
-_default_interpreter: _interpretation.Interpret = _generate_default_interpreter()
+default_interpreter: _interpretation.Interpret = _generate_default_interpreter()
 
 pass
