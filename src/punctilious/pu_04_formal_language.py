@@ -68,8 +68,36 @@ class Formula(tuple):
         return self[1]
 
     @property
+    def arity(self) -> int:
+        """Return the arity of the formula, that is its number of arguments.
+
+        :return:
+        """
+        return len(self.arguments)
+
+    @property
     def connector(self) -> Connector:
         return self[0]
+
+    @property
+    def is_atomic(self) -> bool:
+        """A formula is atomic if it has no arguments."""
+        return self.arity == 0
+
+    @property
+    def is_unary(self) -> bool:
+        """A formula is unary if it has exactly one argument."""
+        return self.arity == 1
+
+    @property
+    def is_binary(self) -> bool:
+        """A formula is binary if it has exactly two arguments."""
+        return self.arity == 2
+
+    @property
+    def is_ternary(self) -> bool:
+        """A formula is ternary if it has exactly three arguments."""
+        return self.arity == 3
 
     def represent(self, is_subformula: bool = False, prefs=None) -> str:
         return self.connector.rep_formula(argument=self.arguments, is_subformula=is_subformula, prefs=prefs)
@@ -329,6 +357,7 @@ class Connector(_identifiers.UniqueIdentifiable):
     """
 
     def __call__(self, *args):
+        """Return a formula with this connector as the root connector, and the arguments as its arguments."""
         return Formula(c=self, a=args)
 
     def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
@@ -364,6 +393,10 @@ class Connector(_identifiers.UniqueIdentifiable):
     @formula_representation.setter
     def formula_representation(self, formula_representation):
         self._formula_representation = formula_representation
+
+    def is_connector_equivalent_to(self, other: Connector) -> bool:
+        """Returns True if the connectors are equivalent, False otherwise."""
+        return self.uid.is_unique_identifier_equivalent(other.uid)
 
     @property
     def package(self):
@@ -436,3 +469,52 @@ def ensure_connector(o: FlexibleConnector) -> Connector:
         return o
     else:
         raise TypeError(f'Connector assurance failure. o: {str(o)}, type: {type(o).__name__}.')
+
+
+def is_root_connector_equivalent(phi: Formula, psi: Formula) -> bool:
+    """Determines whether two formulas are root-connector-equivalent.
+
+    Args:
+        phi: a formula
+        psi: a formula
+
+    Returns:
+        bool: True if the formulas are root-connector-equivalent, False otherwise.
+
+    """
+    phi = ensure_formula(o=phi)
+    psi = ensure_formula(o=psi)
+    return phi.connector.is_connector_equivalent_to(psi.connector)
+
+
+def is_formula_equivalent(phi: Formula, psi: Formula) -> bool:
+    """Determines whether two formulas are formula-equivalent.
+
+    Args:
+        phi: a formula
+        psi: a formula
+
+    Returns:
+        bool: True if the formulas are formula-equivalent, False otherwise.
+
+    """
+    phi = ensure_formula(o=phi)
+    psi = ensure_formula(o=psi)
+    if not is_root_connector_equivalent(phi=phi, psi=psi):
+        return False
+    elif not phi.arity == psi.arity:
+        return False
+    else:
+        return all(is_formula_equivalent(phi=argument_phi, psi=argument_psi)
+                   for argument_phi, argument_psi in zip(phi.arguments, psi.arguments))
+
+
+def formula_contains_unique_arguments(phi: Formula) -> bool:
+    """Check if a formula contains unique or duplicate arguments.
+    """
+    phi: Formula = ensure_formula(o=phi)
+    for i in range(phi.arity):
+        for j in range(i + 1, phi.arity):  # Ensure j > i to avoid duplicates
+            if is_formula_equivalent(phi.a[i], phi.a[j]):
+                return False
+    return True

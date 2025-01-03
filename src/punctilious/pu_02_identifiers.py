@@ -1,3 +1,6 @@
+# special features
+from __future__ import annotations
+
 # external modules
 import abc
 import collections.abc
@@ -140,6 +143,14 @@ class UniqueIdentifier(tuple):
     def friendly_reference(self) -> str:
         """Returns a friendly reference to the identifier (i.e. its slug). This reference may not be unique."""
         return str(self.slug)
+
+    def is_unique_identifier_equivalent(self, other: UniqueIdentifier) -> bool:
+        """Determines whether two UniqueIdentifiers are unique-identifier-equivalent.
+
+        :param other: Another unique identifier.
+        :return: True if the unique identifiers are equivalent, False otherwise.
+        """
+        return self.uuid == other.uuid
 
     @property
     def slug(self) -> Slug:

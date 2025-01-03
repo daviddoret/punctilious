@@ -4,7 +4,7 @@ The connectors declared in this YAML file are also hard-coded in the punctilious
 """
 
 import punctilious.pu_04_formal_language as _formal_language
-import punctilious.pu_08_bundling as _bundling
+import punctilious.pu_10_bundling as _bundling
 
 _meta_operators_1 = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                                   resource='meta_operators_1.yaml')

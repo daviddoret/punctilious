@@ -1,7 +1,7 @@
 import pytest
 import punctilious as pu
 from test_shared_library import create_atomic_connector
-import punctilious.pu_10_default_interpreter as interpreters
+import punctilious.pu_12_default_interpreter as interpreters
 
 
 @pytest.fixture

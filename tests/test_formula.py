@@ -43,3 +43,16 @@ class TestFormula:
         n = pu.constants_1.n
         phi6 = pu.formal_language.Formula(element_of, (x, n))
         assert phi6.represent(prefs=prefs) == 'x ∈ ℕ'
+
+
+class TestFormulaRootConnectorEquivalence:
+    def test_1(self):
+        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        phi = a(b(a(), c(), d(b())))
+        psi = a(b(a(), c(), d(b())))
+        assert pu.formal_language.is_formula_equivalent(phi=phi, psi=psi)
+        psi = a(b(a(), c(), d(c())))
+        assert not pu.formal_language.is_formula_equivalent(phi=phi, psi=psi)
