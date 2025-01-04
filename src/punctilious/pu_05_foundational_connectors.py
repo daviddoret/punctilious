@@ -10,6 +10,9 @@ import punctilious.pu_04_formal_language as _formal_language
 tuple2 = _formal_language.Connector(
     uid=_identifiers.UniqueIdentifier(slug='tuple2', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
 
+set_defined_by_extension = _formal_language.Connector(
+    uid=_identifiers.UniqueIdentifier(slug='set_defined_by_extension', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
+
 true2 = _formal_language.Connector(
     uid=_identifiers.UniqueIdentifier(slug='true', uuid='dde98ed2-b7e0-44b2-bd10-5f59d61fd93e'))
 

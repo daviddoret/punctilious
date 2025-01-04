@@ -12,11 +12,13 @@ from punctilious.pu_03_representation import AbstractRepresentation, ensure_abst
     RendererForStringConstant
 import punctilious.options as options
 import punctilious.pu_04_formal_language as formal_language
-import punctilious.pu_06_interpretation as interpretation
+import punctilious.pu_05_foundational_connectors as foundational_connectors
+import punctilious.pu_06_foundational_objects as foundational_objects
+import punctilious.pu_07_interpretation as interpretation
 
-import punctilious.pu_10_bundling as _bundling
-from punctilious.pu_10_bundling import load_abstract_representation, load_abstract_representations
-import punctilious.pu_11_formula_notations as formula_notations
+import punctilious.pu_11_bundling as _bundling
+from punctilious.pu_11_bundling import load_abstract_representation, load_abstract_representations
+import punctilious.pu_12_formula_notations as formula_notations
 
 import punctilious.miscellaneous_1 as miscellaneous_1
 import punctilious.greek_alphabet_lowercase_serif_italic as greek_alphabet_lowercase_serif_italic
@@ -27,7 +29,7 @@ import punctilious.latin_alphabet_lowercase_serif_bold as latin_alphabet_lowerca
 import punctilious.operators_1 as operators_1
 import punctilious.constants_1 as constants_1
 
-import punctilious.pu_12_default_interpreter as default_interpreter
+import punctilious.pu_13_default_interpreter as default_interpreter
 
 from punctilious.declarations import declare_variable, declare_function
 

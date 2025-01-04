@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="all tests ok. interpretation + meta-language">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/pu_05_fundamental_connectors.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/pu_05b_basic_objects.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/pu_07_meta_language.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/pu_08_proofs.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/connectors/constants_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/declarations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/declarations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
@@ -26,17 +23,19 @@
       <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_mappings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1_mappings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_representations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1_representations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_02_identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_02_identifiers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_no_interpretation_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_no_interpretation_interpreter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_10_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_11_formula_notations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_10_default_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_12_default_interpreter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05_fundamental_connectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_05_foundational_connectors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05b_basic_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_proofs.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_no_interpretation_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_10_no_interpretation_interpreter.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_10_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_11_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_12_formula_notations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_12_default_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_13_default_interpreter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/variables_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/variables_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -313,6 +312,7 @@
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3.executor": "Run",
+    "Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
@@ -511,7 +511,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -786,6 +786,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in punctilious" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -800,23 +817,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in test_greek_alphabet_lowercase_serif_italic.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -851,7 +851,7 @@
       <item itemvalue="Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1" />
       <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_1" />
       <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2" />
-      <item itemvalue="Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py" />
+      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -859,11 +859,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1" />
+        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_1" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2" />
-        <item itemvalue="Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py" />
       </list>
     </recent_temporary>
   </component>
@@ -882,14 +882,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01237" summary="first theorem implementation">
-      <option name="closed" value="true" />
-      <created>1734869320468</created>
-      <option name="number" value="01237" />
-      <option name="presentableId" value="LOCAL-01237" />
-      <option name="project" value="LOCAL" />
-      <updated>1734869320468</updated>
     </task>
     <task id="LOCAL-01238" summary="foundations">
       <option name="closed" value="true" />
@@ -1275,7 +1267,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735762884174</updated>
     </task>
-    <option name="localTasksCounter" value="1286" />
+    <task id="LOCAL-01286" summary="all tests ok. interpretation + meta-language">
+      <option name="closed" value="true" />
+      <created>1735941328422</created>
+      <option name="number" value="01286" />
+      <option name="presentableId" value="LOCAL-01286" />
+      <option name="project" value="LOCAL" />
+      <updated>1735941328422</updated>
+    </task>
+    <option name="localTasksCounter" value="1287" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1432,12 +1432,12 @@
           <option name="timeStamp" value="328" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_10_bundling.py</url>
+          <url>file://$PROJECT_DIR$/src/punctilious/pu_11_bundling.py</url>
           <line>416</line>
           <option name="timeStamp" value="380" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_interpretation.py</url>
+          <url>file://$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py</url>
           <line>119</line>
           <option name="timeStamp" value="389" />
         </line-breakpoint>

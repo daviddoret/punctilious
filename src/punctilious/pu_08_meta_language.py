@@ -15,8 +15,8 @@ import yaml
 # punctilious modules
 import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_04_formal_language as _formal_language
-import punctilious.pu_05_fundamental_connectors as _fundamental_connectors
-import punctilious.pu_06_interpretation as _interpretation
+import punctilious.pu_05_foundational_connectors as _fundamental_connectors
+import punctilious.pu_07_interpretation as _interpretation
 
 
 def arity(phi: _formal_language.Formula) -> int:

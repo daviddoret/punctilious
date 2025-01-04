@@ -7,7 +7,7 @@ import collections.abc
 import typing
 
 # punctilious modules
-from punctilious.pu_01_utilities import get_logger
+import punctilious.pu_01_utilities as _utilities
 import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 
@@ -161,9 +161,9 @@ class Preferences:
             self._encoding = 'unicode_basic'
             self._language = 'en'
             self.__class__._singleton_initialized = True
-            get_logger().debug(
+            _utilities.get_logger().debug(
                 f'Preferences singleton ({id(self)}) initialized.')
-            get_logger().debug(f'Preferences: {str(self.to_dict())}')
+            _utilities.get_logger().debug(f'Preferences: {str(self.to_dict())}')
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
@@ -408,24 +408,33 @@ class Connector(_identifiers.UniqueIdentifiable):
     def rep_formula(self, argument: FormulaArguments | None = None, is_subformula: bool = False, prefs=None) -> str:
         """Returns the string representation of the formula.
         """
+        connector_representation: str
         if self.connector_representation is None:
-            raise ValueError(f'{self.__repr__()} has no connector representation.')
+            _utilities.warning(f'{self.__repr__()} has no connector representation. Using system slug instead.')
+            connector_representation = self.uid.slug
+        else:
+            connector_representation: str = self.rep_connector(prefs=prefs)
+        formula_representation: str
         if self.formula_representation is None:
-            raise ValueError(f'{self.__repr__()} has no formula representation.')
-        connector: str = self.rep_connector(prefs=prefs)
-        argument = ensure_formula_arguments(argument)
-        argument_representations = tuple(a.represent(is_subformula=True, prefs=prefs) for a in argument)
-        variables = {
-            'connector': connector,
-            'argument': argument_representations,
-            'is_subformula': is_subformula}
-        # TODO: NICE_TO_HAVE: Find a way to manage connector precedences, and pass parent and
-        #   child connector
-        #   precedences as a variables to the jinja2 template to manage with more accuracy the
-        #   parenthesization. Precedence should not be a static connector property, but should
-        #   rather be a property of the representation, or possibly of the mapping.
-        rep = self.formula_representation.rep(variables=variables, prefs=prefs)
-        return rep
+            _utilities.warning(
+                f'{self.__repr__()} has no formula representation. Using system functional notation instead.')
+            arguments_representation: str = ', '.join(
+                tuple(i.represent(is_subformula=True, prefs=prefs) for i in argument))
+            formula_representation = f'{connector_representation}({arguments_representation})'
+        else:
+            argument = ensure_formula_arguments(argument)
+            argument_representations = tuple(a.represent(is_subformula=True, prefs=prefs) for a in argument)
+            variables = {
+                'connector': connector_representation,
+                'argument': argument_representations,
+                'is_subformula': is_subformula}
+            # TODO: NICE_TO_HAVE: Find a way to manage connector precedences, and pass parent and
+            #   child connector
+            #   precedences as a variables to the jinja2 template to manage with more accuracy the
+            #   parenthesization. Precedence should not be a static connector property, but should
+            #   rather be a property of the representation, or possibly of the mapping.
+            formula_representation: str = self.formula_representation.rep(variables=variables, prefs=prefs)
+        return formula_representation
 
     @property
     def syntactic_rules(self):

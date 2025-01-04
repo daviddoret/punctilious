@@ -82,6 +82,21 @@ class Logger:
     def info(self, msg: str):
         self._native_logger.info(msg)
 
+    def warning(self, msg: str):
+        self._native_logger.warning(msg)
+
 
 def get_logger():
     return Logger()
+
+
+def debug(msg: str):
+    get_logger().debug(msg)
+
+
+def warning(msg: str):
+    get_logger().warning(msg)
+
+
+def info(msg: str):
+    get_logger().info(msg)

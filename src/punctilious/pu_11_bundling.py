@@ -17,9 +17,9 @@ import punctilious.pu_01_utilities as _util
 import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
-import punctilious.pu_07_meta_language as _meta_language
-import punctilious.pu_06_interpretation as _interpretation
-import punctilious.pu_09_no_interpretation_interpreter as _no_interpretation_interpreter
+import punctilious.pu_08_meta_language as _meta_language
+import punctilious.pu_07_interpretation as _interpretation
+import punctilious.pu_10_no_interpretation_interpreter as _no_interpretation_interpreter
 
 
 class Bundles(dict):
