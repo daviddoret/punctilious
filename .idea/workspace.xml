@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="all tests ok. interpretation + meta-language">
-      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="set_1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05_foundational_connectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_05_foundational_connectors.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -285,6 +287,8 @@
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_2.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestPropositionalLogicMetaTheory.test_pl1_3.executor": "Run",
+    "Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1.executor": "Run",
+    "Python tests.pytest for test_pu_06_foundational_objects.TestSet1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
@@ -485,7 +489,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -726,23 +730,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_interpretation.TestInterpretation.test_interpretation_2" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_interpretation.TestInterpretation.test_interpretation_2&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -760,7 +747,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_pu_06_foundational_objects.TestMap1.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -773,7 +760,24 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestMap1.test_1&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_pu_06_foundational_objects.TestSet1.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestSet1.test_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -824,8 +828,8 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1" />
       <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_1" />
-      <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2" />
-      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSet1.test_1" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -833,11 +837,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1" />
+        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
+        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSet1.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_1" />
-        <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2" />
       </list>
     </recent_temporary>
   </component>
@@ -856,14 +860,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01239" summary="foundations">
-      <option name="closed" value="true" />
-      <created>1734901219818</created>
-      <option name="number" value="01239" />
-      <option name="presentableId" value="LOCAL-01239" />
-      <option name="project" value="LOCAL" />
-      <updated>1734901219818</updated>
     </task>
     <task id="LOCAL-01240" summary="foundations">
       <option name="closed" value="true" />
@@ -1249,7 +1245,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736028264087</updated>
     </task>
-    <option name="localTasksCounter" value="1288" />
+    <task id="LOCAL-01288" summary="set_1">
+      <option name="closed" value="true" />
+      <created>1736095197906</created>
+      <option name="number" value="01288" />
+      <option name="presentableId" value="LOCAL-01288" />
+      <option name="project" value="LOCAL" />
+      <updated>1736095197907</updated>
+    </task>
+    <option name="localTasksCounter" value="1289" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1299,7 +1303,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="presentation renderers" />
     <MESSAGE value="interpretation integrated with foundations" />
     <MESSAGE value="modules importation reorg" />
     <MESSAGE value="modules importation reorg + remove uuid attribute on non-package elements" />
@@ -1324,7 +1327,8 @@
     <MESSAGE value="lark template and interpretation improvements" />
     <MESSAGE value="interpretation + meta-language" />
     <MESSAGE value="all tests ok. interpretation + meta-language" />
-    <option name="LAST_COMMIT_MESSAGE" value="all tests ok. interpretation + meta-language" />
+    <MESSAGE value="set_1" />
+    <option name="LAST_COMMIT_MESSAGE" value="set_1" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

@@ -79,6 +79,24 @@ class Formula(tuple):
     def connector(self) -> Connector:
         return self[0]
 
+    def get_argument_first_index(self, argument: Formula) -> int:
+        """Returns the 0-based index of `argument` in this formula.
+
+        Note that `argument` may occur at multiple positions in the formula arguments,
+        only the first position is returned."""
+        for i, x in enumerate(self.arguments):
+            if argument.is_formula_equivalent(x):
+                return i
+        raise ValueError('`argument` is not an argument of this formula.')
+
+    def has_argument(self, argument: Formula) -> bool:
+        """Returns `True` if `argument` is an argument of the formula.
+
+        Note that `argument` may be multiple times an argument of the formula."""
+        if any(argument.is_formula_equivalent(other=x) for x in self.arguments):
+            return True
+        return False
+
     @property
     def is_atomic(self) -> bool:
         """A formula is atomic if it has no arguments."""
@@ -93,6 +111,22 @@ class Formula(tuple):
     def is_binary(self) -> bool:
         """A formula is binary if it has exactly two arguments."""
         return self.arity == 2
+
+    def is_formula_equivalent(self, other: Formula) -> bool:
+        """Returns `True` if this formula is formula-equivalent to the `other` formula."""
+        other = ensure_formula(o=other)
+        if not self.is_root_connector_equivalent(other=other):
+            return False
+        elif not self.arity == other.arity:
+            return False
+        else:
+            return all(this_argument.is_formula_equivalent(other_argument)
+                       for this_argument, other_argument in zip(self.arguments, other.arguments))
+
+    def is_root_connector_equivalent(self, other: Formula) -> bool:
+        """Returns `True` if this formula and the `other` formula share the same connector."""
+        other: Formula = ensure_formula(o=other)
+        return self.connector.is_connector_equivalent_to(other.connector)
 
     @property
     def is_ternary(self) -> bool:
@@ -491,9 +525,9 @@ def is_root_connector_equivalent(phi: Formula, psi: Formula) -> bool:
         bool: True if the formulas are root-connector-equivalent, False otherwise.
 
     """
-    phi = ensure_formula(o=phi)
-    psi = ensure_formula(o=psi)
-    return phi.connector.is_connector_equivalent_to(psi.connector)
+    phi: Formula = ensure_formula(o=phi)
+    psi: Formula = ensure_formula(o=psi)
+    return phi.is_root_connector_equivalent(other=psi)
 
 
 def is_formula_equivalent(phi: Formula, psi: Formula) -> bool:
@@ -509,13 +543,7 @@ def is_formula_equivalent(phi: Formula, psi: Formula) -> bool:
     """
     phi = ensure_formula(o=phi)
     psi = ensure_formula(o=psi)
-    if not is_root_connector_equivalent(phi=phi, psi=psi):
-        return False
-    elif not phi.arity == psi.arity:
-        return False
-    else:
-        return all(is_formula_equivalent(phi=argument_phi, psi=argument_psi)
-                   for argument_phi, argument_psi in zip(phi.arguments, psi.arguments))
+    return phi.is_formula_equivalent(other=psi)
 
 
 def formula_contains_unique_arguments(phi: Formula) -> bool:
