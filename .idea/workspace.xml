@@ -5,12 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="set_1">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05_foundational_connectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_05_foundational_connectors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -489,7 +483,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -837,9 +831,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSet1.test_1" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1" />
         <item itemvalue="Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_1" />
       </list>
@@ -860,14 +854,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01240" summary="foundations">
-      <option name="closed" value="true" />
-      <created>1734929196807</created>
-      <option name="number" value="01240" />
-      <option name="presentableId" value="LOCAL-01240" />
-      <option name="project" value="LOCAL" />
-      <updated>1734929196807</updated>
     </task>
     <task id="LOCAL-01241" summary="foundations">
       <option name="closed" value="true" />
@@ -1253,7 +1239,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736095197907</updated>
     </task>
-    <option name="localTasksCounter" value="1289" />
+    <task id="LOCAL-01289" summary="set_1">
+      <option name="closed" value="true" />
+      <created>1736106381610</created>
+      <option name="number" value="01289" />
+      <option name="presentableId" value="LOCAL-01289" />
+      <option name="project" value="LOCAL" />
+      <updated>1736106381610</updated>
+    </task>
+    <option name="localTasksCounter" value="1290" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
