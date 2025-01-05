@@ -89,13 +89,20 @@ class Formula(tuple):
                 return i
         raise ValueError('`argument` is not an argument of this formula.')
 
-    def has_argument(self, argument: Formula) -> bool:
-        """Returns `True` if `argument` is an argument of the formula.
+    def has_direct_argument(self, argument: Formula) -> bool:
+        """Returns `True` if `argument` is a direct argument of the formula.
 
-        Note that `argument` may be multiple times an argument of the formula."""
+        By direct argument, it is meant that arguments' sub-formulas are not being considered.
+
+        Note that `argument` may be multiple times a direct argument of the formula."""
         if any(argument.is_formula_equivalent(other=x) for x in self.arguments):
             return True
         return False
+
+    @property
+    def has_unique_arguments(self) -> bool:
+        """Returns `True` if the exists no pair of two formula direct arguments that are formula-equivalent."""
+        return formulas_are_unique(formulas=self.arguments)
 
     @property
     def is_atomic(self) -> bool:
@@ -146,6 +153,15 @@ def ensure_formula_arguments(o=None) -> FormulaArguments:
         return FormulaArguments()
     else:
         raise ValueError(f'o cannot be constrained into FormulaArguments {FormulaArguments}. {type(o)}')
+
+
+def ensure_formulas(*formulas: Formula) -> tuple[Formula, ...]:
+    """
+
+    :param formulas:
+    :return:
+    """
+    return tuple(ensure_formula(o=x) for x in formulas)
 
 
 def ensure_connectors(o=None) -> Connectors:
@@ -546,12 +562,20 @@ def is_formula_equivalent(phi: Formula, psi: Formula) -> bool:
     return phi.is_formula_equivalent(other=psi)
 
 
-def formula_contains_unique_arguments(phi: Formula) -> bool:
+def formula_has_unique_arguments(phi: Formula) -> bool:
     """Check if a formula contains unique or duplicate arguments.
     """
     phi: Formula = ensure_formula(o=phi)
-    for i in range(phi.arity):
-        for j in range(i + 1, phi.arity):  # Ensure j > i to avoid duplicates
-            if is_formula_equivalent(phi.a[i], phi.a[j]):
+    return phi.has_unique_arguments
+
+
+def formulas_are_unique(*formulas: Formula) -> bool:
+    """Returns `True` if all formulas passed as arguments are unique,
+    in other words there exists no pair of two formulas that are formula-equivalent.
+    """
+    formulas = ensure_formulas(*formulas)
+    for i in range(len(formulas)):
+        for j in range(i + 1, len(formulas)):  # Ensure j > i to avoid duplicates
+            if is_formula_equivalent(formulas[i], formulas[j]):
                 return False
     return True

@@ -41,7 +41,7 @@ class Tuple1(_formal_language.Formula):
         """Returns `True` if `element` is an element of the tuple.
 
         Note that `element` may be multiple times an element of the tuple."""
-        return self.has_argument(argument=element)
+        return self.has_direct_argument(argument=element)
 
     def is_tuple_equivalent_to(self, other: Tuple1) -> bool:
         """Returns `True` if this tuple is equal to the `other` tuple.
@@ -87,7 +87,7 @@ class Set1(_formal_language.Formula):
 
     def has_element(self, element: _formal_language.Formula) -> bool:
         """Returns `True` if `element` is an element of the tuple."""
-        return self.has_argument(argument=element)
+        return self.has_direct_argument(argument=element)
 
     def is_set_equivalent_to(self, other: Set1) -> bool:
         """Returns `True` if this set is equal to the `other` set."""
