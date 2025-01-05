@@ -4,6 +4,7 @@ from __future__ import annotations
 # external modules
 import abc
 import collections.abc
+from logging import setLogRecordFactory
 
 # internal modules
 import punctilious.pu_01_utilities as _utilities
@@ -174,3 +175,17 @@ class Map1(_formal_language.Formula):
         # the two domains must be formula-equivalent,
         # i.e. preserving element order.
         return self.is_formula_equivalent(other=other)
+
+
+def substitute_formulas(phi: _formal_language.Formula, m: Map1, include_root: bool = True) -> _formal_language.Formula:
+    """Construct a new formula by substituting formulas in the formula tree of `phi` by applying map `m`.
+
+    :param phi:
+    :param m:
+    :param include_root:
+    :return:
+    """
+    if include_root and m.domain.has_element(phi):
+        return m.get_image(x=phi)
+    substituted_arguments = tuple(substitute_formulas(phi=x, m=m, include_root=True) for x in phi.arguments)
+    return _formal_language.Formula(c=phi.connector, a=substituted_arguments)

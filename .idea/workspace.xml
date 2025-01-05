@@ -7,8 +7,8 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="map_1">
       <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_04_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -289,6 +289,7 @@
     "Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSet1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1.executor": "Run",
+    "Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
@@ -489,7 +490,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_04_formal_language.TestFormula.test_contains_formula">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -747,7 +748,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pu_06_foundational_objects.TestMap1.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_pu_06_foundational_objects.TestSubstitute.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -760,7 +761,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestMap1.test_1&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestSubstitute.test_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -828,7 +829,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormula.test_contains_formula" />
       <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1" />
-      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1" />
       <item itemvalue="Python tests.pytest in test_pu_04_formal_language.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -837,11 +838,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormula.test_contains_formula" />
         <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1" />
         <item itemvalue="Python tests.pytest in test_pu_04_formal_language.py" />
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
       </list>
     </recent_temporary>
   </component>
@@ -860,14 +861,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01243" summary="foundations">
-      <option name="closed" value="true" />
-      <created>1734929736195</created>
-      <option name="number" value="01243" />
-      <option name="presentableId" value="LOCAL-01243" />
-      <option name="project" value="LOCAL" />
-      <updated>1734929736195</updated>
     </task>
     <task id="LOCAL-01244" summary="foundations">
       <option name="closed" value="true" />
@@ -1253,7 +1246,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736112067147</updated>
     </task>
-    <option name="localTasksCounter" value="1292" />
+    <task id="LOCAL-01292" summary="map_1">
+      <option name="closed" value="true" />
+      <created>1736113766545</created>
+      <option name="number" value="01292" />
+      <option name="presentableId" value="LOCAL-01292" />
+      <option name="project" value="LOCAL" />
+      <updated>1736113766545</updated>
+    </task>
+    <option name="localTasksCounter" value="1293" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -43,3 +43,42 @@ class TestMap1:
         assert m1.get_image(x=c()).is_formula_equivalent(z())
         with pytest.raises(ValueError):
             m1.get_image(x=x())
+
+
+class TestSubstitute:
+    def test_1(self):
+        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        x = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        y = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='y'))
+        z = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='z'))
+        domain = pu.foundational_objects.Set1(a(), b(), c())
+        codomain = pu.foundational_objects.Tuple1(x(), y(), z())
+        m1 = pu.foundational_objects.Map1(d=domain,
+                                          c=codomain)
+
+        phi = pu.foundational_objects.substitute_formulas(
+            phi=a(b(c())),
+            m=m1)
+        assert phi.is_formula_equivalent(other=a(b(z())))
+
+        phi = pu.foundational_objects.substitute_formulas(
+            phi=a(b(c(), b(), c()), c(b())),
+            m=m1)
+        assert phi.is_formula_equivalent(other=a(b(z(), y(), z()), c(y())))
+
+        phi = pu.foundational_objects.substitute_formulas(
+            phi=x(z(z(z(y()), z(x(y()))))),
+            m=m1)
+        assert phi.is_formula_equivalent(other=x(z(z(z(y()), z(x(y()))))))
+
+        domain = pu.foundational_objects.Set1(b(b(c())))
+        codomain = pu.foundational_objects.Tuple1(x(y()))
+        m2 = pu.foundational_objects.Map1(d=domain,
+                                          c=codomain)
+
+        phi = pu.foundational_objects.substitute_formulas(
+            phi=a(b(c()), b(b(c())), b(b(b(c()))), b(b(b(b(c()))))),
+            m=m2)
+        assert phi.is_formula_equivalent(other=a(b(c()), x(y()), b(x(y())), b(b(x(y())))))
