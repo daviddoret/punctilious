@@ -84,6 +84,7 @@ class Formula(tuple):
 
         Note that `argument` may occur at multiple positions in the formula arguments,
         only the first position is returned."""
+        argument = ensure_formula(o=argument)
         for i, x in enumerate(self.arguments):
             if argument.is_formula_equivalent(x):
                 return i
@@ -95,6 +96,7 @@ class Formula(tuple):
         By direct argument, it is meant that arguments' sub-formulas are not being considered.
 
         Note that `argument` may be multiple times a direct argument of the formula."""
+        argument = ensure_formula(o=argument)
         if any(argument.is_formula_equivalent(other=x) for x in self.arguments):
             return True
         return False
@@ -102,7 +104,19 @@ class Formula(tuple):
     @property
     def has_unique_arguments(self) -> bool:
         """Returns `True` if the exists no pair of two formula direct arguments that are formula-equivalent."""
-        return formulas_are_unique(formulas=self.arguments)
+        return formulas_are_unique(*self.arguments)
+
+    def iterate_tree(self, include_root: bool = True) -> collections.abc.Iterable[Formula]:
+        """Iterates the formula tree using the following algorithm:
+         - top-down first,
+         - left-right second.
+
+        :return:
+        """
+        if include_root:
+            yield self
+        for x in self.arguments:
+            yield from x.iterate_tree(include_root=True)
 
     @property
     def is_atomic(self) -> bool:
@@ -142,6 +156,20 @@ class Formula(tuple):
 
     def represent(self, is_subformula: bool = False, prefs=None) -> str:
         return self.connector.rep_formula(argument=self.arguments, is_subformula=is_subformula, prefs=prefs)
+
+    def tree_contains_formula(self, phi: Formula, include_root: bool = True) -> bool:
+        """Returns `True` if the formula tree contains formula `phi`.
+
+        :param phi:
+        :param include_root: Consider the case where the root formula is formula-equivalent to `phi` as valid.
+            This is the default behavior.
+        :return:
+        """
+        phi = ensure_formula(o=phi)
+        for psi in self.iterate_tree(include_root=include_root):
+            if phi.is_formula_equivalent(other=psi):
+                return True
+        return False
 
 
 def ensure_formula_arguments(o=None) -> FormulaArguments:
@@ -211,9 +239,9 @@ class Preferences:
             self._encoding = 'unicode_basic'
             self._language = 'en'
             self.__class__._singleton_initialized = True
-            _utilities.get_logger().debug(
+            _utilities.debug(
                 f'Preferences singleton ({id(self)}) initialized.')
-            _utilities.get_logger().debug(f'Preferences: {str(self.to_dict())}')
+            _utilities.debug(f'Preferences: {str(self.to_dict())}')
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
