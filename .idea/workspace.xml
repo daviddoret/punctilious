@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="map_1">
-      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Set1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -286,10 +286,11 @@
     "Python tests.pytest for test_pu_04_formal_language.TestEnsureUniqueFormulas.test_1.executor": "Run",
     "Python tests.pytest for test_pu_04_formal_language.TestFormula.test_contains_formula.executor": "Run",
     "Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1.executor": "Run",
-    "Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1.executor": "Run",
+    "Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1.executor": "Debug",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSet1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1.executor": "Run",
+    "Python tests.pytest for test_pu_06_foundational_objects.TestUnionSets1.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
@@ -490,7 +491,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -731,7 +732,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pu_04_formal_language.TestFormula.test_contains_formula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_pu_06_foundational_objects.TestMap1.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -744,24 +745,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pu_04_formal_language.TestFormula.test_contains_formula&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pu_04_formal_language.TestFormulasAreUnique.test_1&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestMap1.test_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -779,6 +763,23 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestSubstitute.test_1&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_pu_06_foundational_objects.TestUnionSets1.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestUnionSets1.test_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -828,9 +829,9 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestEnsureUniqueFormulas.test_1" />
-      <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormula.test_contains_formula" />
-      <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
       <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestUnionSets1.test_1" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -838,11 +839,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
+        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestUnionSets1.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestEnsureUniqueFormulas.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1" />
-        <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormula.test_contains_formula" />
-        <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1" />
       </list>
     </recent_temporary>
   </component>
@@ -861,14 +862,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01246" summary="foundations">
-      <option name="closed" value="true" />
-      <created>1734986886027</created>
-      <option name="number" value="01246" />
-      <option name="presentableId" value="LOCAL-01246" />
-      <option name="project" value="LOCAL" />
-      <updated>1734986886027</updated>
     </task>
     <task id="LOCAL-01247" summary="foundations">
       <option name="closed" value="true" />
@@ -1254,7 +1247,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736199367082</updated>
     </task>
-    <option name="localTasksCounter" value="1295" />
+    <task id="LOCAL-01295" summary="Set1">
+      <option name="closed" value="true" />
+      <created>1736199817520</created>
+      <option name="number" value="01295" />
+      <option name="presentableId" value="LOCAL-01295" />
+      <option name="project" value="LOCAL" />
+      <updated>1736199817520</updated>
+    </task>
+    <option name="localTasksCounter" value="1296" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1304,7 +1305,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="modules importation reorg" />
     <MESSAGE value="modules importation reorg + remove uuid attribute on non-package elements" />
     <MESSAGE value="identifiers" />
     <MESSAGE value="modules cleanup" />
@@ -1329,7 +1329,8 @@
     <MESSAGE value="all tests ok. interpretation + meta-language" />
     <MESSAGE value="set_1" />
     <MESSAGE value="map_1" />
-    <option name="LAST_COMMIT_MESSAGE" value="map_1" />
+    <MESSAGE value="Set1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Set1" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1419,6 +1420,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py</url>
           <line>119</line>
           <option name="timeStamp" value="389" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py</url>
+          <line>76</line>
+          <option name="timeStamp" value="398" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

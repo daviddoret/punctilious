@@ -136,6 +136,17 @@ def ensure_set_1(o: object,
     raise ValueError(f'Expected Set1. o={o}. type={type(o).__name__}')
 
 
+import itertools
+
+
+def union_sets_1(*sets: Set1):
+    """Returns the union of Set1 provided. Strip any duplicate in the process."""
+    sets = tuple(ensure_set_1(o=s, duplicate_processing=_formal_language.DuplicateProcessing.RAISE_ERROR) for s in sets)
+    flattened_set = tuple(element for sub_tuple in sets for element in sub_tuple.elements)
+    output = Set1(*flattened_set, duplicate_processing=_formal_language.DuplicateProcessing.STRIP)
+    return output
+
+
 class Map1(_formal_language.Formula):
     """A Map1 is a model of a mathematical map with the following constraints:
      - it is finite,
@@ -180,10 +191,20 @@ class Map1(_formal_language.Formula):
         return self.codomain.arguments[i]
 
     def is_map_equivalent(self, other: Map1):
+        """Two maps m1 and m2 are map-equivalent if and only if:
+        for every element x in the union of m1 and m2 domains,
+        x is defined in both domains and returns the same image."""
         # the two domains must be formula-equivalent,
         # i.e. preserving element order.
-        XXX
-        return self.is_formula_equivalent(other=other)
+        union_of_domains = union_sets_1(self.domain, other.domain)
+        for element in union_of_domains.elements:
+            if not self.domain.has_element(element=element):
+                return False
+            if not other.domain.has_element(element=element):
+                return False
+            if not self.get_image(x=element).is_formula_equivalent(other.get_image(x=element)):
+                return False
+        return True
 
 
 def substitute_formulas(phi: _formal_language.Formula, m: Map1, include_root: bool = True) -> _formal_language.Formula:

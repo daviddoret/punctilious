@@ -25,6 +25,31 @@ class TestSet1:
         assert len(phi7.arguments) == 0
 
 
+class TestUnionSets1:
+    def test_1(self):
+        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        s1 = pu.foundational_objects.Set1()
+        s2 = pu.foundational_objects.Set1(a(), b(), d())
+        s3 = pu.foundational_objects.Set1(b())
+        s4 = pu.foundational_objects.Set1(d(), c())
+        s5 = pu.foundational_objects.Set1(a(), b(), c(), d())
+
+        after = pu.foundational_objects.union_sets_1(s1, s1)
+        assert after.is_set_equivalent_to(s1)
+
+        after = pu.foundational_objects.union_sets_1(s1, s2)
+        assert after.is_set_equivalent_to(s2)
+
+        after = pu.foundational_objects.union_sets_1(s2, s3)
+        assert after.is_set_equivalent_to(s2)
+
+        after = pu.foundational_objects.union_sets_1(s2, s4)
+        assert after.is_set_equivalent_to(s5)
+
+
 class TestMap1:
     def test_1(self):
         map1 = pu.foundational_connectors.map_1
@@ -43,6 +68,13 @@ class TestMap1:
         assert m1.get_image(x=c()).is_formula_equivalent(z())
         with pytest.raises(ValueError):
             m1.get_image(x=x())
+
+        domain = pu.foundational_objects.Set1(c(), b(), a())
+        codomain = pu.foundational_objects.Tuple1(z(), y(), x())
+        m2 = pu.foundational_objects.Map1(d=domain,
+                                          c=codomain)
+
+        assert m1.is_map_equivalent(other=m2)
 
 
 class TestSubstitute:
