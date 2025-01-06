@@ -66,13 +66,19 @@ class Set1(_formal_language.Formula):
     the order of the arguments.
     """
 
-    def __init__(self, *a):
-        # check that all arguments are unique.
+    def __init__(self, *a, duplicate_processing: str = 'raise_error'):
+        """
+
+        :param a:
+        :param duplicate_processing: 'raise_error' (default), or 'strip'.
+        """
         n = len(a)
         for i in range(n):
             for j in range(i + 1, n):
-                if _formal_language.is_formula_equivalent(phi=a[i], psi=a[j]):
+                if _formal_language.is_formula_equivalent(phi=a[i], psi=a[j]) and duplicate_processing == 'raise_error':
                     raise ValueError(f'Arguments must be unique. a[{i}]={a[i]}, a[{j}]={a[j]}.')
+                else:
+                    pass
         super().__init__(c=_foundational_connectors.set_1, a=a)
 
     def __new__(cls, *a):
@@ -174,6 +180,7 @@ class Map1(_formal_language.Formula):
     def is_map_equivalent(self, other: Map1):
         # the two domains must be formula-equivalent,
         # i.e. preserving element order.
+        XXX
         return self.is_formula_equivalent(other=other)
 
 

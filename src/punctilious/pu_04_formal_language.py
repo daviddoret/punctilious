@@ -192,6 +192,42 @@ def ensure_formulas(*formulas: Formula) -> tuple[Formula, ...]:
     return tuple(ensure_formula(o=x) for x in formulas)
 
 
+import enum
+
+
+class DuplicateProcessing(enum.Enum):
+    """
+     Attributes:
+        RAISE_ERROR: Raises a ValueError when a duplicate element is found.
+        STRIP: Strips duplicate elements when they are found. Keeps only the first occurrence.
+    """
+    RAISE_ERROR = 'RAISE_ERROR'
+    STRIP = 'STRIP'
+
+
+def ensure_unique_formulas(*formulas: Formula,
+                           duplicate_processing: DuplicateProcessing = DuplicateProcessing.RAISE_ERROR) -> tuple[
+    Formula, ...]:
+    """Ensure that a collection of formulas contains only unique formulas.
+
+    :param duplicate_processing: DuplicateProcessing.RAISE_ERROR or DuplicateProcessing.STRIP.
+    :param formulas:
+    :return:
+    """
+    formulas: tuple[Formula, ...] = ensure_formulas(*formulas)
+    n = len(formulas)
+    unique_formulas: list[Formula] = []
+    for phi in formulas:
+        if any(is_formula_equivalent(phi=phi, psi=psi) for psi in unique_formulas):
+            if duplicate_processing == DuplicateProcessing.RAISE_ERROR:
+                raise ValueError(
+                    f'Formulas must be unique. duplicate:{phi}.')
+        else:
+            unique_formulas.append(phi)
+    unique_formulas: tuple[Formula, ...] = tuple(unique_formulas)
+    return unique_formulas
+
+
 def ensure_connectors(o=None) -> Connectors:
     """
 
