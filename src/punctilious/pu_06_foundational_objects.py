@@ -12,6 +12,7 @@ import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
 import punctilious.pu_05_foundational_connectors as _foundational_connectors
+from punctilious.pu_04_formal_language import DuplicateProcessing
 
 
 class Tuple1(_formal_language.Formula):
@@ -66,23 +67,22 @@ class Set1(_formal_language.Formula):
     the order of the arguments.
     """
 
-    def __init__(self, *a, duplicate_processing: str = 'raise_error'):
+    def __init__(self, *elements,
+                 duplicate_processing: _formal_language.DuplicateProcessing =
+                 _formal_language.DuplicateProcessing.RAISE_ERROR):
         """
 
-        :param a:
+        :param elements:
         :param duplicate_processing: 'raise_error' (default), or 'strip'.
         """
-        n = len(a)
-        for i in range(n):
-            for j in range(i + 1, n):
-                if _formal_language.is_formula_equivalent(phi=a[i], psi=a[j]) and duplicate_processing == 'raise_error':
-                    raise ValueError(f'Arguments must be unique. a[{i}]={a[i]}, a[{j}]={a[j]}.')
-                else:
-                    pass
-        super().__init__(c=_foundational_connectors.set_1, a=a)
+        elements = _formal_language.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
+        super().__init__(c=_foundational_connectors.set_1, a=elements)
 
-    def __new__(cls, *a):
-        return super().__new__(cls, c=_foundational_connectors.set_1, a=a)
+    def __new__(cls, *elements,
+                duplicate_processing: _formal_language.DuplicateProcessing =
+                _formal_language.DuplicateProcessing.RAISE_ERROR):
+        elements = _formal_language.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
+        return super().__new__(cls, c=_foundational_connectors.set_1, a=elements)
 
     @property
     def arity(self) -> int:
@@ -113,11 +113,13 @@ class Set1(_formal_language.Formula):
         return True
 
 
-def ensure_set_1(o):
+def ensure_set_1(o: object,
+                 duplicate_processing: _formal_language.DuplicateProcessing = _formal_language.DuplicateProcessing.RAISE_ERROR):
     """Ensures that the input is a Set1.
 
     Args:
-        o: an object
+        :param o:
+        :param duplicate_processing:
 
     Returns:
         Set1: the input as an ExtensionSet
@@ -130,7 +132,7 @@ def ensure_set_1(o):
     if isinstance(o, _formal_language.Formula):
         if o.connector == _foundational_connectors.set_1:
             pass
-            return Set1(*o.arguments)
+            return Set1(*o.arguments, duplicate_processing=duplicate_processing)
     raise ValueError(f'Expected Set1. o={o}. type={type(o).__name__}')
 
 
