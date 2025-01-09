@@ -7,18 +7,18 @@ import punctilious.pu_04_formal_language as _formal_language
 
 # hard-coded connectors
 # the `tuple` connector is necessary to build complex formulas.
-tuple_1 = _formal_language.Connector(
-    uid=_identifiers.UniqueIdentifier(slug='tuple_1', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
+extension_tuple = _formal_language.Connector(
+    uid=_identifiers.UniqueIdentifier(slug='extension_tuple', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
 """The well-known connector of the `Tuple1` object.
 """
 
-unique_tuple = _formal_language.Connector(
-    uid=_identifiers.UniqueIdentifier(slug='unique_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
+unique_extension_tuple = _formal_language.Connector(
+    uid=_identifiers.UniqueIdentifier(slug='unique_extension_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
 """The well-known connector of the `UniqueTuple` object.
 """
 
-map_1 = _formal_language.Connector(
-    uid=_identifiers.UniqueIdentifier(slug='map_1', uuid='2509dbf9-d636-431c-82d4-6d33b2de3bc4'))
+extension_map = _formal_language.Connector(
+    uid=_identifiers.UniqueIdentifier(slug='extension_map', uuid='2509dbf9-d636-431c-82d4-6d33b2de3bc4'))
 """The well-known connector of the `Map1` object.
 """
 

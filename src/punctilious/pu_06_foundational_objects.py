@@ -3,6 +3,7 @@ from __future__ import annotations
 
 # external modules
 import abc
+import typing
 import collections.abc
 from logging import setLogRecordFactory
 
@@ -12,24 +13,24 @@ import punctilious.pu_02_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
 import punctilious.pu_05_foundational_connectors as _foundational_connectors
-from punctilious.pu_04_formal_language import DuplicateProcessing
+from punctilious.pu_04_formal_language import DuplicateProcessing, Formula
 
 
 class ExtensionTuple(_formal_language.Formula):
-    """A Tuple1 is a model of a mathematical tuple with the following constraints:
+    """A `ExtensionTuple` is a model of a mathematical tuple with the following constraints:
          - it is finite,
          - it is computable,
          - it is defined by extension.
 
-    It is implemented as a formula with a well-known `tuple_1` connector,
+    It is implemented as a formula with a well-known `extension_tuple` connector,
     whose arguments are denoted as the elements of the tuple.
     """
 
     def __init__(self, *a):
-        super().__init__(c=_foundational_connectors.tuple_1, a=a)
+        super().__init__(c=_foundational_connectors.extension_tuple, a=a)
 
     def __new__(cls, *a):
-        return super().__new__(cls, c=_foundational_connectors.tuple_1, a=a)
+        return super().__new__(cls, c=_foundational_connectors.extension_tuple, a=a)
 
     @property
     def arity(self) -> int:
@@ -62,6 +63,9 @@ class ExtensionTuple(_formal_language.Formula):
         return UniqueExtensionTuple(self.elements, duplicate_processing=duplicate_processing)
 
 
+FlexibleExtensionTuple = typing.Union[ExtensionTuple, collections.abc.Iterable]
+
+
 class UniqueExtensionTuple(_formal_language.Formula):
     """A UniqueTuple is a model of a pseudo-set from set theory with the following constraints:
      - it is finite,
@@ -72,10 +76,10 @@ class UniqueExtensionTuple(_formal_language.Formula):
        UniqueTuples without taking order in consideration.
 
     It is implemented as a formula with a well-known `unique_tuple` connector,
-    whose arguments are denoted as the elements of the set,
+    whose arguments are denoted as the elements of the UniqueExtensionTuple,
     and for which no two arguments are formula-equivalent to each other.
 
-    UniqueTuple supports the is_set_equivalent method that,
+    UniqueTuple supports the is_unique_extension_tuple_equivalent method that,
     contrary to formulas and tuples, does not take into account
     the order of the arguments.
     """
@@ -89,13 +93,13 @@ class UniqueExtensionTuple(_formal_language.Formula):
         :param duplicate_processing: 'raise_error' (default), or 'strip'.
         """
         elements = _formal_language.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
-        super().__init__(c=_foundational_connectors.unique_tuple, a=elements)
+        super().__init__(c=_foundational_connectors.unique_extension_tuple, a=elements)
 
     def __new__(cls, *elements,
                 duplicate_processing: _formal_language.DuplicateProcessing =
                 _formal_language.DuplicateProcessing.RAISE_ERROR):
         elements = _formal_language.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
-        return super().__new__(cls, c=_foundational_connectors.unique_tuple, a=elements)
+        return super().__new__(cls, c=_foundational_connectors.unique_extension_tuple, a=elements)
 
     @property
     def arity(self) -> int:
@@ -109,9 +113,9 @@ class UniqueExtensionTuple(_formal_language.Formula):
         """Returns `True` if `element` is an element of the tuple."""
         return self.has_direct_argument(argument=element)
 
-    def is_set_equivalent_to(self, other: UniqueExtensionTuple) -> bool:
+    def is_unique_extension_tuple_equivalent_to(self, other: FlexibleUniqueExtensionTuple) -> bool:
         """Returns `True` if this set is equal to the `other` set."""
-        # TODO: UniqueTuple.is_set_equivalent_to: validate other.
+        other = ensure_unique_extension_tuple(other)
 
         # Check condition for all elements in self.
         for x in self.elements:
@@ -138,8 +142,11 @@ class UniqueExtensionTuple(_formal_language.Formula):
         return ExtensionTuple(self.elements)
 
 
-def ensure_unique_tuple(o: object,
-                        duplicate_processing: _formal_language.DuplicateProcessing = _formal_language.DuplicateProcessing.RAISE_ERROR):
+FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, collections.abc.Iterable]
+
+
+def ensure_unique_extension_tuple(o: FlexibleUniqueExtensionTuple,
+                                  duplicate_processing: _formal_language.DuplicateProcessing = _formal_language.DuplicateProcessing.RAISE_ERROR):
     """Ensures that the input is a UniqueTuple.
 
     Args:
@@ -147,7 +154,7 @@ def ensure_unique_tuple(o: object,
         :param duplicate_processing:
 
     Returns:
-        UniqueTuple: the input as an ExtensionSet
+        UniqueTuple: the input as an UniqueExtensionTuple
 
     Raises:
         ValueError: if the input is not a UniqueTuple.
@@ -155,7 +162,7 @@ def ensure_unique_tuple(o: object,
     if isinstance(o, UniqueExtensionTuple):
         return o
     if isinstance(o, _formal_language.Formula):
-        if o.connector == _foundational_connectors.unique_tuple:
+        if o.connector == _foundational_connectors.unique_extension_tuple:
             pass
             return UniqueExtensionTuple(*o.arguments, duplicate_processing=duplicate_processing)
     raise ValueError(f'Expected UniqueTuple. o={o}. type={type(o).__name__}')
@@ -164,12 +171,13 @@ def ensure_unique_tuple(o: object,
 import itertools
 
 
-def union_unique_tuples(*sets: UniqueExtensionTuple):
+def union_unique_tuples(*args: UniqueExtensionTuple):
     """Returns the union of UniqueTuple provided. Strip any duplicate in the process."""
-    sets = tuple(
-        ensure_unique_tuple(o=s, duplicate_processing=_formal_language.DuplicateProcessing.RAISE_ERROR) for s in sets)
-    flattened_set = tuple(element for sub_tuple in sets for element in sub_tuple.elements)
-    output = UniqueExtensionTuple(*flattened_set, duplicate_processing=_formal_language.DuplicateProcessing.STRIP)
+    args = tuple(
+        ensure_unique_extension_tuple(o=s, duplicate_processing=_formal_language.DuplicateProcessing.RAISE_ERROR) for s
+        in args)
+    flattened = tuple(element for sub_tuple in args for element in sub_tuple.elements)
+    output = UniqueExtensionTuple(*flattened, duplicate_processing=_formal_language.DuplicateProcessing.STRIP)
     return output
 
 
@@ -183,24 +191,24 @@ class ExtensionMap(_formal_language.Formula):
     whose arguments of the form:
         (D, C)
     where:
-     - D is UniqueTuple denoted as the domain,
-     - C is Tuple1 denoted as the codomain,
+     - D is UniqueExtensionTuple denoted as the domain,
+     - C is ExtensionTuple denoted as the codomain,
      - the arity of D and C are equal.
 
     Map1 supports the get_image method that,
     given an element of D, returns the corresponding element of C at the same position.
-    This leverages the fact that UniqueTuple is both a model of a set,
+    This leverages the fact that UniqueExtensionTuple is both a model of a set,
     for which elements order is not taken into account,
     and also a Formula, whose arguments are effectively ordered.
     """
 
-    def __init__(self, d: UniqueExtensionTuple, c: ExtensionTuple):
-        if d.arity != c.arity:
-            raise ValueError(f'`d` and `c` do not have equal arity. `d`: {d}. `c`: {c}.')
-        super().__init__(c=_foundational_connectors.map_1, a=(d, c,))
+    def __init__(self, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
+        if domain.arity != codomain.arity:
+            raise ValueError(f'`d` and `c` do not have equal arity. `d`: {domain}. `c`: {codomain}.')
+        super().__init__(c=_foundational_connectors.extension_map, a=(domain, codomain,))
 
-    def __new__(cls, d: UniqueExtensionTuple, c: ExtensionTuple):
-        return super().__new__(cls, c=_foundational_connectors.map_1, a=(d, c,))
+    def __new__(cls, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
+        return super().__new__(cls, c=_foundational_connectors.extension_map, a=(domain, codomain,))
 
     @property
     def codomain(self) -> ExtensionTuple:
@@ -257,13 +265,16 @@ def substitute_formulas(phi: _formal_language.Formula, m: ExtensionMap,
 
 
 def is_formula_equivalent_with_variables(phi: _formal_language.Formula, psi: _formal_language.Formula,
-                                         v: UniqueExtensionTuple) -> [bool, UniqueExtensionTuple]:
+                                         v: UniqueExtensionTuple) -> [bool, ExtensionMap]:
     phi = _formal_language.ensure_formula(o=phi)
     psi = _formal_language.ensure_formula(o=psi)
     m: dict[_formal_language.Formula, _formal_language.Formula] = dict.fromkeys(v.elements, None)
 
-    def _is_formula_equivalent_with_variables(phi: _formal_language.Formula, psi: _formal_language.Formula,
-                                              m: dict[_formal_language.Formula, _formal_language.Formula]) -> bool:
+    def _is_formula_equivalent_with_variables(
+            phi: _formal_language.Formula, psi: _formal_language.Formula,
+            m: dict[_formal_language.Formula, _formal_language.Formula]) -> [
+        bool,
+        dict[_formal_language.Formula, _formal_language.Formula]]:
         """
 
         :param phi: A formula.
@@ -272,36 +283,42 @@ def is_formula_equivalent_with_variables(phi: _formal_language.Formula, psi: _fo
         :return:
         """
         if phi.is_formula_equivalent(psi):
-            return True
+            return True, m
         else:
             if psi in m.keys():
                 # psi is a variable.
                 if m[psi] is None:
                     m[psi] = phi
                     # the variable slot was not assigned yet, assign it now.
-                    return True
+                    return True, m
                 elif psi.is_formula_equivalent(m[phi]):
                     # matching variable value.
-                    return True
+                    return True, m
                 else:
                     # the variable values do not match,
                     # it follows that the two formulas are not formula-equivalent-with-variables.
-                    return False
+                    return False, m
             else:
                 # psi is not a variable.
                 if not phi.is_root_connector_equivalent(psi):
                     # if root connectors are not equivalent,
                     # it follows that the two formulas are not formula-equivalent-with-variables.
-                    return False
+                    return False, m
                 else:
                     for phi_argument, psi_argument in zip(phi.arguments, psi.arguments):
-                        if not _is_formula_equivalent_with_variables(phi=phi_argument, psi=psi_argument, m=m):
+                        check, m = _is_formula_equivalent_with_variables(phi=phi_argument, psi=psi_argument, m=m)
+                        if not check:
                             # if one sub-argument is not formula-equivalent-with-variables,
                             # it follows that the two formulas are not formula-equivalent-with-variables.
-                            return False
+                            return False, m
                     # if all sub-arguments are formula-equivalent-with-variables,
                     # it follows that the two formulas are formula-equivalent-with-variables.
-                    return True
+                    return True, m
+
+    check, m = _is_formula_equivalent_with_variables(phi=phi, psi=psi, m=m)
+    domain = UniqueExtensionTuple(m.keys())
+    codomain = ExtensionTuple(m.values())
+    return check, ExtensionMap(domain=domain, codomain=codomain)
 
 
 class InferenceRule1(_formal_language.Formula):
