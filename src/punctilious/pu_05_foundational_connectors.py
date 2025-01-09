@@ -7,19 +7,24 @@ import punctilious.pu_04_formal_language as _formal_language
 
 # hard-coded connectors
 # the `tuple` connector is necessary to build complex formulas.
-tuple1 = _formal_language.Connector(
+tuple_1 = _formal_language.Connector(
     uid=_identifiers.UniqueIdentifier(slug='tuple_1', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
 """The well-known connector of the `Tuple1` object.
 """
 
-set_1 = _formal_language.Connector(
-    uid=_identifiers.UniqueIdentifier(slug='set_1', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
-"""The well-known connector of the `Set1` object.
+unique_tuple = _formal_language.Connector(
+    uid=_identifiers.UniqueIdentifier(slug='unique_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
+"""The well-known connector of the `UniqueTuple` object.
 """
 
 map_1 = _formal_language.Connector(
     uid=_identifiers.UniqueIdentifier(slug='map_1', uuid='2509dbf9-d636-431c-82d4-6d33b2de3bc4'))
 """The well-known connector of the `Map1` object.
+"""
+
+inference_rule_1 = _formal_language.Connector(
+    uid=_identifiers.UniqueIdentifier(slug='inference_rule_1', uuid='6f6c4c60-7129-4c60-801f-1454581f01fe'))
+"""The well-known connector of the `InferenceRule1` object.
 """
 
 true2 = _formal_language.Connector(

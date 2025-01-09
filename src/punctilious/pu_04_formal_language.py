@@ -37,6 +37,11 @@ def ensure_formula(o=None) -> Formula:
 class Formula(tuple):
     # __slots__ = tuple('_root_connector', '_arguments', )
 
+    def __eq__(self, other):
+        """Python equality is implemented as formula-equivalence."""
+        other = ensure_formula(other)
+        return self.is_formula_equivalent(other=other)
+
     def __init__(self, c, a=None):
         """
 
@@ -44,6 +49,9 @@ class Formula(tuple):
         :param args: A (possibly empty) collection of arguments.
         """
         super().__init__()
+
+    def __ne__(self, other):
+        return not self == other
 
     def __new__(cls, c, a=None):
         c: Connector = ensure_connector(c)
