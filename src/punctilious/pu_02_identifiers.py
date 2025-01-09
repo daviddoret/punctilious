@@ -89,9 +89,6 @@ class UniqueIdentifier(tuple):
     def __eq__(self, other):
         return hash(self) == hash(other)
 
-    def __ne__(self, other):
-        return not (self == other)
-
     def __hash__(self):
         """Returns a hash for the identifier.
 
@@ -100,7 +97,7 @@ class UniqueIdentifier(tuple):
 
         :return:
         """
-        return hash(self[1])
+        return hash((type(self), self[1]))
 
     def __init__(self, slug: FlexibleSlug, uuid: FlexibleUUID):
         """Initializes a new identifier.
@@ -112,6 +109,9 @@ class UniqueIdentifier(tuple):
         super().__init__()
         uuid = ensure_uuid(uuid)
         # _unique_identifier_index[uuid] = self
+
+    def __ne__(self, other):
+        return hash(self) != hash(other)
 
     def __new__(cls, slug: FlexibleSlug, uuid: FlexibleUUID):
         # global _unique_identifier_index
@@ -198,12 +198,15 @@ class UniqueIdentifiable(abc.ABC):
 
     """
 
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
     def __hash__(self):
         """
 
         :return:
         """
-        return hash((UniqueIdentifiable, self.uid,))
+        return hash((self.__class__, self.uid,))
 
     def __init__(self, uid: FlexibleUniqueIdentifier | None):
         """
@@ -222,6 +225,9 @@ class UniqueIdentifiable(abc.ABC):
                              f"Existing object: {existing}.")
         _unique_identifiable_index[uid.uuid] = self
         super().__init__()
+
+    def __ne__(self, other):
+        return hash(self) != hash(other)
 
     @property
     def uid(self) -> UniqueIdentifier:
@@ -242,7 +248,8 @@ def create_uid(slug: FlexibleSlug) -> UniqueIdentifier:
     return UniqueIdentifier(slug=slug, uuid=uuid)
 
 
-def load_unique_identifiable(o: typing.Mapping) -> UniqueIdentifiable | None:
+def load_unique_identifiable(o: [typing.Mapping | str | uuid_pkg.UUID],
+                             raise_error_if_not_found: bool = True) -> UniqueIdentifiable | None:
     """Returns the existing UniqueIdentifiable if it exists.
     Returns None otherwise.
 
@@ -250,8 +257,20 @@ def load_unique_identifiable(o: typing.Mapping) -> UniqueIdentifiable | None:
     :return: The UniqueIdentifiable or None if it does not exist.
     """
     global _unique_identifiable_index
-    uid = o.get('uid', None)
-    if uid is None:
-        raise ValueError(f'Missing `uid` key in `o`. o: {o}. type(o): {type(o).__name__}')
-    uid = ensure_unique_identifier(uid)
-    return _unique_identifiable_index.get(uid.uuid, None)
+    uuid = None
+    if isinstance(o, typing.Mapping):
+        uid = o.get('uid', None)
+        if uid is None:
+            raise ValueError(f'Missing `uid` key in `o`. o: {o}. type(o): {type(o).__name__}')
+        uid = ensure_unique_identifier(uid)
+        uuid = uid.uuid
+    elif isinstance(o, str):
+        uuid = uuid_pkg.UUID(o)
+    elif isinstance(o, uuid_pkg.UUID):
+        uuid = o
+    if uuid is None:
+        raise ValueError(f'UUID not found. {o}')
+    unique_identifiable = _unique_identifiable_index.get(uuid, None)
+    if unique_identifiable is None and raise_error_if_not_found:
+        raise ValueError(f'UniqueIdentifiable not found. {o}')
+    return unique_identifiable

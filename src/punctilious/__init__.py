@@ -1,4 +1,4 @@
-import punctilious.pu_01_utilities as util
+import punctilious.pu_01_utilities as utilities
 from punctilious.pu_02_identifiers import create_uid, ensure_unique_identifier, ensure_slug, FlexibleSlug, FlexibleUUID, \
     load_unique_identifiable, UniqueIdentifiable, UniqueIdentifier, Slug, SlugsDictionary
 import punctilious.pu_02_identifiers as uid

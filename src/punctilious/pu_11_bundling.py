@@ -302,7 +302,7 @@ def load_bundle_from_yaml_file(
 def load_bundle_from_dict(d: dict) -> Bundle:
     """Load a bundle from a raw dictionary.
     """
-    bundle: Bundle | None = _identifiers.load_unique_identifiable(o=d)
+    bundle: Bundle | None = _identifiers.load_unique_identifiable(o=d, raise_error_if_not_found=False)
     if bundle is not None:
         # _util.get_logger().debug(f'Bundle already loaded: {bundle}.')
         pass
@@ -316,7 +316,8 @@ def load_bundle_from_dict(d: dict) -> Bundle:
         interpreter_uid = d.get('interpreter', None)
         if interpreter_uid is not None:
             # _util.get_logger().debug(f'Interpret UID: {interpreter_uid}')
-            interpreter: _interpretation.Interpret = _identifiers.load_unique_identifiable(o=interpreter_uid)
+            interpreter: _interpretation.Interpret = _identifiers.load_unique_identifiable(o=interpreter_uid,
+                                                                                           raise_error_if_not_found=False)
             if interpreter_uid is None:
                 raise ReferenceError(f'Missing interpreter: {interpreter_uid}')
         else:
@@ -350,7 +351,8 @@ def load_statement(o: typing.Mapping, interpret: _interpretation.Interpret):
     :param o: a raw Connector.
     :return: a typed Connector instance.
     """
-    statement: _meta_language.Statement | None = _identifiers.load_unique_identifiable(o)
+    statement: _meta_language.Statement | None = _identifiers.load_unique_identifiable(o,
+                                                                                       raise_error_if_not_found=False)
     if statement is None:
         # The object was not already loaded in memory.
 
@@ -427,7 +429,8 @@ def load_abstract_representation(o: typing.Mapping,
     :param o: a raw Representation.
     :return: a typed Representation instance.
     """
-    representation: _representation.AbstractRepresentation | None = _identifiers.load_unique_identifiable(o)
+    representation: _representation.AbstractRepresentation | None = _identifiers.load_unique_identifiable(o,
+                                                                                                          raise_error_if_not_found=False)
     if representation is None:
         # The representation does not exist in memory.
         representation = _representation.ensure_abstract_representation(o)
@@ -472,7 +475,8 @@ def load_connector(o: typing.Mapping, overwrite_mutable_properties: bool = False
     :param o: a raw Connector.
     :return: a typed Connector instance.
     """
-    connector: _formal_language.Connector | None = _identifiers.load_unique_identifiable(o)
+    connector: _formal_language.Connector | None = _identifiers.load_unique_identifiable(o,
+                                                                                         raise_error_if_not_found=False)
     if connector is None:
         # The connector does not exist in memory.
         connector = _formal_language.ensure_connector(o)

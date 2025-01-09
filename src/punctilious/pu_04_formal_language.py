@@ -50,6 +50,9 @@ class Formula(tuple):
         """
         super().__init__()
 
+    def __hash__(self):
+        return hash((self.connector, self.arguments))
+
     def __ne__(self, other):
         return not self == other
 
@@ -482,6 +485,12 @@ class Connector(_identifiers.UniqueIdentifiable):
         """Return a formula with this connector as the root connector, and the arguments as its arguments."""
         return Formula(c=self, a=args)
 
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
+    def __hash__(self):
+        return hash((type(self), self.uid))
+
     def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
                  package=None,
                  syntactic_rules=SyntacticRules(),
@@ -493,6 +502,9 @@ class Connector(_identifiers.UniqueIdentifiable):
         self._connector_representation: _representation.AbstractRepresentation = connector_representation
         self._formula_representation: _representation.AbstractRepresentation = formula_representation
         super().__init__(uid=uid)
+
+    def __ne__(self, other):
+        return hash(self) != hash(other)
 
     def __repr__(self):
         return f'{self.uid.slug}[{self.uid.uuid}]'

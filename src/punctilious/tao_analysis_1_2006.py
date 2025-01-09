@@ -82,8 +82,8 @@ test = _identifiers.load_unique_identifiable(
 _statements = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.statements',
                                                             resource='tao_analysis_1_2006.yaml')
 
-successor: _formal_language.Connector = yaml_file_2.connectors.get_from_uuid(
+successor: _formal_language.Connector = _identifiers.load_unique_identifiable(
     'f85163bf-381d-41fa-bdbb-70cd28bb826b', raise_error_if_not_found=True)
 
-zero: _formal_language.Connector = yaml_file_1.connectors.get_from_uuid(
+zero: _formal_language.Connector = _identifiers.load_unique_identifiable(
     '85927ea1-566e-4349-bab9-9845ba3a4b93', raise_error_if_not_found=True)
