@@ -4,24 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Map1">
-      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="foundations">
+      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_bold.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_bold.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/miscellaneous_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/miscellaneous_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_02_identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_02_identifiers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_12_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_12_formula_notations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -301,6 +289,7 @@
     "Python tests.pytest for test_pu_04_formal_language.TestFormula.test_contains_formula.executor": "Run",
     "Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_1.executor": "Run",
+    "Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2.executor": "Debug",
     "Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSet1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1.executor": "Run",
@@ -369,7 +358,7 @@
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in test_variable.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Run",
+    "Python tests.pytest in tests.executor": "Debug",
     "Python.__init__.executor": "Run",
     "Python._identifiers.executor": "Run",
     "Python._latin_alphabet_lowercase_serif_roman.executor": "Debug",
@@ -507,7 +496,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -748,7 +737,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pu_06_foundational_objects.TestMap1.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -761,7 +750,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestMap1.test_1&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -845,7 +834,7 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_1" />
-      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2" />
       <item itemvalue="Python tests.pytest for test_representations.TestRepresentation.test_representation" />
       <item itemvalue="Python tests.pytest in test_pu_06_foundational_objects.py" />
       <item itemvalue="Python tests.pytest in tests" />
@@ -855,11 +844,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_representations.TestRepresentation.test_representation" />
         <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_1" />
         <item itemvalue="Python tests.pytest in test_pu_06_foundational_objects.py" />
-        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1" />
       </list>
     </recent_temporary>
   </component>
@@ -878,14 +867,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01250" summary="renaming tags to options">
-      <option name="closed" value="true" />
-      <created>1735025400276</created>
-      <option name="number" value="01250" />
-      <option name="presentableId" value="LOCAL-01250" />
-      <option name="project" value="LOCAL" />
-      <updated>1735025400276</updated>
     </task>
     <task id="LOCAL-01251" summary="renaming tags to options">
       <option name="closed" value="true" />
@@ -1271,7 +1252,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736426088029</updated>
     </task>
-    <option name="localTasksCounter" value="1299" />
+    <task id="LOCAL-01299" summary="foundations">
+      <option name="closed" value="true" />
+      <created>1736454224517</created>
+      <option name="number" value="01299" />
+      <option name="presentableId" value="LOCAL-01299" />
+      <option name="project" value="LOCAL" />
+      <updated>1736454224517</updated>
+    </task>
+    <option name="localTasksCounter" value="1300" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1325,7 +1314,6 @@
     <MESSAGE value="modules cleanup" />
     <MESSAGE value="formula-notations" />
     <MESSAGE value="first theorem implementation" />
-    <MESSAGE value="foundations" />
     <MESSAGE value="absolute imports" />
     <MESSAGE value="renaming tags to options" />
     <MESSAGE value="cleanup" />
@@ -1346,7 +1334,8 @@
     <MESSAGE value="map_1" />
     <MESSAGE value="Set1" />
     <MESSAGE value="Map1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Map1" />
+    <MESSAGE value="foundations" />
+    <option name="LAST_COMMIT_MESSAGE" value="foundations" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1431,21 +1420,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious/pu_11_bundling.py</url>
           <line>416</line>
           <option name="timeStamp" value="380" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py</url>
-          <line>119</line>
-          <option name="timeStamp" value="389" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_12_formula_notations.py</url>
-          <line>10</line>
-          <option name="timeStamp" value="402" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_12_formula_notations.py</url>
-          <line>16</line>
-          <option name="timeStamp" value="405" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

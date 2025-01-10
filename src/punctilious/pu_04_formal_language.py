@@ -29,9 +29,10 @@ def ensure_formula(o=None) -> Formula:
             a = ensure_formula_arguments(t[1])
             return Formula(c=c, a=a)
         else:
-            raise ValueError(f'Formula must be a 1-tuple, or 2-tuple. {t}')
+            raise ValueError(
+                f'To interpret an Iterable as a Formula, it must either be a 1-tuple (c) to represent atomic formula c(), or a 2-tuple (c,a) to represent formula c(a1,a2,...an). o:{t}')
     else:
-        raise ValueError(f'o cannot be constrained into a Formula. {type(o)}: {o}')
+        raise ValueError(f'`o` cannot be interpreted as a Formula. {type(o)}: {o}')
 
 
 class Formula(tuple):
@@ -550,8 +551,8 @@ class Connector(_identifiers.UniqueIdentifiable):
             connector_representation: str = self.rep_connector(prefs=prefs)
         formula_representation: str
         if self.formula_representation is None:
-            _utilities.warning(
-                f'{self.__repr__()} has no formula representation. Using system functional notation instead.')
+            # _utilities.warning(
+            #    f'{self.__repr__()} has no formula representation. Using system functional notation instead.')
             arguments_representation: str = ', '.join(
                 tuple(i.represent(is_subformula=True, prefs=prefs) for i in argument))
             formula_representation = f'{connector_representation}({arguments_representation})'

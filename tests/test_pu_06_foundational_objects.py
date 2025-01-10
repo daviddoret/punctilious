@@ -163,47 +163,79 @@ class TestSubstitute:
 
 class TestFormulaEquivalenceWithVariables:
     def test_2(self):
+        x = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        y = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='y'))
+        z = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='z'))
         a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
         c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
         d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
         e = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='e'))
         f = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='f'))
-        x = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='x'))
-        y = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='y'))
-        z = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='z'))
-        domain = pu.foundational_objects.UniqueExtensionTuple(a(), b(), c())
-        codomain = pu.foundational_objects.ExtensionTuple(x(), y(), z())
-        m1 = pu.foundational_objects.ExtensionMap(domain=domain,
-                                                  codomain=codomain)
+        variables = pu.foundational_objects.UniqueExtensionTuple(x(), y(), z())
+        values = pu.foundational_objects.ExtensionTuple(d(), e(), f())
+        m1 = pu.foundational_objects.ExtensionMap(domain=variables,
+                                                  codomain=values)
         # no match
-        input = e(f(), d(e()))
-        output = pu.foundational_objects.substitute_formulas(phi=input, m=m1)
-        assert output.is_formula_equivalent(input)
-        pu.foundational_objects.is_formula_equivalent_with_variables(phi=input, psi=output, v=domain)
+        formula_without_variables = b(c(), a(b()))
+        formula_with_variables = pu.foundational_objects.substitute_formulas(phi=formula_without_variables, m=m1)
+        assert formula_with_variables.is_formula_equivalent(formula_without_variables)
+        check, m3 = pu.foundational_objects.is_formula_equivalent_with_variables(
+            formula_without_variables=formula_without_variables,
+            formula_with_variables=formula_with_variables,
+            variables=variables)
+        assert check
 
         # basic root match
-        input = a()
-        output = pu.foundational_objects.substitute_formulas(phi=input, m=m1)
-        assert output.is_formula_equivalent(x())
+        formula_without_variables = x()
+        formula_with_variables = pu.foundational_objects.substitute_formulas(phi=formula_without_variables, m=m1)
+        assert formula_with_variables.is_formula_equivalent(d())
+        check, m3 = pu.foundational_objects.is_formula_equivalent_with_variables(
+            formula_without_variables=formula_with_variables,
+            formula_with_variables=formula_without_variables,
+            variables=variables)
+        assert check
+        assert m3.get_image(x()) == d()
 
         # several level 1 arguments
-        input = a(d(), e(), b(), a(), f(), c())
-        output = pu.foundational_objects.substitute_formulas(phi=input, m=m1)
-        assert output.is_formula_equivalent(a(d(), e(), y(), x(), f(), z()))
+        formula_without_variables = x(a(), b(), y(), x(), c(), z())
+        formula_with_variables = pu.foundational_objects.substitute_formulas(phi=formula_without_variables, m=m1)
+        assert formula_with_variables.is_formula_equivalent(x(a(), b(), e(), d(), c(), f()))
+        check, m3 = pu.foundational_objects.is_formula_equivalent_with_variables(
+            formula_without_variables=formula_with_variables,
+            formula_with_variables=formula_without_variables,
+            variables=variables)
+        assert check
+        assert m3.get_image(x()) == d()
+        assert m3.get_image(y()) == e()
+        assert m3.get_image(z()) == f()
 
         # arguments at different levels
-        input = a(d(b(), e()), e(a()), b(), a(), f(), c(c()))
-        output = pu.foundational_objects.substitute_formulas(phi=input, m=m1)
-        assert output.is_formula_equivalent(a(d(y(), e()), e(x()), y(), x(), f(), c(z())))
+        formula_without_variables = x(a(y(), b()), b(x()), y(), x(), c(), z(z()))
+        formula_with_variables = pu.foundational_objects.substitute_formulas(phi=formula_without_variables, m=m1)
+        assert formula_with_variables.is_formula_equivalent(x(a(e(), b()), b(d()), e(), d(), c(), z(f())))
+        check, m3 = pu.foundational_objects.is_formula_equivalent_with_variables(
+            formula_without_variables=formula_with_variables,
+            formula_with_variables=formula_without_variables,
+            variables=variables)
+        assert check
+        assert m3.get_image(x()) == d()
+        assert m3.get_image(y()) == e()
+        assert m3.get_image(z()) == f()
 
-        domain = pu.foundational_objects.UniqueExtensionTuple(a(a(b())), b(a(), b(b(b())), c()), c())
-        codomain = pu.foundational_objects.ExtensionTuple(x(), y(a(), y(), z(b())), z(x(y(a()))))
-        m2 = pu.foundational_objects.ExtensionMap(domain=domain,
-                                                  codomain=codomain)
+        variables = pu.foundational_objects.UniqueExtensionTuple(x(x(y())), y(x(), y(y(y())), z()), z())
+        values = pu.foundational_objects.ExtensionTuple(d(), e(x(), e(), f(y())), f(d(e(x()))))
+        m2 = pu.foundational_objects.ExtensionMap(domain=variables,
+                                                  codomain=values)
 
         # multi level variables and multi level values
-        input = a(d(b(), e(b(a(), b(b(b(a(a(b())))))))), e(a()), b(a(a(b()))), a(b(a(), b(b(b())), c())), f(), c(c()))
-        output = pu.foundational_objects.substitute_formulas(phi=input, m=m2)
-        assert output.is_formula_equivalent(
-            a(d(b(), e(b(a(), b(b(b(x())))))), e(a()), b(x()), a(y(a(), y(), z(b()))), f(), c(z(x(y(a()))))))
+        formula_without_variables = x(a(y(), b(y(x(), y(y(y(x(x(y())))))))), b(x()), y(x(x(y()))),
+                                      x(y(x(), y(y(y())), z())), c(), z(z()))
+        formula_with_variables = pu.foundational_objects.substitute_formulas(phi=formula_without_variables, m=m2)
+        assert formula_with_variables.is_formula_equivalent(
+            x(a(y(), b(y(x(), y(y(y(d())))))), b(x()), y(d()), x(e(x(), e(), f(y()))), c(), z(f(d(e(x()))))))
+        check, m3 = pu.foundational_objects.is_formula_equivalent_with_variables(
+            formula_without_variables=formula_with_variables,
+            formula_with_variables=formula_without_variables,
+            variables=variables)
+        assert check

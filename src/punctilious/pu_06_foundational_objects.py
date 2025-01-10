@@ -264,61 +264,79 @@ def substitute_formulas(phi: _formal_language.Formula, m: ExtensionMap,
     return _formal_language.Formula(c=phi.connector, a=substituted_arguments)
 
 
-def is_formula_equivalent_with_variables(phi: _formal_language.Formula, psi: _formal_language.Formula,
-                                         v: UniqueExtensionTuple) -> [bool, ExtensionMap]:
-    phi = _formal_language.ensure_formula(o=phi)
-    psi = _formal_language.ensure_formula(o=psi)
-    m: dict[_formal_language.Formula, _formal_language.Formula] = dict.fromkeys(v.elements, None)
+def is_formula_equivalent_with_variables(formula_without_variables: _formal_language.Formula,
+                                         formula_with_variables: _formal_language.Formula,
+                                         variables: UniqueExtensionTuple) -> [bool, ExtensionMap]:
+    formula_without_variables = _formal_language.ensure_formula(formula_without_variables)
+    formula_with_variables = _formal_language.ensure_formula(formula_with_variables)
+    variables = ensure_unique_extension_tuple(variables)
+    # Validates that the formula_without_variables does not contain any variable.
+    for variable in variables.elements:
+        if formula_without_variables.tree_contains_formula(variable, include_root=True):
+            raise ValueError(
+                f'formula `{variable}` is a sub-formula of formula_without_variables `{formula_without_variables}`.')
+    # Declare a python dictionary to collect variable values during parsing.
+    m: dict[_formal_language.Formula, _formal_language.Formula] = dict.fromkeys(variables.elements, None)
 
-    def _is_formula_equivalent_with_variables(
-            phi: _formal_language.Formula, psi: _formal_language.Formula,
-            m: dict[_formal_language.Formula, _formal_language.Formula]) -> [
-        bool,
-        dict[_formal_language.Formula, _formal_language.Formula]]:
-        """
+    check, m = _is_formula_equivalent_with_variables(formula_without_variables=formula_without_variables,
+                                                     formula_with_variables=formula_with_variables, m=m)
 
-        :param phi: A formula.
-        :param psi: A formula possibly with variables in it.
-        :param m:
-        :return:
-        """
-        if phi.is_formula_equivalent(psi):
-            return True, m
-        else:
-            if psi in m.keys():
-                # psi is a variable.
-                if m[psi] is None:
-                    m[psi] = phi
-                    # the variable slot was not assigned yet, assign it now.
-                    return True, m
-                elif psi.is_formula_equivalent(m[phi]):
-                    # matching variable value.
-                    return True, m
-                else:
-                    # the variable values do not match,
-                    # it follows that the two formulas are not formula-equivalent-with-variables.
-                    return False, m
+    # not all variables may be assigned.
+    # filter all unassigned variables and return the map of variable assignments.
+    all_values = tuple(m.values())
+    all_keys = tuple(m.keys())
+    values = tuple(value for value in all_values if value is not None)
+    keys = tuple(all_keys[i] for i, value in enumerate(all_values) if value is not None)
+    domain = UniqueExtensionTuple(*keys)
+    codomain = ExtensionTuple(*values)
+    m2 = ExtensionMap(domain=domain, codomain=codomain)
+
+    return check, m2
+
+
+def _is_formula_equivalent_with_variables(
+        formula_without_variables: _formal_language.Formula, formula_with_variables: _formal_language.Formula,
+        m: dict[_formal_language.Formula, _formal_language.Formula]) -> [
+    bool,
+    dict[_formal_language.Formula, _formal_language.Formula]]:
+    """Internal function. Use public function `is_formula_equivalent_with_variables` instead."""
+    if formula_without_variables.is_formula_equivalent(formula_with_variables):
+        return True, m
+    else:
+        if formula_with_variables in m.keys():
+            variable = formula_with_variables
+            observed_value = formula_without_variables
+            assigned_value = m[formula_with_variables]
+            # formula_with_variables is a variable.
+            if assigned_value is None:
+                m[variable] = observed_value
+                # the variable slot was not assigned yet, assign it now.
+                return True, m
+            elif assigned_value.is_formula_equivalent(observed_value):
+                # matching variable value.
+                return True, m
             else:
-                # psi is not a variable.
-                if not phi.is_root_connector_equivalent(psi):
-                    # if root connectors are not equivalent,
-                    # it follows that the two formulas are not formula-equivalent-with-variables.
-                    return False, m
-                else:
-                    for phi_argument, psi_argument in zip(phi.arguments, psi.arguments):
-                        check, m = _is_formula_equivalent_with_variables(phi=phi_argument, psi=psi_argument, m=m)
-                        if not check:
-                            # if one sub-argument is not formula-equivalent-with-variables,
-                            # it follows that the two formulas are not formula-equivalent-with-variables.
-                            return False, m
-                    # if all sub-arguments are formula-equivalent-with-variables,
-                    # it follows that the two formulas are formula-equivalent-with-variables.
-                    return True, m
-
-    check, m = _is_formula_equivalent_with_variables(phi=phi, psi=psi, m=m)
-    domain = UniqueExtensionTuple(m.keys())
-    codomain = ExtensionTuple(m.values())
-    return check, ExtensionMap(domain=domain, codomain=codomain)
+                # the variable values do not match,
+                # it follows that the two formulas are not formula-equivalent-with-variables.
+                return False, m
+        else:
+            # psi is not a variable.
+            if not formula_without_variables.is_root_connector_equivalent(formula_with_variables):
+                # if root connectors are not equivalent,
+                # it follows that the two formulas are not formula-equivalent-with-variables.
+                return False, m
+            else:
+                for phi_argument, psi_argument in zip(formula_without_variables.arguments,
+                                                      formula_with_variables.arguments):
+                    check, m = _is_formula_equivalent_with_variables(formula_without_variables=phi_argument,
+                                                                     formula_with_variables=psi_argument, m=m)
+                    if not check:
+                        # if one sub-argument is not formula-equivalent-with-variables,
+                        # it follows that the two formulas are not formula-equivalent-with-variables.
+                        return False, m
+                # if all sub-arguments are formula-equivalent-with-variables,
+                # it follows that the two formulas are formula-equivalent-with-variables.
+                return True, m
 
 
 class InferenceRule1(_formal_language.Formula):
