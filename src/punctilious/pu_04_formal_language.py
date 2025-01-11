@@ -51,8 +51,24 @@ class Formula(tuple):
         """
         super().__init__()
 
+    def __getitem__(self, index):
+        """Returns the """
+        if isinstance(index, slice):
+            # Handle slicing
+            return self.arguments[index.start:index.stop:index.step]
+        else:
+            # Handle single index
+            return self.arguments[index]
+
     def __hash__(self):
         return hash((self.connector, self.arguments))
+
+    def __iter__(self):
+        """Iterates the 1st level arguments of the formula.
+
+        Note: This is equivalent to the explicit `iterate_arguments()` method.
+        """
+        yield from self.iterate_arguments()
 
     def __ne__(self, other):
         return not self == other
@@ -78,7 +94,7 @@ class Formula(tuple):
 
     @property
     def arguments(self) -> FormulaArguments:
-        return self[1]
+        return super().__getitem__(1)
 
     @property
     def arity(self) -> int:
@@ -90,7 +106,7 @@ class Formula(tuple):
 
     @property
     def connector(self) -> Connector:
-        return self[0]
+        return super().__getitem__(0)
 
     def get_argument_first_index(self, argument: Formula) -> int:
         """Returns the 0-based index of `argument` in this formula.
@@ -102,6 +118,15 @@ class Formula(tuple):
             if argument.is_formula_equivalent(x):
                 return i
         raise ValueError('`argument` is not an argument of this formula.')
+
+    def get_raw_element(self, index) -> Formula:
+        """Returns the `index` raw element of the formula.
+
+        Note: `__getitem__` is overridden to return formula arguments, which is the
+        naturally expected behavior in most circumstances. This method gives access to the
+        raw `__getitem__` method of the Python `tuple` super class.
+        """
+        yield from super().__getitem__(index)
 
     def has_direct_argument(self, argument: Formula) -> bool:
         """Returns `True` if `argument` is a direct argument of the formula.
@@ -123,13 +148,27 @@ class Formula(tuple):
         """Iterates the formula tree using the following algorithm:
          - top-down first,
          - left-right second.
-
-        :return:
         """
         if include_root:
             yield self
-        for x in self.arguments:
+        for x in self.iterate_arguments():
             yield from x.iterate_tree(include_root=True)
+
+    def iterate_arguments(self) -> collections.abc.Iterable[Formula]:
+        """Iterates the formula (first-level) arguments using the following algorithm:
+         - left-right.
+        """
+        for x in self.arguments:
+            yield x
+
+    def iterate_raw_elements(self) -> collections.abc.Iterable[Formula]:
+        """Iterates the two formula raw level components, that is the connector and the arguments.
+
+        Note: `__iter__` is overridden to iterate the formula arguments, which is the
+        naturally expected behavior in most circumstances. This method gives access to the
+        raw `__iter__` method of the Python `tuple` super class.
+        """
+        yield from super().__iter__()
 
     @property
     def is_atomic(self) -> bool:
