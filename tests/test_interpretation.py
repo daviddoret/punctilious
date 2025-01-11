@@ -1,7 +1,6 @@
 import pytest
 import punctilious as pu
 from test_shared_library import create_atomic_connector
-import punctilious.pu_13_default_interpreter as interpreters
 
 
 @pytest.fixture
@@ -49,7 +48,7 @@ class TestInterpretation:
         function_connectors = {'not': lnot, 'f': f, 'g': g}
         postfix_connectors = {}
 
-        uid = pu.uid.UniqueIdentifier(slug='test', uuid='f75433aa-3d3c-43ae-8387-421c25772ba1')
+        uid = pu.ids.UniqueIdentifier(slug='test', uuid='f75433aa-3d3c-43ae-8387-421c25772ba1')
 
         # Output the parsed structure
         interpreter = pu.interpretation.Interpret(

@@ -76,7 +76,7 @@ class TestRepresentation:
         x = pu.RendererForStringConstant(string_constant='and', options=(en, word,))
         y = pu.RendererForStringConstant(string_constant='et', options=(fr, word,))
         z = pu.RendererForStringConstant(string_constant='∧', options=(symbol,))
-        rep = pu.AbstractRepresentation(pu.create_uid('rep'), renderers=(x, y, z,))
+        rep = pu.AbstractRepresentation(pu.ids.create_uid('rep'), renderers=(x, y, z,))
 
         prefs[word] = 10
         prefs[symbol] = 20
@@ -121,7 +121,7 @@ class TestRepresentation:
         traditional = pu.RendererForStringTemplate(
             string_template='{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})',
             options=(traditional_formula,))
-        rep = pu.AbstractRepresentation(uid=pu.create_uid('rep'), renderers=(infix, traditional,))
+        rep = pu.AbstractRepresentation(uid=pu.ids.create_uid('rep'), renderers=(infix, traditional,))
 
         prefs[traditional_formula] = 10
         prefs[infix_formula] = 20

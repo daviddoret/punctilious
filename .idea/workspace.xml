@@ -4,17 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules clean-up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/declarations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/declarations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_13_default_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_13_default_interpreter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_1_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_20_01_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_2_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_20_02_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_2_latin_alphabet_lowercase_serif_bold.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_20_03_latin_alphabet_lowercase_serif_bold.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_4_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_20_04_latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_5_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_20_05_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_identifiers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_shared_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_shared_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -886,14 +885,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01257" summary="forbidden option">
-      <option name="closed" value="true" />
-      <created>1735075387164</created>
-      <option name="number" value="01257" />
-      <option name="presentableId" value="LOCAL-01257" />
-      <option name="project" value="LOCAL" />
-      <updated>1735075387165</updated>
-    </task>
     <task id="LOCAL-01258" summary="interpretation with variables">
       <option name="closed" value="true" />
       <created>1735111837651</created>
@@ -1278,7 +1269,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736606126676</updated>
     </task>
-    <option name="localTasksCounter" value="1306" />
+    <task id="LOCAL-01306" summary="modules clean-up">
+      <option name="closed" value="true" />
+      <created>1736607213724</created>
+      <option name="number" value="01306" />
+      <option name="presentableId" value="LOCAL-01306" />
+      <option name="project" value="LOCAL" />
+      <updated>1736607213724</updated>
+    </task>
+    <option name="localTasksCounter" value="1307" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1328,7 +1327,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="modules cleanup" />
     <MESSAGE value="formula-notations" />
     <MESSAGE value="first theorem implementation" />
     <MESSAGE value="absolute imports" />
@@ -1353,7 +1351,8 @@
     <MESSAGE value="Map1" />
     <MESSAGE value="foundations" />
     <MESSAGE value="meta-language" />
-    <option name="LAST_COMMIT_MESSAGE" value="meta-language" />
+    <MESSAGE value="modules clean-up" />
+    <option name="LAST_COMMIT_MESSAGE" value="modules clean-up" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

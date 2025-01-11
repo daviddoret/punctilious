@@ -10,8 +10,8 @@ import jinja2
 import typing
 
 # punctilious modules
-import punctilious.pu_01_utilities as _util
-import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_01_utilities as _utl
+import punctilious.pu_02_identifiers as _ids
 
 
 def ensure_option(o) -> Option:
@@ -96,7 +96,7 @@ def ensure_abstract_representation(o) -> AbstractRepresentation:
     elif isinstance(o, dict):
         # conversion from dict structure.
         uid = o['uid']
-        uid = _identifiers.ensure_unique_identifier(uid)
+        uid = _ids.ensure_unique_identifier(uid)
         renderers = ensure_renderers(o=o.get('renderers', []))
         o = AbstractRepresentation(uid=uid, renderers=renderers)
         return o
@@ -115,18 +115,18 @@ def ensure_abstract_representations(o) -> AbstractRepresentations:
         raise TypeError(f'Representations validation failure. Type: {type(o)}. Object: {o}.')
 
 
-class AbstractRepresentation(_identifiers.UniqueIdentifiable):
+class AbstractRepresentation(_ids.UniqueIdentifiable):
     """An AbstractRepresentation is an object that, given the expected input parameters,
     has the capability to generate ConcreteRepresentations.
     """
 
-    def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
+    def __init__(self, uid: _ids.FlexibleUniqueIdentifier,
                  renderers: tuple[Renderer, ...] | tuple[()] | None):
         if renderers is None:
             renderers = tuple()
         self._renderers: tuple[Renderer, ...] = renderers
         super().__init__(uid=uid)
-        _util.get_logger().debug(f'AbstractRepresentation: `{repr(self)}`')
+        _utl.get_logger().debug(f'AbstractRepresentation: `{repr(self)}`')
 
     def __repr__(self):
         return f'{self.uid.slug} ({self.uid.uuid})'
@@ -183,12 +183,12 @@ class AbstractRepresentations(tuple[AbstractRepresentation, ...]):
         if isinstance(key, int):
             # Default behavior for integer keys
             return super().__getitem__(key)
-        if isinstance(key, _identifiers.FlexibleUUID):
+        if isinstance(key, _ids.FlexibleUUID):
             # Custom behavior for uuid keys
             item: AbstractRepresentation | None = self.get_from_uuid(uuid=key, raise_error_if_not_found=False)
             if item is not None:
                 return item
-        if isinstance(key, _identifiers.FlexibleUniqueIdentifier):
+        if isinstance(key, _ids.FlexibleUniqueIdentifier):
             # Custom behavior for UniqueIdentifier keys
             item: AbstractRepresentation | None = self.get_from_uid(uid=key, raise_error_if_not_found=False)
             if item is not None:
@@ -210,7 +210,7 @@ class AbstractRepresentations(tuple[AbstractRepresentation, ...]):
     def __str__(self):
         return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
-    def get_from_uid(self, uid: _identifiers.FlexibleUniqueIdentifier,
+    def get_from_uid(self, uid: _ids.FlexibleUniqueIdentifier,
                      raise_error_if_not_found: bool = False) -> AbstractRepresentation | None:
         """Return a representation by its UniqueIdentifier.
 
@@ -218,14 +218,14 @@ class AbstractRepresentations(tuple[AbstractRepresentation, ...]):
         :param raise_error_if_not_found:
         :return:
         """
-        uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(uid)
+        uid: _ids.UniqueIdentifier = _ids.ensure_unique_identifier(uid)
         item: AbstractRepresentation | None = next((item for item in self if item.uid == uid), None)
         if item is None and raise_error_if_not_found:
             raise IndexError(f'Representation not found. UID: "{uid}".')
         else:
             return item
 
-    def get_from_uuid(self, uuid: _identifiers.FlexibleUUID,
+    def get_from_uuid(self, uuid: _ids.FlexibleUUID,
                       raise_error_if_not_found: bool = False) -> AbstractRepresentation | None:
         """Return a representation by its UUID.
 
@@ -233,7 +233,7 @@ class AbstractRepresentations(tuple[AbstractRepresentation, ...]):
         :param raise_error_if_not_found:
         :return:
         """
-        uuid: _identifiers.uuid_pkg.UUID = _identifiers.ensure_uuid(uuid)
+        uuid: _ids.uuid_pkg.UUID = _ids.ensure_uuid(uuid)
         if uuid in self._index:
             identifier_index = self._index.index(uuid)
             return self[identifier_index]
@@ -561,7 +561,7 @@ def ensure_base_priority(o: FlexibleBasePriority) -> BasePriority:
 
 def load_abstract_representation(o: [typing.Mapping | str | uuid_pkg.UUID],
                                  raise_error_if_not_found: bool = True) -> AbstractRepresentation:
-    o: _identifiers.UniqueIdentifiable = _identifiers.load_unique_identifiable(o=o, raise_error_if_not_found=True)
+    o: _ids.UniqueIdentifiable = _ids.load_unique_identifiable(o=o, raise_error_if_not_found=True)
     if not isinstance(o, AbstractRepresentation):
         raise TypeError(f'`o` ({o}) of type `{str(type(o))}` is not of type `AbstractRepresentation`.')
     o: AbstractRepresentation
