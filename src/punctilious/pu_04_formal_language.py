@@ -144,41 +144,10 @@ class Formula(tuple):
         """Returns `True` if the exists no pair of two formula direct arguments that are formula-equivalent."""
         return formulas_are_unique(*self.arguments)
 
-    def iterate_tree(self, include_root: bool = True) -> collections.abc.Iterable[Formula]:
-        """Iterates the formula tree using the following algorithm:
-         - top-down first,
-         - left-right second.
-        """
-        if include_root:
-            yield self
-        for x in self.iterate_arguments():
-            yield from x.iterate_tree(include_root=True)
-
-    def iterate_arguments(self) -> collections.abc.Iterable[Formula]:
-        """Iterates the formula (first-level) arguments using the following algorithm:
-         - left-right.
-        """
-        for x in self.arguments:
-            yield x
-
-    def iterate_raw_elements(self) -> collections.abc.Iterable[Formula]:
-        """Iterates the two formula raw level components, that is the connector and the arguments.
-
-        Note: `__iter__` is overridden to iterate the formula arguments, which is the
-        naturally expected behavior in most circumstances. This method gives access to the
-        raw `__iter__` method of the Python `tuple` super class.
-        """
-        yield from super().__iter__()
-
     @property
     def is_atomic(self) -> bool:
         """A formula is atomic if it has no arguments."""
         return self.arity == 0
-
-    @property
-    def is_unary(self) -> bool:
-        """A formula is unary if it has exactly one argument."""
-        return self.arity == 1
 
     @property
     def is_binary(self) -> bool:
@@ -205,6 +174,37 @@ class Formula(tuple):
     def is_ternary(self) -> bool:
         """A formula is ternary if it has exactly three arguments."""
         return self.arity == 3
+
+    @property
+    def is_unary(self) -> bool:
+        """A formula is unary if it has exactly one argument."""
+        return self.arity == 1
+
+    def iterate_arguments(self) -> collections.abc.Iterable[Formula]:
+        """Iterates the formula (first-level) arguments using the following algorithm:
+         - left-right.
+        """
+        for x in self.arguments:
+            yield x
+
+    def iterate_raw_elements(self) -> collections.abc.Iterable[Formula]:
+        """Iterates the two formula raw level components, that is the connector and the arguments.
+
+        Note: `__iter__` is overridden to iterate the formula arguments, which is the
+        naturally expected behavior in most circumstances. This method gives access to the
+        raw `__iter__` method of the Python `tuple` super class.
+        """
+        yield from super().__iter__()
+
+    def iterate_tree(self, include_root: bool = True) -> collections.abc.Iterable[Formula]:
+        """Iterates the formula tree using the following algorithm:
+         - top-down first,
+         - left-right second.
+        """
+        if include_root:
+            yield self
+        for x in self.iterate_arguments():
+            yield from x.iterate_tree(include_root=True)
 
     def represent(self, is_subformula: bool = False, prefs=None) -> str:
         return self.connector.rep_formula(argument=self.arguments, is_subformula=is_subformula, prefs=prefs)
