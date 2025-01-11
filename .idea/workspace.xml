@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="foundations">
-      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/QuickJinja_project.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" afterDir="false" />
@@ -290,6 +290,7 @@
     "Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2.executor": "Debug",
+    "Python tests.pytest for test_pu_06_foundational_objects.TestInferenceRule.test_1.executor": "Debug",
     "Python tests.pytest for test_pu_06_foundational_objects.TestMap1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSet1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1.executor": "Run",
@@ -358,7 +359,7 @@
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in test_variable.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Debug",
+    "Python tests.pytest in tests.executor": "Run",
     "Python.__init__.executor": "Run",
     "Python._identifiers.executor": "Run",
     "Python._latin_alphabet_lowercase_serif_roman.executor": "Debug",
@@ -754,6 +755,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_pu_06_foundational_objects.TestInferenceRule.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_foundational_objects.TestInferenceRule.test_1&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_representations.TestRepresentation.test_representation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -788,23 +806,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_pu_06_foundational_objects.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -835,8 +836,8 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_1" />
       <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2" />
+      <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestInferenceRule.test_1" />
       <item itemvalue="Python tests.pytest for test_representations.TestRepresentation.test_representation" />
-      <item itemvalue="Python tests.pytest in test_pu_06_foundational_objects.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -845,10 +846,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_2" />
+        <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestInferenceRule.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_representations.TestRepresentation.test_representation" />
         <item itemvalue="Python tests.pytest for test_pu_06_foundational_objects.TestFormulaEquivalenceWithVariables.test_1" />
-        <item itemvalue="Python tests.pytest in test_pu_06_foundational_objects.py" />
       </list>
     </recent_temporary>
   </component>
@@ -867,14 +868,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01251" summary="renaming tags to options">
-      <option name="closed" value="true" />
-      <created>1735025595863</created>
-      <option name="number" value="01251" />
-      <option name="presentableId" value="LOCAL-01251" />
-      <option name="project" value="LOCAL" />
-      <updated>1735025595863</updated>
     </task>
     <task id="LOCAL-01252" summary="renaming tags to options">
       <option name="closed" value="true" />
@@ -1260,7 +1253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736454224517</updated>
     </task>
-    <option name="localTasksCounter" value="1300" />
+    <task id="LOCAL-01300" summary="foundations">
+      <option name="closed" value="true" />
+      <created>1736510946241</created>
+      <option name="number" value="01300" />
+      <option name="presentableId" value="LOCAL-01300" />
+      <option name="project" value="LOCAL" />
+      <updated>1736510946241</updated>
+    </task>
+    <option name="localTasksCounter" value="1301" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1420,6 +1421,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious/pu_11_bundling.py</url>
           <line>416</line>
           <option name="timeStamp" value="380" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py</url>
+          <line>221</line>
+          <option name="timeStamp" value="423" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

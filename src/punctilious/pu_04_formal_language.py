@@ -545,7 +545,7 @@ class Connector(_identifiers.UniqueIdentifiable):
         """
         connector_representation: str
         if self.connector_representation is None:
-            _utilities.warning(f'{self.__repr__()} has no connector representation. Using system slug instead.')
+            # _utilities.warning(f'{self.__repr__()} has no connector representation. Using system slug instead.')
             connector_representation = self.uid.slug
         else:
             connector_representation: str = self.rep_connector(prefs=prefs)

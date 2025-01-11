@@ -41,13 +41,18 @@ class ExtensionTuple(_formal_language.Formula):
         return (element for element in self.arguments)
 
     def has_element(self, element: _formal_language.Formula) -> bool:
-        """Returns `True` if `element` is an element of the tuple.
+        """Returns `True` if `element` is an element of the tuple, `False` otherwise.
 
         Note that `element` may be multiple times an element of the tuple."""
         return self.has_direct_argument(argument=element)
 
+    @property
+    def has_unique_elements(self) -> bool:
+        """Returns `True` if all the elements of this ExtensionTuple are unique, `False` otherwise."""
+        return self.has_unique_arguments
+
     def is_tuple_equivalent_to(self, other: ExtensionTuple) -> bool:
-        """Returns `True` if this tuple is equal to the `other` tuple.
+        """Returns `True` if this tuple is equal to the `other` tuple, `False` otherwise.
 
         This is equivalent to formula-equivalence."""
         return self.is_formula_equivalent(other=other)
@@ -58,8 +63,10 @@ class ExtensionTuple(_formal_language.Formula):
     def to_python_tuple(self) -> tuple[_formal_language.Formula, ...]:
         return tuple(self.elements)
 
-    def to_unique_tuple(self, duplicate_processing: _formal_language.DuplicateProcessing =
+    def to_unique_extension_tuple(self, duplicate_processing: _formal_language.DuplicateProcessing =
     _formal_language.DuplicateProcessing.RAISE_ERROR) -> UniqueExtensionTuple:
+        if duplicate_processing == _formal_language.DuplicateProcessing.RAISE_ERROR and not self.has_unique_arguments:
+            raise ValueError(f'All the elements of this `ExtensionTuple` are not unique: {self}')
         return UniqueExtensionTuple(self.elements, duplicate_processing=duplicate_processing)
 
 
@@ -138,7 +145,7 @@ class UniqueExtensionTuple(_formal_language.Formula):
     def to_python_set(self) -> set[_formal_language.Formula]:
         return set(self.elements)
 
-    def to_tuple_1(self) -> ExtensionTuple:
+    def to_extension_tuple(self) -> ExtensionTuple:
         return ExtensionTuple(self.elements)
 
 
@@ -223,6 +230,27 @@ class ExtensionMap(_formal_language.Formula):
             raise ValueError(f'`x` is not an element of the map domain. `x`: {x}.')
         i: int = self.domain.get_argument_first_index(argument=x)
         return self.codomain.arguments[i]
+
+    def invert(self) -> ExtensionMap:
+        """Returns the inverse map.
+
+        Given a map `m(domain, codomain)`, the inverse map is `m(codomain, domain)`.
+
+        If all elements of the map codomain are not unique, raises a `ValueError`.
+
+        :return:
+        """
+        if not self.is_invertible:
+            raise ValueError(f'This ExtensionMap is not invertible: {self}')
+        new_domain = UniqueExtensionTuple(*self.codomain.elements)
+        new_codomain = ExtensionTuple(*self.domain.elements)
+        return ExtensionMap(domain=new_domain, codomain=new_codomain)
+
+    def is_invertible(self) -> bool:
+        """Returns `True` if the ExtensionMap can be inverted,
+        that is its codomain is made of unique formulas
+        such that we can create an ExtensionMap with switched domain and codomain."""
+        return self.codomain.has_unique_arguments
 
     def is_map_equivalent(self, other: ExtensionMap):
         """Two maps m1 and m2 are map-equivalent if and only if:
@@ -341,16 +369,18 @@ def _is_formula_equivalent_with_variables(
 
 class InferenceRule1(_formal_language.Formula):
 
-    def __init__(self, v: UniqueExtensionTuple, p: UniqueExtensionTuple, c: _formal_language.Formula):
+    def __init__(self, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
+                 conclusion: _formal_language.Formula):
         """
-        :param v: the variables.
-        :param p: the premises.
-        :param c: the conclusion.
+        :param variables: the variables.
+        :param premises: the premises.
+        :param conclusion: the conclusion.
         """
-        super().__init__(c=_foundational_connectors.inference_rule_1, a=(v, p, c,))
+        super().__init__(c=_foundational_connectors.inference_rule_1, a=(variables, premises, conclusion,))
 
-    def __new__(cls, v: UniqueExtensionTuple, p: UniqueExtensionTuple, c: _formal_language.Formula):
-        return super().__new__(cls, c=_foundational_connectors.inference_rule_1, a=(v, p, c,))
+    def __new__(cls, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
+                conclusion: _formal_language.Formula):
+        return super().__new__(cls, c=_foundational_connectors.inference_rule_1, a=(variables, premises, conclusion,))
 
     @property
     def conclusion(self) -> _formal_language.Formula:
@@ -368,24 +398,31 @@ class InferenceRule1(_formal_language.Formula):
         if arguments.arity != self.premises.arity:
             raise ValueError('arities dont match')
 
-        # infer the variable values
-        for v in self.variables.elements:
-            # retrieve the position of the variable in the premises
-            variable_value = None
-            for p in iterate_formulas_positions(v, self.premises):
-                # retrieve variable value
-                new_value = retrieve_position_value(p, arguments)
-                if variable_value is None:
-                    variable_value = new_value
-                else:
-                    # check the variable value is unique
-                    if variable_value.is_not_formula_equivalent(new_value):
-                        raise ValueError('variable mapping inconsistency')
-            # store the variable value in a map for later usage
-            variable_values_map = None
+        # the arguments must be formula-equivalent-with variables to the premises.
+        # simultaneously, infer the variable values.
+        check, m = is_formula_equivalent_with_variables(
+            formula_without_variables=arguments,
+            variables=self.variables,
+            formula_with_variables=self.premises
+        )
+        check: bool
+        m: ExtensionMap
+        if not check:
+            raise ValueError(
+                f'The `arguments` ({arguments}) are not formula-equivalent-with-variables'
+                f' with the `premises` ({self.premises})'
+                f' considering `variables` ({self.variables}).')
 
-        # substitute variable with values in arguments
+        # confirm that all variables have been assigned a value.
+        for variable in self.variables.elements:
+            if variable not in m.domain.elements:
+                raise ValueError(f'`variable` ({variable}) is not assigned a value.')
 
-        # check consistency with premises
+        # transform the conclusion.
+        conclusion_with_variable_assignments: _formal_language.Formula = substitute_formulas(
+            phi=self.conclusion,
+            m=m,
+            include_root=True
+        )
 
-        # substitute variable with values in conclusion
+        return conclusion_with_variable_assignments
