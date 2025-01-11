@@ -146,7 +146,8 @@ class UniqueExtensionTuple(_formal_language.Formula):
         return set(self.elements)
 
     def to_extension_tuple(self) -> ExtensionTuple:
-        return ExtensionTuple(self.elements)
+        """Returns an ExtensionTuple with the same elements, preserving order."""
+        return ExtensionTuple(*self.elements)
 
 
 FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, collections.abc.Iterable]
@@ -382,6 +383,35 @@ class InferenceRule1(_formal_language.Formula):
                 conclusion: _formal_language.Formula):
         return super().__new__(cls, c=_foundational_connectors.inference_rule_1, a=(variables, premises, conclusion,))
 
+    def _check_arguments_validity(self, arguments: ExtensionTuple) -> [bool, ExtensionTuple | None,
+                                                                       ExtensionMap | None]:
+        """Internal function. Factors validation code between `apply_rule` and `check_arguments_validity`."""
+        if arguments.arity != self.premises.arity:
+            return False, None, None
+
+        # the arguments are passed as an ExtensionTuple.
+        # in order to check formula-equivalence-with-variables between
+        # arguments and premises, we must convert premises to ExtensionTuple.
+        premises_as_extension_tuple: ExtensionTuple = self.premises.to_extension_tuple()
+
+        # the arguments must be formula-equivalent-with variables to the premises.
+        # simultaneously, infer the variable values.
+        check, m = is_formula_equivalent_with_variables(
+            formula_without_variables=arguments,
+            variables=self.variables,
+            formula_with_variables=premises_as_extension_tuple
+        )
+        check: bool
+        if not check:
+            return False, None, None
+
+        # confirm that all variables have been assigned a value.
+        for variable in self.variables.elements:
+            if variable not in m.domain.elements:
+                return False, None, None
+
+        return True, premises_as_extension_tuple, m
+
     @property
     def conclusion(self) -> _formal_language.Formula:
         return self.arguments[2]
@@ -398,12 +428,17 @@ class InferenceRule1(_formal_language.Formula):
         if arguments.arity != self.premises.arity:
             raise ValueError('arities dont match')
 
+        # the arguments are passed as an ExtensionTuple.
+        # in order to check formula-equivalence-with-variables between
+        # arguments and premises, we must convert premises to ExtensionTuple.
+        premises_as_extension_tuple: ExtensionTuple = self.premises.to_extension_tuple()
+
         # the arguments must be formula-equivalent-with variables to the premises.
         # simultaneously, infer the variable values.
         check, m = is_formula_equivalent_with_variables(
             formula_without_variables=arguments,
             variables=self.variables,
-            formula_with_variables=self.premises
+            formula_with_variables=premises_as_extension_tuple
         )
         check: bool
         m: ExtensionMap
@@ -426,3 +461,8 @@ class InferenceRule1(_formal_language.Formula):
         )
 
         return conclusion_with_variable_assignments
+
+    def check_arguments_validity(self, arguments: ExtensionTuple) -> bool:
+        """Returns `True` if `arguments` are valid for this InferenceRule."""
+        check, _, _ = self._check_arguments_validity(arguments=arguments)
+        return check

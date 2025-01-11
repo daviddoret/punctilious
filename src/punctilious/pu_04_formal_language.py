@@ -70,7 +70,8 @@ class Formula(tuple):
         return super().__new__(cls, phi)
 
     def __repr__(self):
-        return self.connector.__str__() + self.arguments.__str__()
+        # return self.connector.__str__() + self.arguments.__str__()
+        return self.represent()
 
     def __str__(self):
         return self.represent()

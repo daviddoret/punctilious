@@ -49,7 +49,7 @@ representations:
       - implementation: string_template
         string_template: '\left({{ connector }}, \left({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}\right)\right)'
         options: { technical_language: latex_math, super_parenthesization: not_required }
-  - uid: { slug: tuple, uuid: 2d050cf8-bb21-4af3-879f-2faf34b35722 }
+  - uid: { slug: parenthesized_formula, uuid: 443c2f9b-0f49-421d-8cea-c0d0fafc093d }
     renderers:
       - implementation: string_template
         string_template: '({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %})'
@@ -57,6 +57,16 @@ representations:
       - implementation: string_template
         string_template: '\left({% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}\right)'
         options: { technical_language: latex_math, super_parenthesization: not_required }
-
+  - uid: { slug: angle_bracketed_formula, uuid: 2d050cf8-bb21-4af3-879f-2faf34b35722 }
+    renderers:
+      - implementation: string_template
+        string_template: '<{% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}>'
+        options: { technical_language: unicode_basic, super_parenthesization: not_required }
+      - implementation: string_template
+        string_template: '⟨{% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}⟩'
+        options: { technical_language: unicode_extended, super_parenthesization: not_required }
+      - implementation: string_template
+        string_template: '\left\langle{% for a in argument %}{{ a }}{% if not loop.last %}, {% endif %}{% endfor %}\right\rangle'
+        options: { technical_language: latex_math, super_parenthesization: not_required }
 
 

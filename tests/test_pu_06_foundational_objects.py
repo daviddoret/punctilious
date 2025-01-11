@@ -282,4 +282,5 @@ class TestInferenceRule:
             b(e(), f())
         )
         conclusion_with_variable_assignments = inference_rule.apply_rule(arguments=arguments)
-        pass
+        assert conclusion_with_variable_assignments.is_formula_equivalent(
+            other=c(d(), f()))

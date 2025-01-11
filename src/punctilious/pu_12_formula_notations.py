@@ -43,3 +43,15 @@ system_formula = _identifiers.load_unique_identifiable('8df8b738-3efc-4da5-928a-
 """A formula representation for system formulas of the form: `(𝗖, (𝗮₁, 𝗮₂, …, 𝗮ₙ))` where 𝗖 is the connector
 and 𝗮ᵢ is an argument.
 """
+
+parenthesized_formula = _identifiers.load_unique_identifiable('2d050cf8-bb21-4af3-879f-2faf34b35722',
+                                                              raise_error_if_not_found=True)
+"""A formula representation for parenthesized formulas of the form: `(𝗮₁, 𝗮₂, …, 𝗮ₙ)` where 𝗮ᵢ is an argument.
+This notation introduces some ambiguity because the connector is not explicitly represented.
+"""
+
+angle_bracketed_formula = _identifiers.load_unique_identifiable('2d050cf8-bb21-4af3-879f-2faf34b35722',
+                                                                raise_error_if_not_found=True)
+"""A formula representation for angle-bracketed formulas of the form: `⟨𝗮₁, 𝗮₂, …, 𝗮ₙ⟩` where 𝗮ᵢ is an argument.
+This notation introduces some ambiguity because the connector is not explicitly represented.
+"""
