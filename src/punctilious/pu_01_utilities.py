@@ -6,10 +6,7 @@
 from __future__ import annotations
 
 # external modules
-# import collections.abc
 import io
-# import typing
-# import uuid as uuid_pkg
 import yaml
 import importlib.resources
 import logging
@@ -79,6 +76,9 @@ class Logger:
     def debug(self, msg: str):
         self._native_logger.debug(msg)
 
+    def exception(self, msg: str):
+        self._native_logger.exception(msg)
+
     def info(self, msg: str):
         self._native_logger.info(msg)
 
@@ -90,13 +90,42 @@ def get_logger():
     return Logger()
 
 
-def debug(msg: str):
-    get_logger().debug(msg)
+def kwargs_to_str(**kwargs) -> str:
+    return '\n'.join(f'`{str(key)}`: ({type(value).__name__}) `{str(value)}`' for key, value in kwargs.items())
 
 
-def warning(msg: str):
-    get_logger().warning(msg)
+def debug(msg: str, **kwargs):
+    get_logger().debug(msg + kwargs_to_str(**kwargs))
 
 
-def info(msg: str):
-    get_logger().info(msg)
+def exception(msg: str, **kwargs):
+    get_logger().exception(msg + kwargs_to_str(**kwargs))
+
+
+def warning(msg: str, **kwargs):
+    get_logger().warning(msg + kwargs_to_str(**kwargs))
+
+
+def info(msg: str, **kwargs):
+    get_logger().info(msg + kwargs_to_str(**kwargs))
+
+
+class PunctiliousError(Exception):
+    def __init__(self, msg: str, **kwargs):
+        self._msg: str = msg
+        self._kwargs = kwargs
+        self._description: str = msg + kwargs_to_str(**kwargs)
+        exception(msg=msg, **kwargs)
+        super().__init__()
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @property
+    def kwargs(self):
+        return self._kwargs
+
+    @property
+    def msg(self) -> str:
+        return self._msg

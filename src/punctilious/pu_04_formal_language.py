@@ -7,9 +7,9 @@ import collections.abc
 import typing
 
 # punctilious modules
-import punctilious.pu_01_utilities as _utilities
-import punctilious.pu_02_identifiers as _identifiers
-import punctilious.pu_03_representation as _representation
+import punctilious.pu_01_utilities as _utl
+import punctilious.pu_02_identifiers as _ids
+import punctilious.pu_03_representation as _rpr
 
 
 def ensure_formula(o=None) -> Formula:
@@ -29,10 +29,14 @@ def ensure_formula(o=None) -> Formula:
             a = ensure_formula_arguments(t[1])
             return Formula(c=c, a=a)
         else:
-            raise ValueError(
-                f'To interpret an Iterable as a Formula, it must either be a 1-tuple (c) to represent atomic formula c(), or a 2-tuple (c,a) to represent formula c(a1,a2,...an). o:{t}')
+            raise _utl.PunctiliousError(
+                f'To interpret an Iterable as a Formula,'
+                f' it must either be a 1-tuple (c) to represent atomic formula c(),'
+                f' or a 2-tuple (c,a) to represent formula c(a1,a2,...an).',
+                o=o, tuple_o=t)
     else:
-        raise ValueError(f'`o` cannot be interpreted as a Formula. {type(o)}: {o}')
+        raise _utl.PunctiliousError(f'`o` cannot be interpreted as a Formula.',
+                                    o=o)
 
 
 class Formula(tuple):
@@ -327,9 +331,9 @@ class Preferences:
             self._encoding = 'unicode_basic'
             self._language = 'en'
             self.__class__._singleton_initialized = True
-            _utilities.debug(
+            _utl.debug(
                 f'Preferences singleton ({id(self)}) initialized.')
-            _utilities.debug(f'Preferences: {str(self.to_dict())}')
+            _utl.debug(f'Preferences: {str(self.to_dict())}')
 
     def __new__(cls, *args, **kwargs):
         if cls._singleton is None:
@@ -454,12 +458,12 @@ class Connectors(tuple):
         if isinstance(key, int):
             # Default behavior for integer keys
             return super().__getitem__(key)
-        if isinstance(key, _identifiers.FlexibleUUID):
+        if isinstance(key, _ids.FlexibleUUID):
             # Custom behavior for uuid keys
             item: Connector | None = self.get_from_uuid(uuid=key, raise_error_if_not_found=False)
             if item is not None:
                 return item
-        if isinstance(key, _identifiers.FlexibleUniqueIdentifier):
+        if isinstance(key, _ids.FlexibleUniqueIdentifier):
             # Custom behavior for UniqueIdentifier keys
             item: Connector | None = self.get_from_uid(uid=key, raise_error_if_not_found=False)
             if item is not None:
@@ -481,7 +485,7 @@ class Connectors(tuple):
     def __str__(self):
         return '(' + ', '.join(e.uid.slug for e in self) + ')'
 
-    def get_from_uid(self, uid: _identifiers.FlexibleUniqueIdentifier,
+    def get_from_uid(self, uid: _ids.FlexibleUniqueIdentifier,
                      raise_error_if_not_found: bool = False) -> Connector | None:
         """Return a Connector by its UniqueIdentifier.
 
@@ -489,14 +493,14 @@ class Connectors(tuple):
         :param raise_error_if_not_found:
         :return:
         """
-        uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(uid)
+        uid: _ids.UniqueIdentifier = _ids.ensure_unique_identifier(uid)
         item: Connector | None = next((item for item in self if item.uid == uid), None)
         if item is None and raise_error_if_not_found:
             raise IndexError(f'Connector not found. UID: "{uid}".')
         else:
             return item
 
-    def get_from_uuid(self, uuid: _identifiers.FlexibleUUID,
+    def get_from_uuid(self, uuid: _ids.FlexibleUUID,
                       raise_error_if_not_found: bool = False) -> Connector | None:
         """Return a Connector by its UUID.
 
@@ -504,7 +508,7 @@ class Connectors(tuple):
         :param raise_error_if_not_found:
         :return:
         """
-        uuid: _identifiers.uuid_pkg.UUID = _identifiers.ensure_uuid(uuid)
+        uuid: _ids.uuid_pkg.UUID = _ids.ensure_uuid(uuid)
         if uuid in self._index:
             identifier_index = self._index.index(uuid)
             return self[identifier_index]
@@ -517,7 +521,7 @@ class Connectors(tuple):
         return yaml.dump(self, default_flow_style=default_flow_style)
 
 
-class Connector(_identifiers.UniqueIdentifiable):
+class Connector(_ids.UniqueIdentifiable):
     """
     TODO: Inherit from tuple to manage immutable properties.
     """
@@ -532,16 +536,16 @@ class Connector(_identifiers.UniqueIdentifiable):
     def __hash__(self):
         return hash((type(self), self.uid))
 
-    def __init__(self, uid: _identifiers.FlexibleUniqueIdentifier,
+    def __init__(self, uid: _ids.FlexibleUniqueIdentifier,
                  package=None,
                  syntactic_rules=SyntacticRules(),
-                 connector_representation: _representation.AbstractRepresentation | None = None,
-                 formula_representation: _representation.AbstractRepresentation | None = None
+                 connector_representation: _rpr.AbstractRepresentation | None = None,
+                 formula_representation: _rpr.AbstractRepresentation | None = None
                  ):
         self._package = package
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
-        self._connector_representation: _representation.AbstractRepresentation = connector_representation
-        self._formula_representation: _representation.AbstractRepresentation = formula_representation
+        self._connector_representation: _rpr.AbstractRepresentation = connector_representation
+        self._formula_representation: _rpr.AbstractRepresentation = formula_representation
         super().__init__(uid=uid)
 
     def __ne__(self, other):
@@ -554,7 +558,7 @@ class Connector(_identifiers.UniqueIdentifiable):
         return f'{self.uid.slug}'
 
     @property
-    def connector_representation(self) -> _representation.AbstractRepresentation:
+    def connector_representation(self) -> _rpr.AbstractRepresentation:
         return self._connector_representation
 
     @connector_representation.setter
@@ -562,7 +566,7 @@ class Connector(_identifiers.UniqueIdentifiable):
         self._connector_representation = connector_representation
 
     @property
-    def formula_representation(self) -> _representation.AbstractRepresentation:
+    def formula_representation(self) -> _rpr.AbstractRepresentation:
         return self._formula_representation
 
     @formula_representation.setter
@@ -704,3 +708,18 @@ def formulas_are_unique(*formulas: Formula) -> bool:
             if is_formula_equivalent(formulas[i], formulas[j]):
                 return False
     return True
+
+
+def load_connector(o: [typing.Mapping | str | uuid_pkg.UUID],
+                   raise_error_if_not_found: bool = True) -> Connector:
+    """Load a UniqueIdentifiable of type Connector from the general UID index.
+
+    :param o:
+    :param raise_error_if_not_found:
+    :return:
+    """
+    o: _ids.UniqueIdentifiable = _ids.load_unique_identifiable(o=o, raise_error_if_not_found=True)
+    if not isinstance(o, Connector):
+        raise TypeError(f'`o` ({o}) of type `{str(type(o))}` is not of type `Connector`.')
+    o: Connector
+    return o

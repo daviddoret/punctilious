@@ -24,7 +24,7 @@ def ensure_option(o) -> Option:
         o = Option(label=label, value=value)
         return o
     else:
-        raise TypeError(f'Option validation failure. Type: {type(o)}. Object: {o}.')
+        raise _utl.PunctiliousError(f'Option validation failure.', o=o)
 
 
 def ensure_options_assignment(o) -> OptionsAssignment:
@@ -561,6 +561,12 @@ def ensure_base_priority(o: FlexibleBasePriority) -> BasePriority:
 
 def load_abstract_representation(o: [typing.Mapping | str | uuid_pkg.UUID],
                                  raise_error_if_not_found: bool = True) -> AbstractRepresentation:
+    """Load a UniqueIdentifiable of type AbstractRepresentation from the general UID index.
+
+    :param o:
+    :param raise_error_if_not_found:
+    :return:
+    """
     o: _ids.UniqueIdentifiable = _ids.load_unique_identifiable(o=o, raise_error_if_not_found=True)
     if not isinstance(o, AbstractRepresentation):
         raise TypeError(f'`o` ({o}) of type `{str(type(o))}` is not of type `AbstractRepresentation`.')

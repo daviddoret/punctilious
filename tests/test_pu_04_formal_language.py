@@ -11,7 +11,7 @@ class TestFormulasAreUnique:
         assert pu.fml.formulas_are_unique()
         assert pu.fml.formulas_are_unique(a(), b(), c(), d())
         assert not pu.fml.formulas_are_unique(a(), b(), c(), a(), d())
-        with pytest.raises(ValueError):
+        with pytest.raises(pu.utl.PunctiliousError):
             pu.fml.formulas_are_unique(a(), b(), 5, a(), d())
 
 
