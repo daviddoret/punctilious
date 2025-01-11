@@ -6,14 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules clean-up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_identifiers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula_notations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_options.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_options.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_presentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_04_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_representations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_representations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_shared_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_shared_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -885,14 +891,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01258" summary="interpretation with variables">
-      <option name="closed" value="true" />
-      <created>1735111837651</created>
-      <option name="number" value="01258" />
-      <option name="presentableId" value="LOCAL-01258" />
-      <option name="project" value="LOCAL" />
-      <updated>1735111837652</updated>
-    </task>
     <task id="LOCAL-01259" summary="interpretation with variables">
       <option name="closed" value="true" />
       <created>1735111862307</created>
@@ -1277,7 +1275,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736607213724</updated>
     </task>
-    <option name="localTasksCounter" value="1307" />
+    <task id="LOCAL-01307" summary="modules clean-up">
+      <option name="closed" value="true" />
+      <created>1736609856768</created>
+      <option name="number" value="01307" />
+      <option name="presentableId" value="LOCAL-01307" />
+      <option name="project" value="LOCAL" />
+      <updated>1736609856768</updated>
+    </task>
+    <option name="localTasksCounter" value="1308" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

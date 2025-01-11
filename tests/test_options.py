@@ -4,11 +4,11 @@ import punctilious as pu
 class TestOptions:
 
     def test_abstract_options(self):
-        option_a = pu.Option('option_a', 'description of option_a')
-        option_b = pu.Option('option_b', 'description of option_b')
-        option_c = pu.Option('option_c', 'description of option_c')
+        option_a = pu.rpr.Option('option_a', 'description of option_a')
+        option_b = pu.rpr.Option('option_b', 'description of option_b')
+        option_c = pu.rpr.Option('option_c', 'description of option_c')
 
-        prefs = pu.Preferences()
+        prefs = pu.rpr.Preferences()
         prefs[option_a] = 1
         prefs[option_b] = pu.representation.get_forbidden()
         prefs[option_c] = 5
@@ -24,7 +24,7 @@ class TestOptions:
         """Test various values of the technical_language option.
         """
         pass
-        prefs = pu.Preferences()
+        prefs = pu.rpr.Preferences()
         prefs[pu.options.technical_language.unicode_basic] = 2
         assert (pu.greek_alphabet_lowercase_serif_italic.lambda2.rep(prefs=prefs) == 'lambda')
         prefs[pu.options.technical_language.unicode_extended] = 3
@@ -37,7 +37,7 @@ class TestOptions:
         """Test various values of the technical_language option.
         """
         pass
-        prefs = pu.Preferences()
+        prefs = pu.rpr.Preferences()
         prefs[pu.options.technical_language.unicode_basic] = 2
         assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == 'in')
         prefs[pu.options.technical_language.unicode_extended] = 3

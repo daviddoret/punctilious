@@ -4,52 +4,52 @@ import punctilious as pu
 
 @pytest.fixture
 def en():
-    return pu.Option('language', 'en')
+    return pu.rpr.Option('language', 'en')
 
 
 @pytest.fixture
 def fr():
-    return pu.Option('language', 'fr')
+    return pu.rpr.Option('language', 'fr')
 
 
 @pytest.fixture
 def symbol():
-    return pu.Option('connector_representation', 'symbol')
+    return pu.rpr.Option('connector_representation', 'symbol')
 
 
 @pytest.fixture
 def word():
-    return pu.Option('connector_representation', 'word')
+    return pu.rpr.Option('connector_representation', 'word')
 
 
 @pytest.fixture
 def traditional_formula():
-    return pu.Option('layout', 'traditional_formula')
+    return pu.rpr.Option('layout', 'traditional_formula')
 
 
 @pytest.fixture
 def infix_formula():
-    return pu.Option('layout', 'infix_formula')
+    return pu.rpr.Option('layout', 'infix_formula')
 
 
 @pytest.fixture
 def unicode_basic():
-    return pu.Option('technical_language', 'unicode_basic')
+    return pu.rpr.Option('technical_language', 'unicode_basic')
 
 
 @pytest.fixture
 def unicode_extended():
-    return pu.Option('technical_language', 'unicode_extended')
+    return pu.rpr.Option('technical_language', 'unicode_extended')
 
 
 @pytest.fixture
 def latex_math():
-    return pu.Option('technical_language', 'latex_math')
+    return pu.rpr.Option('technical_language', 'latex_math')
 
 
 @pytest.fixture
 def prefs(en, fr, symbol, word):
-    prefs = pu.Preferences()
+    prefs = pu.rpr.Preferences()
     prefs[en] = 6
     prefs[fr] = 9
     prefs[symbol] = 100
@@ -73,10 +73,10 @@ class TestRepresentation:
     def test_representation(self, en, fr, word, symbol, prefs, unicode_basic, unicode_extended, latex_math):
         """Test of representation with multiple string-constant renderers.
         """
-        x = pu.RendererForStringConstant(string_constant='and', options=(en, word,))
-        y = pu.RendererForStringConstant(string_constant='et', options=(fr, word,))
-        z = pu.RendererForStringConstant(string_constant='∧', options=(symbol,))
-        rep = pu.AbstractRepresentation(pu.ids.create_uid('rep'), renderers=(x, y, z,))
+        x = pu.rpr.RendererForStringConstant(string_constant='and', options=(en, word,))
+        y = pu.rpr.RendererForStringConstant(string_constant='et', options=(fr, word,))
+        z = pu.rpr.RendererForStringConstant(string_constant='∧', options=(symbol,))
+        rep = pu.rpr.AbstractRepresentation(pu.ids.create_uid('rep'), renderers=(x, y, z,))
 
         prefs[word] = 10
         prefs[symbol] = 20
@@ -115,13 +115,13 @@ class TestRepresentation:
         assert (conjunction_connector.rep(prefs=prefs) == 'and')
 
     def test_template(self, traditional_formula, infix_formula, prefs):
-        infix = pu.RendererForStringTemplate(
+        infix = pu.rpr.RendererForStringTemplate(
             string_template='{{ arguments[0] }} {{ connector }} {{ arguments[1] }}',
             options=(infix_formula,))
-        traditional = pu.RendererForStringTemplate(
+        traditional = pu.rpr.RendererForStringTemplate(
             string_template='{{ connector }}({% for argument in arguments %}{{ argument }}{% if not loop.last %}, {% endif %}{% endfor %})',
             options=(traditional_formula,))
-        rep = pu.AbstractRepresentation(uid=pu.ids.create_uid('rep'), renderers=(infix, traditional,))
+        rep = pu.rpr.AbstractRepresentation(uid=pu.ids.create_uid('rep'), renderers=(infix, traditional,))
 
         prefs[traditional_formula] = 10
         prefs[infix_formula] = 20

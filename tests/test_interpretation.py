@@ -5,7 +5,7 @@ from test_shared_library import create_atomic_connector
 
 @pytest.fixture
 def prefs():
-    prefs = pu.Preferences()
+    prefs = pu.rpr.Preferences()
     prefs[pu.options.language.en] = 6
     prefs[pu.options.language.fr] = 9
     prefs[pu.options.connector_representation.symbol] = 100

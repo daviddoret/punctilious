@@ -1,18 +1,6 @@
 import punctilious.pu_01_utilities as utilities
-
-utl = utilities
-"""A shortcut for `punctilious.utilities`."""
-
 import punctilious.pu_02_identifiers as identifiers
-import punctilious.pu_02_identifiers as ids
-
 import punctilious.pu_03_representation as representation
-from punctilious.pu_03_representation import AbstractRepresentation, ensure_abstract_representations, \
-    ensure_abstract_representation, \
-    Option, \
-    Preferences, \
-    OptionsAssignment, RendererForStringTemplate, \
-    RendererForStringConstant
 import punctilious.options as options
 import punctilious.pu_04_formal_language as formal_language
 import punctilious.pu_05_foundational_connectors as foundational_connectors
@@ -44,5 +32,17 @@ prefs = representation.Preferences()
 import punctilious.tao_analysis_1_2006 as tao_analysis_1_2006
 
 # packages = _bundling.get_packages()
+
+utl = utilities
+"""A shortcut for the `punctilious.utilities` module."""
+
+ids = identifiers
+"""A shortcut for the `punctilious.identifiers` module."""
+
+rpr = representation
+"""A shortcut for the `punctilious.representation` module."""
+
+fml = formal_language
+"""A shortcut for the `punctilious.formal_language` module."""
 
 pass

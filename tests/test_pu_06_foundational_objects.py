@@ -6,13 +6,13 @@ from punctilious.pu_04_formal_language import formulas_are_unique
 class TestUniqueTuple:
     def test_1(self):
         set1 = pu.foundational_connectors.unique_extension_tuple
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
         phi1 = set1(a(), b(), c())
         phi2 = pu.foundational_objects.ensure_unique_extension_tuple(o=phi1)
-        assert pu.formal_language.is_formula_equivalent(phi=phi1, psi=phi2)
+        assert pu.fml.is_formula_equivalent(phi=phi1, psi=phi2)
         phi3 = set1(a(), b(), a())
         with pytest.raises(ValueError):
             pu.foundational_objects.ensure_unique_extension_tuple(o=phi3)
@@ -28,10 +28,10 @@ class TestUniqueTuple:
 
 class TestUnionSets1:
     def test_1(self):
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
         s1 = pu.foundational_objects.UniqueExtensionTuple()
         s2 = pu.foundational_objects.UniqueExtensionTuple(a(), b(), d())
         s3 = pu.foundational_objects.UniqueExtensionTuple(b())
@@ -54,12 +54,12 @@ class TestUnionSets1:
 class TestMap1:
     def test_1(self):
         map1 = pu.foundational_connectors.extension_map
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        x = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='x'))
-        y = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='y'))
-        z = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='z'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
+        z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.foundational_objects.UniqueExtensionTuple(a(), b(), c())
         codomain = pu.foundational_objects.ExtensionTuple(x(), y(), z())
         m1 = pu.foundational_objects.ExtensionMap(domain=domain,
@@ -80,12 +80,12 @@ class TestMap1:
 
 class TestSubstitute:
     def test_1(self):
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        x = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='x'))
-        y = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='y'))
-        z = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='z'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
+        z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.foundational_objects.UniqueExtensionTuple(a(), b(), c())
         codomain = pu.foundational_objects.ExtensionTuple(x(), y(), z())
         m1 = pu.foundational_objects.ExtensionMap(domain=domain,
@@ -117,15 +117,15 @@ class TestSubstitute:
         assert phi.is_formula_equivalent(other=a(b(c()), x(y()), b(x(y())), b(b(x(y())))))
 
     def test_2(self):
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        e = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='e'))
-        f = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='f'))
-        x = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='x'))
-        y = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='y'))
-        z = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='z'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        e = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='e'))
+        f = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='f'))
+        x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
+        z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.foundational_objects.UniqueExtensionTuple(a(), b(), c())
         codomain = pu.foundational_objects.ExtensionTuple(x(), y(), z())
         m1 = pu.foundational_objects.ExtensionMap(domain=domain,
@@ -164,15 +164,15 @@ class TestSubstitute:
 
 class TestFormulaEquivalenceWithVariables:
     def test_2(self):
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        e = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='e'))
-        f = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='f'))
-        x = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='x'))
-        y = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='y'))
-        z = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='z'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        e = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='e'))
+        f = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='f'))
+        x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
+        z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         variables = pu.foundational_objects.UniqueExtensionTuple(x(), y(), z())
         values = pu.foundational_objects.ExtensionTuple(d(), e(), f())
         m1 = pu.foundational_objects.ExtensionMap(domain=variables,
@@ -257,15 +257,15 @@ class TestFormulaEquivalenceWithVariables:
 
 class TestInferenceRule:
     def test_1(self):
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        e = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='e'))
-        f = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='f'))
-        x = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='x'))
-        y = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='y'))
-        z = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='z'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        e = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='e'))
+        f = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='f'))
+        x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
+        z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         variables = pu.foundational_objects.UniqueExtensionTuple(x(), y(), z())
         premises = pu.foundational_objects.UniqueExtensionTuple(
             a(x(), y()),

@@ -4,24 +4,24 @@ import punctilious as pu
 
 class TestFormulasAreUnique:
     def test_1(self):
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        assert pu.formal_language.formulas_are_unique()
-        assert pu.formal_language.formulas_are_unique(a(), b(), c(), d())
-        assert not pu.formal_language.formulas_are_unique(a(), b(), c(), a(), d())
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        assert pu.fml.formulas_are_unique()
+        assert pu.fml.formulas_are_unique(a(), b(), c(), d())
+        assert not pu.fml.formulas_are_unique(a(), b(), c(), a(), d())
         with pytest.raises(ValueError):
-            pu.formal_language.formulas_are_unique(a(), b(), 5, a(), d())
+            pu.fml.formulas_are_unique(a(), b(), 5, a(), d())
 
 
 class TestFormula:
     def test_contains_formula(self):
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        e = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='e'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        e = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='e'))
         phi = a(b(a(b(c(d(a(), c(d())), a(b()), d())))))
         assert phi.tree_contains_formula(phi=a())
         assert phi.tree_contains_formula(phi=b())
@@ -37,30 +37,30 @@ class TestFormula:
 
 class TestEnsureUniqueFormulas:
     def test_1(self):
-        a = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        e = pu.formal_language.Connector(uid=pu.identifiers.create_uid(slug='e'))
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        e = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='e'))
 
         before = (a(), b(), c(),)
-        after = pu.formal_language.ensure_unique_formulas(*before)
+        after = pu.fml.ensure_unique_formulas(*before)
         assert before == after
 
         before = (a(), b(), c(), a(),)
-        after = pu.formal_language.ensure_unique_formulas(
+        after = pu.fml.ensure_unique_formulas(
             *before,
-            duplicate_processing=pu.formal_language.DuplicateProcessing.STRIP)
+            duplicate_processing=pu.fml.DuplicateProcessing.STRIP)
         assert before != after
         assert after == (a(), b(), c(),)
 
         before = (a(), b(), c(), a(), c(), c(), c(), b(), a())
         with pytest.raises(ValueError):
-            after = pu.formal_language.ensure_unique_formulas(
+            after = pu.fml.ensure_unique_formulas(
                 *before,
-                duplicate_processing=pu.formal_language.DuplicateProcessing.RAISE_ERROR)
-        after = pu.formal_language.ensure_unique_formulas(
+                duplicate_processing=pu.fml.DuplicateProcessing.RAISE_ERROR)
+        after = pu.fml.ensure_unique_formulas(
             *before,
-            duplicate_processing=pu.formal_language.DuplicateProcessing.STRIP)
+            duplicate_processing=pu.fml.DuplicateProcessing.STRIP)
         assert before != after
         assert after == (a(), b(), c(),)
