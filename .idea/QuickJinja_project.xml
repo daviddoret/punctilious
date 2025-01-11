@@ -3,7 +3,7 @@
   <component name="de.achimonline.quickjinja.settings.QuickJinjaProjectSettingsState">
     <option name="settings">
       <QuickJinjaProjectSettings>
-        <option name="templateFilePath" value="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" />
+        <option name="templateFilePath" value="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" />
       </QuickJinjaProjectSettings>
     </option>
   </component>
