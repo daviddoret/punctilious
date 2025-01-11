@@ -557,3 +557,12 @@ def ensure_base_priority(o: FlexibleBasePriority) -> BasePriority:
         return get_forbidden()
     else:
         raise TypeError(f'BasePriority validation failure. Type: {type(o)}. Object: {o}.')
+
+
+def load_abstract_representation(o: [typing.Mapping | str | uuid_pkg.UUID],
+                                 raise_error_if_not_found: bool = True) -> AbstractRepresentation:
+    o: _identifiers.UniqueIdentifiable = _identifiers.load_unique_identifiable(o=o, raise_error_if_not_found=True)
+    if not isinstance(o, AbstractRepresentation):
+        raise TypeError(f'`o` ({o}) of type `{str(type(o))}` is not of type `AbstractRepresentation`.')
+    o: AbstractRepresentation
+    return o
