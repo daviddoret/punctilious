@@ -1,5 +1,5 @@
 import punctilious.pu_01_utilities as utilities
-import punctilious.pu_02_identifiers as identifiers
+import punctilious.pu_02_unique_identifiers as identifiers
 import punctilious.pu_03_representation as representation
 import punctilious.options as options
 import punctilious.pu_04_formal_language as formal_language
@@ -44,5 +44,10 @@ rpr = representation
 
 fml = formal_language
 """A shortcut for the `punctilious.formal_language` module."""
+
+from punctilious.pu_01_utilities import *
+from punctilious.pu_02_unique_identifiers import *
+from punctilious.pu_03_representation import *
+from punctilious.pu_04_formal_language import *
 
 pass

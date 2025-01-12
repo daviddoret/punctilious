@@ -8,7 +8,7 @@ import typing
 
 # punctilious modules
 import punctilious.pu_01_utilities as _utl
-import punctilious.pu_02_identifiers as _ids
+import punctilious.pu_02_unique_identifiers as _ids
 import punctilious.pu_03_representation as _rpr
 
 
@@ -723,3 +723,47 @@ def load_connector(o: [typing.Mapping | str | uuid_pkg.UUID],
         raise TypeError(f'`o` ({o}) of type `{str(type(o))}` is not of type `Connector`.')
     o: Connector
     return o
+
+
+def arity(phi: Formula) -> int:
+    """Returns the arity of a formula.
+
+    Args:
+        phi: a formula
+
+    Returns:
+        int: the arity of the formula
+
+    """
+    phi = ensure_formula(o=phi)
+    return phi.arity
+
+
+def is_atomic(phi: Formula) -> bool:
+    """Determines whether a formula is atomic.
+
+    Args:
+        phi: a formula
+        """
+    phi = ensure_formula(o=phi)
+    return phi.is_atomic
+
+
+def is_binary(phi: Formula) -> bool:
+    """Determines whether a formula is binary.
+
+    Args:
+        phi: a formula
+        """
+    phi = ensure_formula(o=phi)
+    return phi.is_binary
+
+
+def is_ternary(phi: Formula) -> bool:
+    """Determines whether a formula is ternary.
+
+    Args:
+        phi: a formula
+        """
+    phi = ensure_formula(o=phi)
+    return phi.is_ternary

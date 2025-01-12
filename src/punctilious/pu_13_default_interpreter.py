@@ -1,7 +1,7 @@
 """A catalog of useful interpreters to parse mathematical formulas."""
 
 import punctilious.pu_01_utilities as _utilities
-import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_02_unique_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
 import punctilious.pu_11_bundling as _bundling

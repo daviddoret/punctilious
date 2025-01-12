@@ -13,54 +13,10 @@ import typing
 import yaml
 
 # punctilious modules
-import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_02_unique_identifiers as _identifiers
 import punctilious.pu_04_formal_language as _formal_language
 import punctilious.pu_05_foundational_connectors as _fundamental_connectors
 import punctilious.pu_07_interpretation as _interpretation
-
-
-def arity(phi: _formal_language.Formula) -> int:
-    """Returns the arity of a formula.
-
-    Args:
-        phi: a formula
-
-    Returns:
-        int: the arity of the formula
-
-    """
-    phi = _formal_language.ensure_formula(o=phi)
-    return phi.arity
-
-
-def is_atomic(phi: _formal_language.Formula) -> bool:
-    """Determines whether a formula is atomic.
-
-    Args:
-        phi: a formula
-        """
-    phi = _formal_language.ensure_formula(o=phi)
-    return phi.is_atomic
-
-
-def is_binary(phi: _formal_language.Formula) -> bool:
-    """Determines whether a formula is binary.
-
-    Args:
-        phi: a formula
-        """
-    phi = _formal_language.ensure_formula(o=phi)
-    return phi.is_binary
-
-
-def is_ternary(phi: _formal_language.Formula) -> bool:
-    """Determines whether a formula is ternary.
-
-    Args:
-        phi: a formula
-        """
-    phi = _formal_language.ensure_formula(o=phi)
-    return phi.is_ternary
 
 
 def is_well_formed_tuple(phi: _formal_language.Formula) -> bool:

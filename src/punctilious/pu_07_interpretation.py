@@ -12,7 +12,7 @@ import uuid as uuid_package
 
 # punctilious modules
 import punctilious.pu_01_utilities as _utilities
-import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_02_unique_identifiers as _identifiers
 import punctilious.pu_04_formal_language as _formal_language
 
 
@@ -125,7 +125,7 @@ class Interpret(_identifiers.UniqueIdentifiable):
     def __init__(self, uid: _identifiers.UniqueIdentifier, atomic_connectors: dict, prefix_connectors: dict,
                  postfix_connectors: dict, infix_connectors: dict, function_connectors: dict):
         self._jinja2_template: jinja2.Template = _utilities.get_jinja2_template_from_package(
-            'data.grammars',
+            'punctilious.data.grammars',
             'formula_grammar_5.jinja2')
         self._transformer = Transformer(
             atomic_connectors=atomic_connectors,

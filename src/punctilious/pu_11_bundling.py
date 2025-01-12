@@ -14,7 +14,7 @@ import typing
 
 # punctilious modules
 import punctilious.pu_01_utilities as _util
-import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_02_unique_identifiers as _identifiers
 import punctilious.pu_03_representation as _representation
 import punctilious.pu_04_formal_language as _formal_language
 import punctilious.pu_08_meta_language as _meta_language

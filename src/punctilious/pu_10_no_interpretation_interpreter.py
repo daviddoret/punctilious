@@ -4,7 +4,7 @@
 
 # punctilious modules
 import punctilious.pu_01_utilities as _utilities
-import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_02_unique_identifiers as _identifiers
 import punctilious.pu_07_interpretation as _interpretation
 
 

@@ -2,7 +2,7 @@
 
 These connectors are hard-coded here as they are necessary to build the meta-language, etc."""
 
-import punctilious.pu_02_identifiers as _identifiers
+import punctilious.pu_02_unique_identifiers as _identifiers
 import punctilious.pu_04_formal_language as _formal_language
 
 # hard-coded connectors

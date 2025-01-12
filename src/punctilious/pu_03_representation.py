@@ -11,7 +11,7 @@ import typing
 
 # punctilious modules
 import punctilious.pu_01_utilities as _utl
-import punctilious.pu_02_identifiers as _ids
+import punctilious.pu_02_unique_identifiers as _ids
 
 
 def ensure_option(o) -> Option:
