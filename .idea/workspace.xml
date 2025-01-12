@@ -6,13 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/declarations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/declarations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -299,7 +294,7 @@
     "Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestUnionSets1.test_1.executor": "Run",
-    "Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1.executor": "Run",
+    "Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1.executor": "Debug",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
@@ -403,7 +398,7 @@
     "Python.propositional_logic_syntax_1.executor": "Run",
     "Python.pu_05_meta_language.executor": "Run",
     "Python.punctilious.executor": "Run",
-    "Python.sandbox.executor": "Run",
+    "Python.sandbox.executor": "Debug",
     "Python.sandbox_2.executor": "Run",
     "Python.sequences_1.executor": "Run",
     "Python.symbols (1).executor": "Run",
@@ -503,7 +498,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -861,9 +856,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python.sandbox" />
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestInferenceRule.test_1" />
         <item itemvalue="Python.operators_1_mappings" />
       </list>
@@ -884,14 +879,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01271" summary="meta_language module">
-      <option name="closed" value="true" />
-      <created>1735252639407</created>
-      <option name="number" value="01271" />
-      <option name="presentableId" value="LOCAL-01271" />
-      <option name="project" value="LOCAL" />
-      <updated>1735252639407</updated>
     </task>
     <task id="LOCAL-01272" summary="meta_language module">
       <option name="closed" value="true" />
@@ -1277,7 +1264,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736674623607</updated>
     </task>
-    <option name="localTasksCounter" value="1320" />
+    <task id="LOCAL-01320" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1736682495506</created>
+      <option name="number" value="01320" />
+      <option name="presentableId" value="LOCAL-01320" />
+      <option name="project" value="LOCAL" />
+      <updated>1736682495507</updated>
+    </task>
+    <option name="localTasksCounter" value="1321" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

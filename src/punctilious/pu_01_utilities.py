@@ -76,8 +76,8 @@ class Logger:
     def debug(self, msg: str):
         self._native_logger.debug(msg)
 
-    def error(self, msg: str):
-        self._native_logger.error(msg, exc_info=sys.exc_info())
+    def error(self, msg: str, e: Exception):
+        self._native_logger.error(msg, exc_info=e)
 
     def info(self, msg: str):
         self._native_logger.info(msg)
@@ -91,41 +91,78 @@ def get_logger():
 
 
 def kwargs_to_str(**kwargs) -> str:
-    return '\n\t'.join(f'`{str(key)}`: ({type(value).__name__}) `{str(value)}`' for key, value in kwargs.items())
+    return '\n\t'.join(
+        f'`{coerce_to_str(key)}`: ({type(value).__name__}) `{str(value)}`' for key, value in kwargs.items())
 
 
-def debug(msg: str, **kwargs):
-    get_logger().debug(f'{msg}\n\t{kwargs_to_str(**kwargs)}')
+def coerce_to_str(o: object) -> str:
+    try:
+        return str(o)
+    except:
+        pass
+    try:
+        return repr(o)
+    except:
+        pass
+    try:
+        return f'python-object-{str(id(o))}'
+    except:
+        pass
+    return '[no string representation available]'
 
 
-def error(msg: str, **kwargs):
-    get_logger().error(f'{msg}\n\t{kwargs_to_str(**kwargs)}')
+def friendly_report(title: str, report: str, **kwargs) -> str:
+    if report is not None:
+        report: str = f'\n\t{report}'
+    else:
+        report: str = ''
+    if len(kwargs) > 0:
+        kwargs: str = f'\n\t{kwargs_to_str(**kwargs)}'
+    else:
+        kwargs = ''
+    return f'{title}{report}{kwargs}'
 
 
-def warning(msg: str, **kwargs):
-    get_logger().warning(f'{msg}\n\t{kwargs_to_str(**kwargs)}')
+def debug(title: str, details: str, **kwargs):
+    get_logger().debug(friendly_report(title=title, report=details, **kwargs))
 
 
-def info(msg: str, **kwargs):
-    get_logger().info(f'{msg}\n\t{kwargs_to_str(**kwargs)}')
+def _error(title: str, details: str, exception: Exception, **kwargs):
+    """Internal function. Called internally by PunctiliousError.__init__."""
+    get_logger().error(friendly_report(title=title, report=details, **kwargs), e=exception)
+
+
+def warning(title: str, details: str, **kwargs):
+    get_logger().warning(friendly_report(title=title, report=details, **kwargs))
+
+
+def info(title: str, details: str, **kwargs):
+    get_logger().info(friendly_report(title=title, report=details, **kwargs))
 
 
 class PunctiliousError(Exception):
-    def __init__(self, msg: str, **kwargs):
-        self._msg: str = msg
+    def __init__(self, title: str, details: str | None = None, **kwargs):
+        self._title: str = title
+        self._details: str = details
         self._kwargs = kwargs
-        self._description: str = f'{msg}\n\t{kwargs_to_str(**kwargs)}'
-        error(msg=msg, **kwargs)
-        super().__init__()
+        self._friendly_report: str = 'ERROR: ' + friendly_report(title=title, report=details, **kwargs)
+        super().__init__(self.friendly_report)
+        # _error(title=title, details=details, exception=self, **kwargs)
+
+    def __repr__(self):
+        return self.friendly_report
+
+    def __str__(self):
+        return self.friendly_report
 
     @property
-    def description(self) -> str:
-        return self._description
+    def friendly_report(self) -> str:
+        return self._friendly_report
 
     @property
     def kwargs(self):
         return self._kwargs
 
     @property
-    def msg(self) -> str:
-        return self._msg
+    def title(self) -> str:
+        return self._title
