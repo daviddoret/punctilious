@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -882,14 +881,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01273" summary="meta_language module">
-      <option name="closed" value="true" />
-      <created>1735252866513</created>
-      <option name="number" value="01273" />
-      <option name="presentableId" value="LOCAL-01273" />
-      <option name="project" value="LOCAL" />
-      <updated>1735252866513</updated>
-    </task>
     <task id="LOCAL-01274" summary="meta_language module">
       <option name="closed" value="true" />
       <created>1735282120126</created>
@@ -1274,7 +1265,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736685651546</updated>
     </task>
-    <option name="localTasksCounter" value="1322" />
+    <task id="LOCAL-01322" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1736689353924</created>
+      <option name="number" value="01322" />
+      <option name="presentableId" value="LOCAL-01322" />
+      <option name="project" value="LOCAL" />
+      <updated>1736689353925</updated>
+    </task>
+    <option name="localTasksCounter" value="1323" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

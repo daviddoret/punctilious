@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 # external modules
+import typing
 import io
 import yaml
 import importlib.resources

@@ -188,14 +188,14 @@ class Formula(tuple):
         """A formula is unary if it has exactly one argument."""
         return self.arity == 1
 
-    def iterate_arguments(self) -> collections.abc.Iterable[Formula]:
+    def iterate_arguments(self) -> typing.Generator[Formula, None, None]:
         """Iterates the formula (first-level) arguments using the following algorithm:
          - left-right.
         """
         for x in self.arguments:
             yield x
 
-    def iterate_raw_elements(self) -> collections.abc.Iterable[Formula]:
+    def iterate_raw_elements(self) -> typing.Generator[Formula, None, None]:
         """Iterates the two formula raw level components, that is the connector and the arguments.
 
         Note: `__iter__` is overridden to iterate the formula arguments, which is the
@@ -204,7 +204,7 @@ class Formula(tuple):
         """
         yield from super().__iter__()
 
-    def iterate_tree(self, include_root: bool = True) -> collections.abc.Iterable[Formula]:
+    def iterate_tree(self, include_root: bool = True) -> typing.Generator[Formula, None, None]:
         """Iterates the formula tree using the following algorithm:
          - top-down first,
          - left-right second.

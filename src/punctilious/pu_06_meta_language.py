@@ -90,6 +90,9 @@ class ExtensionTuple(_fml.Formula):
         This is equivalent to formula-equivalence."""
         return self.is_formula_equivalent(other=other)
 
+    def iterate_elements(self) -> typing.Generator[_fml.Formula, None, None]:
+        yield from self.iterate_arguments()
+
     def to_python_list(self) -> list[_fml.Formula]:
         return list(self.elements)
 
@@ -166,6 +169,9 @@ class UniqueExtensionTuple(_fml.Formula):
 
         return True
 
+    def iterate_elements(self) -> typing.Generator[_fml.Formula, None, None]:
+        yield from self.iterate_arguments()
+
     def to_python_list(self) -> list[_fml.Formula]:
         return list(self.elements)
 
@@ -180,7 +186,7 @@ class UniqueExtensionTuple(_fml.Formula):
         return ExtensionTuple(*self.elements)
 
 
-def ensure_extension_tuple(o: FlexibleExtensionTuple):
+def ensure_extension_tuple(o: FlexibleExtensionTuple) -> ExtensionTuple:
     """Ensures that the input is an extension-tuple, and returns an instance of ExtensionTuple.
 
     :param o:
@@ -188,15 +194,14 @@ def ensure_extension_tuple(o: FlexibleExtensionTuple):
     """
     if isinstance(o, ExtensionTuple):
         return o
-    if isinstance(o, _fml.Formula):
-        if o.connector == extension_tuple:
-            pass
-            return ExtensionTuple(*o.arguments)
+    if isinstance(o, _fml.Formula) and o.connector == extension_tuple:
+        return ExtensionTuple(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
 
 
-def ensure_unique_extension_tuple(o: FlexibleUniqueExtensionTuple,
-                                  duplicate_processing: _fml.DuplicateProcessing = _fml.DuplicateProcessing.RAISE_ERROR):
+def ensure_unique_extension_tuple(
+        o: FlexibleUniqueExtensionTuple,
+        duplicate_processing: _fml.DuplicateProcessing = _fml.DuplicateProcessing.RAISE_ERROR) -> UniqueExtensionTuple:
     """Ensures that the input is a UniqueTuple.
 
     Args:
@@ -211,14 +216,12 @@ def ensure_unique_extension_tuple(o: FlexibleUniqueExtensionTuple,
     """
     if isinstance(o, UniqueExtensionTuple):
         return o
-    if isinstance(o, _fml.Formula):
-        if o.connector == unique_extension_tuple:
-            pass
-            return UniqueExtensionTuple(*o.arguments, duplicate_processing=duplicate_processing)
+    if isinstance(o, _fml.Formula) and o.connector == unique_extension_tuple:
+        return UniqueExtensionTuple(*o.arguments, duplicate_processing=duplicate_processing)
     raise _utl.PunctiliousError(f'`o` is not a unique-extension-tuple.', o=o)
 
 
-def ensure_extension_map(o: FlexibleExtensionTuple):
+def ensure_extension_map(o: FlexibleExtensionTuple) -> ExtensionMap:
     """Ensures that the input is an extension-map, and returns an instance of ExtensionMap.
 
     :param o:
@@ -226,12 +229,12 @@ def ensure_extension_map(o: FlexibleExtensionTuple):
     """
     if isinstance(o, ExtensionMap):
         return o
-    if isinstance(o, _fml.Formula):
+    if isinstance(o, _fml.Formula) and o.connector == extension_map:
         return ExtensionMap(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
 
 
-def ensure_natural_inference_rule(o: FlexibleNaturalInferenceRule):
+def ensure_natural_inference_rule(o: FlexibleNaturalInferenceRule) -> NaturalInferenceRule:
     """Ensures that the input is a natural-inference-rule, and returns an instance of NaturalInferenceRule.
 
     :param o:
@@ -239,9 +242,17 @@ def ensure_natural_inference_rule(o: FlexibleNaturalInferenceRule):
     """
     if isinstance(o, NaturalInferenceRule):
         return o
-    if isinstance(o, _fml.Formula):
+    if isinstance(o, _fml.Formula) and o.connector == natural_inference_rule:
         return NaturalInferenceRule(*o.arguments)
-    raise _utl.PunctiliousError(f'`o` is not a natural-inference-rule.', o=o)
+    raise _utl.PunctiliousError(title='Inconsistent natural-inference-rule.',
+                                details=f'`o` cannot be interpreted as a natural-inference-rule.',
+                                o=o)
+
+
+def ensure_natural_inference_rules(o: typing.Iterable[FlexibleNaturalInferenceRule]) -> typing.Generator[
+    NaturalInferenceRule, None, None]:
+    for i in o:
+        yield ensure_natural_inference_rule(i)
 
 
 def ensure_inference_step(o: FlexibleInferenceStep):
@@ -252,7 +263,7 @@ def ensure_inference_step(o: FlexibleInferenceStep):
     """
     if isinstance(o, InferenceStep):
         return o
-    if isinstance(o, _fml.Formula):
+    if isinstance(o, _fml.Formula) and o.connector == inference_step:
         return InferenceStep(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an inference-step.', o=o)
 
@@ -452,10 +463,10 @@ def _is_formula_equivalent_with_variables(
 
 
 class NaturalInferenceRule(_fml.Formula):
-    VARIABLES_INDEX: int = 0
-    PREMISES_INDEX: int = 1
-    CONCLUSION_INDEX: int = 2
-    _FORMULA_FIXED_ARITY: int = 3
+    _NATURAL_INFERENCE_RULE_VARIABLES_INDEX: int = 0
+    _NATURAL_INFERENCE_RULE_PREMISES_INDEX: int = 1
+    _NATURAL_INFERENCE_RULE_CONCLUSION_INDEX: int = 2
+    _NATURAL_INFERENCE_RULE_FIXED_ARITY: int = 3
 
     def __init__(self, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
                  conclusion: _fml.Formula):
@@ -519,8 +530,8 @@ class NaturalInferenceRule(_fml.Formula):
             if variable not in m.domain.elements:
                 if raise_error_if_false:
                     raise _utl.PunctiliousError(
-                        f'Inconsistent natural-inference.'
-                        f' The value of the `variable` could not be inferred from the `inputs`.',
+                        title='Inconsistent natural-inference',
+                        details=f'The value of the `variable` could not be inferred from the `inputs`.',
                         variable=variable,
                         inputs=inputs,
                         premises=self.premises,
@@ -531,15 +542,17 @@ class NaturalInferenceRule(_fml.Formula):
 
     @property
     def conclusion(self) -> _fml.Formula:
-        return self.arguments[2]
+        return self.arguments[NaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
 
     @property
     def premises(self) -> UniqueExtensionTuple:
-        return ensure_unique_extension_tuple(self.arguments[1])
+        return ensure_unique_extension_tuple(
+            self.arguments[NaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX])
 
     @property
     def variables(self) -> UniqueExtensionTuple:
-        return ensure_unique_extension_tuple(self.arguments[0])
+        return ensure_unique_extension_tuple(
+            self.arguments[NaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
 
     def apply_rule(self, inputs: ExtensionTuple) -> _fml.Formula:
         check, premises_as_extension_tuple, m = self._check_arguments_validity(inputs=inputs,
@@ -602,12 +615,15 @@ class Theory(_fml.Formula):
     _THEORY_AXIOMS_INDEX: int = 0
     _THEORY_INFERENCE_RULES_INDEX: int = 1
     _THEORY_STATEMENTS_INDEX: int = 2
-    _INFERENCE_STEP_FIXED_ARITY: int = 3
+    _THEORY_FIXED_ARITY: int = 3
 
     def __init__(self, axioms: UniqueExtensionTuple, inference_rules: UniqueExtensionTuple,
                  statements: UniqueExtensionTuple):
         axioms = ensure_unique_extension_tuple(axioms)
         inference_rules = ensure_unique_extension_tuple(inference_rules)
+        # QUESTION: This will systematically create a new object instead of creating a new one.
+        #   Is this avoidable?
+        inference_rules = UniqueExtensionTuple(*ensure_natural_inference_rules(inference_rules.iterate_elements()))
         statements = ensure_unique_extension_tuple(statements)
         super().__init__(connector=theory, arguments=(axioms, inference_rules, statements,))
 
