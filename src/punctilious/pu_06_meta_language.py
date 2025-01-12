@@ -8,15 +8,42 @@ import collections.abc
 from logging import setLogRecordFactory
 
 # internal modules
-import punctilious.pu_01_utilities as _utilities
-import punctilious.pu_02_unique_identifiers as _identifiers
-import punctilious.pu_03_representation as _representation
-import punctilious.pu_04_formal_language as _formal_language
-import punctilious.pu_05_foundational_connectors as _foundational_connectors
+import punctilious.pu_01_utilities as _utl
+import punctilious.pu_02_unique_identifiers as _uid
+import punctilious.pu_03_representation as _rpr
+import punctilious.pu_04_formal_language as _fml
 from punctilious.pu_04_formal_language import DuplicateProcessing, Formula
 
+# hard-coded connectors
+# the `tuple` connector is necessary to build complex formulas.
+extension_tuple = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='extension_tuple', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
+"""The well-known connector of the `Tuple1` object.
+"""
 
-class ExtensionTuple(_formal_language.Formula):
+unique_extension_tuple = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='unique_extension_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
+"""The well-known connector of the `UniqueTuple` object.
+"""
+
+extension_map = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='extension_map', uuid='2509dbf9-d636-431c-82d4-6d33b2de3bc4'))
+"""The well-known connector of the `Map1` object.
+"""
+
+inference_rule_1 = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='inference_rule_1', uuid='6f6c4c60-7129-4c60-801f-1454581f01fe'))
+"""The well-known connector of the `InferenceRule1` object.
+"""
+
+true2 = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='true', uuid='dde98ed2-b7e0-44b2-bd10-5f59d61fd93e'))
+
+false2 = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='false2', uuid='ffa97ce6-e320-4e5c-86c7-d7470c2d7c94'))
+
+
+class ExtensionTuple(_fml.Formula):
     """A `ExtensionTuple` is a model of a mathematical tuple with the following constraints:
          - it is finite,
          - it is computable,
@@ -27,20 +54,20 @@ class ExtensionTuple(_formal_language.Formula):
     """
 
     def __init__(self, *a):
-        super().__init__(c=_foundational_connectors.extension_tuple, a=a)
+        super().__init__(c=extension_tuple, a=a)
 
     def __new__(cls, *a):
-        return super().__new__(cls, c=_foundational_connectors.extension_tuple, a=a)
+        return super().__new__(cls, c=extension_tuple, a=a)
 
     @property
     def arity(self) -> int:
-        return _formal_language.Formula.arity.__get__(self)
+        return _fml.Formula.arity.__get__(self)
 
     @property
-    def elements(self) -> collections.abc.Iterable[_formal_language.Formula]:
+    def elements(self) -> collections.abc.Iterable[_fml.Formula]:
         return (element for element in self.arguments)
 
-    def has_element(self, element: _formal_language.Formula) -> bool:
+    def has_element(self, element: _fml.Formula) -> bool:
         """Returns `True` if `element` is an element of the tuple, `False` otherwise.
 
         Note that `element` may be multiple times an element of the tuple."""
@@ -57,15 +84,15 @@ class ExtensionTuple(_formal_language.Formula):
         This is equivalent to formula-equivalence."""
         return self.is_formula_equivalent(other=other)
 
-    def to_python_list(self) -> list[_formal_language.Formula]:
+    def to_python_list(self) -> list[_fml.Formula]:
         return list(self.elements)
 
-    def to_python_tuple(self) -> tuple[_formal_language.Formula, ...]:
+    def to_python_tuple(self) -> tuple[_fml.Formula, ...]:
         return tuple(self.elements)
 
-    def to_unique_extension_tuple(self, duplicate_processing: _formal_language.DuplicateProcessing =
-    _formal_language.DuplicateProcessing.RAISE_ERROR) -> UniqueExtensionTuple:
-        if duplicate_processing == _formal_language.DuplicateProcessing.RAISE_ERROR and not self.has_unique_arguments:
+    def to_unique_extension_tuple(self, duplicate_processing: _fml.DuplicateProcessing =
+    _fml.DuplicateProcessing.RAISE_ERROR) -> UniqueExtensionTuple:
+        if duplicate_processing == _fml.DuplicateProcessing.RAISE_ERROR and not self.has_unique_arguments:
             raise ValueError(f'All the elements of this `ExtensionTuple` are not unique: {self}')
         return UniqueExtensionTuple(self.elements, duplicate_processing=duplicate_processing)
 
@@ -73,7 +100,7 @@ class ExtensionTuple(_formal_language.Formula):
 FlexibleExtensionTuple = typing.Union[ExtensionTuple, collections.abc.Iterable]
 
 
-class UniqueExtensionTuple(_formal_language.Formula):
+class UniqueExtensionTuple(_fml.Formula):
     """A UniqueTuple is a model of a pseudo-set from set theory with the following constraints:
      - it is finite,
      - it is computable,
@@ -92,31 +119,31 @@ class UniqueExtensionTuple(_formal_language.Formula):
     """
 
     def __init__(self, *elements,
-                 duplicate_processing: _formal_language.DuplicateProcessing =
-                 _formal_language.DuplicateProcessing.RAISE_ERROR):
+                 duplicate_processing: _fml.DuplicateProcessing =
+                 _fml.DuplicateProcessing.RAISE_ERROR):
         """
 
         :param elements:
         :param duplicate_processing: 'raise_error' (default), or 'strip'.
         """
-        elements = _formal_language.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
-        super().__init__(c=_foundational_connectors.unique_extension_tuple, a=elements)
+        elements = _fml.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
+        super().__init__(c=unique_extension_tuple, a=elements)
 
     def __new__(cls, *elements,
-                duplicate_processing: _formal_language.DuplicateProcessing =
-                _formal_language.DuplicateProcessing.RAISE_ERROR):
-        elements = _formal_language.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
-        return super().__new__(cls, c=_foundational_connectors.unique_extension_tuple, a=elements)
+                duplicate_processing: _fml.DuplicateProcessing =
+                _fml.DuplicateProcessing.RAISE_ERROR):
+        elements = _fml.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
+        return super().__new__(cls, c=unique_extension_tuple, a=elements)
 
     @property
     def arity(self) -> int:
-        return _formal_language.Formula.arity.__get__(self)
+        return _fml.Formula.arity.__get__(self)
 
     @property
-    def elements(self) -> collections.abc.Iterable[_formal_language.Formula]:
+    def elements(self) -> collections.abc.Iterable[_fml.Formula]:
         return (element for element in self.arguments)
 
-    def has_element(self, element: _formal_language.Formula) -> bool:
+    def has_element(self, element: _fml.Formula) -> bool:
         """Returns `True` if `element` is an element of the tuple."""
         return self.has_direct_argument(argument=element)
 
@@ -136,13 +163,13 @@ class UniqueExtensionTuple(_formal_language.Formula):
 
         return True
 
-    def to_python_list(self) -> list[_formal_language.Formula]:
+    def to_python_list(self) -> list[_fml.Formula]:
         return list(self.elements)
 
-    def to_python_tuple(self) -> tuple[_formal_language.Formula, ...]:
+    def to_python_tuple(self) -> tuple[_fml.Formula, ...]:
         return tuple(self.elements)
 
-    def to_python_set(self) -> set[_formal_language.Formula]:
+    def to_python_set(self) -> set[_fml.Formula]:
         return set(self.elements)
 
     def to_extension_tuple(self) -> ExtensionTuple:
@@ -154,7 +181,7 @@ FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, collections.ab
 
 
 def ensure_unique_extension_tuple(o: FlexibleUniqueExtensionTuple,
-                                  duplicate_processing: _formal_language.DuplicateProcessing = _formal_language.DuplicateProcessing.RAISE_ERROR):
+                                  duplicate_processing: _fml.DuplicateProcessing = _fml.DuplicateProcessing.RAISE_ERROR):
     """Ensures that the input is a UniqueTuple.
 
     Args:
@@ -169,8 +196,8 @@ def ensure_unique_extension_tuple(o: FlexibleUniqueExtensionTuple,
     """
     if isinstance(o, UniqueExtensionTuple):
         return o
-    if isinstance(o, _formal_language.Formula):
-        if o.connector == _foundational_connectors.unique_extension_tuple:
+    if isinstance(o, _fml.Formula):
+        if o.connector == unique_extension_tuple:
             pass
             return UniqueExtensionTuple(*o.arguments, duplicate_processing=duplicate_processing)
     raise ValueError(f'Expected UniqueTuple. o={o}. type={type(o).__name__}')
@@ -182,14 +209,14 @@ import itertools
 def union_unique_tuples(*args: UniqueExtensionTuple):
     """Returns the union of UniqueTuple provided. Strip any duplicate in the process."""
     args = tuple(
-        ensure_unique_extension_tuple(o=s, duplicate_processing=_formal_language.DuplicateProcessing.RAISE_ERROR) for s
+        ensure_unique_extension_tuple(o=s, duplicate_processing=_fml.DuplicateProcessing.RAISE_ERROR) for s
         in args)
     flattened = tuple(element for sub_tuple in args for element in sub_tuple.elements)
-    output = UniqueExtensionTuple(*flattened, duplicate_processing=_formal_language.DuplicateProcessing.STRIP)
+    output = UniqueExtensionTuple(*flattened, duplicate_processing=_fml.DuplicateProcessing.STRIP)
     return output
 
 
-class ExtensionMap(_formal_language.Formula):
+class ExtensionMap(_fml.Formula):
     """A Map1 is a model of a mathematical map with the following constraints:
      - it is finite,
      - it is computable,
@@ -213,10 +240,10 @@ class ExtensionMap(_formal_language.Formula):
     def __init__(self, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
         if domain.arity != codomain.arity:
             raise ValueError(f'`d` and `c` do not have equal arity. `d`: {domain}. `c`: {codomain}.')
-        super().__init__(c=_foundational_connectors.extension_map, a=(domain, codomain,))
+        super().__init__(c=extension_map, a=(domain, codomain,))
 
     def __new__(cls, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
-        return super().__new__(cls, c=_foundational_connectors.extension_map, a=(domain, codomain,))
+        return super().__new__(cls, c=extension_map, a=(domain, codomain,))
 
     @property
     def codomain(self) -> ExtensionTuple:
@@ -226,7 +253,7 @@ class ExtensionMap(_formal_language.Formula):
     def domain(self) -> UniqueExtensionTuple:
         return self.arguments[0]
 
-    def get_image(self, x: _formal_language.Formula) -> _formal_language.Formula:
+    def get_image(self, x: _fml.Formula) -> _fml.Formula:
         if not self.domain.has_element(element=x):
             raise ValueError(f'`x` is not an element of the map domain. `x`: {x}.')
         i: int = self.domain.get_argument_first_index(argument=x)
@@ -269,12 +296,12 @@ class ExtensionMap(_formal_language.Formula):
                 return False
         return True
 
-    def to_python_dict(self) -> dict[_formal_language.Formula, _formal_language.Formula]:
+    def to_python_dict(self) -> dict[_fml.Formula, _fml.Formula]:
         return dict(zip(self.domain.elements, self.codomain.elements))
 
 
-def substitute_formulas(phi: _formal_language.Formula, m: ExtensionMap,
-                        include_root: bool = True) -> _formal_language.Formula:
+def substitute_formulas(phi: _fml.Formula, m: ExtensionMap,
+                        include_root: bool = True) -> _fml.Formula:
     """Construct a new formula by substituting formulas in the formula tree of `phi` by applying map `m`.
 
     Implementation:
@@ -290,14 +317,14 @@ def substitute_formulas(phi: _formal_language.Formula, m: ExtensionMap,
     if include_root and m.domain.has_element(phi):
         return m.get_image(x=phi)
     substituted_arguments = tuple(substitute_formulas(phi=x, m=m, include_root=True) for x in phi.arguments)
-    return _formal_language.Formula(c=phi.connector, a=substituted_arguments)
+    return _fml.Formula(c=phi.connector, a=substituted_arguments)
 
 
-def is_formula_equivalent_with_variables(formula_without_variables: _formal_language.Formula,
-                                         formula_with_variables: _formal_language.Formula,
+def is_formula_equivalent_with_variables(formula_without_variables: _fml.Formula,
+                                         formula_with_variables: _fml.Formula,
                                          variables: UniqueExtensionTuple) -> [bool, ExtensionMap]:
-    formula_without_variables = _formal_language.ensure_formula(formula_without_variables)
-    formula_with_variables = _formal_language.ensure_formula(formula_with_variables)
+    formula_without_variables = _fml.ensure_formula(formula_without_variables)
+    formula_with_variables = _fml.ensure_formula(formula_with_variables)
     variables = ensure_unique_extension_tuple(variables)
     # Validates that the formula_without_variables does not contain any variable.
     for variable in variables.elements:
@@ -305,7 +332,7 @@ def is_formula_equivalent_with_variables(formula_without_variables: _formal_lang
             raise ValueError(
                 f'formula `{variable}` is a sub-formula of formula_without_variables `{formula_without_variables}`.')
     # Declare a python dictionary to collect variable values during parsing.
-    m: dict[_formal_language.Formula, _formal_language.Formula] = dict.fromkeys(variables.elements, None)
+    m: dict[_fml.Formula, _fml.Formula] = dict.fromkeys(variables.elements, None)
 
     check, m = _is_formula_equivalent_with_variables(formula_without_variables=formula_without_variables,
                                                      formula_with_variables=formula_with_variables, m=m)
@@ -324,10 +351,10 @@ def is_formula_equivalent_with_variables(formula_without_variables: _formal_lang
 
 
 def _is_formula_equivalent_with_variables(
-        formula_without_variables: _formal_language.Formula, formula_with_variables: _formal_language.Formula,
-        m: dict[_formal_language.Formula, _formal_language.Formula]) -> [
+        formula_without_variables: _fml.Formula, formula_with_variables: _fml.Formula,
+        m: dict[_fml.Formula, _fml.Formula]) -> [
     bool,
-    dict[_formal_language.Formula, _formal_language.Formula]]:
+    dict[_fml.Formula, _fml.Formula]]:
     """Internal function. Use public function `is_formula_equivalent_with_variables` instead."""
     if formula_without_variables.is_formula_equivalent(formula_with_variables):
         return True, m
@@ -368,20 +395,20 @@ def _is_formula_equivalent_with_variables(
                 return True, m
 
 
-class InferenceRule1(_formal_language.Formula):
+class InferenceRule1(_fml.Formula):
 
     def __init__(self, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
-                 conclusion: _formal_language.Formula):
+                 conclusion: _fml.Formula):
         """
         :param variables: the variables.
         :param premises: the premises.
         :param conclusion: the conclusion.
         """
-        super().__init__(c=_foundational_connectors.inference_rule_1, a=(variables, premises, conclusion,))
+        super().__init__(c=inference_rule_1, a=(variables, premises, conclusion,))
 
     def __new__(cls, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
-                conclusion: _formal_language.Formula):
-        return super().__new__(cls, c=_foundational_connectors.inference_rule_1, a=(variables, premises, conclusion,))
+                conclusion: _fml.Formula):
+        return super().__new__(cls, c=inference_rule_1, a=(variables, premises, conclusion,))
 
     def _check_arguments_validity(self, arguments: ExtensionTuple, raise_error_if_false: bool = False) -> [bool,
                                                                                                            ExtensionTuple | None,
@@ -430,7 +457,7 @@ class InferenceRule1(_formal_language.Formula):
         return True, premises_as_extension_tuple, m
 
     @property
-    def conclusion(self) -> _formal_language.Formula:
+    def conclusion(self) -> _fml.Formula:
         return self.arguments[2]
 
     @property
@@ -441,12 +468,12 @@ class InferenceRule1(_formal_language.Formula):
     def variables(self) -> UniqueExtensionTuple:
         return self.arguments[0]
 
-    def apply_rule(self, arguments: ExtensionTuple) -> _formal_language.Formula:
+    def apply_rule(self, arguments: ExtensionTuple) -> _fml.Formula:
         check, premises_as_extension_tuple, m = self._check_arguments_validity(arguments=arguments,
                                                                                raise_error_if_false=True)
 
         # transform the conclusion.
-        conclusion_with_variable_assignments: _formal_language.Formula = substitute_formulas(
+        conclusion_with_variable_assignments: _fml.Formula = substitute_formulas(
             phi=self.conclusion,
             m=m,
             include_root=True

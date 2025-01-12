@@ -7,24 +7,12 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules clean-up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/declarations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/declarations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/miscellaneous_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/miscellaneous_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/operators_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_02_identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_02_unique_identifiers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05_foundational_connectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_05_foundational_connectors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_05_foundational_connectors.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language_OBSOLETE.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_10_no_interpretation_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_10_no_interpretation_interpreter.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_12_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_12_formula_notations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_13_default_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_13_default_interpreter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_06_constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_20_06_constants_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sandbox/sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sandbox/sandbox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_foundational_objects.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -901,14 +889,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01261" summary="interpretation">
-      <option name="closed" value="true" />
-      <created>1735122710589</created>
-      <option name="number" value="01261" />
-      <option name="presentableId" value="LOCAL-01261" />
-      <option name="project" value="LOCAL" />
-      <updated>1735122710589</updated>
-    </task>
     <task id="LOCAL-01262" summary="interpretation">
       <option name="closed" value="true" />
       <created>1735123623071</created>
@@ -1293,7 +1273,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736636758931</updated>
     </task>
-    <option name="localTasksCounter" value="1310" />
+    <task id="LOCAL-01310" summary="modules clean-up">
+      <option name="closed" value="true" />
+      <created>1736655924241</created>
+      <option name="number" value="01310" />
+      <option name="presentableId" value="LOCAL-01310" />
+      <option name="project" value="LOCAL" />
+      <updated>1736655924241</updated>
+    </task>
+    <option name="localTasksCounter" value="1311" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

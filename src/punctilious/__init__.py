@@ -3,8 +3,7 @@ import punctilious.pu_02_unique_identifiers as identifiers
 import punctilious.pu_03_representation as representation
 import punctilious.options as options
 import punctilious.pu_04_formal_language as formal_language
-import punctilious.pu_05_foundational_connectors as foundational_connectors
-import punctilious.pu_06_foundational_objects as foundational_objects
+import punctilious.pu_06_meta_language as meta_language
 import punctilious.pu_07_interpretation as interpretation
 
 import punctilious.pu_11_bundling as _bundling
@@ -45,9 +44,7 @@ rpr = representation
 fml = formal_language
 """A shortcut for the `punctilious.formal_language` module."""
 
-from punctilious.pu_01_utilities import *
-from punctilious.pu_02_unique_identifiers import *
-from punctilious.pu_03_representation import *
-from punctilious.pu_04_formal_language import *
+mtl = meta_language
+"""A shortcut for the `punctilious.meta_language` module."""
 
 pass

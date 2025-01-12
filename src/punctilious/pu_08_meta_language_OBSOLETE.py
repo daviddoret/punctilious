@@ -15,7 +15,6 @@ import yaml
 # punctilious modules
 import punctilious.pu_02_unique_identifiers as _identifiers
 import punctilious.pu_04_formal_language as _formal_language
-import punctilious.pu_05_foundational_connectors as _fundamental_connectors
 import punctilious.pu_07_interpretation as _interpretation
 
 
