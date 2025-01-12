@@ -6,6 +6,7 @@ import typing
 import collections.abc
 
 # internal modules
+import punctilious.pu_01_utilities as _utl
 import punctilious.pu_02_unique_identifiers as _uid
 import punctilious.pu_04_formal_language as _fml
 
@@ -26,7 +27,7 @@ extension_map = _fml.Connector(
 """The well-known connector of the `Map1` object.
 """
 
-inference_rule_1 = _fml.Connector(
+natural_inference_rule = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='inference_rule_1', uuid='6f6c4c60-7129-4c60-801f-1454581f01fe'))
 """The well-known connector of the `InferenceRule1` object.
 """
@@ -185,6 +186,21 @@ class UniqueExtensionTuple(_fml.Formula):
 FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, collections.abc.Iterable]
 
 
+def ensure_extension_tuple(o: FlexibleExtensionTuple):
+    """Ensures that the input is an extension-tuple, and returns an instance of ExtensionTuple.
+
+    :param o:
+    :return:
+    """
+    if isinstance(o, ExtensionTuple):
+        return o
+    if isinstance(o, _fml.Formula):
+        if o.connector == extension_tuple:
+            pass
+            return ExtensionTuple(*o.arguments)
+    raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
+
+
 def ensure_unique_extension_tuple(o: FlexibleUniqueExtensionTuple,
                                   duplicate_processing: _fml.DuplicateProcessing = _fml.DuplicateProcessing.RAISE_ERROR):
     """Ensures that the input is a UniqueTuple.
@@ -205,7 +221,21 @@ def ensure_unique_extension_tuple(o: FlexibleUniqueExtensionTuple,
         if o.connector == unique_extension_tuple:
             pass
             return UniqueExtensionTuple(*o.arguments, duplicate_processing=duplicate_processing)
-    raise ValueError(f'Expected UniqueTuple. o={o}. type={type(o).__name__}')
+    raise _utl.PunctiliousError(f'`o` is not a unique-extension-tuple.', o=o)
+
+
+def ensure_extension_map(o: FlexibleExtensionTuple):
+    """Ensures that the input is an extension-map, and returns an instance of ExtensionMap.
+
+    :param o:
+    :return:
+    """
+    if isinstance(o, ExtensionMap):
+        return o
+    if isinstance(o, _fml.Formula):
+        if o.connector == extension_map and o.arity == 2:
+            return ExtensionMap(*o.arguments)
+    raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
 
 
 def union_unique_tuples(*args: UniqueExtensionTuple):
@@ -238,10 +268,14 @@ class ExtensionMap(_fml.Formula):
     for which elements order is not taken into account,
     and also a Formula, whose arguments are effectively ordered.
     """
+    DOMAIN_INDEX: int = 0  # The index-position of the `domain` element in the `arguments` tuple.
+    CODOMAIN_INDEX: int = 1  # The index-position of the `codomain` element in the `arguments` tuple.
 
     def __init__(self, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
         if domain.arity != codomain.arity:
-            raise ValueError(f'`d` and `c` do not have equal arity. `d`: {domain}. `c`: {codomain}.')
+            raise _utl.PunctiliousError(f'The arity of the `domain` is not equal to the arity of the `codomain`.',
+                                        domain_arity=domain.arity, codomain_arity=codomain.arity,
+                                        domain=domain, codomain=codomain)
         super().__init__(c=extension_map, a=(domain, codomain,))
 
     def __new__(cls, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
@@ -249,11 +283,11 @@ class ExtensionMap(_fml.Formula):
 
     @property
     def codomain(self) -> ExtensionTuple:
-        return self.arguments[1]
+        return ensure_extension_tuple(self.arguments[self.__class__.CODOMAIN_INDEX])
 
     @property
     def domain(self) -> UniqueExtensionTuple:
-        return self.arguments[0]
+        return ensure_unique_extension_tuple(self.arguments[self.__class__.DOMAIN_INDEX])
 
     def get_image(self, x: _fml.Formula) -> _fml.Formula:
         if not self.domain.has_element(element=x):
@@ -397,7 +431,7 @@ def _is_formula_equivalent_with_variables(
                 return True, m
 
 
-class InferenceRule1(_fml.Formula):
+class NaturalInferenceRule(_fml.Formula):
 
     def __init__(self, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
                  conclusion: _fml.Formula):
@@ -406,12 +440,12 @@ class InferenceRule1(_fml.Formula):
         :param premises: the premises.
         :param conclusion: the conclusion.
         """
-        super().__init__(c=inference_rule_1, a=(variables, premises,
-                                                conclusion,))
+        super().__init__(c=natural_inference_rule, a=(variables, premises,
+                                                      conclusion,))
 
     def __new__(cls, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
                 conclusion: _fml.Formula):
-        return super().__new__(cls, c=inference_rule_1,
+        return super().__new__(cls, c=natural_inference_rule,
                                a=(variables, premises,
                                   conclusion,))
 
@@ -494,11 +528,23 @@ class InferenceRule1(_fml.Formula):
 
 class InferenceStep(_fml.Formula):
 
-    def __init__(self, arguments: UniqueExtensionTuple, inference_rule: UniqueExtensionTuple, statement: _fml.Formula):
+    def __init__(self, arguments: ExtensionTuple, inference_rule: UniqueExtensionTuple, statement: _fml.Formula):
         super().__init__(c=theory, a=(arguments, inference_rule, statement,))
 
-    def __new__(cls, arguments: UniqueExtensionTuple, inference_rule: UniqueExtensionTuple, statement: _fml.Formula):
+    def __new__(cls, arguments: ExtensionTuple, inference_rule: UniqueExtensionTuple, statement: _fml.Formula):
         return super().__new__(cls, c=theory, a=(arguments, inference_rule, statement,))
+
+    @property
+    def arguments(self) -> ExtensionTuple:
+        return ensure_extension_tuple(self.arguments[0])
+
+    @property
+    def inference_rule(self) -> NaturalInferenceRule:
+        return ensure_inference_rule(self.arguments[1])
+
+    @property
+    def statement(self) -> ExtensionTuple:
+        return ensure_formula(self.arguments[1])
 
 
 class Theory(_fml.Formula):

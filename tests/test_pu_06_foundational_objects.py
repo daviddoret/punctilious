@@ -271,7 +271,7 @@ class TestInferenceRule:
             b(y(), z())
         )
         conclusion = c(x(), z())
-        inference_rule = pu.mtl.InferenceRule1(
+        inference_rule = pu.mtl.NaturalInferenceRule(
             variables=variables,
             premises=premises,
             conclusion=conclusion
