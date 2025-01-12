@@ -599,12 +599,36 @@ class InferenceStep(_fml.Formula):
 
 
 class Theory(_fml.Formula):
+    _THEORY_AXIOMS_INDEX: int = 0
+    _THEORY_INFERENCE_RULES_INDEX: int = 1
+    _THEORY_STATEMENTS_INDEX: int = 2
+    _INFERENCE_STEP_FIXED_ARITY: int = 3
 
-    def __init__(self, axioms: UniqueExtensionTuple, statements: UniqueExtensionTuple):
-        super().__init__(connector=theory, arguments=(axioms, statements,))
+    def __init__(self, axioms: UniqueExtensionTuple, inference_rules: UniqueExtensionTuple,
+                 statements: UniqueExtensionTuple):
+        axioms = ensure_unique_extension_tuple(axioms)
+        inference_rules = ensure_unique_extension_tuple(inference_rules)
+        statements = ensure_unique_extension_tuple(statements)
+        super().__init__(connector=theory, arguments=(axioms, inference_rules, statements,))
 
-    def __new__(cls, axioms: UniqueExtensionTuple, statements: UniqueExtensionTuple):
-        return super().__new__(cls, connector=theory, arguments=(axioms, statements,))
+    def __new__(cls, axioms: UniqueExtensionTuple, inference_rules: UniqueExtensionTuple,
+                statements: UniqueExtensionTuple):
+        axioms = ensure_unique_extension_tuple(axioms)
+        inference_rules = ensure_unique_extension_tuple(inference_rules)
+        statements = ensure_unique_extension_tuple(statements)
+        return super().__new__(cls, connector=theory, arguments=(axioms, inference_rules, statements,))
+
+    @property
+    def axioms(self) -> UniqueExtensionTuple:
+        return ensure_unique_extension_tuple(self.arguments[Theory._THEORY_AXIOMS_INDEX])
+
+    @property
+    def inference_rules(self) -> UniqueExtensionTuple:
+        return ensure_unique_extension_tuple(self.arguments[Theory._THEORY_INFERENCE_RULES_INDEX])
+
+    @property
+    def statements(self) -> UniqueExtensionTuple:
+        return ensure_unique_extension_tuple(self.arguments[Theory._THEORY_STATEMENTS_INDEX])
 
 
 FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]

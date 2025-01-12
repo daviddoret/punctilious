@@ -127,7 +127,7 @@ class AbstractRepresentation(_ids.UniqueIdentifiable):
             renderers = tuple()
         self._renderers: tuple[Renderer, ...] = renderers
         super().__init__(uid=uid)
-        _utl.get_logger().debug(f'AbstractRepresentation: `{repr(self)}`')
+        # _utl.get_logger().debug(f'AbstractRepresentation: `{repr(self)}`')
 
     def __repr__(self):
         return f'{self.uid.slug} ({self.uid.uuid})'

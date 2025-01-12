@@ -30,8 +30,8 @@ class Bundles(dict):
     def __init__(self):
         if self.__class__._singleton_initialized is None:
             self.__class__._singleton_initialized = True
-            _util.get_logger().debug(
-                f'Packages singleton ({id(self)}) initialized.')
+            # _util.get_logger().debug(
+            #    f'Packages singleton ({id(self)}) initialized.')
         super().__init__()
 
     def __new__(cls, *args, **kwargs):
@@ -311,7 +311,7 @@ def load_bundle_from_dict(d: dict) -> Bundle:
 
         schema = d['schema']
         uid: _identifiers.UniqueIdentifier = _identifiers.ensure_unique_identifier(d['uid'])
-        _util.get_logger().debug(f'Bundle: {uid}')
+        # _util.get_logger().debug(f'Bundle: {uid}')
         interpreter: _interpretation.Interpret | None
         interpreter_uid = d.get('interpreter', None)
         if interpreter_uid is not None:
@@ -321,7 +321,7 @@ def load_bundle_from_dict(d: dict) -> Bundle:
             if interpreter_uid is None:
                 raise ReferenceError(f'Missing interpreter: {interpreter_uid}')
         else:
-            _util.get_logger().debug(f'Interpret UID: None')
+            # _util.get_logger().debug(f'Interpret UID: None')
             interpreter: _interpretation.Interpret = _no_interpretation_interpreter.get_no_interpretation_interpreter()
         # _util.get_logger().debug(f'Interpret: {interpreter}')
         untyped_imports = d['imports'] if 'imports' in d.keys() else tuple()
@@ -414,7 +414,7 @@ def load_statements(o: typing.Iterable | None, interpreter: _interpretation.Inte
         o = []
     statements: typing.Union[list, list[_formal_language.Formula, ...]] = []
     for i in o:
-        _util.get_logger().debug(f'statement: {i}')
+        # _util.get_logger().debug(f'statement: {i}')
         statement: _formal_language.Formula = load_statement(i, interpret=interpreter)
         statements.append(statement)
     # return _meta_language.Statements(*statements)

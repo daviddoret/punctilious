@@ -33,7 +33,7 @@ class Transformer(lark.Transformer):
 
     def parse_function_formula(self, items) -> _formal_language.Formula:
         """Transform a function with a word and optional arguments."""
-        _utilities.get_logger().debug(f'parse function formula: {items}')
+        # _utilities.get_logger().debug(f'parse function formula: {items}')
         function_connector_terminal = str(items[0])
         if function_connector_terminal not in self._function_connectors.keys():
             _utilities.get_logger()._error(f'Unknown function connector: {function_connector_terminal}')
@@ -45,7 +45,7 @@ class Transformer(lark.Transformer):
                 raise ValueError(
                     f'Function argument #{i} was not parsed as Formula. {a}. {type(a).__name__}')
         phi = _formal_language.Formula(function_connector, arguments)
-        _utilities.get_logger().debug(f'Parsed function formula: {phi}\n\tSource: {items}')
+        # _utilities.get_logger().debug(f'Parsed function formula: {phi}\n\tSource: {items}')
         return phi
 
     def parse_function_formula_arguments(self, items):
@@ -54,7 +54,7 @@ class Transformer(lark.Transformer):
 
     def parse_infix_formula(self, items):
         """Transform a list of expressions into a Python list."""
-        _utilities.get_logger().debug(f'parse infix formula: {items}')
+        # _utilities.get_logger().debug(f'parse infix formula: {items}')
         left_operand = items[0]
         if not isinstance(left_operand, _formal_language.Formula):
             raise ValueError(
@@ -68,15 +68,15 @@ class Transformer(lark.Transformer):
             raise ValueError(
                 f'Infix right_operand was not parsed as Formula. {right_operand}. {type(right_operand).__name__}')
         phi = _formal_language.Formula(infix_connector, (left_operand, right_operand,))
-        _utilities.get_logger().debug(f'Parsed infix formula: {phi}\n\tSource: {items}')
+        # _utilities.get_logger().debug(f'Parsed infix formula: {phi}\n\tSource: {items}')
         return phi
 
     def parse_prefix_formula(self, items):
         """Transform a list of expressions into a Python list."""
-        _utilities.get_logger().debug(f'parse prefix formula: {items}')
+        # _utilities.get_logger().debug(f'parse prefix formula: {items}')
         prefix_connector_terminal = items[0][0]
         if prefix_connector_terminal not in self._prefix_connectors.keys():
-            _utilities.get_logger().debug(f'Unknown prefix connector: {prefix_connector_terminal}')
+            # _utilities.get_logger().debug(f'Unknown prefix connector: {prefix_connector_terminal}')
             raise ValueError(f'Unknown prefix connector: {prefix_connector_terminal}')
         prefix_connector = self._prefix_connectors[prefix_connector_terminal]
         operand = items[1]
@@ -84,15 +84,15 @@ class Transformer(lark.Transformer):
             raise ValueError(
                 f'Prefix operand was not parsed as Formula. {operand}. {type(operand).__name__}')
         phi = _formal_language.Formula(prefix_connector, (operand,))
-        _utilities.get_logger().debug(f'Parsed prefix formula: {phi}\n\tSource: {items}')
+        # _utilities.get_logger().debug(f'Parsed prefix formula: {phi}\n\tSource: {items}')
         return phi
 
     def parse_postfix_formula(self, items):
         """Transform a list of expressions into a Python list."""
-        _utilities.get_logger().debug(f'parse postfix formula: {items}')
+        # _utilities.get_logger().debug(f'parse postfix formula: {items}')
         postfix_connector_terminal = str(items[1])
         if postfix_connector_terminal not in self._postfix_connectors.keys():
-            _utilities.get_logger().debug(f'Unknown postfix connector: {postfix_connector_terminal}')
+            # _utilities.get_logger().debug(f'Unknown postfix connector: {postfix_connector_terminal}')
             raise ValueError(f'Unknown postfix connector: {postfix_connector_terminal}')
         postfix_connector = self._postfix_connectors[postfix_connector_terminal]
         operand = items[0]
@@ -100,15 +100,15 @@ class Transformer(lark.Transformer):
             raise ValueError(
                 f'Postfix operand was not parsed as Formula. {operand}. {type(operand).__name__}')
         phi = _formal_language.Formula(postfix_connector, (operand,))
-        _utilities.get_logger().debug(f'Parsed postfix formula: {phi}\n\tSource: {items}')
+        # _utilities.get_logger().debug(f'Parsed postfix formula: {phi}\n\tSource: {items}')
         return phi
 
     def parse_atomic_formula(self, items):
         """Transform a list of expressions into a Python list."""
-        _utilities.get_logger().debug(f'parse atomic formula: {items}')
+        # _utilities.get_logger().debug(f'parse atomic formula: {items}')
         atomic_connector_terminal = items[0][0]
         if atomic_connector_terminal not in self._atomic_connectors.keys():
-            _utilities.get_logger().debug(f'Unknown atomic connector: {atomic_connector_terminal}')
+            # _utilities.get_logger().debug(f'Unknown atomic connector: {atomic_connector_terminal}')
             raise ValueError(f'Unknown atomic connector: {atomic_connector_terminal}')
         atomic_connector = self._atomic_connectors[atomic_connector_terminal]
         # arguments = []
@@ -116,7 +116,7 @@ class Transformer(lark.Transformer):
 
     def parse_parenthesized_formula(self, items):
         """Transform a list of expressions into a Python list."""
-        _utilities.get_logger().debug(f'parse parenthesized formula: {items}')
+        # _utilities.get_logger().debug(f'parse parenthesized formula: {items}')
         return items[0]
 
 
@@ -159,9 +159,9 @@ class Interpret(_identifiers.UniqueIdentifiable):
         self._grammar = self._jinja2_template.render(grammar_dict)
         # parsers: earley, lalr, cyk
         self._parser = lark.Lark(self._grammar, start='start', parser='earley', debug=True)
-        _utilities.get_logger().debug(f'grammar:\n{self._grammar}')
+        # _utilities.get_logger().debug(f'grammar:\n{self._grammar}')
         super().__init__(uid=uid)
-        _utilities.get_logger().debug(f'`{repr(self)}` configured.')
+        # _utilities.get_logger().debug(f'`{repr(self)}` configured.')
 
     def __repr__(self):
         return f'{self.uid.slug} ({self.uid.uuid}) interpreter'
@@ -196,11 +196,11 @@ class Interpret(_identifiers.UniqueIdentifiable):
 
     def interpret_formula(self, source_formula: str) -> _formal_language.Formula:
         source_formula: str = str(source_formula)
-        _utilities.get_logger().debug(f'interpretation of string: `{source_formula}`')
+        # _utilities.get_logger().debug(f'interpretation of string: `{source_formula}`')
         tree = self._parser.parse(source_formula)
-        _utilities.get_logger().debug(f'tree: `{tree}`')
+        # _utilities.get_logger().debug(f'tree: `{tree}`')
         result = self._transformer.transform(tree)
-        _utilities.get_logger().debug(f'string: `{source_formula}` interpreted as: {result}')
+        # _utilities.get_logger().debug(f'string: `{source_formula}` interpreted as: {result}')
         return result
 
 
@@ -217,7 +217,7 @@ class InterpretedFormula(_formal_language.Formula):
         self._interpret: Interpret = interpret
         formula: _formal_language.Formula = interpret.interpret_formula(source_formula=original_formula)
         super().__init__(connector=formula.c, arguments=formula.a)
-        _utilities.get_logger().debug(f'Original formula: `{original_formula}` interpreted as `{self}`.')
+        # _utilities.get_logger().debug(f'Original formula: `{original_formula}` interpreted as `{self}`.')
 
     @property
     def original_formula(self) -> str:

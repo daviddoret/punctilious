@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -398,7 +400,7 @@
     "Python.propositional_logic_syntax_1.executor": "Run",
     "Python.pu_05_meta_language.executor": "Run",
     "Python.punctilious.executor": "Run",
-    "Python.sandbox.executor": "Debug",
+    "Python.sandbox.executor": "Run",
     "Python.sandbox_2.executor": "Run",
     "Python.sequences_1.executor": "Run",
     "Python.symbols (1).executor": "Run",
@@ -880,14 +882,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01272" summary="meta_language module">
-      <option name="closed" value="true" />
-      <created>1735252698083</created>
-      <option name="number" value="01272" />
-      <option name="presentableId" value="LOCAL-01272" />
-      <option name="project" value="LOCAL" />
-      <updated>1735252698083</updated>
-    </task>
     <task id="LOCAL-01273" summary="meta_language module">
       <option name="closed" value="true" />
       <created>1735252866513</created>
@@ -1272,7 +1266,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736682495507</updated>
     </task>
-    <option name="localTasksCounter" value="1321" />
+    <task id="LOCAL-01321" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1736685651546</created>
+      <option name="number" value="01321" />
+      <option name="presentableId" value="LOCAL-01321" />
+      <option name="project" value="LOCAL" />
+      <updated>1736685651546</updated>
+    </task>
+    <option name="localTasksCounter" value="1322" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
