@@ -1,7 +1,6 @@
 """This module provides a catalog of abstract representations for various formula notations.
 
 """
-import punctilious.pu_02_unique_identifiers as _uid
 import punctilious.pu_03_representation as _rpr
 import punctilious.pu_11_bundling as _bnd
 

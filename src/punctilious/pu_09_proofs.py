@@ -1,9 +1,4 @@
-import pu_01_utilities as _utilities
-import pu_02_unique_identifiers as _identifiers
-import pu_03_representation as _representation
 import pu_04_formal_language as _formal_language
-import pu_05_meta_language as _fundamental_connectors
-import pu_07_interpretation as _interpretation
 import pu_08_meta_language_OBSOLETE as _meta_language
 
 

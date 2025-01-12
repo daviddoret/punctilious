@@ -2,17 +2,12 @@
 from __future__ import annotations
 
 # external modules
-import abc
 import typing
 import collections.abc
-from logging import setLogRecordFactory
 
 # internal modules
-import punctilious.pu_01_utilities as _utl
 import punctilious.pu_02_unique_identifiers as _uid
-import punctilious.pu_03_representation as _rpr
 import punctilious.pu_04_formal_language as _fml
-from punctilious.pu_04_formal_language import DuplicateProcessing, Formula
 
 # hard-coded connectors
 # the `tuple` connector is necessary to build complex formulas.
