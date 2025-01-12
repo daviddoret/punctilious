@@ -36,6 +36,11 @@ inference_rule_1 = _fml.Connector(
 """The well-known connector of the `InferenceRule1` object.
 """
 
+theory = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='theory', uuid='2724eebf-070d-459d-a097-de9889f118b9'))
+"""The well-known connector of the `Theory` object.
+"""
+
 true2 = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='true', uuid='dde98ed2-b7e0-44b2-bd10-5f59d61fd93e'))
 
@@ -485,3 +490,12 @@ class InferenceRule1(_fml.Formula):
         """Returns `True` if `arguments` are valid for this InferenceRule."""
         check, _, _ = self._check_arguments_validity(arguments=arguments)
         return check
+
+
+class Theory(_fml.Formula):
+
+    def __init__(self, axioms: UniqueExtensionTuple, statements: UniqueExtensionTuple):
+        super().__init__(c=theory, a=(axioms, statements,))
+
+    def __new__(cls, axioms: UniqueExtensionTuple, statements: UniqueExtensionTuple):
+        return super().__new__(cls, c=theory, a=(axioms, statements,))
