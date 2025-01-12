@@ -5,6 +5,7 @@ from __future__ import annotations
 import yaml
 import collections.abc
 import typing
+import uuid as uuid_pkg
 
 # punctilious modules
 import punctilious.pu_01_utilities as _utl
@@ -51,7 +52,7 @@ class Formula(tuple):
         """
 
         :param c: A connector.
-        :param args: A (possibly empty) collection of arguments.
+        :param a: A (possibly empty) collection of arguments.
         """
         super().__init__()
 
