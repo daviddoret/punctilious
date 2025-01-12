@@ -31,6 +31,11 @@ inference_rule_1 = _fml.Connector(
 """The well-known connector of the `InferenceRule1` object.
 """
 
+inference_step = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='inference_step', uuid='b527b045-614b-49d6-95b3-9725f9143ba2'))
+"""The well-known connector of the `InferenceStep` object.
+"""
+
 theory = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='theory', uuid='2724eebf-070d-459d-a097-de9889f118b9'))
 """The well-known connector of the `Theory` object.
@@ -401,11 +406,14 @@ class InferenceRule1(_fml.Formula):
         :param premises: the premises.
         :param conclusion: the conclusion.
         """
-        super().__init__(c=inference_rule_1, a=(variables, premises, conclusion,))
+        super().__init__(c=inference_rule_1, a=(variables, premises,
+                                                conclusion,))
 
     def __new__(cls, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
                 conclusion: _fml.Formula):
-        return super().__new__(cls, c=inference_rule_1, a=(variables, premises, conclusion,))
+        return super().__new__(cls, c=inference_rule_1,
+                               a=(variables, premises,
+                                  conclusion,))
 
     def _check_arguments_validity(self, arguments: ExtensionTuple, raise_error_if_false: bool = False) -> [bool,
                                                                                                            ExtensionTuple | None,
@@ -459,11 +467,11 @@ class InferenceRule1(_fml.Formula):
 
     @property
     def premises(self) -> UniqueExtensionTuple:
-        return self.arguments[1]
+        return ensure_unique_extension_tuple(self.arguments[1])
 
     @property
     def variables(self) -> UniqueExtensionTuple:
-        return self.arguments[0]
+        return ensure_unique_extension_tuple(self.arguments[0])
 
     def apply_rule(self, arguments: ExtensionTuple) -> _fml.Formula:
         check, premises_as_extension_tuple, m = self._check_arguments_validity(arguments=arguments,
@@ -482,6 +490,15 @@ class InferenceRule1(_fml.Formula):
         """Returns `True` if `arguments` are valid for this InferenceRule."""
         check, _, _ = self._check_arguments_validity(arguments=arguments)
         return check
+
+
+class InferenceStep(_fml.Formula):
+
+    def __init__(self, arguments: UniqueExtensionTuple, inference_rule: UniqueExtensionTuple, statement: _fml.Formula):
+        super().__init__(c=theory, a=(arguments, inference_rule, statement,))
+
+    def __new__(cls, arguments: UniqueExtensionTuple, inference_rule: UniqueExtensionTuple, statement: _fml.Formula):
+        return super().__new__(cls, c=theory, a=(arguments, inference_rule, statement,))
 
 
 class Theory(_fml.Formula):
