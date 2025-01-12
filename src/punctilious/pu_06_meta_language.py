@@ -203,9 +203,6 @@ def ensure_unique_extension_tuple(o: FlexibleUniqueExtensionTuple,
     raise ValueError(f'Expected UniqueTuple. o={o}. type={type(o).__name__}')
 
 
-import itertools
-
-
 def union_unique_tuples(*args: UniqueExtensionTuple):
     """Returns the union of UniqueTuple provided. Strip any duplicate in the process."""
     args = tuple(

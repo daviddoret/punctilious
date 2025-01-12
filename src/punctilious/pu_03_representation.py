@@ -8,6 +8,7 @@ import collections.abc
 import yaml
 import jinja2
 import typing
+import uuid as uuid_pkg
 
 # punctilious modules
 import punctilious.pu_01_utilities as _utl
