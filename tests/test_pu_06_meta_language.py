@@ -326,3 +326,28 @@ class TestInferenceStep:
             pu.mtl.InferenceStep(inputs=wrong_inputs,
                                  inference_rule=inference_rule,
                                  statement=statement)
+
+
+class TestTheory:
+    def test_1(self):
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        e = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='e'))
+        f = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='f'))
+        x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        variables = pu.mtl.UniqueExtensionTuple(x())
+        premises = pu.mtl.UniqueExtensionTuple(a(x()))
+        conclusion = a(b(x()))
+        inference_rule = pu.mtl.NaturalInferenceRule(
+            variables=variables,
+            premises=premises,
+            conclusion=conclusion
+        )
+        theory = pu.mtl.Theory(axioms=pu.mtl.UniqueExtensionTuple(a(c)),
+                               inference_rules=pu.mtl.UniqueExtensionTuple(inference_rule),
+                               inference_steps=pu.mtl.UniqueExtensionTuple())
+        RESUME
+        WORK
+        HERE

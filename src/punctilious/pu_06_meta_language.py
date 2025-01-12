@@ -63,6 +63,7 @@ class ExtensionTuple(_fml.Formula):
         super().__init__(connector=extension_tuple, arguments=arguments)
 
     def __new__(cls, *arguments):
+        arguments = _fml.ensure_formulas(*arguments)
         return super().__new__(cls, connector=extension_tuple, arguments=arguments)
 
     @property
@@ -614,25 +615,29 @@ class InferenceStep(_fml.Formula):
 class Theory(_fml.Formula):
     _THEORY_AXIOMS_INDEX: int = 0
     _THEORY_INFERENCE_RULES_INDEX: int = 1
-    _THEORY_STATEMENTS_INDEX: int = 2
+    _THEORY_INFERENCE_STEPS_INDEX: int = 2
     _THEORY_FIXED_ARITY: int = 3
 
     def __init__(self, axioms: UniqueExtensionTuple, inference_rules: UniqueExtensionTuple,
-                 statements: UniqueExtensionTuple):
-        axioms = ensure_unique_extension_tuple(axioms)
-        inference_rules = ensure_unique_extension_tuple(inference_rules)
-        # QUESTION: This will systematically create a new object instead of creating a new one.
-        #   Is this avoidable?
-        inference_rules = UniqueExtensionTuple(*ensure_natural_inference_rules(inference_rules.iterate_elements()))
-        statements = ensure_unique_extension_tuple(statements)
-        super().__init__(connector=theory, arguments=(axioms, inference_rules, statements,))
+                 inference_steps: UniqueExtensionTuple):
+        super().__init__(connector=theory, arguments=(axioms, inference_rules, inference_steps,))
 
     def __new__(cls, axioms: UniqueExtensionTuple, inference_rules: UniqueExtensionTuple,
-                statements: UniqueExtensionTuple):
+                inference_steps: UniqueExtensionTuple):
         axioms = ensure_unique_extension_tuple(axioms)
+        # QUESTION: The following approach will systematically create objects
+        # instead of using the existing one if adequate. Is this avoidable?
         inference_rules = ensure_unique_extension_tuple(inference_rules)
-        statements = ensure_unique_extension_tuple(statements)
-        return super().__new__(cls, connector=theory, arguments=(axioms, inference_rules, statements,))
+        inference_rules = UniqueExtensionTuple(
+            *tuple(ensure_natural_inference_rule(x) for x in inference_rules.iterate_elements()))
+        inference_steps = ensure_unique_extension_tuple(inference_steps)
+        inference_steps = UniqueExtensionTuple(
+            *tuple(ensure_inference_step(x) for x in inference_steps.iterate_elements()))
+        for i in inference_steps.iterate_elements():
+            for a in i.iterate_arguments():
+                # Check that the argument is valid in the theory.
+                pass
+        return super().__new__(cls, connector=theory, arguments=(axioms, inference_rules, inference_steps,))
 
     @property
     def axioms(self) -> UniqueExtensionTuple:
@@ -643,8 +648,37 @@ class Theory(_fml.Formula):
         return ensure_unique_extension_tuple(self.arguments[Theory._THEORY_INFERENCE_RULES_INDEX])
 
     @property
-    def statements(self) -> UniqueExtensionTuple:
-        return ensure_unique_extension_tuple(self.arguments[Theory._THEORY_STATEMENTS_INDEX])
+    def inference_steps(self) -> UniqueExtensionTuple:
+        return ensure_unique_extension_tuple(self.arguments[Theory._THEORY_INFERENCE_STEPS_INDEX])
+
+    def is_valid_statement(self, formula: _fml.Formula) -> bool:
+        """Returns `True` if `formula` is a valid statement in the theory, `False` otherwise.
+
+        Note: `False` does not imply that `formula` is not a valid statement in the theory,
+        `False` only implies that the theory does not prove `formula` yet.
+        """
+        formula: _fml.Formula = _fml.ensure_formula(formula)
+        return any(formula.is_formula_equivalent(x) for x in self.iterate_valid_statements())
+
+    def iterate_valid_statements(self) -> typing.Generator[_fml.Formula, None, None]:
+        """Iterates the theory valid statements in canonical order.
+
+        :return:
+        """
+        yield from self.axioms.iterate_elements()
+        for x in self.inference_steps.iterate_elements():
+            x: InferenceStep
+            yield x.statement
+
+
+def ensure_theory(o) -> Theory:
+    if isinstance(o, Theory):
+        return o
+    if isinstance(o, _fml.Formula) and o.connector == theory:
+        return Theory(*o.arguments)
+    raise _utl.PunctiliousError(title='Inconsistent theory.',
+                                details=f'`o` cannot be interpreted as a theory.',
+                                o=o)
 
 
 FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]
@@ -652,3 +686,4 @@ FlexibleExtensionTuple = typing.Union[ExtensionTuple, _fml.Formula, collections.
 FlexibleNaturalInferenceRule = typing.Union[ExtensionTuple, _fml.Formula]
 FlexibleInferenceStep = typing.Union[InferenceStep, _fml.Formula]
 FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, _fml.Formula, collections.abc.Iterable]
+FlexibleTheory = typing.Union[Theory, _fml.Formula]
