@@ -216,7 +216,7 @@ class InterpretedFormula(_formal_language.Formula):
         self._original_formula: str = original_formula
         self._interpret: Interpret = interpret
         formula: _formal_language.Formula = interpret.interpret_formula(source_formula=original_formula)
-        super().__init__(c=formula.c, a=formula.a)
+        super().__init__(connector=formula.c, arguments=formula.a)
         _utilities.get_logger().debug(f'Original formula: `{original_formula}` interpreted as `{self}`.')
 
     @property

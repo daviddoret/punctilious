@@ -17,18 +17,18 @@ def ensure_formula(o=None) -> Formula:
     if isinstance(o, Formula):
         return o
     elif isinstance(o, Connector):
-        return Formula(c=o)
+        return Formula(connector=o)
     elif isinstance(o, collections.abc.Iterable):
         # If o is an iterable, the assumption is that it is of the shape:
         # singleton (c) where c is a connector,
         # or pair (c, a) where c is a connector, and `a` is an n-tuple of argument sub-formulas.
         t = tuple(o)
         if len(t) == 1:
-            return Formula(c=t[0])
+            return Formula(connector=t[0])
         elif len(t) == 2:
             c = ensure_connector(t[0])
             a = ensure_formula_arguments(t[1])
-            return Formula(c=c, a=a)
+            return Formula(connector=c, arguments=a)
         else:
             raise _utl.PunctiliousError(
                 f'To interpret an Iterable as a Formula,'
@@ -42,17 +42,20 @@ def ensure_formula(o=None) -> Formula:
 
 class Formula(tuple):
     # __slots__ = tuple('_root_connector', '_arguments', )
+    _FORMULA_CONNECTOR_INDEX: int = 0
+    _FORMULA_ARGUMENTS_INDEX: int = 1
+    _FORMULA_FIXED_ARITY: int = 2
 
     def __eq__(self, other):
         """Python equality is implemented as formula-equivalence."""
         other = ensure_formula(other)
         return self.is_formula_equivalent(other=other)
 
-    def __init__(self, c, a=None):
+    def __init__(self, connector, arguments=None):
         """
 
-        :param c: A connector.
-        :param a: A (possibly empty) collection of arguments.
+        :param connector: A connector.
+        :param arguments: A (possibly empty) collection of arguments.
         """
         super().__init__()
 
@@ -78,16 +81,16 @@ class Formula(tuple):
     def __ne__(self, other):
         return not self == other
 
-    def __new__(cls, c, a=None):
-        c: Connector = ensure_connector(c)
+    def __new__(cls, connector, arguments=None):
+        connector: Connector = ensure_connector(connector)
 
         # TODO: If the connector is a meta-operator,
         #   and if the python class is not of the proper class,
         #   substitute the formula with an instance
         #   of the correct type? e.g. Statement?
 
-        a: FormulaArguments = ensure_formula_arguments(a)
-        phi: tuple[Connector, FormulaArguments] = (c, a,)
+        arguments: FormulaArguments = ensure_formula_arguments(arguments)
+        phi: tuple[Connector, FormulaArguments] = (connector, arguments,)
         return super().__new__(cls, phi)
 
     def __repr__(self):
@@ -99,7 +102,7 @@ class Formula(tuple):
 
     @property
     def arguments(self) -> FormulaArguments:
-        return super().__getitem__(1)
+        return super().__getitem__(Formula._FORMULA_ARGUMENTS_INDEX)
 
     @property
     def arity(self) -> int:
@@ -111,7 +114,7 @@ class Formula(tuple):
 
     @property
     def connector(self) -> Connector:
-        return super().__getitem__(0)
+        return super().__getitem__(Formula._FORMULA_CONNECTOR_INDEX)
 
     def get_argument_first_index(self, argument: Formula) -> int:
         """Returns the 0-based index of `argument` in this formula.
@@ -529,7 +532,7 @@ class Connector(_ids.UniqueIdentifiable):
 
     def __call__(self, *args):
         """Return a formula with this connector as the root connector, and the arguments as its arguments."""
-        return Formula(c=self, a=args)
+        return Formula(connector=self, arguments=args)
 
     def __eq__(self, other):
         return hash(self) == hash(other)

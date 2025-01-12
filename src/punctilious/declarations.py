@@ -24,7 +24,7 @@ def declare_variable(rep: _representation.AbstractRepresentation):
     c = _formal_language.Connector(
         uid=_identifiers.create_uid(slug=f'variable_{_variable_counter}'),
         connector_representation=rep)
-    return _formal_language.Formula(c=c)
+    return _formal_language.Formula(connector=c)
 
 
 def declare_function(

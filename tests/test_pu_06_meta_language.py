@@ -254,7 +254,7 @@ class TestFormulaEquivalenceWithVariables:
         assert check
 
 
-class TestInferenceRule:
+class TestNaturalInferenceRule:
     def test_1(self):
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
@@ -280,6 +280,49 @@ class TestInferenceRule:
             a(d(), e()),
             b(e(), f())
         )
-        conclusion_with_variable_assignments = inference_rule.apply_rule(arguments=arguments)
+        conclusion_with_variable_assignments = inference_rule.apply_rule(inputs=arguments)
         assert conclusion_with_variable_assignments.is_formula_equivalent(
             other=c(d(), f()))
+
+
+class TestInferenceStep:
+    def test_1(self):
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        e = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='e'))
+        f = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='f'))
+        x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
+        y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
+        z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
+        variables = pu.mtl.UniqueExtensionTuple(x(), y(), z())
+        premises = pu.mtl.UniqueExtensionTuple(
+            a(x(), y()),
+            b(y(), z())
+        )
+        conclusion = c(x(), z())
+        inference_rule = pu.mtl.NaturalInferenceRule(
+            variables=variables,
+            premises=premises,
+            conclusion=conclusion
+        )
+        inputs = pu.mtl.ExtensionTuple(
+            a(d(), e()),
+            b(e(), f())
+        )
+        statement = inference_rule.apply_rule(inputs=inputs)
+
+        inference_step = pu.mtl.InferenceStep(inputs=inputs,
+                                              inference_rule=inference_rule,
+                                              statement=statement)
+
+        assert inference_step.statement.is_formula_equivalent(statement)
+
+        with pytest.raises(pu.utl.PunctiliousError):
+            wrong_inputs = pu.mtl.ExtensionTuple(
+                a(d(), e()),
+                c(e(), f()))
+            pu.mtl.InferenceStep(inputs=wrong_inputs,
+                                 inference_rule=inference_rule,
+                                 statement=statement)

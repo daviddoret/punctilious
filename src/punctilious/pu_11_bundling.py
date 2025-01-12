@@ -362,11 +362,12 @@ def load_statement(o: typing.Mapping, interpret: _interpretation.Interpret):
         conclusion = interpret_formula(o=o.get('conclusion', None), interpret=interpret)
 
         # Prepares the sub-formulas.
-        variables = _formal_language.Formula(c=_meta_language.tuple2, a=variables)
-        premises = _formal_language.Formula(c=_meta_language.tuple2, a=premises)
+        variables = _formal_language.Formula(connector=_meta_language.tuple2, arguments=variables)
+        premises = _formal_language.Formula(connector=_meta_language.tuple2, arguments=premises)
 
         # Prepares the statement formula.
-        statement = _formal_language.Formula(c=_meta_language.tuple2, a=(variables, premises, conclusion,))
+        statement = _formal_language.Formula(connector=_meta_language.tuple2,
+                                             arguments=(variables, premises, conclusion,))
     else:
         # The representation exists in memory.
         pass

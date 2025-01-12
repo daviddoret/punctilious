@@ -14,7 +14,7 @@ def express_statement(v, p, c):
     # v = _meta_language.ensure_tuple_of_variables(o=v)
     # p = _meta_language.ensure_tuple_of_premises(o=p)
     # c = _meta_language.ensure_conclusion(o=c)
-    return _formal_language.Formula(c=_fundamental_connectors.extension_tuple, a=(v, p, c,))
+    return _formal_language.Formula(connector=_fundamental_connectors.extension_tuple, arguments=(v, p, c,))
 
 
 def is_valid_derivation(d, t):
