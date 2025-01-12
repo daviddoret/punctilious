@@ -36,7 +36,7 @@ class Transformer(lark.Transformer):
         _utilities.get_logger().debug(f'parse function formula: {items}')
         function_connector_terminal = str(items[0])
         if function_connector_terminal not in self._function_connectors.keys():
-            _utilities.get_logger().exception(f'Unknown function connector: {function_connector_terminal}')
+            _utilities.get_logger().error(f'Unknown function connector: {function_connector_terminal}')
             raise ValueError(f'Unknown function connector: {function_connector_terminal}')
         function_connector = self._function_connectors[function_connector_terminal]
         arguments = items[1] if len(items) > 1 else []

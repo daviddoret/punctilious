@@ -76,8 +76,8 @@ class Logger:
     def debug(self, msg: str):
         self._native_logger.debug(msg)
 
-    def exception(self, msg: str):
-        self._native_logger.exception(msg)
+    def error(self, msg: str):
+        self._native_logger.error(msg, exc_info=sys.exc_info())
 
     def info(self, msg: str):
         self._native_logger.info(msg)
@@ -91,31 +91,31 @@ def get_logger():
 
 
 def kwargs_to_str(**kwargs) -> str:
-    return '\n'.join(f'`{str(key)}`: ({type(value).__name__}) `{str(value)}`' for key, value in kwargs.items())
+    return '\n\t'.join(f'`{str(key)}`: ({type(value).__name__}) `{str(value)}`' for key, value in kwargs.items())
 
 
 def debug(msg: str, **kwargs):
-    get_logger().debug(msg + kwargs_to_str(**kwargs))
+    get_logger().debug(f'{msg}\n\t{kwargs_to_str(**kwargs)}')
 
 
-def exception(msg: str, **kwargs):
-    get_logger().exception(msg + kwargs_to_str(**kwargs))
+def error(msg: str, **kwargs):
+    get_logger().error(f'{msg}\n\t{kwargs_to_str(**kwargs)}')
 
 
 def warning(msg: str, **kwargs):
-    get_logger().warning(msg + kwargs_to_str(**kwargs))
+    get_logger().warning(f'{msg}\n\t{kwargs_to_str(**kwargs)}')
 
 
 def info(msg: str, **kwargs):
-    get_logger().info(msg + kwargs_to_str(**kwargs))
+    get_logger().info(f'{msg}\n\t{kwargs_to_str(**kwargs)}')
 
 
 class PunctiliousError(Exception):
     def __init__(self, msg: str, **kwargs):
         self._msg: str = msg
         self._kwargs = kwargs
-        self._description: str = msg + kwargs_to_str(**kwargs)
-        exception(msg=msg, **kwargs)
+        self._description: str = f'{msg}\n\t{kwargs_to_str(**kwargs)}'
+        error(msg=msg, **kwargs)
         super().__init__()
 
     @property
