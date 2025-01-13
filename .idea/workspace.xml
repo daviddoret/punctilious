@@ -8,7 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,7 +295,7 @@
     "Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestUnionSets1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1.executor": "Debug",
-    "Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1.executor": "Debug",
+    "Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
@@ -500,7 +499,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -853,8 +852,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
         <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_formula" />
         <item itemvalue="Python.sandbox" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1" />
@@ -876,14 +875,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01276" summary="meta_language module">
-      <option name="closed" value="true" />
-      <created>1735338252883</created>
-      <option name="number" value="01276" />
-      <option name="presentableId" value="LOCAL-01276" />
-      <option name="project" value="LOCAL" />
-      <updated>1735338252883</updated>
     </task>
     <task id="LOCAL-01277" summary="lark template for postfix connectors">
       <option name="closed" value="true" />
@@ -1269,7 +1260,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736717509980</updated>
     </task>
-    <option name="localTasksCounter" value="1325" />
+    <task id="LOCAL-01325" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1736796175324</created>
+      <option name="number" value="01325" />
+      <option name="presentableId" value="LOCAL-01325" />
+      <option name="project" value="LOCAL" />
+      <updated>1736796175325</updated>
+    </task>
+    <option name="localTasksCounter" value="1326" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

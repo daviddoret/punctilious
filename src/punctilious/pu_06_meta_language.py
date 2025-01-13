@@ -74,7 +74,7 @@ class ExtensionTuple(_fml.Formula):
     def elements(self) -> collections.abc.Iterable[_fml.Formula]:
         return (element for element in self.arguments)
 
-    def has_element(self, element: _fml.Formula) -> bool:
+    def has_top_level_element(self, element: _fml.Formula) -> bool:
         """Returns `True` if `element` is an element of the tuple, `False` otherwise.
 
         Note that `element` may be multiple times an element of the tuple."""
@@ -92,7 +92,7 @@ class ExtensionTuple(_fml.Formula):
         return self.is_formula_equivalent(other=other)
 
     def iterate_elements(self) -> typing.Generator[_fml.Formula, None, None]:
-        yield from self.iterate_arguments()
+        yield from self.iterate_top_level_arguments()
 
     def to_python_list(self) -> list[_fml.Formula]:
         return list(self.elements)
@@ -150,7 +150,7 @@ class UniqueExtensionTuple(_fml.Formula):
     def elements(self) -> collections.abc.Iterable[_fml.Formula]:
         return (element for element in self.arguments)
 
-    def has_element(self, element: _fml.Formula) -> bool:
+    def has_top_level_element(self, element: _fml.Formula) -> bool:
         """Returns `True` if `element` is an element of the tuple."""
         return self.has_top_level_argument(argument=element)
 
@@ -160,18 +160,18 @@ class UniqueExtensionTuple(_fml.Formula):
 
         # Check condition for all elements in self.
         for x in self.elements:
-            if not other.has_element(element=x):
+            if not other.has_top_level_element(element=x):
                 return False
 
         # Check condition for all elements in `other`
         for x in other.elements:
-            if not self.has_element(element=x):
+            if not self.has_top_level_element(element=x):
                 return False
 
         return True
 
-    def iterate_elements(self) -> typing.Generator[_fml.Formula, None, None]:
-        yield from self.iterate_arguments()
+    def iterate_top_level_elements(self) -> typing.Generator[_fml.Formula, None, None]:
+        yield from self.iterate_top_level_arguments()
 
     def to_python_list(self) -> list[_fml.Formula]:
         return list(self.elements)
@@ -322,7 +322,7 @@ class ExtensionMap(_fml.Formula):
         return ensure_unique_extension_tuple(self.arguments[self.__class__.DOMAIN_INDEX])
 
     def get_image(self, x: _fml.Formula) -> _fml.Formula:
-        if not self.domain.has_element(element=x):
+        if not self.domain.has_top_level_element(element=x):
             raise ValueError(f'`x` is not an element of the map domain. `x`: {x}.')
         i: int = self.domain.get_argument_first_index(argument=x)
         return self.codomain.arguments[i]
@@ -356,9 +356,9 @@ class ExtensionMap(_fml.Formula):
         # i.e. preserving element order.
         union_of_domains = union_unique_tuples(self.domain, other.domain)
         for element in union_of_domains.elements:
-            if not self.domain.has_element(element=element):
+            if not self.domain.has_top_level_element(element=element):
                 return False
-            if not other.domain.has_element(element=element):
+            if not other.domain.has_top_level_element(element=element):
                 return False
             if not self.get_image(x=element).is_formula_equivalent(other.get_image(x=element)):
                 return False
@@ -382,7 +382,7 @@ def substitute_formulas(phi: _fml.Formula, m: ExtensionMap,
     :param include_root:
     :return:
     """
-    if include_root and m.domain.has_element(phi):
+    if include_root and m.domain.has_top_level_element(phi):
         return m.get_image(x=phi)
     substituted_arguments = tuple(substitute_formulas(phi=x, m=m, include_root=True) for x in phi.arguments)
     return _fml.Formula(connector=phi.connector, arguments=substituted_arguments)
@@ -629,14 +629,21 @@ class Theory(_fml.Formula):
         # instead of using the existing one if adequate. Is this avoidable?
         inference_rules = ensure_unique_extension_tuple(inference_rules)
         inference_rules = UniqueExtensionTuple(
-            *tuple(ensure_natural_inference_rule(x) for x in inference_rules.iterate_elements()))
+            *tuple(ensure_natural_inference_rule(x) for x in inference_rules.iterate_top_level_elements()))
         inference_steps = ensure_unique_extension_tuple(inference_steps)
         inference_steps = UniqueExtensionTuple(
-            *tuple(ensure_inference_step(x) for x in inference_steps.iterate_elements()))
-        for i in inference_steps.iterate_elements():
-            for a in i.iterate_arguments():
+            *tuple(ensure_inference_step(x) for x in inference_steps.iterate_top_level_elements()))
+        for i in inference_steps.iterate_top_level_elements():
+            for argument in i.iterate_top_level_arguments():
                 # Check that the argument is valid in the theory.
-                XXX
+                if not is_valid(proposition=argument, assumptions=iterate_valid_statements(axioms=axioms,
+                                                                                           inference_steps=inference_steps)):
+                    raise _utl.PunctiliousError(title='Inconsistent theory.',
+                                                details='The `inference_step` is based on an `argument`'
+                                                        ' that is not valid in the `theory`.',
+                                                argument=argument,
+                                                inference_step=inference_step,
+                                                axioms=axioms)
         return super().__new__(cls, connector=theory, arguments=(axioms, inference_rules, inference_steps,))
 
     @property
@@ -665,10 +672,17 @@ class Theory(_fml.Formula):
 
         :return:
         """
-        yield from self.axioms.iterate_elements()
-        for x in self.inference_steps.iterate_elements():
-            x: InferenceStep
-            yield x.statement
+        yield from iterate_valid_statements(axioms=self.axioms, inference_steps=self.inference_steps)
+
+
+def iterate_valid_statements(axioms: typing.Iterable[_fml.Formula], inference_steps: typing.Iterable[InferenceStep]) -> \
+        typing.Generator[_fml.Formula, None, None]:
+    """Given the components of a theory, that is a collection of axioms and a collection of inference_steps,
+    yield all the valid statements."""
+    for a in axioms:
+        yield a
+    for step in inference_steps:
+        yield step.statement
 
 
 def ensure_theory(o) -> Theory:

@@ -76,7 +76,7 @@ class Formula(tuple):
 
         Note: This is equivalent to the explicit `iterate_arguments()` method.
         """
-        yield from self.iterate_arguments()
+        yield from self.iterate_top_level_arguments()
 
     def __ne__(self, other):
         return not self == other
@@ -179,7 +179,7 @@ class Formula(tuple):
         """A formula is unary if it has exactly one argument."""
         return self.arity == 1
 
-    def iterate_arguments(self) -> typing.Generator[Formula, None, None]:
+    def iterate_top_level_arguments(self) -> typing.Generator[Formula, None, None]:
         """Iterates the formula (first-level) arguments using the following algorithm:
          - left-right.
         """
@@ -202,7 +202,7 @@ class Formula(tuple):
         """
         if include_root:
             yield self
-        for x in self.iterate_arguments():
+        for x in self.iterate_top_level_arguments():
             yield from x.iterate_tree(include_root=True)
 
     def represent(self, is_subformula: bool = False, prefs=None) -> str:
@@ -777,7 +777,7 @@ def is_top_level_element_of(formula: Formula, container: typing.Iterable[Formula
     """
     if isinstance(container, Formula):
         container: Formula = ensure_formula(container)
-        for x in container.iterate_arguments():
+        for x in container.iterate_top_level_arguments():
             if x.is_formula_equivalent(formula):
                 return True
         return False
