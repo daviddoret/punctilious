@@ -78,7 +78,7 @@ class ExtensionTuple(_fml.Formula):
         """Returns `True` if `element` is an element of the tuple, `False` otherwise.
 
         Note that `element` may be multiple times an element of the tuple."""
-        return self.has_direct_argument(argument=element)
+        return self.has_top_level_argument(argument=element)
 
     @property
     def has_unique_elements(self) -> bool:
@@ -152,7 +152,7 @@ class UniqueExtensionTuple(_fml.Formula):
 
     def has_element(self, element: _fml.Formula) -> bool:
         """Returns `True` if `element` is an element of the tuple."""
-        return self.has_direct_argument(argument=element)
+        return self.has_top_level_argument(argument=element)
 
     def is_unique_extension_tuple_equivalent_to(self, other: FlexibleUniqueExtensionTuple) -> bool:
         """Returns `True` if this set is equal to the `other` set."""
@@ -636,7 +636,7 @@ class Theory(_fml.Formula):
         for i in inference_steps.iterate_elements():
             for a in i.iterate_arguments():
                 # Check that the argument is valid in the theory.
-                pass
+                XXX
         return super().__new__(cls, connector=theory, arguments=(axioms, inference_rules, inference_steps,))
 
     @property
@@ -658,7 +658,7 @@ class Theory(_fml.Formula):
         `False` only implies that the theory does not prove `formula` yet.
         """
         formula: _fml.Formula = _fml.ensure_formula(formula)
-        return any(formula.is_formula_equivalent(x) for x in self.iterate_valid_statements())
+        return is_valid(proposition=formula, assumptions=self.iterate_valid_statements())
 
     def iterate_valid_statements(self) -> typing.Generator[_fml.Formula, None, None]:
         """Iterates the theory valid statements in canonical order.
@@ -679,6 +679,22 @@ def ensure_theory(o) -> Theory:
     raise _utl.PunctiliousError(title='Inconsistent theory.',
                                 details=f'`o` cannot be interpreted as a theory.',
                                 o=o)
+
+
+def is_valid(proposition: _fml.Formula, assumptions: typing.Iterable[
+                                                         _fml.Formula] | _fml.Formula | UniqueExtensionTuple | ExtensionTuple) -> bool:
+    """Returns `True` if `proposition` is valid given the `assumptions`, `False` otherwise.
+
+    Note 1:
+    A proposition is valid given a collection of assumptions if and only if
+    the proposition is formula-equivalent to at least one assumption. For
+    this reason, this Python function is equivalent to function `is_top_level_element_of`.
+
+    Note 2:
+    In practice, using the default iterator (e.g. `proposition in assumptions`) is equivalent.
+    This function is semantically more explicit in its intention.
+    """
+    return _fml.is_top_level_element_of(formula=proposition, container=assumptions)
 
 
 FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]

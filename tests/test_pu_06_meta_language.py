@@ -348,6 +348,4 @@ class TestTheory:
         theory = pu.mtl.Theory(axioms=pu.mtl.UniqueExtensionTuple(a(c)),
                                inference_rules=pu.mtl.UniqueExtensionTuple(inference_rule),
                                inference_steps=pu.mtl.UniqueExtensionTuple())
-        RESUME
-        WORK
-        HERE
+        pass

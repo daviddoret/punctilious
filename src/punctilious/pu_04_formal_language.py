@@ -83,12 +83,6 @@ class Formula(tuple):
 
     def __new__(cls, connector, arguments=None):
         connector: Connector = ensure_connector(connector)
-
-        # TODO: If the connector is a meta-operator,
-        #   and if the python class is not of the proper class,
-        #   substitute the formula with an instance
-        #   of the correct type? e.g. Statement?
-
         arguments: FormulaArguments = ensure_formula_arguments(arguments)
         phi: tuple[Connector, FormulaArguments] = (connector, arguments,)
         return super().__new__(cls, phi)
@@ -136,16 +130,13 @@ class Formula(tuple):
         """
         yield from super().__getitem__(index)
 
-    def has_direct_argument(self, argument: Formula) -> bool:
+    def has_top_level_argument(self, argument: Formula) -> bool:
         """Returns `True` if `argument` is a direct argument of the formula.
 
         By direct argument, it is meant that arguments' sub-formulas are not being considered.
 
         Note that `argument` may be multiple times a direct argument of the formula."""
-        argument = ensure_formula(o=argument)
-        if any(argument.is_formula_equivalent(other=x) for x in self.arguments):
-            return True
-        return False
+        return is_top_level_element_of(formula=argument, container=self)
 
     @property
     def has_unique_arguments(self) -> bool:
@@ -771,3 +762,31 @@ def is_ternary(phi: Formula) -> bool:
         """
     phi = ensure_formula(o=phi)
     return phi.is_ternary
+
+
+def is_top_level_element_of(formula: Formula, container: typing.Iterable[Formula] | Formula) -> bool:
+    """Returns `True` if `formula` is a top-level element of `container`, `False` otherwise.
+
+    Note 1:
+        - The top-level elements of a formula are its arguments.
+        - The top-level elements of an iterable Python object are the top-level elements of that iterable.
+
+    Note 2:
+    In practice, using the default iterator (e.g. `formula in container`) is equivalent.
+    This function is semantically more explicit in its intention.
+    """
+    if isinstance(container, Formula):
+        container: Formula = ensure_formula(container)
+        for x in container.iterate_arguments():
+            if x.is_formula_equivalent(formula):
+                return True
+        return False
+    if isinstance(container, typing.Iterable):
+        for x in container:
+            if x.is_formula_equivalent(formula):
+                return True
+        return False
+    raise _utl.PunctiliousError(title='Non supported Python type.',
+                                details='`container` is of a `python_type` that is not supported by this function.',
+                                python_type=type(container).__name__,
+                                container=container)
