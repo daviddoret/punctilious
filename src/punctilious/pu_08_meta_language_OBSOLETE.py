@@ -32,7 +32,7 @@ def is_well_formed_tuple(phi: _formal_language.Formula) -> bool:
 
     """
     phi = _formal_language.ensure_formula(o=phi)
-    return phi.connector.is_connector_equivalent_to(_fundamental_connectors.extension_tuple)
+    return phi.connector.is_connector_equivalent_to(_fundamental_connectors.extension_tuple_connector)
 
 
 def is_well_formed_statement(phi: _formal_language.Formula) -> bool:

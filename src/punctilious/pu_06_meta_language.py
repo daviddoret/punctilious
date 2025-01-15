@@ -1,6 +1,7 @@
 # special features
 from __future__ import annotations
 
+import abc
 # external modules
 import typing
 import collections.abc
@@ -12,34 +13,44 @@ import punctilious.pu_04_formal_language as _fml
 
 # hard-coded connectors
 # the `tuple` connector is necessary to build complex formulas.
-extension_tuple = _fml.Connector(
+extension_tuple_connector = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='extension_tuple', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
 """The well-known connector of the `Tuple1` object.
 """
 
-unique_extension_tuple = _fml.Connector(
+unique_extension_tuple_connector = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='unique_extension_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
 """The well-known connector of the `UniqueTuple` object.
 """
 
-extension_map = _fml.Connector(
+extension_map_connector = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='extension_map', uuid='2509dbf9-d636-431c-82d4-6d33b2de3bc4'))
 """The well-known connector of the `Map1` object.
 """
 
-natural_inference_rule = _fml.Connector(
+natural_inference_rule_connector = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='inference_rule_1', uuid='6f6c4c60-7129-4c60-801f-1454581f01fe'))
 """The well-known connector of the `InferenceRule1` object.
 """
 
-inference_step = _fml.Connector(
+inference_step_connector = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='inference_step', uuid='b527b045-614b-49d6-95b3-9725f9143ba2'))
 """The well-known connector of the `InferenceStep` object.
 """
 
-theory = _fml.Connector(
+theory_connector = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='theory', uuid='2724eebf-070d-459d-a097-de9889f118b9'))
 """The well-known connector of the `Theory` object.
+"""
+
+axiom_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='axiom', uuid='0ead1815-8a20-4b02-bd06-1b5ae0295c92'))
+"""The well-known connector of the `Axiom` object.
+"""
+
+statement_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='statement', uuid='254d104d-8746-415b-b146-279fcc7e037f'))
+"""The well-known connector of the `Statement` object.
 """
 
 true2 = _fml.Connector(
@@ -47,6 +58,59 @@ true2 = _fml.Connector(
 
 false2 = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='false2', uuid='ffa97ce6-e320-4e5c-86c7-d7470c2d7c94'))
+
+
+class ITheoryComponent(abc.ABC):
+    pass
+
+
+class IStatement(abc.ABC):
+    """An `IStatement` is a theory component that exposes a `statement`
+    that is by definition valid in the theory.
+    """
+
+    @property
+    @abc.abstractmethod
+    def statement(self) -> _fml.Formula:
+        raise _utl.PunctiliousError(
+            title='Abstract method not implemented.',
+            details='Python object `o` inherits from abstract class `IStatement`,'
+                    ' but method `statement` is not implemented.',
+            o=self)
+
+
+class IInferenceRule(abc.ABC):
+    """
+
+    """
+
+    @abc.abstractmethod
+    def apply_rule(self, inputs: typing.Iterable[_fml.Formula]) -> _fml.Formula:
+        raise _utl.PunctiliousError(
+            title='Abstract method not implemented.',
+            details='Python object `o` inherits from abstract class `IInferenceRule`,'
+                    ' but method `apply_rule` is not implemented.',
+            o=self)
+
+
+class Axiom(_fml.Formula, ITheoryComponent, IStatement):
+    """An `Axiom` is a model of a mathematical axiom.
+
+    It is implemented as a unary formula with a well-known `axiom` connector,
+    whose argument is the statement content.
+    """
+    _AXIOM_STATEMENT_INDEX: int = 0
+
+    def __init__(self, statement: _fml.Formula):
+        super().__init__(connector=axiom_connector, arguments=(statement,))
+
+    def __new__(cls, statement: _fml.Formula):
+        statement = _fml.ensure_formula(statement)
+        return super().__new__(cls, connector=axiom_connector, arguments=(statement,))
+
+    @property
+    def statement(self) -> _fml.Formula:
+        return self.arguments[Axiom._AXIOM_STATEMENT_INDEX]
 
 
 class ExtensionTuple(_fml.Formula):
@@ -60,11 +124,11 @@ class ExtensionTuple(_fml.Formula):
     """
 
     def __init__(self, *arguments):
-        super().__init__(connector=extension_tuple, arguments=arguments)
+        super().__init__(connector=extension_tuple_connector, arguments=arguments)
 
     def __new__(cls, *arguments):
         arguments = _fml.ensure_formulas(*arguments)
-        return super().__new__(cls, connector=extension_tuple, arguments=arguments)
+        return super().__new__(cls, connector=extension_tuple_connector, arguments=arguments)
 
     @property
     def arity(self) -> int:
@@ -134,13 +198,13 @@ class UniqueExtensionTuple(_fml.Formula):
         :param duplicate_processing: 'raise_error' (default), or 'strip'.
         """
         elements = _fml.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
-        super().__init__(connector=unique_extension_tuple, arguments=elements)
+        super().__init__(connector=unique_extension_tuple_connector, arguments=elements)
 
     def __new__(cls, *elements,
                 duplicate_processing: _fml.DuplicateProcessing =
                 _fml.DuplicateProcessing.RAISE_ERROR):
         elements = _fml.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
-        return super().__new__(cls, connector=unique_extension_tuple, arguments=elements)
+        return super().__new__(cls, connector=unique_extension_tuple_connector, arguments=elements)
 
     @property
     def arity(self) -> int:
@@ -195,7 +259,7 @@ def ensure_extension_tuple(o: FlexibleExtensionTuple) -> ExtensionTuple:
     """
     if isinstance(o, ExtensionTuple):
         return o
-    if isinstance(o, _fml.Formula) and o.connector == extension_tuple:
+    if isinstance(o, _fml.Formula) and o.connector == extension_tuple_connector:
         return ExtensionTuple(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
 
@@ -217,7 +281,7 @@ def ensure_unique_extension_tuple(
     """
     if isinstance(o, UniqueExtensionTuple):
         return o
-    if isinstance(o, _fml.Formula) and o.connector == unique_extension_tuple:
+    if isinstance(o, _fml.Formula) and o.connector == unique_extension_tuple_connector:
         return UniqueExtensionTuple(*o.arguments, duplicate_processing=duplicate_processing)
     raise _utl.PunctiliousError(f'`o` is not a unique-extension-tuple.', o=o)
 
@@ -230,7 +294,7 @@ def ensure_extension_map(o: FlexibleExtensionTuple) -> ExtensionMap:
     """
     if isinstance(o, ExtensionMap):
         return o
-    if isinstance(o, _fml.Formula) and o.connector == extension_map:
+    if isinstance(o, _fml.Formula) and o.connector == extension_map_connector:
         return ExtensionMap(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
 
@@ -243,7 +307,7 @@ def ensure_natural_inference_rule(o: FlexibleNaturalInferenceRule) -> NaturalInf
     """
     if isinstance(o, NaturalInferenceRule):
         return o
-    if isinstance(o, _fml.Formula) and o.connector == natural_inference_rule:
+    if isinstance(o, _fml.Formula) and o.connector == natural_inference_rule_connector:
         return NaturalInferenceRule(*o.arguments)
     raise _utl.PunctiliousError(title='Inconsistent natural-inference-rule.',
                                 details=f'`o` cannot be interpreted as a natural-inference-rule.',
@@ -264,9 +328,24 @@ def ensure_inference_step(o: FlexibleInferenceStep):
     """
     if isinstance(o, InferenceStep):
         return o
-    if isinstance(o, _fml.Formula) and o.connector == inference_step:
+    if isinstance(o, _fml.Formula) and o.connector == inference_step_connector:
         return InferenceStep(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an inference-step.', o=o)
+
+
+def ensure_axiom(o: FlexibleAxiom):
+    """Ensures that the input is an axiom, and returns an instance of Axiom.
+
+    :param o:
+    :return:
+    """
+    if isinstance(o, Axiom):
+        return o
+    if isinstance(o, _fml.Formula) and o.connector == axiom_connector:
+        return Axiom(*o.arguments)
+    raise _utl.PunctiliousError(title='Inconsistent axiom',
+                                details=f'`o` cannot be interpreted as a axiom.',
+                                o=o)
 
 
 def union_unique_tuples(*args: UniqueExtensionTuple):
@@ -308,10 +387,10 @@ class ExtensionMap(_fml.Formula):
             raise _utl.PunctiliousError(f'The arity of the `domain` is not equal to the arity of the `codomain`.',
                                         domain_arity=domain.arity, codomain_arity=codomain.arity,
                                         domain=domain, codomain=codomain)
-        super().__init__(connector=extension_map, arguments=(domain, codomain,))
+        super().__init__(connector=extension_map_connector, arguments=(domain, codomain,))
 
     def __new__(cls, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
-        return super().__new__(cls, connector=extension_map, arguments=(domain, codomain,))
+        return super().__new__(cls, connector=extension_map_connector, arguments=(domain, codomain,))
 
     @property
     def codomain(self) -> ExtensionTuple:
@@ -463,7 +542,7 @@ def _is_formula_equivalent_with_variables(
                 return True, m
 
 
-class NaturalInferenceRule(_fml.Formula):
+class NaturalInferenceRule(_fml.Formula, ITheoryComponent, IInferenceRule):
     _NATURAL_INFERENCE_RULE_VARIABLES_INDEX: int = 0
     _NATURAL_INFERENCE_RULE_PREMISES_INDEX: int = 1
     _NATURAL_INFERENCE_RULE_CONCLUSION_INDEX: int = 2
@@ -479,12 +558,12 @@ class NaturalInferenceRule(_fml.Formula):
         variables: UniqueExtensionTuple = ensure_unique_extension_tuple(variables)
         premises: UniqueExtensionTuple = ensure_unique_extension_tuple(premises)
         conclusion: _fml.Formula = _fml.ensure_formula(conclusion)
-        super().__init__(connector=natural_inference_rule, arguments=(variables, premises,
-                                                                      conclusion,))
+        super().__init__(connector=natural_inference_rule_connector, arguments=(variables, premises,
+                                                                                conclusion,))
 
     def __new__(cls, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
                 conclusion: _fml.Formula):
-        return super().__new__(cls, connector=natural_inference_rule,
+        return super().__new__(cls, connector=natural_inference_rule_connector,
                                arguments=(variables, premises,
                                           conclusion,))
 
@@ -555,7 +634,7 @@ class NaturalInferenceRule(_fml.Formula):
         return ensure_unique_extension_tuple(
             self.arguments[NaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
 
-    def apply_rule(self, inputs: ExtensionTuple) -> _fml.Formula:
+    def apply_rule(self, inputs: typing.Iterable[_fml.Formula]) -> _fml.Formula:
         check, premises_as_extension_tuple, m = self._check_arguments_validity(inputs=inputs,
                                                                                raise_error_if_false=True)
 
@@ -574,30 +653,31 @@ class NaturalInferenceRule(_fml.Formula):
         return check
 
 
-class InferenceStep(_fml.Formula):
-    _INFERENCE_STEP_INPUTS: int = 0
-    _INFERENCE_STEP_INFERENCE_RULE_INDEX: int = 1
-    _INFERENCE_STEP_STATEMENT_INDEX: int = 2
+class InferenceStep(_fml.Formula, ITheoryComponent, IStatement):
+    _INFERENCE_STEP_STATEMENT_INDEX: int = 0
+    _INFERENCE_STEP_INPUTS: int = 1
+    _INFERENCE_STEP_INFERENCE_RULE_INDEX: int = 2
     _INFERENCE_STEP_FIXED_ARITY: int = 3
 
-    def __init__(self, inputs: FlexibleExtensionTuple, inference_rule: FlexibleNaturalInferenceRule,
-                 statement: _fml.Formula):
-        super().__init__(connector=theory, arguments=(inputs, inference_rule, statement,))
+    def __init__(self, statement: _fml.Formula, inputs: FlexibleExtensionTuple,
+                 inference_rule: FlexibleNaturalInferenceRule):
+        super().__init__(connector=theory_connector, arguments=(statement, inputs, inference_rule,))
 
-    def __new__(cls, inputs: FlexibleExtensionTuple, inference_rule: FlexibleNaturalInferenceRule,
-                statement: _fml.Formula):
+    def __new__(cls, statement: _fml.Formula, inputs: FlexibleExtensionTuple,
+                inference_rule: FlexibleNaturalInferenceRule,
+                ):
+        statement: _fml.Formula = _fml.ensure_formula(statement)
         inputs: ExtensionTuple = ensure_extension_tuple(inputs)
         inference_rule: NaturalInferenceRule = ensure_natural_inference_rule(inference_rule)
-        statement: _fml.Formula = _fml.ensure_formula(statement)
-        conclusion: _fml.Formula = inference_rule.apply_rule(inputs)
-        if not conclusion.is_formula_equivalent(statement):
+        infered_statement: _fml.Formula = inference_rule.apply_rule(inputs)
+        if not infered_statement.is_formula_equivalent(statement):
             raise _utl.PunctiliousError(f'Inconsistent inference-step. Applying the `inference_rule` on the `arguments`'
                                         f' yields a `conclusion` that is distinct from the `statement`.',
                                         statement=statement,
-                                        conclusion=conclusion,
+                                        conclusion=infered_statement,
                                         arguments=inputs,
                                         inference_rule=inference_rule)
-        return super().__new__(cls, connector=theory, arguments=(inputs, inference_rule, statement,))
+        return super().__new__(cls, connector=theory_connector, arguments=(statement, inputs, inference_rule,))
 
     @property
     def inputs(self) -> ExtensionTuple:
@@ -620,7 +700,7 @@ class Theory(_fml.Formula):
 
     def __init__(self, axioms: UniqueExtensionTuple, inference_rules: UniqueExtensionTuple,
                  inference_steps: UniqueExtensionTuple):
-        super().__init__(connector=theory, arguments=(axioms, inference_rules, inference_steps,))
+        super().__init__(connector=theory_connector, arguments=(axioms, inference_rules, inference_steps,))
 
     def __new__(cls, axioms: UniqueExtensionTuple, inference_rules: UniqueExtensionTuple,
                 inference_steps: UniqueExtensionTuple):
@@ -633,18 +713,33 @@ class Theory(_fml.Formula):
         inference_steps = ensure_unique_extension_tuple(inference_steps)
         inference_steps = UniqueExtensionTuple(
             *tuple(ensure_inference_step(x) for x in inference_steps.iterate_top_level_elements()))
-        for i in inference_steps.iterate_top_level_elements():
-            for argument in i.iterate_top_level_arguments():
+        for inference_step in inference_steps.iterate_top_level_elements():
+            inference_step: InferenceStep
+            inference_rule: NaturalInferenceRule = inference_step.inference_rule
+
+            XXXXX
+            # TODO: CHECK ---> UP TO THIS THEORY LIMIT
+            if not is_valid_inference_rule(inference_rule=inference_rule, assumptioms=iterate_valid_inference_rules(
+                    inference_rules=inference_rules, inference_steps=inference_steps)):
+                raise _utl.PunctiliousError(title='Inconsistent theory.',
+                                            details='The `inference_step` is based on an `inference_rule`'
+                                                    ' that is not valid in the `theory`.',
+                                            inference_rule=inference_rule,
+                                            inference_step=inference_step,
+                                            axioms=axioms)
+            for argument in inference_step.iterate_top_level_arguments():
                 # Check that the argument is valid in the theory.
-                if not is_valid(proposition=argument, assumptions=iterate_valid_statements(axioms=axioms,
-                                                                                           inference_steps=inference_steps)):
+                XXXXX
+                # TODO: CHECK ---> UP TO THIS THEORY LIMIT
+                if not is_valid_statement(proposition=argument, assumptions=iterate_valid_statements(axioms=axioms,
+                                                                                                     inference_steps=inference_steps)):
                     raise _utl.PunctiliousError(title='Inconsistent theory.',
                                                 details='The `inference_step` is based on an `argument`'
                                                         ' that is not valid in the `theory`.',
                                                 argument=argument,
                                                 inference_step=inference_step,
                                                 axioms=axioms)
-        return super().__new__(cls, connector=theory, arguments=(axioms, inference_rules, inference_steps,))
+        return super().__new__(cls, connector=theory_connector, arguments=(axioms, inference_rules, inference_steps,))
 
     @property
     def axioms(self) -> UniqueExtensionTuple:
@@ -665,7 +760,7 @@ class Theory(_fml.Formula):
         `False` only implies that the theory does not prove `formula` yet.
         """
         formula: _fml.Formula = _fml.ensure_formula(formula)
-        return is_valid(proposition=formula, assumptions=self.iterate_valid_statements())
+        return is_valid_statement(proposition=formula, assumptions=self.iterate_valid_statements())
 
     def iterate_valid_statements(self) -> typing.Generator[_fml.Formula, None, None]:
         """Iterates the theory valid statements in canonical order.
@@ -688,16 +783,16 @@ def iterate_valid_statements(axioms: typing.Iterable[_fml.Formula], inference_st
 def ensure_theory(o) -> Theory:
     if isinstance(o, Theory):
         return o
-    if isinstance(o, _fml.Formula) and o.connector == theory:
+    if isinstance(o, _fml.Formula) and o.connector == theory_connector:
         return Theory(*o.arguments)
     raise _utl.PunctiliousError(title='Inconsistent theory.',
                                 details=f'`o` cannot be interpreted as a theory.',
                                 o=o)
 
 
-def is_valid(proposition: _fml.Formula, assumptions: typing.Iterable[
-                                                         _fml.Formula] | _fml.Formula | UniqueExtensionTuple | ExtensionTuple) -> bool:
-    """Returns `True` if `proposition` is valid given the `assumptions`, `False` otherwise.
+def is_valid_statement(proposition: _fml.Formula, assumptions: typing.Iterable[
+    _fml.Formula]) -> bool:
+    """Returns `True` if `statement` is valid given the `assumptions`, `False` otherwise.
 
     Note 1:
     A proposition is valid given a collection of assumptions if and only if
@@ -708,9 +803,21 @@ def is_valid(proposition: _fml.Formula, assumptions: typing.Iterable[
     In practice, using the default iterator (e.g. `proposition in assumptions`) is equivalent.
     This function is semantically more explicit in its intention.
     """
-    return _fml.is_top_level_element_of(formula=proposition, container=assumptions)
+    proposition: _fml.Formula = _fml.ensure_formula(proposition)
+    for assumption in assumptions:
+        if assumption.connector == axiom_connector:
+            axiom: Axiom = ensure_axiom(assumption)
+            if proposition.is_formula_equivalent(axiom.statement):
+                return True
+        elif assumption.connector == inference_step_connector:
+            inference_step: InferenceStep = ensure_inference_step(assumption)
+            if proposition.is_formula_equivalent(inference_step.statement):
+                return True
+    return False
 
 
+FlexibleAxiom = typing.Union[Axiom, _fml.Formula]
+FlexibleStatement = typing.Union[IStatement, _fml.Formula]
 FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]
 FlexibleExtensionTuple = typing.Union[ExtensionTuple, _fml.Formula, collections.abc.Iterable]
 FlexibleNaturalInferenceRule = typing.Union[ExtensionTuple, _fml.Formula]

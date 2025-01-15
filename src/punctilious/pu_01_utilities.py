@@ -5,6 +5,7 @@
 # special features
 from __future__ import annotations
 
+import abc
 # external modules
 import typing
 import io

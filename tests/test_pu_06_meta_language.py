@@ -4,7 +4,7 @@ import punctilious as pu
 
 class TestUniqueTuple:
     def test_1(self):
-        set1 = pu.mtl.unique_extension_tuple
+        set1 = pu.mtl.unique_extension_tuple_connector
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
         c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
@@ -52,7 +52,7 @@ class TestUnionSets1:
 
 class TestMap1:
     def test_1(self):
-        map1 = pu.mtl.extension_map
+        map1 = pu.mtl.extension_map_connector
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
         c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
