@@ -572,10 +572,6 @@ class Connector(_ids.UniqueIdentifiable):
         """Returns True if the connectors are equivalent, False otherwise."""
         return self.uid.is_unique_identifier_equivalent(other.uid)
 
-    @property
-    def package(self):
-        return self._package
-
     def rep_connector(self, prefs=None, **kwargs) -> str:
         return self.connector_representation.rep(prefs=prefs, **kwargs)
 
@@ -628,6 +624,44 @@ class Connector(_ids.UniqueIdentifiable):
 
     def to_yaml(self, default_flow_style):
         return yaml.dump(self.to_dict(), default_flow_style=default_flow_style)
+
+
+class WellFormingConnector(Connector):
+    """A WellFormingConnector is a Connector that is intended to
+    signal a formula of a defined well-form in a meta-language.
+    """
+
+    def __init__(self, uid: _ids.FlexibleUniqueIdentifier,
+                 well_formedness_validator_function: typing.Callable,
+                 well_formed_type_ensurer_function: typing.Callable,
+                 well_formed_type: type,
+                 syntactic_rules=SyntacticRules(),
+                 connector_representation: _rpr.AbstractRepresentation | None = None,
+                 formula_representation: _rpr.AbstractRepresentation | None = None
+                 ):
+        self._well_formedness_validator_function = well_formedness_validator_function
+        self._well_formed_type_ensurer_function = well_formed_type_ensurer_function
+        self._well_formed_type = well_formed_type
+        super().__init__(uid=uid,
+                         syntactic_rules=syntactic_rules,
+                         connector_representation=connector_representation,
+                         formula_representation=formula_representation)
+
+    def is_well_formed(self, formula: Formula) -> bool:
+        """Returns `True` if `formula` is well-formed
+        for the formula structure expected by this connector."""
+        return self._well_formedness_validator_function(formula)
+
+    def ensure_well_formed_type(self, formula: Formula) -> Formula:
+        """Given a `formula`
+        presumably well-formed for the formula structure expected by this connector,
+        returns a formula object of the `well_formed_type`."""
+        return self._well_formed_type_ensurer_function(formula)
+
+    @property
+    def well_formed_type(self) -> type:
+        """The `well_formed_type` of the connector is a Python type that enforces well-formedness."""
+        return self._well_formed_type
 
 
 FlexibleConnector = typing.Union[Connector, collections.abc.Mapping, collections.abc.Iterable]

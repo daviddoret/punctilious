@@ -11,54 +11,6 @@ import punctilious.pu_01_utilities as _utl
 import punctilious.pu_02_unique_identifiers as _uid
 import punctilious.pu_04_formal_language as _fml
 
-# hard-coded connectors
-# the `tuple` connector is necessary to build complex formulas.
-extension_tuple_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='extension_tuple', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
-"""The well-known connector of the `Tuple1` object.
-"""
-
-unique_extension_tuple_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='unique_extension_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
-"""The well-known connector of the `UniqueTuple` object.
-"""
-
-extension_map_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='extension_map', uuid='2509dbf9-d636-431c-82d4-6d33b2de3bc4'))
-"""The well-known connector of the `Map1` object.
-"""
-
-natural_inference_rule_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='inference_rule_1', uuid='6f6c4c60-7129-4c60-801f-1454581f01fe'))
-"""The well-known connector of the `InferenceRule1` object.
-"""
-
-inference_step_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='inference_step', uuid='b527b045-614b-49d6-95b3-9725f9143ba2'))
-"""The well-known connector of the `InferenceStep` object.
-"""
-
-theory_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='theory', uuid='2724eebf-070d-459d-a097-de9889f118b9'))
-"""The well-known connector of the `Theory` object.
-"""
-
-axiom_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='axiom', uuid='0ead1815-8a20-4b02-bd06-1b5ae0295c92'))
-"""The well-known connector of the `Axiom` object.
-"""
-
-statement_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='statement', uuid='254d104d-8746-415b-b146-279fcc7e037f'))
-"""The well-known connector of the `Statement` object.
-"""
-
-true2 = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='true', uuid='dde98ed2-b7e0-44b2-bd10-5f59d61fd93e'))
-
-false2 = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='false2', uuid='ffa97ce6-e320-4e5c-86c7-d7470c2d7c94'))
-
 
 class ITheoryComponent(abc.ABC):
     pass
@@ -93,7 +45,7 @@ class IInferenceRule(abc.ABC):
             o=self)
 
 
-class Axiom(_fml.Formula, ITheoryComponent, IStatement):
+class WellFormedAxiom(_fml.Formula, ITheoryComponent, IStatement):
     """An `Axiom` is a model of a mathematical axiom.
 
     It is implemented as a unary formula with a well-known `axiom` connector,
@@ -110,7 +62,7 @@ class Axiom(_fml.Formula, ITheoryComponent, IStatement):
 
     @property
     def statement(self) -> _fml.Formula:
-        return self.arguments[Axiom._AXIOM_STATEMENT_INDEX]
+        return self.arguments[WellFormedAxiom._AXIOM_STATEMENT_INDEX]
 
 
 class ExtensionTuple(_fml.Formula):
@@ -333,19 +285,23 @@ def ensure_inference_step(o: FlexibleInferenceStep):
     raise _utl.PunctiliousError(f'`o` is not an inference-step.', o=o)
 
 
-def ensure_axiom(o: FlexibleAxiom):
-    """Ensures that the input is an axiom, and returns an instance of Axiom.
+def ensure_well_formed_axiom(formula: _fml.Formula):
+    """Ensures that `formula` is a well-formed axiom, raises an exception otherwise.
 
-    :param o:
-    :return:
+    :param formula: A formula.
+    :return: An axiom, typed as WellFormedAxiom.
     """
-    if isinstance(o, Axiom):
-        return o
-    if isinstance(o, _fml.Formula) and o.connector == axiom_connector:
-        return Axiom(*o.arguments)
-    raise _utl.PunctiliousError(title='Inconsistent axiom',
-                                details=f'`o` cannot be interpreted as a axiom.',
-                                o=o)
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedAxiom):
+        # The type ensures well-formedness.
+        return formula
+    elif isinstance(formula, _fml.Formula) and formula.connector == axiom_connector:
+        # The class initializer ensures well-formedness.
+        return WellFormedAxiom(*formula.arguments)
+    else:
+        raise _utl.PunctiliousError(title='Non-supported type',
+                                    details=f'The Python type of `formula` is not supported.',
+                                    formula=formula)
 
 
 def union_unique_tuples(*args: UniqueExtensionTuple):
@@ -806,7 +762,7 @@ def is_valid_statement(proposition: _fml.Formula, assumptions: typing.Iterable[
     proposition: _fml.Formula = _fml.ensure_formula(proposition)
     for assumption in assumptions:
         if assumption.connector == axiom_connector:
-            axiom: Axiom = ensure_axiom(assumption)
+            axiom: WellFormedAxiom = ensure_well_formed_axiom(assumption)
             if proposition.is_formula_equivalent(axiom.statement):
                 return True
         elif assumption.connector == inference_step_connector:
@@ -816,7 +772,7 @@ def is_valid_statement(proposition: _fml.Formula, assumptions: typing.Iterable[
     return False
 
 
-FlexibleAxiom = typing.Union[Axiom, _fml.Formula]
+FlexibleAxiom = typing.Union[WellFormedAxiom, _fml.Formula]
 FlexibleStatement = typing.Union[IStatement, _fml.Formula]
 FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]
 FlexibleExtensionTuple = typing.Union[ExtensionTuple, _fml.Formula, collections.abc.Iterable]
@@ -824,3 +780,85 @@ FlexibleNaturalInferenceRule = typing.Union[ExtensionTuple, _fml.Formula]
 FlexibleInferenceStep = typing.Union[InferenceStep, _fml.Formula]
 FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, _fml.Formula, collections.abc.Iterable]
 FlexibleTheory = typing.Union[Theory, _fml.Formula]
+
+
+def is_well_formed_axiom(formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
+    """Returns `True` if `formula` is a well-formed axiom, `False` otherwise.
+
+    :param formula: A formula.
+    :param raise_error_if_false: Raises an exception instead of returning `False`.
+    :return:
+    """
+    formula = _fml.ensure_formula(formula)
+    if formula.connector != axiom_connector:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed axiom',
+                details='`formula` is not a well-formed axiom.'
+                        'Its root connector is not the well-known `axiom_connector`.',
+                formula=formula,
+                axiom_connector=axiom_connector
+            )
+        return False
+    if formula.arity != 1:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed axiom',
+                details='`formula` is not a well-formed axiom.'
+                        'Its arity is not equal 1.',
+                formula=formula
+            )
+        return False
+    return True
+
+
+# well-known connectors
+# the `tuple` connector is necessary to build complex formulas.
+extension_tuple_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='extension_tuple', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
+"""The well-known connector of the `Tuple1` object.
+"""
+
+unique_extension_tuple_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='unique_extension_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
+"""The well-known connector of the `UniqueTuple` object.
+"""
+
+extension_map_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='extension_map', uuid='2509dbf9-d636-431c-82d4-6d33b2de3bc4'))
+"""The well-known connector of the `Map1` object.
+"""
+
+natural_inference_rule_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='inference_rule_1', uuid='6f6c4c60-7129-4c60-801f-1454581f01fe'))
+"""The well-known connector of the `InferenceRule1` object.
+"""
+
+inference_step_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='inference_step', uuid='b527b045-614b-49d6-95b3-9725f9143ba2'))
+"""The well-known connector of the `InferenceStep` object.
+"""
+
+theory_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='theory', uuid='2724eebf-070d-459d-a097-de9889f118b9'))
+"""The well-known connector of the `Theory` object.
+"""
+
+axiom_connector = _fml.WellFormingConnector(
+    uid=_uid.UniqueIdentifier(slug='axiom', uuid='0ead1815-8a20-4b02-bd06-1b5ae0295c92'),
+    well_formedness_validator_function=is_well_formed_axiom,
+    well_formed_type_ensurer_function=ensure_well_formed_axiom,
+    well_formed_type=WellFormedAxiom)
+"""The well-known connector of the `Axiom` object.
+"""
+
+statement_connector = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='statement', uuid='254d104d-8746-415b-b146-279fcc7e037f'))
+"""The well-known connector of the `Statement` object.
+"""
+
+true2 = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='true', uuid='dde98ed2-b7e0-44b2-bd10-5f59d61fd93e'))
+
+false2 = _fml.Connector(
+    uid=_uid.UniqueIdentifier(slug='false2', uuid='ffa97ce6-e320-4e5c-86c7-d7470c2d7c94'))
