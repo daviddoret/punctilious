@@ -352,12 +352,38 @@ class TestTheory:
 
 
 class TestAxiom:
-    a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
-    b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
-    c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+    def test_1(self):
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
 
-    axiom_1_typed = pu.meta_language.WellFormedAxiom(a(b(c()), c()))
-    axiom_1_untyped = pu.meta_language.axiom_connector(a(b(c()), c()))
-    assert axiom_1_typed.is_formula_equivalent(axiom_1_untyped)
+        axiom_1_statement = a(b(c()), c())
+        assert not pu.meta_language.is_well_formed_axiom(axiom_1_statement)
+        assert not pu.meta_language.axiom_connector.is_well_formed(axiom_1_statement)
+        axiom_1_typed = pu.meta_language.WellFormedAxiom(axiom_1_statement)
+        axiom_1_untyped = pu.meta_language.axiom_connector(axiom_1_statement)
+        assert axiom_1_typed.is_formula_equivalent(axiom_1_untyped)
+        assert axiom_1_untyped.is_formula_equivalent(axiom_1_typed)
+        assert not axiom_1_typed.is_formula_equivalent(axiom_1_statement)
+        assert pu.meta_language.is_well_formed_axiom(axiom_1_typed)
+        assert pu.meta_language.is_well_formed_axiom(axiom_1_untyped)
+        axiom_1_retyped = pu.meta_language.ensure_well_formed_axiom(axiom_1_untyped)
+        assert axiom_1_retyped.is_formula_equivalent(axiom_1_typed)
 
-    pass
+        axiom_2_statement = a()
+        assert not pu.meta_language.is_well_formed_axiom(axiom_2_statement)
+        assert not pu.meta_language.axiom_connector.is_well_formed(axiom_2_statement)
+        axiom_2_typed = pu.meta_language.WellFormedAxiom(axiom_2_statement)
+        axiom_2_untyped = pu.meta_language.axiom_connector(axiom_2_statement)
+        assert axiom_2_typed.is_formula_equivalent(axiom_2_typed)
+        assert axiom_2_untyped.is_formula_equivalent(axiom_2_typed)
+        assert not axiom_2_typed.is_formula_equivalent(axiom_2_statement)
+        assert pu.meta_language.is_well_formed_axiom(axiom_2_typed)
+        assert pu.meta_language.is_well_formed_axiom(axiom_2_untyped)
+        axiom_2_retyped = pu.meta_language.ensure_well_formed_axiom(axiom_2_untyped)
+        assert axiom_2_retyped.is_formula_equivalent(axiom_2_typed)
+
+        assert not axiom_1_typed.is_formula_equivalent(axiom_2_typed)
+        assert not axiom_2_typed.is_formula_equivalent(axiom_1_typed)
+
+        pass
