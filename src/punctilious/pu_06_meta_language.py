@@ -16,18 +16,21 @@ class ITheoryComponent(abc.ABC):
     pass
 
 
-class IStatement(abc.ABC):
-    """An `IStatement` is a theory component that exposes a `statement`
-    that is by definition valid in the theory.
+class IClaim(ITheoryComponent, abc.ABC):
+    """An `IClaim` is a theory component that claims a statement as valid in some theoretical context.
     """
 
     @property
     @abc.abstractmethod
-    def statement(self) -> _fml.Formula:
+    def claimed_statement(self) -> _fml.Formula:
+        """The statement claimed as valid in some theoretical context.
+
+        :return: A formula.
+        """
         raise _utl.PunctiliousError(
             title='Abstract method not implemented.',
-            details='Python object `o` inherits from abstract class `IStatement`,'
-                    ' but method `statement` is not implemented.',
+            details='Python object `o` inherits from abstract class `IClaim`,'
+                    ' but method `claimed_statement` is not implemented.',
             o=self)
 
 
@@ -45,7 +48,7 @@ class IInferenceRule(abc.ABC):
             o=self)
 
 
-class WellFormedAxiom(_fml.Formula, ITheoryComponent, IStatement):
+class WellFormedAxiom(_fml.Formula, IClaim):
     """An `Axiom` is a model of a mathematical axiom.
 
     It is implemented as a unary formula with a well-known `axiom` connector,
@@ -57,11 +60,17 @@ class WellFormedAxiom(_fml.Formula, ITheoryComponent, IStatement):
         super().__init__(connector=axiom_connector, arguments=(statement,))
 
     def __new__(cls, statement: _fml.Formula):
+        """
+
+        Note: this method must be consistent with function :func:`is_well_formed_axiom`.
+
+        :param statement:
+        """
         statement = _fml.ensure_formula(statement)
         return super().__new__(cls, connector=axiom_connector, arguments=(statement,))
 
     @property
-    def statement(self) -> _fml.Formula:
+    def claimed_statement(self) -> _fml.Formula:
         return self.arguments[WellFormedAxiom._AXIOM_STATEMENT_INDEX]
 
 
@@ -609,7 +618,7 @@ class NaturalInferenceRule(_fml.Formula, ITheoryComponent, IInferenceRule):
         return check
 
 
-class InferenceStep(_fml.Formula, ITheoryComponent, IStatement):
+class InferenceStep(_fml.Formula, IClaim):
     _INFERENCE_STEP_STATEMENT_INDEX: int = 0
     _INFERENCE_STEP_INPUTS: int = 1
     _INFERENCE_STEP_INFERENCE_RULE_INDEX: int = 2
@@ -644,7 +653,7 @@ class InferenceStep(_fml.Formula, ITheoryComponent, IStatement):
         return ensure_natural_inference_rule(self.arguments[InferenceStep._INFERENCE_STEP_INFERENCE_RULE_INDEX])
 
     @property
-    def statement(self) -> _fml.Formula:
+    def claimed_statement(self) -> _fml.Formula:
         return _fml.ensure_formula(self.arguments[InferenceStep._INFERENCE_STEP_STATEMENT_INDEX])
 
 
@@ -687,8 +696,8 @@ class Theory(_fml.Formula):
                 # Check that the argument is valid in the theory.
                 XXXXX
                 # TODO: CHECK ---> UP TO THIS THEORY LIMIT
-                if not is_valid_statement(proposition=argument, assumptions=iterate_valid_statements(axioms=axioms,
-                                                                                                     inference_steps=inference_steps)):
+                if not is_valid_statement(statement=argument, theory_components=iterate_valid_statements(axioms=axioms,
+                                                                                                         inference_steps=inference_steps)):
                     raise _utl.PunctiliousError(title='Inconsistent theory.',
                                                 details='The `inference_step` is based on an `argument`'
                                                         ' that is not valid in the `theory`.',
@@ -716,7 +725,7 @@ class Theory(_fml.Formula):
         `False` only implies that the theory does not prove `formula` yet.
         """
         formula: _fml.Formula = _fml.ensure_formula(formula)
-        return is_valid_statement(proposition=formula, assumptions=self.iterate_valid_statements())
+        return is_valid_statement(statement=formula, theory_components=self.iterate_valid_statements())
 
     def iterate_valid_statements(self) -> typing.Generator[_fml.Formula, None, None]:
         """Iterates the theory valid statements in canonical order.
@@ -733,7 +742,7 @@ def iterate_valid_statements(axioms: typing.Iterable[_fml.Formula], inference_st
     for a in axioms:
         yield a
     for step in inference_steps:
-        yield step.statement
+        yield step.claimed_statement
 
 
 def ensure_theory(o) -> Theory:
@@ -746,34 +755,27 @@ def ensure_theory(o) -> Theory:
                                 o=o)
 
 
-def is_valid_statement(proposition: _fml.Formula, assumptions: typing.Iterable[
-    _fml.Formula]) -> bool:
-    """Returns `True` if `statement` is valid given the `assumptions`, `False` otherwise.
+def is_valid_statement(statement: _fml.Formula, theory_components: typing.Iterable[ITheoryComponent]) -> bool:
+    """Returns `True` if `statement` is valid given a collection of `theory_components`, `False` otherwise.
 
     Note 1:
-    A proposition is valid given a collection of assumptions if and only if
-    the proposition is formula-equivalent to at least one assumption. For
-    this reason, this Python function is equivalent to function `is_top_level_element_of`.
+    A statement is valid given a collection of theory components if and only if
+    the statement is formula-equivalent to the statement claimed by at least
+    one theory component.
 
-    Note 2:
-    In practice, using the default iterator (e.g. `proposition in assumptions`) is equivalent.
-    This function is semantically more explicit in its intention.
     """
-    proposition: _fml.Formula = _fml.ensure_formula(proposition)
-    for assumption in assumptions:
-        if assumption.connector == axiom_connector:
-            axiom: WellFormedAxiom = ensure_well_formed_axiom(assumption)
-            if proposition.is_formula_equivalent(axiom.statement):
-                return True
-        elif assumption.connector == inference_step_connector:
-            inference_step: InferenceStep = ensure_inference_step(assumption)
-            if proposition.is_formula_equivalent(inference_step.statement):
+    statement: _fml.Formula = _fml.ensure_formula(statement)
+    for theory_component in theory_components:
+        theory_component: ITheoryComponent = ensure_theory_component(theory_component)
+        if isinstance(theory_component, IClaim):
+            theory_statement: IClaim = theory_component
+            if statement.is_formula_equivalent(theory_statement.claimed_statement):
                 return True
     return False
 
 
 FlexibleAxiom = typing.Union[WellFormedAxiom, _fml.Formula]
-FlexibleStatement = typing.Union[IStatement, _fml.Formula]
+FlexibleStatement = typing.Union[IClaim, _fml.Formula]
 FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]
 FlexibleExtensionTuple = typing.Union[ExtensionTuple, _fml.Formula, collections.abc.Iterable]
 FlexibleNaturalInferenceRule = typing.Union[ExtensionTuple, _fml.Formula]
@@ -784,6 +786,8 @@ FlexibleTheory = typing.Union[Theory, _fml.Formula]
 
 def is_well_formed_axiom(formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
     """Returns `True` if `formula` is a well-formed axiom, `False` otherwise.
+
+    Note: this function must be consistent with method :meth:`WellFormedAxiom.__new__`.
 
     :param formula: A formula.
     :param raise_error_if_false: Raises an exception instead of returning `False`.

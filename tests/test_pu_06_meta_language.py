@@ -317,7 +317,7 @@ class TestInferenceStep:
                                               inference_rule=inference_rule,
                                               statement=statement)
 
-        assert inference_step.statement.is_formula_equivalent(statement)
+        assert inference_step.claimed_statement.is_formula_equivalent(statement)
 
         with pytest.raises(pu.utl.PunctiliousError):
             wrong_inputs = pu.mtl.ExtensionTuple(
