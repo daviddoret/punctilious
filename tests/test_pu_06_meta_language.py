@@ -386,4 +386,16 @@ class TestAxiom:
         assert not axiom_1_typed.is_formula_equivalent(axiom_2_typed)
         assert not axiom_2_typed.is_formula_equivalent(axiom_1_typed)
 
+        with pytest.raises(TypeError):
+            pu.meta_language.WellFormedAxiom()
+
+        with pytest.raises(pu.utl.PunctiliousError):
+            pu.meta_language.WellFormedAxiom(None)
+
+        with pytest.raises(TypeError):
+            pu.meta_language.WellFormedAxiom(a(), b())
+
+        with pytest.raises(pu.utl.PunctiliousError):
+            pu.meta_language.ensure_well_formed_axiom(axiom_1_statement)
+
         pass
