@@ -93,17 +93,17 @@ class TestSubstitute:
         phi = pu.mtl.substitute_formulas(
             phi=a(b(c())),
             m=m1)
-        assert phi.is_formula_equivalent(other=a(b(z())))
+        assert phi.is_formula_equivalent(other_formula=a(b(z())))
 
         phi = pu.mtl.substitute_formulas(
             phi=a(b(c(), b(), c()), c(b())),
             m=m1)
-        assert phi.is_formula_equivalent(other=a(b(z(), y(), z()), c(y())))
+        assert phi.is_formula_equivalent(other_formula=a(b(z(), y(), z()), c(y())))
 
         phi = pu.mtl.substitute_formulas(
             phi=x(z(z(z(y()), z(x(y()))))),
             m=m1)
-        assert phi.is_formula_equivalent(other=x(z(z(z(y()), z(x(y()))))))
+        assert phi.is_formula_equivalent(other_formula=x(z(z(z(y()), z(x(y()))))))
 
         domain = pu.mtl.UniqueExtensionTuple(b(b(c())))
         codomain = pu.mtl.ExtensionTuple(x(y()))
@@ -113,7 +113,7 @@ class TestSubstitute:
         phi = pu.mtl.substitute_formulas(
             phi=a(b(c()), b(b(c())), b(b(b(c()))), b(b(b(b(c()))))),
             m=m2)
-        assert phi.is_formula_equivalent(other=a(b(c()), x(y()), b(x(y())), b(b(x(y())))))
+        assert phi.is_formula_equivalent(other_formula=a(b(c()), x(y()), b(x(y())), b(b(x(y())))))
 
     def test_2(self):
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
@@ -282,7 +282,7 @@ class TestNaturalInferenceRule:
         )
         conclusion_with_variable_assignments = inference_rule.apply_rule(inputs=arguments)
         assert conclusion_with_variable_assignments.is_formula_equivalent(
-            other=c(d(), f()))
+            other_formula=c(d(), f()))
 
 
 class TestInferenceStep:
@@ -349,3 +349,15 @@ class TestTheory:
                                inference_rules=pu.mtl.UniqueExtensionTuple(inference_rule),
                                inference_steps=pu.mtl.UniqueExtensionTuple())
         pass
+
+
+class TestAxiom:
+    a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+    b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+    c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+
+    axiom_1_typed = pu.meta_language.WellFormedAxiom(a(b(c()), c()))
+    axiom_1_untyped = pu.meta_language.axiom_connector(a(b(c()), c()))
+    assert axiom_1_typed.is_formula_equivalent(axiom_1_untyped)
+
+    pass

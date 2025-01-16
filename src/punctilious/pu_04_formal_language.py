@@ -49,7 +49,7 @@ class Formula(tuple):
     def __eq__(self, other):
         """Python equality is implemented as formula-equivalence."""
         other = ensure_formula(other)
-        return self.is_formula_equivalent(other=other)
+        return self.is_formula_equivalent(other_formula=other)
 
     def __init__(self, connector, arguments=None):
         """
@@ -153,19 +153,19 @@ class Formula(tuple):
         """A formula is binary if it has exactly two arguments."""
         return self.arity == 2
 
-    def is_formula_equivalent(self, other: Formula) -> bool:
-        """Returns `True` if this formula is formula-equivalent to the `other` formula."""
-        other = ensure_formula(o=other)
-        if not self.is_root_connector_equivalent(other=other):
+    def is_formula_equivalent(self, other_formula: Formula) -> bool:
+        """Returns `True` if this formula is formula-equivalent to `other_formula`, `False` otherwise"""
+        other_formula = ensure_formula(o=other_formula)
+        if not self.is_root_connector_equivalent(other=other_formula):
             return False
-        elif not self.arity == other.arity:
+        elif not self.arity == other_formula.arity:
             return False
         else:
             return all(this_argument.is_formula_equivalent(other_argument)
-                       for this_argument, other_argument in zip(self.arguments, other.arguments))
+                       for this_argument, other_argument in zip(self.arguments, other_formula.arguments))
 
     def is_root_connector_equivalent(self, other: Formula) -> bool:
-        """Returns `True` if this formula and the `other` formula share the same connector."""
+        """Returns `True` if this formula is root-connector-equivalent to `other_formula`, `False` otherwise."""
         other: Formula = ensure_formula(o=other)
         return self.connector.is_connector_equivalent_to(other.connector)
 
@@ -218,7 +218,7 @@ class Formula(tuple):
         """
         phi = ensure_formula(o=phi)
         for psi in self.iterate_tree(include_root=include_root):
-            if phi.is_formula_equivalent(other=psi):
+            if phi.is_formula_equivalent(other_formula=psi):
                 return True
         return False
 
@@ -717,7 +717,7 @@ def is_formula_equivalent(phi: Formula, psi: Formula) -> bool:
     """
     phi = ensure_formula(o=phi)
     psi = ensure_formula(o=psi)
-    return phi.is_formula_equivalent(other=psi)
+    return phi.is_formula_equivalent(other_formula=psi)
 
 
 def formula_has_unique_arguments(phi: Formula) -> bool:

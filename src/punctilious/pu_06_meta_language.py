@@ -105,7 +105,7 @@ class ExtensionTuple(_fml.Formula):
         """Returns `True` if this tuple is equal to the `other` tuple, `False` otherwise.
 
         This is equivalent to formula-equivalence."""
-        return self.is_formula_equivalent(other=other)
+        return self.is_formula_equivalent(other_formula=other)
 
     def iterate_elements(self) -> typing.Generator[_fml.Formula, None, None]:
         yield from self.iterate_top_level_arguments()
