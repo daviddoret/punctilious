@@ -359,7 +359,7 @@ class TestAxiom:
 
         axiom_1_statement = a(b(c()), c())
         assert not pu.meta_language.is_well_formed_axiom(axiom_1_statement)
-        assert not pu.meta_language.axiom_connector.is_well_formed(axiom_1_statement)
+        assert not pu.meta_language.axiom_connector.check_formula_well_formedness(axiom_1_statement)
         axiom_1_typed = pu.meta_language.WellFormedAxiom(axiom_1_statement)
         axiom_1_untyped = pu.meta_language.axiom_connector(axiom_1_statement)
         assert axiom_1_typed.is_formula_equivalent(axiom_1_untyped)
@@ -372,7 +372,7 @@ class TestAxiom:
 
         axiom_2_statement = a()
         assert not pu.meta_language.is_well_formed_axiom(axiom_2_statement)
-        assert not pu.meta_language.axiom_connector.is_well_formed(axiom_2_statement)
+        assert not pu.meta_language.axiom_connector.check_formula_well_formedness(axiom_2_statement)
         axiom_2_typed = pu.meta_language.WellFormedAxiom(axiom_2_statement)
         axiom_2_untyped = pu.meta_language.axiom_connector(axiom_2_statement)
         assert axiom_2_typed.is_formula_equivalent(axiom_2_typed)

@@ -9,7 +9,66 @@ import collections.abc
 # internal modules
 import punctilious.pu_01_utilities as _utl
 import punctilious.pu_02_unique_identifiers as _uid
+import punctilious.pu_03_representation as _rpr
 import punctilious.pu_04_formal_language as _fml
+
+
+class FormSignalConnector(_fml.Connector):
+    """A `FormSignalConnector` is a well-known `Connector` that is dedicated to
+    signalling a formula of a defined form in a meta-language.
+    """
+
+    def __init__(self, uid: _uid.FlexibleUniqueIdentifier,
+                 well_formedness_validator_function: typing.Callable,
+                 well_formed_type_ensurer_function: typing.Callable,
+                 well_formed_type: type,
+                 syntactic_rules=_fml.SyntacticRules(),
+                 connector_representation: _rpr.AbstractRepresentation | None = None,
+                 formula_representation: _rpr.AbstractRepresentation | None = None
+                 ):
+        self._well_formedness_validator_function = well_formedness_validator_function
+        self._well_formed_type_ensurer_function = well_formed_type_ensurer_function
+        self._well_formed_type = well_formed_type
+        super().__init__(uid=uid,
+                         syntactic_rules=syntactic_rules,
+                         connector_representation=connector_representation,
+                         formula_representation=formula_representation)
+
+    def check_formula_well_formedness(self, formula: _fml.Formula) -> bool:
+        """Returns `True` if `formula` is well-formed
+        for the formula structure expected by this connector."""
+        return self._well_formedness_validator_function(formula)
+
+    def ensure_formula_well_formed_type(self, formula: _fml.Formula) -> _fml.Formula:
+        """Given a `formula`
+        presumably well-formed for the formula structure expected by this connector,
+        returns a formula object of the `well_formed_type`."""
+        return self._well_formed_type_ensurer_function(formula)
+
+    @property
+    def well_formed_python_type(self) -> type:
+        """The `well_formed_python_type` of the connector is a Python type that enforces well-formedness."""
+        return self._well_formed_type
+
+
+class WellFormedFormula(abc.ABC):
+    """A `WellFormedFormula` is a formula that is well-formed
+    according to some definition.
+    """
+
+    def __init__(self, connector, arguments=None):
+        """
+
+        :param connector: A connector.
+        :param arguments: A (possibly empty) collection of arguments.
+        """
+        super().__init__()
+
+    def __new__(cls, connector, arguments=None):
+        connector: _fml.Connector = _fml.ensure_connector(connector)
+        arguments: _fml.FormulaArguments = _fml.ensure_formula_arguments(arguments)
+        phi: tuple[_fml.Connector, _fml.FormulaArguments] = (connector, arguments,)
+        return super().__new__(cls, phi)
 
 
 class ITheoryComponent(abc.ABC):
@@ -307,6 +366,34 @@ def ensure_well_formed_axiom(formula: _fml.Formula):
     elif isinstance(formula, _fml.Formula) and formula.connector == axiom_connector:
         # The class initializer ensures well-formedness.
         return WellFormedAxiom(*formula.arguments)
+    else:
+        raise _utl.PunctiliousError(title='Non-supported type',
+                                    details=f'The Python type of `formula` is not supported.',
+                                    formula=formula)
+
+
+def ensure_well_formed_formula(formula: _fml.Formula) -> WellFormedFormula:
+    """Ensures that `formula` is a well-formed formula, raises an exception otherwise.
+
+    A well-formed formula is a formula that is well-formed according to some definition.
+
+    Well-formed formulas are implemented with Python IWellFormedFormula abstract-class.
+
+    Canonically well-formed formulas can be automatically identified if they are composed with a
+    dedicated WellFormingConnector connector that signals their presence.
+
+    :param formula: A formula.
+    :return: A canonically well-formed formula.
+    """
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedFormula):
+        # The type ensures well-formedness.
+        return formula
+    elif (isinstance(formula, _fml.Formula) and
+          isinstance(formula.connector, _fml.FormSignalConnector) and
+          formula.connector.is_well_formed(formula)):
+        # A
+        return formula.connector.ensure_well_formed_type(formula)
     else:
         raise _utl.PunctiliousError(title='Non-supported type',
                                     details=f'The Python type of `formula` is not supported.',
@@ -848,7 +935,7 @@ theory_connector = _fml.Connector(
 """The well-known connector of the `Theory` object.
 """
 
-axiom_connector = _fml.WellFormingConnector(
+axiom_connector = FormSignalConnector(
     uid=_uid.UniqueIdentifier(slug='axiom', uuid='0ead1815-8a20-4b02-bd06-1b5ae0295c92'),
     well_formedness_validator_function=is_well_formed_axiom,
     well_formed_type_ensurer_function=ensure_well_formed_axiom,
