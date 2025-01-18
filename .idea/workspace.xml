@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sandbox/sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/sandbox/sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -295,7 +292,7 @@
     "Python tests.pytest for test_pu_06_foundational_objects.TestSetDefinedByExtension.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestSubstitute.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_foundational_objects.TestUnionSets1.test_1.executor": "Run",
-    "Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1.executor": "Run",
+    "Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1.executor": "Debug",
     "Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1.executor": "Debug",
     "Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
@@ -502,7 +499,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -855,9 +852,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python.sandbox" />
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1" />
         <item itemvalue="Python tests.pytest in test_pu_06_meta_language.py" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
       </list>
@@ -878,14 +875,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01285" summary="all tests ok. interpretation + meta-language">
-      <option name="closed" value="true" />
-      <created>1735762884174</created>
-      <option name="number" value="01285" />
-      <option name="presentableId" value="LOCAL-01285" />
-      <option name="project" value="LOCAL" />
-      <updated>1735762884174</updated>
     </task>
     <task id="LOCAL-01286" summary="all tests ok. interpretation + meta-language">
       <option name="closed" value="true" />
@@ -1271,7 +1260,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737145566370</updated>
     </task>
-    <option name="localTasksCounter" value="1334" />
+    <task id="LOCAL-01334" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1737187064591</created>
+      <option name="number" value="01334" />
+      <option name="presentableId" value="LOCAL-01334" />
+      <option name="project" value="LOCAL" />
+      <updated>1737187064591</updated>
+    </task>
+    <option name="localTasksCounter" value="1335" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1426,6 +1423,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious/pu_11_bundling.py</url>
           <line>416</line>
           <option name="timeStamp" value="380" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_pu_06_meta_language.py</url>
+          <line>364</line>
+          <option name="timeStamp" value="432" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

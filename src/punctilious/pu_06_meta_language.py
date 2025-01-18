@@ -70,7 +70,7 @@ class WellFormedFormula(_fml.Formula):
 
     @property
     def connector(self) -> WellFormedFormulaConnector:
-        return typing.cast(WellFormedFormulaConnector, self.connector)
+        return typing.cast(WellFormedFormulaConnector, super().connector)
 
     def ensure_formula_well_formed_type(self, formula: _fml.Formula) -> _fml.Formula:
         """Given a `formula`
