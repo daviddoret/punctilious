@@ -1,20 +1,9 @@
-# import punctilious as pu
+import abc
+import typing
 
-from abc import ABC
-
-
-class ITopLevel(ABC):  # Abstract base class
-    pass
-
-
-class ISecondLevel(ITopLevel, ABC):  # Also an abstract base class
-    pass
-
-
-class HelloWorld(ITopLevel):  # Concrete class
-    pass
-
-
-x = HelloWorld()
-
-pass
+x = (1, 2, 3,)
+print(type(x).__name__)
+print(id(x))
+y = tuple(x)
+print(type(y).__name__)
+print(id(y))
