@@ -60,7 +60,7 @@ class TestMap1:
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.mtl.UniqueExtensionTuple(a(), b(), c())
-        codomain = pu.mtl.ExtensionTuple(x(), y(), z())
+        codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
         m1 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
         assert m1.get_image(x=a()).is_formula_equivalent(x())
@@ -70,7 +70,7 @@ class TestMap1:
             m1.get_image(x=x())
 
         domain = pu.mtl.UniqueExtensionTuple(c(), b(), a())
-        codomain = pu.mtl.ExtensionTuple(z(), y(), x())
+        codomain = pu.mtl.WellFormedExtensionTuple(z(), y(), x())
         m2 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
 
@@ -86,7 +86,7 @@ class TestSubstitute:
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.mtl.UniqueExtensionTuple(a(), b(), c())
-        codomain = pu.mtl.ExtensionTuple(x(), y(), z())
+        codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
         m1 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
 
@@ -106,7 +106,7 @@ class TestSubstitute:
         assert phi.is_formula_equivalent(other_formula=x(z(z(z(y()), z(x(y()))))))
 
         domain = pu.mtl.UniqueExtensionTuple(b(b(c())))
-        codomain = pu.mtl.ExtensionTuple(x(y()))
+        codomain = pu.mtl.WellFormedExtensionTuple(x(y()))
         m2 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
 
@@ -126,7 +126,7 @@ class TestSubstitute:
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.mtl.UniqueExtensionTuple(a(), b(), c())
-        codomain = pu.mtl.ExtensionTuple(x(), y(), z())
+        codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
         m1 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
         # no match
@@ -150,7 +150,7 @@ class TestSubstitute:
         assert output.is_formula_equivalent(a(d(y(), e()), e(x()), y(), x(), f(), c(z())))
 
         domain = pu.mtl.UniqueExtensionTuple(a(a(b())), b(a(), b(b(b())), c()), c())
-        codomain = pu.mtl.ExtensionTuple(x(), y(a(), y(), z(b())), z(x(y(a()))))
+        codomain = pu.mtl.WellFormedExtensionTuple(x(), y(a(), y(), z(b())), z(x(y(a()))))
         m2 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
 
@@ -173,7 +173,7 @@ class TestFormulaEquivalenceWithVariables:
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         variables = pu.mtl.UniqueExtensionTuple(x(), y(), z())
-        values = pu.mtl.ExtensionTuple(d(), e(), f())
+        values = pu.mtl.WellFormedExtensionTuple(d(), e(), f())
         m1 = pu.mtl.ExtensionMap(domain=variables,
                                  codomain=values)
         # no match
@@ -237,7 +237,7 @@ class TestFormulaEquivalenceWithVariables:
         assert m3.get_image(z()) == f()
 
         variables = pu.mtl.UniqueExtensionTuple(x(x(y())), y(x(), y(y(y())), z()), z())
-        values = pu.mtl.ExtensionTuple(d(), e(x(), e(), f(y())), f(d(e(x()))))
+        values = pu.mtl.WellFormedExtensionTuple(d(), e(x(), e(), f(y())), f(d(e(x()))))
         m2 = pu.mtl.ExtensionMap(domain=variables,
                                  codomain=values)
 
@@ -276,7 +276,7 @@ class TestNaturalInferenceRule:
             premises=premises,
             conclusion=conclusion
         )
-        arguments = pu.mtl.ExtensionTuple(
+        arguments = pu.mtl.WellFormedExtensionTuple(
             a(d(), e()),
             b(e(), f())
         )
@@ -307,7 +307,7 @@ class TestTheorem:
             premises=premises,
             conclusion=conclusion
         )
-        inputs = pu.mtl.ExtensionTuple(
+        inputs = pu.mtl.WellFormedExtensionTuple(
             a(d(), e()),
             b(e(), f())
         )
@@ -320,7 +320,7 @@ class TestTheorem:
         assert inference_step.valid_statement.is_formula_equivalent(statement)
 
         with pytest.raises(pu.utl.PunctiliousError):
-            wrong_inputs = pu.mtl.ExtensionTuple(
+            wrong_inputs = pu.mtl.WellFormedExtensionTuple(
                 a(d(), e()),
                 c(e(), f()))
             pu.mtl.WellFormedTheorem(inputs=wrong_inputs,

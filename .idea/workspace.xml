@@ -424,7 +424,7 @@
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious",
     "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -501,7 +501,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -854,8 +854,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python.sandbox" />
         <item itemvalue="Python tests.pytest in test_pu_06_meta_language.py" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
@@ -877,14 +877,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01287" summary="all tests ok. interpretation + meta-language">
-      <option name="closed" value="true" />
-      <created>1736028264087</created>
-      <option name="number" value="01287" />
-      <option name="presentableId" value="LOCAL-01287" />
-      <option name="project" value="LOCAL" />
-      <updated>1736028264087</updated>
     </task>
     <task id="LOCAL-01288" summary="set_1">
       <option name="closed" value="true" />
@@ -1270,7 +1262,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737187366741</updated>
     </task>
-    <option name="localTasksCounter" value="1336" />
+    <task id="LOCAL-01336" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1737193038686</created>
+      <option name="number" value="01336" />
+      <option name="presentableId" value="LOCAL-01336" />
+      <option name="project" value="LOCAL" />
+      <updated>1737193038686</updated>
+    </task>
+    <option name="localTasksCounter" value="1337" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

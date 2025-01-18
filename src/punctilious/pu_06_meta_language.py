@@ -34,10 +34,14 @@ class WellFormedFormulaConnector(_fml.Connector):
                          connector_representation=connector_representation,
                          formula_representation=formula_representation)
 
-    def validate_formula_well_formedness(self, formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
+    def validate_formula_well_formedness(self,
+                                         formula: _fml.Formula, raise_error_if_false: bool = False,
+                                         return_typed_arguments: bool = False
+                                         ) -> bool:
         """Returns `True` if `formula` is well-formed
         for the formula structure expected by this connector."""
-        return self._validation_function(formula, raise_error_if_false=raise_error_if_false)
+        return self._validation_function(formula, raise_error_if_false=raise_error_if_false,
+                                         return_typed_arguments=return_typed_arguments)
 
     def ensure_well_formed_formula(self, formula: _fml.Formula) -> WellFormedFormula:
         """Given a presumably well-formed `formula`,
@@ -69,7 +73,9 @@ class WellFormedFormula(_fml.Formula):
         # Declares a raw formula to check its well-formedness.
         raw_formula: _fml.Formula = _fml.Formula(connector=connector, arguments=arguments)
         # Validates the well-formedness of the raw-formula.
-        connector.validate_formula_well_formedness(formula=raw_formula, raise_error_if_false=True)
+        arguments: _fml.FormulaArguments
+        _, arguments = connector.validate_formula_well_formedness(
+            formula=raw_formula, raise_error_if_false=True, return_typed_arguments=True)
         return super().__new__(cls, connector=connector, arguments=arguments)
 
     @property
@@ -82,10 +88,13 @@ class WellFormedFormula(_fml.Formula):
         returns a formula object of the `well_formed_type`."""
         return self.ensure_formula_well_formed_type(formula)
 
-    def validate_formula_well_formedness(self, formula: _fml.Formula) -> bool:
+    def validate_formula_well_formedness(self, formula: _fml.Formula,
+                                         raise_error_if_false: bool = False,
+                                         return_typed_arguments: bool = False) -> bool:
         """Returns `True` if `formula` is well-formed
         for the formula structure expected by this connector."""
-        return self.connector.validate_formula_well_formedness(formula)
+        return self.connector.validate_formula_well_formedness(
+            formula, raise_error_if_false=raise_error_if_false, return_typed_arguments=return_typed_arguments)
 
     @property
     def well_formed_formula_python_type(self) -> type:
@@ -190,7 +199,7 @@ class WellFormedAxiom(WellFormedAssertion):
         return self.arguments[WellFormedAxiom._AXIOM_VALID_STATEMENT_INDEX]
 
 
-class ExtensionTuple(_fml.Formula):
+class WellFormedExtensionTuple(_fml.Formula):
     """A `ExtensionTuple` is a model of a mathematical tuple with the following constraints:
          - it is finite,
          - it is computable,
@@ -226,7 +235,7 @@ class ExtensionTuple(_fml.Formula):
         """Returns `True` if all the elements of this ExtensionTuple are unique, `False` otherwise."""
         return self.has_unique_arguments
 
-    def is_tuple_equivalent_to(self, other: ExtensionTuple) -> bool:
+    def is_tuple_equivalent_to(self, other: WellFormedExtensionTuple) -> bool:
         """Returns `True` if this tuple is equal to the `other` tuple, `False` otherwise.
 
         This is equivalent to formula-equivalence."""
@@ -323,21 +332,21 @@ class UniqueExtensionTuple(_fml.Formula):
     def to_python_set(self) -> set[_fml.Formula]:
         return set(self.elements)
 
-    def to_extension_tuple(self) -> ExtensionTuple:
+    def to_extension_tuple(self) -> WellFormedExtensionTuple:
         """Returns an ExtensionTuple with the same elements, preserving order."""
-        return ExtensionTuple(*self.elements)
+        return WellFormedExtensionTuple(*self.elements)
 
 
-def ensure_extension_tuple(o: FlexibleExtensionTuple) -> ExtensionTuple:
+def ensure_well_formed_extension_tuple(o: FlexibleExtensionTuple) -> WellFormedExtensionTuple:
     """Ensures that the input is an extension-tuple, and returns an instance of ExtensionTuple.
 
     :param o:
     :return:
     """
-    if isinstance(o, ExtensionTuple):
+    if isinstance(o, WellFormedExtensionTuple):
         return o
     if isinstance(o, _fml.Formula) and o.connector == extension_tuple_connector:
-        return ExtensionTuple(*o.arguments)
+        return WellFormedExtensionTuple(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
 
 
@@ -452,7 +461,7 @@ def ensure_well_formed_axiom(formula: _fml.Formula):
         # The type ensures well-formedness.
         return formula
     elif isinstance(formula, _fml.Formula) and formula.connector == axiom_connector:
-        # The class initializer ensures well-formedness.
+        # The WellFormedFormula parent class initializer ensures well-formedness.
         return WellFormedAxiom(*formula.arguments)
     else:
         raise _utl.PunctiliousError(title='Ill-formed axiom',
@@ -471,11 +480,30 @@ def ensure_well_formed_theorem(formula: _fml.Formula):
         # The type ensures well-formedness.
         return formula
     elif isinstance(formula, _fml.Formula) and formula.connector == theorem_connector:
-        # The class initializer ensures well-formedness.
+        # The WellFormedFormula parent class initializer ensures well-formedness.
         return WellFormedTheorem(*formula.arguments)
     else:
         raise _utl.PunctiliousError(title='Ill-formed theorem',
                                     details=f'`formula` is not a well-formed theorem.',
+                                    formula=formula)
+
+
+def ensure_well_formed_inference_rule(formula: _fml.Formula):
+    """Ensures that `formula` is a well-formed inference_rule, raises an exception otherwise.
+
+    :param formula: A formula.
+    :return: A well-formed inference rule, typed as WellFormedInferenceRule.
+    """
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedInferenceRule):
+        # The type ensures well-formedness.
+        return formula
+    elif isinstance(formula, _fml.Formula) and formula.connector == inference_rule_connector:
+        # The WellFormedFormula parent class initializer ensures well-formedness.
+        return WellFormedInferenceRule(*formula.arguments)
+    else:
+        raise _utl.PunctiliousError(title='Ill-formed inference rule',
+                                    details=f'`formula` is not a well-formed inference_rule.',
                                     formula=formula)
 
 
@@ -539,19 +567,19 @@ class ExtensionMap(_fml.Formula):
     CODOMAIN_INDEX: int = 1  # The index-position of the `codomain` element in the `arguments` tuple.
     _FORMULA_FIXED_ARITY: int = 2  # A syntactic-rule.
 
-    def __init__(self, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
+    def __init__(self, domain: UniqueExtensionTuple, codomain: WellFormedExtensionTuple):
         if domain.arity != codomain.arity:
             raise _utl.PunctiliousError(f'The arity of the `domain` is not equal to the arity of the `codomain`.',
                                         domain_arity=domain.arity, codomain_arity=codomain.arity,
                                         domain=domain, codomain=codomain)
         super().__init__(connector=extension_map_connector, arguments=(domain, codomain,))
 
-    def __new__(cls, domain: UniqueExtensionTuple, codomain: ExtensionTuple):
+    def __new__(cls, domain: UniqueExtensionTuple, codomain: WellFormedExtensionTuple):
         return super().__new__(cls, connector=extension_map_connector, arguments=(domain, codomain,))
 
     @property
-    def codomain(self) -> ExtensionTuple:
-        return ensure_extension_tuple(self.arguments[self.__class__.CODOMAIN_INDEX])
+    def codomain(self) -> WellFormedExtensionTuple:
+        return ensure_well_formed_extension_tuple(self.arguments[self.__class__.CODOMAIN_INDEX])
 
     @property
     def domain(self) -> UniqueExtensionTuple:
@@ -575,7 +603,7 @@ class ExtensionMap(_fml.Formula):
         if not self.is_invertible:
             raise ValueError(f'This ExtensionMap is not invertible: {self}')
         new_domain = UniqueExtensionTuple(*self.codomain.elements)
-        new_codomain = ExtensionTuple(*self.domain.elements)
+        new_codomain = WellFormedExtensionTuple(*self.domain.elements)
         return ExtensionMap(domain=new_domain, codomain=new_codomain)
 
     def is_invertible(self) -> bool:
@@ -648,7 +676,7 @@ def is_formula_equivalent_with_variables(formula_without_variables: _fml.Formula
     values = tuple(value for value in all_values if value is not None)
     keys = tuple(all_keys[i] for i, value in enumerate(all_values) if value is not None)
     domain = UniqueExtensionTuple(*keys)
-    codomain = ExtensionTuple(*values)
+    codomain = WellFormedExtensionTuple(*values)
     m2 = ExtensionMap(domain=domain, codomain=codomain)
 
     return check, m2
@@ -724,9 +752,9 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
                                arguments=(variables, premises,
                                           conclusion,))
 
-    def _check_arguments_validity(self, inputs: ExtensionTuple, raise_error_if_false: bool = False) -> [bool,
-                                                                                                        ExtensionTuple | None,
-                                                                                                        ExtensionMap | None]:
+    def _check_arguments_validity(self, inputs: WellFormedExtensionTuple, raise_error_if_false: bool = False) -> [bool,
+                                                                                                                  WellFormedExtensionTuple | None,
+                                                                                                                  ExtensionMap | None]:
         """Internal function. Factors validation code between `apply_rule` and `check_arguments_validity`."""
         if inputs.arity != self.premises.arity:
             if raise_error_if_false:
@@ -741,7 +769,7 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
         # the arguments are passed as an ExtensionTuple.
         # in order to check formula-equivalence-with-variables between
         # arguments and premises, we must convert premises to ExtensionTuple.
-        premises_as_extension_tuple: ExtensionTuple = self.premises.to_extension_tuple()
+        premises_as_extension_tuple: WellFormedExtensionTuple = self.premises.to_extension_tuple()
 
         # the arguments must be formula-equivalent-with variables to the premises.
         # simultaneously, infer the variable values.
@@ -804,7 +832,7 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
 
         return conclusion_with_variable_assignments
 
-    def check_arguments_validity(self, arguments: ExtensionTuple) -> bool:
+    def check_arguments_validity(self, arguments: WellFormedExtensionTuple) -> bool:
         """Returns `True` if `arguments` are valid for this InferenceRule."""
         check, _, _ = self._check_arguments_validity(inputs=arguments)
         return check
@@ -812,7 +840,7 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
 
 class WellFormedTheorem(WellFormedAssertion):
     _THEOREM_STATEMENT_INDEX: int = 0
-    _THEOREM_INPUTS: int = 1
+    _THEOREM_INPUTS_INDEX: int = 1
     _THEOREM_INFERENCE_RULE_INDEX: int = 2
     _THEOREM_FIXED_ARITY: int = 3
 
@@ -834,8 +862,8 @@ class WellFormedTheorem(WellFormedAssertion):
         return super().__new__(cls, connector=theorem_connector, arguments=(valid_statement, inputs, inference_rule,))
 
     @property
-    def inputs(self) -> ExtensionTuple:
-        return ensure_extension_tuple(self.arguments[WellFormedTheorem._THEOREM_INPUTS])
+    def inputs(self) -> WellFormedExtensionTuple:
+        return ensure_well_formed_extension_tuple(self.arguments[WellFormedTheorem._THEOREM_INPUTS_INDEX])
 
     @property
     def inference_rule(self) -> WellFormedNaturalInferenceRule:
@@ -905,25 +933,35 @@ def is_valid_statement(statement: _fml.Formula, theory_components: typing.Iterab
 FlexibleAxiom = typing.Union[WellFormedAxiom, _fml.Formula]
 FlexibleStatement = typing.Union[WellFormedAssertion, _fml.Formula]
 FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]
-FlexibleExtensionTuple = typing.Union[ExtensionTuple, _fml.Formula, collections.abc.Iterable]
-FlexibleNaturalInferenceRule = typing.Union[ExtensionTuple, _fml.Formula]
+FlexibleExtensionTuple = typing.Union[WellFormedExtensionTuple, _fml.Formula, collections.abc.Iterable]
+FlexibleNaturalInferenceRule = typing.Union[WellFormedExtensionTuple, _fml.Formula]
 FlexibleTheorem = typing.Union[WellFormedTheorem, _fml.Formula]
 FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, _fml.Formula, collections.abc.Iterable]
 FlexibleTheory = typing.Union[Theory, _fml.Formula]
 FlexibleTheoryComponent = typing.Union[_fml.Formula]
 
 
-def is_well_formed_axiom(formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
+def is_well_formed_axiom(
+        formula: _fml.Formula,
+        raise_error_if_false: bool = False,
+        return_typed_arguments: bool = False) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
     """Returns `True` if `formula` is a well-formed axiom, `False` otherwise.
 
-    Note: this function must be consistent with method :meth:`WellFormedAxiom.__new__`.
-
     :param formula: A formula.
-    :param raise_error_if_false: Raises an exception instead of returning `False`.
+    :param raise_error_if_false: If `True`, raises an exception instead of returning `False`.
+    :param return_typed_arguments: If `True`, returns a tuple (bool, FormulaArguments) where arguments are
+        typed as WellFormedFormulas if applicable.
     :return:
     """
     global axiom_connector
     formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedAxiom):
+        # The type assure well-formedness and proper Python typing by design.
+        if return_typed_arguments:
+            return True, formula.arguments
+        else:
+            return True
+    # For a raw formula, well-formedness and proper Python typing must be checked.
     if formula.connector != axiom_connector:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
@@ -933,7 +971,10 @@ def is_well_formed_axiom(formula: _fml.Formula, raise_error_if_false: bool = Fal
                 formula=formula,
                 axiom_connector=axiom_connector
             )
-        return False
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
     if formula.arity != WellFormedAxiom._AXIOM_FIXED_ARITY:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
@@ -941,42 +982,76 @@ def is_well_formed_axiom(formula: _fml.Formula, raise_error_if_false: bool = Fal
                 details=f'`formula` is not a well-formed axiom.'
                         f'Its arity is not equal `fixed_arity`.',
                 formula=formula,
-                fixed_arity=WellFormedAxiom._AXIOM_FIXED_ARITY
+                fixed_arity=WellFormedAxiom._AXIOM_VFIXED_ARITY
             )
-        return False
-    return True
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
+    valid_statement: _fml.Formula = formula[WellFormedAxiom._AXIOM_VALID_STATEMENT_INDEX]
+    if return_typed_arguments:
+        return True, _fml.FormulaArguments(valid_statement)
+    else:
+        return True
 
 
-def is_well_formed_theorem(formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
+def is_well_formed_theorem(
+        formula: _fml.Formula,
+        raise_error_if_false: bool = False,
+        return_typed_arguments: bool = False
+) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
     """Returns `True` if `formula` is a well-formed theorem, `False` otherwise.
 
     :param formula: A formula.
-    :param raise_error_if_false: Raises an exception instead of returning `False`.
+    :param raise_error_if_false: If `True`, raises an exception instead of returning `False`.
+    :param return_typed_arguments: If `True`, returns a tuple (bool, FormulaArguments|None)
+        where arguments are properly typed as WellFormedFormulas as applicable.
     :return:
     """
     global theorem_connector
     formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedTheorem):
+        # The type assure well-formedness and proper Python typing by design.
+        if return_typed_arguments:
+            return True, formula.arguments
+        else:
+            return True
+    # For a raw formula, well-formedness and proper Python typing must be checked.
     if formula.connector != theorem_connector:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
                 title='Ill-formed theorem',
                 details='`formula` is not a well-formed theorem.'
-                        'Its root connector is not the well-known :obj:`theorem_connector`.',
+                        ' Its root connector is not the well-known :obj:`theorem_connector`.',
                 formula=formula,
                 axiom_connector=axiom_connector
             )
-        return False
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
     if formula.arity != WellFormedTheorem._THEOREM_FIXED_ARITY:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
                 title='Ill-formed theorem',
-                details=f'`formula` is not a well-formed axiom.'
-                        f'Its arity is not equal `fixed_arity`.',
+                details='`formula` is not a well-formed theorem.'
+                        ' Its arity is not equal `fixed_arity`.',
                 formula=formula,
                 fixed_arity=WellFormedTheorem._AXIOM_FIXED_ARITY
             )
-        return False
-    return True
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
+    statement: _fml.Formula = formula[WellFormedTheorem._THEOREM_STATEMENT_INDEX]
+    inputs: WellFormedExtensionTuple = ensure_well_formed_extension_tuple(
+        formula[WellFormedTheorem._THEOREM_INPUTS_INDEX], raise_error_if_false=True)
+    inference_rule: WellFormedInferenceRule = ensure_well_formed_inference_rule(
+        formula[WellFormedTheorem._THEOREM_INFERENCE_RULE_INDEX], raise_error_if_false=True)
+    if return_typed_arguments:
+        return True, _fml.FormulaArguments(statement, inputs, inference_rule)
+    else:
+        return True
 
 
 def is_well_formed_natural_inference_rule(formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
