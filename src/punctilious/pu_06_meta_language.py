@@ -385,19 +385,23 @@ def ensure_extension_map(o: FlexibleExtensionTuple) -> ExtensionMap:
     raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
 
 
-def ensure_well_formed_natural_inference_rule(o: FlexibleNaturalInferenceRule) -> WellFormedNaturalInferenceRule:
-    """Ensures that the input is a well-formed natural-inference-rule, and returns an instance of NaturalInferenceRule.
+def ensure_well_formed_natural_inference_rule(formula: _fml.Formula) -> WellFormedNaturalInferenceRule:
+    """Ensures that `formula` is a well-formed natural inference rule, raises an exception otherwise.
 
-    :param o:
-    :return:
+    :param formula: A formula.
+    :return: A well-formed natural inference rule, typed as WellFormedNaturalInferenceRule.
     """
-    if isinstance(o, WellFormedNaturalInferenceRule):
-        return o
-    if isinstance(o, _fml.Formula) and o.connector == natural_inference_rule_connector:
-        return WellFormedNaturalInferenceRule(*o.arguments)
-    raise _utl.PunctiliousError(title='Inconsistent natural-inference-rule.',
-                                details=f'`o` cannot be interpreted as a natural-inference-rule.',
-                                o=o)
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedNaturalInferenceRule):
+        # The type ensures well-formedness.
+        return formula
+    elif isinstance(formula, _fml.Formula) and formula.connector == axiom_connector:
+        # The WellFormedFormula parent class initializer ensures well-formedness.
+        return WellFormedNaturalInferenceRule(*formula.arguments)
+    else:
+        raise _utl.PunctiliousError(title='Ill-formed natural inference rule',
+                                    details=f'`formula` is not a well-formed natural inference rule.',
+                                    formula=formula)
 
 
 def ensure_well_formed_natural_inference_rules(o: typing.Iterable[FlexibleNaturalInferenceRule]) -> typing.Generator[
@@ -450,11 +454,11 @@ def ensure_inference_step(o: FlexibleTheorem):
     raise _utl.PunctiliousError(f'`o` is not an inference-step.', o=o)
 
 
-def ensure_well_formed_axiom(formula: _fml.Formula):
+def ensure_well_formed_axiom(formula: _fml.Formula) -> WellFormedAxiom:
     """Ensures that `formula` is a well-formed axiom, raises an exception otherwise.
 
     :param formula: A formula.
-    :return: An axiom, typed as WellFormedAxiom.
+    :return: A well-formed axiom, typed as WellFormedAxiom.
     """
     formula = _fml.ensure_formula(formula)
     if isinstance(formula, WellFormedAxiom):

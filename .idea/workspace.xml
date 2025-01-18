@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -292,6 +295,7 @@
     "Python tests.pytest for test_pu_06_foundational_objects.TestUnionSets1.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_meta_language.TestInferenceStep.test_1.executor": "Debug",
+    "Python tests.pytest for test_pu_06_meta_language.TestNaturalInferenceRule.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
@@ -497,7 +501,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestNaturalInferenceRule.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -760,7 +764,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pu_06_meta_language.TestTheory.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_pu_06_meta_language.TestNaturalInferenceRule.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -773,7 +777,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pu_06_meta_language.TestTheory.test_1&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_meta_language.TestNaturalInferenceRule.test_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -841,7 +845,7 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1" />
-      <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestNaturalInferenceRule.test_1" />
       <item itemvalue="Python tests.pytest in test_pu_06_meta_language.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -850,11 +854,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestNaturalInferenceRule.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestAxiom.test_1" />
         <item itemvalue="Python.sandbox" />
         <item itemvalue="Python tests.pytest in test_pu_06_meta_language.py" />
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
       </list>
     </recent_temporary>
   </component>
@@ -873,14 +877,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01289" summary="set_1">
-      <option name="closed" value="true" />
-      <created>1736106381610</created>
-      <option name="number" value="01289" />
-      <option name="presentableId" value="LOCAL-01289" />
-      <option name="project" value="LOCAL" />
-      <updated>1736106381610</updated>
     </task>
     <task id="LOCAL-01290" summary="map_1">
       <option name="closed" value="true" />
@@ -1266,7 +1262,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737227875248</updated>
     </task>
-    <option name="localTasksCounter" value="1338" />
+    <task id="LOCAL-01338" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1737228209479</created>
+      <option name="number" value="01338" />
+      <option name="presentableId" value="LOCAL-01338" />
+      <option name="project" value="LOCAL" />
+      <updated>1737228209480</updated>
+    </task>
+    <option name="localTasksCounter" value="1339" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
