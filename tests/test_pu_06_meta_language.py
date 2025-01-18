@@ -271,7 +271,7 @@ class TestNaturalInferenceRule:
             b(y(), z())
         )
         conclusion = c(x(), z())
-        inference_rule = pu.mtl.NaturalInferenceRule(
+        inference_rule = pu.mtl.WellFormedNaturalInferenceRule(
             variables=variables,
             premises=premises,
             conclusion=conclusion
@@ -285,7 +285,7 @@ class TestNaturalInferenceRule:
             other_formula=c(d(), f()))
 
 
-class TestInferenceStep:
+class TestTheorem:
     def test_1(self):
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
@@ -302,7 +302,7 @@ class TestInferenceStep:
             b(y(), z())
         )
         conclusion = c(x(), z())
-        inference_rule = pu.mtl.NaturalInferenceRule(
+        inference_rule = pu.mtl.WellFormedNaturalInferenceRule(
             variables=variables,
             premises=premises,
             conclusion=conclusion
@@ -313,9 +313,9 @@ class TestInferenceStep:
         )
         statement = inference_rule.apply_rule(inputs=inputs)
 
-        inference_step = pu.mtl.Theorem(inputs=inputs,
-                                        inference_rule=inference_rule,
-                                        statement=statement)
+        inference_step = pu.mtl.WellFormedTheorem(inputs=inputs,
+                                                  inference_rule=inference_rule,
+                                                  valid_statement=statement)
 
         assert inference_step.valid_statement.is_formula_equivalent(statement)
 
@@ -323,9 +323,9 @@ class TestInferenceStep:
             wrong_inputs = pu.mtl.ExtensionTuple(
                 a(d(), e()),
                 c(e(), f()))
-            pu.mtl.Theorem(inputs=wrong_inputs,
-                           inference_rule=inference_rule,
-                           statement=statement)
+            pu.mtl.WellFormedTheorem(inputs=wrong_inputs,
+                                     inference_rule=inference_rule,
+                                     valid_statement=statement)
 
 
 class TestTheory:
@@ -340,7 +340,7 @@ class TestTheory:
         variables = pu.mtl.UniqueExtensionTuple(x())
         premises = pu.mtl.UniqueExtensionTuple(a(x()))
         conclusion = a(b(x()))
-        inference_rule = pu.mtl.NaturalInferenceRule(
+        inference_rule = pu.mtl.WellFormedNaturalInferenceRule(
             variables=variables,
             premises=premises,
             conclusion=conclusion

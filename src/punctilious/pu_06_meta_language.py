@@ -34,10 +34,10 @@ class WellFormedFormulaConnector(_fml.Connector):
                          connector_representation=connector_representation,
                          formula_representation=formula_representation)
 
-    def validate_formula_well_formedness(self, formula: _fml.Formula) -> bool:
+    def validate_formula_well_formedness(self, formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
         """Returns `True` if `formula` is well-formed
         for the formula structure expected by this connector."""
-        return self._validation_function(formula)
+        return self._validation_function(formula, raise_error_if_false=raise_error_if_false)
 
     def ensure_well_formed_formula(self, formula: _fml.Formula) -> WellFormedFormula:
         """Given a presumably well-formed `formula`,
@@ -66,6 +66,10 @@ class WellFormedFormula(_fml.Formula):
     def __new__(cls, connector: WellFormedFormulaConnector, arguments=None):
         connector: WellFormedFormulaConnector = ensure_well_formed_formula_connector(connector)
         arguments: _fml.FormulaArguments = _fml.ensure_formula_arguments(arguments)
+        # Declares a raw formula to check its well-formedness.
+        raw_formula: _fml.Formula = _fml.Formula(connector=connector, arguments=arguments)
+        # Validates the well-formedness of the raw-formula.
+        connector.validate_formula_well_formedness(formula=raw_formula, raise_error_if_false=True)
         return super().__new__(cls, connector=connector, arguments=arguments)
 
     @property
@@ -159,37 +163,31 @@ class WellFormedAxiom(WellFormedAssertion):
 
     Form
     ------------
-    A :class:`WellFormedAxiom` is a formula of the form:
+    A :class:`WellFormedAxiom` is a formula of the well-defined form:
 
     .. math::
 
-        axiom(\phi)
+        \mathrm{axiom}(\phi)
 
     where:
-      - :math:`axiom` is the well-known axiom connector,
-      - :math:`\phi` is the statement asserted by the axiom.
+      - :math:`\mathrm{axiom}` is the well-known axiom meta-theory connector.
+      - :math:`\phi` is a formula denoted as the valid statement asserted by the axiom.
 
     """
-    _AXIOM_STATEMENT_INDEX: int = 0
+    _AXIOM_VALID_STATEMENT_INDEX: int = 0
+    _AXIOM_FIXED_ARITY: int = 1
 
     def __init__(self, valid_statement: _fml.Formula):
         global axiom_connector
         super().__init__(connector=axiom_connector, arguments=(valid_statement,))
 
     def __new__(cls, valid_statement: _fml.Formula):
-        """
-
-        Note: this method must be consistent with function :func:`is_well_formed_axiom`.
-
-        :param valid_statement:
-        """
         global axiom_connector
-        valid_statement = _fml.ensure_formula(valid_statement)
         return super().__new__(cls, connector=axiom_connector, arguments=(valid_statement,))
 
     @property
     def valid_statement(self) -> _fml.Formula:
-        return self.arguments[WellFormedAxiom._AXIOM_STATEMENT_INDEX]
+        return self.arguments[WellFormedAxiom._AXIOM_VALID_STATEMENT_INDEX]
 
 
 class ExtensionTuple(_fml.Formula):
@@ -378,25 +376,25 @@ def ensure_extension_map(o: FlexibleExtensionTuple) -> ExtensionMap:
     raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
 
 
-def ensure_natural_inference_rule(o: FlexibleNaturalInferenceRule) -> NaturalInferenceRule:
-    """Ensures that the input is a natural-inference-rule, and returns an instance of NaturalInferenceRule.
+def ensure_well_formed_natural_inference_rule(o: FlexibleNaturalInferenceRule) -> WellFormedNaturalInferenceRule:
+    """Ensures that the input is a well-formed natural-inference-rule, and returns an instance of NaturalInferenceRule.
 
     :param o:
     :return:
     """
-    if isinstance(o, NaturalInferenceRule):
+    if isinstance(o, WellFormedNaturalInferenceRule):
         return o
     if isinstance(o, _fml.Formula) and o.connector == natural_inference_rule_connector:
-        return NaturalInferenceRule(*o.arguments)
+        return WellFormedNaturalInferenceRule(*o.arguments)
     raise _utl.PunctiliousError(title='Inconsistent natural-inference-rule.',
                                 details=f'`o` cannot be interpreted as a natural-inference-rule.',
                                 o=o)
 
 
-def ensure_natural_inference_rules(o: typing.Iterable[FlexibleNaturalInferenceRule]) -> typing.Generator[
-    NaturalInferenceRule, None, None]:
+def ensure_well_formed_natural_inference_rules(o: typing.Iterable[FlexibleNaturalInferenceRule]) -> typing.Generator[
+    WellFormedNaturalInferenceRule, None, None]:
     for i in o:
-        yield ensure_natural_inference_rule(i)
+        yield ensure_well_formed_natural_inference_rule(i)
 
 
 def ensure_theory_component(o: FlexibleTheoryComponent) -> WellFormedTheoryComponent:
@@ -408,7 +406,7 @@ def ensure_theory_component(o: FlexibleTheoryComponent) -> WellFormedTheoryCompo
     if isinstance(o, WellFormedTheoryComponent):
         return o
     if isinstance(o, _fml.Formula) and o.connector == natural_inference_rule_connector:
-        return NaturalInferenceRule(*o.arguments)
+        return WellFormedNaturalInferenceRule(*o.arguments)
     raise _utl.PunctiliousError(title='Inconsistent theory component.',
                                 details=f'`o` cannot be interpreted as an ITheoryComponent.',
                                 o=o)
@@ -436,10 +434,10 @@ def ensure_inference_step(o: FlexibleTheorem):
     :param o:
     :return:
     """
-    if isinstance(o, Theorem):
+    if isinstance(o, WellFormedTheorem):
         return o
-    if isinstance(o, _fml.Formula) and o.connector == inference_step_connector:
-        return Theorem(*o.arguments)
+    if isinstance(o, _fml.Formula) and o.connector == theorem_connector:
+        return WellFormedTheorem(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an inference-step.', o=o)
 
 
@@ -457,8 +455,27 @@ def ensure_well_formed_axiom(formula: _fml.Formula):
         # The class initializer ensures well-formedness.
         return WellFormedAxiom(*formula.arguments)
     else:
-        raise _utl.PunctiliousError(title='Non-supported type',
-                                    details=f'The Python type of `formula` is not supported.',
+        raise _utl.PunctiliousError(title='Ill-formed axiom',
+                                    details=f'`formula` is not a well-formed axiom.',
+                                    formula=formula)
+
+
+def ensure_well_formed_theorem(formula: _fml.Formula):
+    """Ensures that `formula` is a well-formed theorem, raises an exception otherwise.
+
+    :param formula: A formula.
+    :return: A well-formed theorem, typed as WellFormedTheorem.
+    """
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedTheorem):
+        # The type ensures well-formedness.
+        return formula
+    elif isinstance(formula, _fml.Formula) and formula.connector == theorem_connector:
+        # The class initializer ensures well-formedness.
+        return WellFormedTheorem(*formula.arguments)
+    else:
+        raise _utl.PunctiliousError(title='Ill-formed theorem',
+                                    details=f'`formula` is not a well-formed theorem.',
                                     formula=formula)
 
 
@@ -682,7 +699,7 @@ def _is_formula_equivalent_with_variables(
                 return True, m
 
 
-class NaturalInferenceRule(WellFormedInferenceRule):
+class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
     _NATURAL_INFERENCE_RULE_VARIABLES_INDEX: int = 0
     _NATURAL_INFERENCE_RULE_PREMISES_INDEX: int = 1
     _NATURAL_INFERENCE_RULE_CONCLUSION_INDEX: int = 2
@@ -762,17 +779,17 @@ class NaturalInferenceRule(WellFormedInferenceRule):
 
     @property
     def conclusion(self) -> _fml.Formula:
-        return self.arguments[NaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
+        return self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
 
     @property
     def premises(self) -> UniqueExtensionTuple:
         return ensure_unique_extension_tuple(
-            self.arguments[NaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX])
+            self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX])
 
     @property
     def variables(self) -> UniqueExtensionTuple:
         return ensure_unique_extension_tuple(
-            self.arguments[NaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
+            self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
 
     def apply_rule(self, inputs: typing.Iterable[_fml.Formula]) -> _fml.Formula:
         check, premises_as_extension_tuple, m = self._check_arguments_validity(inputs=inputs,
@@ -793,45 +810,41 @@ class NaturalInferenceRule(WellFormedInferenceRule):
         return check
 
 
-class Theorem(WellFormedAssertion):
+class WellFormedTheorem(WellFormedAssertion):
     _THEOREM_STATEMENT_INDEX: int = 0
     _THEOREM_INPUTS: int = 1
     _THEOREM_INFERENCE_RULE_INDEX: int = 2
-    _INFERENCE_STEP_FIXED_ARITY: int = 3
+    _THEOREM_FIXED_ARITY: int = 3
 
-    def __init__(self, statement: _fml.Formula, inputs: FlexibleExtensionTuple,
-                 inference_rule: FlexibleNaturalInferenceRule):
+    def __init__(self, inputs: FlexibleExtensionTuple,
+                 inference_rule: FlexibleNaturalInferenceRule, valid_statement: _fml.Formula):
         global theorem_connector
-        super().__init__(connector=theorem_connector, arguments=(statement, inputs, inference_rule,))
+        super().__init__(connector=theorem_connector, arguments=(valid_statement, inputs, inference_rule,))
 
-    def __new__(cls, statement: _fml.Formula, inputs: FlexibleExtensionTuple,
-                inference_rule: FlexibleNaturalInferenceRule,
+    def __new__(cls, inputs: FlexibleExtensionTuple,
+                inference_rule: FlexibleNaturalInferenceRule, valid_statement: _fml.Formula | None,
                 ):
         global theorem_connector
-        statement: _fml.Formula = _fml.ensure_formula(statement)
-        inputs: ExtensionTuple = ensure_extension_tuple(inputs)
-        inference_rule: NaturalInferenceRule = ensure_natural_inference_rule(inference_rule)
-        infered_statement: _fml.Formula = inference_rule.apply_rule(inputs)
-        if not infered_statement.is_formula_equivalent(statement):
-            raise _utl.PunctiliousError(f'Inconsistent inference-step. Applying the `inference_rule` on the `arguments`'
-                                        f' yields a `conclusion` that is distinct from the `statement`.',
-                                        statement=statement,
-                                        conclusion=infered_statement,
-                                        arguments=inputs,
-                                        inference_rule=inference_rule)
-        return super().__new__(cls, connector=theorem_connector, arguments=(statement, inputs, inference_rule,))
+        if valid_statement is None:
+            # If the `valid_statement` is not provided, computes it.
+            inference_rule: WellFormedNaturalInferenceRule = ensure_well_formed_natural_inference_rule(inference_rule)
+            valid_statement: _fml.Formula = inference_rule.apply_rule(inputs)
+        # Reminder: the consistency of `valid_statement` is always checked
+        # by the :class:`WellFormedFormula` parent class.
+        return super().__new__(cls, connector=theorem_connector, arguments=(valid_statement, inputs, inference_rule,))
 
     @property
     def inputs(self) -> ExtensionTuple:
-        return ensure_extension_tuple(self.arguments[Theorem._THEOREM_INPUTS])
+        return ensure_extension_tuple(self.arguments[WellFormedTheorem._THEOREM_INPUTS])
 
     @property
-    def inference_rule(self) -> NaturalInferenceRule:
-        return ensure_natural_inference_rule(self.arguments[Theorem._THEOREM_INFERENCE_RULE_INDEX])
+    def inference_rule(self) -> WellFormedNaturalInferenceRule:
+        return ensure_well_formed_natural_inference_rule(
+            self.arguments[WellFormedTheorem._THEOREM_INFERENCE_RULE_INDEX])
 
     @property
     def valid_statement(self) -> _fml.Formula:
-        return _fml.ensure_formula(self.arguments[Theorem._THEOREM_STATEMENT_INDEX])
+        return _fml.ensure_formula(self.arguments[WellFormedTheorem._THEOREM_STATEMENT_INDEX])
 
 
 class Theory(WellFormedFormula):
@@ -849,7 +862,8 @@ class Theory(WellFormedFormula):
         return self.arguments
 
 
-def iterate_valid_statements(axioms: typing.Iterable[_fml.Formula], inference_steps: typing.Iterable[Theorem]) -> \
+def iterate_valid_statements(axioms: typing.Iterable[_fml.Formula],
+                             inference_steps: typing.Iterable[WellFormedTheorem]) -> \
         typing.Generator[_fml.Formula, None, None]:
     """Given the components of a theory, that is a collection of axioms and a collection of inference_steps,
     yield all the valid statements."""
@@ -893,7 +907,7 @@ FlexibleStatement = typing.Union[WellFormedAssertion, _fml.Formula]
 FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]
 FlexibleExtensionTuple = typing.Union[ExtensionTuple, _fml.Formula, collections.abc.Iterable]
 FlexibleNaturalInferenceRule = typing.Union[ExtensionTuple, _fml.Formula]
-FlexibleTheorem = typing.Union[Theorem, _fml.Formula]
+FlexibleTheorem = typing.Union[WellFormedTheorem, _fml.Formula]
 FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, _fml.Formula, collections.abc.Iterable]
 FlexibleTheory = typing.Union[Theory, _fml.Formula]
 FlexibleTheoryComponent = typing.Union[_fml.Formula]
@@ -908,26 +922,65 @@ def is_well_formed_axiom(formula: _fml.Formula, raise_error_if_false: bool = Fal
     :param raise_error_if_false: Raises an exception instead of returning `False`.
     :return:
     """
+    global axiom_connector
     formula = _fml.ensure_formula(formula)
     if formula.connector != axiom_connector:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
                 title='Ill-formed axiom',
                 details='`formula` is not a well-formed axiom.'
-                        'Its root connector is not the well-known `axiom_connector`.',
+                        'Its root connector is not the well-known :obj:`axiom_connector`.',
                 formula=formula,
                 axiom_connector=axiom_connector
             )
         return False
-    if formula.arity != 1:
+    if formula.arity != WellFormedAxiom._AXIOM_FIXED_ARITY:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
                 title='Ill-formed axiom',
-                details='`formula` is not a well-formed axiom.'
-                        'Its arity is not equal 1.',
-                formula=formula
+                details=f'`formula` is not a well-formed axiom.'
+                        f'Its arity is not equal `fixed_arity`.',
+                formula=formula,
+                fixed_arity=WellFormedAxiom._AXIOM_FIXED_ARITY
             )
         return False
+    return True
+
+
+def is_well_formed_theorem(formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
+    """Returns `True` if `formula` is a well-formed theorem, `False` otherwise.
+
+    :param formula: A formula.
+    :param raise_error_if_false: Raises an exception instead of returning `False`.
+    :return:
+    """
+    global theorem_connector
+    formula = _fml.ensure_formula(formula)
+    if formula.connector != theorem_connector:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed theorem',
+                details='`formula` is not a well-formed theorem.'
+                        'Its root connector is not the well-known :obj:`theorem_connector`.',
+                formula=formula,
+                axiom_connector=axiom_connector
+            )
+        return False
+    if formula.arity != WellFormedTheorem._THEOREM_FIXED_ARITY:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed theorem',
+                details=f'`formula` is not a well-formed axiom.'
+                        f'Its arity is not equal `fixed_arity`.',
+                formula=formula,
+                fixed_arity=WellFormedTheorem._AXIOM_FIXED_ARITY
+            )
+        return False
+    return True
+
+
+def is_well_formed_natural_inference_rule(formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
+    # TODO: IMPLEMENT THIS FUNCTION
     return True
 
 
@@ -948,14 +1001,30 @@ extension_map_connector = _fml.Connector(
 """The well-known connector of the `Map1` object.
 """
 
-natural_inference_rule_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='inference_rule_1', uuid='6f6c4c60-7129-4c60-801f-1454581f01fe'))
-"""The well-known connector of the `InferenceRule1` object.
+natural_inference_rule_connector = WellFormedFormulaConnector(
+    uid=_uid.UniqueIdentifier(slug='natural_inference_rule', uuid='6f6c4c60-7129-4c60-801f-1454581f01fe'),
+    validation_function=is_well_formed_natural_inference_rule,
+    ensurance_function=ensure_well_formed_natural_inference_rule,
+    well_formed_formula_python_type=WellFormedNaturalInferenceRule)
+"""The well-known natural-inference-rule connector.
+
+See also
+---------
+
+- :class:`WellFormedNaturalInferenceRule`
 """
 
-inference_step_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='inference_step', uuid='b527b045-614b-49d6-95b3-9725f9143ba2'))
-"""The well-known connector of the `InferenceStep` object.
+theorem_connector = WellFormedFormulaConnector(
+    uid=_uid.UniqueIdentifier(slug='theorem', uuid='b527b045-614b-49d6-95b3-9725f9143ba2'),
+    validation_function=is_well_formed_theorem,
+    ensurance_function=ensure_well_formed_theorem,
+    well_formed_formula_python_type=WellFormedTheorem)
+"""The well-known theorem meta-theory connector. 
+
+See also
+---------
+
+- :class:`WellFormedTheorem`
 """
 
 theory_connector = _fml.Connector(
@@ -968,7 +1037,12 @@ axiom_connector = WellFormedFormulaConnector(
     validation_function=is_well_formed_axiom,
     ensurance_function=ensure_well_formed_axiom,
     well_formed_formula_python_type=WellFormedAxiom)
-"""The well-known connector of the `Axiom` object.
+"""The well-known axiom meta-theory connector.
+
+See also
+---------
+
+- :class:`WellFormedAxiom`
 """
 
 statement_connector = _fml.Connector(
