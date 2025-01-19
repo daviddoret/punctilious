@@ -83,8 +83,8 @@ class TestMap1:
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), c())
         codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
-        m1 = pu.mtl.ExtensionMap(domain=domain,
-                                 codomain=codomain)
+        m1 = pu.mtl.WellFormedExtensionMap(domain=domain,
+                                           codomain=codomain)
         assert m1.get_image(x=a()).is_formula_equivalent(x())
         assert m1.get_image(x=b()).is_formula_equivalent(y())
         assert m1.get_image(x=c()).is_formula_equivalent(z())
@@ -93,8 +93,8 @@ class TestMap1:
 
         domain = pu.mtl.WellFormedUniqueExtensionTuple(c(), b(), a())
         codomain = pu.mtl.WellFormedExtensionTuple(z(), y(), x())
-        m2 = pu.mtl.ExtensionMap(domain=domain,
-                                 codomain=codomain)
+        m2 = pu.mtl.WellFormedExtensionMap(domain=domain,
+                                           codomain=codomain)
 
         assert m1.is_map_equivalent(other=m2)
 
@@ -109,8 +109,8 @@ class TestSubstitute:
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), c())
         codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
-        m1 = pu.mtl.ExtensionMap(domain=domain,
-                                 codomain=codomain)
+        m1 = pu.mtl.WellFormedExtensionMap(domain=domain,
+                                           codomain=codomain)
 
         phi = pu.mtl.substitute_formulas(
             phi=a(b(c())),
@@ -129,8 +129,8 @@ class TestSubstitute:
 
         domain = pu.mtl.WellFormedUniqueExtensionTuple(b(b(c())))
         codomain = pu.mtl.WellFormedExtensionTuple(x(y()))
-        m2 = pu.mtl.ExtensionMap(domain=domain,
-                                 codomain=codomain)
+        m2 = pu.mtl.WellFormedExtensionMap(domain=domain,
+                                           codomain=codomain)
 
         phi = pu.mtl.substitute_formulas(
             phi=a(b(c()), b(b(c())), b(b(b(c()))), b(b(b(b(c()))))),
@@ -149,8 +149,8 @@ class TestSubstitute:
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         domain = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), c())
         codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
-        m1 = pu.mtl.ExtensionMap(domain=domain,
-                                 codomain=codomain)
+        m1 = pu.mtl.WellFormedExtensionMap(domain=domain,
+                                           codomain=codomain)
         # no match
         input = e(f(), d(e()))
         output = pu.mtl.substitute_formulas(phi=input, m=m1)
@@ -173,8 +173,8 @@ class TestSubstitute:
 
         domain = pu.mtl.WellFormedUniqueExtensionTuple(a(a(b())), b(a(), b(b(b())), c()), c())
         codomain = pu.mtl.WellFormedExtensionTuple(x(), y(a(), y(), z(b())), z(x(y(a()))))
-        m2 = pu.mtl.ExtensionMap(domain=domain,
-                                 codomain=codomain)
+        m2 = pu.mtl.WellFormedExtensionMap(domain=domain,
+                                           codomain=codomain)
 
         # multi level variables and multi level values
         input = a(d(b(), e(b(a(), b(b(b(a(a(b())))))))), e(a()), b(a(a(b()))), a(b(a(), b(b(b())), c())), f(), c(c()))
@@ -196,8 +196,8 @@ class TestFormulaEquivalenceWithVariables:
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
         variables = pu.mtl.WellFormedUniqueExtensionTuple(x(), y(), z())
         values = pu.mtl.WellFormedExtensionTuple(d(), e(), f())
-        m1 = pu.mtl.ExtensionMap(domain=variables,
-                                 codomain=values)
+        m1 = pu.mtl.WellFormedExtensionMap(domain=variables,
+                                           codomain=values)
         # no match
         formulas_with_variables = b(c(), a(b()))
         formula_without_variables = pu.mtl.substitute_formulas(phi=formulas_with_variables, m=m1)
@@ -260,8 +260,8 @@ class TestFormulaEquivalenceWithVariables:
 
         variables = pu.mtl.WellFormedUniqueExtensionTuple(x(x(y())), y(x(), y(y(y())), z()), z())
         values = pu.mtl.WellFormedExtensionTuple(d(), e(x(), e(), f(y())), f(d(e(x()))))
-        m2 = pu.mtl.ExtensionMap(domain=variables,
-                                 codomain=values)
+        m2 = pu.mtl.WellFormedExtensionMap(domain=variables,
+                                           codomain=values)
 
         # multi level variables and multi level values
         formulas_with_variables = x(a(y(), b(y(x(), y(y(y(x(x(y())))))))), b(x()), y(x(x(y()))),
