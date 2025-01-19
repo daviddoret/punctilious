@@ -877,14 +877,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01304" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1736598264514</created>
-      <option name="number" value="01304" />
-      <option name="presentableId" value="LOCAL-01304" />
-      <option name="project" value="LOCAL" />
-      <updated>1736598264514</updated>
-    </task>
     <task id="LOCAL-01305" summary="meta-language">
       <option name="closed" value="true" />
       <created>1736606126675</created>
@@ -1269,7 +1261,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737310840621</updated>
     </task>
-    <option name="localTasksCounter" value="1353" />
+    <task id="LOCAL-01353" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1737311326638</created>
+      <option name="number" value="01353" />
+      <option name="presentableId" value="LOCAL-01353" />
+      <option name="project" value="LOCAL" />
+      <updated>1737311326638</updated>
+    </task>
+    <option name="localTasksCounter" value="1354" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1429,11 +1429,6 @@
           <url>file://$PROJECT_DIR$/tests/test_pu_06_meta_language.py</url>
           <line>37</line>
           <option name="timeStamp" value="436" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py</url>
-          <line>1189</line>
-          <option name="timeStamp" value="440" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

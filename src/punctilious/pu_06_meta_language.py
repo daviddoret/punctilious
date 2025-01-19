@@ -627,8 +627,8 @@ def ensure_well_formed_formula(formula: _fml.Formula) -> WellFormedFormula:
         if isinstance(formula.connector, WellFormedFormulaConnector):
             connector: WellFormedFormulaConnector = typing.cast(WellFormedFormulaConnector, formula.connector)
             return connector.ensure_well_formed_formula(formula=formula)
-    raise _utl.PunctiliousError(title='Invalid type',
-                                details=f'`formula` could not be interpreted as a WellFormedFormula.',
+    raise _utl.PunctiliousError(title='Ill-formed formula',
+                                details=f'`formula` could not be automatically interpreted as a well-formed formula.',
                                 formula=formula)
 
 
@@ -1055,7 +1055,81 @@ def is_well_formed_theory(
         formula: _fml.Formula,
         raise_error_if_false: bool = False,
         return_typed_arguments: bool = False) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
-    raise NotImplementedError('oops')
+    """Returns :obj:`True` if :paramref:`formula` is a well-formed theory, :obj:`False` otherwise.
+
+    :param formula: A formula.
+    :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
+    :param return_typed_arguments: If `:obj:`True`, returns a tuple (bool, FormulaArguments) where arguments are
+        typed as :class:`WellFormedFormula` if applicable.
+    :return: :obj:`True` if :paramref:`formula` is a well-formed unique-extension-tuple, :obj:`False` otherwise.
+    """
+    global theory_connector
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedTheory):
+        # The type assure well-formedness and proper Python typing by design.
+        if return_typed_arguments:
+            return True, formula.arguments
+        else:
+            return True
+    # For a raw formula, well-formedness and proper Python typing must be checked.
+    if formula.connector != theory_connector:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed theory',
+                details='`formula` is not a well-formed theory,'
+                        ' because its `root_connector` is not the well-known `theory_connector`.',
+                formula=formula,
+                root_connector=formula.connector,
+                theory_connector=theory_connector
+            )
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
+    # Ensures the uniqueness of theory components.
+    # TODO: Avoid raising an exception and return False instead
+    arguments: tuple[_fml.Formula, ...] = _fml.ensure_unique_formulas(
+        *formula.arguments, duplicate_processing=_fml.DuplicateProcessing.RAISE_ERROR)
+    # Declare an empty list to populate the validated arguments.
+    valid_arguments: list[WellFormedTheoryComponent] = list()
+    for argument in arguments:
+        # Ensures the argument is a well-formed formula.
+        if not is_well_formed_formula(argument):
+            if raise_error_if_false:
+                raise _utl.PunctiliousError(
+                    title='Ill-formed theory',
+                    details='`formula` is not a well-formed theory,'
+                            ' because `argument` is not a well-formed formula.',
+                    argument=argument,
+                    formula=formula
+                )
+            if return_typed_arguments:
+                return False, None
+            else:
+                return False
+        well_formed_formula: WellFormedFormula = ensure_well_formed_formula(argument)
+        # Ensures the well-formed formula is a theory-component.
+        if not isinstance(well_formed_formula, WellFormedTheoryComponent):
+            if raise_error_if_false:
+                raise _utl.PunctiliousError(
+                    title='Ill-formed theory',
+                    details='`formula` is not a well-formed theory,'
+                            ' because `argument` is not a well-formed theory-component.',
+                    argument=argument,
+                    formula=formula
+                )
+            if return_typed_arguments:
+                return False, None
+            else:
+                return False
+        theory_component: WellFormedTheoryComponent = typing.cast(well_formed_formula, WellFormedTheoryComponent)
+        # If the theory-component is a theorem,
+        # ensures all of its inputs are antecedent valid-statements in the theory.
+        XXXXXXXXXX
+    if return_typed_arguments:
+        return True, _fml.FormulaArguments(*arguments)
+    else:
+        return True
 
 
 def is_well_formed_axiom(
@@ -1084,7 +1158,7 @@ def is_well_formed_axiom(
             raise _utl.PunctiliousError(
                 title='Ill-formed axiom',
                 details='`formula` is not a well-formed axiom.'
-                        'Its root connector is not the well-known :obj:`axiom_connector`.',
+                        'Its root connector is not the well-known `axiom_connector`.',
                 formula=formula,
                 axiom_connector=axiom_connector
             )
@@ -1110,6 +1184,50 @@ def is_well_formed_axiom(
         return True, _fml.FormulaArguments(valid_statement)
     else:
         return True
+
+
+def is_well_formed_formula(
+        formula: _fml.Formula,
+        raise_error_if_false: bool = False,
+        return_typed_arguments: bool = False) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
+    """Returns :obj:`True` if :paramref:`formula` is a well-known well-formed formula, :obj:`False` otherwise.
+
+    :param formula: A formula.
+    :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
+    :param return_typed_arguments: If `:obj:`True`, returns a tuple (bool, FormulaArguments) where arguments are
+        typed as WellFormedFormulas if applicable.
+    :return: :class:`bool`: :obj:`True` if :paramref:`formula` is a well-formed formula, :obj:`False` otherwise.
+    """
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedFormula):
+        # The type assure well-formedness and proper Python typing by design.
+        if return_typed_arguments:
+            return True, formula.arguments
+        else:
+            return True
+    # For a raw formula, well-formedness and proper Python typing must be checked.
+    if isinstance(formula.connector, WellFormedFormulaConnector):
+        connector: WellFormedFormulaConnector = typing.cast(formula.connector, WellFormedFormulaConnector)
+        check: bool
+        arguments: _fml.FormulaArguments
+        check, arguments = connector.validate_formula_well_formedness(formula, raise_error_if_false=False,
+                                                                      return_typed_arguments=True)
+        if check:
+            if return_typed_arguments:
+                return True, arguments
+            else:
+                return True
+    # The formula could not be interpreted as a well-formed formula.
+    if raise_error_if_false:
+        raise _utl.PunctiliousError(
+            title='Ill-formed axiom',
+            details='`formula` is not a well-formed formula.',
+            formula=formula
+        )
+    if return_typed_arguments:
+        return False, None
+    else:
+        return False
 
 
 def is_well_formed_extension_tuple(
@@ -1138,7 +1256,7 @@ def is_well_formed_extension_tuple(
             raise _utl.PunctiliousError(
                 title='Ill-formed extension-tuple',
                 details='`formula` is not a well-formed extension-tuple.'
-                        'Its root connector is not the well-known :obj:`extension_tuple_connector`.',
+                        'Its root connector is not the well-known `extension_tuple_connector`.',
                 formula=formula,
                 extension_tuple_connector=extension_tuple_connector
             )
@@ -1178,7 +1296,7 @@ def is_well_formed_unique_extension_tuple(
             raise _utl.PunctiliousError(
                 title='Ill-formed unique-extension-tuple',
                 details='`formula` is not a well-formed unique-extension-tuple.'
-                        'Its root connector is not the well-known :obj:`unique_extension_tuple_connector`.',
+                        'Its root connector is not the well-known `unique_extension_tuple_connector`.',
                 formula=formula,
                 unique_extension_tuple_connector=unique_extension_tuple_connector
             )
@@ -1222,7 +1340,7 @@ def is_well_formed_theorem(
             raise _utl.PunctiliousError(
                 title='Ill-formed theorem',
                 details='`formula` is not a well-formed theorem.'
-                        ' Its root connector is not the well-known :obj:`theorem_connector`.',
+                        ' Its root connector is not the well-known `theorem_connector`.',
                 formula=formula,
                 theorem_connector=theorem_connector
             )
@@ -1301,7 +1419,7 @@ def is_well_formed_extension_map(
             raise _utl.PunctiliousError(
                 title='Ill-formed theorem',
                 details='`formula` is not a well-formed extension-map.'
-                        ' Its root connector is not the well-known :obj:`extension_map_connector`.',
+                        ' Its root connector is not the well-known `extension_map_connector`.',
                 formula=formula,
                 extension_map_connector=extension_map_connector
             )
@@ -1359,7 +1477,7 @@ def is_well_formed_natural_inference_rule(
             raise _utl.PunctiliousError(
                 title='Ill-formed natural inference rule',
                 details='`formula` is not a well-formed natural inference rule.'
-                        ' Its root connector is not the well-known :obj:`natural_inference_rule_connector`.',
+                        ' Its root connector is not the well-known `natural_inference_rule_connector`.',
                 formula=formula,
                 natural_inference_rule_connector=natural_inference_rule_connector
             )
