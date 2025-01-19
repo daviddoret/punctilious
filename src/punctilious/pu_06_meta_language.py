@@ -1022,7 +1022,7 @@ def is_well_formed_extension_tuple(
         formula: _fml.Formula,
         raise_error_if_false: bool = False,
         return_typed_arguments: bool = False) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
-    """Returns :obj:`True` if `formula` is a well-formed extension-tuple, :obj:`False` otherwise.
+    """Returns :obj:`True` if :paramref:`formula` is a well-formed extension-tuple, :obj:`False` otherwise.
 
     :param formula: A formula.
     :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
