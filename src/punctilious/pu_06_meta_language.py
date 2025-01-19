@@ -534,16 +534,22 @@ def ensure_well_formed_inference_rule(formula: _fml.Formula):
     if isinstance(formula, WellFormedInferenceRule):
         # The type ensures well-formedness.
         return formula
-    elif isinstance(formula, _fml.Formula) and formula.connector == natural_inference_rule_connector:
+    if isinstance(formula, _fml.Formula) and formula.connector == natural_inference_rule_connector:
         # The WellFormedFormula parent class initializer ensures well-formedness.
+        # Well-known WellFormedInferenceRule Python subclass: WellFormedNaturalInferenceRule.
         formula: WellFormedNaturalInferenceRule = ensure_well_formed_natural_inference_rule(formula)
         return formula
-    # QUESTION: WE MAY LIST HERE ALL WELL-FORMED INFERENCE-RULE CLASSES HERE,
-    #   BUT THIS APPROACH IS NOT VERY ELEGANT...
-    else:
-        raise _utl.PunctiliousError(title='Ill-formed inference rule',
-                                    details=f'`formula` is not a well-formed inference-rule.',
-                                    formula=formula)
+    # CODE MAINTENANCE: Insert here explicit support for other WellFormedInferenceRule Python subclasses.
+    if isinstance(formula, _fml.Formula):
+        # The WellFormedFormula parent class initializer ensures well-formedness.
+        # Potentially unknown WellFormedInferenceRule Python subclass.
+        formula: WellFormedFormula = ensure_well_formed_formula(formula)
+        if isinstance(formula, WellFormedInferenceRule):
+            return formula
+    # No solution found.
+    raise _utl.PunctiliousError(title='Ill-formed inference rule',
+                                details=f'`formula` is not a well-formed inference-rule.',
+                                formula=formula)
 
 
 def ensure_well_formed_formula(formula: _fml.Formula) -> WellFormedFormula:
@@ -1294,11 +1300,9 @@ def is_well_formed_natural_inference_rule(
         else:
             return False
     variables: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(
-        formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX],
-        raise_error_if_false=True)
+        formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
     premises: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(
-        formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX],
-        raise_error_if_false=True)
+        formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX])
     conclusion = formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
     if return_typed_arguments:
         return True, _fml.FormulaArguments(variables, premises, conclusion)
