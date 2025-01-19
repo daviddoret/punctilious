@@ -25,6 +25,27 @@ class TestUniqueTuple:
         assert len(phi7.arguments) == 0
 
 
+class TestWellFormedExtensionTuple:
+    def test_1(self):
+        extension_tuple = pu.mtl.extension_tuple_connector
+        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
+        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
+        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
+        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
+        phi1 = extension_tuple(a(), b(), c())
+        assert pu.mtl.is_well_formed_extension_tuple(phi1)
+        phi2 = pu.mtl.ensure_well_formed_extension_tuple(phi1)
+        assert pu.fml.is_formula_equivalent(phi=phi1, psi=phi2)
+        phi3 = extension_tuple(a(), b(), a())
+        assert not phi3.has_unique_arguments
+        phi4 = extension_tuple(a(), b(a()), a(b()), c(a()))
+        phi5 = pu.mtl.ensure_well_formed_extension_tuple(phi4)
+        assert len(phi5.arguments) == 4
+        phi6 = extension_tuple()
+        phi7 = pu.mtl.ensure_well_formed_extension_tuple(phi6)
+        assert len(phi7.arguments) == 0
+
+
 class TestUnionSets1:
     def test_1(self):
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))

@@ -225,8 +225,8 @@ class WellFormedExtensionTuple(WellFormedFormula):
         super().__init__(connector=extension_tuple_connector, arguments=arguments)
 
     def __new__(cls, *arguments):
-        arguments = _fml.ensure_formulas(*arguments)
         global extension_tuple_connector
+        arguments = _fml.ensure_formulas(*arguments)
         return super().__new__(cls, connector=extension_tuple_connector, arguments=arguments)
 
     @property
@@ -1053,7 +1053,7 @@ def is_well_formed_extension_tuple(
         else:
             return False
     if return_typed_arguments:
-        return True, _fml.FormulaArguments(formula.arguments)
+        return True, _fml.FormulaArguments(*formula.arguments)
     else:
         return True
 
