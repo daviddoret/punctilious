@@ -496,10 +496,21 @@ def ensure_inference_step(o: FlexibleTheorem):
 def ensure_well_formed_theory(formula: _fml.Formula) -> WellFormedTheory:
     """Ensures that :paramref:`formula` is a well-formed theory, raises an exception otherwise.
 
-    :param formula: A formula.
-    :return: A strongly-typed well-formed theory.
-    """
-    raise NotImplementedError('ooops')
+        :param formula: A formula.
+        :return: A strongly-typed well-formed theory.
+        """
+    global theory_connector
+    formula: _fml.Formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedTheory):
+        # The type ensures well-formedness.
+        return formula
+    elif isinstance(formula, _fml.Formula) and formula.connector == theory_connector:
+        # The WellFormedFormula parent class initializer ensures well-formedness.
+        return WellFormedTheory(*formula.arguments)
+    else:
+        raise _utl.PunctiliousError(title='Ill-formed theory',
+                                    details=f'`formula` is not a well-formed theory.',
+                                    formula=formula)
 
 
 def ensure_well_formed_axiom(formula: _fml.Formula) -> WellFormedAxiom:
