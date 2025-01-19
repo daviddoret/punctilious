@@ -38,7 +38,7 @@ class WellFormedFormulaConnector(_fml.Connector):
                                          formula: _fml.Formula, raise_error_if_false: bool = False,
                                          return_typed_arguments: bool = False
                                          ) -> bool:
-        """Returns `True` if :paramref:`formula` is well-formed
+        """Returns :obj:`True` if :paramref:`formula` is well-formed
         for the formula structure expected by this connector."""
         return self._validation_function(formula, raise_error_if_false=raise_error_if_false,
                                          return_typed_arguments=return_typed_arguments)
@@ -91,7 +91,7 @@ class WellFormedFormula(_fml.Formula):
     def validate_formula_well_formedness(self, formula: _fml.Formula,
                                          raise_error_if_false: bool = False,
                                          return_typed_arguments: bool = False) -> bool:
-        """Returns `True` if :paramref:`formula` is well-formed
+        """Returns :obj:`True` if :paramref:`formula` is well-formed
         for the formula structure expected by this connector."""
         return self.connector.validate_formula_well_formedness(
             formula, raise_error_if_false=raise_error_if_false, return_typed_arguments=return_typed_arguments)
@@ -237,18 +237,18 @@ class WellFormedExtensionTuple(WellFormedFormula):
         return (element for element in self.arguments)
 
     def has_top_level_element(self, element: _fml.Formula) -> bool:
-        """Returns `True` if `element` is an element of the tuple, `False` otherwise.
+        """Returns :obj:`True` if `element` is an element of the tuple, :obj:`False` otherwise.
 
         Note that `element` may be multiple times an element of the tuple."""
         return self.has_top_level_argument(argument=element)
 
     @property
     def has_unique_elements(self) -> bool:
-        """Returns `True` if all the elements of this ExtensionTuple are unique, `False` otherwise."""
+        """Returns :obj:`True` if all the elements of this ExtensionTuple are unique, :obj:`False` otherwise."""
         return self.has_unique_arguments
 
     def is_tuple_equivalent_to(self, other: WellFormedExtensionTuple) -> bool:
-        """Returns `True` if this tuple is equal to the `other` tuple, `False` otherwise.
+        """Returns :obj:`True` if this tuple is equal to the `other` tuple, :obj:`False` otherwise.
 
         This is equivalent to formula-equivalence."""
         return self.is_formula_equivalent(other_formula=other)
@@ -303,11 +303,11 @@ class WellFormedUniqueExtensionTuple(WellFormedFormula):
         return (element for element in self.arguments)
 
     def has_top_level_element(self, element: _fml.Formula) -> bool:
-        """Returns `True` if `element` is an element of the tuple."""
+        """Returns :obj:`True` if `element` is an element of the tuple."""
         return self.has_top_level_argument(argument=element)
 
     def is_unique_extension_tuple_equivalent_to(self, other: FlexibleUniqueExtensionTuple) -> bool:
-        """Returns `True` if this set is equal to the `other` set."""
+        """Returns :obj:`True` if this set is equal to the `other` set."""
         other = ensure_well_formed_unique_extension_tuple(other)
 
         # Check condition for all elements in self.
@@ -338,7 +338,7 @@ def ensure_well_formed_extension_tuple(formula: _fml.Formula) -> WellFormedExten
     """Ensures that :paramref:`formula` is a well-formed extension-tuple, raises an exception otherwise.
 
     :param formula: A formula.
-    :return: A well-formed extension-tuple, strongly typed as :class:`WellFormedExtensionTuple`.
+    :return: A strongly-typed well-formed extension-tuple.
     """
     global extension_tuple_connector
     formula: _fml.Formula = _fml.ensure_formula(formula)
@@ -394,7 +394,7 @@ def ensure_well_formed_natural_inference_rule(formula: _fml.Formula) -> WellForm
     """Ensures that :paramref:`formula` is a well-formed natural inference rule, raises an exception otherwise.
 
     :param formula: A formula.
-    :return: A well-formed natural inference rule, typed as WellFormedNaturalInferenceRule.
+    :return: A strongly-typed well-formed natural-inference-rule.
     """
     formula = _fml.ensure_formula(formula)
     if isinstance(formula, WellFormedNaturalInferenceRule):
@@ -463,7 +463,7 @@ def ensure_well_formed_axiom(formula: _fml.Formula) -> WellFormedAxiom:
     """Ensures that :paramref:`formula` is a well-formed axiom, raises an exception otherwise.
 
     :param formula: A formula.
-    :return: A well-formed axiom, typed as :class:`WellFormedAxiom`.
+    :return: A strongly-typed well-formed axiom.
     """
     global axiom_connector
     formula: _fml.Formula = _fml.ensure_formula(formula)
@@ -479,11 +479,11 @@ def ensure_well_formed_axiom(formula: _fml.Formula) -> WellFormedAxiom:
                                     formula=formula)
 
 
-def ensure_well_formed_theorem(formula: _fml.Formula):
+def ensure_well_formed_theorem(formula: _fml.Formula) -> WellFormedTheorem:
     """Ensures that :paramref:`formula` is a well-formed theorem, raises an exception otherwise.
 
     :param formula: A formula.
-    :return: A well-formed theorem, typed as WellFormedTheorem.
+    :return: A strongly-typed well-formed theorem.
     """
     formula = _fml.ensure_formula(formula)
     if isinstance(formula, WellFormedTheorem):
@@ -498,11 +498,30 @@ def ensure_well_formed_theorem(formula: _fml.Formula):
                                     formula=formula)
 
 
-def ensure_well_formed_inference_rule(formula: _fml.Formula):
-    """Ensures that :paramref:`formula` is a well-formed inference_rule, raises an exception otherwise.
+def ensure_well_formed_extension_map(formula: _fml.Formula) -> WellFormedExtensionMap:
+    """Ensures that :paramref:`formula` is a well-formed extension-map, raises an exception otherwise.
 
     :param formula: A formula.
-    :return: A well-formed inference rule, typed as WellFormedInferenceRule.
+    :return: A strongly-typed well-formed extension-map.
+    """
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedExtensionMap):
+        # The type ensures well-formedness.
+        return formula
+    elif isinstance(formula, _fml.Formula) and formula.connector == extension_map_connector:
+        # The WellFormedFormula parent class initializer ensures well-formedness.
+        return WellFormedExtensionMap(*formula.arguments)
+    else:
+        raise _utl.PunctiliousError(title='Ill-formed extension-map',
+                                    details=f'`formula` is not a well-formed extension-map.',
+                                    formula=formula)
+
+
+def ensure_well_formed_inference_rule(formula: _fml.Formula):
+    """Ensures that :paramref:`formula` is a well-formed inference-rule, raises an exception otherwise.
+
+    :param formula: A formula.
+    :return: A strongly-typed well-formed inference-rule.
     """
     formula = _fml.ensure_formula(formula)
     if isinstance(formula, WellFormedInferenceRule):
@@ -603,7 +622,12 @@ class WellFormedExtensionMap(WellFormedFormula):
 
     def get_image(self, x: _fml.Formula) -> _fml.Formula:
         if not self.domain.has_top_level_element(element=x):
-            raise ValueError(f'`x` is not an element of the map domain. `x`: {x}.')
+            raise _utl.PunctiliousError(
+                title='Map domain error',
+                details=f'`x` is not an element of the `domain` of map `m`.',
+                x=x,
+                domain=self.domain,
+                m=self)
         i: int = self.domain.get_argument_first_index(argument=x)
         return self.codomain.arguments[i]
 
@@ -623,7 +647,7 @@ class WellFormedExtensionMap(WellFormedFormula):
         return WellFormedExtensionMap(domain=new_domain, codomain=new_codomain)
 
     def is_invertible(self) -> bool:
-        """Returns `True` if the ExtensionMap can be inverted,
+        """Returns :obj:`True` if the ExtensionMap can be inverted,
         that is its codomain is made of unique formulas
         such that we can create an ExtensionMap with switched domain and codomain."""
         return self.codomain.has_unique_arguments
@@ -849,7 +873,7 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
         return conclusion_with_variable_assignments
 
     def check_arguments_validity(self, arguments: WellFormedExtensionTuple) -> bool:
-        """Returns `True` if `arguments` are valid for this InferenceRule."""
+        """Returns :obj:`True` if `arguments` are valid for this InferenceRule."""
         check, _, _ = self._check_arguments_validity(inputs=arguments)
         return check
 
@@ -928,7 +952,7 @@ def ensure_theory(o) -> Theory:
 
 
 def is_valid_statement(statement: _fml.Formula, theory_components: typing.Iterable[WellFormedTheoryComponent]) -> bool:
-    """Returns `True` if `statement` is valid given a collection of `theory_components`, `False` otherwise.
+    """Returns :obj:`True` if `statement` is valid given a collection of `theory_components`, :obj:`False` otherwise.
 
     Note 1:
     A statement is valid given a collection of theory components if and only if
@@ -1099,11 +1123,11 @@ def is_well_formed_theorem(
         raise_error_if_false: bool = False,
         return_typed_arguments: bool = False
 ) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
-    """Returns `True` if :paramref:`formula` is a well-formed theorem, `False` otherwise.
+    """Returns :obj:`True` if :paramref:`formula` is a well-formed theorem, :obj:`False` otherwise.
 
     :param formula: A formula.
-    :param raise_error_if_false: If `True`, raises an exception instead of returning `False`.
-    :param return_typed_arguments: If `True`, returns a tuple (bool, FormulaArguments|None)
+    :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
+    :param return_typed_arguments: If :obj:`True`, returns a tuple (bool, FormulaArguments|None)
         where arguments are properly typed as WellFormedFormulas as applicable.
     :return:
     """
@@ -1158,11 +1182,11 @@ def is_well_formed_extension_map(
         raise_error_if_false: bool = False,
         return_typed_arguments: bool = False
 ) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
-    """Returns `True` if :paramref:`formula` is a well-formed extension-map, `False` otherwise.
+    """Returns :obj:`True` if :paramref:`formula` is a well-formed extension-map, :obj:`False` otherwise.
 
     :param formula: A formula.
-    :param raise_error_if_false: If `True`, raises an exception instead of returning `False`.
-    :param return_typed_arguments: If `True`, returns a tuple (bool, FormulaArguments|None)
+    :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
+    :param return_typed_arguments: If :obj:`True`, returns a tuple (bool, FormulaArguments|None)
         where arguments are properly typed as WellFormedFormulas as applicable.
     :return:
     """
@@ -1202,9 +1226,9 @@ def is_well_formed_extension_map(
         else:
             return False
     domain: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(
-        formula[WellFormedExtensionMap._EXTENSION_MAP_DOMAIN_INDEX], raise_error_if_false=True)
+        formula[WellFormedExtensionMap._EXTENSION_MAP_DOMAIN_INDEX])
     codomain: WellFormedExtensionTuple = ensure_well_formed_extension_tuple(
-        formula[WellFormedExtensionMap._EXTENSION_MAP_CODOMAIN_INDEX], raise_error_if_false=True)
+        formula[WellFormedExtensionMap._EXTENSION_MAP_CODOMAIN_INDEX])
     if return_typed_arguments:
         return True, _fml.FormulaArguments(domain, codomain)
     else:
@@ -1216,11 +1240,11 @@ def is_well_formed_natural_inference_rule(
         raise_error_if_false: bool = False,
         return_typed_arguments: bool = False
 ) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
-    """Returns `True` if :paramref:`formula` is a well-formed natural inference rule, `False` otherwise.
+    """Returns :obj:`True` if :paramref:`formula` is a well-formed natural inference rule, :obj:`False` otherwise.
 
     :param formula: A formula.
-    :param raise_error_if_false: If `True`, raises an exception instead of returning `False`.
-    :param return_typed_arguments: If `True`, returns a tuple (bool, FormulaArguments|None)
+    :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
+    :param return_typed_arguments: If :obj:`True`, returns a tuple (bool, FormulaArguments|None)
         where arguments are properly typed as WellFormedFormulas as applicable.
     :return:
     """

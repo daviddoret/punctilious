@@ -72,7 +72,7 @@ class TestUnionSets1:
         assert after.is_unique_extension_tuple_equivalent_to(s5)
 
 
-class TestMap1:
+class TestWellFormedExtensionMap:
     def test_1(self):
         map1 = pu.mtl.extension_map_connector
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
@@ -88,7 +88,7 @@ class TestMap1:
         assert m1.get_image(x=a()).is_formula_equivalent(x())
         assert m1.get_image(x=b()).is_formula_equivalent(y())
         assert m1.get_image(x=c()).is_formula_equivalent(z())
-        with pytest.raises(ValueError):
+        with pytest.raises(pu.utl.PunctiliousError):
             m1.get_image(x=x())
 
         domain = pu.mtl.WellFormedUniqueExtensionTuple(c(), b(), a())
