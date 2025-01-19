@@ -7,6 +7,7 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -299,6 +300,7 @@
     "Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionMap.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1.executor": "Run",
+    "Python tests.pytest for test_pu_06_meta_language.TestWellFormedTheorem.test_1.executor": "Run",
     "Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
@@ -762,7 +764,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_pu_06_meta_language.TestWellFormedTheorem.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -775,7 +777,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_meta_language.TestWellFormedTheorem.test_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -843,7 +845,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1" />
       <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionMap.test_1" />
-      <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedTheorem.test_1" />
       <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -853,10 +855,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedTheorem.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionMap.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1" />
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" />
       </list>
     </recent_temporary>
   </component>
@@ -875,14 +877,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01301" summary="foundations">
-      <option name="closed" value="true" />
-      <created>1736584131241</created>
-      <option name="number" value="01301" />
-      <option name="presentableId" value="LOCAL-01301" />
-      <option name="project" value="LOCAL" />
-      <updated>1736584131241</updated>
     </task>
     <task id="LOCAL-01302" summary="meta-language">
       <option name="closed" value="true" />
@@ -1268,7 +1262,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737304685690</updated>
     </task>
-    <option name="localTasksCounter" value="1350" />
+    <task id="LOCAL-01350" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1737308022015</created>
+      <option name="number" value="01350" />
+      <option name="presentableId" value="LOCAL-01350" />
+      <option name="project" value="LOCAL" />
+      <updated>1737308022015</updated>
+    </task>
+    <option name="localTasksCounter" value="1351" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1431,7 +1433,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py</url>
-          <line>1128</line>
+          <line>1149</line>
           <option name="timeStamp" value="440" />
         </line-breakpoint>
       </breakpoints>

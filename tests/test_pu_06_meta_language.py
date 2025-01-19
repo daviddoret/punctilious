@@ -307,7 +307,7 @@ class TestWellFormedNaturalInferenceRule:
             other_formula=c(d(), f()))
 
 
-class TestTheorem:
+class TestWellFormedTheorem:
     def test_1(self):
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
@@ -335,11 +335,11 @@ class TestTheorem:
         )
         statement = inference_rule.apply_rule(inputs=inputs)
 
-        inference_step = pu.mtl.WellFormedTheorem(inputs=inputs,
-                                                  inference_rule=inference_rule,
-                                                  valid_statement=statement)
+        theorem = pu.mtl.WellFormedTheorem(inputs=inputs,
+                                           inference_rule=inference_rule,
+                                           valid_statement=statement)
 
-        assert inference_step.valid_statement.is_formula_equivalent(statement)
+        assert theorem.valid_statement.is_formula_equivalent(statement)
 
         with pytest.raises(pu.utl.PunctiliousError):
             wrong_inputs = pu.mtl.WellFormedExtensionTuple(

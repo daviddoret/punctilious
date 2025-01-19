@@ -167,6 +167,11 @@ class WellFormedInferenceRule(WellFormedTheoryComponent, abc.ABC):
             o=self)
 
 
+class WellFormedTheory(WellFormedFormula):
+    def __init__(self):
+        raise NotImplementedError('ooops')
+
+
 class WellFormedAxiom(WellFormedAssertion):
     """A :class:`WellFormedAxiom` is a model of a mathematical axiom.
 
@@ -457,6 +462,15 @@ def ensure_inference_step(o: FlexibleTheorem):
     if isinstance(o, _fml.Formula) and o.connector == theorem_connector:
         return WellFormedTheorem(*o.arguments)
     raise _utl.PunctiliousError(f'`o` is not an inference-step.', o=o)
+
+
+def ensure_well_formed_theory(formula: _fml.Formula) -> WellFormedTheory:
+    """Ensures that :paramref:`formula` is a well-formed theory, raises an exception otherwise.
+
+    :param formula: A formula.
+    :return: A strongly-typed well-formed theory.
+    """
+    raise NotImplementedError('ooops')
 
 
 def ensure_well_formed_axiom(formula: _fml.Formula) -> WellFormedAxiom:
@@ -997,6 +1011,13 @@ FlexibleTheory = typing.Union[Theory, _fml.Formula]
 FlexibleTheoryComponent = typing.Union[_fml.Formula]
 
 
+def is_well_formed_theory(
+        formula: _fml.Formula,
+        raise_error_if_false: bool = False,
+        return_typed_arguments: bool = False) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
+    raise NotImplementedError('oops')
+
+
 def is_well_formed_axiom(
         formula: _fml.Formula,
         raise_error_if_false: bool = False,
@@ -1184,9 +1205,29 @@ def is_well_formed_theorem(
             return False
     statement: _fml.Formula = formula[WellFormedTheorem._THEOREM_STATEMENT_INDEX]
     inputs: WellFormedExtensionTuple = ensure_well_formed_extension_tuple(
-        formula[WellFormedTheorem._THEOREM_INPUTS_INDEX], raise_error_if_false=True)
+        formula[WellFormedTheorem._THEOREM_INPUTS_INDEX])
     inference_rule: WellFormedInferenceRule = ensure_well_formed_inference_rule(
-        formula[WellFormedTheorem._THEOREM_INFERENCE_RULE_INDEX], raise_error_if_false=True)
+        formula[WellFormedTheorem._THEOREM_INFERENCE_RULE_INDEX])
+    derived_statement: _fml.Formula = inference_rule.apply_rule(inputs)
+    if not derived_statement.is_formula_equivalent(statement):
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed theorem',
+                details='`formula` is not a well-formed theorem.'
+                        ' Its claimed `statement` is not formula-equivalent'
+                        ' to the `derived_statement`'
+                        ' obtained by passing `inputs`'
+                        ' to the `inference_rule`.',
+                statement=statement,
+                derived_statement=derived_statement,
+                inputs=inputs,
+                inference_rule=inference_rule,
+                formula=formula
+            )
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
     if return_typed_arguments:
         return True, _fml.FormulaArguments(statement, inputs, inference_rule)
     else:
@@ -1377,9 +1418,17 @@ See also
 - :class:`WellFormedTheorem`
 """
 
-theory_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='theory', uuid='2724eebf-070d-459d-a097-de9889f118b9'))
-"""The well-known connector of the `Theory` object.
+theory_connector = WellFormedFormulaConnector(
+    uid=_uid.UniqueIdentifier(slug='theory', uuid='2724eebf-070d-459d-a097-de9889f118b9'),
+    validation_function=is_well_formed_theory,
+    ensurance_function=ensure_well_formed_theory,
+    well_formed_formula_python_type=WellFormedTheory)
+"""The well-known theory meta-theory connector.
+
+See also
+---------
+
+- :class:`WellFormedTheory`
 """
 
 axiom_connector = WellFormedFormulaConnector(
