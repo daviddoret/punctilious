@@ -209,6 +209,54 @@ class Formula(tuple):
     def represent(self, is_subformula: bool = False, prefs=None) -> str:
         return self.connector.rep_formula(argument=self.arguments, is_subformula=is_subformula, prefs=prefs)
 
+    def to_python_list(self, include_connector: bool = False, recursive: bool = False) -> list:
+        """Returns a raw Python list representation of this formula.
+
+        :param include_connector: If `False` (default), outputs formulas as (argument_1, argument_2, ..., argument_n).
+            If `True`, outputs formula as (connector, (argument_1, argument_2, ..., argument_n))
+        :param recursive: If `False` (default), leave sub-formulas intact. If `True`, apply the transformation
+            recursively to sub-formulas.
+        :return: A Python list.
+        """
+        if not recursive:
+            if not include_connector:
+                return list(self.arguments)
+            else:
+                return [self.connector, list(self.arguments), ]
+        else:
+            if not include_connector:
+                return list(
+                    argument.to_python_list(include_connector=include_connector, recursive=recursive) for argument in
+                    self.arguments)
+            else:
+                return [self.connector, list(
+                    argument.to_python_list(include_connector=include_connector, recursive=recursive) for argument in
+                    self.arguments), ]
+
+    def to_python_tuple(self, include_connector: bool = False, recursive: bool = False) -> tuple:
+        """Returns a raw Python tuple representation of this formula.
+
+        :param include_connector: If `False` (default), outputs formulas as (argument_1, argument_2, ..., argument_n).
+            If `True`, outputs formula as (connector, (argument_1, argument_2, ..., argument_n))
+        :param recursive: If `False` (default), leave sub-formulas intact. If `True`, apply the transformation
+            recursively to sub-formulas.
+        :return: A Python tuple.
+        """
+        if not recursive:
+            if not include_connector:
+                return tuple(self.arguments)
+            else:
+                return self.connector, tuple(self.arguments),
+        else:
+            if not include_connector:
+                return tuple(
+                    argument.to_python_list(include_connector=include_connector, recursive=recursive) for argument in
+                    self.arguments)
+            else:
+                return (self.connector, tuple(
+                    argument.to_python_list(include_connector=include_connector, recursive=recursive) for argument in
+                    self.arguments),)
+
     def tree_contains_formula(self, phi: Formula, include_root: bool = True) -> bool:
         """Returns `True` if the formula tree contains formula `phi`.
 

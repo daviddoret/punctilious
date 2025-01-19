@@ -122,8 +122,8 @@ class WellFormedAssertion(WellFormedTheoryComponent, abc.ABC):
     """An :class:`WellFormedAssertion` is a model of a mathematical theory assertion, i.e.: an axiom or a theorem.
 
     2 categories of :class:`WellFormedAssertion` are well-known and implemented:
-    - :class:`Axiom`.
-    - :class:`Theorem`.
+    - :class:`WellFormedAxiom`.
+    - :class:`WellFormedTheorem`.
 
     """
 
@@ -179,7 +179,7 @@ class WellFormedAxiom(WellFormedAssertion):
         \mathrm{axiom}(\phi)
 
     where:
-      - :math:`\mathrm{axiom}` is the well-known axiom meta-theory connector.
+      - :math:`\mathrm{axiom}` is the well-known :obj:`axiom_connector`.
       - :math:`\phi` is a formula denoted as the valid statement asserted by the axiom.
 
     """
@@ -199,24 +199,34 @@ class WellFormedAxiom(WellFormedAssertion):
         return self.arguments[WellFormedAxiom._AXIOM_VALID_STATEMENT_INDEX]
 
 
-class WellFormedExtensionTuple(_fml.Formula):
-    """A `ExtensionTuple` is a model of a mathematical tuple with the following constraints:
-         - it is finite,
-         - it is computable,
-         - it is defined by extension.
+class WellFormedExtensionTuple(WellFormedFormula):
+    """A :class:`WellFormedExtensionTuple` is a model of a mathematical tuple,
+    with the following constraints:
+     - it is finite,
+     - it is computable,
+     - it is defined by extension.
 
-    TODO: Rename and inherit from WellFormedFormula,
-        adapt ensure and validation functions, etc.
+    Form
+    ------------
+    A :class:`WellFormedExtensionTuple` is a formula of the well-defined form:
 
-    It is implemented as a formula with a well-known `extension_tuple` connector,
-    whose arguments are denoted as the elements of the tuple.
+    .. math::
+
+        \mathrm{extension-tuple}(\phi_1, \phi_2, \ldots, \phi_n)
+
+    where:
+      - :math:`\mathrm{extension-tuple}` is the well-known :obj:`extension_tuple_connector`.
+      - :math:`\phi_i` are some (possibly no) formulas, denoted as the elements of the tuple.
+
     """
 
     def __init__(self, *arguments):
+        global extension_tuple_connector
         super().__init__(connector=extension_tuple_connector, arguments=arguments)
 
     def __new__(cls, *arguments):
         arguments = _fml.ensure_formulas(*arguments)
+        global extension_tuple_connector
         return super().__new__(cls, connector=extension_tuple_connector, arguments=arguments)
 
     @property
@@ -243,15 +253,6 @@ class WellFormedExtensionTuple(_fml.Formula):
 
         This is equivalent to formula-equivalence."""
         return self.is_formula_equivalent(other_formula=other)
-
-    def iterate_elements(self) -> typing.Generator[_fml.Formula, None, None]:
-        yield from self.iterate_top_level_arguments()
-
-    def to_python_list(self) -> list[_fml.Formula]:
-        return list(self.elements)
-
-    def to_python_tuple(self) -> tuple[_fml.Formula, ...]:
-        return tuple(self.elements)
 
     def to_unique_extension_tuple(self, duplicate_processing: _fml.DuplicateProcessing =
     _fml.DuplicateProcessing.RAISE_ERROR) -> UniqueExtensionTuple:
@@ -343,17 +344,24 @@ class UniqueExtensionTuple(_fml.Formula):
         return WellFormedExtensionTuple(*self.elements)
 
 
-def ensure_well_formed_extension_tuple(o: FlexibleExtensionTuple) -> WellFormedExtensionTuple:
-    """Ensures that the input is an extension-tuple, and returns an instance of ExtensionTuple.
+def ensure_well_formed_extension_tuple(formula: _fml.Formula) -> WellFormedExtensionTuple:
+    """Ensures that `formula` is a well-formed extension-tuple, raises an exception otherwise.
 
-    :param o:
-    :return:
+    :param formula: A formula.
+    :return: A well-formed extension-tuple, typed as :class:`WellFormedExtensionTuple`.
     """
-    if isinstance(o, WellFormedExtensionTuple):
-        return o
-    if isinstance(o, _fml.Formula) and o.connector == extension_tuple_connector:
-        return WellFormedExtensionTuple(*o.arguments)
-    raise _utl.PunctiliousError(f'`o` is not an extension-tuple.', o=o)
+    global extension_tuple_connector
+    formula: _fml.Formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedExtensionTuple):
+        # The type ensures well-formedness.
+        return formula
+    elif isinstance(formula, _fml.Formula) and formula.connector == extension_tuple_connector:
+        # The WellFormedFormula parent class initializer ensures well-formedness.
+        return WellFormedExtensionTuple(*formula.arguments)
+    else:
+        raise _utl.PunctiliousError(title='Ill-formed extension-tuple',
+                                    details=f'`formula` is not a well-formed extension-tuple.',
+                                    formula=formula)
 
 
 def ensure_unique_extension_tuple(
@@ -464,9 +472,10 @@ def ensure_well_formed_axiom(formula: _fml.Formula) -> WellFormedAxiom:
     """Ensures that `formula` is a well-formed axiom, raises an exception otherwise.
 
     :param formula: A formula.
-    :return: A well-formed axiom, typed as WellFormedAxiom.
+    :return: A well-formed axiom, typed as :class:`WellFormedAxiom`.
     """
-    formula = _fml.ensure_formula(formula)
+    global axiom_connector
+    formula: _fml.Formula = _fml.ensure_formula(formula)
     if isinstance(formula, WellFormedAxiom):
         # The type ensures well-formedness.
         return formula
@@ -959,13 +968,13 @@ def is_well_formed_axiom(
         formula: _fml.Formula,
         raise_error_if_false: bool = False,
         return_typed_arguments: bool = False) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
-    """Returns `True` if `formula` is a well-formed axiom, `False` otherwise.
+    """Returns :obj:`True` if `formula` is a well-formed axiom, :obj:`False` otherwise.
 
     :param formula: A formula.
-    :param raise_error_if_false: If `True`, raises an exception instead of returning `False`.
-    :param return_typed_arguments: If `True`, returns a tuple (bool, FormulaArguments) where arguments are
+    :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
+    :param return_typed_arguments: If `:obj:`True`, returns a tuple (bool, FormulaArguments) where arguments are
         typed as WellFormedFormulas if applicable.
-    :return:
+    :return: :class:`bool`: :obj:`True` if `formula` is a well-formed axiom, :obj:`False` otherwise.
     """
     global axiom_connector
     formula = _fml.ensure_formula(formula)
@@ -996,7 +1005,7 @@ def is_well_formed_axiom(
                 details=f'`formula` is not a well-formed axiom.'
                         f'Its arity is not equal `fixed_arity`.',
                 formula=formula,
-                fixed_arity=WellFormedAxiom._AXIOM_VFIXED_ARITY
+                fixed_arity=WellFormedAxiom._AXIOM_FIXED_ARITY
             )
         if return_typed_arguments:
             return False, None
@@ -1005,6 +1014,46 @@ def is_well_formed_axiom(
     valid_statement: _fml.Formula = formula[WellFormedAxiom._AXIOM_VALID_STATEMENT_INDEX]
     if return_typed_arguments:
         return True, _fml.FormulaArguments(valid_statement)
+    else:
+        return True
+
+
+def is_well_formed_extension_tuple(
+        formula: _fml.Formula,
+        raise_error_if_false: bool = False,
+        return_typed_arguments: bool = False) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
+    """Returns :obj:`True` if `formula` is a well-formed extension-tuple, :obj:`False` otherwise.
+
+    :param formula: A formula.
+    :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
+    :param return_typed_arguments: If `:obj:`True`, returns a tuple (bool, FormulaArguments) where arguments are
+        typed as WellFormedFormulas if applicable.
+    :return: :class:`bool`: :obj:`True` if `formula` is a well-formed extension-tuple, :obj:`False` otherwise.
+    """
+    global extension_tuple_connector
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedExtensionTuple):
+        # The type assure well-formedness and proper Python typing by design.
+        if return_typed_arguments:
+            return True, formula.arguments
+        else:
+            return True
+    # For a raw formula, well-formedness and proper Python typing must be checked.
+    if formula.connector != extension_tuple_connector:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed extension-tuple',
+                details='`formula` is not a well-formed extension-tuple.'
+                        'Its root connector is not the well-known :obj:`extension_tuple_connector`.',
+                formula=formula,
+                extension_tuple_connector=extension_tuple_connector
+            )
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
+    if return_typed_arguments:
+        return True, _fml.FormulaArguments(formula.arguments)
     else:
         return True
 
@@ -1131,9 +1180,17 @@ def is_well_formed_natural_inference_rule(
 
 # well-known connectors
 # the `tuple` connector is necessary to build complex formulas.
-extension_tuple_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='extension_tuple', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'))
-"""The well-known connector of the `Tuple1` object.
+extension_tuple_connector = WellFormedFormulaConnector(
+    uid=_uid.UniqueIdentifier(slug='extension_tuple', uuid='c138b200-111a-4a40-ac3c-c8afa8e615fb'),
+    validation_function=is_well_formed_extension_tuple,
+    ensurance_function=ensure_well_formed_extension_tuple,
+    well_formed_formula_python_type=WellFormedExtensionTuple)
+"""The well-known extension-tuple connector.
+
+See also
+---------
+
+- :class:`WellFormedExtensionTuple`
 """
 
 unique_extension_tuple_connector = _fml.Connector(
