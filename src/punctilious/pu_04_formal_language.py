@@ -320,8 +320,12 @@ def ensure_unique_formulas(*formulas: Formula,
     for phi in formulas:
         if any(is_formula_equivalent(phi=phi, psi=psi) for psi in unique_formulas):
             if duplicate_processing == DuplicateProcessing.RAISE_ERROR:
-                raise ValueError(
-                    f'Formulas must be unique. duplicate:{phi}.')
+                raise _utl.PunctiliousError(
+                    title='Formulas are not unique',
+                    details='Formula `phi` occurs at least twice in `formulas`.'
+                            ' It follows that `formulas` are not unique.',
+                    phi=phi,
+                    formulas=formulas)
         else:
             unique_formulas.append(phi)
     unique_formulas: tuple[Formula, ...] = tuple(unique_formulas)

@@ -260,7 +260,7 @@ class WellFormedExtensionTuple(WellFormedFormula):
         return WellFormedUniqueExtensionTuple(self.elements, duplicate_processing=duplicate_processing)
 
 
-class WellFormedUniqueExtensionTuple(_fml.Formula):
+class WellFormedUniqueExtensionTuple(WellFormedFormula):
     """A UniqueTuple is a model of a pseudo-set from set theory with the following constraints:
      - it is finite,
      - it is computable,
@@ -1085,8 +1085,8 @@ def is_well_formed_unique_extension_tuple(
         else:
             return False
     # Assures the uniqueness of elements.
-    arguments = _fml.ensure_unique_formulas(*formula.arguments,
-                                            duplicate_processing=_fml.DuplicateProcessing.RAISE_ERROR)
+    arguments: tuple[_fml.Formula, ...] = _fml.ensure_unique_formulas(
+        *formula.arguments, duplicate_processing=_fml.DuplicateProcessing.RAISE_ERROR)
     if return_typed_arguments:
         return True, _fml.FormulaArguments(*arguments)
     else:
