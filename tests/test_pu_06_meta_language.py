@@ -254,7 +254,7 @@ class TestFormulaEquivalenceWithVariables:
         assert check
 
 
-class TestNaturalInferenceRule:
+class TestWellFormedNaturalInferenceRule:
     def test_1(self):
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
@@ -351,7 +351,7 @@ class TestTheory:
         pass
 
 
-class TestAxiom:
+class TestWellFormedAxiom:
     def test_1(self):
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))

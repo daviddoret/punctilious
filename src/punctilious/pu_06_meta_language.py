@@ -205,6 +205,9 @@ class WellFormedExtensionTuple(_fml.Formula):
          - it is computable,
          - it is defined by extension.
 
+    TODO: Rename and inherit from WellFormedFormula,
+        adapt ensure and validation functions, etc.
+
     It is implemented as a formula with a well-known `extension_tuple` connector,
     whose arguments are denoted as the elements of the tuple.
     """
@@ -279,6 +282,9 @@ class UniqueExtensionTuple(_fml.Formula):
                  duplicate_processing: _fml.DuplicateProcessing =
                  _fml.DuplicateProcessing.RAISE_ERROR):
         """
+        TODO: Rename and inherit from WellFormedFormula,
+            adapt ensure and validation functions, etc.
+
 
         :param elements:
         :param duplicate_processing: 'raise_error' (default), or 'strip'.
@@ -552,7 +558,11 @@ class ExtensionMap(_fml.Formula):
      - it is finite,
      - it is computable,
      - it is defined by extension.
-     
+
+    TODO: Rename and inherit from WellFormedFormula,
+        adapt ensure and validation functions, etc.
+
+
     It is implemented as a formula with the well-known `map_1` root connector,
     whose arguments of the form:
         (D, C)
@@ -1028,7 +1038,7 @@ def is_well_formed_theorem(
                 details='`formula` is not a well-formed theorem.'
                         ' Its root connector is not the well-known :obj:`theorem_connector`.',
                 formula=formula,
-                axiom_connector=axiom_connector
+                theorem_connector=theorem_connector
             )
         if return_typed_arguments:
             return False, None
@@ -1058,9 +1068,65 @@ def is_well_formed_theorem(
         return True
 
 
-def is_well_formed_natural_inference_rule(formula: _fml.Formula, raise_error_if_false: bool = False) -> bool:
-    # TODO: IMPLEMENT THIS FUNCTION
-    return True
+def is_well_formed_natural_inference_rule(
+        formula: _fml.Formula,
+        raise_error_if_false: bool = False,
+        return_typed_arguments: bool = False
+) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
+    """Returns `True` if `formula` is a well-formed natural inference rule, `False` otherwise.
+
+    :param formula: A formula.
+    :param raise_error_if_false: If `True`, raises an exception instead of returning `False`.
+    :param return_typed_arguments: If `True`, returns a tuple (bool, FormulaArguments|None)
+        where arguments are properly typed as WellFormedFormulas as applicable.
+    :return:
+    """
+    global natural_inference_rule_connector
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedNaturalInferenceRule):
+        # The type assure well-formedness and proper Python typing by design.
+        if return_typed_arguments:
+            return True, formula.arguments
+        else:
+            return True
+    # For a raw formula, well-formedness and proper Python typing must be checked.
+    if formula.connector != natural_inference_rule_connector:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed natural inference rule',
+                details='`formula` is not a well-formed natural inference rule.'
+                        ' Its root connector is not the well-known :obj:`natural_inference_rule_connector`.',
+                formula=formula,
+                natural_inference_rule_connector=natural_inference_rule_connector
+            )
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
+    if formula.arity != WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_FIXED_ARITY:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed natural inference rule',
+                details='`formula` is not a well-formed natural inference rule.'
+                        ' Its arity is not equal `fixed_arity`.',
+                formula=formula,
+                fixed_arity=WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_FIXED_ARITY
+            )
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
+    variables: UniqueExtensionTuple = ensure_unique_extension_tuple(
+        formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX],
+        raise_error_if_false=True)
+    premises: UniqueExtensionTuple = ensure_unique_extension_tuple(
+        formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX],
+        raise_error_if_false=True)
+    conclusion = formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
+    if return_typed_arguments:
+        return True, _fml.FormulaArguments(variables, premises, conclusion)
+    else:
+        return True
 
 
 # well-known connectors
