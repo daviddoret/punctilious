@@ -60,16 +60,16 @@ class TestUnionSets1:
         s5 = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), c(), d())
 
         after = pu.mtl.union_unique_tuples(s1, s1)
-        assert after.is_unique_extension_tuple_equivalent_to(s1)
+        assert after.is_well_formed_unique_extension_tuple_equivalent_to(s1)
 
         after = pu.mtl.union_unique_tuples(s1, s2)
-        assert after.is_unique_extension_tuple_equivalent_to(s2)
+        assert after.is_well_formed_unique_extension_tuple_equivalent_to(s2)
 
         after = pu.mtl.union_unique_tuples(s2, s3)
-        assert after.is_unique_extension_tuple_equivalent_to(s2)
+        assert after.is_well_formed_unique_extension_tuple_equivalent_to(s2)
 
         after = pu.mtl.union_unique_tuples(s2, s4)
-        assert after.is_unique_extension_tuple_equivalent_to(s5)
+        assert after.is_well_formed_unique_extension_tuple_equivalent_to(s5)
 
 
 class TestWellFormedExtensionMap:

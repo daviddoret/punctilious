@@ -168,8 +168,40 @@ class WellFormedInferenceRule(WellFormedTheoryComponent, abc.ABC):
 
 
 class WellFormedTheory(WellFormedFormula):
-    def __init__(self):
+
+    def __init__(self, *theory_components,
+                 duplicate_processing: _fml.DuplicateProcessing = _fml.DuplicateProcessing.RAISE_ERROR):
+        global theory_connector
+        super().__init__(connector=theory_connector, arguments=theory_components)
+
+    def __new__(cls, *theory_components,
+                duplicate_processing: _fml.DuplicateProcessing = _fml.DuplicateProcessing.RAISE_ERROR):
+        global theory_connector
+        # Strip duplicates if required, before well-formedness validation.
+        if duplicate_processing == _fml.DuplicateProcessing.STRIP:
+            theory_components = _fml.ensure_unique_formulas(*theory_components,
+                                                            duplicate_processing=duplicate_processing)
+        return super().__new__(cls, connector=theory_connector, arguments=theory_components)
+
+    @property
+    def theory_components(self) -> collections.abc.Iterable[WellFormedTheoryComponent]:
+        return (typing.cast(theory_component, WellFormedTheoryComponent) for theory_component in self.arguments)
+
+    def has_top_level_theory_component(self, theory_component: _fml.Formula) -> bool:
+        """Returns :obj:`True` if `theory_component` is a theory-component of this theory."""
+        return self.has_top_level_argument(argument=theory_component)
+
+    def is_theory_equivalent_to(self, other: FlexibleUniqueExtensionTuple) -> bool:
+        """Returns :obj:`True` if this set is equal to the `other` set."""
         raise NotImplementedError('ooops')
+
+    def to_well_formed_extension_tuple(self) -> WellFormedExtensionTuple:
+        """Returns an ExtensionTuple with the same elements, preserving order."""
+        return WellFormedExtensionTuple(*self.theory_components)
+
+    def to_well_formed_unique_extension_tuple(self) -> WellFormedUniqueExtensionTuple:
+        """Returns an UniqueExtensionTuple with the same elements, preserving order."""
+        return WellFormedUniqueExtensionTuple(*self.theory_components)
 
 
 class WellFormedAxiom(WellFormedAssertion):
@@ -301,6 +333,7 @@ class WellFormedUniqueExtensionTuple(WellFormedFormula):
 
     @property
     def arity(self) -> int:
+        """Returns the number of elements in this unique-extension-tuple."""
         return super().arity
 
     @property
@@ -311,7 +344,7 @@ class WellFormedUniqueExtensionTuple(WellFormedFormula):
         """Returns :obj:`True` if `element` is an element of the tuple."""
         return self.has_top_level_argument(argument=element)
 
-    def is_unique_extension_tuple_equivalent_to(self, other: FlexibleUniqueExtensionTuple) -> bool:
+    def is_well_formed_unique_extension_tuple_equivalent_to(self, other: FlexibleUniqueExtensionTuple) -> bool:
         """Returns :obj:`True` if this set is equal to the `other` set."""
         other = ensure_well_formed_unique_extension_tuple(other)
 
@@ -330,11 +363,7 @@ class WellFormedUniqueExtensionTuple(WellFormedFormula):
     def iterate_top_level_elements(self) -> typing.Generator[_fml.Formula, None, None]:
         yield from self.iterate_top_level_arguments()
 
-    def to_python_set(self) -> set[_fml.Formula]:
-        # TODO: Move this method to Formula.
-        return set(self.elements)
-
-    def to_extension_tuple(self) -> WellFormedExtensionTuple:
+    def to_well_formed_extension_tuple(self) -> WellFormedExtensionTuple:
         """Returns an ExtensionTuple with the same elements, preserving order."""
         return WellFormedExtensionTuple(*self.elements)
 
@@ -839,7 +868,7 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
         # the arguments are passed as an ExtensionTuple.
         # in order to check formula-equivalence-with-variables between
         # arguments and premises, we must convert premises to ExtensionTuple.
-        premises_as_extension_tuple: WellFormedExtensionTuple = self.premises.to_extension_tuple()
+        premises_as_extension_tuple: WellFormedExtensionTuple = self.premises.to_well_formed_extension_tuple()
 
         # the arguments must be formula-equivalent-with variables to the premises.
         # simultaneously, infer the variable values.
