@@ -226,12 +226,11 @@ class WellFormedExtensionTuple(WellFormedFormula):
 
     def __new__(cls, *arguments):
         global extension_tuple_connector
-        arguments = _fml.ensure_formulas(*arguments)
         return super().__new__(cls, connector=extension_tuple_connector, arguments=arguments)
 
     @property
     def arity(self) -> int:
-        return _fml.Formula.arity.__get__(self)
+        return super().arity
 
     @property
     def elements(self) -> collections.abc.Iterable[_fml.Formula]:
@@ -255,20 +254,21 @@ class WellFormedExtensionTuple(WellFormedFormula):
         return self.is_formula_equivalent(other_formula=other)
 
     def to_unique_extension_tuple(self, duplicate_processing: _fml.DuplicateProcessing =
-    _fml.DuplicateProcessing.RAISE_ERROR) -> UniqueExtensionTuple:
+    _fml.DuplicateProcessing.RAISE_ERROR) -> WellFormedUniqueExtensionTuple:
         if duplicate_processing == _fml.DuplicateProcessing.RAISE_ERROR and not self.has_unique_arguments:
             raise ValueError(f'All the elements of this `ExtensionTuple` are not unique: {self}')
-        return UniqueExtensionTuple(self.elements, duplicate_processing=duplicate_processing)
+        return WellFormedUniqueExtensionTuple(self.elements, duplicate_processing=duplicate_processing)
 
 
-class UniqueExtensionTuple(_fml.Formula):
+class WellFormedUniqueExtensionTuple(_fml.Formula):
     """A UniqueTuple is a model of a pseudo-set from set theory with the following constraints:
      - it is finite,
      - it is computable,
      - it is defined by extension,
-     - its elements are unique,
      - its elements are ordered but unique-tuple-equivalence makes it possible to compare
        UniqueTuples without taking order in consideration.
+     - its elements are unique, i.e. there exists no pair (x, y) of elements such that
+       x ~formula y.
 
     It is implemented as a formula with a well-known `unique_tuple` connector,
     whose arguments are denoted as the elements of the UniqueExtensionTuple,
@@ -279,29 +279,24 @@ class UniqueExtensionTuple(_fml.Formula):
     the order of the arguments.
     """
 
-    def __init__(self, *elements,
+    def __init__(self, *arguments,
                  duplicate_processing: _fml.DuplicateProcessing =
                  _fml.DuplicateProcessing.RAISE_ERROR):
-        """
-        TODO: Rename and inherit from WellFormedFormula,
-            adapt ensure and validation functions, etc.
+        global unique_extension_tuple_connector
+        super().__init__(connector=unique_extension_tuple_connector, arguments=arguments)
 
-
-        :param elements:
-        :param duplicate_processing: 'raise_error' (default), or 'strip'.
-        """
-        elements = _fml.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
-        super().__init__(connector=unique_extension_tuple_connector, arguments=elements)
-
-    def __new__(cls, *elements,
+    def __new__(cls, *arguments,
                 duplicate_processing: _fml.DuplicateProcessing =
                 _fml.DuplicateProcessing.RAISE_ERROR):
-        elements = _fml.ensure_unique_formulas(*elements, duplicate_processing=duplicate_processing)
-        return super().__new__(cls, connector=unique_extension_tuple_connector, arguments=elements)
+        global unique_extension_tuple_connector
+        # Strip duplicates if required, before well-formedness validation.
+        if duplicate_processing == _fml.DuplicateProcessing.STRIP:
+            arguments = _fml.ensure_unique_formulas(*arguments, duplicate_processing=duplicate_processing)
+        return super().__new__(cls, connector=unique_extension_tuple_connector, arguments=arguments)
 
     @property
     def arity(self) -> int:
-        return _fml.Formula.arity.__get__(self)
+        return super().arity
 
     @property
     def elements(self) -> collections.abc.Iterable[_fml.Formula]:
@@ -313,7 +308,7 @@ class UniqueExtensionTuple(_fml.Formula):
 
     def is_unique_extension_tuple_equivalent_to(self, other: FlexibleUniqueExtensionTuple) -> bool:
         """Returns `True` if this set is equal to the `other` set."""
-        other = ensure_unique_extension_tuple(other)
+        other = ensure_well_formed_unique_extension_tuple(other)
 
         # Check condition for all elements in self.
         for x in self.elements:
@@ -330,13 +325,8 @@ class UniqueExtensionTuple(_fml.Formula):
     def iterate_top_level_elements(self) -> typing.Generator[_fml.Formula, None, None]:
         yield from self.iterate_top_level_arguments()
 
-    def to_python_list(self) -> list[_fml.Formula]:
-        return list(self.elements)
-
-    def to_python_tuple(self) -> tuple[_fml.Formula, ...]:
-        return tuple(self.elements)
-
     def to_python_set(self) -> set[_fml.Formula]:
+        # TODO: Move this method to Formula.
         return set(self.elements)
 
     def to_extension_tuple(self) -> WellFormedExtensionTuple:
@@ -345,10 +335,10 @@ class UniqueExtensionTuple(_fml.Formula):
 
 
 def ensure_well_formed_extension_tuple(formula: _fml.Formula) -> WellFormedExtensionTuple:
-    """Ensures that `formula` is a well-formed extension-tuple, raises an exception otherwise.
+    """Ensures that :paramref:`formula` is a well-formed extension-tuple, raises an exception otherwise.
 
     :param formula: A formula.
-    :return: A well-formed extension-tuple, typed as :class:`WellFormedExtensionTuple`.
+    :return: A well-formed extension-tuple, strongly typed as :class:`WellFormedExtensionTuple`.
     """
     global extension_tuple_connector
     formula: _fml.Formula = _fml.ensure_formula(formula)
@@ -364,26 +354,27 @@ def ensure_well_formed_extension_tuple(formula: _fml.Formula) -> WellFormedExten
                                     formula=formula)
 
 
-def ensure_unique_extension_tuple(
-        o: FlexibleUniqueExtensionTuple,
-        duplicate_processing: _fml.DuplicateProcessing = _fml.DuplicateProcessing.RAISE_ERROR) -> UniqueExtensionTuple:
-    """Ensures that the input is a UniqueTuple.
+def ensure_well_formed_unique_extension_tuple(
+        formula: _fml.Formula,
+        duplicate_processing: _fml.DuplicateProcessing = _fml.DuplicateProcessing.RAISE_ERROR) -> WellFormedUniqueExtensionTuple:
+    """Ensures that :paramref:`formula` is a well-formed extension-tuple, raises an exception otherwise.
 
-    Args:
-        :param o:
-        :param duplicate_processing:
-
-    Returns:
-        UniqueTuple: the input as an UniqueExtensionTuple
-
-    Raises:
-        ValueError: if the input is not a UniqueTuple.
+    :param formula: A formula.
+    :param duplicate_processing: Instructions on how duplicates are processed.
+    :return: A well-formed extension-tuple, strongly typed as :class:`WellFormedUniqueExtensionTuple`.
     """
-    if isinstance(o, UniqueExtensionTuple):
-        return o
-    if isinstance(o, _fml.Formula) and o.connector == unique_extension_tuple_connector:
-        return UniqueExtensionTuple(*o.arguments, duplicate_processing=duplicate_processing)
-    raise _utl.PunctiliousError(f'`o` is not a unique-extension-tuple.', o=o)
+    global unique_extension_tuple_connector
+    formula: _fml.Formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedUniqueExtensionTuple):
+        # The type ensures well-formedness.
+        return formula
+    elif isinstance(formula, _fml.Formula) and formula.connector == unique_extension_tuple_connector:
+        # The WellFormedFormula parent class initializer ensures well-formedness.
+        return WellFormedUniqueExtensionTuple(*formula.arguments, duplicate_processing=duplicate_processing)
+    else:
+        raise _utl.PunctiliousError(title='Ill-formed unique-extension-tuple',
+                                    details=f'`formula` is not a well-formed unique-extension-tuple.',
+                                    formula=formula)
 
 
 def ensure_extension_map(o: FlexibleExtensionTuple) -> ExtensionMap:
@@ -552,13 +543,14 @@ def ensure_well_formed_formula(formula: _fml.Formula) -> WellFormedFormula:
                                 formula=formula)
 
 
-def union_unique_tuples(*args: UniqueExtensionTuple):
+def union_unique_tuples(*args: WellFormedUniqueExtensionTuple):
     """Returns the union of UniqueTuple provided. Strip any duplicate in the process."""
     args = tuple(
-        ensure_unique_extension_tuple(o=s, duplicate_processing=_fml.DuplicateProcessing.RAISE_ERROR) for s
+        ensure_well_formed_unique_extension_tuple(formula=s, duplicate_processing=_fml.DuplicateProcessing.RAISE_ERROR)
+        for s
         in args)
     flattened = tuple(element for sub_tuple in args for element in sub_tuple.elements)
-    output = UniqueExtensionTuple(*flattened, duplicate_processing=_fml.DuplicateProcessing.STRIP)
+    output = WellFormedUniqueExtensionTuple(*flattened, duplicate_processing=_fml.DuplicateProcessing.STRIP)
     return output
 
 
@@ -590,14 +582,14 @@ class ExtensionMap(_fml.Formula):
     CODOMAIN_INDEX: int = 1  # The index-position of the `codomain` element in the `arguments` tuple.
     _FORMULA_FIXED_ARITY: int = 2  # A syntactic-rule.
 
-    def __init__(self, domain: UniqueExtensionTuple, codomain: WellFormedExtensionTuple):
+    def __init__(self, domain: WellFormedUniqueExtensionTuple, codomain: WellFormedExtensionTuple):
         if domain.arity != codomain.arity:
             raise _utl.PunctiliousError(f'The arity of the `domain` is not equal to the arity of the `codomain`.',
                                         domain_arity=domain.arity, codomain_arity=codomain.arity,
                                         domain=domain, codomain=codomain)
         super().__init__(connector=extension_map_connector, arguments=(domain, codomain,))
 
-    def __new__(cls, domain: UniqueExtensionTuple, codomain: WellFormedExtensionTuple):
+    def __new__(cls, domain: WellFormedUniqueExtensionTuple, codomain: WellFormedExtensionTuple):
         return super().__new__(cls, connector=extension_map_connector, arguments=(domain, codomain,))
 
     @property
@@ -605,8 +597,8 @@ class ExtensionMap(_fml.Formula):
         return ensure_well_formed_extension_tuple(self.arguments[self.__class__.CODOMAIN_INDEX])
 
     @property
-    def domain(self) -> UniqueExtensionTuple:
-        return ensure_unique_extension_tuple(self.arguments[self.__class__.DOMAIN_INDEX])
+    def domain(self) -> WellFormedUniqueExtensionTuple:
+        return ensure_well_formed_unique_extension_tuple(self.arguments[self.__class__.DOMAIN_INDEX])
 
     def get_image(self, x: _fml.Formula) -> _fml.Formula:
         if not self.domain.has_top_level_element(element=x):
@@ -625,7 +617,7 @@ class ExtensionMap(_fml.Formula):
         """
         if not self.is_invertible:
             raise ValueError(f'This ExtensionMap is not invertible: {self}')
-        new_domain = UniqueExtensionTuple(*self.codomain.elements)
+        new_domain = WellFormedUniqueExtensionTuple(*self.codomain.elements)
         new_codomain = WellFormedExtensionTuple(*self.domain.elements)
         return ExtensionMap(domain=new_domain, codomain=new_codomain)
 
@@ -677,10 +669,10 @@ def substitute_formulas(phi: _fml.Formula, m: ExtensionMap,
 
 def is_formula_equivalent_with_variables(formula_without_variables: _fml.Formula,
                                          formula_with_variables: _fml.Formula,
-                                         variables: UniqueExtensionTuple) -> [bool, ExtensionMap]:
+                                         variables: WellFormedUniqueExtensionTuple) -> [bool, ExtensionMap]:
     formula_without_variables = _fml.ensure_formula(formula_without_variables)
     formula_with_variables = _fml.ensure_formula(formula_with_variables)
-    variables = ensure_unique_extension_tuple(variables)
+    variables = ensure_well_formed_unique_extension_tuple(variables)
     # Validates that the formula_without_variables does not contain any variable.
     for variable in variables.elements:
         if formula_without_variables.tree_contains_formula(variable, include_root=True):
@@ -698,7 +690,7 @@ def is_formula_equivalent_with_variables(formula_without_variables: _fml.Formula
     all_keys = tuple(m.keys())
     values = tuple(value for value in all_values if value is not None)
     keys = tuple(all_keys[i] for i, value in enumerate(all_values) if value is not None)
-    domain = UniqueExtensionTuple(*keys)
+    domain = WellFormedUniqueExtensionTuple(*keys)
     codomain = WellFormedExtensionTuple(*values)
     m2 = ExtensionMap(domain=domain, codomain=codomain)
 
@@ -756,20 +748,20 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
     _NATURAL_INFERENCE_RULE_CONCLUSION_INDEX: int = 2
     _NATURAL_INFERENCE_RULE_FIXED_ARITY: int = 3
 
-    def __init__(self, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
+    def __init__(self, variables: WellFormedUniqueExtensionTuple, premises: WellFormedUniqueExtensionTuple,
                  conclusion: _fml.Formula):
         """
         :param variables: the variables.
         :param premises: the premises.
         :param conclusion: the conclusion.
         """
-        variables: UniqueExtensionTuple = ensure_unique_extension_tuple(variables)
-        premises: UniqueExtensionTuple = ensure_unique_extension_tuple(premises)
+        variables: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(variables)
+        premises: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(premises)
         conclusion: _fml.Formula = _fml.ensure_formula(conclusion)
         super().__init__(connector=natural_inference_rule_connector, arguments=(variables, premises,
                                                                                 conclusion,))
 
-    def __new__(cls, variables: UniqueExtensionTuple, premises: UniqueExtensionTuple,
+    def __new__(cls, variables: WellFormedUniqueExtensionTuple, premises: WellFormedUniqueExtensionTuple,
                 conclusion: _fml.Formula):
         return super().__new__(cls, connector=natural_inference_rule_connector,
                                arguments=(variables, premises,
@@ -833,13 +825,13 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
         return self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
 
     @property
-    def premises(self) -> UniqueExtensionTuple:
-        return ensure_unique_extension_tuple(
+    def premises(self) -> WellFormedUniqueExtensionTuple:
+        return ensure_well_formed_unique_extension_tuple(
             self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX])
 
     @property
-    def variables(self) -> UniqueExtensionTuple:
-        return ensure_unique_extension_tuple(
+    def variables(self) -> WellFormedUniqueExtensionTuple:
+        return ensure_well_formed_unique_extension_tuple(
             self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
 
     def apply_rule(self, inputs: typing.Iterable[_fml.Formula]) -> _fml.Formula:
@@ -959,7 +951,7 @@ FlexibleExtensionMap = typing.Union[ExtensionMap, _fml.Formula]
 FlexibleExtensionTuple = typing.Union[WellFormedExtensionTuple, _fml.Formula, collections.abc.Iterable]
 FlexibleNaturalInferenceRule = typing.Union[WellFormedExtensionTuple, _fml.Formula]
 FlexibleTheorem = typing.Union[WellFormedTheorem, _fml.Formula]
-FlexibleUniqueExtensionTuple = typing.Union[UniqueExtensionTuple, _fml.Formula, collections.abc.Iterable]
+FlexibleUniqueExtensionTuple = typing.Union[WellFormedUniqueExtensionTuple, _fml.Formula, collections.abc.Iterable]
 FlexibleTheory = typing.Union[Theory, _fml.Formula]
 FlexibleTheoryComponent = typing.Union[_fml.Formula]
 
@@ -1054,6 +1046,49 @@ def is_well_formed_extension_tuple(
             return False
     if return_typed_arguments:
         return True, _fml.FormulaArguments(*formula.arguments)
+    else:
+        return True
+
+
+def is_well_formed_unique_extension_tuple(
+        formula: _fml.Formula,
+        raise_error_if_false: bool = False,
+        return_typed_arguments: bool = False) -> typing.Union[bool, tuple[bool, _fml.FormulaArguments | None]]:
+    """Returns :obj:`True` if :paramref:`formula` is a well-formed unique-extension-tuple, :obj:`False` otherwise.
+
+    :param formula: A formula.
+    :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
+    :param return_typed_arguments: If `:obj:`True`, returns a tuple (bool, FormulaArguments) where arguments are
+        typed as :class:`WellFormedFormula` if applicable.
+    :return: :class:`bool`: :obj:`True` if `formula` is a well-formed unique-extension-tuple, :obj:`False` otherwise.
+    """
+    global unique_extension_tuple_connector
+    formula = _fml.ensure_formula(formula)
+    if isinstance(formula, WellFormedUniqueExtensionTuple):
+        # The type assure well-formedness and proper Python typing by design.
+        if return_typed_arguments:
+            return True, formula.arguments
+        else:
+            return True
+    # For a raw formula, well-formedness and proper Python typing must be checked.
+    if formula.connector != unique_extension_tuple_connector:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed unique-extension-tuple',
+                details='`formula` is not a well-formed unique-extension-tuple.'
+                        'Its root connector is not the well-known :obj:`unique_extension_tuple_connector`.',
+                formula=formula,
+                unique_extension_tuple_connector=unique_extension_tuple_connector
+            )
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
+    # Assures the uniqueness of elements.
+    arguments = _fml.ensure_unique_formulas(*formula.arguments,
+                                            duplicate_processing=_fml.DuplicateProcessing.RAISE_ERROR)
+    if return_typed_arguments:
+        return True, _fml.FormulaArguments(*arguments)
     else:
         return True
 
@@ -1165,10 +1200,10 @@ def is_well_formed_natural_inference_rule(
             return False, None
         else:
             return False
-    variables: UniqueExtensionTuple = ensure_unique_extension_tuple(
+    variables: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(
         formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX],
         raise_error_if_false=True)
-    premises: UniqueExtensionTuple = ensure_unique_extension_tuple(
+    premises: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(
         formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX],
         raise_error_if_false=True)
     conclusion = formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
@@ -1193,9 +1228,17 @@ See also
 - :class:`WellFormedExtensionTuple`
 """
 
-unique_extension_tuple_connector = _fml.Connector(
-    uid=_uid.UniqueIdentifier(slug='unique_extension_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'))
-"""The well-known connector of the `UniqueTuple` object.
+unique_extension_tuple_connector = WellFormedFormulaConnector(
+    uid=_uid.UniqueIdentifier(slug='unique_extension_tuple', uuid='8fd36cc9-8845-4cdf-ac24-1faf95ee44fc'),
+    validation_function=is_well_formed_unique_extension_tuple,
+    ensurance_function=ensure_well_formed_unique_extension_tuple,
+    well_formed_formula_python_type=WellFormedUniqueExtensionTuple)
+"""The well-known unique-extension-tuple connector.
+
+See also
+---------
+
+- :class:`WellFormedUniqueExtensionTuple`
 """
 
 extension_map_connector = _fml.Connector(

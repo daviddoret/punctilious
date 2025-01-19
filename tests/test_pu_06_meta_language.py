@@ -2,26 +2,27 @@ import pytest
 import punctilious as pu
 
 
-class TestUniqueTuple:
+class TestWellFormedUniqueExtensionTuple:
     def test_1(self):
-        set1 = pu.mtl.unique_extension_tuple_connector
+        unique_tuple = pu.mtl.unique_extension_tuple_connector
         a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
         c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
         d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        phi1 = set1(a(), b(), c())
-        phi2 = pu.mtl.ensure_unique_extension_tuple(o=phi1)
+        phi1 = unique_tuple(a(), b(), c())
+        assert pu.mtl.is_well_formed_unique_extension_tuple(phi1)
+        phi2 = pu.mtl.ensure_well_formed_unique_extension_tuple(formula=phi1)
         assert pu.fml.is_formula_equivalent(phi=phi1, psi=phi2)
-        phi3 = set1(a(), b(), a())
-        with pytest.raises(ValueError):
-            pu.mtl.ensure_unique_extension_tuple(o=phi3)
-        with pytest.raises(ValueError):
-            pu.mtl.UniqueExtensionTuple(a(), b(), a())
-        phi4 = set1(a(), b(a()), a(b()), c(a()))
-        phi5 = pu.mtl.ensure_unique_extension_tuple(o=phi4)
+        phi3 = unique_tuple(a(), b(), a())
+        with pytest.raises(pu.utl.PunctiliousError):
+            pu.mtl.ensure_well_formed_unique_extension_tuple(formula=phi3)
+        with pytest.raises(pu.utl.PunctiliousError):
+            pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), a())
+        phi4 = unique_tuple(a(), b(a()), a(b()), c(a()))
+        phi5 = pu.mtl.ensure_well_formed_unique_extension_tuple(formula=phi4)
         assert len(phi5.arguments) == 4
-        phi6 = set1()
-        phi7 = pu.mtl.ensure_unique_extension_tuple(o=phi6)
+        phi6 = unique_tuple()
+        phi7 = pu.mtl.ensure_well_formed_unique_extension_tuple(formula=phi6)
         assert len(phi7.arguments) == 0
 
 
@@ -52,11 +53,11 @@ class TestUnionSets1:
         b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
         c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
         d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        s1 = pu.mtl.UniqueExtensionTuple()
-        s2 = pu.mtl.UniqueExtensionTuple(a(), b(), d())
-        s3 = pu.mtl.UniqueExtensionTuple(b())
-        s4 = pu.mtl.UniqueExtensionTuple(d(), c())
-        s5 = pu.mtl.UniqueExtensionTuple(a(), b(), c(), d())
+        s1 = pu.mtl.WellFormedUniqueExtensionTuple()
+        s2 = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), d())
+        s3 = pu.mtl.WellFormedUniqueExtensionTuple(b())
+        s4 = pu.mtl.WellFormedUniqueExtensionTuple(d(), c())
+        s5 = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), c(), d())
 
         after = pu.mtl.union_unique_tuples(s1, s1)
         assert after.is_unique_extension_tuple_equivalent_to(s1)
@@ -80,7 +81,7 @@ class TestMap1:
         x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
-        domain = pu.mtl.UniqueExtensionTuple(a(), b(), c())
+        domain = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), c())
         codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
         m1 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
@@ -90,7 +91,7 @@ class TestMap1:
         with pytest.raises(ValueError):
             m1.get_image(x=x())
 
-        domain = pu.mtl.UniqueExtensionTuple(c(), b(), a())
+        domain = pu.mtl.WellFormedUniqueExtensionTuple(c(), b(), a())
         codomain = pu.mtl.WellFormedExtensionTuple(z(), y(), x())
         m2 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
@@ -106,7 +107,7 @@ class TestSubstitute:
         x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
-        domain = pu.mtl.UniqueExtensionTuple(a(), b(), c())
+        domain = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), c())
         codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
         m1 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
@@ -126,7 +127,7 @@ class TestSubstitute:
             m=m1)
         assert phi.is_formula_equivalent(other_formula=x(z(z(z(y()), z(x(y()))))))
 
-        domain = pu.mtl.UniqueExtensionTuple(b(b(c())))
+        domain = pu.mtl.WellFormedUniqueExtensionTuple(b(b(c())))
         codomain = pu.mtl.WellFormedExtensionTuple(x(y()))
         m2 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
@@ -146,7 +147,7 @@ class TestSubstitute:
         x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
-        domain = pu.mtl.UniqueExtensionTuple(a(), b(), c())
+        domain = pu.mtl.WellFormedUniqueExtensionTuple(a(), b(), c())
         codomain = pu.mtl.WellFormedExtensionTuple(x(), y(), z())
         m1 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
@@ -170,7 +171,7 @@ class TestSubstitute:
         output = pu.mtl.substitute_formulas(phi=input, m=m1)
         assert output.is_formula_equivalent(a(d(y(), e()), e(x()), y(), x(), f(), c(z())))
 
-        domain = pu.mtl.UniqueExtensionTuple(a(a(b())), b(a(), b(b(b())), c()), c())
+        domain = pu.mtl.WellFormedUniqueExtensionTuple(a(a(b())), b(a(), b(b(b())), c()), c())
         codomain = pu.mtl.WellFormedExtensionTuple(x(), y(a(), y(), z(b())), z(x(y(a()))))
         m2 = pu.mtl.ExtensionMap(domain=domain,
                                  codomain=codomain)
@@ -193,7 +194,7 @@ class TestFormulaEquivalenceWithVariables:
         x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
-        variables = pu.mtl.UniqueExtensionTuple(x(), y(), z())
+        variables = pu.mtl.WellFormedUniqueExtensionTuple(x(), y(), z())
         values = pu.mtl.WellFormedExtensionTuple(d(), e(), f())
         m1 = pu.mtl.ExtensionMap(domain=variables,
                                  codomain=values)
@@ -257,7 +258,7 @@ class TestFormulaEquivalenceWithVariables:
         assert m3.get_image(y()) == e()
         assert m3.get_image(z()) == f()
 
-        variables = pu.mtl.UniqueExtensionTuple(x(x(y())), y(x(), y(y(y())), z()), z())
+        variables = pu.mtl.WellFormedUniqueExtensionTuple(x(x(y())), y(x(), y(y(y())), z()), z())
         values = pu.mtl.WellFormedExtensionTuple(d(), e(x(), e(), f(y())), f(d(e(x()))))
         m2 = pu.mtl.ExtensionMap(domain=variables,
                                  codomain=values)
@@ -286,8 +287,8 @@ class TestWellFormedNaturalInferenceRule:
         x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
-        variables = pu.mtl.UniqueExtensionTuple(x(), y(), z())
-        premises = pu.mtl.UniqueExtensionTuple(
+        variables = pu.mtl.WellFormedUniqueExtensionTuple(x(), y(), z())
+        premises = pu.mtl.WellFormedUniqueExtensionTuple(
             a(x(), y()),
             b(y(), z())
         )
@@ -317,8 +318,8 @@ class TestTheorem:
         x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
         y = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='y'))
         z = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='z'))
-        variables = pu.mtl.UniqueExtensionTuple(x(), y(), z())
-        premises = pu.mtl.UniqueExtensionTuple(
+        variables = pu.mtl.WellFormedUniqueExtensionTuple(x(), y(), z())
+        premises = pu.mtl.WellFormedUniqueExtensionTuple(
             a(x(), y()),
             b(y(), z())
         )
@@ -358,17 +359,17 @@ class TestTheory:
         e = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='e'))
         f = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='f'))
         x = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='x'))
-        variables = pu.mtl.UniqueExtensionTuple(x())
-        premises = pu.mtl.UniqueExtensionTuple(a(x()))
+        variables = pu.mtl.WellFormedUniqueExtensionTuple(x())
+        premises = pu.mtl.WellFormedUniqueExtensionTuple(a(x()))
         conclusion = a(b(x()))
         inference_rule = pu.mtl.WellFormedNaturalInferenceRule(
             variables=variables,
             premises=premises,
             conclusion=conclusion
         )
-        theory = pu.mtl.Theory(axioms=pu.mtl.UniqueExtensionTuple(a(c)),
-                               inference_rules=pu.mtl.UniqueExtensionTuple(inference_rule),
-                               inference_steps=pu.mtl.UniqueExtensionTuple())
+        theory = pu.mtl.Theory(axioms=pu.mtl.WellFormedUniqueExtensionTuple(a(c)),
+                               inference_rules=pu.mtl.WellFormedUniqueExtensionTuple(inference_rule),
+                               inference_steps=pu.mtl.WellFormedUniqueExtensionTuple())
         pass
 
 
