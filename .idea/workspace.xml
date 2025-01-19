@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_04_formal_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -504,7 +503,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -852,9 +851,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_04_formal_language.TestFormulasAreUnique.test_1" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestNaturalInferenceRule.test_1" />
       </list>
@@ -875,14 +874,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01296" summary="Set1">
-      <option name="closed" value="true" />
-      <created>1736202177053</created>
-      <option name="number" value="01296" />
-      <option name="presentableId" value="LOCAL-01296" />
-      <option name="project" value="LOCAL" />
-      <updated>1736202177053</updated>
     </task>
     <task id="LOCAL-01297" summary="Map1">
       <option name="closed" value="true" />
@@ -1268,7 +1259,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737269956537</updated>
     </task>
-    <option name="localTasksCounter" value="1345" />
+    <task id="LOCAL-01345" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1737272331067</created>
+      <option name="number" value="01345" />
+      <option name="presentableId" value="LOCAL-01345" />
+      <option name="project" value="LOCAL" />
+      <updated>1737272331067</updated>
+    </task>
+    <option name="localTasksCounter" value="1346" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1428,11 +1427,6 @@
           <url>file://$PROJECT_DIR$/tests/test_pu_06_meta_language.py</url>
           <line>37</line>
           <option name="timeStamp" value="436" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_pu_06_meta_language.py</url>
-          <line>17</line>
-          <option name="timeStamp" value="439" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py</url>

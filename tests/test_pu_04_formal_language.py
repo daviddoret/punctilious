@@ -55,7 +55,7 @@ class TestEnsureUniqueFormulas:
         assert after == (a(), b(), c(),)
 
         before = (a(), b(), c(), a(), c(), c(), c(), b(), a())
-        with pytest.raises(ValueError):
+        with pytest.raises(pu.utl.PunctiliousError):
             after = pu.fml.ensure_unique_formulas(
                 *before,
                 duplicate_processing=pu.fml.DuplicateProcessing.RAISE_ERROR)
