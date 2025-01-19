@@ -520,19 +520,29 @@ def ensure_well_formed_extension_map(formula: _fml.Formula) -> WellFormedExtensi
 def ensure_well_formed_inference_rule(formula: _fml.Formula):
     """Ensures that :paramref:`formula` is a well-formed inference-rule, raises an exception otherwise.
 
+    Note
+    _____
+
+    :class:`WellFormedInferenceRule` is an abstract Python class. Therefore, it is necessary
+        to maintain this function to support all concrete Python classes implementing
+        :class:`WellFormedInferenceRule`.
+
     :param formula: A formula.
     :return: A strongly-typed well-formed inference-rule.
     """
-    formula = _fml.ensure_formula(formula)
+    formula: _fml.Formula = _fml.ensure_formula(formula)
     if isinstance(formula, WellFormedInferenceRule):
         # The type ensures well-formedness.
         return formula
-    elif isinstance(formula, _fml.Formula) and formula.connector == inference_rule_connector:
+    elif isinstance(formula, _fml.Formula) and formula.connector == natural_inference_rule_connector:
         # The WellFormedFormula parent class initializer ensures well-formedness.
-        return WellFormedInferenceRule(*formula.arguments)
+        formula: WellFormedNaturalInferenceRule = ensure_well_formed_natural_inference_rule(formula)
+        return formula
+    # QUESTION: WE MAY LIST HERE ALL WELL-FORMED INFERENCE-RULE CLASSES HERE,
+    #   BUT THIS APPROACH IS NOT VERY ELEGANT...
     else:
         raise _utl.PunctiliousError(title='Ill-formed inference rule',
-                                    details=f'`formula` is not a well-formed inference_rule.',
+                                    details=f'`formula` is not a well-formed inference-rule.',
                                     formula=formula)
 
 
