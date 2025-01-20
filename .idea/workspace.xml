@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -879,14 +877,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01306" summary="modules clean-up">
-      <option name="closed" value="true" />
-      <created>1736607213724</created>
-      <option name="number" value="01306" />
-      <option name="presentableId" value="LOCAL-01306" />
-      <option name="project" value="LOCAL" />
-      <updated>1736607213724</updated>
-    </task>
     <task id="LOCAL-01307" summary="modules clean-up">
       <option name="closed" value="true" />
       <created>1736609856768</created>
@@ -1271,7 +1261,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737321196246</updated>
     </task>
-    <option name="localTasksCounter" value="1355" />
+    <task id="LOCAL-01355" summary="meta-language">
+      <option name="closed" value="true" />
+      <created>1737404960201</created>
+      <option name="number" value="01355" />
+      <option name="presentableId" value="LOCAL-01355" />
+      <option name="project" value="LOCAL" />
+      <updated>1737404960201</updated>
+    </task>
+    <option name="localTasksCounter" value="1356" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
