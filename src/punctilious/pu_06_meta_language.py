@@ -991,8 +991,6 @@ class Theory(WellFormedFormula):
         super().__init__(connector=theory_connector, arguments=components)
 
     def __new__(cls, *components: tuple[WellFormedTheoryComponent]):
-        components: tuple[WellFormedTheoryComponent] = tuple(ensure_theory_component(x) for x in components)
-        # TODO: CHECK THEORY CONSISTENCY
         return super().__new__(cls, connector=theory_connector, arguments=components)
 
     @property
@@ -1087,12 +1085,15 @@ def is_well_formed_theory(
         else:
             return False
     # Ensures the uniqueness of theory components.
-    # TODO: Avoid raising an exception and return False instead
-    arguments: tuple[_fml.Formula, ...] = _fml.ensure_unique_formulas(
-        *formula.arguments, duplicate_processing=_fml.DuplicateProcessing.RAISE_ERROR)
+    formulas_are_unique: bool = _fml.formulas_are_unique(*formula.arguments, raise_error_if_false=raise_error_if_false)
+    if not formulas_are_unique:
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
     # Declare an empty list to populate the validated arguments.
-    valid_arguments: list[WellFormedTheoryComponent] = list()
-    for argument in arguments:
+    typed_theory_components: list[WellFormedTheoryComponent] = list()
+    for argument in formula.arguments:
         # Ensures the argument is a well-formed formula.
         if not is_well_formed_formula(argument):
             if raise_error_if_false:
@@ -1122,12 +1123,31 @@ def is_well_formed_theory(
                 return False, None
             else:
                 return False
-        theory_component: WellFormedTheoryComponent = typing.cast(well_formed_formula, WellFormedTheoryComponent)
         # If the theory-component is a theorem,
         # ensures all of its inputs are antecedent valid-statements in the theory.
-        XXXXXXXXXX
+        if isinstance(well_formed_formula, WellFormedTheorem):
+            for input in well_formed_formula.inputs:
+                if not is_valid_statement(input, typed_theory_components):
+                    if raise_error_if_false:
+                        raise _utl.PunctiliousError(
+                            title='Ill-formed theory',
+                            details='`formula` is an ill-formed theory, '
+                                    ' because an `input` of a `theorem` is not a valid-statement'
+                                    ' in `predecessor-theory-components`.',
+                            input=input,
+                            theorem=well_formed_formula,
+                            predecessor_theory_components=typed_theory_components,
+                            formula=formula
+                        )
+                    if return_typed_arguments:
+                        return False, None
+                    else:
+                        return False
+        # Append the now validated theory component to the list
+        typed_theory_components.append(well_formed_formula)
+    # All theory components have been validated.
     if return_typed_arguments:
-        return True, _fml.FormulaArguments(*arguments)
+        return True, _fml.FormulaArguments(*typed_theory_components)
     else:
         return True
 

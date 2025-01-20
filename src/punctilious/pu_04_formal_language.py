@@ -14,10 +14,11 @@ import punctilious.pu_02_unique_identifiers as _ids
 import punctilious.pu_03_representation as _rpr
 
 
-def ensure_formula(o=None) -> Formula:
+def ensure_formula(o: object = None) -> Formula:
     if isinstance(o, Formula):
         return o
     elif isinstance(o, Connector):
+        # This is a convention: when a connector * is passed as is, it is interpreted as *().
         return Formula(connector=o)
     elif isinstance(o, collections.abc.Iterable):
         # If o is an iterable, the assumption is that it is of the shape:
@@ -742,7 +743,7 @@ def formula_has_unique_arguments(phi: Formula) -> bool:
     return phi.has_unique_arguments
 
 
-def formulas_are_unique(*formulas: Formula) -> bool:
+def formulas_are_unique(*formulas: Formula, raise_error_if_false: bool = False) -> bool:
     """Returns `True` if all formulas passed as arguments are unique,
     in other words there exists no pair of two formulas that are formula-equivalent.
     """
@@ -750,6 +751,17 @@ def formulas_are_unique(*formulas: Formula) -> bool:
     for i in range(len(formulas)):
         for j in range(i + 1, len(formulas)):  # Ensure j > i to avoid duplicates
             if is_formula_equivalent(formulas[i], formulas[j]):
+                if raise_error_if_false:
+                    raise _utl.PunctiliousError(
+                        title='Formulas are not unique',
+                        details='`formulas` are not unique because formula `phi` at index-position `i`'
+                                ' is formula-equivalent with formula `psi` at index-position `j`.',
+                        phi=formulas[i],
+                        psi=formulas[j],
+                        i=i,
+                        j=j,
+                        formulas=formulas
+                    )
                 return False
     return True
 

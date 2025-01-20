@@ -367,9 +367,11 @@ class TestTheory:
             premises=premises,
             conclusion=conclusion
         )
-        theory = pu.mtl.Theory(axioms=pu.mtl.WellFormedUniqueExtensionTuple(a(c)),
-                               inference_rules=pu.mtl.WellFormedUniqueExtensionTuple(inference_rule),
-                               inference_steps=pu.mtl.WellFormedUniqueExtensionTuple())
+        axiom = pu.mtl.WellFormedAxiom(a(c()))
+        theory_components = (axiom, inference_rule)
+
+        pass
+        theory = pu.mtl.Theory(*theory_components)
         pass
 
 
