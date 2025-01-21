@@ -7,6 +7,7 @@ import typing
 import collections.abc
 
 # internal modules
+import punctilious.constants as _cst
 import punctilious.pu_01_utilities as _utl
 import punctilious.pu_02_unique_identifiers as _uid
 import punctilious.pu_03_representation as _rpr
@@ -193,7 +194,7 @@ class WellFormedTheory(WellFormedFormula):
 
     def is_theory_equivalent_to(self, other: FlexibleUniqueExtensionTuple) -> bool:
         """Returns :obj:`True` if this set is equal to the `other` set."""
-        raise NotImplementedError('ooops')
+        raise NotImplementedError('oops')
 
     def to_well_formed_extension_tuple(self) -> WellFormedExtensionTuple:
         """Returns an ExtensionTuple with the same elements, preserving order."""
@@ -220,8 +221,6 @@ class WellFormedAxiom(WellFormedAssertion):
       - :math:`\phi` is a formula denoted as the valid statement asserted by the axiom.
 
     """
-    _AXIOM_VALID_STATEMENT_INDEX: int = 0
-    _AXIOM_FIXED_ARITY: int = 1
 
     def __init__(self, valid_statement: _fml.Formula):
         global axiom_connector
@@ -667,9 +666,6 @@ class WellFormedExtensionMap(WellFormedFormula):
     for which elements order is not taken into account,
     and also a Formula, whose arguments are effectively ordered.
     """
-    _EXTENSION_MAP_DOMAIN_INDEX: int = 0  # The index-position of the `domain` element in the `arguments` tuple.
-    _EXTENSION_MAP_CODOMAIN_INDEX: int = 1  # The index-position of the `codomain` element in the `arguments` tuple.
-    _EXTENSION_MAP_FIXED_ARITY: int = 2  # A syntactic-rule.
 
     def __init__(self, domain: WellFormedUniqueExtensionTuple, codomain: WellFormedExtensionTuple):
         if domain.arity != codomain.arity:
@@ -838,10 +834,6 @@ def _is_formula_equivalent_with_variables(
 
 
 class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
-    _NATURAL_INFERENCE_RULE_VARIABLES_INDEX: int = 0
-    _NATURAL_INFERENCE_RULE_PREMISES_INDEX: int = 1
-    _NATURAL_INFERENCE_RULE_CONCLUSION_INDEX: int = 2
-    _NATURAL_INFERENCE_RULE_FIXED_ARITY: int = 3
 
     def __init__(self, variables: WellFormedUniqueExtensionTuple, premises: WellFormedUniqueExtensionTuple,
                  conclusion: _fml.Formula):
@@ -949,10 +941,6 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
 
 
 class WellFormedTheorem(WellFormedAssertion):
-    _THEOREM_STATEMENT_INDEX: int = 0
-    _THEOREM_INPUTS_INDEX: int = 1
-    _THEOREM_INFERENCE_RULE_INDEX: int = 2
-    _THEOREM_FIXED_ARITY: int = 3
 
     def __init__(self, inputs: FlexibleExtensionTuple,
                  inference_rule: FlexibleNaturalInferenceRule, valid_statement: _fml.Formula):
@@ -1186,20 +1174,20 @@ def is_well_formed_axiom(
             return False, None
         else:
             return False
-    if formula.arity != WellFormedAxiom._AXIOM_FIXED_ARITY:
+    if formula.arity != _cst.AXIOM_FIXED_ARITY:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
                 title='Ill-formed axiom',
                 details=f'`formula` is not a well-formed axiom.'
                         f'Its arity is not equal `fixed_arity`.',
                 formula=formula,
-                fixed_arity=WellFormedAxiom._AXIOM_FIXED_ARITY
+                fixed_arity=_cst.AXIOM_FIXED_ARITY
             )
         if return_typed_arguments:
             return False, None
         else:
             return False
-    valid_statement: _fml.Formula = formula[WellFormedAxiom._AXIOM_VALID_STATEMENT_INDEX]
+    valid_statement: _fml.Formula = formula[_cst.AXIOM_VALID_STATEMENT_INDEX]
     if return_typed_arguments:
         return True, _fml.FormulaArguments(valid_statement)
     else:
@@ -1368,24 +1356,24 @@ def is_well_formed_theorem(
             return False, None
         else:
             return False
-    if formula.arity != WellFormedTheorem._THEOREM_FIXED_ARITY:
+    if formula.arity != _cst.THEOREM_FIXED_ARITY:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
                 title='Ill-formed theorem',
                 details='`formula` is not a well-formed theorem.'
                         ' Its arity is not equal `fixed_arity`.',
                 formula=formula,
-                fixed_arity=WellFormedTheorem._THEOREM_FIXED_ARITY
+                fixed_arity=_cst.THEOREM_FIXED_ARITY
             )
         if return_typed_arguments:
             return False, None
         else:
             return False
-    statement: _fml.Formula = formula[WellFormedTheorem._THEOREM_STATEMENT_INDEX]
+    statement: _fml.Formula = formula[_cst.THEOREM_STATEMENT_INDEX]
     inputs: WellFormedExtensionTuple = ensure_well_formed_extension_tuple(
-        formula[WellFormedTheorem._THEOREM_INPUTS_INDEX])
+        formula[_cst.THEOREM_INPUTS_INDEX])
     inference_rule: WellFormedInferenceRule = ensure_well_formed_inference_rule(
-        formula[WellFormedTheorem._THEOREM_INFERENCE_RULE_INDEX])
+        formula[_cst.THEOREM_INFERENCE_RULE_INDEX])
     derived_statement: _fml.Formula = inference_rule.apply_rule(inputs)
     if not derived_statement.is_formula_equivalent(statement):
         if raise_error_if_false:
@@ -1447,14 +1435,14 @@ def is_well_formed_extension_map(
             return False, None
         else:
             return False
-    if formula.arity != WellFormedExtensionMap._EXTENSION_MAP_FIXED_ARITY:
+    if formula.arity != _cst.EXTENSION_MAP_FIXED_ARITY:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
                 title='Ill-formed extension-map',
                 details='`formula` is not a well-formed extension-map.'
                         ' Its arity is not equal `fixed_arity`.',
                 formula=formula,
-                fixed_arity=WellFormedExtensionMap._EXTENSION_MAP_FIXED_ARITY
+                fixed_arity=_cst.EXTENSION_MAP_FIXED_ARITY
             )
         if return_typed_arguments:
             return False, None
@@ -1505,24 +1493,24 @@ def is_well_formed_natural_inference_rule(
             return False, None
         else:
             return False
-    if formula.arity != WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_FIXED_ARITY:
+    if formula.arity != _cst.NATURAL_INFERENCE_RULE_FIXED_ARITY:
         if raise_error_if_false:
             raise _utl.PunctiliousError(
                 title='Ill-formed natural inference rule',
                 details='`formula` is not a well-formed natural inference rule.'
                         ' Its arity is not equal `fixed_arity`.',
                 formula=formula,
-                fixed_arity=WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_FIXED_ARITY
+                fixed_arity=_cst.NATURAL_INFERENCE_RULE_FIXED_ARITY
             )
         if return_typed_arguments:
             return False, None
         else:
             return False
     variables: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(
-        formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
+        formula[_cst.NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
     premises: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(
-        formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX])
-    conclusion = formula[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
+        formula[_cst.NATURAL_INFERENCE_RULE_PREMISES_INDEX])
+    conclusion = formula[_cst.NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
     if return_typed_arguments:
         return True, _fml.FormulaArguments(variables, premises, conclusion)
     else:

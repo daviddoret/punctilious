@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="implicit-conversions">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -505,7 +506,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -853,8 +854,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" />
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedTheorem.test_1" />
@@ -876,14 +877,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01309" summary="modules clean-up">
-      <option name="closed" value="true" />
-      <created>1736636758930</created>
-      <option name="number" value="01309" />
-      <option name="presentableId" value="LOCAL-01309" />
-      <option name="project" value="LOCAL" />
-      <updated>1736636758931</updated>
     </task>
     <task id="LOCAL-01310" summary="modules clean-up">
       <option name="closed" value="true" />
@@ -1269,7 +1262,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737488681668</updated>
     </task>
-    <option name="localTasksCounter" value="1358" />
+    <task id="LOCAL-01358" summary="implicit-conversions">
+      <option name="closed" value="true" />
+      <created>1737488910281</created>
+      <option name="number" value="01358" />
+      <option name="presentableId" value="LOCAL-01358" />
+      <option name="project" value="LOCAL" />
+      <updated>1737488910281</updated>
+    </task>
+    <option name="localTasksCounter" value="1359" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
