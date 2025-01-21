@@ -210,7 +210,7 @@ class WellFormedAxiom(WellFormedAssertion):
 
     Form
     ------------
-    A :class:`WellFormedAxiom` is a formula of the well-defined form:
+    A :class:`WellFormedAxiom` is a formula of the form:
 
     .. math::
 
@@ -643,28 +643,33 @@ def union_unique_tuples(*args: WellFormedUniqueExtensionTuple):
 
 
 class WellFormedExtensionMap(WellFormedFormula):
-    """A Map1 is a model of a mathematical map with the following constraints:
+    """A :class:`WellFormedExtensionMap` is a model of a mathematical map with the following constraints:
      - it is finite,
      - it is computable,
      - it is defined by extension.
 
-    TODO: Rename and inherit from WellFormedFormula,
-        adapt ensure and validation functions, etc.
+    Form
+    ------------
+    A :class:`WellFormedExtensionMap` is a formula of the form:
 
+    .. math::
 
-    It is implemented as a formula with the well-known `map_1` root connector,
-    whose arguments of the form:
-        (D, C)
+        \mathrm{extension-map}( ⟨ \phi_1, \phi_2, \ldots, \phi_n ⟩, ( \psi_1, \psi_2, \ldots, \psi_n ) )
+
     where:
-     - D is UniqueExtensionTuple denoted as the domain,
-     - C is ExtensionTuple denoted as the codomain,
-     - the arity of D and C are equal.
+      - :math:`\mathrm{extension-map}` is the well-known :obj:`extension_map_connector`.
+      - :math:`⟨ \phi_1, \phi_2, \ldots, \phi_n ⟩` is a unique-extension-tuple of zero or more formulas
+        denoted as the domain of the extension-map.
+      - :math:`( \psi_1, \psi_2, \ldots, \psi_n )` is an extension-tuple of zero or more formulas
+        denoted as the codomain of the extension-map.
+      - the arities of the domain and codomain are equal.
 
-    Map1 supports the get_image method that,
-    given an element of D, returns the corresponding element of C at the same position.
-    This leverages the fact that UniqueExtensionTuple is both a model of a set,
-    for which elements order is not taken into account,
-    and also a Formula, whose arguments are effectively ordered.
+    Note
+    ------------
+    A :class:`WellFormedExtensionMap` supports the :meth:`WellFormedExtensionMap.get_image` method that,
+     given an element of the domain, returns the corresponding element of the codomain,
+     that is the element at the same position.
+     This leverages the fact that :class:`WellFormedUniqueExtensionTuple` contains unique elements.
     """
 
     def __init__(self, domain: WellFormedUniqueExtensionTuple, codomain: WellFormedExtensionTuple):
@@ -1452,6 +1457,22 @@ def is_well_formed_extension_map(
         formula[_cst.EXTENSION_MAP_DOMAIN_INDEX])
     codomain: WellFormedExtensionTuple = ensure_well_formed_extension_tuple(
         formula[_cst.EXTENSION_MAP_CODOMAIN_INDEX])
+    if domain.arity != codomain.arity:
+        if raise_error_if_false:
+            raise _utl.PunctiliousError(
+                title='Ill-formed extension-map',
+                details='The arity of the `domain`'
+                        ' is not equal to the arity of the `codomain`.',
+                domain_arity=domain.arity,
+                codomain_arity=codomain.arity,
+                domain=domain,
+                codomain=codomain,
+                formula=formula
+            )
+        if return_typed_arguments:
+            return False, None
+        else:
+            return False
     if return_typed_arguments:
         return True, _fml.FormulaArguments(domain, codomain)
     else:
