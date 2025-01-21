@@ -13,30 +13,37 @@ import punctilious.pu_01_utilities as _utl
 import punctilious.pu_02_unique_identifiers as _ids
 import punctilious.pu_03_representation as _rpr
 
+_implicit_conversion_mapping: list[tuple[typing.Callable, Connector]] = []
+"""A global variable where implicit conversion is configured. See `implicit_conversion`."""
+
+
+def configure_implicit_conversion(test_function: typing.Callable, conversion_function: typing.Callable,
+                                  priority: int | None = None) -> None:
+    """Configure implicit conversion.
+
+    :param test_function: A boolean Python function.
+    :param conversion_function:
+    :return:
+    """
+    global _implicit_conversion_mapping
+    if priority is None:
+        _implicit_conversion_mapping.append((test_function, conversion_function))
+    else:
+        _implicit_conversion_mapping.insert(priority, (test_function, conversion_function))
+
 
 def ensure_formula(o: object = None) -> Formula:
+    global _implicit_conversion_mapping
     if isinstance(o, Formula):
         return o
-    elif isinstance(o, Connector):
+    if isinstance(o, Connector):
         # This is a convention: when a connector * is passed as is, it is interpreted as *().
         return Formula(connector=o)
-    elif isinstance(o, collections.abc.Iterable):
-        # If o is an iterable, the assumption is that it is of the shape:
-        # singleton (c) where c is a connector,
-        # or pair (c, a) where c is a connector, and `a` is an n-tuple of argument sub-formulas.
-        t = tuple(o)
-        if len(t) == 1:
-            return Formula(connector=t[0])
-        elif len(t) == 2:
-            c = ensure_connector(t[0])
-            a = ensure_formula_arguments(t[1])
-            return Formula(connector=c, arguments=a)
-        else:
-            raise _utl.PunctiliousError(
-                f'To interpret an Iterable as a Formula,'
-                f' it must either be a 1-tuple (c) to represent atomic formula c(),'
-                f' or a 2-tuple (c,a) to represent formula c(a1,a2,...an).',
-                o=o, tuple_o=t)
+    for mapping in _implicit_conversion_mapping:
+        test_function: typing.Callable = mapping[0]
+        if test_function(o):
+            conversion_function: Connector = mapping[1]
+            return conversion_function(o)
     else:
         raise _utl.PunctiliousError(f'`o` cannot be interpreted as a Formula.',
                                     o=o)

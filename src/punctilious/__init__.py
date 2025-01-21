@@ -1,3 +1,5 @@
+import typing
+
 import punctilious.pu_01_utilities as utilities
 import punctilious.pu_02_unique_identifiers as identifiers
 import punctilious.pu_03_representation as representation
@@ -46,5 +48,13 @@ fml = formal_language
 
 mtl = meta_language
 """A shortcut for the `punctilious.meta_language` module."""
+
+# Implicit conversions
+fml.configure_implicit_conversion(
+    test_function=lambda formula: isinstance(formula, set),
+    conversion_function=lambda formula: fml.Formula(mtl.unique_extension_tuple_connector, tuple(formula), ))
+fml.configure_implicit_conversion(
+    test_function=lambda formula: isinstance(formula, typing.Iterable),
+    conversion_function=lambda formula: fml.Formula(mtl.extension_tuple_connector, tuple(formula), ))
 
 pass

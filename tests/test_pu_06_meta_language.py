@@ -371,11 +371,11 @@ class TestTheory:
         theory_components = (axiom, inference_rule)
         theory = pu.mtl.Theory(*theory_components)
         inputs = pu.mtl.WellFormedExtensionTuple(a(c()))
-        theorem = pu.mtl.WellFormedTheorem(inputs=inputs,
+        theorem = pu.mtl.WellFormedTheorem(inputs=(a(c()),),
                                            inference_rule=inference_rule,
                                            valid_statement=a(b(c())))
         extended_theory = pu.mtl.Theory(*theory_components, theorem)
-        
+
         pass
 
 
