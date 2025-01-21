@@ -25,6 +25,10 @@ class TestWellFormedUniqueExtensionTuple:
         phi7 = pu.mtl.ensure_well_formed_unique_extension_tuple(formula=phi6)
         assert len(phi7.arguments) == 0
 
+        # implicit conversion
+        phi8 = pu.fml.ensure_formula({a(), b(), c(), })
+        assert phi8.is_formula_equivalent(phi1)
+
 
 class TestWellFormedExtensionTuple:
     def test_1(self):
@@ -45,6 +49,12 @@ class TestWellFormedExtensionTuple:
         phi6 = extension_tuple()
         phi7 = pu.mtl.ensure_well_formed_extension_tuple(phi6)
         assert len(phi7.arguments) == 0
+
+        # implicit conversion
+        phi8 = pu.fml.ensure_formula((a(), b(), c(),))
+        assert phi8.is_formula_equivalent(phi1)
+        phi8 = pu.fml.ensure_formula([a(), b(), c(), ])
+        assert phi8.is_formula_equivalent(phi1)
 
 
 class TestUnionSets1:

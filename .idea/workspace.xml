@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta-language">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="implicit-conversions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -476,6 +474,7 @@
   <component name="QodanaCloudProjectLink">
     <option name="lastReportId" value="JjJBx" />
     <option name="linkedProjectId" value="p01Q5" />
+    <option name="linkedProjectName" value="punctilious" />
     <option name="organizationId" value="3PZVk" />
     <option name="userId" value="3yE6e" />
   </component>
@@ -506,7 +505,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -747,7 +746,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_pu_06_meta_language.TestWellFormedExtensionMap.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -760,7 +759,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_pu_06_meta_language.TestWellFormedExtensionMap.test_1&quot;" />
+      <option name="_new_target" value="&quot;test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -844,7 +843,7 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
-      <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionMap.test_1" />
+      <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" />
       <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedTheorem.test_1" />
       <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
       <item itemvalue="Python tests.pytest in tests" />
@@ -854,11 +853,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedTheorem.test_1" />
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionMap.test_1" />
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
       </list>
     </recent_temporary>
   </component>
@@ -877,14 +876,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01308" summary="modules clean-up">
-      <option name="closed" value="true" />
-      <created>1736634822261</created>
-      <option name="number" value="01308" />
-      <option name="presentableId" value="LOCAL-01308" />
-      <option name="project" value="LOCAL" />
-      <updated>1736634822261</updated>
     </task>
     <task id="LOCAL-01309" summary="modules clean-up">
       <option name="closed" value="true" />
@@ -1270,7 +1261,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737406582350</updated>
     </task>
-    <option name="localTasksCounter" value="1357" />
+    <task id="LOCAL-01357" summary="implicit-conversions">
+      <option name="closed" value="true" />
+      <created>1737488681667</created>
+      <option name="number" value="01357" />
+      <option name="presentableId" value="LOCAL-01357" />
+      <option name="project" value="LOCAL" />
+      <updated>1737488681668</updated>
+    </task>
+    <option name="localTasksCounter" value="1358" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1320,7 +1319,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="formula-notations" />
     <MESSAGE value="first theorem implementation" />
     <MESSAGE value="absolute imports" />
     <MESSAGE value="renaming tags to options" />
@@ -1345,7 +1343,8 @@
     <MESSAGE value="foundations" />
     <MESSAGE value="modules clean-up" />
     <MESSAGE value="meta-language" />
-    <option name="LAST_COMMIT_MESSAGE" value="meta-language" />
+    <MESSAGE value="implicit-conversions" />
+    <option name="LAST_COMMIT_MESSAGE" value="implicit-conversions" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1425,11 +1424,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious/pu_11_bundling.py</url>
           <line>416</line>
           <option name="timeStamp" value="380" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_pu_06_meta_language.py</url>
-          <line>37</line>
-          <option name="timeStamp" value="436" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
