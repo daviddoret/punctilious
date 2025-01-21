@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="implicit-conversions">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/constants.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="constants">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -366,7 +368,7 @@
     "Python tests.pytest in test_typesetting.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in test_variable.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Run",
+    "Python tests.pytest in tests.executor": "Debug",
     "Python.__init__.executor": "Run",
     "Python._identifiers.executor": "Run",
     "Python._latin_alphabet_lowercase_serif_roman.executor": "Debug",
@@ -506,7 +508,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1">
+  <component name="RunManager" selected="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -854,10 +856,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
-        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedExtensionTuple.test_1" />
+        <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestTheory.test_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedTheorem.test_1" />
       </list>
     </recent_temporary>
@@ -877,14 +879,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01310" summary="modules clean-up">
-      <option name="closed" value="true" />
-      <created>1736655924241</created>
-      <option name="number" value="01310" />
-      <option name="presentableId" value="LOCAL-01310" />
-      <option name="project" value="LOCAL" />
-      <updated>1736655924241</updated>
     </task>
     <task id="LOCAL-01311" summary="modules clean-up">
       <option name="closed" value="true" />
@@ -1270,7 +1264,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737488910281</updated>
     </task>
-    <option name="localTasksCounter" value="1359" />
+    <task id="LOCAL-01359" summary="constants">
+      <option name="closed" value="true" />
+      <created>1737489529670</created>
+      <option name="number" value="01359" />
+      <option name="presentableId" value="LOCAL-01359" />
+      <option name="project" value="LOCAL" />
+      <updated>1737489529671</updated>
+    </task>
+    <option name="localTasksCounter" value="1360" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1320,7 +1322,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="first theorem implementation" />
     <MESSAGE value="absolute imports" />
     <MESSAGE value="renaming tags to options" />
     <MESSAGE value="cleanup" />
@@ -1345,7 +1346,8 @@
     <MESSAGE value="modules clean-up" />
     <MESSAGE value="meta-language" />
     <MESSAGE value="implicit-conversions" />
-    <option name="LAST_COMMIT_MESSAGE" value="implicit-conversions" />
+    <MESSAGE value="constants" />
+    <option name="LAST_COMMIT_MESSAGE" value="constants" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

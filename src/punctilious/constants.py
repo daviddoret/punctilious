@@ -1,3 +1,9 @@
+# formal-language constants
+
+FORMULA_CONNECTOR_INDEX: int = 0
+FORMULA_ARGUMENTS_INDEX: int = 1
+FORMULA_FIXED_ARITY: int = 2
+
 # meta-language formula structures
 
 AXIOM_VALID_STATEMENT_INDEX: int = 0

@@ -232,7 +232,7 @@ class WellFormedAxiom(WellFormedAssertion):
 
     @property
     def valid_statement(self) -> _fml.Formula:
-        return self.arguments[WellFormedAxiom._AXIOM_VALID_STATEMENT_INDEX]
+        return self.arguments[_cst.AXIOM_VALID_STATEMENT_INDEX]
 
 
 class WellFormedExtensionTuple(WellFormedFormula):
@@ -679,12 +679,12 @@ class WellFormedExtensionMap(WellFormedFormula):
 
     @property
     def codomain(self) -> WellFormedExtensionTuple:
-        return ensure_well_formed_extension_tuple(self.arguments[WellFormedExtensionMap._EXTENSION_MAP_CODOMAIN_INDEX])
+        return ensure_well_formed_extension_tuple(self.arguments[_cst.EXTENSION_MAP_CODOMAIN_INDEX])
 
     @property
     def domain(self) -> WellFormedUniqueExtensionTuple:
         return ensure_well_formed_unique_extension_tuple(
-            self.arguments[WellFormedExtensionMap._EXTENSION_MAP_DOMAIN_INDEX])
+            self.arguments[_cst.EXTENSION_MAP_DOMAIN_INDEX])
 
     def get_image(self, x: _fml.Formula) -> _fml.Formula:
         if not self.domain.has_top_level_element(element=x):
@@ -909,17 +909,17 @@ class WellFormedNaturalInferenceRule(WellFormedInferenceRule):
 
     @property
     def conclusion(self) -> _fml.Formula:
-        return self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
+        return self.arguments[_cst.NATURAL_INFERENCE_RULE_CONCLUSION_INDEX]
 
     @property
     def premises(self) -> WellFormedUniqueExtensionTuple:
         return ensure_well_formed_unique_extension_tuple(
-            self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_PREMISES_INDEX])
+            self.arguments[_cst.NATURAL_INFERENCE_RULE_PREMISES_INDEX])
 
     @property
     def variables(self) -> WellFormedUniqueExtensionTuple:
         return ensure_well_formed_unique_extension_tuple(
-            self.arguments[WellFormedNaturalInferenceRule._NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
+            self.arguments[_cst.NATURAL_INFERENCE_RULE_VARIABLES_INDEX])
 
     def apply_rule(self, inputs: typing.Iterable[_fml.Formula]) -> _fml.Formula:
         check, premises_as_extension_tuple, m = self._check_arguments_validity(inputs=inputs,
@@ -961,16 +961,16 @@ class WellFormedTheorem(WellFormedAssertion):
 
     @property
     def inputs(self) -> WellFormedExtensionTuple:
-        return ensure_well_formed_extension_tuple(self.arguments[WellFormedTheorem._THEOREM_INPUTS_INDEX])
+        return ensure_well_formed_extension_tuple(self.arguments[_cst.THEOREM_INPUTS_INDEX])
 
     @property
     def inference_rule(self) -> WellFormedNaturalInferenceRule:
         return ensure_well_formed_natural_inference_rule(
-            self.arguments[WellFormedTheorem._THEOREM_INFERENCE_RULE_INDEX])
+            self.arguments[_cst.THEOREM_INFERENCE_RULE_INDEX])
 
     @property
     def valid_statement(self) -> _fml.Formula:
-        return _fml.ensure_formula(self.arguments[WellFormedTheorem._THEOREM_STATEMENT_INDEX])
+        return _fml.ensure_formula(self.arguments[_cst.THEOREM_STATEMENT_INDEX])
 
 
 class Theory(WellFormedFormula):
@@ -1449,9 +1449,9 @@ def is_well_formed_extension_map(
         else:
             return False
     domain: WellFormedUniqueExtensionTuple = ensure_well_formed_unique_extension_tuple(
-        formula[WellFormedExtensionMap._EXTENSION_MAP_DOMAIN_INDEX])
+        formula[_cst.EXTENSION_MAP_DOMAIN_INDEX])
     codomain: WellFormedExtensionTuple = ensure_well_formed_extension_tuple(
-        formula[WellFormedExtensionMap._EXTENSION_MAP_CODOMAIN_INDEX])
+        formula[_cst.EXTENSION_MAP_CODOMAIN_INDEX])
     if return_typed_arguments:
         return True, _fml.FormulaArguments(domain, codomain)
     else:

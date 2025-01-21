@@ -27,7 +27,8 @@ class TestWellFormedUniqueExtensionTuple:
 
         # implicit conversion
         phi8 = pu.fml.ensure_formula({a(), b(), c(), })
-        assert phi8.is_formula_equivalent(phi1)
+        phi8 = pu.mtl.ensure_well_formed_formula(phi8)
+        assert phi8.is_well_formed_unique_extension_tuple_equivalent_to(phi1)
 
 
 class TestWellFormedExtensionTuple:

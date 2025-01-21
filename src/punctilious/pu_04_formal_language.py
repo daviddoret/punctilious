@@ -9,6 +9,7 @@ import uuid as uuid_pkg
 import abc
 
 # punctilious modules
+import punctilious.constants as _cst
 import punctilious.pu_01_utilities as _utl
 import punctilious.pu_02_unique_identifiers as _ids
 import punctilious.pu_03_representation as _rpr
@@ -51,9 +52,6 @@ def ensure_formula(o: object = None) -> Formula:
 
 class Formula(tuple):
     # __slots__ = tuple('_root_connector', '_arguments', )
-    _FORMULA_CONNECTOR_INDEX: int = 0
-    _FORMULA_ARGUMENTS_INDEX: int = 1
-    _FORMULA_FIXED_ARITY: int = 2
 
     def __eq__(self, other):
         """Python equality is implemented as formula-equivalence."""
@@ -105,7 +103,7 @@ class Formula(tuple):
 
     @property
     def arguments(self) -> FormulaArguments:
-        return super().__getitem__(Formula._FORMULA_ARGUMENTS_INDEX)
+        return super().__getitem__(_cst.FORMULA_ARGUMENTS_INDEX)
 
     @property
     def arity(self) -> int:
@@ -117,7 +115,7 @@ class Formula(tuple):
 
     @property
     def connector(self) -> Connector:
-        return super().__getitem__(Formula._FORMULA_CONNECTOR_INDEX)
+        return super().__getitem__(_cst.FORMULA_CONNECTOR_INDEX)
 
     def get_argument_first_index(self, argument: Formula) -> int:
         """Returns the 0-based index of `argument` in this formula.
