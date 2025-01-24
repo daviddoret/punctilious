@@ -8,7 +8,7 @@ packages:
   - slug: greek_alphabet_uppercase_serif_italic_representation_1
     path: '/data/representations/greek_alphabet_uppercase_serif_italic.yaml'
   - slug: operators_representation_1
-    path: '/data/representations/operators_1.yaml'
+    path: '/data/representations/operators.yaml'
   - slug: tao_analysis_1_2006_representations
     path: '/data/representations/tao_analysis_1_2006.yaml'
 

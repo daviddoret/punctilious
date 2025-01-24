@@ -22,15 +22,15 @@ def _generate_default_interpreter():
     prefs[_options.technical_language.latex_math] = _rpr.get_forbidden()
 
     operators_1_connectors = _bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
-                                                                      resource='operators_1.yaml')
+                                                                      resource='operators.yaml')
     variables_1_connectors = _bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                                       resource='variables_1.yaml')
     constants_1_connectors = _bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                                                       resource='constants_1.yaml')
     representations = _bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
-                                                               resource='operators_1.yaml')
+                                                               resource='operators.yaml')
     mappings = _bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
-                                                        resource='operators_1.yaml')
+                                                        resource='operators.yaml')
     alpha2 = _bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
                                                       resource='latin_alphabet_uppercase_serif_italic.yaml')
     alpha1 = _bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',

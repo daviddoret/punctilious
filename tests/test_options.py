@@ -39,11 +39,11 @@ class TestOptions:
         pass
         prefs = pu.rpr.Preferences()
         prefs[pu.options.technical_language.unicode_basic] = 2
-        assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == 'in')
+        assert (pu.operators.element_of.rep_connector(prefs=prefs) == 'in')
         prefs[pu.options.technical_language.unicode_extended] = 3
-        assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == '∈')
+        assert (pu.operators.element_of.rep_connector(prefs=prefs) == '∈')
         prefs[pu.options.technical_language.latex_math] = 4
-        assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == '\\in')
+        assert (pu.operators.element_of.rep_connector(prefs=prefs) == '\\in')
         prefs[pu.options.technical_language.latex_math] = pu.representation.get_forbidden()
-        assert (pu.operators_1.element_of.rep_connector(prefs=prefs) == '∈')
+        assert (pu.operators.element_of.rep_connector(prefs=prefs) == '∈')
         pass

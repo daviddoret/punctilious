@@ -14,8 +14,8 @@ class TestFormula:
         p = create_atomic_connector('P')
         q = create_atomic_connector('Q')
         r = create_atomic_connector('R')
-        land = pu.operators_1.conjunction
-        lnot = pu.operators_1.negation
+        land = pu.operators.conjunction
+        lnot = pu.operators.negation
 
         phi1 = pu.fml.Formula(p)
         assert phi1.represent(prefs=prefs) == 'P'
@@ -39,7 +39,7 @@ class TestFormula:
         prefs[pu.options.technical_language.latex_math] = 0
 
         x = create_atomic_connector('x')
-        element_of = pu.operators_1.element_of
+        element_of = pu.operators.element_of
         n = pu.constants_1.n
         phi6 = pu.fml.Formula(element_of, (x, n))
         assert phi6.represent(prefs=prefs) == 'x ∈ ℕ'

@@ -1293,7 +1293,7 @@ def is_well_formed_unique_extension_tuple(
     :param raise_error_if_false: If :obj:`True`, raises an exception instead of returning :obj:`False`.
     :param return_typed_arguments: If `:obj:`True`, returns a tuple (bool, FormulaArguments) where arguments are
         typed as :class:`WellFormedFormula` if applicable.
-    :return: :class:`bool`: :obj:`True` if :paramref:`formula` is a well-formed unique-extension-tuple, :obj:`False` otherwise.
+    :return: :obj:`True` if :paramref:`formula` is a well-formed unique-extension-tuple, :obj:`False` otherwise.
     """
     global unique_extension_tuple_connector
     formula = _fml.ensure_formula(formula)
@@ -1641,3 +1641,7 @@ true2 = _fml.Connector(
 
 false2 = _fml.Connector(
     uid=_uid.UniqueIdentifier(slug='false2', uuid='ffa97ce6-e320-4e5c-86c7-d7470c2d7c94'))
+
+
+def declare_metavariable() -> _fml.Formula:
+    return _fml.Formula()

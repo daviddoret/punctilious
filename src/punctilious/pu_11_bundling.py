@@ -237,7 +237,7 @@ class YamlFileBundle(Bundle):
         This method is called when processing imports with `source_type: python_package_resources`.
 
         :param path: A python importlib.resources.files folder, e.g. `data.operators`.
-        :param resource: A yaml filename, e.g. `operators_1.yaml`.
+        :param resource: A yaml filename, e.g. `operators.yaml`.
         :return:
         """
         package_path = importlib.resources.files(path).joinpath(resource)

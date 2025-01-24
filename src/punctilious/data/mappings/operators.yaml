@@ -9,11 +9,11 @@ dependencies:
   - bundle: { slug: operators_1_connectors, uuid: ed3c1e47-dd75-4abc-9b43-ba3e408cfc48 }
     scheme: python_package
     path: data.connectors
-    resource: operators_1.yaml
+    resource: operators.yaml
   - bundle: { slug: operators_1, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
     scheme: python_package
     path: data.representations
-    resource: operators_1.yaml
+    resource: operators.yaml
 connectors:
   - uid: { slug: conjunction, uuid: b5a16d91-9974-48fa-901e-b777eb38e290 }
     connector_representation: { uid: { slug: conjunction, uuid: 8be8dfc0-375f-463d-9334-d2b8ad5ffef0 } }

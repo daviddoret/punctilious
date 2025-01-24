@@ -3,4 +3,4 @@
 import punctilious.pu_11_bundling as _bundling
 
 bundle = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
-                                                       resource='operators_1.yaml')
+                                                       resource='operators.yaml')

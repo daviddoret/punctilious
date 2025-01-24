@@ -5,7 +5,7 @@ class TestRepresentation:
     def test_representation(self):
         p = pu.declare_variable(rep=pu.latin_alphabet_uppercase_serif_italic.p)
         q = pu.declare_variable(rep=pu.latin_alphabet_uppercase_serif_italic.q)
-        phi = pu.fml.Formula(pu.operators_1.conjunction, (p, q,))
+        phi = pu.fml.Formula(pu.operators.conjunction, (p, q,))
         # print(phi)
 
 

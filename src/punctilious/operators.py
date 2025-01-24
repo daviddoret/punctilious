@@ -4,7 +4,7 @@ import punctilious.pu_02_unique_identifiers as _identifiers
 import punctilious.pu_11_bundling as _bundling
 
 _operators_1_connectors_bundle = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
-                                                                               resource='operators_1.yaml')
+                                                                               resource='operators.yaml')
 
 conjunction = _identifiers.load_unique_identifiable('b5a16d91-9974-48fa-901e-b777eb38e290',
                                                     raise_error_if_not_found=True)
@@ -46,10 +46,10 @@ tuple2 = _identifiers.load_unique_identifiable('c138b200-111a-4a40-ac3c-c8afa8e6
 
 # Load default representations
 _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
-                                              resource='operators_1.yaml')
+                                              resource='operators.yaml')
 
 # Map default representations to the connectors
 _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
-                                              resource='operators_1.yaml')
+                                              resource='operators.yaml')
 
 pass

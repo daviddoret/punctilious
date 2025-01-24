@@ -9,7 +9,7 @@ imports:
   - slug: operators_representation_1
     scheme: python_package
     path: data.representations
-    resource: operators_1.yaml
+    resource: operators.yaml
 theorems:
   - uuid: c697d495-9034-4bf0-9a52-7f9954be0157
     slug: absorption_law

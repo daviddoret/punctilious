@@ -3,7 +3,7 @@
 import punctilious.pu_11_bundling as _bundling
 
 bundle = _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
-                                                       resource='operators_1.yaml')
+                                                       resource='operators.yaml')
 
 conjunction = bundle.connectors.get_from_uuid('b5a16d91-9974-48fa-901e-b777eb38e290', raise_error_if_not_found=True)
 

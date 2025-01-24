@@ -15,7 +15,7 @@ def prefs():
 
 @pytest.fixture
 def reps():
-    d: dict = pu.get_yaml_from_package(path='punctilious.data.representations', resource='operators_1.yaml')
+    d: dict = pu.get_yaml_from_package(path='punctilious.data.representations', resource='operators.yaml')
     raw = d.get('representations', [])
     return pu.ensure_abstract_representations(o=raw)
 
@@ -38,8 +38,8 @@ class TestInterpretation:
         q = create_atomic_connector('Q')
         r = create_atomic_connector('R')
         # weird = create_atomic_connector('weird')
-        lnot = pu.operators_1.negation
-        land = pu.operators_1.conjunction
+        lnot = pu.operators.negation
+        land = pu.operators.conjunction
         f = pu.declare_function('f')
         g = pu.declare_function('g')
         atomic_connectors = {'P': p, 'Q': q, 'R': r}

@@ -9,11 +9,11 @@ dependencies:
   - bundle: { slug: propositional_logic_1, uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d }
     scheme: python_package
     path: data.connectors
-    resource: operators_1.yaml
+    resource: operators.yaml
   - bundle: { slug: operators_1, uuid: 7fe7669a-b7c0-4667-94c9-33c7971179b4 }
     scheme: python_package
     path: data.representations
-    resource: operators_1.yaml
+    resource: operators.yaml
 connectors:
   - uid: { slug: is_propositional_variable, uuid: 81277fd4-280d-4436-a465-79b4e83aadf5 }
     connector_representation: { uid: { slug: conjunction, uuid: 639885d1-acd6-4c66-9a9c-fb14e65b2ddc } }
