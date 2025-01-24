@@ -5,10 +5,10 @@ import punctilious.pu_11_bundling as _bnd
 
 _bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.connectors',
                                          resource='predicates.yaml')
-# _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
-#                                              resource='predicates.yaml')
-# _bundling.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
-#                                              resource='predicates.yaml')
+_bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.representations',
+                                         resource='predicates.yaml')
+_bnd.load_bundle_from_yaml_file_resource(path='punctilious.data.mappings',
+                                         resource='predicates.yaml')
 
 is_a_well_formed_integer_number = _uid.load_unique_identifiable('6c8db03d-926c-4d0c-89b2-fa8318ec983f')
 """The well-known `is-a-well-formed-integer-number` predicate connector from number theory."""

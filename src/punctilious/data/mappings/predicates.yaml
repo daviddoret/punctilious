@@ -1,0 +1,39 @@
+schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
+uid: { slug: operators_1_mappings, uuid: c57df5ae-2608-4ba8-8ae8-dd31bc9df5f6 }
+interpreter: { uid: { slug: no_interpretation, uuid: ccf14265-c568-4276-bbfc-cf3eec1b625b } }
+dependencies:
+  - bundle: { slug: formulas_notations, uuid: 6a45c6c1-f6e1-4947-8036-ef3bd39f16f1 }
+    scheme: python_package
+    path: data.representations
+    resource: formula_notations.yaml
+  - bundle: { slug: predicates_connectors, uuid: d203e2ab-0f90-4045-bb6f-3b586f294c7d }
+    scheme: python_package
+    path: data.connectors
+    resource: predicates.yaml
+  - bundle: { slug: predicates_representations, uuid: 47d84857-12c6-4016-8d5e-942998a6b327 }
+    scheme: python_package
+    path: data.representations
+    resource: predicates.yaml
+connectors:
+  - uid: { slug: is_a_well_formed_integer_number, uuid: 6c8db03d-926c-4d0c-89b2-fa8318ec983f }
+    connector_representation: { uid: { slug: is_a_well_formed_integer_number, uuid: ba38110e-7367-433b-be62-95dee048ca37 } }
+    formula_representation: { uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 } }
+  - uid: { slug: is_a_well_formed_natural_number, uuid: 5be66a92-b1d0-4bc9-9b44-e356f5c15510 }
+    connector_representation: { uid: { slug: is_a_well_formed_natural_number, uuid: d44488d7-6d0a-43be-9a0f-209610af172e } }
+    formula_representation: { uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 } }
+  - uid: { slug: is_a_well_formed_propositional_logic_formula, uuid: 42040abe-47d0-4089-b9f3-9791a6455652 }
+    connector_representation: { uid: { slug: is_a_well_formed_propositional_logic_formula, uuid: 6adc26b4-9764-4ba7-ab62-ee087506c0d7 } }
+    formula_representation: { uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 } }
+  - uid: { slug: is_a_well_formed_propositional_logic_variable, uuid: a8d06d03-8aa6-478c-aecf-d9c3a8701c1c }
+    connector_representation: { uid: { slug: is_a_well_formed_propositional_logic_variable, uuid: c39983fb-1f25-41c0-85c1-a1151c10d150 } }
+    formula_representation: { uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 } }
+  - uid: { slug: is_a_well_formed_rational_number, uuid: 1a920192-94ff-4447-8b46-bdd061845980 }
+    connector_representation: { uid: { slug: is_a_well_formed_rational_number, uuid: e4f87c36-ef35-4623-a0fc-cb1a87795939 } }
+    formula_representation: { uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 } }
+  - uid: { slug: is_a_well_formed_real_number, uuid: c1fa7584-1ce5-4d1f-850b-7a959c346097 }
+    connector_representation: { uid: { slug: is_a_well_formed_real_number, uuid: e7e0a655-6f2a-4a6a-8236-3ec6929297b3 } }
+    formula_representation: { uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 } }
+  - uid: { slug: is_a_well_formed_set, uuid: f629b6fe-d76a-4855-ae28-1a282732cac4 }
+    connector_representation: { uid: { slug: is_a_well_formed_set, uuid: 4be9eb5b-462b-44e0-b24e-52e8178840b7 } }
+    formula_representation: { uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 } }
+
