@@ -39,9 +39,12 @@ Refefence:
 a = mt.declare_metavariable()
 b = mt.declare_metavariable()
 
-# 1. Basis clause: Each propositional variable is a formula (called an atomic formula).
-ir_2_2_1a = mt.declare_declaration(
-    # allows to make declarations of new objects in the theory
+# 1. Basis clause: Each propositional variable is a formula (called an atomic formula)
+ir_2_2_1a = mt.declare_natural_inference_rule(
+    declarations=(a,),  # allows to make declarations of new objects in the theory
+    variables=(),
+    premises=(),
+    conclusion=is_a_well_formed_propositional_variable(a)
 )
 ir_2_2_1b = mt.declare_natural_inference_rule(
     variables=(a,),

@@ -80,7 +80,7 @@ omega: _rpr.AbstractRepresentation = _rpr.load_abstract_representation(
 nabla: _rpr.AbstractRepresentation = _rpr.load_abstract_representation(
     '4d9ae39c-472a-4b50-a3a9-a0cd8ffc5bf0', raise_error_if_not_found=True)
 
-_alphabet = d = {
+font = d = {
     'alpha': alpha,
     'beta': beta,
     'gamma': gamma,
@@ -110,5 +110,5 @@ _alphabet = d = {
 
 
 def get_letter(character: str) -> _rpr.AbstractRepresentation | None:
-    global _alphabet
+    global font
     return _alphabet.get(character, None)

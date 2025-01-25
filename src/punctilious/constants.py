@@ -1,3 +1,5 @@
+import enum
+
 # formal-language constants
 
 FORMULA_CONNECTOR_INDEX: int = 0
@@ -22,3 +24,25 @@ THEOREM_STATEMENT_INDEX: int = 0
 THEOREM_INPUTS_INDEX: int = 1
 THEOREM_INFERENCE_RULE_INDEX: int = 2
 THEOREM_FIXED_ARITY: int = 3
+
+
+class DuplicateProcessing(enum.Enum):
+    """
+     Attributes:
+        RAISE_ERROR: Raises a ValueError when a duplicate element is found.
+        STRIP: Strips duplicate elements when they are found. Keeps only the first occurrence.
+    """
+    RAISE_ERROR = 'RAISE_ERROR'
+    STRIP = 'STRIP'
+
+
+class TypesettingMissingCharacterOptions(enum.Enum):
+    """
+     Attributes:
+        RAISE_ERROR: Raises a ValueError when a duplicate element is found.
+        STRIP: Strips duplicate elements when they are found. Keeps only the first occurrence.
+        KEEP_ORIGINAL: Keep the original letter in the string.
+    """
+    RAISE_ERROR = 'RAISE_ERROR'
+    STRIP = 'STRIP'
+    KEEP_ORIGINAL = 'KEEP_ORIGINAL'

@@ -301,19 +301,10 @@ def ensure_formulas(*formulas: Formula) -> tuple[Formula, ...]:
 import enum
 
 
-class DuplicateProcessing(enum.Enum):
-    """
-     Attributes:
-        RAISE_ERROR: Raises a ValueError when a duplicate element is found.
-        STRIP: Strips duplicate elements when they are found. Keeps only the first occurrence.
-    """
-    RAISE_ERROR = 'RAISE_ERROR'
-    STRIP = 'STRIP'
-
-
 def ensure_unique_formulas(*formulas: Formula,
-                           duplicate_processing: DuplicateProcessing = DuplicateProcessing.RAISE_ERROR) -> tuple[
-    Formula, ...]:
+                           duplicate_processing: _cst.DuplicateProcessing = _cst.DuplicateProcessing.RAISE_ERROR) -> \
+        tuple[
+            Formula, ...]:
     """Ensure that a collection of formulas contains only unique formulas.
 
     :param duplicate_processing: DuplicateProcessing.RAISE_ERROR or DuplicateProcessing.STRIP.
@@ -325,7 +316,7 @@ def ensure_unique_formulas(*formulas: Formula,
     unique_formulas: list[Formula] = []
     for phi in formulas:
         if any(is_formula_equivalent(phi=phi, psi=psi) for psi in unique_formulas):
-            if duplicate_processing == DuplicateProcessing.RAISE_ERROR:
+            if duplicate_processing == _cst.DuplicateProcessing.RAISE_ERROR:
                 raise _utl.PunctiliousError(
                     title='Formulas are not unique',
                     details='Formula `phi` occurs at least twice in `formulas`.'
@@ -579,6 +570,7 @@ class Connector(_ids.UniqueIdentifiable):
     """
     TODO: Inherit from tuple to manage immutable properties.
     """
+    _no_uid_unique_index: int = 0
 
     def __call__(self, *args):
         """Return a formula with this connector as the root connector, and the arguments as its arguments."""
@@ -590,12 +582,17 @@ class Connector(_ids.UniqueIdentifiable):
     def __hash__(self):
         return hash((type(self), self.uid))
 
-    def __init__(self, uid: _ids.FlexibleUniqueIdentifier,
+    def __init__(self, uid: _ids.FlexibleUniqueIdentifier | None = None,
                  package=None,
                  syntactic_rules=SyntacticRules(),
                  connector_representation: _rpr.AbstractRepresentation | None = None,
                  formula_representation: _rpr.AbstractRepresentation | None = None
                  ):
+        if uid is None:
+            # Assigns automatically a new uid
+            Connector._no_uid_unique_index = Connector._no_uid_unique_index + 1
+            slug: str = f'c{Connector._no_uid_unique_index}'
+            uid = _ids.create_uid(slug)
         self._package = package
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
         self._connector_representation: _rpr.AbstractRepresentation = connector_representation

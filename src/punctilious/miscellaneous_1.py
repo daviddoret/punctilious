@@ -9,11 +9,11 @@ _miscellaneous_1 = _bundling.load_bundle_from_yaml_file_resource(
 empty_string: _representation.AbstractRepresentation = _identifiers.load_unique_identifiable(
     '68007b08-f95d-4399-9162-a81dc90e7cfa', raise_error_if_not_found=True)
 
-_alphabet = d = {
+font = d = {
     'empty_string': empty_string
 }
 
 
 def get_abstract_representation(character: str) -> _representation.AbstractRepresentation | None:
-    global _alphabet
+    global font
     return _alphabet.get(character, None)

@@ -9,6 +9,7 @@ import yaml
 import jinja2
 import typing
 import uuid as uuid_pkg
+import re
 
 # punctilious modules
 import punctilious.pu_01_utilities as _utl
@@ -573,3 +574,45 @@ def load_abstract_representation(o: [typing.Mapping | str | uuid_pkg.UUID],
         raise TypeError(f'`o` ({o}) of type `{str(type(o))}` is not of type `AbstractRepresentation`.')
     o: AbstractRepresentation
     return o
+
+
+class Font(dict):
+    """A collection of keys with representable symbols."""
+
+    def __setitem__(self, key, value):
+        raise TypeError(f'{self.__class__.__name__} is read-only')
+
+    def __delitem__(self, key):
+        raise TypeError(f'{self.__class__.__name__} is read-only')
+
+    def clear(self):
+        raise TypeError(f'{self.__class__.__name__} is read-only')
+
+    def pop(self, key, default=None):
+        raise TypeError(f'{self.__class__.__name__} is read-only')
+
+    def popitem(self):
+        raise TypeError(f'{self.__class__.__name__} is read-only')
+
+    def update(self, *args, **kwargs):
+        raise TypeError(f'{self.__class__.__name__} is read-only')
+
+    def setdefault(self, key, default=None):
+        raise TypeError(f'{self.__class__.__name__} is read-only')
+
+    def __getitem__(self, key):
+        # Add your custom logic before returning the value
+        if key not in self:
+            raise KeyError(f"Key {key} not found!")
+        return super().__getitem__(key)
+
+    def get(self, key, default=None):
+        # Add custom logic for the get method
+        return super().get(key, default)
+
+    def __contains__(self, key):
+        # Add custom logic for membership testing
+        return super().__contains__(key)
+
+    def translate_string(self, string: str, raise_error_if_a_letter_is_not_found: bool = False):
+        raise NotImplementedError('oops')

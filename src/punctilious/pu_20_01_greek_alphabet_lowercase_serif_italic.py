@@ -77,7 +77,7 @@ psi: _rpr.AbstractRepresentation = _rpr.load_abstract_representation(
 omega: _rpr.AbstractRepresentation = _rpr.load_abstract_representation(
     '7f7cd2bb-be7b-49e4-8a4a-ac087a568111', raise_error_if_not_found=True)
 
-_alphabet = d = {
+font = d = {
     'alpha': alpha,
     'beta': beta,
     'gamma': gamma,
@@ -106,5 +106,5 @@ _alphabet = d = {
 
 
 def get_letter(character: str) -> _rpr.AbstractRepresentation | None:
-    global _alphabet
+    global font
     return _alphabet.get(character, None)

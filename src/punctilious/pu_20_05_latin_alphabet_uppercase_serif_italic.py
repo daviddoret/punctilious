@@ -112,10 +112,11 @@ z: _rpr.AbstractRepresentation = _rpr.load_abstract_representation(
     '3116add7-3977-4fdc-8a6c-ab7d65bdcaf9',
     raise_error_if_not_found=True)
 
-_alphabet = {'a': a, 'b': b, 'c': c, 'd': d, 'e': e, 'f': f, 'g': g, 'h': h, 'i': i, 'j': j, 'k': k, 'l': l, 'm': m,
-             'n': n, 'o': o, 'p': p, 'q': q, 'r': r, 's': s, 't': t, 'u': u, 'v': v, 'w': w, 'x': x, 'y': y, 'z': z}
+font = _rpr.Font(
+    {'a': a, 'b': b, 'c': c, 'd': d, 'e': e, 'f': f, 'g': g, 'h': h, 'i': i, 'j': j, 'k': k, 'l': l, 'm': m,
+     'n': n, 'o': o, 'p': p, 'q': q, 'r': r, 's': s, 't': t, 'u': u, 'v': v, 'w': w, 'x': x, 'y': y, 'z': z})
 
 
 def get_letter(character: str) -> _rpr.AbstractRepresentation | None:
-    global _alphabet
-    return _alphabet.get(character, None)
+    global font
+    return font.get(character, None)
