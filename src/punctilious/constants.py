@@ -36,7 +36,7 @@ class DuplicateProcessing(enum.Enum):
     STRIP = 'STRIP'
 
 
-class TypesettingMissingCharacterOptions(enum.Enum):
+class MissingSymbolOptions(enum.Enum):
     """
      Attributes:
         RAISE_ERROR: Raises a ValueError when a duplicate element is found.
@@ -46,3 +46,4 @@ class TypesettingMissingCharacterOptions(enum.Enum):
     RAISE_ERROR = 'RAISE_ERROR'
     STRIP = 'STRIP'
     KEEP_ORIGINAL = 'KEEP_ORIGINAL'
+    RETURN_DEFAULT = 'RETURN_DEFAULT'

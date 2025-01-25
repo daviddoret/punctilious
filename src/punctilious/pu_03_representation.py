@@ -12,6 +12,7 @@ import uuid as uuid_pkg
 import re
 
 # punctilious modules
+import punctilious.constants as _constants
 import punctilious.pu_01_utilities as _utl
 import punctilious.pu_02_unique_identifiers as _ids
 
@@ -579,14 +580,38 @@ def load_abstract_representation(o: [typing.Mapping | str | uuid_pkg.UUID],
 class Font(dict):
     """A collection of keys with representable symbols."""
 
-    def __setitem__(self, key, value):
+    def __delitem__(self, key: str):
         raise TypeError(f'{self.__class__.__name__} is read-only')
 
-    def __delitem__(self, key):
+    def __getitem__(self, key):
+        # Add your custom logic before returning the value
+        if key not in self:
+            raise KeyError(f"Key {key} not found!")
+        return super().__getitem__(key)
+
+    def __setitem__(self, key: str, value: AbstractRepresentation):
         raise TypeError(f'{self.__class__.__name__} is read-only')
 
     def clear(self):
         raise TypeError(f'{self.__class__.__name__} is read-only')
+
+    def get(self, key):
+        return self.typeset(key)
+
+    def typeset(self, symbol_key,
+                missing_symbol_option: _constants.MissingSymbolOptions = _constants.MissingSymbolOptions.RAISE_ERROR,
+                default_symbol: str = ''):
+        if symbol_key in super().keys():
+            return super().get(symbol_key, default_symbol)
+        if missing_symbol_option == _constants.MissingSymbolOptions.RAISE_ERROR:
+            raise _utl.PunctiliousError('oops')
+        if missing_symbol_option == _constants.MissingSymbolOptions.STRIP:
+            return ''
+        if missing_symbol_option == _constants.MissingSymbolOptions.RETURN_DEFAULT:
+            return default_symbol
+        if missing_symbol_option == _constants.MissingSymbolOptions.KEEP_ORIGINAL:
+            return symbol_key
+        raise NotImplementedError('oops')
 
     def pop(self, key, default=None):
         raise TypeError(f'{self.__class__.__name__} is read-only')
@@ -600,19 +625,44 @@ class Font(dict):
     def setdefault(self, key, default=None):
         raise TypeError(f'{self.__class__.__name__} is read-only')
 
-    def __getitem__(self, key):
-        # Add your custom logic before returning the value
-        if key not in self:
-            raise KeyError(f"Key {key} not found!")
-        return super().__getitem__(key)
-
-    def get(self, key, default=None):
-        # Add custom logic for the get method
-        return super().get(key, default)
-
     def __contains__(self, key):
         # Add custom logic for membership testing
         return super().__contains__(key)
 
-    def translate_string(self, string: str, raise_error_if_a_letter_is_not_found: bool = False):
-        raise NotImplementedError('oops')
+    def typeset_keys(self, keys: typing.Iterable[str] | str,
+                     missing_symbol_option: _constants.MissingSymbolOptions = _constants.MissingSymbolOptions.KEEP_ORIGINAL,
+                     default_symbol: str = '') -> typing.Iterable[AbstractRepresentation]:
+        """
+
+        :param keys: An iterable of keys. If a string, assuming every key is a single character.
+        :param missing_symbol_option:
+        :param default_symbol:
+        :return:
+        """
+        for key in keys:
+            yield self.typeset(key, missing_symbol_option=missing_symbol_option, default_symbol=default_symbol)
+
+    def represent_keys(self, keys: typing.Iterable[str] | str,
+                       missing_symbol_option: _constants.MissingSymbolOptions = _constants.MissingSymbolOptions.KEEP_ORIGINAL,
+                       default_symbol: str = '',
+                       prefs: Preferences | None = None) -> str:
+        """
+
+        :param keys: An iterable of keys. If a string, assuming every key is a single character.
+        :param missing_symbol_option:
+        :param default_symbol:
+        :param prefs:
+        :return:
+        """
+        return ''.join(x if isinstance(x, str) else x.rep(prefs=prefs) for x in
+                       self.typeset_keys(keys=keys, missing_symbol_option=missing_symbol_option,
+                                         default_symbol=default_symbol))
+
+
+class BasicVariableName(AbstractRepresentation):
+    def __init__(self, symbol: str, font: Font, uid: _ids.FlexibleUniqueIdentifier,
+                 renderers: tuple[Renderer, ...] | tuple[()] | None):
+        self._symbol = symbol
+        self._font = font
+        # renderer = font.get(key=)
+        # super().__init__(uid=None, renderers)

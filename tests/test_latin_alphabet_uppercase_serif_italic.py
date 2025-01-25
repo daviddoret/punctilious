@@ -14,3 +14,8 @@ class TestLatinAlphabetLowercaseSerifItalic:
         assert (pu.latin_alphabet_uppercase_serif_italic.p.rep(prefs=prefs) == '\\textit{P}')
         prefs[pu.options.technical_language.latex_math] = pu.representation.get_forbidden()
         assert (pu.latin_alphabet_uppercase_serif_italic.p.rep(prefs=prefs) == '𝑃')
+
+    def test_strings(self):
+        assert pu.latin_alphabet_uppercase_serif_italic.font.represent_keys(
+            'hello world',
+            missing_symbol_option=pu.constants.MissingSymbolOptions.KEEP_ORIGINAL) == 'HELLO WORLD'
