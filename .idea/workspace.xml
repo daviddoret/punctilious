@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="propositional-logic">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/fonts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -509,7 +508,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_latin_alphabet_uppercase_serif_italic.TestLatinAlphabetLowercaseSerifItalic.test_strings">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -867,8 +866,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_latin_alphabet_uppercase_serif_italic.TestLatinAlphabetLowercaseSerifItalic.test_strings" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_latin_alphabet_uppercase_serif_italic.TestLatinAlphabetLowercaseSerifItalic.test_strings" />
         <item itemvalue="Python.operators_1_connectors" />
         <item itemvalue="Python.propositional_logic_1" />
         <item itemvalue="Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1" />
@@ -890,14 +889,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01316" summary="modules clean-up">
-      <option name="closed" value="true" />
-      <created>1736658029364</created>
-      <option name="number" value="01316" />
-      <option name="presentableId" value="LOCAL-01316" />
-      <option name="project" value="LOCAL" />
-      <updated>1736658029364</updated>
     </task>
     <task id="LOCAL-01317" summary="meta-language">
       <option name="closed" value="true" />
@@ -1283,7 +1274,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737813446465</updated>
     </task>
-    <option name="localTasksCounter" value="1365" />
+    <task id="LOCAL-01365" summary="propositional-logic">
+      <option name="closed" value="true" />
+      <created>1737818082699</created>
+      <option name="number" value="01365" />
+      <option name="presentableId" value="LOCAL-01365" />
+      <option name="project" value="LOCAL" />
+      <updated>1737818082699</updated>
+    </task>
+    <option name="localTasksCounter" value="1366" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
