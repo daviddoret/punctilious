@@ -628,6 +628,14 @@ class Connector(_ids.UniqueIdentifiable):
     def formula_representation(self, formula_representation):
         self._formula_representation = formula_representation
 
+    @property
+    def has_subscript(self) -> bool:
+        return self.subscript_representation is None
+
+    @property
+    def has_superscript(self) -> bool:
+        return self.superscript_representation is None
+
     def is_connector_equivalent_to(self, other: Connector) -> bool:
         """Returns True if the connectors are equivalent, False otherwise."""
         return self.uid.is_unique_identifier_equivalent(other.uid)
@@ -665,7 +673,9 @@ class Connector(_ids.UniqueIdentifiable):
             argument_representations = tuple(a.represent(is_subformula=True, prefs=prefs) for a in argument)
             variables = {
                 'connector': connector_representation,
+                'has_subscript': self.has_subscript,
                 'subscript': subscript_representation,
+                'has_superscript': self.has_superscript,
                 'superscript': superscript_representation,
                 'argument': argument_representations,
                 'is_subformula': is_subformula}
@@ -676,6 +686,18 @@ class Connector(_ids.UniqueIdentifiable):
             #   rather be a property of the representation, or possibly of the mapping.
             formula_representation: str = self.formula_representation.rep(variables=variables, prefs=prefs)
         return formula_representation
+
+    def rep_subscript(self, prefs=None, **kwargs) -> str:
+        if self.has_subscript:
+            return self.subscript_representation.rep(prefs=prefs, **kwargs)
+        else:
+            return ''
+
+    def rep_superscript(self, prefs=None, **kwargs) -> str:
+        if self.has_superscript:
+            return self.superscript_representation.rep(prefs=prefs, **kwargs)
+        else:
+            return ''
 
     @property
     def subscript_representation(self) -> _rpr.AbstractRepresentation | None:
