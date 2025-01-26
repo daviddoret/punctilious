@@ -123,8 +123,11 @@ class AbstractRepresentation(_ids.UniqueIdentifiable):
     has the capability to generate ConcreteRepresentations.
     """
 
-    def __init__(self, uid: _ids.FlexibleUniqueIdentifier,
+    def __init__(self, uid: _ids.FlexibleUniqueIdentifier | None,
                  renderers: tuple[Renderer, ...] | tuple[()] | None):
+        if uid is None:
+            # Generate a default `uid`.
+            uid = _ids.UniqueIdentifier(slug='abstract_representation', uuid=uuid_pkg.uuid4())
         if renderers is None:
             renderers = tuple()
         self._renderers: tuple[Renderer, ...] = renderers
@@ -657,3 +660,48 @@ class Font(dict):
         return ''.join(x if isinstance(x, str) else x.rep(prefs=prefs) for x in
                        self.typeset_keys(keys=keys, missing_symbol_option=missing_symbol_option,
                                          default_symbol=default_symbol))
+
+
+class TypesettingLibrary:
+    """A library of utility functions (often string manipulations) used to typeset.
+
+    """
+
+    @staticmethod
+    def is_unicode_subscriptable(string: str):
+        """Returns `True` if all characters in `string` are subscriptable with Unicode characters."""
+        return all(character in _constants.UNICODE_SUBSCRIPT_MAP.keys() for character in string)
+
+    @staticmethod
+    def convert_to_unicode_subscript(
+            string: str,
+            missing_character_option: _constants.MissingSymbolOptions = _constants.MissingSymbolOptions.KEEP_ORIGINAL,
+            default_symbol: str = '') -> str:
+        """Given an input `string`, makes a best effort to return a subscript representation
+        of that `string` using subscript symbols available in the Unicode character set."""
+        result = []
+        for character in string:
+            if character in _constants.UNICODE_SUBSCRIPT_MAP:
+                result.append(_constants.UNICODE_SUBSCRIPT_MAP[character])
+            elif missing_character_option == _constants.MissingSymbolOptions.KEEP_ORIGINAL:
+                result.append(character)
+            elif missing_character_option == _constants.MissingSymbolOptions.RAISE_ERROR:
+                raise _utl.PunctiliousError(
+                    title='Invalid subscript string',
+                    details='`string` contains a `character` that are not available in the `unicode_subscript_map`.',
+                    character=character,
+                    string=string,
+                    unicode_subscript_map=_constants.UNICODE_SUBSCRIPT_MAP
+                )
+            elif missing_character_option == _constants.MissingSymbolOptions.STRIP:
+                continue
+            elif missing_character_option == _constants.MissingSymbolOptions.RETURN_DEFAULT:
+                result.append(default_symbol)
+            else:
+                raise _utl.PunctiliousError(
+                    title='Invalid missing character option',
+                    details='`missing_character_option` is not listed in `missing_symbol_options`.',
+                    missing_character_option=missing_character_option,
+                    missing_symbol_options=_constants.MissingSymbolOptions
+                )
+        return ''.join(result)

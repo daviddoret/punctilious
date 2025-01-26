@@ -630,11 +630,11 @@ class Connector(_ids.UniqueIdentifiable):
 
     @property
     def has_subscript(self) -> bool:
-        return self.subscript_representation is None
+        return self.subscript_representation is not None
 
     @property
     def has_superscript(self) -> bool:
-        return self.superscript_representation is None
+        return self.superscript_representation is not None
 
     def is_connector_equivalent_to(self, other: Connector) -> bool:
         """Returns True if the connectors are equivalent, False otherwise."""
@@ -678,7 +678,8 @@ class Connector(_ids.UniqueIdentifiable):
                 'has_superscript': self.has_superscript,
                 'superscript': superscript_representation,
                 'argument': argument_representations,
-                'is_subformula': is_subformula}
+                'is_subformula': is_subformula,
+                'TypesettingLibrary': _rpr.TypesettingLibrary}
             # TODO: NICE_TO_HAVE: Find a way to manage connector precedences, and pass parent and
             #   child connector
             #   precedences as a variables to the jinja2 template to manage with more accuracy the

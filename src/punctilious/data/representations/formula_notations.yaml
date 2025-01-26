@@ -7,10 +7,15 @@ representations:
   - uid: { slug: atomic_formula, uuid: f6bd05d7-ee5b-4480-9d59-ea9fa3a13516 }
     renderers:
       - implementation: string_template
+        # improve logic by checking if connector is only alphabetic and subscript only digits,
+        # otherwise encode subscript with _{ subscript } LaTeX convention.
         string_template: '{{ connector }}{% if has_subscript %}{{ subscript }}{% endif %}'
         options: { technical_language: unicode_basic, super_parenthesization: not_required }
       - implementation: string_template
-        string_template: '{{ connector }}{% if has_subscript %}"_{"{{ subscript }}"}"{% endif %}'
+        string_template: '{{ connector }}{% if has_subscript %}{% if TypesettingLibrary.is_unicode_subscriptable(subscript) %}{{ TypesettingLibrary.convert_to_unicode_subscript(subscript) }}{% else %}"_{"{{ subscript }}"}"{% endif %}{% endif %}'
+        options: { technical_language: unicode_extended, super_parenthesization: not_required }
+      - implementation: string_template
+        string_template: '{{ connector }}{% if has_subscript %}_{{ "{" }}{{ subscript }}{{ "}" }}{% endif %}'
         options: { technical_language: latex_math, super_parenthesization: not_required }
   - uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 }
     renderers:

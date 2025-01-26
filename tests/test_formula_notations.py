@@ -2,6 +2,35 @@ import punctilious as pu
 
 
 class TestFormulaNotations:
+
+    def test_atomic_formula(self):
+        unicode_basic_option = pu.rpr.Option('technical_language', 'unicode_basic')
+        unicode_extended_option = pu.rpr.Option('technical_language', 'unicode_extended')
+        latex_math_option = pu.rpr.Option('technical_language', 'latex_math')
+        prefs = pu.rpr.Preferences()
+        x = pu.formal_language.Connector(
+            connector_representation=pu.latin_alphabet_uppercase_serif_italic.x,
+            formula_representation=pu.formula_notations.atomic_formula,
+        )
+        renderer_123 = pu.representation.RendererForStringConstant('123')
+        subscript_123 = pu.representation.AbstractRepresentation(
+            uid=None, renderers=(renderer_123,))
+        x123 = pu.formal_language.Connector(
+            connector_representation=pu.latin_alphabet_uppercase_serif_italic.x,
+            subscript_representation=subscript_123,
+            formula_representation=pu.formula_notations.atomic_formula,
+        )
+        prefs[unicode_basic_option] = 100
+        assert not x().connector.has_subscript
+        assert x().represent(prefs=prefs) == 'X'
+        assert x123().represent(prefs=prefs) == 'X123'
+        prefs[unicode_extended_option] = 200
+        assert x().represent(prefs=prefs) == '𝑋'
+        assert x123().represent(prefs=prefs) == '𝑋₁₂₃'
+        prefs[latex_math_option] = 10000
+        assert x().represent(prefs=prefs) == '\\textit{X}'
+        assert x123().represent(prefs=prefs) == '\\textit{X}_{123}'
+
     def test_infix_notation(self):
         prefs = pu.rpr.Preferences()
         tag = pu.rpr.Option('technical_language', 'unicode_basic')
