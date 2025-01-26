@@ -20,16 +20,27 @@ class TestFormulaNotations:
             subscript_representation=subscript_123,
             formula_representation=pu.formula_notations.atomic_formula,
         )
+        renderer_hard = pu.representation.RendererForStringConstant('hello world!')
+        subscript_hard = pu.representation.AbstractRepresentation(
+            uid=None, renderers=(renderer_hard,))
+        xhard = pu.formal_language.Connector(
+            connector_representation=pu.latin_alphabet_uppercase_serif_italic.x,
+            subscript_representation=subscript_hard,
+            formula_representation=pu.formula_notations.atomic_formula,
+        )
         prefs[unicode_basic_option] = 100
         assert not x().connector.has_subscript
         assert x().represent(prefs=prefs) == 'X'
         assert x123().represent(prefs=prefs) == 'X123'
+        assert xhard().represent(prefs=prefs) == 'X_{hello world!}'
         prefs[unicode_extended_option] = 200
         assert x().represent(prefs=prefs) == '𝑋'
         assert x123().represent(prefs=prefs) == '𝑋₁₂₃'
-        prefs[latex_math_option] = 10000
+        assert xhard().represent(prefs=prefs) == '𝑋_{hello world!}'
+        prefs[latex_math_option] = 300
         assert x().represent(prefs=prefs) == '\\textit{X}'
         assert x123().represent(prefs=prefs) == '\\textit{X}_{123}'
+        assert xhard().represent(prefs=prefs) == '\\textit{X}_{hello world!}'
 
     def test_infix_notation(self):
         prefs = pu.rpr.Preferences()

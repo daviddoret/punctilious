@@ -705,3 +705,7 @@ class TypesettingLibrary:
                     missing_symbol_options=_constants.MissingSymbolOptions
                 )
         return ''.join(result)
+
+    @staticmethod
+    def match_regular_expression(string: str, pattern: str):
+        return re.fullmatch(pattern, string)
