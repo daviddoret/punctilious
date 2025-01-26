@@ -7,8 +7,11 @@ representations:
   - uid: { slug: atomic_formula, uuid: f6bd05d7-ee5b-4480-9d59-ea9fa3a13516 }
     renderers:
       - implementation: string_template
-        string_template: '{{ connector }}'
-        options: { super_parenthesization: not_required }
+        string_template: '{{ connector }}{% if has_subscript %}{{ subscript }}{% endif %}'
+        options: { technical_language: unicode_basic, super_parenthesization: not_required }
+      - implementation: string_template
+        string_template: '{{ connector }}{% if has_subscript %}"_{"{{ subscript }}"}"{% endif %}'
+        options: { technical_language: latex_math, super_parenthesization: not_required }
   - uid: { slug: function_formula, uuid: cd1df2f9-f04d-4321-8430-5191082da985 }
     renderers:
       - implementation: string_template

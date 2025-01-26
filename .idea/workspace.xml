@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="support for index subscript and export superscript in formula typesetting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -889,14 +889,6 @@
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
     </task>
-    <task id="LOCAL-01319" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1736674623607</created>
-      <option name="number" value="01319" />
-      <option name="presentableId" value="LOCAL-01319" />
-      <option name="project" value="LOCAL" />
-      <updated>1736674623607</updated>
-    </task>
     <task id="LOCAL-01320" summary="meta-language">
       <option name="closed" value="true" />
       <created>1736682495506</created>
@@ -1281,7 +1273,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737878309030</updated>
     </task>
-    <option name="localTasksCounter" value="1368" />
+    <task id="LOCAL-01368" summary="support for index subscript and export superscript in formula typesetting">
+      <option name="closed" value="true" />
+      <created>1737878575764</created>
+      <option name="number" value="01368" />
+      <option name="presentableId" value="LOCAL-01368" />
+      <option name="project" value="LOCAL" />
+      <updated>1737878575764</updated>
+    </task>
+    <option name="localTasksCounter" value="1369" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
