@@ -8,6 +8,9 @@ import re
 import uuid as uuid_pkg
 import typing
 
+# punctilious modules
+import punctilious.pu_01_utilities as _util
+
 
 class Slug(str):
     """A slug is an identifier that uses lowercase alphanumeric ASCII characters with words
@@ -28,13 +31,29 @@ class Slug(str):
     def __new__(cls, slug: str):
         pattern = r'^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$'
         if not bool(re.fullmatch(pattern, slug)):
-            raise ValueError(f'Invalid slug: "{slug}".')
+            raise _util.PunctiliousError(
+                title='Invalid slug',
+                details='String `string` does not match the string regular expression `pattern` for slugs.',
+                string=slug,
+                pattern=pattern)
         return super().__new__(cls, slug)
 
     def __repr__(self):
-        return f'"{str(super().__str__())}" slug'
+        return self.machine_friendly_representation
 
     def __str__(self):
+        return self.human_friendly_representation
+
+    @property
+    def human_friendly_representation(self) -> str:
+        """The human-friendly representation of slugs uses hyphens (`-`) instead of underscores (`_`) for separators.
+
+        :return:
+        """
+        return str(super().__str__()).replace('_', '-')
+
+    @property
+    def machine_friendly_representation(self) -> str:
         return str(super().__str__())
 
 

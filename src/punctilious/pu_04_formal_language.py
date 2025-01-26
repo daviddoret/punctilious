@@ -586,7 +586,9 @@ class Connector(_ids.UniqueIdentifiable):
                  package=None,
                  syntactic_rules=SyntacticRules(),
                  connector_representation: _rpr.AbstractRepresentation | None = None,
-                 formula_representation: _rpr.AbstractRepresentation | None = None
+                 formula_representation: _rpr.AbstractRepresentation | None = None,
+                 subscript_representation: _rpr.AbstractRepresentation | None = None,
+                 superscript_representation: _rpr.AbstractRepresentation | None = None
                  ):
         if uid is None:
             # Assigns automatically a new uid
@@ -597,6 +599,8 @@ class Connector(_ids.UniqueIdentifiable):
         self._syntactic_rules = ensure_syntactic_rules(syntactic_rules)
         self._connector_representation: _rpr.AbstractRepresentation = connector_representation
         self._formula_representation: _rpr.AbstractRepresentation = formula_representation
+        self._subscript_representation: _rpr.AbstractRepresentation = subscript_representation
+        self._superscript_representation: _rpr.AbstractRepresentation = superscript_representation
         super().__init__(uid=uid)
 
     def __ne__(self, other):
@@ -636,14 +640,23 @@ class Connector(_ids.UniqueIdentifiable):
         """
         connector_representation: str
         if self.connector_representation is None:
-            # _utilities.warning(f'{self.__repr__()} has no connector representation. Using system slug instead.')
-            connector_representation = self.uid.slug
+            # Fail-safe representation when `connector_representation` is not defined.
+            connector_representation = self.uid.slug.human_friendly_representation
         else:
             connector_representation: str = self.rep_connector(prefs=prefs)
+        if self.subscript_representation is None:
+            # Fail-safe representation when `subscript_representation` is not defined.
+            subscript_representation = ''
+        else:
+            subscript_representation: str = self.rep_subscript(prefs=prefs)
+        if self.superscript_representation is None:
+            # Fail-safe representation when `superscript_representation` is not defined.
+            superscript_representation = ''
+        else:
+            superscript_representation: str = self.rep_superscript(prefs=prefs)
         formula_representation: str
         if self.formula_representation is None:
-            # _utilities.warning(
-            #    f'{self.__repr__()} has no formula representation. Using system functional notation instead.')
+            # Fail-safe representation when `formula_representation` is not defined.
             arguments_representation: str = ', '.join(
                 tuple(i.represent(is_subformula=True, prefs=prefs) for i in argument))
             formula_representation = f'{connector_representation}({arguments_representation})'
@@ -652,6 +665,8 @@ class Connector(_ids.UniqueIdentifiable):
             argument_representations = tuple(a.represent(is_subformula=True, prefs=prefs) for a in argument)
             variables = {
                 'connector': connector_representation,
+                'subscript': subscript_representation,
+                'superscript': superscript_representation,
                 'argument': argument_representations,
                 'is_subformula': is_subformula}
             # TODO: NICE_TO_HAVE: Find a way to manage connector precedences, and pass parent and
@@ -661,6 +676,22 @@ class Connector(_ids.UniqueIdentifiable):
             #   rather be a property of the representation, or possibly of the mapping.
             formula_representation: str = self.formula_representation.rep(variables=variables, prefs=prefs)
         return formula_representation
+
+    @property
+    def subscript_representation(self) -> _rpr.AbstractRepresentation | None:
+        return self._subscript_representation
+
+    @subscript_representation.setter
+    def subscript_representation(self, subscript_representation: _rpr.AbstractRepresentation | None):
+        self._subscript_representation = subscript_representation
+
+    @property
+    def superscript_representation(self) -> _rpr.AbstractRepresentation | None:
+        return self._superscript_representation
+
+    @superscript_representation.setter
+    def superscript_representation(self, superscript_representation: _rpr.AbstractRepresentation | None):
+        self._superscript_representation = superscript_representation
 
     @property
     def syntactic_rules(self):
@@ -676,6 +707,10 @@ class Connector(_ids.UniqueIdentifiable):
             d['connector_representation'] = self.connector_representation
         if self.formula_representation is not None:
             d['formula_representation'] = self.formula_representation
+        if self.subscript_representation is not None:
+            d['subscript_representation'] = self.subscript_representation
+        if self.superscript_representation is not None:
+            d['superscript_representation'] = self.superscript_representation
         return d
 
     def to_yaml(self, default_flow_style):

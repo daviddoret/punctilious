@@ -657,12 +657,3 @@ class Font(dict):
         return ''.join(x if isinstance(x, str) else x.rep(prefs=prefs) for x in
                        self.typeset_keys(keys=keys, missing_symbol_option=missing_symbol_option,
                                          default_symbol=default_symbol))
-
-
-class BasicVariableName(AbstractRepresentation):
-    def __init__(self, symbol: str, font: Font, uid: _ids.FlexibleUniqueIdentifier,
-                 renderers: tuple[Renderer, ...] | tuple[()] | None):
-        self._symbol = symbol
-        self._font = font
-        # renderer = font.get(key=)
-        # super().__init__(uid=None, renderers)
