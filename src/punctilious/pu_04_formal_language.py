@@ -302,7 +302,7 @@ import enum
 
 
 def ensure_unique_formulas(*formulas: Formula,
-                           duplicate_processing: _cst.DuplicateProcessing = _cst.DuplicateProcessing.RAISE_ERROR) -> \
+                           duplicate_processing: _cst.ExtraneousElementOptions = _cst.ExtraneousElementOptions.RAISE_ERROR) -> \
         tuple[
             Formula, ...]:
     """Ensure that a collection of formulas contains only unique formulas.
@@ -316,7 +316,7 @@ def ensure_unique_formulas(*formulas: Formula,
     unique_formulas: list[Formula] = []
     for phi in formulas:
         if any(is_formula_equivalent(phi=phi, psi=psi) for psi in unique_formulas):
-            if duplicate_processing == _cst.DuplicateProcessing.RAISE_ERROR:
+            if duplicate_processing == _cst.ExtraneousElementOptions.RAISE_ERROR:
                 raise _utl.PunctiliousError(
                     title='Formulas are not unique',
                     details='Formula `phi` occurs at least twice in `formulas`.'

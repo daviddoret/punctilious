@@ -18,4 +18,4 @@ class TestLatinAlphabetLowercaseSerifItalic:
     def test_strings(self):
         assert pu.latin_alphabet_uppercase_serif_italic.font.represent_keys(
             'hello world',
-            missing_symbol_option=pu.constants.MissingSymbolOptions.KEEP_ORIGINAL) == 'HELLO WORLD'
+            missing_symbol_option=pu.constants.MissingElementOptions.KEEP_ORIGINAL) == 'HELLO WORLD'

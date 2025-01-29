@@ -602,17 +602,17 @@ class Font(dict):
         return self.typeset(key)
 
     def typeset(self, symbol_key,
-                missing_symbol_option: _constants.MissingSymbolOptions = _constants.MissingSymbolOptions.RAISE_ERROR,
+                missing_symbol_option: _constants.MissingElementOptions = _constants.MissingElementOptions.RAISE_ERROR,
                 default_symbol: str = ''):
         if symbol_key in super().keys():
             return super().get(symbol_key, default_symbol)
-        if missing_symbol_option == _constants.MissingSymbolOptions.RAISE_ERROR:
+        if missing_symbol_option == _constants.MissingElementOptions.RAISE_ERROR:
             raise _utl.PunctiliousError('oops')
-        if missing_symbol_option == _constants.MissingSymbolOptions.STRIP:
+        if missing_symbol_option == _constants.MissingElementOptions.STRIP:
             return ''
-        if missing_symbol_option == _constants.MissingSymbolOptions.RETURN_DEFAULT:
+        if missing_symbol_option == _constants.MissingElementOptions.RETURN_DEFAULT:
             return default_symbol
-        if missing_symbol_option == _constants.MissingSymbolOptions.KEEP_ORIGINAL:
+        if missing_symbol_option == _constants.MissingElementOptions.KEEP_ORIGINAL:
             return symbol_key
         raise NotImplementedError('oops')
 
@@ -633,7 +633,7 @@ class Font(dict):
         return super().__contains__(key)
 
     def typeset_keys(self, keys: typing.Iterable[str] | str,
-                     missing_symbol_option: _constants.MissingSymbolOptions = _constants.MissingSymbolOptions.KEEP_ORIGINAL,
+                     missing_symbol_option: _constants.MissingElementOptions = _constants.MissingElementOptions.KEEP_ORIGINAL,
                      default_symbol: str = '') -> typing.Iterable[AbstractRepresentation]:
         """
 
@@ -646,7 +646,7 @@ class Font(dict):
             yield self.typeset(key, missing_symbol_option=missing_symbol_option, default_symbol=default_symbol)
 
     def represent_keys(self, keys: typing.Iterable[str] | str,
-                       missing_symbol_option: _constants.MissingSymbolOptions = _constants.MissingSymbolOptions.KEEP_ORIGINAL,
+                       missing_symbol_option: _constants.MissingElementOptions = _constants.MissingElementOptions.KEEP_ORIGINAL,
                        default_symbol: str = '',
                        prefs: Preferences | None = None) -> str:
         """
@@ -675,7 +675,7 @@ class TypesettingLibrary:
     @staticmethod
     def convert_to_unicode_subscript(
             string: str,
-            missing_character_option: _constants.MissingSymbolOptions = _constants.MissingSymbolOptions.KEEP_ORIGINAL,
+            missing_character_option: _constants.MissingElementOptions = _constants.MissingElementOptions.KEEP_ORIGINAL,
             default_symbol: str = '') -> str:
         """Given an input `string`, makes a best effort to return a subscript representation
         of that `string` using subscript symbols available in the Unicode character set."""
@@ -683,9 +683,9 @@ class TypesettingLibrary:
         for character in string:
             if character in _constants.UNICODE_SUBSCRIPT_MAP:
                 result.append(_constants.UNICODE_SUBSCRIPT_MAP[character])
-            elif missing_character_option == _constants.MissingSymbolOptions.KEEP_ORIGINAL:
+            elif missing_character_option == _constants.MissingElementOptions.KEEP_ORIGINAL:
                 result.append(character)
-            elif missing_character_option == _constants.MissingSymbolOptions.RAISE_ERROR:
+            elif missing_character_option == _constants.MissingElementOptions.RAISE_ERROR:
                 raise _utl.PunctiliousError(
                     title='Invalid subscript string',
                     details='`string` contains a `character` that are not available in the `unicode_subscript_map`.',
@@ -693,16 +693,16 @@ class TypesettingLibrary:
                     string=string,
                     unicode_subscript_map=_constants.UNICODE_SUBSCRIPT_MAP
                 )
-            elif missing_character_option == _constants.MissingSymbolOptions.STRIP:
+            elif missing_character_option == _constants.MissingElementOptions.STRIP:
                 continue
-            elif missing_character_option == _constants.MissingSymbolOptions.RETURN_DEFAULT:
+            elif missing_character_option == _constants.MissingElementOptions.RETURN_DEFAULT:
                 result.append(default_symbol)
             else:
                 raise _utl.PunctiliousError(
                     title='Invalid missing character option',
                     details='`missing_character_option` is not listed in `missing_symbol_options`.',
                     missing_character_option=missing_character_option,
-                    missing_symbol_options=_constants.MissingSymbolOptions
+                    missing_symbol_options=_constants.MissingElementOptions
                 )
         return ''.join(result)
 

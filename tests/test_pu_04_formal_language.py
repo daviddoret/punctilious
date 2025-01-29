@@ -50,7 +50,7 @@ class TestEnsureUniqueFormulas:
         before = (a(), b(), c(), a(),)
         after = pu.fml.ensure_unique_formulas(
             *before,
-            duplicate_processing=pu.constants.DuplicateProcessing.STRIP)
+            duplicate_processing=pu.constants.ExtraneousElementOptions.STRIP)
         assert before != after
         assert after == (a(), b(), c(),)
 
@@ -58,9 +58,9 @@ class TestEnsureUniqueFormulas:
         with pytest.raises(pu.utl.PunctiliousError):
             after = pu.fml.ensure_unique_formulas(
                 *before,
-                duplicate_processing=pu.constants.DuplicateProcessing.RAISE_ERROR)
+                duplicate_processing=pu.constants.ExtraneousElementOptions.RAISE_ERROR)
         after = pu.fml.ensure_unique_formulas(
             *before,
-            duplicate_processing=pu.constants.DuplicateProcessing.STRIP)
+            duplicate_processing=pu.constants.ExtraneousElementOptions.STRIP)
         assert before != after
         assert after == (a(), b(), c(),)

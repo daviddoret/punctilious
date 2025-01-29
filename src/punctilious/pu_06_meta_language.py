@@ -171,15 +171,15 @@ class WellFormedInferenceRule(WellFormedTheoryComponent, abc.ABC):
 class WellFormedTheory(WellFormedFormula):
 
     def __init__(self, *theory_components,
-                 duplicate_processing: _cst.DuplicateProcessing = _cst.DuplicateProcessing.RAISE_ERROR):
+                 duplicate_processing: _cst.ExtraneousElementOptions = _cst.ExtraneousElementOptions.RAISE_ERROR):
         global theory_connector
         super().__init__(connector=theory_connector, arguments=theory_components)
 
     def __new__(cls, *theory_components,
-                duplicate_processing: _cst.DuplicateProcessing = _cst.DuplicateProcessing.RAISE_ERROR):
+                duplicate_processing: _cst.ExtraneousElementOptions = _cst.ExtraneousElementOptions.RAISE_ERROR):
         global theory_connector
         # Strip duplicates if required, before well-formedness validation.
-        if duplicate_processing == _cst.DuplicateProcessing.STRIP:
+        if duplicate_processing == _cst.ExtraneousElementOptions.STRIP:
             theory_components = _fml.ensure_unique_formulas(*theory_components,
                                                             duplicate_processing=duplicate_processing)
         return super().__new__(cls, connector=theory_connector, arguments=theory_components)
@@ -289,9 +289,9 @@ class WellFormedExtensionTuple(WellFormedFormula):
         This is equivalent to formula-equivalence."""
         return self.is_formula_equivalent(other_formula=other)
 
-    def to_unique_extension_tuple(self, duplicate_processing: _cst.DuplicateProcessing =
-    _cst.DuplicateProcessing.RAISE_ERROR) -> WellFormedUniqueExtensionTuple:
-        if duplicate_processing == _cst.DuplicateProcessing.RAISE_ERROR and not self.has_unique_arguments:
+    def to_unique_extension_tuple(self, duplicate_processing: _cst.ExtraneousElementOptions =
+    _cst.ExtraneousElementOptions.RAISE_ERROR) -> WellFormedUniqueExtensionTuple:
+        if duplicate_processing == _cst.ExtraneousElementOptions.RAISE_ERROR and not self.has_unique_arguments:
             raise ValueError(f'All the elements of this `ExtensionTuple` are not unique: {self}')
         return WellFormedUniqueExtensionTuple(self.elements, duplicate_processing=duplicate_processing)
 
@@ -316,17 +316,17 @@ class WellFormedUniqueExtensionTuple(WellFormedFormula):
     """
 
     def __init__(self, *arguments,
-                 duplicate_processing: _cst.DuplicateProcessing =
-                 _cst.DuplicateProcessing.RAISE_ERROR):
+                 duplicate_processing: _cst.ExtraneousElementOptions =
+                 _cst.ExtraneousElementOptions.RAISE_ERROR):
         global unique_extension_tuple_connector
         super().__init__(connector=unique_extension_tuple_connector, arguments=arguments)
 
     def __new__(cls, *arguments,
-                duplicate_processing: _cst.DuplicateProcessing =
-                _cst.DuplicateProcessing.RAISE_ERROR):
+                duplicate_processing: _cst.ExtraneousElementOptions =
+                _cst.ExtraneousElementOptions.RAISE_ERROR):
         global unique_extension_tuple_connector
         # Strip duplicates if required, before well-formedness validation.
-        if duplicate_processing == _cst.DuplicateProcessing.STRIP:
+        if duplicate_processing == _cst.ExtraneousElementOptions.STRIP:
             arguments = _fml.ensure_unique_formulas(*arguments, duplicate_processing=duplicate_processing)
         return super().__new__(cls, connector=unique_extension_tuple_connector, arguments=arguments)
 
@@ -389,7 +389,7 @@ def ensure_well_formed_extension_tuple(formula: _fml.Formula) -> WellFormedExten
 
 def ensure_well_formed_unique_extension_tuple(
         formula: _fml.Formula,
-        duplicate_processing: _cst.DuplicateProcessing = _cst.DuplicateProcessing.RAISE_ERROR) -> WellFormedUniqueExtensionTuple:
+        duplicate_processing: _cst.ExtraneousElementOptions = _cst.ExtraneousElementOptions.RAISE_ERROR) -> WellFormedUniqueExtensionTuple:
     """Ensures that :paramref:`formula` is a well-formed extension-tuple, raises an exception otherwise.
 
     :param formula: A formula.
@@ -634,11 +634,12 @@ def ensure_well_formed_formula(formula: _fml.Formula) -> WellFormedFormula:
 def union_unique_tuples(*args: WellFormedUniqueExtensionTuple):
     """Returns the union of UniqueTuple provided. Strip any duplicate in the process."""
     args = tuple(
-        ensure_well_formed_unique_extension_tuple(formula=s, duplicate_processing=_cst.DuplicateProcessing.RAISE_ERROR)
+        ensure_well_formed_unique_extension_tuple(formula=s,
+                                                  duplicate_processing=_cst.ExtraneousElementOptions.RAISE_ERROR)
         for s
         in args)
     flattened = tuple(element for sub_tuple in args for element in sub_tuple.elements)
-    output = WellFormedUniqueExtensionTuple(*flattened, duplicate_processing=_cst.DuplicateProcessing.STRIP)
+    output = WellFormedUniqueExtensionTuple(*flattened, duplicate_processing=_cst.ExtraneousElementOptions.STRIP)
     return output
 
 
@@ -1319,7 +1320,7 @@ def is_well_formed_unique_extension_tuple(
             return False
     # Assures the uniqueness of elements.
     arguments: tuple[_fml.Formula, ...] = _fml.ensure_unique_formulas(
-        *formula.arguments, duplicate_processing=_cst.DuplicateProcessing.RAISE_ERROR)
+        *formula.arguments, duplicate_processing=_cst.ExtraneousElementOptions.RAISE_ERROR)
     if return_typed_arguments:
         return True, _fml.FormulaArguments(*arguments)
     else:
