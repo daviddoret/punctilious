@@ -4,116 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="presentation layer rework">
-      <change afterPath="$PROJECT_DIR$/src/punctilious_20250223/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_20250223/__typesetting.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_20250223/__typesetting_basic_unicode.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_20250223/__typesetting_extended_unicode.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious_20250223/theories/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests_20250223/test_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/scopes/Limited_Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scopes/Limited_Project.xml" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="new approach with Pointers and Structures.">
+      <change afterPath="$PROJECT_DIR$/tests/test_formal_language.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts_macos/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts_macos/source/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts_windows/generate_sample_outputs.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts_windows/generate_sample_outputs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts_windows/prebuild_generate_theory_reports.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts_windows/prebuild_generate_theory_reports.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/__TODO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/bundles.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/bundles.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/operators.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/operators.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/predicates.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/predicates.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/connectors/variables_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/variables_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_1.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_1.jinja2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_2.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_2.jinja2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_3.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_3.jinja2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_4.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_4.jinja2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/grammars/formula_grammar_5.jinja2" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_5.jinja2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/interpretations/operators_1_interpretations_OBSOLETE.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/interpretations/operators_1_interpretations_OBSOLETE.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/interpretations/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/interpretations/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/documentation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/documentation.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/meta_language.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/meta_language.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/operators.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/operators.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/predicates.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/predicates.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/mappings/variables_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/variables_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/constants_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/constants_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/formula_notations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/formula_notations.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/greek_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/greek_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/greek_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_bold.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/latin_alphabet_lowercase_serif_bold.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_lowercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/latin_alphabet_lowercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/latin_alphabet_uppercase_serif_italic.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/latin_alphabet_uppercase_serif_italic.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/miscellaneous_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/miscellaneous_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/operators.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/operators.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/parenthesizations.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/parenthesizations.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/predicates.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/predicates.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/representations/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/statements/propositional_logic_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/statements/propositional_logic_1.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/statements/tao_analysis_1_2006.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/statements/tao_analysis_1_2006.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/variables/propositional_logic_1_variables.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/data/variables/propositional_logic_1_variables.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/declarations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/declarations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/fonts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/fonts.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language_mappings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/formal_language_mappings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/meta_operators_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/meta_operators_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/miscellaneous_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/miscellaneous_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/operators.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_connectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/operators_1_connectors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_mappings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/operators_1_mappings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/operators_1_representations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/operators_1_representations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/options/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/options/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/options/connector_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/options/connector_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/options/language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/options/language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/options/technical_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/options/technical_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/predicates.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/predicates.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/propositional_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_01_utilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_01_utilities.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_02_unique_identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_02_unique_identifiers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_03_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_06_meta_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_07_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_07_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_08_meta_language_OBSOLETE.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_08_meta_language_OBSOLETE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_09_proofs.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_09_proofs.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_10_no_interpretation_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_10_no_interpretation_interpreter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_11_bundling.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_11_bundling.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_12_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_12_formula_notations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_13_default_interpreter.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_13_default_interpreter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_01_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_01_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_02_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_02_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_03_latin_alphabet_lowercase_serif_bold.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_03_latin_alphabet_lowercase_serif_bold.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_04_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_04_latin_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_05_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_05_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_20_06_constants_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_06_constants_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/pu_22_mathematical_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/pu_22_mathematical_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/sandbox.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/tao_analysis_1_2006.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/theories/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/theories/propositional_logic_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/theories/propositional_logic_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/variables_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious_20250223/variables_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula_notations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_formula_notations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_greek_alphabet_lowercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_greek_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_identifiers.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_identifiers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_interpretation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_interpretation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_latin_alphabet_uppercase_serif_italic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_options.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_options.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_packaging.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_packaging.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_presentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_presentation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pu_03_representation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_pu_03_representation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pu_04_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_pu_04_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_pu_06_meta_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_pu_06_meta_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_representations.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_representations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_shared_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_shared_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_tao_analysis_1_2006.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_tao_analysis_1_2006.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_variable.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests_20250223/test_variable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -307,9 +202,12 @@
     "Python tests.pytest for test_axiomatic_system_1.TestVariable.test_variable.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.test_is_extension.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
+    "Python tests.pytest for test_formal_language.TestConnectorFiniteOrderedSet.test_connector_finite_ordered_set.executor": "Run",
+    "Python tests.pytest for test_formal_language.TestFormula.test_formula.executor": "Debug",
+    "Python tests.pytest for test_formula.TestFormalLanguage.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_formula.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_formula_2.executor": "Debug",
-    "Python tests.pytest for test_formula.TestFormula.test_structure.executor": "Run",
+    "Python tests.pytest for test_formula.TestFormula.test_structure.executor": "Debug",
     "Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1.executor": "Run",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.executor": "Run",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.test_atomic_formula.executor": "Run",
@@ -455,6 +353,7 @@
     "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
     "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
     "Python tests.pytest in test_fl1.py.executor": "Run",
+    "Python tests.pytest in test_formal_language.py.executor": "Run",
     "Python tests.pytest in test_formula.py.executor": "Run",
     "Python tests.pytest in test_formula_notations.py.executor": "Run",
     "Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py.executor": "Run",
@@ -492,6 +391,7 @@
     "Python.fl1.executor": "Run",
     "Python.fl1_presentation.executor": "Run",
     "Python.fl1_typesetting.executor": "Run",
+    "Python.formal_language.executor": "Run",
     "Python.formal_language_1.executor": "Run",
     "Python.formal_language_1_presentation_1.executor": "Run",
     "Python.formal_language_mappings.executor": "Run",
@@ -602,7 +502,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_structure">
+  <component name="RunManager" selected="Python tests.pytest in test_formal_language.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -647,7 +547,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="constants" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="formal_language" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -660,29 +560,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/constants.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="formula" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/formula.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/formal_language.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -853,7 +731,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_formula.TestFormula.test_structure" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_formal_language" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -866,24 +744,41 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_formula.TestFormula.test_structure&quot;" />
+      <option name="_new_target" value="&quot;test_formal_language&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_formula_notations.TestFormulaNotations.test_atomic_formula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_formal_language.TestConnectorFiniteOrderedSet.test_connector_finite_ordered_set" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests_20250223" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_formula_notations.TestFormulaNotations.test_atomic_formula&quot;" />
+      <option name="_new_target" value="&quot;test_formal_language.TestConnectorFiniteOrderedSet.test_connector_finite_ordered_set&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_formal_language.TestFormula.test_formula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_formal_language.TestFormula.test_formula&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -921,6 +816,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_formal_language.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_formal_language.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in tests_20250223" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -944,15 +856,15 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.constants" />
-      <item itemvalue="Python.formula" />
+      <item itemvalue="Python.formal_language" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_structure" />
-      <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_atomic_formula" />
+      <item itemvalue="Python tests.pytest for test_formal_language.TestConnectorFiniteOrderedSet.test_connector_finite_ordered_set" />
+      <item itemvalue="Python tests.pytest for test_formal_language.TestFormula.test_formula" />
+      <item itemvalue="Python tests.pytest in test_formal_language.py" />
       <item itemvalue="Python tests.pytest in tests_20250223" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -960,11 +872,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_structure" />
-        <item itemvalue="Python.formula" />
-        <item itemvalue="Python tests.pytest in tests_20250223" />
-        <item itemvalue="Python.constants" />
-        <item itemvalue="Python tests.pytest for test_formula_notations.TestFormulaNotations.test_atomic_formula" />
+        <item itemvalue="Python tests.pytest in test_formal_language.py" />
+        <item itemvalue="Python tests.pytest for test_formal_language.TestFormula.test_formula" />
+        <item itemvalue="Python tests.pytest for test_formal_language.TestConnectorFiniteOrderedSet.test_connector_finite_ordered_set" />
+        <item itemvalue="Python tests.pytest for test_formal_language" />
+        <item itemvalue="Python.formal_language" />
       </list>
     </recent_temporary>
   </component>
@@ -983,22 +895,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01324" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1736717509980</created>
-      <option name="number" value="01324" />
-      <option name="presentableId" value="LOCAL-01324" />
-      <option name="project" value="LOCAL" />
-      <updated>1736717509980</updated>
-    </task>
-    <task id="LOCAL-01325" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1736796175324</created>
-      <option name="number" value="01325" />
-      <option name="presentableId" value="LOCAL-01325" />
-      <option name="project" value="LOCAL" />
-      <updated>1736796175325</updated>
     </task>
     <task id="LOCAL-01326" summary="meta-language">
       <option name="closed" value="true" />
@@ -1376,7 +1272,23 @@
       <option name="project" value="LOCAL" />
       <updated>1738118465638</updated>
     </task>
-    <option name="localTasksCounter" value="1373" />
+    <task id="LOCAL-01373" summary="new approach with Pointers and Structures.">
+      <option name="closed" value="true" />
+      <created>1740329344689</created>
+      <option name="number" value="01373" />
+      <option name="presentableId" value="LOCAL-01373" />
+      <option name="project" value="LOCAL" />
+      <updated>1740329344690</updated>
+    </task>
+    <task id="LOCAL-01374" summary="new approach with Pointers and Structures.">
+      <option name="closed" value="true" />
+      <created>1740329389025</created>
+      <option name="number" value="01374" />
+      <option name="presentableId" value="LOCAL-01374" />
+      <option name="project" value="LOCAL" />
+      <updated>1740329389025</updated>
+    </task>
+    <option name="localTasksCounter" value="1375" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1426,7 +1338,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="prefs argument consistency" />
     <MESSAGE value="forbidden option" />
     <MESSAGE value="interpretation with variables" />
     <MESSAGE value="rename theorem to statement" />
@@ -1451,7 +1362,8 @@
     <MESSAGE value="propositional-logic" />
     <MESSAGE value="support for index subscript and export superscript in formula typesetting" />
     <MESSAGE value="presentation layer rework" />
-    <option name="LAST_COMMIT_MESSAGE" value="presentation layer rework" />
+    <MESSAGE value="new approach with Pointers and Structures." />
+    <option name="LAST_COMMIT_MESSAGE" value="new approach with Pointers and Structures." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1533,9 +1445,9 @@
           <option name="timeStamp" value="380" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/formula.py</url>
-          <line>82</line>
-          <option name="timeStamp" value="381" />
+          <url>file://$PROJECT_DIR$/tests/test_formal_language.py</url>
+          <line>54</line>
+          <option name="timeStamp" value="384" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
