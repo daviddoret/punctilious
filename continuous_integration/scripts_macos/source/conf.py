@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'punctilious'
+project = 'punctilious_20250223'
 copyright = '2024, David DORET'
 author = 'David DORET'
 

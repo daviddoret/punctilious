@@ -16,7 +16,7 @@ print(sys.path)
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'punctilious'
+project = 'punctilious_20250223'
 copyright = '2023, David Doret'
 author = 'David Doret'
 release = "2.0.3"
@@ -65,8 +65,8 @@ html_theme_options = {'sticky_navigation': False, 'navigation_depth': -1, 'title
 # exec_code_source_folders = ['../..']
 # exec_code_example_dir = '../../sample'
 
-favicons = [{'href': 'punctilious-logo-compact-light.svg'},  # => use `_static/icon.svg`
-            {'href': 'punctilious-logo-compact-light-16x16-white.png'},
-            {'href': 'punctilious-logo-compact-light-32x32-white.png'},
+favicons = [{'href': 'punctilious_20250223-logo-compact-light.svg'},  # => use `_static/icon.svg`
+            {'href': 'punctilious_20250223-logo-compact-light-16x16-white.png'},
+            {'href': 'punctilious_20250223-logo-compact-light-32x32-white.png'},
             {'rel': 'apple-touch-icon',
-             'href': 'punctilious-logo-compact-light-180x180-white.png', }, ]
+             'href': 'punctilious_20250223-logo-compact-light-180x180-white.png', }, ]

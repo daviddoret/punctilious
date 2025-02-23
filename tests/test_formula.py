@@ -1,58 +1,34 @@
-import punctilious as pu
-from test_shared_library import create_atomic_connector
+import punctilious.formula as formula
 
 
 class TestFormula:
-    def test_formula(self):
-        """Test of representation with multiple string-constant renderers.
-        """
-        prefs = pu.rpr.Preferences()
-        prefs[pu.options.technical_language.unicode_extended] = 3
-        prefs[pu.options.technical_language.unicode_extended] = 4
-        prefs[pu.options.technical_language.latex_math] = 0
+    def test_pointer(self):
+        p0 = formula.Pointer(0)
+        assert p0 == 0
+        p1 = formula.Pointer(1)
+        assert p1 > p0
+        p2 = formula.Pointer(2)
+        assert p2 == p1 + p1
 
-        p = create_atomic_connector('P')
-        q = create_atomic_connector('Q')
-        r = create_atomic_connector('R')
-        land = pu.operators.conjunction
-        lnot = pu.operators.negation
-
-        phi1 = pu.fml.Formula(p)
-        assert phi1.represent(prefs=prefs) == 'P'
-
-        phi2 = pu.fml.Formula(land, (p, q,))
-        assert phi2.represent(prefs=prefs) == 'P ∧ Q'
-
-        phi3 = pu.fml.Formula(lnot, (p,))
-        assert phi3.represent(prefs=prefs) == '¬P'
-
-        phi4 = pu.fml.Formula(land, (phi3, phi2))
-        assert phi4.represent(prefs=prefs) == '(¬P) ∧ (P ∧ Q)'
-
-        phi5 = pu.fml.Formula(land, (phi2, phi2))
-        assert phi5.represent(prefs=prefs) == '(P ∧ Q) ∧ (P ∧ Q)'
-
-    def test_formula_2(self):
-        prefs = pu.rpr.Preferences()
-        prefs[pu.options.technical_language.unicode_extended] = 3
-        prefs[pu.options.technical_language.unicode_extended] = 4
-        prefs[pu.options.technical_language.latex_math] = 0
-
-        x = create_atomic_connector('x')
-        element_of = pu.operators.element_of
-        n = pu.constants_1.n
-        phi6 = pu.fml.Formula(element_of, (x, n))
-        assert phi6.represent(prefs=prefs) == 'x ∈ ℕ'
-
-
-class TestFormulaRootConnectorEquivalence:
-    def test_1(self):
-        a = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='a'))
-        b = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='b'))
-        c = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='c'))
-        d = pu.fml.Connector(uid=pu.identifiers.create_uid(slug='d'))
-        phi = a(b(a(), c(), d(b())))
-        psi = a(b(a(), c(), d(b())))
-        assert pu.fml.is_formula_equivalent(phi=phi, psi=psi)
-        psi = a(b(a(), c(), d(c())))
-        assert not pu.fml.is_formula_equivalent(phi=phi, psi=psi)
+    def test_structure(self):
+        p0 = formula.Pointer(0)
+        p1 = formula.Pointer(1)
+        p2 = formula.Pointer(2)
+        s0 = formula.Structure(p0)
+        assert s0.is_leaf
+        assert s0.is_canonical
+        s1 = formula.Structure(p1)
+        assert s1.is_leaf
+        assert not s1.is_canonical
+        s2 = formula.Structure(p2)
+        assert s2.is_leaf
+        assert not s2.is_canonical
+        s3 = formula.Structure(p0, (s0,))
+        assert not s3.is_leaf
+        assert s3.is_canonical
+        s4 = formula.Structure(p0, (s1,))
+        assert not s4.is_leaf
+        assert s4.is_canonical
+        s5 = formula.Structure(p0, (s2,))
+        assert not s5.is_leaf
+        assert not s5.is_canonical

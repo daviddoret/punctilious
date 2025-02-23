@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tests_20250223" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/punctilious_obsolete" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/trashcan" />
@@ -31,7 +32,7 @@
       <list>
         <option value="$MODULE_DIR$/trashcan/punctilious_package_1/data" />
         <option value="$MODULE_DIR$/trashcan/punctilious_package_1" />
-        <option value="$MODULE_DIR$/src/punctilious/options" />
+        <option value="$MODULE_DIR$/src/punctilious_20250223/options" />
       </list>
     </option>
   </component>
