@@ -1,4 +1,5 @@
 import pytest
+import uuid
 
 import punctilious.formal_language as fl
 
@@ -9,9 +10,14 @@ class TestStructure:
         s0 = fl.Structure(0)
         assert s0.is_leaf
         assert s0.is_canonical
+        s0b = fl.Structure(0)
+        assert s0 == s0b
+        assert id(s0) == id(s0b)
+        assert s0 is s0b
         s1 = fl.Structure(1)
         assert s1.is_leaf
         assert not s1.is_canonical
+        assert s1 is not s0
         s2 = fl.Structure(2)
         assert s2.is_leaf
         assert not s2.is_canonical
@@ -30,7 +36,28 @@ class TestStructure:
         s7 = fl.Structure(0, (s1, s2, s3, s4, s5, s6,))
         assert not s7.is_leaf
         assert s7.is_canonical
+        s7b = fl.Structure(0, (s1, s2, s3, s4, s5, s6,))
+        assert s7 == s7b
+        assert id(s7) == id(s7b)
+        assert s7 is s7b
+        assert s7 is not s5
         pass
+
+
+class TestConnector:
+    def test_connector(self):
+        uid1 = uuid.uuid4()
+        uid2 = uuid.uuid4()
+        c1 = fl.Connector(uid=uid1)
+        c2 = fl.Connector(uid=uid2)
+        assert c1 != c2
+        assert c1 == c1
+        assert c2 == c2
+        c1_reuse = fl.Connector(uid=uid1)
+        assert c1 == c1_reuse
+        assert c1 is c1_reuse
+        assert id(c1) == id(c1_reuse)
+        assert c1_reuse != c2
 
 
 class TestFormula:
@@ -45,6 +72,9 @@ class TestFormula:
         s4 = fl.Structure(2, (s3, s1, s2, s3, s4,))
         phi1 = fl.Formula((c1,), s1)
         phi2 = fl.Formula((c2,), s1)
+        assert phi1 != phi2
+        phi1b = fl.Formula((c1,), s1)
+        assert phi1 == phi1b
         phi3 = fl.Formula((c1,), s3)
         phi4 = fl.Formula((c2,), s3)
         with pytest.raises(Exception) as e:

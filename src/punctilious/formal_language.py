@@ -6,10 +6,83 @@ import typing
 import uuid
 
 
+def ensure_pointer(o: int) -> int:
+    """Performs data validation on a presumed pointer `o`.
+
+    :param o:
+    :return:
+    """
+    if o is None:
+        raise ValueError('A pointer cannot be None.')
+    elif not isinstance(o, int):
+        raise ValueError('A pointer cannot be of a different type than `int`.')
+    elif o < 0:
+        raise ValueError('A pointer cannot be negative.')
+    else:
+        return o
+
+
+def ensure_structure(o: Structure, fix_tuple_with_structure: bool = True) -> Structure:
+    """Performs data validation on a presumed Structure `o`.
+
+    :param o:
+    :param fix_tuple_with_structure:
+    :return:
+    """
+    if o is None:
+        raise ValueError('A structure cannot be None.')
+    elif not isinstance(o, Structure):
+        if fix_tuple_with_structure and isinstance(o, tuple) and len(o) == 2:
+            # implicit conversion of equivalent tuple into structure.
+            structure = Structure(root=o[0], sub_structures=o[1])
+            return structure
+        raise ValueError('A structure cannot be of a different type than `Structure`.')
+    else:
+        return o
+
+
+def ensure_sub_structures(o: tuple[Structure, ...], fix_none_with_empty: bool = True,
+                          fix_tuple_with_structure: bool = True) -> tuple[Structure, ...]:
+    """Performs data validation on a presumed tuple of Structure `o`.
+
+    :param o:
+    :param fix_none_with_empty:
+    :param fix_tuple_with_structure:
+    :return:
+    """
+    if o is None:
+        if fix_none_with_empty:
+            return tuple()
+        else:
+            raise ValueError('A tuple of structures cannot be None.')
+    elif not isinstance(o, tuple):
+        raise ValueError('A tuple of structures cannot be of a different type than `tuple`.')
+    elif not all(isinstance(structure, Structure) for structure in o):
+        if fix_tuple_with_structure:
+            # implicit conversion of equivalent tuples into structures.
+            structures = tuple(ensure_structure(o=structure) for structure in o)
+            return structures
+        raise ValueError('A tuple of structures cannot be of a different type than `Structure`.')
+    else:
+        return o
+
+
+def compute_structure_hash(root: int, sub_structures: tuple[Structure, ...] = tuple()):
+    root = ensure_pointer(root)
+    sub_structures = ensure_sub_structures(sub_structures, fix_none_with_empty=True, fix_tuple_with_structure=True)
+    return hash((Structure, root, sub_structures,))
+
+
+_structures: dict[int, Structure] = {}
+
+
 class Structure(tuple):
     """A `Structure` is an abstract formula structure, independent of connectors.
 
     """
+
+    def __hash__(self):
+        return compute_structure_hash(root=self.root, sub_structures=self.sub_structures)
 
     def __init__(self, root: int, sub_structures: tuple[Structure, ...] = tuple()):
         super(Structure, self).__init__()
@@ -25,10 +98,16 @@ class Structure(tuple):
         self._pointers: tuple[int, ...] = tuple(pointers)
 
     def __new__(cls, root: int, sub_structures: tuple[Structure, ...] = tuple()):
-        if root < 0:
-            raise ValueError('The value of a pointer cannot be negative.')
-        structure: tuple[root, sub_structures] = (root, sub_structures,)
-        return super(Structure, cls).__new__(cls, structure)
+        global _structures
+        root: int = ensure_pointer(root)
+        sub_structures: tuple[Structure, ...] = ensure_sub_structures(o=sub_structures, fix_none_with_empty=True)
+        structure_hash: int = compute_structure_hash(root=root, sub_structures=sub_structures)
+        if structure_hash in _structures:
+            return _structures[structure_hash]
+        else:
+            structure = super(Structure, cls).__new__(cls, (root, sub_structures,))
+            _structures[structure_hash] = structure
+            return structure
 
     def check_canonicity(self, max_pointer: int | None = None) -> tuple[bool, int | None]:
         """Returns `True` if this structure participates in a canonical structure, `False` otherwise.
@@ -107,6 +186,9 @@ class Structure(tuple):
         return self[1]
 
 
+_connectors: dict[uuid.UUID, Connector] = {}
+
+
 class Connector:
     """A `Connector` is a formula symbolic component."""
 
@@ -121,11 +203,31 @@ class Connector:
         return hash((type(self), self.uid))
 
     def __init__(self, uid: uuid.UUID | None = None):
-        if uid is None:
-            # Assigns automatically a new uid
-            uid: uuid.UUID = uuid.uuid4()
-        self._uid = uid
+        # Assignment of self._uid was already done in __new__,
+        # to manage the situation where uid was passed as None,
+        # and __new__ created a new one.
+        # In consequence, do not implement: self._uid = uid
         super(Connector, self).__init__()
+
+    def __new__(cls, uid: uuid.UUID | None = None):
+        global _connectors
+        if uid is None:
+            # Assigns automatically a new pseudo-random uid.
+            uid: uuid.UUID = uuid.uuid4()
+        if uid in _connectors:
+            # Reuses the connector from the cache.
+            return _connectors[uid]
+        else:
+            # Initiates a new connector.
+            instance: Connector = super(Connector, cls).__new__(cls)
+            # The uid cannot be assigned from __init__,
+            # because if it was None, __new__ would create a new one,
+            # and the new one is not passed to __init__.
+            # In consequence, execute the assignment directly in __new__:
+            instance._uid = uid
+            # Store the connector in the cache.
+            _connectors[uid] = instance
+            return instance
 
     def __ne__(self, other):
         return hash(self) != hash(other)
@@ -142,7 +244,7 @@ class Connector:
 
 
 def ensure_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = True) -> tuple:
-    """Returns a
+    """Given some `elements`, returns a tuple of unique elements.
 
     :param elements:
     :param raise_error_on_duplicate:
@@ -159,7 +261,7 @@ def ensure_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = T
 
 class Formula(tuple):
     """A `Formula` is a pair (C, S) where:
-     - C is a finite and ordered set of connectors.
+     - C is a non-empty, finite and ordered set of connectors.
      - S is a formula structure.
     """
 
@@ -168,10 +270,20 @@ class Formula(tuple):
 
     def __new__(cls, connectors: tuple[Connector, ...], structure: Structure):
         connectors = ensure_unicity(connectors, raise_error_on_duplicate=True)
-        if len(connectors) != structure.pointers_count:
+        if len(connectors) == 0:
+            raise ValueError('The formula `connectors` are empty.')
+        elif len(connectors) != structure.pointers_count:
             raise ValueError('The length of `connectors` is not equal to the number of connectors in the `structure`.')
         formula: tuple[tuple[Connector, ...], Structure] = (connectors, structure,)
         return super(Formula, cls).__new__(cls, formula)
+
+    @property
+    def connectors(self) -> tuple[Connector, ...]:
+        return self[0]
+
+    @property
+    def structure(self) -> Structure:
+        return self[1]
 
 
 pass
