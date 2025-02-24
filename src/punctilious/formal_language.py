@@ -85,6 +85,7 @@ class Structure(tuple):
         return compute_structure_hash(root=self.root, sub_structures=self.sub_structures)
 
     def __init__(self, root: int, sub_structures: tuple[Structure, ...] = tuple()):
+        global _structures
         super(Structure, self).__init__()
         # `is_canonical` is cached, because this property will be pervasively necessary.
         is_canonical, _ = self.check_canonicity()
@@ -96,6 +97,8 @@ class Structure(tuple):
                     pointers.append(pointer)
         pointers = sorted(pointers)
         self._pointers: tuple[int, ...] = tuple(pointers)
+        structure_hash: int = compute_structure_hash(root=root, sub_structures=sub_structures)
+        _structures[structure_hash] = self
 
     def __new__(cls, root: int, sub_structures: tuple[Structure, ...] = tuple()):
         global _structures
@@ -106,7 +109,6 @@ class Structure(tuple):
             return _structures[structure_hash]
         else:
             structure = super(Structure, cls).__new__(cls, (root, sub_structures,))
-            _structures[structure_hash] = structure
             return structure
 
     def check_canonicity(self, max_pointer: int | None = None) -> tuple[bool, int | None]:
