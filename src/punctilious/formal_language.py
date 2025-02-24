@@ -5,6 +5,22 @@ import typing
 # external packages
 import uuid
 
+import const
+
+
+def ensure_uid(o: uuid.UUID) -> uuid.UUID:
+    """Performs data validation on a presumed uid `o`.
+
+    :param o:
+    :return:
+    """
+    if o is None:
+        raise ValueError('A uid cannot be None.')
+    elif not isinstance(o, uuid.UUID):
+        raise ValueError('A uid cannot be of a different type than `uuid.UUID`.')
+    else:
+        return o
+
 
 def ensure_pointer(o: int) -> int:
     """Performs data validation on a presumed pointer `o`.
@@ -68,9 +84,11 @@ def ensure_sub_structures(o: tuple[Structure, ...], fix_none_with_empty: bool = 
 
 
 def compute_structure_hash(root: int, sub_structures: tuple[Structure, ...] = tuple()):
+    """Given its components, returns the hash of a `Structure`.
+    """
     root = ensure_pointer(root)
     sub_structures = ensure_sub_structures(sub_structures, fix_none_with_empty=True, fix_tuple_with_structure=True)
-    return hash((Structure, root, sub_structures,))
+    return hash((const.structure_prime, Structure, root, sub_structures,))
 
 
 _structures: dict[int, Structure] = {}
@@ -145,6 +163,8 @@ class Structure(tuple):
         are such that no pointer `p_i` ever appear in the structure
         unless i=0, or `p_(i-1)` already appeared in the structure.
 
+        A formula is well-formed only if its structure is canonical.
+
         :return:
         """
         return self._is_canonical
@@ -188,7 +208,14 @@ class Structure(tuple):
         return self[1]
 
 
-_connectors: dict[uuid.UUID, Connector] = {}
+_connectors: dict[int, Connector] = {}
+
+
+def compute_connector_hash(uid: uuid.UUID):
+    """Given its components, returns the hash of a `Connector`.
+    """
+    uid = ensure_uid(uid)
+    return hash((const.connector_prime, Connector, uid,))
 
 
 class Connector:
@@ -202,7 +229,7 @@ class Connector:
         return hash(self) == hash(other)
 
     def __hash__(self):
-        return hash((type(self), self.uid))
+        return compute_connector_hash(uid=self.uid)
 
     def __init__(self, uid: uuid.UUID | None = None):
         # Assignment of self._uid was already done in __new__,
@@ -216,9 +243,10 @@ class Connector:
         if uid is None:
             # Assigns automatically a new pseudo-random uid.
             uid: uuid.UUID = uuid.uuid4()
-        if uid in _connectors:
+        instance_hash: int = compute_connector_hash(uid=uid)
+        if instance_hash in _connectors:
             # Reuses the connector from the cache.
-            return _connectors[uid]
+            return _connectors[instance_hash]
         else:
             # Initiates a new connector.
             instance: Connector = super(Connector, cls).__new__(cls)
@@ -228,7 +256,7 @@ class Connector:
             # In consequence, execute the assignment directly in __new__:
             instance._uid = uid
             # Store the connector in the cache.
-            _connectors[uid] = instance
+            _connectors[instance_hash] = instance
             return instance
 
     def __ne__(self, other):
