@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="new approach with Pointers and Structures.">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/const.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/const.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/const.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -354,7 +353,7 @@
     "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
     "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
     "Python tests.pytest in test_fl1.py.executor": "Run",
-    "Python tests.pytest in test_formal_language.py.executor": "Run",
+    "Python tests.pytest in test_formal_language.py.executor": "Debug",
     "Python tests.pytest in test_formula.py.executor": "Run",
     "Python tests.pytest in test_formula_notations.py.executor": "Run",
     "Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py.executor": "Run",
@@ -504,7 +503,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_formal_language.py">
+  <component name="RunManager" selected="Python.const">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -874,8 +873,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in test_formal_language.py" />
         <item itemvalue="Python.const" />
+        <item itemvalue="Python tests.pytest in test_formal_language.py" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestFormula.test_formula" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestStructure.test_structure_01" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestConnector.test_connector" />
@@ -897,14 +896,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01329" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737005645401</created>
-      <option name="number" value="01329" />
-      <option name="presentableId" value="LOCAL-01329" />
-      <option name="project" value="LOCAL" />
-      <updated>1737005645402</updated>
     </task>
     <task id="LOCAL-01330" summary="meta-language">
       <option name="closed" value="true" />
@@ -1290,7 +1281,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740391624545</updated>
     </task>
-    <option name="localTasksCounter" value="1378" />
+    <task id="LOCAL-01378" summary="new approach with Pointers and Structures.">
+      <option name="closed" value="true" />
+      <created>1740433845609</created>
+      <option name="number" value="01378" />
+      <option name="presentableId" value="LOCAL-01378" />
+      <option name="project" value="LOCAL" />
+      <updated>1740433845609</updated>
+    </task>
+    <option name="localTasksCounter" value="1379" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1445,6 +1444,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious_20250223/pu_11_bundling.py</url>
           <line>416</line>
           <option name="timeStamp" value="380" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_formal_language.py</url>
+          <line>84</line>
+          <option name="timeStamp" value="390" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
