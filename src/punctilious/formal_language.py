@@ -88,7 +88,7 @@ def compute_structure_hash(root: int, sub_structures: tuple[Structure, ...] = tu
     """
     root = ensure_pointer(root)
     sub_structures = ensure_sub_structures(sub_structures, fix_none_with_empty=True, fix_tuple_with_structure=True)
-    return hash((const.structure_prime, Structure, root, sub_structures,))
+    return hash((const.structure_hash_prime, Structure, root, sub_structures,))
 
 
 _structures: dict[int, Structure] = {}
@@ -215,7 +215,7 @@ def compute_connector_hash(uid: uuid.UUID):
     """Given its components, returns the hash of a `Connector`.
     """
     uid = ensure_uid(uid)
-    return hash((const.connector_prime, Connector, uid,))
+    return hash((const.connector_hash_prime, Connector, uid,))
 
 
 class Connector:
