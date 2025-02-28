@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="new approach with Pointers and Structures.">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/config.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/representation_foundation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/const.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/const.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -203,7 +204,7 @@
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for test_formal_language.TestConnector.test_connector.executor": "Run",
     "Python tests.pytest for test_formal_language.TestConnectorFiniteOrderedSet.test_connector_finite_ordered_set.executor": "Run",
-    "Python tests.pytest for test_formal_language.TestFormula.test_formula.executor": "Run",
+    "Python tests.pytest for test_formal_language.TestFormula.test_formula.executor": "Debug",
     "Python tests.pytest for test_formal_language.TestStructure.test_structure_01.executor": "Run",
     "Python tests.pytest for test_formula.TestFormalLanguage.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_formula.executor": "Run",
@@ -354,7 +355,7 @@
     "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
     "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
     "Python tests.pytest in test_fl1.py.executor": "Run",
-    "Python tests.pytest in test_formal_language.py.executor": "Run",
+    "Python tests.pytest in test_formal_language.py.executor": "Debug",
     "Python tests.pytest in test_formula.py.executor": "Run",
     "Python tests.pytest in test_formula_notations.py.executor": "Run",
     "Python tests.pytest in test_greek_alphabet_lowercase_serif_italic.py.executor": "Run",
@@ -504,7 +505,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_formal_language.py">
+  <component name="RunManager" selected="Python tests.pytest for test_formal_language.TestFormula.test_formula">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -874,9 +875,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_formal_language.TestFormula.test_formula" />
         <item itemvalue="Python tests.pytest in test_formal_language.py" />
         <item itemvalue="Python.const" />
-        <item itemvalue="Python tests.pytest for test_formal_language.TestFormula.test_formula" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestStructure.test_structure_01" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestConnector.test_connector" />
       </list>
@@ -897,14 +898,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-    </task>
-    <task id="LOCAL-01331" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737008769380</created>
-      <option name="number" value="01331" />
-      <option name="presentableId" value="LOCAL-01331" />
-      <option name="project" value="LOCAL" />
-      <updated>1737008769380</updated>
     </task>
     <task id="LOCAL-01332" summary="meta-language">
       <option name="closed" value="true" />
@@ -1290,7 +1283,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740434474173</updated>
     </task>
-    <option name="localTasksCounter" value="1380" />
+    <task id="LOCAL-01380" summary="new approach with Pointers and Structures.">
+      <option name="closed" value="true" />
+      <created>1740607498858</created>
+      <option name="number" value="01380" />
+      <option name="presentableId" value="LOCAL-01380" />
+      <option name="project" value="LOCAL" />
+      <updated>1740607498858</updated>
+    </task>
+    <option name="localTasksCounter" value="1381" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

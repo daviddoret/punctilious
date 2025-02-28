@@ -6,6 +6,7 @@ import typing
 import uuid
 
 import const
+import representation_foundation as rf
 
 
 def ensure_uid(o: uuid.UUID) -> uuid.UUID:
@@ -218,7 +219,7 @@ def compute_connector_hash(uid: uuid.UUID):
     return hash((const.connector_hash_prime, Connector, uid,))
 
 
-class Connector:
+class Connector(rf.Representable):
     """A `Connector` is a formula symbolic component."""
 
     def __call__(self, *args):
@@ -231,12 +232,12 @@ class Connector:
     def __hash__(self):
         return compute_connector_hash(uid=self.uid)
 
-    def __init__(self, uid: uuid.UUID | None = None):
+    def __init__(self, uid: uuid.UUID | None = None, representation_function: rf.RepresentationFunction | None = None):
         # Assignment of self._uid was already done in __new__,
         # to manage the situation where uid was passed as None,
         # and __new__ created a new one.
         # In consequence, do not implement: self._uid = uid
-        super(Connector, self).__init__()
+        super(Connector, self).__init__(representation_function=representation_function)
 
     def __new__(cls, uid: uuid.UUID | None = None):
         global _connectors
@@ -262,12 +263,6 @@ class Connector:
     def __ne__(self, other):
         return hash(self) != hash(other)
 
-    def __repr__(self):
-        return f'{self.uid}'
-
-    def __str__(self):
-        return f'{self.uid}'
-
     @property
     def uid(self) -> uuid.UUID:
         return self._uid
@@ -289,14 +284,16 @@ def ensure_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = T
     return tuple(unique_elements)
 
 
-class Formula(tuple):
+class Formula(tuple, rf.Representable):
     """A `Formula` is a pair (C, S) where:
      - C is a non-empty, finite and ordered set of connectors.
      - S is a formula structure.
     """
 
-    def __init__(self, connectors: tuple[Connector, ...], structure: Structure):
+    def __init__(self, connectors: tuple[Connector, ...], structure: Structure,
+                 representation_function: rf.RepresentationFunction | None = None):
         super(Formula, self).__init__()
+        rf.Representable.__init__(self=self, representation_function=representation_function)
 
     def __new__(cls, connectors: tuple[Connector, ...], structure: Structure):
         connectors = ensure_unicity(connectors, raise_error_on_duplicate=True)
