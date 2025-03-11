@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="new approach with Pointers and Structures.">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/config.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/representation_foundation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/data/real_analysis_1/test.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formal_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -446,7 +446,7 @@
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "/Users/daviddoret/PycharmProjects/punctilious/src/punctilious/data/mappings",
     "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "configurable.group.build",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -707,7 +707,6 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="$PROJECT_DIR$/.venv/bin/python" />
-      <option name="SDK_NAME" value="Python 3.12 (punctilious)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/trashcan/tests_old" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -865,6 +864,7 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
+      <item itemvalue="Python tests.pytest for test_formal_language" />
       <item itemvalue="Python tests.pytest for test_formal_language.TestConnector.test_connector" />
       <item itemvalue="Python tests.pytest for test_formal_language.TestFormula.test_formula" />
       <item itemvalue="Python tests.pytest for test_formal_language.TestStructure.test_structure_01" />

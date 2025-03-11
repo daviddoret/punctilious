@@ -22,7 +22,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/punctilious_20250223" />
       <excludeFolder url="file://$MODULE_DIR$/tests_20250223" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12 (punctilious)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.11 (PythonVirtualEnvironments)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
