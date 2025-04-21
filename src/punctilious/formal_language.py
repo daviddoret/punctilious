@@ -23,32 +23,30 @@ def ensure_uid(o: uuid.UUID) -> uuid.UUID:
         return o
 
 
-def ensure_pointer(o: int) -> int:
-    """Performs data validation on a presumed pointer `o`.
+def ensure_connector_index(o: int) -> ConnectorIndex:
+    """Performs data validation on a presumed connector-index `o`.
+    Convert `o` for FormulaPoint implicitly if necessary.
+    """
+    if isinstance(o, ConnectorIndex):
+        return o
+    elif isinstance(o, int):
+        return ConnectorIndex(o)
+    elif o is None:
+        raise ValueError('A connector-index cannot be None.')
+    elif not isinstance(o, ConnectorIndex):
+        raise ValueError('Non supported input for `ConnectorIndex`.')
+    else:
+        return o
+
+
+def ensure_connector_index_tuple(o: tuple) -> tuple[ConnectorIndex, ...]:
+    """Ensure that a python-tuple `o` is composed of `ConnectorIndex` elements.
+    Otherwise, implicitly convert its elements to `ConnectorIndex` and return a new tuple.
 
     :param o:
     :return:
     """
-    if o is None:
-        raise ValueError('A pointer cannot be None.')
-    elif not isinstance(o, int):
-        raise ValueError('A pointer cannot be of a different type than `int`.')
-    elif o < 0:
-        raise ValueError('A pointer cannot be negative.')
-    else:
-        return o
-
-
-def ensure_formula_pointer(o: int) -> int:
-    """Performs data validation on a presumed formula-pointer `o`.
-    Convert `o` for FormulaPoint implicitly if necessary.
-    """
-    if o is None:
-        raise ValueError('A formula-pointer cannot be None.')
-    elif not isinstance(o, FormulaPointer):
-        raise ValueError('A formula-point cannot be of a different type than `FormulaPointer`.')
-    else:
-        return o
+    return tuple(ensure_connector_index(fp) for fp in o)
 
 
 def ensure_formula_structure(o: FormulaStructure, fix_tuple_with_structure: bool = True) -> FormulaStructure:
@@ -99,39 +97,39 @@ def ensure_sub_structures(o: tuple[FormulaStructure, ...], fix_none_with_empty: 
 def compute_structure_hash(root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
     """Given its components, returns the hash of a `Structure`.
     """
-    root = ensure_pointer(root)
+    root = ensure_connector_index(root)
     sub_structures = ensure_sub_structures(sub_structures, fix_none_with_empty=True, fix_tuple_with_structure=True)
     return hash((const.formula_structure_hash_prime, FormulaStructure, root, sub_structures,))
 
 
 _formula_structures: dict[int, FormulaStructure] = {}
-_formula_pointers: dict[int, FormulaPointer] = {}
+_connector_indexes: dict[int, ConnectorIndex] = {}
 
 
-class FormulaPointer(int):
-    """A `FormulaPointer` is a natural number (whose first element is mapped to 0),
-    that is used to build formula-structures."""
+class ConnectorIndex(int):
+    """A `ConnectorIndex` is a model of natural number (whose first element is mapped to 0),
+    that is used as a connector index to build formula-structures."""
 
     def __hash__(self):
-        return compute_pointer_hash(self)
+        return compute_connector_index_hash(self)
 
-    def __new__(cls, n: int) -> FormulaPointer:
-        global _formula_pointers
+    def __new__(cls, n: int) -> ConnectorIndex:
+        global _connector_indexes
         if not isinstance(n, int):
             raise ValueError('`i` must be of type `int`.')
-        formula_pointer_hash: int = compute_pointer_hash(n)
-        if formula_pointer_hash in _formula_pointers:
-            return _formula_pointers[formula_pointer_hash]
-        elif isinstance(n, FormulaPointer):
+        connector_index_hash: int = compute_connector_index_hash(n)
+        if connector_index_hash in _connector_indexes:
+            return _connector_indexes[connector_index_hash]
+        elif isinstance(n, ConnectorIndex):
             return n
         else:
-            formula_pointer = super(FormulaPointer, cls).__new__(cls, n)
-            _formula_pointers[formula_pointer_hash] = formula_pointer
-            return formula_pointer
+            connector_index = super(ConnectorIndex, cls).__new__(cls, n)
+            _connector_indexes[connector_index_hash] = connector_index
+            return connector_index
 
 
-def compute_pointer_hash(i: int):
-    return hash((const.formula_pointer_hash_prime, FormulaPointer, i))
+def compute_connector_index_hash(i: int):
+    return hash((const.connector_index_hash_prime, ConnectorIndex, i))
 
 
 class FormulaStructure(tuple):
@@ -160,7 +158,7 @@ class FormulaStructure(tuple):
 
     def __new__(cls, root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
         global _formula_structures
-        root: int = ensure_pointer(root)
+        root: int = ensure_connector_index(root)
         sub_structures: tuple[FormulaStructure, ...] = ensure_sub_structures(o=sub_structures, fix_none_with_empty=True)
         structure_hash: int = compute_structure_hash(root=root, sub_structures=sub_structures)
         if structure_hash in _formula_structures:
@@ -351,5 +349,9 @@ class Formula(tuple, rf.Representable):
     def structure(self) -> FormulaStructure:
         return self[1]
 
+
+FlexibleConnectorIndex = typing.Union[ConnectorIndex, int]
+FlexibleConnectorIndexTuple = typing.Tuple[FlexibleConnectorIndex, ...]
+FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, FlexibleConnectorIndexTuple]]
 
 pass

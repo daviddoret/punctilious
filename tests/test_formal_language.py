@@ -4,11 +4,11 @@ import uuid
 import punctilious.formal_language as fl
 
 
-class TestFormulaPointer:
+class TestConnectorIndex:
     def test_formula_pointer_01(self):
-        fp0 = fl.FormulaPointer(0)
-        fp0b = fl.FormulaPointer(0)
-        fp1 = fl.FormulaPointer(1)
+        fp0 = fl.ConnectorIndex(0)
+        fp0b = fl.ConnectorIndex(0)
+        fp1 = fl.ConnectorIndex(1)
         assert fp0 == fp0b
         assert fp0 != fp1
         assert fp0 is fp0b
