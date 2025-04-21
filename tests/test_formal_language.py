@@ -5,7 +5,7 @@ import punctilious.formal_language as fl
 
 
 class TestConnectorIndex:
-    def test_formula_pointer_01(self):
+    def test_connector_index_01(self):
         fp0 = fl.ConnectorIndex(0)
         fp0b = fl.ConnectorIndex(0)
         fp1 = fl.ConnectorIndex(1)
@@ -14,6 +14,28 @@ class TestConnectorIndex:
         assert fp0 is fp0b
         assert fp0 is not fp1
         assert fp1 > fp0
+        with pytest.raises(Exception) as e:
+            fl.ConnectorIndex(None)
+        with pytest.raises(Exception) as e:
+            fl.ConnectorIndex('a')
+
+
+class TestConnectorIndexTuple:
+    def test_connector_index_tuple_01(self):
+        fp0 = fl.ConnectorIndex(0)
+        fp0b = fl.ConnectorIndex(0)
+        fp1 = fl.ConnectorIndex(1)
+        cit01a = fl.ensure_connector_index_tuple((fp0, fp1,))
+        cit01b = fl.ensure_connector_index_tuple((fp0b, fp1))
+        assert cit01a == cit01b
+        cit01c = fl.ensure_connector_index_tuple((0, 1))
+        assert cit01a == cit01c
+        cit10 = fl.ensure_connector_index_tuple((fp1, fp0,))
+        assert cit01a != cit10
+        with pytest.raises(Exception) as e:
+            fl.ensure_connector_index_tuple(None)
+        with pytest.raises(Exception) as e:
+            fl.ensure_connector_index_tuple((1, 'a'))
 
 
 class TestStructure:

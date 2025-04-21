@@ -61,7 +61,7 @@ def ensure_formula_structure(o: FormulaStructure, fix_tuple_with_structure: bool
     elif not isinstance(o, FormulaStructure):
         if fix_tuple_with_structure and isinstance(o, tuple) and len(o) == 2:
             # implicit conversion of equivalent tuple into structure.
-            structure = FormulaStructure(root=o[0], sub_structures=o[1])
+            structure = FormulaStructure(root=o[0], structure=o[1])
             return structure
         raise ValueError('A structure cannot be of a different type than `Structure`.')
     else:
@@ -156,15 +156,15 @@ class FormulaStructure(tuple):
         structure_hash: int = compute_structure_hash(root=root, sub_structures=sub_structures)
         _formula_structures[structure_hash] = self
 
-    def __new__(cls, root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
+    def __new__(cls, root: FlexibleConnectorIndex, structure: tuple[FormulaStructure, ...] = tuple()):
         global _formula_structures
-        root: int = ensure_connector_index(root)
-        sub_structures: tuple[FormulaStructure, ...] = ensure_sub_structures(o=sub_structures, fix_none_with_empty=True)
-        structure_hash: int = compute_structure_hash(root=root, sub_structures=sub_structures)
+        root: ConnectorIndex = ensure_connector_index(root)
+        structure: tuple[FormulaStructure, ...] = ensure_sub_structures(o=structure, fix_none_with_empty=True)
+        structure_hash: int = compute_structure_hash(root=root, sub_structures=structure)
         if structure_hash in _formula_structures:
             return _formula_structures[structure_hash]
         else:
-            structure = super(FormulaStructure, cls).__new__(cls, (root, sub_structures,))
+            structure = super(FormulaStructure, cls).__new__(cls, (root, structure,))
             return structure
 
     def check_canonicity(self, max_pointer: int | None = None) -> tuple[bool, int | None]:
