@@ -1,0 +1,59 @@
+schema:
+  uuid: f42b7da4-46f1-41aa-9fed-19aec7bf0aad
+  version: 1
+  name: punctilious_schema
+header:
+  uuid: edc1ec22-f0f4-4aa6-8068-30d24250b221
+  version: 1
+  name: test
+dependent_packages: # list dependent punctilious packages here.
+  - url:
+    uuid:
+    version: 1
+    remote_name: some_dependency # the name of the remote punctilious package as it appears in the package.
+    name: my_dependency # (conditional) if necessary, the dependent punctilious package can be renamed to overcome name conflicts.
+    import_all_names: True | False
+    import_some_names: a, b, c
+aliases:
+  - my_local_name: my_dependency.myname # maps a local name to an object in a dependent package.
+  - some_name: another_name # maps a local name to another local name.
+interprets:
+  constant_notation:
+    template: "{{ connector }}"
+  function_notation:
+    template: "{{ connector }}({{ arguments }})"
+  infix_notation:
+    template: "{{ argument[0] }}{{ connector }}{{ argument[1] }}"
+connectors:
+  exponentiation:
+    uuid: 684eb39a-9184-4a02-912e-6ccdd589d3f4
+      
+  is_a_real_number:
+    uuid: 9ebfdf49-3917-458c-9343-078163496238
+    template: "is_a_real_number({{ argument[0] }})"
+  a:
+    uuid: e5f5b6d1-0e54-4e7e-b194-f3b22a024f66
+    template: "a"
+  0:
+    uuid: c94cda22-c36b-4fe9-a02e-5795316ac20e
+    template: "0"
+  1:
+    uuid: 361e9958-6d2a-4560-953f-c44271feb3cc
+    template: "1"
+theorems:
+  a_power_0_equal_1:
+    variables:
+      - a
+    premises:
+      - "is_a_real_number(a)"
+    conclusion:
+      a^0 = 1
+  a_power_p_equal_a_power_p_minus_1:
+    variables:
+      - "a"
+      - "p"
+    premises:
+      - "is_a_real_number(a)"
+      - "is_a_real_number(p)"
+    conclusion:
+      "a^p = a * a^(p - 1)"

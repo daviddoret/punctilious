@@ -61,7 +61,7 @@ https://pypi.org/project/punctilious/</a></p>
 
 ## Prerequisites
 
-Python version 3.11 or later.
+Python version 3.12 or later.
 
 ## Installation
 
