@@ -351,7 +351,6 @@ class Formula(tuple, rf.Representable):
 
 
 FlexibleConnectorIndex = typing.Union[ConnectorIndex, int]
-FlexibleConnectorIndexTuple = typing.Tuple[FlexibleConnectorIndex, ...]
-FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, FlexibleConnectorIndexTuple]]
+FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, tuple[FlexibleFormulaStructure, ...]]]
 
 pass

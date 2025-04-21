@@ -63,7 +63,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/daviddoret/punctilious.git",
-    "accountId": "b5832d9a-22a9-45b8-9976-592495d33dab"
+    "accountId": "fa3a4ec0-c0c3-40a4-94e1-364ebf02bb5c"
   }
 }]]></component>
   <component name="HighlightingSettingsPerFile">
@@ -205,6 +205,7 @@
     "Python tests.pytest for test_formal_language.TestConnectorFiniteOrderedSet.test_connector_finite_ordered_set.executor": "Run",
     "Python tests.pytest for test_formal_language.TestConnectorIndex.test_connector_index_01.executor": "Run",
     "Python tests.pytest for test_formal_language.TestConnectorIndex.test_formula_pointer_01.executor": "Run",
+    "Python tests.pytest for test_formal_language.TestConnectorIndexTuple.test_connector_index_tuple_01.executor": "Run",
     "Python tests.pytest for test_formal_language.TestFormula.test_formula.executor": "Debug",
     "Python tests.pytest for test_formal_language.TestFormulaPointer.test_formula_point_01.executor": "Run",
     "Python tests.pytest for test_formal_language.TestFormulaPointer.test_formula_pointer_01.executor": "Run",
@@ -454,7 +455,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -514,7 +515,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_formal_language.TestConnectorIndex.test_connector_index_01">
+  <component name="RunManager" selected="Python tests.pytest for test_formal_language.TestConnectorIndexTuple.test_connector_index_tuple_01">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -727,6 +728,24 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_formal_language.TestConnectorIndexTuple.test_connector_index_tuple_01" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_formal_language.TestConnectorIndexTuple.test_connector_index_tuple_01&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_formal_language.TestConnectorIndex.test_connector_index_01" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -835,24 +854,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -866,20 +867,20 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_formal_language.TestConnectorIndex.test_connector_index_01" />
       <item itemvalue="Python tests.pytest for test_formal_language.TestConnectorIndex.test_formula_pointer_01" />
+      <item itemvalue="Python tests.pytest for test_formal_language.TestConnectorIndexTuple.test_connector_index_tuple_01" />
       <item itemvalue="Python tests.pytest for test_formal_language.TestFormulaPointer.test_formula_point_01" />
       <item itemvalue="Python tests.pytest for test_formal_language.TestFormulaPointer.test_formula_pointer_01" />
-      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_formal_language.TestConnectorIndexTuple.test_connector_index_tuple_01" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestConnectorIndex.test_connector_index_01" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestConnectorIndex.test_formula_pointer_01" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestFormulaPointer.test_formula_pointer_01" />
         <item itemvalue="Python tests.pytest for test_formal_language.TestFormulaPointer.test_formula_point_01" />
-        <item itemvalue="Python tests.pytest in tests" />
       </list>
     </recent_temporary>
   </component>
@@ -899,15 +900,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-      <workItem from="1745231164817" duration="3992000" />
-    </task>
-    <task id="LOCAL-01334" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737187064591</created>
-      <option name="number" value="01334" />
-      <option name="presentableId" value="LOCAL-01334" />
-      <option name="project" value="LOCAL" />
-      <updated>1737187064591</updated>
+      <workItem from="1745231164817" duration="5625000" />
     </task>
     <task id="LOCAL-01335" summary="meta-language">
       <option name="closed" value="true" />
@@ -1293,7 +1286,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745250463128</updated>
     </task>
-    <option name="localTasksCounter" value="1383" />
+    <task id="LOCAL-01383" summary="ConnectorIndex">
+      <option name="closed" value="true" />
+      <created>1745251254670</created>
+      <option name="number" value="01383" />
+      <option name="presentableId" value="LOCAL-01383" />
+      <option name="project" value="LOCAL" />
+      <updated>1745251254671</updated>
+    </task>
+    <option name="localTasksCounter" value="1384" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1467,6 +1468,7 @@
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaPointer_test_formula_point_01.coverage" NAME="pytest for test_formal_language.TestFormulaPointer.test_formula_point_01 Coverage Results" MODIFIED="1745240274025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestConnectorIndex_test_formula_pointer_01.coverage" NAME="pytest for test_formal_language.TestConnectorIndex.test_formula_pointer_01 Coverage Results" MODIFIED="1745250446314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaPointer_test_formula_pointer_01.coverage" NAME="pytest for test_formal_language.TestFormulaPointer.test_formula_pointer_01 Coverage Results" MODIFIED="1745249684021" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestConnectorIndexTuple_test_connector_index_tuple_01.coverage" NAME="pytest for test_formal_language.TestConnectorIndexTuple.test_connector_index_tuple_01 Coverage Results" MODIFIED="1745251158076" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestConnectorIndex_test_connector_index_01.coverage" NAME="pytest for test_formal_language.TestConnectorIndex.test_connector_index_01 Coverage Results" MODIFIED="1745250534335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
   </component>
 </project>
