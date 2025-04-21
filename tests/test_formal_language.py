@@ -20,9 +20,9 @@ class TestConnectorIndex:
             fl.ConnectorIndex('a')
 
 
-class TestStructure:
+class TestFormulaStructure:
 
-    def test_structure_01(self):
+    def test_formula_structure_01(self):
         s0 = fl.FormulaStructure(0)
         assert s0.is_leaf
         assert s0.is_canonical

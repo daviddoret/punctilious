@@ -5,22 +5,27 @@ import typing
 # external packages
 import uuid
 
+import util
 import const
 import representation_foundation as rf
 
 
 def ensure_uid(o: uuid.UUID) -> uuid.UUID:
-    """Performs data validation on a presumed uid `o`.
+    """Ensures `o` is of type `uuid.UUID`, using implicit conversion if necessary.
 
     :param o:
     :return:
     """
-    if o is None:
-        raise ValueError('A uid cannot be None.')
-    elif not isinstance(o, uuid.UUID):
-        raise ValueError('A uid cannot be of a different type than `uuid.UUID`.')
-    else:
+    if isinstance(o, uuid.UUID):
         return o
+    elif isinstance(o, str):
+        try:
+            return uuid.UUID(o)
+        except ValueError:
+            raise util.PunctiliousException('`uuid.UUID` ensurance failure. `o` is not a string in valid UUID format.',
+                                            o=o)
+    else:
+        raise util.PunctiliousException('`uuid.UUID` ensurance failure. `o` is not of a supported type.', o=o)
 
 
 def ensure_connector_index(o: int) -> ConnectorIndex:
@@ -31,12 +36,8 @@ def ensure_connector_index(o: int) -> ConnectorIndex:
         return o
     elif isinstance(o, int):
         return ConnectorIndex(o)
-    elif o is None:
-        raise ValueError('A connector-index cannot be None.')
-    elif not isinstance(o, ConnectorIndex):
-        raise ValueError('Non supported input for `ConnectorIndex`.')
     else:
-        return o
+        raise util.PunctiliousException('`ConnectorIndex` ensurance failure. `o` is not of a supported type.', o=o)
 
 
 def ensure_connector_index_tuple(o: tuple) -> tuple[ConnectorIndex, ...]:
@@ -49,23 +50,21 @@ def ensure_connector_index_tuple(o: tuple) -> tuple[ConnectorIndex, ...]:
     return tuple(ensure_connector_index(fp) for fp in o)
 
 
-def ensure_formula_structure(o: FormulaStructure, fix_tuple_with_structure: bool = True) -> FormulaStructure:
+def ensure_formula_structure(o: FormulaStructure, implicit_tuple_conversion: bool = True) -> FormulaStructure:
     """Performs data validation on a presumed Structure `o`.
 
     :param o:
-    :param fix_tuple_with_structure:
+    :param implicit_tuple_conversion: if `o` is a tuple
     :return:
     """
-    if o is None:
-        raise ValueError('A structure cannot be None.')
-    elif not isinstance(o, FormulaStructure):
-        if fix_tuple_with_structure and isinstance(o, tuple) and len(o) == 2:
-            # implicit conversion of equivalent tuple into structure.
-            structure = FormulaStructure(root=o[0], structure=o[1])
-            return structure
-        raise ValueError('A structure cannot be of a different type than `Structure`.')
-    else:
+    if isinstance(o, FormulaStructure):
         return o
+    elif implicit_tuple_conversion and isinstance(o, tuple) and len(o) == 2:
+        structure = FormulaStructure(root=o[0], sub_structures=o[1])
+        return structure
+    else:
+        raise util.PunctiliousException('`FormulaStructure` ensurance failure. `o` is not of a supported type.', o=o,
+                                        implicit_tuple_conversion=implicit_tuple_conversion)
 
 
 def ensure_sub_structures(o: tuple[FormulaStructure, ...], fix_none_with_empty: bool = True,
@@ -77,6 +76,7 @@ def ensure_sub_structures(o: tuple[FormulaStructure, ...], fix_none_with_empty: 
     :param fix_tuple_with_structure:
     :return:
     """
+    # TODO: Implement SubStructures as a dedicated class.
     if o is None:
         if fix_none_with_empty:
             return tuple()
@@ -126,6 +126,12 @@ class ConnectorIndex(int):
             connector_index = super(ConnectorIndex, cls).__new__(cls, n)
             _connector_indexes[connector_index_hash] = connector_index
             return connector_index
+
+    def __str__(self):
+        return f'i{self.as_int()}'
+
+    def as_int(self) -> int:
+        return int(self)
 
 
 def compute_connector_index_hash(i: int):
@@ -308,6 +314,18 @@ class Connector(rf.Representable):
         return self._uid
 
 
+def ensure_connector(o: FlexibleConnector) -> Connector:
+    """Ensures `o` is of type `Connector`. Uses implicit conversion if possible.
+
+    :param o:
+    :return:
+    """
+    if isinstance(o, Connector):
+        return o
+    else:
+        raise ValueError('`o` is not implicitly convertible to `Connector`.')
+
+
 def ensure_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = True) -> tuple:
     """Given some `elements`, returns a tuple of unique elements.
 
@@ -324,10 +342,21 @@ def ensure_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = T
     return tuple(unique_elements)
 
 
+class ConnectorOrderedSet(tuple):
+    """A finite, computable, ordered set of connectors."""
+
+    def __new__(cls, connectors: tuple[Connector, ...]):
+        connectors: tuple = ensure_unicity(connectors, raise_error_on_duplicate=True)
+        connector_ordered_set: tuple[Connector, ...] = tuple(ensure_connector(c) for c in connectors)
+        return super(ConnectorOrderedSet, cls).__new__(cls, connector_ordered_set)
+
+
 class Formula(tuple, rf.Representable):
     """A `Formula` is a pair (C, S) where:
-     - C is a non-empty, finite and ordered set of connectors.
-     - S is a formula structure.
+     - C is a non-empty, finite and ordered set of connectors of size n.
+     - S is a formula-structure, such that:
+        - all connector-index in S are < n.
+        - all index positions in C are present in S (possibly in a sub-structure)..
     """
 
     def __init__(self, connectors: tuple[Connector, ...], structure: FormulaStructure,
@@ -353,7 +382,8 @@ class Formula(tuple, rf.Representable):
         return self[1]
 
 
-FlexibleConnectorIndex = typing.Union[ConnectorIndex, int]
-FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, tuple]]
+FlexibleConnector = typing.Union[Connector,]
+FlexibleConnectorIndex = typing.Union[ConnectorIndex, int,]
+FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, tuple,]]
 
 pass
