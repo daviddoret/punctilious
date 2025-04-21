@@ -4,39 +4,51 @@ import uuid
 import punctilious.formal_language as fl
 
 
+class TestFormulaPointer:
+    def test_formula_pointer_01(self):
+        fp0 = fl.FormulaPointer(0)
+        fp0b = fl.FormulaPointer(0)
+        fp1 = fl.FormulaPointer(1)
+        assert fp0 == fp0b
+        assert fp0 != fp1
+        assert fp0 is fp0b
+        assert fp0 is not fp1
+        assert fp1 > fp0
+
+
 class TestStructure:
 
     def test_structure_01(self):
-        s0 = fl.Structure(0)
+        s0 = fl.FormulaStructure(0)
         assert s0.is_leaf
         assert s0.is_canonical
-        s0b = fl.Structure(0)
+        s0b = fl.FormulaStructure(0)
         assert s0 == s0b
         assert id(s0) == id(s0b)
         assert s0 is s0b
-        s1 = fl.Structure(1)
+        s1 = fl.FormulaStructure(1)
         assert s1.is_leaf
         assert not s1.is_canonical
         assert s1 is not s0
-        s2 = fl.Structure(2)
+        s2 = fl.FormulaStructure(2)
         assert s2.is_leaf
         assert not s2.is_canonical
-        s3 = fl.Structure(0, (s0,))
+        s3 = fl.FormulaStructure(0, (s0,))
         assert not s3.is_leaf
         assert s3.is_canonical
-        s4 = fl.Structure(0, (s1,))
+        s4 = fl.FormulaStructure(0, (s1,))
         assert not s4.is_leaf
         assert s4.is_canonical
-        s5 = fl.Structure(0, (s2,))
+        s5 = fl.FormulaStructure(0, (s2,))
         assert not s5.is_leaf
         assert not s5.is_canonical
-        s6 = fl.Structure(0, (s2, s5, s1, s0,))
+        s6 = fl.FormulaStructure(0, (s2, s5, s1, s0,))
         assert not s6.is_leaf
         assert not s6.is_canonical
-        s7 = fl.Structure(0, (s1, s2, s3, s4, s5, s6,))
+        s7 = fl.FormulaStructure(0, (s1, s2, s3, s4, s5, s6,))
         assert not s7.is_leaf
         assert s7.is_canonical
-        s7b = fl.Structure(0, (s1, s2, s3, s4, s5, s6,))
+        s7b = fl.FormulaStructure(0, (s1, s2, s3, s4, s5, s6,))
         assert s7 == s7b
         assert id(s7) == id(s7b)
         assert s7 is s7b
@@ -65,11 +77,11 @@ class TestFormula:
         c1 = fl.Connector()
         c2 = fl.Connector()
         c3 = fl.Connector()
-        s1 = fl.Structure(0)
-        s2 = fl.Structure(1)
-        s3 = fl.Structure(0, (s1,))
-        s4 = fl.Structure(1, (s1, s2,))
-        s4 = fl.Structure(2, (s3, s1, s2, s3, s4,))
+        s1 = fl.FormulaStructure(0)
+        s2 = fl.FormulaStructure(1)
+        s3 = fl.FormulaStructure(0, (s1,))
+        s4 = fl.FormulaStructure(1, (s1, s2,))
+        s4 = fl.FormulaStructure(2, (s3, s1, s2, s3, s4,))
         phi1 = fl.Formula((c1,), s1)
         phi2 = fl.Formula((c2,), s1)
         assert phi1 != phi2

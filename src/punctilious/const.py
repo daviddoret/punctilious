@@ -10,4 +10,5 @@ import sys
 
 connector_hash_prime: int = 1076876232711380473
 formula_hash_prime: int = 5729681708660247977
-structure_hash_prime: int = 8518494684108058217
+formula_structure_hash_prime: int = 8518494684108058217
+formula_pointer_hash_prime: int = 3325534686958711459

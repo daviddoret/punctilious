@@ -39,7 +39,19 @@ def ensure_pointer(o: int) -> int:
         return o
 
 
-def ensure_structure(o: Structure, fix_tuple_with_structure: bool = True) -> Structure:
+def ensure_formula_pointer(o: int) -> int:
+    """Performs data validation on a presumed formula-pointer `o`.
+    Convert `o` for FormulaPoint implicitly if necessary.
+    """
+    if o is None:
+        raise ValueError('A formula-pointer cannot be None.')
+    elif not isinstance(o, FormulaPointer):
+        raise ValueError('A formula-point cannot be of a different type than `FormulaPointer`.')
+    else:
+        return o
+
+
+def ensure_formula_structure(o: FormulaStructure, fix_tuple_with_structure: bool = True) -> FormulaStructure:
     """Performs data validation on a presumed Structure `o`.
 
     :param o:
@@ -48,18 +60,18 @@ def ensure_structure(o: Structure, fix_tuple_with_structure: bool = True) -> Str
     """
     if o is None:
         raise ValueError('A structure cannot be None.')
-    elif not isinstance(o, Structure):
+    elif not isinstance(o, FormulaStructure):
         if fix_tuple_with_structure and isinstance(o, tuple) and len(o) == 2:
             # implicit conversion of equivalent tuple into structure.
-            structure = Structure(root=o[0], sub_structures=o[1])
+            structure = FormulaStructure(root=o[0], sub_structures=o[1])
             return structure
         raise ValueError('A structure cannot be of a different type than `Structure`.')
     else:
         return o
 
 
-def ensure_sub_structures(o: tuple[Structure, ...], fix_none_with_empty: bool = True,
-                          fix_tuple_with_structure: bool = True) -> tuple[Structure, ...]:
+def ensure_sub_structures(o: tuple[FormulaStructure, ...], fix_none_with_empty: bool = True,
+                          fix_tuple_with_structure: bool = True) -> tuple[FormulaStructure, ...]:
     """Performs data validation on a presumed tuple of Structure `o`.
 
     :param o:
@@ -74,38 +86,65 @@ def ensure_sub_structures(o: tuple[Structure, ...], fix_none_with_empty: bool = 
             raise ValueError('A tuple of structures cannot be None.')
     elif not isinstance(o, tuple):
         raise ValueError('A tuple of structures cannot be of a different type than `tuple`.')
-    elif not all(isinstance(structure, Structure) for structure in o):
+    elif not all(isinstance(structure, FormulaStructure) for structure in o):
         if fix_tuple_with_structure:
             # implicit conversion of equivalent tuples into structures.
-            structures = tuple(ensure_structure(o=structure) for structure in o)
+            structures = tuple(ensure_formula_structure(o=structure) for structure in o)
             return structures
         raise ValueError('A tuple of structures cannot be of a different type than `Structure`.')
     else:
         return o
 
 
-def compute_structure_hash(root: int, sub_structures: tuple[Structure, ...] = tuple()):
+def compute_structure_hash(root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
     """Given its components, returns the hash of a `Structure`.
     """
     root = ensure_pointer(root)
     sub_structures = ensure_sub_structures(sub_structures, fix_none_with_empty=True, fix_tuple_with_structure=True)
-    return hash((const.structure_hash_prime, Structure, root, sub_structures,))
+    return hash((const.formula_structure_hash_prime, FormulaStructure, root, sub_structures,))
 
 
-_structures: dict[int, Structure] = {}
+_formula_structures: dict[int, FormulaStructure] = {}
+_formula_pointers: dict[int, FormulaPointer] = {}
 
 
-class Structure(tuple):
-    """A `Structure` is an abstract formula structure, independent of connectors.
+class FormulaPointer(int):
+    """A `FormulaPointer` is a natural number (whose first element is mapped to 0),
+    that is used to build formula-structures."""
+
+    def __hash__(self):
+        return compute_pointer_hash(self)
+
+    def __new__(cls, n: int) -> FormulaPointer:
+        global _formula_pointers
+        if not isinstance(n, int):
+            raise ValueError('`i` must be of type `int`.')
+        formula_pointer_hash: int = compute_pointer_hash(n)
+        if formula_pointer_hash in _formula_pointers:
+            return _formula_pointers[formula_pointer_hash]
+        elif isinstance(n, FormulaPointer):
+            return n
+        else:
+            formula_pointer = super(FormulaPointer, cls).__new__(cls, n)
+            _formula_pointers[formula_pointer_hash] = formula_pointer
+            return formula_pointer
+
+
+def compute_pointer_hash(i: int):
+    return hash((const.formula_pointer_hash_prime, FormulaPointer, i))
+
+
+class FormulaStructure(tuple):
+    """A `FormulaStructure` is an abstract formula structure, independent of connectors.
 
     """
 
     def __hash__(self):
         return compute_structure_hash(root=self.root, sub_structures=self.sub_structures)
 
-    def __init__(self, root: int, sub_structures: tuple[Structure, ...] = tuple()):
-        global _structures
-        super(Structure, self).__init__()
+    def __init__(self, root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
+        global _formula_structures
+        super(FormulaStructure, self).__init__()
         # `is_canonical` is cached, because this property will be pervasively necessary.
         is_canonical, _ = self.check_canonicity()
         self._is_canonical: bool = is_canonical
@@ -117,17 +156,17 @@ class Structure(tuple):
         pointers = sorted(pointers)
         self._pointers: tuple[int, ...] = tuple(pointers)
         structure_hash: int = compute_structure_hash(root=root, sub_structures=sub_structures)
-        _structures[structure_hash] = self
+        _formula_structures[structure_hash] = self
 
-    def __new__(cls, root: int, sub_structures: tuple[Structure, ...] = tuple()):
-        global _structures
+    def __new__(cls, root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
+        global _formula_structures
         root: int = ensure_pointer(root)
-        sub_structures: tuple[Structure, ...] = ensure_sub_structures(o=sub_structures, fix_none_with_empty=True)
+        sub_structures: tuple[FormulaStructure, ...] = ensure_sub_structures(o=sub_structures, fix_none_with_empty=True)
         structure_hash: int = compute_structure_hash(root=root, sub_structures=sub_structures)
-        if structure_hash in _structures:
-            return _structures[structure_hash]
+        if structure_hash in _formula_structures:
+            return _formula_structures[structure_hash]
         else:
-            structure = super(Structure, cls).__new__(cls, (root, sub_structures,))
+            structure = super(FormulaStructure, cls).__new__(cls, (root, sub_structures,))
             return structure
 
     def check_canonicity(self, max_pointer: int | None = None) -> tuple[bool, int | None]:
@@ -201,7 +240,7 @@ class Structure(tuple):
         return self[0]
 
     @property
-    def sub_structures(self) -> tuple[Structure]:
+    def sub_structures(self) -> tuple[FormulaStructure]:
         """The tuple of sub-structures contained in this structure.
 
         :return:
@@ -290,18 +329,18 @@ class Formula(tuple, rf.Representable):
      - S is a formula structure.
     """
 
-    def __init__(self, connectors: tuple[Connector, ...], structure: Structure,
+    def __init__(self, connectors: tuple[Connector, ...], structure: FormulaStructure,
                  representation_function: rf.RepresentationFunction | None = None):
         super(Formula, self).__init__()
         rf.Representable.__init__(self=self, representation_function=representation_function)
 
-    def __new__(cls, connectors: tuple[Connector, ...], structure: Structure):
+    def __new__(cls, connectors: tuple[Connector, ...], structure: FormulaStructure):
         connectors = ensure_unicity(connectors, raise_error_on_duplicate=True)
         if len(connectors) == 0:
             raise ValueError('The formula `connectors` are empty.')
         elif len(connectors) != structure.pointers_count:
             raise ValueError('The length of `connectors` is not equal to the number of connectors in the `structure`.')
-        formula: tuple[tuple[Connector, ...], Structure] = (connectors, structure,)
+        formula: tuple[tuple[Connector, ...], FormulaStructure] = (connectors, structure,)
         return super(Formula, cls).__new__(cls, formula)
 
     @property
@@ -309,7 +348,7 @@ class Formula(tuple, rf.Representable):
         return self[0]
 
     @property
-    def structure(self) -> Structure:
+    def structure(self) -> FormulaStructure:
         return self[1]
 
 

@@ -22,20 +22,11 @@
       <excludeFolder url="file://$MODULE_DIR$/src/punctilious_20250223" />
       <excludeFolder url="file://$MODULE_DIR$/tests_20250223" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.11 (punctilious)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.11" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="requirementsPath" value="" />
-  </component>
-  <component name="PyNamespacePackagesService">
-    <option name="namespacePackageFolders">
-      <list>
-        <option value="$MODULE_DIR$/trashcan/punctilious_package_1/data" />
-        <option value="$MODULE_DIR$/trashcan/punctilious_package_1" />
-        <option value="$MODULE_DIR$/src/punctilious_20250223/options" />
-      </list>
-    </option>
   </component>
   <component name="ReSTService">
     <option name="DOC_DIR" value="C:\Users\David\PycharmProjects\punctilious\docs" />
