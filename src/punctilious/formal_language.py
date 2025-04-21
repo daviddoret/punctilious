@@ -129,6 +129,9 @@ class ConnectorIndex(int):
 
 
 def compute_connector_index_hash(i: int):
+    if isinstance(i, ConnectorIndex):
+        # To avoid infinite recursion with method __hash__ of ConnectorIndex.
+        i: int = int(i)
     return hash((const.connector_index_hash_prime, ConnectorIndex, i))
 
 
@@ -351,6 +354,6 @@ class Formula(tuple, rf.Representable):
 
 
 FlexibleConnectorIndex = typing.Union[ConnectorIndex, int]
-FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, tuple[FlexibleFormulaStructure, ...]]]
+FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, tuple]]
 
 pass
