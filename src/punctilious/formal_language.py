@@ -60,7 +60,7 @@ def ensure_formula_structure(o: FormulaStructure, implicit_tuple_conversion: boo
     if isinstance(o, FormulaStructure):
         return o
     elif implicit_tuple_conversion and isinstance(o, tuple) and len(o) == 2:
-        structure = FormulaStructure(root=o[0], sub_structures=o[1])
+        structure = FormulaStructure(root=o[0], terms=o[1])
         return structure
     else:
         raise util.PunctiliousException('`FormulaStructure` ensurance failure. `o` is not of a supported type.', o=o,
@@ -94,7 +94,7 @@ def ensure_sub_structures(o: tuple[FormulaStructure, ...], fix_none_with_empty: 
         return o
 
 
-def compute_structure_hash(root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
+def compute_formula_structure_hash(root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
     """Given its components, returns the hash of a `Structure`.
     """
     root = ensure_connector_index(root)
@@ -108,7 +108,9 @@ _connector_indexes: dict[int, ConnectorIndex] = {}
 
 class ConnectorIndex(int):
     """A `ConnectorIndex` is a model of natural number (whose first element is mapped to 0),
-    that is used as a connector index to build formula-structures."""
+    that is used as a connector index to build formula-structures.
+
+    """
 
     def __hash__(self):
         return compute_connector_index_hash(self)
@@ -147,34 +149,44 @@ class FormulaStructure(tuple):
     """
 
     def __hash__(self):
-        return compute_structure_hash(root=self.root, sub_structures=self.sub_structures)
+        return compute_formula_structure_hash(root=self.root, sub_structures=self.terms)
 
-    def __init__(self, root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
+    def __init__(self, root: FlexibleConnectorIndex, terms: tuple[FormulaStructure, ...] = tuple()):
         global _formula_structures
+        root: ConnectorIndex = ensure_connector_index(root)
         super(FormulaStructure, self).__init__()
         # `is_canonical` is cached, because this property will be pervasively necessary.
         is_canonical, _ = self.check_canonicity()
         self._is_canonical: bool = is_canonical
-        pointers = [self.root]
-        for sub_structure in self.sub_structures:
-            for pointer in sub_structure.pointers:
-                if pointer not in pointers:
-                    pointers.append(pointer)
-        pointers = sorted(pointers)
-        self._pointers: tuple[int, ...] = tuple(pointers)
-        structure_hash: int = compute_structure_hash(root=root, sub_structures=sub_structures)
+        connector_indexes = [self.root]
+        for term in self.terms:
+            for ci in term.connector_indexes:
+                if ci not in connector_indexes:
+                    connector_indexes.append(ci)
+        connector_indexes = sorted(connector_indexes)
+        self._connector_indexes: tuple[ConnectorIndex, ...] = tuple(connector_indexes)
+        structure_hash: int = compute_formula_structure_hash(root=root, sub_structures=terms)
         _formula_structures[structure_hash] = self
 
     def __new__(cls, root: FlexibleConnectorIndex, structure: tuple[FormulaStructure, ...] = tuple()):
         global _formula_structures
         root: ConnectorIndex = ensure_connector_index(root)
         structure: tuple[FormulaStructure, ...] = ensure_sub_structures(o=structure, fix_none_with_empty=True)
-        structure_hash: int = compute_structure_hash(root=root, sub_structures=structure)
+        structure_hash: int = compute_formula_structure_hash(root=root, sub_structures=structure)
         if structure_hash in _formula_structures:
             return _formula_structures[structure_hash]
         else:
             structure = super(FormulaStructure, cls).__new__(cls, (root, structure,))
             return structure
+
+    def arity(self) -> int:
+        """Returns the `arity` of the `FormulaStructure`.
+
+        The `arity` of a `FormulaStructure` is the number of terms it contains.
+
+        :return:
+        """
+        return len(self._connector_indexes)
 
     def check_canonicity(self, max_pointer: int | None = None) -> tuple[bool, int | None]:
         """Returns `True` if this structure participates in a canonical structure, `False` otherwise.
@@ -194,7 +206,7 @@ class FormulaStructure(tuple):
         if self.root == max_pointer + 1:
             # this is the only authorized increment of max_pointer.
             max_pointer = self.root
-        for sub_structure in self.sub_structures:
+        for sub_structure in self.terms:
             check, max_pointer = sub_structure.check_canonicity(max_pointer=max_pointer)
             if not check:
                 return False, None
@@ -210,45 +222,51 @@ class FormulaStructure(tuple):
         are such that no pointer `p_i` ever appear in the structure
         unless i=0, or `p_(i-1)` already appeared in the structure.
 
-        A formula is well-formed only if its structure is canonical.
-
         :return:
         """
         return self._is_canonical
+
+    def is_formula_structure_equivalent_to(self, formula_structure: FlexibleFormulaStructure,
+                                           implicit_tuple_conversion: bool = True) -> bool:
+        formula_structure: FormulaStructure = ensure_formula_structure(formula_structure,
+                                                                       implicit_tuple_conversion=True)
+        # if self.root.is TODO: RESUME HERE
 
     @property
     def is_leaf(self) -> bool:
         """Returns `True` if the structure is a leaf, `False` otherwise.
 
-        A structure is a leaf if and only if it contains no sub-structures.
+        A structure is a leaf if and only if it contains no sub-terms.
         """
-        return len(self.sub_structures) == 0
+        return len(self.terms) == 0
 
     @property
-    def pointers(self) -> tuple[int, ...]:
+    def connector_indexes(self) -> tuple[ConnectorIndex, ...]:
         """Returns
 
         :return:
         """
-        return self._pointers
+        return self._connector_indexes
 
     @property
-    def pointers_count(self):
-        """Returns the number of distinct counters in the structure.
+    def connector_indexes_count(self):
+        """Returns the number of distinct `ConnectorIndex` in the `FormulaStructure`.
         """
-        return len(self.pointers)
+        return len(self.connector_indexes)
 
     @property
-    def root(self) -> int:
-        """The root pointer of the structure.
+    def root(self) -> ConnectorIndex:
+        """The `root` of the `FormulaStructure`.
+
+        The `root` of a `FormulaStructure` is the topmost `ConnectorIndex` of the formula tree..
 
         :return:
         """
         return self[0]
 
     @property
-    def sub_structures(self) -> tuple[FormulaStructure]:
-        """The tuple of sub-structures contained in this structure.
+    def terms(self) -> tuple[FormulaStructure]:
+        """The tuple of terms (sub-structures) contained in this `FormulaStructure`.
 
         :return:
         """
@@ -273,7 +291,7 @@ class Connector(rf.Representable):
         pass
 
     def __eq__(self, other):
-        return hash(self) == hash(other)
+        return self.is_connector_equivalent_to(other)
 
     def __hash__(self):
         return compute_connector_hash(uid=self.uid)
@@ -307,7 +325,14 @@ class Connector(rf.Representable):
             return instance
 
     def __ne__(self, other):
-        return hash(self) != hash(other)
+        return not (self.is_connector_equivalent_to(other))
+
+    def is_connector_equivalent_to(self, other: FlexibleConnector):
+        """Returns `True` if and only if this `Connector` is connector-equivalent to `other`.
+
+        Two `Connector` objects are connector-equivalent if they are the same object in all circumstances."""
+        other: Connector = ensure_connector(other)
+        return hash(self) == hash(other)
 
     @property
     def uid(self) -> uuid.UUID:
@@ -356,7 +381,9 @@ class Formula(tuple, rf.Representable):
      - C is a non-empty, finite and ordered set of connectors of size n.
      - S is a formula-structure, such that:
         - all connector-index in S are < n.
-        - all index positions in C are present in S (possibly in a sub-structure)..
+        - all index positions in C are present in S (possibly in a sub-terms).
+
+    `Formula` is mutable because it is `Representable`.
     """
 
     def __init__(self, connectors: tuple[Connector, ...], structure: FormulaStructure,
@@ -368,7 +395,7 @@ class Formula(tuple, rf.Representable):
         connectors = ensure_unicity(connectors, raise_error_on_duplicate=True)
         if len(connectors) == 0:
             raise ValueError('The formula `connectors` are empty.')
-        elif len(connectors) != structure.pointers_count:
+        elif len(connectors) != structure.connector_indexes_count:
             raise ValueError('The length of `connectors` is not equal to the number of connectors in the `structure`.')
         formula: tuple[tuple[Connector, ...], FormulaStructure] = (connectors, structure,)
         return super(Formula, cls).__new__(cls, formula)

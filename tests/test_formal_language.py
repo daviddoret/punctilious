@@ -61,11 +61,13 @@ class TestFormulaStructure:
 
 
 class TestConnector:
-    def test_connector(self):
+    def test_connector_1(self):
         uid1 = uuid.uuid4()
         uid2 = uuid.uuid4()
         c1 = fl.Connector(uid=uid1)
         c2 = fl.Connector(uid=uid2)
+        assert c1.is_connector_equivalent_to(c1)
+        assert not (c1.is_connector_equivalent_to(c2))
         assert c1 != c2
         assert c1 == c1
         assert c2 == c2
