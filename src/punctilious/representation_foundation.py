@@ -2,7 +2,7 @@ import abc
 import typing
 
 
-class RepresentationFunction(abc.ABC):
+class Presenter(abc.ABC):
 
     def __call__(self, **kwargs):
         pass
@@ -15,7 +15,7 @@ class RepresentationFunction(abc.ABC):
         pass
 
 
-class TechnicalRepresentation(RepresentationFunction):
+class TechnicalPresenter(Presenter):
 
     def __init__(self):
         super().__init__()
@@ -24,15 +24,25 @@ class TechnicalRepresentation(RepresentationFunction):
         yield f'{id(self)} ({self.__class__.__name__})'
 
 
-technical_representation: RepresentationFunction = TechnicalRepresentation()
+technical_representer: Presenter = TechnicalPresenter()
+
+
+class StringPresenter(Presenter):
+
+    def __init__(self, string: str):
+        self.string = string
+        super().__init__()
+
+    def yield_representation(self, **kwargs) -> typing.Iterator[str]:
+        yield self.string
 
 
 class Representable(abc.ABC):
 
-    def __init__(self, representation_function: RepresentationFunction | None = None):
-        global technical_representation
+    def __init__(self, representation_function: Presenter | None = None):
+        global technical_representer
         if representation_function is None:
-            representation_function = technical_representation
+            representation_function = technical_representer
         self._representation_function = representation_function
 
     def __repr__(self) -> str:
@@ -48,5 +58,5 @@ class Representable(abc.ABC):
         return self.representation_function.get_representation(**kwargs)
 
     @property
-    def representation_function(self) -> RepresentationFunction:
+    def representation_function(self) -> Presenter:
         return self._representation_function

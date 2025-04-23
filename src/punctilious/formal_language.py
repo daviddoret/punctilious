@@ -278,7 +278,7 @@ class Connector(rf.Representable):
     def __hash__(self):
         return compute_connector_hash(uid=self.uid)
 
-    def __init__(self, uid: uuid.UUID | None = None, representation_function: rf.RepresentationFunction | None = None):
+    def __init__(self, uid: uuid.UUID | None = None, representation_function: rf.Presenter | None = None):
         # Assignment of self._uid was already done in __new__,
         # to manage the situation where uid was passed as None,
         # and __new__ created a new one.
@@ -360,7 +360,7 @@ class Formula(tuple, rf.Representable):
     """
 
     def __init__(self, connectors: tuple[Connector, ...], structure: FormulaStructure,
-                 representation_function: rf.RepresentationFunction | None = None):
+                 representation_function: rf.Presenter | None = None):
         super(Formula, self).__init__()
         rf.Representable.__init__(self=self, representation_function=representation_function)
 
