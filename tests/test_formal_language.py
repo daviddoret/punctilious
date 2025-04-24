@@ -19,6 +19,16 @@ class TestConnectorIndex:
         with pytest.raises(Exception) as e:
             fl.ConnectorIndex('a')
 
+    def test_connector_index_equivalence(self):
+        fp0 = fl.ConnectorIndex(0)
+        fp0b = fl.ConnectorIndex(0)
+        fp1 = fl.ConnectorIndex(1)
+        assert fp0.is_connector_index_equivalent_to(fp0b)
+        assert not (fp0.is_connector_index_equivalent_to(fp1))
+        assert not (fp1.is_connector_index_equivalent_to(fp0))
+        assert not (fp1.is_connector_index_equivalent_to(fp0b))
+        assert fp1.is_connector_index_equivalent_to(fp1)
+
 
 class TestFormulaStructure:
 
@@ -58,6 +68,22 @@ class TestFormulaStructure:
         assert s7 is s7b
         assert s7 is not s5
         pass
+
+    def test_formula_structure_equivalence(self):
+        fs1 = fl.FormulaStructure(0)
+        assert fs1.is_formula_structure_equivalent_to(fs1)
+        fs2 = fl.FormulaStructure(1)
+        assert not fs1.is_formula_structure_equivalent_to(fs2)
+        fs3 = fl.FormulaStructure(0, (1, 2, 0, 1,))
+        assert not fs1.is_formula_structure_equivalent_to(fs3)
+        fs4 = fl.FormulaStructure(0, (1, 2, 0, 1,))
+        assert fs3.is_formula_structure_equivalent_to(fs4)
+        fs5 = fl.FormulaStructure(0, (1, 2, 1, 1,))
+        assert not fs3.is_formula_structure_equivalent_to(fs5)
+        fs6 = fl.FormulaStructure(0, (1, (0, (1, 2, 3,)), 0, 1,))
+        assert fs6.is_formula_structure_equivalent_to(fs6)
+        fs7 = fl.FormulaStructure(0, (1, (0, (1, 2, 2,)), 0, 1,))
+        assert not fs7.is_formula_structure_equivalent_to(fs6)
 
 
 class TestConnector:

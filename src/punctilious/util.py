@@ -5,5 +5,5 @@ class PunctiliousException(Exception):
         super().__init__(message)
 
     def __str__(self):
-        variables: str = ' | '.join(f'`{k}`=`{v!r}`' for k, v in self.variables.items())
+        variables: str = ' | '.join(f'`{k}` {"is" if v is None else "="} `{v!r}`' for k, v in self.variables.items())
         return f'{self.message} | {variables}'

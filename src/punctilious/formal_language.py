@@ -50,7 +50,7 @@ def ensure_connector_index_tuple(o: tuple) -> tuple[ConnectorIndex, ...]:
     return tuple(ensure_connector_index(fp) for fp in o)
 
 
-def ensure_formula_structure(o: FormulaStructure, implicit_tuple_conversion: bool = True) -> FormulaStructure:
+def ensure_formula_structure(o: FlexibleFormulaStructure) -> FormulaStructure:
     """Performs data validation on a presumed Structure `o`.
 
     :param o:
@@ -59,16 +59,21 @@ def ensure_formula_structure(o: FormulaStructure, implicit_tuple_conversion: boo
     """
     if isinstance(o, FormulaStructure):
         return o
-    elif implicit_tuple_conversion and isinstance(o, tuple) and len(o) == 2:
+    elif isinstance(o, ConnectorIndex):
+        # implicit conversion of ConnectorIndex `o` to FormulaStructure o().
+        return FormulaStructure(o)
+    elif isinstance(o, int):
+        # implicit conversion of int `o` to FormulaStructure o().
+        return FormulaStructure(o)
+    elif isinstance(o, tuple) and len(o) == 2:
+        # implicit conversion of tuple of length 2 `o` to FormulaStructure o0(*o1).
         structure = FormulaStructure(root=o[0], terms=o[1])
         return structure
     else:
-        raise util.PunctiliousException('`FormulaStructure` ensurance failure. `o` is not of a supported type.', o=o,
-                                        implicit_tuple_conversion=implicit_tuple_conversion)
+        raise util.PunctiliousException('`FormulaStructure` ensurance failure. `o` is not of a supported type.', o=o)
 
 
-def ensure_sub_structures(o: tuple[FormulaStructure, ...], fix_none_with_empty: bool = True,
-                          fix_tuple_with_structure: bool = True) -> tuple[FormulaStructure, ...]:
+def ensure_terms(o: tuple[FormulaStructure, ...]) -> tuple[FormulaStructure, ...]:
     """Performs data validation on a presumed tuple of Structure `o`.
 
     :param o:
@@ -78,28 +83,28 @@ def ensure_sub_structures(o: tuple[FormulaStructure, ...], fix_none_with_empty: 
     """
     # TODO: Implement SubStructures as a dedicated class.
     if o is None:
-        if fix_none_with_empty:
-            return tuple()
+        # implicit conversion of None to no terms.
+        return tuple()
+    elif isinstance(o, tuple):
+        if len(o) == 0:
+            # an empty tuple means no terms.
+            return o
+        elif all(isinstance(term, FormulaStructure) for term in o):
+            return o
         else:
-            raise ValueError('A tuple of structures cannot be None.')
-    elif not isinstance(o, tuple):
-        raise ValueError('A tuple of structures cannot be of a different type than `tuple`.')
-    elif not all(isinstance(structure, FormulaStructure) for structure in o):
-        if fix_tuple_with_structure:
-            # implicit conversion of equivalent tuples into structures.
-            structures = tuple(ensure_formula_structure(o=structure) for structure in o)
-            return structures
-        raise ValueError('A tuple of structures cannot be of a different type than `Structure`.')
+            # recursive ensurance is required.
+            terms = tuple(ensure_formula_structure(o=term) for term in o)
+            return terms
     else:
-        return o
+        raise ValueError('A tuple of structures cannot be of a different type than `tuple`.')
 
 
-def compute_formula_structure_hash(root: int, sub_structures: tuple[FormulaStructure, ...] = tuple()):
+def compute_formula_structure_hash(root: FlexibleConnectorIndex, terms: FlexibleTerms = None):
     """Given its components, returns the hash of a `Structure`.
     """
     root = ensure_connector_index(root)
-    sub_structures = ensure_sub_structures(sub_structures, fix_none_with_empty=True, fix_tuple_with_structure=True)
-    return hash((const.formula_structure_hash_prime, FormulaStructure, root, sub_structures,))
+    terms = ensure_terms(terms)
+    return hash((const.formula_structure_hash_prime, FormulaStructure, root, terms,))
 
 
 _formula_structures: dict[int, FormulaStructure] = {}
@@ -135,6 +140,12 @@ class ConnectorIndex(int):
     def as_int(self) -> int:
         return int(self)
 
+    def is_connector_index_equivalent_to(self, connector_index: FlexibleConnectorIndex) -> bool:
+        """Returns `True` if `self` is connector-index-equivalent to `other`.
+        Raises an exception if `other` is not a `ConnectorIndex`."""
+        connector_index: ConnectorIndex = ensure_connector_index(connector_index)
+        return self.as_int() == connector_index.as_int()
+
 
 def compute_connector_index_hash(i: int):
     if isinstance(i, ConnectorIndex):
@@ -149,11 +160,12 @@ class FormulaStructure(tuple):
     """
 
     def __hash__(self):
-        return compute_formula_structure_hash(root=self.root, sub_structures=self.terms)
+        return compute_formula_structure_hash(root=self.root, terms=self.terms)
 
-    def __init__(self, root: FlexibleConnectorIndex, terms: tuple[FormulaStructure, ...] = tuple()):
+    def __init__(self, root: FlexibleConnectorIndex, terms: FlexibleTerms = tuple()):
         global _formula_structures
         root: ConnectorIndex = ensure_connector_index(root)
+        terms: tuple[FormulaStructure, ...] = ensure_terms(terms)
         super(FormulaStructure, self).__init__()
         # `is_canonical` is cached, because this property will be pervasively necessary.
         is_canonical, _ = self.check_canonicity()
@@ -165,19 +177,19 @@ class FormulaStructure(tuple):
                     connector_indexes.append(ci)
         connector_indexes = sorted(connector_indexes)
         self._connector_indexes: tuple[ConnectorIndex, ...] = tuple(connector_indexes)
-        structure_hash: int = compute_formula_structure_hash(root=root, sub_structures=terms)
+        structure_hash: int = compute_formula_structure_hash(root=root, terms=terms)
         _formula_structures[structure_hash] = self
 
-    def __new__(cls, root: FlexibleConnectorIndex, structure: tuple[FormulaStructure, ...] = tuple()):
+    def __new__(cls, root: FlexibleConnectorIndex, terms: FlexibleTerms = tuple()):
         global _formula_structures
         root: ConnectorIndex = ensure_connector_index(root)
-        structure: tuple[FormulaStructure, ...] = ensure_sub_structures(o=structure, fix_none_with_empty=True)
-        structure_hash: int = compute_formula_structure_hash(root=root, sub_structures=structure)
+        terms: tuple[FormulaStructure, ...] = ensure_terms(o=terms)
+        structure_hash: int = compute_formula_structure_hash(root=root, terms=terms)
         if structure_hash in _formula_structures:
             return _formula_structures[structure_hash]
         else:
-            structure = super(FormulaStructure, cls).__new__(cls, (root, structure,))
-            return structure
+            terms = super(FormulaStructure, cls).__new__(cls, (root, terms,))
+            return terms
 
     def arity(self) -> int:
         """Returns the `arity` of the `FormulaStructure`.
@@ -228,9 +240,25 @@ class FormulaStructure(tuple):
 
     def is_formula_structure_equivalent_to(self, formula_structure: FlexibleFormulaStructure,
                                            implicit_tuple_conversion: bool = True) -> bool:
-        formula_structure: FormulaStructure = ensure_formula_structure(formula_structure,
-                                                                       implicit_tuple_conversion=True)
-        # if self.root.is TODO: RESUME HERE
+        """Two formula-structures a and b are formula-structure-equivalent if and only if
+         - the root of a is connector-index equivalent to the root of b,
+         - the arity of a is equal to the arity of b,
+         - in order, every term of a is formula-structure-equivalent to the corresponding term of b.
+
+        :param formula_structure:
+        :param implicit_tuple_conversion:
+        :return:
+        """
+        formula_structure: FormulaStructure = ensure_formula_structure(formula_structure)
+        if not (self.root.is_connector_index_equivalent_to(formula_structure.root)):
+            return False
+        elif not (self.arity() == formula_structure.arity()):
+            return False
+        elif not (
+                all(fs1.is_formula_structure_equivalent_to(fs2) for fs1, fs2 in
+                    zip(self.terms, formula_structure.terms))):
+            return False
+        return True
 
     @property
     def is_leaf(self) -> bool:
@@ -411,6 +439,7 @@ class Formula(tuple, rf.Representable):
 
 FlexibleConnector = typing.Union[Connector,]
 FlexibleConnectorIndex = typing.Union[ConnectorIndex, int,]
-FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, tuple,]]
+FlexibleFormulaStructure = typing.Union[FormulaStructure, tuple[ConnectorIndex, tuple,], ConnectorIndex, int]
+FlexibleTerms = typing.Union[tuple[FlexibleFormulaStructure, ...], tuple[()], None]
 
 pass
