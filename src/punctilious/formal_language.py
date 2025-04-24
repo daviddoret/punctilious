@@ -10,7 +10,10 @@ import const
 import representation_foundation as rf
 
 
-def ensure_uid(o: uuid.UUID) -> uuid.UUID:
+# TODO: FormulaStructureTerms caching does not function properly.
+#   first, develop a test test_formula_structure to check if hashing functions properly.
+
+def data_validate_uid(o: uuid.UUID) -> uuid.UUID:
     """Ensures `o` is of type `uuid.UUID`, using implicit conversion if necessary.
 
     :param o:
@@ -28,7 +31,7 @@ def ensure_uid(o: uuid.UUID) -> uuid.UUID:
         raise util.PunctiliousException('`uuid.UUID` ensurance failure. `o` is not of a supported type.', o=o)
 
 
-def ensure_connector_index(o: int) -> ConnectorIndex:
+def data_validate_connector_index(o: int) -> ConnectorIndex:
     """Performs data validation on a presumed connector-index `o`.
     Convert `o` for FormulaPoint implicitly if necessary.
     """
@@ -47,10 +50,10 @@ def ensure_connector_index_tuple(o: tuple) -> tuple[ConnectorIndex, ...]:
     :param o:
     :return:
     """
-    return tuple(ensure_connector_index(fp) for fp in o)
+    return tuple(data_validate_connector_index(fp) for fp in o)
 
 
-def ensure_formula_structure(o: FlexibleFormulaStructure) -> FormulaStructure:
+def data_validate_formula_structure(o: FlexibleFormulaStructure) -> FormulaStructure:
     """Performs data validation on a presumed Structure `o`.
 
     :param o:
@@ -73,41 +76,37 @@ def ensure_formula_structure(o: FlexibleFormulaStructure) -> FormulaStructure:
         raise util.PunctiliousException('`FormulaStructure` ensurance failure. `o` is not of a supported type.', o=o)
 
 
-def ensure_terms(o: tuple[FormulaStructure, ...]) -> tuple[FormulaStructure, ...]:
-    """Performs data validation on a presumed tuple of Structure `o`.
+def data_validate_terms(o: FlexibleTerms) -> FormulaStructureTerms:
+    """Performs data validation on presumed Terms `o`.
 
     :param o:
-    :param fix_none_with_empty:
-    :param fix_tuple_with_structure:
     :return:
     """
-    # TODO: Implement SubStructures as a dedicated class.
-    if o is None:
-        # implicit conversion of None to no terms.
-        return tuple()
-    elif isinstance(o, tuple):
-        if len(o) == 0:
-            # an empty tuple means no terms.
-            return o
-        elif all(isinstance(term, FormulaStructure) for term in o):
-            return o
-        else:
-            # recursive ensurance is required.
-            terms = tuple(ensure_formula_structure(o=term) for term in o)
-            return terms
-    else:
-        raise ValueError('A tuple of structures cannot be of a different type than `tuple`.')
+    # Logic is implemented in Terms.__new__().
+    return FormulaStructureTerms(o)
 
 
 def compute_formula_structure_hash(root: FlexibleConnectorIndex, terms: FlexibleTerms = None):
     """Given its components, returns the hash of a `Structure`.
     """
-    root = ensure_connector_index(root)
-    terms = ensure_terms(terms)
+    root = data_validate_connector_index(root)
+    terms = data_validate_terms(terms)
     return hash((const.formula_structure_hash_prime, FormulaStructure, root, terms,))
 
 
+def compute_formula_structure_terms_hash(terms: FlexibleTerms = None):
+    if terms is None:
+        terms = tuple()
+    if not isinstance(terms, tuple):
+        raise util.PunctiliousException('oops', terms=terms)
+    # we cannot data_validate_terms as this leads to infinite loop.
+    # terms = data_validate_terms(terms)
+    # instead we explode the terms in the hash computation, as follows:
+    return hash((const.formula_structure_terms_hash_prime, FormulaStructureTerms, *terms,))
+
+
 _formula_structures: dict[int, FormulaStructure] = {}
+_formula_structure_terms: dict[int, FormulaStructureTerms] = {}
 _connector_indexes: dict[int, ConnectorIndex] = {}
 
 
@@ -143,8 +142,8 @@ class ConnectorIndex(int):
     def is_connector_index_equivalent_to(self, connector_index: FlexibleConnectorIndex) -> bool:
         """Returns `True` if `self` is connector-index-equivalent to `other`.
         Raises an exception if `other` is not a `ConnectorIndex`."""
-        connector_index: ConnectorIndex = ensure_connector_index(connector_index)
-        return self.as_int() == connector_index.as_int()
+        connector_index: ConnectorIndex = data_validate_connector_index(connector_index)
+        return self is connector_index or self.as_int() == connector_index.as_int()
 
 
 def compute_connector_index_hash(i: int):
@@ -164,8 +163,8 @@ class FormulaStructure(tuple):
 
     def __init__(self, root: FlexibleConnectorIndex, terms: FlexibleTerms = tuple()):
         global _formula_structures
-        root: ConnectorIndex = ensure_connector_index(root)
-        terms: tuple[FormulaStructure, ...] = ensure_terms(terms)
+        root: ConnectorIndex = data_validate_connector_index(root)
+        terms: tuple[FormulaStructure, ...] = data_validate_terms(terms)
         super(FormulaStructure, self).__init__()
         # `is_canonical` is cached, because this property will be pervasively necessary.
         is_canonical, _ = self.check_canonicity()
@@ -182,8 +181,8 @@ class FormulaStructure(tuple):
 
     def __new__(cls, root: FlexibleConnectorIndex, terms: FlexibleTerms = tuple()):
         global _formula_structures
-        root: ConnectorIndex = ensure_connector_index(root)
-        terms: tuple[FormulaStructure, ...] = ensure_terms(o=terms)
+        root: ConnectorIndex = data_validate_connector_index(root)
+        terms: tuple[FormulaStructure, ...] = data_validate_terms(o=terms)
         structure_hash: int = compute_formula_structure_hash(root=root, terms=terms)
         if structure_hash in _formula_structures:
             return _formula_structures[structure_hash]
@@ -249,8 +248,10 @@ class FormulaStructure(tuple):
         :param implicit_tuple_conversion:
         :return:
         """
-        formula_structure: FormulaStructure = ensure_formula_structure(formula_structure)
-        if not (self.root.is_connector_index_equivalent_to(formula_structure.root)):
+        formula_structure: FormulaStructure = data_validate_formula_structure(formula_structure)
+        if self is formula_structure:
+            return True
+        elif not (self.root.is_connector_index_equivalent_to(formula_structure.root)):
             return False
         elif not (self.arity() == formula_structure.arity()):
             return False
@@ -307,7 +308,7 @@ _connectors: dict[int, Connector] = {}
 def compute_connector_hash(uid: uuid.UUID):
     """Given its components, returns the hash of a `Connector`.
     """
-    uid = ensure_uid(uid)
+    uid = data_validate_uid(uid)
     return hash((const.connector_hash_prime, Connector, uid,))
 
 
@@ -359,7 +360,7 @@ class Connector(rf.Representable):
         """Returns `True` if and only if this `Connector` is connector-equivalent to `other`.
 
         Two `Connector` objects are connector-equivalent if they are the same object in all circumstances."""
-        other: Connector = ensure_connector(other)
+        other: Connector = data_validate_connector(other)
         return hash(self) == hash(other)
 
     @property
@@ -367,7 +368,7 @@ class Connector(rf.Representable):
         return self._uid
 
 
-def ensure_connector(o: FlexibleConnector) -> Connector:
+def data_validate_connector(o: FlexibleConnector) -> Connector:
     """Ensures `o` is of type `Connector`. Uses implicit conversion if possible.
 
     :param o:
@@ -379,7 +380,7 @@ def ensure_connector(o: FlexibleConnector) -> Connector:
         raise ValueError('`o` is not implicitly convertible to `Connector`.')
 
 
-def ensure_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = True) -> tuple:
+def data_validate_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = True) -> tuple:
     """Given some `elements`, returns a tuple of unique elements.
 
     :param elements:
@@ -395,12 +396,42 @@ def ensure_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = T
     return tuple(unique_elements)
 
 
+class FormulaStructureTerms(tuple):
+    """Formula Structure Terms"""
+
+    def __hash__(self):
+        return compute_formula_structure_terms_hash(self)
+
+    def __init__(self, terms: FlexibleTerms = None):
+        terms_hash: int = compute_formula_structure_terms_hash(terms)
+        if terms_hash not in _formula_structure_terms:
+            _formula_structure_terms[terms_hash] = self
+
+    def __new__(cls, terms: FlexibleTerms = None):
+        global _formula_structure_terms
+        if isinstance(terms, FormulaStructureTerms):
+            return terms
+        else:
+            if terms is None:
+                terms = tuple()
+            if isinstance(terms, tuple):
+                terms: tuple[FlexibleFormulaStructure, ...] = tuple(
+                    data_validate_formula_structure(term) for term in terms)
+                terms_hash: int = compute_formula_structure_terms_hash(terms)
+                if terms_hash in _formula_structure_terms:
+                    # reuse cache.
+                    return _formula_structure_terms[terms_hash]
+                else:
+                    return super(FormulaStructureTerms, cls).__new__(cls, terms)
+        raise util.PunctiliousException('Data validation error for `Terms` `o`.', terms=terms)
+
+
 class ConnectorOrderedSet(tuple):
     """A finite, computable, ordered set of connectors."""
 
     def __new__(cls, connectors: tuple[Connector, ...]):
-        connectors: tuple = ensure_unicity(connectors, raise_error_on_duplicate=True)
-        connector_ordered_set: tuple[Connector, ...] = tuple(ensure_connector(c) for c in connectors)
+        connectors: tuple = data_validate_unicity(connectors, raise_error_on_duplicate=True)
+        connector_ordered_set: tuple[Connector, ...] = tuple(data_validate_connector(c) for c in connectors)
         return super(ConnectorOrderedSet, cls).__new__(cls, connector_ordered_set)
 
 
@@ -420,7 +451,7 @@ class Formula(tuple, rf.Representable):
         rf.Representable.__init__(self=self, representation_function=representation_function)
 
     def __new__(cls, connectors: tuple[Connector, ...], structure: FormulaStructure):
-        connectors = ensure_unicity(connectors, raise_error_on_duplicate=True)
+        connectors = data_validate_unicity(connectors, raise_error_on_duplicate=True)
         if len(connectors) == 0:
             raise ValueError('The formula `connectors` are empty.')
         elif len(connectors) != structure.connector_indexes_count:
