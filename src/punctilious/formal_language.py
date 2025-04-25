@@ -76,8 +76,9 @@ def data_validate_formula_structure(o: FlexibleFormulaStructure) -> FormulaStruc
         raise util.PunctiliousException('`FormulaStructure` ensurance failure. `o` is not of a supported type.', o=o)
 
 
-def data_validate_terms(o: FlexibleTerms) -> FormulaStructureTerms:
-    """Performs data validation on presumed Terms `o`.
+def data_validate_formula_structure_terms(o: FlexibleTerms) -> FormulaStructureTerms:
+    """Performs data validation on `o` being of type `FormulaStructureTerms`.
+    Apply implicit data conversion if necessary.
 
     :param o:
     :return:
@@ -90,7 +91,7 @@ def compute_formula_structure_hash(root: FlexibleConnectorIndex, terms: Flexible
     """Given its components, returns the hash of a `Structure`.
     """
     root = data_validate_connector_index(root)
-    terms = data_validate_terms(terms)
+    terms = data_validate_formula_structure_terms(terms)
     return hash((const.formula_structure_hash_prime, FormulaStructure, root, terms,))
 
 
@@ -102,12 +103,15 @@ def compute_formula_structure_terms_hash(terms: FlexibleTerms = None):
     # we cannot data_validate_terms as this leads to infinite loop.
     # terms = data_validate_terms(terms)
     # instead we explode the terms in the hash computation, as follows:
+    if not isinstance(terms, FormulaStructureTerms):
+        # ensure all terms are of type FormulaStructureTerms.
+        terms = tuple(data_validate_formula_structure(term) for term in terms)
     return hash((const.formula_structure_terms_hash_prime, FormulaStructureTerms, *terms,))
 
 
+_connector_indexes: dict[int, ConnectorIndex] = {}
 _formula_structures: dict[int, FormulaStructure] = {}
 _formula_structure_terms: dict[int, FormulaStructureTerms] = {}
-_connector_indexes: dict[int, ConnectorIndex] = {}
 
 
 class ConnectorIndex(int):
@@ -164,7 +168,7 @@ class FormulaStructure(tuple):
     def __init__(self, root: FlexibleConnectorIndex, terms: FlexibleTerms = tuple()):
         global _formula_structures
         root: ConnectorIndex = data_validate_connector_index(root)
-        terms: tuple[FormulaStructure, ...] = data_validate_terms(terms)
+        terms: tuple[FormulaStructure, ...] = data_validate_formula_structure_terms(terms)
         super(FormulaStructure, self).__init__()
         # `is_canonical` is cached, because this property will be pervasively necessary.
         is_canonical, _ = self.check_canonicity()
@@ -182,7 +186,7 @@ class FormulaStructure(tuple):
     def __new__(cls, root: FlexibleConnectorIndex, terms: FlexibleTerms = tuple()):
         global _formula_structures
         root: ConnectorIndex = data_validate_connector_index(root)
-        terms: tuple[FormulaStructure, ...] = data_validate_terms(o=terms)
+        terms: tuple[FormulaStructure, ...] = data_validate_formula_structure_terms(o=terms)
         structure_hash: int = compute_formula_structure_hash(root=root, terms=terms)
         if structure_hash in _formula_structures:
             return _formula_structures[structure_hash]
