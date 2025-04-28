@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation).">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/concrete_formal_language.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_concrete_formal_language.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/concrete_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/concrete_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_concrete_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_concrete_formal_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -910,15 +908,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-      <workItem from="1745231164817" duration="36598000" />
-    </task>
-    <task id="LOCAL-01344" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737269956537</created>
-      <option name="number" value="01344" />
-      <option name="presentableId" value="LOCAL-01344" />
-      <option name="project" value="LOCAL" />
-      <updated>1737269956537</updated>
+      <workItem from="1745231164817" duration="40428000" />
     </task>
     <task id="LOCAL-01345" summary="meta-language">
       <option name="closed" value="true" />
@@ -1304,7 +1294,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745610953905</updated>
     </task>
-    <option name="localTasksCounter" value="1393" />
+    <task id="LOCAL-01393" summary="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation).">
+      <option name="closed" value="true" />
+      <created>1745788514617</created>
+      <option name="number" value="01393" />
+      <option name="presentableId" value="LOCAL-01393" />
+      <option name="project" value="LOCAL" />
+      <updated>1745788514617</updated>
+    </task>
+    <option name="localTasksCounter" value="1394" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1357,7 +1355,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="interpretation + latin alphabet yaml files corrections" />
     <MESSAGE value="renaming a few modules" />
     <MESSAGE value="Statement class" />
     <MESSAGE value="meta_language module" />
@@ -1382,7 +1379,8 @@
     <MESSAGE value="ConnectorIndex" />
     <MESSAGE value="minor improvements" />
     <MESSAGE value="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation)." />
-    <option name="LAST_COMMIT_MESSAGE" value="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation)." />
+    <MESSAGE value="modules cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="modules cleanup" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1475,7 +1473,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/punctilious$concrete_formal_language.coverage" NAME="concrete_formal_language Coverage Results" MODIFIED="1745771573841" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/punctilious" />
-    <SUITE FILE_PATH="coverage/punctilious$pytest_in_tests.coverage" NAME="pytest in tests Coverage Results" MODIFIED="1745771745161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/punctilious$pytest_in_tests.coverage" NAME="pytest in tests Coverage Results" MODIFIED="1745868280580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaStructure_test_formula_structure_is_canonical.coverage" NAME="pytest for test_formal_language.TestFormulaStructure.test_formula_structure_is_canonical Coverage Results" MODIFIED="1745529702971" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaPointer_test_formula_point_01.coverage" NAME="pytest for test_formal_language.TestFormulaPointer.test_formula_point_01 Coverage Results" MODIFIED="1745240274025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestConnectorIndex_test_formula_pointer_01.coverage" NAME="pytest for test_formal_language.TestConnectorIndex.test_formula_pointer_01 Coverage Results" MODIFIED="1745250446314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />

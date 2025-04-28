@@ -1,17 +1,18 @@
-# special features
-from __future__ import annotations
+"""Formal language linked to representations.
 
+"""
+
+# python special features
+from __future__ import annotations
+# python packages
 import typing
-import collections.abc
 # external packages
 import uuid
-
+# punctilious modules
 import util
 import const
 import abstract_formal_language as afl
 import representation_foundation as rf
-
-_connectors: dict[int, Connector] = {}
 
 
 def compute_connector_hash(uid: uuid.UUID):
@@ -108,18 +109,18 @@ class Formula(tuple, rf.Representable):
     `Formula` is mutable because it is `Representable`.
     """
 
-    def __init__(self, connectors: tuple[Connector, ...], structure: afl.FormulaStructure,
+    def __init__(self, connectors: tuple[Connector, ...], structure: afl.AbstractFormula,
                  representation_function: rf.Presenter | None = None):
         super(Formula, self).__init__()
         rf.Representable.__init__(self=self, representation_function=representation_function)
 
-    def __new__(cls, connectors: tuple[Connector, ...], structure: afl.FormulaStructure):
+    def __new__(cls, connectors: tuple[Connector, ...], structure: afl.AbstractFormula):
         connectors = util.data_validate_unicity(connectors, raise_error_on_duplicate=True)
         if len(connectors) == 0:
             raise ValueError('The formula `connectors` are empty.')
         elif len(connectors) != structure.connector_indexes_count:
             raise ValueError('The length of `connectors` is not equal to the number of connectors in the `structure`.')
-        formula: tuple[tuple[Connector, ...], afl.FormulaStructure] = (connectors, structure,)
+        formula: tuple[tuple[Connector, ...], afl.AbstractFormula] = (connectors, structure,)
         return super(Formula, cls).__new__(cls, formula)
 
     @property
@@ -127,10 +128,12 @@ class Formula(tuple, rf.Representable):
         return self[0]
 
     @property
-    def structure(self) -> afl.FormulaStructure:
+    def structure(self) -> afl.AbstractFormula:
         return self[1]
 
 
 FlexibleConnector = typing.Union[Connector,]
+
+_connectors: dict[int, Connector] = {}
 
 pass
