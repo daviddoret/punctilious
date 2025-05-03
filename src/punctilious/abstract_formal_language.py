@@ -57,8 +57,13 @@ def data_validate_abstract_formula(o: FlexibleAbstractFormula) -> AbstractFormul
         # implicit conversion of tuple of length 2 `o` to AbstractFormula o0(*o1).
         structure = AbstractFormula(root=o[0], terms=o[1])
         return structure
+    elif isinstance(o, tuple) and len(o) == 1:
+        # implicit conversion of tuple of length 1 `o` to AbstractFormula o0(*o1).
+        structure = AbstractFormula(root=o[0], terms=tuple())
+        return structure
     else:
-        raise util.PunctiliousException('`AbstractFormula` ensurance failure. `o` is not of a supported type.', o=o)
+        raise util.PunctiliousException('`AbstractFormula` ensurance failure. `o` is not of a supported type.', o=o,
+                                        o_type=type(o).__name__)
 
 
 def data_validate_formula_structure_terms(o: FlexibleAbstractFormulaTerms) -> AbstractFormulaTerms:
@@ -71,54 +76,11 @@ def data_validate_formula_structure_terms(o: FlexibleAbstractFormulaTerms) -> Ab
     return AbstractFormulaTerms(o)
 
 
-def compute_abstract_formula_hash(root: FlexibleConnectorIndex, terms: FlexibleAbstractFormulaTerms = None):
-    """Given its constitutive components, returns the hash of an `AbstractFormula`.
-    """
-    root = data_validate_connector_index(root)
-    terms = data_validate_formula_structure_terms(terms)
-    return hash((const.formula_structure_hash_prime, AbstractFormula, root, terms,))
-
-
-def compute_abstract_formula_terms_hash(terms: FlexibleAbstractFormulaTerms = None):
-    """Given its constitutive components, returns the hash of an `AbstractFormulaTerms`.
-    """
-    if terms is None:
-        terms = tuple()
-    if isinstance(terms, collections.abc.Iterable) and not isinstance(terms, tuple):
-        terms: tuple = tuple(terms)
-    if not isinstance(terms, tuple):
-        raise util.PunctiliousException('Invalid argument `terms`', terms=terms)
-    # we cannot data_validate_terms as this leads to infinite loop.
-    # terms = data_validate_terms(terms)
-    # instead we explode the terms in the hash computation, as follows:
-    if not isinstance(terms, AbstractFormulaTerms):
-        # ensure all terms are of type AbstractFormulaTerms.
-        terms = tuple(data_validate_abstract_formula(term) for term in terms)
-    return hash((const.formula_structure_terms_hash_prime, AbstractFormulaTerms, *terms,))
-
-
 class ConnectorIndex(int):
     """A `ConnectorIndex` is a model of natural number (whose first element is mapped to 0),
     that is used as a connector index to build formula-structures.
 
     """
-
-    def __hash__(self):
-        return compute_connector_index_hash(self)
-
-    def __new__(cls, n: int) -> ConnectorIndex:
-        global _connector_indexes
-        if not isinstance(n, int):
-            raise ValueError('`i` must be of type `int`.')
-        connector_index_hash: int = compute_connector_index_hash(n)
-        if connector_index_hash in _connector_indexes:
-            return _connector_indexes[connector_index_hash]
-        elif isinstance(n, ConnectorIndex):
-            return n
-        else:
-            connector_index = super(ConnectorIndex, cls).__new__(cls, n)
-            _connector_indexes[connector_index_hash] = connector_index
-            return connector_index
 
     def __str__(self):
         return f'i{self.as_int()}'
@@ -131,13 +93,6 @@ class ConnectorIndex(int):
         Raises an exception if `other` is not a `ConnectorIndex`."""
         connector_index: ConnectorIndex = data_validate_connector_index(connector_index)
         return self is connector_index or self.as_int() == connector_index.as_int()
-
-
-def compute_connector_index_hash(i: int):
-    if isinstance(i, ConnectorIndex):
-        # To avoid infinite recursion with method __hash__ of ConnectorIndex.
-        i: int = int(i)
-    return hash((const.connector_index_hash_prime, ConnectorIndex, i))
 
 
 def data_validate_connector_index_dict(o) -> ConnectorIndexDict:
@@ -175,13 +130,10 @@ class AbstractFormula(tuple):
 
     """
 
-    def __hash__(self):
-        return compute_abstract_formula_hash(root=self.root, terms=self.terms)
-
     def __init__(self, root: FlexibleConnectorIndex, terms: FlexibleAbstractFormulaTerms = tuple()):
         global _abstract_formulas
         root: ConnectorIndex = data_validate_connector_index(root)
-        terms: tuple[AbstractFormula, ...] = data_validate_formula_structure_terms(terms)
+        terms: AbstractFormulaTerms = data_validate_formula_structure_terms(terms)
         super(AbstractFormula, self).__init__()
         # `is_canonical` is cached, because this property will be pervasively necessary.
         is_canonical, _ = self.check_canonicity()
@@ -193,19 +145,13 @@ class AbstractFormula(tuple):
                     connector_indexes.append(ci)
         connector_indexes = sorted(connector_indexes)
         self._connector_indexes: tuple[ConnectorIndex, ...] = tuple(connector_indexes)
-        structure_hash: int = compute_abstract_formula_hash(root=root, terms=terms)
-        _abstract_formulas[structure_hash] = self
 
     def __new__(cls, root: FlexibleConnectorIndex, terms: FlexibleAbstractFormulaTerms = tuple()):
         global _abstract_formulas
         root: ConnectorIndex = data_validate_connector_index(root)
-        terms: tuple[AbstractFormula, ...] = data_validate_formula_structure_terms(o=terms)
-        structure_hash: int = compute_abstract_formula_hash(root=root, terms=terms)
-        if structure_hash in _abstract_formulas:
-            return _abstract_formulas[structure_hash]
-        else:
-            terms = super(AbstractFormula, cls).__new__(cls, (root, terms,))
-            return terms
+        terms: AbstractFormulaTerms = data_validate_formula_structure_terms(o=terms)
+        terms = super(AbstractFormula, cls).__new__(cls, (root, terms,))
+        return terms
 
     def arity(self) -> int:
         """Returns the `arity` of the `AbstractFormula`.
@@ -314,20 +260,26 @@ class AbstractFormula(tuple):
         return self[0]
 
     def transform_by_connector_index_substitution(self,
-                                                  substitution_map: dict[
+                                                  m: dict[
                                                       FlexibleAbstractFormula, FlexibleConnectorIndex]) -> AbstractFormula:
-        """Returns a new `AbstractFormula` such that every `ConnectorIndex` in the (recursive) structure
-        is substituted with a new `ConnectorIndex` according to the `substitution_map` if it is
-        referenced in the map.
+        """Returns an `AbstractFormula` `y` that is a `transformation by connector index substitution` on this `AbstractFormula`,
+        given substitution map `m`.
 
-        :param map:
+        ## Definition
+
+        A transformation by connector-index substitution is a transformation ...
+        TODO: Complete formal definition.
+
+        :param m:
         :return:
         """
-        substitution_map: ConnectorIndexDict = data_validate_connector_index_dict(substitution_map)
-        substituted_terms: AbstractFormulaTerms = AbstractFormulaTerms(
-            terms=(term.transform_by_connector_index_substitution(substitution_map) for term in self.terms))
-        return AbstractFormula(root=substitution_map[self.root],
-                               terms=substituted_terms)
+        m: ConnectorIndexDict = data_validate_connector_index_dict(m)
+        if len(m.keys()) == 0:
+            # Trivial case, no substitution is required.
+            return self
+        else:
+            return AbstractFormula(root=m.get(self.root, self.root),
+                                   terms=(term.transform_by_connector_index_substitution(m) for term in self.terms))
 
     @property
     def terms(self) -> tuple[AbstractFormula]:
@@ -362,54 +314,30 @@ def data_validate_unicity(elements: typing.Iterable, raise_error_on_duplicate: b
 class AbstractFormulaTerms(tuple):
     """Formula Structure Terms"""
 
-    def __hash__(self):
-        return compute_abstract_formula_terms_hash(self)
-
     def __init__(self, terms: FlexibleAbstractFormulaTerms = None):
-        terms_hash: int = compute_abstract_formula_terms_hash(terms)
-        if terms_hash not in _abstract_formula_terms:
-            _abstract_formula_terms[terms_hash] = self
+        pass
 
     def __new__(cls, terms: FlexibleAbstractFormulaTerms = None):
         global _abstract_formula_terms
-        if isinstance(terms, AbstractFormulaTerms):
-            return terms
+        if terms is None:
+            terms = tuple()
+        elif isinstance(terms, collections.abc.Iterator) and not isinstance(terms, tuple):
+            terms = tuple(terms)
+        elif isinstance(terms, collections.abc.Generator):
+            terms = tuple(terms)
+        if isinstance(terms, tuple):
+            terms: tuple[FlexibleAbstractFormula, ...] = tuple(
+                data_validate_abstract_formula(term) for term in terms)
+            return super(AbstractFormulaTerms, cls).__new__(cls, terms)
         else:
-            if terms is None:
-                terms = tuple()
-            elif isinstance(terms, collections.abc.Iterator) and not isinstance(terms, tuple):
-                terms = tuple(terms)
-            if isinstance(terms, tuple):
-                terms: tuple[FlexibleAbstractFormula, ...] = tuple(
-                    data_validate_abstract_formula(term) for term in terms)
-                terms_hash: int = compute_abstract_formula_terms_hash(terms)
-                if terms_hash in _abstract_formula_terms:
-                    # reuse cache.
-                    return _abstract_formula_terms[terms_hash]
-                else:
-                    return super(AbstractFormulaTerms, cls).__new__(cls, terms)
-            else:
-                raise util.PunctiliousException('Data validation error for `Terms` `o`.', terms=terms)
-
-
-class ConnectorOrderedSet(tuple):
-    """A finite, computable, ordered set of connectors."""
-
-    def __new__(cls, connectors: tuple[Connector, ...]):
-        connectors: tuple = data_validate_unicity(connectors, raise_error_on_duplicate=True)
-        connector_ordered_set: tuple[Connector, ...] = tuple(data_validate_connector(c) for c in connectors)
-        return super(ConnectorOrderedSet, cls).__new__(cls, connector_ordered_set)
+            raise util.PunctiliousException('Data validation error for `Terms` `o`.', terms=terms)
 
 
 # Type aliases
 FlexibleConnectorIndex = typing.Union[ConnectorIndex, int,]
 FlexibleConnectorIndexIterator = typing.Union[None, collections.abc.Iterator,]
-FlexibleAbstractFormula = typing.Union[AbstractFormula, collections.abc.Iterator, FlexibleConnectorIndex]
-FlexibleAbstractFormulaTerms = typing.Union[collections.abc.Iterator[FlexibleAbstractFormula], None]
-
-# Caches
-_connector_indexes: dict[int, ConnectorIndex] = {}
-_abstract_formulas: dict[int, AbstractFormula] = {}
-_abstract_formula_terms: dict[int, AbstractFormulaTerms] = {}
+FlexibleAbstractFormula = typing.Union[AbstractFormula, collections.abc.Iterator, FlexibleConnectorIndex, int,]
+FlexibleAbstractFormulaTerms = typing.Union[AbstractFormulaTerms,
+collections.abc.Iterator, collections.abc.Generator, tuple, None]
 
 pass

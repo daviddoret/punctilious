@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="modules cleanup">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleaning up class names">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/concrete_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/concrete_formal_language.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/const.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/const.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formal_language.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_concrete_formal_language.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_concrete_formal_language.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,12 +61,12 @@
       </list>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/daviddoret/punctilious.git",
-    "accountId": "fa3a4ec0-c0c3-40a4-94e1-364ebf02bb5c"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/daviddoret/punctilious.git&quot;,
+    &quot;accountId&quot;: &quot;fa3a4ec0-c0c3-40a4-94e1-364ebf02bb5c&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python311/Lib/pprint.py" root0="SKIP_INSPECTION" />
     <setting file="file://$USER_HOME$/AppData/Local/Programs/Python/Python311/Lib/unittest/case.py" root0="SKIP_INSPECTION" />
@@ -102,6 +101,10 @@
     "PowerShell.increment_package_version_patch.ps1.executor": "Run",
     "PowerShell.release_patch.ps1.executor": "Run",
     "Python tests.Python tests in tests.executor": "Run",
+    "Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_02.executor": "Debug",
+    "Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_equivalence.executor": "Run",
+    "Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_substitute_indexes.executor": "Run",
+    "Python tests.pytest for test_abstract_formal_language.TestAbstractFormulaTerms.test_abstract_formula_terms_hash.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Debug",
@@ -362,6 +365,7 @@
     "Python tests.pytest for tests.test_propositional_logic_syntax_1.TestAxioms.test_pl1.executor": "Run",
     "Python tests.pytest for tests.test_typesetting.TestProtocolPreference.test_protocol.executor": "Debug",
     "Python tests.pytest in punctilious.executor": "Run",
+    "Python tests.pytest in test_abstract_formal_language.py.executor": "Run",
     "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
     "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
     "Python tests.pytest in test_fl1.py.executor": "Run",
@@ -523,7 +527,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_substitute_indexes">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -718,7 +722,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_abstract_formal_language.TestFormulaStructureTerms.test_formula_structure_terms_hash" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_abstract_formal_language.TestAbstractFormulaTerms.test_abstract_formula_terms_hash" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -732,11 +736,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_abstract_formal_language.TestFormulaStructureTerms.test_formula_structure_terms_hash&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formal_language.TestAbstractFormulaTerms.test_abstract_formula_terms_hash&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_abstract_formal_language.TestFormulaStructure.test_formula_structure_is_canonical" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_02" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -750,11 +754,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_abstract_formal_language.TestFormulaStructure.test_formula_structure_is_canonical&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_02&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_abstract_formal_language.TestFormulaStructure.test_formula_structure_substitute_indexes" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_equivalence" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -768,7 +772,25 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_abstract_formal_language.TestFormulaStructure.test_formula_structure_substitute_indexes&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_equivalence&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_substitute_indexes" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_substitute_indexes&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -844,24 +866,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -873,22 +877,22 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestFormulaStructure.test_formula_structure_is_canonical" />
-      <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestFormulaStructure.test_formula_structure_substitute_indexes" />
-      <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestFormulaStructureTerms.test_formula_structure_terms_hash" />
+      <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_02" />
+      <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestAbstractFormulaTerms.test_abstract_formula_terms_hash" />
+      <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_equivalence" />
+      <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_substitute_indexes" />
       <item itemvalue="Python tests.pytest in test_abstract_formal_language.py" />
-      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_substitute_indexes" />
+        <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_equivalence" />
+        <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_02" />
+        <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestAbstractFormulaTerms.test_abstract_formula_terms_hash" />
         <item itemvalue="Python tests.pytest in test_abstract_formal_language.py" />
-        <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestFormulaStructure.test_formula_structure_substitute_indexes" />
-        <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestFormulaStructureTerms.test_formula_structure_terms_hash" />
-        <item itemvalue="Python tests.pytest for test_abstract_formal_language.TestFormulaStructure.test_formula_structure_is_canonical" />
       </list>
     </recent_temporary>
   </component>
@@ -908,15 +912,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687980987309</updated>
-      <workItem from="1745231164817" duration="40428000" />
-    </task>
-    <task id="LOCAL-01345" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737272331067</created>
-      <option name="number" value="01345" />
-      <option name="presentableId" value="LOCAL-01345" />
-      <option name="project" value="LOCAL" />
-      <updated>1737272331067</updated>
+      <workItem from="1745231164817" duration="43984000" />
+      <workItem from="1745955236370" duration="7298000" />
     </task>
     <task id="LOCAL-01346" summary="meta-language">
       <option name="closed" value="true" />
@@ -1302,7 +1299,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745788514617</updated>
     </task>
-    <option name="localTasksCounter" value="1394" />
+    <task id="LOCAL-01394" summary="cleaning up class names">
+      <option name="closed" value="true" />
+      <created>1745868431257</created>
+      <option name="number" value="01394" />
+      <option name="presentableId" value="LOCAL-01394" />
+      <option name="project" value="LOCAL" />
+      <updated>1745868431257</updated>
+    </task>
+    <option name="localTasksCounter" value="1395" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1355,7 +1360,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="renaming a few modules" />
     <MESSAGE value="Statement class" />
     <MESSAGE value="meta_language module" />
     <MESSAGE value="lark template for postfix connectors" />
@@ -1380,7 +1384,8 @@
     <MESSAGE value="minor improvements" />
     <MESSAGE value="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation)." />
     <MESSAGE value="modules cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="modules cleanup" />
+    <MESSAGE value="cleaning up class names" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleaning up class names" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1461,6 +1466,11 @@
           <line>416</line>
           <option name="timeStamp" value="380" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_abstract_formal_language.py</url>
+          <line>104</line>
+          <option name="timeStamp" value="390" />
+        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1473,17 +1483,22 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/punctilious$concrete_formal_language.coverage" NAME="concrete_formal_language Coverage Results" MODIFIED="1745771573841" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/punctilious" />
-    <SUITE FILE_PATH="coverage/punctilious$pytest_in_tests.coverage" NAME="pytest in tests Coverage Results" MODIFIED="1745868280580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/punctilious$pytest_in_tests.coverage" NAME="pytest in tests Coverage Results" MODIFIED="1745869306138" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaStructure_test_formula_structure_is_canonical.coverage" NAME="pytest for test_formal_language.TestFormulaStructure.test_formula_structure_is_canonical Coverage Results" MODIFIED="1745529702971" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaPointer_test_formula_point_01.coverage" NAME="pytest for test_formal_language.TestFormulaPointer.test_formula_point_01 Coverage Results" MODIFIED="1745240274025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestConnectorIndex_test_formula_pointer_01.coverage" NAME="pytest for test_formal_language.TestConnectorIndex.test_formula_pointer_01 Coverage Results" MODIFIED="1745250446314" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_abstract_formal_language_TestAbstractFormula_test_abstract_formula_equivalence.coverage" NAME="pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_equivalence Coverage Results" MODIFIED="1746306942144" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaPointer_test_formula_pointer_01.coverage" NAME="pytest for test_formal_language.TestFormulaPointer.test_formula_pointer_01 Coverage Results" MODIFIED="1745249684021" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$util.coverage" NAME="util Coverage Results" MODIFIED="1745771586683" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/punctilious" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_in_test_formal_language_py.coverage" NAME="pytest in test_formal_language.py Coverage Results" MODIFIED="1745771205672" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_abstract_formal_language_TestAbstractFormula_test_abstract_formula_02.coverage" NAME="pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_02 Coverage Results" MODIFIED="1746303675213" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaStructure_test_formula_structure_substitute_indexes.coverage" NAME="pytest for test_formal_language.TestFormulaStructure.test_formula_structure_substitute_indexes Coverage Results" MODIFIED="1745771182440" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/punctilious$pytest_in_test_abstract_formal_language_py.coverage" NAME="pytest in test_abstract_formal_language.py Coverage Results" MODIFIED="1746303112756" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestFormulaStructureTerms_test_formula_structure_terms_hash.coverage" NAME="pytest for test_formal_language.TestFormulaStructureTerms.test_formula_structure_terms_hash Coverage Results" MODIFIED="1745696927475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_abstract_formal_language_TestAbstractFormulaTerms_test_abstract_formula_terms_hash.coverage" NAME="pytest for test_abstract_formal_language.TestAbstractFormulaTerms.test_abstract_formula_terms_hash Coverage Results" MODIFIED="1746303140408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestConnectorIndexTuple_test_connector_index_tuple_01.coverage" NAME="pytest for test_formal_language.TestConnectorIndexTuple.test_connector_index_tuple_01 Coverage Results" MODIFIED="1745253589262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestConnectorIndex_test_connector_index_01.coverage" NAME="pytest for test_formal_language.TestConnectorIndex.test_connector_index_01 Coverage Results" MODIFIED="1745250534335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_formal_language_TestStructure.coverage" NAME="pytest for test_formal_language.TestStructure Coverage Results" MODIFIED="1745254557982" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/punctilious$pytest_for_test_abstract_formal_language_TestAbstractFormula_test_abstract_formula_substitute_indexes.coverage" NAME="pytest for test_abstract_formal_language.TestAbstractFormula.test_abstract_formula_substitute_indexes Coverage Results" MODIFIED="1746307142911" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
   </component>
 </project>

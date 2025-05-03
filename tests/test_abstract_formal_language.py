@@ -47,6 +47,12 @@ class TestAbstractFormulaTerms:
         t9 = afl.AbstractFormulaTerms((0, 1, (1, (2, 3, 4, 5, 6, 7, (7, (1, 1)))), 3,))
         assert hash(t7) == hash(t8)
         assert not hash(t7) == hash(t9)
+        t10 = afl.AbstractFormulaTerms()
+        t11 = afl.AbstractFormulaTerms((0,))
+        t12 = afl.AbstractFormulaTerms((1,))
+        assert hash(t10) != hash(t11)
+        assert hash(t11) != hash(t12)
+        assert hash(t10) != hash(t11)
 
 
 class TestAbstractFormula:
@@ -88,6 +94,16 @@ class TestAbstractFormula:
         assert s7 is not s5
         pass
 
+    def test_abstract_formula_02(self):
+        foo = afl.AbstractFormula(0)
+        bar = afl.AbstractFormula(1)
+        assert bar.is_abstract_formula_equivalent_to(afl.AbstractFormula(1))
+        foo = afl.AbstractFormula(0, (1,))
+        bar = afl.AbstractFormula(1, (0,))
+        assert bar.is_abstract_formula_equivalent_to(afl.AbstractFormula(1, (0,)))
+        foo = afl.AbstractFormula(0, (1, 1,))  # bug here
+        pass
+
     def test_abstract_formula_hash(self):
         pass
 
@@ -120,11 +136,29 @@ class TestAbstractFormula:
         assert fs6.is_abstract_formula_equivalent_to(fs6)
         fs7 = afl.AbstractFormula(0, (1, (0, (1, 2, 2,)), 0, 1,))
         assert not fs7.is_abstract_formula_equivalent_to(fs6)
+        assert afl.AbstractFormula(0).is_abstract_formula_equivalent_to(afl.AbstractFormula(0))
+        assert afl.AbstractFormula(1).is_abstract_formula_equivalent_to(afl.AbstractFormula(1))
+        assert not afl.AbstractFormula(0).is_abstract_formula_equivalent_to(afl.AbstractFormula(1))
+        assert not afl.AbstractFormula(0, (1,)).is_abstract_formula_equivalent_to(afl.AbstractFormula(1, (0,)))
 
     def test_abstract_formula_substitute_indexes(self):
+        pass
         # TODO: RESUME HERE
-        m1 = {0: 1}
-        fs1 = afl.AbstractFormula(0)
-        fs1b = fs1.transform_by_connector_index_substitution(m1)
-        fs1c = afl.AbstractFormula(1)
-        assert fs1b is fs1c
+        foo = afl.AbstractFormula(0)
+        bar = foo.transform_by_connector_index_substitution({0: 1})
+        assert bar.is_abstract_formula_equivalent_to(afl.AbstractFormula(1))
+        foo = afl.AbstractFormula(0, (1,))
+        foo = afl.AbstractFormula(1, (0,))
+        bar = foo.transform_by_connector_index_substitution({0: 1, 1: 0})
+        # assert bar.is_abstract_formula_equivalent_to(afl.AbstractFormula(1, (0,)))
+        foo = afl.AbstractFormula(0, (1, 1,))  # bug here
+        bar = foo.transform_by_connector_index_substitution({0: 1, 1: 0})
+        assert bar.is_abstract_formula_equivalent_to(afl.AbstractFormula(1, (0, 0,)))
+        foo = afl.AbstractFormula(0, ((0, (1,)),))
+        bar = foo.transform_by_connector_index_substitution({0: 1, 1: 0})
+        assert bar.is_abstract_formula_equivalent_to(afl.AbstractFormula(1, ((1, (0,)),)))
+        fs3 = afl.AbstractFormula(10, (11, (12, (11, 12, 13,)), 13,))
+        fs3b = fs3.transform_by_connector_index_substitution({5: 6, 10: 20, 11: 21, 12: 22})
+        fs3c = afl.AbstractFormula(20, (21, (22, (21, 22, 13,)), 13,))
+        assert fs3b.is_abstract_formula_equivalent_to(fs3c)
+        pass
