@@ -36,6 +36,12 @@ class TestRootedPlaneTree:
         assert t3.degree == 5
         assert t4.degree == 4
 
+    def test_size(self, t1, t2, t3, t4):
+        assert t1.size == 1
+        assert t2.size == 2
+        assert t3.size == 6
+        assert t4.size == 12
+
     def test_ahu_unsorted_string(self, t1, t2, t3, t4):
         assert t1.ahu_unsorted_string == "()"
         assert t2.ahu_unsorted_string == "(())"

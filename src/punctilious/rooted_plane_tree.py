@@ -32,22 +32,6 @@ class RootedPlaneTree(tuple):
         children: tuple[RootedPlaneTree, ...] = tuple(data_validate_rooted_plane_tree(child) for child in children)
         return super(RootedPlaneTree, cls).__new__(cls, children)
 
-    def is_rooted_plane_tree_equivalent_to(self, x: FlexibleRootedPlaneTree) -> bool:
-        x: RootedPlaneTree = data_validate_rooted_plane_tree(x)
-        return x.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
-
-    @property
-    def children(self) -> tuple[RootedPlaneTree]:
-        """The tuple of terms (sub-structures) contained in this `RootedPlaneTree`.
-
-        :return:
-        """
-        return self
-
-    @property
-    def degree(self) -> int:
-        return len(self.children)
-
     @property
     def ahu_unsorted_string(self) -> str:
         """Returns the AHU unsorted encoding of this `RootedPlaneTree`.
@@ -92,12 +76,35 @@ class RootedPlaneTree(tuple):
         return int(self.ahu_unsorted_inverted_binary_string, base=2)
 
     @property
+    def children(self) -> tuple[RootedPlaneTree]:
+        """The tuple of terms (sub-structures) contained in this `RootedPlaneTree`.
+
+        :return:
+        """
+        return self
+
+    @property
+    def degree(self) -> int:
+        return len(self.children)
+
+    @property
     def is_leaf(self) -> bool:
         """Returns `True` if the RootedPlaneTree is a leaf, `False` otherwise.
 
         A `RootedPlaneTree` is a leaf if and only if it contains no children.
         """
         return self.degree == 0
+
+    def is_rooted_plane_tree_equivalent_to(self, x: FlexibleRootedPlaneTree) -> bool:
+        x: RootedPlaneTree = data_validate_rooted_plane_tree(x)
+        return x.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
+
+    @property
+    def size(self):
+        """Returns the size of this `RootedPlaneTree`.
+
+        Definition: the size of a rooted plan tree is the total number of vertices in the graph."""
+        return 1 + sum(child.size for child in self.children)
 
     def to_list(self) -> list:
         """Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
