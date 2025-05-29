@@ -34,7 +34,7 @@ class RootedPlaneTree(tuple):
 
     def is_rooted_plane_tree_equivalent_to(self, x: FlexibleRootedPlaneTree) -> bool:
         x: RootedPlaneTree = data_validate_rooted_plane_tree(x)
-        # TODO: Implement AHU algorithm
+        return x.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
 
     @property
     def children(self) -> tuple[RootedPlaneTree]:
