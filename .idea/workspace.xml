@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleaning up class names">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RootedPlaneTree">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -919,14 +918,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01346" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737272507820</created>
-      <option name="number" value="01346" />
-      <option name="presentableId" value="LOCAL-01346" />
-      <option name="project" value="LOCAL" />
-      <updated>1737272507821</updated>
-    </task>
     <task id="LOCAL-01347" summary="meta-language">
       <option name="closed" value="true" />
       <created>1737303151600</created>
@@ -1311,7 +1302,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745868431257</updated>
     </task>
-    <option name="localTasksCounter" value="1395" />
+    <task id="LOCAL-01395" summary="RootedPlaneTree">
+      <option name="closed" value="true" />
+      <created>1748479528292</created>
+      <option name="number" value="01395" />
+      <option name="presentableId" value="LOCAL-01395" />
+      <option name="project" value="LOCAL" />
+      <updated>1748479528292</updated>
+    </task>
+    <option name="localTasksCounter" value="1396" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1364,7 +1363,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Statement class" />
     <MESSAGE value="meta_language module" />
     <MESSAGE value="lark template for postfix connectors" />
     <MESSAGE value="lark template and interpretation improvements" />
@@ -1389,7 +1387,8 @@
     <MESSAGE value="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation)." />
     <MESSAGE value="modules cleanup" />
     <MESSAGE value="cleaning up class names" />
-    <option name="LAST_COMMIT_MESSAGE" value="cleaning up class names" />
+    <MESSAGE value="RootedPlaneTree" />
+    <option name="LAST_COMMIT_MESSAGE" value="RootedPlaneTree" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

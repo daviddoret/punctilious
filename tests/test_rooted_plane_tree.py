@@ -3,29 +3,53 @@ import pytest
 import punctilious.rooted_plane_tree as rpt
 
 
+@pytest.fixture
+def t1():
+    return rpt.RootedPlaneTree()
+
+
+@pytest.fixture
+def t2(t1):
+    return rpt.RootedPlaneTree(t1)
+
+
+@pytest.fixture
+def t3(t1):
+    return rpt.RootedPlaneTree(t1, t1, t1, t1, t1)
+
+
+@pytest.fixture
+def t4(t1, t2, t3):
+    return rpt.RootedPlaneTree(t1, t2, t3, t2)
+
+
 class TestRootedPlaneTree:
-    def test_sample_rooted_plane_trees(self):
-        t1 = rpt.RootedPlaneTree()
+    def test_is_leaf(self, t1, t2, t3, t4):
         assert t1.is_leaf
-        assert t1.degree == 0
-        assert t1.ahu_unsorted_string == "()"
-        assert t1.ahu_unsorted_inverted_binary_string == "10"
-        assert t1.ahu_unsorted_inverted_integer == 2
-        t2 = rpt.RootedPlaneTree(t1)
         assert not t2.is_leaf
-        assert t2.degree == 1
-        assert t2.ahu_unsorted_string == "(())"
-        assert t2.ahu_unsorted_inverted_binary_string == "1100"
-        assert t2.ahu_unsorted_inverted_integer == 12
-        t3 = rpt.RootedPlaneTree(t1, t1, t1, t1, t1)
         assert not t3.is_leaf
-        assert t3.degree == 5
-        assert t3.ahu_unsorted_string == "(()()()()())"
-        assert t3.ahu_unsorted_inverted_binary_string == "110101010100"
-        assert t3.ahu_unsorted_inverted_integer == 3412
-        t4 = rpt.RootedPlaneTree(t1, t2, t3, t2)
         assert not t4.is_leaf
+
+    def test_degree(self, t1, t2, t3, t4):
+        assert t1.degree == 0
+        assert t2.degree == 1
+        assert t3.degree == 5
         assert t4.degree == 4
+
+    def test_ahu_unsorted_string(self, t1, t2, t3, t4):
+        assert t1.ahu_unsorted_string == "()"
+        assert t2.ahu_unsorted_string == "(())"
+        assert t3.ahu_unsorted_string == "(()()()()())"
         assert t4.ahu_unsorted_string == "(()(())(()()()()())(()))"
+
+    def test_ahu_unsorted_inverted_binary_string(self, t1, t2, t3, t4):
+        assert t1.ahu_unsorted_inverted_binary_string == "10"
+        assert t2.ahu_unsorted_inverted_binary_string == "1100"
+        assert t3.ahu_unsorted_inverted_binary_string == "110101010100"
         assert t4.ahu_unsorted_inverted_binary_string == "110110011010101010011000"
+
+    def test_ahu_unsorted_inverted_integer(self, t1, t2, t3, t4):
+        assert t1.ahu_unsorted_inverted_integer == 2
+        assert t2.ahu_unsorted_inverted_integer == 12
+        assert t3.ahu_unsorted_inverted_integer == 3412
         assert t4.ahu_unsorted_inverted_integer == 14264984
