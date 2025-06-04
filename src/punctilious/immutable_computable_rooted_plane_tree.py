@@ -2,6 +2,7 @@ from __future__ import annotations
 import typing
 import collections
 import util
+from punctilious.immutable_computable_rooted_plane_tree_full_data_model import RootedPlaneTree
 
 
 def data_validate_rooted_plane_tree(o: FlexibleRootedPlaneTree) -> RootedPlaneTree:
@@ -14,13 +15,26 @@ def data_validate_rooted_plane_tree(o: FlexibleRootedPlaneTree) -> RootedPlaneTr
     raise util.PunctiliousException('FlexibleRootedPlaneTree data validation failure', o=o)
 
 
+_rooted_plane_tree_index = dict()  # cache mechanism assuring that unique rpts are only instantiated once.
+
+
+def retrieve_rooted_plane_tree_from_cache(rpt: FlexibleRootedPlaneTree):
+    """cache mechanism assuring that unique rpts are only instantiated once."""
+    global _rooted_plane_tree_index
+    if hash(rpt) in _rooted_plane_tree_index.keys():
+        return _rooted_plane_tree_index[hash(rpt)]
+    else:
+        _rooted_plane_tree_index[hash(rpt)] = rpt
+        return rpt
+
+
 class RootedPlaneTree(tuple):
-    """A `RootedPlaneTree` is an implementation of an (immutable) rooted plane tree, aka rooted ordered tree.
+    """A `RootedPlaneTree` is an implementation of an immutable and computable rooted plane tree,
+    aka rooted ordered tree.
 
     Reminder:
     Theorem 3.11 A graph G is a tree if and only if every two vertices of G are connected by a unique path.
     Chartrand, Lesniak, and Zhang, Graphs & Digraphs: Sixth Edition, p. 65.
-
 
     """
 
@@ -29,8 +43,12 @@ class RootedPlaneTree(tuple):
         super(RootedPlaneTree, self).__init__()
 
     def __new__(cls, *children: FlexibleRootedPlaneTree):
-        children: tuple[RootedPlaneTree, ...] = tuple(data_validate_rooted_plane_tree(child) for child in children)
-        return super(RootedPlaneTree, cls).__new__(cls, children)
+        children: tuple[RootedPlaneTree, ...] = tuple(
+            data_validate_rooted_plane_tree(child) for child in children)
+        rpt = super(RootedPlaneTree, cls).__new__(cls, children)
+        # cache mechanism assuring that unique rpts are only instanciated once.
+        rpt = retrieve_rooted_plane_tree_from_cache(rpt)
+        return rpt
 
     @property
     def ahu_unsorted_string(self) -> str:
@@ -77,7 +95,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def children(self) -> tuple[RootedPlaneTree]:
-        """The tuple of terms (sub-structures) contained in this `RootedPlaneTree`.
+        """The child rooted plane trees that compose this `RootedPlaneTree`.
 
         :return:
         """
@@ -112,4 +130,5 @@ class RootedPlaneTree(tuple):
         return list(self.children)
 
 
-FlexibleRootedPlaneTree = typing.Union[RootedPlaneTree, collections.abc.Iterator, collections.abc.Generator, None]
+FlexibleRootedPlaneTree = typing.Union[
+    RootedPlaneTree, tuple[RootedPlaneTree], collections.abc.Iterator, collections.abc.Generator, None]

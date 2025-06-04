@@ -1,6 +1,6 @@
 import pytest
 
-import punctilious.rooted_plane_tree as rpt
+import punctilious.immutable_computable_rooted_plane_tree as rpt
 
 
 @pytest.fixture
@@ -84,3 +84,17 @@ class TestRootedPlaneTree:
         assert t2.is_rooted_plane_tree_equivalent_to(rpt.RootedPlaneTree(t1))
         assert t3.is_rooted_plane_tree_equivalent_to(rpt.RootedPlaneTree(t1, t1, t1, t1, t1))
         assert t4.is_rooted_plane_tree_equivalent_to(rpt.RootedPlaneTree(t1, t2, t3, t2))
+
+    def test_cache(self, t1, t2, t3, t4):
+        t1_clone = rpt.RootedPlaneTree()
+        assert t1 == t1_clone
+        assert t1 is t1_clone
+        t2_clone = rpt.RootedPlaneTree(t1_clone)
+        assert t2 == t2_clone
+        assert t2 is t2_clone
+        t3_clone = rpt.RootedPlaneTree(t1_clone, t1_clone, t1_clone, t1_clone, t1_clone)
+        assert t3 == t3_clone
+        assert t3 is t3_clone
+        t4_clone = rpt.RootedPlaneTree(t1_clone, t2_clone, t3_clone, t2_clone)
+        assert t4 == t4_clone
+        assert t4 is t4_clone
