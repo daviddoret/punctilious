@@ -46,7 +46,7 @@ class RootedPlaneTree(tuple):
         children: tuple[RootedPlaneTree, ...] = tuple(
             data_validate_rooted_plane_tree(child) for child in children)
         rpt = super(RootedPlaneTree, cls).__new__(cls, children)
-        # cache mechanism assuring that unique rpts are only instanciated once.
+        # cache mechanism assuring that unique rpts are only instantiated once.
         rpt = retrieve_rooted_plane_tree_from_cache(rpt)
         return rpt
 
@@ -128,6 +128,58 @@ class RootedPlaneTree(tuple):
         """Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
         lists are mutable."""
         return list(self.children)
+
+    def to_multiline_string_vertical_tree_representation(self, prefix="", is_root=True, is_first=True, is_last=True):
+        """Returns a multiline string representation of this `RootedPlaneTree`.
+
+        May be useful to get a quick visual understanding of the tree structure.
+
+        Sample:
+        ⬤━┳━⬤
+          ┣━⬤━━━⬤
+          ┣━⬤━┳━⬤
+          ┃   ┣━⬤
+          ┃   ┗━⬤
+          ┗━⬤━━━⬤
+
+        """
+        output = ""
+        if is_root:
+            output = "⬤"
+        elif is_first and is_last:
+            output = "━━━⬤"
+        elif is_first and not is_last:
+            output = "━┳━⬤"
+        elif not is_last:
+            output = " ┣━⬤"
+        elif is_last:
+            output = " ┗━⬤"
+        elif self.is_leaf:
+            output = "━━━⬤"
+        # suffix = "" if self.is_leaf else "┓"
+        # connector = "┗" if is_last else "┣"
+        if is_root:
+            output = output
+        elif is_first:
+            output = output
+        else:
+            output = "\n" + prefix + output
+        # Update the prefix for child levels
+        if is_root:
+            new_prefix = prefix + " "
+        elif is_last:
+            new_prefix = prefix + "    "
+        else:
+            new_prefix = prefix + " ┃  "
+
+        child_count = len(self.children)
+        for i, child in enumerate(self.children):
+            is_first_child = (i == 0)
+            is_last_child = (i == child_count - 1)
+            output = output + child.to_multiline_string_vertical_tree_representation(new_prefix, False, is_first_child,
+                                                                                     is_last_child)
+
+        return output
 
 
 FlexibleRootedPlaneTree = typing.Union[

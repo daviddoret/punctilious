@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RootedPlaneTree.size">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/digraph.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/graph.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/immutable_computable_rooted_plane_tree_full_data_model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/immutable_computable_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/immutable_computable_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/immutable_computable_rooted_plane_tree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -329,7 +326,7 @@
     "Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
-    "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache.executor": "Run",
+    "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache.executor": "Debug",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_connector_index_01.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
     "Python tests.pytest for test_typesetting.TestHierarchicalClass.test_is_subclass_of.executor": "Run",
@@ -823,6 +820,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in /home/dm3d/PycharmProjects/punctilious/tests/test_rooted_plane_tree_full_data_model.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_rooted_plane_tree_full_data_model.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in punctilious" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -838,23 +852,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in test_rooted_plane_tree_full_data_model.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_rooted_plane_tree_full_data_model.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -889,7 +886,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree_full_data_model.TestRootedPlaneTree" />
-      <item itemvalue="Python tests.pytest in test_rooted_plane_tree_full_data_model.py" />
+      <item itemvalue="Python tests.pytest in /home/dm3d/PycharmProjects/punctilious/tests/test_rooted_plane_tree_full_data_model.py" />
       <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -899,7 +896,7 @@
       <list>
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache" />
         <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
-        <item itemvalue="Python tests.pytest in test_rooted_plane_tree_full_data_model.py" />
+        <item itemvalue="Python tests.pytest in /home/dm3d/PycharmProjects/punctilious/tests/test_rooted_plane_tree_full_data_model.py" />
         <item itemvalue="Python.graph" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree_full_data_model.TestRootedPlaneTree" />
       </list>
@@ -923,14 +920,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01350" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737308022015</created>
-      <option name="number" value="01350" />
-      <option name="presentableId" value="LOCAL-01350" />
-      <option name="project" value="LOCAL" />
-      <updated>1737308022015</updated>
     </task>
     <task id="LOCAL-01351" summary="meta-language">
       <option name="closed" value="true" />
@@ -1316,7 +1305,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748481688770</updated>
     </task>
-    <option name="localTasksCounter" value="1399" />
+    <task id="LOCAL-01399" summary="RootedPlaneTree.size">
+      <option name="closed" value="true" />
+      <created>1749072141729</created>
+      <option name="number" value="01399" />
+      <option name="presentableId" value="LOCAL-01399" />
+      <option name="project" value="LOCAL" />
+      <updated>1749072141729</updated>
+    </task>
+    <option name="localTasksCounter" value="1400" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1479,6 +1476,11 @@
           <url>file://$PROJECT_DIR$/tests/test_abstract_formal_language.py</url>
           <line>104</line>
           <option name="timeStamp" value="390" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_rooted_plane_tree.py</url>
+          <line>100</line>
+          <option name="timeStamp" value="391" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

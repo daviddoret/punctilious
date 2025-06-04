@@ -98,3 +98,4 @@ class TestRootedPlaneTree:
         t4_clone = rpt.RootedPlaneTree(t1_clone, t2_clone, t3_clone, t2_clone)
         assert t4 == t4_clone
         assert t4 is t4_clone
+        pass
