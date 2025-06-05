@@ -2,7 +2,6 @@ from __future__ import annotations
 import typing
 import collections
 import util
-from punctilious.immutable_computable_rooted_plane_tree_full_data_model import RootedPlaneTree
 
 
 def data_validate_rooted_plane_tree(o: FlexibleRootedPlaneTree) -> RootedPlaneTree:

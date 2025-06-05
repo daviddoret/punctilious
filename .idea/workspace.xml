@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RootedPlaneTree.size">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RootedPlaneTree.to_multiline_string_vertical_tree_representation">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/erratic_dyck_path.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/digraph.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/graph.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/immutable_computable_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/immutable_computable_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/immutable_computable_rooted_plane_tree_full_data_model.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -325,7 +329,7 @@
     "Python tests.pytest for test_pu_06_meta_language.TestWellFormedUniqueExtensionTuple.test_1.executor": "Run",
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
-    "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache.executor": "Debug",
+    "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_connector_index_01.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
     "Python tests.pytest for test_typesetting.TestHierarchicalClass.test_is_subclass_of.executor": "Run",
@@ -920,14 +924,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01352" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737310840621</created>
-      <option name="number" value="01352" />
-      <option name="presentableId" value="LOCAL-01352" />
-      <option name="project" value="LOCAL" />
-      <updated>1737310840621</updated>
-    </task>
     <task id="LOCAL-01353" summary="meta-language">
       <option name="closed" value="true" />
       <created>1737311326638</created>
@@ -1312,7 +1308,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749077038095</updated>
     </task>
-    <option name="localTasksCounter" value="1401" />
+    <task id="LOCAL-01401" summary="RootedPlaneTree.to_multiline_string_vertical_tree_representation">
+      <option name="closed" value="true" />
+      <created>1749107444121</created>
+      <option name="number" value="01401" />
+      <option name="presentableId" value="LOCAL-01401" />
+      <option name="project" value="LOCAL" />
+      <updated>1749107444121</updated>
+    </task>
+    <option name="localTasksCounter" value="1402" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1365,7 +1369,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="lark template for postfix connectors" />
     <MESSAGE value="lark template and interpretation improvements" />
     <MESSAGE value="interpretation + meta-language" />
     <MESSAGE value="all tests ok. interpretation + meta-language" />
@@ -1390,7 +1393,8 @@
     <MESSAGE value="cleaning up class names" />
     <MESSAGE value="RootedPlaneTree" />
     <MESSAGE value="RootedPlaneTree.size" />
-    <option name="LAST_COMMIT_MESSAGE" value="RootedPlaneTree.size" />
+    <MESSAGE value="RootedPlaneTree.to_multiline_string_vertical_tree_representation" />
+    <option name="LAST_COMMIT_MESSAGE" value="RootedPlaneTree.to_multiline_string_vertical_tree_representation" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1475,11 +1479,6 @@
           <url>file://$PROJECT_DIR$/tests/test_abstract_formal_language.py</url>
           <line>104</line>
           <option name="timeStamp" value="390" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_rooted_plane_tree.py</url>
-          <line>100</line>
-          <option name="timeStamp" value="391" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
