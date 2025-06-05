@@ -103,6 +103,10 @@ class RootedPlaneTree(tuple):
 
     @property
     def degree(self) -> int:
+        """The `degree` of a `RootedPlaneTree` is the number of immediate children it has.
+
+        :return:
+        """
         return len(self.children)
 
     @property
@@ -143,7 +147,7 @@ class RootedPlaneTree(tuple):
           ┗━⬤━━━⬤
 
         """
-        output = ""
+        output: str = ""
         if is_root:
             output = "⬤"
         elif is_first and is_last:
@@ -156,13 +160,7 @@ class RootedPlaneTree(tuple):
             output = " ┗━⬤"
         elif self.is_leaf:
             output = "━━━⬤"
-        # suffix = "" if self.is_leaf else "┓"
-        # connector = "┗" if is_last else "┣"
-        if is_root:
-            output = output
-        elif is_first:
-            output = output
-        else:
+        if not is_root and not is_first:
             output = "\n" + prefix + output
         # Update the prefix for child levels
         if is_root:
@@ -172,13 +170,12 @@ class RootedPlaneTree(tuple):
         else:
             new_prefix = prefix + " ┃  "
 
-        child_count = len(self.children)
+        child_count: int = len(self.children)
         for i, child in enumerate(self.children):
             is_first_child = (i == 0)
             is_last_child = (i == child_count - 1)
             output = output + child.to_multiline_string_vertical_tree_representation(new_prefix, False, is_first_child,
                                                                                      is_last_child)
-
         return output
 
 
