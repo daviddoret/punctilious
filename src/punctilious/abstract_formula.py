@@ -6,6 +6,7 @@ import collections
 import util
 import rooted_plane_tree as rpt
 import restricted_growth_function as rgf
+from punctilious.rooted_plane_tree import RootedPlaneTree
 
 
 def data_validate_abstract_formula(
@@ -35,6 +36,7 @@ def retrieve_abstract_formula_from_cache(o: AbstractFormula):
 class AbstractFormula(tuple):
     def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: rgf.FlexibleRestrictedGrowthFunctionSequence):
         super(AbstractFormula, self).__init__()
+        self._sub_formulas = None
 
     def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: rgf.FlexibleRestrictedGrowthFunctionSequence):
         t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
@@ -46,6 +48,48 @@ class AbstractFormula(tuple):
         phi = super(AbstractFormula, cls).__new__(cls, (t, s))
         phi = retrieve_abstract_formula_from_cache(phi)
         return phi
+
+    @property
+    def restricted_growth_function_sequence(self) -> rgf.RestrictedGrowthFunctionSequence:
+        """Shortcut: self.s.
+
+        :return:
+        """
+        return self[1]
+
+    @property
+    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
+        """Shortcut: self.t."""
+        return self[0]
+
+    @property
+    def s(self) -> rgf.RestrictedGrowthFunctionSequence:
+        """A shortcut for self.restricted_growth_function_sequence."""
+        return self.restricted_growth_function_sequence
+
+    @property
+    def sub_formulas(self):
+        if self._sub_formulas is None:
+            sequence_index = 0
+            sub_formulas = list()
+            for sub_tree in self.rooted_plane_tree.children:
+                sub_tree_size = sub_tree.size
+                sub_sequence = self.restricted_growth_function_sequence[sequence_index:sequence_index + sub_tree_size]
+                sub_formulas.append(AbstractFormula(t=sub_tree, s=sub_sequence))
+            self._sub_formulas = tuple(sub_formulas)
+        return self._sub_formulas
+
+    @property
+    def t(self) -> rpt.RootedPlaneTree:
+        """A shortcut for self.rooted_plane_tree."""
+        return self.rooted_plane_tree
+
+    def to_default_representation(self) -> str:
+        """"""
+        TODO: RESUME
+        HERE
+        output = f"{str(self.restricted_growth_function_sequence[0])}("
+        output +=
 
 
 FlexibleAbstractFormula = typing.Union[

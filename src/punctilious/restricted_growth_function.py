@@ -68,5 +68,27 @@ class RestrictedGrowthFunctionSequence(tuple):
         return len(self)
 
 
+def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[int]):
+    """Convert any finite sequence into a `RestrictedGrowthFunctionSequence`,
+    by substituting natural numbers based on their order of appearance in the sequence.
+
+    Examples:
+    (3,5,2,1) --> (1,2,3,4)
+    (3,5,3,1,5,2) --> (1,2,1,3,2,4)
+
+
+    :param s:
+    :return:
+    """
+    mapping = dict()
+    mapped_value = 0
+    for n in s:
+        if n not in mapping.keys():
+            mapped_value += 1
+            mapping[n] = mapped_value
+    s2 = tuple(mapping[n] for n in s)
+    return RestrictedGrowthFunctionSequence(*s2)
+
+
 FlexibleRestrictedGrowthFunctionSequence = typing.Union[
     RestrictedGrowthFunctionSequence, tuple[int], collections.abc.Iterator, collections.abc.Generator, None]

@@ -51,3 +51,11 @@ class TestRestrictedGrowthFunctionSequence:
         assert pu.edp.RestrictedGrowthFunctionSequence(*s3) is pu.edp.RestrictedGrowthFunctionSequence(*s3)
         assert pu.edp.RestrictedGrowthFunctionSequence(*s1) is not pu.edp.RestrictedGrowthFunctionSequence(*s3)
         assert pu.edp.RestrictedGrowthFunctionSequence(*s3) is not pu.edp.RestrictedGrowthFunctionSequence(*s1)
+
+    def test_conversion_from_arbitrary_sequence(self):
+        assert pu.edp.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+            (1, 2, 3,)) == pu.edp.RestrictedGrowthFunctionSequence(1, 2, 3)
+        assert pu.edp.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+            (3, 2, 1,)) == pu.edp.RestrictedGrowthFunctionSequence(1, 2, 3)
+        assert pu.edp.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+            (3, 5, 5, 10, 1, 3, 3, 1,)) == pu.edp.RestrictedGrowthFunctionSequence(1, 2, 2, 3, 4, 1, 1, 4)
