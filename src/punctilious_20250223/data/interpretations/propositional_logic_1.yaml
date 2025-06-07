@@ -1,8 +1,0 @@
-schema: http://punctilious.org/data/schemas/punctilious_package_schema_1.yaml
-uid: { slug: propositional_logic_1, uuid: c3ad2744-0d75-4ed9-aa05-c40e3a384482 }
-interpretations:
-  - uid: { slug: propositional_logic_1, uuid: 879b2c65-1e48-427d-ab62-8520c40ff240 }
-    variable_connectors:
-      - string_constant: 'P'
-    atomic_connectors:
-      - { string_constant: '∧', connector: { uid: { slug: conjunction, uuid: b5a16d91-9974-48fa-901e-b777eb38e290 } } }
