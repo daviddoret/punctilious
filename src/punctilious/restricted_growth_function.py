@@ -31,7 +31,7 @@ def data_validate_restricted_growth_function_sequence_elements(
     raise util.PunctiliousException('RestrictedGrowthFunctionSequence elements data validation failure', o=o)
 
 
-_abstract_formula_cache = dict()  # cache mechanism assuring that unique rpts are only instantiated once.
+_restricted_growth_function_sequence_cache = dict()  # cache mechanism assuring that unique rpts are only instantiated once.
 
 
 def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthFunctionSequence):

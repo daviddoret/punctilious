@@ -27,8 +27,23 @@ def retrieve_rooted_plane_tree_from_cache(o: FlexibleRootedPlaneTree):
         return o
 
 
+def convert_tuple_tree_to_rooted_plane_tree(t: TupleTree | None = None) -> RootedPlaneTree:
+    """
+
+    :param t:
+    :return:
+    """
+    if t is None:
+        return RootedPlaneTree()
+    elif len(t) == 0:
+        return RootedPlaneTree()
+    else:
+        children = tuple(convert_tuple_tree_to_rooted_plane_tree(u) for u in t)
+        return RootedPlaneTree(*children)
+
+
 class RootedPlaneTree(tuple):
-    """A `RootedPlaneTree` is an implementation of an immutable, finite (and computable) rooted plane tree,
+    """The `RootedPlaneTree` class implements an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.
 
     Reminder:
@@ -37,21 +52,37 @@ class RootedPlaneTree(tuple):
 
     """
 
-    def __init__(self, *children: FlexibleRootedPlaneTree):
+    def __init__(self, *children: FlexibleRootedPlaneTree, tuple_tree: tuple[tuple] = None):
+        """
+
+        :param children: A tuple of FlexibleRootedPlaneTree instances.
+        :param tuple_tree: A tuple tree structure.
+        """
         # children: RootedPlaneTreeTerms = data_validate_formula_structure_terms(children)
         super(RootedPlaneTree, self).__init__()
 
-    def __new__(cls, *children: FlexibleRootedPlaneTree):
-        children: tuple[RootedPlaneTree, ...] = tuple(
-            data_validate_rooted_plane_tree(child) for child in children)
-        rpt = super(RootedPlaneTree, cls).__new__(cls, children)
-        # cache mechanism assuring that unique rpts are only instantiated once.
-        rpt = retrieve_rooted_plane_tree_from_cache(rpt)
-        return rpt
+    def __new__(cls, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
+        if tuple_tree is not None:
+            t = convert_tuple_tree_to_rooted_plane_tree(tuple_tree)
+            t = super(RootedPlaneTree, cls).__new__(cls, t)
+            t = retrieve_rooted_plane_tree_from_cache(t)
+            return t
+        elif children is not None:
+            children: tuple[RootedPlaneTree, ...] = tuple(
+                data_validate_rooted_plane_tree(child) for child in children)
+            t = super(RootedPlaneTree, cls).__new__(cls, children)
+            t = retrieve_rooted_plane_tree_from_cache(t)
+            return t
+        elif children is None and tuple_tree is None:
+            t = super(RootedPlaneTree, cls).__new__(cls, tuple())
+            t = retrieve_rooted_plane_tree_from_cache(t)
+            return t
+        else:
+            raise util.PunctiliousException('Invalid input parameters', children=children, tuple_tree=tuple_tree)
 
     @property
     def ahu_unsorted_string(self) -> str:
-        """Returns the AHU unsorted encoding of this `RootedPlaneTree`.
+        """Returns the AHU (Aho, Hopcroft, and Ullman) unsorted encoding of this `RootedPlaneTree`.
 
         It is unsorted because children are not sorted, because this is an ordered tree.
         In consequence, this AHU encoding is not comparable to the AHU encoding of an unordered tree.
@@ -180,3 +211,5 @@ class RootedPlaneTree(tuple):
 
 FlexibleRootedPlaneTree = typing.Union[
     RootedPlaneTree, tuple[RootedPlaneTree], collections.abc.Iterator, collections.abc.Generator, None]
+
+TupleTree: typing.TypeAlias = typing.Union[int, tuple["TupleTree", ...]]

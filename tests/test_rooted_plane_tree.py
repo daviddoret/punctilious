@@ -99,3 +99,13 @@ class TestRootedPlaneTree:
         assert t4 == t4_clone
         assert t4 is t4_clone
         pass
+
+    def test_tuple_tree_constructor(self, t1, t2, t3, t4):
+        t1b = rpt.RootedPlaneTree(tuple_tree=())
+        assert t1b == t1
+        t2b = rpt.RootedPlaneTree(tuple_tree=((),))
+        assert t2b == t2
+        t3b = rpt.RootedPlaneTree(tuple_tree=((), (), (), (), (),))
+        assert t3b == t3
+        t4b = rpt.RootedPlaneTree(tuple_tree=((), ((),), ((), (), (), (), (),), ((),),))
+        assert t4b == t4
