@@ -5,356 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="files cleanup">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/erratic_dyck_path_analysis.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_erratic_dyck_path.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formal_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/concrete_formal_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/erratic_dyck_path.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/erratic_dyck_path.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/__TODO.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/__typesetting.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/__typesetting_basic_unicode.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/__typesetting_extended_unicode.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/constants.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/bundles.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/constants_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/operators.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/predicates.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/propositional_logic_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/connectors/variables_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_1.jinja2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_2.jinja2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_3.jinja2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_4.jinja2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/grammars/formula_grammar_5.jinja2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/interpretations/operators_1_interpretations_OBSOLETE.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/interpretations/propositional_logic_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/constants_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/documentation.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/meta_language.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/operators.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/predicates.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/propositional_logic_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/tao_analysis_1_2006.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/mappings/variables_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/constants_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/formula_notations.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/greek_alphabet_lowercase_serif_italic.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/greek_alphabet_uppercase_serif_italic.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/latin_alphabet_lowercase_serif_bold.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/latin_alphabet_lowercase_serif_italic.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/latin_alphabet_uppercase_serif_italic.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/miscellaneous_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/operators.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/parenthesizations.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/predicates.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/propositional_logic_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/representations/tao_analysis_1_2006.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/statements/propositional_logic_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/statements/tao_analysis_1_2006.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/data/variables/propositional_logic_1_variables.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/declarations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/fonts.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/formal_language_mappings.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/meta_operators_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/miscellaneous_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/operators.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/operators_1_connectors.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/operators_1_mappings.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/operators_1_representations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/options/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/options/connector_representation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/options/language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/options/technical_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/predicates.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/propositional_logic_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_01_utilities.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_02_unique_identifiers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_03_representation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_04_formal_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_06_meta_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_07_interpretation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_08_meta_language_OBSOLETE.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_09_proofs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_10_no_interpretation_interpreter.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_11_bundling.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_12_formula_notations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_13_default_interpreter.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_01_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_02_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_03_latin_alphabet_lowercase_serif_bold.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_04_latin_alphabet_lowercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_05_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_20_06_constants_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/pu_22_mathematical_representation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/sandbox.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/tao_analysis_1_2006.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/theories/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/theories/propositional_logic_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious_20250223/variables_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sandbox/sandbox.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formal_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_concrete_formal_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_formula.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_formula_notations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_greek_alphabet_lowercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_greek_alphabet_uppercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_identifiers.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_interpretation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_latin_alphabet_uppercase_serif_italic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_options.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_packaging.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_presentation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_pu_03_representation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_pu_04_formal_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_pu_06_meta_language.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_representations.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_shared_library.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_tao_analysis_1_2006.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests_20250223/test_variable.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/base_symbols_database.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/base_symbols_database.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/references/latex-unicode.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/references/stix-tbl.asc98feb26.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/references/unicode-latex (converted).txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/references/unicode-latex.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/references/unicode.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_classical_logic_k0_noproof_enus_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_classical_logic_k0_noproof_enus_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_classical_logic_k0_proof_enus_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_classical_logic_k0_proof_enus_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_intuitionistic_logic_j0_noproof_enus_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_intuitionistic_logic_j0_proof_enus_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_minimal_logic_m0_noproof_enus_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_minimal_logic_m0_noproof_enus_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_minimal_logic_m0_proof_enus_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_mgz_2021_minimal_logic_m0_proof_enus_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_tao_2006_the_peano_axioms_noproof_enus_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_tao_2006_the_peano_axioms_noproof_enus_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_tao_2006_the_peano_axioms_proof_enus_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/report_tao_2006_the_peano_axioms_proof_enus_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_absorption_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_absorption_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_axiom_interpretation_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_axiom_interpretation_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_biconditional_elimination_1_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_biconditional_elimination_1_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_biconditional_elimination_2_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_biconditional_elimination_2_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_biconditional_introduction_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_biconditional_introduction_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_conjunction_elimination_1_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_conjunction_elimination_1_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_conjunction_elimination_2_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_conjunction_elimination_2_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_conjunction_introduction_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_conjunction_introduction_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_constructive_dilemma_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_constructive_dilemma_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_definition_interpretation_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_definition_interpretation_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_destructive_dilemma_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_destructive_dilemma_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunction_introduction_1_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunction_introduction_1_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunction_introduction_2_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunction_introduction_2_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_resolution_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_resolution_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_syllogism_1_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_syllogism_1_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_syllogism_2_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_disjunctive_syllogism_2_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_double_negation_elimination_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_double_negation_elimination_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_double_negation_introduction_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_double_negation_introduction_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_equal_terms_substitution_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_equal_terms_substitution_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_equality_commutativity_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_equality_commutativity_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_export_all_articles_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_export_all_articles_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_hypothesis_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_hypothesis_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_hypothetical_syllogism_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_hypothetical_syllogism_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_1_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_1_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_2_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_2_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_3_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_inconsistency_introduction_3_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_modus_ponens_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_modus_ponens_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_modus_tollens_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_modus_tollens_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_pet_theory_1_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_pet_theory_1_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_proof_by_contradiction_1_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_proof_by_contradiction_1_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_proof_by_contradiction_2_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_proof_by_contradiction_2_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_proof_by_refutation_1_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_proof_by_refutation_1_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_proof_by_refutation_2_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_proof_by_refutation_2_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_sandbox_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_sandbox_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_variable_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_variable_substitution_plaintext.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_variable_substitution_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/data/sample_variable_unicode.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/bibliography.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/biconditional_introduction.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/class.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/conjunction_introduction.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/consistency.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/contentual.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/creation.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/data_model.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/declaration.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/definition.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/definitional-equality.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/derivable-of-formulae.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/derivation_rule.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/direct_axiom_inference.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/disjunction_introduction.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/equal_terms_substitution_inference_rule.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/equality_commutativity_inference_rule.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/formula-syntactic-equivalence.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/formula.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/foundation_system.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/homography.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/hypothesis.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/mermaid_class_diagram_template.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/modus_ponens.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/negation_introduction.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/proof-by-contradiction.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/proof-by-refutation.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/proof.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/proposition.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/refutation-b-ontradition.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/relation.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/stabilized_of_theories.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/statement.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/theoretical_morphism.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/theory.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/universe-of-discourse.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/project/docs_to_integrate/variable_substitution.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/propositional_logic_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/_TODO.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/axiomatic_system_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/chars.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/connectives_standard_library_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/constants_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/declaration_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/inference_rules_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/meta_theory_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/minimal_logic_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/natural_numbers_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/presentation_layer_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/presentation_layer_1.toml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/propositional_logic_syntax_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/sequences_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/state_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/unicode_utilities_obsolete.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete/util_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/caller_info.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/core.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/graph.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/locale_en_us.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/plaintext.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/random_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/repm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/reserved_words.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_absorption.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_axiom_interpretation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_biconditional_elimination_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_biconditional_elimination_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_biconditional_introduction.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_conjunction_elimination_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_conjunction_elimination_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_conjunction_introduction.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_constant.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_constructive_dilemma.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_definition_interpretation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_destructive_dilemma.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_disjunction_introduction_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_disjunction_introduction_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_disjunctive_resolution.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_disjunctive_syllogism_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_disjunctive_syllogism_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_double_negation_elimination.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_double_negation_introduction.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_equal_terms_substitution.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_equality_commutativity.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_export_all_articles.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_hypothesis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_hypothetical_syllogism.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_inconsistency_introduction_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_inconsistency_introduction_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_inconsistency_introduction_3.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_iterate_formula_data_model_components.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_modus_ponens.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_modus_tollens.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_pet_theory_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_proof_by_contradiction_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_proof_by_contradiction_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_proof_by_refutation_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_proof_by_refutation_2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_sandbox.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_universe_of_discourse.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_variable.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/sample/sample_variable_substitution.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/theory/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/theory/punctilious_2023_metatheory_OBSOLETE.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/theory/theory_mgz_2021_classical_logic_j0.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/theory/theory_mgz_2021_intuitionistic_logic_j0.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/theory/theory_mgz_2021_minimal_logic_m0.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/theory/theory_mgz_2021_propositional_logic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/theory/theory_punctilious_minimal_metatheory.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/theory/theory_tao_2006_the_peano_axioms.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_obsolete_20240114/unicode_utilities.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/config.old" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/config.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/config/config.toml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/log.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/pl2.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/preferences.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/punctilious.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/typesetting.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_old/utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/conjunction_1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/conjunction_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/is_a_proposition_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/connectors/material_implication_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/representation_modes/symbolic_inline_en.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/connector_1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/symbol_1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/schemas/theorem_1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/symbols/generator.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/test/test_1.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/punctilious_package_1/data/test/test_2.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/sandbox/generate_symbols.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/sandbox/script.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/sandbox/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/tests/test_axiomatic_system_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/tests/test_inference_rules_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/tests/test_meta_theory_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/tests/test_minimal_logic_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/tests/test_presentation_layer_1.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/trashcan/tests/test_propositional_logic_syntax_1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/erratic_dyck_path.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/erratic_dyck_path_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/immutable_computable_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_erratic_dyck_path.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -883,7 +543,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/mappings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_erratic_dyck_path.TestErraticDyckPath">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -922,50 +582,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="erratic_dyck_path" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/erratic_dyck_path.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="erratic_dyck_path_analysis" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/erratic_dyck_path_analysis.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1036,6 +652,50 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="restricted_growth_function" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="restricted_growth_function_analysis" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/restricted_growth_function_analysis.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1140,23 +800,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_erratic_dyck_path.TestErraticDyckPath" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_erratic_dyck_path.TestErraticDyckPath&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1175,7 +818,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_restricted_growth_function" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1188,7 +831,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_rooted_plane_tree.TestRootedPlaneTree.test_cache&quot;" />
+      <option name="_new_target" value="&quot;test_restricted_growth_function&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1210,7 +853,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_erratic_dyck_path.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in test_restricted_growth_function.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1223,7 +866,24 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_erratic_dyck_path.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_restricted_growth_function.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -1233,27 +893,27 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.erratic_dyck_path" />
-      <item itemvalue="Python.erratic_dyck_path_analysis" />
+      <item itemvalue="Python.restricted_growth_function_sequence" />
+      <item itemvalue="Python.restricted_growth_function_analysis" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_erratic_dyck_path.TestErraticDyckPath" />
-      <item itemvalue="Python tests.pytest in test_erratic_dyck_path.py" />
-      <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache" />
+      <item itemvalue="Python tests.pytest for test_restricted_growth_function" />
+      <item itemvalue="Python tests.pytest in test_restricted_growth_function.py" />
+      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_erratic_dyck_path.TestErraticDyckPath" />
-        <item itemvalue="Python tests.pytest in test_erratic_dyck_path.py" />
-        <item itemvalue="Python.erratic_dyck_path" />
-        <item itemvalue="Python.erratic_dyck_path_analysis" />
-        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache" />
+        <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_restricted_growth_function" />
+        <item itemvalue="Python tests.pytest in test_restricted_growth_function.py" />
+        <item itemvalue="Python.restricted_growth_function_sequence" />
+        <item itemvalue="Python.restricted_growth_function_analysis" />
       </list>
     </recent_temporary>
   </component>
@@ -1275,14 +935,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01354" summary="meta-language">
-      <option name="closed" value="true" />
-      <created>1737321196245</created>
-      <option name="number" value="01354" />
-      <option name="presentableId" value="LOCAL-01354" />
-      <option name="project" value="LOCAL" />
-      <updated>1737321196246</updated>
     </task>
     <task id="LOCAL-01355" summary="meta-language">
       <option name="closed" value="true" />
@@ -1668,7 +1320,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749107619355</updated>
     </task>
-    <option name="localTasksCounter" value="1403" />
+    <task id="LOCAL-01403" summary="files cleanup">
+      <option name="closed" value="true" />
+      <created>1749305367496</created>
+      <option name="number" value="01403" />
+      <option name="presentableId" value="LOCAL-01403" />
+      <option name="project" value="LOCAL" />
+      <updated>1749305367496</updated>
+    </task>
+    <option name="localTasksCounter" value="1404" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

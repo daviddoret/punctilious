@@ -17,18 +17,18 @@ def data_validate_rooted_plane_tree(o: FlexibleRootedPlaneTree) -> RootedPlaneTr
 _rooted_plane_tree_index = dict()  # cache mechanism assuring that unique rpts are only instantiated once.
 
 
-def retrieve_rooted_plane_tree_from_cache(rpt: FlexibleRootedPlaneTree):
+def retrieve_rooted_plane_tree_from_cache(o: FlexibleRootedPlaneTree):
     """cache mechanism assuring that unique rpts are only instantiated once."""
     global _rooted_plane_tree_index
-    if hash(rpt) in _rooted_plane_tree_index.keys():
-        return _rooted_plane_tree_index[hash(rpt)]
+    if hash(o) in _rooted_plane_tree_index.keys():
+        return _rooted_plane_tree_index[hash(o)]
     else:
-        _rooted_plane_tree_index[hash(rpt)] = rpt
-        return rpt
+        _rooted_plane_tree_index[hash(o)] = o
+        return o
 
 
 class RootedPlaneTree(tuple):
-    """A `RootedPlaneTree` is an implementation of an immutable and computable rooted plane tree,
+    """A `RootedPlaneTree` is an implementation of an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.
 
     Reminder:

@@ -1,6 +1,6 @@
 import pytest
 
-import punctilious.immutable_computable_rooted_plane_tree as rpt
+import punctilious.rooted_plane_tree as rpt
 
 
 @pytest.fixture
