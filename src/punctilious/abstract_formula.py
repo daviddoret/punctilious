@@ -11,70 +11,24 @@ from punctilious.restricted_growth_function import RestrictedGrowthFunctionSeque
 from punctilious.rooted_plane_tree import RootedPlaneTree
 
 
-class FormulaIterationNavigator:
-    def __init__(self):
-        self.is_start = True
-        self.is_move_down = False
-        self.is_move_right = False
-        self.is_move_up = False
-        self.is_end = False
-        self.rooted_plane_tree_depth = 1
-        self.rooted_plane_tree_children_index = 1
-        self.restricted_growth_function_sequence_index = 1
+class AbstractFormulaIterationNavigator:
+    def __init__(self, phi: FlexibleAbstractFormula):
+        self._abstract_formula = data_validate_abstract_formula(phi)
+        self._sequence_path: tuple[int, ...] = (1,)
 
     def __str__(self):
-        if self.is_start:
-            return "S"
-        elif self.is_move_down:
-            return "D"
-        elif self.is_move_up:
-            return "U"
-        elif self.is_move_right:
-            return "R"
-        elif self.is_end:
-            return "E"
-        else:
-            raise util.PunctiliousException('ooops')
+        return str(self.sequence_path)
 
-    def move_down(self):
-        self.is_start = False
-        self.is_move_down = True
-        self.is_move_right = False
-        self.is_move_up = False
-        self.is_end = False
-        self.rooted_plane_tree_children_index = None
-        self.rooted_plane_tree_depth += 1
+    def iterate(self):
+        pass
 
-    def move_right(self, i: int):
-        """
+    @property
+    def abstract_formula(self) -> AbstractFormula:
+        return self._abstract_formula
 
-        :param i: The rooted_plane_tree_children_index.
-        :return:
-        """
-        self.is_start = False
-        self.is_move_down = False
-        self.is_move_right = True
-        self.is_move_up = False
-        self.is_end = False
-        self.rooted_plane_tree_children_index = i
-        self.restricted_growth_function_sequence_index += 1
-
-    def move_up(self):
-        self.is_start = False
-        self.is_move_down = False
-        self.is_move_right = False
-        self.is_move_up = True
-        self.is_end = False
-        self.rooted_plane_tree_children_index = None
-        self.rooted_plane_tree_depth -= 1
-
-    def end(self):
-        self.is_start = False
-        self.is_move_down = False
-        self.is_move_right = False
-        self.is_move_up = False
-        self.is_end = True
-        self.rooted_plane_tree_children_index = None
+    @property
+    def sequence_path(self) -> tuple[int, ...]:
+        return self._sequence_path
 
 
 def data_validate_abstract_formula(
@@ -153,7 +107,7 @@ class AbstractFormula(tuple):
         return self.rooted_plane_tree
 
     def iterate_formula_components_depth_first_ascending(self):
-        nav = FormulaIterationNavigator()
+        nav = AbstractFormulaIterationNavigator()
         yield nav
         if self.rooted_plane_tree.degree > 0:
             nav.move_down()

@@ -1,26 +1,26 @@
 import pytest
 
-import punctilious.rooted_plane_tree as rpt
+import punctilious as pu
 
 
 @pytest.fixture
 def t1():
-    return rpt.RootedPlaneTree()
+    return pu.rpt.RootedPlaneTree()
 
 
 @pytest.fixture
 def t2(t1):
-    return rpt.RootedPlaneTree(t1)
+    return pu.rpt.RootedPlaneTree(t1)
 
 
 @pytest.fixture
 def t3(t1):
-    return rpt.RootedPlaneTree(t1, t1, t1, t1, t1)
+    return pu.rpt.RootedPlaneTree(t1, t1, t1, t1, t1)
 
 
 @pytest.fixture
 def t4(t1, t2, t3):
-    return rpt.RootedPlaneTree(t1, t2, t3, t2)
+    return pu.rpt.RootedPlaneTree(t1, t2, t3, t2)
 
 
 class TestRootedPlaneTree:
@@ -80,32 +80,99 @@ class TestRootedPlaneTree:
         assert not t4.is_rooted_plane_tree_equivalent_to(t2)
         assert not t4.is_rooted_plane_tree_equivalent_to(t2)
         # equivalence with distinct instances
-        assert t1.is_rooted_plane_tree_equivalent_to(rpt.RootedPlaneTree())
-        assert t2.is_rooted_plane_tree_equivalent_to(rpt.RootedPlaneTree(t1))
-        assert t3.is_rooted_plane_tree_equivalent_to(rpt.RootedPlaneTree(t1, t1, t1, t1, t1))
-        assert t4.is_rooted_plane_tree_equivalent_to(rpt.RootedPlaneTree(t1, t2, t3, t2))
+        assert t1.is_rooted_plane_tree_equivalent_to(pu.rpt.RootedPlaneTree())
+        assert t2.is_rooted_plane_tree_equivalent_to(pu.rpt.RootedPlaneTree(t1))
+        assert t3.is_rooted_plane_tree_equivalent_to(pu.rpt.RootedPlaneTree(t1, t1, t1, t1, t1))
+        assert t4.is_rooted_plane_tree_equivalent_to(pu.rpt.RootedPlaneTree(t1, t2, t3, t2))
 
     def test_cache(self, t1, t2, t3, t4):
-        t1_clone = rpt.RootedPlaneTree()
+        t1_clone = pu.rpt.RootedPlaneTree()
         assert t1 == t1_clone
         assert t1 is t1_clone
-        t2_clone = rpt.RootedPlaneTree(t1_clone)
+        t2_clone = pu.rpt.RootedPlaneTree(t1_clone)
         assert t2 == t2_clone
         assert t2 is t2_clone
-        t3_clone = rpt.RootedPlaneTree(t1_clone, t1_clone, t1_clone, t1_clone, t1_clone)
+        t3_clone = pu.rpt.RootedPlaneTree(t1_clone, t1_clone, t1_clone, t1_clone, t1_clone)
         assert t3 == t3_clone
         assert t3 is t3_clone
-        t4_clone = rpt.RootedPlaneTree(t1_clone, t2_clone, t3_clone, t2_clone)
+        t4_clone = pu.rpt.RootedPlaneTree(t1_clone, t2_clone, t3_clone, t2_clone)
         assert t4 == t4_clone
         assert t4 is t4_clone
         pass
 
+    def test_select_sub_rooted_plane_tree_from_path_sequence(self, t1, t2, t3, t4):
+        assert t1.select_sub_tree_from_path_sequence((1,)) == t1
+        assert t2.select_sub_tree_from_path_sequence((1,)) == t2
+        assert t2.select_sub_tree_from_path_sequence((1, 1,)) == t1
+        assert t3.select_sub_tree_from_path_sequence((1,)) == t3
+        assert t3.select_sub_tree_from_path_sequence((1, 1,)) == t1
+        assert t3.select_sub_tree_from_path_sequence((1, 2,)) == t1
+        assert t3.select_sub_tree_from_path_sequence((1, 3,)) == t1
+        assert t3.select_sub_tree_from_path_sequence((1, 4,)) == t1
+        assert t3.select_sub_tree_from_path_sequence((1, 5,)) == t1
+        assert t4.select_sub_tree_from_path_sequence((1,)) == t4
+        assert t4.select_sub_tree_from_path_sequence((1, 1,)) == t1
+        assert t4.select_sub_tree_from_path_sequence((1, 2,)) == t2
+        assert t4.select_sub_tree_from_path_sequence((1, 2, 1,)) == t1
+        assert t4.select_sub_tree_from_path_sequence((1, 3,)) == t3
+        assert t4.select_sub_tree_from_path_sequence((1, 3, 1,)) == t1
+        assert t4.select_sub_tree_from_path_sequence((1, 3, 2,)) == t1
+        assert t4.select_sub_tree_from_path_sequence((1, 3, 3,)) == t1
+        assert t4.select_sub_tree_from_path_sequence((1, 3, 4,)) == t1
+        assert t4.select_sub_tree_from_path_sequence((1, 3, 5,)) == t1
+        assert t4.select_sub_tree_from_path_sequence((1, 4,)) == t2
+        assert t4.select_sub_tree_from_path_sequence((1, 4, 1,)) == t1
+
     def test_tuple_tree_constructor(self, t1, t2, t3, t4):
-        t1b = rpt.RootedPlaneTree(tuple_tree=())
+        t1b = pu.rpt.RootedPlaneTree(tuple_tree=())
         assert t1b == t1
-        t2b = rpt.RootedPlaneTree(tuple_tree=((),))
+        t2b = pu.rpt.RootedPlaneTree(tuple_tree=((),))
         assert t2b == t2
-        t3b = rpt.RootedPlaneTree(tuple_tree=((), (), (), (), (),))
+        t3b = pu.rpt.RootedPlaneTree(tuple_tree=((), (), (), (), (),))
         assert t3b == t3
-        t4b = rpt.RootedPlaneTree(tuple_tree=((), ((),), ((), (), (), (), (),), ((),),))
+        t4b = pu.rpt.RootedPlaneTree(tuple_tree=((), ((),), ((), (), (), (), (),), ((),),))
         assert t4b == t4
+
+    def test_iterate_depth_first_ascending(self, t1, t2, t3, t4):
+        l = tuple(t for t in t1.iterate_depth_first_ascending())
+        assert l[0] == t1
+        l = tuple(t for t in t2.iterate_depth_first_ascending())
+        assert l[0] == t2
+        assert l[1] == t1
+        l = tuple(t for t in t3.iterate_depth_first_ascending())
+        assert l[0] == t3
+        assert l[1] == t1
+        assert l[2] == t1
+        assert l[3] == t1
+        assert l[4] == t1
+        assert l[5] == t1
+        l = tuple(t for t in t4.iterate_depth_first_ascending())
+        assert l[0] == t4
+        assert l[1] == t1
+        assert l[2] == t2
+        assert l[3] == t1
+        assert l[4] == t3
+        assert l[5] == t1
+        assert l[6] == t1
+        assert l[7] == t1
+        assert l[8] == t1
+        assert l[9] == t1
+        assert l[10] == t2
+        assert l[11] == t1
+
+    def test_iterate_children(self, t1, t2, t3, t4):
+        l = tuple(t for t in t1.iterate_children())
+        assert len(l) == 0
+        l = tuple(t for t in t2.iterate_children())
+        assert l[0] == t1
+        l = tuple(t for t in t3.iterate_children())
+        assert l[0] == t1
+        assert l[1] == t1
+        assert l[2] == t1
+        assert l[3] == t1
+        assert l[4] == t1
+        l = tuple(t for t in t4.iterate_children())
+        assert l[0] == t1
+        assert l[1] == t2
+        assert l[2] == t3
+        assert l[3] == t2

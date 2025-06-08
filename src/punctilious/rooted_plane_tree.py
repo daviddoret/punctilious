@@ -129,7 +129,7 @@ class RootedPlaneTree(tuple):
 
         :return:
         """
-        return self
+        return tuple(self)
 
     @property
     def degree(self) -> int:
@@ -150,6 +150,31 @@ class RootedPlaneTree(tuple):
     def is_rooted_plane_tree_equivalent_to(self, x: FlexibleRootedPlaneTree) -> bool:
         x: RootedPlaneTree = data_validate_rooted_plane_tree(x)
         return x.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
+
+    def iterate_children(self) -> typing.Generator[RootedPlaneTree, None, None]:
+        """Generator function that iterates the direct children of the `RootedPlaneTree`.
+
+        :return:
+        """
+        yield from super().__iter__()
+
+    def iterate_depth_first_ascending(self) -> typing.Generator[RootedPlaneTree, None, None]:
+        """Generator function that iterates the `RootedPlaneTree` using the depth-first, then ascending children
+        algorithm.
+
+        :return:
+        """
+        yield self
+        for child in self.children:
+            yield from child.iterate_depth_first_ascending()
+
+    def select_sub_tree_from_path_sequence(self, s: tuple[int, ...]) -> RootedPlaneTree:
+        # TODO: Implement data-validation, including first element == 1
+        current_rooted_plane_tree: RootedPlaneTree = self
+        for i, n in enumerate(s):
+            if i != 0:
+                current_rooted_plane_tree = current_rooted_plane_tree.children[n - 1]
+        return current_rooted_plane_tree
 
     @property
     def size(self):
