@@ -124,12 +124,12 @@ class RootedPlaneTree(tuple):
         return int(self.ahu_unsorted_inverted_binary_string, base=2)
 
     @property
-    def children(self) -> tuple[RootedPlaneTree]:
+    def children(self) -> tuple[RootedPlaneTree, ...]:
         """The child rooted plane trees that compose this `RootedPlaneTree`.
 
         :return:
         """
-        return tuple(self)
+        return tuple(super().__iter__())
 
     @property
     def degree(self) -> int:
@@ -137,7 +137,7 @@ class RootedPlaneTree(tuple):
 
         :return:
         """
-        return len(self.children)
+        return super().__len__()
 
     @property
     def is_leaf(self) -> bool:

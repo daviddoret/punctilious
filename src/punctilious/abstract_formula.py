@@ -71,6 +71,12 @@ class AbstractFormula(tuple):
         phi = retrieve_abstract_formula_from_cache(phi)
         return phi
 
+    # def __repr__(self):
+    #    return self.to_default_representation()
+
+    # def __str__(self):
+    #    return self.to_default_representation()
+
     @property
     def restricted_growth_function_sequence(self) -> rgf.RestrictedGrowthFunctionSequence:
         """Shortcut: self.s.
@@ -106,34 +112,47 @@ class AbstractFormula(tuple):
         """A shortcut for self.rooted_plane_tree."""
         return self.rooted_plane_tree
 
-    def iterate_formula_components_depth_first_ascending(self):
-        nav = AbstractFormulaIterationNavigator()
-        yield nav
-        if self.rooted_plane_tree.degree > 0:
-            nav.move_down()
-            yield nav
-            for i in range(0, self.rooted_plane_tree.degree):
-                nav.move_right(i)
-                yield nav
-            nav.move_up()
-            yield nav
-        nav.end()
-        yield nav
+    def iterate_child_sequences(self):
+        """Iterates the direct child rgf sequences of this `AbstractFormula`.
 
-    def to_default_representation(self) -> str:
+        Note: the child rgf sequences are determined by 1) the parent rgf sequence,
+        and 2) the rooted plane tree.
+        """
+        # remove the root
+        truncated_sequence: tuple[int, ...] = self.restricted_growth_function_sequence[1:]
+        for child_tree in self.rooted_plane_tree.iterate_children():
+            # retrieve the elements mapped to this child tree
+            child_sequence: tuple[int, ...] = truncated_sequence[0:child_tree.size]
+            # transform the sequence into an rgf sequence
+            child_sequence: rgf.RestrictedGrowthFunctionSequence = rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+                child_sequence)
+            # yield this child rgf sequence
+            yield child_sequence
+            # truncate the remaining sequence
+            truncated_sequence = truncated_sequence[child_tree.size:]
+
+    def iterate_sub_formulas_depth_first_ascending(self):
+        yield self
+        for child_tree, child_sequence in self.rooted_plane_tree.iterate_children(), self.iterate_child_sequences():
+            sub_formula = AbstractFormula(child_tree, child_sequence)
+            yield from sub_formula.iterate_sub_formulas_depth_first_ascending()
+
+    def iterate_sub_formulas_direct_children(self):
+        yield self
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_children(),
+                                              self.iterate_child_sequences()):
+            sub_formula = AbstractFormula(child_tree, child_sequence)
+            yield sub_formula
+
+    def represent_as_indexed_function(self) -> str:
         """"""
-        output = ""
-        for nav in self.iterate_formula_components_depth_first_ascending():
-            if nav.is_start:
-                output += str(self.restricted_growth_function_sequence[nav.restricted_growth_function_sequence_index])
-            elif nav.is_move_down:
-                output += "("
-            elif nav.is_move_right:
-                if nav.rooted_plane_tree_children_index > 1:
-                    output += ", "
-                output += str(self.restricted_growth_function_sequence[nav.restricted_growth_function_sequence_index])
-            elif nav.is_move_up:
-                output += ")"
+        output = str(self.restricted_growth_function_sequence[0])
+        if not self.rooted_plane_tree.is_leaf:
+            output += "("
+            output += ", ".join(
+                sub_formula.represent_as_indexed_function() for sub_formula in
+                self.iterate_sub_formulas_direct_children())
+            output += ")"
         return output
 
 

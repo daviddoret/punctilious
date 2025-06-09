@@ -68,7 +68,7 @@ class RestrictedGrowthFunctionSequence(tuple):
         return len(self)
 
 
-def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[int]):
+def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[int, ...]):
     """Convert any finite sequence into a `RestrictedGrowthFunctionSequence`,
     by substituting natural numbers based on their order of appearance in the sequence.
 

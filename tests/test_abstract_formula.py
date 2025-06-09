@@ -16,3 +16,11 @@ class TestAbstractFormula:
             pu.af.AbstractFormula(t=(((),), (),), s=(1, 2, 1,))
         with pytest.raises(pu.util.PunctiliousException):
             pu.af.AbstractFormula(t=(((),), (),), s=(1, 2, 1, 2, 1,))
+
+    def test_iterate_children(self, af1, af2, af3):
+        l = tuple(af for af in af1.iterate_sub_formulas_direct_children())
+        assert len(l) == 0
+        l = tuple(af for af in af2.iterate_sub_formulas_direct_children())
+        assert l[0] == af1
+        l = tuple(af for af in af3.iterate_sub_formulas_direct_children())
+        assert l[0] == af1
