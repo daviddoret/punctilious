@@ -4,33 +4,33 @@ import punctilious as pu
 
 
 class TestRestrictedGrowthFunctionSequence:
-    def test_data_validation(self, s1, s2, s3, s4):
-        assert pu.rgf.data_validate_restricted_growth_function_sequence_elements(s1) == s1
-        assert pu.rgf.data_validate_restricted_growth_function_sequence_elements(s3) == s3
+    def test_data_validation(self, s3a, s3b, s14a, s14b):
+        assert pu.rgf.data_validate_restricted_growth_function_sequence_elements(s3a) == s3a
+        assert pu.rgf.data_validate_restricted_growth_function_sequence_elements(s14a) == s14a
         with pytest.raises(pu.util.PunctiliousException):
-            pu.rgf.data_validate_restricted_growth_function_sequence_elements(s2)
+            pu.rgf.data_validate_restricted_growth_function_sequence_elements(s3b)
         with pytest.raises(pu.util.PunctiliousException):
-            pu.rgf.data_validate_restricted_growth_function_sequence_elements(s4)
+            pu.rgf.data_validate_restricted_growth_function_sequence_elements(s14b)
 
-    def test_data_validation_in_construction(self, s1, s2, s3, s4):
+    def test_data_validation_in_construction(self, s3a, s3b, s14a, s14b):
         with pytest.raises(pu.util.PunctiliousException):
-            pu.rgf.RestrictedGrowthFunctionSequence(*s2)
+            pu.rgf.RestrictedGrowthFunctionSequence(*s3b)
         with pytest.raises(pu.util.PunctiliousException):
-            pu.rgf.RestrictedGrowthFunctionSequence(*s4)
+            pu.rgf.RestrictedGrowthFunctionSequence(*s14b)
 
-    def test_equality(self, s1, s2, s3, s4):
-        assert pu.rgf.RestrictedGrowthFunctionSequence(*s1) == pu.rgf.RestrictedGrowthFunctionSequence(*s1)
-        assert pu.rgf.RestrictedGrowthFunctionSequence(*s3) == pu.rgf.RestrictedGrowthFunctionSequence(*s3)
+    def test_equality(self, s3a, s3b, s14a, s14b):
+        assert pu.rgf.RestrictedGrowthFunctionSequence(*s3a) == pu.rgf.RestrictedGrowthFunctionSequence(*s3a)
+        assert pu.rgf.RestrictedGrowthFunctionSequence(*s14a) == pu.rgf.RestrictedGrowthFunctionSequence(*s14a)
 
-    def test_inequality(self, s1, s2, s3, s4):
-        assert pu.rgf.RestrictedGrowthFunctionSequence(*s1) != pu.rgf.RestrictedGrowthFunctionSequence(*s3)
-        assert pu.rgf.RestrictedGrowthFunctionSequence(*s3) != pu.rgf.RestrictedGrowthFunctionSequence(*s1)
+    def test_inequality(self, s3a, s3b, s14a, s14b):
+        assert pu.rgf.RestrictedGrowthFunctionSequence(*s3a) != pu.rgf.RestrictedGrowthFunctionSequence(*s14a)
+        assert pu.rgf.RestrictedGrowthFunctionSequence(*s14a) != pu.rgf.RestrictedGrowthFunctionSequence(*s3a)
 
-    def test_cache(self, s1, s2, s3, s4):
-        assert pu.rgf.RestrictedGrowthFunctionSequence(*s1) is pu.rgf.RestrictedGrowthFunctionSequence(*s1)
-        assert pu.rgf.RestrictedGrowthFunctionSequence(*s3) is pu.rgf.RestrictedGrowthFunctionSequence(*s3)
-        assert pu.rgf.RestrictedGrowthFunctionSequence(*s1) is not pu.rgf.RestrictedGrowthFunctionSequence(*s3)
-        assert pu.rgf.RestrictedGrowthFunctionSequence(*s3) is not pu.rgf.RestrictedGrowthFunctionSequence(*s1)
+    def test_cache(self, s3a, s3b, s14a, s14b):
+        assert pu.rgf.RestrictedGrowthFunctionSequence(*s3a) is pu.rgf.RestrictedGrowthFunctionSequence(*s3a)
+        assert pu.rgf.RestrictedGrowthFunctionSequence(*s14a) is pu.rgf.RestrictedGrowthFunctionSequence(*s14a)
+        assert pu.rgf.RestrictedGrowthFunctionSequence(*s3a) is not pu.rgf.RestrictedGrowthFunctionSequence(*s14a)
+        assert pu.rgf.RestrictedGrowthFunctionSequence(*s14a) is not pu.rgf.RestrictedGrowthFunctionSequence(*s3a)
 
     def test_conversion_from_arbitrary_sequence(self):
         assert pu.rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(

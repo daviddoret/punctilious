@@ -66,7 +66,7 @@ class AbstractFormula(tuple):
         if t.size != s.length:
             raise util.PunctiliousException(
                 f"`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `RestrictedGrowthFunctionSequence`.",
-                t=t, s=s)
+                t_size=t.size, s_length=s.length, t=t, s=s)
         phi = super(AbstractFormula, cls).__new__(cls, (t, s))
         phi = retrieve_abstract_formula_from_cache(phi)
         return phi
@@ -138,7 +138,6 @@ class AbstractFormula(tuple):
             yield from sub_formula.iterate_sub_formulas_depth_first_ascending()
 
     def iterate_sub_formulas_direct_children(self):
-        yield self
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_children(),
                                               self.iterate_child_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
