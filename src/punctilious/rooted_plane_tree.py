@@ -80,6 +80,12 @@ class RootedPlaneTree(tuple):
         else:
             raise util.PunctiliousException('Invalid input parameters', children=children, tuple_tree=tuple_tree)
 
+    def __repr__(self):
+        return self.represent_as_anonymous_function()
+
+    def __str__(self):
+        return self.represent_as_anonymous_function()
+
     @property
     def ahu_unsorted_string(self) -> str:
         """Returns the AHU (Aho, Hopcroft, and Ullman) unsorted encoding of this `RootedPlaneTree`.
@@ -168,27 +174,33 @@ class RootedPlaneTree(tuple):
         for child in self.children:
             yield from child.iterate_depth_first_ascending()
 
-    def select_sub_tree_from_path_sequence(self, s: tuple[int, ...]) -> RootedPlaneTree:
-        # TODO: Implement data-validation, including first element == 1
-        current_rooted_plane_tree: RootedPlaneTree = self
-        for i, n in enumerate(s):
-            if i != 0:
-                current_rooted_plane_tree = current_rooted_plane_tree.children[n - 1]
-        return current_rooted_plane_tree
+    def represent_as_anonymous_function(self) -> str:
+        output: str = "★"
+        if not self.is_leaf:
+            output += "("
+        for i, child in enumerate(self.children):
+            if i > 0:
+                output += ", "
+            output += child.represent_as_anonymous_function()
+        if not self.is_leaf:
+            output += ")"
+        return output
 
-    @property
-    def size(self):
-        """Returns the size of this `RootedPlaneTree`.
+    def represent_as_indexed_function(self, sequence: tuple[int]) -> str:
+        output: str = str(sequence[0])
+        if not self.is_leaf:
+            output += "("
+        for i, child in enumerate(self.children):
+            if i > 0:
+                output += ", "
+            sub_sequence = sequence[1:]
+            output += child.represent_as_indexed_function(sequence=sub_sequence)
+        if not self.is_leaf:
+            output += ")"
+        return output
 
-        Definition: the size of a rooted plan tree is the total number of vertices in the graph."""
-        return 1 + sum(child.size for child in self.children)
-
-    def to_list(self) -> list:
-        """Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
-        lists are mutable."""
-        return list(self.children)
-
-    def to_multiline_string_vertical_tree_representation(self, prefix="", is_root=True, is_first=True, is_last=True):
+    def represent_as_multiline_string_vertical_tree_representation(self, prefix="", is_root=True, is_first=True,
+                                                                   is_last=True) -> str:
         """Returns a multiline string representation of this `RootedPlaneTree`.
 
         May be useful to get a quick visual understanding of the tree structure.
@@ -229,9 +241,30 @@ class RootedPlaneTree(tuple):
         for i, child in enumerate(self.children):
             is_first_child = (i == 0)
             is_last_child = (i == child_count - 1)
-            output = output + child.to_multiline_string_vertical_tree_representation(new_prefix, False, is_first_child,
-                                                                                     is_last_child)
+            output = output + child.represent_as_multiline_string_vertical_tree_representation(new_prefix, False,
+                                                                                               is_first_child,
+                                                                                               is_last_child)
         return output
+
+    def select_sub_tree_from_path_sequence(self, s: tuple[int, ...]) -> RootedPlaneTree:
+        # TODO: Implement data-validation, including first element == 1
+        current_rooted_plane_tree: RootedPlaneTree = self
+        for i, n in enumerate(s):
+            if i != 0:
+                current_rooted_plane_tree = current_rooted_plane_tree.children[n - 1]
+        return current_rooted_plane_tree
+
+    @property
+    def size(self):
+        """Returns the size of this `RootedPlaneTree`.
+
+        Definition: the size of a rooted plan tree is the total number of vertices in the graph."""
+        return 1 + sum(child.size for child in self.children)
+
+    def to_list(self) -> list:
+        """Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
+        lists are mutable."""
+        return list(self.children)
 
 
 FlexibleRootedPlaneTree = typing.Union[

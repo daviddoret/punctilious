@@ -17,15 +17,19 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.af.AbstractFormula(t=(((),), (),), s=(1, 2, 1, 2, 1,))
 
-    def test_iterate_children(self, af1, af2a, af2b, af4, af6a):
-        l = tuple(af for af in af1.iterate_sub_formulas_direct_children())
+    def test_iterate_sub_formulas_direct(self, af1, af2a, af2b, af4, af6a):
+        l = tuple(af for af in af1.iterate_sub_formulas_direct())
         assert len(l) == 0
-        l = tuple(af for af in af2a.iterate_sub_formulas_direct_children())
+        l = tuple(af for af in af2a.iterate_sub_formulas_direct())
         assert l[0] == af1
-        l = tuple(af for af in af2b.iterate_sub_formulas_direct_children())
+        l = tuple(af for af in af2b.iterate_sub_formulas_direct())
         assert l[0] == af1
-        l = tuple(af for af in af4.iterate_sub_formulas_direct_children())
+        l = tuple(af for af in af4.iterate_sub_formulas_direct())
         assert l[0] == af1
         assert l[1] == af2b
         assert l[2] == af6a
         assert l[3] == af2b
+
+    def test_iterate_sub_formulas_depth_first_ascending(self, af1, af2a, af2b, af4, af6a):
+# af1.iterate_sub_formulas_depth_first_ascending()
+# implement this test

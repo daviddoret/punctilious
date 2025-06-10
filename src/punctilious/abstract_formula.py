@@ -71,11 +71,11 @@ class AbstractFormula(tuple):
         phi = retrieve_abstract_formula_from_cache(phi)
         return phi
 
-    # def __repr__(self):
-    #    return self.to_default_representation()
+    def __repr__(self):
+        return self.represent_as_indexed_function()
 
-    # def __str__(self):
-    #    return self.to_default_representation()
+    def __str__(self):
+        return self.represent_as_indexed_function()
 
     @property
     def restricted_growth_function_sequence(self) -> rgf.RestrictedGrowthFunctionSequence:
@@ -131,28 +131,32 @@ class AbstractFormula(tuple):
             # truncate the remaining sequence
             truncated_sequence = truncated_sequence[child_tree.size:]
 
-    def iterate_sub_formulas_depth_first_ascending(self):
+    def iterate_sub_formulas_depth_first_ascending(self) -> collections.abc.Generator[AbstractFormula, None, None]:
+        """Iterates the recursive sub-formulas of the `AbstractFormula`,
+        including the `AbstractFormula` itself.
+
+        :return:
+        """
         yield self
         for child_tree, child_sequence in self.rooted_plane_tree.iterate_children(), self.iterate_child_sequences():
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield from sub_formula.iterate_sub_formulas_depth_first_ascending()
 
-    def iterate_sub_formulas_direct_children(self):
+    def iterate_sub_formulas_direct(self) -> collections.abc.Generator[AbstractFormula, None, None]:
+        """Iterates the direct sub-formulas of the `AbstractFormula`.
+
+        :return:
+        """
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_children(),
                                               self.iterate_child_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
     def represent_as_indexed_function(self) -> str:
-        """"""
-        output = str(self.restricted_growth_function_sequence[0])
-        if not self.rooted_plane_tree.is_leaf:
-            output += "("
-            output += ", ".join(
-                sub_formula.represent_as_indexed_function() for sub_formula in
-                self.iterate_sub_formulas_direct_children())
-            output += ")"
-        return output
+        """Returns a string representation of the `AbstractFormula` using function notation,
+        and the corresponding values of the `RestrictedGrowthFunctionSequence` as function names.
+        """
+        return self.rooted_plane_tree.represent_as_indexed_function(sequence=self.restricted_growth_function_sequence)
 
 
 FlexibleAbstractFormula = typing.Union[
