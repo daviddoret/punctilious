@@ -1,14 +1,11 @@
 from __future__ import annotations
 import typing
 import collections
-import enum
 
 # package modules
 import util
 import rooted_plane_tree as rpt
 import restricted_growth_function as rgf
-from punctilious.restricted_growth_function import RestrictedGrowthFunctionSequence
-from punctilious.rooted_plane_tree import RootedPlaneTree
 
 
 class AbstractFormulaIterationNavigator:
@@ -45,9 +42,10 @@ def data_validate_abstract_formula(
 _abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
 
 
-def retrieve_abstract_formula_from_cache(o: AbstractFormula):
+def retrieve_abstract_formula_from_cache(o: FlexibleAbstractFormula):
     """cache mechanism assuring that unique abstract formulas are only instantiated once."""
     global _abstract_formula_cache
+    o: AbstractFormula = data_validate_abstract_formula(o)
     if hash(o) in _abstract_formula_cache.keys():
         return _abstract_formula_cache[hash(o)]
     else:
