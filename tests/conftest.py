@@ -89,5 +89,5 @@ def af6a(rpt6a, rgf6a):
 
 
 @pytest.fixture
-def af4(rpt12a, rgf12a):
+def af12a(rpt12a, rgf12a):
     return pu.af.AbstractFormula(rpt12a, rgf12a)

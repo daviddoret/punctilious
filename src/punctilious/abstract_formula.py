@@ -131,16 +131,32 @@ class AbstractFormula(tuple):
             # truncate the remaining sequence
             truncated_sequence = truncated_sequence[child_tree.size:]
 
+    def iterate_sequences_depth_first_ascending(self):
+        yield from self._iterate_sequences_depth_first_ascending(self.restricted_growth_function_sequence)
+
+    def _iterate_sequences_depth_first_ascending(self, s: rgf.RestrictedGrowthFunctionSequence):
+        i: int = 0
+        for sub_tree in self.rooted_plane_tree.iterate_depth_first_ascending():
+            # retrieve the elements mapped to this child tree
+            sub_sequence: tuple[int, ...] = s[i:sub_tree.size]
+            # transform the sequence into an rgf sequence
+            sub_sequence: rgf.RestrictedGrowthFunctionSequence = rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+                sub_sequence)
+            # yield this child rgf sequence
+            yield from sub_sequence
+            # truncate the remaining sequence
+            i += sub_tree.size
+
     def iterate_sub_formulas_depth_first_ascending(self) -> collections.abc.Generator[AbstractFormula, None, None]:
         """Iterates the recursive sub-formulas of the `AbstractFormula`,
         including the `AbstractFormula` itself.
 
         :return:
         """
-        yield self
-        for child_tree, child_sequence in self.rooted_plane_tree.iterate_children(), self.iterate_child_sequences():
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
+                                              self.iterate_sequences_depth_first_ascending()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
-            yield from sub_formula.iterate_sub_formulas_depth_first_ascending()
+            yield sub_formula
 
     def iterate_sub_formulas_direct(self) -> collections.abc.Generator[AbstractFormula, None, None]:
         """Iterates the direct sub-formulas of the `AbstractFormula`.
