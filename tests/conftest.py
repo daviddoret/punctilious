@@ -34,6 +34,21 @@ def rpt2(rpt1):
 
 
 @pytest.fixture
+def rpt3a(rpt2):
+    return pu.rpt.RootedPlaneTree(rpt2)
+
+
+@pytest.fixture
+def rpt3b(rpt1):
+    return pu.rpt.RootedPlaneTree(rpt1, rpt1)
+
+
+@pytest.fixture
+def rpt7a(rpt3b):
+    return pu.rpt.RootedPlaneTree(rpt3b, rpt3b)
+
+
+@pytest.fixture
 def rpt6a(rpt1):
     return pu.rpt.RootedPlaneTree(rpt1, rpt1, rpt1, rpt1, rpt1)
 

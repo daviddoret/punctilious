@@ -110,7 +110,7 @@ class AbstractFormula(tuple):
         """A shortcut for self.rooted_plane_tree."""
         return self.rooted_plane_tree
 
-    def iterate_child_sequences(self):
+    def iterate_sequences_direct_ascending(self):
         """Iterates the direct child rgf sequences of this `AbstractFormula`.
 
         Note: the child rgf sequences are determined by 1) the parent rgf sequence,
@@ -129,21 +129,22 @@ class AbstractFormula(tuple):
             # truncate the remaining sequence
             truncated_sequence = truncated_sequence[child_tree.size:]
 
-    def iterate_sequences_depth_first_ascending(self):
+    def iterate_sequences_depth_first_ascending(self) -> \
+            collections.abc.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
         yield from self._iterate_sequences_depth_first_ascending(self.restricted_growth_function_sequence)
 
-    def _iterate_sequences_depth_first_ascending(self, s: rgf.RestrictedGrowthFunctionSequence):
-        i: int = 0
-        for sub_tree in self.rooted_plane_tree.iterate_depth_first_ascending():
+    def _iterate_sequences_depth_first_ascending(self, s: rgf.RestrictedGrowthFunctionSequence) -> \
+            collections.abc.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
+        i: int
+        sub_tree: rpt.RootedPlaneTree
+        for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_depth_first_ascending()):
             # retrieve the elements mapped to this child tree
             sub_sequence: tuple[int, ...] = s[i:sub_tree.size]
             # transform the sequence into an rgf sequence
             sub_sequence: rgf.RestrictedGrowthFunctionSequence = rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
                 sub_sequence)
             # yield this child rgf sequence
-            yield from sub_sequence
-            # truncate the remaining sequence
-            i += sub_tree.size
+            yield sub_sequence
 
     def iterate_sub_formulas_depth_first_ascending(self) -> collections.abc.Generator[AbstractFormula, None, None]:
         """Iterates the recursive sub-formulas of the `AbstractFormula`,
@@ -151,6 +152,8 @@ class AbstractFormula(tuple):
 
         :return:
         """
+        child_tree: rpt.RootedPlaneTree
+        child_sequence: rgf.RestrictedGrowthFunctionSequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
                                               self.iterate_sequences_depth_first_ascending()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
@@ -162,7 +165,7 @@ class AbstractFormula(tuple):
         :return:
         """
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_children(),
-                                              self.iterate_child_sequences()):
+                                              self.iterate_sequences_direct_ascending()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
