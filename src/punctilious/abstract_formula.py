@@ -8,26 +8,6 @@ import rooted_plane_tree as rpt
 import restricted_growth_function as rgf
 
 
-class AbstractFormulaIterationNavigator:
-    def __init__(self, phi: FlexibleAbstractFormula):
-        self._abstract_formula = data_validate_abstract_formula(phi)
-        self._sequence_path: tuple[int, ...] = (1,)
-
-    def __str__(self):
-        return str(self.sequence_path)
-
-    def iterate(self):
-        pass
-
-    @property
-    def abstract_formula(self) -> AbstractFormula:
-        return self._abstract_formula
-
-    @property
-    def sequence_path(self) -> tuple[int, ...]:
-        return self._sequence_path
-
-
 def data_validate_abstract_formula(
         o: FlexibleAbstractFormula) -> AbstractFormula:
     if isinstance(o, AbstractFormula):

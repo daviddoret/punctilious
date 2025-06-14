@@ -6,6 +6,12 @@ import util
 
 def data_validate_restricted_growth_function_sequence(
         o: FlexibleRestrictedGrowthFunctionSequence) -> RestrictedGrowthFunctionSequence:
+    """Data validates `o` against type `RestrictedGrowthFunctionSequence`,
+    applying implicit conversion as necessary.
+
+    :param o: An object that may be interpreted as a `RestrictedGrowthFunctionSequence`.
+    :return:
+    """
     if isinstance(o, RestrictedGrowthFunctionSequence):
         return o
     if isinstance(o, collections.abc.Iterable):

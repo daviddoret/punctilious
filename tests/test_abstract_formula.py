@@ -90,10 +90,10 @@ class TestAbstractFormula:
         assert l[3] == af1
         assert l[4] == af1
         assert l[5] == af1
-        l = tuple(t for t in af12a.iterate_depth_first_ascending())
+        l = tuple(t for t in af12a.iterate_sub_formulas_depth_first_ascending())
         assert l[0] == af12a
         assert l[1] == af1
-        assert l[2] == af2a
+        assert l[2] == af2b
         assert l[3] == af1
         assert l[4] == af6a
         assert l[5] == af1
@@ -101,5 +101,5 @@ class TestAbstractFormula:
         assert l[7] == af1
         assert l[8] == af1
         assert l[9] == af1
-        assert l[10] == af2a
+        assert l[10] == af2b
         assert l[11] == af1
