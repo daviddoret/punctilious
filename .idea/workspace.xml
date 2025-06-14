@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="AbstractFormula">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="AbstractFormula.iterate_subsequences_direct_ascending">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,6 +108,7 @@
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_construction_failure.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_construction_success.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_children.executor": "Run",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index.executor": "Debug",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_depth_first_ascending.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_direct.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_subsequences_direct_ascending.executor": "Run",
@@ -558,7 +556,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_subsequences_direct_ascending">
+  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -753,6 +751,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_depth_first_ascending" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -840,23 +855,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_depth_first_ascending_with_index" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_depth_first_ascending_with_index&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_direct_ascending" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -903,22 +901,22 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
+      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_depth_first_ascending" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_direct" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_subsequences_direct_ascending" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_direct_ascending" />
-      <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_depth_first_ascending_with_index" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_subsequences_direct_ascending" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_direct_ascending" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_depth_first_ascending" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_direct" />
-        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_depth_first_ascending_with_index" />
       </list>
     </recent_temporary>
   </component>
@@ -940,14 +938,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01366" summary="propositional-logic">
-      <option name="closed" value="true" />
-      <created>1737818326812</created>
-      <option name="number" value="01366" />
-      <option name="presentableId" value="LOCAL-01366" />
-      <option name="project" value="LOCAL" />
-      <updated>1737818326813</updated>
     </task>
     <task id="LOCAL-01367" summary="support for index subscript and export superscript in formula typesetting">
       <option name="closed" value="true" />
@@ -1333,7 +1323,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749813869810</updated>
     </task>
-    <option name="localTasksCounter" value="1415" />
+    <task id="LOCAL-01415" summary="AbstractFormula.iterate_subsequences_direct_ascending">
+      <option name="closed" value="true" />
+      <created>1749873121437</created>
+      <option name="number" value="01415" />
+      <option name="presentableId" value="LOCAL-01415" />
+      <option name="project" value="LOCAL" />
+      <updated>1749873121437</updated>
+    </task>
+    <option name="localTasksCounter" value="1416" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1386,7 +1384,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="all tests ok. interpretation + meta-language" />
     <MESSAGE value="set_1" />
     <MESSAGE value="map_1" />
     <MESSAGE value="Set1" />
@@ -1411,7 +1408,8 @@
     <MESSAGE value="RootedPlaneTree.to_multiline_string_vertical_tree_representation" />
     <MESSAGE value="files cleanup" />
     <MESSAGE value="AbstractFormula" />
-    <option name="LAST_COMMIT_MESSAGE" value="AbstractFormula" />
+    <MESSAGE value="AbstractFormula.iterate_subsequences_direct_ascending" />
+    <option name="LAST_COMMIT_MESSAGE" value="AbstractFormula.iterate_subsequences_direct_ascending" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1496,6 +1494,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious/test_2.py</url>
           <line>20</line>
           <option name="timeStamp" value="396" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
+          <line>39</line>
+          <option name="timeStamp" value="415" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

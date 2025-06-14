@@ -136,7 +136,7 @@ class AbstractFormula(tuple):
         sub_tree: rpt.RootedPlaneTree
         for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_depth_first_ascending()):
             # retrieves the sub-sequence in the root RGF sequence that is mapped to this child RPT
-            sub_sequence: tuple[int, ...] = self.restricted_growth_function_sequence[i:sub_tree.size]
+            sub_sequence: tuple[int, ...] = self.restricted_growth_function_sequence[i:i + sub_tree.size]
             # converts ths sub-sequence to an RGF sequence, which modifies all values to start with 1.
             sub_sequence: rgf.RestrictedGrowthFunctionSequence = rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
                 sub_sequence)
