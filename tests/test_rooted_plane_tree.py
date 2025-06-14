@@ -113,6 +113,23 @@ class TestRootedPlaneTree:
         t4b = pu.rpt.RootedPlaneTree(tuple_tree=((), ((),), ((), (), (), (), (),), ((),),))
         assert t4b == rpt12a
 
+    def test_iterate_direct_ascending(self, rpt1, rpt2, rpt6a, rpt12a):
+        l = tuple(t for t in rpt1.iterate_direct_ascending())
+        assert len(l) == 0
+        l = tuple(t for t in rpt2.iterate_direct_ascending())
+        assert l[0] == rpt1
+        l = tuple(t for t in rpt6a.iterate_direct_ascending())
+        assert l[0] == rpt1
+        assert l[1] == rpt1
+        assert l[2] == rpt1
+        assert l[3] == rpt1
+        assert l[4] == rpt1
+        l = tuple(t for t in rpt12a.iterate_direct_ascending())
+        assert l[0] == rpt1
+        assert l[1] == rpt2
+        assert l[2] == rpt6a
+        assert l[3] == rpt2
+
     def test_iterate_depth_first_ascending(self, rpt1, rpt2, rpt6a, rpt12a):
         l = tuple(t for t in rpt1.iterate_depth_first_ascending())
         assert l[0] == rpt1
@@ -139,55 +156,3 @@ class TestRootedPlaneTree:
         assert l[9] == rpt1
         assert l[10] == rpt2
         assert l[11] == rpt1
-
-    def test_iterate_depth_first_ascending_with_index(self, rpt1, rpt2, rpt3a, rpt3b, rpt6a, rpt7a, rpt12a):
-        l = tuple(t for t in rpt1.iterate_depth_first_ascending_by_index())
-        assert l[0] == (rpt1, 0,)
-        l = tuple(t for t in rpt2.iterate_depth_first_ascending_by_index())
-        assert l[0] == (rpt2, 0,)
-        assert l[1] == (rpt1, 1,)
-        l = tuple(t for t in rpt6a.iterate_depth_first_ascending_by_index())
-        assert l[0] == (rpt6a, 0,)
-        assert l[1] == (rpt1, 1,)
-        assert l[2] == (rpt1, 2,)
-        assert l[3] == (rpt1, 3,)
-        assert l[4] == (rpt1, 4,)
-        assert l[5] == (rpt1, 5,)
-        l = tuple(t for t in rpt7a.iterate_depth_first_ascending_by_index())
-        assert l[0] == (rpt7a, 0,)
-        assert l[1] == (rpt3b, 1,)
-        assert l[2] == (rpt1, 2,)
-        assert l[3] == (rpt1, 3,)
-        assert l[4] == (rpt3b, 4,)
-        assert l[5] == (rpt1, 5,)
-        assert l[6] == (rpt1, 6,)
-        l = tuple(t for t in rpt12a.iterate_depth_first_ascending_by_index())
-        assert l[0] == (rpt12a, 0,)
-        assert l[1] == (rpt1, 1,)
-        assert l[2] == (rpt2, 2,)
-        assert l[3] == (rpt1, 3,)
-        assert l[4] == (rpt6a, 4,)
-        assert l[5] == (rpt1, 5,)
-        assert l[6] == (rpt1, 6,)
-        assert l[7] == (rpt1, 7,)
-        assert l[8] == (rpt1, 8,)
-        assert l[9] == (rpt1, 9,)
-        assert l[10] == (rpt2, 10,)
-        assert l[11] == (rpt1, 11,)
-
-    def test_iterate_children(self, rpt1, rpt2, rpt6a, rpt12a):
-        l = tuple(t for t in rpt1.iterate_children())
-        assert len(l) == 0
-        l = tuple(t for t in rpt2.iterate_children())
-        assert l[0] == rpt1
-        l = tuple(t for t in rpt6a.iterate_children())
-        assert l[0] == rpt1
-        assert l[1] == rpt1
-        assert l[2] == rpt1
-        assert l[3] == rpt1
-        assert l[4] == rpt1
-        l = tuple(t for t in rpt12a.iterate_children())
-        assert l[0] == rpt1
-        assert l[1] == rpt2
-        assert l[2] == rpt6a
-        assert l[3] == rpt2

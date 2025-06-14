@@ -157,16 +157,15 @@ class RootedPlaneTree(tuple):
         x: RootedPlaneTree = data_validate_rooted_plane_tree(x)
         return x.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
 
-    def iterate_children(self) -> typing.Generator[RootedPlaneTree, None, None]:
-        """Generator function that iterates the direct children of the `RootedPlaneTree`.
+    def iterate_direct_ascending(self) -> typing.Generator[RootedPlaneTree, None, None]:
+        """Generator function that iterates the direct children of the `RootedPlaneTree` in ascending order.
 
         :return:
         """
         yield from super().__iter__()
 
     def iterate_depth_first_ascending(self) -> typing.Generator[RootedPlaneTree, None, None]:
-        """Generator function that iterates the `RootedPlaneTree` using the depth-first, then ascending children
-        algorithm.
+        """Generator function that iterates recursively the `RootedPlaneTree` using the depth first ascending algorithm.
 
         :return:
         """
@@ -174,31 +173,31 @@ class RootedPlaneTree(tuple):
         for child in self.children:
             yield from child.iterate_depth_first_ascending()
 
-    def iterate_depth_first_ascending_by_index(self) -> typing.Generator[tuple[RootedPlaneTree, int], None, None]:
-        """Same as method `iterate_depth_first_ascending` but yields tuples (T,i) where:
-         - T is the sub-rooted-plane-tree,
-         - i is the 0-based index of the root of that tree in the dept-first-ascending sequence of nodes of the root tree.
+    # def iterate_depth_first_ascending_by_index(self) -> typing.Generator[tuple[RootedPlaneTree, int], None, None]:
+    #    """Same as method `iterate_depth_first_ascending` but yields tuples (T,i) where:
+    #     - T is the sub-rooted-plane-tree,
+    #     - i is the 0-based index of the root of that tree in the dept-first-ascending sequence of nodes of the root tree.
 
-        A use case for this method is the mapping of RPTs with RGFSs in AbstractFormula.
+    #    A use case for this method is the mapping of RPTs with RGFSs in AbstractFormula.
 
-        """
-        i = 0
-        yield from self._iterate_depth_first_ascending_by_index(i=0)
+    #    """
+    #    i = 0
+    #    yield from self._iterate_depth_first_ascending_by_index(i=0)
 
-    def _iterate_depth_first_ascending_by_index(self, i: int) -> typing.Generator[
-        tuple[RootedPlaneTree, int], None, None]:
-        """Generator function that iterates the `RootedPlaneTree` using the depth-first, then ascending children
-        algorithm.
+    # def _iterate_depth_first_ascending_by_index(self, i: int) -> typing.Generator[
+    #    tuple[RootedPlaneTree, int], None, None]:
+    #    """Generator function that iterates the `RootedPlaneTree` using the depth-first, then ascending children
+    #    algorithm.
 
-        :return:
-        """
-        yield self, i
-        child: RootedPlaneTree
-        if self.degree > 0:
-            i += 1  # position the index on the root vertex of the first child
-            for child in self.children:
-                yield from child._iterate_depth_first_ascending_by_index(i=i)
-                i += child.size
+    #    :return:
+    #    """
+    #    yield self, i
+    #    child: RootedPlaneTree
+    #    if self.degree > 0:
+    #        i += 1  # position the index on the root vertex of the first child
+    #        for child in self.children:
+    #            yield from child._iterate_depth_first_ascending_by_index(i=i)
+    #            i += child.size
 
     def represent_as_anonymous_function(self) -> str:
         output: str = "★"

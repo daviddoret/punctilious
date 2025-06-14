@@ -45,12 +45,13 @@ def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthF
 
 
 class RestrictedGrowthFunctionSequence(tuple):
-    """
+    """A finite (computable) sequence of values starting at 1 whose maximal value increase is restricted.
 
     Definition:
     A `RestrictedGrowthFunctionSequence` is a finite sequence of natural numbers such that:
         - n_1 = 1
         - with i > 1, n_i = 1 + max(n_1, n_2, ..., n_(i-1))
+
     """
 
     def __init__(self, *s):
