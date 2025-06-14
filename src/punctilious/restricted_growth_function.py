@@ -42,7 +42,7 @@ _restricted_growth_function_sequence_cache = dict()  # cache mechanism assuring 
 
 def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthFunctionSequence):
     """cache mechanism assuring that unique rpts are only instantiated once."""
-    global _abstract_formula_cache
+    global _restricted_growth_function_sequence_cache
     if hash(i) in _restricted_growth_function_sequence_cache.keys():
         return _restricted_growth_function_sequence_cache[hash(i)]
     else:
