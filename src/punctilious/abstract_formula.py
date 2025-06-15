@@ -4,6 +4,7 @@ import collections
 
 # package modules
 import util
+import connective
 import rooted_plane_tree as rpt
 import restricted_growth_function as rgf
 
@@ -72,7 +73,41 @@ class AbstractFormula(tuple):
                 i += 1
         return i
 
-    def iterate_sequences_direct_ascending(self) -> typing.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
+    @property
+    def immediate_sub_formulas(self) -> tuple[AbstractFormula, ...]:
+        """The `immediate_sub_formulas` of an `AbstractFormula` `phi` is the tuple of `AbstractFormulas` that are the
+        immediate children formulas of `phi` in the formula tree, or equivalently the formulas of degree 0 in `phi`.
+
+        The term `immediate sub-formula` is used by (Mancosu 2021, definition 2.4, p. 18).
+
+        See also:
+        - :attr:`AbstractFormula.sub_formulas`
+
+        References:
+        - Mancosu 2021.
+
+        :return:
+        """
+        if self._sub_formulas is None:
+            sub_formulas = list()
+            for sub_formula in self.iterate_immediate_sub_formulas():
+                sub_formulas.append(sub_formula)
+            self._sub_formulas = tuple(sub_formulas)
+        return self._sub_formulas
+
+    def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
+        """Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
+
+        See :attr:`AbstractFormula.immediate_sub_formulas` for a definition of the term `immediate sub-formula`.
+
+        :return: A generator of :class:`AbstractFormula`.
+        """
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_direct_ascending(),
+                                              self.iterate_immediate_sub_sequences()):
+            sub_formula = AbstractFormula(child_tree, child_sequence)
+            yield sub_formula
+
+    def iterate_immediate_sub_sequences(self) -> typing.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
         """Iterates the direct child RGF sequences of this `AbstractFormula`.
 
         Note: the child rgf sequences are determined by 1) the parent rgf sequence,
@@ -92,7 +127,7 @@ class AbstractFormula(tuple):
             # truncate the remaining sequence
             i += child_tree.size
 
-    def iterate_sequences_depth_first_ascending(self) -> \
+    def iterate_sub_sequences(self) -> \
             collections.abc.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
         i: int
         sub_tree: rpt.RootedPlaneTree
@@ -105,26 +140,17 @@ class AbstractFormula(tuple):
             # yield the child RGF sequence
             yield sub_sequence
 
-    def iterate_sub_formulas_depth_first_ascending(self) -> collections.abc.Generator[AbstractFormula, None, None]:
-        """Iterates the recursive sub-formulas of the `AbstractFormula`,
-        including the `AbstractFormula` itself.
+    def iterate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
+        """Iterates the sub-formulas of the `AbstractFormula` using the `depth-first, ascending nodes` algorithm.
+
+        See :attr:`AbstractFormula.sub_formulas` for a definition of the term `sub-formula`.
 
         :return:
         """
         child_tree: rpt.RootedPlaneTree
         child_sequence: rgf.RestrictedGrowthFunctionSequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
-                                              self.iterate_sequences_depth_first_ascending()):
-            sub_formula = AbstractFormula(child_tree, child_sequence)
-            yield sub_formula
-
-    def iterate_sub_formulas_direct(self) -> collections.abc.Generator[AbstractFormula, None, None]:
-        """Iterates the direct sub-formulas of the `AbstractFormula`.
-
-        :return:
-        """
-        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_direct_ascending(),
-                                              self.iterate_sequences_direct_ascending()):
+                                              self.iterate_sub_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
@@ -158,14 +184,32 @@ class AbstractFormula(tuple):
         return self.restricted_growth_function_sequence.max_value
 
     @property
-    def sub_formulas(self):
+    def sub_formulas(self) -> tuple[AbstractFormula, ...]:
+        """The `sub_formulas` of an `AbstractFormula` `phi` is the tuple of `AbstractFormulas` that are present
+        in the formula tree of `phi`, including `phi` itself.
+
+        Formal definition:
+         - If phi is an atomic formula, the sub-formulas of phi is the tuple (phi).
+         - If phi is a non-atomic formula, the sub-formulas of phi is the tuple
+           composed of phi, and all sub-formulas of the immediate sub-formulas of phi,
+           in ascending order.
+        - Nothing else is a sub-formula.
+
+        This definition is a generalization of the term `formula` defined by (Mancosu 2021, definition 2.2, p. 14)
+        for propositional-logic.
+
+        See also:
+        - :attr:`AbstractFormula.immediate_sub_formulas`
+
+        References:
+        - Mancosu 2021.
+
+        :return: A tuple of the sub-formulas.
+        """
         if self._sub_formulas is None:
-            sequence_index = 0
             sub_formulas = list()
-            for sub_tree in self.rooted_plane_tree.children:
-                sub_tree_size = sub_tree.size
-                sub_sequence = self.restricted_growth_function_sequence[sequence_index:sequence_index + sub_tree_size]
-                sub_formulas.append(AbstractFormula(t=sub_tree, s=sub_sequence))
+            for sub_formula in self.iterate_sub_formulas():
+                sub_formulas.append(sub_formula)
             self._sub_formulas = tuple(sub_formulas)
         return self._sub_formulas
 
