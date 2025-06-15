@@ -4,6 +4,7 @@ import collections
 
 # package modules
 import util
+import connective
 import rooted_plane_tree as rpt
 import restricted_growth_function as rgf
 import abstract_formula as af
@@ -88,6 +89,20 @@ class Formula(tuple):
         :return:
         """
         return self.abstract_formula.formula_degree
+
+    def iterate_connectives(self) -> collections.abc.Generator[connective.Connective, None, None]:
+        """Iterate the `Formula` connectives, following the depth-first, ascending-nodes algorithm.
+
+        :return: None
+        """
+        i: int
+        c: connective.Connective
+        for i in self.abstract_formula.restricted_growth_function_sequence:
+            yield self.connective_sequence[i - 1]
+
+    @property
+    def main_connective(self) -> connective.Connective:
+        raise NotImplementedError()
 
     @property
     def sequence_max_value(self) -> int:
