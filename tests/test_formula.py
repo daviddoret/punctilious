@@ -1,6 +1,5 @@
-import pytest
-
 import punctilious as pu
+import pytest
 
 
 class TestFormula:
@@ -26,3 +25,9 @@ class TestFormula:
         assert l[3] == pu.connective_library.three
         assert l[4] == pu.connective_library.four
         assert l[5] == pu.connective_library.five
+
+    def test_main_connective(self, phi1, phi2a, phi2b, phi6a):
+        assert phi1.main_connective == pu.connective_library.one
+        assert phi2a.main_connective == pu.connective_library.one
+        assert phi2b.main_connective == pu.connective_library.minus
+        assert phi6a.main_connective == pu.connective_library.set_by_extension

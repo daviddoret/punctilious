@@ -5,8 +5,6 @@ import collections
 # package modules
 import util
 import connective
-import rooted_plane_tree as rpt
-import restricted_growth_function as rgf
 import abstract_formula as af
 import connective_sequence as cs
 
@@ -44,6 +42,7 @@ class Formula(tuple):
 
     def __init__(self, s: cs.FlexibleConnectiveSequence, phi: af.FlexibleAbstractFormula):
         super(Formula, self).__init__()
+        self._connectives = None
 
     def __new__(cls, s: cs.FlexibleConnectiveSequence, phi: af.FlexibleAbstractFormula):
         s: cs.ConnectiveSequence = cs.data_validate_connective_sequence(s)
@@ -79,6 +78,20 @@ class Formula(tuple):
         return tuple.__getitem__(self, 0)
 
     @property
+    def connectives(self) -> tuple[connective.Connective, ...]:
+        """The `connectives` of a `Formula` `phi` is the tuple of `Connective` elements in the formula tree,
+        following the depth-first, ascending-nodes algorithm.
+
+        :return:
+        """
+        if self._connectives is None:
+            connectives = list()
+            for c in self.iterate_connectives():
+                connectives.append(c)
+            self._connectives = tuple(connectives)
+        return self._connectives
+
+    @property
     def formula_degree(self) -> int:
         """The `formula_degree` of a `Formula` is the number of non-leaf nodes it contains.
 
@@ -102,7 +115,17 @@ class Formula(tuple):
 
     @property
     def main_connective(self) -> connective.Connective:
-        raise NotImplementedError()
+        """The `main_connective` of a :class:`Formula` `phi` is the :class:`Connective` that corresponds
+        to the root node of the formula tree.
+
+        The term `main connective` is defined by Mancosu 2021, p. 17 in the context of propositional logic.
+
+        References:
+         - Mancosu 2021
+
+        :return: a :class:`Connective`
+        """
+        return self.connectives[0]
 
     @property
     def sequence_max_value(self) -> int:

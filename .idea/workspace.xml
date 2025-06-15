@@ -79,7 +79,7 @@
     </order>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -565,7 +565,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_iterate_connectives">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -921,8 +921,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_iterate_connectives" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_iterate_connectives" />
         <item itemvalue="Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_max_value" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_formula_degree" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_tree_size" />
@@ -947,14 +947,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01373" summary="new approach with Pointers and Structures.">
-      <option name="closed" value="true" />
-      <created>1740329344689</created>
-      <option name="number" value="01373" />
-      <option name="presentableId" value="LOCAL-01373" />
-      <option name="project" value="LOCAL" />
-      <updated>1740329344690</updated>
     </task>
     <task id="LOCAL-01374" summary="new approach with Pointers and Structures.">
       <option name="closed" value="true" />
@@ -1340,7 +1332,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750004877250</updated>
     </task>
-    <option name="localTasksCounter" value="1422" />
+    <task id="LOCAL-01422" summary="main_sequence_element">
+      <option name="closed" value="true" />
+      <created>1750015877301</created>
+      <option name="number" value="01422" />
+      <option name="presentableId" value="LOCAL-01422" />
+      <option name="project" value="LOCAL" />
+      <updated>1750015877301</updated>
+    </task>
+    <option name="localTasksCounter" value="1423" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1503,6 +1503,10 @@
           <url>file://$PROJECT_DIR$/src/punctilious/test_2.py</url>
           <line>20</line>
           <option name="timeStamp" value="396" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_connective.py</url>
+          <option name="timeStamp" value="419" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
