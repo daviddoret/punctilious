@@ -4,14 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Connector">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="clean-up">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/tests/test_connective_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/connector.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connector_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connectors.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/connector_sequence.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/const.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/const.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/data/real_analysis_1/test_1.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/real_analysis_1/test_1.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
@@ -959,14 +959,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01371" summary="support for index subscript and export superscript in formula typesetting">
-      <option name="closed" value="true" />
-      <created>1737896541273</created>
-      <option name="number" value="01371" />
-      <option name="presentableId" value="LOCAL-01371" />
-      <option name="project" value="LOCAL" />
-      <updated>1737896541273</updated>
-    </task>
     <task id="LOCAL-01372" summary="presentation layer rework">
       <option name="closed" value="true" />
       <created>1738118465638</created>
@@ -1351,7 +1343,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749978268907</updated>
     </task>
-    <option name="localTasksCounter" value="1420" />
+    <task id="LOCAL-01420" summary="clean-up">
+      <option name="closed" value="true" />
+      <created>1750004414998</created>
+      <option name="number" value="01420" />
+      <option name="presentableId" value="LOCAL-01420" />
+      <option name="project" value="LOCAL" />
+      <updated>1750004414998</updated>
+    </task>
+    <option name="localTasksCounter" value="1421" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1404,7 +1404,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="foundations" />
     <MESSAGE value="modules clean-up" />
     <MESSAGE value="implicit-conversions" />
     <MESSAGE value="constants" />
@@ -1429,7 +1428,8 @@
     <MESSAGE value="AbstractFormula.iterate_sub_formulas_depth_first_ascending" />
     <MESSAGE value="AbstractFormlua" />
     <MESSAGE value="Connector" />
-    <option name="LAST_COMMIT_MESSAGE" value="Connector" />
+    <MESSAGE value="clean-up" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean-up" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

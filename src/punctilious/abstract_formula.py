@@ -154,6 +154,25 @@ class AbstractFormula(tuple):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
+    @property
+    def main_sequence_element(self) -> int:
+        """The `main_sequence_element` of an `AbstractFormula` is the first element of the
+        attr:`AbstractFormula.restricted_growth_function_sequence`, that corresponds to the root
+        node of the attr:`AbstractFormula.rooted_plane_tree`.
+
+        By the definition of restricted growth function, the `main_sequence_element` is
+        always equal to 1.
+
+        The term `main_sequence_element` was designed in reference to the term `main connective`,
+        cf. Mancosu 2021, p. 17.
+
+        References:
+         - Mancosu 2021
+
+        :return: 1
+        """
+        return self.restricted_growth_function_sequence[0]
+
     def represent_as_indexed_function(self) -> str:
         """Returns a string representation of the `AbstractFormula` using function notation,
         and the corresponding values of the `RestrictedGrowthFunctionSequence` as function names.

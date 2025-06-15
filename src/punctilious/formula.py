@@ -7,7 +7,7 @@ import util
 import rooted_plane_tree as rpt
 import restricted_growth_function as rgf
 import abstract_formula as af
-import connector_sequence as cs
+import connective_sequence as cs
 
 
 def data_validate_formula(
@@ -37,19 +37,19 @@ def retrieve_formula_from_cache(o: FlexibleFormula):
 
 class Formula(tuple):
     """A `Formula` is a pair (S, ϕ) where:
-     - S is a sequence of connectors of length n,
+     - S is a sequence of connectives of length n,
      - ϕ is an abstract formula of tree-size n.
     """
 
-    def __init__(self, s: cs.FlexibleConnectorSequence, phi: af.FlexibleAbstractFormula):
+    def __init__(self, s: cs.FlexibleConnectiveSequence, phi: af.FlexibleAbstractFormula):
         super(Formula, self).__init__()
 
-    def __new__(cls, s: cs.FlexibleConnectorSequence, phi: af.FlexibleAbstractFormula):
-        s: cs.ConnectorSequence = cs.data_validate_connector_sequence(s)
+    def __new__(cls, s: cs.FlexibleConnectiveSequence, phi: af.FlexibleAbstractFormula):
+        s: cs.ConnectiveSequence = cs.data_validate_connective_sequence(s)
         phi: af.AbstractFormula = af.data_validate_abstract_formula(phi)
         if s.length != phi.sequence_max_value:
             raise util.PunctiliousException(
-                f"`Formula` data validation error. The length of the `ConnectorSequence` is not equal to the `sequence_max_value` of its `abstract_formula`.",
+                f"`Formula` data validation error. The length of the `ConnectiveSequence` is not equal to the `sequence_max_value` of its `abstract_formula`.",
                 s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
         psi = super(Formula, cls).__new__(cls, (s, phi,))
         psi = retrieve_formula_from_cache(psi)
@@ -67,10 +67,10 @@ class Formula(tuple):
         return tuple.__getitem__(self, 1)
 
     @property
-    def connector_sequence(self) -> cs.ConnectorSequence:
+    def connective_sequence(self) -> cs.ConnectiveSequence:
         """
 
-        `connector_sequence` is an immutable property.
+        `connective_sequence` is an immutable property.
 
 
         :return:
@@ -105,4 +105,4 @@ class Formula(tuple):
 
 FlexibleFormula = typing.Union[
     Formula, tuple[
-        cs.FlexibleConnectorSequence, af.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]
+        cs.FlexibleConnectiveSequence, af.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]

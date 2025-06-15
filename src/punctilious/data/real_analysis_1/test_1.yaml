@@ -19,15 +19,15 @@ aliases:
   - some_name: another_name # maps a local name to another local name.
 interprets:
   constant_notation:
-    template: "{{ connector }}"
+    template: "{{ connective }}"
   function_notation:
-    template: "{{ connector }}({{ arguments }})"
+    template: "{{ connective }}({{ arguments }})"
   infix_notation:
-    template: "{{ argument[0] }}{{ connector }}{{ argument[1] }}"
-connectors:
+    template: "{{ argument[0] }}{{ connective }}{{ argument[1] }}"
+connectives:
   exponentiation:
     uuid: 684eb39a-9184-4a02-912e-6ccdd589d3f4
-      
+
   is_a_real_number:
     uuid: 9ebfdf49-3917-458c-9343-078163496238
     template: "is_a_real_number({{ argument[0] }})"

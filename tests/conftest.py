@@ -115,7 +115,7 @@ def phi1(af1):
     :param af1:
     :return:
     """
-    return pu.formula.Formula((pu.connectors.one,), af1)
+    return pu.formula.Formula((pu.connective_library.one,), af1)
 
 
 @pytest.fixture
@@ -125,7 +125,7 @@ def phi2a(af2a):
     :param af2a:
     :return:
     """
-    return pu.formula.Formula((pu.connectors.one,), af2a)
+    return pu.formula.Formula((pu.connective_library.one,), af2a)
 
 
 @pytest.fixture
@@ -135,7 +135,7 @@ def phi2b(af2b):
     :param af2b:
     :return:
     """
-    return pu.formula.Formula((pu.connectors.minus, pu.connectors.one,), af2b)
+    return pu.formula.Formula((pu.connective_library.minus, pu.connective_library.one,), af2b)
 
 
 @pytest.fixture
@@ -146,5 +146,7 @@ def phi6a(af6a):
     :return:
     """
     return pu.formula.Formula(
-        (pu.connectors.set_by_extension, pu.connectors.one, pu.connectors.two, pu.connectors.three, pu.connectors.four,
-         pu.connectors.five,), af6a)
+        (pu.connective_library.set_by_extension, pu.connective_library.one, pu.connective_library.two,
+         pu.connective_library.three,
+         pu.connective_library.four,
+         pu.connective_library.five,), af6a)

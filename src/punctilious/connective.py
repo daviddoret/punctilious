@@ -6,47 +6,50 @@ import uuid
 # package modules
 import util
 
-_connector_cache: dict[uuid.UUID, Connector] = {}  # cache mechanism assuring connectors unicity
+_connective_cache: dict[uuid.UUID, Connective] = {}  # cache mechanism assuring connectives unicity
 
 
-def data_validate_connector(
-        o: FlexibleConnector) -> Connector:
-    if isinstance(o, Connector):
+def data_validate_connective(
+        o: FlexibleConnective) -> Connective:
+    if isinstance(o, Connective):
         return o
     if isinstance(o, uuid.UUID):
-        return Connector(uid=o)
-    raise util.PunctiliousException('Connector data validation failure', o=o)
+        return Connective(uid=o)
+    raise util.PunctiliousException('Connective data validation failure', o=o)
 
 
-def retrieve_connector_from_cache(uid: uuid.UUID) -> Connector | None:
-    """cache mechanism assuring the unicity of connectors."""
-    global _connector_cache
+def retrieve_connective_from_cache(uid: uuid.UUID) -> Connective | None:
+    """cache mechanism assuring the unicity of connectives."""
+    global _connective_cache
     uid: uuid.UUID = util.data_validate_uid(uid)
-    if uid in _connector_cache.keys():
-        return _connector_cache[uid]
+    if uid in _connective_cache.keys():
+        return _connective_cache[uid]
     else:
         return None
 
 
-def add_connector_to_cache(o: FlexibleConnector) -> Connector | None:
-    """cache mechanism assuring the unicity of connectors."""
-    global _connector_cache
-    o: Connector = data_validate_connector(o)
-    if not o.uid in _connector_cache.keys():
-        _connector_cache[o.uid] = o
+def add_connective_to_cache(o: FlexibleConnective) -> Connective | None:
+    """cache mechanism assuring the unicity of connectives."""
+    global _connective_cache
+    o: Connective = data_validate_connective(o)
+    if not o.uid in _connective_cache.keys():
+        _connective_cache[o.uid] = o
     else:
-        existing = _connector_cache[o.uid]
+        existing = _connective_cache[o.uid]
         if o is not existing:
-            raise util.PunctiliousException('`Connector`unicity conflict')
+            raise util.PunctiliousException('`Connective`unicity conflict')
 
 
-class Connector(tuple):
-    """A `Connector` is an abstract symbol that may be assigned various (human-readable) representations,
+class Connective(tuple):
+    """A `Connective` is an abstract symbol that may be assigned various (human-readable) representations,
     and that is recognized as a distinctive semantic unit.
+
+    References:
+     - Mancosu 2021, definition 2.1, p. 14, p. 15.
     """
 
     def __hash__(self):
-        return hash((Connector, self.uid,))
+        return hash((Connective, self.uid,))
 
     def __init__(self, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         pass
@@ -56,12 +59,12 @@ class Connector(tuple):
             uid: uuid.UUID = uuid.uuid4()
 
         uid: uuid.UUID = util.data_validate_uid(uid)
-        cached = retrieve_connector_from_cache(uid)
+        cached = retrieve_connective_from_cache(uid)
         if cached is not None:
             return cached
         else:
-            phi = super(Connector, cls).__new__(cls, (uid, fallback_string_representation,))
-            add_connector_to_cache(phi)
+            phi = super(Connective, cls).__new__(cls, (uid, fallback_string_representation,))
+            add_connective_to_cache(phi)
             return phi
 
     def __repr__(self):
@@ -72,7 +75,7 @@ class Connector(tuple):
 
     @property
     def fallback_string_representation(self) -> str:
-        """The `fallback_string_representation` of a `Connector` is a string representation
+        """The `fallback_string_representation` of a `Connective` is a string representation
         that is always available, and will be used as a fallback value when no solution
         can be found to return a string representation matching user preferences.
 
@@ -85,12 +88,12 @@ class Connector(tuple):
            representation in mathematical expressions or formulas).
          - be as unambiguous as possible while not being too verbose or lengthy.
 
-        :return: A string representation of the connector.
+        :return: A string representation of the connective.
         """
         return tuple.__getitem__(self, 1)
 
     def get_string_representation(self, **user_preferences) -> str:
-        """Returns the string representation of the `Connector` that best matches `user_preferences`.
+        """Returns the string representation of the `Connective` that best matches `user_preferences`.
 
         :param user_preferences:
         :return:
@@ -109,7 +112,7 @@ class Connector(tuple):
         return tuple.__getitem__(self, 0)
 
     def yield_string_representation(self, **user_preferences) -> typing.Generator[str, None, None]:
-        """Generates the string representation of the `Connector` that best matches `user_preferences`.
+        """Generates the string representation of the `Connective` that best matches `user_preferences`.
 
         :param user_preferences:
         :return:
@@ -117,5 +120,5 @@ class Connector(tuple):
         yield self.fallback_string_representation
 
 
-FlexibleConnector = typing.Union[
-    Connector, uuid.UUID]
+FlexibleConnective = typing.Union[
+    Connective, uuid.UUID]

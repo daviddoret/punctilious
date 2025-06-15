@@ -104,6 +104,13 @@ class TestAbstractFormula:
         assert l[10] == af2b
         assert l[11] == af1
 
+    def test_main_sequence_element(self, af1, af2a, af2b, af6a, af12a):
+        assert af1.main_sequence_element == 1
+        assert af2a.main_sequence_element == 1
+        assert af2b.main_sequence_element == 1
+        assert af6a.main_sequence_element == 1
+        assert af12a.main_sequence_element == 1
+
     def test_tree_size(self, af1, af2a, af2b, af6a, af12a):
         assert af1.tree_size == 1
         assert af2a.tree_size == 2
