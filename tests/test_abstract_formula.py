@@ -103,3 +103,17 @@ class TestAbstractFormula:
         assert l[9] == af1
         assert l[10] == af2b
         assert l[11] == af1
+
+    def test_tree_size(self, af1, af2a, af2b, af6a, af12a):
+        assert af1.tree_size == 1
+        assert af2a.tree_size == 2
+        assert af2b.tree_size == 2
+        assert af6a.tree_size == 6
+        assert af12a.tree_size == 12
+
+    def test_formula_degree(self, af1, af2a, af2b, af6a, af12a):
+        assert af1.formula_degree == 0
+        assert af2a.formula_degree == 1
+        assert af2b.formula_degree == 1
+        assert af6a.formula_degree == 1
+        assert af12a.formula_degree == 4

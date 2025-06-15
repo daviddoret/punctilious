@@ -106,3 +106,45 @@ def af6a(rpt6a, rgf6a):
 @pytest.fixture
 def af12a(rpt12a, rgf12a):
     return pu.af.AbstractFormula(rpt12a, rgf12a)
+
+
+@pytest.fixture
+def phi1(af1):
+    """1
+
+    :param af1:
+    :return:
+    """
+    return pu.formula.Formula((pu.connectors.one,), af1)
+
+
+@pytest.fixture
+def phi2a(af2a):
+    """1(1)
+
+    :param af2a:
+    :return:
+    """
+    return pu.formula.Formula((pu.connectors.one,), af2a)
+
+
+@pytest.fixture
+def phi2b(af2b):
+    """1(2)
+
+    :param af2b:
+    :return:
+    """
+    return pu.formula.Formula((pu.connectors.minus, pu.connectors.one,), af2b)
+
+
+@pytest.fixture
+def phi6a(af6a):
+    """set(1, 2, 3, 4, 5)
+
+    :param af6a:
+    :return:
+    """
+    return pu.formula.Formula(
+        (pu.connectors.set_by_extension, pu.connectors.one, pu.connectors.two, pu.connectors.three, pu.connectors.four,
+         pu.connectors.five,), af6a)

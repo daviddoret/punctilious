@@ -7,25 +7,102 @@ import util
 import rooted_plane_tree as rpt
 import restricted_growth_function as rgf
 import abstract_formula as af
+import connector_sequence as cs
+
+
+def data_validate_formula(
+        o: FlexibleFormula) -> Formula:
+    if isinstance(o, Formula):
+        return o
+    if isinstance(o, collections.abc.Iterable):
+        return Formula(*o)
+    if isinstance(o, collections.abc.Generator):
+        return Formula(*o)
+    raise util.PunctiliousException('Formula data validation failure', o=o)
+
+
+_formula_cache = dict()  # cache mechanism assuring that unique  formulas are only instantiated once.
+
+
+def retrieve_formula_from_cache(o: FlexibleFormula):
+    """cache mechanism assuring that unique  formulas are only instantiated once."""
+    global _formula_cache
+    o: Formula = data_validate_formula(o)
+    if hash(o) in _formula_cache.keys():
+        return _formula_cache[hash(o)]
+    else:
+        _formula_cache[hash(o)] = o
+        return o
 
 
 class Formula(tuple):
-    """A `Formula` is a pair (C, ϕ) where:
-     - C is a sequence of connectors of size n,
-     - ϕ is an abstract formula of size n.
+    """A `Formula` is a pair (S, ϕ) where:
+     - S is a sequence of connectors of length n,
+     - ϕ is an abstract formula of tree-size n.
     """
 
-    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: rgf.FlexibleRestrictedGrowthFunctionSequence):
+    def __init__(self, s: cs.FlexibleConnectorSequence, phi: af.FlexibleAbstractFormula):
         super(Formula, self).__init__()
-        self._sub_formulas = None
 
-    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: rgf.FlexibleRestrictedGrowthFunctionSequence):
-        t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
-        s: rgf.RestrictedGrowthFunctionSequence = rgf.data_validate_restricted_growth_function_sequence(s)
-        if t.size != s.length:
+    def __new__(cls, s: cs.FlexibleConnectorSequence, phi: af.FlexibleAbstractFormula):
+        s: cs.ConnectorSequence = cs.data_validate_connector_sequence(s)
+        phi: af.AbstractFormula = af.data_validate_abstract_formula(phi)
+        if s.length != phi.sequence_max_value:
             raise util.PunctiliousException(
-                f"`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `RestrictedGrowthFunctionSequence`.",
-                t_size=t.size, s_length=s.length, t=t, s=s)
-        phi = super(AbstractFormula, cls).__new__(cls, (t, s))
-        phi = retrieve_abstract_formula_from_cache(phi)
-        return phi
+                f"`Formula` data validation error. The length of the `ConnectorSequence` is not equal to the `sequence_max_value` of its `abstract_formula`.",
+                s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
+        psi = super(Formula, cls).__new__(cls, (s, phi,))
+        psi = retrieve_formula_from_cache(psi)
+        return psi
+
+    @property
+    def abstract_formula(self) -> af.AbstractFormula:
+        """
+
+        `abstract_formula` is an immutable property.
+
+
+        :return:
+        """
+        return tuple.__getitem__(self, 1)
+
+    @property
+    def connector_sequence(self) -> cs.ConnectorSequence:
+        """
+
+        `connector_sequence` is an immutable property.
+
+
+        :return:
+        """
+        return tuple.__getitem__(self, 0)
+
+    @property
+    def formula_degree(self) -> int:
+        """The `formula_degree` of a `Formula` is the number of non-leaf nodes it contains.
+
+        This definition is derived from (Mancosu et al, 2021, p. 18).
+
+        Attention point: do not confuse `tree_size` and `formula_degree`.
+
+        :return:
+        """
+        return self.abstract_formula.formula_degree
+
+    @property
+    def sequence_max_value(self) -> int:
+        """The `sequence_max_value` of a `Formula` is the `sequence_max_value` of its `abstract_formula`."""
+        return self.abstract_formula.sequence_max_value
+
+    @property
+    def tree_size(self) -> int:
+        """The `tree_size` of a `Formula` is the number of vertices in the `RootedPlaneTree` of its `abstract_formula`.
+
+        Attention point: do not confuse `tree_size` and `formula_degree`.
+        """
+        return self.abstract_formula.tree_size
+
+
+FlexibleFormula = typing.Union[
+    Formula, tuple[
+        cs.FlexibleConnectorSequence, af.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]

@@ -56,39 +56,21 @@ class AbstractFormula(tuple):
         return self.represent_as_indexed_function()
 
     @property
-    def restricted_growth_function_sequence(self) -> rgf.RestrictedGrowthFunctionSequence:
-        """Shortcut: self.s.
+    def formula_degree(self) -> int:
+        """The `formula_degree` of an `AbstractFormula` is the number of non-leaf nodes it contains.
+
+        This definition is derived from (Mancosu et al, 2021, p. 18).
+
+        Attention point: do not confuse `tree_size` and `formula_degree`.
 
         :return:
         """
-        return self[1]
-
-    @property
-    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
-        """Shortcut: self.t."""
-        return self[0]
-
-    @property
-    def s(self) -> rgf.RestrictedGrowthFunctionSequence:
-        """A shortcut for self.restricted_growth_function_sequence."""
-        return self.restricted_growth_function_sequence
-
-    @property
-    def sub_formulas(self):
-        if self._sub_formulas is None:
-            sequence_index = 0
-            sub_formulas = list()
-            for sub_tree in self.rooted_plane_tree.children:
-                sub_tree_size = sub_tree.size
-                sub_sequence = self.restricted_growth_function_sequence[sequence_index:sequence_index + sub_tree_size]
-                sub_formulas.append(AbstractFormula(t=sub_tree, s=sub_sequence))
-            self._sub_formulas = tuple(sub_formulas)
-        return self._sub_formulas
-
-    @property
-    def t(self) -> rpt.RootedPlaneTree:
-        """A shortcut for self.rooted_plane_tree."""
-        return self.rooted_plane_tree
+        i: int = 0
+        t: rpt.RootedPlaneTree
+        for t in self.rooted_plane_tree.iterate_depth_first_ascending():
+            if t.degree > 0:
+                i += 1
+        return i
 
     def iterate_sequences_direct_ascending(self) -> typing.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
         """Iterates the direct child RGF sequences of this `AbstractFormula`.
@@ -151,6 +133,54 @@ class AbstractFormula(tuple):
         and the corresponding values of the `RestrictedGrowthFunctionSequence` as function names.
         """
         return self.rooted_plane_tree.represent_as_indexed_function(sequence=self.restricted_growth_function_sequence)
+
+    @property
+    def restricted_growth_function_sequence(self) -> rgf.RestrictedGrowthFunctionSequence:
+        """Shortcut: self.s.
+
+        :return:
+        """
+        return self[1]
+
+    @property
+    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
+        """Shortcut: self.t."""
+        return self[0]
+
+    @property
+    def s(self) -> rgf.RestrictedGrowthFunctionSequence:
+        """A shortcut for self.restricted_growth_function_sequence."""
+        return self.restricted_growth_function_sequence
+
+    @property
+    def sequence_max_value(self) -> int:
+        """The `sequence_max_value` of an `AbstractFormula` is the `max_value` of its `restricted_growth_function_sequence`."""
+        return self.restricted_growth_function_sequence.max_value
+
+    @property
+    def sub_formulas(self):
+        if self._sub_formulas is None:
+            sequence_index = 0
+            sub_formulas = list()
+            for sub_tree in self.rooted_plane_tree.children:
+                sub_tree_size = sub_tree.size
+                sub_sequence = self.restricted_growth_function_sequence[sequence_index:sequence_index + sub_tree_size]
+                sub_formulas.append(AbstractFormula(t=sub_tree, s=sub_sequence))
+            self._sub_formulas = tuple(sub_formulas)
+        return self._sub_formulas
+
+    @property
+    def t(self) -> rpt.RootedPlaneTree:
+        """A shortcut for self.rooted_plane_tree."""
+        return self.rooted_plane_tree
+
+    @property
+    def tree_size(self) -> int:
+        """The `tree_size` of an `AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
+
+        Attention point: do not confuse `tree_size` and `formula_degree`.
+        """
+        return self.rooted_plane_tree.size
 
 
 FlexibleAbstractFormula = typing.Union[

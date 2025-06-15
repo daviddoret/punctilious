@@ -46,7 +46,7 @@ class Connector(tuple):
     """
 
     def __hash__(self):
-        return hash((Connector, self._uid,))
+        return hash((Connector, self.uid,))
 
     def __init__(self, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         pass

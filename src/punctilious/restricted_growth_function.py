@@ -74,6 +74,11 @@ class RestrictedGrowthFunctionSequence(tuple):
         """The `length` of a finite sequence is the number of elements in the sequence."""
         return len(self)
 
+    @property
+    def max_value(self) -> int:
+        """The `max_value` of a `RestrictedGrowthFunctionSequence` is the maximum value of its elements."""
+        return max(self)
+
 
 def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[int, ...]):
     """Convert any finite sequence into a `RestrictedGrowthFunctionSequence`,

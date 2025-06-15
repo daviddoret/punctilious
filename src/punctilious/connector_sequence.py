@@ -35,7 +35,8 @@ def data_validate_connector_sequence_elements(
     raise util.PunctiliousException('ConnectorSequence elements data validation failure', o=o)
 
 
-_connector_sequence_cache = dict()  # cache mechanism assuring that unique rpts are only instantiated once.
+_connector_sequence_cache: dict[
+    int, ConnectorSequence] = {}  # cache mechanism assuring that unique rpts are only instantiated once.
 
 
 def retrieve_connector_sequence_from_cache(i: ConnectorSequence):
@@ -49,7 +50,7 @@ def retrieve_connector_sequence_from_cache(i: ConnectorSequence):
 
 
 class ConnectorSequence(tuple):
-    """A finite (computable) sequence of connectors.
+    """A finite (computable) sequence of at least 1 connectors.
 
     """
 
@@ -58,6 +59,8 @@ class ConnectorSequence(tuple):
 
     def __new__(cls, *s):
         s: tuple[connector.Connector, ...] = data_validate_connector_sequence_elements(s)
+        if len(s) < 1:
+            raise util.PunctiliousException('The length of a ConnectorSequence must be strictly greater than ')
         s: tuple[connector.Connector] = super(ConnectorSequence, cls).__new__(cls, s)
         s: tuple[connector.Connector] = retrieve_connector_sequence_from_cache(s)
         return s

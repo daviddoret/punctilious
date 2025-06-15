@@ -4,6 +4,10 @@ import punctilious as pu
 
 
 class TestRootedPlaneTree:
+
+    def test_trivial_tree(self):
+        rpt1 = pu.rpt.RootedPlaneTree()
+
     def test_is_leaf(self, rpt1, rpt2, rpt6a, rpt12a):
         assert rpt1.is_leaf
         assert not rpt2.is_leaf

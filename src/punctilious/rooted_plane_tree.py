@@ -27,7 +27,7 @@ def retrieve_rooted_plane_tree_from_cache(o: FlexibleRootedPlaneTree):
         return o
 
 
-def convert_tuple_tree_to_rooted_plane_tree(t: TupleTree | None = None) -> RootedPlaneTree:
+def convert_tuple_tree_to_rooted_plane_tree(t: FlexibleRootedPlaneTree | None = None) -> RootedPlaneTree:
     """
 
     :param t:
@@ -43,7 +43,7 @@ def convert_tuple_tree_to_rooted_plane_tree(t: TupleTree | None = None) -> Roote
 
 
 class RootedPlaneTree(tuple):
-    """The `RootedPlaneTree` class implements an immutable, finite (and computable) rooted plane tree,
+    """A `RootedPlaneTree` is an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.
 
     Reminder:
@@ -52,11 +52,13 @@ class RootedPlaneTree(tuple):
 
     """
 
-    def __init__(self, *children: FlexibleRootedPlaneTree, tuple_tree: tuple[tuple] = None):
+    def __init__(self, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         """
 
+        If all parameters are passed as None or empty tuples, a single node `RootedPlaneTree` is returned.
+
         :param children: A tuple of FlexibleRootedPlaneTree instances.
-        :param tuple_tree: A tuple tree structure.
+        :param tuple_tree: A `TupleTree` structure.
         """
         # children: RootedPlaneTreeTerms = data_validate_formula_structure_terms(children)
         super(RootedPlaneTree, self).__init__()
@@ -293,6 +295,11 @@ class RootedPlaneTree(tuple):
 
 
 FlexibleRootedPlaneTree = typing.Union[
-    RootedPlaneTree, tuple[RootedPlaneTree], collections.abc.Iterator, collections.abc.Generator, None]
+    RootedPlaneTree, tuple[RootedPlaneTree, ...], collections.abc.Iterator, collections.abc.Generator, None]
 
 TupleTree: typing.TypeAlias = typing.Union[int, tuple["TupleTree", ...]]
+"""A `TupleTree` is a tree of tuples whose leafs are empty empty tuples.
+
+It allows to express RootedPlaneTree using python tuple syntax, e.g.: ( (), (), ( (), (), ), )
+
+"""
