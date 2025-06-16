@@ -37,6 +37,7 @@ def retrieve_abstract_formula_from_cache(o: FlexibleAbstractFormula):
 class AbstractFormula(tuple):
     def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: rgf.FlexibleRestrictedGrowthFunctionSequence):
         super(AbstractFormula, self).__init__()
+        self._immediate_sub_formulas = None
         self._sub_formulas = None
 
     def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: rgf.FlexibleRestrictedGrowthFunctionSequence):
@@ -51,10 +52,10 @@ class AbstractFormula(tuple):
         return phi
 
     def __repr__(self):
-        return self.represent_as_indexed_function()
+        return self.represent_as_function()
 
     def __str__(self):
-        return self.represent_as_indexed_function()
+        return self.represent_as_function()
 
     @property
     def formula_degree(self) -> int:
@@ -75,10 +76,11 @@ class AbstractFormula(tuple):
 
     @property
     def immediate_sub_formulas(self) -> tuple[AbstractFormula, ...]:
-        """The `immediate_sub_formulas` of an `AbstractFormula` `phi` is the tuple of `AbstractFormulas` that are the
-        immediate children formulas of `phi` in the formula tree, or equivalently the formulas of degree 0 in `phi`.
+        """The `immediate_sub_formulas` of an `AbstractFormula` `phi` is the tuple of `AbstractFormula` elements
+        that are the immediate children formulas of `phi` in the formula tree, or equivalently the formulas
+        of degree 0 in `phi`.
 
-        The term `immediate sub-formula` is used by (Mancosu 2021, definition 2.4, p. 18).
+        The term `immediate sub-formula` is used by (Mancosu 2021, p. 17-18).
 
         See also:
         - :attr:`AbstractFormula.sub_formulas`
@@ -88,12 +90,12 @@ class AbstractFormula(tuple):
 
         :return:
         """
-        if self._sub_formulas is None:
+        if self._immediate_sub_formulas is None:
             sub_formulas = list()
-            for sub_formula in self.iterate_immediate_sub_formulas():
-                sub_formulas.append(sub_formula)
-            self._sub_formulas = tuple(sub_formulas)
-        return self._sub_formulas
+            for phi in self.iterate_immediate_sub_formulas():
+                sub_formulas.append(phi)
+            self._immediate_sub_formulas = tuple(sub_formulas)
+        return self._immediate_sub_formulas
 
     def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
         """Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
@@ -173,11 +175,31 @@ class AbstractFormula(tuple):
         """
         return self.restricted_growth_function_sequence[0]
 
-    def represent_as_indexed_function(self) -> str:
-        """Returns a string representation of the `AbstractFormula` using function notation,
-        and the corresponding values of the `RestrictedGrowthFunctionSequence` as function names.
+    def represent_as_function(self, connectives: tuple | None = None) -> str:
+        """Returns a string representation of the :class:`AbstractFormula` using function notation.
+
+        By default, connectives are represented by their respective values
+        in the :attr:`AbstractFormula.restricted_growth_function_sequence`.
+
+        :param connectives: A tuple of connectives of length equal to the length of
+        the :attr:`AbstractFormula.restricted_growth_function_sequence`. Default: `None`.
+        :return:
         """
-        return self.rooted_plane_tree.represent_as_indexed_function(sequence=self.restricted_growth_function_sequence)
+        if connectives is None:
+            connectives = self.restricted_growth_function_sequence
+        else:
+            if len(connectives) != len(self.restricted_growth_function_sequence):
+                raise util.PunctiliousException(
+                    "The length of the connectives tuple is not equal to the length "
+                    "of the abstract formula's RGF sequence.",
+                    connectives_length=len(connectives),
+                    rgf_sequence_length=self.restricted_growth_function_sequence.length,
+                    connectives=connectives,
+                    rgf_sequence=self.restricted_growth_function_sequence,
+                    abstract_formula=self
+                )
+        return self.rooted_plane_tree.represent_as_function(
+            connectives=connectives)
 
     @property
     def restricted_growth_function_sequence(self) -> rgf.RestrictedGrowthFunctionSequence:
@@ -204,7 +226,7 @@ class AbstractFormula(tuple):
 
     @property
     def sub_formulas(self) -> tuple[AbstractFormula, ...]:
-        """The `sub_formulas` of an `AbstractFormula` `phi` is the tuple of `AbstractFormulas` that are present
+        """The `sub_formulas` of an `AbstractFormula` `phi` is the tuple of `AbstractFormula` elements that are present
         in the formula tree of `phi`, including `phi` itself.
 
         Formal definition:
@@ -226,7 +248,7 @@ class AbstractFormula(tuple):
         :return: A tuple of the sub-formulas.
         """
         if self._sub_formulas is None:
-            sub_formulas = list()
+            sub_formulas: list[AbstractFormula] = list()
             for sub_formula in self.iterate_sub_formulas():
                 sub_formulas.append(sub_formula)
             self._sub_formulas = tuple(sub_formulas)

@@ -213,15 +213,15 @@ class RootedPlaneTree(tuple):
             output += ")"
         return output
 
-    def represent_as_indexed_function(self, sequence: tuple[int]) -> str:
-        output: str = str(sequence[0])
+    def represent_as_function(self, connectives: tuple) -> str:
+        output: str = str(connectives[0])
         if not self.is_leaf:
             output += "("
         for i, child in enumerate(self.children):
             if i > 0:
                 output += ", "
-            sub_sequence = sequence[1:]
-            output += child.represent_as_indexed_function(sequence=sub_sequence)
+            sub_sequence = connectives[1:]
+            output += child.represent_as_function(connectives=sub_sequence)
         if not self.is_leaf:
             output += ")"
         return output
