@@ -163,7 +163,12 @@ class AbstractFormula(tuple):
         node of the attr:`AbstractFormula.rooted_plane_tree`.
 
         By the definition of restricted growth function, the `main_sequence_element` is
-        always equal to 1.
+        always equal to 0.
+
+        Note that this is 0 by design choice of using 0 as the initial value
+        of RGF sequences, instead of 1 which is usual in the literature. In effect, using
+        0 is consistent with the design choice of using 0-based indexes in tuples,
+        which is a natural choice in Python implementations.
 
         The term `main_sequence_element` was designed in reference to the term `main connective`,
         cf. Mancosu 2021, p. 17.

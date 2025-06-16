@@ -34,15 +34,15 @@ class TestRestrictedGrowthFunctionSequence:
 
     def test_conversion_from_arbitrary_sequence(self):
         assert pu.rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
-            (1, 2, 3,)) == pu.rgf.RestrictedGrowthFunctionSequence(1, 2, 3)
+            (0, 1, 2,)) == pu.rgf.RestrictedGrowthFunctionSequence(0, 1, 2)
         assert pu.rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
-            (3, 2, 1,)) == pu.rgf.RestrictedGrowthFunctionSequence(1, 2, 3)
+            (2, 1, 0,)) == pu.rgf.RestrictedGrowthFunctionSequence(0, 1, 2)
         assert pu.rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
-            (3, 5, 5, 10, 1, 3, 3, 1,)) == pu.rgf.RestrictedGrowthFunctionSequence(1, 2, 2, 3, 4, 1, 1, 4)
+            (2, 4, 4, 9, 0, 2, 2, 0,)) == pu.rgf.RestrictedGrowthFunctionSequence(0, 1, 1, 2, 3, 0, 0, 3)
 
     def test_max_value(self, rgf1, rgf2a, rgf2b, rgf6a, rgf12a):
-        assert rgf1.max_value == 1
-        assert rgf2a.max_value == 1
-        assert rgf2b.max_value == 2
-        assert rgf6a.max_value == 6
-        assert rgf12a.max_value == 12
+        assert rgf1.max_value == 0
+        assert rgf2a.max_value == 0
+        assert rgf2b.max_value == 1
+        assert rgf6a.max_value == 5
+        assert rgf12a.max_value == 11

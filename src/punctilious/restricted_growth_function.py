@@ -29,12 +29,16 @@ def data_validate_restricted_growth_function_sequence_elements(
     if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
         o = tuple(o)
         o = tuple(int(n) for n in o)
+        if o[0] != 0:
+            raise util.PunctiliousException("The first element `x` of the RGF sequence `s` is not equal to 0.",
+                                            x=o[0], s=o)
         for i, n in enumerate(o):
             if i > 0 and n > max(o[0:i]) + 1:
-                raise util.PunctiliousException('RestrictedGrowthFunctionSequence elements data validation failure',
-                                                o=o, i=i, n=n)
+                raise util.PunctiliousException(
+                    "The i-th element `n` of the RGF sequence `s` is greater than max(s[0:i]) + 1.",
+                    i=i, n=n, s=o)
         return o
-    raise util.PunctiliousException('RestrictedGrowthFunctionSequence elements data validation failure', o=o)
+    raise util.PunctiliousException("Non-supported input.", o=o)
 
 
 _restricted_growth_function_sequence_cache = dict()  # cache mechanism assuring that unique rpts are only instantiated once.
@@ -51,12 +55,17 @@ def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthF
 
 
 class RestrictedGrowthFunctionSequence(tuple):
-    """A finite (computable) sequence of values starting at 1 whose maximal value increase is restricted.
+    """A finite (computable) sequence of values starting at 0 whose maximal value increase is restricted.
+
+    Note:
+    Often RGF sequences have an initial value of 1 in the literature. We choose 0 here for consistency
+    with the design choice of using 0-based indexes as the default indexing. In practice, 0-based indexes
+    were a natural choice for Python implementation.
 
     Definition:
     A `RestrictedGrowthFunctionSequence` is a finite sequence of natural numbers such that:
-        - n_1 = 1
-        - with i > 1, n_i = 1 + max(n_1, n_2, ..., n_(i-1))
+        - n_0 = 0
+        - with i > 0, n_i = 1 + max(n_0, n_1, ..., n_(i-1))
 
     """
 
@@ -96,8 +105,8 @@ def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[i
     mapped_value = 0
     for n in s:
         if n not in mapping.keys():
-            mapped_value += 1
             mapping[n] = mapped_value
+            mapped_value += 1
     s2 = tuple(mapping[n] for n in s)
     return RestrictedGrowthFunctionSequence(*s2)
 

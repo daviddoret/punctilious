@@ -47,11 +47,11 @@ eight: connective.Connective = connective.Connective("8", uid="4311ae18-67d7-4d1
 nine: connective.Connective = connective.Connective("9", uid="9f931933-649e-42d8-8a7b-8c19ba7fe89e")
 
 # arithmetic operators
-addition: connective.Connective = connective.Connective("0", uid="3ed8a142-17a1-4799-b1e1-7061b07a1c36")
-division: connective.Connective = connective.Connective("0", uid="167a8e01-8f9d-4f93-a004-bf1ae96fe335")
-exponentiation: connective.Connective = connective.Connective("0", uid="c0ed8133-ea0e-4d23-939f-b308b6cc5cba")
-multiplication: connective.Connective = connective.Connective("0", uid="2cd26a6f-15af-4529-b37c-71afab1699de")
-substraction: connective.Connective = connective.Connective("0", uid="90c1ae38-5bc2-4917-ac66-5d03217055b6")
+addition: connective.Connective = connective.Connective("+", uid="3ed8a142-17a1-4799-b1e1-7061b07a1c36")
+division: connective.Connective = connective.Connective("/", uid="167a8e01-8f9d-4f93-a004-bf1ae96fe335")
+exponentiation: connective.Connective = connective.Connective("^", uid="c0ed8133-ea0e-4d23-939f-b308b6cc5cba")
+multiplication: connective.Connective = connective.Connective("*", uid="2cd26a6f-15af-4529-b37c-71afab1699de")
+substraction: connective.Connective = connective.Connective("-", uid="90c1ae38-5bc2-4917-ac66-5d03217055b6")
 plus: connective.Connective = addition
 minus: connective.Connective = substraction
 power: connective.Connective = exponentiation

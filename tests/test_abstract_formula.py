@@ -5,17 +5,17 @@ import punctilious as pu
 
 class TestAbstractFormula:
     def test_construction_success(self):
-        phi1 = pu.af.AbstractFormula(t=(((),), (),), s=(1, 2, 3, 4,))
-        phi2 = pu.af.AbstractFormula(t=(((),), (),), s=(1, 2, 1, 1,))
+        phi1 = pu.af.AbstractFormula(t=(((),), (),), s=(0, 1, 2, 3,))
+        phi2 = pu.af.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 0,))
         pass
 
     def test_construction_failure(self):
         with pytest.raises(pu.util.PunctiliousException):
-            pu.af.AbstractFormula(t=(((),), (),), s=(1, 3, 2, 1,))  # invalid
+            pu.af.AbstractFormula(t=(((),), (),), s=(0, 2, 1, 0,))  # invalid
         with pytest.raises(pu.util.PunctiliousException):
-            pu.af.AbstractFormula(t=(((),), (),), s=(1, 2, 1,))
+            pu.af.AbstractFormula(t=(((),), (),), s=(0, 1, 0,))
         with pytest.raises(pu.util.PunctiliousException):
-            pu.af.AbstractFormula(t=(((),), (),), s=(1, 2, 1, 2, 1,))
+            pu.af.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0,))
 
     def test_iterate_subsequences_direct_ascending(self, af1, rgf1, af2a, rgf2b, af6a, rgf6a, af12a, rgf12a):
         l = tuple(t for t in af1.iterate_immediate_sub_sequences())
@@ -105,11 +105,11 @@ class TestAbstractFormula:
         assert l[11] == af1
 
     def test_main_sequence_element(self, af1, af2a, af2b, af6a, af12a):
-        assert af1.main_sequence_element == 1
-        assert af2a.main_sequence_element == 1
-        assert af2b.main_sequence_element == 1
-        assert af6a.main_sequence_element == 1
-        assert af12a.main_sequence_element == 1
+        assert af1.main_sequence_element == 0
+        assert af2a.main_sequence_element == 0
+        assert af2b.main_sequence_element == 0
+        assert af6a.main_sequence_element == 0
+        assert af12a.main_sequence_element == 0
 
     def test_tree_size(self, af1, af2a, af2b, af6a, af12a):
         assert af1.tree_size == 1
