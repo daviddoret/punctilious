@@ -5,6 +5,47 @@ import punctilious as pu
 
 # raw sequences
 
+
+@pytest.fixture
+def s1a():
+    return (0,)
+
+
+@pytest.fixture
+def s1b():
+    return (1,)
+
+
+@pytest.fixture
+def s1c():
+    return (2,)
+
+
+@pytest.fixture
+def s1d():
+    return (3,)
+
+
+@pytest.fixture
+def s1e():
+    return (4,)
+
+
+@pytest.fixture
+def s1f():
+    return (5,)
+
+
+@pytest.fixture
+def s2a():
+    return (0, 0,)
+
+
+@pytest.fixture
+def s2b():
+    return (0, 1,)
+
+
 @pytest.fixture
 def s3a():
     return (0, 1, 2,)
@@ -63,18 +104,18 @@ def rpt12a(rpt1, rpt2, rpt6a):
 
 
 @pytest.fixture
-def rgf1():
-    return pu.rgf.RestrictedGrowthFunctionSequence(0, )
+def rgf1(s1a):
+    return pu.rgf.RestrictedGrowthFunctionSequence(*s1a)
 
 
 @pytest.fixture
-def rgf2a():
-    return pu.rgf.RestrictedGrowthFunctionSequence(0, 0, )
+def rgf2a(s2a):
+    return pu.rgf.RestrictedGrowthFunctionSequence(*s2a)
 
 
 @pytest.fixture
-def rgf2b():
-    return pu.rgf.RestrictedGrowthFunctionSequence(0, 1, )
+def rgf2b(s2b):
+    return pu.rgf.RestrictedGrowthFunctionSequence(*s2b)
 
 
 @pytest.fixture

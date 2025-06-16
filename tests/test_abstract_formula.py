@@ -17,7 +17,27 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.af.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0,))
 
-    def test_iterate_subsequences_direct_ascending(self, af1, rgf1, af2a, rgf2b, af6a, rgf6a, af12a, rgf12a):
+    def test_iterate_immediate_sub_sequences(self, s1a, s1b, s1c, s1d, s1e, s1f, s2a, s2b, af1, rgf1, af2a, rgf2b, af6a,
+                                             rgf6a,
+                                             af12a, rgf12a):
+        l = tuple(t for t in af1.iterate_immediate_sub_sequences())
+        assert len(l) == 0
+        l = tuple(t for t in af2a.iterate_immediate_sub_sequences())
+        assert l[0] == s1a
+        l = tuple(t for t in af6a.iterate_immediate_sub_sequences())
+        assert l[0] == s1b
+        assert l[1] == s1c
+        assert l[2] == s1d
+        assert l[3] == s1e
+        assert l[4] == s1f
+        l = tuple(t for t in af12a.iterate_immediate_sub_sequences())
+        assert l[0] == s1b
+        assert l[1] == (2, 3,)
+        assert l[2] == (4, 5, 6, 7, 8, 9,)
+        assert l[3] == (10, 11,)
+
+    def test_iterate_immediate_sub_restricted_growth_function_sequences(self, af1, rgf1, af2a, rgf2b, af6a, rgf6a,
+                                                                        af12a, rgf12a):
         l = tuple(t for t in af1.iterate_immediate_sub_restricted_growth_function_sequences())
         assert len(l) == 0
         l = tuple(t for t in af2a.iterate_immediate_sub_restricted_growth_function_sequences())
@@ -34,7 +54,7 @@ class TestAbstractFormula:
         assert l[2] == rgf6a
         assert l[3] == rgf2b
 
-    def test_iterate_depth_first_ascending_with_index(self, af1, rgf1, af2a, rgf2b, af6a, af12a, rgf6a):
+    def test_iterate_sub_restricted_growth_function_sequences(self, af1, rgf1, af2a, rgf2b, af6a, af12a, rgf6a):
         l = tuple(t for t in af1.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af1.restricted_growth_function_sequence
         l = tuple(t for t in af2a.iterate_sub_restricted_growth_function_sequences())
