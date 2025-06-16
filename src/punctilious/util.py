@@ -61,7 +61,7 @@ def data_validate_uid(o: uuid.UUID) -> uuid.UUID:
         try:
             return uuid.UUID(o)
         except ValueError:
-            raise util.PunctiliousException('`uuid.UUID` ensurance failure. `o` is not a string in valid UUID format.',
-                                            o=o)
+            raise PunctiliousException('`uuid.UUID` ensurance failure. `o` is not a string in valid UUID format.',
+                                       o=o)
     else:
-        raise util.PunctiliousException('`uuid.UUID` ensurance failure. `o` is not of a supported type.', o=o)
+        raise PunctiliousException('`uuid.UUID` ensurance failure. `o` is not of a supported type.', o=o)
