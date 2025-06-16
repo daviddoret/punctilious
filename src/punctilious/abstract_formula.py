@@ -102,7 +102,7 @@ class AbstractFormula(tuple):
         :param phi:
         :return:
         """
-        XXXX
+        raise NotImplemented()
 
     def is_sub_formula_of(self, phi: AbstractFormula):
         """Returns `True` if this :class:`AbstractFormula` if a sub-formula of :class:`AbstractFormula` phi.

@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="equivalence for rpt.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -577,7 +575,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_rooted_plane_tree.py">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -933,9 +931,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_connective_sequence.py" />
         <item itemvalue="Python tests.pytest for test_connective.TestConnective" />
       </list>
@@ -959,14 +957,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01387" summary="minor improvements">
-      <option name="closed" value="true" />
-      <created>1745266283819</created>
-      <option name="number" value="01387" />
-      <option name="presentableId" value="LOCAL-01387" />
-      <option name="project" value="LOCAL" />
-      <updated>1745266283820</updated>
     </task>
     <task id="LOCAL-01388" summary="minor improvements">
       <option name="closed" value="true" />
@@ -1352,7 +1342,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750108090536</updated>
     </task>
-    <option name="localTasksCounter" value="1436" />
+    <task id="LOCAL-01436" summary="equivalence for rpt.">
+      <option name="closed" value="true" />
+      <created>1750108262141</created>
+      <option name="number" value="01436" />
+      <option name="presentableId" value="LOCAL-01436" />
+      <option name="project" value="LOCAL" />
+      <updated>1750108262141</updated>
+    </task>
+    <option name="localTasksCounter" value="1437" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
