@@ -42,9 +42,8 @@ class TestFormula:
         l = tuple(t for t in phi2b.iterate_immediate_sub_formulas())
         assert l[0] == phi1a
         l = tuple(t for t in phi6a.iterate_immediate_sub_formulas())
-        assert l[0] == pu.connective_library.set_by_extension
-        assert l[1] == pu.connective_library.one
-        assert l[2] == pu.connective_library.two
-        assert l[3] == pu.connective_library.three
-        assert l[4] == pu.connective_library.four
-        assert l[5] == pu.connective_library.five
+        assert l[0] == pu.connective_library.one
+        assert l[1] == pu.connective_library.two
+        assert l[2] == pu.connective_library.three
+        assert l[3] == pu.connective_library.four
+        assert l[4] == pu.connective_library.five

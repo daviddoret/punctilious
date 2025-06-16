@@ -105,15 +105,21 @@ class AbstractFormula(tuple):
         :return: A generator of :class:`AbstractFormula`.
         """
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_direct_ascending(),
-                                              self.iterate_immediate_sub_sequences()):
+                                              self.iterate_immediate_sub_restricted_growth_function_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
-    def iterate_immediate_sub_sequences(self) -> typing.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
-        """Iterates the direct child RGF sequences of this `AbstractFormula`.
+    def iterate_immediate_sub_sequences(self) -> typing.Generator[
+        tuple[int, ...], None, None]:
+        """Iterates the direct sub-sequences of this `AbstractFormula`.
 
-        Note: the child rgf sequences are determined by 1) the parent rgf sequence,
-        and 2) the rooted plane tree.
+        Note:
+            A sub-sequence is not an RGF sequence, i.e. its initial value may not be equal to 0,
+            and it may contain maximal values that are greater than the ones allowed by restricted growth.
+
+        Note:
+            The child rgf sequences are determined by 1) the parent rgf sequence,
+            and 2) the rooted plane tree.
         """
         i: int = 1  # remove the root
         child_tree: rpt.RootedPlaneTree
@@ -121,24 +127,42 @@ class AbstractFormula(tuple):
         for child_tree in self.rooted_plane_tree.iterate_direct_ascending():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.restricted_growth_function_sequence[i:i + child_tree.size]
-            # transform the sequence into an RGF sequence, restarting from initial value 1
-            sub_sequence: rgf.RestrictedGrowthFunctionSequence = rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
-                sub_sequence)
             # yield this child RGF sequence
             yield sub_sequence
             # truncate the remaining sequence
             i += child_tree.size
 
-    def iterate_sub_sequences(self) -> \
-            collections.abc.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
+    def iterate_immediate_sub_restricted_growth_function_sequences(self) -> typing.Generator[
+        rgf.RestrictedGrowthFunctionSequence, None, None]:
+        """Iterates the direct child sub-sequences of this `AbstractFormula`.
+
+        Note: the child rgf sequences are determined by 1) the parent rgf sequence,
+        and 2) the rooted plane tree.
+        """
+        s: rgf.RestrictedGrowthFunctionSequence
+        for s in self.iterate_immediate_sub_sequences():
+            # transform the sequence into an RGF sequence, restarting from initial value 0
+            sub_sequence: rgf.RestrictedGrowthFunctionSequence = rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+                s)
+            # yield this child RGF sequence
+            yield sub_sequence
+
+    def iterate_sub_sequences(self) -> collections.abc.Generator[tuple[int, ...], None, None]:
         i: int
         sub_tree: rpt.RootedPlaneTree
         for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_depth_first_ascending()):
             # retrieves the sub-sequence in the root RGF sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.restricted_growth_function_sequence[i:i + sub_tree.size]
+            # yield the child RGF sequence
+            yield sub_sequence
+
+    def iterate_sub_restricted_growth_function_sequences(self) -> \
+            collections.abc.Generator[rgf.RestrictedGrowthFunctionSequence, None, None]:
+        s: rgf.RestrictedGrowthFunctionSequence
+        for s in self.iterate_sub_sequences():
             # converts ths sub-sequence to an RGF sequence, which modifies all values to start with 1.
             sub_sequence: rgf.RestrictedGrowthFunctionSequence = rgf.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
-                sub_sequence)
+                s)
             # yield the child RGF sequence
             yield sub_sequence
 
@@ -152,7 +176,7 @@ class AbstractFormula(tuple):
         child_tree: rpt.RootedPlaneTree
         child_sequence: rgf.RestrictedGrowthFunctionSequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
-                                              self.iterate_sub_sequences()):
+                                              self.iterate_sub_restricted_growth_function_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
 

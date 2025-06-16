@@ -112,7 +112,7 @@ class Formula(tuple):
         return self.abstract_formula.formula_degree
 
     def get_connective_by_sequence_element(self, i: int) -> connective.Connective:
-        return self.connective_sequence[i - 1]
+        return self.connective_sequence[i]
 
     @property
     def immediate_sub_formulas(self) -> tuple[Formula, ...]:
@@ -153,7 +153,6 @@ class Formula(tuple):
 
         :return: A generator of :class:`Formula`.
         """
-        # TODO: TEST THIS
         for phi, s in zip(self.abstract_formula.iterate_immediate_sub_formulas(),
                           self.abstract_formula.iterate_immediate_sub_sequences()):
             t: tuple[connective.Connective, ...] = tuple(

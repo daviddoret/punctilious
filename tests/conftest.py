@@ -114,7 +114,7 @@ def af12a(rpt12a, rgf12a):
 
 @pytest.fixture
 def phi1a(af1):
-    """1
+    """The formula 1.
 
     :param af1:
     :return:
@@ -124,7 +124,7 @@ def phi1a(af1):
 
 @pytest.fixture
 def phi2a(af2a):
-    """1(1)
+    """The formula: 1(1).
 
     :param af2a:
     :return:
@@ -134,7 +134,7 @@ def phi2a(af2a):
 
 @pytest.fixture
 def phi2b(af2b):
-    """-1
+    """The formula: -1.
 
     :param af2b:
     :return:

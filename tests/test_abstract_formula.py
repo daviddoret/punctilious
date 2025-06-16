@@ -18,36 +18,36 @@ class TestAbstractFormula:
             pu.af.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0,))
 
     def test_iterate_subsequences_direct_ascending(self, af1, rgf1, af2a, rgf2b, af6a, rgf6a, af12a, rgf12a):
-        l = tuple(t for t in af1.iterate_immediate_sub_sequences())
+        l = tuple(t for t in af1.iterate_immediate_sub_restricted_growth_function_sequences())
         assert len(l) == 0
-        l = tuple(t for t in af2a.iterate_immediate_sub_sequences())
+        l = tuple(t for t in af2a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgf1
-        l = tuple(t for t in af6a.iterate_immediate_sub_sequences())
+        l = tuple(t for t in af6a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgf1
         assert l[1] == rgf1
         assert l[2] == rgf1
         assert l[3] == rgf1
         assert l[4] == rgf1
-        l = tuple(t for t in af12a.iterate_immediate_sub_sequences())
+        l = tuple(t for t in af12a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgf1
         assert l[1] == rgf2b
         assert l[2] == rgf6a
         assert l[3] == rgf2b
 
     def test_iterate_depth_first_ascending_with_index(self, af1, rgf1, af2a, rgf2b, af6a, af12a, rgf6a):
-        l = tuple(t for t in af1.iterate_sub_sequences())
+        l = tuple(t for t in af1.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af1.restricted_growth_function_sequence
-        l = tuple(t for t in af2a.iterate_sub_sequences())
+        l = tuple(t for t in af2a.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af2a.restricted_growth_function_sequence
         assert l[1] == rgf1
-        l = tuple(t for t in af6a.iterate_sub_sequences())
+        l = tuple(t for t in af6a.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af6a.restricted_growth_function_sequence
         assert l[1] == rgf1
         assert l[2] == rgf1
         assert l[3] == rgf1
         assert l[4] == rgf1
         assert l[5] == rgf1
-        l = tuple(t for t in af12a.iterate_sub_sequences())
+        l = tuple(t for t in af12a.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af12a.restricted_growth_function_sequence
         assert l[1] == rgf1
         assert l[2] == rgf2b
