@@ -160,7 +160,11 @@ class Formula(tuple):
             yield Formula(phi, t)
 
     def iterate_sub_formulas(self) -> collections.abc.Generator[Formula, None, None]:
-        raise NotImplementedError()
+        for phi, s in zip(self.abstract_formula.iterate_sub_formulas(),
+                          self.abstract_formula.iterate_sub_sequences()):
+            t: tuple[connective.Connective, ...] = tuple(
+                self.get_connective_by_sequence_element(i) for i in s)
+            yield Formula(phi, t)
 
     @property
     def main_connective(self) -> connective.Connective:
