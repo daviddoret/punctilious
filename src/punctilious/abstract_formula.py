@@ -4,7 +4,6 @@ import collections
 
 # package modules
 import util
-import connective
 import rooted_plane_tree as rpt
 import restricted_growth_function as rgf
 

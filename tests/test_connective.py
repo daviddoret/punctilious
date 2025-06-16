@@ -1,7 +1,5 @@
 import uuid
 
-import pytest
-
 import punctilious as pu
 
 

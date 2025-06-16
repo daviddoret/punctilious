@@ -52,6 +52,27 @@ class RootedPlaneTree(tuple):
 
     """
 
+    def __eq__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTre`,
+        returns `True` if `t` is connective-equivalent to this :class:`RootedPlaneTre`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+            return self.is_rooted_plane_tree_equivalent_to(t)
+        except util.PunctiliousException:
+            return False
+
+    def __hash__(self):
+        return hash((RootedPlaneTree, *self,))
+
     def __init__(self, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         """
 
@@ -62,6 +83,24 @@ class RootedPlaneTree(tuple):
         """
         # children: RootedPlaneTreeTerms = data_validate_formula_structure_terms(children)
         super(RootedPlaneTree, self).__init__()
+
+    def __ne__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTree`,
+        returns `True` if `t` is not rooted-plane-tree-equivalent to this :class:`RootedPlaneTree`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+            return not self.is_rooted_plane_tree_equivalent_to(t)
+        except util.PunctiliousException:
+            return False
 
     def __new__(cls, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         if tuple_tree is not None:
@@ -155,9 +194,29 @@ class RootedPlaneTree(tuple):
         """
         return self.degree == 0
 
-    def is_rooted_plane_tree_equivalent_to(self, x: FlexibleRootedPlaneTree) -> bool:
-        x: RootedPlaneTree = data_validate_rooted_plane_tree(x)
-        return x.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
+    def is_rooted_plane_tree_equivalent_to(self, t: FlexibleRootedPlaneTree) -> bool:
+        """Returns `True` if this :class:`RootedPlaneTree` is connective-equivalent to :class:`RootedPlaneTree` `t`.
+
+        Formal definition 1:
+        A rooted-plane-tree `t` is connective-equivalent to a rooted-plane-tree `u` if and only if
+         - degree(t) = degree(u).
+         - and immediate sub-rooted-plane-tree t_i of t is-rooted-plane-tree-equivalent
+           to immediate sub-rooted-plane-tree u_i of u with 0 <= i < degree(t) - 1.
+
+        Formal definition 2:
+        A rooted-plane-tree `t` is connective-equivalent to a rooted-plane-tree `u` if and only if
+        the unsorted-inverted-integer AHU of `t` = the unsorted-inverted-integer AHU of `u`.
+
+        :param t: A rooted-plane-tree.
+        :return:
+        """
+        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        t_i: RootedPlaneTree
+        u_i: RootedPlaneTree
+        return self.degree == t.degree and all(t_i.is_rooted_plane_tree_equivalent_to(u_i) for t_i, u_i in
+                                               zip(t.iterate_direct_ascending(), self.iterate_direct_ascending()))
+        # Equivalent implementation:
+        # return t.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
 
     def iterate_direct_ascending(self) -> typing.Generator[RootedPlaneTree, None, None]:
         """Generator function that iterates the direct children of the `RootedPlaneTree` in ascending order.
@@ -174,32 +233,6 @@ class RootedPlaneTree(tuple):
         yield self
         for child in self.children:
             yield from child.iterate_depth_first_ascending()
-
-    # def iterate_depth_first_ascending_by_index(self) -> typing.Generator[tuple[RootedPlaneTree, int], None, None]:
-    #    """Same as method `iterate_depth_first_ascending` but yields tuples (T,i) where:
-    #     - T is the sub-rooted-plane-tree,
-    #     - i is the 0-based index of the root of that tree in the dept-first-ascending sequence of nodes of the root tree.
-
-    #    A use case for this method is the mapping of RPTs with RGFSs in AbstractFormula.
-
-    #    """
-    #    i = 0
-    #    yield from self._iterate_depth_first_ascending_by_index(i=0)
-
-    # def _iterate_depth_first_ascending_by_index(self, i: int) -> typing.Generator[
-    #    tuple[RootedPlaneTree, int], None, None]:
-    #    """Generator function that iterates the `RootedPlaneTree` using the depth-first, then ascending children
-    #    algorithm.
-
-    #    :return:
-    #    """
-    #    yield self, i
-    #    child: RootedPlaneTree
-    #    if self.degree > 0:
-    #        i += 1  # position the index on the root vertex of the first child
-    #        for child in self.children:
-    #            yield from child._iterate_depth_first_ascending_by_index(i=i)
-    #            i += child.size
 
     def represent_as_anonymous_function(self) -> str:
         output: str = "★"

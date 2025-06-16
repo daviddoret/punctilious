@@ -5,8 +5,27 @@ import punctilious as pu
 
 class TestRootedPlaneTree:
 
-    def test_trivial_tree(self):
-        rpt1 = pu.rpt.RootedPlaneTree()
+    def test_is_rooted_plane_tree_equivalent(self, rpt1, rpt2, rpt6a, rpt12a):
+        assert rpt1.is_rooted_plane_tree_equivalent_to(rpt1)
+        assert rpt2.is_rooted_plane_tree_equivalent_to(rpt2)
+        assert rpt6a.is_rooted_plane_tree_equivalent_to(rpt6a)
+        assert rpt12a.is_rooted_plane_tree_equivalent_to(rpt12a)
+
+        assert not rpt1.is_rooted_plane_tree_equivalent_to(rpt2)
+        assert not rpt1.is_rooted_plane_tree_equivalent_to(rpt6a)
+        assert not rpt1.is_rooted_plane_tree_equivalent_to(rpt12a)
+
+        assert not rpt2.is_rooted_plane_tree_equivalent_to(rpt1)
+        assert not rpt2.is_rooted_plane_tree_equivalent_to(rpt6a)
+        assert not rpt2.is_rooted_plane_tree_equivalent_to(rpt12a)
+
+        assert not rpt6a.is_rooted_plane_tree_equivalent_to(rpt1)
+        assert not rpt6a.is_rooted_plane_tree_equivalent_to(rpt2)
+        assert not rpt6a.is_rooted_plane_tree_equivalent_to(rpt12a)
+
+        assert not rpt12a.is_rooted_plane_tree_equivalent_to(rpt1)
+        assert not rpt12a.is_rooted_plane_tree_equivalent_to(rpt2)
+        assert not rpt12a.is_rooted_plane_tree_equivalent_to(rpt6a)
 
     def test_is_leaf(self, rpt1, rpt2, rpt6a, rpt12a):
         assert rpt1.is_leaf

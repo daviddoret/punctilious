@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="__util__ cleanup">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="equivalence for connectives and connective-sequences.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/connective.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_connective.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_connective.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -356,6 +358,7 @@
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_connector_index_01.executor": "Run",
+    "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_children.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_depth_first_ascending_with_index.executor": "Run",
@@ -578,7 +581,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_connective_sequence.py">
+  <component name="RunManager" selected="Python tests.pytest in test_rooted_plane_tree.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -808,40 +811,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_connective.TestConnective.test_is_connective_equivalent_to" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_connective.TestConnective.test_is_connective_equivalent_to&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_formula.TestFormula.test_iterate_sub_formulas" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_formula.TestFormula.test_iterate_sub_formulas&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -857,6 +826,23 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -895,6 +881,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_rooted_plane_tree.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_rooted_plane_tree.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -924,9 +927,9 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_connective.TestConnective" />
-      <item itemvalue="Python tests.pytest for test_connective.TestConnective.test_is_connective_equivalent_to" />
-      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_iterate_sub_formulas" />
+      <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent" />
       <item itemvalue="Python tests.pytest in test_connective_sequence.py" />
+      <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -934,11 +937,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
+        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_connective_sequence.py" />
         <item itemvalue="Python tests.pytest for test_connective.TestConnective" />
-        <item itemvalue="Python tests.pytest for test_connective.TestConnective.test_is_connective_equivalent_to" />
-        <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_iterate_sub_formulas" />
       </list>
     </recent_temporary>
   </component>
@@ -960,14 +963,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01385" summary="ConnectorIndex">
-      <option name="closed" value="true" />
-      <created>1745253842526</created>
-      <option name="number" value="01385" />
-      <option name="presentableId" value="LOCAL-01385" />
-      <option name="project" value="LOCAL" />
-      <updated>1745253842526</updated>
     </task>
     <task id="LOCAL-01386" summary="ConnectorIndex">
       <option name="closed" value="true" />
@@ -1353,7 +1348,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750099901462</updated>
     </task>
-    <option name="localTasksCounter" value="1434" />
+    <task id="LOCAL-01434" summary="equivalence for connectives and connective-sequences.">
+      <option name="closed" value="true" />
+      <created>1750105381486</created>
+      <option name="number" value="01434" />
+      <option name="presentableId" value="LOCAL-01434" />
+      <option name="project" value="LOCAL" />
+      <updated>1750105381486</updated>
+    </task>
+    <option name="localTasksCounter" value="1435" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1406,7 +1409,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="support for index subscript and export superscript in formula typesetting" />
     <MESSAGE value="presentation layer rework" />
     <MESSAGE value="new approach with Pointers and Structures." />
     <MESSAGE value="FormulaPointer" />
@@ -1431,7 +1433,8 @@
     <MESSAGE value="RGF sequence initial value=0" />
     <MESSAGE value="RGF sequence initial value=0, sub-sequences, sub-restricted-growth-function-sequences." />
     <MESSAGE value="__util__ cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="__util__ cleanup" />
+    <MESSAGE value="equivalence for connectives and connective-sequences." />
+    <option name="LAST_COMMIT_MESSAGE" value="equivalence for connectives and connective-sequences." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

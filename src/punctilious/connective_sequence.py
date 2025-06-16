@@ -54,9 +54,6 @@ class ConnectiveSequence(tuple):
 
     """
 
-    def __hash__(self):
-        return hash((ConnectiveSequence, *self,))
-
     def __eq__(self, s):
         """Returns `False` if `s` cannot be interpreted as a :class:`ConnectiveSequence`,
         returns `True` if `s` is connective-sequence-equivalent to this :class:`ConnectiveSequence`,
@@ -74,6 +71,9 @@ class ConnectiveSequence(tuple):
             return self.is_connective_sequence_equivalent_to(s)
         except util.PunctiliousException:
             return False
+
+    def __hash__(self):
+        return hash((ConnectiveSequence, *self,))
 
     def __init__(self, *s):
         super(ConnectiveSequence, self).__init__()
