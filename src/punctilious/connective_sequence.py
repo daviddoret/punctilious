@@ -73,7 +73,7 @@ class ConnectiveSequence(tuple):
             return False
 
     def __hash__(self):
-        return hash((ConnectiveSequence, *self,))
+        return hash((ConnectiveSequence, *self.elements,))
 
     def __init__(self, *s):
         super(ConnectiveSequence, self).__init__()
@@ -103,6 +103,14 @@ class ConnectiveSequence(tuple):
         s: tuple[connective.Connective] = super(ConnectiveSequence, cls).__new__(cls, s)
         s: tuple[connective.Connective] = retrieve_connective_sequence_from_cache(s)
         return s
+
+    @property
+    def elements(self) -> tuple[int, ...]:
+        """The elements that compose this `ConnectiveSequence`, in order.
+
+        :return:
+        """
+        return tuple(super().__iter__())
 
     def is_connective_sequence_equivalent_to(self, s: FlexibleConnectiveSequence):
         """Returns `True` if this :class:`ConnectiveSequence` is connective-sequence-equivalent

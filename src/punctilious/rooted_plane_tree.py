@@ -71,7 +71,7 @@ class RootedPlaneTree(tuple):
             return False
 
     def __hash__(self):
-        return hash((RootedPlaneTree, *self,))
+        return hash((RootedPlaneTree, *self.children,))
 
     def __init__(self, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         """

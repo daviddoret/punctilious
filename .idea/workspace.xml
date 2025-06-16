@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="equivalence for connectives and connective-sequences.">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="equivalence for rpt.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_connective.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_connective.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -964,14 +960,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01386" summary="ConnectorIndex">
-      <option name="closed" value="true" />
-      <created>1745254639041</created>
-      <option name="number" value="01386" />
-      <option name="presentableId" value="LOCAL-01386" />
-      <option name="project" value="LOCAL" />
-      <updated>1745254639042</updated>
-    </task>
     <task id="LOCAL-01387" summary="minor improvements">
       <option name="closed" value="true" />
       <created>1745266283819</created>
@@ -1356,7 +1344,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750105381486</updated>
     </task>
-    <option name="localTasksCounter" value="1435" />
+    <task id="LOCAL-01435" summary="equivalence for rpt.">
+      <option name="closed" value="true" />
+      <created>1750108090536</created>
+      <option name="number" value="01435" />
+      <option name="presentableId" value="LOCAL-01435" />
+      <option name="project" value="LOCAL" />
+      <updated>1750108090536</updated>
+    </task>
+    <option name="localTasksCounter" value="1436" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1409,7 +1405,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="presentation layer rework" />
     <MESSAGE value="new approach with Pointers and Structures." />
     <MESSAGE value="FormulaPointer" />
     <MESSAGE value="ConnectorIndex" />
@@ -1434,7 +1429,8 @@
     <MESSAGE value="RGF sequence initial value=0, sub-sequences, sub-restricted-growth-function-sequences." />
     <MESSAGE value="__util__ cleanup" />
     <MESSAGE value="equivalence for connectives and connective-sequences." />
-    <option name="LAST_COMMIT_MESSAGE" value="equivalence for connectives and connective-sequences." />
+    <MESSAGE value="equivalence for rpt." />
+    <option name="LAST_COMMIT_MESSAGE" value="equivalence for rpt." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
