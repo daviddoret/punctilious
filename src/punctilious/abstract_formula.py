@@ -97,6 +97,28 @@ class AbstractFormula(tuple):
             self._immediate_sub_formulas = tuple(sub_formulas)
         return self._immediate_sub_formulas
 
+    def is_abstract_formula_equivalent_to(self, phi: AbstractFormula):
+        """Returns `True` if this :class:`AbstractFormula` is abstract_formula-equivalent to :class:`AbstractFormula` phi.
+
+        :param phi:
+        :return:
+        """
+        XXXX
+
+    def is_sub_formula_of(self, phi: AbstractFormula):
+        """Returns `True` if this :class:`AbstractFormula` if a sub-formula of :class:`AbstractFormula` phi.
+
+        :param phi:
+        :return:
+        """
+        XXXX
+        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        psi: AbstractFormula
+        for psi in self.iterate_sub_formulas():
+            if psi == phi:
+                return True
+        return False
+
     def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
         """Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
 

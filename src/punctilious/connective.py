@@ -48,11 +48,47 @@ class Connective(tuple):
      - Mancosu 2021, definition 2.1, p. 14, p. 15.
     """
 
+    def __eq__(self, c):
+        """Returns `False` if `c` cannot be interpreted as a :class:`Connective`,
+        returns `True` if `c` is connective-equivalent to this :class:`Connective`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            c: Connective = data_validate_connective(c)
+            return self.is_connective_equivalent_to(c)
+        except util.PunctiliousException:
+            return False
+
     def __hash__(self):
         return hash((Connective, self.uid,))
 
     def __init__(self, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         pass
+
+    def __ne__(self, c):
+        """Returns `False` if `c` cannot be interpreted as a :class:`Connective`,
+        returns `True` if `c` is not connective-equivalent to this :class:`Connective`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            c: Connective = data_validate_connective(c)
+            return not self.is_connective_equivalent_to(c)
+        except util.PunctiliousException:
+            return False
 
     def __new__(cls, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         if uid is None:
@@ -99,6 +135,26 @@ class Connective(tuple):
         :return:
         """
         return self.fallback_string_representation
+
+    def is_connective_equivalent_to(self, c: FlexibleConnective):
+        """Returns `True` if this :class:`Connective` is connective-equivalent to :class:`Connective` `c`.
+
+        Formal definition:
+        A connective `c` is connective-equivalent to a connective `d` if and only if this is the same
+        symbol, or equivalently they are indistinguishable.
+
+        Note:
+        connective-equivalence is a syntactic property, i.e. it is related to an abstract symbol,
+        and it is not related to the diverse and sometimes ambiguous ways a connective may be represented.
+
+        Implementation:
+        As a proxy for the concept of an abstract symbol, we use the :attr:`Connective.uid` property.
+
+        :param c:
+        :return:
+        """
+        c: Connective = data_validate_connective(c)
+        return c.uid == self.uid
 
     @property
     def uid(self) -> uuid.UUID:

@@ -54,8 +54,47 @@ class ConnectiveSequence(tuple):
 
     """
 
+    def __hash__(self):
+        return hash((ConnectiveSequence, *self,))
+
+    def __eq__(self, s):
+        """Returns `False` if `s` cannot be interpreted as a :class:`ConnectiveSequence`,
+        returns `True` if `s` is connective-sequence-equivalent to this :class:`ConnectiveSequence`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            s: ConnectiveSequence = data_validate_connective_sequence(s)
+            return self.is_connective_sequence_equivalent_to(s)
+        except util.PunctiliousException:
+            return False
+
     def __init__(self, *s):
         super(ConnectiveSequence, self).__init__()
+
+    def __ne__(self, s):
+        """Returns `False` if `c` cannot be interpreted as a :class:`ConnectiveSequence`,
+        returns `True` if `c` is not connective-sequence-equivalent to this :class:`ConnectiveSequence`,
+        returns `False` otherwise.
+
+         Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+       """
+        try:
+            s: ConnectiveSequence = data_validate_connective_sequence(s)
+            return not self.is_connective_sequence_equivalent_to(s)
+        except util.PunctiliousException:
+            return False
 
     def __new__(cls, *s):
         s: tuple[connective.Connective, ...] = data_validate_connective_sequence_elements(s)
@@ -64,6 +103,21 @@ class ConnectiveSequence(tuple):
         s: tuple[connective.Connective] = super(ConnectiveSequence, cls).__new__(cls, s)
         s: tuple[connective.Connective] = retrieve_connective_sequence_from_cache(s)
         return s
+
+    def is_connective_sequence_equivalent_to(self, s: FlexibleConnectiveSequence):
+        """Returns `True` if this :class:`ConnectiveSequence` is connective-sequence-equivalent
+        to :class:`ConnectiveSequence` `s`.
+
+        Formal definition:
+        A connective-sequence `s` is connective-sequence-equivalent to a connective-sequence `t` if and only if
+         - the length of `t` = the length of `d`,
+         - s_i is connective-equivalent to d_i for all i from 0 to length(`t`) - 1.
+
+        :param s:
+        :return:
+        """
+        s: ConnectiveSequence = data_validate_connective_sequence(s)
+        return all(i == j for i, j in zip(self, s))
 
     @property
     def length(self) -> int:
