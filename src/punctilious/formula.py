@@ -155,6 +155,7 @@ class Formula(tuple):
         """
         for phi, s in zip(self.abstract_formula.iterate_immediate_sub_formulas(),
                           self.abstract_formula.iterate_immediate_sub_sequences()):
+            s: tuple[int, ...] = util.deduplicate_integer_sequence(s)
             t: tuple[connective.Connective, ...] = tuple(
                 self.get_connective_by_sequence_element(i) for i in s)
             yield Formula(phi, t)
@@ -162,6 +163,7 @@ class Formula(tuple):
     def iterate_sub_formulas(self) -> collections.abc.Generator[Formula, None, None]:
         for phi, s in zip(self.abstract_formula.iterate_sub_formulas(),
                           self.abstract_formula.iterate_sub_sequences()):
+            s: tuple[int, ...] = util.deduplicate_integer_sequence(s)
             t: tuple[connective.Connective, ...] = tuple(
                 self.get_connective_by_sequence_element(i) for i in s)
             yield Formula(phi, t)

@@ -2,6 +2,26 @@ import typing
 import uuid
 
 
+def deduplicate_integer_sequence(t: tuple[int, ...]) -> tuple[int, ...]:
+    """Given a sequence S of integers, return a sequence T such that:
+     - the order and values of elements are preserved with the exception that
+     - only the first occurrence of every distinct value is copied to T.
+
+    Samples:
+    (1,5,0,3,5,1,1,2) --> (1,5,0,3,2)
+
+    :param t:
+    :return:
+    """
+    observed = set()
+    result = []
+    for item in t:
+        if item not in observed:
+            observed.add(item)
+            result.append(item)
+    return tuple(result)
+
+
 def data_validate_unicity(elements: typing.Iterable, raise_error_on_duplicate: bool = True) -> tuple:
     """Given some `elements`, returns a tuple of unique elements.
 
