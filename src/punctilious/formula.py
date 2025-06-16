@@ -49,7 +49,7 @@ class Formula(tuple):
     def __new__(cls, phi: af.FlexibleAbstractFormula, s: cs.FlexibleConnectiveSequence):
         s: cs.ConnectiveSequence = cs.data_validate_connective_sequence(s)
         phi: af.AbstractFormula = af.data_validate_abstract_formula(phi)
-        if s.length != phi.sequence_max_value:
+        if s.length != phi.sequence_max_value + 1:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the `ConnectiveSequence` is not equal to the `sequence_max_value` of its `abstract_formula`.",
                 s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
@@ -168,6 +168,9 @@ class Formula(tuple):
         """The `main_connective` of a :class:`Formula` `phi` is the :class:`Connective` that corresponds
         to the root node of the formula tree.
 
+        By definition of a :class:`Formula` as a pair (phi, S) where S is sequence of connectives,
+        the `main_connective` is the first element of S.
+
         The term `main connective` is defined by Mancosu 2021, p. 17 in the context of propositional logic.
 
         References:
@@ -175,7 +178,7 @@ class Formula(tuple):
 
         :return: a :class:`Connective`
         """
-        return self.connectives[0]
+        return self.connective_sequence[0]
 
     def represent_as_function(self) -> str:
         """Returns a string representation of the `Formula` using function notation.

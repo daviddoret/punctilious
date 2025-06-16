@@ -6,11 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RGF sequence initial value=0">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,7 +235,9 @@
     "Python tests.pytest for test_formula.TestFormula.test_formula_2.executor": "Debug",
     "Python tests.pytest for test_formula.TestFormula.test_iterate_connectives.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_iterate_immediate_sub_formulas.executor": "Debug",
+    "Python tests.pytest for test_formula.TestFormula.test_main_connective.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_structure.executor": "Debug",
+    "Python tests.pytest for test_formula.TestFormula.test_tree_size.executor": "Run",
     "Python tests.pytest for test_formula.TestFormulaRootConnectorEquivalence.test_1.executor": "Run",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.executor": "Run",
     "Python tests.pytest for test_formula_notations.TestFormulaNotations.test_atomic_formula.executor": "Run",
@@ -569,7 +567,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_abstract_formula.py">
+  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_main_connective">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -782,7 +780,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_formula.TestFormula.test_iterate_immediate_sub_formulas" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_formula.TestFormula.test_main_connective" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -795,7 +793,24 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_formula.TestFormula.test_iterate_immediate_sub_formulas&quot;" />
+      <option name="_new_target" value="&quot;test_formula.TestFormula.test_main_connective&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_formula.TestFormula.test_tree_size" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_formula.TestFormula.test_tree_size&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -852,7 +867,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_restricted_growth_function.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in test_formula.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -865,24 +880,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_restricted_growth_function.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in test_rooted_plane_tree.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_rooted_plane_tree.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_formula.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -914,10 +912,10 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_iterate_immediate_sub_formulas" />
+      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_main_connective" />
+      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_tree_size" />
       <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
-      <item itemvalue="Python tests.pytest in test_restricted_growth_function.py" />
-      <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
+      <item itemvalue="Python tests.pytest in test_formula.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -925,11 +923,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
-        <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
-        <item itemvalue="Python tests.pytest in test_restricted_growth_function.py" />
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_iterate_immediate_sub_formulas" />
+        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_main_connective" />
+        <item itemvalue="Python tests.pytest in test_formula.py" />
+        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_tree_size" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
       </list>
     </recent_temporary>
   </component>
@@ -951,14 +949,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01376" summary="new approach with Pointers and Structures.">
-      <option name="closed" value="true" />
-      <created>1740391489839</created>
-      <option name="number" value="01376" />
-      <option name="presentableId" value="LOCAL-01376" />
-      <option name="project" value="LOCAL" />
-      <updated>1740391489839</updated>
     </task>
     <task id="LOCAL-01377" summary="new approach with Pointers and Structures.">
       <option name="closed" value="true" />
@@ -1344,7 +1334,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750071943278</updated>
     </task>
-    <option name="localTasksCounter" value="1425" />
+    <task id="LOCAL-01425" summary="RGF sequence initial value=0">
+      <option name="closed" value="true" />
+      <created>1750072144048</created>
+      <option name="number" value="01425" />
+      <option name="presentableId" value="LOCAL-01425" />
+      <option name="project" value="LOCAL" />
+      <updated>1750072144049</updated>
+    </task>
+    <option name="localTasksCounter" value="1426" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1514,13 +1512,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_formula.py</url>
-          <line>42</line>
-          <option name="timeStamp" value="420" />
+          <line>31</line>
+          <option name="timeStamp" value="427" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_formula.py</url>
-          <line>41</line>
-          <option name="timeStamp" value="421" />
+          <line>32</line>
+          <option name="timeStamp" value="428" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_formula.py</url>
+          <line>33</line>
+          <option name="timeStamp" value="429" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_formula.py</url>
+          <line>34</line>
+          <option name="timeStamp" value="430" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
