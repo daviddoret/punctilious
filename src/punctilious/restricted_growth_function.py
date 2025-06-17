@@ -69,14 +69,75 @@ class RestrictedGrowthFunctionSequence(tuple):
 
     """
 
+    def __eq__(self, s):
+        """Returns `False` if `s` cannot be interpreted as a :class:`RestrictedGrowthFunctionSequence`,
+        returns `True` if `s` is connective-sequence-equivalent to this :class:`RestrictedGrowthFunctionSequence`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            s: RestrictedGrowthFunctionSequence = data_validate_restricted_growth_function_sequence(s)
+            return self.is_restricted_growth_function_sequence_equivalent_to(s)
+        except util.PunctiliousException:
+            return False
+
+    def __hash__(self):
+        return hash((RestrictedGrowthFunctionSequence, *self.elements,))
+
     def __init__(self, *s):
         super(RestrictedGrowthFunctionSequence, self).__init__()
+
+    def __ne__(self, s):
+        """Returns `False` if `c` cannot be interpreted as a :class:`RestrictedGrowthFunctionSequence`,
+        returns `True` if `c` is not connective-sequence-equivalent to this :class:`RestrictedGrowthFunctionSequence`,
+        returns `False` otherwise.
+
+         Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+       """
+        try:
+            s: RestrictedGrowthFunctionSequence = data_validate_restricted_growth_function_sequence(s)
+            return not self.is_restricted_growth_function_sequence_equivalent_to(s)
+        except util.PunctiliousException:
+            return False
 
     def __new__(cls, *s):
         s: tuple[int] = data_validate_restricted_growth_function_sequence_elements(s)
         s: tuple[int] = super(RestrictedGrowthFunctionSequence, cls).__new__(cls, s)
         s: tuple[int] = retrieve_restricted_growth_function_sequence_from_cache(s)
         return s
+
+    @property
+    def elements(self) -> tuple[int, ...]:
+        """The elements that compose this :class:`RestrictedGrowthFunctionSequence`, in order.
+
+        :return:
+        """
+        return tuple(super().__iter__())
+
+    def is_restricted_growth_function_sequence_equivalent_to(self, s: FlexibleRestrictedGrowthFunctionSequence):
+        """
+
+        Formal definition:
+        Two RGF-sequences s and t are RGF-sequence-equivalent if and only if:
+         - length(s) = length(t)
+         - s_i = t_i for 0 <= i < length(s)
+
+        :param s:
+        :return:
+        """
+        s: RestrictedGrowthFunctionSequence = data_validate_restricted_growth_function_sequence(s)
+        return self.length == s.length and all(x == y for x, y in zip(self, s))
 
     @property
     def length(self) -> int:

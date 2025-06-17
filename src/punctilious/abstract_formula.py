@@ -1,6 +1,7 @@
 from __future__ import annotations
 import typing
 import collections
+from platform import android_ver
 
 # package modules
 import util
@@ -97,12 +98,21 @@ class AbstractFormula(tuple):
         return self._immediate_sub_formulas
 
     def is_abstract_formula_equivalent_to(self, phi: AbstractFormula):
-        """Returns `True` if this :class:`AbstractFormula` is abstract_formula-equivalent to :class:`AbstractFormula` phi.
+        """Returns `True` if this :class:`AbstractFormula` is abstract-formula-equivalent
+        to :class:`AbstractFormula` `phi`.
+
+        Formal definition:
+        Two abstract-formulas phi and psi are abstract-formula-equivalent if and only if:
+        - the rooted-plane-tree of phi is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,
+        - the RGF-sequence of phi is sequence-equivalent to the RGF-sequence of psi.
 
         :param phi:
         :return:
         """
-        raise NotImplemented()
+        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
+            phi.rooted_plane_tree) and self.restricted_growth_function_sequence.is_restricted_growth_function_sequence_equivalent(
+            phi.restricted_growth_function_sequence)
 
     def is_sub_formula_of(self, phi: AbstractFormula):
         """Returns `True` if this :class:`AbstractFormula` if a sub-formula of :class:`AbstractFormula` phi.
