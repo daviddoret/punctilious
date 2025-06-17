@@ -20,6 +20,18 @@ References:
 - Mancosu 2021, definition 2.2 (p. 14).
 """
 
+# meta theory
+axiom: connective.Connective = connective.Connective("axiom",
+                                                     uid="9c4ab2a3-792c-4259-b4fa-21b560cbe821")
+theory: connective.Connective = connective.Connective("axiom",
+                                                      uid="74f68dc9-88dd-4bd0-94b8-ec2743a8ae82")
+hypothesis: connective.Connective = connective.Connective("axiom",
+                                                          uid="18549a80-aeb4-4670-b02b-394dfaf3eca8")
+inference_rule: connective.Connective = connective.Connective("inference-rule",
+                                                              uid="10158ac9-8ef8-414d-8f20-f93dc9326e8c")
+theorem: connective.Connective = connective.Connective("theorem",
+                                                       uid="3468cdbe-92d2-4cc4-beb4-e6889d46e981")
+
 # general logic
 biconditional: connective.Connective = connective.Connective("if-and-only-if",
                                                              uid="7db6be5a-3687-4ab3-aff6-b49ce06fd80a")

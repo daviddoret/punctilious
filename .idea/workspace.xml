@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="formula equivalence">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Formula.is_sub_formula, is_immediate_sub_formula">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -967,14 +965,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01393" summary="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation).">
-      <option name="closed" value="true" />
-      <created>1745788514617</created>
-      <option name="number" value="01393" />
-      <option name="presentableId" value="LOCAL-01393" />
-      <option name="project" value="LOCAL" />
-      <updated>1745788514617</updated>
-    </task>
     <task id="LOCAL-01394" summary="cleaning up class names">
       <option name="closed" value="true" />
       <created>1745868431257</created>
@@ -1359,7 +1349,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750158720169</updated>
     </task>
-    <option name="localTasksCounter" value="1442" />
+    <task id="LOCAL-01442" summary="Formula.is_sub_formula, is_immediate_sub_formula">
+      <option name="closed" value="true" />
+      <created>1750159705484</created>
+      <option name="number" value="01442" />
+      <option name="presentableId" value="LOCAL-01442" />
+      <option name="project" value="LOCAL" />
+      <updated>1750159705484</updated>
+    </task>
+    <option name="localTasksCounter" value="1443" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1412,7 +1410,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation)." />
     <MESSAGE value="modules cleanup" />
     <MESSAGE value="cleaning up class names" />
     <MESSAGE value="RootedPlaneTree" />
@@ -1437,7 +1434,8 @@
     <MESSAGE value="RGF-sequence equivalence" />
     <MESSAGE value="abstract-formula equivalence" />
     <MESSAGE value="formula equivalence" />
-    <option name="LAST_COMMIT_MESSAGE" value="formula equivalence" />
+    <MESSAGE value="Formula.is_sub_formula, is_immediate_sub_formula" />
+    <option name="LAST_COMMIT_MESSAGE" value="Formula.is_sub_formula, is_immediate_sub_formula" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
