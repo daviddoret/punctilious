@@ -35,10 +35,50 @@ def retrieve_abstract_formula_from_cache(o: FlexibleAbstractFormula):
 
 
 class AbstractFormula(tuple):
+
+    def __eq__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`AbstractFormula`,
+        returns `True` if `t` is abstract-formula-equivalent to this :class:`AbstractFormula`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            t: AbstractFormula = data_validate_abstract_formula(t)
+            return self.is_abstract_formula_equivalent_to(t)
+        except util.PunctiliousException:
+            return False
+
+    def __hash__(self):
+        return hash((AbstractFormula, self.rooted_plane_tree, self.restricted_growth_function_sequence,))
+
     def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: rgf.FlexibleRestrictedGrowthFunctionSequence):
         super(AbstractFormula, self).__init__()
         self._immediate_sub_formulas = None
         self._sub_formulas = None
+
+    def __ne__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`AbstractFormula`,
+        returns `True` if `t` is not abstract-formula-equivalent to this :class:`AbstractFormula`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            t: AbstractFormula = data_validate_abstract_formula(t)
+            return not self.is_abstract_formula_equivalent_to(t)
+        except util.PunctiliousException:
+            return False
 
     def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: rgf.FlexibleRestrictedGrowthFunctionSequence):
         t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
@@ -111,7 +151,7 @@ class AbstractFormula(tuple):
         """
         phi: AbstractFormula = data_validate_abstract_formula(phi)
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
-            phi.rooted_plane_tree) and self.restricted_growth_function_sequence.is_restricted_growth_function_sequence_equivalent(
+            phi.rooted_plane_tree) and self.restricted_growth_function_sequence.is_restricted_growth_function_sequence_equivalent_to(
             phi.restricted_growth_function_sequence)
 
     def is_sub_formula_of(self, phi: AbstractFormula):

@@ -144,3 +144,15 @@ class TestAbstractFormula:
         assert af2b.formula_degree == 1
         assert af6a.formula_degree == 1
         assert af12a.formula_degree == 4
+
+    def test_2(self, af1, af2a, af2b, af6a, af12a):
+        assert af1.is_abstract_formula_equivalent_to(af1)
+        assert af2a.is_abstract_formula_equivalent_to(af2a)
+        assert af2b.is_abstract_formula_equivalent_to(af2b)
+        assert af6a.is_abstract_formula_equivalent_to(af6a)
+        assert af12a.is_abstract_formula_equivalent_to(af12a)
+
+        assert not af1.is_abstract_formula_equivalent_to(af2a)
+        assert not af1.is_abstract_formula_equivalent_to(af2b)
+        assert not af1.is_abstract_formula_equivalent_to(af6a)
+        assert not af1.is_abstract_formula_equivalent_to(af12a)

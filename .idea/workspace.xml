@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="equivalence for abstract-formula and formula.">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RGF-sequence equivalence">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -351,6 +350,7 @@
     "Python tests.pytest for test_representations.TestRendererForStringTemplate.test_renderer_for_string_template.executor": "Run",
     "Python tests.pytest for test_representations.TestRepresentation.test_representation.executor": "Run",
     "Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_conversion_from_arbitrary_sequence.executor": "Run",
+    "Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to.executor": "Run",
     "Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_max_value.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache.executor": "Run",
@@ -578,7 +578,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_restricted_growth_function.py">
+  <component name="RunManager" selected="Python tests.pytest in test_abstract_formula.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -809,7 +809,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -822,7 +822,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent&quot;" />
+      <option name="_new_target" value="&quot;test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -844,7 +844,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_connective_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in test_abstract_formula.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -857,7 +857,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_connective_sequence.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_abstract_formula.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -923,8 +923,8 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent" />
-      <item itemvalue="Python tests.pytest in test_connective_sequence.py" />
+      <item itemvalue="Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to" />
+      <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
       <item itemvalue="Python tests.pytest in test_restricted_growth_function.py" />
       <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
       <item itemvalue="Python tests.pytest in tests" />
@@ -934,11 +934,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
+        <item itemvalue="Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to" />
         <item itemvalue="Python tests.pytest in test_restricted_growth_function.py" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
-        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent" />
-        <item itemvalue="Python tests.pytest in test_connective_sequence.py" />
       </list>
     </recent_temporary>
   </component>
@@ -960,14 +960,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01389" summary="minor improvements">
-      <option name="closed" value="true" />
-      <created>1745440072703</created>
-      <option name="number" value="01389" />
-      <option name="presentableId" value="LOCAL-01389" />
-      <option name="project" value="LOCAL" />
-      <updated>1745440072703</updated>
     </task>
     <task id="LOCAL-01390" summary="minor improvements">
       <option name="closed" value="true" />
@@ -1353,7 +1345,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750108492245</updated>
     </task>
-    <option name="localTasksCounter" value="1438" />
+    <task id="LOCAL-01438" summary="RGF-sequence equivalence">
+      <option name="closed" value="true" />
+      <created>1750157797800</created>
+      <option name="number" value="01438" />
+      <option name="presentableId" value="LOCAL-01438" />
+      <option name="project" value="LOCAL" />
+      <updated>1750157797800</updated>
+    </task>
+    <option name="localTasksCounter" value="1439" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1406,7 +1406,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="FormulaPointer" />
     <MESSAGE value="ConnectorIndex" />
     <MESSAGE value="minor improvements" />
     <MESSAGE value="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation)." />
@@ -1431,7 +1430,8 @@
     <MESSAGE value="equivalence for connectives and connective-sequences." />
     <MESSAGE value="equivalence for rpt." />
     <MESSAGE value="equivalence for abstract-formula and formula." />
-    <option name="LAST_COMMIT_MESSAGE" value="equivalence for abstract-formula and formula." />
+    <MESSAGE value="RGF-sequence equivalence" />
+    <option name="LAST_COMMIT_MESSAGE" value="RGF-sequence equivalence" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
