@@ -173,4 +173,4 @@ def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[i
 
 
 FlexibleRestrictedGrowthFunctionSequence = typing.Union[
-    RestrictedGrowthFunctionSequence, tuple[int], collections.abc.Iterator, collections.abc.Generator, None]
+    RestrictedGrowthFunctionSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]

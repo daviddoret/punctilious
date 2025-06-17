@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="abstract-formula equivalence">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="formula equivalence">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -242,6 +240,7 @@
     "Python tests.pytest for test_formula.TestFormula.test_formula.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_formula_2.executor": "Debug",
     "Python tests.pytest for test_formula.TestFormula.test_is__formula_equivalent_to.executor": "Run",
+    "Python tests.pytest for test_formula.TestFormula.test_is_formula_equivalent_to.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_iterate_connectives.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_iterate_immediate_sub_formulas.executor": "Run",
     "Python tests.pytest for test_formula.TestFormula.test_iterate_sub_formulas.executor": "Run",
@@ -581,7 +580,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_is__formula_equivalent_to">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -828,6 +827,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_formula.TestFormula.test_is_formula_equivalent_to" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_formula.TestFormula.test_is_formula_equivalent_to&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -843,23 +859,6 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -881,23 +880,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_abstract_formula.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_abstract_formula.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest in test_formula.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -915,6 +897,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -928,20 +927,20 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_2" />
       <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is__formula_equivalent_to" />
-      <item itemvalue="Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to" />
-      <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
+      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_formula_equivalent_to" />
       <item itemvalue="Python tests.pytest in test_formula.py" />
+      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_formula_equivalent_to" />
         <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is__formula_equivalent_to" />
         <item itemvalue="Python tests.pytest in test_formula.py" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_2" />
-        <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
-        <item itemvalue="Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to" />
       </list>
     </recent_temporary>
   </component>
@@ -963,14 +962,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01391" summary="minor improvements">
-      <option name="closed" value="true" />
-      <created>1745530584479</created>
-      <option name="number" value="01391" />
-      <option name="presentableId" value="LOCAL-01391" />
-      <option name="project" value="LOCAL" />
-      <updated>1745530584479</updated>
     </task>
     <task id="LOCAL-01392" summary="minor improvements">
       <option name="closed" value="true" />
@@ -1356,7 +1347,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750158149958</updated>
     </task>
-    <option name="localTasksCounter" value="1440" />
+    <task id="LOCAL-01440" summary="formula equivalence">
+      <option name="closed" value="true" />
+      <created>1750158616702</created>
+      <option name="number" value="01440" />
+      <option name="presentableId" value="LOCAL-01440" />
+      <option name="project" value="LOCAL" />
+      <updated>1750158616702</updated>
+    </task>
+    <option name="localTasksCounter" value="1441" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1409,7 +1408,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="minor improvements" />
     <MESSAGE value="separation between abstract_formal_language (without representation) and concrete_formal_language (with representation)." />
     <MESSAGE value="modules cleanup" />
     <MESSAGE value="cleaning up class names" />
@@ -1434,7 +1432,8 @@
     <MESSAGE value="equivalence for abstract-formula and formula." />
     <MESSAGE value="RGF-sequence equivalence" />
     <MESSAGE value="abstract-formula equivalence" />
-    <option name="LAST_COMMIT_MESSAGE" value="abstract-formula equivalence" />
+    <MESSAGE value="formula equivalence" />
+    <option name="LAST_COMMIT_MESSAGE" value="formula equivalence" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
