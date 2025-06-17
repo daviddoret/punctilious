@@ -48,6 +48,24 @@ class TestFormula:
         assert l[3] == pu.formula.Formula(phi=af1, s=(pu.connective_library.four,))
         assert l[4] == pu.formula.Formula(phi=af1, s=(pu.connective_library.five,))
 
+    def test_is_immediate_sub_formula_of(self, af1, phi1a, phi2a, phi2b, phi6a):
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.one,)).is_immediate_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.two,)).is_immediate_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.three,)).is_immediate_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.four,)).is_immediate_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.five,)).is_immediate_sub_formula_of(phi6a)
+
+    def test_is_sub_formula_of(self, af1, phi1a, phi2a, phi2b, phi6a):
+        assert phi1a.is_sub_formula_of(phi1a)
+        assert phi2a.is_sub_formula_of(phi2a)
+        assert phi2b.is_sub_formula_of(phi2b)
+        assert phi6a.is_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.one,)).is_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.two,)).is_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.three,)).is_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.four,)).is_sub_formula_of(phi6a)
+        assert pu.formula.Formula(phi=af1, s=(pu.connective_library.five,)).is_sub_formula_of(phi6a)
+
     def test_iterate_sub_formulas(self, af1, phi1a, phi2a, phi2b, phi6a):
         l = tuple(t for t in phi1a.iterate_sub_formulas())
         assert l[0] == phi1a

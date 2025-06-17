@@ -192,6 +192,24 @@ class Formula(tuple):
             phi.abstract_formula) and self.connective_sequence.is_connective_sequence_equivalent_to(
             phi.connective_sequence)
 
+    def is_immediate_sub_formula_of(self, phi: Formula) -> bool:
+        """Returns `True` if `phi` is an immediate sub-formula of the current `Formula`, `False` otherwise.
+
+        :param phi:
+        :return:
+        """
+        phi: Formula = data_validate_formula(phi)
+        return any(self.is_formula_equivalent_to(psi) for psi in phi.iterate_immediate_sub_formulas())
+
+    def is_sub_formula_of(self, phi: Formula) -> bool:
+        """Returns `True` if `phi` is a sub-formula of the current `Formula`, `False` otherwise.
+
+        :param phi:
+        :return:
+        """
+        phi: Formula = data_validate_formula(phi)
+        return any(self.is_formula_equivalent_to(psi) for psi in phi.iterate_sub_formulas())
+
     def iterate_connectives(self) -> collections.abc.Generator[connective.Connective, None, None]:
         """Iterate the `Formula` connectives, following the depth-first, ascending-nodes algorithm.
 
