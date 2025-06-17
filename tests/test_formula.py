@@ -64,3 +64,13 @@ class TestFormula:
         assert l[3] == pu.formula.Formula(phi=af1, s=(pu.connective_library.three,))
         assert l[4] == pu.formula.Formula(phi=af1, s=(pu.connective_library.four,))
         assert l[5] == pu.formula.Formula(phi=af1, s=(pu.connective_library.five,))
+
+    def test_is_formula_equivalent_to(self, phi1a, phi2a, phi2b, phi6a):
+        assert phi1a.is_formula_equivalent_to(phi1a)
+        assert phi2a.is_formula_equivalent_to(phi2a)
+        assert phi2b.is_formula_equivalent_to(phi2b)
+        assert phi6a.is_formula_equivalent_to(phi6a)
+
+        assert not phi1a.is_formula_equivalent_to(phi2a)
+        assert not phi1a.is_formula_equivalent_to(phi2b)
+        assert not phi1a.is_formula_equivalent_to(phi6a)

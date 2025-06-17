@@ -40,11 +40,50 @@ class Formula(tuple):
      - S is a sequence of connectives of length n.
     """
 
+    def __eq__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`Formula`,
+        returns `True` if `t` is formula-equivalent to this :class:`Formula`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            t: Formula = data_validate_formula(t)
+            return self.is_formula_equivalent_to(t)
+        except util.PunctiliousException:
+            return False
+
+    def __hash__(self):
+        return hash((Formula, self.abstract_formula, self.connective_sequence,))
+
     def __init__(self, phi: af.FlexibleAbstractFormula, s: cs.FlexibleConnectiveSequence):
         super(Formula, self).__init__()
         self._connectives = None
         self._immediate_sub_formulas = None
         self._sub_formulas = None
+
+    def __ne__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`Formula`,
+        returns `True` if `t` is not formula-equivalent to this :class:`Formula`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            t: Formula = data_validate_formula(t)
+            return not self.is_formula_equivalent_to(t)
+        except util.PunctiliousException:
+            return False
 
     def __new__(cls, phi: af.FlexibleAbstractFormula, s: cs.FlexibleConnectiveSequence):
         s: cs.ConnectiveSequence = cs.data_validate_connective_sequence(s)
@@ -135,6 +174,23 @@ class Formula(tuple):
                 sub_formulas.append(sub_formula)
             self._sub_formulas = tuple(sub_formulas)
         return self._sub_formulas
+
+    def is_formula_equivalent_to(self, phi: Formula):
+        """Returns `True` if this :class:`Formula` is formula-equivalent
+        to :class:`Formula` `phi`.
+
+        Formal definition:
+        Two formulas phi and psi are formula-equivalent if and only if:
+        - the abstract-formula of phi is abstract-formula-equivalent to the abstract-formula of psi,
+        - the connective-sequence of phi is connective-sequence-equivalent to the connective-sequence of psi.
+
+        :param phi:
+        :return:
+        """
+        phi: Formula = data_validate_formula(phi)
+        return self.abstract_formula.is_abstract_formula_equivalent_to(
+            phi.abstract_formula) and self.connective_sequence.is_connective_sequence_equivalent_to(
+            phi.connective_sequence)
 
     def iterate_connectives(self) -> collections.abc.Generator[connective.Connective, None, None]:
         """Iterate the `Formula` connectives, following the depth-first, ascending-nodes algorithm.
