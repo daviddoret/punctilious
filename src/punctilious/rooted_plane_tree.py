@@ -186,6 +186,36 @@ class RootedPlaneTree(tuple):
         """
         return super().__len__()
 
+    def get_sub_tree_by_path(self, p: tuple[int, ...]) -> RootedPlaneTree:
+        """Given a path `p`, returns the corresponding sub-rooted-plane-tree.
+
+        Definition - rooted-plane-tree path:
+        A rooted-plane-tree path is a finite sequence of natural numbers >= 0, of length > 0,
+        that gives the index position of the sub-plane-trees, following the depth-first algorithm,
+        starting with 0 meaning the original tree.
+
+        It follows that for any tree `t`, the path (0) returns the tree itself.
+
+        :param p:
+        :return:
+        """
+        p: tuple[int, ...] = tuple(int(n) for n in p)
+        if p[0] != 0:
+            raise util.PunctiliousException("The first element of the path is not equal to 0.", p0=p[0], p=p)
+        if p == (0,):
+            return self
+        else:
+            t: RootedPlaneTree = self
+            for i in range(1, len(p)):
+                j = p[i]
+                if 0 < j >= t.degree:
+                    raise util.PunctiliousException(
+                        "The n-th element of the path is negative or greater than the number of"
+                        " immediate sub-rooted-plane-trees in t.", n_index=i, n_value=j,
+                        t=t)
+                t: RootedPlaneTree = t.children[j]
+            return t
+
     @property
     def is_leaf(self) -> bool:
         """Returns `True` if the RootedPlaneTree is a leaf, `False` otherwise.
@@ -320,6 +350,10 @@ class RootedPlaneTree(tuple):
 
         Definition: the size of a rooted plan tree is the total number of vertices in the graph."""
         return 1 + sum(child.size for child in self.children)
+
+    @property
+    def substitute_sub_tree(self, m: dict[FlexibleRootedPlaneTree, FlexibleRootedPlaneTree]) -> RootedPlaneTree:
+        raise NotImplementedError('TO BE IMPLEMENTED')
 
     def to_list(self) -> list:
         """Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because

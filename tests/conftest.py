@@ -104,28 +104,33 @@ def rpt12a(rpt1, rpt2, rpt6a):
 
 
 @pytest.fixture
+def rpt_big(rpt1, rpt2, rpt6a, rpt12a):
+    return pu.rpt.RootedPlaneTree(rpt12a, rpt2, rpt6a, rpt12a, rpt2)
+
+
+@pytest.fixture
 def rgf1(s1a):
-    return pu.rgf.RestrictedGrowthFunctionSequence(*s1a)
+    return pu.rgfs.RestrictedGrowthFunctionSequence(*s1a)
 
 
 @pytest.fixture
 def rgf2a(s2a):
-    return pu.rgf.RestrictedGrowthFunctionSequence(*s2a)
+    return pu.rgfs.RestrictedGrowthFunctionSequence(*s2a)
 
 
 @pytest.fixture
 def rgf2b(s2b):
-    return pu.rgf.RestrictedGrowthFunctionSequence(*s2b)
+    return pu.rgfs.RestrictedGrowthFunctionSequence(*s2b)
 
 
 @pytest.fixture
 def rgf6a():
-    return pu.rgf.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, )
+    return pu.rgfs.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, )
 
 
 @pytest.fixture
 def rgf12a():
-    return pu.rgf.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+    return pu.rgfs.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
 
 
 @pytest.fixture

@@ -1,12 +1,12 @@
 from __future__ import annotations
 import typing
 import collections
-from platform import android_ver
+import itertools
 
 # package modules
 import util
 import rooted_plane_tree as rpt
-import restricted_growth_function as rgf
+import restricted_growth_function_sequence as rgf
 
 
 def data_validate_abstract_formula(
@@ -354,6 +354,30 @@ class AbstractFormula(tuple):
             self._sub_formulas = tuple(sub_formulas)
         return self._sub_formulas
 
+    def substitute_sub_formulas(self, m: dict[FlexibleAbstractFormula, FlexibleAbstractFormula]) -> AbstractFormula:
+        """Returns a new :class:`AbstractFormula`
+        similar to the current :class:`AbstractFormula` except that
+        all sub-abstract-formulas present in the map `m` domain,
+        are substituted with corresponding :class:`AbstractFormula` elements in map `m` codomain,
+        following the depth-first, ascending-nodes algorithm.
+
+        :param m: A map AbstractFormula --> AbstractFormula.
+        :return:
+        """
+        domain: tuple[AbstractFormula, ...] = tuple(data_validate_abstract_formula(x) for x in m.keys())
+        codomain: tuple[AbstractFormula, ...] = tuple(data_validate_abstract_formula(y) for y in m.values())
+        m: dict[AbstractFormula, AbstractFormula] = dict(zip(domain, codomain))
+        immediate_sub_formulas: list[AbstractFormula] = []
+        phi: AbstractFormula
+        for phi in self.iterate_immediate_sub_formulas():
+            if phi in m.keys():
+                phi = m[phi]
+                immediate_sub_formulas.append(phi)
+            else:
+                immediate_sub_formulas.append(phi)
+        psi: AbstractFormula = AbstractFormula()
+        raise NotImplementedError("Complete implementation here")
+
     @property
     def t(self) -> rpt.RootedPlaneTree:
         """A shortcut for self.rooted_plane_tree."""
@@ -366,6 +390,22 @@ class AbstractFormula(tuple):
         Attention point: do not confuse `tree_size` and `formula_degree`.
         """
         return self.rooted_plane_tree.size
+
+
+def build_formula_from_immediate_sub_formulas(
+        immediate_sub_formulas: tuple[FlexibleAbstractFormula]) -> AbstractFormula:
+    """
+
+    :param immediate_sub_formulas:
+    :return:
+    """
+    immediate_sub_formulas: tuple[AbstractFormula, ...] = tuple(
+        data_validate_abstract_formula(o=phi) for phi in immediate_sub_formulas)
+    phi: AbstractFormula
+    s: rgf.RestrictedGrowthFunctionSequence = itertools.chain.from_iterable(
+        phi.restricted_growth_function_sequence for phi in immediate_sub_formulas)
+    phi = AbstractFormula(t=t, s=s)
+    raise NotImplementedError('review approach completely')
 
 
 FlexibleAbstractFormula = typing.Union[

@@ -179,3 +179,11 @@ class TestRootedPlaneTree:
         assert l[9] == rpt1
         assert l[10] == rpt2
         assert l[11] == rpt1
+
+    def test_get_sub_tree_by_path(self, rpt1, rpt2, rpt6a, rpt12a, rpt_big):
+        assert rpt1.get_sub_tree_by_path((0,)) == rpt1
+        assert rpt2.get_sub_tree_by_path((0,)) == rpt2
+        assert rpt2.get_sub_tree_by_path((0, 0,)) == rpt1
+        assert rpt_big.get_sub_tree_by_path((0, 3,)) == rpt12a
+        assert rpt_big.get_sub_tree_by_path((0, 3, 2,)) == rpt6a
+        assert rpt_big.get_sub_tree_by_path((0, 3, 2, 4,)) == rpt1

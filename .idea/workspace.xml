@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Formula.is_sub_formula, is_immediate_sub_formula">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="meta theory connectives">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -356,9 +363,11 @@
     "Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_conversion_from_arbitrary_sequence.executor": "Run",
     "Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_is_restricted_growth_function_sequence_equivalent_to.executor": "Run",
     "Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_max_value.executor": "Run",
+    "Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_concatenate_single.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_connector_index_01.executor": "Run",
+    "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_rooted_plane_tree_equivalent.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_iterate_children.executor": "Run",
@@ -436,6 +445,7 @@
     "Python tests.pytest in test_pu_06_meta_language.py.executor": "Run",
     "Python tests.pytest in test_representations.py.executor": "Run",
     "Python tests.pytest in test_restricted_growth_function.py.executor": "Run",
+    "Python tests.pytest in test_restricted_growth_function_sequence.py.executor": "Run",
     "Python tests.pytest in test_rooted_plane_tree.py.executor": "Run",
     "Python tests.pytest in test_rooted_plane_tree_OLD.py.executor": "Run",
     "Python tests.pytest in test_typesetting.py.executor": "Run",
@@ -582,7 +592,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_formula.TestFormula.test_is_sub_formula_of">
+  <component name="RunManager" selected="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -795,57 +805,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_formula.TestFormula.test_is__formula_equivalent_to" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_formula.TestFormula.test_is__formula_equivalent_to&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_formula.TestFormula.test_is_formula_equivalent_to" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_formula.TestFormula.test_is_formula_equivalent_to&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_formula.TestFormula.test_is_immediate_sub_formula_of" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_formula.TestFormula.test_is_immediate_sub_formula_of&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_formula.TestFormula.test_is_sub_formula_of" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -881,6 +840,40 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_concatenate_single" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_concatenate_single&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in punctilious" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -896,6 +889,23 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in test_restricted_growth_function_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -927,10 +937,10 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is__formula_equivalent_to" />
-      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_formula_equivalent_to" />
-      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_immediate_sub_formula_of" />
       <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_sub_formula_of" />
+      <item itemvalue="Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_concatenate_single" />
+      <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path" />
+      <item itemvalue="Python tests.pytest in test_restricted_growth_function_sequence.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -938,11 +948,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_sub_formula_of" />
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_immediate_sub_formula_of" />
+        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path" />
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_formula_equivalent_to" />
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is__formula_equivalent_to" />
+        <item itemvalue="Python tests.pytest in test_restricted_growth_function_sequence.py" />
+        <item itemvalue="Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_concatenate_single" />
+        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_sub_formula_of" />
       </list>
     </recent_temporary>
   </component>
@@ -964,14 +974,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01394" summary="cleaning up class names">
-      <option name="closed" value="true" />
-      <created>1745868431257</created>
-      <option name="number" value="01394" />
-      <option name="presentableId" value="LOCAL-01394" />
-      <option name="project" value="LOCAL" />
-      <updated>1745868431257</updated>
     </task>
     <task id="LOCAL-01395" summary="RootedPlaneTree">
       <option name="closed" value="true" />
@@ -1357,7 +1359,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750159705484</updated>
     </task>
-    <option name="localTasksCounter" value="1443" />
+    <task id="LOCAL-01443" summary="meta theory connectives">
+      <option name="closed" value="true" />
+      <created>1750159958458</created>
+      <option name="number" value="01443" />
+      <option name="presentableId" value="LOCAL-01443" />
+      <option name="project" value="LOCAL" />
+      <updated>1750159958458</updated>
+    </task>
+    <option name="localTasksCounter" value="1444" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1410,7 +1420,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="modules cleanup" />
     <MESSAGE value="cleaning up class names" />
     <MESSAGE value="RootedPlaneTree" />
     <MESSAGE value="RootedPlaneTree.size" />
@@ -1435,7 +1444,8 @@
     <MESSAGE value="abstract-formula equivalence" />
     <MESSAGE value="formula equivalence" />
     <MESSAGE value="Formula.is_sub_formula, is_immediate_sub_formula" />
-    <option name="LAST_COMMIT_MESSAGE" value="Formula.is_sub_formula, is_immediate_sub_formula" />
+    <MESSAGE value="meta theory connectives" />
+    <option name="LAST_COMMIT_MESSAGE" value="meta theory connectives" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

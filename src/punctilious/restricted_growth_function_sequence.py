@@ -1,4 +1,5 @@
 from __future__ import annotations
+import itertools
 import typing
 import collections
 import util
@@ -69,6 +70,17 @@ class RestrictedGrowthFunctionSequence(tuple):
 
     """
 
+    def __add__(self, other):
+        """Concatenates the current :class:`RestrictedGrowthFunctionSequence` with another one.
+
+        Note:
+            This enables the usage of the python sum function, e.g.: sum(s1, s2, ...).
+
+        :param other:
+        :return:
+        """
+        return concatenate_flexible_restricted_growth_sequences(self, other)
+
     def __eq__(self, s):
         """Returns `False` if `s` cannot be interpreted as a :class:`RestrictedGrowthFunctionSequence`,
         returns `True` if `s` is connective-sequence-equivalent to this :class:`RestrictedGrowthFunctionSequence`,
@@ -116,6 +128,19 @@ class RestrictedGrowthFunctionSequence(tuple):
         s: tuple[int] = super(RestrictedGrowthFunctionSequence, cls).__new__(cls, s)
         s: tuple[int] = retrieve_restricted_growth_function_sequence_from_cache(s)
         return s
+
+    def concatenate_with(self, *s: FlexibleRestrictedGrowthFunctionSequence) -> RestrictedGrowthFunctionSequence:
+        """Concatenates the current :class:`RestrictedGrowthFunctionSequence` with another one,
+        or an iterable of multiple ones.
+
+        Shortcuts:
+        s1 + s2
+        sum(s1, s2, ..., sn)
+
+        :param s:
+        :return:
+        """
+        return concatenate_flexible_restricted_growth_sequences(self, *s)
 
     @property
     def elements(self) -> tuple[int, ...]:
@@ -170,6 +195,17 @@ def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[i
             mapped_value += 1
     s2 = tuple(mapping[n] for n in s)
     return RestrictedGrowthFunctionSequence(*s2)
+
+
+def concatenate_flexible_restricted_growth_sequences(*s: tuple[
+    FlexibleRestrictedGrowthFunctionSequence, ...]) -> RestrictedGrowthFunctionSequence:
+    """Concatenates :class:`RestrictedGrowthFunctionSequence` elements.
+
+    :param s:
+    :return:
+    """
+    t: tuple[FlexibleRestrictedGrowthFunctionSequence] = tuple(itertools.chain.from_iterable(s))
+    return RestrictedGrowthFunctionSequence(*t)
 
 
 FlexibleRestrictedGrowthFunctionSequence = typing.Union[

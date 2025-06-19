@@ -300,6 +300,31 @@ class Formula(tuple):
             self._sub_formulas = tuple(sub_formulas)
         return self._sub_formulas
 
+    def substitute_sub_formulas(self, m: dict[FlexibleFormula, FlexibleFormula]) -> Formula:
+        """Returns a new :class:`Formula` similar to the current :class:`Formula` except that
+        all sub-formulas present in the map `m` domain,
+        are substituted with corresponding :class:`Formula` elements in map `m` codomain,
+        following the depth-first, ascending-nodes algorithm.
+
+        :param m: A map Formula --> Formula.
+        :return:
+        """
+        domain: tuple[Formula, ...] = tuple(data_validate_formula(x) for x in m.keys())
+        codomain: tuple[Formula, ...] = tuple(data_validate_formula(y) for y in m.values())
+        m: dict[Formula, Formula] = dict(zip(domain, codomain))
+        sub_formulas: list[Formula] = []
+        immediate_abstract_formulas: list[af.AbstractFormula] = []
+        for phi in self.iterate_immediate_sub_formulas():
+            if phi in m.keys():
+                psi = m[phi]
+                sub_formulas.append(psi)
+                immediate_abstract_formulas.append(psi.abstract_formula)
+            else:
+                sub_formulas.append(phi)
+                immediate_abstract_formulas.append(phi.abstract_formula)
+        abstract_formula: af.AbstractFormula = af.AbstractFormula()
+        raise NotImplementedError("Complete implementation")
+
     @property
     def tree_size(self) -> int:
         """The `tree_size` of a `Formula` is the number of vertices in the `RootedPlaneTree` of its `abstract_formula`.
