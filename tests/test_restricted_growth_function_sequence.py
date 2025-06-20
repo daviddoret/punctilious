@@ -4,33 +4,39 @@ import punctilious as pu
 
 
 class TestRestrictedGrowthFunctionSequence:
-    def test_data_validation(self, s3a, s3b, s14a, s14b):
-        assert pu.rgfs.data_validate_restricted_growth_function_sequence_elements(s3a) == s3a
-        assert pu.rgfs.data_validate_restricted_growth_function_sequence_elements(s14a) == s14a
+    def test_data_validation(self, s012, s021, s00010203043212, s00010203043262):
+        assert pu.rgfs.data_validate_restricted_growth_function_sequence_elements(s012) == s012
+        assert pu.rgfs.data_validate_restricted_growth_function_sequence_elements(s00010203043212) == s00010203043212
         with pytest.raises(pu.util.PunctiliousException):
-            pu.rgfs.data_validate_restricted_growth_function_sequence_elements(s3b)
+            pu.rgfs.data_validate_restricted_growth_function_sequence_elements(s021)
         with pytest.raises(pu.util.PunctiliousException):
-            pu.rgfs.data_validate_restricted_growth_function_sequence_elements(s14b)
+            pu.rgfs.data_validate_restricted_growth_function_sequence_elements(s00010203043262)
 
-    def test_data_validation_in_construction(self, s3a, s3b, s14a, s14b):
+    def test_data_validation_in_construction(self, s012, s021, s00010203043212, s00010203043262):
         with pytest.raises(pu.util.PunctiliousException):
-            pu.rgfs.RestrictedGrowthFunctionSequence(*s3b)
+            pu.rgfs.RestrictedGrowthFunctionSequence(*s021)
         with pytest.raises(pu.util.PunctiliousException):
-            pu.rgfs.RestrictedGrowthFunctionSequence(*s14b)
+            pu.rgfs.RestrictedGrowthFunctionSequence(*s00010203043262)
 
-    def test_equality(self, s3a, s3b, s14a, s14b):
-        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s3a) == pu.rgfs.RestrictedGrowthFunctionSequence(*s3a)
-        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s14a) == pu.rgfs.RestrictedGrowthFunctionSequence(*s14a)
+    def test_equality(self, s012, s021, s00010203043212, s00010203043262):
+        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s012) == pu.rgfs.RestrictedGrowthFunctionSequence(*s012)
+        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s00010203043212) == pu.rgfs.RestrictedGrowthFunctionSequence(
+            *s00010203043212)
 
-    def test_inequality(self, s3a, s3b, s14a, s14b):
-        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s3a) != pu.rgfs.RestrictedGrowthFunctionSequence(*s14a)
-        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s14a) != pu.rgfs.RestrictedGrowthFunctionSequence(*s3a)
+    def test_inequality(self, s012, s021, s00010203043212, s00010203043262):
+        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s012) != pu.rgfs.RestrictedGrowthFunctionSequence(
+            *s00010203043212)
+        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s00010203043212) != pu.rgfs.RestrictedGrowthFunctionSequence(
+            *s012)
 
-    def test_cache(self, s3a, s3b, s14a, s14b):
-        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s3a) is pu.rgfs.RestrictedGrowthFunctionSequence(*s3a)
-        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s14a) is pu.rgfs.RestrictedGrowthFunctionSequence(*s14a)
-        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s3a) is not pu.rgfs.RestrictedGrowthFunctionSequence(*s14a)
-        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s14a) is not pu.rgfs.RestrictedGrowthFunctionSequence(*s3a)
+    def test_cache(self, s012, s021, s00010203043212, s00010203043262):
+        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s012) is pu.rgfs.RestrictedGrowthFunctionSequence(*s012)
+        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s00010203043212) is pu.rgfs.RestrictedGrowthFunctionSequence(
+            *s00010203043212)
+        assert pu.rgfs.RestrictedGrowthFunctionSequence(*s012) is not pu.rgfs.RestrictedGrowthFunctionSequence(
+            *s00010203043212)
+        assert pu.rgfs.RestrictedGrowthFunctionSequence(
+            *s00010203043212) is not pu.rgfs.RestrictedGrowthFunctionSequence(*s012)
 
     def test_conversion_from_arbitrary_sequence(self):
         assert pu.rgfs.convert_arbitrary_sequence_to_restricted_growth_function_sequence(

@@ -114,6 +114,37 @@ class AbstractFormula(tuple):
                 i += 1
         return i
 
+    def get_sub_formula_by_path(self, p: tuple[int, ...]) -> AbstractFormula:
+        """Given a path `p`, returns the corresponding sub-formula.
+
+        Definition - sub-formula path:
+        A sub-formula path is a finite sequence of natural numbers >= 0, of length > 0,
+        that gives the index position of the sub-formulas, following the depth-first algorithm,
+        starting with 0 meaning the original tree.
+
+        It follows that for any formula `phi`, the path (0) returns the formula itself.
+
+        :param p:
+        :return:
+        """
+        p: tuple[int, ...] = tuple(int(n) for n in p)
+        if p[0] != 0:
+            raise util.PunctiliousException("The first element of the path is not equal to 0.", p0=p[0], p=p,
+                                            phi=self)
+        if p == (0,):
+            return self
+        else:
+            phi: AbstractFormula = self
+            for i in range(1, len(p)):
+                j = p[i]
+                if 0 < j >= phi.tree_degree:
+                    raise util.PunctiliousException(
+                        "The n-th element of the path is negative or greater than the number of"
+                        " immediate sub-formulas in phi.", n_index=i, n_value=j,
+                        phi=phi)
+                phi: AbstractFormula = phi.immediate_sub_formulas[j]
+            return phi
+
     @property
     def immediate_sub_formulas(self) -> tuple[AbstractFormula, ...]:
         """The `immediate_sub_formulas` of an `AbstractFormula` `phi` is the tuple of `AbstractFormula` elements
@@ -382,6 +413,14 @@ class AbstractFormula(tuple):
     def t(self) -> rpt.RootedPlaneTree:
         """A shortcut for self.rooted_plane_tree."""
         return self.rooted_plane_tree
+
+    @property
+    def tree_degree(self) -> int:
+        """The `tree_degree` of an `AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
+
+        Attention point: do not confuse `tree_degree` and `formula_degree`.
+        """
+        return self.rooted_plane_tree.degree
 
     @property
     def tree_size(self) -> int:

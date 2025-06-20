@@ -17,21 +17,21 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.af.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0,))
 
-    def test_iterate_immediate_sub_sequences(self, s1a, s1b, s1c, s1d, s1e, s1f, s2a, s2b, af1, rgf1, af2a, rgf2b, af6a,
+    def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, rgf1, af2a, rgf2b, af6a,
                                              rgf6a,
                                              af12a, rgf12a):
         l = tuple(t for t in af1.iterate_immediate_sub_sequences())
         assert len(l) == 0
         l = tuple(t for t in af2a.iterate_immediate_sub_sequences())
-        assert l[0] == s1a
+        assert l[0] == s0
         l = tuple(t for t in af6a.iterate_immediate_sub_sequences())
-        assert l[0] == s1b
-        assert l[1] == s1c
-        assert l[2] == s1d
-        assert l[3] == s1e
-        assert l[4] == s1f
+        assert l[0] == s1
+        assert l[1] == s2
+        assert l[2] == s3
+        assert l[3] == s4
+        assert l[4] == s5
         l = tuple(t for t in af12a.iterate_immediate_sub_sequences())
-        assert l[0] == s1b
+        assert l[0] == s1
         assert l[1] == (2, 3,)
         assert l[2] == (4, 5, 6, 7, 8, 9,)
         assert l[3] == (10, 11,)
@@ -156,3 +156,12 @@ class TestAbstractFormula:
         assert not af1.is_abstract_formula_equivalent_to(af2b)
         assert not af1.is_abstract_formula_equivalent_to(af6a)
         assert not af1.is_abstract_formula_equivalent_to(af12a)
+
+    def test_get_sub_tree_by_path(self, af1, af2a, af6a, af12a, af_big):
+        assert af1.get_sub_formula_by_path((0,)) == af1
+        assert af2a.get_sub_formula_by_path((0,)) == af2a
+        assert af2a.get_sub_formula_by_path((0, 0,)) == af1
+
+        assert af_big.get_sub_formula_by_path((0, 3,)) == af12a
+        assert af_big.get_sub_formula_by_path((0, 3, 2,)) == (0, 1, 2,)
+        assert af_big.get_sub_formula_by_path((0, 3, 2, 4,)) == (0, 1, 2,)

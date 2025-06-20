@@ -7,120 +7,120 @@ import punctilious as pu
 
 
 @pytest.fixture
-def s1a():
+def s0():
     return (0,)
 
 
 @pytest.fixture
-def s1b():
+def s1():
     return (1,)
 
 
 @pytest.fixture
-def s1c():
+def s2():
     return (2,)
 
 
 @pytest.fixture
-def s1d():
+def s3():
     return (3,)
 
 
 @pytest.fixture
-def s1e():
+def s4():
     return (4,)
 
 
 @pytest.fixture
-def s1f():
+def s5():
     return (5,)
 
 
 @pytest.fixture
-def s2a():
-    return (0, 0,)
+def s00():
+    return 0, 0,
 
 
 @pytest.fixture
-def s2b():
-    return (0, 1,)
+def s01():
+    return 0, 1,
 
 
 @pytest.fixture
-def s3a():
-    return (0, 1, 2,)
+def s012():
+    return 0, 1, 2,
 
 
 @pytest.fixture
-def s3b():
-    return (0, 2, 1,)
+def s021():
+    return 0, 2, 1,
 
 
 @pytest.fixture
-def s14a():
-    return (0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 3, 2, 1, 2,)
+def s00010203043212():
+    return 0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 3, 2, 1, 2,
 
 
 @pytest.fixture
-def s14b():
-    return (0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 3, 2, 6, 2,)
+def s00010203043262():
+    return 0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 3, 2, 6, 2,
 
 
 # rooted plane trees
 
 @pytest.fixture
-def rpt1():
+def t1_a():
     return pu.rpt.RootedPlaneTree()
 
 
 @pytest.fixture
-def rpt2(rpt1):
-    return pu.rpt.RootedPlaneTree(rpt1)
+def t2_a_aa(t1_a):
+    return pu.rpt.RootedPlaneTree(t1_a)
 
 
 @pytest.fixture
-def rpt3a(rpt2):
-    return pu.rpt.RootedPlaneTree(rpt2)
+def t3_a_aa_aaa(t2_a_aa):
+    return pu.t_rpt.RootedPlaneTree(t2_a_aa)
 
 
 @pytest.fixture
-def rpt3b(rpt1):
-    return pu.rpt.RootedPlaneTree(rpt1, rpt1)
+def t3_a_aa_ab(t1_a):
+    return pu.rpt.RootedPlaneTree(t1_a, t1_a)
 
 
 @pytest.fixture
-def rpt7a(rpt3b):
-    return pu.rpt.RootedPlaneTree(rpt3b, rpt3b)
+def t7_a_aa_ab_aaa_aaaa_aba_abaa(t3_a_aa_ab):
+    return pu.rpt.RootedPlaneTree(t3_a_aa_ab, t3_a_aa_ab)
 
 
 @pytest.fixture
-def rpt6a(rpt1):
-    return pu.rpt.RootedPlaneTree(rpt1, rpt1, rpt1, rpt1, rpt1)
+def t6_a_aa_ab_ac_ad_ae(t1_a):
+    return pu.rpt.RootedPlaneTree(t1_a, t1_a, t1_a, t1_a, t1_a)
 
 
 @pytest.fixture
-def rpt12a(rpt1, rpt2, rpt6a):
-    return pu.rpt.RootedPlaneTree(rpt1, rpt2, rpt6a, rpt2)
+def t12(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae):
+    return pu.rpt.RootedPlaneTree(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
 
 
 @pytest.fixture
-def rpt_big(rpt1, rpt2, rpt6a, rpt12a):
-    return pu.rpt.RootedPlaneTree(rpt12a, rpt2, rpt6a, rpt12a, rpt2)
+def t_big(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
+    return pu.rpt.RootedPlaneTree(t12, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12, t2_a_aa)
 
 
 @pytest.fixture
-def rgf1(s1a):
-    return pu.rgfs.RestrictedGrowthFunctionSequence(*s1a)
+def rgf1(s0):
+    return pu.rgfs.RestrictedGrowthFunctionSequence(*s0)
 
 
 @pytest.fixture
-def rgf2a(s2a):
-    return pu.rgfs.RestrictedGrowthFunctionSequence(*s2a)
+def rgf2a(s00):
+    return pu.rgfs.RestrictedGrowthFunctionSequence(*s00)
 
 
 @pytest.fixture
-def rgf2b(s2b):
-    return pu.rgfs.RestrictedGrowthFunctionSequence(*s2b)
+def rgf2b(s01):
+    return pu.rgfs.RestrictedGrowthFunctionSequence(*s01)
 
 
 @pytest.fixture
@@ -134,28 +134,40 @@ def rgf12a():
 
 
 @pytest.fixture
-def af1(rpt1, rgf1):
-    return pu.af.AbstractFormula(rpt1, rgf1)
+def af1(t1_a, rgf1):
+    return pu.af.AbstractFormula(t1_a, rgf1)
 
 
 @pytest.fixture
-def af2a(rpt2, rgf2a):
-    return pu.af.AbstractFormula(rpt2, rgf2a)
+def af2a(t2_a_aa, rgf2a):
+    return pu.af.AbstractFormula(t2_a_aa, rgf2a)
 
 
 @pytest.fixture
-def af2b(rpt2, rgf2b):
-    return pu.af.AbstractFormula(rpt2, rgf2b)
+def af2b(t2_a_aa, rgf2b):
+    return pu.af.AbstractFormula(t2_a_aa, rgf2b)
 
 
 @pytest.fixture
-def af6a(rpt6a, rgf6a):
-    return pu.af.AbstractFormula(rpt6a, rgf6a)
+def af3a(t3_a_aa_aaa, rgf3a):
+    return pu.af.AbstractFormula(t3_a_aa_aaa, rgf3a)
 
 
 @pytest.fixture
-def af12a(rpt12a, rgf12a):
-    return pu.af.AbstractFormula(rpt12a, rgf12a)
+def af6a(t6_a_aa_ab_ac_ad_ae, rgf6a):
+    return pu.af.AbstractFormula(t6_a_aa_ab_ac_ad_ae, rgf6a)
+
+
+@pytest.fixture
+def af12a(t12, rgf12a):
+    return pu.af.AbstractFormula(t12, rgf12a)
+
+
+@pytest.fixture
+def af_big(t_big):
+    return pu.af.AbstractFormula(t_big,
+                                 (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1, 4, 9, 10,
+                                  7, 7, 7, 9, 0, 11, 12,))
 
 
 @pytest.fixture
