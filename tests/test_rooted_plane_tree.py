@@ -187,3 +187,13 @@ class TestRootedPlaneTree:
         assert t_big.get_sub_tree_by_path((0, 3,)) == t12
         assert t_big.get_sub_tree_by_path((0, 3, 2,)) == t6_a_aa_ab_ac_ad_ae
         assert t_big.get_sub_tree_by_path((0, 3, 2, 4,)) == t1_a
+
+    def test_build_rooted_plane_tree_from_tuple_tree(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
+        u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(())
+        assert u1 == t1_a
+        u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(((),))
+        assert u1 == t2_a_aa
+        u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(((), (), (), (), (),))
+        assert u1 == t6_a_aa_ab_ac_ad_ae
+        u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(((), ((),), ((), (), (), (), (),), ((),),))
+        assert u1 == t12

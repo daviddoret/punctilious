@@ -431,6 +431,36 @@ class AbstractFormula(tuple):
         return self.rooted_plane_tree.size
 
 
+def build_formula_from_tree_of_integer_tuple_pairs(t) -> AbstractFormula:
+    """Build an abstract formula from a tree of integer / tuple pairs (n, T) where i is a natural number,
+    and T a tree of integer / tuple pairs.
+
+    :param t:
+    :return:
+    """
+
+    def _process_pair(t, u, s):
+        if len(t) != 2:
+            raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(t), t=t)
+        n = int(t[0])
+        s.append(n)
+        immediate_children_pairs = t[1]
+        for sub_pair in immediate_children_pairs:
+            sub_tree = []
+            u.append(sub_tree)
+            _process_pair(sub_pair, u=sub_tree, s=s)
+
+    u: list = []
+    s: list = []
+
+    _process_pair(t=t, u=u, s=s)
+
+    u: rpt.RootedPlaneTree = rpt.build_rooted_plane_tree_from_tuple_tree(t)
+    s: rgf.RestrictedGrowthFunctionSequence = rgf.RestrictedGrowthFunctionSequence(*s)
+
+    phi = AbstractFormula(t=u, s=s)
+
+
 def build_formula_from_immediate_sub_formulas(
         immediate_sub_formulas: tuple[FlexibleAbstractFormula]) -> AbstractFormula:
     """

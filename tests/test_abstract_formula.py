@@ -157,6 +157,12 @@ class TestAbstractFormula:
         assert not af1.is_abstract_formula_equivalent_to(af6a)
         assert not af1.is_abstract_formula_equivalent_to(af12a)
 
+    def test_build_formula_from_tree_of_integer_tuple_pairs(self, af1):
+        phi = pu.af.build_formula_from_tree_of_integer_tuple_pairs(
+            (0, ())
+        )
+        pass
+
     def test_get_sub_tree_by_path(self, af1, af2a, af6a, af12a, af_big):
         assert af1.get_sub_formula_by_path((0,)) == af1
         assert af2a.get_sub_formula_by_path((0,)) == af2a

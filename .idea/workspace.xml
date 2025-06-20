@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RPT: get_sub_tree_by_path">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="get_sub_formula_by_path">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -109,10 +108,11 @@
     "Python tests.pytest for test_abstract_formal_language.TestAbstractFormulaTerms.test_abstract_formula_terms_hash.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.executor": "Debug",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_2.executor": "Run",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs.executor": "Debug",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_construction_failure.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_construction_success.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_formula_degree.executor": "Run",
-    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path.executor": "Run",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path.executor": "Debug",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_children.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_immediate_sub_restricted_growth_function_sequences.executor": "Run",
@@ -363,6 +363,7 @@
     "Python tests.pytest for test_restricted_growth_function.TestRestrictedGrowthFunctionSequence.test_max_value.executor": "Run",
     "Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_concatenate_single.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.executor": "Run",
+    "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_cache.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_connector_index_01.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path.executor": "Run",
@@ -591,7 +592,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path">
+  <component name="RunManager" selected="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -808,6 +809,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -861,7 +879,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -874,7 +892,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path&quot;" />
+      <option name="_new_target" value="&quot;test_rooted_plane_tree.TestRootedPlaneTree.test&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -896,7 +914,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_restricted_growth_function_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in test_rooted_plane_tree.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -909,24 +927,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_rooted_plane_tree.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -942,21 +943,21 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
+      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path" />
-      <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path" />
-      <item itemvalue="Python tests.pytest in test_restricted_growth_function_sequence.py" />
-      <item itemvalue="Python tests.pytest in tests" />
+      <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test" />
+      <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test" />
+        <item itemvalue="Python tests.pytest in test_rooted_plane_tree.py" />
+        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path" />
         <item itemvalue="Python.conftest" />
-        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_get_sub_tree_by_path" />
-        <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest in test_restricted_growth_function_sequence.py" />
       </list>
     </recent_temporary>
   </component>
@@ -978,14 +979,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01396" summary="RootedPlaneTree">
-      <option name="closed" value="true" />
-      <created>1748480706113</created>
-      <option name="number" value="01396" />
-      <option name="presentableId" value="LOCAL-01396" />
-      <option name="project" value="LOCAL" />
-      <updated>1748480706113</updated>
     </task>
     <task id="LOCAL-01397" summary="RootedPlaneTree">
       <option name="closed" value="true" />
@@ -1371,7 +1364,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750332775243</updated>
     </task>
-    <option name="localTasksCounter" value="1445" />
+    <task id="LOCAL-01445" summary="get_sub_formula_by_path">
+      <option name="closed" value="true" />
+      <created>1750419384483</created>
+      <option name="number" value="01445" />
+      <option name="presentableId" value="LOCAL-01445" />
+      <option name="project" value="LOCAL" />
+      <updated>1750419384483</updated>
+    </task>
+    <option name="localTasksCounter" value="1446" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1424,7 +1425,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="RootedPlaneTree" />
     <MESSAGE value="RootedPlaneTree.size" />
     <MESSAGE value="RootedPlaneTree.to_multiline_string_vertical_tree_representation" />
     <MESSAGE value="files cleanup" />
@@ -1449,7 +1449,8 @@
     <MESSAGE value="Formula.is_sub_formula, is_immediate_sub_formula" />
     <MESSAGE value="meta theory connectives" />
     <MESSAGE value="RPT: get_sub_tree_by_path" />
-    <option name="LAST_COMMIT_MESSAGE" value="RPT: get_sub_tree_by_path" />
+    <MESSAGE value="get_sub_formula_by_path" />
+    <option name="LAST_COMMIT_MESSAGE" value="get_sub_formula_by_path" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1542,8 +1543,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>164</line>
-          <option name="timeStamp" value="442" />
+          <line>163</line>
+          <option name="timeStamp" value="443" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
+          <line>160</line>
+          <option name="timeStamp" value="444" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

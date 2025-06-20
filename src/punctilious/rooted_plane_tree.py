@@ -27,8 +27,8 @@ def retrieve_rooted_plane_tree_from_cache(o: FlexibleRootedPlaneTree):
         return o
 
 
-def convert_tuple_tree_to_rooted_plane_tree(t: FlexibleRootedPlaneTree | None = None) -> RootedPlaneTree:
-    """
+def build_rooted_plane_tree_from_tuple_tree(t: tuple | None = None) -> RootedPlaneTree:
+    """Builes a rooted-plane-tree from a tree of python tuples.
 
     :param t:
     :return:
@@ -38,7 +38,7 @@ def convert_tuple_tree_to_rooted_plane_tree(t: FlexibleRootedPlaneTree | None = 
     elif len(t) == 0:
         return RootedPlaneTree()
     else:
-        children = tuple(convert_tuple_tree_to_rooted_plane_tree(u) for u in t)
+        children = tuple(build_rooted_plane_tree_from_tuple_tree(u) for u in t)
         return RootedPlaneTree(*children)
 
 
@@ -104,7 +104,7 @@ class RootedPlaneTree(tuple):
 
     def __new__(cls, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         if tuple_tree is not None:
-            t = convert_tuple_tree_to_rooted_plane_tree(tuple_tree)
+            t = build_rooted_plane_tree_from_tuple_tree(tuple_tree)
             t = super(RootedPlaneTree, cls).__new__(cls, t)
             t = retrieve_rooted_plane_tree_from_cache(t)
             return t
