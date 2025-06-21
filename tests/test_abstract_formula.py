@@ -157,6 +157,20 @@ class TestAbstractFormula:
         assert not af1.is_abstract_formula_equivalent_to(af6a)
         assert not af1.is_abstract_formula_equivalent_to(af12a)
 
+    def test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(self):
+        tree_of_pairs = (0, (),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert (t, s,) == ((), (0,),)
+        tree_of_pairs = (3, ((2, (),),),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert (t, s,) == (((),), (3, 2,),)
+        tree_of_pairs = (3, ((9, (),), (8, (),), (7, (),),),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert (t, s,) == (((), (), (),), (3, 9, 8, 7,),)
+        tree_of_pairs = (3, ((9, (),), (8, ((3, ((2, ((3, ((2, (),),),),),),),),),), (7, ((0, (),),),),),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert (t, s,) == (((), (((((),),),),), ((),),), (3, 9, 8, 3, 2, 3, 2, 7, 0,),)
+
     def test_build_formula_from_tree_of_integer_tuple_pairs(self, af1):
         phi = pu.af.build_formula_from_tree_of_integer_tuple_pairs(
             (0, ())

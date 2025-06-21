@@ -431,34 +431,65 @@ class AbstractFormula(tuple):
         return self.rooted_plane_tree.size
 
 
+def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
+    """Given a tree of integer/tuple pairs, extracts:
+     - its tree of tuples,
+     - and its sequence of integers,
+    following the depth-first ascending-nodes algorithm.
+
+    :param p: the tree of integer/tuple pairs
+    :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
+    """
+    if len(p) != 2:
+        raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
+    i: int = p[0]
+    children = p[1]
+    if len(children) == 0:
+        # this is a leaf
+        return (), (i,)
+    else:
+        t: list = []
+        s: tuple[int, ...] = (i,)
+        for sub_p in children:
+            sub_t, sub_s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=sub_p)
+            t.append(sub_t)
+            s += sub_s
+        t: tuple[tuple, ...] = tuple(t)
+        return t, s
+
+
 def build_formula_from_tree_of_integer_tuple_pairs(t) -> AbstractFormula:
     """Build an abstract formula from a tree of integer / tuple pairs (n, T) where i is a natural number,
     and T a tree of integer / tuple pairs.
+
+    Definition:
+    A tree of integer tuple pairs `T` defined as:
+     T := (n, T')
+    where:
+     - n is a natural number
+     - T' is tree of integer tuple pairs.
+
 
     :param t:
     :return:
     """
 
-    def _process_pair(t, u, s):
-        if len(t) != 2:
-            raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(t), t=t)
-        n = int(t[0])
-        s.append(n)
-        immediate_children_pairs = t[1]
-        for sub_pair in immediate_children_pairs:
-            sub_tree = []
-            u.append(sub_tree)
-            _process_pair(sub_pair, u=sub_tree, s=s)
+    if len(t) != 2:
+        raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(t), t=t)
 
-    u: list = []
-    s: list = []
+    n = t[0]
+    children = t[1]
 
-    _process_pair(t=t, u=u, s=s)
-
-    u: rpt.RootedPlaneTree = rpt.build_rooted_plane_tree_from_tuple_tree(t)
-    s: rgf.RestrictedGrowthFunctionSequence = rgf.RestrictedGrowthFunctionSequence(*s)
-
-    phi = AbstractFormula(t=u, s=s)
+    if len(children) == 0:
+        # This is a leaf.
+        return AbstractFormula(t=rpt.RootedPlaneTree(), s=(n,))
+    else:
+        # This is not a leaf
+        l: list[AbstractFormula, ...] = []
+        for sub_pair in children:
+            phi: AbstractFormula = build_formula_from_tree_of_integer_tuple_pairs(sub_pair)
+            l.append(phi)
+        raise NotImplementedError("XXXXX")
 
 
 def build_formula_from_immediate_sub_formulas(
