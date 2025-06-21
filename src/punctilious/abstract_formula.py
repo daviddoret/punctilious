@@ -458,7 +458,7 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
         return t, s
 
 
-def build_formula_from_tree_of_integer_tuple_pairs(t) -> AbstractFormula:
+def build_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
     """Build an abstract formula from a tree of integer / tuple pairs (n, T) where i is a natural number,
     and T a tree of integer / tuple pairs.
 
@@ -470,26 +470,15 @@ def build_formula_from_tree_of_integer_tuple_pairs(t) -> AbstractFormula:
      - T' is tree of integer tuple pairs.
 
 
-    :param t:
+    :param p:
     :return:
     """
 
-    if len(t) != 2:
-        raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(t), t=t)
-
-    n = t[0]
-    children = t[1]
-
-    if len(children) == 0:
-        # This is a leaf.
-        return AbstractFormula(t=rpt.RootedPlaneTree(), s=(n,))
-    else:
-        # This is not a leaf
-        l: list[AbstractFormula, ...] = []
-        for sub_pair in children:
-            phi: AbstractFormula = build_formula_from_tree_of_integer_tuple_pairs(sub_pair)
-            l.append(phi)
-        raise NotImplementedError("XXXXX")
+    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
+    t = rpt.build_rooted_plane_tree_from_tuple_tree(t)
+    s = rgf.RestrictedGrowthFunctionSequence(*s)
+    phi = AbstractFormula(t, s)
+    return phi
 
 
 def build_formula_from_immediate_sub_formulas(

@@ -172,10 +172,31 @@ class TestAbstractFormula:
         assert (t, s,) == (((), (((((),),),),), ((),),), (3, 9, 8, 3, 2, 3, 2, 7, 0,),)
 
     def test_build_formula_from_tree_of_integer_tuple_pairs(self, af1):
-        phi = pu.af.build_formula_from_tree_of_integer_tuple_pairs(
-            (0, ())
-        )
-        pass
+        tree_of_pairs = (0, (),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.af.AbstractFormula(t, s)
+        psi = pu.af.build_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert phi == psi
+        tree_of_pairs = (0, ((0, (),),),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.af.AbstractFormula(t, s)
+        psi = pu.af.build_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert phi == psi
+        tree_of_pairs = (0, ((1, (),),),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.af.AbstractFormula(t, s)
+        psi = pu.af.build_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert phi == psi
+        tree_of_pairs = (0, ((1, (),), (2, (),), (3, (),),),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.af.AbstractFormula(t, s)
+        psi = pu.af.build_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert phi == psi
+        tree_of_pairs = (0, ((1, (),), (0, ((1, ((2, ((3, ((1, (),),),),),),),),),), (4, ((1, (),),),),),)
+        t, s = pu.af.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.af.AbstractFormula(t, s)
+        psi = pu.af.build_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        assert phi == psi
 
     def test_get_sub_tree_by_path(self, af1, af2a, af6a, af12a, af_big):
         assert af1.get_sub_formula_by_path((0,)) == af1
