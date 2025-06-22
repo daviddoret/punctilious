@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="CAF">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="UnrestrictedSequence">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -976,14 +976,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01401" summary="RootedPlaneTree.to_multiline_string_vertical_tree_representation">
-      <option name="closed" value="true" />
-      <created>1749107444121</created>
-      <option name="number" value="01401" />
-      <option name="presentableId" value="LOCAL-01401" />
-      <option name="project" value="LOCAL" />
-      <updated>1749107444121</updated>
-    </task>
     <task id="LOCAL-01402" summary="files cleanup">
       <option name="closed" value="true" />
       <created>1749107619355</created>
@@ -1368,7 +1360,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750573370940</updated>
     </task>
-    <option name="localTasksCounter" value="1450" />
+    <task id="LOCAL-01450" summary="UnrestrictedSequence">
+      <option name="closed" value="true" />
+      <created>1750573923506</created>
+      <option name="number" value="01450" />
+      <option name="presentableId" value="LOCAL-01450" />
+      <option name="project" value="LOCAL" />
+      <updated>1750573923506</updated>
+    </task>
+    <option name="localTasksCounter" value="1451" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1421,7 +1421,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="AbstractFormula.iterate_subsequences_direct_ascending" />
     <MESSAGE value="AbstractFormula.iterate_sequences_depth_first_ascending" />
     <MESSAGE value="AbstractFormula.iterate_sub_formulas_depth_first_ascending" />
     <MESSAGE value="AbstractFormlua" />
@@ -1446,7 +1445,8 @@
     <MESSAGE value="extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs" />
     <MESSAGE value="build_formula_from_tree_of_integer_tuple_pairs" />
     <MESSAGE value="CAF" />
-    <option name="LAST_COMMIT_MESSAGE" value="CAF" />
+    <MESSAGE value="UnrestrictedSequence" />
+    <option name="LAST_COMMIT_MESSAGE" value="UnrestrictedSequence" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

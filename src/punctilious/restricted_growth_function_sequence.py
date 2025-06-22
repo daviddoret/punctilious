@@ -63,7 +63,7 @@ class RestrictedGrowthFunctionSequence(tuple):
     Formal Definition:
     A :class:`RestrictedGrowthFunctionSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_i) such that:
         - n_0 = 0
-        - with j > 0, n_j <= 1 + max(n_0, n_1, ..., n_(j-1))
+        - n_j <= 1 + max(n_0, n_1, ..., n_(j-1)) for 0 < j <= i
 
     Note:
     Often RGF sequences have an initial value of 1 in the literature. We choose 0 here for consistency

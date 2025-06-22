@@ -56,17 +56,11 @@ def retrieve_unrestricted_sequence_from_cache(i: UnrestrictedSequence):
 
 
 class UnrestrictedSequence(tuple):
-    """A finite (computable) sequence of values starting at 0 whose maximal value increase is restricted.
-
-    Note:
-    Often RGF sequences have an initial value of 1 in the literature. We choose 0 here for consistency
-    with the design choice of using 0-based indexes as the default indexing. In practice, 0-based indexes
-    were a natural choice for Python implementation.
+    """A finite (computable) and arbitrary sequence of natural numbers.
 
     Definition:
-    A `UnrestrictedSequence` is a finite sequence of natural numbers such that:
-        - n_0 = 0
-        - with i > 0, n_i = 1 + max(n_0, n_1, ..., n_(i-1))
+    An :class:`UnrestrictedSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_j) such that:
+        - n_i >= 0 for 0 <= i <= j
 
     """
 
