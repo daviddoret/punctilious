@@ -11,11 +11,11 @@ class TestNonCanonicalAbstractFormula:
 
     def test_construction_failure(self):
         with pytest.raises(pu.util.PunctiliousException):
-            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 2, 1, 0,))  # invalid
+            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 2,))  # invalid
         with pytest.raises(pu.util.PunctiliousException):
-            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0,))
+            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 2,))
         with pytest.raises(pu.util.PunctiliousException):
-            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0,))
+            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
 
     def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, rgfs0, af2a, rgfs01, af6a,
                                              rgfs012345,

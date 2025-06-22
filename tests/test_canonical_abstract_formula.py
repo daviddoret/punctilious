@@ -5,17 +5,17 @@ import punctilious as pu
 
 class TestAbstractFormula:
     def test_construction_success(self):
-        phi1 = pu.caf.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 2, 3,))
-        phi2 = pu.caf.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 0,))
+        phi1 = pu.afl.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 2, 3,))
+        phi2 = pu.afl.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 0,))
         pass
 
     def test_construction_failure(self):
         with pytest.raises(pu.util.PunctiliousException):
-            pu.caf.CanonicalAbstractFormula(t=(((),), (),), s=(0, 2, 1, 0,))  # invalid
+            pu.afl.CanonicalAbstractFormula(t=(((),), (),), s=(0, 2, 1, 0,))  # invalid
         with pytest.raises(pu.util.PunctiliousException):
-            pu.caf.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0,))
+            pu.afl.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0,))
         with pytest.raises(pu.util.PunctiliousException):
-            pu.caf.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0,))
+            pu.afl.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0,))
 
     def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, rgfs0, af2a, rgfs01, af6a,
                                              rgfs012345,
@@ -160,43 +160,43 @@ class TestAbstractFormula:
 
     def test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(self):
         tree_of_pairs = (0, (),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert (t, s,) == ((), (0,),)
         tree_of_pairs = (3, ((2, (),),),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert (t, s,) == (((),), (3, 2,),)
         tree_of_pairs = (3, ((9, (),), (8, (),), (7, (),),),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert (t, s,) == (((), (), (),), (3, 9, 8, 7,),)
         tree_of_pairs = (3, ((9, (),), (8, ((3, ((2, ((3, ((2, (),),),),),),),),),), (7, ((0, (),),),),),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert (t, s,) == (((), (((((),),),),), ((),),), (3, 9, 8, 3, 2, 3, 2, 7, 0,),)
 
     def test_build_formula_from_tree_of_integer_tuple_pairs(self, af1):
         tree_of_pairs = (0, (),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.caf.CanonicalAbstractFormula(t, s)
-        psi = pu.caf.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.CanonicalAbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((0, (),),),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.caf.CanonicalAbstractFormula(t, s)
-        psi = pu.caf.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.CanonicalAbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),),),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.caf.CanonicalAbstractFormula(t, s)
-        psi = pu.caf.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.CanonicalAbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),), (2, (),), (3, (),),),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.caf.CanonicalAbstractFormula(t, s)
-        psi = pu.caf.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.CanonicalAbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),), (0, ((1, ((2, ((3, ((1, (),),),),),),),),),), (4, ((1, (),),),),),)
-        t, s = pu.caf.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.caf.CanonicalAbstractFormula(t, s)
-        psi = pu.caf.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.CanonicalAbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
 
     def test_get_sub_tree_by_path(self, af1, af2a, af6a, af12a, af_big):

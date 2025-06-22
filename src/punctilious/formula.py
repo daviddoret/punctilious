@@ -5,7 +5,7 @@ import collections
 # package modules
 import util
 import connective
-import canonical_abstract_formula as af
+import abstract_formula_library as af
 import sequence_library as sl
 
 
