@@ -1,7 +1,6 @@
 import util as util
 import rooted_plane_tree
-import unrestricted_sequence
-import restricted_growth_function_sequence
+import sequence_library
 import canonical_abstract_formula
 import connective
 import connective_sequence
@@ -11,15 +10,13 @@ import formula
 caf = canonical_abstract_formula
 cl = connective_library
 cs = connective_sequence
-rgfs = restricted_growth_function_sequence
 rpt = rooted_plane_tree
-us = unrestricted_sequence
+sl = sequence_library
 
 __all__ = [
     'canonical_abstract_formula', 'caf',
     'connective',
-    'cl', 'connective_library',
+    'connective_library', 'cl',
     'connective_sequence', 'cs',
-    'restricted_growth_function_sequence', 'rgfs',
     'rooted_plane_tree', 'rpt',
-    'unrestricted_sequence', 'us']
+    'sequence_library', 'sl']

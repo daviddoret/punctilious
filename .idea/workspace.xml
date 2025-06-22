@@ -5,13 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="UnrestrictedSequence">
-      <change afterPath="$PROJECT_DIR$/tests/test_unrestricted_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/canonical_abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_canonical_abstract_formula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_unrestricted_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_unrestricted_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -597,7 +598,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_unrestricted_sequence.py">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -953,8 +954,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in test_unrestricted_sequence.py" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest in test_unrestricted_sequence.py" />
         <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path" />
         <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_build_rooted_plane_tree_from_tuple_tree" />
@@ -979,14 +980,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01403" summary="files cleanup">
-      <option name="closed" value="true" />
-      <created>1749305367496</created>
-      <option name="number" value="01403" />
-      <option name="presentableId" value="LOCAL-01403" />
-      <option name="project" value="LOCAL" />
-      <updated>1749305367496</updated>
     </task>
     <task id="LOCAL-01404" summary="files cleanup">
       <option name="closed" value="true" />
@@ -1372,7 +1365,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750574229262</updated>
     </task>
-    <option name="localTasksCounter" value="1452" />
+    <task id="LOCAL-01452" summary="UnrestrictedSequence">
+      <option name="closed" value="true" />
+      <created>1750575931658</created>
+      <option name="number" value="01452" />
+      <option name="presentableId" value="LOCAL-01452" />
+      <option name="project" value="LOCAL" />
+      <updated>1750575931658</updated>
+    </task>
+    <option name="localTasksCounter" value="1453" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1545,10 +1546,6 @@
           <url>file://$PROJECT_DIR$/tests/test_canonical_abstract_formula.py</url>
           <line>205</line>
           <option name="timeStamp" value="452" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py</url>
-          <option name="timeStamp" value="453" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

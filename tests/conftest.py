@@ -115,62 +115,62 @@ def t_big(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
 
 @pytest.fixture
 def us0(s0):
-    return pu.us.UnrestrictedSequence(*s0)
+    return pu.sl.UnrestrictedSequence(*s0)
 
 
 @pytest.fixture
 def us00(s00):
-    return pu.us.UnrestrictedSequence(*s00)
+    return pu.sl.UnrestrictedSequence(*s00)
 
 
 @pytest.fixture
 def us01(s01):
-    return pu.us.UnrestrictedSequence(*s01)
+    return pu.sl.UnrestrictedSequence(*s01)
 
 
 @pytest.fixture
 def us10(s10):
-    return pu.us.UnrestrictedSequence(*s10)
+    return pu.sl.UnrestrictedSequence(*s10)
 
 
 @pytest.fixture
 def us012345():
-    return pu.us.UnrestrictedSequence(0, 1, 2, 3, 4, 5, )
+    return pu.sl.UnrestrictedSequence(0, 1, 2, 3, 4, 5, )
 
 
 @pytest.fixture
 def us746107():
-    return pu.us.UnrestrictedSequence(7, 4, 6, 1, 0, 7, )
+    return pu.sl.UnrestrictedSequence(7, 4, 6, 1, 0, 7, )
 
 
 @pytest.fixture
 def us0123456789_10_11():
-    return pu.us.UnrestrictedSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+    return pu.sl.UnrestrictedSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
 
 
 @pytest.fixture
 def rgfs0(s0):
-    return pu.rgfs.RestrictedGrowthFunctionSequence(*s0)
+    return pu.sl.RestrictedGrowthFunctionSequence(*s0)
 
 
 @pytest.fixture
 def rgfs00(s00):
-    return pu.rgfs.RestrictedGrowthFunctionSequence(*s00)
+    return pu.sl.RestrictedGrowthFunctionSequence(*s00)
 
 
 @pytest.fixture
 def rgfs01(s01):
-    return pu.rgfs.RestrictedGrowthFunctionSequence(*s01)
+    return pu.sl.RestrictedGrowthFunctionSequence(*s01)
 
 
 @pytest.fixture
 def rgfs012345():
-    return pu.rgfs.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, )
+    return pu.sl.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, )
 
 
 @pytest.fixture
 def rgfs0123456789_10_11():
-    return pu.rgfs.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+    return pu.sl.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
 
 
 @pytest.fixture

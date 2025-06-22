@@ -6,7 +6,7 @@ import itertools
 # package modules
 import util
 import rooted_plane_tree as rpt
-import restricted_growth_function_sequence as rgf
+import sequence_library as rgf
 
 
 def data_validate_canonical_abstract_formula(
