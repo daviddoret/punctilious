@@ -17,9 +17,9 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.caf.CanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0,))
 
-    def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, rgf1, af2a, rgf2b, af6a,
-                                             rgf6a,
-                                             af12a, rgf12a):
+    def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, rgfs0, af2a, rgfs01, af6a,
+                                             rgfs012345,
+                                             af12a, rgfs0123456789_10_11):
         l = tuple(t for t in af1.iterate_immediate_sub_sequences())
         assert len(l) == 0
         l = tuple(t for t in af2a.iterate_immediate_sub_sequences())
@@ -36,50 +36,51 @@ class TestAbstractFormula:
         assert l[2] == (4, 5, 6, 7, 8, 9,)
         assert l[3] == (10, 11,)
 
-    def test_iterate_immediate_sub_restricted_growth_function_sequences(self, af1, rgf1, af2a, rgf2b, af6a, rgf6a,
-                                                                        af12a, rgf12a):
+    def test_iterate_immediate_sub_restricted_growth_function_sequences(self, af1, rgfs0, af2a, rgfs01, af6a,
+                                                                        rgfs012345,
+                                                                        af12a, rgfs0123456789_10_11):
         l = tuple(t for t in af1.iterate_immediate_sub_restricted_growth_function_sequences())
         assert len(l) == 0
         l = tuple(t for t in af2a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == rgf1
+        assert l[0] == rgfs0
         l = tuple(t for t in af6a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == rgf1
-        assert l[1] == rgf1
-        assert l[2] == rgf1
-        assert l[3] == rgf1
-        assert l[4] == rgf1
+        assert l[0] == rgfs0
+        assert l[1] == rgfs0
+        assert l[2] == rgfs0
+        assert l[3] == rgfs0
+        assert l[4] == rgfs0
         l = tuple(t for t in af12a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == rgf1
-        assert l[1] == rgf2b
-        assert l[2] == rgf6a
-        assert l[3] == rgf2b
+        assert l[0] == rgfs0
+        assert l[1] == rgfs01
+        assert l[2] == rgfs012345
+        assert l[3] == rgfs01
 
-    def test_iterate_sub_restricted_growth_function_sequences(self, af1, rgf1, af2a, rgf2b, af6a, af12a, rgf6a):
+    def test_iterate_sub_restricted_growth_function_sequences(self, af1, rgfs0, af2a, rgfs01, af6a, af12a, rgfs012345):
         l = tuple(t for t in af1.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af1.restricted_growth_function_sequence
         l = tuple(t for t in af2a.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af2a.restricted_growth_function_sequence
-        assert l[1] == rgf1
+        assert l[1] == rgfs0
         l = tuple(t for t in af6a.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af6a.restricted_growth_function_sequence
-        assert l[1] == rgf1
-        assert l[2] == rgf1
-        assert l[3] == rgf1
-        assert l[4] == rgf1
-        assert l[5] == rgf1
+        assert l[1] == rgfs0
+        assert l[2] == rgfs0
+        assert l[3] == rgfs0
+        assert l[4] == rgfs0
+        assert l[5] == rgfs0
         l = tuple(t for t in af12a.iterate_sub_restricted_growth_function_sequences())
         assert l[0] == af12a.restricted_growth_function_sequence
-        assert l[1] == rgf1
-        assert l[2] == rgf2b
-        assert l[3] == rgf1
-        assert l[4] == rgf6a
-        assert l[5] == rgf1
-        assert l[6] == rgf1
-        assert l[7] == rgf1
-        assert l[8] == rgf1
-        assert l[9] == rgf1
-        assert l[10] == rgf2b
-        assert l[11] == rgf1
+        assert l[1] == rgfs0
+        assert l[2] == rgfs01
+        assert l[3] == rgfs0
+        assert l[4] == rgfs012345
+        assert l[5] == rgfs0
+        assert l[6] == rgfs0
+        assert l[7] == rgfs0
+        assert l[8] == rgfs0
+        assert l[9] == rgfs0
+        assert l[10] == rgfs01
+        assert l[11] == rgfs0
 
     def test_iterate_sub_formulas_direct(self, af1, af2a, af2b, af12a, af6a):
         l = tuple(af for af in af1.iterate_immediate_sub_formulas())

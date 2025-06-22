@@ -47,6 +47,11 @@ def s01():
 
 
 @pytest.fixture
+def s10():
+    return 1, 0,
+
+
+@pytest.fixture
 def s012():
     return 0, 1, 2,
 
@@ -109,43 +114,78 @@ def t_big(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
 
 
 @pytest.fixture
-def rgf1(s0):
+def us0(s0):
+    return pu.us.UnrestrictedSequence(*s0)
+
+
+@pytest.fixture
+def us00(s00):
+    return pu.us.UnrestrictedSequence(*s00)
+
+
+@pytest.fixture
+def us01(s01):
+    return pu.us.UnrestrictedSequence(*s01)
+
+
+@pytest.fixture
+def us10(s10):
+    return pu.us.UnrestrictedSequence(*s10)
+
+
+@pytest.fixture
+def us012345():
+    return pu.us.UnrestrictedSequence(0, 1, 2, 3, 4, 5, )
+
+
+@pytest.fixture
+def us746107():
+    return pu.us.UnrestrictedSequence(7, 4, 6, 1, 0, 7, )
+
+
+@pytest.fixture
+def us0123456789_10_11():
+    return pu.us.UnrestrictedSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+
+
+@pytest.fixture
+def rgfs0(s0):
     return pu.rgfs.RestrictedGrowthFunctionSequence(*s0)
 
 
 @pytest.fixture
-def rgf2a(s00):
+def rgfs00(s00):
     return pu.rgfs.RestrictedGrowthFunctionSequence(*s00)
 
 
 @pytest.fixture
-def rgf2b(s01):
+def rgfs01(s01):
     return pu.rgfs.RestrictedGrowthFunctionSequence(*s01)
 
 
 @pytest.fixture
-def rgf6a():
+def rgfs012345():
     return pu.rgfs.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, )
 
 
 @pytest.fixture
-def rgf12a():
+def rgfs0123456789_10_11():
     return pu.rgfs.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
 
 
 @pytest.fixture
-def af1(t1_a, rgf1):
-    return pu.caf.CanonicalAbstractFormula(t1_a, rgf1)
+def af1(t1_a, rgfs0):
+    return pu.caf.CanonicalAbstractFormula(t1_a, rgfs0)
 
 
 @pytest.fixture
-def af2a(t2_a_aa, rgf2a):
-    return pu.caf.CanonicalAbstractFormula(t2_a_aa, rgf2a)
+def af2a(t2_a_aa, rgfs00):
+    return pu.caf.CanonicalAbstractFormula(t2_a_aa, rgfs00)
 
 
 @pytest.fixture
-def af2b(t2_a_aa, rgf2b):
-    return pu.caf.CanonicalAbstractFormula(t2_a_aa, rgf2b)
+def af2b(t2_a_aa, rgfs01):
+    return pu.caf.CanonicalAbstractFormula(t2_a_aa, rgfs01)
 
 
 @pytest.fixture
@@ -154,13 +194,13 @@ def af3a(t3_a_aa_aaa, rgf3a):
 
 
 @pytest.fixture
-def af6a(t6_a_aa_ab_ac_ad_ae, rgf6a):
-    return pu.caf.CanonicalAbstractFormula(t6_a_aa_ab_ac_ad_ae, rgf6a)
+def af6a(t6_a_aa_ab_ac_ad_ae, rgfs012345):
+    return pu.caf.CanonicalAbstractFormula(t6_a_aa_ab_ac_ad_ae, rgfs012345)
 
 
 @pytest.fixture
-def af12a(t12, rgf12a):
-    return pu.caf.CanonicalAbstractFormula(t12, rgf12a)
+def af12a(t12, rgfs0123456789_10_11):
+    return pu.caf.CanonicalAbstractFormula(t12, rgfs0123456789_10_11)
 
 
 @pytest.fixture

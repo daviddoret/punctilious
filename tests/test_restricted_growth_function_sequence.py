@@ -46,32 +46,33 @@ class TestRestrictedGrowthFunctionSequence:
         assert pu.rgfs.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
             (2, 4, 4, 9, 0, 2, 2, 0,)) == pu.rgfs.RestrictedGrowthFunctionSequence(0, 1, 1, 2, 3, 0, 0, 3)
 
-    def test_max_value(self, rgf1, rgf2a, rgf2b, rgf6a, rgf12a):
-        assert rgf1.max_value == 0
-        assert rgf2a.max_value == 0
-        assert rgf2b.max_value == 1
-        assert rgf6a.max_value == 5
-        assert rgf12a.max_value == 11
+    def test_max_value(self, rgfs0, rgfs00, rgfs01, rgfs012345, rgfs0123456789_10_11):
+        assert rgfs0.max_value == 0
+        assert rgfs00.max_value == 0
+        assert rgfs01.max_value == 1
+        assert rgfs012345.max_value == 5
+        assert rgfs0123456789_10_11.max_value == 11
 
-    def test_is_restricted_growth_function_sequence_equivalent_to(self, rgf1, rgf2a, rgf2b, rgf6a, rgf12a):
-        assert rgf1.is_restricted_growth_function_sequence_equivalent_to(rgf1)
-        assert rgf2a.is_restricted_growth_function_sequence_equivalent_to(rgf2a)
-        assert rgf2b.is_restricted_growth_function_sequence_equivalent_to(rgf2b)
-        assert rgf6a.is_restricted_growth_function_sequence_equivalent_to(rgf6a)
-        assert rgf12a.is_restricted_growth_function_sequence_equivalent_to(rgf12a)
+    def test_is_restricted_growth_function_sequence_equivalent_to(self, rgfs0, rgfs00, rgfs01, rgfs012345,
+                                                                  rgfs0123456789_10_11):
+        assert rgfs0.is_restricted_growth_function_sequence_equivalent_to(rgfs0)
+        assert rgfs00.is_restricted_growth_function_sequence_equivalent_to(rgfs00)
+        assert rgfs01.is_restricted_growth_function_sequence_equivalent_to(rgfs01)
+        assert rgfs012345.is_restricted_growth_function_sequence_equivalent_to(rgfs012345)
+        assert rgfs0123456789_10_11.is_restricted_growth_function_sequence_equivalent_to(rgfs0123456789_10_11)
 
-        assert not rgf1.is_restricted_growth_function_sequence_equivalent_to(rgf2a)
-        assert not rgf1.is_restricted_growth_function_sequence_equivalent_to(rgf2b)
-        assert not rgf1.is_restricted_growth_function_sequence_equivalent_to(rgf6a)
-        assert not rgf1.is_restricted_growth_function_sequence_equivalent_to(rgf12a)
+        assert not rgfs0.is_restricted_growth_function_sequence_equivalent_to(rgfs00)
+        assert not rgfs0.is_restricted_growth_function_sequence_equivalent_to(rgfs01)
+        assert not rgfs0.is_restricted_growth_function_sequence_equivalent_to(rgfs012345)
+        assert not rgfs0.is_restricted_growth_function_sequence_equivalent_to(rgfs0123456789_10_11)
 
-        assert not rgf2a.is_restricted_growth_function_sequence_equivalent_to(rgf1)
-        assert not rgf2a.is_restricted_growth_function_sequence_equivalent_to(rgf2b)
-        assert not rgf2a.is_restricted_growth_function_sequence_equivalent_to(rgf6a)
-        assert not rgf2a.is_restricted_growth_function_sequence_equivalent_to(rgf12a)
+        assert not rgfs00.is_restricted_growth_function_sequence_equivalent_to(rgfs0)
+        assert not rgfs00.is_restricted_growth_function_sequence_equivalent_to(rgfs01)
+        assert not rgfs00.is_restricted_growth_function_sequence_equivalent_to(rgfs012345)
+        assert not rgfs00.is_restricted_growth_function_sequence_equivalent_to(rgfs0123456789_10_11)
 
-    def test_concatenate_single(self, rgf1, rgf2a, rgf2b, rgf6a, rgf12a):
-        assert rgf1.concatenate_with(rgf2a) == pu.rgfs.RestrictedGrowthFunctionSequence(*rgf1, *rgf2a)
-        assert pu.rgfs.concatenate_flexible_restricted_growth_function_sequences(rgf12a,
-                                                                                 rgf2a) == pu.rgfs.RestrictedGrowthFunctionSequence(
-            *rgf12a, *rgf2a)
+    def test_concatenate_single(self, rgfs0, rgfs00, rgfs01, rgfs012345, rgfs0123456789_10_11):
+        assert rgfs0.concatenate_with(rgfs00) == pu.rgfs.RestrictedGrowthFunctionSequence(*rgfs0, *rgfs00)
+        assert pu.rgfs.concatenate_flexible_restricted_growth_function_sequences(rgfs0123456789_10_11,
+                                                                                 rgfs00) == pu.rgfs.RestrictedGrowthFunctionSequence(
+            *rgfs0123456789_10_11, *rgfs00)

@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="UnrestrictedSequence">
+      <change afterPath="$PROJECT_DIR$/tests/test_unrestricted_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_canonical_abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -449,6 +452,7 @@
     "Python tests.pytest in test_rooted_plane_tree.py.executor": "Run",
     "Python tests.pytest in test_rooted_plane_tree_OLD.py.executor": "Run",
     "Python tests.pytest in test_typesetting.py.executor": "Run",
+    "Python tests.pytest in test_unrestricted_sequence.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in test_variable.py.executor": "Run",
     "Python tests.pytest in tests.executor": "Run",
@@ -526,7 +530,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/home/dm3d/PycharmProjects/punctilious/src/punctilious",
+    "last_opened_file_path": "/home/dm3d/PycharmProjects/punctilious/tests",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -579,8 +583,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/punctilious" />
       <recent name="$PROJECT_DIR$/tests" />
+      <recent name="$PROJECT_DIR$/src/punctilious" />
       <recent name="$PROJECT_DIR$/src/punctilious/data" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
@@ -593,7 +597,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest in test_unrestricted_sequence.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -823,23 +827,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_canonical_abstract_formula.TestAbstractFormula.test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_canonical_abstract_formula.TestAbstractFormula.test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_canonical_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -910,6 +897,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_unrestricted_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_unrestricted_sequence.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -939,9 +943,9 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
-      <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs" />
       <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_build_rooted_plane_tree_from_tuple_tree" />
+      <item itemvalue="Python tests.pytest in test_unrestricted_sequence.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -949,11 +953,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in test_unrestricted_sequence.py" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path" />
         <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_build_rooted_plane_tree_from_tuple_tree" />
-        <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs" />
       </list>
     </recent_temporary>
   </component>
@@ -975,14 +979,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01402" summary="files cleanup">
-      <option name="closed" value="true" />
-      <created>1749107619355</created>
-      <option name="number" value="01402" />
-      <option name="presentableId" value="LOCAL-01402" />
-      <option name="project" value="LOCAL" />
-      <updated>1749107619355</updated>
     </task>
     <task id="LOCAL-01403" summary="files cleanup">
       <option name="closed" value="true" />
@@ -1368,7 +1364,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750573923506</updated>
     </task>
-    <option name="localTasksCounter" value="1451" />
+    <task id="LOCAL-01451" summary="UnrestrictedSequence">
+      <option name="closed" value="true" />
+      <created>1750574229262</created>
+      <option name="number" value="01451" />
+      <option name="presentableId" value="LOCAL-01451" />
+      <option name="project" value="LOCAL" />
+      <updated>1750574229262</updated>
+    </task>
+    <option name="localTasksCounter" value="1452" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

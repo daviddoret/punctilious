@@ -30,23 +30,20 @@ def data_validate_unrestricted_sequence_elements(
     if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
         o = tuple(o)
         o = tuple(int(n) for n in o)
-        if o[0] != 0:
-            raise util.PunctiliousException("The first element `x` of the RGF sequence `s` is not equal to 0.",
-                                            x=o[0], s=o)
         for i, n in enumerate(o):
-            if i > 0 and n > max(o[0:i]) + 1:
+            if i < 0:
                 raise util.PunctiliousException(
-                    "The i-th element `n` of the RGF sequence `s` is greater than max(s[0:i]) + 1.",
+                    "The i-th element `n` of the unrestricted sequence `s` is less than 0.",
                     i=i, n=n, s=o)
         return o
     raise util.PunctiliousException("Non-supported input.", o=o)
 
 
-_unrestricted_sequence_cache = dict()  # cache mechanism assuring that unique RGFS are only instantiated once.
+_unrestricted_sequence_cache = dict()  # cache mechanism assuring that unique unrestricted-sequences are only instantiated once.
 
 
 def retrieve_unrestricted_sequence_from_cache(i: UnrestrictedSequence):
-    """cache mechanism assuring that unique RGFS are only instantiated once."""
+    """cache mechanism assuring that unique unrestricted-sequences are only instantiated once."""
     global _unrestricted_sequence_cache
     if hash(i) in _unrestricted_sequence_cache.keys():
         return _unrestricted_sequence_cache[hash(i)]
@@ -64,16 +61,16 @@ class UnrestrictedSequence(tuple):
 
     """
 
-    def __add__(self, other):
-        """Concatenates the current :class:`UnrestrictedSequence` with another one.
+    def __add__(self, s):
+        """Concatenates this :class:`UnrestrictedSequence` with another :class:`UnrestrictedSequence` `s`.
 
         Note:
             This enables the usage of the python sum function, e.g.: sum(s1, s2, ...).
 
-        :param other:
+        :param s:
         :return:
         """
-        return concatenate_flexible_unrestricted_sequences(self, other)
+        return concatenate_flexible_unrestricted_sequences(self, s)
 
     def __eq__(self, s):
         """Returns `False` if `s` cannot be interpreted as a :class:`UnrestrictedSequence`,
@@ -124,8 +121,8 @@ class UnrestrictedSequence(tuple):
         return s
 
     def concatenate_with(self, *s: FlexibleUnrestrictedSequence) -> UnrestrictedSequence:
-        """Concatenates the current :class:`UnrestrictedSequence` with another one,
-        or an iterable of multiple ones.
+        """Concatenates this :class:`UnrestrictedSequence` with :class:`UnrestrictedSequence` `s`,
+        or an iterable / generator of multiple :class:`UnrestrictedSequence` elements.
 
         Shortcuts:
         s1 + s2
@@ -148,7 +145,7 @@ class UnrestrictedSequence(tuple):
         """
 
         Formal definition:
-        Two RGF-sequences s and t are RGF-sequence-equivalent if and only if:
+        Two unrestricted-sequences s and t are unrestricted-sequence-equivalent if and only if:
          - length(s) = length(t)
          - s_i = t_i for 0 <= i < length(s)
 
@@ -167,28 +164,6 @@ class UnrestrictedSequence(tuple):
     def max_value(self) -> int:
         """The `max_value` of a `UnrestrictedSequence` is the maximum value of its elements."""
         return max(self)
-
-
-def convert_arbitrary_sequence_to_unrestricted_sequence(s: tuple[int, ...]):
-    """Convert any finite sequence into a `UnrestrictedSequence`,
-    by substituting natural numbers based on their order of appearance in the sequence.
-
-    Examples:
-    (3,5,2,1) --> (1,2,3,4)
-    (3,5,3,1,5,2) --> (1,2,1,3,2,4)
-
-
-    :param s:
-    :return:
-    """
-    mapping = dict()
-    mapped_value = 0
-    for n in s:
-        if n not in mapping.keys():
-            mapping[n] = mapped_value
-            mapped_value += 1
-    s2 = tuple(mapping[n] for n in s)
-    return UnrestrictedSequence(*s2)
 
 
 def concatenate_flexible_unrestricted_sequences(*s: tuple[

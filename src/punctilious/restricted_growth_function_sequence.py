@@ -34,6 +34,10 @@ def data_validate_restricted_growth_function_sequence_elements(
             raise util.PunctiliousException("The first element `x` of the RGF sequence `s` is not equal to 0.",
                                             x=o[0], s=o)
         for i, n in enumerate(o):
+            if i < 0:
+                raise util.PunctiliousException(
+                    "The i-th element `n` of the unrestricted sequence `s` is less than 0.",
+                    i=i, n=n, s=o)
             if i > 0 and n > max(o[0:i]) + 1:
                 raise util.PunctiliousException(
                     "The i-th element `n` of the RGF sequence `s` is greater than max(s[0:i]) + 1.",
