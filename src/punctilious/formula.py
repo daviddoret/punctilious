@@ -5,7 +5,7 @@ import collections
 # package modules
 import util
 import connective
-import abstract_formula as af
+import canonical_abstract_formula as af
 import connective_sequence as cs
 
 
@@ -61,7 +61,7 @@ class Formula(tuple):
     def __hash__(self):
         return hash((Formula, self.abstract_formula, self.connective_sequence,))
 
-    def __init__(self, phi: af.FlexibleAbstractFormula, s: cs.FlexibleConnectiveSequence):
+    def __init__(self, phi: af.FlexibleCanonicalAbstractFormula, s: cs.FlexibleConnectiveSequence):
         super(Formula, self).__init__()
         self._connectives = None
         self._immediate_sub_formulas = None
@@ -85,9 +85,9 @@ class Formula(tuple):
         except util.PunctiliousException:
             return False
 
-    def __new__(cls, phi: af.FlexibleAbstractFormula, s: cs.FlexibleConnectiveSequence):
+    def __new__(cls, phi: af.FlexibleCanonicalAbstractFormula, s: cs.FlexibleConnectiveSequence):
         s: cs.ConnectiveSequence = cs.data_validate_connective_sequence(s)
-        phi: af.AbstractFormula = af.data_validate_abstract_formula(phi)
+        phi: af.CanonicalAbstractFormula = af.data_validate_canonical_abstract_formula(phi)
         if s.length != phi.sequence_max_value + 1:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the `ConnectiveSequence` is not equal to the `sequence_max_value` of its `abstract_formula`.",
@@ -103,7 +103,7 @@ class Formula(tuple):
         return self.represent_as_function()
 
     @property
-    def abstract_formula(self) -> af.AbstractFormula:
+    def abstract_formula(self) -> af.CanonicalAbstractFormula:
         """
 
         `abstract_formula` is an immutable property.
@@ -188,7 +188,7 @@ class Formula(tuple):
         :return:
         """
         phi: Formula = data_validate_formula(phi)
-        return self.abstract_formula.is_abstract_formula_equivalent_to(
+        return self.abstract_formula.is_canonical_abstract_formula_equivalent_to(
             phi.abstract_formula) and self.connective_sequence.is_connective_sequence_equivalent_to(
             phi.connective_sequence)
 
@@ -313,7 +313,7 @@ class Formula(tuple):
         codomain: tuple[Formula, ...] = tuple(data_validate_formula(y) for y in m.values())
         m: dict[Formula, Formula] = dict(zip(domain, codomain))
         sub_formulas: list[Formula] = []
-        immediate_abstract_formulas: list[af.AbstractFormula] = []
+        immediate_abstract_formulas: list[af.CanonicalAbstractFormula] = []
         for phi in self.iterate_immediate_sub_formulas():
             if phi in m.keys():
                 psi = m[phi]
@@ -322,7 +322,7 @@ class Formula(tuple):
             else:
                 sub_formulas.append(phi)
                 immediate_abstract_formulas.append(phi.abstract_formula)
-        abstract_formula: af.AbstractFormula = af.AbstractFormula()
+        abstract_formula: af.CanonicalAbstractFormula = af.CanonicalAbstractFormula()
         raise NotImplementedError("Complete implementation")
 
     @property
@@ -336,4 +336,4 @@ class Formula(tuple):
 
 FlexibleFormula = typing.Union[
     Formula, tuple[
-        cs.FlexibleConnectiveSequence, af.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]
+        cs.FlexibleConnectiveSequence, af.FlexibleCanonicalAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]

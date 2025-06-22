@@ -276,7 +276,10 @@ class RootedPlaneTree(tuple):
             output += ")"
         return output
 
-    def represent_as_function(self, connectives: tuple) -> str:
+    def represent_as_function(self, connectives: tuple | None = None) -> str:
+        if connectives is None:
+            # By default, represent connectives with natural numbers.
+            connectives: tuple[int] = tuple(range(0, self.size))
         output: str = str(connectives[0])
         if not self.is_leaf:
             output += "("
