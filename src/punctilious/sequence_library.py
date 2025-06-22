@@ -518,9 +518,9 @@ FlexibleUnrestrictedSequence = typing.Union[
 
 # Aliases
 
-CS = ConnectiveSequence  # Alias
-RGFS = RestrictedGrowthFunctionSequence  # Alias
-US = UnrestrictedSequence  # Alias
+CS = ConnectiveSequence  # An alias for ConnectiveSequence.
+RGFS = RestrictedGrowthFunctionSequence  # An alias for RestrictedGrowthFunctionSequence
+US = UnrestrictedSequence  # An alias for UnrestrictedSequence
 
 # Global variables
 

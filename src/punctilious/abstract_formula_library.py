@@ -1,12 +1,45 @@
 from __future__ import annotations
 import typing
 import collections
+import abc
 import itertools
 
 # package modules
 import util
 import rooted_plane_tree as rpt
 import sequence_library as sl
+
+
+class AbstractFormula:
+    """
+
+    Definition:
+    An abstract-formula is a formula with abstract connectives, for which by convention we use the natural numbers.
+    By abstract connectives we mean that meaningful connectives used in mathematics are not available.
+    One way to look at it is to see an abstract-formula as a formula that captures the complete "structure"
+    of a formula, but that is independent of its meaning.
+
+    """
+
+    @property
+    @abc.abstractmethod
+    def formula_degree(self) -> int:
+        """The `formula_degree` of an :class:`AbstractFormula` is the number of non-leaf nodes it contains.
+
+        This definition is derived from (Mancosu et al, 2021, p. 18).
+
+        Attention point: do not confuse `tree_size` and `formula_degree`.
+
+        :return:
+        """
+        raise util.PunctiliousException("Calling an abstract method", self=self)
+
+    @property
+    @abc.abstractmethod
+    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
+        """The `rooted_plan_tree` :class:`AbstractFormula` is the rooted-plan-tree that
+        defines the formula's structure."""
+        raise util.PunctiliousException("Calling an abstract method", self=self)
 
 
 def data_validate_canonical_abstract_formula(
@@ -20,9 +53,6 @@ def data_validate_canonical_abstract_formula(
     raise util.PunctiliousException('CanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
 
 
-_canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
-
-
 def retrieve_canonical_abstract_formula_from_cache(o: FlexibleCanonicalAbstractFormula):
     """cache mechanism assuring that unique canonical abstract formulas are only instantiated once."""
     global _canonical_abstract_formula_cache
@@ -34,7 +64,7 @@ def retrieve_canonical_abstract_formula_from_cache(o: FlexibleCanonicalAbstractF
         return o
 
 
-class CanonicalAbstractFormula(tuple):
+class CanonicalAbstractFormula(tuple, AbstractFormula):
 
     def __eq__(self, t):
         """Returns `False` if `t` cannot be interpreted as a :class:`CanonicalAbstractFormula`,
@@ -501,11 +531,6 @@ def Declare_formula_from_immediate_sub_formulas(
     raise NotImplementedError('review approach completely')
 
 
-FlexibleCanonicalAbstractFormula = typing.Union[
-    CanonicalAbstractFormula, tuple[
-        rpt.FlexibleRootedPlaneTree, sl.FlexibleRestrictedGrowthFunctionSequence], collections.abc.Iterator, collections.abc.Generator, None]
-
-
 def data_validate_non_canonical_abstract_formula(
         o: FlexibleNonCanonicalAbstractFormula) -> NonCanonicalAbstractFormula:
     if isinstance(o, NonCanonicalAbstractFormula):
@@ -515,9 +540,6 @@ def data_validate_non_canonical_abstract_formula(
     if isinstance(o, collections.abc.Generator):
         return NonCanonicalAbstractFormula(*o)
     raise util.PunctiliousException('NonCanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
-
-
-_non_canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
 
 
 def retrieve_non_canonical_abstract_formula_from_cache(o: FlexibleNonCanonicalAbstractFormula):
@@ -531,7 +553,7 @@ def retrieve_non_canonical_abstract_formula_from_cache(o: FlexibleNonCanonicalAb
         return o
 
 
-class NonCanonicalAbstractFormula(tuple):
+class NonCanonicalAbstractFormula(tuple, AbstractFormula):
 
     def __eq__(self, t):
         """Returns `False` if `t` cannot be interpreted as a :class:`NonCanonicalAbstractFormula`,
@@ -998,6 +1020,20 @@ def declare_formula_from_immediate_sub_formulas(
     raise NotImplementedError('review approach completely')
 
 
+# Flexible types to facilitate data validation
+
+FlexibleCanonicalAbstractFormula = typing.Union[
+    CanonicalAbstractFormula, tuple[
+        rpt.FlexibleRootedPlaneTree, sl.FlexibleRestrictedGrowthFunctionSequence], collections.abc.Iterator, collections.abc.Generator, None]
 FlexibleNonCanonicalAbstractFormula = typing.Union[
     NonCanonicalAbstractFormula, tuple[
         rpt.FlexibleRootedPlaneTree, sl.FlexibleUnrestrictedSequence], collections.abc.Iterator, collections.abc.Generator, None]
+
+# Aliases
+
+CAF = CanonicalAbstractFormula  # An alias for CanonicalAbstractFormula
+NCAF = NonCanonicalAbstractFormula  # An alias for NonCanonicalAbstractFormula
+
+# Global variables
+_canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
+_non_canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.

@@ -13,7 +13,7 @@ class TestNonCanonicalAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 2,))  # invalid
         with pytest.raises(pu.util.PunctiliousException):
-            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 2,))
+            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 2, 0,))
         with pytest.raises(pu.util.PunctiliousException):
             pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
 
