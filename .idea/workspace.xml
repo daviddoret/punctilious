@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="UnrestrictedSequence" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="UnrestrictedSequence">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -972,14 +975,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01406" summary="AbstractFormula">
-      <option name="closed" value="true" />
-      <created>1749334921259</created>
-      <option name="number" value="01406" />
-      <option name="presentableId" value="LOCAL-01406" />
-      <option name="project" value="LOCAL" />
-      <updated>1749334921259</updated>
-    </task>
     <task id="LOCAL-01407" summary="AbstractFormula">
       <option name="closed" value="true" />
       <created>1749376403503</created>
@@ -1364,7 +1359,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750582355220</updated>
     </task>
-    <option name="localTasksCounter" value="1455" />
+    <task id="LOCAL-01455" summary="UnrestrictedSequence">
+      <option name="closed" value="true" />
+      <created>1750582388707</created>
+      <option name="number" value="01455" />
+      <option name="presentableId" value="LOCAL-01455" />
+      <option name="project" value="LOCAL" />
+      <updated>1750582388707</updated>
+    </task>
+    <option name="localTasksCounter" value="1456" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -49,9 +49,6 @@ def data_validate_restricted_growth_function_sequence_elements(
     raise util.PunctiliousException("Non-supported input.", o=o)
 
 
-_restricted_growth_function_sequence_cache = dict()  # cache mechanism assuring that unique RGFS are only instantiated once.
-
-
 def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthFunctionSequence):
     """cache mechanism assuring that unique RGFS are only instantiated once."""
     global _restricted_growth_function_sequence_cache
@@ -218,10 +215,6 @@ def concatenate_flexible_restricted_growth_function_sequences(*s: tuple[
     return RestrictedGrowthFunctionSequence(*t)
 
 
-FlexibleRestrictedGrowthFunctionSequence = typing.Union[
-    RestrictedGrowthFunctionSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
-
-
 def data_validate_unrestricted_sequence(
         o: FlexibleUnrestrictedSequence) -> UnrestrictedSequence:
     """Data validates `o` against type `UnrestrictedSequence`,
@@ -254,9 +247,6 @@ def data_validate_unrestricted_sequence_elements(
                     i=i, n=n, s=o)
         return o
     raise util.PunctiliousException("Non-supported input.", o=o)
-
-
-_unrestricted_sequence_cache = dict()  # cache mechanism assuring that unique unrestricted-sequences are only instantiated once.
 
 
 def retrieve_unrestricted_sequence_from_cache(i: UnrestrictedSequence):
@@ -394,10 +384,6 @@ def concatenate_flexible_unrestricted_sequences(*s: tuple[
     return UnrestrictedSequence(*t)
 
 
-FlexibleUnrestrictedSequence = typing.Union[
-    UnrestrictedSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
-
-
 def data_validate_connective_sequence(
         o: FlexibleConnectiveSequence) -> ConnectiveSequence:
     """Data validates `o` against type `ConnectiveSequence`,
@@ -425,10 +411,6 @@ def data_validate_connective_sequence_elements(
         o: tuple[connective.Connective, ...] = tuple(connective.data_validate_connective(n) for n in o)
         return o
     raise util.PunctiliousException('ConnectiveSequence elements data validation failure', o=o)
-
-
-_connective_sequence_cache: dict[
-    int, ConnectiveSequence] = {}  # cache mechanism assuring that unique rpts are only instantiated once.
 
 
 def retrieve_connective_sequence_from_cache(i: ConnectiveSequence):
@@ -525,5 +507,26 @@ class ConnectiveSequence(tuple):
         return len(self)
 
 
+# Flexible types to facilitate data validation
+
 FlexibleConnectiveSequence = typing.Union[
     ConnectiveSequence, tuple[connective.Connective, ...], collections.abc.Iterator, collections.abc.Generator, None]
+FlexibleRestrictedGrowthFunctionSequence = typing.Union[
+    RestrictedGrowthFunctionSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
+FlexibleUnrestrictedSequence = typing.Union[
+    UnrestrictedSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
+
+# Aliases
+
+CS = ConnectiveSequence  # Alias
+RGFS = RestrictedGrowthFunctionSequence  # Alias
+US = UnrestrictedSequence  # Alias
+
+# Global variables
+
+_connective_sequence_cache: dict[
+    int, ConnectiveSequence] = {}  # cache mechanism assuring that unique rpts are only instantiated once.
+_restricted_growth_function_sequence_cache: dict[
+    int, RestrictedGrowthFunctionSequence] = dict()  # cache mechanism assuring that unique RGFS are only instantiated once.
+_unrestricted_sequence_cache: dict[
+    int, UnrestrictedSequence] = dict()  # cache mechanism assuring that unique unrestricted-sequences are only instantiated once.
