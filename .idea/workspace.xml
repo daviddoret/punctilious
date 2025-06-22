@@ -7,12 +7,10 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="UnrestrictedSequence">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/canonical_abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/unrestricted_sequence.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_unrestricted_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_unrestricted_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_connective_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_connective_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -981,14 +979,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01404" summary="files cleanup">
-      <option name="closed" value="true" />
-      <created>1749313995138</created>
-      <option name="number" value="01404" />
-      <option name="presentableId" value="LOCAL-01404" />
-      <option name="project" value="LOCAL" />
-      <updated>1749313995138</updated>
-    </task>
     <task id="LOCAL-01405" summary="AbstractFormula">
       <option name="closed" value="true" />
       <created>1749322377920</created>
@@ -1373,7 +1363,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750575931658</updated>
     </task>
-    <option name="localTasksCounter" value="1453" />
+    <task id="LOCAL-01453" summary="UnrestrictedSequence">
+      <option name="closed" value="true" />
+      <created>1750576285147</created>
+      <option name="number" value="01453" />
+      <option name="presentableId" value="LOCAL-01453" />
+      <option name="project" value="LOCAL" />
+      <updated>1750576285147</updated>
+    </task>
+    <option name="localTasksCounter" value="1454" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

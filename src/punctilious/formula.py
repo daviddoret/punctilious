@@ -6,7 +6,7 @@ import collections
 import util
 import connective
 import canonical_abstract_formula as af
-import connective_sequence as cs
+import sequence_library as sl
 
 
 def data_validate_formula(
@@ -61,7 +61,7 @@ class Formula(tuple):
     def __hash__(self):
         return hash((Formula, self.abstract_formula, self.connective_sequence,))
 
-    def __init__(self, phi: af.FlexibleCanonicalAbstractFormula, s: cs.FlexibleConnectiveSequence):
+    def __init__(self, phi: af.FlexibleCanonicalAbstractFormula, s: sl.FlexibleConnectiveSequence):
         super(Formula, self).__init__()
         self._connectives = None
         self._immediate_sub_formulas = None
@@ -85,8 +85,8 @@ class Formula(tuple):
         except util.PunctiliousException:
             return False
 
-    def __new__(cls, phi: af.FlexibleCanonicalAbstractFormula, s: cs.FlexibleConnectiveSequence):
-        s: cs.ConnectiveSequence = cs.data_validate_connective_sequence(s)
+    def __new__(cls, phi: af.FlexibleCanonicalAbstractFormula, s: sl.FlexibleConnectiveSequence):
+        s: sl.ConnectiveSequence = sl.data_validate_connective_sequence(s)
         phi: af.CanonicalAbstractFormula = af.data_validate_canonical_abstract_formula(phi)
         if s.length != phi.sequence_max_value + 1:
             raise util.PunctiliousException(
@@ -114,7 +114,7 @@ class Formula(tuple):
         return tuple.__getitem__(self, 1)
 
     @property
-    def connective_sequence(self) -> cs.ConnectiveSequence:
+    def connective_sequence(self) -> sl.ConnectiveSequence:
         """
 
         `connective_sequence` is an immutable property.
@@ -336,4 +336,4 @@ class Formula(tuple):
 
 FlexibleFormula = typing.Union[
     Formula, tuple[
-        cs.FlexibleConnectiveSequence, af.FlexibleCanonicalAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]
+        sl.FlexibleConnectiveSequence, af.FlexibleCanonicalAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]
