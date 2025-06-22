@@ -72,6 +72,6 @@ class TestRestrictedGrowthFunctionSequence:
 
     def test_concatenate_single(self, rgf1, rgf2a, rgf2b, rgf6a, rgf12a):
         assert rgf1.concatenate_with(rgf2a) == pu.rgfs.RestrictedGrowthFunctionSequence(*rgf1, *rgf2a)
-        assert pu.rgfs.concatenate_flexible_restricted_growth_sequences(rgf12a,
-                                                                        rgf2a) == pu.rgfs.RestrictedGrowthFunctionSequence(
+        assert pu.rgfs.concatenate_flexible_restricted_growth_function_sequences(rgf12a,
+                                                                                 rgf2a) == pu.rgfs.RestrictedGrowthFunctionSequence(
             *rgf12a, *rgf2a)

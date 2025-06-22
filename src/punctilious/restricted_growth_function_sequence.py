@@ -58,15 +58,18 @@ def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthF
 class RestrictedGrowthFunctionSequence(tuple):
     """A finite (computable) sequence of values starting at 0 whose maximal value increase is restricted.
 
+    Acronym: RGFS
+
+    Formal Definition:
+    A :class:`RestrictedGrowthFunctionSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_i) such that:
+        - n_0 = 0
+        - with j > 0, n_j <= 1 + max(n_0, n_1, ..., n_(j-1))
+
     Note:
     Often RGF sequences have an initial value of 1 in the literature. We choose 0 here for consistency
     with the design choice of using 0-based indexes as the default indexing. In practice, 0-based indexes
     were a natural choice for Python implementation.
 
-    Definition:
-    A `RestrictedGrowthFunctionSequence` is a finite sequence of natural numbers such that:
-        - n_0 = 0
-        - with i > 0, n_i = 1 + max(n_0, n_1, ..., n_(i-1))
 
     """
 
@@ -79,7 +82,7 @@ class RestrictedGrowthFunctionSequence(tuple):
         :param other:
         :return:
         """
-        return concatenate_flexible_restricted_growth_sequences(self, other)
+        return concatenate_flexible_restricted_growth_function_sequences(self, other)
 
     def __eq__(self, s):
         """Returns `False` if `s` cannot be interpreted as a :class:`RestrictedGrowthFunctionSequence`,
@@ -140,7 +143,7 @@ class RestrictedGrowthFunctionSequence(tuple):
         :param s:
         :return:
         """
-        return concatenate_flexible_restricted_growth_sequences(self, *s)
+        return concatenate_flexible_restricted_growth_function_sequences(self, *s)
 
     @property
     def elements(self) -> tuple[int, ...]:
@@ -197,7 +200,7 @@ def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[i
     return RestrictedGrowthFunctionSequence(*s2)
 
 
-def concatenate_flexible_restricted_growth_sequences(*s: tuple[
+def concatenate_flexible_restricted_growth_function_sequences(*s: tuple[
     FlexibleRestrictedGrowthFunctionSequence, ...]) -> RestrictedGrowthFunctionSequence:
     """Concatenates :class:`RestrictedGrowthFunctionSequence` elements.
 
