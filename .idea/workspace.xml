@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="UnrestrictedSequence">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/non_canonical_abstract_formula.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_non_canonical_abstract_formula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -975,14 +978,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01407" summary="AbstractFormula">
-      <option name="closed" value="true" />
-      <created>1749376403503</created>
-      <option name="number" value="01407" />
-      <option name="presentableId" value="LOCAL-01407" />
-      <option name="project" value="LOCAL" />
-      <updated>1749376403503</updated>
-    </task>
     <task id="LOCAL-01408" summary="AbstractFormula">
       <option name="closed" value="true" />
       <created>1749419678002</created>
@@ -1367,7 +1362,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750582388707</updated>
     </task>
-    <option name="localTasksCounter" value="1456" />
+    <task id="LOCAL-01456" summary="UnrestrictedSequence">
+      <option name="closed" value="true" />
+      <created>1750582819838</created>
+      <option name="number" value="01456" />
+      <option name="presentableId" value="LOCAL-01456" />
+      <option name="project" value="LOCAL" />
+      <updated>1750582819839</updated>
+    </task>
+    <option name="localTasksCounter" value="1457" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1540,6 +1543,10 @@
           <url>file://$PROJECT_DIR$/tests/test_canonical_abstract_formula.py</url>
           <line>205</line>
           <option name="timeStamp" value="452" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/non_canonical_abstract_formula.py</url>
+          <option name="timeStamp" value="454" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

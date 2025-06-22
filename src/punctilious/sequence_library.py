@@ -525,8 +525,8 @@ US = UnrestrictedSequence  # Alias
 # Global variables
 
 _connective_sequence_cache: dict[
-    int, ConnectiveSequence] = {}  # cache mechanism assuring that unique rpts are only instantiated once.
+    int, ConnectiveSequence] = {}  # cache for ConnectiveSequence elements.
 _restricted_growth_function_sequence_cache: dict[
-    int, RestrictedGrowthFunctionSequence] = dict()  # cache mechanism assuring that unique RGFS are only instantiated once.
+    int, RestrictedGrowthFunctionSequence] = dict()  # cache for RestrictedGrowthFunctionSequence elements.
 _unrestricted_sequence_cache: dict[
-    int, UnrestrictedSequence] = dict()  # cache mechanism assuring that unique unrestricted-sequences are only instantiated once.
+    int, UnrestrictedSequence] = dict()  # cache for UnrestrictedSequence.
