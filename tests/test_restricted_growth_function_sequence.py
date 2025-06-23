@@ -5,8 +5,9 @@ import punctilious as pu
 
 class TestRestrictedGrowthFunctionSequence:
     def test_data_validation(self, s012, s021, s00010203043212, s00010203043262):
-        assert pu.sl.data_validate_restricted_growth_function_sequence_elements(s012) == s012
-        assert pu.sl.data_validate_restricted_growth_function_sequence_elements(s00010203043212) == s00010203043212
+        assert pu.sl.data_validate_restricted_growth_function_sequence_elements(s012) == (True, s012,)
+        assert pu.sl.data_validate_restricted_growth_function_sequence_elements(s00010203043212) == (True,
+                                                                                                     s00010203043212,)
         with pytest.raises(pu.util.PunctiliousException):
             pu.sl.data_validate_restricted_growth_function_sequence_elements(s021)
         with pytest.raises(pu.util.PunctiliousException):

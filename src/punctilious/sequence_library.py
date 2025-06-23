@@ -26,27 +26,46 @@ def data_validate_restricted_growth_function_sequence(
 
 
 def data_validate_restricted_growth_function_sequence_elements(
-        o: FlexibleRestrictedGrowthFunctionSequence) -> FlexibleRestrictedGrowthFunctionSequence:
+        o: FlexibleRestrictedGrowthFunctionSequence,
+        raise_exception: bool = True) -> tuple[bool, FlexibleRestrictedGrowthFunctionSequence]:
+    """Coerces `o` :class:`RestrictedGrowthFunctionSequence` type.
+
+    :param o:
+    :param raise_exception: Whether an exception is raised if coercion is fails.
+    :return: a tuple (b, o) where `b == True` if coercion was successful and `o` is the coerced object, `False` and `None` otherwise.
+    """
     if isinstance(o, RestrictedGrowthFunctionSequence):
         # data validation is assured by the class logic.
-        return o
+        return True, o
     if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
         o = tuple(o)
         o = tuple(int(n) for n in o)
         if o[0] != 0:
-            raise util.PunctiliousException("The first element `x` of the RGF sequence `s` is not equal to 0.",
-                                            x=o[0], s=o)
+            if raise_exception:
+                raise util.PunctiliousException("The first element `x` of the RGF sequence `s` is not equal to 0.",
+                                                x=o[0], s=o)
+            else:
+                return False, None
         for i, n in enumerate(o):
             if i < 0:
-                raise util.PunctiliousException(
-                    "The i-th element `n` of the unrestricted sequence `s` is less than 0.",
-                    i=i, n=n, s=o)
+                if raise_exception:
+                    raise util.PunctiliousException(
+                        "The i-th element `n` of the unrestricted sequence `s` is less than 0.",
+                        i=i, n=n, s=o)
+                else:
+                    return False, None
             if i > 0 and n > max(o[0:i]) + 1:
-                raise util.PunctiliousException(
-                    "The i-th element `n` of the RGF sequence `s` is greater than max(s[0:i]) + 1.",
-                    i=i, n=n, s=o)
-        return o
-    raise util.PunctiliousException("Non-supported input.", o=o)
+                if raise_exception:
+                    raise util.PunctiliousException(
+                        "The i-th element `n` of the RGF sequence `s` is greater than max(s[0:i]) + 1.",
+                        i=i, n=n, s=o)
+                else:
+                    return False, None
+        return True, o
+    if raise_exception:
+        raise util.PunctiliousException("Non-supported input.", o=o)
+    else:
+        return False, None
 
 
 def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthFunctionSequence):
@@ -131,7 +150,9 @@ class RestrictedGrowthFunctionSequence(tuple):
             return False
 
     def __new__(cls, *s):
-        s: tuple[int] = data_validate_restricted_growth_function_sequence_elements(s)
+        b: bool
+        s: tuple[int]
+        b, s = data_validate_restricted_growth_function_sequence_elements(s)
         s: tuple[int] = super(RestrictedGrowthFunctionSequence, cls).__new__(cls, s)
         s: tuple[int] = retrieve_restricted_growth_function_sequence_from_cache(s)
         return s
@@ -157,6 +178,14 @@ class RestrictedGrowthFunctionSequence(tuple):
         """
         return tuple(super().__iter__())
 
+    @property
+    def is_restricted_growth_function_sequence(self) -> bool:
+        return True
+
+    @property
+    def is_unrestricted_sequence(self) -> bool:
+        return True
+
     def is_restricted_growth_function_sequence_equivalent_to(self, s: FlexibleRestrictedGrowthFunctionSequence):
         """
 
@@ -178,8 +207,15 @@ class RestrictedGrowthFunctionSequence(tuple):
 
     @property
     def max_value(self) -> int:
-        """The `max_value` of a `RestrictedGrowthFunctionSequence` is the maximum value of its elements."""
+        """The `max_value` of a :class:`RestrictedGrowthFunctionSequence` is the maximum value of its elements."""
         return max(self)
+
+    def convert_to_unrestricted_sequence(self):
+        """Converts this :class:`RestrictedGrowthFunctionSequence` object to an :class:`UnrestrictedSequence`.
+
+        :return:
+        """
+        return UnrestrictedSequence(*self)
 
 
 def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[int, ...]):
@@ -340,6 +376,14 @@ class UnrestrictedSequence(tuple):
         """
         return concatenate_flexible_unrestricted_sequences(self, *s)
 
+    def convert_to_restricted_growth_function_sequence(self):
+        """Converts this :class:`UnrestrictedSequence` object to type :class:`RestrictedGrowthFunctionSequence`,
+        or raise an exception if the sequence is not an RGF sequence.
+
+        :return:
+        """
+        return RestrictedGrowthFunctionSequence(*self)
+
     @property
     def elements(self) -> tuple[int, ...]:
         """The elements that compose this :class:`UnrestrictedSequence`, in order.
@@ -347,6 +391,18 @@ class UnrestrictedSequence(tuple):
         :return:
         """
         return tuple(super().__iter__())
+
+    @property
+    def is_restricted_growth_function_sequence(self) -> bool:
+        """`True` if this unrestricted sequence is also an RGF sequence, `False` otherwise.
+        """
+        b: bool
+        b, _ = data_validate_restricted_growth_function_sequence_elements(self)
+        return b
+
+    @property
+    def is_unrestricted_sequence(self) -> bool:
+        return True
 
     def is_unrestricted_sequence_equivalent_to(self, s: FlexibleUnrestrictedSequence):
         """
