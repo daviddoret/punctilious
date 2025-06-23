@@ -144,6 +144,7 @@ class RestrictedGrowthFunctionSequence(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
        """
         try:
+            b: bool
             s: RestrictedGrowthFunctionSequence = data_validate_restricted_growth_function_sequence(s)
             return not self.is_restricted_growth_function_sequence_equivalent_to(s)
         except util.PunctiliousException:
