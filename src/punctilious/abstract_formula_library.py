@@ -65,6 +65,11 @@ def retrieve_canonical_abstract_formula_from_cache(o: FlexibleCanonicalAbstractF
 
 
 class CanonicalAbstractFormula(tuple, AbstractFormula):
+    """A :class:`CanonicalAbstractFormula` is a tuple `(T, S)` such that:
+     - `T` is a rooted-plane-tree,
+     - `S` is an RGF sequence.
+
+    """
 
     def __eq__(self, t):
         """Returns `False` if `t` cannot be interpreted as a :class:`CanonicalAbstractFormula`,
@@ -554,6 +559,11 @@ def retrieve_non_canonical_abstract_formula_from_cache(o: FlexibleNonCanonicalAb
 
 
 class NonCanonicalAbstractFormula(tuple, AbstractFormula):
+    """A :class:`NonCanonicalAbstractFormula` is a tuple `(T, S)` such that:
+     - `T` is a rooted-plane-tree,
+     - `S` is an unrestricted sequence (of natural numbers).
+
+    """
 
     def __eq__(self, t):
         """Returns `False` if `t` cannot be interpreted as a :class:`NonCanonicalAbstractFormula`,
