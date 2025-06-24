@@ -10,7 +10,169 @@ import rooted_plane_tree as rpt
 import sequence_library as sl
 
 
-class AbstractFormula:
+# Formula declarations
+
+
+def declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(p) -> NonCanonicalAbstractFormula:
+    """Declares a :class:`NonCanonicalAbstractFormula` object from a tree of integer/tuple pairs.
+
+    Definition:
+    A tree of integer/tuple pairs `T` defined as:
+     T := (n, T')
+    where:
+     - n is a natural number
+     - T' is (possibly empty) tuple of trees of integer/tuple pairs.
+
+    :param p: A tree of integer/tuple pairs.
+    :return: a :class:`NonCanonicalAbstractFormula`.
+    """
+
+    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
+    t: rpt.RootedPlaneTree = rpt.build_rooted_plane_tree_from_tuple_tree(t)
+    s: sl.UnrestrictedSequence = sl.UnrestrictedSequence(*s)
+    phi: NonCanonicalAbstractFormula = NonCanonicalAbstractFormula(t, s)
+    return phi
+
+
+def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> NonCanonicalAbstractFormula:
+    """Declares a :class:`CanonicalAbstractFormula` object from a tree of integer/tuple pairs.
+
+    Definition:
+    A tree of integer/tuple pairs `T` defined as:
+     T := (n, T')
+    where:
+     - n is a natural number
+     - T' is (possibly empty) tuple of trees of integer/tuple pairs.
+
+    :param p: A tree of integer/tuple pairs.
+    :return: a :class:`CanonicalAbstractFormula`.
+    """
+
+    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
+    t = rpt.build_rooted_plane_tree_from_tuple_tree(t)
+    s = sl.UnrestrictedSequence(*s)
+    phi = NonCanonicalAbstractFormula(t, s)
+    return phi
+
+
+def Declare_formula_from_immediate_sub_formulas(
+        immediate_sub_formulas: tuple[FlexibleCanonicalAbstractFormula]) -> CanonicalAbstractFormula:
+    """Given a sequence of abstract-formulas 𝛷, declares a new formula 𝜓 such that:
+     - the formulas in 𝛷 are mapped to the immediate sub-formulas
+
+    :param immediate_sub_formulas:
+    :return:
+    """
+    immediate_sub_formulas: tuple[CanonicalAbstractFormula, ...] = tuple(
+        data_validate_canonical_abstract_formula(o=phi) for phi in immediate_sub_formulas)
+    phi: CanonicalAbstractFormula
+    s: sl.RestrictedGrowthFunctionSequence = itertools.chain.from_iterable(
+        phi.restricted_growth_function_sequence for phi in immediate_sub_formulas)
+    phi = CanonicalAbstractFormula(t=t, s=s)
+    raise NotImplementedError('review approach completely')
+
+
+def declare_formula_from_immediate_sub_formulas(
+        immediate_sub_formulas: tuple[FlexibleNonCanonicalAbstractFormula]) -> NonCanonicalAbstractFormula:
+    """Given a sequence of abstract-formulas 𝛷, declares a new formula 𝜓 such that:
+     - the formulas in 𝛷 are mapped to the immediate sub-formulas
+
+    :param immediate_sub_formulas:
+    :return:
+    """
+    immediate_sub_formulas: tuple[NonCanonicalAbstractFormula, ...] = tuple(
+        data_validate_non_canonical_abstract_formula(o=phi) for phi in immediate_sub_formulas)
+    phi: NonCanonicalAbstractFormula
+    s: sl.UnrestrictedSequence = itertools.chain.from_iterable(
+        phi.unrestricted_sequence for phi in immediate_sub_formulas)
+    phi = NonCanonicalAbstractFormula(t=t, s=s)
+    raise NotImplementedError('review approach completely')
+
+
+# Transformation functions
+
+
+def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
+    """Given a tree of integer/tuple pairs, extracts:
+     - its tree of tuples,
+     - and its sequence of integers,
+    following the depth-first ascending-nodes algorithm.
+
+    :param p: the tree of integer/tuple pairs
+    :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
+    """
+    if len(p) != 2:
+        raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
+    i: int = p[0]
+    children = p[1]
+    if len(children) == 0:
+        # this is a leaf
+        return (), (i,)
+    else:
+        t: list = []
+        s: tuple[int, ...] = (i,)
+        for sub_p in children:
+            sub_t, sub_s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=sub_p)
+            t.append(sub_t)
+            s += sub_s
+        t: tuple[tuple, ...] = tuple(t)
+        return t, s
+
+
+def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
+    """Given a tree of integer/tuple pairs, extracts:
+     - its tree of tuples,
+     - and its sequence of integers,
+    following the depth-first ascending-nodes algorithm.
+
+    :param p: the tree of integer/tuple pairs
+    :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
+    """
+    if len(p) != 2:
+        raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
+    i: int = p[0]
+    children = p[1]
+    if len(children) == 0:
+        # this is a leaf
+        return (), (i,)
+    else:
+        t: list = []
+        s: tuple[int, ...] = (i,)
+        for sub_p in children:
+            sub_t, sub_s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=sub_p)
+            t.append(sub_t)
+            s += sub_s
+        t: tuple[tuple, ...] = tuple(t)
+        return t, s
+
+
+# Data validation functions
+
+def data_validate_canonical_abstract_formula(
+        o: FlexibleCanonicalAbstractFormula) -> CanonicalAbstractFormula:
+    if isinstance(o, CanonicalAbstractFormula):
+        return o
+    if isinstance(o, collections.abc.Iterable):
+        return CanonicalAbstractFormula(*o)
+    if isinstance(o, collections.abc.Generator):
+        return CanonicalAbstractFormula(*o)
+    raise util.PunctiliousException('CanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
+
+
+def data_validate_non_canonical_abstract_formula(
+        o: FlexibleNonCanonicalAbstractFormula) -> NonCanonicalAbstractFormula:
+    if isinstance(o, NonCanonicalAbstractFormula):
+        return o
+    if isinstance(o, collections.abc.Iterable):
+        return NonCanonicalAbstractFormula(*o)
+    if isinstance(o, collections.abc.Generator):
+        return NonCanonicalAbstractFormula(*o)
+    raise util.PunctiliousException('NonCanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
+
+
+# Classes
+
+class AbstractFormula(abc.ABC):
     """
 
     Definition:
@@ -40,28 +202,6 @@ class AbstractFormula:
         """The `rooted_plan_tree` :class:`AbstractFormula` is the rooted-plan-tree that
         defines the formula's structure."""
         raise util.PunctiliousException("Calling an abstract method", self=self)
-
-
-def data_validate_canonical_abstract_formula(
-        o: FlexibleCanonicalAbstractFormula) -> CanonicalAbstractFormula:
-    if isinstance(o, CanonicalAbstractFormula):
-        return o
-    if isinstance(o, collections.abc.Iterable):
-        return CanonicalAbstractFormula(*o)
-    if isinstance(o, collections.abc.Generator):
-        return CanonicalAbstractFormula(*o)
-    raise util.PunctiliousException('CanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
-
-
-def retrieve_canonical_abstract_formula_from_cache(o: FlexibleCanonicalAbstractFormula):
-    """cache mechanism assuring that unique canonical abstract formulas are only instantiated once."""
-    global _canonical_abstract_formula_cache
-    o: CanonicalAbstractFormula = data_validate_canonical_abstract_formula(o)
-    if hash(o) in _canonical_abstract_formula_cache.keys():
-        return _canonical_abstract_formula_cache[hash(o)]
-    else:
-        _canonical_abstract_formula_cache[hash(o)] = o
-        return o
 
 
 class CanonicalAbstractFormula(tuple, AbstractFormula):
@@ -469,95 +609,6 @@ class CanonicalAbstractFormula(tuple, AbstractFormula):
         return self.rooted_plane_tree.size
 
 
-def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
-    """Given a tree of integer/tuple pairs, extracts:
-     - its tree of tuples,
-     - and its sequence of integers,
-    following the depth-first ascending-nodes algorithm.
-
-    :param p: the tree of integer/tuple pairs
-    :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
-    """
-    if len(p) != 2:
-        raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
-    i: int = p[0]
-    children = p[1]
-    if len(children) == 0:
-        # this is a leaf
-        return (), (i,)
-    else:
-        t: list = []
-        s: tuple[int, ...] = (i,)
-        for sub_p in children:
-            sub_t, sub_s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=sub_p)
-            t.append(sub_t)
-            s += sub_s
-        t: tuple[tuple, ...] = tuple(t)
-        return t, s
-
-
-def declare_formula_from_tree_of_integer_tuple_pairs(p) -> CanonicalAbstractFormula:
-    """Declares a :class:`CanonicalAbstractFormula` object from a tree of integer / tuple pairs (n, T) where i is a natural number,
-    and T a tree of integer / tuple pairs.
-
-    Definition:
-    A tree of integer tuple pairs `T` defined as:
-     T := (n, T')
-    where:
-     - n is a natural number
-     - T' is tree of integer tuple pairs.
-
-
-    :param p:
-    :return:
-    """
-
-    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
-    t = rpt.build_rooted_plane_tree_from_tuple_tree(t)
-    s = sl.RestrictedGrowthFunctionSequence(*s)
-    phi = CanonicalAbstractFormula(t, s)
-    return phi
-
-
-def Declare_formula_from_immediate_sub_formulas(
-        immediate_sub_formulas: tuple[FlexibleCanonicalAbstractFormula]) -> CanonicalAbstractFormula:
-    """Given a sequence of abstract-formulas 𝛷, declares a new formula 𝜓 such that:
-     - the formulas in 𝛷 are mapped to the immediate sub-formulas
-
-    :param immediate_sub_formulas:
-    :return:
-    """
-    immediate_sub_formulas: tuple[CanonicalAbstractFormula, ...] = tuple(
-        data_validate_canonical_abstract_formula(o=phi) for phi in immediate_sub_formulas)
-    phi: CanonicalAbstractFormula
-    s: sl.RestrictedGrowthFunctionSequence = itertools.chain.from_iterable(
-        phi.restricted_growth_function_sequence for phi in immediate_sub_formulas)
-    phi = CanonicalAbstractFormula(t=t, s=s)
-    raise NotImplementedError('review approach completely')
-
-
-def data_validate_non_canonical_abstract_formula(
-        o: FlexibleNonCanonicalAbstractFormula) -> NonCanonicalAbstractFormula:
-    if isinstance(o, NonCanonicalAbstractFormula):
-        return o
-    if isinstance(o, collections.abc.Iterable):
-        return NonCanonicalAbstractFormula(*o)
-    if isinstance(o, collections.abc.Generator):
-        return NonCanonicalAbstractFormula(*o)
-    raise util.PunctiliousException('NonCanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
-
-
-def retrieve_non_canonical_abstract_formula_from_cache(o: FlexibleNonCanonicalAbstractFormula):
-    """cache mechanism assuring that unique canonical abstract formulas are only instantiated once."""
-    global _non_canonical_abstract_formula_cache
-    o: NonCanonicalAbstractFormula = data_validate_non_canonical_abstract_formula(o)
-    if hash(o) in _non_canonical_abstract_formula_cache.keys():
-        return _non_canonical_abstract_formula_cache[hash(o)]
-    else:
-        _non_canonical_abstract_formula_cache[hash(o)] = o
-        return o
-
-
 class NonCanonicalAbstractFormula(tuple, AbstractFormula):
     """A :class:`NonCanonicalAbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
@@ -963,73 +1014,6 @@ class NonCanonicalAbstractFormula(tuple, AbstractFormula):
         return self.rooted_plane_tree.size
 
 
-def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
-    """Given a tree of integer/tuple pairs, extracts:
-     - its tree of tuples,
-     - and its sequence of integers,
-    following the depth-first ascending-nodes algorithm.
-
-    :param p: the tree of integer/tuple pairs
-    :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
-    """
-    if len(p) != 2:
-        raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
-    i: int = p[0]
-    children = p[1]
-    if len(children) == 0:
-        # this is a leaf
-        return (), (i,)
-    else:
-        t: list = []
-        s: tuple[int, ...] = (i,)
-        for sub_p in children:
-            sub_t, sub_s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=sub_p)
-            t.append(sub_t)
-            s += sub_s
-        t: tuple[tuple, ...] = tuple(t)
-        return t, s
-
-
-def declare_formula_from_tree_of_integer_tuple_pairs(p) -> NonCanonicalAbstractFormula:
-    """Declares a :class:`NonCanonicalAbstractFormula` object from a tree of integer / tuple pairs (n, T) where i is a natural number,
-    and T a tree of integer / tuple pairs.
-
-    Definition:
-    A tree of integer tuple pairs `T` defined as:
-     T := (n, T')
-    where:
-     - n is a natural number
-     - T' is tree of integer tuple pairs.
-
-
-    :param p:
-    :return:
-    """
-
-    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
-    t = rpt.build_rooted_plane_tree_from_tuple_tree(t)
-    s = sl.UnrestrictedSequence(*s)
-    phi = NonCanonicalAbstractFormula(t, s)
-    return phi
-
-
-def declare_formula_from_immediate_sub_formulas(
-        immediate_sub_formulas: tuple[FlexibleNonCanonicalAbstractFormula]) -> NonCanonicalAbstractFormula:
-    """Given a sequence of abstract-formulas 𝛷, declares a new formula 𝜓 such that:
-     - the formulas in 𝛷 are mapped to the immediate sub-formulas
-
-    :param immediate_sub_formulas:
-    :return:
-    """
-    immediate_sub_formulas: tuple[NonCanonicalAbstractFormula, ...] = tuple(
-        data_validate_non_canonical_abstract_formula(o=phi) for phi in immediate_sub_formulas)
-    phi: NonCanonicalAbstractFormula
-    s: sl.UnrestrictedSequence = itertools.chain.from_iterable(
-        phi.unrestricted_sequence for phi in immediate_sub_formulas)
-    phi = NonCanonicalAbstractFormula(t=t, s=s)
-    raise NotImplementedError('review approach completely')
-
-
 # Flexible types to facilitate data validation
 
 FlexibleCanonicalAbstractFormula = typing.Union[
@@ -1044,6 +1028,29 @@ FlexibleNonCanonicalAbstractFormula = typing.Union[
 CAF = CanonicalAbstractFormula  # An alias for CanonicalAbstractFormula
 NCAF = NonCanonicalAbstractFormula  # An alias for NonCanonicalAbstractFormula
 
-# Global variables
+# Cache Management
+
 _canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
 _non_canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
+
+
+def retrieve_canonical_abstract_formula_from_cache(o: FlexibleCanonicalAbstractFormula):
+    """cache mechanism assuring that unique canonical abstract formulas are only instantiated once."""
+    global _canonical_abstract_formula_cache
+    o: CanonicalAbstractFormula = data_validate_canonical_abstract_formula(o)
+    if hash(o) in _canonical_abstract_formula_cache.keys():
+        return _canonical_abstract_formula_cache[hash(o)]
+    else:
+        _canonical_abstract_formula_cache[hash(o)] = o
+        return o
+
+
+def retrieve_non_canonical_abstract_formula_from_cache(o: FlexibleNonCanonicalAbstractFormula):
+    """cache mechanism assuring that unique canonical abstract formulas are only instantiated once."""
+    global _non_canonical_abstract_formula_cache
+    o: NonCanonicalAbstractFormula = data_validate_non_canonical_abstract_formula(o)
+    if hash(o) in _non_canonical_abstract_formula_cache.keys():
+        return _non_canonical_abstract_formula_cache[hash(o)]
+    else:
+        _non_canonical_abstract_formula_cache[hash(o)] = o
+        return o

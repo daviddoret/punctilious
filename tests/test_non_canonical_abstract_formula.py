@@ -176,27 +176,27 @@ class TestNonCanonicalAbstractFormula:
         tree_of_pairs = (0, (),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((0, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),), (2, (),), (3, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),), (0, ((1, ((2, ((3, ((1, (),),),),),),),),),), (4, ((1, (),),),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
 
     def test_get_sub_tree_by_path(self, af1, af2a, af6a, af12a, af_big):

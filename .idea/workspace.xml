@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="data_validate_restricted_growth_function_sequence_elements with raise_exception parameter">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="doc">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_canonical_abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_non_canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_non_canonical_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -978,14 +980,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01413" summary="AbstractFormula">
-      <option name="closed" value="true" />
-      <created>1749711112848</created>
-      <option name="number" value="01413" />
-      <option name="presentableId" value="LOCAL-01413" />
-      <option name="project" value="LOCAL" />
-      <updated>1749711112848</updated>
-    </task>
     <task id="LOCAL-01414" summary="AbstractFormula">
       <option name="closed" value="true" />
       <created>1749813869809</created>
@@ -1370,7 +1364,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750677126346</updated>
     </task>
-    <option name="localTasksCounter" value="1462" />
+    <task id="LOCAL-01462" summary="doc">
+      <option name="closed" value="true" />
+      <created>1750677413719</created>
+      <option name="number" value="01462" />
+      <option name="presentableId" value="LOCAL-01462" />
+      <option name="project" value="LOCAL" />
+      <updated>1750677413719</updated>
+    </task>
+    <option name="localTasksCounter" value="1463" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1423,7 +1425,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="AbstractFormlua" />
     <MESSAGE value="Connector" />
     <MESSAGE value="clean-up" />
     <MESSAGE value="main_sequence_element" />
@@ -1448,7 +1449,8 @@
     <MESSAGE value="UnrestrictedSequence" />
     <MESSAGE value="NonCanonicalAbstractFormula" />
     <MESSAGE value="data_validate_restricted_growth_function_sequence_elements with raise_exception parameter" />
-    <option name="LAST_COMMIT_MESSAGE" value="data_validate_restricted_growth_function_sequence_elements with raise_exception parameter" />
+    <MESSAGE value="doc" />
+    <option name="LAST_COMMIT_MESSAGE" value="doc" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
