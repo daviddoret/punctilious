@@ -203,39 +203,8 @@ def data_validate_non_canonical_abstract_formula(
 
 # Classes
 
-class AbstractFormula(abc.ABC):
-    """
 
-    Definition:
-    An abstract-formula is a formula with abstract connectives, for which by convention we use the natural numbers.
-    By abstract connectives we mean that meaningful connectives used in mathematics are not available.
-    One way to look at it is to see an abstract-formula as a formula that captures the complete "structure"
-    of a formula, but that is independent of its meaning.
-
-    """
-
-    @property
-    @abc.abstractmethod
-    def formula_degree(self) -> int:
-        """The `formula_degree` of an :class:`AbstractFormula` is the number of non-leaf nodes it contains.
-
-        This definition is derived from (Mancosu et al, 2021, p. 18).
-
-        Attention point: do not confuse `tree_size` and `formula_degree`.
-
-        :return:
-        """
-        raise util.PunctiliousException("Calling an abstract method", self=self)
-
-    @property
-    @abc.abstractmethod
-    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
-        """The `rooted_plan_tree` :class:`AbstractFormula` is the rooted-plan-tree that
-        defines the formula's structure."""
-        raise util.PunctiliousException("Calling an abstract method", self=self)
-
-
-class CanonicalAbstractFormula(tuple, AbstractFormula):
+class CanonicalAbstractFormula(tuple):
     """A :class:`CanonicalAbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is an RGF sequence.
@@ -640,7 +609,7 @@ class CanonicalAbstractFormula(tuple, AbstractFormula):
         return self.rooted_plane_tree.size
 
 
-class NonCanonicalAbstractFormula(tuple, AbstractFormula):
+class NonCanonicalAbstractFormula(tuple):
     """A :class:`NonCanonicalAbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is an unrestricted sequence (of natural numbers).
@@ -837,7 +806,7 @@ class NonCanonicalAbstractFormula(tuple, AbstractFormula):
         for child_tree in self.rooted_plane_tree.iterate_direct_ascending():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.unrestricted_sequence[i:i + child_tree.size]
-            sub_sequence: UnrestrictedSequence = UnrestrictedSequence(sub_sequence)
+            sub_sequence: UnrestrictedSequence = UnrestrictedSequence(*sub_sequence)
             # yield this child RGF sequence
             yield sub_sequence
             # truncate the remaining sequence
@@ -943,14 +912,6 @@ class NonCanonicalAbstractFormula(tuple, AbstractFormula):
             connectives=connectives)
 
     @property
-    def unrestricted_sequence(self) -> sl.UnrestrictedSequence:
-        """Shortcut: self.s.
-
-        :return:
-        """
-        return self[1]
-
-    @property
     def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
         """Shortcut: self.t."""
         return self[0]
@@ -1042,6 +1003,14 @@ class NonCanonicalAbstractFormula(tuple, AbstractFormula):
         Attention point: do not confuse `tree_size` and `formula_degree`.
         """
         return self.rooted_plane_tree.size
+
+    @property
+    def unrestricted_sequence(self) -> sl.UnrestrictedSequence:
+        """Shortcut: self.s.
+
+        :return:
+        """
+        return self[1]
 
 
 # Flexible types to facilitate data validation

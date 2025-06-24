@@ -56,21 +56,21 @@ class TestNonCanonicalAbstractFormula:
         assert l[2] == rgfs012345
         assert l[3] == rgfs01
 
-    def test_iterate_sub_restricted_growth_function_sequences(self, ncaf1, rgfs0, ncaf2a, rgfs01, ncaf6a, ncaf12a,
-                                                              rgfs012345):
-        l = tuple(t for t in ncaf1.iterate_sub_restricted_growth_function_sequences())
+    def test_iterate_sub_unrestricted_sequences(self, ncaf1, rgfs0, ncaf2a, rgfs01, ncaf6a, ncaf12a,
+                                                rgfs012345):
+        l = tuple(t for t in ncaf1.iterate_sub_unrestricted_sequences())
         assert l[0] == ncaf1.restricted_growth_function_sequence
-        l = tuple(t for t in ncaf2a.iterate_sub_restricted_growth_function_sequences())
+        l = tuple(t for t in ncaf2a.iterate_sub_unrestricted_sequences())
         assert l[0] == ncaf2a.restricted_growth_function_sequence
         assert l[1] == rgfs0
-        l = tuple(t for t in ncaf6a.iterate_sub_restricted_growth_function_sequences())
+        l = tuple(t for t in ncaf6a.iterate_sub_unrestricted_sequences())
         assert l[0] == ncaf6a.restricted_growth_function_sequence
         assert l[1] == rgfs0
         assert l[2] == rgfs0
         assert l[3] == rgfs0
         assert l[4] == rgfs0
         assert l[5] == rgfs0
-        l = tuple(t for t in ncaf12a.iterate_sub_restricted_growth_function_sequences())
+        l = tuple(t for t in ncaf12a.iterate_sub_unrestricted_sequences())
         assert l[0] == ncaf12a.restricted_growth_function_sequence
         assert l[1] == rgfs0
         assert l[2] == rgfs01
