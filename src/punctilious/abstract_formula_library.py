@@ -16,12 +16,20 @@ import sequence_library as sl
 def declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(p) -> NonCanonicalAbstractFormula:
     """Declares a :class:`NonCanonicalAbstractFormula` object from a tree of integer/tuple pairs.
 
+    Use case:
+    Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.
+
     Definition:
     A tree of integer/tuple pairs `T` defined as:
      T := (n, T')
     where:
      - n is a natural number
      - T' is (possibly empty) tuple of trees of integer/tuple pairs.
+
+    Sample tree of integer/tuple pairs:
+    (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)
+    ...which maps to formula:
+    0(1,0(2,1),2)
 
     :param p: A tree of integer/tuple pairs.
     :return: a :class:`NonCanonicalAbstractFormula`.
@@ -37,12 +45,20 @@ def declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(p) -> NonCano
 def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> NonCanonicalAbstractFormula:
     """Declares a :class:`CanonicalAbstractFormula` object from a tree of integer/tuple pairs.
 
+    Use case:
+    Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.
+
     Definition:
     A tree of integer/tuple pairs `T` defined as:
      T := (n, T')
     where:
      - n is a natural number
      - T' is (possibly empty) tuple of trees of integer/tuple pairs.
+
+    Sample tree of integer/tuple pairs:
+    (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)
+    ...which maps to formula:
+    0(1,0(2,1),2)
 
     :param p: A tree of integer/tuple pairs.
     :return: a :class:`CanonicalAbstractFormula`.
