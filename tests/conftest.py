@@ -174,37 +174,37 @@ def rgfs0123456789_10_11():
 
 
 @pytest.fixture
-def af1(t1_a, rgfs0):
+def caf1(t1_a, rgfs0):
     return pu.afl.CanonicalAbstractFormula(t1_a, rgfs0)
 
 
 @pytest.fixture
-def af2a(t2_a_aa, rgfs00):
+def caf2a(t2_a_aa, rgfs00):
     return pu.afl.CanonicalAbstractFormula(t2_a_aa, rgfs00)
 
 
 @pytest.fixture
-def af2b(t2_a_aa, rgfs01):
+def caf2b(t2_a_aa, rgfs01):
     return pu.afl.CanonicalAbstractFormula(t2_a_aa, rgfs01)
 
 
 @pytest.fixture
-def af3a(t3_a_aa_aaa, rgf3a):
+def caf3a(t3_a_aa_aaa, rgf3a):
     return pu.afl.CanonicalAbstractFormula(t3_a_aa_aaa, rgf3a)
 
 
 @pytest.fixture
-def af6a(t6_a_aa_ab_ac_ad_ae, rgfs012345):
+def caf6a(t6_a_aa_ab_ac_ad_ae, rgfs012345):
     return pu.afl.CanonicalAbstractFormula(t6_a_aa_ab_ac_ad_ae, rgfs012345)
 
 
 @pytest.fixture
-def af12a(t12, rgfs0123456789_10_11):
+def caf12a(t12, rgfs0123456789_10_11):
     return pu.afl.CanonicalAbstractFormula(t12, rgfs0123456789_10_11)
 
 
 @pytest.fixture
-def af_big(t_big):
+def caf_big(t_big):
     return pu.afl.CanonicalAbstractFormula(t_big,
                                            (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1,
                                             4,
@@ -213,43 +213,82 @@ def af_big(t_big):
 
 
 @pytest.fixture
-def phi1a(af1):
+def ncaf1(t1_a, rgfs0):
+    return pu.afl.NonCanonicalAbstractFormula(t1_a, rgfs0)
+
+
+@pytest.fixture
+def ncaf2a(t2_a_aa, rgfs00):
+    return pu.afl.NonCanonicalAbstractFormula(t2_a_aa, rgfs00)
+
+
+@pytest.fixture
+def ncaf2b(t2_a_aa, rgfs01):
+    return pu.afl.NonCanonicalAbstractFormula(t2_a_aa, rgfs01)
+
+
+@pytest.fixture
+def ncaf3a(t3_a_aa_aaa, rgf3a):
+    return pu.afl.NonCanonicalAbstractFormula(t3_a_aa_aaa, rgf3a)
+
+
+@pytest.fixture
+def ncaf6a(t6_a_aa_ab_ac_ad_ae, rgfs012345):
+    return pu.afl.NonCanonicalAbstractFormula(t6_a_aa_ab_ac_ad_ae, rgfs012345)
+
+
+@pytest.fixture
+def ncaf12a(t12, rgfs0123456789_10_11):
+    return pu.afl.NonCanonicalAbstractFormula(t12, rgfs0123456789_10_11)
+
+
+@pytest.fixture
+def ncaf_big(t_big):
+    return pu.afl.CanonicalAbstractFormula(t_big,
+                                           (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1,
+                                            4,
+                                            9, 10,
+                                            7, 7, 7, 9, 0, 11, 12,))
+
+
+@pytest.fixture
+def phi1a(caf1):
     """The formula 1.
 
     :param af1:
     :return:
     """
-    return pu.formula.Formula(af1, (pu.connective_library.one,), )
+    return pu.formula.Formula(caf1, (pu.connective_library.one,), )
 
 
 @pytest.fixture
-def phi2a(af2a):
+def phi2a(caf2a):
     """The formula: 1(1).
 
     :param af2a:
     :return:
     """
-    return pu.formula.Formula(af2a, (pu.connective_library.one,), )
+    return pu.formula.Formula(caf2a, (pu.connective_library.one,), )
 
 
 @pytest.fixture
-def phi2b(af2b):
+def phi2b(caf2b):
     """The formula: -1.
 
     :param af2b:
     :return:
     """
-    return pu.formula.Formula(af2b, (pu.connective_library.minus, pu.connective_library.one,), )
+    return pu.formula.Formula(caf2b, (pu.connective_library.minus, pu.connective_library.one,), )
 
 
 @pytest.fixture
-def phi6a(af6a):
+def phi6a(caf6a):
     """set(1, 2, 3, 4, 5)
 
     :param af6a:
     :return:
     """
-    return pu.formula.Formula(af6a,
+    return pu.formula.Formula(caf6a,
                               (pu.connective_library.set_by_extension, pu.connective_library.one,
                                pu.connective_library.two,
                                pu.connective_library.three,

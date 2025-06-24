@@ -88,21 +88,31 @@ def Declare_formula_from_immediate_sub_formulas(
     raise NotImplementedError('review approach completely')
 
 
-def declare_formula_from_immediate_sub_formulas(
-        immediate_sub_formulas: tuple[FlexibleNonCanonicalAbstractFormula]) -> NonCanonicalAbstractFormula:
-    """Given a sequence of abstract-formulas 𝛷, declares a new formula 𝜓 such that:
-     - the formulas in 𝛷 are mapped to the immediate sub-formulas
+def declare_non_canonical_abstract_formula_from_immediate_sub_formulas(
+        n: int,
+        s: tuple[
+               FlexibleNonCanonicalAbstractFormula] | None) -> NonCanonicalAbstractFormula:
+    """Given a root natural number n,
+    and a tuple of abstract-formulas s,
+    declares a new formula 𝜓 n(s_0, s_1, ..., s_n) where s_i is an element of s.
 
-    :param immediate_sub_formulas:
+    :param n:
+    :param s:
     :return:
     """
-    immediate_sub_formulas: tuple[NonCanonicalAbstractFormula, ...] = tuple(
-        data_validate_non_canonical_abstract_formula(o=phi) for phi in immediate_sub_formulas)
+    if s is None:
+        s = ()
+    s: tuple[NonCanonicalAbstractFormula, ...] = tuple(
+        data_validate_non_canonical_abstract_formula(o=phi) for phi in s)
     phi: NonCanonicalAbstractFormula
-    s: sl.UnrestrictedSequence = itertools.chain.from_iterable(
-        phi.unrestricted_sequence for phi in immediate_sub_formulas)
-    phi = NonCanonicalAbstractFormula(t=t, s=s)
-    raise NotImplementedError('review approach completely')
+    # Retrieves the children trees
+    t: tuple[rpt.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
+    # Declare the new parent tree
+    t: rpt.RootedPlaneTree = rpt.RootedPlaneTree(*t)
+    u: sl.UnrestrictedSequence = (n,) + itertools.chain.from_iterable(
+        phi.unrestricted_sequence for phi in s)
+    phi: NonCanonicalAbstractFormula = NonCanonicalAbstractFormula(t=u, s=u)
+    return phi
 
 
 # Transformation functions
@@ -179,6 +189,10 @@ def data_validate_non_canonical_abstract_formula(
         o: FlexibleNonCanonicalAbstractFormula) -> NonCanonicalAbstractFormula:
     if isinstance(o, NonCanonicalAbstractFormula):
         return o
+    if isinstance(o, CanonicalAbstractFormula):
+        # Every canonical abstract-formula is a non-canonical abstract formula.
+        # Implicit conversion is allowed.
+        return NonCanonicalAbstractFormula(o.rooted_plane_tree, o.restricted_growth_function_sequence)
     if isinstance(o, collections.abc.Iterable):
         return NonCanonicalAbstractFormula(*o)
     if isinstance(o, collections.abc.Generator):
