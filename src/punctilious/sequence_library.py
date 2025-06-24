@@ -219,20 +219,27 @@ class RestrictedGrowthFunctionSequence(tuple):
         return UnrestrictedSequence(*self)
 
 
-def convert_arbitrary_sequence_to_restricted_growth_function_sequence(s: tuple[int, ...]):
-    """Convert any finite sequence into a `RestrictedGrowthFunctionSequence`,
-    by substituting natural numbers based on their order of appearance in the sequence.
+def apply_canonical_labeling(s: UnrestrictedSequence) -> RestrictedGrowthFunctionSequence:
+    """Convert the :class:`UnrestrictedSequence` `s` into a :class:`RestrictedGrowthFunctionSequence` `t`,
+    by applying canonical labeling.
+
+    Definition - Canonical Labeling:
+    The canonical-labeling of an unrestricted-sequence S is an RFG-sequence T such that:
+     - the value of the first element of S is mapped to 0
+     - whenever a new value x appears in S, it is mapped to max(t0, t1, ..., ti) + 1 where i is the index
+       position of x in S
 
     Examples:
-    (3,5,2,1) --> (1,2,3,4)
-    (3,5,3,1,5,2) --> (1,2,1,3,2,4)
+    (3,5,2,1) --> (0,1,2,3)
+    (3,5,3,1,5,2) --> (0,1,0,2,1,3)
 
 
     :param s:
-    :return:
+    :return: A canonical-labeling of `s`
     """
-    mapping = dict()
-    mapped_value = 0
+    mapping: dict[int, int] = dict()
+    mapped_value: int = 0
+    n: int
     for n in s:
         if n not in mapping.keys():
             mapping[n] = mapped_value

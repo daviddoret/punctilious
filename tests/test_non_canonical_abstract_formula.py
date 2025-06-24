@@ -40,17 +40,17 @@ class TestNonCanonicalAbstractFormula:
     def test_iterate_immediate_sub_unrestricted_sequences(self, ncaf1, rgfs0, ncaf2a, rgfs01, ncaf6a,
                                                           rgfs012345,
                                                           ncaf12a, rgfs0123456789_10_11):
-        l = tuple(t for t in ncaf1.iterate_immediate_sub_unrestricted_sequences())
+        l = tuple(t for t in ncaf1.iterate_immediate_sub_restricted_growth_function_sequences())
         assert len(l) == 0
-        l = tuple(t for t in ncaf2a.iterate_immediate_sub_unrestricted_sequences())
+        l = tuple(t for t in ncaf2a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgfs0
-        l = tuple(t for t in ncaf6a.iterate_immediate_sub_unrestricted_sequences())
+        l = tuple(t for t in ncaf6a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgfs0
         assert l[1] == rgfs0
         assert l[2] == rgfs0
         assert l[3] == rgfs0
         assert l[4] == rgfs0
-        l = tuple(t for t in ncaf12a.iterate_immediate_sub_unrestricted_sequences())
+        l = tuple(t for t in ncaf12a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgfs0
         assert l[1] == rgfs01
         assert l[2] == rgfs012345

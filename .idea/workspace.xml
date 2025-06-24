@@ -7,10 +7,9 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="AbstractFormula cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_canonical_abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_non_canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_non_canonical_abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -311,6 +310,7 @@
     "Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs.executor": "Run",
     "Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_construction_success.executor": "Run",
     "Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_iterate_immediate_sub_restricted_growth_function_sequences.executor": "Run",
+    "Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_iterate_immediate_sub_unrestricted_sequences.executor": "Run",
     "Python tests.pytest for test_options.TestOptions.test_abstract_options.executor": "Run",
     "Python tests.pytest for test_options.TestOptions.test_technical_language.executor": "Run",
     "Python tests.pytest for test_options.TestOptions.test_technical_language_2.executor": "Run",
@@ -602,7 +602,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_non_canonical_abstract_formula.py">
+  <component name="RunManager" selected="Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_iterate_immediate_sub_unrestricted_sequences">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -867,7 +867,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_max_value" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_iterate_immediate_sub_unrestricted_sequences" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -880,7 +880,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_max_value&quot;" />
+      <option name="_new_target" value="&quot;test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_iterate_immediate_sub_unrestricted_sequences&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -949,7 +949,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
       <item itemvalue="Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
-      <item itemvalue="Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_max_value" />
+      <item itemvalue="Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_iterate_immediate_sub_unrestricted_sequences" />
       <item itemvalue="Python tests.pytest in test_non_canonical_abstract_formula.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -958,11 +958,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_iterate_immediate_sub_unrestricted_sequences" />
         <item itemvalue="Python tests.pytest in test_non_canonical_abstract_formula.py" />
         <item itemvalue="Python tests.pytest for test_canonical_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
         <item itemvalue="Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs" />
         <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_max_value" />
       </list>
     </recent_temporary>
   </component>
@@ -984,14 +984,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01416" summary="AbstractFormula.iterate_sequences_depth_first_ascending">
-      <option name="closed" value="true" />
-      <created>1749873700562</created>
-      <option name="number" value="01416" />
-      <option name="presentableId" value="LOCAL-01416" />
-      <option name="project" value="LOCAL" />
-      <updated>1749873700562</updated>
     </task>
     <task id="LOCAL-01417" summary="AbstractFormlua">
       <option name="closed" value="true" />
@@ -1377,7 +1369,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750732392947</updated>
     </task>
-    <option name="localTasksCounter" value="1465" />
+    <task id="LOCAL-01465" summary="AbstractFormula cleanup">
+      <option name="closed" value="true" />
+      <created>1750734083092</created>
+      <option name="number" value="01465" />
+      <option name="presentableId" value="LOCAL-01465" />
+      <option name="project" value="LOCAL" />
+      <updated>1750734083092</updated>
+    </task>
+    <option name="localTasksCounter" value="1466" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

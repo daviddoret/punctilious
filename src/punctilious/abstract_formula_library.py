@@ -8,6 +8,7 @@ import itertools
 import util
 import rooted_plane_tree as rpt
 import sequence_library as sl
+from punctilious.sequence_library import UnrestrictedSequence
 
 
 # Formula declarations
@@ -449,7 +450,7 @@ class CanonicalAbstractFormula(tuple, AbstractFormula):
         s: sl.RestrictedGrowthFunctionSequence
         for s in self.iterate_immediate_sub_sequences():
             # transform the sequence into an RGF sequence, restarting from initial value 0
-            sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+            sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.apply_canonical_labeling(
                 s)
             # yield this child RGF sequence
             yield sub_sequence
@@ -468,7 +469,7 @@ class CanonicalAbstractFormula(tuple, AbstractFormula):
         s: sl.RestrictedGrowthFunctionSequence
         for s in self.iterate_sub_sequences():
             # converts ths sub-sequence to an RGF sequence, which modifies all values to start with 1.
-            sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+            sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.apply_canonical_labeling(
                 s)
             # yield the child RGF sequence
             yield sub_sequence
@@ -817,21 +818,18 @@ class NonCanonicalAbstractFormula(tuple, AbstractFormula):
         :return: A generator of :class:`NonCanonicalAbstractFormula`.
         """
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_direct_ascending(),
-                                              self.iterate_immediate_sub_unrestricted_sequences()):
+                                              self.iterate_immediate_sub_restricted_growth_function_sequences()):
             sub_formula = NonCanonicalAbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
     def iterate_immediate_sub_sequences(self) -> typing.Generator[
-        tuple[int, ...], None, None]:
-        """Iterates the direct sub-sequences of this `NonCanonicalAbstractFormula`.
+        UnrestrictedSequence, None, None]:
+        """Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this `NonCanonicalAbstractFormula`.
 
         Note:
-            A sub-sequence is not an RGF sequence, i.e. its initial value may not be equal to 0,
-            and it may contain maximal values that are greater than the ones allowed by restricted growth.
-
-        Note:
-            The child rgf sequences are determined by 1) the parent rgf sequence,
-            and 2) the rooted plane tree.
+            A sub-sequence of an abstract-formula is determined by:
+             - 1) the parent rgf sequence,
+             - and 2) the rooted plane tree.
         """
         i: int = 1  # remove the root
         child_tree: rpt.RootedPlaneTree
@@ -839,22 +837,24 @@ class NonCanonicalAbstractFormula(tuple, AbstractFormula):
         for child_tree in self.rooted_plane_tree.iterate_direct_ascending():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.unrestricted_sequence[i:i + child_tree.size]
+            sub_sequence: UnrestrictedSequence = UnrestrictedSequence(sub_sequence)
             # yield this child RGF sequence
             yield sub_sequence
             # truncate the remaining sequence
             i += child_tree.size
 
-    def iterate_immediate_sub_unrestricted_sequences(self) -> typing.Generator[
-        sl.UnrestrictedSequence, None, None]:
-        """Iterates the direct child sub-sequences of this `NonCanonicalAbstractFormula`.
+    def iterate_immediate_sub_restricted_growth_function_sequences(self) -> typing.Generator[
+        sl.RestrictedGrowthFunctionSequence, None, None]:
+        """Iterates the direct child sub-sequences of this :class:`NonCanonicalAbstractFormula`,
+        applying canonical labeling to resulting sequences.
 
-        Note: the child rgf sequences are determined by 1) the parent rgf sequence,
-        and 2) the rooted plane tree.
+        Note: the immediate sub-sequences are determined by:
+         - 1) the parent sequence,
+         - and 2) the rooted plane tree.
         """
         s: sl.UnrestrictedSequence
         for s in self.iterate_immediate_sub_sequences():
-            # transform the sequence into an RGF sequence, restarting from initial value 0
-            sub_sequence: sl.UnrestrictedSequence = sl.convert_arbitrary_sequence_to_unrestricted_sequence(
+            sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.apply_canonical_labeling(
                 s)
             # yield this child RGF sequence
             yield sub_sequence

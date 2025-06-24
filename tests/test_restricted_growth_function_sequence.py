@@ -40,11 +40,11 @@ class TestRestrictedGrowthFunctionSequence:
             *s00010203043212) is not pu.sl.RestrictedGrowthFunctionSequence(*s012)
 
     def test_conversion_from_arbitrary_sequence(self):
-        assert pu.sl.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+        assert pu.sl.apply_canonical_labeling(
             (0, 1, 2,)) == pu.sl.RestrictedGrowthFunctionSequence(0, 1, 2)
-        assert pu.sl.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+        assert pu.sl.apply_canonical_labeling(
             (2, 1, 0,)) == pu.sl.RestrictedGrowthFunctionSequence(0, 1, 2)
-        assert pu.sl.convert_arbitrary_sequence_to_restricted_growth_function_sequence(
+        assert pu.sl.apply_canonical_labeling(
             (2, 4, 4, 9, 0, 2, 2, 0,)) == pu.sl.RestrictedGrowthFunctionSequence(0, 1, 1, 2, 3, 0, 0, 3)
 
     def test_max_value(self, rgfs0, rgfs00, rgfs01, rgfs012345, rgfs0123456789_10_11):
