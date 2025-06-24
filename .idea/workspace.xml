@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RGFSequence inherited from UnrestrictedSequence">
+      <change afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_non_canonical_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_non_canonical_abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_unrestricted_sequence.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -985,14 +988,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01417" summary="AbstractFormlua">
-      <option name="closed" value="true" />
-      <created>1749874224243</created>
-      <option name="number" value="01417" />
-      <option name="presentableId" value="LOCAL-01417" />
-      <option name="project" value="LOCAL" />
-      <updated>1749874224243</updated>
-    </task>
     <task id="LOCAL-01418" summary="Connector">
       <option name="closed" value="true" />
       <created>1749885646448</created>
@@ -1377,7 +1372,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750734083092</updated>
     </task>
-    <option name="localTasksCounter" value="1466" />
+    <task id="LOCAL-01466" summary="RGFSequence inherited from UnrestrictedSequence">
+      <option name="closed" value="true" />
+      <created>1750798447728</created>
+      <option name="number" value="01466" />
+      <option name="presentableId" value="LOCAL-01466" />
+      <option name="project" value="LOCAL" />
+      <updated>1750798447728</updated>
+    </task>
+    <option name="localTasksCounter" value="1467" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

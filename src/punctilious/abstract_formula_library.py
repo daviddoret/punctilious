@@ -8,7 +8,7 @@ import itertools
 import util
 import rooted_plane_tree as rpt
 import sequence_library as sl
-from punctilious.sequence_library import UnrestrictedSequence
+from punctilious.sequence_library import NaturalNumberSequence
 
 
 # Formula declarations
@@ -38,7 +38,7 @@ def declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(p) -> NonCano
 
     t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
     t: rpt.RootedPlaneTree = rpt.build_rooted_plane_tree_from_tuple_tree(t)
-    s: sl.UnrestrictedSequence = sl.UnrestrictedSequence(*s)
+    s: sl.NaturalNumberSequence = sl.NaturalNumberSequence(*s)
     phi: NonCanonicalAbstractFormula = NonCanonicalAbstractFormula(t, s)
     return phi
 
@@ -67,7 +67,7 @@ def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> No
 
     t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
     t = rpt.build_rooted_plane_tree_from_tuple_tree(t)
-    s = sl.UnrestrictedSequence(*s)
+    s = sl.NaturalNumberSequence(*s)
     phi = NonCanonicalAbstractFormula(t, s)
     return phi
 
@@ -110,7 +110,7 @@ def declare_non_canonical_abstract_formula_from_immediate_sub_formulas(
     t: tuple[rpt.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
     # Declare the new parent tree
     t: rpt.RootedPlaneTree = rpt.RootedPlaneTree(*t)
-    u: sl.UnrestrictedSequence = (n,) + itertools.chain.from_iterable(
+    u: sl.NaturalNumberSequence = (n,) + itertools.chain.from_iterable(
         phi.unrestricted_sequence for phi in s)
     phi: NonCanonicalAbstractFormula = NonCanonicalAbstractFormula(t=u, s=u)
     return phi
@@ -637,7 +637,7 @@ class NonCanonicalAbstractFormula(tuple):
     def __hash__(self):
         return hash((NonCanonicalAbstractFormula, self.rooted_plane_tree, self.unrestricted_sequence,))
 
-    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleUnrestrictedSequence):
+    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
         super(NonCanonicalAbstractFormula, self).__init__()
         self._immediate_sub_formulas = None
         self._sub_formulas = None
@@ -660,9 +660,9 @@ class NonCanonicalAbstractFormula(tuple):
         except util.PunctiliousException:
             return False
 
-    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleUnrestrictedSequence):
+    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
         t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
-        s: sl.UnrestrictedSequence = sl.data_validate_unrestricted_sequence(s)
+        s: sl.NaturalNumberSequence = sl.data_validate_natural_numbers_sequence(s)
         if t.size != s.length:
             raise util.PunctiliousException(
                 f"`NonCanonicalAbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.",
@@ -762,7 +762,7 @@ class NonCanonicalAbstractFormula(tuple):
         """
         phi: NonCanonicalAbstractFormula = data_validate_non_canonical_abstract_formula(phi)
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
-            phi.rooted_plane_tree) and self.unrestricted_sequence.is_unrestricted_sequence_equivalent_to(
+            phi.rooted_plane_tree) and self.unrestricted_sequence.is_natural_numbers_sequence_equivalent_to(
             phi.unrestricted_sequence)
 
     def is_sub_formula_of(self, phi: NonCanonicalAbstractFormula):
@@ -792,7 +792,7 @@ class NonCanonicalAbstractFormula(tuple):
             yield sub_formula
 
     def iterate_immediate_sub_sequences(self) -> typing.Generator[
-        UnrestrictedSequence, None, None]:
+        NaturalNumberSequence, None, None]:
         """Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this `NonCanonicalAbstractFormula`.
 
         Note:
@@ -806,7 +806,7 @@ class NonCanonicalAbstractFormula(tuple):
         for child_tree in self.rooted_plane_tree.iterate_direct_ascending():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.unrestricted_sequence[i:i + child_tree.size]
-            sub_sequence: UnrestrictedSequence = UnrestrictedSequence(*sub_sequence)
+            sub_sequence: NaturalNumberSequence = NaturalNumberSequence(*sub_sequence)
             # yield this child RGF sequence
             yield sub_sequence
             # truncate the remaining sequence
@@ -821,7 +821,7 @@ class NonCanonicalAbstractFormula(tuple):
          - 1) the parent sequence,
          - and 2) the rooted plane tree.
         """
-        s: sl.UnrestrictedSequence
+        s: sl.NaturalNumberSequence
         for s in self.iterate_immediate_sub_sequences():
             sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.apply_canonical_labeling(
                 s)
@@ -838,11 +838,11 @@ class NonCanonicalAbstractFormula(tuple):
             yield sub_sequence
 
     def iterate_sub_unrestricted_sequences(self) -> \
-            collections.abc.Generator[sl.UnrestrictedSequence, None, None]:
-        s: sl.UnrestrictedSequence
+            collections.abc.Generator[sl.NaturalNumberSequence, None, None]:
+        s: sl.NaturalNumberSequence
         for s in self.iterate_sub_sequences():
             # converts ths sub-sequence to an RGF sequence, which modifies all values to start with 1.
-            sub_sequence: sl.UnrestrictedSequence = sl.convert_arbitrary_sequence_to_unrestricted_sequence(
+            sub_sequence: sl.NaturalNumberSequence = sl.convert_arbitrary_sequence_to_unrestricted_sequence(
                 s)
             # yield the child RGF sequence
             yield sub_sequence
@@ -855,7 +855,7 @@ class NonCanonicalAbstractFormula(tuple):
         :return:
         """
         child_tree: rpt.RootedPlaneTree
-        child_sequence: sl.UnrestrictedSequence
+        child_sequence: sl.NaturalNumberSequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
                                               self.iterate_sub_unrestricted_sequences()):
             sub_formula = NonCanonicalAbstractFormula(child_tree, child_sequence)
@@ -917,7 +917,7 @@ class NonCanonicalAbstractFormula(tuple):
         return self[0]
 
     @property
-    def s(self) -> sl.UnrestrictedSequence:
+    def s(self) -> sl.NaturalNumberSequence:
         """A shortcut for self.unrestricted_sequence."""
         return self.unrestricted_sequence
 
@@ -1005,7 +1005,7 @@ class NonCanonicalAbstractFormula(tuple):
         return self.rooted_plane_tree.size
 
     @property
-    def unrestricted_sequence(self) -> sl.UnrestrictedSequence:
+    def unrestricted_sequence(self) -> sl.NaturalNumberSequence:
         """Shortcut: self.s.
 
         :return:
@@ -1020,7 +1020,7 @@ FlexibleCanonicalAbstractFormula = typing.Union[
         rpt.FlexibleRootedPlaneTree, sl.FlexibleRestrictedGrowthFunctionSequence], collections.abc.Iterator, collections.abc.Generator, None]
 FlexibleNonCanonicalAbstractFormula = typing.Union[
     NonCanonicalAbstractFormula, tuple[
-        rpt.FlexibleRootedPlaneTree, sl.FlexibleUnrestrictedSequence], collections.abc.Iterator, collections.abc.Generator, None]
+        rpt.FlexibleRootedPlaneTree, sl.FlexibleNaturalNumbersSequence], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 

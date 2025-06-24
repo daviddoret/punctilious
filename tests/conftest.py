@@ -114,38 +114,38 @@ def t_big(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
 
 
 @pytest.fixture
-def us0(s0):
-    return pu.sl.UnrestrictedSequence(*s0)
+def nns0(s0):
+    return pu.sl.NaturalNumberSequence(*s0)
 
 
 @pytest.fixture
-def us00(s00):
-    return pu.sl.UnrestrictedSequence(*s00)
+def nns00(s00):
+    return pu.sl.NaturalNumberSequence(*s00)
 
 
 @pytest.fixture
-def us01(s01):
-    return pu.sl.UnrestrictedSequence(*s01)
+def nns01(s01):
+    return pu.sl.NaturalNumberSequence(*s01)
 
 
 @pytest.fixture
-def us10(s10):
-    return pu.sl.UnrestrictedSequence(*s10)
+def nns10(s10):
+    return pu.sl.NaturalNumberSequence(*s10)
 
 
 @pytest.fixture
-def us012345():
-    return pu.sl.UnrestrictedSequence(0, 1, 2, 3, 4, 5, )
+def nns012345():
+    return pu.sl.NaturalNumberSequence(0, 1, 2, 3, 4, 5, )
 
 
 @pytest.fixture
-def us746107():
-    return pu.sl.UnrestrictedSequence(7, 4, 6, 1, 0, 7, )
+def nns746107():
+    return pu.sl.NaturalNumberSequence(7, 4, 6, 1, 0, 7, )
 
 
 @pytest.fixture
-def us0123456789_10_11():
-    return pu.sl.UnrestrictedSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+def nns0123456789_10_11():
+    return pu.sl.NaturalNumberSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
 
 
 @pytest.fixture

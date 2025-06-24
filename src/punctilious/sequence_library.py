@@ -20,7 +20,7 @@ def data_validate_restricted_growth_function_sequence(
     """
     if isinstance(o, RestrictedGrowthFunctionSequence):
         return o
-    if isinstance(o, UnrestrictedSequence):
+    if isinstance(o, NaturalNumberSequence):
         # Raises an exception if this is not an RGF-sequence
         return RestrictedGrowthFunctionSequence(*o)
     if isinstance(o, collections.abc.Iterable):
@@ -44,7 +44,7 @@ def data_validate_restricted_growth_function_sequence_elements(
     if isinstance(o, RestrictedGrowthFunctionSequence):
         # data validation is assured by the class logic.
         return True, o
-    elif isinstance(o, UnrestrictedSequence):
+    elif isinstance(o, NaturalNumberSequence):
         try:
             # Raise an exception if the sequence is not an RGF-sequence
             o: RestrictedGrowthFunctionSequence = RestrictedGrowthFunctionSequence(*o)
@@ -64,7 +64,7 @@ def data_validate_restricted_growth_function_sequence_elements(
             if i < 0:
                 if raise_exception:
                     raise util.PunctiliousException(
-                        "The i-th element `n` of the unrestricted sequence `s` is less than 0.",
+                        "The i-th element `n` of the natural numbers sequence `s` is less than 0.",
                         i=i, n=n, s=o)
                 else:
                     return False, None
@@ -85,17 +85,17 @@ def data_validate_restricted_growth_function_sequence_elements(
 # Classes
 
 
-class UnrestrictedSequence(tuple):
-    """A finite (computable) and arbitrary sequence of natural numbers.
+class NaturalNumberSequence(tuple):
+    """A finite (computable) and natural-numbers-sequence.
 
     Definition:
-    An :class:`UnrestrictedSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_j) such that:
+    An :class:`NaturalNumberSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_j) such that:
         - n_i >= 0 for 0 <= i <= j
 
     """
 
     def __add__(self, s):
-        """Concatenates this :class:`UnrestrictedSequence` with another :class:`UnrestrictedSequence` `s`.
+        """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
 
         Note:
             This enables the usage of the python sum function, e.g.: sum(s1, s2, ...).
@@ -103,11 +103,11 @@ class UnrestrictedSequence(tuple):
         :param s:
         :return:
         """
-        return concatenate_flexible_unrestricted_sequences(self, s)
+        return concatenate_flexible_natural_numbers_sequences(self, s)
 
     def __eq__(self, s):
-        """Returns `False` if `s` cannot be interpreted as a :class:`UnrestrictedSequence`,
-        returns `True` if `s` is connective-sequence-equivalent to this :class:`UnrestrictedSequence`,
+        """Returns `False` if `s` cannot be interpreted as a :class:`NaturalNumberSequence`,
+        returns `True` if `s` is connective-sequence-equivalent to this :class:`NaturalNumberSequence`,
         returns `False` otherwise.
 
         Note:
@@ -118,20 +118,20 @@ class UnrestrictedSequence(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
         """
         try:
-            s: UnrestrictedSequence = data_validate_unrestricted_sequence(s)
-            return self.is_unrestricted_sequence_equivalent_to(s)
+            s: NaturalNumberSequence = data_validate_natural_numbers_sequence(s)
+            return self.is_natural_numbers_sequence_equivalent_to(s)
         except util.PunctiliousException:
             return False
 
     def __hash__(self):
-        return hash((UnrestrictedSequence, *self.elements,))
+        return hash((NaturalNumberSequence, *self.elements,))
 
     def __init__(self, *s):
-        super(UnrestrictedSequence, self).__init__()
+        super(NaturalNumberSequence, self).__init__()
 
     def __ne__(self, s):
-        """Returns `False` if `c` cannot be interpreted as a :class:`UnrestrictedSequence`,
-        returns `True` if `c` is not connective-sequence-equivalent to this :class:`UnrestrictedSequence`,
+        """Returns `False` if `c` cannot be interpreted as a :class:`NaturalNumberSequence`,
+        returns `True` if `c` is not connective-sequence-equivalent to this :class:`NaturalNumberSequence`,
         returns `False` otherwise.
 
          Note:
@@ -142,20 +142,20 @@ class UnrestrictedSequence(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
        """
         try:
-            s: UnrestrictedSequence = data_validate_unrestricted_sequence(s)
-            return not self.is_unrestricted_sequence_equivalent_to(s)
+            s: NaturalNumberSequence = data_validate_natural_numbers_sequence(s)
+            return not self.is_natural_numbers_sequence_equivalent_to(s)
         except util.PunctiliousException:
             return False
 
     def __new__(cls, *s):
-        s: tuple[int] = data_validate_unrestricted_sequence_elements(s)
-        s: tuple[int] = super(UnrestrictedSequence, cls).__new__(cls, s)
-        s: tuple[int] = retrieve_unrestricted_sequence_from_cache(s)
+        s: tuple[int] = data_validate_natural_numbers_sequence_elements(s)
+        s: tuple[int] = super(NaturalNumberSequence, cls).__new__(cls, s)
+        s: tuple[int] = retrieve_natural_numbers_sequence_from_cache(s)
         return s
 
-    def concatenate_with(self, *s: FlexibleUnrestrictedSequence) -> UnrestrictedSequence:
-        """Concatenates this :class:`UnrestrictedSequence` with :class:`UnrestrictedSequence` `s`,
-        or an iterable / generator of multiple :class:`UnrestrictedSequence` elements.
+    def concatenate_with(self, *s: FlexibleNaturalNumbersSequence) -> NaturalNumberSequence:
+        """Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
+        or an iterable / generator of multiple :class:`NaturalNumberSequence` elements.
 
         Shortcuts:
         s1 + s2
@@ -164,10 +164,10 @@ class UnrestrictedSequence(tuple):
         :param s:
         :return:
         """
-        return concatenate_flexible_unrestricted_sequences(self, *s)
+        return concatenate_flexible_natural_numbers_sequences(self, *s)
 
     def convert_to_restricted_growth_function_sequence(self):
-        """Converts this :class:`UnrestrictedSequence` object to type :class:`RestrictedGrowthFunctionSequence`,
+        """Converts this :class:`NaturalNumberSequence` object to type :class:`RestrictedGrowthFunctionSequence`,
         or raise an exception if the sequence is not an RGF sequence.
 
         :return:
@@ -176,7 +176,7 @@ class UnrestrictedSequence(tuple):
 
     @property
     def elements(self) -> tuple[int, ...]:
-        """The elements that compose this :class:`UnrestrictedSequence`, in order.
+        """The elements that compose this :class:`NaturalNumberSequence`, in order.
 
         :return:
         """
@@ -184,28 +184,28 @@ class UnrestrictedSequence(tuple):
 
     @property
     def is_restricted_growth_function_sequence(self) -> bool:
-        """`True` if this unrestricted sequence is also an RGF sequence, `False` otherwise.
+        """`True` if this natural numbers sequence is also an RGF sequence, `False` otherwise.
         """
         b: bool
         b, _ = data_validate_restricted_growth_function_sequence_elements(self)
         return b
 
     @property
-    def is_unrestricted_sequence(self) -> bool:
+    def is_natural_numbers_sequence(self) -> bool:
         return True
 
-    def is_unrestricted_sequence_equivalent_to(self, s: FlexibleUnrestrictedSequence):
+    def is_natural_numbers_sequence_equivalent_to(self, s: FlexibleNaturalNumbersSequence):
         """
 
         Formal definition:
-        Two unrestricted-sequences s and t are unrestricted-sequence-equivalent if and only if:
+        Two natural numbers-sequences s and t are natural-numbers-sequence-equivalent if and only if:
          - length(s) = length(t)
          - s_i = t_i for 0 <= i < length(s)
 
         :param s:
         :return:
         """
-        s: UnrestrictedSequence = data_validate_unrestricted_sequence(s)
+        s: NaturalNumberSequence = data_validate_natural_numbers_sequence(s)
         return self.length == s.length and all(x == y for x, y in zip(self, s))
 
     @property
@@ -215,11 +215,11 @@ class UnrestrictedSequence(tuple):
 
     @property
     def max_value(self) -> int:
-        """The `max_value` of a `UnrestrictedSequence` is the maximum value of its elements."""
+        """The `max_value` of a `NaturalNumberSequence` is the maximum value of its elements."""
         return max(self)
 
 
-class RestrictedGrowthFunctionSequence(UnrestrictedSequence):
+class RestrictedGrowthFunctionSequence(NaturalNumberSequence):
     """A finite (computable) sequence of values starting at 0 whose maximal value increase is restricted.
 
     Acronym: RGFS
@@ -325,7 +325,7 @@ class RestrictedGrowthFunctionSequence(UnrestrictedSequence):
         return True
 
     @property
-    def is_unrestricted_sequence(self) -> bool:
+    def is_natural_numbers_sequence(self) -> bool:
         return True
 
     def is_restricted_growth_function_sequence_equivalent_to(self, s: FlexibleRestrictedGrowthFunctionSequence):
@@ -352,20 +352,20 @@ class RestrictedGrowthFunctionSequence(UnrestrictedSequence):
         """The `max_value` of a :class:`RestrictedGrowthFunctionSequence` is the maximum value of its elements."""
         return max(self)
 
-    def convert_to_unrestricted_sequence(self):
-        """Converts this :class:`RestrictedGrowthFunctionSequence` object to an :class:`UnrestrictedSequence`.
+    def convert_to_natural_numbers_sequence(self):
+        """Converts this :class:`RestrictedGrowthFunctionSequence` object to an :class:`NaturalNumberSequence`.
 
         :return:
         """
-        return UnrestrictedSequence(*self)
+        return NaturalNumberSequence(*self)
 
 
-def apply_canonical_labeling(s: UnrestrictedSequence) -> RestrictedGrowthFunctionSequence:
-    """Convert the :class:`UnrestrictedSequence` `s` into a :class:`RestrictedGrowthFunctionSequence` `t`,
+def apply_canonical_labeling(s: NaturalNumberSequence) -> RestrictedGrowthFunctionSequence:
+    """Convert the :class:`NaturalNumberSequence` `s` into a :class:`RestrictedGrowthFunctionSequence` `t`,
     by applying canonical labeling.
 
     Definition - Canonical Labeling:
-    The canonical-labeling of an unrestricted-sequence S is an RFG-sequence T such that:
+    The canonical-labeling of an natural-numbers-sequence S is an RFG-sequence T such that:
      - the value of the first element of S is mapped to 0
      - whenever a new value x appears in S, it is mapped to max(t0, t1, ..., ti) + 1 where i is the index
        position of x in S
@@ -400,31 +400,31 @@ def concatenate_flexible_restricted_growth_function_sequences(*s: tuple[
     return RestrictedGrowthFunctionSequence(*t)
 
 
-def data_validate_unrestricted_sequence(
-        o: FlexibleUnrestrictedSequence) -> UnrestrictedSequence:
-    """Data validates `o` against type `UnrestrictedSequence`,
+def data_validate_natural_numbers_sequence(
+        o: FlexibleNaturalNumbersSequence) -> NaturalNumberSequence:
+    """Data validates `o` against type :class:`NaturalNumberSequence`,
     applying implicit conversion as necessary.
 
-    :param o: An object that may be interpreted as a `UnrestrictedSequence`.
+    :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
     :return:
     """
-    if isinstance(o, UnrestrictedSequence):
+    if isinstance(o, NaturalNumberSequence):
         return o
     if isinstance(o, RestrictedGrowthFunctionSequence):
         # This raises an exception if the sequence is not an RGF-sequence.
-        return UnrestrictedSequence(*o)
+        return NaturalNumberSequence(*o)
     if isinstance(o, collections.abc.Iterable):
         # This raises an exception if the sequence is not an RGF-sequence.
-        return UnrestrictedSequence(*o)
+        return NaturalNumberSequence(*o)
     if isinstance(o, collections.abc.Generator):
         # This raises an exception if the sequence is not an RGF-sequence.
-        return UnrestrictedSequence(*o)
-    raise util.PunctiliousException('UnrestrictedSequence data validation failure', o=o)
+        return NaturalNumberSequence(*o)
+    raise util.PunctiliousException('NaturalNumberSequence data validation failure', o=o)
 
 
-def data_validate_unrestricted_sequence_elements(
-        o: FlexibleUnrestrictedSequence) -> FlexibleUnrestrictedSequence:
-    if isinstance(o, UnrestrictedSequence):
+def data_validate_natural_numbers_sequence_elements(
+        o: FlexibleNaturalNumbersSequence) -> FlexibleNaturalNumbersSequence:
+    if isinstance(o, NaturalNumberSequence):
         # data validation is assured by the class logic.
         return o
     if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
@@ -433,31 +433,31 @@ def data_validate_unrestricted_sequence_elements(
         for i, n in enumerate(o):
             if i < 0:
                 raise util.PunctiliousException(
-                    "The i-th element `n` of the unrestricted sequence `s` is less than 0.",
+                    "The i-th element `n` of the natural numbers sequence `s` is less than 0.",
                     i=i, n=n, s=o)
         return o
     raise util.PunctiliousException("Non-supported input.", o=o)
 
 
-def retrieve_unrestricted_sequence_from_cache(i: UnrestrictedSequence):
-    """cache mechanism assuring that unique unrestricted-sequences are only instantiated once."""
-    global _unrestricted_sequence_cache
-    if hash(i) in _unrestricted_sequence_cache.keys():
-        return _unrestricted_sequence_cache[hash(i)]
+def retrieve_natural_numbers_sequence_from_cache(i: NaturalNumberSequence):
+    """cache mechanism assuring that unique natural-numbers-sequences are only instantiated once."""
+    global _natural_numbers_sequence_cache
+    if hash(i) in _natural_numbers_sequence_cache.keys():
+        return _natural_numbers_sequence_cache[hash(i)]
     else:
-        _unrestricted_sequence_cache[hash(i)] = i
+        _natural_numbers_sequence_cache[hash(i)] = i
         return i
 
 
-def concatenate_flexible_unrestricted_sequences(*s: tuple[
-    FlexibleUnrestrictedSequence, ...]) -> UnrestrictedSequence:
-    """Concatenates :class:`UnrestrictedSequence` elements.
+def concatenate_flexible_natural_numbers_sequences(*s: tuple[
+    FlexibleNaturalNumbersSequence, ...]) -> NaturalNumberSequence:
+    """Concatenates :class:`NaturalNumberSequence` elements.
 
     :param s:
     :return:
     """
-    t: tuple[FlexibleUnrestrictedSequence] = tuple(itertools.chain.from_iterable(s))
-    return UnrestrictedSequence(*t)
+    t: tuple[FlexibleNaturalNumbersSequence] = tuple(itertools.chain.from_iterable(s))
+    return NaturalNumberSequence(*t)
 
 
 def data_validate_connective_sequence(
@@ -589,14 +589,14 @@ FlexibleConnectiveSequence = typing.Union[
     ConnectiveSequence, tuple[connective.Connective, ...], collections.abc.Iterator, collections.abc.Generator, None]
 FlexibleRestrictedGrowthFunctionSequence = typing.Union[
     RestrictedGrowthFunctionSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
-FlexibleUnrestrictedSequence = typing.Union[
-    UnrestrictedSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
+FlexibleNaturalNumbersSequence = typing.Union[
+    NaturalNumberSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 
 CS = ConnectiveSequence  # An alias for ConnectiveSequence.
 RGFS = RestrictedGrowthFunctionSequence  # An alias for RestrictedGrowthFunctionSequence
-US = UnrestrictedSequence  # An alias for UnrestrictedSequence
+US = NaturalNumberSequence  # An alias for NaturalNumberSequence
 
 # Cache management
 
@@ -604,8 +604,8 @@ _connective_sequence_cache: dict[
     int, ConnectiveSequence] = {}  # cache for ConnectiveSequence elements.
 _restricted_growth_function_sequence_cache: dict[
     int, RestrictedGrowthFunctionSequence] = dict()  # cache for RestrictedGrowthFunctionSequence elements.
-_unrestricted_sequence_cache: dict[
-    int, UnrestrictedSequence] = dict()  # cache for UnrestrictedSequence.
+_natural_numbers_sequence_cache: dict[
+    int, NaturalNumberSequence] = dict()  # cache for NaturalNumberSequence.
 
 
 def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthFunctionSequence):
