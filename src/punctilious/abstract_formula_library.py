@@ -14,8 +14,8 @@ from punctilious.sequence_library import NaturalNumberSequence
 # Formula declarations
 
 
-def declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(p) -> NonCanonicalAbstractFormula:
-    """Declares a :class:`NonCanonicalAbstractFormula` object from a tree of integer/tuple pairs.
+def declare_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
+    """Declares a :class:`AbstractFormula` object from a tree of integer/tuple pairs.
 
     Use case:
     Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.
@@ -33,17 +33,17 @@ def declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(p) -> NonCano
     0(1,0(2,1),2)
 
     :param p: A tree of integer/tuple pairs.
-    :return: a :class:`NonCanonicalAbstractFormula`.
+    :return: a :class:`AbstractFormula`.
     """
 
     t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
     t: rpt.RootedPlaneTree = rpt.build_rooted_plane_tree_from_tuple_tree(t)
     s: sl.NaturalNumberSequence = sl.NaturalNumberSequence(*s)
-    phi: NonCanonicalAbstractFormula = NonCanonicalAbstractFormula(t, s)
+    phi: AbstractFormula = AbstractFormula(t, s)
     return phi
 
 
-def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> NonCanonicalAbstractFormula:
+def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
     """Declares a :class:`CanonicalAbstractFormula` object from a tree of integer/tuple pairs.
 
     Use case:
@@ -68,7 +68,7 @@ def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> No
     t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
     t = rpt.build_rooted_plane_tree_from_tuple_tree(t)
     s = sl.NaturalNumberSequence(*s)
-    phi = NonCanonicalAbstractFormula(t, s)
+    phi = AbstractFormula(t, s)
     return phi
 
 
@@ -89,10 +89,10 @@ def Declare_formula_from_immediate_sub_formulas(
     raise NotImplementedError('review approach completely')
 
 
-def declare_non_canonical_abstract_formula_from_immediate_sub_formulas(
+def declare_abstract_formula_from_immediate_sub_formulas(
         n: int,
         s: tuple[
-               FlexibleNonCanonicalAbstractFormula] | None) -> NonCanonicalAbstractFormula:
+               FlexibleAbstractFormula] | None) -> AbstractFormula:
     """Given a root natural number n,
     and a tuple of abstract-formulas s,
     declares a new formula 𝜓 n(s_0, s_1, ..., s_n) where s_i is an element of s.
@@ -103,16 +103,16 @@ def declare_non_canonical_abstract_formula_from_immediate_sub_formulas(
     """
     if s is None:
         s = ()
-    s: tuple[NonCanonicalAbstractFormula, ...] = tuple(
-        data_validate_non_canonical_abstract_formula(o=phi) for phi in s)
-    phi: NonCanonicalAbstractFormula
+    s: tuple[AbstractFormula, ...] = tuple(
+        data_validate_abstract_formula(o=phi) for phi in s)
+    phi: AbstractFormula
     # Retrieves the children trees
     t: tuple[rpt.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
     # Declare the new parent tree
     t: rpt.RootedPlaneTree = rpt.RootedPlaneTree(*t)
     u: sl.NaturalNumberSequence = (n,) + itertools.chain.from_iterable(
         phi.unrestricted_sequence for phi in s)
-    phi: NonCanonicalAbstractFormula = NonCanonicalAbstractFormula(t=u, s=u)
+    phi: AbstractFormula = AbstractFormula(t=u, s=u)
     return phi
 
 
@@ -186,22 +186,426 @@ def data_validate_canonical_abstract_formula(
     raise util.PunctiliousException('CanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
 
 
-def data_validate_non_canonical_abstract_formula(
-        o: FlexibleNonCanonicalAbstractFormula) -> NonCanonicalAbstractFormula:
-    if isinstance(o, NonCanonicalAbstractFormula):
+def data_validate_abstract_formula(
+        o: FlexibleAbstractFormula) -> AbstractFormula:
+    if isinstance(o, AbstractFormula):
         return o
     if isinstance(o, CanonicalAbstractFormula):
-        # Every canonical abstract-formula is a non-canonical abstract formula.
+        # Every canonical abstract-formula is a  abstract formula.
         # Implicit conversion is allowed.
-        return NonCanonicalAbstractFormula(o.rooted_plane_tree, o.restricted_growth_function_sequence)
+        return AbstractFormula(o.rooted_plane_tree, o.restricted_growth_function_sequence)
     if isinstance(o, collections.abc.Iterable):
-        return NonCanonicalAbstractFormula(*o)
+        return AbstractFormula(*o)
     if isinstance(o, collections.abc.Generator):
-        return NonCanonicalAbstractFormula(*o)
-    raise util.PunctiliousException('NonCanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
+        return AbstractFormula(*o)
+    raise util.PunctiliousException('AbstractFormula data validation failure', type_of_o=type(o), o=o)
 
 
 # Classes
+
+
+class AbstractFormula(tuple):
+    """A :class:`AbstractFormula` is a tuple `(T, S)` such that:
+     - `T` is a rooted-plane-tree,
+     - `S` is an unrestricted sequence (of natural numbers).
+
+    """
+
+    def __eq__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`AbstractFormula`,
+        returns `True` if `t` is abstract-formula-equivalent to this :class:`AbstractFormula`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            t: AbstractFormula = data_validate_abstract_formula(t)
+            return self.is_abstract_formula_equivalent_to(t)
+        except util.PunctiliousException:
+            return False
+
+    def __hash__(self):
+        return hash((AbstractFormula, self.rooted_plane_tree, self.unrestricted_sequence,))
+
+    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
+        super(AbstractFormula, self).__init__()
+        self._immediate_sub_formulas = None
+        self._sub_formulas = None
+
+    def __ne__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`AbstractFormula`,
+        returns `True` if `t` is not abstract-formula-equivalent to this :class:`AbstractFormula`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            t: AbstractFormula = data_validate_abstract_formula(t)
+            return not self.is_abstract_formula_equivalent_to(t)
+        except util.PunctiliousException:
+            return False
+
+    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
+        t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
+        s: sl.NaturalNumberSequence = sl.data_validate_natural_numbers_sequence(s)
+        if t.size != s.length:
+            raise util.PunctiliousException(
+                f"`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.",
+                t_size=t.size, s_length=s.length, t=t, s=s)
+        phi = super(AbstractFormula, cls).__new__(cls, (t, s))
+        phi = retrieve_abstract_formula_from_cache(phi)
+        return phi
+
+    def __repr__(self):
+        return self.represent_as_function()
+
+    def __str__(self):
+        return self.represent_as_function()
+
+    @property
+    def formula_degree(self) -> int:
+        """The `formula_degree` of an :class:`AbstractFormula` is the number of non-leaf nodes it contains.
+
+        This definition is derived from (Mancosu et al, 2021, p. 18).
+
+        Attention point: do not confuse `tree_size` and `formula_degree`.
+
+        :return:
+        """
+        i: int = 0
+        t: rpt.RootedPlaneTree
+        for t in self.rooted_plane_tree.iterate_depth_first_ascending():
+            if t.degree > 0:
+                i += 1
+        return i
+
+    def get_sub_formula_by_path(self, p: tuple[int, ...]) -> AbstractFormula:
+        """Given a path `p`, returns the corresponding sub-formula.
+
+        Definition - sub-formula path:
+        A sub-formula path is a finite sequence of natural numbers >= 0, of length > 0,
+        that gives the index position of the sub-formulas, following the depth-first algorithm,
+        starting with 0 meaning the original tree.
+
+        It follows that for any formula `phi`, the path (0) returns the formula itself.
+
+        :param p:
+        :return:
+        """
+        p: tuple[int, ...] = tuple(int(n) for n in p)
+        if p[0] != 0:
+            raise util.PunctiliousException("The first element of the path is not equal to 0.", p0=p[0], p=p,
+                                            phi=self)
+        if p == (0,):
+            return self
+        else:
+            phi: AbstractFormula = self
+            for i in range(1, len(p)):
+                j = p[i]
+                if 0 < j >= phi.tree_degree:
+                    raise util.PunctiliousException(
+                        "The n-th element of the path is negative or greater than the number of"
+                        " immediate sub-formulas in phi.", n_index=i, n_value=j,
+                        phi=phi)
+                phi: AbstractFormula = phi.immediate_sub_formulas[j]
+            return phi
+
+    @property
+    def immediate_sub_formulas(self) -> tuple[AbstractFormula, ...]:
+        """The `immediate_sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements
+        that are the immediate children formulas of `phi` in the formula tree, or equivalently the formulas
+        of degree 0 in `phi`.
+
+        The term `immediate sub-formula` is used by (Mancosu 2021, p. 17-18).
+
+        See also:
+        - :attr:`AbstractFormula.sub_formulas`
+
+        References:
+        - Mancosu 2021.
+
+        :return:
+        """
+        if self._immediate_sub_formulas is None:
+            sub_formulas = list()
+            for phi in self.iterate_immediate_sub_formulas():
+                sub_formulas.append(phi)
+            self._immediate_sub_formulas = tuple(sub_formulas)
+        return self._immediate_sub_formulas
+
+    def is_abstract_formula_equivalent_to(self, phi: AbstractFormula):
+        """Returns `True` if this :class:`AbstractFormula` is abstract-formula-equivalent
+        to :class:`AbstractFormula` `phi`.
+
+        Formal definition:
+        Two abstract-formulas phi and psi are abstract-formula-equivalent if and only if:
+        - the rooted-plane-tree of phi is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,
+        - the unrestricted-sequence of phi is unrestricted-sequence-equivalent to the unrestricted-sequence of psi.
+
+        :param phi:
+        :return:
+        """
+        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
+            phi.rooted_plane_tree) and self.unrestricted_sequence.is_natural_numbers_sequence_equivalent_to(
+            phi.unrestricted_sequence)
+
+    def is_sub_formula_of(self, phi: AbstractFormula):
+        """Returns `True` if this :class:`AbstractFormula` if a sub-formula of :class:`AbstractFormula` phi.
+
+        :param phi:
+        :return:
+        """
+        XXXX
+        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        psi: AbstractFormula
+        for psi in self.iterate_sub_formulas():
+            if psi == phi:
+                return True
+        return False
+
+    def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
+        """Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
+
+        See :attr:`AbstractFormula.immediate_sub_formulas` for a definition of the term `immediate sub-formula`.
+
+        :return: A generator of :class:`AbstractFormula`.
+        """
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_direct_ascending(),
+                                              self.iterate_immediate_sub_restricted_growth_function_sequences()):
+            sub_formula = AbstractFormula(child_tree, child_sequence)
+            yield sub_formula
+
+    def iterate_immediate_sub_sequences(self) -> typing.Generator[
+        NaturalNumberSequence, None, None]:
+        """Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this :class:`AbstractFormula`.
+
+        Note:
+            A sub-sequence of an abstract-formula is determined by:
+             - 1) the parent rgf sequence,
+             - and 2) the rooted plane tree.
+        """
+        i: int = 1  # remove the root
+        child_tree: rpt.RootedPlaneTree
+        # truncated_sequence: tuple[int, ...] = self.unrestricted_sequence[1:]
+        for child_tree in self.rooted_plane_tree.iterate_direct_ascending():
+            # retrieve the sub-sequence that is mapped to this child RPT
+            sub_sequence: tuple[int, ...] = self.unrestricted_sequence[i:i + child_tree.size]
+            sub_sequence: NaturalNumberSequence = NaturalNumberSequence(*sub_sequence)
+            # yield this child RGF sequence
+            yield sub_sequence
+            # truncate the remaining sequence
+            i += child_tree.size
+
+    def iterate_immediate_sub_restricted_growth_function_sequences(self) -> typing.Generator[
+        sl.RestrictedGrowthFunctionSequence, None, None]:
+        """Iterates the direct child sub-sequences of this :class:`AbstractFormula`,
+        applying canonical labeling to resulting sequences.
+
+        Note: the immediate sub-sequences are determined by:
+         - 1) the parent sequence,
+         - and 2) the rooted plane tree.
+        """
+        s: sl.NaturalNumberSequence
+        for s in self.iterate_immediate_sub_sequences():
+            sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.apply_canonical_labeling(
+                s)
+            # yield this child RGF sequence
+            yield sub_sequence
+
+    def iterate_sub_sequences(self) -> collections.abc.Generator[tuple[int, ...], None, None]:
+        i: int
+        sub_tree: rpt.RootedPlaneTree
+        for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_depth_first_ascending()):
+            # retrieves the sub-sequence in the root RGF sequence that is mapped to this child RPT
+            sub_sequence: tuple[int, ...] = self.unrestricted_sequence[i:i + sub_tree.size]
+            # yield the child RGF sequence
+            yield sub_sequence
+
+    def iterate_sub_unrestricted_sequences(self) -> \
+            collections.abc.Generator[sl.NaturalNumberSequence, None, None]:
+        s: sl.NaturalNumberSequence
+        for s in self.iterate_sub_sequences():
+            # converts ths sub-sequence to an RGF sequence, which modifies all values to start with 1.
+            sub_sequence: sl.NaturalNumberSequence = sl.convert_arbitrary_sequence_to_unrestricted_sequence(
+                s)
+            # yield the child RGF sequence
+            yield sub_sequence
+
+    def iterate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
+        """Iterates the sub-formulas of the :class:`AbstractFormula` using the `depth-first, ascending nodes` algorithm.
+
+        See :attr:`AbstractFormula.sub_formulas` for a definition of the term `sub-formula`.
+
+        :return:
+        """
+        child_tree: rpt.RootedPlaneTree
+        child_sequence: sl.NaturalNumberSequence
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
+                                              self.iterate_sub_unrestricted_sequences()):
+            sub_formula = AbstractFormula(child_tree, child_sequence)
+            yield sub_formula
+
+    @property
+    def main_sequence_element(self) -> int:
+        """The `main_sequence_element` of an :class:`AbstractFormula` is the first element of the
+        attr:`AbstractFormula.unrestricted_sequence`, that corresponds to the root
+        node of the attr:`AbstractFormula.rooted_plane_tree`.
+
+        By the definition of restricted growth function, the `main_sequence_element` is
+        always equal to 0.
+
+        Note that this is 0 by design choice of using 0 as the initial value
+        of RGF sequences, instead of 1 which is usual in the literature. In effect, using
+        0 is consistent with the design choice of using 0-based indexes in tuples,
+        which is a natural choice in Python implementations.
+
+        The term `main_sequence_element` was designed in reference to the term `main connective`,
+        cf. Mancosu 2021, p. 17.
+
+        References:
+         - Mancosu 2021
+
+        :return: 1
+        """
+        return self.unrestricted_sequence[0]
+
+    def represent_as_function(self, connectives: tuple | None = None) -> str:
+        """Returns a string representation of the :class:`AbstractFormula` using function notation.
+
+        By default, connectives are represented by their respective values
+        in the :attr:`AbstractFormula.unrestricted_sequence`.
+
+        :param connectives: A tuple of connectives of length equal to the length of
+        the :attr:`AbstractFormula.unrestricted_sequence`. Default: `None`.
+        :return:
+        """
+        if connectives is None:
+            connectives = self.unrestricted_sequence
+        else:
+            if len(connectives) != len(self.unrestricted_sequence):
+                raise util.PunctiliousException(
+                    "The length of the connectives tuple is not equal to the length "
+                    "of the abstract-formula's RGF sequence.",
+                    connectives_length=len(connectives),
+                    rgf_sequence_length=self.unrestricted_sequence.length,
+                    connectives=connectives,
+                    rgf_sequence=self.unrestricted_sequence,
+                    abstract_formula=self
+                )
+        return self.rooted_plane_tree.represent_as_function(
+            connectives=connectives)
+
+    @property
+    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
+        """Shortcut: self.t."""
+        return self[0]
+
+    @property
+    def s(self) -> sl.NaturalNumberSequence:
+        """A shortcut for self.unrestricted_sequence."""
+        return self.unrestricted_sequence
+
+    @property
+    def sequence_max_value(self) -> int:
+        """The `sequence_max_value` of an :class:`AbstractFormula` is the `max_value` of its `unrestricted_sequence`."""
+        return self.unrestricted_sequence.max_value
+
+    @property
+    def sub_formulas(self) -> tuple[AbstractFormula, ...]:
+        """The `sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements that are present
+        in the formula tree of `phi`, including `phi` itself.
+
+        Formal definition:
+         - If phi is an atomic formula, the sub-formulas of phi is the tuple (phi).
+         - If phi is a non-atomic formula, the sub-formulas of phi is the tuple
+           composed of phi, and all sub-formulas of the immediate sub-formulas of phi,
+           in ascending order.
+        - Nothing else is a sub-formula.
+
+        This definition is a generalization of the term `formula` defined by (Mancosu 2021, definition 2.2, p. 14)
+        for propositional-logic.
+
+        See also:
+        - :attr:`AbstractFormula.immediate_sub_formulas`
+
+        References:
+        - Mancosu 2021.
+
+        :return: A tuple of the sub-formulas.
+        """
+        if self._sub_formulas is None:
+            sub_formulas: list[AbstractFormula] = list()
+            for sub_formula in self.iterate_sub_formulas():
+                sub_formulas.append(sub_formula)
+            self._sub_formulas = tuple(sub_formulas)
+        return self._sub_formulas
+
+    def substitute_sub_formulas(self, m: dict[
+        FlexibleAbstractFormula, FlexibleAbstractFormula]) -> AbstractFormula:
+        """Returns a new :class:`AbstractFormula`
+        similar to the current :class:`AbstractFormula` except that
+        all sub-abstract-formulas present in the map `m` domain,
+        are substituted with corresponding :class:`AbstractFormula` elements in map `m` codomain,
+        following the depth-first, ascending-nodes algorithm.
+
+        :param m: A map AbstractFormula --> AbstractFormula.
+        :return:
+        """
+        domain: tuple[AbstractFormula, ...] = tuple(
+            data_validate_abstract_formula(x) for x in m.keys())
+        codomain: tuple[AbstractFormula, ...] = tuple(
+            data_validate_abstract_formula(y) for y in m.values())
+        m: dict[AbstractFormula, AbstractFormula] = dict(zip(domain, codomain))
+        immediate_sub_formulas: list[AbstractFormula] = []
+        phi: AbstractFormula
+        for phi in self.iterate_immediate_sub_formulas():
+            if phi in m.keys():
+                phi = m[phi]
+                immediate_sub_formulas.append(phi)
+            else:
+                immediate_sub_formulas.append(phi)
+        psi: AbstractFormula = AbstractFormula()
+        raise NotImplementedError("Complete implementation here")
+
+    @property
+    def t(self) -> rpt.RootedPlaneTree:
+        """A shortcut for self.rooted_plane_tree."""
+        return self.rooted_plane_tree
+
+    @property
+    def tree_degree(self) -> int:
+        """The `tree_degree` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
+
+        Attention point: do not confuse `tree_degree` and `formula_degree`.
+        """
+        return self.rooted_plane_tree.degree
+
+    @property
+    def tree_size(self) -> int:
+        """The `tree_size` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
+
+        Attention point: do not confuse `tree_size` and `formula_degree`.
+        """
+        return self.rooted_plane_tree.size
+
+    @property
+    def unrestricted_sequence(self) -> sl.NaturalNumberSequence:
+        """Shortcut: self.s.
+
+        :return:
+        """
+        return self[1]
 
 
 class CanonicalAbstractFormula(tuple):
@@ -609,428 +1013,24 @@ class CanonicalAbstractFormula(tuple):
         return self.rooted_plane_tree.size
 
 
-class NonCanonicalAbstractFormula(tuple):
-    """A :class:`NonCanonicalAbstractFormula` is a tuple `(T, S)` such that:
-     - `T` is a rooted-plane-tree,
-     - `S` is an unrestricted sequence (of natural numbers).
-
-    """
-
-    def __eq__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`NonCanonicalAbstractFormula`,
-        returns `True` if `t` is abstract-formula-equivalent to this :class:`NonCanonicalAbstractFormula`,
-        returns `False` otherwise.
-
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-        """
-        try:
-            t: NonCanonicalAbstractFormula = data_validate_non_canonical_abstract_formula(t)
-            return self.is_non_canonical_abstract_formula_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
-
-    def __hash__(self):
-        return hash((NonCanonicalAbstractFormula, self.rooted_plane_tree, self.unrestricted_sequence,))
-
-    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
-        super(NonCanonicalAbstractFormula, self).__init__()
-        self._immediate_sub_formulas = None
-        self._sub_formulas = None
-
-    def __ne__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`NonCanonicalAbstractFormula`,
-        returns `True` if `t` is not abstract-formula-equivalent to this :class:`NonCanonicalAbstractFormula`,
-        returns `False` otherwise.
-
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-        """
-        try:
-            t: NonCanonicalAbstractFormula = data_validate_non_canonical_abstract_formula(t)
-            return not self.is_non_canonical_abstract_formula_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
-
-    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
-        t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
-        s: sl.NaturalNumberSequence = sl.data_validate_natural_numbers_sequence(s)
-        if t.size != s.length:
-            raise util.PunctiliousException(
-                f"`NonCanonicalAbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.",
-                t_size=t.size, s_length=s.length, t=t, s=s)
-        phi = super(NonCanonicalAbstractFormula, cls).__new__(cls, (t, s))
-        phi = retrieve_non_canonical_abstract_formula_from_cache(phi)
-        return phi
-
-    def __repr__(self):
-        return self.represent_as_function()
-
-    def __str__(self):
-        return self.represent_as_function()
-
-    @property
-    def formula_degree(self) -> int:
-        """The `formula_degree` of an `NonCanonicalAbstractFormula` is the number of non-leaf nodes it contains.
-
-        This definition is derived from (Mancosu et al, 2021, p. 18).
-
-        Attention point: do not confuse `tree_size` and `formula_degree`.
-
-        :return:
-        """
-        i: int = 0
-        t: rpt.RootedPlaneTree
-        for t in self.rooted_plane_tree.iterate_depth_first_ascending():
-            if t.degree > 0:
-                i += 1
-        return i
-
-    def get_sub_formula_by_path(self, p: tuple[int, ...]) -> NonCanonicalAbstractFormula:
-        """Given a path `p`, returns the corresponding sub-formula.
-
-        Definition - sub-formula path:
-        A sub-formula path is a finite sequence of natural numbers >= 0, of length > 0,
-        that gives the index position of the sub-formulas, following the depth-first algorithm,
-        starting with 0 meaning the original tree.
-
-        It follows that for any formula `phi`, the path (0) returns the formula itself.
-
-        :param p:
-        :return:
-        """
-        p: tuple[int, ...] = tuple(int(n) for n in p)
-        if p[0] != 0:
-            raise util.PunctiliousException("The first element of the path is not equal to 0.", p0=p[0], p=p,
-                                            phi=self)
-        if p == (0,):
-            return self
-        else:
-            phi: NonCanonicalAbstractFormula = self
-            for i in range(1, len(p)):
-                j = p[i]
-                if 0 < j >= phi.tree_degree:
-                    raise util.PunctiliousException(
-                        "The n-th element of the path is negative or greater than the number of"
-                        " immediate sub-formulas in phi.", n_index=i, n_value=j,
-                        phi=phi)
-                phi: NonCanonicalAbstractFormula = phi.immediate_sub_formulas[j]
-            return phi
-
-    @property
-    def immediate_sub_formulas(self) -> tuple[NonCanonicalAbstractFormula, ...]:
-        """The `immediate_sub_formulas` of an `NonCanonicalAbstractFormula` `phi` is the tuple of `NonCanonicalAbstractFormula` elements
-        that are the immediate children formulas of `phi` in the formula tree, or equivalently the formulas
-        of degree 0 in `phi`.
-
-        The term `immediate sub-formula` is used by (Mancosu 2021, p. 17-18).
-
-        See also:
-        - :attr:`AbstractFormula.sub_formulas`
-
-        References:
-        - Mancosu 2021.
-
-        :return:
-        """
-        if self._immediate_sub_formulas is None:
-            sub_formulas = list()
-            for phi in self.iterate_immediate_sub_formulas():
-                sub_formulas.append(phi)
-            self._immediate_sub_formulas = tuple(sub_formulas)
-        return self._immediate_sub_formulas
-
-    def is_non_canonical_abstract_formula_equivalent_to(self, phi: NonCanonicalAbstractFormula):
-        """Returns `True` if this :class:`NonCanonicalAbstractFormula` is non-canonical-abstract-formula-equivalent
-        to :class:`NonCanonicalAbstractFormula` `phi`.
-
-        Formal definition:
-        Two non-canonical-abstract-formulas phi and psi are non-canonical-abstract-formula-equivalent if and only if:
-        - the rooted-plane-tree of phi is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,
-        - the unrestricted-sequence of phi is unrestricted-sequence-equivalent to the unrestricted-sequence of psi.
-
-        :param phi:
-        :return:
-        """
-        phi: NonCanonicalAbstractFormula = data_validate_non_canonical_abstract_formula(phi)
-        return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
-            phi.rooted_plane_tree) and self.unrestricted_sequence.is_natural_numbers_sequence_equivalent_to(
-            phi.unrestricted_sequence)
-
-    def is_sub_formula_of(self, phi: NonCanonicalAbstractFormula):
-        """Returns `True` if this :class:`NonCanonicalAbstractFormula` if a sub-formula of :class:`NonCanonicalAbstractFormula` phi.
-
-        :param phi:
-        :return:
-        """
-        XXXX
-        phi: NonCanonicalAbstractFormula = data_validate_non_canonical_abstract_formula(phi)
-        psi: NonCanonicalAbstractFormula
-        for psi in self.iterate_sub_formulas():
-            if psi == phi:
-                return True
-        return False
-
-    def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[NonCanonicalAbstractFormula, None, None]:
-        """Iterates the immediate sub-formulas of the :class:`NonCanonicalAbstractFormula`.
-
-        See :attr:`AbstractFormula.immediate_sub_formulas` for a definition of the term `immediate sub-formula`.
-
-        :return: A generator of :class:`NonCanonicalAbstractFormula`.
-        """
-        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_direct_ascending(),
-                                              self.iterate_immediate_sub_restricted_growth_function_sequences()):
-            sub_formula = NonCanonicalAbstractFormula(child_tree, child_sequence)
-            yield sub_formula
-
-    def iterate_immediate_sub_sequences(self) -> typing.Generator[
-        NaturalNumberSequence, None, None]:
-        """Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this `NonCanonicalAbstractFormula`.
-
-        Note:
-            A sub-sequence of an abstract-formula is determined by:
-             - 1) the parent rgf sequence,
-             - and 2) the rooted plane tree.
-        """
-        i: int = 1  # remove the root
-        child_tree: rpt.RootedPlaneTree
-        # truncated_sequence: tuple[int, ...] = self.unrestricted_sequence[1:]
-        for child_tree in self.rooted_plane_tree.iterate_direct_ascending():
-            # retrieve the sub-sequence that is mapped to this child RPT
-            sub_sequence: tuple[int, ...] = self.unrestricted_sequence[i:i + child_tree.size]
-            sub_sequence: NaturalNumberSequence = NaturalNumberSequence(*sub_sequence)
-            # yield this child RGF sequence
-            yield sub_sequence
-            # truncate the remaining sequence
-            i += child_tree.size
-
-    def iterate_immediate_sub_restricted_growth_function_sequences(self) -> typing.Generator[
-        sl.RestrictedGrowthFunctionSequence, None, None]:
-        """Iterates the direct child sub-sequences of this :class:`NonCanonicalAbstractFormula`,
-        applying canonical labeling to resulting sequences.
-
-        Note: the immediate sub-sequences are determined by:
-         - 1) the parent sequence,
-         - and 2) the rooted plane tree.
-        """
-        s: sl.NaturalNumberSequence
-        for s in self.iterate_immediate_sub_sequences():
-            sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.apply_canonical_labeling(
-                s)
-            # yield this child RGF sequence
-            yield sub_sequence
-
-    def iterate_sub_sequences(self) -> collections.abc.Generator[tuple[int, ...], None, None]:
-        i: int
-        sub_tree: rpt.RootedPlaneTree
-        for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_depth_first_ascending()):
-            # retrieves the sub-sequence in the root RGF sequence that is mapped to this child RPT
-            sub_sequence: tuple[int, ...] = self.unrestricted_sequence[i:i + sub_tree.size]
-            # yield the child RGF sequence
-            yield sub_sequence
-
-    def iterate_sub_unrestricted_sequences(self) -> \
-            collections.abc.Generator[sl.NaturalNumberSequence, None, None]:
-        s: sl.NaturalNumberSequence
-        for s in self.iterate_sub_sequences():
-            # converts ths sub-sequence to an RGF sequence, which modifies all values to start with 1.
-            sub_sequence: sl.NaturalNumberSequence = sl.convert_arbitrary_sequence_to_unrestricted_sequence(
-                s)
-            # yield the child RGF sequence
-            yield sub_sequence
-
-    def iterate_sub_formulas(self) -> collections.abc.Generator[NonCanonicalAbstractFormula, None, None]:
-        """Iterates the sub-formulas of the `NonCanonicalAbstractFormula` using the `depth-first, ascending nodes` algorithm.
-
-        See :attr:`AbstractFormula.sub_formulas` for a definition of the term `sub-formula`.
-
-        :return:
-        """
-        child_tree: rpt.RootedPlaneTree
-        child_sequence: sl.NaturalNumberSequence
-        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
-                                              self.iterate_sub_unrestricted_sequences()):
-            sub_formula = NonCanonicalAbstractFormula(child_tree, child_sequence)
-            yield sub_formula
-
-    @property
-    def main_sequence_element(self) -> int:
-        """The `main_sequence_element` of an `NonCanonicalAbstractFormula` is the first element of the
-        attr:`AbstractFormula.unrestricted_sequence`, that corresponds to the root
-        node of the attr:`AbstractFormula.rooted_plane_tree`.
-
-        By the definition of restricted growth function, the `main_sequence_element` is
-        always equal to 0.
-
-        Note that this is 0 by design choice of using 0 as the initial value
-        of RGF sequences, instead of 1 which is usual in the literature. In effect, using
-        0 is consistent with the design choice of using 0-based indexes in tuples,
-        which is a natural choice in Python implementations.
-
-        The term `main_sequence_element` was designed in reference to the term `main connective`,
-        cf. Mancosu 2021, p. 17.
-
-        References:
-         - Mancosu 2021
-
-        :return: 1
-        """
-        return self.unrestricted_sequence[0]
-
-    def represent_as_function(self, connectives: tuple | None = None) -> str:
-        """Returns a string representation of the :class:`NonCanonicalAbstractFormula` using function notation.
-
-        By default, connectives are represented by their respective values
-        in the :attr:`AbstractFormula.unrestricted_sequence`.
-
-        :param connectives: A tuple of connectives of length equal to the length of
-        the :attr:`AbstractFormula.unrestricted_sequence`. Default: `None`.
-        :return:
-        """
-        if connectives is None:
-            connectives = self.unrestricted_sequence
-        else:
-            if len(connectives) != len(self.unrestricted_sequence):
-                raise util.PunctiliousException(
-                    "The length of the connectives tuple is not equal to the length "
-                    "of the non-canonical-abstract-formula's RGF sequence.",
-                    connectives_length=len(connectives),
-                    rgf_sequence_length=self.unrestricted_sequence.length,
-                    connectives=connectives,
-                    rgf_sequence=self.unrestricted_sequence,
-                    abstract_formula=self
-                )
-        return self.rooted_plane_tree.represent_as_function(
-            connectives=connectives)
-
-    @property
-    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
-        """Shortcut: self.t."""
-        return self[0]
-
-    @property
-    def s(self) -> sl.NaturalNumberSequence:
-        """A shortcut for self.unrestricted_sequence."""
-        return self.unrestricted_sequence
-
-    @property
-    def sequence_max_value(self) -> int:
-        """The `sequence_max_value` of an `NonCanonicalAbstractFormula` is the `max_value` of its `unrestricted_sequence`."""
-        return self.unrestricted_sequence.max_value
-
-    @property
-    def sub_formulas(self) -> tuple[NonCanonicalAbstractFormula, ...]:
-        """The `sub_formulas` of an `NonCanonicalAbstractFormula` `phi` is the tuple of `NonCanonicalAbstractFormula` elements that are present
-        in the formula tree of `phi`, including `phi` itself.
-
-        Formal definition:
-         - If phi is an atomic formula, the sub-formulas of phi is the tuple (phi).
-         - If phi is a non-atomic formula, the sub-formulas of phi is the tuple
-           composed of phi, and all sub-formulas of the immediate sub-formulas of phi,
-           in ascending order.
-        - Nothing else is a sub-formula.
-
-        This definition is a generalization of the term `formula` defined by (Mancosu 2021, definition 2.2, p. 14)
-        for propositional-logic.
-
-        See also:
-        - :attr:`AbstractFormula.immediate_sub_formulas`
-
-        References:
-        - Mancosu 2021.
-
-        :return: A tuple of the sub-formulas.
-        """
-        if self._sub_formulas is None:
-            sub_formulas: list[NonCanonicalAbstractFormula] = list()
-            for sub_formula in self.iterate_sub_formulas():
-                sub_formulas.append(sub_formula)
-            self._sub_formulas = tuple(sub_formulas)
-        return self._sub_formulas
-
-    def substitute_sub_formulas(self, m: dict[
-        FlexibleNonCanonicalAbstractFormula, FlexibleNonCanonicalAbstractFormula]) -> NonCanonicalAbstractFormula:
-        """Returns a new :class:`NonCanonicalAbstractFormula`
-        similar to the current :class:`NonCanonicalAbstractFormula` except that
-        all sub-abstract-formulas present in the map `m` domain,
-        are substituted with corresponding :class:`NonCanonicalAbstractFormula` elements in map `m` codomain,
-        following the depth-first, ascending-nodes algorithm.
-
-        :param m: A map AbstractFormula --> AbstractFormula.
-        :return:
-        """
-        domain: tuple[NonCanonicalAbstractFormula, ...] = tuple(
-            data_validate_non_canonical_abstract_formula(x) for x in m.keys())
-        codomain: tuple[NonCanonicalAbstractFormula, ...] = tuple(
-            data_validate_non_canonical_abstract_formula(y) for y in m.values())
-        m: dict[NonCanonicalAbstractFormula, NonCanonicalAbstractFormula] = dict(zip(domain, codomain))
-        immediate_sub_formulas: list[NonCanonicalAbstractFormula] = []
-        phi: NonCanonicalAbstractFormula
-        for phi in self.iterate_immediate_sub_formulas():
-            if phi in m.keys():
-                phi = m[phi]
-                immediate_sub_formulas.append(phi)
-            else:
-                immediate_sub_formulas.append(phi)
-        psi: NonCanonicalAbstractFormula = NonCanonicalAbstractFormula()
-        raise NotImplementedError("Complete implementation here")
-
-    @property
-    def t(self) -> rpt.RootedPlaneTree:
-        """A shortcut for self.rooted_plane_tree."""
-        return self.rooted_plane_tree
-
-    @property
-    def tree_degree(self) -> int:
-        """The `tree_degree` of an `NonCanonicalAbstractFormula` is the number of vertices in its `RootedPlaneTree`.
-
-        Attention point: do not confuse `tree_degree` and `formula_degree`.
-        """
-        return self.rooted_plane_tree.degree
-
-    @property
-    def tree_size(self) -> int:
-        """The `tree_size` of an `NonCanonicalAbstractFormula` is the number of vertices in its `RootedPlaneTree`.
-
-        Attention point: do not confuse `tree_size` and `formula_degree`.
-        """
-        return self.rooted_plane_tree.size
-
-    @property
-    def unrestricted_sequence(self) -> sl.NaturalNumberSequence:
-        """Shortcut: self.s.
-
-        :return:
-        """
-        return self[1]
-
-
 # Flexible types to facilitate data validation
 
 FlexibleCanonicalAbstractFormula = typing.Union[
     CanonicalAbstractFormula, tuple[
         rpt.FlexibleRootedPlaneTree, sl.FlexibleRestrictedGrowthFunctionSequence], collections.abc.Iterator, collections.abc.Generator, None]
-FlexibleNonCanonicalAbstractFormula = typing.Union[
-    NonCanonicalAbstractFormula, tuple[
+FlexibleAbstractFormula = typing.Union[
+    AbstractFormula, tuple[
         rpt.FlexibleRootedPlaneTree, sl.FlexibleNaturalNumbersSequence], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 
 CAF = CanonicalAbstractFormula  # An alias for CanonicalAbstractFormula
-NCAF = NonCanonicalAbstractFormula  # An alias for NonCanonicalAbstractFormula
+NCAF = AbstractFormula  # An alias for AbstractFormula
 
 # Cache Management
 
 _canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
-_non_canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
+_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
 
 
 def retrieve_canonical_abstract_formula_from_cache(o: FlexibleCanonicalAbstractFormula):
@@ -1044,12 +1044,12 @@ def retrieve_canonical_abstract_formula_from_cache(o: FlexibleCanonicalAbstractF
         return o
 
 
-def retrieve_non_canonical_abstract_formula_from_cache(o: FlexibleNonCanonicalAbstractFormula):
+def retrieve_abstract_formula_from_cache(o: FlexibleAbstractFormula):
     """cache mechanism assuring that unique canonical abstract formulas are only instantiated once."""
-    global _non_canonical_abstract_formula_cache
-    o: NonCanonicalAbstractFormula = data_validate_non_canonical_abstract_formula(o)
-    if hash(o) in _non_canonical_abstract_formula_cache.keys():
-        return _non_canonical_abstract_formula_cache[hash(o)]
+    global _abstract_formula_cache
+    o: AbstractFormula = data_validate_abstract_formula(o)
+    if hash(o) in _abstract_formula_cache.keys():
+        return _abstract_formula_cache[hash(o)]
     else:
-        _non_canonical_abstract_formula_cache[hash(o)] = o
+        _abstract_formula_cache[hash(o)] = o
         return o

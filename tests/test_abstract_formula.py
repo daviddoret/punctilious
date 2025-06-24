@@ -3,19 +3,19 @@ import pytest
 import punctilious as pu
 
 
-class TestNonCanonicalAbstractFormula:
+class TestAbstractFormula:
     def test_construction_success(self):
-        phi1 = pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 2, 3,))
-        phi2 = pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 0,))
+        phi1 = pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 2, 3,))
+        phi2 = pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 0,))
         pass
 
     def test_construction_failure(self):
         with pytest.raises(pu.util.PunctiliousException):
-            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 2,))  # invalid
+            pu.afl.AbstractFormula(t=(((),), (),), s=(0, 2,))  # invalid
         with pytest.raises(pu.util.PunctiliousException):
-            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 2, 0,))
+            pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 2, 0,))
         with pytest.raises(pu.util.PunctiliousException):
-            pu.afl.NonCanonicalAbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
+            pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
 
     def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, ncaf1, rgfs0, ncaf2a, rgfs01,
                                              ncaf6a,
@@ -177,28 +177,28 @@ class TestNonCanonicalAbstractFormula:
     def test_build_formula_from_tree_of_integer_tuple_pairs(self, ncaf1):
         tree_of_pairs = (0, (),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.afl.NonCanonicalAbstractFormula(t, s)
+        phi = pu.afl.AbstractFormula(t, s)
         psi = pu.afl.declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((0, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.AbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.AbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),), (2, (),), (3, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.AbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),), (0, ((1, ((2, ((3, ((1, (),),),),),),),),),), (4, ((1, (),),),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.afl.NonCanonicalAbstractFormula(t, s)
-        psi = pu.afl.declare_non_canonical_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        phi = pu.afl.AbstractFormula(t, s)
+        psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
 
     def test_get_sub_tree_by_path(self, ncaf1, ncaf2a, ncaf6a, ncaf12a, ncaf_big):
