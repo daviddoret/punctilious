@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -462,7 +461,7 @@
     "Python tests.pytest in test_unrestricted_sequence.py.executor": "Run",
     "Python tests.pytest in test_utils.py.executor": "Run",
     "Python tests.pytest in test_variable.py.executor": "Run",
-    "Python tests.pytest in tests.executor": "Run",
+    "Python tests.pytest in tests.executor": "Debug",
     "Python.__init__.executor": "Run",
     "Python._identifiers.executor": "Run",
     "Python._latin_alphabet_lowercase_serif_roman.executor": "Debug",
@@ -604,7 +603,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -960,8 +959,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_sequences" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_natural_numbers_sequences" />
         <item itemvalue="Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_cache" />
@@ -986,14 +985,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01426" summary="RGF sequence initial value=0">
-      <option name="closed" value="true" />
-      <created>1750072637384</created>
-      <option name="number" value="01426" />
-      <option name="presentableId" value="LOCAL-01426" />
-      <option name="project" value="LOCAL" />
-      <updated>1750072637384</updated>
     </task>
     <task id="LOCAL-01427" summary="RGF sequence initial value=0">
       <option name="closed" value="true" />
@@ -1379,7 +1370,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750855581302</updated>
     </task>
-    <option name="localTasksCounter" value="1475" />
+    <task id="LOCAL-01475" summary="Cleanup">
+      <option name="closed" value="true" />
+      <created>1750878205051</created>
+      <option name="number" value="01475" />
+      <option name="presentableId" value="LOCAL-01475" />
+      <option name="project" value="LOCAL" />
+      <updated>1750878205051</updated>
+    </task>
+    <option name="localTasksCounter" value="1476" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1557,6 +1556,11 @@
           <url>file://$PROJECT_DIR$/tests/test_restricted_growth_function_sequence.py</url>
           <line>33</line>
           <option name="timeStamp" value="457" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
+          <line>208</line>
+          <option name="timeStamp" value="461" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

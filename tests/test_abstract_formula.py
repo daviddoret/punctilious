@@ -149,16 +149,16 @@ class TestAbstractFormula:
         assert af12a.formula_degree == 4
 
     def test_is_abstract_formula_equivalent_to(self, af1, af2a, af2b, af6a, af12a):
-        assert af1.is_canonical_abstract_formula_equivalent_to(af1)
-        assert af2a.is_canonical_abstract_formula_equivalent_to(af2a)
-        assert af2b.is_canonical_abstract_formula_equivalent_to(af2b)
-        assert af6a.is_canonical_abstract_formula_equivalent_to(af6a)
-        assert af12a.is_canonical_abstract_formula_equivalent_to(af12a)
+        assert af1.is_abstract_formula_equivalent_to(af1)
+        assert af2a.is_abstract_formula_equivalent_to(af2a)
+        assert af2b.is_abstract_formula_equivalent_to(af2b)
+        assert af6a.is_abstract_formula_equivalent_to(af6a)
+        assert af12a.is_abstract_formula_equivalent_to(af12a)
 
-        assert not af1.is_canonical_abstract_formula_equivalent_to(af2a)
-        assert not af1.is_canonical_abstract_formula_equivalent_to(af2b)
-        assert not af1.is_canonical_abstract_formula_equivalent_to(af6a)
-        assert not af1.is_canonical_abstract_formula_equivalent_to(af12a)
+        assert not af1.is_abstract_formula_equivalent_to(af2a)
+        assert not af1.is_abstract_formula_equivalent_to(af2b)
+        assert not af1.is_abstract_formula_equivalent_to(af6a)
+        assert not af1.is_abstract_formula_equivalent_to(af12a)
 
     def test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(self):
         tree_of_pairs = (0, (),)

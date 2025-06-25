@@ -244,11 +244,11 @@ def af12a(t12, rgfs0123456789_10_11):
 
 @pytest.fixture
 def af_big(t_big):
-    return pu.afl.CanonicalAbstractFormula(t_big,
-                                           (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1,
-                                            4,
-                                            9, 10,
-                                            7, 7, 7, 9, 0, 11, 12,))
+    return pu.afl.AbstractFormula(t_big,
+                                  (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1,
+                                   4,
+                                   9, 10,
+                                   7, 7, 7, 9, 0, 11, 12,))
 
 
 @pytest.fixture
