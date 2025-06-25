@@ -128,11 +128,11 @@ class TestAbstractFormula:
         assert l[11] == ncaf1
 
     def test_main_sequence_element(self, ncaf1, ncaf2a, ncaf2b, ncaf6a, ncaf12a):
-        assert ncaf1.main_sequence_element == 0
-        assert ncaf2a.main_sequence_element == 0
-        assert ncaf2b.main_sequence_element == 0
-        assert ncaf6a.main_sequence_element == 0
-        assert ncaf12a.main_sequence_element == 0
+        assert ncaf1.main_element == 0
+        assert ncaf2a.main_element == 0
+        assert ncaf2b.main_element == 0
+        assert ncaf6a.main_element == 0
+        assert ncaf12a.main_element == 0
 
     def test_tree_size(self, ncaf1, ncaf2a, ncaf2b, ncaf6a, ncaf12a):
         assert ncaf1.tree_size == 1

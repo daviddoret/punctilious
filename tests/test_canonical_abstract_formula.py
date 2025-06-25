@@ -127,11 +127,11 @@ class TestAbstractFormula:
         assert l[11] == caf1
 
     def test_main_sequence_element(self, caf1, caf2a, caf2b, caf6a, caf12a):
-        assert caf1.main_sequence_element == 0
-        assert caf2a.main_sequence_element == 0
-        assert caf2b.main_sequence_element == 0
-        assert caf6a.main_sequence_element == 0
-        assert caf12a.main_sequence_element == 0
+        assert caf1.main_element == 0
+        assert caf2a.main_element == 0
+        assert caf2b.main_element == 0
+        assert caf6a.main_element == 0
+        assert caf12a.main_element == 0
 
     def test_tree_size(self, caf1, caf2a, caf2b, caf6a, caf12a):
         assert caf1.tree_size == 1

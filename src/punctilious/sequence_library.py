@@ -86,7 +86,7 @@ def data_validate_restricted_growth_function_sequence_elements(
 
 
 class NaturalNumberSequence(tuple):
-    """A finite (computable) and natural-numbers-sequence.
+    """A non-empty, finite (computable) sequence of natural numbers (0 based).
 
     Definition:
     An :class:`NaturalNumberSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_j) such that:
