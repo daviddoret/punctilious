@@ -71,7 +71,7 @@ class RootedPlaneTree(tuple):
             return False
 
     def __hash__(self):
-        return hash((RootedPlaneTree, *self.children,))
+        return hash((RootedPlaneTree, *self.immediate_subtrees,))
 
     def __init__(self, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         """
@@ -138,7 +138,7 @@ class RootedPlaneTree(tuple):
         """
         if self.is_leaf:
             return "()"
-        child_encodings = [child.ahu_unsorted_string for child in self.children]
+        child_encodings = [child.ahu_unsorted_string for child in self.immediate_subtrees]
         return "(" + "".join(child_encodings) + ")"
 
     @property
@@ -171,23 +171,23 @@ class RootedPlaneTree(tuple):
         return int(self.ahu_unsorted_inverted_binary_string, base=2)
 
     @property
-    def children(self) -> tuple[RootedPlaneTree, ...]:
-        """The child rooted plane trees that compose this `RootedPlaneTree`.
+    def immediate_subtrees(self) -> tuple[RootedPlaneTree, ...]:
+        """The tuple of immediate subtrees.
 
-        :return:
+        :return: the tuple of the immediate subtrees.
         """
         return tuple(super().__iter__())
 
     @property
     def degree(self) -> int:
-        """The `degree` of a `RootedPlaneTree` is the number of immediate children it has.
+        """The `degree` of a :class:`RootedPlaneTree` is the number of immediate subtrees it has.
 
         :return:
         """
         return super().__len__()
 
-    def get_sub_tree_by_path(self, p: tuple[int, ...]) -> RootedPlaneTree:
-        """Given a path `p`, returns the corresponding sub-rooted-plane-tree.
+    def get_subtree_by_path(self, p: tuple[int, ...]) -> RootedPlaneTree:
+        """Given a path `p`, returns the corresponding subtree.
 
         Definition - rooted-plane-tree path:
         A rooted-plane-tree path is a finite sequence of natural numbers >= 0, of length > 0,
@@ -213,7 +213,7 @@ class RootedPlaneTree(tuple):
                         "The n-th element of the path is negative or greater than the number of"
                         " immediate sub-rooted-plane-trees in t.", n_index=i, n_value=j,
                         t=t)
-                t: RootedPlaneTree = t.children[j]
+                t: RootedPlaneTree = t.immediate_subtrees[j]
             return t
 
     @property
@@ -244,31 +244,35 @@ class RootedPlaneTree(tuple):
         t_i: RootedPlaneTree
         u_i: RootedPlaneTree
         return self.degree == t.degree and all(t_i.is_rooted_plane_tree_equivalent_to(u_i) for t_i, u_i in
-                                               zip(t.iterate_direct_ascending(), self.iterate_direct_ascending()))
+                                               zip(t.iterate_immediate_subtrees(), self.iterate_immediate_subtrees()))
         # Equivalent implementation:
         # return t.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
 
-    def iterate_direct_ascending(self) -> typing.Generator[RootedPlaneTree, None, None]:
-        """Generator function that iterates the direct children of the `RootedPlaneTree` in ascending order.
+    def iterate_immediate_subtrees(self) -> typing.Generator[RootedPlaneTree, None, None]:
+        """Generator function that iterates the immediate subtrees of this :class:`RootedPlaneTree`.
+        following the canonical vertex ordering.
 
-        :return:
+        :yields: RootedPlaneTree - a subtree.
+        :return: None
         """
         yield from super().__iter__()
 
-    def iterate_depth_first_ascending(self) -> typing.Generator[RootedPlaneTree, None, None]:
-        """Generator function that iterates recursively the `RootedPlaneTree` using the depth first ascending algorithm.
+    def iterate_subtrees(self) -> typing.Generator[RootedPlaneTree, None, None]:
+        """Generator function that iterates recursively the subtrees of this :class:`RootedPlaneTree`.
+        using the depth-first / canonical vertex ordering algorithm.
 
-        :return:
+        :yields: RootedPlaneTree - a subtree.
+        :return: None
         """
-        yield self
-        for child in self.children:
-            yield from child.iterate_depth_first_ascending()
+        yield self  # Yield the initial rooted-plane-tree itself.
+        for child in self.immediate_subtrees:  # Recursively yield subtrees from the immediate subtrees.
+            yield from child.iterate_subtrees()
 
     def represent_as_anonymous_function(self) -> str:
         output: str = "★"
         if not self.is_leaf:
             output += "("
-        for i, child in enumerate(self.children):
+        for i, child in enumerate(self.immediate_subtrees):
             if i > 0:
                 output += ", "
             output += child.represent_as_anonymous_function()
@@ -283,7 +287,7 @@ class RootedPlaneTree(tuple):
         output: str = str(connectives[0])
         if not self.is_leaf:
             output += "("
-        for i, child in enumerate(self.children):
+        for i, child in enumerate(self.immediate_subtrees):
             if i > 0:
                 output += ", "
             sub_sequence = connectives[1:]
@@ -330,8 +334,8 @@ class RootedPlaneTree(tuple):
         else:
             new_prefix = prefix + " ┃  "
 
-        child_count: int = len(self.children)
-        for i, child in enumerate(self.children):
+        child_count: int = len(self.immediate_subtrees)
+        for i, child in enumerate(self.immediate_subtrees):
             is_first_child = (i == 0)
             is_last_child = (i == child_count - 1)
             output = output + child.represent_as_multiline_string_vertical_tree_representation(new_prefix, False,
@@ -344,7 +348,7 @@ class RootedPlaneTree(tuple):
         current_rooted_plane_tree: RootedPlaneTree = self
         for i, n in enumerate(s):
             if i != 0:
-                current_rooted_plane_tree = current_rooted_plane_tree.children[n - 1]
+                current_rooted_plane_tree = current_rooted_plane_tree.immediate_subtrees[n - 1]
         return current_rooted_plane_tree
 
     @property
@@ -352,7 +356,7 @@ class RootedPlaneTree(tuple):
         """Returns the size of this `RootedPlaneTree`.
 
         Definition: the size of a rooted plan tree is the total number of vertices in the graph."""
-        return 1 + sum(child.size for child in self.children)
+        return 1 + sum(child.size for child in self.immediate_subtrees)
 
     @property
     def substitute_sub_tree(self, m: dict[FlexibleRootedPlaneTree, FlexibleRootedPlaneTree]) -> RootedPlaneTree:
@@ -361,7 +365,7 @@ class RootedPlaneTree(tuple):
     def to_list(self) -> list:
         """Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
         lists are mutable."""
-        return list(self.children)
+        return list(self.immediate_subtrees)
 
 
 FlexibleRootedPlaneTree = typing.Union[

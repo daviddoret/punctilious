@@ -284,7 +284,7 @@ class AbstractFormula(tuple):
         """
         i: int = 0
         t: rpt.RootedPlaneTree
-        for t in self.rooted_plane_tree.iterate_depth_first_ascending():
+        for t in self.rooted_plane_tree.iterate_subtrees():
             if t.degree > 0:
                 i += 1
         return i
@@ -381,7 +381,7 @@ class AbstractFormula(tuple):
 
         :return: A generator of :class:`AbstractFormula`.
         """
-        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_direct_ascending(),
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_immediate_subtrees(),
                                               self.iterate_immediate_sub_restricted_growth_function_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
@@ -397,7 +397,7 @@ class AbstractFormula(tuple):
         """
         i: int = 1  # remove the root
         child_tree: rpt.RootedPlaneTree
-        for child_tree in self.rooted_plane_tree.iterate_direct_ascending():
+        for child_tree in self.rooted_plane_tree.iterate_immediate_subtrees():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.natural_numbers_sequence[i:i + child_tree.size]
             sub_sequence: NaturalNumberSequence = NaturalNumberSequence(*sub_sequence)
@@ -425,7 +425,7 @@ class AbstractFormula(tuple):
     def iterate_sub_sequences(self) -> collections.abc.Generator[tuple[int, ...], None, None]:
         i: int
         sub_tree: rpt.RootedPlaneTree
-        for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_depth_first_ascending()):
+        for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_subtrees()):
             # retrieves the sub-sequence in the root RGF sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.natural_numbers_sequence[i:i + sub_tree.size]
             # yield the child RGF sequence
@@ -450,7 +450,7 @@ class AbstractFormula(tuple):
         """
         child_tree: rpt.RootedPlaneTree
         child_sequence: sl.NaturalNumberSequence
-        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_subtrees(),
                                               self.iterate_sub_natural_numbers_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
@@ -679,7 +679,7 @@ class CanonicalAbstractFormula(tuple):
         """
         i: int = 0
         t: rpt.RootedPlaneTree
-        for t in self.rooted_plane_tree.iterate_depth_first_ascending():
+        for t in self.rooted_plane_tree.iterate_subtrees():
             if t.degree > 0:
                 i += 1
         return i
@@ -776,7 +776,7 @@ class CanonicalAbstractFormula(tuple):
 
         :return: A generator of :class:`CanonicalAbstractFormula`.
         """
-        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_direct_ascending(),
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_immediate_subtrees(),
                                               self.iterate_immediate_sub_restricted_growth_function_sequences()):
             sub_formula = CanonicalAbstractFormula(child_tree, child_sequence)
             yield sub_formula
@@ -796,7 +796,7 @@ class CanonicalAbstractFormula(tuple):
         i: int = 1  # remove the root
         child_tree: rpt.RootedPlaneTree
         # truncated_sequence: tuple[int, ...] = self.restricted_growth_function_sequence[1:]
-        for child_tree in self.rooted_plane_tree.iterate_direct_ascending():
+        for child_tree in self.rooted_plane_tree.iterate_immediate_subtrees():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.restricted_growth_function_sequence[i:i + child_tree.size]
             # yield this child RGF sequence
@@ -822,7 +822,7 @@ class CanonicalAbstractFormula(tuple):
     def iterate_sub_sequences(self) -> collections.abc.Generator[tuple[int, ...], None, None]:
         i: int
         sub_tree: rpt.RootedPlaneTree
-        for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_depth_first_ascending()):
+        for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_subtrees()):
             # retrieves the sub-sequence in the root RGF sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.restricted_growth_function_sequence[i:i + sub_tree.size]
             # yield the child RGF sequence
@@ -847,7 +847,7 @@ class CanonicalAbstractFormula(tuple):
         """
         child_tree: rpt.RootedPlaneTree
         child_sequence: sl.RestrictedGrowthFunctionSequence
-        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_depth_first_ascending(),
+        for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_subtrees(),
                                               self.iterate_sub_restricted_growth_function_sequences()):
             sub_formula = CanonicalAbstractFormula(child_tree, child_sequence)
             yield sub_formula

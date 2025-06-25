@@ -137,36 +137,36 @@ class TestRootedPlaneTree:
         assert t4b == t12
 
     def test_iterate_direct_ascending(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        l = tuple(t for t in t1_a.iterate_direct_ascending())
+        l = tuple(t for t in t1_a.iterate_immediate_subtrees())
         assert len(l) == 0
-        l = tuple(t for t in t2_a_aa.iterate_direct_ascending())
+        l = tuple(t for t in t2_a_aa.iterate_immediate_subtrees())
         assert l[0] == t1_a
-        l = tuple(t for t in t6_a_aa_ab_ac_ad_ae.iterate_direct_ascending())
+        l = tuple(t for t in t6_a_aa_ab_ac_ad_ae.iterate_immediate_subtrees())
         assert l[0] == t1_a
         assert l[1] == t1_a
         assert l[2] == t1_a
         assert l[3] == t1_a
         assert l[4] == t1_a
-        l = tuple(t for t in t12.iterate_direct_ascending())
+        l = tuple(t for t in t12.iterate_immediate_subtrees())
         assert l[0] == t1_a
         assert l[1] == t2_a_aa
         assert l[2] == t6_a_aa_ab_ac_ad_ae
         assert l[3] == t2_a_aa
 
     def test_iterate_depth_first_ascending(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        l = tuple(t for t in t1_a.iterate_depth_first_ascending())
+        l = tuple(t for t in t1_a.iterate_subtrees())
         assert l[0] == t1_a
-        l = tuple(t for t in t2_a_aa.iterate_depth_first_ascending())
+        l = tuple(t for t in t2_a_aa.iterate_subtrees())
         assert l[0] == t2_a_aa
         assert l[1] == t1_a
-        l = tuple(t for t in t6_a_aa_ab_ac_ad_ae.iterate_depth_first_ascending())
+        l = tuple(t for t in t6_a_aa_ab_ac_ad_ae.iterate_subtrees())
         assert l[0] == t6_a_aa_ab_ac_ad_ae
         assert l[1] == t1_a
         assert l[2] == t1_a
         assert l[3] == t1_a
         assert l[4] == t1_a
         assert l[5] == t1_a
-        l = tuple(t for t in t12.iterate_depth_first_ascending())
+        l = tuple(t for t in t12.iterate_subtrees())
         assert l[0] == t12
         assert l[1] == t1_a
         assert l[2] == t2_a_aa
@@ -181,12 +181,12 @@ class TestRootedPlaneTree:
         assert l[11] == t1_a
 
     def test_get_sub_tree_by_path(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12, t_big):
-        assert t1_a.get_sub_tree_by_path((0,)) == t1_a
-        assert t2_a_aa.get_sub_tree_by_path((0,)) == t2_a_aa
-        assert t2_a_aa.get_sub_tree_by_path((0, 0,)) == t1_a
-        assert t_big.get_sub_tree_by_path((0, 3,)) == t12
-        assert t_big.get_sub_tree_by_path((0, 3, 2,)) == t6_a_aa_ab_ac_ad_ae
-        assert t_big.get_sub_tree_by_path((0, 3, 2, 4,)) == t1_a
+        assert t1_a.get_subtree_by_path((0,)) == t1_a
+        assert t2_a_aa.get_subtree_by_path((0,)) == t2_a_aa
+        assert t2_a_aa.get_subtree_by_path((0, 0,)) == t1_a
+        assert t_big.get_subtree_by_path((0, 3,)) == t12
+        assert t_big.get_subtree_by_path((0, 3, 2,)) == t6_a_aa_ab_ac_ad_ae
+        assert t_big.get_subtree_by_path((0, 3, 2, 4,)) == t1_a
 
     def test_build_rooted_plane_tree_from_tuple_tree(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
         u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(())
