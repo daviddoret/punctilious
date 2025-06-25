@@ -81,8 +81,8 @@ class RootedPlaneTree(tuple):
         :param children: A tuple of FlexibleRootedPlaneTree instances.
         :param tuple_tree: A `TupleTree` structure.
         """
-        # children: RootedPlaneTreeTerms = data_validate_formula_structure_terms(children)
         super(RootedPlaneTree, self).__init__()
+        self._subtrees: tuple[RootedPlaneTree, ...] | None = None
 
     def __ne__(self, t):
         """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTree`,
@@ -176,7 +176,8 @@ class RootedPlaneTree(tuple):
 
         :return: the tuple of the immediate subtrees.
         """
-        return tuple(super().__iter__())
+        # return tuple(super().__iter__()) # alternative implementation.
+        return tuple.__new__(tuple, self)  # this implementation seems more "direct".
 
     @property
     def degree(self) -> int:
@@ -359,8 +360,18 @@ class RootedPlaneTree(tuple):
         return 1 + sum(child.size for child in self.immediate_subtrees)
 
     @property
-    def substitute_sub_tree(self, m: dict[FlexibleRootedPlaneTree, FlexibleRootedPlaneTree]) -> RootedPlaneTree:
+    def substitute_subtree(self, m: dict[FlexibleRootedPlaneTree, FlexibleRootedPlaneTree]) -> RootedPlaneTree:
         raise NotImplementedError('TO BE IMPLEMENTED')
+
+    @property
+    def subtrees(self) -> tuple[RootedPlaneTree, ...]:
+        """The tuple of subtrees ordered by the depth-first / canonical vertex ordering algorithm.
+
+        :return: the tuple of the subtrees.
+        """
+        if self._subtrees is None:
+            self._subtrees = tuple(self.iterate_subtrees())
+        return self._subtrees
 
     def to_list(self) -> list:
         """Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
