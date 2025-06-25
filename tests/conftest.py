@@ -94,13 +94,13 @@ def t3_a_aa_ab(t1_a):
 
 
 @pytest.fixture
-def t7_a_aa_ab_aaa_aaaa_aba_abaa(t3_a_aa_ab):
-    return pu.rpt.RootedPlaneTree(t3_a_aa_ab, t3_a_aa_ab)
+def t6_a_aa_ab_ac_ad_ae(t1_a):
+    return pu.rpt.RootedPlaneTree(t1_a, t1_a, t1_a, t1_a, t1_a)
 
 
 @pytest.fixture
-def t6_a_aa_ab_ac_ad_ae(t1_a):
-    return pu.rpt.RootedPlaneTree(t1_a, t1_a, t1_a, t1_a, t1_a)
+def t7_a_aa_ab_aaa_aaaa_aba_abaa(t3_a_aa_ab):
+    return pu.rpt.RootedPlaneTree(t3_a_aa_ab, t3_a_aa_ab)
 
 
 @pytest.fixture

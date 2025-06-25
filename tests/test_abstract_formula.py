@@ -97,7 +97,7 @@ class TestAbstractFormula:
         assert l[2] == af6a
         assert l[3] == af2b
 
-    def test_iterate_sub_formulas(self, af1, af2a, af2b, af6a, af12a):
+    def test_iterate_sub_formulas(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, af1, af2a, af2b, af6a, af12a):
         l = tuple(t for t in af1.iterate_sub_formulas())
         assert l[0] == af1
         l = tuple(t for t in af2a.iterate_sub_formulas())
@@ -105,27 +105,27 @@ class TestAbstractFormula:
         assert l[1] == af1
         l = tuple(t for t in af2b.iterate_sub_formulas())
         assert l[0] == af2b
-        assert l[1] == af1
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (1,))
         l = tuple(t for t in af6a.iterate_sub_formulas())
         assert l[0] == af6a
-        assert l[1] == af1
-        assert l[2] == af1
-        assert l[3] == af1
-        assert l[4] == af1
-        assert l[5] == af1
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (1,))
+        assert l[2] == pu.afl.AbstractFormula(t1_a, (2,))
+        assert l[3] == pu.afl.AbstractFormula(t1_a, (3,))
+        assert l[4] == pu.afl.AbstractFormula(t1_a, (4,))
+        assert l[5] == pu.afl.AbstractFormula(t1_a, (5,))
         l = tuple(t for t in af12a.iterate_sub_formulas())
         assert l[0] == af12a
-        assert l[1] == af1
-        assert l[2] == af2b
-        assert l[3] == af1
-        assert l[4] == af6a
-        assert l[5] == af1
-        assert l[6] == af1
-        assert l[7] == af1
-        assert l[8] == af1
-        assert l[9] == af1
-        assert l[10] == af2b
-        assert l[11] == af1
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (1,))
+        assert l[2] == pu.afl.AbstractFormula(t2_a_aa, (2, 3,))
+        assert l[3] == pu.afl.AbstractFormula(t1_a, (3,))
+        assert l[4] == pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, (4, 5, 6, 7, 8, 9,))
+        assert l[5] == pu.afl.AbstractFormula(t1_a, (5,))
+        assert l[6] == pu.afl.AbstractFormula(t1_a, (6,))
+        assert l[7] == pu.afl.AbstractFormula(t1_a, (7,))
+        assert l[8] == pu.afl.AbstractFormula(t1_a, (8,))
+        assert l[9] == pu.afl.AbstractFormula(t1_a, (9,))
+        assert l[10] == pu.afl.AbstractFormula(t2_a_aa, (10, 11,))
+        assert l[11] == pu.afl.AbstractFormula(t1_a, (11,))
 
     def test_main_sequence_element(self, af1, af2a, af2b, af6a, af12a):
         assert af1.main_element == 0

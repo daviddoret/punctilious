@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -116,6 +116,7 @@
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_immediate_sub_restricted_growth_function_sequences.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_immediate_sub_sequences.executor": "Run",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_depth_first_ascending.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas_direct.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_natural_numbers_sequences.executor": "Run",
@@ -603,7 +604,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -798,7 +799,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_abstract_formula.TestAbstractFormula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -811,7 +812,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -948,7 +949,7 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula" />
+      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_natural_numbers_sequences" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_sequences" />
       <item itemvalue="Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_cache" />
@@ -959,11 +960,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_formulas" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_sequences" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_natural_numbers_sequences" />
         <item itemvalue="Python tests.pytest for test_restricted_growth_function_sequence.TestRestrictedGrowthFunctionSequence.test_cache" />
-        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula" />
       </list>
     </recent_temporary>
   </component>
@@ -985,14 +986,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01425" summary="RGF sequence initial value=0">
-      <option name="closed" value="true" />
-      <created>1750072144048</created>
-      <option name="number" value="01425" />
-      <option name="presentableId" value="LOCAL-01425" />
-      <option name="project" value="LOCAL" />
-      <updated>1750072144049</updated>
     </task>
     <task id="LOCAL-01426" summary="RGF sequence initial value=0">
       <option name="closed" value="true" />
@@ -1378,7 +1371,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750851299892</updated>
     </task>
-    <option name="localTasksCounter" value="1474" />
+    <task id="LOCAL-01474" summary="Cleanup">
+      <option name="closed" value="true" />
+      <created>1750855581302</created>
+      <option name="number" value="01474" />
+      <option name="presentableId" value="LOCAL-01474" />
+      <option name="project" value="LOCAL" />
+      <updated>1750855581302</updated>
+    </task>
+    <option name="localTasksCounter" value="1475" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
