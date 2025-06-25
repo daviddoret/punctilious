@@ -422,12 +422,13 @@ class AbstractFormula(tuple):
             # yield this child RGF sequence
             yield sub_sequence
 
-    def iterate_sub_sequences(self) -> collections.abc.Generator[tuple[int, ...], None, None]:
+    def iterate_sub_sequences(self) -> collections.abc.Generator[sl.NaturalNumberSequence, None, None]:
         i: int
         sub_tree: rpt.RootedPlaneTree
         for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_subtrees()):
-            # retrieves the sub-sequence in the root RGF sequence that is mapped to this child RPT
+            # retrieves the sub-sequence in the sequence
             sub_sequence: tuple[int, ...] = self.natural_numbers_sequence[i:i + sub_tree.size]
+            sub_sequence: sl.NaturalNumberSequence = sl.NaturalNumberSequence(*sub_sequence)
             # yield the child RGF sequence
             yield sub_sequence
 
@@ -599,7 +600,7 @@ class AbstractFormula(tuple):
         return self[1]
 
 
-class CanonicalAbstractFormula(tuple):
+class CanonicalAbstractFormula(AbstractFormula):
     """A :class:`CanonicalAbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is an RGF sequence.
@@ -628,7 +629,7 @@ class CanonicalAbstractFormula(tuple):
         return hash((CanonicalAbstractFormula, self.rooted_plane_tree, self.restricted_growth_function_sequence,))
 
     def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleRestrictedGrowthFunctionSequence):
-        super(CanonicalAbstractFormula, self).__init__()
+        super(CanonicalAbstractFormula, self).__init__(t=t, s=s)
         self._immediate_sub_formulas = None
         self._sub_formulas = None
 
@@ -657,7 +658,7 @@ class CanonicalAbstractFormula(tuple):
             raise util.PunctiliousException(
                 f"`CanonicalAbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `RestrictedGrowthFunctionSequence`.",
                 t_size=t.size, s_length=s.length, t=t, s=s)
-        phi = super(CanonicalAbstractFormula, cls).__new__(cls, (t, s))
+        phi = super(CanonicalAbstractFormula, cls).__new__(cls, t=t, s=s)
         phi = retrieve_canonical_abstract_formula_from_cache(phi)
         return phi
 
@@ -853,7 +854,7 @@ class CanonicalAbstractFormula(tuple):
             yield sub_formula
 
     @property
-    def main_sequence_element(self) -> int:
+    def main_element(self) -> int:
         """The `main_sequence_element` of an `CanonicalAbstractFormula` is the first element of the
         attr:`AbstractFormula.restricted_growth_function_sequence`, that corresponds to the root
         node of the attr:`AbstractFormula.rooted_plane_tree`.

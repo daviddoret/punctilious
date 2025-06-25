@@ -56,33 +56,33 @@ class TestAbstractFormula:
         assert l[2] == rgfs012345
         assert l[3] == rgfs01
 
-    def test_iterate_sub_natural_numbers_sequences(self, af1, rgfs0, af2a, rgfs01, af6a, af12a,
-                                                   rgfs012345):
-        l = tuple(t for t in af1.iterate_sub_natural_numbers_sequences())
-        assert l[0] == af1.restricted_growth_function_sequence
-        l = tuple(t for t in af2a.iterate_sub_natural_numbers_sequences())
-        assert l[0] == af2a.restricted_growth_function_sequence
+    def test_iterate_sub_sequences(self, af1, rgfs0, af2a, rgfs01, af6a, af12a,
+                                   rgfs012345):
+        l = tuple(t for t in af1.iterate_sub_sequences())
+        assert l[0] == af1.natural_numbers_sequence
+        l = tuple(t for t in af2a.iterate_sub_sequences())
+        assert l[0] == af2a.natural_numbers_sequence
         assert l[1] == rgfs0
-        l = tuple(t for t in af6a.iterate_sub_natural_numbers_sequences())
-        assert l[0] == af6a.restricted_growth_function_sequence
-        assert l[1] == rgfs0
-        assert l[2] == rgfs0
-        assert l[3] == rgfs0
-        assert l[4] == rgfs0
-        assert l[5] == rgfs0
-        l = tuple(t for t in af12a.iterate_sub_natural_numbers_sequences())
-        assert l[0] == af12a.restricted_growth_function_sequence
-        assert l[1] == rgfs0
-        assert l[2] == rgfs01
-        assert l[3] == rgfs0
-        assert l[4] == rgfs012345
-        assert l[5] == rgfs0
-        assert l[6] == rgfs0
-        assert l[7] == rgfs0
-        assert l[8] == rgfs0
-        assert l[9] == rgfs0
-        assert l[10] == rgfs01
-        assert l[11] == rgfs0
+        l = tuple(t for t in af6a.iterate_sub_sequences())
+        assert l[0] == af6a.natural_numbers_sequence
+        assert l[1] == pu.sl.NaturalNumberSequence(1, )
+        assert l[2] == pu.sl.NaturalNumberSequence(2, )
+        assert l[3] == pu.sl.NaturalNumberSequence(3, )
+        assert l[4] == pu.sl.NaturalNumberSequence(4, )
+        assert l[5] == pu.sl.NaturalNumberSequence(5, )
+        l = tuple(t for t in af12a.iterate_sub_sequences())
+        assert l[0] == af12a.natural_numbers_sequence
+        assert l[1] == pu.sl.NaturalNumberSequence(1, )
+        assert l[2] == pu.sl.NaturalNumberSequence(2, 3, )
+        assert l[3] == pu.sl.NaturalNumberSequence(3, )
+        assert l[4] == pu.sl.NaturalNumberSequence(4, 5, 6, 7, 8, 9, )
+        assert l[5] == pu.sl.NaturalNumberSequence(5, )
+        assert l[6] == pu.sl.NaturalNumberSequence(6, )
+        assert l[7] == pu.sl.NaturalNumberSequence(7, )
+        assert l[8] == pu.sl.NaturalNumberSequence(8, )
+        assert l[9] == pu.sl.NaturalNumberSequence(9, )
+        assert l[10] == pu.sl.NaturalNumberSequence(10, 11, )
+        assert l[11] == pu.sl.NaturalNumberSequence(11, )
 
     def test_iterate_sub_formulas_direct(self, af1, af2a, af2b, af12a, af6a):
         l = tuple(af for af in af1.iterate_immediate_sub_formulas())

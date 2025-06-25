@@ -126,7 +126,7 @@ class TestAbstractFormula:
         assert l[10] == caf2b
         assert l[11] == caf1
 
-    def test_main_sequence_element(self, caf1, caf2a, caf2b, caf6a, caf12a):
+    def test_main_element(self, caf1, caf2a, caf2b, caf6a, caf12a):
         assert caf1.main_element == 0
         assert caf2a.main_element == 0
         assert caf2b.main_element == 0
