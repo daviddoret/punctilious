@@ -213,37 +213,37 @@ def caf_big(t_big):
 
 
 @pytest.fixture
-def ncaf1(t1_a, rgfs0):
+def af1(t1_a, rgfs0):
     return pu.afl.AbstractFormula(t1_a, rgfs0)
 
 
 @pytest.fixture
-def ncaf2a(t2_a_aa, rgfs00):
+def af2a(t2_a_aa, rgfs00):
     return pu.afl.AbstractFormula(t2_a_aa, rgfs00)
 
 
 @pytest.fixture
-def ncaf2b(t2_a_aa, rgfs01):
+def af2b(t2_a_aa, rgfs01):
     return pu.afl.AbstractFormula(t2_a_aa, rgfs01)
 
 
 @pytest.fixture
-def ncaf3a(t3_a_aa_aaa, rgf3a):
+def af3a(t3_a_aa_aaa, rgf3a):
     return pu.afl.AbstractFormula(t3_a_aa_aaa, rgf3a)
 
 
 @pytest.fixture
-def ncaf6a(t6_a_aa_ab_ac_ad_ae, rgfs012345):
+def af6a(t6_a_aa_ab_ac_ad_ae, rgfs012345):
     return pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, rgfs012345)
 
 
 @pytest.fixture
-def ncaf12a(t12, rgfs0123456789_10_11):
+def af12a(t12, rgfs0123456789_10_11):
     return pu.afl.AbstractFormula(t12, rgfs0123456789_10_11)
 
 
 @pytest.fixture
-def ncaf_big(t_big):
+def af_big(t_big):
     return pu.afl.CanonicalAbstractFormula(t_big,
                                            (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1,
                                             4,

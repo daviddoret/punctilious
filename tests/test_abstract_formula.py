@@ -17,61 +17,61 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
 
-    def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, ncaf1, rgfs0, ncaf2a, rgfs01,
-                                             ncaf6a,
+    def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, rgfs0, af2a, rgfs01,
+                                             af6a,
                                              rgfs012345,
-                                             ncaf12a, rgfs0123456789_10_11):
-        l = tuple(t for t in ncaf1.iterate_immediate_sub_sequences())
+                                             af12a, rgfs0123456789_10_11):
+        l = tuple(t for t in af1.iterate_immediate_sub_sequences())
         assert len(l) == 0
-        l = tuple(t for t in ncaf2a.iterate_immediate_sub_sequences())
+        l = tuple(t for t in af2a.iterate_immediate_sub_sequences())
         assert l[0] == s0
-        l = tuple(t for t in ncaf6a.iterate_immediate_sub_sequences())
+        l = tuple(t for t in af6a.iterate_immediate_sub_sequences())
         assert l[0] == s1
         assert l[1] == s2
         assert l[2] == s3
         assert l[3] == s4
         assert l[4] == s5
-        l = tuple(t for t in ncaf12a.iterate_immediate_sub_sequences())
+        l = tuple(t for t in af12a.iterate_immediate_sub_sequences())
         assert l[0] == s1
         assert l[1] == (2, 3,)
         assert l[2] == (4, 5, 6, 7, 8, 9,)
         assert l[3] == (10, 11,)
 
-    def test_iterate_immediate_sub_natural_numbers_sequences(self, ncaf1, rgfs0, ncaf2a, rgfs01, ncaf6a,
+    def test_iterate_immediate_sub_natural_numbers_sequences(self, af1, rgfs0, af2a, rgfs01, af6a,
                                                              rgfs012345,
-                                                             ncaf12a, rgfs0123456789_10_11):
-        l = tuple(t for t in ncaf1.iterate_immediate_sub_restricted_growth_function_sequences())
+                                                             af12a, rgfs0123456789_10_11):
+        l = tuple(t for t in af1.iterate_immediate_sub_restricted_growth_function_sequences())
         assert len(l) == 0
-        l = tuple(t for t in ncaf2a.iterate_immediate_sub_restricted_growth_function_sequences())
+        l = tuple(t for t in af2a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgfs0
-        l = tuple(t for t in ncaf6a.iterate_immediate_sub_restricted_growth_function_sequences())
+        l = tuple(t for t in af6a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgfs0
         assert l[1] == rgfs0
         assert l[2] == rgfs0
         assert l[3] == rgfs0
         assert l[4] == rgfs0
-        l = tuple(t for t in ncaf12a.iterate_immediate_sub_restricted_growth_function_sequences())
+        l = tuple(t for t in af12a.iterate_immediate_sub_restricted_growth_function_sequences())
         assert l[0] == rgfs0
         assert l[1] == rgfs01
         assert l[2] == rgfs012345
         assert l[3] == rgfs01
 
-    def test_iterate_sub_natural_numbers_sequences(self, ncaf1, rgfs0, ncaf2a, rgfs01, ncaf6a, ncaf12a,
+    def test_iterate_sub_natural_numbers_sequences(self, af1, rgfs0, af2a, rgfs01, af6a, af12a,
                                                    rgfs012345):
-        l = tuple(t for t in ncaf1.iterate_sub_natural_numbers_sequences())
-        assert l[0] == ncaf1.restricted_growth_function_sequence
-        l = tuple(t for t in ncaf2a.iterate_sub_natural_numbers_sequences())
-        assert l[0] == ncaf2a.restricted_growth_function_sequence
+        l = tuple(t for t in af1.iterate_sub_natural_numbers_sequences())
+        assert l[0] == af1.restricted_growth_function_sequence
+        l = tuple(t for t in af2a.iterate_sub_natural_numbers_sequences())
+        assert l[0] == af2a.restricted_growth_function_sequence
         assert l[1] == rgfs0
-        l = tuple(t for t in ncaf6a.iterate_sub_natural_numbers_sequences())
-        assert l[0] == ncaf6a.restricted_growth_function_sequence
+        l = tuple(t for t in af6a.iterate_sub_natural_numbers_sequences())
+        assert l[0] == af6a.restricted_growth_function_sequence
         assert l[1] == rgfs0
         assert l[2] == rgfs0
         assert l[3] == rgfs0
         assert l[4] == rgfs0
         assert l[5] == rgfs0
-        l = tuple(t for t in ncaf12a.iterate_sub_natural_numbers_sequences())
-        assert l[0] == ncaf12a.restricted_growth_function_sequence
+        l = tuple(t for t in af12a.iterate_sub_natural_numbers_sequences())
+        assert l[0] == af12a.restricted_growth_function_sequence
         assert l[1] == rgfs0
         assert l[2] == rgfs01
         assert l[3] == rgfs0
@@ -84,81 +84,81 @@ class TestAbstractFormula:
         assert l[10] == rgfs01
         assert l[11] == rgfs0
 
-    def test_iterate_sub_formulas_direct(self, ncaf1, ncaf2a, ncaf2b, ncaf12a, ncaf6a):
-        l = tuple(af for af in ncaf1.iterate_immediate_sub_formulas())
+    def test_iterate_sub_formulas_direct(self, af1, af2a, af2b, af12a, af6a):
+        l = tuple(af for af in af1.iterate_immediate_sub_formulas())
         assert len(l) == 0
-        l = tuple(af for af in ncaf2a.iterate_immediate_sub_formulas())
-        assert l[0] == ncaf1
-        l = tuple(af for af in ncaf2b.iterate_immediate_sub_formulas())
-        assert l[0] == ncaf1
-        l = tuple(af for af in ncaf12a.iterate_immediate_sub_formulas())
-        assert l[0] == ncaf1
-        assert l[1] == ncaf2b
-        assert l[2] == ncaf6a
-        assert l[3] == ncaf2b
+        l = tuple(af for af in af2a.iterate_immediate_sub_formulas())
+        assert l[0] == af1
+        l = tuple(af for af in af2b.iterate_immediate_sub_formulas())
+        assert l[0] == af1
+        l = tuple(af for af in af12a.iterate_immediate_sub_formulas())
+        assert l[0] == af1
+        assert l[1] == af2b
+        assert l[2] == af6a
+        assert l[3] == af2b
 
-    def test_iterate_sub_formulas_depth_first_ascending(self, ncaf1, ncaf2a, ncaf2b, ncaf6a, ncaf12a):
-        l = tuple(t for t in ncaf1.iterate_sub_formulas())
-        assert l[0] == ncaf1
-        l = tuple(t for t in ncaf2a.iterate_sub_formulas())
-        assert l[0] == ncaf2a
-        assert l[1] == ncaf1
-        l = tuple(t for t in ncaf2b.iterate_sub_formulas())
-        assert l[0] == ncaf2b
-        assert l[1] == ncaf1
-        l = tuple(t for t in ncaf6a.iterate_sub_formulas())
-        assert l[0] == ncaf6a
-        assert l[1] == ncaf1
-        assert l[2] == ncaf1
-        assert l[3] == ncaf1
-        assert l[4] == ncaf1
-        assert l[5] == ncaf1
-        l = tuple(t for t in ncaf12a.iterate_sub_formulas())
-        assert l[0] == ncaf12a
-        assert l[1] == ncaf1
-        assert l[2] == ncaf2b
-        assert l[3] == ncaf1
-        assert l[4] == ncaf6a
-        assert l[5] == ncaf1
-        assert l[6] == ncaf1
-        assert l[7] == ncaf1
-        assert l[8] == ncaf1
-        assert l[9] == ncaf1
-        assert l[10] == ncaf2b
-        assert l[11] == ncaf1
+    def test_iterate_sub_formulas_depth_first_ascending(self, af1, af2a, af2b, af6a, af12a):
+        l = tuple(t for t in af1.iterate_sub_formulas())
+        assert l[0] == af1
+        l = tuple(t for t in af2a.iterate_sub_formulas())
+        assert l[0] == af2a
+        assert l[1] == af1
+        l = tuple(t for t in af2b.iterate_sub_formulas())
+        assert l[0] == af2b
+        assert l[1] == af1
+        l = tuple(t for t in af6a.iterate_sub_formulas())
+        assert l[0] == af6a
+        assert l[1] == af1
+        assert l[2] == af1
+        assert l[3] == af1
+        assert l[4] == af1
+        assert l[5] == af1
+        l = tuple(t for t in af12a.iterate_sub_formulas())
+        assert l[0] == af12a
+        assert l[1] == af1
+        assert l[2] == af2b
+        assert l[3] == af1
+        assert l[4] == af6a
+        assert l[5] == af1
+        assert l[6] == af1
+        assert l[7] == af1
+        assert l[8] == af1
+        assert l[9] == af1
+        assert l[10] == af2b
+        assert l[11] == af1
 
-    def test_main_sequence_element(self, ncaf1, ncaf2a, ncaf2b, ncaf6a, ncaf12a):
-        assert ncaf1.main_element == 0
-        assert ncaf2a.main_element == 0
-        assert ncaf2b.main_element == 0
-        assert ncaf6a.main_element == 0
-        assert ncaf12a.main_element == 0
+    def test_main_sequence_element(self, af1, af2a, af2b, af6a, af12a):
+        assert af1.main_element == 0
+        assert af2a.main_element == 0
+        assert af2b.main_element == 0
+        assert af6a.main_element == 0
+        assert af12a.main_element == 0
 
-    def test_tree_size(self, ncaf1, ncaf2a, ncaf2b, ncaf6a, ncaf12a):
-        assert ncaf1.tree_size == 1
-        assert ncaf2a.tree_size == 2
-        assert ncaf2b.tree_size == 2
-        assert ncaf6a.tree_size == 6
-        assert ncaf12a.tree_size == 12
+    def test_tree_size(self, af1, af2a, af2b, af6a, af12a):
+        assert af1.tree_size == 1
+        assert af2a.tree_size == 2
+        assert af2b.tree_size == 2
+        assert af6a.tree_size == 6
+        assert af12a.tree_size == 12
 
-    def test_formula_degree(self, ncaf1, ncaf2a, ncaf2b, ncaf6a, ncaf12a):
-        assert ncaf1.formula_degree == 0
-        assert ncaf2a.formula_degree == 1
-        assert ncaf2b.formula_degree == 1
-        assert ncaf6a.formula_degree == 1
-        assert ncaf12a.formula_degree == 4
+    def test_formula_degree(self, af1, af2a, af2b, af6a, af12a):
+        assert af1.formula_degree == 0
+        assert af2a.formula_degree == 1
+        assert af2b.formula_degree == 1
+        assert af6a.formula_degree == 1
+        assert af12a.formula_degree == 4
 
-    def test_is_abstract_formula_equivalent_to(self, ncaf1, ncaf2a, ncaf2b, ncaf6a, ncaf12a):
-        assert ncaf1.is_canonical_abstract_formula_equivalent_to(caf1)
-        assert ncaf2a.is_canonical_abstract_formula_equivalent_to(caf2a)
-        assert ncaf2b.is_canonical_abstract_formula_equivalent_to(caf2b)
-        assert ncaf6a.is_canonical_abstract_formula_equivalent_to(caf6a)
-        assert ncaf12a.is_canonical_abstract_formula_equivalent_to(caf12a)
+    def test_is_abstract_formula_equivalent_to(self, af1, af2a, af2b, af6a, af12a):
+        assert af1.is_canonical_abstract_formula_equivalent_to(af1)
+        assert af2a.is_canonical_abstract_formula_equivalent_to(af2a)
+        assert af2b.is_canonical_abstract_formula_equivalent_to(af2b)
+        assert af6a.is_canonical_abstract_formula_equivalent_to(af6a)
+        assert af12a.is_canonical_abstract_formula_equivalent_to(af12a)
 
-        assert not ncaf1.is_canonical_abstract_formula_equivalent_to(caf2a)
-        assert not ncaf1.is_canonical_abstract_formula_equivalent_to(caf2b)
-        assert not ncaf1.is_canonical_abstract_formula_equivalent_to(caf6a)
-        assert not ncaf1.is_canonical_abstract_formula_equivalent_to(caf12a)
+        assert not af1.is_canonical_abstract_formula_equivalent_to(af2a)
+        assert not af1.is_canonical_abstract_formula_equivalent_to(af2b)
+        assert not af1.is_canonical_abstract_formula_equivalent_to(af6a)
+        assert not af1.is_canonical_abstract_formula_equivalent_to(af12a)
 
     def test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(self):
         tree_of_pairs = (0, (),)
@@ -174,7 +174,7 @@ class TestAbstractFormula:
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert (t, s,) == (((), (((((),),),),), ((),),), (3, 9, 8, 3, 2, 3, 2, 7, 0,),)
 
-    def test_build_formula_from_tree_of_integer_tuple_pairs(self, ncaf1):
+    def test_build_formula_from_tree_of_integer_tuple_pairs(self, af1):
         tree_of_pairs = (0, (),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.AbstractFormula(t, s)
@@ -201,11 +201,11 @@ class TestAbstractFormula:
         psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
 
-    def test_get_sub_tree_by_path(self, ncaf1, ncaf2a, ncaf6a, ncaf12a, ncaf_big):
-        assert ncaf1.get_sub_formula_by_path((0,)) == ncaf1
-        assert ncaf2a.get_sub_formula_by_path((0,)) == ncaf2a
-        assert ncaf2a.get_sub_formula_by_path((0, 0,)) == ncaf1
+    def test_get_sub_formula_by_path(self, af1, af2a, af6a, af12a, af_big):
+        assert af1.get_sub_formula_by_path((0,)) == af1
+        assert af2a.get_sub_formula_by_path((0,)) == af2a
+        assert af2a.get_sub_formula_by_path((0, 0,)) == af1
 
-        assert ncaf_big.get_sub_formula_by_path((0, 3,)) == ncaf12a
-        assert ncaf_big.get_sub_formula_by_path((0, 3, 2,)) == (0, 1, 2,)
-        assert ncaf_big.get_sub_formula_by_path((0, 3, 2, 4,)) == (0, 1, 2,)
+        assert af_big.get_sub_formula_by_path((0, 3,)) == af12a
+        assert af_big.get_sub_formula_by_path((0, 3, 2,)) == (0, 1, 2,)
+        assert af_big.get_sub_formula_by_path((0, 3, 2, 4,)) == (0, 1, 2,)
