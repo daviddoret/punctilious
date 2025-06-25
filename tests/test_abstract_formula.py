@@ -84,7 +84,7 @@ class TestAbstractFormula:
         assert l[10] == pu.sl.NaturalNumberSequence(10, 11, )
         assert l[11] == pu.sl.NaturalNumberSequence(11, )
 
-    def test_iterate_sub_formulas_direct(self, af1, af2a, af2b, af12a, af6a):
+    def test_iterate_immediate_sub_formulas(self, af1, af2a, af2b, af12a, af6a):
         l = tuple(af for af in af1.iterate_immediate_sub_formulas())
         assert len(l) == 0
         l = tuple(af for af in af2a.iterate_immediate_sub_formulas())
@@ -97,7 +97,7 @@ class TestAbstractFormula:
         assert l[2] == af6a
         assert l[3] == af2b
 
-    def test_iterate_sub_formulas_depth_first_ascending(self, af1, af2a, af2b, af6a, af12a):
+    def test_iterate_sub_formulas(self, af1, af2a, af2b, af6a, af12a):
         l = tuple(t for t in af1.iterate_sub_formulas())
         assert l[0] == af1
         l = tuple(t for t in af2a.iterate_sub_formulas())

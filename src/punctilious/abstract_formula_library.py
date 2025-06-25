@@ -432,16 +432,6 @@ class AbstractFormula(tuple):
             # yield the child RGF sequence
             yield sub_sequence
 
-    def iterate_sub_natural_numbers_sequences(self) -> \
-            collections.abc.Generator[sl.NaturalNumberSequence, None, None]:
-        s: sl.NaturalNumberSequence
-        for s in self.iterate_sub_sequences():
-            # converts ths sub-sequence to an RGF sequence, which modifies all values to start with 1.
-            sub_sequence: sl.NaturalNumberSequence = sl.convert_arbitrary_sequence_to_unrestricted_sequence(
-                s)
-            # yield the child RGF sequence
-            yield sub_sequence
-
     def iterate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
         """Iterates the sub-formulas of the :class:`AbstractFormula` using the `depth-first, ascending nodes` algorithm.
 
@@ -452,7 +442,7 @@ class AbstractFormula(tuple):
         child_tree: rpt.RootedPlaneTree
         child_sequence: sl.NaturalNumberSequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_subtrees(),
-                                              self.iterate_sub_natural_numbers_sequences()):
+                                              self.iterate_sub_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
