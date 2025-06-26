@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Cleanup">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="data model simplification">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -992,14 +989,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01428" summary="RGF sequence initial value=0">
-      <option name="closed" value="true" />
-      <created>1750091484477</created>
-      <option name="number" value="01428" />
-      <option name="presentableId" value="LOCAL-01428" />
-      <option name="project" value="LOCAL" />
-      <updated>1750091484477</updated>
-    </task>
     <task id="LOCAL-01429" summary="RGF sequence initial value=0">
       <option name="closed" value="true" />
       <created>1750092141638</created>
@@ -1384,7 +1373,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750878519350</updated>
     </task>
-    <option name="localTasksCounter" value="1477" />
+    <task id="LOCAL-01477" summary="data model simplification">
+      <option name="closed" value="true" />
+      <created>1750972030833</created>
+      <option name="number" value="01477" />
+      <option name="presentableId" value="LOCAL-01477" />
+      <option name="project" value="LOCAL" />
+      <updated>1750972030833</updated>
+    </task>
+    <option name="localTasksCounter" value="1478" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1437,7 +1434,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="RGF sequence initial value=0, sub-sequences, sub-restricted-growth-function-sequences." />
     <MESSAGE value="__util__ cleanup" />
     <MESSAGE value="equivalence for connectives and connective-sequences." />
     <MESSAGE value="equivalence for rpt." />
@@ -1462,7 +1458,8 @@
     <MESSAGE value="UnrestrictedSequence renamed to NaturalNumbersSequence" />
     <MESSAGE value="Revised data model with inheritance" />
     <MESSAGE value="Cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleanup" />
+    <MESSAGE value="data model simplification" />
+    <option name="LAST_COMMIT_MESSAGE" value="data model simplification" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

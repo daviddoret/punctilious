@@ -75,11 +75,10 @@ class TestNaturalNumbersSequence:
                                                                     nns00) == pu.sl.NaturalNumberSequence(
             *nns0123456789_10_11, *nns00)
 
-    def test_is_canonical(self, af1, af2a, af2b, af3a, af6a, af12a, af_big):
+    def test_is_canonical(self, af1, af2a, af2b, af6a, af12a, af_big):
         assert af1.is_canonical
         assert af2a.is_canonical
         assert af2b.is_canonical
-        assert af3a.is_canonical
         assert af6a.is_canonical
         assert af12a.is_canonical
         assert af_big.is_canonical

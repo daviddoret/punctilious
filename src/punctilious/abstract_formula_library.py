@@ -43,52 +43,6 @@ def declare_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
     return phi
 
 
-def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
-    """Declares a :class:`CanonicalAbstractFormula` object from a tree of integer/tuple pairs.
-
-    Use case:
-    Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.
-
-    Definition:
-    A tree of integer/tuple pairs `T` defined as:
-     T := (n, T')
-    where:
-     - n is a natural number
-     - T' is (possibly empty) tuple of trees of integer/tuple pairs.
-
-    Sample tree of integer/tuple pairs:
-    (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)
-    ...which maps to formula:
-    0(1,0(2,1),2)
-
-    :param p: A tree of integer/tuple pairs.
-    :return: a :class:`CanonicalAbstractFormula`.
-    """
-
-    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
-    t = rpt.build_rooted_plane_tree_from_tuple_tree(t)
-    s = sl.NaturalNumberSequence(*s)
-    phi = AbstractFormula(t, s)
-    return phi
-
-
-def Declare_formula_from_immediate_sub_formulas(
-        immediate_sub_formulas: tuple[FlexibleCanonicalAbstractFormula]) -> CanonicalAbstractFormula:
-    """Given a sequence of abstract-formulas 𝛷, declares a new formula 𝜓 such that:
-     - the formulas in 𝛷 are mapped to the immediate sub-formulas
-
-    :param immediate_sub_formulas:
-    :return:
-    """
-    immediate_sub_formulas: tuple[CanonicalAbstractFormula, ...] = tuple(
-        data_validate_canonical_abstract_formula(o=phi) for phi in immediate_sub_formulas)
-    phi: CanonicalAbstractFormula
-    s: sl.RestrictedGrowthFunctionSequence = itertools.chain.from_iterable(
-        phi.restricted_growth_function_sequence for phi in immediate_sub_formulas)
-    phi = CanonicalAbstractFormula(t=t, s=s)
-    raise NotImplementedError('review approach completely')
-
-
 def declare_abstract_formula_from_immediate_sub_formulas(
         n: int,
         s: tuple[
@@ -174,16 +128,6 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
 
 
 # Data validation functions
-
-def data_validate_canonical_abstract_formula(
-        o: FlexibleCanonicalAbstractFormula) -> CanonicalAbstractFormula:
-    if isinstance(o, CanonicalAbstractFormula):
-        return o
-    if isinstance(o, collections.abc.Iterable):
-        return CanonicalAbstractFormula(*o)
-    if isinstance(o, collections.abc.Generator):
-        return CanonicalAbstractFormula(*o)
-    raise util.PunctiliousException('CanonicalAbstractFormula data validation failure', type_of_o=type(o), o=o)
 
 
 def data_validate_abstract_formula(
@@ -602,7 +546,7 @@ class AbstractFormula(tuple):
         return self[1]
 
 
-class CanonicalAbstractFormula(AbstractFormula):
+class CanonicalAbstractFormula_OBSOLETE(AbstractFormula):
     """A :class:`CanonicalAbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is an RGF sequence.
@@ -1015,24 +959,11 @@ FlexibleAbstractFormula = typing.Union[
 
 # Aliases
 
-CAF = CanonicalAbstractFormula  # An alias for CanonicalAbstractFormula
-NCAF = AbstractFormula  # An alias for AbstractFormula
+AF = AbstractFormula  # An alias for AbstractFormula
 
 # Cache Management
 
-_canonical_abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
 _abstract_formula_cache = dict()  # cache mechanism assuring that unique abstract formulas are only instantiated once.
-
-
-def retrieve_canonical_abstract_formula_from_cache(o: FlexibleCanonicalAbstractFormula):
-    """cache mechanism assuring that unique canonical abstract formulas are only instantiated once."""
-    global _canonical_abstract_formula_cache
-    o: CanonicalAbstractFormula = data_validate_canonical_abstract_formula(o)
-    if hash(o) in _canonical_abstract_formula_cache.keys():
-        return _canonical_abstract_formula_cache[hash(o)]
-    else:
-        _canonical_abstract_formula_cache[hash(o)] = o
-        return o
 
 
 def retrieve_abstract_formula_from_cache(o: FlexibleAbstractFormula):
