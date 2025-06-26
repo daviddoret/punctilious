@@ -336,4 +336,4 @@ class Formula(tuple):
 
 FlexibleFormula = typing.Union[
     Formula, tuple[
-        sl.FlexibleConnectiveSequence, af.FlexibleCanonicalAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]
+        sl.FlexibleConnectiveSequence, af.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]

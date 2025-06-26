@@ -85,7 +85,7 @@ def t2_a_aa(t1_a):
 
 @pytest.fixture
 def t3_a_aa_aaa(t2_a_aa):
-    return pu.t_rpt.RootedPlaneTree(t2_a_aa)
+    return pu.rpt.RootedPlaneTree(t2_a_aa)
 
 
 @pytest.fixture
@@ -134,6 +134,11 @@ def nns10(s10):
 
 
 @pytest.fixture
+def nns000(s00):
+    return pu.sl.NaturalNumberSequence(*s00)
+
+
+@pytest.fixture
 def nns012345():
     return pu.sl.NaturalNumberSequence(0, 1, 2, 3, 4, 5, )
 
@@ -149,43 +154,18 @@ def nns0123456789_10_11():
 
 
 @pytest.fixture
-def rgfs0(s0):
-    return pu.sl.RestrictedGrowthFunctionSequence(*s0)
+def caf1(t1_a, nns0):
+    return pu.afl.CanonicalAbstractFormula(t1_a, nns0)
 
 
 @pytest.fixture
-def rgfs00(s00):
-    return pu.sl.RestrictedGrowthFunctionSequence(*s00)
+def caf2a(t2_a_aa, nns00):
+    return pu.afl.CanonicalAbstractFormula(t2_a_aa, nns00)
 
 
 @pytest.fixture
-def rgfs01(s01):
-    return pu.sl.RestrictedGrowthFunctionSequence(*s01)
-
-
-@pytest.fixture
-def rgfs012345():
-    return pu.sl.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, )
-
-
-@pytest.fixture
-def rgfs0123456789_10_11():
-    return pu.sl.RestrictedGrowthFunctionSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
-
-
-@pytest.fixture
-def caf1(t1_a, rgfs0):
-    return pu.afl.CanonicalAbstractFormula(t1_a, rgfs0)
-
-
-@pytest.fixture
-def caf2a(t2_a_aa, rgfs00):
-    return pu.afl.CanonicalAbstractFormula(t2_a_aa, rgfs00)
-
-
-@pytest.fixture
-def caf2b(t2_a_aa, rgfs01):
-    return pu.afl.CanonicalAbstractFormula(t2_a_aa, rgfs01)
+def caf2b(t2_a_aa, nns01):
+    return pu.afl.CanonicalAbstractFormula(t2_a_aa, nns01)
 
 
 @pytest.fixture
@@ -194,13 +174,13 @@ def caf3a(t3_a_aa_aaa, rgf3a):
 
 
 @pytest.fixture
-def caf6a(t6_a_aa_ab_ac_ad_ae, rgfs012345):
-    return pu.afl.CanonicalAbstractFormula(t6_a_aa_ab_ac_ad_ae, rgfs012345)
+def caf6a(t6_a_aa_ab_ac_ad_ae, nns012345):
+    return pu.afl.CanonicalAbstractFormula(t6_a_aa_ab_ac_ad_ae, nns012345)
 
 
 @pytest.fixture
-def caf12a(t12, rgfs0123456789_10_11):
-    return pu.afl.CanonicalAbstractFormula(t12, rgfs0123456789_10_11)
+def caf12a(t12, nns0123456789_10_11):
+    return pu.afl.CanonicalAbstractFormula(t12, nns0123456789_10_11)
 
 
 @pytest.fixture
@@ -213,33 +193,33 @@ def caf_big(t_big):
 
 
 @pytest.fixture
-def af1(t1_a, rgfs0):
-    return pu.afl.AbstractFormula(t1_a, rgfs0)
+def af1(t1_a, nns0):
+    return pu.afl.AbstractFormula(t1_a, nns0)
 
 
 @pytest.fixture
-def af2a(t2_a_aa, rgfs00):
-    return pu.afl.AbstractFormula(t2_a_aa, rgfs00)
+def af2a(t2_a_aa, nns00):
+    return pu.afl.AbstractFormula(t2_a_aa, nns00)
 
 
 @pytest.fixture
-def af2b(t2_a_aa, rgfs01):
-    return pu.afl.AbstractFormula(t2_a_aa, rgfs01)
+def af2b(t2_a_aa, nns01):
+    return pu.afl.AbstractFormula(t2_a_aa, nns01)
 
 
 @pytest.fixture
-def af3a(t3_a_aa_aaa, rgf3a):
-    return pu.afl.AbstractFormula(t3_a_aa_aaa, rgf3a)
+def af3a(t3_a_aa_aaa, nns3a):
+    return pu.afl.AbstractFormula(t3_a_aa_aaa, nns3a)
 
 
 @pytest.fixture
-def af6a(t6_a_aa_ab_ac_ad_ae, rgfs012345):
-    return pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, rgfs012345)
+def af6a(t6_a_aa_ab_ac_ad_ae, nns012345):
+    return pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, nns012345)
 
 
 @pytest.fixture
-def af12a(t12, rgfs0123456789_10_11):
-    return pu.afl.AbstractFormula(t12, rgfs0123456789_10_11)
+def af12a(t12, nns0123456789_10_11):
+    return pu.afl.AbstractFormula(t12, nns0123456789_10_11)
 
 
 @pytest.fixture

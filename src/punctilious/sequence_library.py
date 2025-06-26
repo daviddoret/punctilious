@@ -10,76 +10,90 @@ import connective
 
 # Data validation functions
 
-def data_validate_restricted_growth_function_sequence(
-        o: FlexibleRestrictedGrowthFunctionSequence) -> RestrictedGrowthFunctionSequence:
-    """Data validates `o` against type `RestrictedGrowthFunctionSequence`,
+
+def data_validate_natural_number_sequence(
+        o: FlexibleNaturalNumbersSequence) -> NaturalNumberSequence:
+    """Data validates `o` against type :class:`NaturalNumberSequence`,
     applying implicit conversion as necessary.
 
-    :param o: An object that may be interpreted as a `RestrictedGrowthFunctionSequence`.
+    :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
     :return:
     """
-    if isinstance(o, RestrictedGrowthFunctionSequence):
-        return o
     if isinstance(o, NaturalNumberSequence):
-        # Raises an exception if this is not an RGF-sequence
-        return RestrictedGrowthFunctionSequence(*o)
+        return o
     if isinstance(o, collections.abc.Iterable):
-        # Raises an exception if this is not an RGF-sequence
-        return RestrictedGrowthFunctionSequence(*o)
+        # This raises an exception if the sequence is not an RGF-sequence.
+        return NaturalNumberSequence(*o)
     if isinstance(o, collections.abc.Generator):
-        # Raises an exception if this is not an RGF-sequence
-        return RestrictedGrowthFunctionSequence(*o)
-    raise util.PunctiliousException('RestrictedGrowthFunctionSequence data validation failure', o=o)
+        # This raises an exception if the sequence is not an RGF-sequence.
+        return NaturalNumberSequence(*o)
+    raise util.PunctiliousException('NaturalNumberSequence data validation failure', o=o)
 
 
-def data_validate_restricted_growth_function_sequence_elements(
-        o: FlexibleRestrictedGrowthFunctionSequence,
-        raise_exception: bool = True) -> tuple[bool, FlexibleRestrictedGrowthFunctionSequence]:
-    """Coerces `o` :class:`RestrictedGrowthFunctionSequence` type.
+def data_validate_natural_number_sequence_elements(
+        o: FlexibleNaturalNumbersSequence, raise_exception_on_validation_failure: bool = True) -> tuple[
+    bool, FlexibleNaturalNumbersSequence | None]:
+    """Validates `o` against type :class:`NaturalNumberSequence`,
+    applying implicit conversion as necessary.
 
-    :param o:
-    :param raise_exception: Whether an exception is raised if coercion is fails.
-    :return: a tuple (b, o) where `b == True` if coercion was successful and `o` is the coerced object, `False` and `None` otherwise.
+    :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
+    :param raise_exception_on_validation_failure: Raises an exception if data validation fails.
+    :return: a tuple (v, s) where v is True if data validation was successful, False otherwise,
+        and s is the resulting natural-number sequence, or None if data validation failed.
     """
-    if isinstance(o, RestrictedGrowthFunctionSequence):
+    if isinstance(o, NaturalNumberSequence):
         # data validation is assured by the class logic.
         return True, o
-    elif isinstance(o, NaturalNumberSequence):
-        try:
-            # Raise an exception if the sequence is not an RGF-sequence
-            o: RestrictedGrowthFunctionSequence = RestrictedGrowthFunctionSequence(*o)
-            return True, o
-        except util.PunctiliousException:
-            return False, o
-    elif isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
+    if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
+        v: bool = True
         o = tuple(o)
-        o = tuple(int(n) for n in o)
-        if o[0] != 0:
-            if raise_exception:
-                raise util.PunctiliousException("The first element `x` of the RGF sequence `s` is not equal to 0.",
-                                                x=o[0], s=o)
+        if len(o) == 0:
+            if raise_exception_on_validation_failure:
+                raise util.PunctiliousException(
+                    "`o` is empty.", o=o)
             else:
-                return False, None
-        for i, n in enumerate(o):
-            if i < 0:
-                if raise_exception:
-                    raise util.PunctiliousException(
-                        "The i-th element `n` of the natural numbers sequence `s` is less than 0.",
-                        i=i, n=n, s=o)
-                else:
-                    return False, None
-            if i > 0 and n > max(o[0:i]) + 1:
-                if raise_exception:
-                    raise util.PunctiliousException(
-                        "The i-th element `n` of the RGF sequence `s` is greater than max(s[0:i]) + 1.",
-                        i=i, n=n, s=o)
-                else:
-                    return False, None
-        return True, o
-    if raise_exception:
-        raise util.PunctiliousException("Non-supported input.", o=o)
+                v = False
+        o = tuple(int(n) for n in o)
+        if any(n for n in o if n < 0):
+            if raise_exception_on_validation_failure:
+                raise util.PunctiliousException(
+                    "Some element of `o` is less than 0.", o=o)
+            else:
+                v = False
+        return v, o if v else None
+    if raise_exception_on_validation_failure:
+        raise util.PunctiliousException("The type of `o` is not supported.", o_type=type(o), o=o)
     else:
         return False, None
+
+
+def data_validate_connective_sequence(
+        o: FlexibleConnectiveSequence) -> ConnectiveSequence:
+    """Data validates `o` against type `ConnectiveSequence`,
+    applying implicit conversion as necessary.
+
+    :param o: An object that may be interpreted as a `ConnectiveSequence`.
+    :return:
+    """
+    if isinstance(o, ConnectiveSequence):
+        return o
+    if isinstance(o, collections.abc.Iterable):
+        return ConnectiveSequence(*o)
+    if isinstance(o, collections.abc.Generator):
+        return ConnectiveSequence(*o)
+    raise util.PunctiliousException('ConnectiveSequence data validation failure', o=o)
+
+
+def data_validate_connective_sequence_elements(
+        o: FlexibleConnectiveSequence) -> FlexibleConnectiveSequence:
+    if isinstance(o, ConnectiveSequence):
+        # data validation is assured by the class logic.
+        return o
+    if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
+        o = tuple(o)
+        o: tuple[connective.Connective, ...] = tuple(connective.data_validate_connective(n) for n in o)
+        return o
+    raise util.PunctiliousException('ConnectiveSequence elements data validation failure', o=o)
 
 
 # Classes
@@ -118,8 +132,8 @@ class NaturalNumberSequence(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
         """
         try:
-            s: NaturalNumberSequence = data_validate_natural_numbers_sequence(s)
-            return self.is_natural_numbers_sequence_equivalent_to(s)
+            s: NaturalNumberSequence = data_validate_natural_number_sequence(s)
+            return self.is_natural_number_sequence_equivalent_to(s)
         except util.PunctiliousException:
             return False
 
@@ -128,6 +142,7 @@ class NaturalNumberSequence(tuple):
 
     def __init__(self, *s):
         super(NaturalNumberSequence, self).__init__()
+        self._is_restricted_growth_function_sequence: bool | None = None
 
     def __ne__(self, s):
         """Returns `False` if `c` cannot be interpreted as a :class:`NaturalNumberSequence`,
@@ -142,13 +157,16 @@ class NaturalNumberSequence(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
        """
         try:
-            s: NaturalNumberSequence = data_validate_natural_numbers_sequence(s)
-            return not self.is_natural_numbers_sequence_equivalent_to(s)
+            s: NaturalNumberSequence = data_validate_natural_number_sequence(s)
+            return not self.is_natural_number_sequence_equivalent_to(s)
         except util.PunctiliousException:
             return False
 
     def __new__(cls, *s):
-        s: tuple[int] = data_validate_natural_numbers_sequence_elements(s)
+        v: bool
+        s: tuple[int] | None
+        r: bool
+        v, s = data_validate_natural_number_sequence_elements(s, raise_exception_on_validation_failure=True)
         s: tuple[int] = super(NaturalNumberSequence, cls).__new__(cls, s)
         s: tuple[int] = retrieve_natural_numbers_sequence_from_cache(s)
         return s
@@ -172,6 +190,7 @@ class NaturalNumberSequence(tuple):
 
         :return:
         """
+        raise util.PunctiliousException("REIMPLEMENT")
         return RestrictedGrowthFunctionSequence(*self)
 
     @property
@@ -185,16 +204,35 @@ class NaturalNumberSequence(tuple):
     @property
     def is_restricted_growth_function_sequence(self) -> bool:
         """`True` if this natural numbers sequence is also an RGF sequence, `False` otherwise.
+
+        Formal Definition:
+        A restricted-growth-function-sequence is a finite (computable) sequence
+        of natural numbers (n_0, n_1, ..., n_i) such that:
+            - n_0 = 0
+            - n_j <= 1 + max(n_0, n_1, ..., n_(j-1)) for 0 < j <= i
+
+        Synonyms:
+         - RGFS
+         - RGF sequence
+
+        Note:
+        Often RGF sequences have an initial value of 1 in the literature. We choose 0 here for consistency
+        with the design choice of using 0-based indexes as the default indexing method in Python.
+
         """
-        b: bool
-        b, _ = data_validate_restricted_growth_function_sequence_elements(self)
-        return b
+        if self._is_restricted_growth_function_sequence is None:
+            b: bool = True
+            for i, n in enumerate(self):
+                if i > 0 and n > max(self[0:i]) + 1:
+                    b = False
+            self._is_restricted_growth_function_sequence: bool = b
+        return self._is_restricted_growth_function_sequence
 
     @property
-    def is_natural_numbers_sequence(self) -> bool:
+    def is_natural_number_sequence(self) -> bool:
         return True
 
-    def is_natural_numbers_sequence_equivalent_to(self, s: FlexibleNaturalNumbersSequence):
+    def is_natural_number_sequence_equivalent_to(self, s: FlexibleNaturalNumbersSequence):
         """
 
         Formal definition:
@@ -205,7 +243,7 @@ class NaturalNumberSequence(tuple):
         :param s:
         :return:
         """
-        s: NaturalNumberSequence = data_validate_natural_numbers_sequence(s)
+        s: NaturalNumberSequence = data_validate_natural_number_sequence(s)
         return self.length == s.length and all(x == y for x, y in zip(self, s))
 
     @property
@@ -219,148 +257,7 @@ class NaturalNumberSequence(tuple):
         return max(self)
 
 
-class RestrictedGrowthFunctionSequence(NaturalNumberSequence):
-    """A finite (computable) sequence of values starting at 0 whose maximal value increase is restricted.
-
-    Acronym: RGFS
-
-    Formal Definition:
-    A :class:`RestrictedGrowthFunctionSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_i) such that:
-        - n_0 = 0
-        - n_j <= 1 + max(n_0, n_1, ..., n_(j-1)) for 0 < j <= i
-
-    Note:
-    Often RGF sequences have an initial value of 1 in the literature. We choose 0 here for consistency
-    with the design choice of using 0-based indexes as the default indexing. In practice, 0-based indexes
-    were a natural choice for Python implementation.
-
-
-    """
-
-    def __add__(self, other):
-        """Concatenates the current :class:`RestrictedGrowthFunctionSequence` with another one.
-
-        Note:
-            This enables the usage of the python sum function, e.g.: sum(s1, s2, ...).
-
-        :param other:
-        :return:
-        """
-        return concatenate_flexible_restricted_growth_function_sequences(self, other)
-
-    def __eq__(self, s):
-        """Returns `False` if `s` cannot be interpreted as a :class:`RestrictedGrowthFunctionSequence`,
-        returns `True` if `s` is connective-sequence-equivalent to this :class:`RestrictedGrowthFunctionSequence`,
-        returns `False` otherwise.
-
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-        """
-        try:
-            s: RestrictedGrowthFunctionSequence = data_validate_restricted_growth_function_sequence(s)
-            return self.is_restricted_growth_function_sequence_equivalent_to(s)
-        except util.PunctiliousException:
-            return False
-
-    def __hash__(self):
-        return hash((RestrictedGrowthFunctionSequence, *self.elements,))
-
-    def __init__(self, *s):
-        super(RestrictedGrowthFunctionSequence, self).__init__()
-
-    def __ne__(self, s):
-        """Returns `False` if `c` cannot be interpreted as a :class:`RestrictedGrowthFunctionSequence`,
-        returns `True` if `c` is not connective-sequence-equivalent to this :class:`RestrictedGrowthFunctionSequence`,
-        returns `False` otherwise.
-
-         Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-       """
-        try:
-            b: bool
-            s: RestrictedGrowthFunctionSequence = data_validate_restricted_growth_function_sequence(s)
-            return not self.is_restricted_growth_function_sequence_equivalent_to(s)
-        except util.PunctiliousException:
-            return False
-
-    def __new__(cls, *s):
-        b: bool
-        s: tuple[int]
-        b, s = data_validate_restricted_growth_function_sequence_elements(s, raise_exception=True)
-        s: tuple[int] = super(RestrictedGrowthFunctionSequence, cls).__new__(cls, *s)
-        s: tuple[int] = retrieve_restricted_growth_function_sequence_from_cache(s)
-        return s
-
-    def concatenate_with(self, *s: FlexibleRestrictedGrowthFunctionSequence) -> RestrictedGrowthFunctionSequence:
-        """Concatenates the current :class:`RestrictedGrowthFunctionSequence` with another one,
-        or an iterable of multiple ones.
-
-        Shortcuts:
-        s1 + s2
-        sum(s1, s2, ..., sn)
-
-        :param s:
-        :return:
-        """
-        return concatenate_flexible_restricted_growth_function_sequences(self, *s)
-
-    @property
-    def elements(self) -> tuple[int, ...]:
-        """The elements that compose this :class:`RestrictedGrowthFunctionSequence`, in order.
-
-        :return:
-        """
-        return tuple(super().__iter__())
-
-    @property
-    def is_restricted_growth_function_sequence(self) -> bool:
-        return True
-
-    @property
-    def is_natural_numbers_sequence(self) -> bool:
-        return True
-
-    def is_restricted_growth_function_sequence_equivalent_to(self, s: FlexibleRestrictedGrowthFunctionSequence):
-        """
-
-        Formal definition:
-        Two RGF-sequences s and t are RGF-sequence-equivalent if and only if:
-         - length(s) = length(t)
-         - s_i = t_i for 0 <= i < length(s)
-
-        :param s:
-        :return:
-        """
-        s: RestrictedGrowthFunctionSequence = data_validate_restricted_growth_function_sequence(s)
-        return self.length == s.length and all(x == y for x, y in zip(self, s))
-
-    @property
-    def length(self) -> int:
-        """The `length` of a finite sequence is the number of elements in the sequence."""
-        return len(self)
-
-    @property
-    def max_value(self) -> int:
-        """The `max_value` of a :class:`RestrictedGrowthFunctionSequence` is the maximum value of its elements."""
-        return max(self)
-
-    def convert_to_natural_numbers_sequence(self):
-        """Converts this :class:`RestrictedGrowthFunctionSequence` object to an :class:`NaturalNumberSequence`.
-
-        :return:
-        """
-        return NaturalNumberSequence(*self)
-
-
-def apply_canonical_labeling(s: NaturalNumberSequence) -> RestrictedGrowthFunctionSequence:
+def apply_canonical_labeling(s: FlexibleNaturalNumberSequence) -> NaturalNumberSequence:
     """Convert the :class:`NaturalNumberSequence` `s` into a :class:`RestrictedGrowthFunctionSequence` `t`,
     by applying canonical labeling.
 
@@ -386,67 +283,8 @@ def apply_canonical_labeling(s: NaturalNumberSequence) -> RestrictedGrowthFuncti
             mapping[n] = mapped_value
             mapped_value += 1
     s2 = tuple(mapping[n] for n in s)
+    raise util.PunctiliousException("RE-IKMPLEMENT!")
     return RestrictedGrowthFunctionSequence(*s2)
-
-
-def concatenate_flexible_restricted_growth_function_sequences(*s: tuple[
-    FlexibleRestrictedGrowthFunctionSequence, ...]) -> RestrictedGrowthFunctionSequence:
-    """Concatenates :class:`RestrictedGrowthFunctionSequence` elements.
-
-    :param s:
-    :return:
-    """
-    t: tuple[FlexibleRestrictedGrowthFunctionSequence] = tuple(itertools.chain.from_iterable(s))
-    return RestrictedGrowthFunctionSequence(*t)
-
-
-def data_validate_natural_numbers_sequence(
-        o: FlexibleNaturalNumbersSequence) -> NaturalNumberSequence:
-    """Data validates `o` against type :class:`NaturalNumberSequence`,
-    applying implicit conversion as necessary.
-
-    :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
-    :return:
-    """
-    if isinstance(o, NaturalNumberSequence):
-        return o
-    if isinstance(o, RestrictedGrowthFunctionSequence):
-        # This raises an exception if the sequence is not an RGF-sequence.
-        return NaturalNumberSequence(*o)
-    if isinstance(o, collections.abc.Iterable):
-        # This raises an exception if the sequence is not an RGF-sequence.
-        return NaturalNumberSequence(*o)
-    if isinstance(o, collections.abc.Generator):
-        # This raises an exception if the sequence is not an RGF-sequence.
-        return NaturalNumberSequence(*o)
-    raise util.PunctiliousException('NaturalNumberSequence data validation failure', o=o)
-
-
-def data_validate_natural_numbers_sequence_elements(
-        o: FlexibleNaturalNumbersSequence) -> FlexibleNaturalNumbersSequence:
-    if isinstance(o, NaturalNumberSequence):
-        # data validation is assured by the class logic.
-        return o
-    if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
-        o = tuple(o)
-        o = tuple(int(n) for n in o)
-        for i, n in enumerate(o):
-            if i < 0:
-                raise util.PunctiliousException(
-                    "The i-th element `n` of the natural numbers sequence `s` is less than 0.",
-                    i=i, n=n, s=o)
-        return o
-    raise util.PunctiliousException("Non-supported input.", o=o)
-
-
-def retrieve_natural_numbers_sequence_from_cache(i: NaturalNumberSequence):
-    """cache mechanism assuring that unique natural-numbers-sequences are only instantiated once."""
-    global _natural_numbers_sequence_cache
-    if hash(i) in _natural_numbers_sequence_cache.keys():
-        return _natural_numbers_sequence_cache[hash(i)]
-    else:
-        _natural_numbers_sequence_cache[hash(i)] = i
-        return i
 
 
 def concatenate_flexible_natural_numbers_sequences(*s: tuple[
@@ -458,45 +296,6 @@ def concatenate_flexible_natural_numbers_sequences(*s: tuple[
     """
     t: tuple[FlexibleNaturalNumbersSequence] = tuple(itertools.chain.from_iterable(s))
     return NaturalNumberSequence(*t)
-
-
-def data_validate_connective_sequence(
-        o: FlexibleConnectiveSequence) -> ConnectiveSequence:
-    """Data validates `o` against type `ConnectiveSequence`,
-    applying implicit conversion as necessary.
-
-    :param o: An object that may be interpreted as a `ConnectiveSequence`.
-    :return:
-    """
-    if isinstance(o, ConnectiveSequence):
-        return o
-    if isinstance(o, collections.abc.Iterable):
-        return ConnectiveSequence(*o)
-    if isinstance(o, collections.abc.Generator):
-        return ConnectiveSequence(*o)
-    raise util.PunctiliousException('ConnectiveSequence data validation failure', o=o)
-
-
-def data_validate_connective_sequence_elements(
-        o: FlexibleConnectiveSequence) -> FlexibleConnectiveSequence:
-    if isinstance(o, ConnectiveSequence):
-        # data validation is assured by the class logic.
-        return o
-    if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
-        o = tuple(o)
-        o: tuple[connective.Connective, ...] = tuple(connective.data_validate_connective(n) for n in o)
-        return o
-    raise util.PunctiliousException('ConnectiveSequence elements data validation failure', o=o)
-
-
-def retrieve_connective_sequence_from_cache(i: ConnectiveSequence):
-    """cache mechanism assuring that unique connective sequences are only instantiated once."""
-    global _connective_sequence_cache
-    if hash(i) in _connective_sequence_cache.keys():
-        return _connective_sequence_cache[hash(i)]
-    else:
-        _connective_sequence_cache[hash(i)] = i
-        return i
 
 
 class ConnectiveSequence(tuple):
@@ -587,32 +386,37 @@ class ConnectiveSequence(tuple):
 
 FlexibleConnectiveSequence = typing.Union[
     ConnectiveSequence, tuple[connective.Connective, ...], collections.abc.Iterator, collections.abc.Generator, None]
-FlexibleRestrictedGrowthFunctionSequence = typing.Union[
-    RestrictedGrowthFunctionSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
 FlexibleNaturalNumbersSequence = typing.Union[
     NaturalNumberSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 
 CS = ConnectiveSequence  # An alias for ConnectiveSequence.
-RGFS = RestrictedGrowthFunctionSequence  # An alias for RestrictedGrowthFunctionSequence
 US = NaturalNumberSequence  # An alias for NaturalNumberSequence
 
 # Cache management
 
 _connective_sequence_cache: dict[
     int, ConnectiveSequence] = {}  # cache for ConnectiveSequence elements.
-_restricted_growth_function_sequence_cache: dict[
-    int, RestrictedGrowthFunctionSequence] = dict()  # cache for RestrictedGrowthFunctionSequence elements.
 _natural_numbers_sequence_cache: dict[
     int, NaturalNumberSequence] = dict()  # cache for NaturalNumberSequence.
 
 
-def retrieve_restricted_growth_function_sequence_from_cache(i: RestrictedGrowthFunctionSequence):
-    """cache mechanism assuring that unique RGFS are only instantiated once."""
-    global _restricted_growth_function_sequence_cache
-    if hash(i) in _restricted_growth_function_sequence_cache.keys():
-        return _restricted_growth_function_sequence_cache[hash(i)]
+def retrieve_natural_numbers_sequence_from_cache(i: NaturalNumberSequence):
+    """cache mechanism assuring that unique natural-numbers-sequences are only instantiated once."""
+    global _natural_numbers_sequence_cache
+    if hash(i) in _natural_numbers_sequence_cache.keys():
+        return _natural_numbers_sequence_cache[hash(i)]
     else:
-        _restricted_growth_function_sequence_cache[hash(i)] = i
+        _natural_numbers_sequence_cache[hash(i)] = i
+        return i
+
+
+def retrieve_connective_sequence_from_cache(i: ConnectiveSequence):
+    """cache mechanism assuring that unique connective sequences are only instantiated once."""
+    global _connective_sequence_cache
+    if hash(i) in _connective_sequence_cache.keys():
+        return _connective_sequence_cache[hash(i)]
+    else:
+        _connective_sequence_cache[hash(i)] = i
         return i

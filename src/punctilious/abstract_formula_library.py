@@ -257,7 +257,7 @@ class AbstractFormula(tuple):
 
     def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
         t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
-        s: sl.NaturalNumberSequence = sl.data_validate_natural_numbers_sequence(s)
+        s: sl.NaturalNumberSequence = sl.data_validate_natural_number_sequence(s)
         if t.size != s.length:
             raise util.PunctiliousException(
                 f"`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.",
@@ -357,8 +357,20 @@ class AbstractFormula(tuple):
         """
         phi: AbstractFormula = data_validate_abstract_formula(phi)
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
-            phi.rooted_plane_tree) and self.natural_numbers_sequence.is_natural_numbers_sequence_equivalent_to(
+            phi.rooted_plane_tree) and self.natural_numbers_sequence.is_natural_number_sequence_equivalent_to(
             phi.natural_numbers_sequence)
+
+    @property
+    def is_canonical(self) -> bool:
+        """Returns `True` if this abstract-formula is in canonical form.
+
+        Definition:
+        An abstract-formula `phi` is `canonical` if and only if
+        its natural-number-sequence is a restricted-growth-function-sequence.
+
+        :return: `True` if this abstract-formula is in canonical form, `False` otherwise.
+        """
+        return self.natural_numbers_sequence.is_restricted_growth_function_sequence
 
     def is_sub_formula_of(self, phi: AbstractFormula):
         """Returns `True` if this :class:`AbstractFormula` if a sub-formula of :class:`AbstractFormula` phi.
@@ -997,9 +1009,6 @@ class CanonicalAbstractFormula(AbstractFormula):
 
 # Flexible types to facilitate data validation
 
-FlexibleCanonicalAbstractFormula = typing.Union[
-    CanonicalAbstractFormula, tuple[
-        rpt.FlexibleRootedPlaneTree, sl.FlexibleRestrictedGrowthFunctionSequence], collections.abc.Iterator, collections.abc.Generator, None]
 FlexibleAbstractFormula = typing.Union[
     AbstractFormula, tuple[
         rpt.FlexibleRootedPlaneTree, sl.FlexibleNaturalNumbersSequence], collections.abc.Iterator, collections.abc.Generator, None]
