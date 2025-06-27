@@ -1,7 +1,6 @@
 from __future__ import annotations
 import typing
 import collections
-import abc
 import itertools
 
 # package modules
@@ -319,11 +318,10 @@ class AbstractFormula(tuple):
         :param phi:
         :return:
         """
-        XXXX
         phi: AbstractFormula = data_validate_abstract_formula(phi)
         psi: AbstractFormula
-        for psi in self.iterate_sub_formulas():
-            if psi == phi:
+        for psi in phi.iterate_sub_formulas():
+            if self.is_abstract_formula_equivalent_to(psi):
                 return True
         return False
 

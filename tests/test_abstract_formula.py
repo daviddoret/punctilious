@@ -198,3 +198,9 @@ class TestAbstractFormula:
         assert pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
                                       (4, 5, 6, 7, 8, 9,)).represent_as_function() == "4(5, 6, 7, 8, 9)"
         assert af_big.represent_as_function() == "0(1(2, 0(2), 2(0, 3, 0, 1, 2), 0(3)), 2(0), 0(2, 0, 3, 0, 1), 2(0, 3(0), 0(1, 2, 4, 5, 2), 1(2)), 0(3))"
+
+    def test_is_subformula_of(self, t6_a_aa_ab_ac_ad_ae, af_big):
+        assert pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
+                                      (2, 0, 3, 0, 1, 2,)).is_sub_formula_of(af_big)
+        assert not pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
+                                          (2, 0, 3, 0, 2, 2,)).is_sub_formula_of(af_big)
