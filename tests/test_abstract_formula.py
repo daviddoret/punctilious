@@ -38,33 +38,60 @@ class TestAbstractFormula:
         assert l[2] == (4, 5, 6, 7, 8, 9,)
         assert l[3] == (10, 11,)
 
-    def test_iterate_sub_sequences(self, af1, nns0, af2a, nns01, af6a, af12a,
-                                   nns012345):
-        l = tuple(t for t in af1.iterate_sub_sequences())
-        assert l[0] == af1.natural_numbers_sequence
-        l = tuple(t for t in af2a.iterate_sub_sequences())
-        assert l[0] == af2a.natural_numbers_sequence
-        assert l[1] == nns0
-        l = tuple(t for t in af6a.iterate_sub_sequences())
-        assert l[0] == af6a.natural_numbers_sequence
-        assert l[1] == pu.sl.NaturalNumberSequence(1, )
-        assert l[2] == pu.sl.NaturalNumberSequence(2, )
-        assert l[3] == pu.sl.NaturalNumberSequence(3, )
-        assert l[4] == pu.sl.NaturalNumberSequence(4, )
-        assert l[5] == pu.sl.NaturalNumberSequence(5, )
-        l = tuple(t for t in af12a.iterate_sub_sequences())
-        assert l[0] == af12a.natural_numbers_sequence
-        assert l[1] == pu.sl.NaturalNumberSequence(1, )
-        assert l[2] == pu.sl.NaturalNumberSequence(2, 3, )
-        assert l[3] == pu.sl.NaturalNumberSequence(3, )
-        assert l[4] == pu.sl.NaturalNumberSequence(4, 5, 6, 7, 8, 9, )
-        assert l[5] == pu.sl.NaturalNumberSequence(5, )
-        assert l[6] == pu.sl.NaturalNumberSequence(6, )
-        assert l[7] == pu.sl.NaturalNumberSequence(7, )
-        assert l[8] == pu.sl.NaturalNumberSequence(8, )
-        assert l[9] == pu.sl.NaturalNumberSequence(9, )
-        assert l[10] == pu.sl.NaturalNumberSequence(10, 11, )
-        assert l[11] == pu.sl.NaturalNumberSequence(11, )
+    def test_iterate_sub_sequences(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t7_a_aa_ab_aaa_aaaa_aba_abaa):
+        phi = pu.afl.AbstractFormula(t1_a, (0,))
+        l = tuple(t for t in phi.iterate_sub_formulas())
+        assert len(l) == 1
+        assert l[0] == phi
+
+        phi = pu.afl.AbstractFormula(t1_a, (17,))
+        l = tuple(t for t in phi.iterate_sub_formulas())
+        assert len(l) == 1
+        assert l[0] == phi
+
+        phi = pu.afl.AbstractFormula(t2_a_aa, (0, 1,))
+        l = tuple(t for t in phi.iterate_sub_formulas())
+        assert len(l) == 2
+        assert l[0] == phi
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (1,))
+
+        phi = pu.afl.AbstractFormula(t2_a_aa, (3, 2,))
+        l = tuple(t for t in phi.iterate_sub_formulas())
+        assert len(l) == 2
+        assert l[0] == phi
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (2,))
+
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 0, 0,))
+        l = tuple(t for t in phi.iterate_sub_formulas())
+        assert len(l) == 3
+        assert l[0] == phi
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (0,))
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (0,))
+
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 1, 2,))
+        l = tuple(t for t in phi.iterate_sub_formulas())
+        assert len(l) == 3
+        assert l[0] == phi
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (1,))
+        assert l[2] == pu.afl.AbstractFormula(t1_a, (2,))
+
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (8, 1, 14,))
+        l = tuple(t for t in phi.iterate_sub_formulas())
+        assert len(l) == 3
+        assert l[0] == phi
+        assert l[1] == pu.afl.AbstractFormula(t1_a, (1,))
+        assert l[2] == pu.afl.AbstractFormula(t1_a, (14,))
+
+        phi = pu.afl.AbstractFormula(t7_a_aa_ab_aaa_aaaa_aba_abaa, (3, 1, 4, 1, 7, 9, 2,))
+        l = tuple(t for t in phi.iterate_sub_formulas())
+        assert len(l) == 7
+        assert l[0] == phi
+        assert l[1] == pu.afl.AbstractFormula(t3_a_aa_ab, (1, 4, 1,))
+        assert l[2] == pu.afl.AbstractFormula(t1_a, (4,))
+        assert l[3] == pu.afl.AbstractFormula(t1_a, (1,))
+        assert l[4] == pu.afl.AbstractFormula(t3_a_aa_ab, (7, 9, 2,))
+        assert l[5] == pu.afl.AbstractFormula(t1_a, (9,))
+        assert l[6] == pu.afl.AbstractFormula(t1_a, (2,))
 
     def test_iterate_immediate_sub_formulas(self, af1, af1b, af2a, t2_a_aa, af2b, af12a, af6a, t6_a_aa_ab_ac_ad_ae):
         l = tuple(af for af in af1.iterate_immediate_sub_formulas())
