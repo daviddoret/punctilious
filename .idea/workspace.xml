@@ -7,8 +7,6 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="data model simplification">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -125,7 +123,7 @@
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_natural_numbers_sequences.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_sequences.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_subsequences_direct_ascending.executor": "Run",
-    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_represent_as_function.executor": "Debug",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_represent_as_function.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_tree_size.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Debug",
@@ -993,14 +991,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01431" summary="RGF sequence initial value=0, sub-sequences, sub-restricted-growth-function-sequences.">
-      <option name="closed" value="true" />
-      <created>1750099279422</created>
-      <option name="number" value="01431" />
-      <option name="presentableId" value="LOCAL-01431" />
-      <option name="project" value="LOCAL" />
-      <updated>1750099279422</updated>
-    </task>
     <task id="LOCAL-01432" summary="__util__ cleanup">
       <option name="closed" value="true" />
       <created>1750099838627</created>
@@ -1385,7 +1375,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751000493864</updated>
     </task>
-    <option name="localTasksCounter" value="1480" />
+    <task id="LOCAL-01480" summary="data model simplification">
+      <option name="closed" value="true" />
+      <created>1751002571251</created>
+      <option name="number" value="01480" />
+      <option name="presentableId" value="LOCAL-01480" />
+      <option name="project" value="LOCAL" />
+      <updated>1751002571251</updated>
+    </task>
+    <option name="localTasksCounter" value="1481" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1553,11 +1551,6 @@
           <url>file://$PROJECT_DIR$/tests/test_formula.py</url>
           <line>51</line>
           <option name="timeStamp" value="441" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>197</line>
-          <option name="timeStamp" value="466" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

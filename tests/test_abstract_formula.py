@@ -194,6 +194,7 @@ class TestAbstractFormula:
         assert af_big.get_sub_formula_by_path((0, 3, 2,)) == (0, 1, 2,)
         assert af_big.get_sub_formula_by_path((0, 3, 2, 4,)) == (0, 1, 2,)
 
-    def test_represent_as_function(self, t6_a_aa_ab_ac_ad_ae):
+    def test_represent_as_function(self, t6_a_aa_ab_ac_ad_ae, af_big):
         assert pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
                                       (4, 5, 6, 7, 8, 9,)).represent_as_function() == "4(5, 6, 7, 8, 9)"
+        assert af_big.represent_as_function() == "0(1(2, 0(2), 2(0, 3, 0, 1, 2), 0(3)), 2(0), 0(2, 0, 3, 0, 1), 2(0, 3(0), 0(1, 2, 4, 5, 2), 1(2)), 0(3))"
