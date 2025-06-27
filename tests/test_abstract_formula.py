@@ -1,6 +1,7 @@
 import pytest
 
 import punctilious as pu
+from conftest import t6_a_aa_ab_ac_ad_ae, t2_a_aa
 
 
 class TestAbstractFormula:
@@ -37,25 +38,6 @@ class TestAbstractFormula:
         assert l[2] == (4, 5, 6, 7, 8, 9,)
         assert l[3] == (10, 11,)
 
-    def test_iterate_immediate_sub_natural_numbers_sequences(self, af1, nns0, af2a, nns01, af6a,
-                                                             nns012345,
-                                                             af12a, nns0123456789_10_11):
-        l = tuple(t for t in af1.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert len(l) == 0
-        l = tuple(t for t in af2a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == nns0
-        l = tuple(t for t in af6a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == nns0
-        assert l[1] == nns0
-        assert l[2] == nns0
-        assert l[3] == nns0
-        assert l[4] == nns0
-        l = tuple(t for t in af12a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == nns0
-        assert l[1] == nns01
-        assert l[2] == nns012345
-        assert l[3] == nns01
-
     def test_iterate_sub_sequences(self, af1, nns0, af2a, nns01, af6a, af12a,
                                    nns012345):
         l = tuple(t for t in af1.iterate_sub_sequences())
@@ -84,18 +66,18 @@ class TestAbstractFormula:
         assert l[10] == pu.sl.NaturalNumberSequence(10, 11, )
         assert l[11] == pu.sl.NaturalNumberSequence(11, )
 
-    def test_iterate_immediate_sub_formulas(self, af1, af2a, af2b, af12a, af6a):
+    def test_iterate_immediate_sub_formulas(self, af1, af1b, af2a, t2_a_aa, af2b, af12a, af6a, t6_a_aa_ab_ac_ad_ae):
         l = tuple(af for af in af1.iterate_immediate_sub_formulas())
         assert len(l) == 0
         l = tuple(af for af in af2a.iterate_immediate_sub_formulas())
         assert l[0] == af1
         l = tuple(af for af in af2b.iterate_immediate_sub_formulas())
-        assert l[0] == af1
+        assert l[0] == af1b
         l = tuple(af for af in af12a.iterate_immediate_sub_formulas())
-        assert l[0] == af1
-        assert l[1] == af2b
-        assert l[2] == af6a
-        assert l[3] == af2b
+        assert l[0] == af1b
+        assert l[1] == pu.afl.AbstractFormula(t2_a_aa, (2, 3,))
+        assert l[2] == pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, (4, 5, 6, 7, 8, 9,))
+        assert l[3] == pu.afl.AbstractFormula(t2_a_aa, (10, 11,))
 
     def test_iterate_sub_formulas(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, af1, af2a, af2b, af6a, af12a):
         l = tuple(t for t in af1.iterate_sub_formulas())
@@ -201,11 +183,17 @@ class TestAbstractFormula:
         psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
 
-    def test_get_sub_formula_by_path(self, af1, af2a, af6a, af12a, af_big):
+    def test_get_sub_formula_by_path(self, af1, af2a, af6a, af12a, af_big, t12):
         assert af1.get_sub_formula_by_path((0,)) == af1
         assert af2a.get_sub_formula_by_path((0,)) == af2a
         assert af2a.get_sub_formula_by_path((0, 0,)) == af1
 
-        assert af_big.get_sub_formula_by_path((0, 3,)) == af12a
+        assert af_big.get_sub_formula_by_path((0, 3,)) == pu.afl.AbstractFormula(
+            t=t12,
+            s=(4, 3, 3, 2, 3, 2, 2, 2, 2, 2, 3, 2))
         assert af_big.get_sub_formula_by_path((0, 3, 2,)) == (0, 1, 2,)
         assert af_big.get_sub_formula_by_path((0, 3, 2, 4,)) == (0, 1, 2,)
+
+    def test_represent_as_function(self, t6_a_aa_ab_ac_ad_ae):
+        assert pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
+                                      (4, 5, 6, 7, 8, 9,)).represent_as_function() == "4(5, 6, 7, 8, 9)"

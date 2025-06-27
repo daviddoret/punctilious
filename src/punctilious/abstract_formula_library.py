@@ -335,7 +335,7 @@ class AbstractFormula(tuple):
         :return: A generator of :class:`AbstractFormula`.
         """
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_immediate_subtrees(),
-                                              self.iterate_immediate_sub_restricted_growth_function_sequences()):
+                                              self.iterate_immediate_sub_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
@@ -358,22 +358,6 @@ class AbstractFormula(tuple):
             yield sub_sequence
             # truncate the remaining sequence
             i += child_tree.size
-
-    def iterate_immediate_sub_restricted_growth_function_sequences(self) -> typing.Generator[
-        sl.RestrictedGrowthFunctionSequence, None, None]:
-        """Iterates the direct child sub-sequences of this :class:`AbstractFormula`,
-        applying canonical labeling to resulting sequences.
-
-        Note: the immediate sub-sequences are determined by:
-         - 1) the parent sequence,
-         - and 2) the rooted plane tree.
-        """
-        s: sl.NaturalNumberSequence
-        for s in self.iterate_immediate_sub_sequences():
-            sub_sequence: sl.RestrictedGrowthFunctionSequence = sl.apply_canonical_labeling(
-                s)
-            # yield this child RGF sequence
-            yield sub_sequence
 
     def iterate_sub_sequences(self) -> collections.abc.Generator[sl.NaturalNumberSequence, None, None]:
         i: int
@@ -432,7 +416,7 @@ class AbstractFormula(tuple):
             if len(connectives) != len(self.natural_numbers_sequence):
                 raise util.PunctiliousException(
                     "The length of the connectives tuple is not equal to the length "
-                    "of the abstract-formula's RGF sequence.",
+                    "of the abstract-formula's natural-number-sequence.",
                     connectives_length=len(connectives),
                     rgf_sequence_length=self.natural_numbers_sequence.length,
                     connectives=connectives,
@@ -444,7 +428,9 @@ class AbstractFormula(tuple):
 
     @property
     def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
-        """Shortcut: self.t."""
+        """The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.
+
+        Shortcut: self.t."""
         return self[0]
 
     @property
@@ -537,7 +523,9 @@ class AbstractFormula(tuple):
 
     @property
     def natural_numbers_sequence(self) -> sl.NaturalNumberSequence:
-        """Shortcut: self.s.
+        """The :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.
+
+        Shortcut: self.s.
 
         :return:
         """

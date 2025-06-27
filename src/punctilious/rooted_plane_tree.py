@@ -291,7 +291,7 @@ class RootedPlaneTree(tuple):
         for i, child in enumerate(self.immediate_subtrees):
             if i > 0:
                 output += ", "
-            sub_sequence = connectives[1:]
+            sub_sequence = connectives[i + 1:]
             output += child.represent_as_function(connectives=sub_sequence)
         if not self.is_leaf:
             output += ")"
