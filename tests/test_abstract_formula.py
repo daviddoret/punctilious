@@ -17,10 +17,10 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
 
-    def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, rgfs0, af2a, rgfs01,
+    def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, nns0, af2a, nns01,
                                              af6a,
-                                             rgfs012345,
-                                             af12a, rgfs0123456789_10_11):
+                                             nns012345,
+                                             af12a, nns0123456789_10_11):
         l = tuple(t for t in af1.iterate_immediate_sub_sequences())
         assert len(l) == 0
         l = tuple(t for t in af2a.iterate_immediate_sub_sequences())
@@ -37,32 +37,32 @@ class TestAbstractFormula:
         assert l[2] == (4, 5, 6, 7, 8, 9,)
         assert l[3] == (10, 11,)
 
-    def test_iterate_immediate_sub_natural_numbers_sequences(self, af1, rgfs0, af2a, rgfs01, af6a,
-                                                             rgfs012345,
-                                                             af12a, rgfs0123456789_10_11):
+    def test_iterate_immediate_sub_natural_numbers_sequences(self, af1, nns0, af2a, nns01, af6a,
+                                                             nns012345,
+                                                             af12a, nns0123456789_10_11):
         l = tuple(t for t in af1.iterate_immediate_sub_restricted_growth_function_sequences())
         assert len(l) == 0
         l = tuple(t for t in af2a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == rgfs0
+        assert l[0] == nns0
         l = tuple(t for t in af6a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == rgfs0
-        assert l[1] == rgfs0
-        assert l[2] == rgfs0
-        assert l[3] == rgfs0
-        assert l[4] == rgfs0
+        assert l[0] == nns0
+        assert l[1] == nns0
+        assert l[2] == nns0
+        assert l[3] == nns0
+        assert l[4] == nns0
         l = tuple(t for t in af12a.iterate_immediate_sub_restricted_growth_function_sequences())
-        assert l[0] == rgfs0
-        assert l[1] == rgfs01
-        assert l[2] == rgfs012345
-        assert l[3] == rgfs01
+        assert l[0] == nns0
+        assert l[1] == nns01
+        assert l[2] == nns012345
+        assert l[3] == nns01
 
-    def test_iterate_sub_sequences(self, af1, rgfs0, af2a, rgfs01, af6a, af12a,
-                                   rgfs012345):
+    def test_iterate_sub_sequences(self, af1, nns0, af2a, nns01, af6a, af12a,
+                                   nns012345):
         l = tuple(t for t in af1.iterate_sub_sequences())
         assert l[0] == af1.natural_numbers_sequence
         l = tuple(t for t in af2a.iterate_sub_sequences())
         assert l[0] == af2a.natural_numbers_sequence
-        assert l[1] == rgfs0
+        assert l[1] == nns0
         l = tuple(t for t in af6a.iterate_sub_sequences())
         assert l[0] == af6a.natural_numbers_sequence
         assert l[1] == pu.sl.NaturalNumberSequence(1, )

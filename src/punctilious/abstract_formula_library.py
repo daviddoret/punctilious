@@ -100,7 +100,7 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
         return t, s
 
 
-def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
+def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs_DUPLICATE(p):
     """Given a tree of integer/tuple pairs, extracts:
      - its tree of tuples,
      - and its sequence of integers,
@@ -134,15 +134,12 @@ def data_validate_abstract_formula(
         o: FlexibleAbstractFormula) -> AbstractFormula:
     if isinstance(o, AbstractFormula):
         return o
-    if isinstance(o, CanonicalAbstractFormula):
-        # Every canonical abstract-formula is a  abstract formula.
-        # Implicit conversion is allowed.
-        return AbstractFormula(o.rooted_plane_tree, o.restricted_growth_function_sequence)
     if isinstance(o, collections.abc.Iterable):
         return AbstractFormula(*o)
     if isinstance(o, collections.abc.Generator):
         return AbstractFormula(*o)
-    raise util.PunctiliousException('AbstractFormula data validation failure', type_of_o=type(o), o=o)
+    raise util.PunctiliousException("`AbstractFormula` data validation failure. `o` is of unknown type.",
+                                    type_of_o=type(o), o=o)
 
 
 # Classes
@@ -220,7 +217,7 @@ class AbstractFormula(tuple):
     def formula_degree(self) -> int:
         """The `formula_degree` of an :class:`AbstractFormula` is the number of non-leaf nodes it contains.
 
-        This definition is derived from (Mancosu et al, 2021, p. 18).
+        This definition is derived from (Mancosu et al., 2021, p. 18).
 
         Attention point: do not confuse `tree_size` and `formula_degree`.
 
@@ -408,8 +405,9 @@ class AbstractFormula(tuple):
         attr:`AbstractFormula.natural_numbers_sequence`, that corresponds to the root
         node of the attr:`AbstractFormula.rooted_plane_tree`.
 
-        The term `main element` was designed in reference to the term `main connective`
-        (cf. Mancosu 2021, p. 17), but `main connective` is reserved for non-abstract formulas.
+        The term `main element` was coined in reference to the term `main connective`
+         (cf. Mancosu 2021, p. 17), because abstract-formulas are composed of sequences,
+         and thus `main connective` is reserved for "concrete" formulas.
 
         References:
          - Mancosu 2021
@@ -553,84 +551,6 @@ class CanonicalAbstractFormula_OBSOLETE(AbstractFormula):
 
     """
 
-    def __eq__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`CanonicalAbstractFormula`,
-        returns `True` if `t` is abstract-formula-equivalent to this :class:`CanonicalAbstractFormula`,
-        returns `False` otherwise.
-
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-        """
-        try:
-            t: CanonicalAbstractFormula = data_validate_canonical_abstract_formula(t)
-            return self.is_canonical_abstract_formula_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
-
-    def __hash__(self):
-        return hash((CanonicalAbstractFormula, self.rooted_plane_tree, self.restricted_growth_function_sequence,))
-
-    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleRestrictedGrowthFunctionSequence):
-        super(CanonicalAbstractFormula, self).__init__(t=t, s=s)
-        self._immediate_sub_formulas = None
-        self._sub_formulas = None
-
-    def __ne__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`CanonicalAbstractFormula`,
-        returns `True` if `t` is not abstract-formula-equivalent to this :class:`CanonicalAbstractFormula`,
-        returns `False` otherwise.
-
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-        """
-        try:
-            t: CanonicalAbstractFormula = data_validate_canonical_abstract_formula(t)
-            return not self.is_canonical_abstract_formula_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
-
-    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleRestrictedGrowthFunctionSequence):
-        t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
-        s: sl.RestrictedGrowthFunctionSequence = sl.data_validate_restricted_growth_function_sequence(s)
-        if t.size != s.length:
-            raise util.PunctiliousException(
-                f"`CanonicalAbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `RestrictedGrowthFunctionSequence`.",
-                t_size=t.size, s_length=s.length, t=t, s=s)
-        phi = super(CanonicalAbstractFormula, cls).__new__(cls, t=t, s=s)
-        phi = retrieve_canonical_abstract_formula_from_cache(phi)
-        return phi
-
-    def __repr__(self):
-        return self.represent_as_function()
-
-    def __str__(self):
-        return self.represent_as_function()
-
-    @property
-    def formula_degree(self) -> int:
-        """The `formula_degree` of an `CanonicalAbstractFormula` is the number of non-leaf nodes it contains.
-
-        This definition is derived from (Mancosu et al, 2021, p. 18).
-
-        Attention point: do not confuse `tree_size` and `formula_degree`.
-
-        :return:
-        """
-        i: int = 0
-        t: rpt.RootedPlaneTree
-        for t in self.rooted_plane_tree.iterate_subtrees():
-            if t.degree > 0:
-                i += 1
-        return i
-
     def get_sub_formula_by_path(self, p: tuple[int, ...]) -> CanonicalAbstractFormula:
         """Given a path `p`, returns the corresponding sub-formula.
 
@@ -684,23 +604,6 @@ class CanonicalAbstractFormula_OBSOLETE(AbstractFormula):
                 sub_formulas.append(phi)
             self._immediate_sub_formulas = tuple(sub_formulas)
         return self._immediate_sub_formulas
-
-    def is_canonical_abstract_formula_equivalent_to(self, phi: CanonicalAbstractFormula):
-        """Returns `True` if this :class:`CanonicalAbstractFormula` is abstract-formula-equivalent
-        to :class:`CanonicalAbstractFormula` `phi`.
-
-        Formal definition:
-        Two abstract-formulas phi and psi are abstract-formula-equivalent if and only if:
-        - the rooted-plane-tree of phi is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,
-        - the RGF-sequence of phi is sequence-equivalent to the RGF-sequence of psi.
-
-        :param phi:
-        :return:
-        """
-        phi: CanonicalAbstractFormula = data_validate_canonical_abstract_formula(phi)
-        return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
-            phi.rooted_plane_tree) and self.restricted_growth_function_sequence.is_restricted_growth_function_sequence_equivalent_to(
-            phi.restricted_growth_function_sequence)
 
     def is_sub_formula_of(self, phi: CanonicalAbstractFormula):
         """Returns `True` if this :class:`CanonicalAbstractFormula` if a sub-formula of :class:`CanonicalAbstractFormula` phi.
@@ -799,30 +702,6 @@ class CanonicalAbstractFormula_OBSOLETE(AbstractFormula):
             sub_formula = CanonicalAbstractFormula(child_tree, child_sequence)
             yield sub_formula
 
-    @property
-    def main_element(self) -> int:
-        """The `main_sequence_element` of an `CanonicalAbstractFormula` is the first element of the
-        attr:`AbstractFormula.restricted_growth_function_sequence`, that corresponds to the root
-        node of the attr:`AbstractFormula.rooted_plane_tree`.
-
-        By the definition of restricted growth function, the `main_sequence_element` is
-        always equal to 0.
-
-        Note that this is 0 by design choice of using 0 as the initial value
-        of RGF sequences, instead of 1 which is usual in the literature. In effect, using
-        0 is consistent with the design choice of using 0-based indexes in tuples,
-        which is a natural choice in Python implementations.
-
-        The term `main_sequence_element` was designed in reference to the term `main connective`,
-        cf. Mancosu 2021, p. 17.
-
-        References:
-         - Mancosu 2021
-
-        :return: 1
-        """
-        return self.restricted_growth_function_sequence[0]
-
     def represent_as_function(self, connectives: tuple | None = None) -> str:
         """Returns a string representation of the :class:`CanonicalAbstractFormula` using function notation.
 
@@ -856,21 +735,6 @@ class CanonicalAbstractFormula_OBSOLETE(AbstractFormula):
         :return:
         """
         return self[1]
-
-    @property
-    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
-        """Shortcut: self.t."""
-        return self[0]
-
-    @property
-    def s(self) -> sl.RestrictedGrowthFunctionSequence:
-        """A shortcut for self.restricted_growth_function_sequence."""
-        return self.restricted_growth_function_sequence
-
-    @property
-    def sequence_max_value(self) -> int:
-        """The `sequence_max_value` of an `CanonicalAbstractFormula` is the `max_value` of its `restricted_growth_function_sequence`."""
-        return self.restricted_growth_function_sequence.max_value
 
     @property
     def sub_formulas(self) -> tuple[CanonicalAbstractFormula, ...]:
@@ -928,27 +792,6 @@ class CanonicalAbstractFormula_OBSOLETE(AbstractFormula):
                 immediate_sub_formulas.append(phi)
         psi: CanonicalAbstractFormula = CanonicalAbstractFormula()
         raise NotImplementedError("Complete implementation here")
-
-    @property
-    def t(self) -> rpt.RootedPlaneTree:
-        """A shortcut for self.rooted_plane_tree."""
-        return self.rooted_plane_tree
-
-    @property
-    def tree_degree(self) -> int:
-        """The `tree_degree` of an `CanonicalAbstractFormula` is the number of vertices in its `RootedPlaneTree`.
-
-        Attention point: do not confuse `tree_degree` and `formula_degree`.
-        """
-        return self.rooted_plane_tree.degree
-
-    @property
-    def tree_size(self) -> int:
-        """The `tree_size` of an `CanonicalAbstractFormula` is the number of vertices in its `RootedPlaneTree`.
-
-        Attention point: do not confuse `tree_size` and `formula_degree`.
-        """
-        return self.rooted_plane_tree.size
 
 
 # Flexible types to facilitate data validation
