@@ -174,8 +174,9 @@ class AbstractFormula(tuple):
 
     def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
         super(AbstractFormula, self).__init__()
-        self._immediate_sub_formulas = None
-        self._sub_formulas = None
+        self._canonical_abstract_formula: AbstractFormula | None = None
+        self._immediate_sub_formulas: tuple[AbstractFormula, ...] | None = None
+        self._sub_formulas: tuple[AbstractFormula, ...] | None = None
 
     def __ne__(self, t):
         """Returns `False` if `t` cannot be interpreted as a :class:`AbstractFormula`,
@@ -211,6 +212,28 @@ class AbstractFormula(tuple):
 
     def __str__(self):
         return self.represent_as_function()
+
+    @property
+    def canonical_abstract_formula(self) -> AbstractFormula:
+        """
+
+        Definition: the canonical-abstract-formula `phi` of an abstract-formula `psi`
+        is a formula such that:
+         - their rooted-plane-tree are rooted-plane-tree-equivalent,
+         - the natural-number-sequence of `phi` is the canonical-naturel-number-sequence
+           of the natural-number-sequence of `psi`
+
+        :return:
+        """
+        if self.is_canonical:
+            return self
+        elif self._canonical_abstract_formula is not None:
+            return self._canonical_abstract_formula
+        else:
+            self._canonical_abstract_formula: AbstractFormula = AbstractFormula(
+                t=self.rooted_plane_tree,
+                s=self.natural_number_sequence.canonical_natural_number_sequence)
+            return self._canonical_abstract_formula
 
     @property
     def formula_degree(self) -> int:

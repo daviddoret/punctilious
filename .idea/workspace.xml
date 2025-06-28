@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="data model simplification">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,6 +114,7 @@
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_formula_degree.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_get_sub_tree_by_path.executor": "Debug",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_canonical.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_subformula_of.executor": "Debug",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_children.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_depth_first_ascending_with_index.executor": "Run",
@@ -310,8 +314,10 @@
     "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4.executor": "Debug",
     "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation.executor": "Run",
+    "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_natural_number_sequence.executor": "Run",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_canonical.executor": "Run",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_natural_numbers_sequence_equivalent_to.executor": "Run",
+    "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence.executor": "Run",
     "Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs.executor": "Run",
     "Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_construction_success.executor": "Run",
     "Python tests.pytest for test_non_canonical_abstract_formula.TestNonCanonicalAbstractFormula.test_iterate_immediate_sub_restricted_growth_function_sequences.executor": "Run",
@@ -608,7 +614,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_represent_as_function">
+  <component name="RunManager" selected="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_natural_number_sequence">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -803,7 +809,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_abstract_formula.TestAbstractFormula" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_is_canonical" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -816,41 +822,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_is_subformula_of" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula.test_is_subformula_of&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_sequences" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula.test_iterate_sub_sequences&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula.test_is_canonical&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -907,6 +879,57 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_natural_number_sequence" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_natural_number_sequence&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_canonical" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_canonical&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in punctilious" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -925,23 +948,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -953,22 +959,22 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula" />
-      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_subformula_of" />
-      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_sequences" />
+      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_canonical" />
+      <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_natural_number_sequence" />
+      <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_canonical" />
+      <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_represent_as_function" />
-      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_natural_number_sequence" />
+        <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence" />
+        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_canonical" />
+        <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_canonical" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_represent_as_function" />
-        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula" />
-        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_subformula_of" />
-        <item itemvalue="Python tests.pytest in tests" />
-        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_sub_sequences" />
       </list>
     </recent_temporary>
   </component>
@@ -990,14 +996,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01436" summary="equivalence for rpt.">
-      <option name="closed" value="true" />
-      <created>1750108262141</created>
-      <option name="number" value="01436" />
-      <option name="presentableId" value="LOCAL-01436" />
-      <option name="project" value="LOCAL" />
-      <updated>1750108262141</updated>
     </task>
     <task id="LOCAL-01437" summary="equivalence for abstract-formula and formula.">
       <option name="closed" value="true" />
@@ -1383,7 +1381,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751123233318</updated>
     </task>
-    <option name="localTasksCounter" value="1485" />
+    <task id="LOCAL-01485" summary="data model simplification">
+      <option name="closed" value="true" />
+      <created>1751137830274</created>
+      <option name="number" value="01485" />
+      <option name="presentableId" value="LOCAL-01485" />
+      <option name="project" value="LOCAL" />
+      <updated>1751137830274</updated>
+    </task>
+    <option name="localTasksCounter" value="1486" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

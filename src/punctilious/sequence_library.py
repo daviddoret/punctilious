@@ -143,6 +143,7 @@ class NaturalNumberSequence(tuple):
     def __init__(self, *s):
         super(NaturalNumberSequence, self).__init__()
         self._is_restricted_growth_function_sequence: bool | None = None
+        self._canonical_natural_number_sequence: NaturalNumberSequence | None = None
 
     def __ne__(self, s):
         """Returns `False` if `c` cannot be interpreted as a :class:`NaturalNumberSequence`,
@@ -170,6 +171,39 @@ class NaturalNumberSequence(tuple):
         s: tuple[int] = super(NaturalNumberSequence, cls).__new__(cls, s)
         s: tuple[int] = retrieve_natural_numbers_sequence_from_cache(s)
         return s
+
+    @property
+    def canonical_natural_number_sequence(self) -> NaturalNumberSequence:
+        """Convert the :class:`NaturalNumberSequence` `s` into a restricted-growth-function-sequence `t`,
+        by applying canonical labeling.
+
+        Definition - Canonical Labeling:
+        The canonical-labeling of a natural-numbers-sequence S is an RFG-sequence T such that:
+         - the value of the first element of S is mapped to 0
+         - whenever a new value x appears in S, it is mapped to max(t0, t1, ..., ti) + 1 where i is the index
+           position of x in S
+
+        Examples:
+        (3,5,2,1) --> (0,1,2,3)
+        (3,5,3,1,5,2) --> (0,1,0,2,1,3)
+
+        :return:
+        """
+        if self.is_restricted_growth_function_sequence:
+            return self
+        elif self._canonical_natural_number_sequence is not None:
+            return self._canonical_natural_number_sequence
+        else:
+            mapping: dict[int, int] = dict()
+            mapped_value: int = 0
+            n: int
+            for n in self:
+                if n not in mapping.keys():
+                    mapping[n] = mapped_value
+                    mapped_value += 1
+            s: tuple[int, ...] = tuple(mapping[n] for n in self)
+            self._canonical_natural_number_sequence = NaturalNumberSequence(*s)
+            return self._canonical_natural_number_sequence
 
     def concatenate_with(self, *s: FlexibleNaturalNumbersSequence) -> NaturalNumberSequence:
         """Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
@@ -220,13 +254,18 @@ class NaturalNumberSequence(tuple):
         with the design choice of using 0-based indexes as the default indexing method in Python.
 
         """
-        if self._is_restricted_growth_function_sequence is None:
-            b: bool = True
+        if self._is_restricted_growth_function_sequence is not None:
+            return self._is_restricted_growth_function_sequence
+        else:
             for i, n in enumerate(self):
+                if i == 0 and n > 0:
+                    self._is_restricted_growth_function_sequence: bool = False
+                    return self._is_restricted_growth_function_sequence
                 if i > 0 and n > max(self[0:i]) + 1:
-                    b = False
-            self._is_restricted_growth_function_sequence: bool = b
-        return self._is_restricted_growth_function_sequence
+                    self._is_restricted_growth_function_sequence: bool = False
+                    return self._is_restricted_growth_function_sequence
+            self._is_restricted_growth_function_sequence: bool = True
+            return self._is_restricted_growth_function_sequence
 
     @property
     def is_natural_number_sequence(self) -> bool:
@@ -255,36 +294,6 @@ class NaturalNumberSequence(tuple):
     def max_value(self) -> int:
         """The `max_value` of a `NaturalNumberSequence` is the maximum value of its elements."""
         return max(self)
-
-
-def apply_canonical_labeling(s: FlexibleNaturalNumberSequence) -> NaturalNumberSequence:
-    """Convert the :class:`NaturalNumberSequence` `s` into a :class:`RestrictedGrowthFunctionSequence` `t`,
-    by applying canonical labeling.
-
-    Definition - Canonical Labeling:
-    The canonical-labeling of an natural-numbers-sequence S is an RFG-sequence T such that:
-     - the value of the first element of S is mapped to 0
-     - whenever a new value x appears in S, it is mapped to max(t0, t1, ..., ti) + 1 where i is the index
-       position of x in S
-
-    Examples:
-    (3,5,2,1) --> (0,1,2,3)
-    (3,5,3,1,5,2) --> (0,1,0,2,1,3)
-
-
-    :param s:
-    :return: A canonical-labeling of `s`
-    """
-    mapping: dict[int, int] = dict()
-    mapped_value: int = 0
-    n: int
-    for n in s:
-        if n not in mapping.keys():
-            mapping[n] = mapped_value
-            mapped_value += 1
-    s2 = tuple(mapping[n] for n in s)
-    raise util.PunctiliousException("RE-IKMPLEMENT!")
-    return RestrictedGrowthFunctionSequence(*s2)
 
 
 def concatenate_flexible_natural_numbers_sequences(*s: tuple[

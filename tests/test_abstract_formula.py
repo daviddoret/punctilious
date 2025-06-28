@@ -18,6 +18,14 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
 
+    def test_is_canonical(self, af1, af2a, af2b, af6a, af12a, af_big):
+        assert af1.is_canonical
+        assert af2a.is_canonical
+        assert af2b.is_canonical
+        assert af6a.is_canonical
+        assert af12a.is_canonical
+        assert af_big.is_canonical
+
     def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, nns0, af2a, nns01,
                                              af6a,
                                              nns012345,

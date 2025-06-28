@@ -75,10 +75,29 @@ class TestNaturalNumbersSequence:
                                                                     nns00) == pu.sl.NaturalNumberSequence(
             *nns0123456789_10_11, *nns00)
 
-    def test_is_canonical(self, af1, af2a, af2b, af6a, af12a, af_big):
-        assert af1.is_canonical
-        assert af2a.is_canonical
-        assert af2b.is_canonical
-        assert af6a.is_canonical
-        assert af12a.is_canonical
-        assert af_big.is_canonical
+    def test_is_restricted_growth_function_sequence(self):
+        s = pu.sl.NaturalNumberSequence(0, 0, 0)
+        assert s.is_restricted_growth_function_sequence
+        s = pu.sl.NaturalNumberSequence(0, 1, 0)
+        assert s.is_restricted_growth_function_sequence
+        s = pu.sl.NaturalNumberSequence(0, 1, 2)
+        assert s.is_restricted_growth_function_sequence
+        s = pu.sl.NaturalNumberSequence(3, 2, 1)
+        assert not s.is_restricted_growth_function_sequence
+        s = pu.sl.NaturalNumberSequence(0, 2, 1)
+        assert not s.is_restricted_growth_function_sequence
+
+    def test_canonical_natural_number_sequence(self):
+        s = pu.sl.NaturalNumberSequence(3, 2, 1)
+        t = s.canonical_natural_number_sequence
+        u = pu.sl.NaturalNumberSequence(0, 1, 2)
+        assert t == u
+
+        s = pu.sl.NaturalNumberSequence(0, 1, 2)
+        t = s.canonical_natural_number_sequence
+        assert s == t
+
+        s = pu.sl.NaturalNumberSequence(0, 7, 9, 14, 14, 14, 12, 0, 2, 1, 7, 9)
+        t = s.canonical_natural_number_sequence
+        u = pu.sl.NaturalNumberSequence(0, 1, 2, 3, 3, 3, 4, 0, 5, 6, 1, 2)
+        assert t == u
