@@ -285,14 +285,23 @@ class RootedPlaneTree(tuple):
         if connectives is None:
             # By default, represent connectives with natural numbers.
             connectives: tuple[int] = tuple(range(0, self.size))
+        if len(connectives) != self.size:
+            raise util.PunctiliousException("The length of the connectives `c` is not equal to "
+                                            "the size of the rooted-plane-tree `t`.",
+                                            c_length=len(connectives),
+                                            c=connectives,
+                                            t_size=self.size,
+                                            t=self)
         output: str = str(connectives[0])
         if not self.is_leaf:
             output += "("
-        for i, child in enumerate(self.immediate_subtrees):
-            if i > 0:
+        j = 1
+        for child in self.immediate_subtrees:
+            if j > 1:
                 output += ", "
-            sub_sequence = connectives[i + 1:]
+            sub_sequence = connectives[j:j + child.size]
             output += child.represent_as_function(connectives=sub_sequence)
+            j += child.size
         if not self.is_leaf:
             output += ")"
         return output

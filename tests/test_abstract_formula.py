@@ -221,13 +221,36 @@ class TestAbstractFormula:
         assert af_big.get_sub_formula_by_path((0, 3, 2,)) == (0, 1, 2,)
         assert af_big.get_sub_formula_by_path((0, 3, 2, 4,)) == (0, 1, 2,)
 
-    def test_represent_as_function(self, t6_a_aa_ab_ac_ad_ae, af_big):
-        assert pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
-                                      (4, 5, 6, 7, 8, 9,)).represent_as_function() == "4(5, 6, 7, 8, 9)"
-        assert af_big.represent_as_function() == "0(1(2, 0(2), 2(0, 3, 0, 1, 2), 0(3)), 2(0), 0(2, 0, 3, 0, 1), 2(0, 3(0), 0(1, 2, 4, 5, 2), 1(2)), 0(3))"
+    def test_represent_as_function(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae, t12):
+        phi = pu.afl.AbstractFormula(t1_a, (0,))
+        assert phi.represent_as_function() == "0"
+        phi = pu.afl.AbstractFormula(t1_a, (17,))
+        assert phi.represent_as_function() == "17"
+        phi = pu.afl.AbstractFormula(t2_a_aa, (0, 0,))
+        assert phi.represent_as_function() == "0(0)"
+        phi = pu.afl.AbstractFormula(t2_a_aa, (0, 1,))
+        assert phi.represent_as_function() == "0(1)"
+        phi = pu.afl.AbstractFormula(t2_a_aa, (94, 12,))
+        assert phi.represent_as_function() == "94(12)"
+        phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (0, 0, 0,))
+        assert phi.represent_as_function() == "0(0(0))"
+        phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (0, 1, 2,))
+        assert phi.represent_as_function() == "0(1(2))"
+        phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (9, 5, 104,))
+        assert phi.represent_as_function() == "9(5(104))"
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 0, 0,))
+        assert phi.represent_as_function() == "0(0, 0)"
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 1, 2,))
+        assert phi.represent_as_function() == "0(1, 2)"
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (100, 102, 140,))
+        assert phi.represent_as_function() == "100(102, 140)"
+        phi = pu.afl.AbstractFormula(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
+        # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
+        # DEBUG HERE
+        assert phi.represent_as_function() == "0(1, 2(3), 4(5, 6, 7, 8, 9), 10(11))"
 
     def test_is_subformula_of(self, t6_a_aa_ab_ac_ad_ae, af_big):
-        assert pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
-                                      (2, 0, 3, 0, 1, 2,)).is_sub_formula_of(af_big)
+        phi = pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, (0, 2, 0, 3, 0, 1,))
+        assert phi.is_sub_formula_of(af_big)
         assert not pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
                                           (2, 0, 3, 0, 2, 2,)).is_sub_formula_of(af_big)

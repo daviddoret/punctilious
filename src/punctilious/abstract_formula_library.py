@@ -64,7 +64,7 @@ def declare_abstract_formula_from_immediate_sub_formulas(
     # Declare the new parent tree
     t: rpt.RootedPlaneTree = rpt.RootedPlaneTree(*t)
     u: sl.NaturalNumberSequence = (n,) + itertools.chain.from_iterable(
-        phi.natural_numbers_sequence for phi in s)
+        phi.natural_number_sequence for phi in s)
     phi: AbstractFormula = AbstractFormula(t=u, s=u)
     return phi
 
@@ -170,7 +170,7 @@ class AbstractFormula(tuple):
             return False
 
     def __hash__(self):
-        return hash((AbstractFormula, self.rooted_plane_tree, self.natural_numbers_sequence,))
+        return hash((AbstractFormula, self.rooted_plane_tree, self.natural_number_sequence,))
 
     def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
         super(AbstractFormula, self).__init__()
@@ -297,8 +297,8 @@ class AbstractFormula(tuple):
         """
         phi: AbstractFormula = data_validate_abstract_formula(phi)
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
-            phi.rooted_plane_tree) and self.natural_numbers_sequence.is_natural_number_sequence_equivalent_to(
-            phi.natural_numbers_sequence)
+            phi.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_sequence_equivalent_to(
+            phi.natural_number_sequence)
 
     @property
     def is_canonical(self) -> bool:
@@ -310,7 +310,7 @@ class AbstractFormula(tuple):
 
         :return: `True` if this abstract-formula is in canonical form, `False` otherwise.
         """
-        return self.natural_numbers_sequence.is_restricted_growth_function_sequence
+        return self.natural_number_sequence.is_restricted_growth_function_sequence
 
     def is_sub_formula_of(self, phi: AbstractFormula):
         """Returns `True` if this :class:`AbstractFormula` if a sub-formula of :class:`AbstractFormula` phi.
@@ -350,7 +350,7 @@ class AbstractFormula(tuple):
         child_tree: rpt.RootedPlaneTree
         for child_tree in self.rooted_plane_tree.iterate_immediate_subtrees():
             # retrieve the sub-sequence that is mapped to this child RPT
-            sub_sequence: tuple[int, ...] = self.natural_numbers_sequence[i:i + child_tree.size]
+            sub_sequence: tuple[int, ...] = self.natural_number_sequence[i:i + child_tree.size]
             sub_sequence: NaturalNumberSequence = NaturalNumberSequence(*sub_sequence)
             # yield this child RGF sequence
             yield sub_sequence
@@ -362,7 +362,7 @@ class AbstractFormula(tuple):
         sub_tree: rpt.RootedPlaneTree
         for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_subtrees()):
             # retrieves the sub-sequence in the sequence
-            sub_sequence: tuple[int, ...] = self.natural_numbers_sequence[i:i + sub_tree.size]
+            sub_sequence: tuple[int, ...] = self.natural_number_sequence[i:i + sub_tree.size]
             sub_sequence: sl.NaturalNumberSequence = sl.NaturalNumberSequence(*sub_sequence)
             # yield the child RGF sequence
             yield sub_sequence
@@ -396,7 +396,7 @@ class AbstractFormula(tuple):
 
         :return: 1
         """
-        return self.natural_numbers_sequence[0]
+        return self.natural_number_sequence[0]
 
     def represent_as_function(self, connectives: tuple | None = None) -> str:
         """Returns a string representation of the :class:`AbstractFormula` using function notation.
@@ -409,16 +409,16 @@ class AbstractFormula(tuple):
         :return:
         """
         if connectives is None:
-            connectives = self.natural_numbers_sequence
+            connectives = self.natural_number_sequence
         else:
-            if len(connectives) != len(self.natural_numbers_sequence):
+            if len(connectives) != len(self.natural_number_sequence):
                 raise util.PunctiliousException(
                     "The length of the connectives tuple is not equal to the length "
                     "of the abstract-formula's natural-number-sequence.",
                     connectives_length=len(connectives),
-                    rgf_sequence_length=self.natural_numbers_sequence.length,
+                    natural_number_sequence_length=self.natural_number_sequence.length,
                     connectives=connectives,
-                    rgf_sequence=self.natural_numbers_sequence,
+                    natural_number_sequence=self.natural_number_sequence,
                     abstract_formula=self
                 )
         return self.rooted_plane_tree.represent_as_function(
@@ -434,12 +434,12 @@ class AbstractFormula(tuple):
     @property
     def s(self) -> sl.NaturalNumberSequence:
         """A shortcut for self.natural_numbers_sequence."""
-        return self.natural_numbers_sequence
+        return self.natural_number_sequence
 
     @property
     def sequence_max_value(self) -> int:
         """The `sequence_max_value` of an :class:`AbstractFormula` is the `max_value` of its `natural_numbers_sequence`."""
-        return self.natural_numbers_sequence.max_value
+        return self.natural_number_sequence.max_value
 
     @property
     def sub_formulas(self) -> tuple[AbstractFormula, ...]:
@@ -520,7 +520,7 @@ class AbstractFormula(tuple):
         return self.rooted_plane_tree.size
 
     @property
-    def natural_numbers_sequence(self) -> sl.NaturalNumberSequence:
+    def natural_number_sequence(self) -> sl.NaturalNumberSequence:
         """The :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.
 
         Shortcut: self.s.
