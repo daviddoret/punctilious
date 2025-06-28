@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="data model simplification">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -993,14 +991,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01435" summary="equivalence for rpt.">
-      <option name="closed" value="true" />
-      <created>1750108090536</created>
-      <option name="number" value="01435" />
-      <option name="presentableId" value="LOCAL-01435" />
-      <option name="project" value="LOCAL" />
-      <updated>1750108090536</updated>
-    </task>
     <task id="LOCAL-01436" summary="equivalence for rpt.">
       <option name="closed" value="true" />
       <created>1750108262141</created>
@@ -1385,7 +1375,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751024493322</updated>
     </task>
-    <option name="localTasksCounter" value="1484" />
+    <task id="LOCAL-01484" summary="data model simplification">
+      <option name="closed" value="true" />
+      <created>1751123233317</created>
+      <option name="number" value="01484" />
+      <option name="presentableId" value="LOCAL-01484" />
+      <option name="project" value="LOCAL" />
+      <updated>1751123233318</updated>
+    </task>
+    <option name="localTasksCounter" value="1485" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1553,11 +1551,6 @@
           <url>file://$PROJECT_DIR$/tests/test_formula.py</url>
           <line>51</line>
           <option name="timeStamp" value="441" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>249</line>
-          <option name="timeStamp" value="443" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

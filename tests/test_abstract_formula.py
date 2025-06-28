@@ -244,10 +244,11 @@ class TestAbstractFormula:
         assert phi.represent_as_function() == "0(1, 2)"
         phi = pu.afl.AbstractFormula(t3_a_aa_ab, (100, 102, 140,))
         assert phi.represent_as_function() == "100(102, 140)"
-        phi = pu.afl.AbstractFormula(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
-        # DEBUG HERE
+        phi = pu.afl.AbstractFormula(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
         assert phi.represent_as_function() == "0(1, 2(3), 4(5, 6, 7, 8, 9), 10(11))"
+        phi = pu.afl.AbstractFormula(t12, (14, 0, 7, 2, 2, 9, 10, 11, 10, 5, 1, 9,))
+        assert phi.represent_as_function() == "14(0, 7(2), 2(9, 10, 11, 10, 5), 1(9))"
 
     def test_is_subformula_of(self, t6_a_aa_ab_ac_ad_ae, af_big):
         phi = pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, (0, 2, 0, 3, 0, 1,))
