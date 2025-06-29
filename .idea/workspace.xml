@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="NaturalNumberSequence.image &amp; image_cardinality">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -998,14 +998,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01443" summary="meta theory connectives">
-      <option name="closed" value="true" />
-      <created>1750159958458</created>
-      <option name="number" value="01443" />
-      <option name="presentableId" value="LOCAL-01443" />
-      <option name="project" value="LOCAL" />
-      <updated>1750159958458</updated>
-    </task>
     <task id="LOCAL-01444" summary="RPT: get_sub_tree_by_path">
       <option name="closed" value="true" />
       <created>1750332775243</created>
@@ -1390,7 +1382,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751176325773</updated>
     </task>
-    <option name="localTasksCounter" value="1492" />
+    <task id="LOCAL-01492" summary="NaturalNumberSequence.image &amp; image_cardinality">
+      <option name="closed" value="true" />
+      <created>1751182665282</created>
+      <option name="number" value="01492" />
+      <option name="presentableId" value="LOCAL-01492" />
+      <option name="project" value="LOCAL" />
+      <updated>1751182665282</updated>
+    </task>
+    <option name="localTasksCounter" value="1493" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -267,6 +267,18 @@ class NaturalNumberSequence(tuple):
         """
         return len(self.image)
 
+    def is_canonical_natural_number_sequence_equivalent(self, s) -> bool:
+        """`True` if this natural number sequence canonical-natural-number-sequence-equivalent
+        to the natural-number-sequence `s`, `False` otherwise.
+
+        Formal Definition:
+        Two natural-number-sequences `s` and `t` are canonical-natural-number-sequence-equivalent
+        if and only if their canonical-natural-number-sequence are natural-number-sequence-equivalent.
+
+        """
+        s: NaturalNumberSequence = data_validate_natural_number_sequence(s)
+        return self.canonical_natural_number_sequence.is_natural_number_sequence_equivalent_to(s)
+
     @property
     def is_restricted_growth_function_sequence(self) -> bool:
         """`True` if this natural numbers sequence is also an RGF sequence, `False` otherwise.
