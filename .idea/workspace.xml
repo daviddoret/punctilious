@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="data model simplification">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="NaturalNumberSequence.image &amp; image_cardinality">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -999,14 +998,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01442" summary="Formula.is_sub_formula, is_immediate_sub_formula">
-      <option name="closed" value="true" />
-      <created>1750159705484</created>
-      <option name="number" value="01442" />
-      <option name="presentableId" value="LOCAL-01442" />
-      <option name="project" value="LOCAL" />
-      <updated>1750159705484</updated>
-    </task>
     <task id="LOCAL-01443" summary="meta theory connectives">
       <option name="closed" value="true" />
       <created>1750159958458</created>
@@ -1391,7 +1382,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751175240007</updated>
     </task>
-    <option name="localTasksCounter" value="1491" />
+    <task id="LOCAL-01491" summary="NaturalNumberSequence.image &amp; image_cardinality">
+      <option name="closed" value="true" />
+      <created>1751176325773</created>
+      <option name="number" value="01491" />
+      <option name="presentableId" value="LOCAL-01491" />
+      <option name="project" value="LOCAL" />
+      <updated>1751176325773</updated>
+    </task>
+    <option name="localTasksCounter" value="1492" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1444,7 +1443,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="__util__ cleanup" />
     <MESSAGE value="equivalence for connectives and connective-sequences." />
     <MESSAGE value="equivalence for rpt." />
     <MESSAGE value="equivalence for abstract-formula and formula." />
@@ -1469,7 +1467,8 @@
     <MESSAGE value="Revised data model with inheritance" />
     <MESSAGE value="Cleanup" />
     <MESSAGE value="data model simplification" />
-    <option name="LAST_COMMIT_MESSAGE" value="data model simplification" />
+    <MESSAGE value="NaturalNumberSequence.image &amp; image_cardinality" />
+    <option name="LAST_COMMIT_MESSAGE" value="NaturalNumberSequence.image &amp; image_cardinality" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1559,31 +1558,6 @@
           <url>file://$PROJECT_DIR$/tests/test_formula.py</url>
           <line>51</line>
           <option name="timeStamp" value="441" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>257</line>
-          <option name="timeStamp" value="451" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_natural_numbers_sequence.py</url>
-          <line>118</line>
-          <option name="timeStamp" value="452" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_natural_numbers_sequence.py</url>
-          <line>117</line>
-          <option name="timeStamp" value="453" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_natural_numbers_sequence.py</url>
-          <line>115</line>
-          <option name="timeStamp" value="454" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_natural_numbers_sequence.py</url>
-          <line>116</line>
-          <option name="timeStamp" value="455" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

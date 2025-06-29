@@ -315,6 +315,25 @@ class AbstractFormula(tuple):
         """
         return self.natural_number_sequence.is_restricted_growth_function_sequence
 
+    def is_canonical_abstract_formula_equivalent_to(self, phi: AbstractFormula):
+        """Returns `True` if this :class:`AbstractFormula` is canonical-abstract-formula-equivalent
+        to :class:`AbstractFormula` `phi`.
+
+        Formal definition:
+        Two abstract-formulas phi and psi are canonical-abstract-formula-equivalent if and only if:
+        - the canonical-abstract-formula of phi is abstract-formula-equivalent
+          to the canonical-abstract-formula of psi.
+
+        Intuitive definition:
+        Two formulas are canonical-abstract-formula-equivalent if they have the same "structure".
+
+        :param phi:
+        :return:
+        """
+        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        return self.canonical_abstract_formula.is_abstract_formula_equivalent_to(
+            phi.canonical_abstract_formula)
+
     def is_sub_formula_of(self, phi: AbstractFormula):
         """Returns `True` if this :class:`AbstractFormula` if a sub-formula of :class:`AbstractFormula` phi.
 
@@ -327,6 +346,15 @@ class AbstractFormula(tuple):
             if self.is_abstract_formula_equivalent_to(psi):
                 return True
         return False
+
+    def is_super_formula_of(self, phi: AbstractFormula):
+        """Returns `True` if :class:`AbstractFormula` phi if a sub-formula of this :class:`AbstractFormula`.
+
+        :param phi:
+        :return:
+        """
+        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        return phi.is_sub_formula_of(self)
 
     def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
         """Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
