@@ -9,6 +9,8 @@ import abstract_formula_library as af
 import sequence_library as sl
 
 
+# Data validation
+
 def data_validate_formula(
         o: FlexibleFormula) -> Formula:
     if isinstance(o, Formula):
@@ -20,19 +22,7 @@ def data_validate_formula(
     raise util.PunctiliousException('Formula data validation failure', o=o)
 
 
-_formula_cache = dict()  # cache mechanism assuring that unique  formulas are only instantiated once.
-
-
-def retrieve_formula_from_cache(o: FlexibleFormula):
-    """cache mechanism assuring that unique  formulas are only instantiated once."""
-    global _formula_cache
-    o: Formula = data_validate_formula(o)
-    if hash(o) in _formula_cache.keys():
-        return _formula_cache[hash(o)]
-    else:
-        _formula_cache[hash(o)] = o
-        return o
-
+# Classes
 
 class Formula(tuple):
     """A `Formula` is a pair (ϕ, S) where:
@@ -337,3 +327,19 @@ class Formula(tuple):
 FlexibleFormula = typing.Union[
     Formula, tuple[
         sl.FlexibleConnectiveSequence, af.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]
+
+# Cache management
+
+
+_formula_cache = dict()  # cache mechanism assuring that unique  formulas are only instantiated once.
+
+
+def retrieve_formula_from_cache(o: FlexibleFormula):
+    """cache mechanism assuring that unique  formulas are only instantiated once."""
+    global _formula_cache
+    o: Formula = data_validate_formula(o)
+    if hash(o) in _formula_cache.keys():
+        return _formula_cache[hash(o)]
+    else:
+        _formula_cache[hash(o)] = o
+        return o

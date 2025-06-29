@@ -218,15 +218,6 @@ class NaturalNumberSequence(tuple):
         """
         return concatenate_flexible_natural_numbers_sequences(self, *s)
 
-    def convert_to_restricted_growth_function_sequence(self):
-        """Converts this :class:`NaturalNumberSequence` object to type :class:`RestrictedGrowthFunctionSequence`,
-        or raise an exception if the sequence is not an RGF sequence.
-
-        :return:
-        """
-        raise util.PunctiliousException("REIMPLEMENT")
-        return RestrictedGrowthFunctionSequence(*self)
-
     @property
     def elements(self) -> tuple[int, ...]:
         """The elements that compose this :class:`NaturalNumberSequence`, in order.
