@@ -99,31 +99,11 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
         return t, s
 
 
-def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs_DUPLICATE(p):
-    """Given a tree of integer/tuple pairs, extracts:
-     - its tree of tuples,
-     - and its sequence of integers,
-    following the depth-first ascending-nodes algorithm.
-
-    :param p: the tree of integer/tuple pairs
-    :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
+def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p):
     """
-    if len(p) != 2:
-        raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
-    i: int = p[0]
-    children = p[1]
-    if len(children) == 0:
-        # this is a leaf
-        return (), (i,)
-    else:
-        t: list = []
-        s: tuple[int, ...] = (i,)
-        for sub_p in children:
-            sub_t, sub_s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=sub_p)
-            t.append(sub_t)
-            s += sub_s
-        t: tuple[tuple, ...] = tuple(t)
-        return t, s
+    """
+    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p)
+    return AbstractFormula(t, s)
 
 
 # Data validation functions
