@@ -142,6 +142,7 @@ class NaturalNumberSequence(tuple):
 
     def __init__(self, *s):
         super(NaturalNumberSequence, self).__init__()
+        self._image: tuple[int, ...] | None = None
         self._is_restricted_growth_function_sequence: bool | None = None
         self._canonical_natural_number_sequence: NaturalNumberSequence | None = None
 
@@ -225,6 +226,46 @@ class NaturalNumberSequence(tuple):
         :return:
         """
         return tuple(super().__iter__())
+
+    @property
+    def im(self) -> tuple[int, ...]:
+        """A shortcut for :attr:`NaturalNumberSequence.image`."""
+        return self.image
+
+    @property
+    def image(self) -> tuple[int, ...]:
+        """The :attr:`NaturalNumberSequence.image` is the set of values it contains.
+
+        Note: a Python tuple is returned instead of a Python set. This is a design choice
+            to force working with immutable objects.
+
+        Shortcut: :attr:`NaturalNumberSequence.im`
+
+        Definition:
+            S := { s_0, s_1, ..., s_n }
+            Im(S) := { s_i | 0 <= i <= n }
+
+        :return: an ordered tuple of integers.
+        """
+        if self._image is not None:
+            return self._image
+        else:
+            s: set[int] = set()
+            for n in self.elements:
+                s.add(n)
+            s: tuple[int, ...] = tuple(s)
+            s: tuple[int, ...] = tuple(sorted(s))
+            self._image = s
+            return s
+
+    @property
+    def image_cardinality(self) -> int:
+        """The :attr:`NaturalNumberSequence.image_cardinality` is the cardinality
+         of the :attr:`NaturalNumberSequence.image`, i.e. the number of distinct values it contains.
+
+        :return:
+        """
+        return len(self.image)
 
     @property
     def is_restricted_growth_function_sequence(self) -> bool:

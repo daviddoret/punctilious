@@ -101,3 +101,23 @@ class TestNaturalNumbersSequence:
         t = s.canonical_natural_number_sequence
         u = pu.sl.NaturalNumberSequence(0, 1, 2, 3, 3, 3, 4, 0, 5, 6, 1, 2)
         assert t == u
+
+    def test_image(self):
+        s = pu.sl.NaturalNumberSequence(0, 0, 0)
+        assert s.image == (0,)
+        s = pu.sl.NaturalNumberSequence(0, 1, 0)
+        assert s.image == (0, 1,)
+        s = pu.sl.NaturalNumberSequence(0, 1, 2)
+        assert s.image == (0, 1, 2,)
+        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 2, 1, 2, 0, )
+        assert s.image == (0, 1, 2, 7,)
+
+    def test_image_cardinality(self):
+        s = pu.sl.NaturalNumberSequence(0, 0, 0)
+        assert s.image_cardinality == 1
+        s = pu.sl.NaturalNumberSequence(0, 1, 0)
+        assert s.image_cardinality == 2
+        s = pu.sl.NaturalNumberSequence(0, 1, 2)
+        assert s.image_cardinality == 3
+        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 2, 1, 2, 0, )
+        assert s.image_cardinality == 4
