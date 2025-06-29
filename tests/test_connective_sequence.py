@@ -5,15 +5,15 @@ import punctilious as pu
 
 class TestConnectiveSequence:
     def test_connective_sequence(self):
-        x = pu.connective.Connective("x")
-        y = pu.connective.Connective("y")
-        s1 = pu.sl.ConnectiveSequence(pu.connective_library.addition, x, y, )
+        x = pu.cl.Connective("x")
+        y = pu.cl.Connective("y")
+        s1 = pu.sl.ConnectiveSequence(pu.cc.addition, x, y, )
         assert s1.length == 3
-        s2 = pu.sl.ConnectiveSequence(pu.connective_library.addition, y, x, )
+        s2 = pu.sl.ConnectiveSequence(pu.cc.addition, y, x, )
         assert s2.length == 3
         assert s1 != s2
         assert s1 is not s2
-        s3 = pu.sl.ConnectiveSequence(pu.connective_library.addition, x, y, )
+        s3 = pu.sl.ConnectiveSequence(pu.cc.addition, x, y, )
         assert s3.length == 3
         assert s1 == s3
         assert s1 is s3

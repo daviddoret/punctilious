@@ -1,73 +1,179 @@
-"""A catalogue of well-known connectives.
+from __future__ import annotations
+import typing
+import uuid
 
-"""
+# package modules
+import util
 
-import connective
+_connective_cache: dict[uuid.UUID, Connective] = {}  # cache mechanism assuring connectives unicity
 
-# propositional logic
-is_a_propositional_logic_variable: connective.Connective = connective.Connective("is-a-propositional-variable",
-                                                                                 uid="1dde6cdb-8268-4586-bfdb-5531baee5b6f")
-"""Connective used to formally declare variables of the propositional-logic axiomatic calculi.
 
-References:
-- Mancosu 2021, definition 2.1 (p. 13).
-"""
-is_a_propositional_logic_formula: connective.Connective = connective.Connective("is-a-propositional-variable",
-                                                                                uid="1dde6cdb-8268-4586-bfdb-5531baee5b6f")
-"""Connective used to formally declare formulas of the propositional-logic axiomatic calculi.
+def data_validate_connective(
+        o: FlexibleConnective) -> Connective:
+    if isinstance(o, Connective):
+        return o
+    if isinstance(o, uuid.UUID):
+        return Connective(uid=o)
+    raise util.PunctiliousException('Connective data validation failure', o=o)
 
-References:
-- Mancosu 2021, definition 2.2 (p. 14).
-"""
 
-# meta theory
-axiom: connective.Connective = connective.Connective("axiom",
-                                                     uid="9c4ab2a3-792c-4259-b4fa-21b560cbe821")
-theory: connective.Connective = connective.Connective("axiom",
-                                                      uid="74f68dc9-88dd-4bd0-94b8-ec2743a8ae82")
-hypothesis: connective.Connective = connective.Connective("axiom",
-                                                          uid="18549a80-aeb4-4670-b02b-394dfaf3eca8")
-inference_rule: connective.Connective = connective.Connective("inference-rule",
-                                                              uid="10158ac9-8ef8-414d-8f20-f93dc9326e8c")
-theorem: connective.Connective = connective.Connective("theorem",
-                                                       uid="3468cdbe-92d2-4cc4-beb4-e6889d46e981")
+def retrieve_connective_from_cache(uid: uuid.UUID) -> Connective | None:
+    """cache mechanism assuring the unicity of connectives."""
+    global _connective_cache
+    uid: uuid.UUID = util.data_validate_uid(uid)
+    if uid in _connective_cache.keys():
+        return _connective_cache[uid]
+    else:
+        return None
 
-# general logic
-biconditional: connective.Connective = connective.Connective("if-and-only-if",
-                                                             uid="7db6be5a-3687-4ab3-aff6-b49ce06fd80a")
-conjunction: connective.Connective = connective.Connective("and", uid="2d308177-5e30-4209-86ff-f844620416e6")
-disjunction: connective.Connective = connective.Connective("or", uid="cdb13c92-0203-478f-93f3-d2a582aa0d42")
-material_implication: connective.Connective = connective.Connective("implies",
-                                                                    uid="b9b05d7b-97a7-4ebe-8e29-a1cbbcf98be6")
-negation: connective.Connective = connective.Connective("not", uid="587a7008-ecae-4b20-ac8b-ceb49582db72")
-if_and_only_if: connective.Connective = biconditional
-implies: connective.Connective = material_implication
-land: connective.Connective = conjunction
-lnot: connective.Connective = negation
-lor: connective.Connective = disjunction
 
-# natural numbers
-zero: connective.Connective = connective.Connective("0", uid="e98ed013-f538-4b1e-84e6-97aa54e51d00")
-one: connective.Connective = connective.Connective("1", uid="cbf86ae3-1ada-43ee-a34e-d0abee0978fd")
-two: connective.Connective = connective.Connective("2", uid="dd5d79e7-a3a7-4e36-a50a-9a1ccd0e9e60")
-three: connective.Connective = connective.Connective("3", uid="028932f3-6179-4eb7-a788-20924999e5c8")
-four: connective.Connective = connective.Connective("4", uid="fd58f749-7b6f-4de6-ba42-79c94cca9d8b")
-five: connective.Connective = connective.Connective("5", uid="4844cf98-c65d-4f8c-9faa-d034d38aa9b5")
-six: connective.Connective = connective.Connective("6", uid="6545a912-1fe3-493c-842c-601c423f9392")
-seven: connective.Connective = connective.Connective("7", uid="b0bd6cfb-ae0e-4533-9024-32418288c0e1")
-eight: connective.Connective = connective.Connective("8", uid="4311ae18-67d7-4d1f-aa8b-76638710aedb")
-nine: connective.Connective = connective.Connective("9", uid="9f931933-649e-42d8-8a7b-8c19ba7fe89e")
+def add_connective_to_cache(o: FlexibleConnective) -> Connective | None:
+    """cache mechanism assuring the unicity of connectives."""
+    global _connective_cache
+    o: Connective = data_validate_connective(o)
+    if not o.uid in _connective_cache.keys():
+        _connective_cache[o.uid] = o
+    else:
+        existing = _connective_cache[o.uid]
+        if o is not existing:
+            raise util.PunctiliousException('`Connective`unicity conflict')
 
-# arithmetic operators
-addition: connective.Connective = connective.Connective("+", uid="3ed8a142-17a1-4799-b1e1-7061b07a1c36")
-division: connective.Connective = connective.Connective("/", uid="167a8e01-8f9d-4f93-a004-bf1ae96fe335")
-exponentiation: connective.Connective = connective.Connective("^", uid="c0ed8133-ea0e-4d23-939f-b308b6cc5cba")
-multiplication: connective.Connective = connective.Connective("*", uid="2cd26a6f-15af-4529-b37c-71afab1699de")
-substraction: connective.Connective = connective.Connective("-", uid="90c1ae38-5bc2-4917-ac66-5d03217055b6")
-plus: connective.Connective = addition
-minus: connective.Connective = substraction
-power: connective.Connective = exponentiation
-times: connective.Connective = multiplication
 
-# set theory
-set_by_extension: connective.Connective = connective.Connective("set", uid="0f3d1ff1-e7e8-4b9f-9885-c6a9241dc1af")
+class Connective(tuple):
+    """A `Connective` is an abstract symbol that may be assigned various (human-readable) representations,
+    and that is recognized as a distinctive semantic unit.
+
+    References:
+     - Mancosu 2021, definition 2.1, p. 14, p. 15.
+    """
+
+    def __eq__(self, c):
+        """Returns `False` if `c` cannot be interpreted as a :class:`Connective`,
+        returns `True` if `c` is connective-equivalent to this :class:`Connective`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            c: Connective = data_validate_connective(c)
+            return self.is_connective_equivalent_to(c)
+        except util.PunctiliousException:
+            return False
+
+    def __hash__(self):
+        return hash((Connective, self.uid,))
+
+    def __init__(self, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
+        pass
+
+    def __ne__(self, c):
+        """Returns `False` if `c` cannot be interpreted as a :class:`Connective`,
+        returns `True` if `c` is not connective-equivalent to this :class:`Connective`,
+        returns `False` otherwise.
+
+        Note:
+            The python equality operator may be misleading because it can be called
+            whatever the type of the second object, and formally speaking equality with objects
+            of a distinct type is not defined. For this reason, the following
+            paradox is possible: `not(x == y) and not(x != y)`.
+            To avoid any ambiguity, use the more accurate is-equivalent method.
+        """
+        try:
+            c: Connective = data_validate_connective(c)
+            return not self.is_connective_equivalent_to(c)
+        except util.PunctiliousException:
+            return False
+
+    def __new__(cls, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
+        if uid is None:
+            uid: uuid.UUID = uuid.uuid4()
+
+        uid: uuid.UUID = util.data_validate_uid(uid)
+        cached = retrieve_connective_from_cache(uid)
+        if cached is not None:
+            return cached
+        else:
+            phi = super(Connective, cls).__new__(cls, (uid, fallback_string_representation,))
+            add_connective_to_cache(phi)
+            return phi
+
+    def __repr__(self):
+        return self.get_string_representation()
+
+    def __str__(self):
+        return self.get_string_representation()
+
+    @property
+    def fallback_string_representation(self) -> str:
+        """The `fallback_string_representation` of a `Connective` is a string representation
+        that is always available, and will be used as a fallback value when no solution
+        can be found to return a string representation matching user preferences.
+
+        `fallback_string_representation` is an immutable property.
+
+        By convention, the `fallback_string_representation`:
+         - use a safe subset of Unicode characters that should render properly on any computer system.
+         - can be naturally used in mathematical expressions or formulas.
+         - use English words separated by dashes (in such a way as to constitute a single word for natural
+           representation in mathematical expressions or formulas).
+         - be as unambiguous as possible while not being too verbose or lengthy.
+
+        :return: A string representation of the connective.
+        """
+        return tuple.__getitem__(self, 1)
+
+    def get_string_representation(self, **user_preferences) -> str:
+        """Returns the string representation of the `Connective` that best matches `user_preferences`.
+
+        :param user_preferences:
+        :return:
+        """
+        return self.fallback_string_representation
+
+    def is_connective_equivalent_to(self, c: FlexibleConnective):
+        """Returns `True` if this :class:`Connective` is connective-equivalent to :class:`Connective` `c`.
+
+        Formal definition:
+        A connective `c` is connective-equivalent to a connective `d` if and only if this is the same
+        symbol, or equivalently they are indistinguishable.
+
+        Note:
+        connective-equivalence is a syntactic property, i.e. it is related to an abstract symbol,
+        and it is not related to the diverse and sometimes ambiguous ways a connective may be represented.
+
+        Implementation:
+        As a proxy for the concept of an abstract symbol, we use the :attr:`Connective.uid` property.
+
+        :param c:
+        :return:
+        """
+        c: Connective = data_validate_connective(c)
+        return c.uid == self.uid
+
+    @property
+    def uid(self) -> uuid.UUID:
+        """
+
+        `uid` is an immutable property.
+
+
+        :return:
+        """
+        return tuple.__getitem__(self, 0)
+
+    def yield_string_representation(self, **user_preferences) -> typing.Generator[str, None, None]:
+        """Generates the string representation of the `Connective` that best matches `user_preferences`.
+
+        :param user_preferences:
+        :return:
+        """
+        yield self.fallback_string_representation
+
+
+FlexibleConnective = typing.Union[
+    Connective, uuid.UUID]

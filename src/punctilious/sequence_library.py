@@ -5,7 +5,7 @@ import collections
 import util
 
 # punctilious libraries
-import connective
+import connective_library as cl
 
 
 # Data validation functions
@@ -91,7 +91,7 @@ def data_validate_connective_sequence_elements(
         return o
     if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
         o = tuple(o)
-        o: tuple[connective.Connective, ...] = tuple(connective.data_validate_connective(n) for n in o)
+        o: tuple[cl.Connective, ...] = tuple(cl.data_validate_connective(n) for n in o)
         return o
     raise util.PunctiliousException('ConnectiveSequence elements data validation failure', o=o)
 
@@ -437,11 +437,11 @@ class ConnectiveSequence(tuple):
             return False
 
     def __new__(cls, *s):
-        s: tuple[connective.Connective, ...] = data_validate_connective_sequence_elements(s)
+        s: tuple[cl.Connective, ...] = data_validate_connective_sequence_elements(s)
         if len(s) < 1:
             raise util.PunctiliousException('The length of a ConnectiveSequence must be strictly greater than ')
-        s: tuple[connective.Connective] = super(ConnectiveSequence, cls).__new__(cls, s)
-        s: tuple[connective.Connective] = retrieve_connective_sequence_from_cache(s)
+        s: tuple[cl.Connective] = super(ConnectiveSequence, cls).__new__(cls, s)
+        s: tuple[cl.Connective] = retrieve_connective_sequence_from_cache(s)
         return s
 
     @property
@@ -476,7 +476,7 @@ class ConnectiveSequence(tuple):
 # Flexible types to facilitate data validation
 
 FlexibleConnectiveSequence = typing.Union[
-    ConnectiveSequence, tuple[connective.Connective, ...], collections.abc.Iterator, collections.abc.Generator, None]
+    ConnectiveSequence, tuple[cl.Connective, ...], collections.abc.Iterator, collections.abc.Generator, None]
 FlexibleNaturalNumbersSequence = typing.Union[
     NaturalNumberSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
 

@@ -5,7 +5,7 @@ import itertools
 
 # package modules
 import util
-import rooted_plane_tree as rpt
+import rooted_plane_tree_library as rpt
 import sequence_library as sl
 from punctilious.sequence_library import NaturalNumberSequence
 

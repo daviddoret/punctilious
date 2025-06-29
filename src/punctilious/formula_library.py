@@ -5,7 +5,7 @@ import collections.abc
 
 # package modules
 import util
-import connective
+import connective_library
 import abstract_formula_library as afl
 import sequence_library as sl
 

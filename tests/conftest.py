@@ -75,42 +75,42 @@ def s00010203043262():
 
 @pytest.fixture
 def t1_a():
-    return pu.rpt.RootedPlaneTree()
+    return pu.rptl.RootedPlaneTree()
 
 
 @pytest.fixture
 def t2_a_aa(t1_a):
-    return pu.rpt.RootedPlaneTree(t1_a)
+    return pu.rptl.RootedPlaneTree(t1_a)
 
 
 @pytest.fixture
 def t3_a_aa_aaa(t2_a_aa):
-    return pu.rpt.RootedPlaneTree(t2_a_aa)
+    return pu.rptl.RootedPlaneTree(t2_a_aa)
 
 
 @pytest.fixture
 def t3_a_aa_ab(t1_a):
-    return pu.rpt.RootedPlaneTree(t1_a, t1_a)
+    return pu.rptl.RootedPlaneTree(t1_a, t1_a)
 
 
 @pytest.fixture
 def t6_a_aa_ab_ac_ad_ae(t1_a):
-    return pu.rpt.RootedPlaneTree(t1_a, t1_a, t1_a, t1_a, t1_a)
+    return pu.rptl.RootedPlaneTree(t1_a, t1_a, t1_a, t1_a, t1_a)
 
 
 @pytest.fixture
 def t7_a_aa_ab_aaa_aaaa_aba_abaa(t3_a_aa_ab):
-    return pu.rpt.RootedPlaneTree(t3_a_aa_ab, t3_a_aa_ab)
+    return pu.rptl.RootedPlaneTree(t3_a_aa_ab, t3_a_aa_ab)
 
 
 @pytest.fixture
 def t12(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae):
-    return pu.rpt.RootedPlaneTree(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
+    return pu.rptl.RootedPlaneTree(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
 
 
 @pytest.fixture
 def t_big(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-    return pu.rpt.RootedPlaneTree(t12, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12, t2_a_aa)
+    return pu.rptl.RootedPlaneTree(t12, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12, t2_a_aa)
 
 
 @pytest.fixture
@@ -209,7 +209,7 @@ def phi1a(af1):
     :param af1:
     :return:
     """
-    return pu.formula.Formula(af1, (pu.connective_library.one,), )
+    return pu.fl.Formula(af1, (pu.cc.one,), )
 
 
 @pytest.fixture
@@ -219,7 +219,7 @@ def phi2a(af2a):
     :param af2a:
     :return:
     """
-    return pu.formula.Formula(af2a, (pu.connective_library.one,), )
+    return pu.fl.Formula(af2a, (pu.cc.one,), )
 
 
 @pytest.fixture
@@ -229,7 +229,7 @@ def phi2b(af2b):
     :param af2b:
     :return:
     """
-    return pu.formula.Formula(af2b, (pu.connective_library.minus, pu.connective_library.one,), )
+    return pu.fl.Formula(af2b, (pu.cc.minus, pu.cc.one,), )
 
 
 @pytest.fixture
@@ -239,9 +239,9 @@ def phi6a(af6a):
     :param af6a:
     :return:
     """
-    return pu.formula.Formula(af6a,
-                              (pu.connective_library.set_by_extension, pu.connective_library.one,
-                               pu.connective_library.two,
-                               pu.connective_library.three,
-                               pu.connective_library.four,
-                               pu.connective_library.five,), )
+    return pu.fl.Formula(af6a,
+                         (pu.cc.set_by_extension, pu.cc.one,
+                          pu.cc.two,
+                          pu.cc.three,
+                          pu.cc.four,
+                          pu.cc.five,), )

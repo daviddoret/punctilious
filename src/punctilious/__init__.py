@@ -1,19 +1,22 @@
 import util as util
-import rooted_plane_tree
-import connective
+import rooted_plane_tree_library
 import connective_library
+import connective_catalog
 import sequence_library
 import abstract_formula_library
-import formula
+import formula_library
 
 afl = abstract_formula_library
 cl = connective_library
-rpt = rooted_plane_tree
+cc = connective_catalog
+fl = formula_library
+rptl = rooted_plane_tree_library
 sl = sequence_library
 
 __all__ = [
-    'abstract_formula_library', 'afl',
-    'connective',
-    'connective_library', 'cl',
-    'rooted_plane_tree', 'rpt',
-    'sequence_library', 'sl']
+    "abstract_formula_library", "afl",
+    "connective_library", "cl",
+    "connective_catalog", "cc",
+    "formula_library", "fl",
+    "rooted_plane_tree_library", "rptl",
+    "sequence_library", "sl"]

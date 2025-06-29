@@ -81,24 +81,24 @@ class TestRootedPlaneTree:
         assert not t12.is_rooted_plane_tree_equivalent_to(t2_a_aa)
         assert not t12.is_rooted_plane_tree_equivalent_to(t2_a_aa)
         # equivalence with distinct instances
-        assert t1_a.is_rooted_plane_tree_equivalent_to(pu.rpt.RootedPlaneTree())
-        assert t2_a_aa.is_rooted_plane_tree_equivalent_to(pu.rpt.RootedPlaneTree(t1_a))
+        assert t1_a.is_rooted_plane_tree_equivalent_to(pu.rptl.RootedPlaneTree())
+        assert t2_a_aa.is_rooted_plane_tree_equivalent_to(pu.rptl.RootedPlaneTree(t1_a))
         assert t6_a_aa_ab_ac_ad_ae.is_rooted_plane_tree_equivalent_to(
-            pu.rpt.RootedPlaneTree(t1_a, t1_a, t1_a, t1_a, t1_a))
+            pu.rptl.RootedPlaneTree(t1_a, t1_a, t1_a, t1_a, t1_a))
         assert t12.is_rooted_plane_tree_equivalent_to(
-            pu.rpt.RootedPlaneTree(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa))
+            pu.rptl.RootedPlaneTree(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa))
 
     def test_cache(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        t1_clone = pu.rpt.RootedPlaneTree()
+        t1_clone = pu.rptl.RootedPlaneTree()
         assert t1_a == t1_clone
         assert t1_a is t1_clone
-        t2_clone = pu.rpt.RootedPlaneTree(t1_clone)
+        t2_clone = pu.rptl.RootedPlaneTree(t1_clone)
         assert t2_a_aa == t2_clone
         assert t2_a_aa is t2_clone
-        t3_clone = pu.rpt.RootedPlaneTree(t1_clone, t1_clone, t1_clone, t1_clone, t1_clone)
+        t3_clone = pu.rptl.RootedPlaneTree(t1_clone, t1_clone, t1_clone, t1_clone, t1_clone)
         assert t6_a_aa_ab_ac_ad_ae == t3_clone
         assert t6_a_aa_ab_ac_ad_ae is t3_clone
-        t4_clone = pu.rpt.RootedPlaneTree(t1_clone, t2_clone, t3_clone, t2_clone)
+        t4_clone = pu.rptl.RootedPlaneTree(t1_clone, t2_clone, t3_clone, t2_clone)
         assert t12 == t4_clone
         assert t12 is t4_clone
         pass
@@ -127,13 +127,13 @@ class TestRootedPlaneTree:
         assert t12.select_sub_tree_from_path_sequence((1, 4, 1,)) == t1_a
 
     def test_tuple_tree_constructor(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        t1b = pu.rpt.RootedPlaneTree(tuple_tree=())
+        t1b = pu.rptl.RootedPlaneTree(tuple_tree=())
         assert t1b == t1_a
-        t2b = pu.rpt.RootedPlaneTree(tuple_tree=((),))
+        t2b = pu.rptl.RootedPlaneTree(tuple_tree=((),))
         assert t2b == t2_a_aa
-        t3b = pu.rpt.RootedPlaneTree(tuple_tree=((), (), (), (), (),))
+        t3b = pu.rptl.RootedPlaneTree(tuple_tree=((), (), (), (), (),))
         assert t3b == t6_a_aa_ab_ac_ad_ae
-        t4b = pu.rpt.RootedPlaneTree(tuple_tree=((), ((),), ((), (), (), (), (),), ((),),))
+        t4b = pu.rptl.RootedPlaneTree(tuple_tree=((), ((),), ((), (), (), (), (),), ((),),))
         assert t4b == t12
 
     def test_iterate_direct_ascending(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
@@ -189,11 +189,11 @@ class TestRootedPlaneTree:
         assert t_big.get_subtree_by_path((0, 3, 2, 4,)) == t1_a
 
     def test_build_rooted_plane_tree_from_tuple_tree(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(())
+        u1 = pu.rptl.build_rooted_plane_tree_from_tuple_tree(())
         assert u1 == t1_a
-        u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(((),))
+        u1 = pu.rptl.build_rooted_plane_tree_from_tuple_tree(((),))
         assert u1 == t2_a_aa
-        u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(((), (), (), (), (),))
+        u1 = pu.rptl.build_rooted_plane_tree_from_tuple_tree(((), (), (), (), (),))
         assert u1 == t6_a_aa_ab_ac_ad_ae
-        u1 = pu.rpt.build_rooted_plane_tree_from_tuple_tree(((), ((),), ((), (), (), (), (),), ((),),))
+        u1 = pu.rptl.build_rooted_plane_tree_from_tuple_tree(((), ((),), ((), (), (), (), (),), ((),),))
         assert u1 == t12
