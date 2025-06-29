@@ -240,13 +240,16 @@ class NaturalNumberSequence(tuple):
 
     @property
     def image(self) -> tuple[int, ...]:
-        """The :attr:`NaturalNumberSequence.image` is the set of values it contains.
+        """The :attr:`NaturalNumberSequence.image` is the set of values contained in the sequence,
+        returned as a tuple of ascending and unique values.
 
         Notation:
         :math:`Im(S)`
 
         Note: a Python tuple is returned instead of a Python set. This is a design choice
             to force working with immutable objects.
+
+        Note: the values are returned in ascending order.
 
         Shortcut: :attr:`NaturalNumberSequence.im`
 

@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="NaturalNumberSequence.image &amp; image_cardinality">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Documentation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -615,7 +617,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_image_cardinality">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -971,9 +973,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_image_cardinality" />
         <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_image" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_get_sub_formula_by_path" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_subformula_of" />
       </list>
@@ -997,14 +999,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01445" summary="get_sub_formula_by_path">
-      <option name="closed" value="true" />
-      <created>1750419384483</created>
-      <option name="number" value="01445" />
-      <option name="presentableId" value="LOCAL-01445" />
-      <option name="project" value="LOCAL" />
-      <updated>1750419384483</updated>
     </task>
     <task id="LOCAL-01446" summary="build_rooted_plane_tree_from_tuple_tree">
       <option name="closed" value="true" />
@@ -1390,7 +1384,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751182927974</updated>
     </task>
-    <option name="localTasksCounter" value="1494" />
+    <task id="LOCAL-01494" summary="Documentation">
+      <option name="closed" value="true" />
+      <created>1751183937889</created>
+      <option name="number" value="01494" />
+      <option name="presentableId" value="LOCAL-01494" />
+      <option name="project" value="LOCAL" />
+      <updated>1751183937889</updated>
+    </task>
+    <option name="localTasksCounter" value="1495" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1443,7 +1445,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="equivalence for connectives and connective-sequences." />
     <MESSAGE value="equivalence for rpt." />
     <MESSAGE value="equivalence for abstract-formula and formula." />
     <MESSAGE value="RGF-sequence equivalence" />
@@ -1468,7 +1469,8 @@
     <MESSAGE value="Cleanup" />
     <MESSAGE value="data model simplification" />
     <MESSAGE value="NaturalNumberSequence.image &amp; image_cardinality" />
-    <option name="LAST_COMMIT_MESSAGE" value="NaturalNumberSequence.image &amp; image_cardinality" />
+    <MESSAGE value="Documentation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Documentation" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

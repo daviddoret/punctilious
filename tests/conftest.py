@@ -203,43 +203,43 @@ def af_big(t_big):
 
 
 @pytest.fixture
-def phi1a(caf1):
+def phi1a(af1):
     """The formula 1.
 
     :param af1:
     :return:
     """
-    return pu.formula.Formula(caf1, (pu.connective_library.one,), )
+    return pu.formula.Formula(af1, (pu.connective_library.one,), )
 
 
 @pytest.fixture
-def phi2a(caf2a):
+def phi2a(af2a):
     """The formula: 1(1).
 
     :param af2a:
     :return:
     """
-    return pu.formula.Formula(caf2a, (pu.connective_library.one,), )
+    return pu.formula.Formula(af2a, (pu.connective_library.one,), )
 
 
 @pytest.fixture
-def phi2b(caf2b):
+def phi2b(af2b):
     """The formula: -1.
 
     :param af2b:
     :return:
     """
-    return pu.formula.Formula(caf2b, (pu.connective_library.minus, pu.connective_library.one,), )
+    return pu.formula.Formula(af2b, (pu.connective_library.minus, pu.connective_library.one,), )
 
 
 @pytest.fixture
-def phi6a(caf6a):
+def phi6a(af6a):
     """set(1, 2, 3, 4, 5)
 
     :param af6a:
     :return:
     """
-    return pu.formula.Formula(caf6a,
+    return pu.formula.Formula(af6a,
                               (pu.connective_library.set_by_extension, pu.connective_library.one,
                                pu.connective_library.two,
                                pu.connective_library.three,
