@@ -246,16 +246,20 @@ class TestAbstractFormula:
         psi = pu.afl.declare_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
 
-    def test_get_sub_formula_by_path(self, af1, af2a, af6a, af12a, af_big, t12):
+    def test_get_sub_formula_by_path(self, af1, af2a, af6a, af12a, af_big, t1_a, t6_a_aa_ab_ac_ad_ae, t12):
         assert af1.get_sub_formula_by_path((0,)) == af1
         assert af2a.get_sub_formula_by_path((0,)) == af2a
         assert af2a.get_sub_formula_by_path((0, 0,)) == af1
 
         assert af_big.get_sub_formula_by_path((0, 3,)) == pu.afl.AbstractFormula(
             t=t12,
-            s=(4, 3, 3, 2, 3, 2, 2, 2, 2, 2, 3, 2))
-        assert af_big.get_sub_formula_by_path((0, 3, 2,)) == (0, 1, 2,)
-        assert af_big.get_sub_formula_by_path((0, 3, 2, 4,)) == (0, 1, 2,)
+            s=(4, 3, 2, 1, 4, 9, 10, 7, 7, 7, 9, 0))
+
+        assert af_big.get_sub_formula_by_path((0, 3, 2,)) == pu.afl.AbstractFormula(
+            t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,)
+        )
+        assert af_big.get_sub_formula_by_path((0, 3, 2, 4,)) == pu.afl.AbstractFormula(
+            t1_a, (7,))
 
     def test_represent_as_function(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae, t12):
         phi = pu.afl.AbstractFormula(t1_a, (0,))
@@ -322,8 +326,12 @@ class TestAbstractFormula:
         psi = pu.afl.AbstractFormula(t12, (14, 0, 7, 2, 2, 9, 10, 11, 10, 5, 1, 9,))
         assert psi.canonical_abstract_formula == phi
 
-    def test_is_subformula_of(self, t6_a_aa_ab_ac_ad_ae, af_big):
-        phi = pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, (0, 2, 0, 3, 0, 1,))
+    def test_is_subformula_of(self, t1_a, t6_a_aa_ab_ac_ad_ae, af_big):
+        phi = pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,))
         assert phi.is_sub_formula_of(af_big)
+
+        phi = pu.afl.AbstractFormula(t1_a, (12,))
+        assert phi.is_sub_formula_of(af_big)
+
         assert not pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
                                           (2, 0, 3, 0, 2, 2,)).is_sub_formula_of(af_big)
