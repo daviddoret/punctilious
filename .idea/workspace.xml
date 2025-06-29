@@ -998,14 +998,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01444" summary="RPT: get_sub_tree_by_path">
-      <option name="closed" value="true" />
-      <created>1750332775243</created>
-      <option name="number" value="01444" />
-      <option name="presentableId" value="LOCAL-01444" />
-      <option name="project" value="LOCAL" />
-      <updated>1750332775243</updated>
-    </task>
     <task id="LOCAL-01445" summary="get_sub_formula_by_path">
       <option name="closed" value="true" />
       <created>1750419384483</created>
@@ -1390,7 +1382,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751182665282</updated>
     </task>
-    <option name="localTasksCounter" value="1493" />
+    <task id="LOCAL-01493" summary="NaturalNumberSequence.image &amp; image_cardinality">
+      <option name="closed" value="true" />
+      <created>1751182927974</created>
+      <option name="number" value="01493" />
+      <option name="presentableId" value="LOCAL-01493" />
+      <option name="project" value="LOCAL" />
+      <updated>1751182927974</updated>
+    </task>
+    <option name="localTasksCounter" value="1494" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

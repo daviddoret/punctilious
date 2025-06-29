@@ -178,6 +178,9 @@ class NaturalNumberSequence(tuple):
         """Convert the :class:`NaturalNumberSequence` `s` into a restricted-growth-function-sequence `t`,
         by applying canonical labeling.
 
+        Notation:
+        :math:`canonical(S)`
+
         Definition - Canonical Labeling:
         The canonical-labeling of a natural-numbers-sequence S is an RFG-sequence T such that:
          - the value of the first element of S is mapped to 0
@@ -210,6 +213,9 @@ class NaturalNumberSequence(tuple):
         """Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
         or an iterable / generator of multiple :class:`NaturalNumberSequence` elements.
 
+        Notation:
+        :math:`S \mathbin{+\!\!+} T`
+
         Shortcuts:
         s1 + s2
         sum(s1, s2, ..., sn)
@@ -235,6 +241,9 @@ class NaturalNumberSequence(tuple):
     @property
     def image(self) -> tuple[int, ...]:
         """The :attr:`NaturalNumberSequence.image` is the set of values it contains.
+
+        Notation:
+        :math:`Im(S)`
 
         Note: a Python tuple is returned instead of a Python set. This is a design choice
             to force working with immutable objects.
@@ -263,6 +272,9 @@ class NaturalNumberSequence(tuple):
         """The :attr:`NaturalNumberSequence.image_cardinality` is the cardinality
          of the :attr:`NaturalNumberSequence.image`, i.e. the number of distinct values it contains.
 
+        Notation:
+        :math:`|Im(S)|`
+
         :return:
         """
         return len(self.image)
@@ -270,6 +282,9 @@ class NaturalNumberSequence(tuple):
     def is_canonical_natural_number_sequence_equivalent(self, s) -> bool:
         """`True` if this natural number sequence canonical-natural-number-sequence-equivalent
         to the natural-number-sequence `s`, `False` otherwise.
+
+        Notation:
+        :math:`S ~_{canonical} T`
 
         Formal Definition:
         Two natural-number-sequences `s` and `t` are canonical-natural-number-sequence-equivalent
@@ -313,10 +328,20 @@ class NaturalNumberSequence(tuple):
 
     @property
     def is_natural_number_sequence(self) -> bool:
+        """
+
+        Notation:
+        :math:`\mathbb{N}\text{-sequence}(S)
+
+        :return:
+        """
         return True
 
     def is_natural_number_sequence_equivalent_to(self, s: FlexibleNaturalNumbersSequence):
         """
+
+        Notation:
+        :math:`S ~_{\mathbb{N}\text{-sequence}} T`
 
         Formal definition:
         Two natural numbers-sequences s and t are natural-numbers-sequence-equivalent if and only if:
@@ -331,12 +356,22 @@ class NaturalNumberSequence(tuple):
 
     @property
     def length(self) -> int:
-        """The `length` of a finite sequence is the number of elements in the sequence."""
+        """The `length` of a finite sequence is the number of elements in the sequence.
+
+        Notation:
+        :math:`|S|`
+
+        """
         return len(self)
 
     @property
     def max_value(self) -> int:
-        """The `max_value` of a `NaturalNumberSequence` is the maximum value of its elements."""
+        """The `max_value` of a `NaturalNumberSequence` is the maximum value of its elements.
+
+        Notation:
+        :math:`max(S)`
+
+        """
         return max(self)
 
 
