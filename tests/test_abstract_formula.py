@@ -18,13 +18,41 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
 
-    def test_is_canonical(self, af1, af2a, af2b, af6a, af12a, af_big):
+    def test_is_canonical(self, af1, af2a, af2b, af6a, af12a, af_big, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t12):
         assert af1.is_canonical
         assert af2a.is_canonical
         assert af2b.is_canonical
         assert af6a.is_canonical
         assert af12a.is_canonical
         assert af_big.is_canonical
+
+        phi = pu.afl.AbstractFormula(t1_a, (0,))
+        assert phi.is_canonical
+        phi = pu.afl.AbstractFormula(t1_a, (17,))
+        assert not phi.is_canonical
+        phi = pu.afl.AbstractFormula(t2_a_aa, (0, 0,))
+        assert phi.is_canonical
+        phi = pu.afl.AbstractFormula(t2_a_aa, (0, 1,))
+        assert phi.is_canonical
+        phi = pu.afl.AbstractFormula(t2_a_aa, (94, 12,))
+        assert not phi.is_canonical
+        phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (0, 0, 0,))
+        assert phi.is_canonical
+        phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (0, 1, 2,))
+        assert phi.is_canonical
+        phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (9, 5, 104,))
+        assert not phi.is_canonical
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 0, 0,))
+        assert phi.is_canonical
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 1, 2,))
+        assert phi.is_canonical
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (100, 102, 140,))
+        assert not phi.is_canonical
+        # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
+        phi = pu.afl.AbstractFormula(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
+        assert phi.is_canonical
+        phi = pu.afl.AbstractFormula(t12, (14, 0, 7, 2, 2, 9, 10, 11, 10, 5, 1, 9,))
+        assert not phi.is_canonical
 
     def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, nns0, af2a, nns01,
                                              af6a,
@@ -257,6 +285,42 @@ class TestAbstractFormula:
         assert phi.represent_as_function() == "0(1, 2(3), 4(5, 6, 7, 8, 9), 10(11))"
         phi = pu.afl.AbstractFormula(t12, (14, 0, 7, 2, 2, 9, 10, 11, 10, 5, 1, 9,))
         assert phi.represent_as_function() == "14(0, 7(2), 2(9, 10, 11, 10, 5), 1(9))"
+
+    def test_canonical_abstract_formula(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t12):
+        phi = pu.afl.AbstractFormula(t1_a, (0,))
+        assert phi.canonical_abstract_formula == phi
+        psi = pu.afl.AbstractFormula(t1_a, (17,))
+        assert psi.canonical_abstract_formula == phi
+
+        phi1 = pu.afl.AbstractFormula(t2_a_aa, (0, 0,))
+        assert phi1.canonical_abstract_formula == phi1
+        psi1 = pu.afl.AbstractFormula(t2_a_aa, (13, 13,))
+        assert psi1.canonical_abstract_formula == phi1
+
+        phi2 = pu.afl.AbstractFormula(t2_a_aa, (0, 1,))
+        assert phi2.canonical_abstract_formula == phi2
+        psi2 = pu.afl.AbstractFormula(t2_a_aa, (102, 1,))
+        assert psi2.canonical_abstract_formula == phi2
+
+        assert phi1.canonical_abstract_formula != phi2.canonical_abstract_formula
+
+        phi1 = pu.afl.AbstractFormula(t3_a_aa_aaa, (0, 0, 0,))
+        assert phi1.canonical_abstract_formula == phi1
+        psi1 = pu.afl.AbstractFormula(t3_a_aa_aaa, (5, 5, 5,))
+        assert psi1.canonical_abstract_formula == phi1
+
+        phi2 = pu.afl.AbstractFormula(t3_a_aa_aaa, (0, 1, 2,))
+        assert phi2.canonical_abstract_formula == phi2
+        psi2 = pu.afl.AbstractFormula(t3_a_aa_aaa, (9, 5, 104,))
+        assert psi2.canonical_abstract_formula == phi2
+
+        assert phi1.canonical_abstract_formula != phi2.canonical_abstract_formula
+
+        # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
+        phi = pu.afl.AbstractFormula(t12, (0, 1, 2, 3, 3, 4, 5, 6, 5, 7, 8, 4,))
+        assert phi.canonical_abstract_formula == phi
+        psi = pu.afl.AbstractFormula(t12, (14, 0, 7, 2, 2, 9, 10, 11, 10, 5, 1, 9,))
+        assert psi.canonical_abstract_formula == phi
 
     def test_is_subformula_of(self, t6_a_aa_ab_ac_ad_ae, af_big):
         phi = pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae, (0, 2, 0, 3, 0, 1,))
