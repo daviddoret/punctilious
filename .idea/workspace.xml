@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Documentation">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Formula">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/formula_BACKUP.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -550,7 +550,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/home/dm3d/PycharmProjects/punctilious/tests",
+    "last_opened_file_path": "/home/dm3d/PycharmProjects/punctilious/src/punctilious",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -603,8 +603,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
+      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious/data" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
@@ -1000,14 +1000,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01446" summary="build_rooted_plane_tree_from_tuple_tree">
-      <option name="closed" value="true" />
-      <created>1750452172518</created>
-      <option name="number" value="01446" />
-      <option name="presentableId" value="LOCAL-01446" />
-      <option name="project" value="LOCAL" />
-      <updated>1750452172518</updated>
-    </task>
     <task id="LOCAL-01447" summary="extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs">
       <option name="closed" value="true" />
       <created>1750484291839</created>
@@ -1392,7 +1384,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751183937889</updated>
     </task>
-    <option name="localTasksCounter" value="1495" />
+    <task id="LOCAL-01495" summary="Formula">
+      <option name="closed" value="true" />
+      <created>1751204113710</created>
+      <option name="number" value="01495" />
+      <option name="presentableId" value="LOCAL-01495" />
+      <option name="project" value="LOCAL" />
+      <updated>1751204113710</updated>
+    </task>
+    <option name="localTasksCounter" value="1496" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1445,7 +1445,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="equivalence for rpt." />
     <MESSAGE value="equivalence for abstract-formula and formula." />
     <MESSAGE value="RGF-sequence equivalence" />
     <MESSAGE value="abstract-formula equivalence" />
@@ -1470,7 +1469,8 @@
     <MESSAGE value="data model simplification" />
     <MESSAGE value="NaturalNumberSequence.image &amp; image_cardinality" />
     <MESSAGE value="Documentation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Documentation" />
+    <MESSAGE value="Formula" />
+    <option name="LAST_COMMIT_MESSAGE" value="Formula" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

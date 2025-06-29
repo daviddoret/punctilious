@@ -1,6 +1,7 @@
 from __future__ import annotations
 import typing
 import collections
+import collections.abc
 
 # package modules
 import util
@@ -10,6 +11,7 @@ import sequence_library as sl
 
 
 # Data validation
+
 
 def data_validate_formula(
         o: FlexibleFormula) -> Formula:
@@ -24,10 +26,12 @@ def data_validate_formula(
 
 # Classes
 
+
 class Formula(tuple):
-    """A `Formula` is a pair (ϕ, S) where:
+    """A `Formula` is a pair (ϕ, M) where:
      - ϕ is an abstract formula of tree-size n.
-     - S is a sequence of connectives of length n.
+     - M is a bijective map between the subset of natural-numbers N,
+       and a set of connectives C.
     """
 
     def __eq__(self, t):
@@ -53,7 +57,6 @@ class Formula(tuple):
 
     def __init__(self, phi: afl.FlexibleAbstractFormula, s: sl.FlexibleConnectiveSequence):
         super(Formula, self).__init__()
-        self._connectives = None
         self._immediate_sub_formulas = None
         self._sub_formulas = None
 
@@ -76,13 +79,16 @@ class Formula(tuple):
             return False
 
     def __new__(cls, phi: afl.FlexibleAbstractFormula, s: sl.FlexibleConnectiveSequence):
-        s: sl.ConnectiveSequence = sl.data_validate_connective_sequence(s)
         phi: afl.AbstractFormula = afl.data_validate_abstract_formula(phi)
-        if s.length != phi.sequence_max_value + 1:
+        s: sl.ConnectiveSequence = sl.data_validate_connective_sequence(s)
+        phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
+        if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
-                f"`Formula` data validation error. The length of the `ConnectiveSequence` is not equal to the `sequence_max_value` of its `abstract_formula`.",
+                f"`Formula` data validation error. The length of the `ConnectiveSequence` `s`"
+                f" is not equal to the `image_cardinality` of the `natural_number_sequence` of its"
+                f" `abstract_formula`.",
                 s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
-        psi = super(Formula, cls).__new__(cls, (s, phi,))
+        psi = super(Formula, cls).__new__(cls, (phi, s,))
         psi = retrieve_formula_from_cache(psi)
         return psi
 
@@ -101,7 +107,7 @@ class Formula(tuple):
 
         :return:
         """
-        return tuple.__getitem__(self, 1)
+        return tuple.__getitem__(self, 0)
 
     @property
     def connective_sequence(self) -> sl.ConnectiveSequence:
@@ -112,21 +118,7 @@ class Formula(tuple):
 
         :return:
         """
-        return tuple.__getitem__(self, 0)
-
-    @property
-    def connectives(self) -> tuple[connective.Connective, ...]:
-        """The `connectives` of a `Formula` `phi` is the tuple of `Connective` elements in the formula tree,
-        following the depth-first, ascending-nodes algorithm.
-
-        :return:
-        """
-        if self._connectives is None:
-            connectives = list()
-            for c in self.iterate_connectives():
-                connectives.append(c)
-            self._connectives = tuple(connectives)
-        return self._connectives
+        return tuple.__getitem__(self, 1)
 
     @property
     def formula_degree(self) -> int:
@@ -207,7 +199,7 @@ class Formula(tuple):
         """
         i: int
         c: connective.Connective
-        for i in self.abstract_formula.restricted_growth_function_sequence:
+        for i in self.abstract_formula.natural_number_sequence:
             yield self.get_connective_by_sequence_element(i)
 
     def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[Formula, None, None]:
@@ -323,6 +315,8 @@ class Formula(tuple):
         """
         return self.abstract_formula.tree_size
 
+
+# Data types
 
 FlexibleFormula = typing.Union[
     Formula, tuple[
