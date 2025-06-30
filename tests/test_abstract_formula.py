@@ -335,3 +335,12 @@ class TestAbstractFormula:
 
         assert not pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
                                           (2, 0, 3, 0, 2, 2,)).is_sub_formula_of(af_big)
+
+    def test_declare_abstract_formula_from_immediate_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab):
+        phi1 = pu.afl.AbstractFormula(t2_a_aa, (17, 15,))
+        phi2 = pu.afl.AbstractFormula(t1_a, (31,))
+        phi3 = pu.afl.AbstractFormula(t2_a_aa, (9, 2,))
+        phi4 = pu.afl.declare_abstract_formula_from_immediate_sub_formulas(n=4, s=(phi1, phi2, phi3,))
+        t = pu.rptl.RootedPlaneTree(t2_a_aa, t1_a, t2_a_aa)
+        phi5 = pu.afl.AbstractFormula(t, (4, 17, 15, 31, 9, 2,))
+        assert phi4 == phi5

@@ -130,7 +130,12 @@ class NaturalNumberSequence(tuple):
         :param s:
         :return:
         """
-        return concatenate_natural_number_sequences(self, s)
+        if isinstance(s, int):
+            return self.scalar_addition(n=s)
+        elif isinstance(s, typing.Iterable):
+            return concatenate_natural_number_sequences(self, s)
+        else:
+            raise util.PunctiliousException("Unsupported type.")
 
     def __eq__(self, s):
         """Returns `False` if `s` cannot be interpreted as a :class:`NaturalNumberSequence`,

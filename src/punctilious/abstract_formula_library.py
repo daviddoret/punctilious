@@ -44,8 +44,7 @@ def declare_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractForm
 
 def declare_abstract_formula_from_immediate_sub_formulas(
         n: int | None,
-        s: tuple[
-               FlexibleAbstractFormula] | None) -> AbstractFormula:
+        s: tuple[FlexibleAbstractFormula, ...] | None) -> AbstractFormula:
     """Given a root natural number n,
     and a tuple of abstract-formulas s,
     declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
@@ -67,8 +66,8 @@ def declare_abstract_formula_from_immediate_sub_formulas(
     # Declare the natural-number-sequence by appending n to the concatenation of the
     # children natural-number-sequences.
     u: sl.NaturalNumberSequence = sl.NaturalNumberSequence(n) + sl.concatenate_natural_number_sequences(
-        phi.natural_number_sequence for phi in s)
-    phi: AbstractFormula = AbstractFormula(t=u, s=u)
+        *(phi.natural_number_sequence for phi in s))
+    phi: AbstractFormula = AbstractFormula(t=t, s=u)
     return phi
 
 
