@@ -5,20 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Formula">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/connective_catalog.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_connective.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_connective.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_connective_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_connective_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1010,14 +999,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01448" summary="build_formula_from_tree_of_integer_tuple_pairs">
-      <option name="closed" value="true" />
-      <created>1750494635245</created>
-      <option name="number" value="01448" />
-      <option name="presentableId" value="LOCAL-01448" />
-      <option name="project" value="LOCAL" />
-      <updated>1750494635245</updated>
-    </task>
     <task id="LOCAL-01449" summary="CAF">
       <option name="closed" value="true" />
       <created>1750573370940</created>
@@ -1402,7 +1383,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751224699410</updated>
     </task>
-    <option name="localTasksCounter" value="1497" />
+    <task id="LOCAL-01497" summary="Formula">
+      <option name="closed" value="true" />
+      <created>1751226569473</created>
+      <option name="number" value="01497" />
+      <option name="presentableId" value="LOCAL-01497" />
+      <option name="project" value="LOCAL" />
+      <updated>1751226569473</updated>
+    </task>
+    <option name="localTasksCounter" value="1498" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

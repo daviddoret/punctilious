@@ -334,8 +334,30 @@ class AbstractFormula(tuple):
         return self.canonical_abstract_formula.is_abstract_formula_equivalent_to(
             phi.canonical_abstract_formula)
 
+    def is_immediate_sub_formula_of(self, phi: AbstractFormula):
+        """Returns `True` if this :class:`AbstractFormula` is an immediate sub-formula of :class:`AbstractFormula` phi.
+
+        :param phi:
+        :return:
+        """
+        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        psi: AbstractFormula
+        for psi in phi.iterate_immediate_sub_formulas():
+            if self.is_abstract_formula_equivalent_to(psi):
+                return True
+        return False
+
+    def is_immediate_super_formula_of(self, phi: AbstractFormula):
+        """Returns `True` if :class:`AbstractFormula` phi is an immediate super-formula of this :class:`AbstractFormula`.
+
+        :param phi:
+        :return:
+        """
+        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        return phi.is_immediate_sub_formula_of(self)
+
     def is_sub_formula_of(self, phi: AbstractFormula):
-        """Returns `True` if this :class:`AbstractFormula` if a sub-formula of :class:`AbstractFormula` phi.
+        """Returns `True` if this :class:`AbstractFormula` is a sub-formula of :class:`AbstractFormula` phi.
 
         :param phi:
         :return:
@@ -348,7 +370,7 @@ class AbstractFormula(tuple):
         return False
 
     def is_super_formula_of(self, phi: AbstractFormula):
-        """Returns `True` if :class:`AbstractFormula` phi if a sub-formula of this :class:`AbstractFormula`.
+        """Returns `True` if :class:`AbstractFormula` phi is a sub-formula of this :class:`AbstractFormula`.
 
         :param phi:
         :return:

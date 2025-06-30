@@ -5,7 +5,7 @@ import collections.abc
 
 # package modules
 import util
-import connective_library
+import connective_library as cl
 import abstract_formula_library as afl
 import sequence_library as sl
 
@@ -132,7 +132,7 @@ class Formula(tuple):
         """
         return self.abstract_formula.formula_degree
 
-    def get_connective_by_sequence_element(self, i: int) -> connective.Connective:
+    def get_connective_by_sequence_element(self, i: int) -> cl.Connective:
         return self.connective_sequence[i]
 
     @property
@@ -183,6 +183,15 @@ class Formula(tuple):
         phi: Formula = data_validate_formula(phi)
         return any(self.is_formula_equivalent_to(psi) for psi in phi.iterate_immediate_sub_formulas())
 
+    def is_immediate_super_formula_of(self, phi: Formula):
+        """Returns `True` if :class:`Formula` phi is an immediate sub-formula of this :class:`Formula`.
+
+        :param phi:
+        :return:
+        """
+        phi: Formula = data_validate_formula(phi)
+        return phi.is_immediate_sub_formula_of(self)
+
     def is_sub_formula_of(self, phi: Formula) -> bool:
         """Returns `True` if `phi` is a sub-formula of the current `Formula`, `False` otherwise.
 
@@ -192,13 +201,22 @@ class Formula(tuple):
         phi: Formula = data_validate_formula(phi)
         return any(self.is_formula_equivalent_to(psi) for psi in phi.iterate_sub_formulas())
 
-    def iterate_connectives(self) -> collections.abc.Generator[connective.Connective, None, None]:
+    def is_super_formula_of(self, phi: Formula):
+        """Returns `True` if :class:`Formula` phi is a sub-formula of this :class:`Formula`.
+
+        :param phi:
+        :return:
+        """
+        phi: Formula = data_validate_formula(phi)
+        return phi.is_sub_formula_of(self)
+
+    def iterate_connectives(self) -> collections.abc.Generator[cl.Connective, None, None]:
         """Iterate the `Formula` connectives, following the depth-first, ascending-nodes algorithm.
 
         :return: None
         """
         i: int
-        c: connective.Connective
+        c: cl.Connective
         for i in self.abstract_formula.natural_number_sequence:
             yield self.get_connective_by_sequence_element(i)
 
@@ -212,7 +230,7 @@ class Formula(tuple):
         for phi, s in zip(self.abstract_formula.iterate_immediate_sub_formulas(),
                           self.abstract_formula.iterate_immediate_sub_sequences()):
             s: tuple[int, ...] = util.deduplicate_integer_sequence(s)
-            t: tuple[connective.Connective, ...] = tuple(
+            t: tuple[cl.Connective, ...] = tuple(
                 self.get_connective_by_sequence_element(i) for i in s)
             yield Formula(phi, t)
 
@@ -220,12 +238,12 @@ class Formula(tuple):
         for phi, s in zip(self.abstract_formula.iterate_sub_formulas(),
                           self.abstract_formula.iterate_sub_sequences()):
             s: tuple[int, ...] = util.deduplicate_integer_sequence(s)
-            t: tuple[connective.Connective, ...] = tuple(
+            t: tuple[cl.Connective, ...] = tuple(
                 self.get_connective_by_sequence_element(i) for i in s)
             yield Formula(phi, t)
 
     @property
-    def main_connective(self) -> connective.Connective:
+    def main_connective(self) -> cl.Connective:
         """The `main_connective` of a :class:`Formula` `phi` is the :class:`Connective` that corresponds
         to the root node of the formula tree.
 
