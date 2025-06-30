@@ -130,7 +130,7 @@ class NaturalNumberSequence(tuple):
         :param s:
         :return:
         """
-        return concatenate_flexible_natural_numbers_sequences(self, s)
+        return concatenate_natural_number_sequences(self, s)
 
     def __eq__(self, s):
         """Returns `False` if `s` cannot be interpreted as a :class:`NaturalNumberSequence`,
@@ -236,7 +236,7 @@ class NaturalNumberSequence(tuple):
         :param s:
         :return:
         """
-        return concatenate_flexible_natural_numbers_sequences(self, *s)
+        return concatenate_natural_number_sequences(self, *s)
 
     @property
     def elements(self) -> tuple[int, ...]:
@@ -390,16 +390,17 @@ class NaturalNumberSequence(tuple):
         """
         return max(self)
 
+    def scalar_addition(self, n: int):
+        """Given a :class:`NaturalNumberSequence` :math:`S`,
+        and a natural number :math:`n`,
+        return a :class:`NaturalNumberSequence` :math:`T` defined as
+        :math:`(t_0 + n, t_1 + n, \cdots, t_i)`.
 
-def concatenate_flexible_natural_numbers_sequences(*s: tuple[
-    FlexibleNaturalNumberSequence, ...]) -> NaturalNumberSequence:
-    """Concatenates :class:`NaturalNumberSequence` elements.
-
-    :param s:
-    :return:
-    """
-    t: tuple[FlexibleNaturalNumberSequence] = tuple(itertools.chain.from_iterable(s))
-    return NaturalNumberSequence(*t)
+        :param n:
+        :return:
+        """
+        t: tuple[int, ...] = tuple(x + n for x in self.elements)
+        return NaturalNumberSequence(*t)
 
 
 class ConnectiveSequence(tuple):

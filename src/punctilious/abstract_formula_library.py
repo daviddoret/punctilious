@@ -66,7 +66,7 @@ def declare_abstract_formula_from_immediate_sub_formulas(
     t: rpt.RootedPlaneTree = rpt.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(*t)
     # Declare the natural-number-sequence by appending n to the concatenation of the
     # children natural-number-sequences.
-    u: sl.NaturalNumberSequence = (n,) + sl.concatenate_natural_number_sequences(
+    u: sl.NaturalNumberSequence = sl.NaturalNumberSequence(n) + sl.concatenate_natural_number_sequences(
         phi.natural_number_sequence for phi in s)
     phi: AbstractFormula = AbstractFormula(t=u, s=u)
     return phi

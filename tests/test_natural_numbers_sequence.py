@@ -71,8 +71,8 @@ class TestNaturalNumbersSequence:
 
     def test_concatenate_single(self, nns0, nns00, nns01, nns012345, nns0123456789_10_11):
         assert nns0.concatenate_with(nns00) == pu.sl.NaturalNumberSequence(*nns0, *nns00)
-        assert pu.sl.concatenate_flexible_natural_numbers_sequences(nns0123456789_10_11,
-                                                                    nns00) == pu.sl.NaturalNumberSequence(
+        assert pu.sl.concatenate_natural_number_sequences(nns0123456789_10_11,
+                                                          nns00) == pu.sl.NaturalNumberSequence(
             *nns0123456789_10_11, *nns00)
 
     def test_is_restricted_growth_function_sequence(self):

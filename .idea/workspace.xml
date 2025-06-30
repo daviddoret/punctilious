@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Formula">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/transformation_library.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="concatenate_natural_number_sequences">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1004,14 +1001,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01450" summary="UnrestrictedSequence">
-      <option name="closed" value="true" />
-      <created>1750573923506</created>
-      <option name="number" value="01450" />
-      <option name="presentableId" value="LOCAL-01450" />
-      <option name="project" value="LOCAL" />
-      <updated>1750573923506</updated>
-    </task>
     <task id="LOCAL-01451" summary="UnrestrictedSequence">
       <option name="closed" value="true" />
       <created>1750574229262</created>
@@ -1396,7 +1385,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751261705474</updated>
     </task>
-    <option name="localTasksCounter" value="1499" />
+    <task id="LOCAL-01499" summary="concatenate_natural_number_sequences">
+      <option name="closed" value="true" />
+      <created>1751283533177</created>
+      <option name="number" value="01499" />
+      <option name="presentableId" value="LOCAL-01499" />
+      <option name="project" value="LOCAL" />
+      <updated>1751283533177</updated>
+    </task>
+    <option name="localTasksCounter" value="1500" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1449,7 +1446,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="equivalence for abstract-formula and formula." />
     <MESSAGE value="RGF-sequence equivalence" />
     <MESSAGE value="abstract-formula equivalence" />
     <MESSAGE value="formula equivalence" />
@@ -1474,7 +1470,8 @@
     <MESSAGE value="NaturalNumberSequence.image &amp; image_cardinality" />
     <MESSAGE value="Documentation" />
     <MESSAGE value="Formula" />
-    <option name="LAST_COMMIT_MESSAGE" value="Formula" />
+    <MESSAGE value="concatenate_natural_number_sequences" />
+    <option name="LAST_COMMIT_MESSAGE" value="concatenate_natural_number_sequences" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
