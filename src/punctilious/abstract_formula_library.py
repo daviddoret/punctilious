@@ -13,7 +13,7 @@ from punctilious.sequence_library import NaturalNumberSequence
 # Formula declarations
 
 
-def declare_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
+def declare_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
     """Declares a :class:`AbstractFormula` object from a tree of integer/tuple pairs.
 
     Use case:
@@ -43,27 +43,30 @@ def declare_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
 
 
 def declare_abstract_formula_from_immediate_sub_formulas(
-        n: int,
+        n: int | None,
         s: tuple[
                FlexibleAbstractFormula] | None) -> AbstractFormula:
     """Given a root natural number n,
     and a tuple of abstract-formulas s,
-    declares a new formula 𝜓 n(s_0, s_1, ..., s_n) where s_i is an element of s.
+    declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
 
     :param n:
     :param s:
     :return:
     """
+    if n is None:
+        n: int = 0
     if s is None:
-        s = ()
+        s: tuple[AbstractFormula, ...] = ()
     s: tuple[AbstractFormula, ...] = tuple(
         data_validate_abstract_formula(o=phi) for phi in s)
-    phi: AbstractFormula
     # Retrieves the children trees
     t: tuple[rpt.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
     # Declare the new parent tree
-    t: rpt.RootedPlaneTree = rpt.RootedPlaneTree(*t)
-    u: sl.NaturalNumberSequence = (n,) + itertools.chain.from_iterable(
+    t: rpt.RootedPlaneTree = rpt.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(*t)
+    # Declare the natural-number-sequence by appending n to the concatenation of the
+    # children natural-number-sequences.
+    u: sl.NaturalNumberSequence = (n,) + sl.concatenate_natural_number_sequences(
         phi.natural_number_sequence for phi in s)
     phi: AbstractFormula = AbstractFormula(t=u, s=u)
     return phi
@@ -152,7 +155,7 @@ class AbstractFormula(tuple):
     def __hash__(self):
         return hash((AbstractFormula, self.rooted_plane_tree, self.natural_number_sequence,))
 
-    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
+    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumberSequence):
         super(AbstractFormula, self).__init__()
         self._canonical_abstract_formula: AbstractFormula | None = None
         self._immediate_sub_formulas: tuple[AbstractFormula, ...] | None = None
@@ -176,7 +179,7 @@ class AbstractFormula(tuple):
         except util.PunctiliousException:
             return False
 
-    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumbersSequence):
+    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumberSequence):
         t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
         s: sl.NaturalNumberSequence = sl.data_validate_natural_number_sequence(s)
         if t.size != s.length:
@@ -587,7 +590,7 @@ class AbstractFormula(tuple):
 
 FlexibleAbstractFormula = typing.Union[
     AbstractFormula, tuple[
-        rpt.FlexibleRootedPlaneTree, sl.FlexibleNaturalNumbersSequence], collections.abc.Iterator, collections.abc.Generator, None]
+        rpt.FlexibleRootedPlaneTree, sl.FlexibleNaturalNumberSequence], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 

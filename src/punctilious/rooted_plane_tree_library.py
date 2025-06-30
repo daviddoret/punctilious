@@ -42,6 +42,19 @@ def build_rooted_plane_tree_from_tuple_tree(t: tuple | None = None) -> RootedPla
         return RootedPlaneTree(*children)
 
 
+def declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+        *t: RootedPlaneTree) -> RootedPlaneTree:
+    """Given a collection of :class:`RootedPlaneTree` elements :math:`t_0, t_1, \cdots, t_n`,
+    declares a new :class:`RootedPlaneTree`
+    defined as the parent :class:`RootedPlaneTree` element containing
+    that collection as immediate sub-:class:`RootedPlaneTree` elements preserving order.
+
+    :param t:
+    :return:
+    """
+    return RootedPlaneTree(*t)
+
+
 class RootedPlaneTree(tuple):
     """A `RootedPlaneTree` is an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.

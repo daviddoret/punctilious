@@ -12,7 +12,7 @@ import connective_library as cl
 
 
 def data_validate_natural_number_sequence(
-        o: FlexibleNaturalNumbersSequence) -> NaturalNumberSequence:
+        o: FlexibleNaturalNumberSequence) -> NaturalNumberSequence:
     """Data validates `o` against type :class:`NaturalNumberSequence`,
     applying implicit conversion as necessary.
 
@@ -31,8 +31,8 @@ def data_validate_natural_number_sequence(
 
 
 def data_validate_natural_number_sequence_elements(
-        o: FlexibleNaturalNumbersSequence, raise_exception_on_validation_failure: bool = True) -> tuple[
-    bool, FlexibleNaturalNumbersSequence | None]:
+        o: FlexibleNaturalNumberSequence, raise_exception_on_validation_failure: bool = True) -> tuple[
+    bool, FlexibleNaturalNumberSequence | None]:
     """Validates `o` against type :class:`NaturalNumberSequence`,
     applying implicit conversion as necessary.
 
@@ -94,6 +94,19 @@ def data_validate_connective_sequence_elements(
         o: tuple[cl.Connective, ...] = tuple(cl.data_validate_connective(n) for n in o)
         return o
     raise util.PunctiliousException('ConnectiveSequence elements data validation failure', o=o)
+
+
+# General functions
+
+def concatenate_natural_number_sequences(*s: FlexibleNaturalNumberSequence) -> NaturalNumberSequence:
+    """Concatenates a collection of :class:`NaturalNumberSequence` elements, preserving order.
+
+    :param s:
+    :return:
+    """
+    s: tuple[int] = tuple(itertools.chain.from_iterable(
+        t for t in s))
+    return NaturalNumberSequence(*s)
 
 
 # Classes
@@ -209,7 +222,7 @@ class NaturalNumberSequence(tuple):
             self._canonical_natural_number_sequence = NaturalNumberSequence(*s)
             return self._canonical_natural_number_sequence
 
-    def concatenate_with(self, *s: FlexibleNaturalNumbersSequence) -> NaturalNumberSequence:
+    def concatenate_with(self, *s: FlexibleNaturalNumberSequence) -> NaturalNumberSequence:
         """Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
         or an iterable / generator of multiple :class:`NaturalNumberSequence` elements.
 
@@ -340,7 +353,7 @@ class NaturalNumberSequence(tuple):
         """
         return True
 
-    def is_natural_number_sequence_equivalent_to(self, s: FlexibleNaturalNumbersSequence):
+    def is_natural_number_sequence_equivalent_to(self, s: FlexibleNaturalNumberSequence):
         """
 
         Notation:
@@ -379,13 +392,13 @@ class NaturalNumberSequence(tuple):
 
 
 def concatenate_flexible_natural_numbers_sequences(*s: tuple[
-    FlexibleNaturalNumbersSequence, ...]) -> NaturalNumberSequence:
+    FlexibleNaturalNumberSequence, ...]) -> NaturalNumberSequence:
     """Concatenates :class:`NaturalNumberSequence` elements.
 
     :param s:
     :return:
     """
-    t: tuple[FlexibleNaturalNumbersSequence] = tuple(itertools.chain.from_iterable(s))
+    t: tuple[FlexibleNaturalNumberSequence] = tuple(itertools.chain.from_iterable(s))
     return NaturalNumberSequence(*t)
 
 
@@ -477,7 +490,7 @@ class ConnectiveSequence(tuple):
 
 FlexibleConnectiveSequence = typing.Union[
     ConnectiveSequence, tuple[cl.Connective, ...], collections.abc.Iterator, collections.abc.Generator, None]
-FlexibleNaturalNumbersSequence = typing.Union[
+FlexibleNaturalNumberSequence = typing.Union[
     NaturalNumberSequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases

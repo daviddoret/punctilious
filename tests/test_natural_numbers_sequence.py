@@ -121,3 +121,12 @@ class TestNaturalNumbersSequence:
         assert s.image_cardinality == 3
         s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 2, 1, 2, 0, )
         assert s.image_cardinality == 4
+
+    def test_concatenation(self):
+        s1 = pu.sl.NaturalNumberSequence(0, 0, 0)
+        s2 = pu.sl.NaturalNumberSequence(0, )
+        s3 = pu.sl.NaturalNumberSequence(8, )
+        s4 = pu.sl.NaturalNumberSequence(5, 6, 2, )
+        assert pu.sl.concatenate_natural_number_sequences(s1, s2) == (0, 0, 0, 0,)
+        assert pu.sl.concatenate_natural_number_sequences(s4, s4, s4) == (5, 6, 2, 5, 6, 2, 5, 6, 2,)
+        assert pu.sl.concatenate_natural_number_sequences(s4, s3, s2, s1) == (5, 6, 2, 8, 0, 0, 0, 0,)
