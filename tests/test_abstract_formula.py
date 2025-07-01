@@ -344,3 +344,7 @@ class TestAbstractFormula:
         t = pu.rptl.RootedPlaneTree(t2_a_aa, t1_a, t2_a_aa)
         phi5 = pu.afl.AbstractFormula(t, (4, 17, 15, 31, 9, 2,))
         assert phi4 == phi5
+
+    def test_canonical_order(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
+        assert af1.is_less_than(af1b)
+        assert af2a.is_less_than(af2b)

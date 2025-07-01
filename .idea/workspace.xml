@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RootedPlaneTree: canonical ordering">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="NaturalNumberSequence: canonical ordering">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,6 +110,7 @@
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_2.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_build_formula_from_tree_of_integer_tuple_pairs.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_canonical_abstract_formula.executor": "Run",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_canonical_order.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_construction_failure.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_construction_success.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_declare_abstract_formula_from_immediate_sub_formulas.executor": "Run",
@@ -317,6 +319,7 @@
     "Python tests.pytest for test_minimal_logic_1.TestPL4.test_pl4_with_auto_derivation.executor": "Run",
     "Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation.executor": "Run",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_natural_number_sequence.executor": "Run",
+    "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_ordering.executor": "Run",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_concatenation.executor": "Run",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_image.executor": "Run",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_image_cardinality.executor": "Run",
@@ -620,7 +623,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_canonical_order">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -815,6 +818,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_canonical_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula.test_canonical_order&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_declare_abstract_formula_from_immediate_sub_formulas" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -868,7 +888,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_concatenation" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_ordering" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -881,7 +901,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_numbers_sequence.TestNaturalNumbersSequence.test_concatenation&quot;" />
+      <option name="_new_target" value="&quot;test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_ordering&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -920,23 +940,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_abstract_formula.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_abstract_formula.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -965,10 +968,10 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
+      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_canonical_order" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_declare_abstract_formula_from_immediate_sub_formulas" />
-      <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_concatenation" />
+      <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_ordering" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_canonical_ordering" />
-      <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -976,11 +979,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_canonical_order" />
+        <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_ordering" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_canonical_ordering" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_declare_abstract_formula_from_immediate_sub_formulas" />
-        <item itemvalue="Python tests.pytest in test_abstract_formula.py" />
-        <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_concatenation" />
       </list>
     </recent_temporary>
   </component>
@@ -1002,14 +1005,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01454" summary="UnrestrictedSequence">
-      <option name="closed" value="true" />
-      <created>1750582355220</created>
-      <option name="number" value="01454" />
-      <option name="presentableId" value="LOCAL-01454" />
-      <option name="project" value="LOCAL" />
-      <updated>1750582355220</updated>
     </task>
     <task id="LOCAL-01455" summary="UnrestrictedSequence">
       <option name="closed" value="true" />
@@ -1395,7 +1390,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751395120604</updated>
     </task>
-    <option name="localTasksCounter" value="1503" />
+    <task id="LOCAL-01503" summary="NaturalNumberSequence: canonical ordering">
+      <option name="closed" value="true" />
+      <created>1751395790507</created>
+      <option name="number" value="01503" />
+      <option name="presentableId" value="LOCAL-01503" />
+      <option name="project" value="LOCAL" />
+      <updated>1751395790508</updated>
+    </task>
+    <option name="localTasksCounter" value="1504" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1448,7 +1451,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="abstract-formula equivalence" />
     <MESSAGE value="formula equivalence" />
     <MESSAGE value="Formula.is_sub_formula, is_immediate_sub_formula" />
     <MESSAGE value="meta theory connectives" />
@@ -1473,7 +1475,8 @@
     <MESSAGE value="Formula" />
     <MESSAGE value="concatenate_natural_number_sequences" />
     <MESSAGE value="RootedPlaneTree: canonical ordering" />
-    <option name="LAST_COMMIT_MESSAGE" value="RootedPlaneTree: canonical ordering" />
+    <MESSAGE value="NaturalNumberSequence: canonical ordering" />
+    <option name="LAST_COMMIT_MESSAGE" value="NaturalNumberSequence: canonical ordering" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

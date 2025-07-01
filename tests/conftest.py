@@ -144,6 +144,11 @@ def nns000(s00):
 
 
 @pytest.fixture
+def nns001(s00):
+    return pu.sl.NaturalNumberSequence(0, 0, 1, )
+
+
+@pytest.fixture
 def nns012345():
     return pu.sl.NaturalNumberSequence(0, 1, 2, 3, 4, 5, )
 
@@ -179,8 +184,8 @@ def af2b(t2_a_aa, nns01):
 
 
 @pytest.fixture
-def af3a(t3_a_aa_aaa, nns3a):
-    return pu.afl.AbstractFormula(t3_a_aa_aaa, nns3a)
+def af3a(t3_a_aa_aaa, nns001):
+    return pu.afl.AbstractFormula(t3_a_aa_aaa, nns001)
 
 
 @pytest.fixture
