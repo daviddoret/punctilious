@@ -315,6 +315,58 @@ class NaturalNumberSequence(tuple):
         s: NaturalNumberSequence = data_validate_natural_number_sequence(s)
         return self.canonical_natural_number_sequence.is_natural_number_sequence_equivalent_to(s)
 
+    def is_equal_to(self, s: FlexibleNaturalNumberSequence):
+        """Under :class:`NaturalNumberSequence` canonical ordering,
+        returns `True` if the current :class:`NaturalNumberSequence` is equal to `s`,
+        `False` otherwise.
+
+        See :attr:`NaturalNumberSequence.is_less_than` for a definition of natural-number-sequence canonical-ordering.
+
+        :param s: A :class:`NaturalNumberSequence`.
+        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
+        """
+        s: NaturalNumberSequence = data_validate_natural_number_sequence(s)
+        return self.is_natural_number_sequence_equivalent_to(s)
+
+    def is_less_than_or_equal_to(self, s: FlexibleNaturalNumberSequence) -> bool:
+        """Under :class:`NaturalNumberSequence` canonical ordering,
+        returns `True` if the current :class:`RootedPlaneTree` is less than or equal to `s`,
+        `False` otherwise.
+
+        See :attr:`NaturalNumberSequence.is_less_than` for a definition of natural-number-sequence canonical-ordering.
+
+        :param s: A :class:`NaturalNumberSequence`.
+        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
+        """
+        s: NaturalNumberSequence = data_validate_natural_number_sequence(s)
+        return self.is_equal_to(s) or self.is_less_than(s)
+
+    def is_less_than(self, s: FlexibleNaturalNumberSequence) -> bool:
+        """Under :class:`NaturalNumberSequence` canonical ordering,
+        returns `True` if the current :class:`NaturalNumberSequence` is less than `s`,
+        `False` otherwise.
+
+        Definition: canonical ordering of natural-number-sequence, denoted :math:`\prec`,
+        is defined as length-first, ascending-order second.
+
+        :param s: A :class:`NaturalNumberSequence`.
+        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
+        """
+        s: NaturalNumberSequence = data_validate_natural_number_sequence(s)
+        if self.is_natural_number_sequence_equivalent_to(s):
+            return False
+        elif self.length < s.length:
+            return True
+        elif self.length > s.length:
+            return False
+        else:
+            for n, m in zip(self.elements, s.elements):
+                if n < m:
+                    return True
+                if n > m:
+                    return False
+        raise util.PunctiliousException("Unreachable condition")
+
     @property
     def is_restricted_growth_function_sequence(self) -> bool:
         """`True` if this natural numbers sequence is also an RGF sequence, `False` otherwise.

@@ -227,7 +227,7 @@ class RootedPlaneTree(tuple):
         t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
         return self.is_rooted_plane_tree_equivalent_to(t)
 
-    def is_less_than_or_equal_to(self, t: FlexibleRootedPlaneTree):
+    def is_less_than_or_equal_to(self, t: FlexibleRootedPlaneTree) -> bool:
         """Under :class:`RootedPlaneTree` canonical ordering,
         returns `True` if the current :class:`RootedPlaneTree` is less than or equal to `t`,
         `False` otherwise.
@@ -240,7 +240,7 @@ class RootedPlaneTree(tuple):
         t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
         return self.is_equal_to(t) or self.is_less_than(t)
 
-    def is_less_than(self, t: FlexibleRootedPlaneTree):
+    def is_less_than(self, t: FlexibleRootedPlaneTree) -> bool:
         """Under :class:`RootedPlaneTree` canonical ordering,
         returns `True` if the current :class:`RootedPlaneTree` is less than `t`,
         `False` otherwise.

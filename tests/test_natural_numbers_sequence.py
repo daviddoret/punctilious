@@ -130,3 +130,7 @@ class TestNaturalNumbersSequence:
         assert pu.sl.concatenate_natural_number_sequences(s1, s2) == (0, 0, 0, 0,)
         assert pu.sl.concatenate_natural_number_sequences(s4, s4, s4) == (5, 6, 2, 5, 6, 2, 5, 6, 2,)
         assert pu.sl.concatenate_natural_number_sequences(s4, s3, s2, s1) == (5, 6, 2, 8, 0, 0, 0, 0,)
+
+    def test_canonical_ordering(self):
+        assert pu.sl.NaturalNumberSequence(0, 0, 0).is_less_than(pu.sl.NaturalNumberSequence(0, 0, 1))
+        assert pu.sl.NaturalNumberSequence(0, 4, 17).is_less_than(pu.sl.NaturalNumberSequence(0, 4, 19))

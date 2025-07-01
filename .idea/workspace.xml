@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="concatenate_natural_number_sequences">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RootedPlaneTree: canonical ordering">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/transformation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/transformation_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1004,14 +1003,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01453" summary="UnrestrictedSequence">
-      <option name="closed" value="true" />
-      <created>1750576285147</created>
-      <option name="number" value="01453" />
-      <option name="presentableId" value="LOCAL-01453" />
-      <option name="project" value="LOCAL" />
-      <updated>1750576285147</updated>
-    </task>
     <task id="LOCAL-01454" summary="UnrestrictedSequence">
       <option name="closed" value="true" />
       <created>1750582355220</created>
@@ -1396,7 +1387,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751320430942</updated>
     </task>
-    <option name="localTasksCounter" value="1502" />
+    <task id="LOCAL-01502" summary="RootedPlaneTree: canonical ordering">
+      <option name="closed" value="true" />
+      <created>1751395120604</created>
+      <option name="number" value="01502" />
+      <option name="presentableId" value="LOCAL-01502" />
+      <option name="project" value="LOCAL" />
+      <updated>1751395120604</updated>
+    </task>
+    <option name="localTasksCounter" value="1503" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1449,7 +1448,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="RGF-sequence equivalence" />
     <MESSAGE value="abstract-formula equivalence" />
     <MESSAGE value="formula equivalence" />
     <MESSAGE value="Formula.is_sub_formula, is_immediate_sub_formula" />
@@ -1474,7 +1472,8 @@
     <MESSAGE value="Documentation" />
     <MESSAGE value="Formula" />
     <MESSAGE value="concatenate_natural_number_sequences" />
-    <option name="LAST_COMMIT_MESSAGE" value="concatenate_natural_number_sequences" />
+    <MESSAGE value="RootedPlaneTree: canonical ordering" />
+    <option name="LAST_COMMIT_MESSAGE" value="RootedPlaneTree: canonical ordering" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
