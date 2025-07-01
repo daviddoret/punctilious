@@ -97,6 +97,28 @@ class RootedPlaneTree(tuple):
         super(RootedPlaneTree, self).__init__()
         self._subtrees: tuple[RootedPlaneTree, ...] | None = None
 
+    def __le__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTre`,
+        given canonical ordering, returns `True` if this :class:`RootedPlaneTree` is less than or equal to `t`,
+        `False` otherwise.
+
+        See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
+
+        """
+        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        return self.is_less_than_or_equal_to(t)
+
+    def __lt__(self, t):
+        """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTre`,
+        given canonical ordering, returns `True` if this :class:`RootedPlaneTre` is less than `t`,
+        `False` otherwise.
+
+        See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
+
+        """
+        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        return self.is_less_than(t)
+
     def __ne__(self, t):
         """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTree`,
         returns `True` if `t` is not rooted-plane-tree-equivalent to this :class:`RootedPlaneTree`,
@@ -191,6 +213,62 @@ class RootedPlaneTree(tuple):
         """
         # return tuple(super().__iter__()) # alternative implementation.
         return tuple.__new__(tuple, self)  # this implementation seems more "direct".
+
+    def is_equal_to(self, t: FlexibleRootedPlaneTree):
+        """Under :class:`RootedPlaneTree` canonical ordering,
+        returns `True` if the current :class:`RootedPlaneTree` is equal to `t`,
+        `False` otherwise.
+
+        See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
+
+        :param t: A :class:`RootedPlaneTree`.
+        :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
+        """
+        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        return self.is_rooted_plane_tree_equivalent_to(t)
+
+    def is_less_than_or_equal_to(self, t: FlexibleRootedPlaneTree):
+        """Under :class:`RootedPlaneTree` canonical ordering,
+        returns `True` if the current :class:`RootedPlaneTree` is less than or equal to `t`,
+        `False` otherwise.
+
+        See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
+
+        :param t: A :class:`RootedPlaneTree`.
+        :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
+        """
+        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        return self.is_equal_to(t) or self.is_less_than(t)
+
+    def is_less_than(self, t: FlexibleRootedPlaneTree):
+        """Under :class:`RootedPlaneTree` canonical ordering,
+        returns `True` if the current :class:`RootedPlaneTree` is less than `t`,
+        `False` otherwise.
+
+        Definition: canonical ordering of rooted-plane-trees, denoted :math:`\prec`
+        Given two rooted-plan-trees :math`S` and :math:`T`,
+         :math:`S =_{\prec} T` if and only if :math:`T \sim_{\text{rooted-plane-tree}} S`,
+         :math:`|S| < |T| \Rightarrow S \prec T`,
+         ...then recursively for children in ascending order.
+
+        :param t: A :class:`RootedPlaneTree`.
+        :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
+        """
+        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        if self.is_equal_to(t):
+            return False
+        elif self.degree < t.degree:
+            return True
+        elif self.degree > t.degree:
+            return False
+        else:
+            # S and T have the same degree.
+            for sub_s, sub_t in zip(self.immediate_subtrees, t.immediate_subtrees):
+                if sub_s.is_less_than(sub_t):
+                    return True
+                elif sub_t.is_less_than(sub_s):
+                    return False
+        raise util.PunctiliousException("Unreachable algorithm position.")
 
     @property
     def degree(self) -> int:

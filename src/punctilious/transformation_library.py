@@ -1,4 +1,61 @@
+import util
 import abstract_formula_library as afl
+
+
+class AbstractMap(afl.AbstractFormula):
+    """An :class:`AbstractFormula` that has the structure of a finite (computable) map.
+
+    Definition:
+    An abstract-formula :math:`\phi` is an abstract-map if and only if:
+     - its arity equals 2,
+     - the arities of its immediate sub-formulas are equal.
+
+    Properties:
+     - pre-image: noted :math:`f^{-1}(\phi)`, the first immediate sub-formula of :math:`\phi`.
+       Note that the pre-image is not a set, it is a sub-formula.
+     - image: noted :math:`\operatorname{Im}(\phi)`, the second immediate sub-formula of :math:`\phi`.
+       Note that the pre-image is not a set, it is a sub-formula.
+
+    Definition:
+    An abstract-map :math:`\phi` is canonical if and only if:
+     - its pre-image is canonically ordered.
+
+    Use case:
+    If an abstract-formula :math:`\phi` is an abstract-map,
+    then there is an algorithm that receives an abstract-formula :math:`\psi` as input,
+    that if :math:`\psi` is an element of :math:`f^{-1}(\phi)`
+    returns the element of :math:`\operatorname{Im}(\phi)` that is at the same index position.
+
+    """
+
+    def __init__(self, n: int, p: afl.FlexibleAbstractFormula, i: afl.FlexibleAbstractFormula):
+        """
+
+        :param n: The natural number of the root element of the map.
+        :param i: The image of the map.
+        :param p: The preimage of the map.
+        """
+        super(AbstractTransformation, self).__init__(t=None, s=None)
+
+    def __new__(cls, n: int, p: afl.FlexibleAbstractFormula, i: afl.FlexibleAbstractFormula):
+        """
+
+        :param n: The natural number of the root element of the map.
+        :param i: The image of the map.
+        :param p: The preimage of the map.
+        """
+        n: int = int(n)
+        p: afl.AbstractFormula = afl.data_validate_abstract_formula(p)
+        i: afl.AbstractFormula = afl.data_validate_abstract_formula(i)
+        if p.arity != i.arity:
+            raise util.PunctiliousException(
+                f"`Formula` data validation error. The length of the `ConnectiveSequence` `s`"
+                f" is not equal to the `image_cardinality` of the `natural_number_sequence` of its"
+                f" `abstract_formula`.",
+                s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
+        psi = super(Formula, cls).__new__(cls, (phi, s,))
+        psi = retrieve_formula_from_cache(psi)
+        return psi
 
 
 class AbstractTransformation(afl.AbstractFormula):

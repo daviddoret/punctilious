@@ -196,6 +196,14 @@ class AbstractFormula(tuple):
         return self.represent_as_function()
 
     @property
+    def arity(self) -> int:
+        """The :attr:`AbstractFormula.arity` is the number of immediate sub-formulas it contains.
+
+        :return:
+        """
+        return len(self.immediate_sub_formulas)
+
+    @property
     def canonical_abstract_formula(self) -> AbstractFormula:
         """
 
