@@ -20,23 +20,15 @@ class RootedPlaneTree(tuple):
 
     """
 
-    def __eq__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTre`,
-        returns `True` if `t` is connective-equivalent to this :class:`RootedPlaneTre`,
-        returns `False` otherwise.
+    def __eq__(self, t) -> bool:
+        """Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
 
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
+        See :attr:`RootedPlaneTree.is_equal_to` for a definition of rooted-plane-tree equality.
+
+        :param t: A rooted-plane-tree.
+        :return: `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
         """
-        try:
-            t: RootedPlaneTree = RootedPlaneTree.from_any(t)
-            return self.is_rooted_plane_tree_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
+        return self.is_equal_to(t)
 
     def __hash__(self):
         return self._compute_hash(self)
@@ -52,45 +44,13 @@ class RootedPlaneTree(tuple):
         super(RootedPlaneTree, self).__init__()
         self._subtrees: tuple[RootedPlaneTree, ...] | None = None
 
-    def __le__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTre`,
-        given canonical ordering, returns `True` if this :class:`RootedPlaneTree` is less than or equal to `t`,
-        `False` otherwise.
-
-        See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
-
-        """
-        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
-        return self.is_less_than_or_equal_to(t)
-
     def __lt__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTre`,
-        given canonical ordering, returns `True` if this :class:`RootedPlaneTre` is less than `t`,
-        `False` otherwise.
+        """Returns `True` if this rooted-plane-tree is less than rooted-plane-tree `t`, `False` otherwise.
 
         See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
 
         """
-        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
         return self.is_less_than(t)
-
-    def __ne__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTree`,
-        returns `True` if `t` is not rooted-plane-tree-equivalent to this :class:`RootedPlaneTree`,
-        returns `False` otherwise.
-
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-        """
-        try:
-            t: RootedPlaneTree = RootedPlaneTree.from_any(t)
-            return not self.is_rooted_plane_tree_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
 
     def __new__(cls, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         if tuple_tree is not None:
@@ -287,16 +247,17 @@ class RootedPlaneTree(tuple):
         return tuple.__new__(tuple, self)  # this implementation seems more "direct".
 
     def is_equal_to(self, t: FlexibleRootedPlaneTree):
-        """Under :class:`RootedPlaneTree` canonical ordering,
-        returns `True` if the current :class:`RootedPlaneTree` is equal to `t`,
-        `False` otherwise.
+        """Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
+
+        Definition - rooted-plane-tree equality:
+        In the context of the rooted-plane-tree canonical ordering,
+        equality is defined as rooted-plane-tree equivalence.
 
         See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
 
-        :param t: A :class:`RootedPlaneTree`.
-        :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
+        :param t: A rooted-plane-tree.
+        :return: `True` if the current rooted-plane-tree is equal to `t`, `False` otherwise.
         """
-        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
         return self.is_rooted_plane_tree_equivalent_to(t)
 
     @property
@@ -306,19 +267,6 @@ class RootedPlaneTree(tuple):
         A `RootedPlaneTree` is a leaf if and only if it contains no children.
         """
         return self.degree == 0
-
-    def is_less_than_or_equal_to(self, t: FlexibleRootedPlaneTree) -> bool:
-        """Under :class:`RootedPlaneTree` canonical ordering,
-        returns `True` if the current :class:`RootedPlaneTree` is less than or equal to `t`,
-        `False` otherwise.
-
-        See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
-
-        :param t: A :class:`RootedPlaneTree`.
-        :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
-        """
-        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
-        return self.is_equal_to(t) or self.is_less_than(t)
 
     def is_less_than(self, t: FlexibleRootedPlaneTree) -> bool:
         """Under :class:`RootedPlaneTree` canonical ordering,

@@ -52,23 +52,15 @@ class NaturalNumberSequence(tuple):
         else:
             raise util.PunctiliousException("Unsupported type.")
 
-    def __eq__(self, s):
-        """Returns `False` if `s` cannot be interpreted as a :class:`NaturalNumberSequence`,
-        returns `True` if `s` is connective-sequence-equivalent to this :class:`NaturalNumberSequence`,
-        returns `False` otherwise.
+    def __eq__(self, s) -> bool:
+        """Returns `True` if this natural-number-sequence is equal to natural-number-sequence `s`, `False` otherwise.
 
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
+        See :attr:`NaturalNumberSequence.is_equal_to` for a definition of natural-number-sequence equality.
+
+        :param s: A natural-number-sequence.
+        :return: `True` if this natural-number-sequence is equal to natural-number-sequence `s`, `False` otherwise.
         """
-        try:
-            s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
-            return self.is_natural_number_sequence_equivalent_to(s)
-        except util.PunctiliousException:
-            return False
+        return self.is_equal_to(s)
 
     def __hash__(self):
         return hash((NaturalNumberSequence, *self.elements,))
@@ -323,19 +315,6 @@ class NaturalNumberSequence(tuple):
         s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
         return self.is_natural_number_sequence_equivalent_to(s)
 
-    def is_less_than_or_equal_to(self, s: FlexibleNaturalNumberSequence) -> bool:
-        """Under :class:`NaturalNumberSequence` canonical ordering,
-        returns `True` if the current :class:`RootedPlaneTree` is less than or equal to `s`,
-        `False` otherwise.
-
-        See :attr:`NaturalNumberSequence.is_less_than` for a definition of natural-number-sequence canonical-ordering.
-
-        :param s: A :class:`NaturalNumberSequence`.
-        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
-        """
-        s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
-        return self.is_equal_to(s) or self.is_less_than(s)
-
     def is_less_than(self, s: FlexibleNaturalNumberSequence) -> bool:
         """Under :class:`NaturalNumberSequence` canonical ordering,
         returns `True` if the current :class:`NaturalNumberSequence` is less than `s`,
@@ -460,23 +439,15 @@ class ConnectiveSequence(tuple):
 
     """
 
-    def __eq__(self, s):
-        """Returns `False` if `s` cannot be interpreted as a :class:`ConnectiveSequence`,
-        returns `True` if `s` is connective-sequence-equivalent to this :class:`ConnectiveSequence`,
-        returns `False` otherwise.
+    def __eq__(self, s) -> bool:
+        """Returns `True` if this connective-sequence is equal to connective-sequence `s`, `False` otherwise.
 
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
+        See :attr:`ConnectiveSequence.is_equal_to` for a definition of connective-sequence equality.
+
+        :param s: A connective-sequence.
+        :return: `True` if this connective-sequence is equal to connective-sequence `s`, `False` otherwise.
         """
-        try:
-            s: ConnectiveSequence = ConnectiveSequence.from_any(s)
-            return self.is_connective_sequence_equivalent_to(s)
-        except util.PunctiliousException:
-            return False
+        return self.is_equal_to(s)
 
     def __hash__(self):
         return self._compute_hash(self)
@@ -618,6 +589,45 @@ class ConnectiveSequence(tuple):
         """
         s: ConnectiveSequence = ConnectiveSequence.from_any(s)
         return all(i == j for i, j in zip(self, s))
+
+    def is_equal_to(self, c: FlexibleConnectiveSequence):
+        """Under :class:`ConnectiveSequence` canonical ordering,
+        returns `True` if the current :class:`ConnectiveSequence` is equal to `c`,
+        `False` otherwise.
+
+        See :attr:`ConnectiveSequence.is_less_than` for a definition of connective-sequence canonical-ordering.
+
+        :param c: A :class:`ConnectiveSequence`.
+        :return: `True` if the current :class:`ConnectiveSequence` is equal to `c`, `False` otherwise.
+        """
+        c: ConnectiveSequence = ConnectiveSequence.from_any(c)
+        return self.is_connective_sequence_equivalent_to(c)
+
+    def is_less_than(self, c: FlexibleConnectiveSequence) -> bool:
+        """Under :class:`ConnectiveSequence` canonical ordering,
+        returns `True` if the current :class:`ConnectiveSequence` is less than `c`,
+        `False` otherwise.
+
+        Definition: canonical ordering of natural-number-sequence, denoted :math:`\prec`,
+        is defined as length-first, ascending-order second.
+
+        :param c: A :class:`ConnectiveSequence`.
+        :return: `True` if the current :class:`ConnectiveSequence` is equal to `c`, `False` otherwise.
+        """
+        c: ConnectiveSequence = ConnectiveSequence.from_any(c)
+        if self.is_connective_sequence_equivalent_to(c):
+            return False
+        elif self.length < c.length:
+            return True
+        elif self.length > c.length:
+            return False
+        else:
+            for n, m in zip(self.elements, c.elements):
+                if n < m:
+                    return True
+                if n > m:
+                    return False
+        raise util.PunctiliousException("Unreachable condition")
 
     @property
     def length(self) -> int:

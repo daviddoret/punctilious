@@ -17,29 +17,32 @@ class Connective(tuple):
      - Mancosu 2021, definition 2.1, p. 14, p. 15.
     """
 
-    def __eq__(self, c):
-        """Returns `False` if `c` cannot be interpreted as a :class:`Connective`,
-        returns `True` if `c` is connective-equivalent to this :class:`Connective`,
-        returns `False` otherwise.
+    def __eq__(self, c) -> bool:
+        """Returns `True` if this connective is equal to connective `c`, `False` otherwise.
 
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
+        See :attr:`Connective.is_equal_to` for a definition of connective equality.
+
+        :param c: A connective.
+        :return: `True` if this connective is equal to connective `c`, `False` otherwise.
         """
-        try:
-            c: Connective = Connective.from_any(c)
-            return self.is_connective_equivalent_to(c)
-        except util.PunctiliousException:
-            return False
+        return self.is_equal_to(c)
 
     def __hash__(self):
         return self._compute_hash(self)
 
     def __init__(self, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         pass
+
+    def __lt__(self, c):
+        """Returns `False` if `t` cannot be interpreted as connective,
+        given canonical ordering, returns `True` if this connective is less than `t`,
+        `False` otherwise.
+
+        See :attr:`Connective.is_less_than` for a definition of connective canonical-ordering.
+
+        """
+        c: Connective = Connective.from_any(c)
+        return self.is_less_than(c)
 
     def __ne__(self, c):
         """Returns `False` if `c` cannot be interpreted as a :class:`Connective`,
@@ -162,6 +165,42 @@ class Connective(tuple):
         """
         c: Connective = Connective.from_any(c)
         return c.uid == self.uid
+
+    def is_equal_to(self, c: FlexibleConnective):
+        """Under connective canonical ordering,
+        returns `True` if the current connective is equal to `c`,
+        `False` otherwise.
+
+        See :attr:`Connective.is_less_than` for a definition of connection canonical-ordering.
+
+        :param c: A connective.
+        :return: `True` if the current connective is equal to `c`, `False` otherwise.
+        """
+        c: Connective = Connective.from_any(c)
+        return self.is_connective_equivalent_to(c)
+
+    def is_less_than(self, c: FlexibleConnective) -> bool:
+        """Under connective canonical ordering,
+        returns `True` if the current connective is less than `c`,
+        `False` otherwise.
+
+        Definition: canonical ordering of connective elements, denoted :math:`\prec`,
+        is based on the 128-bit integer value of their respective UUID component,
+        which is the default implementation of __lt__ in the uuid package.
+
+        :param c: A connective`.
+        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
+        """
+        c: Connective = Connective.from_any(c)
+        if self.is_connective_equivalent_to(c):
+            return False
+        elif self.uid < c.uid:
+            # Native UUID ordering.
+            return True
+        elif self.uid > c.uid:
+            # Native UUID ordering.
+            return False
+        raise util.PunctiliousException("Unreachable condition")
 
     @property
     def uid(self) -> uuid.UUID:

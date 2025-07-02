@@ -133,23 +133,15 @@ class AbstractFormula(tuple):
 
     """
 
-    def __eq__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`AbstractFormula`,
-        returns `True` if `t` is abstract-formula-equivalent to this :class:`AbstractFormula`,
-        returns `False` otherwise.
+    def __eq__(self, phi) -> bool:
+        """Returns `True` if this abstract-formula is equal to abstract-formula `phi`, `False` otherwise.
 
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
+        See :attr:`AbstractFormula.is_equal_to` for a definition of abstract-formula equality.
+
+        :param phi: An abstract-formula.
+        :return: `True` if this abstract-formula is equal to abstract-formula `phi`, `False` otherwise.
         """
-        try:
-            t: AbstractFormula = data_validate_abstract_formula(t)
-            return self.is_abstract_formula_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
+        return self.is_equal_to(phi)
 
     def __hash__(self):
         return hash((AbstractFormula, self.rooted_plane_tree, self.natural_number_sequence,))

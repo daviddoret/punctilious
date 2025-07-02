@@ -34,23 +34,15 @@ class Formula(tuple):
        and a set of connectives C.
     """
 
-    def __eq__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`Formula`,
-        returns `True` if `t` is formula-equivalent to this :class:`Formula`,
-        returns `False` otherwise.
+    def __eq__(self, phi) -> bool:
+        """Returns `True` if this formula is equal to formula `phi`, `False` otherwise.
 
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
+        See :attr:`Formula.is_equal_to` for a definition of formula equality.
+
+        :param phi: A formula.
+        :return: `True` if this formula is equal to formula `c`, `False` otherwise.
         """
-        try:
-            t: Formula = data_validate_formula(t)
-            return self.is_formula_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
+        return self.is_equal_to(phi)
 
     def __hash__(self):
         return hash((Formula, self.abstract_formula, self.connective_sequence,))
@@ -156,6 +148,20 @@ class Formula(tuple):
                 sub_formulas.append(sub_formula)
             self._sub_formulas = tuple(sub_formulas)
         return self._sub_formulas
+
+    def is_equal_to(self, t: FlexibleFormula):
+        """Returns `True` if this formula is equal to formula `t`, `False` otherwise.
+
+        Definition - formula equality:
+        In the context of the formula canonical ordering,
+        equality is defined as formula equivalence.
+
+        See :attr:`Formula.is_less_than` for a definition of formula canonical-ordering.
+
+        :param t: A formula.
+        :return: `True` if the current formula is equal to `t`, `False` otherwise.
+        """
+        return self.is_formula_equivalent_to(t)
 
     def is_formula_equivalent_to(self, phi: Formula):
         """Returns `True` if this :class:`Formula` is formula-equivalent
