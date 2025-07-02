@@ -245,9 +245,9 @@ class NaturalNumberSequence(tuple):
 
     @property
     def elements(self) -> tuple[int, ...]:
-        """The elements that compose this :class:`NaturalNumberSequence`, in order.
+        """Returns a tuple of the elements that compose this :class:`NaturalNumberSequence`, preserving order.
 
-        :return:
+        :return: a tuple of the elements that compose this :class:`NaturalNumberSequence`, preserving order.
         """
         return tuple(super().__iter__())
 
@@ -393,7 +393,7 @@ class NaturalNumberSequence(tuple):
                 if i == 0 and n > 0:
                     self._is_restricted_growth_function_sequence: bool = False
                     return self._is_restricted_growth_function_sequence
-                if i > 0 and n > max(self[0:i]) + 1:
+                if i > 0 and n > max(self.elements[0:i]) + 1:
                     self._is_restricted_growth_function_sequence: bool = False
                     return self._is_restricted_growth_function_sequence
             self._is_restricted_growth_function_sequence: bool = True

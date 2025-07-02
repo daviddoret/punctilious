@@ -1,6 +1,87 @@
 import util
+import rooted_plane_tree_library as rptl
+import sequence_library as sl
 import abstract_formula_library as afl
+from punctilious.abstract_formula_library import AbstractFormula
 
+
+class AbstractOrderedSet(afl.AbstractFormula):
+    """An :class:`AbstractOrderedSet` is an abstract-formula
+    that has the structure of a finite (computable) ordered-set.
+
+    Definition:
+    An abstract-formula :math:`\phi` is an abstract-ordered-set if and only if:
+     - its immediate sub-formulas are unique.
+    N.B.: abstract-classes being structurally composed of a rooted-tree-plane,
+      the immediate sub-formulas of an abstract-formula are necessarily ordered.
+
+    Use case:
+    The abstract-ordered-set is the preimage component of the abstract-map.
+
+    """
+
+    def __init__(self, phi: afl.FlexibleAbstractFormula, n: int, p: afl.FlexibleAbstractFormula,
+                 i: afl.FlexibleAbstractFormula):
+        """
+
+        :param n: The natural number of the root element of the map.
+        :param i: The image of the map.
+        :param p: The preimage of the map.
+        """
+        t: rptl.RootedPlaneTree = rptl.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+            p.rooted_plane_tree, i.rooted_plane_tree)
+        s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
+                                                                              i.natural_number_sequence)
+        super(AbstractMap, self).__init__(t=t, s=s)
+
+    def __new__(cls, phi: afl.FlexibleAbstractFormula | None, n: int | None, p: afl.FlexibleAbstractFormula | None,
+                i: afl.FlexibleAbstractFormula | None):
+        """
+
+        :param phi: Constructor
+        :param n: The natural number of the root element of the map.
+        :param i: The image of the map.
+        :param p: The preimage of the map.
+        """
+        if phi is None:
+
+            # Alternative constructor based on the structural components of an abstract-ordered.set.
+            n: int = int(n)
+            p: afl.AbstractFormula = afl.data_validate_abstract_formula(p)
+            i: afl.AbstractFormula = afl.data_validate_abstract_formula(i)
+            if p.arity != i.arity:
+                raise util.PunctiliousException(
+                    f"`Formula` data validation error. The length of the preimage `p`"
+                    f" is not equal to the length of image `i`.",
+                    p_length=p.length, i_length=i., s=s, phi=phi)
+            t: rptl.RootedPlaneTree = rptl.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+                p.rooted_plane_tree, i.rooted_plane_tree)
+            s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
+                                                                                  i.natural_number_sequence)
+            psi = super(AbstractMap, cls).__new__(cls, (t, s,))
+
+        if not isinstance(phi, AbstractFormula):
+            raise TypeError("Expected a Bar instance")
+        phi.__class__ = cls  # Retype the object to Foo
+        return phi
+
+    @classmethod
+    def from_abstract_formula(cls, phi: afl.FlexibleAbstractFormula):
+        """Takes an abstract-formula structurally compatible with an abstract-ordered-set,
+        and returns the same object typed as :class:`AbstractOrderedSet`.
+
+        :param phi:
+        :return:
+        """
+        phi: afl.AbstractFormula = afl.data_validate_abstract_formula(phi)
+        unique_values: set[afl.AbstractFormula] = set()
+        psi: afl.AbstractFormula
+        for psi in phi:
+            if psi in unique_values:
+                return False
+            unique_values.add(item)
+        return True
+        return cls(d['x'], d['y'])
 
 class AbstractMap(afl.AbstractFormula):
     """An :class:`AbstractFormula` that has the structure of a finite (computable) map.
@@ -35,7 +116,11 @@ class AbstractMap(afl.AbstractFormula):
         :param i: The image of the map.
         :param p: The preimage of the map.
         """
-        super(AbstractTransformation, self).__init__(t=None, s=None)
+        t: rptl.RootedPlaneTree = rptl.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+            p.rooted_plane_tree, i.rooted_plane_tree)
+        s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
+                                                                              i.natural_number_sequence)
+        super(AbstractMap, self).__init__(t=t, s=s)
 
     def __new__(cls, n: int, p: afl.FlexibleAbstractFormula, i: afl.FlexibleAbstractFormula):
         """
@@ -49,13 +134,33 @@ class AbstractMap(afl.AbstractFormula):
         i: afl.AbstractFormula = afl.data_validate_abstract_formula(i)
         if p.arity != i.arity:
             raise util.PunctiliousException(
-                f"`Formula` data validation error. The length of the `ConnectiveSequence` `s`"
-                f" is not equal to the `image_cardinality` of the `natural_number_sequence` of its"
-                f" `abstract_formula`.",
-                s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
-        psi = super(Formula, cls).__new__(cls, (phi, s,))
-        psi = retrieve_formula_from_cache(psi)
+                f"`Formula` data validation error. The length of the preimage `p`"
+                f" is not equal to the length of image `i`.",
+                p_length=p.length, i_length=i., s=s, phi=phi)
+        t: rptl.RootedPlaneTree = rptl.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+            p.rooted_plane_tree, i.rooted_plane_tree)
+        s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
+                                                                              i.natural_number_sequence)
+        psi = super(AbstractMap, cls).__new__(cls, (t, s,))
         return psi
+
+    @property
+    def CanonicalAbstractMap(self) -> AbstractMap:
+        """
+
+        :return:
+        """
+        paired = list(zip(self.pre, Bar))
+        paired_sorted = sorted(paired)  # Sort by Foo (alphabetical)
+        Foo_sorted, Bar_aligned = zip(*paired_sorted)
+
+    @property
+    def pre_image(self) -> afl.AbstractFormula:
+        return self[0]
+
+    @property
+    def image(self) -> afl.AbstractFormula:
+        return self[1]
 
 
 class AbstractTransformation(afl.AbstractFormula):

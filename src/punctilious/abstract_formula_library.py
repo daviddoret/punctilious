@@ -157,6 +157,7 @@ class AbstractFormula(tuple):
     def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumberSequence):
         super(AbstractFormula, self).__init__()
         self._canonical_abstract_formula: AbstractFormula | None = None
+        self._contains_unique_immediate_subformulas: AbstractFormula | None = None
         self._immediate_sub_formulas: tuple[AbstractFormula, ...] | None = None
         self._sub_formulas: tuple[AbstractFormula, ...] | None = None
 
@@ -295,6 +296,27 @@ class AbstractFormula(tuple):
                 sub_formulas.append(phi)
             self._immediate_sub_formulas = tuple(sub_formulas)
         return self._immediate_sub_formulas
+
+    @property
+    def immediate_subformulas_are_unique(self) -> bool:
+        """Returns `True` if all immediate subformulas contained in this :class:`AbstractFormula`
+        are unique.
+
+        Trivial case:
+        If the :class:`AbstractFormula` is a leaf, i.e. it contains no immediate subformulas,
+        then all of its immediate subformulas are unique.
+
+        :return:
+        """
+        if self._contains_unique_immediate_subformulas is None:
+            unique_values: set[AbstractFormula] = set()
+            psi: AbstractFormula
+            for psi in self.iterate_immediate_sub_formulas():
+                if psi in unique_values:
+                    self._contains_unique_immediate_subformulas = False
+                unique_values.add(psi)
+            self._contains_unique_immediate_subformulas = True
+        return self._contains_unique_immediate_subformulas
 
     def is_abstract_formula_equivalent_to(self, phi: AbstractFormula):
         """Returns `True` if this :class:`AbstractFormula` is abstract-formula-equivalent
@@ -511,6 +533,16 @@ class AbstractFormula(tuple):
         """
         return self.natural_number_sequence[0]
 
+    @property
+    def natural_number_sequence(self) -> sl.NaturalNumberSequence:
+        """Returns the :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.
+
+        Shortcut: self.s.
+
+        :return:
+        """
+        return super().__getitem__(1)
+
     def represent_as_function(self, connectives: tuple | None = None) -> str:
         """Returns a string representation of the :class:`AbstractFormula` using function notation.
 
@@ -542,7 +574,7 @@ class AbstractFormula(tuple):
         """The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.
 
         Shortcut: self.t."""
-        return self[0]
+        return super().__getitem__(0)
 
     @property
     def s(self) -> sl.NaturalNumberSequence:
@@ -631,16 +663,6 @@ class AbstractFormula(tuple):
         Attention point: do not confuse `tree_size` and `formula_degree`.
         """
         return self.rooted_plane_tree.size
-
-    @property
-    def natural_number_sequence(self) -> sl.NaturalNumberSequence:
-        """The :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.
-
-        Shortcut: self.s.
-
-        :return:
-        """
-        return self[1]
 
 
 # Flexible types to facilitate data validation
