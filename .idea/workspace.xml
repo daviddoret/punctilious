@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Using more elegant approach MyClass.fromBlablabla">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
@@ -624,7 +625,7 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for tests">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -980,9 +981,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for tests" />
         <item itemvalue="Python tests.pytest for tests.test_abstract_formula.TestAbstractFormula.test_construction_success" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_canonical_order" />
         <item itemvalue="Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_ordering" />
       </list>
@@ -1006,14 +1007,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01462" summary="doc">
-      <option name="closed" value="true" />
-      <created>1750677413719</created>
-      <option name="number" value="01462" />
-      <option name="presentableId" value="LOCAL-01462" />
-      <option name="project" value="LOCAL" />
-      <updated>1750677413719</updated>
     </task>
     <task id="LOCAL-01463" summary="AbstractFormula cleanup">
       <option name="closed" value="true" />
@@ -1399,7 +1392,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751455216436</updated>
     </task>
-    <option name="localTasksCounter" value="1511" />
+    <task id="LOCAL-01511" summary="Using more elegant approach MyClass.fromBlablabla">
+      <option name="closed" value="true" />
+      <created>1751455842801</created>
+      <option name="number" value="01511" />
+      <option name="presentableId" value="LOCAL-01511" />
+      <option name="project" value="LOCAL" />
+      <updated>1751455842801</updated>
+    </task>
+    <option name="localTasksCounter" value="1512" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
