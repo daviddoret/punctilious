@@ -181,7 +181,7 @@ class AbstractFormula(tuple):
 
     def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumberSequence):
         t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_any(t)
-        s: sl.NaturalNumberSequence = sl.data_validate_natural_number_sequence(s)
+        s: sl.NaturalNumberSequence = sl.NaturalNumberSequence.from_any(s)
         if t.size != s.length:
             raise util.PunctiliousException(
                 f"`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.",

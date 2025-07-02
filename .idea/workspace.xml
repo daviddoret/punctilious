@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1006,14 +1007,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01460" summary="data_validate_restricted_growth_function_sequence_elements with raise_exception parameter">
-      <option name="closed" value="true" />
-      <created>1750676971332</created>
-      <option name="number" value="01460" />
-      <option name="presentableId" value="LOCAL-01460" />
-      <option name="project" value="LOCAL" />
-      <updated>1750676971332</updated>
-    </task>
     <task id="LOCAL-01461" summary="data_validate_restricted_growth_function_sequence_elements with raise_exception parameter">
       <option name="closed" value="true" />
       <created>1750677126346</created>
@@ -1398,7 +1391,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751436362166</updated>
     </task>
-    <option name="localTasksCounter" value="1509" />
+    <task id="LOCAL-01509" summary="Using more elegant approach MyClass.fromBlablabla">
+      <option name="closed" value="true" />
+      <created>1751452495819</created>
+      <option name="number" value="01509" />
+      <option name="presentableId" value="LOCAL-01509" />
+      <option name="project" value="LOCAL" />
+      <updated>1751452495819</updated>
+    </task>
+    <option name="localTasksCounter" value="1510" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
