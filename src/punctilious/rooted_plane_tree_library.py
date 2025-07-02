@@ -199,7 +199,23 @@ class RootedPlaneTree(tuple):
         return super().__len__()
 
     @classmethod
-    def from_tuple_tree(cls, t):
+    def from_immediate_subtrees(cls, *t: FlexibleRootedPlaneTree) -> RootedPlaneTree:
+        """Declares a rooted-plane-tree from a collection of immediate subtrees.
+
+        Given an ordered collection of rooted-plate-trees :math:`T_0, T_1, \cdots, T_n`,
+        returns a new rooted-plane tree :math:`S`
+        such that :math:`S`'s immediate subtrees are :math:`T_0, T_1, \cdots, T_n`.
+
+        Note:
+            This method is redundant with the default constructor.
+
+        :param t: a collection of immediate subtrees.
+        :return: a rooted-plane-tree.
+        """
+        return RootedPlaneTree(*t)
+
+    @classmethod
+    def from_tuple_tree(cls, t) -> RootedPlaneTree:
         """Declares a rooted-plane-tree from a tree of python tuples.
 
         :param t: a tree of python tuples.

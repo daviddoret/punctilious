@@ -28,7 +28,7 @@ class AbstractOrderedSet(afl.AbstractFormula):
         :param i: The image of the map.
         :param p: The preimage of the map.
         """
-        t: rptl.RootedPlaneTree = rptl.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
             p.rooted_plane_tree, i.rooted_plane_tree)
         s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
                                                                               i.natural_number_sequence)
@@ -54,7 +54,7 @@ class AbstractOrderedSet(afl.AbstractFormula):
                     f"`Formula` data validation error. The length of the preimage `p`"
                     f" is not equal to the length of image `i`.",
                     p_length=p.length, i_length=i., s=s, phi=phi)
-            t: rptl.RootedPlaneTree = rptl.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+            t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
                 p.rooted_plane_tree, i.rooted_plane_tree)
             s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
                                                                                   i.natural_number_sequence)
@@ -116,7 +116,7 @@ class AbstractMap(afl.AbstractFormula):
         :param i: The image of the map.
         :param p: The preimage of the map.
         """
-        t: rptl.RootedPlaneTree = rptl.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
             p.rooted_plane_tree, i.rooted_plane_tree)
         s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
                                                                               i.natural_number_sequence)
@@ -137,7 +137,7 @@ class AbstractMap(afl.AbstractFormula):
                 f"`Formula` data validation error. The length of the preimage `p`"
                 f" is not equal to the length of image `i`.",
                 p_length=p.length, i_length=i., s=s, phi=phi)
-        t: rptl.RootedPlaneTree = rptl.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
+        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
             p.rooted_plane_tree, i.rooted_plane_tree)
         s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
                                                                               i.natural_number_sequence)

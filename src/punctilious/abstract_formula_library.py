@@ -62,7 +62,7 @@ def declare_abstract_formula_from_immediate_sub_formulas(
     # Retrieves the children trees
     t: tuple[rpt.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
     # Declare the new parent tree
-    t: rpt.RootedPlaneTree = rpt.declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(*t)
+    t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_immediate_subtrees(*t)
     # Declare the natural-number-sequence by appending n to the concatenation of the
     # children natural-number-sequences.
     u: sl.NaturalNumberSequence = sl.NaturalNumberSequence(n) + sl.concatenate_natural_number_sequences(
