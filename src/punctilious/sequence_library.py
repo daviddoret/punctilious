@@ -11,23 +11,6 @@ import connective_library as cl
 # Data validation functions
 
 
-def data_validate_connective_sequence(
-        o: FlexibleConnectiveSequence) -> ConnectiveSequence:
-    """Data validates `o` against type `ConnectiveSequence`,
-    applying implicit conversion as necessary.
-
-    :param o: An object that may be interpreted as a `ConnectiveSequence`.
-    :return:
-    """
-    if isinstance(o, ConnectiveSequence):
-        return o
-    if isinstance(o, collections.abc.Iterable):
-        return ConnectiveSequence(*o)
-    if isinstance(o, collections.abc.Generator):
-        return ConnectiveSequence(*o)
-    raise util.PunctiliousException('ConnectiveSequence data validation failure', o=o)
-
-
 def data_validate_connective_sequence_elements(
         o: FlexibleConnectiveSequence) -> FlexibleConnectiveSequence:
     if isinstance(o, ConnectiveSequence):
@@ -532,7 +515,9 @@ class ConnectiveSequence(tuple):
             return False
 
     def __new__(cls, *s):
-        s: tuple[cl.Connective, ...] = data_validate_connective_sequence_elements(s)
+        v: bool
+        s: tuple[cl.Connective, ...]
+        v, s = cls.data_validate_elements(s)
         if len(s) < 1:
             raise util.PunctiliousException('The length of a ConnectiveSequence must be strictly greater than ')
         s: tuple[cl.Connective] = super(ConnectiveSequence, cls).__new__(cls, s)
@@ -567,7 +552,7 @@ class ConnectiveSequence(tuple):
     def data_validate_elements(
             cls,
             o: FlexibleConnectiveSequence, raise_exception_on_validation_failure: bool = True) -> \
-            tuple[bool, FlexibleConnectiveSequence | None]:
+            tuple[bool, tuple[cl.Connective, ...] | None]:
         """Validates `o` as a collection of connective elements,
         applying implicit conversion as necessary.
 
