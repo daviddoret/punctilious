@@ -44,7 +44,7 @@ class RootedPlaneTree(tuple):
         super(RootedPlaneTree, self).__init__()
         self._subtrees: tuple[RootedPlaneTree, ...] | None = None
 
-    def __lt__(self, t):
+    def __lt__(self, t) -> bool:
         """Returns `True` if this rooted-plane-tree is less than rooted-plane-tree `t`, `False` otherwise.
 
         See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.

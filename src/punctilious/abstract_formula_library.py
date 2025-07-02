@@ -153,23 +153,13 @@ class AbstractFormula(tuple):
         self._immediate_sub_formulas: tuple[AbstractFormula, ...] | None = None
         self._sub_formulas: tuple[AbstractFormula, ...] | None = None
 
-    def __ne__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`AbstractFormula`,
-        returns `True` if `t` is not abstract-formula-equivalent to this :class:`AbstractFormula`,
-        returns `False` otherwise.
+    def __lt__(self, phi) -> bool:
+        """Returns `True` if this abstract-formula is less than abstract-formula `phi`, `False` otherwise.
 
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
+        See :attr:`AbstractFormula.is_less_than` for a definition of abstract-formula canonical-ordering.
+
         """
-        try:
-            t: AbstractFormula = data_validate_abstract_formula(t)
-            return not self.is_abstract_formula_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
+        return self.is_less_than(phi)
 
     def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumberSequence):
         t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_any(t)

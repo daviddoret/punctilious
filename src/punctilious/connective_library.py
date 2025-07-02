@@ -33,34 +33,13 @@ class Connective(tuple):
     def __init__(self, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         pass
 
-    def __lt__(self, c):
-        """Returns `False` if `t` cannot be interpreted as connective,
-        given canonical ordering, returns `True` if this connective is less than `t`,
-        `False` otherwise.
+    def __lt__(self, c) -> bool:
+        """Returns `True` if this connective is less than connective `c`, `False` otherwise.
 
         See :attr:`Connective.is_less_than` for a definition of connective canonical-ordering.
 
         """
-        c: Connective = Connective.from_any(c)
         return self.is_less_than(c)
-
-    def __ne__(self, c):
-        """Returns `False` if `c` cannot be interpreted as a :class:`Connective`,
-        returns `True` if `c` is not connective-equivalent to this :class:`Connective`,
-        returns `False` otherwise.
-
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-        """
-        try:
-            c: Connective = Connective.from_any(c)
-            return not self.is_connective_equivalent_to(c)
-        except util.PunctiliousException:
-            return False
 
     def __new__(cls, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         if uid is None:
