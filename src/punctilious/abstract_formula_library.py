@@ -180,7 +180,7 @@ class AbstractFormula(tuple):
             return False
 
     def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumberSequence):
-        t: rpt.RootedPlaneTree = rpt.data_validate_rooted_plane_tree(t)
+        t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_any(t)
         s: sl.NaturalNumberSequence = sl.data_validate_natural_number_sequence(s)
         if t.size != s.length:
             raise util.PunctiliousException(

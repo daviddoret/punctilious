@@ -1,30 +1,13 @@
+# Feature flags
 from __future__ import annotations
+
+# Python native packages
 import typing
 import collections
+# import weakref
+
+# Punctilious modules
 import util
-
-
-def data_validate_rooted_plane_tree(o: FlexibleRootedPlaneTree) -> RootedPlaneTree:
-    if isinstance(o, RootedPlaneTree):
-        return o
-    if isinstance(o, collections.abc.Iterable):
-        return RootedPlaneTree(*o)
-    if isinstance(o, collections.abc.Generator):
-        return RootedPlaneTree(*o)
-    raise util.PunctiliousException('FlexibleRootedPlaneTree data validation failure', o=o)
-
-
-_rooted_plane_tree_index = dict()  # cache mechanism assuring that unique rpts are only instantiated once.
-
-
-def retrieve_rooted_plane_tree_from_cache(o: FlexibleRootedPlaneTree):
-    """cache mechanism assuring that unique rpts are only instantiated once."""
-    global _rooted_plane_tree_index
-    if hash(o) in _rooted_plane_tree_index.keys():
-        return _rooted_plane_tree_index[hash(o)]
-    else:
-        _rooted_plane_tree_index[hash(o)] = o
-        return o
 
 
 class RootedPlaneTree(tuple):
@@ -36,6 +19,12 @@ class RootedPlaneTree(tuple):
     Chartrand, Lesniak, and Zhang, Graphs & Digraphs: Sixth Edition, p. 65.
 
     """
+
+    _cache: dict[int, RootedPlaneTree] = dict()  # Cache mechanism.
+
+    # Not supported because RootedPlaneTree primarily inherits from tuple.
+    # __slots__ = ('__weakref__',)  # Enables caching mechanism with weakref.
+    # _cache = weakref.WeakValueDictionary()  #
 
     def __eq__(self, t):
         """Returns `False` if `t` cannot be interpreted as a :class:`RootedPlaneTre`,
@@ -50,13 +39,13 @@ class RootedPlaneTree(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
         """
         try:
-            t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+            t: RootedPlaneTree = RootedPlaneTree.from_any(t)
             return self.is_rooted_plane_tree_equivalent_to(t)
         except util.PunctiliousException:
             return False
 
     def __hash__(self):
-        return hash((RootedPlaneTree, *self.immediate_subtrees,))
+        return self._compute_hash(self)
 
     def __init__(self, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         """
@@ -77,7 +66,7 @@ class RootedPlaneTree(tuple):
         See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
 
         """
-        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
         return self.is_less_than_or_equal_to(t)
 
     def __lt__(self, t):
@@ -88,7 +77,7 @@ class RootedPlaneTree(tuple):
         See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
 
         """
-        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
         return self.is_less_than(t)
 
     def __ne__(self, t):
@@ -104,26 +93,26 @@ class RootedPlaneTree(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
         """
         try:
-            t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+            t: RootedPlaneTree = RootedPlaneTree.from_any(t)
             return not self.is_rooted_plane_tree_equivalent_to(t)
         except util.PunctiliousException:
             return False
 
     def __new__(cls, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         if tuple_tree is not None:
-            t = build_rooted_plane_tree_from_tuple_tree(tuple_tree)
+            t = RootedPlaneTree.from_tuple_tree(tuple_tree)
             t = super(RootedPlaneTree, cls).__new__(cls, t)
-            t = retrieve_rooted_plane_tree_from_cache(t)
+            t = RootedPlaneTree._from_cache(t)
             return t
         elif children is not None:
             children: tuple[RootedPlaneTree, ...] = tuple(
-                data_validate_rooted_plane_tree(child) for child in children)
+                RootedPlaneTree.from_any(child) for child in children)
             t = super(RootedPlaneTree, cls).__new__(cls, children)
-            t = retrieve_rooted_plane_tree_from_cache(t)
+            t = RootedPlaneTree._from_cache(t)
             return t
         elif children is None and tuple_tree is None:
             t = super(RootedPlaneTree, cls).__new__(cls, tuple())
-            t = retrieve_rooted_plane_tree_from_cache(t)
+            t = RootedPlaneTree._from_cache(t)
             return t
         else:
             raise util.PunctiliousException('Invalid input parameters', children=children, tuple_tree=tuple_tree)
@@ -133,6 +122,27 @@ class RootedPlaneTree(tuple):
 
     def __str__(self):
         return self.represent_as_anonymous_function()
+
+    _HASH_SEED: int = 327761738191040375  # A static random seed to reduce collision risk.
+
+    @classmethod
+    def _compute_hash(cls, o: FlexibleRootedPlaneTree) -> int:
+        """Exposes the hashing logic as a static method.
+
+        :param o: An object that is structurally compatible with a rooted-plane-tree.
+        :return: The hash of the rooted-plane-tree that is structurally equivalent to `o`.
+        """
+        return hash((RootedPlaneTree, cls._HASH_SEED, tuple(RootedPlaneTree._compute_hash(x) for x in o),))
+
+    @classmethod
+    def _from_cache(cls, o: FlexibleRootedPlaneTree):
+        """Cache mechanism used in the constructor."""
+        hash_value: int = RootedPlaneTree._compute_hash(o)
+        if hash_value in cls._cache.keys():
+            return cls._cache[hash_value]
+        else:
+            cls._cache[hash_value] = o
+            return o
 
     @property
     def ahu_unsorted_string(self) -> str:
@@ -184,6 +194,24 @@ class RootedPlaneTree(tuple):
         :return:
         """
         return super().__len__()
+
+    @classmethod
+    def from_any(cls, o: FlexibleRootedPlaneTree) -> RootedPlaneTree:
+        """Declares a rooted-plane-tree from a Python object that can be interpreted as a rooted-plane-tree.
+
+        Note:
+            This method is redundant with the default constructor.
+
+        :param o: a Python object that can be interpreted as a rooted-plane-tree.
+        :return: a rooted-plane-tree.
+        """
+        if isinstance(o, RootedPlaneTree):
+            return o
+        if isinstance(o, collections.abc.Iterable):
+            return RootedPlaneTree(*o)
+        if isinstance(o, collections.abc.Generator):
+            return RootedPlaneTree(*o)
+        raise util.PunctiliousException('FlexibleRootedPlaneTree data validation failure', o=o)
 
     @classmethod
     def from_immediate_subtrees(cls, *t: FlexibleRootedPlaneTree) -> RootedPlaneTree:
@@ -268,7 +296,7 @@ class RootedPlaneTree(tuple):
         :param t: A :class:`RootedPlaneTree`.
         :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
         """
-        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
         return self.is_rooted_plane_tree_equivalent_to(t)
 
     @property
@@ -289,7 +317,7 @@ class RootedPlaneTree(tuple):
         :param t: A :class:`RootedPlaneTree`.
         :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
         """
-        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
         return self.is_equal_to(t) or self.is_less_than(t)
 
     def is_less_than(self, t: FlexibleRootedPlaneTree) -> bool:
@@ -307,7 +335,7 @@ class RootedPlaneTree(tuple):
         :param t: A :class:`RootedPlaneTree`.
         :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
         """
-        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
         if self.is_equal_to(t):
             return False
         elif self.degree < t.degree:
@@ -339,7 +367,7 @@ class RootedPlaneTree(tuple):
         :param t: A rooted-plane-tree.
         :return:
         """
-        t: RootedPlaneTree = data_validate_rooted_plane_tree(t)
+        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
         t_i: RootedPlaneTree
         u_i: RootedPlaneTree
         return self.degree == t.degree and all(t_i.is_rooted_plane_tree_equivalent_to(u_i) for t_i, u_i in
