@@ -127,13 +127,13 @@ class TestRootedPlaneTree:
         assert t12.select_sub_tree_from_path_sequence((1, 4, 1,)) == t1_a
 
     def test_tuple_tree_constructor(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        t1b = pu.rptl.RootedPlaneTree(tuple_tree=())
+        t1b = pu.rptl.RootedPlaneTree.from_tuple_tree(())
         assert t1b == t1_a
-        t2b = pu.rptl.RootedPlaneTree(tuple_tree=((),))
+        t2b = pu.rptl.RootedPlaneTree.from_tuple_tree(((),))
         assert t2b == t2_a_aa
-        t3b = pu.rptl.RootedPlaneTree(tuple_tree=((), (), (), (), (),))
+        t3b = pu.rptl.RootedPlaneTree.from_tuple_tree(((), (), (), (), (),))
         assert t3b == t6_a_aa_ab_ac_ad_ae
-        t4b = pu.rptl.RootedPlaneTree(tuple_tree=((), ((),), ((), (), (), (), (),), ((),),))
+        t4b = pu.rptl.RootedPlaneTree.from_tuple_tree(((), ((),), ((), (), (), (), (),), ((),),))
         assert t4b == t12
 
     def test_iterate_direct_ascending(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
@@ -189,13 +189,13 @@ class TestRootedPlaneTree:
         assert t_big.get_subtree_by_path((0, 3, 2, 4,)) == t1_a
 
     def test_build_rooted_plane_tree_from_tuple_tree(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        u1 = pu.rptl.build_rooted_plane_tree_from_tuple_tree(())
+        u1 = pu.rptl.RootedPlaneTree.from_tuple_tree(())
         assert u1 == t1_a
-        u1 = pu.rptl.build_rooted_plane_tree_from_tuple_tree(((),))
+        u1 = pu.rptl.RootedPlaneTree.from_tuple_tree(((),))
         assert u1 == t2_a_aa
-        u1 = pu.rptl.build_rooted_plane_tree_from_tuple_tree(((), (), (), (), (),))
+        u1 = pu.rptl.RootedPlaneTree.from_tuple_tree(((), (), (), (), (),))
         assert u1 == t6_a_aa_ab_ac_ad_ae
-        u1 = pu.rptl.build_rooted_plane_tree_from_tuple_tree(((), ((),), ((), (), (), (), (),), ((),),))
+        u1 = pu.rptl.RootedPlaneTree.from_tuple_tree(((), ((),), ((), (), (), (), (),), ((),),))
         assert u1 == t12
 
     def test_canonical_ordering(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae,

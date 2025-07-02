@@ -36,7 +36,7 @@ def declare_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractForm
     """
 
     t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
-    t: rpt.RootedPlaneTree = rpt.build_rooted_plane_tree_from_tuple_tree(t)
+    t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_tuple_tree(t)
     s: sl.NaturalNumberSequence = sl.NaturalNumberSequence(*s)
     phi: AbstractFormula = AbstractFormula(t, s)
     return phi

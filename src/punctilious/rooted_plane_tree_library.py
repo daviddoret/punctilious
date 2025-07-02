@@ -27,21 +27,6 @@ def retrieve_rooted_plane_tree_from_cache(o: FlexibleRootedPlaneTree):
         return o
 
 
-def build_rooted_plane_tree_from_tuple_tree(t: tuple | None = None) -> RootedPlaneTree:
-    """Builes a rooted-plane-tree from a tree of python tuples.
-
-    :param t:
-    :return:
-    """
-    if t is None:
-        return RootedPlaneTree()
-    elif len(t) == 0:
-        return RootedPlaneTree()
-    else:
-        children = tuple(build_rooted_plane_tree_from_tuple_tree(u) for u in t)
-        return RootedPlaneTree(*children)
-
-
 def declare_rooted_plane_tree_from_immediate_sub_rooted_plane_trees(
         *t: RootedPlaneTree) -> RootedPlaneTree:
     """Given a collection of :class:`RootedPlaneTree` elements :math:`t_0, t_1, \cdots, t_n`,
@@ -212,6 +197,24 @@ class RootedPlaneTree(tuple):
         :return:
         """
         return super().__len__()
+
+    @classmethod
+    def from_tuple_tree(cls, t):
+        """Declares a rooted-plane-tree from a tree of python tuples.
+
+        :param t: a tree of python tuples.
+        :return: a rooted-plane-tree.
+        """
+        if t is None:
+            # Returns the leaf rooted-plane-tree.
+            return cls()
+        elif len(t) == 0:
+            # Returns the leaf rooted-plane-tree.
+            return cls()
+        else:
+            # Recursively declare immediate subtrees from python tuple children.
+            children: tuple[RootedPlaneTree, ...] = tuple(RootedPlaneTree.from_tuple_tree(u) for u in t)
+            return cls(*children)
 
     def get_subtree_by_path(self, p: tuple[int, ...]) -> RootedPlaneTree:
         """Given a path `p`, returns the corresponding subtree.
