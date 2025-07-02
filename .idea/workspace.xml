@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="Using more elegant approach MyClass.fromBlablabla">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1008,14 +1006,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01463" summary="AbstractFormula cleanup">
-      <option name="closed" value="true" />
-      <created>1750732115276</created>
-      <option name="number" value="01463" />
-      <option name="presentableId" value="LOCAL-01463" />
-      <option name="project" value="LOCAL" />
-      <updated>1750732115277</updated>
-    </task>
     <task id="LOCAL-01464" summary="AbstractFormula cleanup">
       <option name="closed" value="true" />
       <created>1750732392947</created>
@@ -1400,7 +1390,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751455842801</updated>
     </task>
-    <option name="localTasksCounter" value="1512" />
+    <task id="LOCAL-01512" summary="Using more elegant approach MyClass.fromBlablabla">
+      <option name="closed" value="true" />
+      <created>1751484823019</created>
+      <option name="number" value="01512" />
+      <option name="presentableId" value="LOCAL-01512" />
+      <option name="project" value="LOCAL" />
+      <updated>1751484823020</updated>
+    </task>
+    <option name="localTasksCounter" value="1513" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -502,7 +502,7 @@ class ConnectiveSequence(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
         """
         try:
-            s: ConnectiveSequence = data_validate_connective_sequence(s)
+            s: ConnectiveSequence = ConnectiveSequence.from_any(s)
             return self.is_connective_sequence_equivalent_to(s)
         except util.PunctiliousException:
             return False
@@ -526,7 +526,7 @@ class ConnectiveSequence(tuple):
             To avoid any ambiguity, use the more accurate is-equivalent method.
        """
         try:
-            s: ConnectiveSequence = data_validate_connective_sequence(s)
+            s: ConnectiveSequence = ConnectiveSequence.from_any(s)
             return not self.is_connective_sequence_equivalent_to(s)
         except util.PunctiliousException:
             return False
@@ -613,6 +613,24 @@ class ConnectiveSequence(tuple):
         """
         return tuple(super().__iter__())
 
+    @classmethod
+    def from_any(cls, o: FlexibleConnectiveSequence) -> ConnectiveSequence:
+        """Declares a connective-sequence from a Python object that can be interpreted as a connective-sequence.
+
+        Note:
+            This method is redundant with the default constructor.
+
+        :param o: a Python object that can be interpreted as a connective-sequence.
+        :return: a connective-sequence.
+        """
+        if isinstance(o, ConnectiveSequence):
+            return o
+        if isinstance(o, collections.abc.Iterable):
+            return ConnectiveSequence(*o)
+        if isinstance(o, collections.abc.Generator):
+            return ConnectiveSequence(*o)
+        raise util.PunctiliousException('Connective-sequence data validation failure', o=o)
+
     def is_connective_sequence_equivalent_to(self, s: FlexibleConnectiveSequence):
         """Returns `True` if this :class:`ConnectiveSequence` is connective-sequence-equivalent
         to :class:`ConnectiveSequence` `s`.
@@ -625,7 +643,7 @@ class ConnectiveSequence(tuple):
         :param s:
         :return:
         """
-        s: ConnectiveSequence = data_validate_connective_sequence(s)
+        s: ConnectiveSequence = ConnectiveSequence.from_any(s)
         return all(i == j for i, j in zip(self, s))
 
     @property

@@ -80,7 +80,7 @@ class Formula(tuple):
 
     def __new__(cls, phi: afl.FlexibleAbstractFormula, s: sl.FlexibleConnectiveSequence):
         phi: afl.AbstractFormula = afl.data_validate_abstract_formula(phi)
-        s: sl.ConnectiveSequence = sl.data_validate_connective_sequence(s)
+        s: sl.ConnectiveSequence = sl.ConnectiveSequence.from_any(s)
         phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
         if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
