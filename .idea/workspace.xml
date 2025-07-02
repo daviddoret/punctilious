@@ -1005,14 +1005,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01465" summary="AbstractFormula cleanup">
-      <option name="closed" value="true" />
-      <created>1750734083092</created>
-      <option name="number" value="01465" />
-      <option name="presentableId" value="LOCAL-01465" />
-      <option name="project" value="LOCAL" />
-      <updated>1750734083092</updated>
-    </task>
     <task id="LOCAL-01466" summary="RGFSequence inherited from UnrestrictedSequence">
       <option name="closed" value="true" />
       <created>1750798447728</created>
@@ -1397,7 +1389,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751485443964</updated>
     </task>
-    <option name="localTasksCounter" value="1514" />
+    <task id="LOCAL-01514" summary="Using more elegant approach MyClass.fromBlablabla">
+      <option name="closed" value="true" />
+      <created>1751485743154</created>
+      <option name="number" value="01514" />
+      <option name="presentableId" value="LOCAL-01514" />
+      <option name="project" value="LOCAL" />
+      <updated>1751485743154</updated>
+    </task>
+    <option name="localTasksCounter" value="1515" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

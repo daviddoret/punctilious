@@ -11,18 +11,6 @@ import connective_library as cl
 # Data validation functions
 
 
-def data_validate_connective_sequence_elements(
-        o: FlexibleConnectiveSequence) -> FlexibleConnectiveSequence:
-    if isinstance(o, ConnectiveSequence):
-        # data validation is assured by the class logic.
-        return o
-    if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
-        o = tuple(o)
-        o: tuple[cl.Connective, ...] = tuple(cl.Connective.from_any(n) for n in o)
-        return o
-    raise util.PunctiliousException('ConnectiveSequence elements data validation failure', o=o)
-
-
 # General functions
 
 def concatenate_natural_number_sequences(*s: FlexibleNaturalNumberSequence) -> NaturalNumberSequence:
@@ -647,4 +635,4 @@ FlexibleNaturalNumberSequence = typing.Union[
 # Aliases
 
 CS = ConnectiveSequence  # An alias for ConnectiveSequence.
-US = NaturalNumberSequence  # An alias for NaturalNumberSequence
+NNS = NaturalNumberSequence  # An alias for NaturalNumberSequence
