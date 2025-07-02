@@ -71,23 +71,13 @@ class NaturalNumberSequence(tuple):
         self._is_restricted_growth_function_sequence: bool | None = None
         self._canonical_natural_number_sequence: NaturalNumberSequence | None = None
 
-    def __ne__(self, s):
-        """Returns `False` if `c` cannot be interpreted as a :class:`NaturalNumberSequence`,
-        returns `True` if `c` is not connective-sequence-equivalent to this :class:`NaturalNumberSequence`,
-        returns `False` otherwise.
+    def __lt__(self, s) -> bool:
+        """Returns `True` if this natural-number-sequence is less than formula `s`, `False` otherwise.
 
-         Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-       """
-        try:
-            s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
-            return not self.is_natural_number_sequence_equivalent_to(s)
-        except util.PunctiliousException:
-            return False
+        See :attr:`NaturalNumberSequence.is_less_than` for a definition of natural-number-sequence canonical-ordering.
+
+        """
+        return self.is_less_than(s)
 
     def __new__(cls, *s):
         v: bool
@@ -455,23 +445,13 @@ class ConnectiveSequence(tuple):
     def __init__(self, *s):
         super(ConnectiveSequence, self).__init__()
 
-    def __ne__(self, s):
-        """Returns `False` if `c` cannot be interpreted as a :class:`ConnectiveSequence`,
-        returns `True` if `c` is not connective-sequence-equivalent to this :class:`ConnectiveSequence`,
-        returns `False` otherwise.
+    def __lt__(self, s) -> bool:
+        """Returns `True` if this connective-sequence is less than formula `s`, `False` otherwise.
 
-         Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
-       """
-        try:
-            s: ConnectiveSequence = ConnectiveSequence.from_any(s)
-            return not self.is_connective_sequence_equivalent_to(s)
-        except util.PunctiliousException:
-            return False
+        See :attr:`ConnectiveSequence.is_less_than` for a definition of connective-sequence canonical-ordering.
+
+        """
+        return self.is_less_than(s)
 
     def __new__(cls, *s):
         v: bool

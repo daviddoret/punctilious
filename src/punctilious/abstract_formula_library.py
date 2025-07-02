@@ -361,19 +361,6 @@ class AbstractFormula(tuple):
         phi: AbstractFormula = data_validate_abstract_formula(phi)
         return self.is_abstract_formula_equivalent_to(phi)
 
-    def is_less_than_or_equal_to(self, phi: FlexibleAbstractFormula) -> bool:
-        """Under :class:`AbstractFormula` canonical ordering,
-        returns `True` if the current :class:`RootedPlaneTree` is less than or equal to `s`,
-        `False` otherwise.
-
-        See :attr:`AbstractFormula.is_less_than` for a definition of abstract-formula canonical-ordering.
-
-        :param phi: A :class:`AbstractFormula`.
-        :return: `True` if the current :class:`AbstractFormula` is equal to `s`, `False` otherwise.
-        """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
-        return self.is_equal_to(phi) or self.is_less_than(phi)
-
     def is_less_than(self, phi: FlexibleAbstractFormula) -> bool:
         """Under :class:`AbstractFormula` canonical ordering,
         returns `True` if the current :class:`AbstractFormula` is less than `phi`,

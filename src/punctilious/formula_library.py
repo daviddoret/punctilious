@@ -52,23 +52,13 @@ class Formula(tuple):
         self._immediate_sub_formulas = None
         self._sub_formulas = None
 
-    def __ne__(self, t):
-        """Returns `False` if `t` cannot be interpreted as a :class:`Formula`,
-        returns `True` if `t` is not formula-equivalent to this :class:`Formula`,
-        returns `False` otherwise.
+    def __lt__(self, phi) -> bool:
+        """Returns `True` if this formula is less than formula `phi`, `False` otherwise.
 
-        Note:
-            The python equality operator may be misleading because it can be called
-            whatever the type of the second object, and formally speaking equality with objects
-            of a distinct type is not defined. For this reason, the following
-            paradox is possible: `not(x == y) and not(x != y)`.
-            To avoid any ambiguity, use the more accurate is-equivalent method.
+        See :attr:`Formula.is_less_than` for a definition of formula canonical-ordering.
+
         """
-        try:
-            t: Formula = data_validate_formula(t)
-            return not self.is_formula_equivalent_to(t)
-        except util.PunctiliousException:
-            return False
+        return self.is_less_than(phi)
 
     def __new__(cls, phi: afl.FlexibleAbstractFormula, s: sl.FlexibleConnectiveSequence):
         phi: afl.AbstractFormula = afl.data_validate_abstract_formula(phi)
@@ -197,6 +187,30 @@ class Formula(tuple):
         """
         phi: Formula = data_validate_formula(phi)
         return phi.is_immediate_sub_formula_of(self)
+
+    def is_less_than(self, phi: FlexibleFormula) -> bool:
+        """Under :class:`Formula` canonical ordering,
+        returns `True` if the current :class:`Formula` is less than `phi`,
+        `False` otherwise.
+
+        Definition: canonical ordering of formula, denoted :math:`\prec`,
+        is defined as rooted-plane-tree-first, natural-number-sequence second.
+
+        :param phi: A :class:`Formula`.
+        :return: `True` if the current :class:`Formula` is equal to `phi`, `False` otherwise.
+        """
+        phi: Formula = data_validate_formula(phi)
+        if self.is_formula_equivalent_to(phi):
+            return False
+        elif self.abstract_formula.is_less_than(phi.abstract_formula):
+            return True
+        elif phi.abstract_formula.is_less_than(self.abstract_formula):
+            return False
+        elif self.connective_sequence.is_less_than(phi.connective_sequence):
+            return True
+        elif phi.connective_sequence.is_less_than(self.connective_sequence):
+            return False
+        raise util.PunctiliousException("Unreachable condition")
 
     def is_sub_formula_of(self, phi: Formula) -> bool:
         """Returns `True` if `phi` is a sub-formula of the current `Formula`, `False` otherwise.
