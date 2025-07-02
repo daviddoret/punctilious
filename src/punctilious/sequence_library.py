@@ -11,43 +11,6 @@ import connective_library as cl
 # Data validation functions
 
 
-def data_validate_natural_number_sequence_elements(
-        o: FlexibleNaturalNumberSequence, raise_exception_on_validation_failure: bool = True) -> tuple[
-    bool, FlexibleNaturalNumberSequence | None]:
-    """Validates `o` against type :class:`NaturalNumberSequence`,
-    applying implicit conversion as necessary.
-
-    :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
-    :param raise_exception_on_validation_failure: Raises an exception if data validation fails.
-    :return: a tuple (v, s) where v is True if data validation was successful, False otherwise,
-        and s is the resulting natural-number sequence, or None if data validation failed.
-    """
-    if isinstance(o, NaturalNumberSequence):
-        # data validation is assured by the class logic.
-        return True, o
-    if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
-        v: bool = True
-        o = tuple(o)
-        if len(o) == 0:
-            if raise_exception_on_validation_failure:
-                raise util.PunctiliousException(
-                    "`o` is empty.", o=o)
-            else:
-                v = False
-        o = tuple(int(n) for n in o)
-        if any(n for n in o if n < 0):
-            if raise_exception_on_validation_failure:
-                raise util.PunctiliousException(
-                    "Some element of `o` is less than 0.", o=o)
-            else:
-                v = False
-        return v, o if v else None
-    if raise_exception_on_validation_failure:
-        raise util.PunctiliousException("The type of `o` is not supported.", o_type=type(o), o=o)
-    else:
-        return False, None
-
-
 def data_validate_connective_sequence(
         o: FlexibleConnectiveSequence) -> ConnectiveSequence:
     """Data validates `o` against type `ConnectiveSequence`,
@@ -170,7 +133,7 @@ class NaturalNumberSequence(tuple):
         v: bool
         s: tuple[int] | None
         r: bool
-        v, s = data_validate_natural_number_sequence_elements(s, raise_exception_on_validation_failure=True)
+        v, s = cls.data_validate_elements(s, raise_exception_on_validation_failure=True)
         s: tuple[int] = super(NaturalNumberSequence, cls).__new__(cls, s)
         s: tuple[int] = cls._from_cache(s)
         return s
@@ -247,6 +210,44 @@ class NaturalNumberSequence(tuple):
         :return:
         """
         return concatenate_natural_number_sequences(self, *s)
+
+    @classmethod
+    def data_validate_elements(
+            cls,
+            o: FlexibleNaturalNumberSequence, raise_exception_on_validation_failure: bool = True) -> \
+            tuple[bool, FlexibleNaturalNumberSequence | None]:
+        """Validates `o` as a collection of natural number elements,
+        applying implicit conversion as necessary.
+
+        :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
+        :param raise_exception_on_validation_failure: Raises an exception if data validation fails.
+        :return: a tuple (v, s) where v is True if data validation was successful, False otherwise,
+            and s is the resulting natural-number sequence, or None if data validation failed.
+        """
+        if isinstance(o, NaturalNumberSequence):
+            # data validation is assured by the class logic.
+            return True, o
+        if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
+            v: bool = True
+            o = tuple(o)
+            if len(o) == 0:
+                if raise_exception_on_validation_failure:
+                    raise util.PunctiliousException(
+                        "`o` is empty.", o=o)
+                else:
+                    v = False
+            o = tuple(int(n) for n in o)
+            if any(n for n in o if n < 0):
+                if raise_exception_on_validation_failure:
+                    raise util.PunctiliousException(
+                        "Some element of `o` is less than 0.", o=o)
+                else:
+                    v = False
+            return v, o if v else None
+        if raise_exception_on_validation_failure:
+            raise util.PunctiliousException("The type of `o` is not supported.", o_type=type(o), o=o)
+        else:
+            return False, None
 
     @property
     def elements(self) -> tuple[int, ...]:

@@ -494,7 +494,6 @@ class RootedPlaneTree(tuple):
         Definition: the size of a rooted plan tree is the total number of vertices in the graph."""
         return 1 + sum(child.size for child in self.immediate_subtrees)
 
-    @property
     def substitute_subtree(self, m: dict[FlexibleRootedPlaneTree, FlexibleRootedPlaneTree]) -> RootedPlaneTree:
         raise NotImplementedError('TO BE IMPLEMENTED')
 

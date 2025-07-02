@@ -5,11 +5,11 @@ import punctilious as pu
 
 class TestNaturalNumbersSequence:
     def test_data_validation(self, s10, s012, s021, s00010203043212, s00010203043262):
-        assert pu.sl.data_validate_natural_number_sequence_elements(s10)[1] == s10
-        assert pu.sl.data_validate_natural_number_sequence_elements(s012)[1] == s012
-        assert pu.sl.data_validate_natural_number_sequence_elements(s00010203043212)[1] == s00010203043212
-        assert pu.sl.data_validate_natural_number_sequence_elements(s021)[1] == s021
-        assert pu.sl.data_validate_natural_number_sequence_elements(s00010203043262)[1] == s00010203043262
+        assert pu.sl.NaturalNumberSequence.data_validate_elements(s10)[1] == s10
+        assert pu.sl.NaturalNumberSequence.data_validate_elements(s012)[1] == s012
+        assert pu.sl.NaturalNumberSequence.data_validate_elements(s00010203043212)[1] == s00010203043212
+        assert pu.sl.NaturalNumberSequence.data_validate_elements(s021)[1] == s021
+        assert pu.sl.NaturalNumberSequence.data_validate_elements(s00010203043262)[1] == s00010203043262
 
     def test_equality(self, s012, s021, s00010203043212, s00010203043262):
         assert pu.sl.NaturalNumberSequence(*s012) == pu.sl.NaturalNumberSequence(*s012)
