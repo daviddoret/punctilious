@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="__lt__">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="clean-up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/transformation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/transformation_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1008,14 +1005,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01470" summary="Revised data model with inheritance">
-      <option name="closed" value="true" />
-      <created>1750830273202</created>
-      <option name="number" value="01470" />
-      <option name="presentableId" value="LOCAL-01470" />
-      <option name="project" value="LOCAL" />
-      <updated>1750830273203</updated>
-    </task>
     <task id="LOCAL-01471" summary="Cleanup">
       <option name="closed" value="true" />
       <created>1750831388619</created>
@@ -1400,7 +1389,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751494032714</updated>
     </task>
-    <option name="localTasksCounter" value="1519" />
+    <task id="LOCAL-01519" summary="clean-up">
+      <option name="closed" value="true" />
+      <created>1751576999734</created>
+      <option name="number" value="01519" />
+      <option name="presentableId" value="LOCAL-01519" />
+      <option name="project" value="LOCAL" />
+      <updated>1751576999735</updated>
+    </task>
+    <option name="localTasksCounter" value="1520" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1453,7 +1450,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="get_sub_formula_by_path" />
     <MESSAGE value="build_rooted_plane_tree_from_tuple_tree" />
     <MESSAGE value="extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs" />
     <MESSAGE value="build_formula_from_tree_of_integer_tuple_pairs" />
@@ -1478,7 +1474,8 @@
     <MESSAGE value="Using more elegant approach MyClass.fromBlablabla" />
     <MESSAGE value="__eq__" />
     <MESSAGE value="__lt__" />
-    <option name="LAST_COMMIT_MESSAGE" value="__lt__" />
+    <MESSAGE value="clean-up" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean-up" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
