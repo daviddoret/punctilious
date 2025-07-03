@@ -47,8 +47,8 @@ class AbstractOrderedSet(afl.AbstractFormula):
 
             # Alternative constructor based on the structural components of an abstract-ordered.set.
             n: int = int(n)
-            p: afl.AbstractFormula = afl.data_validate_abstract_formula(p)
-            i: afl.AbstractFormula = afl.data_validate_abstract_formula(i)
+            p: afl.AbstractFormula = afl.AbstractFormula.from_any(p)
+            i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
             if p.arity != i.arity:
                 raise util.PunctiliousException(
                     f"`Formula` data validation error. The length of the preimage `p`"
@@ -73,7 +73,7 @@ class AbstractOrderedSet(afl.AbstractFormula):
         :param phi:
         :return:
         """
-        phi: afl.AbstractFormula = afl.data_validate_abstract_formula(phi)
+        phi: afl.AbstractFormula = afl.AbstractFormula.from_any(phi)
         unique_values: set[afl.AbstractFormula] = set()
         psi: afl.AbstractFormula
         for psi in phi:
@@ -130,8 +130,8 @@ class AbstractMap(afl.AbstractFormula):
         :param p: The preimage of the map.
         """
         n: int = int(n)
-        p: afl.AbstractFormula = afl.data_validate_abstract_formula(p)
-        i: afl.AbstractFormula = afl.data_validate_abstract_formula(i)
+        p: afl.AbstractFormula = afl.AbstractFormula.from_any(p)
+        i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
         if p.arity != i.arity:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the preimage `p`"
@@ -177,8 +177,8 @@ class AbstractTransformation(afl.AbstractFormula):
         super(AbstractTransformation, self).__init__(t=None, s=None)
 
     def __new__(cls, i: afl.FlexibleAbstractFormula, o: afl.FlexibleAbstractFormula):
-        i: afl.AbstractFormula = afl.data_validate_abstract_formula(i)
-        o: afl.AbstractFormula = afl.data_validate_abstract_formula(o)
+        i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
+        o: afl.AbstractFormula = afl.AbstractFormula.from_any(o)
         phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
         if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
@@ -211,8 +211,8 @@ class AbstractTransformationBySubstitution(AbstractTransformation):
 
     def __new__(cls, i: afl.FlexibleAbstractFormula, v: afl.FlexibleAbstractFormula, s: afl.FlexibleAbstractFormula,
                 o: afl.FlexibleAbstractFormula):
-        i: afl.AbstractFormula = afl.data_validate_abstract_formula(i)
-        o: afl.AbstractFormula = afl.data_validate_abstract_formula(o)
+        i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
+        o: afl.AbstractFormula = afl.AbstractFormula.from_any(o)
         phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
         if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
@@ -232,8 +232,8 @@ class TransformationBySubstitution:
 
     def __new__(cls, i: afl.FlexibleFormula, v: afl.FlexibleFormula, s: afl.FlexibleFormula,
                 o: afl.FlexibleFormula):
-        i: afl.AbstractFormula = afl.data_validate_abstract_formula(i)
-        o: afl.AbstractFormula = afl.data_validate_abstract_formula(o)
+        i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
+        o: afl.AbstractFormula = afl.AbstractFormula.from_any(o)
         phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
         if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(

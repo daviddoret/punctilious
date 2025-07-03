@@ -223,27 +223,27 @@ class TestAbstractFormula:
         tree_of_pairs = (0, (),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.AbstractFormula(t, s)
-        psi = pu.afl.declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.AbstractFormula.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((0, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.AbstractFormula(t, s)
-        psi = pu.afl.declare_abstract_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.AbstractFormula.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.AbstractFormula(t, s)
-        psi = pu.afl.declare_abstract_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.AbstractFormula.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),), (2, (),), (3, (),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.AbstractFormula(t, s)
-        psi = pu.afl.declare_abstract_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.AbstractFormula.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (0, ((1, (),), (0, ((1, ((2, ((3, ((1, (),),),),),),),),),), (4, ((1, (),),),),),)
         t, s = pu.afl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
         phi = pu.afl.AbstractFormula(t, s)
-        psi = pu.afl.declare_abstract_formula_from_tree_of_integer_tuple_pairs(tree_of_pairs)
+        psi = pu.afl.AbstractFormula.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
 
     def test_get_sub_formula_by_path(self, af1, af2a, af6a, af12a, af_big, t1_a, t6_a_aa_ab_ac_ad_ae, t12):
@@ -340,7 +340,7 @@ class TestAbstractFormula:
         phi1 = pu.afl.AbstractFormula(t2_a_aa, (17, 15,))
         phi2 = pu.afl.AbstractFormula(t1_a, (31,))
         phi3 = pu.afl.AbstractFormula(t2_a_aa, (9, 2,))
-        phi4 = pu.afl.declare_abstract_formula_from_immediate_sub_formulas(n=4, s=(phi1, phi2, phi3,))
+        phi4 = pu.afl.AbstractFormula.from_immediate_sub_formulas(n=4, s=(phi1, phi2, phi3,))
         t = pu.rptl.RootedPlaneTree(t2_a_aa, t1_a, t2_a_aa)
         phi5 = pu.afl.AbstractFormula(t, (4, 17, 15, 31, 9, 2,))
         assert phi4 == phi5

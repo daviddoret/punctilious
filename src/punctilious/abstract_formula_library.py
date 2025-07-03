@@ -13,64 +13,6 @@ from punctilious.sequence_library import NaturalNumberSequence
 # Formula declarations
 
 
-def declare_abstract_formula_from_tree_of_integer_tuple_pairs(p) -> AbstractFormula:
-    """Declares a :class:`AbstractFormula` object from a tree of integer/tuple pairs.
-
-    Use case:
-    Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.
-
-    Definition:
-    A tree of integer/tuple pairs `T` defined as:
-     T := (n, T')
-    where:
-     - n is a natural number
-     - T' is (possibly empty) tuple of trees of integer/tuple pairs.
-
-    Sample tree of integer/tuple pairs:
-    (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)
-    ...which maps to formula:
-    0(1,0(2,1),2)
-
-    :param p: A tree of integer/tuple pairs.
-    :return: a :class:`AbstractFormula`.
-    """
-
-    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
-    t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_tuple_tree(t)
-    s: sl.NaturalNumberSequence = sl.NaturalNumberSequence(*s)
-    phi: AbstractFormula = AbstractFormula(t, s)
-    return phi
-
-
-def declare_abstract_formula_from_immediate_sub_formulas(
-        n: int | None,
-        s: tuple[FlexibleAbstractFormula, ...] | None) -> AbstractFormula:
-    """Given a root natural number n,
-    and a tuple of abstract-formulas s,
-    declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
-
-    :param n:
-    :param s:
-    :return:
-    """
-    if n is None:
-        n: int = 0
-    if s is None:
-        s: tuple[AbstractFormula, ...] = ()
-    s: tuple[AbstractFormula, ...] = tuple(
-        data_validate_abstract_formula(o=phi) for phi in s)
-    # Retrieves the children trees
-    t: tuple[rpt.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
-    # Declare the new parent tree
-    t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_immediate_subtrees(*t)
-    # Declare the natural-number-sequence by appending n to the concatenation of the
-    # children natural-number-sequences.
-    u: sl.NaturalNumberSequence = sl.NaturalNumberSequence(n) + sl.concatenate_natural_number_sequences(
-        *(phi.natural_number_sequence for phi in s))
-    phi: AbstractFormula = AbstractFormula(t=t, s=u)
-    return phi
-
-
 # Transformation functions
 
 
@@ -99,13 +41,6 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
             s += sub_s
         t: tuple[tuple, ...] = tuple(t)
         return t, s
-
-
-def declare_canonical_abstract_formula_from_tree_of_integer_tuple_pairs(p):
-    """
-    """
-    t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p)
-    return AbstractFormula(t, s)
 
 
 # Data validation functions
@@ -225,6 +160,78 @@ class AbstractFormula(tuple):
                 i += 1
         return i
 
+    @classmethod
+    def from_any(
+            cls,
+            o: FlexibleAbstractFormula) -> AbstractFormula:
+        if isinstance(o, AbstractFormula):
+            return o
+        if isinstance(o, collections.abc.Iterable):
+            return AbstractFormula(*o)
+        if isinstance(o, collections.abc.Generator):
+            return AbstractFormula(*o)
+        raise util.PunctiliousException("`AbstractFormula` data validation failure. `o` is of unknown type.",
+                                        type_of_o=type(o), o=o)
+
+    @classmethod
+    def from_immediate_sub_formulas(
+            cls,
+            n: int | None,
+            s: tuple[FlexibleAbstractFormula, ...] | None) -> AbstractFormula:
+        """Given a root natural number n,
+        and a tuple of abstract-formulas s,
+        declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
+
+        :param n:
+        :param s:
+        :return:
+        """
+        if n is None:
+            n: int = 0
+        if s is None:
+            s: tuple[AbstractFormula, ...] = ()
+        s: tuple[AbstractFormula, ...] = tuple(
+            AbstractFormula.from_any(o=phi) for phi in s)
+        # Retrieves the children trees
+        t: tuple[rpt.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
+        # Declare the new parent tree
+        t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_immediate_subtrees(*t)
+        # Declare the natural-number-sequence by appending n to the concatenation of the
+        # children natural-number-sequences.
+        u: sl.NaturalNumberSequence = sl.NaturalNumberSequence(n) + sl.concatenate_natural_number_sequences(
+            *(phi.natural_number_sequence for phi in s))
+        phi: AbstractFormula = AbstractFormula(t=t, s=u)
+        return phi
+
+    @classmethod
+    def from_tree_of_integer_tuple_pairs(cls, p) -> AbstractFormula:
+        """Declares a :class:`AbstractFormula` object from a tree of integer/tuple pairs.
+
+        Use case:
+        Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.
+
+        Definition:
+        A tree of integer/tuple pairs `T` defined as:
+         T := (n, T')
+        where:
+         - n is a natural number
+         - T' is (possibly empty) tuple of trees of integer/tuple pairs.
+
+        Sample tree of integer/tuple pairs:
+        (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)
+        ...which maps to formula:
+        0(1,0(2,1),2)
+
+        :param p: A tree of integer/tuple pairs.
+        :return: a :class:`AbstractFormula`.
+        """
+
+        t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
+        t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_tuple_tree(t)
+        s: sl.NaturalNumberSequence = sl.NaturalNumberSequence(*s)
+        phi: AbstractFormula = AbstractFormula(t, s)
+        return phi
+
     def get_sub_formula_by_path(self, p: tuple[int, ...]) -> AbstractFormula:
         """Given a path `p`, returns the corresponding sub-formula.
 
@@ -312,7 +319,7 @@ class AbstractFormula(tuple):
         :param phi:
         :return:
         """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
             phi.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_sequence_equivalent_to(
             phi.natural_number_sequence)
@@ -344,7 +351,7 @@ class AbstractFormula(tuple):
         :param phi:
         :return:
         """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
         return self.canonical_abstract_formula.is_abstract_formula_equivalent_to(
             phi.canonical_abstract_formula)
 
@@ -358,7 +365,7 @@ class AbstractFormula(tuple):
         :param phi: A :class:`AbstractFormula`.
         :return: `True` if the current :class:`AbstractFormula` is equal to `s`, `False` otherwise.
         """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
         return self.is_abstract_formula_equivalent_to(phi)
 
     def is_less_than(self, phi: FlexibleAbstractFormula) -> bool:
@@ -372,7 +379,7 @@ class AbstractFormula(tuple):
         :param phi: A :class:`AbstractFormula`.
         :return: `True` if the current :class:`AbstractFormula` is equal to `phi`, `False` otherwise.
         """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
         if self.is_abstract_formula_equivalent_to(phi):
             return False
         elif self.rooted_plane_tree.is_less_than(phi.rooted_plane_tree):
@@ -391,7 +398,7 @@ class AbstractFormula(tuple):
         :param phi:
         :return:
         """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
         psi: AbstractFormula
         for psi in phi.iterate_immediate_sub_formulas():
             if self.is_abstract_formula_equivalent_to(psi):
@@ -404,7 +411,7 @@ class AbstractFormula(tuple):
         :param phi:
         :return:
         """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
         return phi.is_immediate_sub_formula_of(self)
 
     def is_sub_formula_of(self, phi: AbstractFormula):
@@ -413,7 +420,7 @@ class AbstractFormula(tuple):
         :param phi:
         :return:
         """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
         psi: AbstractFormula
         for psi in phi.iterate_sub_formulas():
             if self.is_abstract_formula_equivalent_to(psi):
@@ -426,7 +433,7 @@ class AbstractFormula(tuple):
         :param phi:
         :return:
         """
-        phi: AbstractFormula = data_validate_abstract_formula(phi)
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
         return phi.is_sub_formula_of(self)
 
     def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
@@ -511,6 +518,16 @@ class AbstractFormula(tuple):
         :return:
         """
         return super().__getitem__(1)
+
+    @property
+    def ordered(self) -> AbstractFormula:
+        """Returns the current abstract-formula with immediate subformulas canonically ordered.
+
+        :return:
+        """
+        if self._ordered is None:
+            self._ordered = None
+        raise NotImplementedError("XXX")
 
     def represent_as_function(self, connectives: tuple | None = None) -> str:
         """Returns a string representation of the :class:`AbstractFormula` using function notation.
@@ -597,9 +614,9 @@ class AbstractFormula(tuple):
         :return:
         """
         domain: tuple[AbstractFormula, ...] = tuple(
-            data_validate_abstract_formula(x) for x in m.keys())
+            AbstractFormula.from_any(x) for x in m.keys())
         codomain: tuple[AbstractFormula, ...] = tuple(
-            data_validate_abstract_formula(y) for y in m.values())
+            AbstractFormula.from_any(y) for y in m.values())
         m: dict[AbstractFormula, AbstractFormula] = dict(zip(domain, codomain))
         immediate_sub_formulas: list[AbstractFormula] = []
         phi: AbstractFormula
@@ -652,7 +669,7 @@ _abstract_formula_cache = dict()  # cache mechanism assuring that unique abstrac
 def retrieve_abstract_formula_from_cache(o: FlexibleAbstractFormula):
     """cache mechanism assuring that unique abstract formulas are only instantiated once."""
     global _abstract_formula_cache
-    o: AbstractFormula = data_validate_abstract_formula(o)
+    o: AbstractFormula = AbstractFormula.from_any(o)
     if hash(o) in _abstract_formula_cache.keys():
         return _abstract_formula_cache[hash(o)]
     else:

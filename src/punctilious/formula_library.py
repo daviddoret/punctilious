@@ -61,7 +61,7 @@ class Formula(tuple):
         return self.is_less_than(phi)
 
     def __new__(cls, phi: afl.FlexibleAbstractFormula, s: sl.FlexibleConnectiveSequence):
-        phi: afl.AbstractFormula = afl.data_validate_abstract_formula(phi)
+        phi: afl.AbstractFormula = afl.AbstractFormula.from_any(phi)
         s: sl.ConnectiveSequence = sl.ConnectiveSequence.from_any(s)
         phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
         if s.length != phi.natural_number_sequence.image_cardinality:
