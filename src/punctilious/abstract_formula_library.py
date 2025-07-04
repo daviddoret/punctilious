@@ -629,8 +629,6 @@ class AbstractFormula(tuple):
         return self.rooted_plane_tree.size
 
 
-# Misc functions
-
 # Transformation functions
 
 

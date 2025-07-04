@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="clean-up">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1005,14 +1004,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01472" summary="Cleanup">
-      <option name="closed" value="true" />
-      <created>1750831904827</created>
-      <option name="number" value="01472" />
-      <option name="presentableId" value="LOCAL-01472" />
-      <option name="project" value="LOCAL" />
-      <updated>1750831904827</updated>
-    </task>
     <task id="LOCAL-01473" summary="Cleanup">
       <option name="closed" value="true" />
       <created>1750851299892</created>
@@ -1397,7 +1388,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751577312101</updated>
     </task>
-    <option name="localTasksCounter" value="1521" />
+    <task id="LOCAL-01521" summary="clean-up">
+      <option name="closed" value="true" />
+      <created>1751577623345</created>
+      <option name="number" value="01521" />
+      <option name="presentableId" value="LOCAL-01521" />
+      <option name="project" value="LOCAL" />
+      <updated>1751577623345</updated>
+    </task>
+    <option name="localTasksCounter" value="1522" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
