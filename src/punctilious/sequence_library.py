@@ -305,6 +305,21 @@ class NaturalNumberSequence(tuple):
         s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
         return self.is_natural_number_sequence_equivalent_to(s)
 
+    @property
+    def is_increasing(self) -> bool:
+        """Returns `True` if this sequence is increasing, `False` otherwise.
+
+        Definition - Increasing sequence:
+        A sequence :math:`S = (n_0, n1, \cdots, n_l)` is increasing
+        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, n_{i + 1} \ge n_i`.
+
+        References:
+         - Adams, Malcolm R. “An Introduction to Mathematical Analysis,” 2007.
+
+        :return: `True` if this sequence is increasing, `False` otherwise.
+        """
+        return all(self.elements[i + 1] >= self.elements[i] for i in range(0, self.length - 1))
+
     def is_less_than(self, s: FlexibleNaturalNumberSequence) -> bool:
         """Under :class:`NaturalNumberSequence` canonical ordering,
         returns `True` if the current :class:`NaturalNumberSequence` is less than `s`,
@@ -330,6 +345,34 @@ class NaturalNumberSequence(tuple):
                 if n > m:
                     return False
         raise util.PunctiliousException("Unreachable condition")
+
+    @property
+    def is_natural_number_sequence(self) -> bool:
+        """
+
+        Notation:
+        :math:`\mathbb{N}\text{-sequence}(S)
+
+        :return:
+        """
+        return True
+
+    def is_natural_number_sequence_equivalent_to(self, s: FlexibleNaturalNumberSequence):
+        """
+
+        Notation:
+        :math:`S ~_{\mathbb{N}\text{-sequence}} T`
+
+        Formal definition:
+        Two natural numbers-sequences s and t are natural-numbers-sequence-equivalent if and only if:
+         - length(s) = length(t)
+         - s_i = t_i for 0 <= i < length(s)
+
+        :param s:
+        :return:
+        """
+        s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
+        return self.length == s.length and all(x == y for x, y in zip(self, s))
 
     @property
     def is_restricted_growth_function_sequence(self) -> bool:
@@ -364,32 +407,19 @@ class NaturalNumberSequence(tuple):
             return self._is_restricted_growth_function_sequence
 
     @property
-    def is_natural_number_sequence(self) -> bool:
+    def is_strictly_increasing(self) -> bool:
+        """Returns `True` if this sequence is strictly increasing, `False` otherwise.
+
+        Definition - Strictly increasing sequence:
+        A sequence :math:`S = (n_0, n1, \cdots, n_l)` is strictly increasing
+        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, n_{i + 1} > n_i`.
+
+        References:
+         - Adams, Malcolm R. “An Introduction to Mathematical Analysis,” 2007.
+
+        :return: `True` if this sequence is strictly increasing, `False` otherwise.
         """
-
-        Notation:
-        :math:`\mathbb{N}\text{-sequence}(S)
-
-        :return:
-        """
-        return True
-
-    def is_natural_number_sequence_equivalent_to(self, s: FlexibleNaturalNumberSequence):
-        """
-
-        Notation:
-        :math:`S ~_{\mathbb{N}\text{-sequence}} T`
-
-        Formal definition:
-        Two natural numbers-sequences s and t are natural-numbers-sequence-equivalent if and only if:
-         - length(s) = length(t)
-         - s_i = t_i for 0 <= i < length(s)
-
-        :param s:
-        :return:
-        """
-        s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
-        return self.length == s.length and all(x == y for x, y in zip(self, s))
+        return all(self.elements[i + 1] > self.elements[i] for i in range(0, self.length - 1))
 
     @property
     def length(self) -> int:

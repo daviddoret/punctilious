@@ -1,7 +1,7 @@
 from __future__ import annotations
 import typing
 import collections
-import itertools
+# import itertools
 
 # package modules
 import util

@@ -132,3 +132,31 @@ class TestNaturalNumbersSequence:
     def test_canonical_ordering(self):
         assert pu.sl.NaturalNumberSequence(0, 0, 0).is_less_than(pu.sl.NaturalNumberSequence(0, 0, 1))
         assert pu.sl.NaturalNumberSequence(0, 4, 17).is_less_than(pu.sl.NaturalNumberSequence(0, 4, 19))
+
+    def test_is_increasing(self):
+        s = pu.sl.NaturalNumberSequence(0, )
+        assert s.is_increasing
+        s = pu.sl.NaturalNumberSequence(17, )
+        assert s.is_increasing
+        s = pu.sl.NaturalNumberSequence(0, 1, 2, )
+        assert s.is_increasing
+        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 8, 12, 2000, 2000, )
+        assert s.is_increasing
+        s = pu.sl.NaturalNumberSequence(0, 1, 0, )
+        assert not s.is_increasing
+        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 8, 7, 2000, 2000, )
+        assert not s.is_increasing
+
+    def test_is_strictly_increasing(self):
+        s = pu.sl.NaturalNumberSequence(0, )
+        assert s.is_strictly_increasing
+        s = pu.sl.NaturalNumberSequence(17, )
+        assert s.is_strictly_increasing
+        s = pu.sl.NaturalNumberSequence(0, 1, 2, )
+        assert s.is_strictly_increasing
+        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 8, 12, 2000, 2001, )
+        assert not s.is_strictly_increasing
+        s = pu.sl.NaturalNumberSequence(0, 1, 0, )
+        assert not s.is_strictly_increasing
+        s = pu.sl.NaturalNumberSequence(0, 1, 6, 7, 8, 100, 2000, 2000, )
+        assert not s.is_strictly_increasing
