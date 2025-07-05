@@ -535,16 +535,6 @@ class AbstractFormula(tuple):
         """
         return super().__getitem__(1)
 
-    @property
-    def ordered(self) -> AbstractFormula:
-        """Returns the current abstract-formula with immediate subformulas canonically ordered.
-
-        :return:
-        """
-        if self._ordered is None:
-            self._ordered = None
-        raise NotImplementedError("XXX")
-
     def represent_as_function(self, connectives: tuple | None = None) -> str:
         """Returns a string representation of the :class:`AbstractFormula` using function notation.
 

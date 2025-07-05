@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="NaturalNumberSequence.is_increasing etc.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="is_strictly_increasing" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1014,14 +1008,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01475" summary="Cleanup">
-      <option name="closed" value="true" />
-      <created>1750878205051</created>
-      <option name="number" value="01475" />
-      <option name="presentableId" value="LOCAL-01475" />
-      <option name="project" value="LOCAL" />
-      <updated>1750878205051</updated>
-    </task>
     <task id="LOCAL-01476" summary="Cleanup">
       <option name="closed" value="true" />
       <created>1750878519350</created>
@@ -1406,7 +1392,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751718796575</updated>
     </task>
-    <option name="localTasksCounter" value="1524" />
+    <task id="LOCAL-01524" summary="is_strictly_increasing">
+      <option name="closed" value="true" />
+      <created>1751720333550</created>
+      <option name="number" value="01524" />
+      <option name="presentableId" value="LOCAL-01524" />
+      <option name="project" value="LOCAL" />
+      <updated>1751720333550</updated>
+    </task>
+    <option name="localTasksCounter" value="1525" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1459,7 +1453,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs" />
     <MESSAGE value="build_formula_from_tree_of_integer_tuple_pairs" />
     <MESSAGE value="CAF" />
     <MESSAGE value="UnrestrictedSequence" />
@@ -1484,7 +1477,8 @@
     <MESSAGE value="__lt__" />
     <MESSAGE value="clean-up" />
     <MESSAGE value="NaturalNumberSequence.is_increasing etc." />
-    <option name="LAST_COMMIT_MESSAGE" value="NaturalNumberSequence.is_increasing etc." />
+    <MESSAGE value="is_strictly_increasing" />
+    <option name="LAST_COMMIT_MESSAGE" value="is_strictly_increasing" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
