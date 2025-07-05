@@ -167,6 +167,10 @@ class Connective(tuple):
         is based on the 128-bit integer value of their respective UUID component,
         which is the default implementation of __lt__ in the uuid package.
 
+        Note:
+        The canonical ordering of connective-sequence being dependent on the connectives UUIDs,
+        the resulting ordering may appear random to the human reader.
+
         :param c: A connective`.
         :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
         """

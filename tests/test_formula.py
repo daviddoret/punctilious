@@ -92,3 +92,15 @@ class TestFormula:
         assert not phi1a.is_formula_equivalent_to(phi2a)
         assert not phi1a.is_formula_equivalent_to(phi2b)
         assert not phi1a.is_formula_equivalent_to(phi6a)
+
+    def test_is_increasing(self, phi1a, phi2a, phi2b, phi6a):
+        assert phi1a.is_increasing
+        assert phi2a.is_increasing
+        assert phi2b.is_increasing
+        assert not phi6a.is_increasing
+
+    def test_is_strictly_increasing(self, phi1a, phi2a, phi2b, phi6a):
+        assert phi1a.is_strictly_increasing
+        assert phi2a.is_strictly_increasing
+        assert phi2b.is_strictly_increasing
+        assert not phi6a.is_strictly_increasing

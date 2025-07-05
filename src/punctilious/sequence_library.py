@@ -621,6 +621,10 @@ class ConnectiveSequence(tuple):
         Definition: canonical ordering of natural-number-sequence, denoted :math:`\prec`,
         is defined as length-first, ascending-order second.
 
+        Note:
+        The canonical ordering of connective-sequence being dependent on the connectives UUIDs,
+        the resulting ordering may appear random to the human reader.
+
         :param c: A :class:`ConnectiveSequence`.
         :return: `True` if the current :class:`ConnectiveSequence` is equal to `c`, `False` otherwise.
         """

@@ -10,11 +10,7 @@ import sequence_library as sl
 from punctilious.sequence_library import NaturalNumberSequence
 
 
-# Formula declarations
-
-
 # Classes
-
 
 class AbstractFormula(tuple):
     """A :class:`AbstractFormula` is a tuple `(T, S)` such that:
