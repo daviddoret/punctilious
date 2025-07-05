@@ -348,3 +348,27 @@ class TestAbstractFormula:
     def test_canonical_order(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
         assert af1.is_less_than(af1b)
         assert af2a.is_less_than(af2b)
+
+    def test_is_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big, t3_a_aa_ab):
+        assert af1.is_increasing
+        assert af1b.is_increasing
+        assert af2a.is_increasing
+        assert af2b.is_increasing
+        assert af3a.is_increasing
+        assert af6a.is_increasing
+        assert not af_big.is_increasing
+        assert pu.afl.AbstractFormula(t3_a_aa_ab, (9, 2, 3,)).is_increasing
+        assert pu.afl.AbstractFormula(t3_a_aa_ab, (9, 5, 5,)).is_increasing
+        assert not pu.afl.AbstractFormula(t3_a_aa_ab, (9, 3, 2,)).is_increasing
+
+    def test_is_strictly_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big, t3_a_aa_ab):
+        assert af1.is_strictly_increasing
+        assert af1b.is_strictly_increasing
+        assert af2a.is_strictly_increasing
+        assert af2b.is_strictly_increasing
+        assert af3a.is_strictly_increasing
+        assert af6a.is_strictly_increasing
+        assert not af_big.is_strictly_increasing
+        assert pu.afl.AbstractFormula(t3_a_aa_ab, (9, 2, 3,)).is_strictly_increasing
+        assert not pu.afl.AbstractFormula(t3_a_aa_ab, (9, 5, 5,)).is_strictly_increasing
+        assert not pu.afl.AbstractFormula(t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing

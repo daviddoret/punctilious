@@ -227,3 +227,27 @@ class TestRootedPlaneTree:
 
         assert t7_a_aa_ab_aaa_aaaa_aba_abaa.is_less_than(t6_a_aa_ab_ac_ad_ae)
         assert not t6_a_aa_ab_ac_ad_ae.is_less_than(t7_a_aa_ab_aaa_aaaa_aba_abaa)
+
+    def test_is_increasing(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae,
+                           t7_a_aa_ab_aaa_aaaa_aba_abaa,
+                           t12, t_big):
+        assert t1_a.is_increasing
+        assert t2_a_aa.is_increasing
+        assert t3_a_aa_aaa.is_increasing
+        assert t3_a_aa_ab.is_increasing
+        assert t6_a_aa_ab_ac_ad_ae.is_increasing
+        assert t7_a_aa_ab_aaa_aaaa_aba_abaa.is_increasing
+        assert not t12.is_increasing
+        assert not t_big.is_increasing
+
+    def test_is_strictly_increasing(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae,
+                                    t7_a_aa_ab_aaa_aaaa_aba_abaa,
+                                    t12, t_big):
+        assert t1_a.is_strictly_increasing
+        assert t2_a_aa.is_strictly_increasing
+        assert t3_a_aa_aaa.is_strictly_increasing
+        assert not t3_a_aa_ab.is_strictly_increasing
+        assert not t6_a_aa_ab_ac_ad_ae.is_strictly_increasing
+        assert not t7_a_aa_ab_aaa_aaaa_aba_abaa.is_strictly_increasing
+        assert not t12.is_strictly_increasing
+        assert not t_big.is_strictly_increasing

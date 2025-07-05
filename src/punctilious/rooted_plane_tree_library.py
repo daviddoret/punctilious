@@ -261,6 +261,25 @@ class RootedPlaneTree(tuple):
         return self.is_rooted_plane_tree_equivalent_to(t)
 
     @property
+    def is_increasing(self) -> bool:
+        """Returns `True` if this rooted-plane-tree is increasing, `False` otherwise.
+
+        Definition - increasing rooted-plane-tree:
+        A rooted-plane-tree is increasing
+        or increasing under canonical order,
+        if its immediate subtrees are ordered.
+
+        Definition - increasing rooted-plane-tree:
+        A rooted-plane-tree :math:`T = (S_0, S1, \cdots, S_l)` is increasing,
+        or increasing under canonical order,
+        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, S_{i + 1} \ge S_i`.
+
+        :return: `True` if this rooted-plane-tree is increasing, `False` otherwise.
+        """
+        return all(
+            self.immediate_subtrees[i + 1] >= self.immediate_subtrees[i] for i in range(0, self.degree - 1))
+
+    @property
     def is_leaf(self) -> bool:
         """Returns `True` if the RootedPlaneTree is a leaf, `False` otherwise.
 
@@ -322,6 +341,25 @@ class RootedPlaneTree(tuple):
                                                zip(t.iterate_immediate_subtrees(), self.iterate_immediate_subtrees()))
         # Equivalent implementation:
         # return t.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
+
+    @property
+    def is_strictly_increasing(self) -> bool:
+        """Returns `True` if this rooted-plane-tree is strictly increasing, `False` otherwise.
+
+        Definition - strictly increasing rooted-plane-tree:
+        A rooted-plane-tree is strictly increasing
+        or strictly increasing under canonical order,
+        if its immediate subtrees are strictly ordered.
+
+        Definition - strictly increasing rooted-plane-tree:
+        A rooted-plane-tree :math:`T = (S_0, S1, \cdots, S_l)` is strictly increasing,
+        or strictly increasing under canonical order,
+        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, S_{i + 1} > S_i`.
+
+        :return: `True` if this rooted-plane-tree is strictly increasing, `False` otherwise.
+        """
+        return all(
+            self.immediate_subtrees[i + 1] > self.immediate_subtrees[i] for i in range(0, self.degree - 1))
 
     def iterate_immediate_subtrees(self) -> typing.Generator[RootedPlaneTree, None, None]:
         """Generator function that iterates the immediate subtrees of this :class:`RootedPlaneTree`.

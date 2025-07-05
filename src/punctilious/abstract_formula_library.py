@@ -392,6 +392,44 @@ class AbstractFormula(tuple):
         phi: AbstractFormula = AbstractFormula.from_any(phi)
         return phi.is_immediate_sub_formula_of(self)
 
+    @property
+    def is_increasing(self) -> bool:
+        """Returns `True` if this abstract-formula is increasing, `False` otherwise.
+
+        Definition - increasing abstract-formula:
+        An abstract-formula is increasing
+        or increasing under canonical order,
+        if its immediate subformulas are ordered.
+
+        Definition - increasing abstract-formula:
+        An abstract-formula :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is increasing,
+        or increasing under canonical order,
+        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} \ge \psi_i`.
+
+        :return: `True` if this abstract-formula is increasing, `False` otherwise.
+        """
+        return all(
+            self.immediate_sub_formulas[i + 1] >= self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
+
+    @property
+    def is_strictly_increasing(self) -> bool:
+        """Returns `True` if this abstract-formula is strictly increasing, `False` otherwise.
+
+        Definition - strictly increasing abstract-formula:
+        An abstract-formula is strictly increasing
+        or strictly increasing under canonical order,
+        if its immediate subformulas are strictly ordered.
+
+        Definition - strictly increasing abstract-formula:
+        An abstract-formula :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is strictly increasing,
+        or strictly increasing under canonical order,
+        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} > \psi_i`.
+
+        :return: `True` if this abstract-formula is strictly increasing, `False` otherwise.
+        """
+        return all(
+            self.immediate_sub_formulas[i + 1] > self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
+
     def is_sub_formula_of(self, phi: AbstractFormula):
         """Returns `True` if this :class:`AbstractFormula` is a sub-formula of :class:`AbstractFormula` phi.
 
