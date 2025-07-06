@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="clean up">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/abstract_structure_library.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_abstract_structures.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="abstract-map">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_structure_library.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1023,14 +1021,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01478" summary="data model simplification">
-      <option name="closed" value="true" />
-      <created>1750972297410</created>
-      <option name="number" value="01478" />
-      <option name="presentableId" value="LOCAL-01478" />
-      <option name="project" value="LOCAL" />
-      <updated>1750972297410</updated>
-    </task>
     <task id="LOCAL-01479" summary="data model simplification">
       <option name="closed" value="true" />
       <created>1751000493864</created>
@@ -1415,7 +1405,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751727633374</updated>
     </task>
-    <option name="localTasksCounter" value="1527" />
+    <task id="LOCAL-01527" summary="abstract-map">
+      <option name="closed" value="true" />
+      <created>1751785865400</created>
+      <option name="number" value="01527" />
+      <option name="presentableId" value="LOCAL-01527" />
+      <option name="project" value="LOCAL" />
+      <updated>1751785865400</updated>
+    </task>
+    <option name="localTasksCounter" value="1528" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1468,7 +1466,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="CAF" />
     <MESSAGE value="UnrestrictedSequence" />
     <MESSAGE value="NonCanonicalAbstractFormula" />
     <MESSAGE value="data_validate_restricted_growth_function_sequence_elements with raise_exception parameter" />
@@ -1493,7 +1490,8 @@
     <MESSAGE value="NaturalNumberSequence.is_increasing etc." />
     <MESSAGE value="is_strictly_increasing" />
     <MESSAGE value="clean up" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean up" />
+    <MESSAGE value="abstract-map" />
+    <option name="LAST_COMMIT_MESSAGE" value="abstract-map" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1583,11 +1581,6 @@
           <url>file://$PROJECT_DIR$/tests/test_natural_numbers_sequence.py</url>
           <line>145</line>
           <option name="timeStamp" value="398" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/abstract_structure_library.py</url>
-          <line>30</line>
-          <option name="timeStamp" value="404" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
