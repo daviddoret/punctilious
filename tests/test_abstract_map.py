@@ -4,7 +4,7 @@ import punctilious as pu
 import conftest
 
 
-class TestAbstractStructures:
+class TestAbstractMap:
     def test_abstract_map(self, t1_a, t3_a_aa_ab):
         phi1 = pu.afl.AbstractFormula(t=((), (),), s=(0, 1, 2,))
         phi2 = pu.afl.AbstractFormula(t=((), (),), s=(0, 3, 4,))
