@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="is_strictly_increasing">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="clean up">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/abstract_structure_library.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_abstract_structures.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,6 +136,7 @@
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_iterate_subsequences_direct_ascending.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_represent_as_function.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_tree_size.executor": "Run",
+    "Python tests.pytest for test_abstract_structures.TestAbstractStructures.test_abstract_map.executor": "Run",
     "Python tests.pytest for test_axiomatic_system.test_connective.executor": "Run",
     "Python tests.pytest for test_axiomatic_system_1.TestAlgorithm.test_algorithm.executor": "Debug",
     "Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheory.test_are_valid_statements_in_theory.executor": "Debug",
@@ -456,6 +456,7 @@
     "Python tests.pytest in test_3.py.executor": "Run",
     "Python tests.pytest in test_abstract_formal_language.py.executor": "Run",
     "Python tests.pytest in test_abstract_formula.py.executor": "Debug",
+    "Python tests.pytest in test_abstract_structures.py.executor": "Debug",
     "Python tests.pytest in test_axiomatic_system.py.executor": "Run",
     "Python tests.pytest in test_axiomatic_system_1.py.executor": "Run",
     "Python tests.pytest in test_connective_sequence.py.executor": "Run",
@@ -497,6 +498,7 @@
     "Python._latin_alphabet_lowercase_serif_roman.executor": "Debug",
     "Python._packaging.executor": "Run",
     "Python._tao_analysis_1_2006.executor": "Run",
+    "Python.abstract_structure_library.executor": "Run",
     "Python.axiomatic_system.executor": "Run",
     "Python.axiomatic_system_1.executor": "Run",
     "Python.basic.executor": "Run",
@@ -633,7 +635,29 @@
       <recent name="$PROJECT_DIR$/src/punctilious/data2/theorems" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_abstract_structures.TestAbstractStructures.test_abstract_map">
+    <configuration name="abstract_structure_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/abstract_structure_library.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -828,7 +852,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_abstract_formula.TestAbstractFormula.test_is_strictly_increasing" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_abstract_structures.TestAbstractStructures.test_abstract_map" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -841,7 +865,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_abstract_formula.TestAbstractFormula.test_is_strictly_increasing&quot;" />
+      <option name="_new_target" value="&quot;test_abstract_structures.TestAbstractStructures.test_abstract_map&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -863,23 +887,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_formula.TestFormula.test_is_increasing" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_formula.TestFormula.test_is_increasing&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -898,23 +905,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_increasing" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_rooted_plane_tree.TestRootedPlaneTree.test_is_increasing&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest in punctilious" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -930,6 +920,23 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in test_abstract_structures.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_abstract_structures.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -973,15 +980,15 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
+      <item itemvalue="Python.abstract_structure_library" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_increasing" />
+      <item itemvalue="Python tests.pytest for test_abstract_structures.TestAbstractStructures.test_abstract_map" />
+      <item itemvalue="Python tests.pytest in test_abstract_structures.py" />
       <item itemvalue="Python tests.pytest in test_formula.py" />
-      <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_strictly_increasing" />
-      <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_increasing" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -989,11 +996,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_abstract_structures.TestAbstractStructures.test_abstract_map" />
+        <item itemvalue="Python tests.pytest in test_abstract_structures.py" />
+        <item itemvalue="Python.abstract_structure_library" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest in test_formula.py" />
-        <item itemvalue="Python tests.pytest for test_formula.TestFormula.test_is_increasing" />
-        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_increasing" />
-        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_is_strictly_increasing" />
       </list>
     </recent_temporary>
   </component>
@@ -1015,14 +1022,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01477" summary="data model simplification">
-      <option name="closed" value="true" />
-      <created>1750972030833</created>
-      <option name="number" value="01477" />
-      <option name="presentableId" value="LOCAL-01477" />
-      <option name="project" value="LOCAL" />
-      <updated>1750972030833</updated>
     </task>
     <task id="LOCAL-01478" summary="data model simplification">
       <option name="closed" value="true" />
@@ -1408,7 +1407,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751720404110</updated>
     </task>
-    <option name="localTasksCounter" value="1526" />
+    <task id="LOCAL-01526" summary="clean up">
+      <option name="closed" value="true" />
+      <created>1751727633374</created>
+      <option name="number" value="01526" />
+      <option name="presentableId" value="LOCAL-01526" />
+      <option name="project" value="LOCAL" />
+      <updated>1751727633374</updated>
+    </task>
+    <option name="localTasksCounter" value="1527" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1461,7 +1468,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="build_formula_from_tree_of_integer_tuple_pairs" />
     <MESSAGE value="CAF" />
     <MESSAGE value="UnrestrictedSequence" />
     <MESSAGE value="NonCanonicalAbstractFormula" />
@@ -1486,7 +1492,8 @@
     <MESSAGE value="clean-up" />
     <MESSAGE value="NaturalNumberSequence.is_increasing etc." />
     <MESSAGE value="is_strictly_increasing" />
-    <option name="LAST_COMMIT_MESSAGE" value="is_strictly_increasing" />
+    <MESSAGE value="clean up" />
+    <option name="LAST_COMMIT_MESSAGE" value="clean up" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1576,6 +1583,11 @@
           <url>file://$PROJECT_DIR$/tests/test_natural_numbers_sequence.py</url>
           <line>145</line>
           <option name="timeStamp" value="398" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/abstract_structure_library.py</url>
+          <line>30</line>
+          <option name="timeStamp" value="404" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
