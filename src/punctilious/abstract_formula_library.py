@@ -135,6 +135,21 @@ class AbstractFormula(tuple):
         else:
             raise util.PunctiliousException("This abstract-formula is not an abstract-map.")
 
+    def derive_abstract_inference_rule(self, p: FlexibleAbstractFormula) -> AbstractFormula:
+        """If this abstract-formula is an abstract-inference-rule, derives a theorem
+        from the finite (computable) sequence of premises `p`.
+
+        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
+
+        :param p: a finite (computable) sequence of premises.
+        :return: the theorem derived from this abstract-inference-rule, given premises `p`.
+        """
+        p: AbstractFormula = AbstractFormula.from_any(p)
+        if self.is_abstract_inference_rule:
+        # TODO: IMPLEMENT INFERENCE-RULE LOGIC
+        else:
+            raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
+
     def get_abstract_map_value(self, phi: FlexibleAbstractFormula) -> AbstractFormula:
         """If this abstract-formula is an abstract-map, returns the image `phi` under this map.
 
