@@ -7,6 +7,7 @@ import collections
 import util
 import rooted_plane_tree_library as rpt
 import sequence_library as sl
+from punctilious.connective_catalog import inference_rule
 from punctilious.sequence_library import NaturalNumberSequence
 
 
@@ -141,11 +142,33 @@ class AbstractFormula(tuple):
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
 
-        :param p: a finite (computable) sequence of premises.
+        :param p: a finite (computable) sequence of premises, in the order expected by the inference-rule.
         :return: the theorem derived from this abstract-inference-rule, given premises `p`.
         """
         p: AbstractFormula = AbstractFormula.from_any(p)
         if self.is_abstract_inference_rule:
+            if p.arity != self.abstract_inference_rule_premises.arity:
+                raise util.PunctiliousException("The number of input premises is not equal to the number"
+                                                " of premises expected by the inference-rule.",
+                                                input_premises=p,
+                                                expected_premises=self.abstract_inference_rule_premises,
+                                                inference_rule=self)
+            v: dict[AbstractFormula, AbstractFormula | None]  # A mapping for variable values
+
+            i: AbstractFormula  # An input premise
+            e: AbstractFormula  # An expected premise
+            for i, e in zip(p.iterate_immediate_sub_formulas(), self.abstract_inference_rule_premises):
+                ok, v = _compute_abstract_inference_rule_variables(v, i, e)
+                if not ok:
+                    pass
+                else:
+                    pass
+
+
+
+
+
+
         # TODO: IMPLEMENT INFERENCE-RULE LOGIC
         else:
             raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
@@ -250,6 +273,21 @@ class AbstractFormula(tuple):
         else:
             cls._cache[hash_value] = o
             return o
+
+    @classmethod
+    def abstract_map_from_preimage_and_image(
+            cls,
+            n: int,
+            p: FlexibleAbstractFormula,
+            i: FlexibleAbstractFormula) -> AbstractFormula:
+        """Declares a new abstract-map.
+
+        :param n: The main-element of the abstract-map.
+        :param p: The preimage of the abstract-map.
+        :param i: The image of the abstract-map.
+        :return: The resulting abstract-map.
+        """
+        return AbstractFormula.from_immediate_sub_formulas(n=n, s=(p, i,))
 
     @property
     def arity(self) -> int:
@@ -481,6 +519,23 @@ class AbstractFormula(tuple):
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
             phi.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_sequence_equivalent_to(
             phi.natural_number_sequence)
+
+    def is_abstract_formula_equivalent_to_with_variables(self, phi: AbstractFormula,
+                                                         v: AbstractFormula) -> bool:
+        """Returns `True` if this abstract-formula is abstract-formula-equivalent to abstract-formula `phi`,
+        after substitution of variables with assigned values in this abstract-formula,
+        according to variables and assigned values in abstract-map `v`.
+
+        :param phi: An abstract-formula.
+        :param v: An abstract-map whose preimage is denoted as the variables, and image as the assigned values.
+        :return: `True` if formulas are equivalent given above conditions, `False` otherwise.
+        """
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
+        v: AbstractFormula = AbstractFormula.from_any(v)
+        if not v.is_abstract_map:
+            raise util.PunctiliousException("`v` is not an abstract-map", v=v, phi=phi, this_abstract_formula=self)
+        psi: AbstractFormula = self.substitute_sub_formulas(m=v)
+        return psi.is_abstract_formula_equivalent_to(phi)
 
     @property
     def is_canonical(self) -> bool:
@@ -741,6 +796,45 @@ class AbstractFormula(tuple):
         return self.rooted_plane_tree.represent_as_function(
             connectives=connectives)
 
+    def represent_as_map_extension(self, connectives: tuple | None = None) -> str:
+        """Returns a string representation of the :class:`AbstractFormula` using map notation.
+
+        By default, connectives are represented by their respective values
+        in the :attr:`AbstractFormula.natural_numbers_sequence`.
+
+        :param connectives: A tuple of connectives of length equal to the length of
+        the :attr:`AbstractFormula.natural_numbers_sequence`. Default: `None`.
+        :return:
+        """
+        if connectives is None:
+            connectives = self.natural_number_sequence
+        else:
+            if len(connectives) != len(self.natural_number_sequence):
+                raise util.PunctiliousException(
+                    "The length of the connectives tuple is not equal to the length "
+                    "of the abstract-formula's natural-number-sequence.",
+                    connectives_length=len(connectives),
+                    natural_number_sequence_length=self.natural_number_sequence.length,
+                    connectives=connectives,
+                    natural_number_sequence=self.natural_number_sequence,
+                    abstract_formula=self
+                )
+        output = f"{{ "
+        first = True
+        for i, preimage, j, image in zip(
+                range(1, 1 + self.abstract_map_preimage_sequence.arity),
+                self.abstract_map_preimage_sequence.immediate_sub_formulas,
+                range(1 + self.abstract_map_preimage_sequence.arity,
+                      1 + 2 * self.abstract_map_preimage_sequence.arity),
+                self.abstract_map_image_sequence.immediate_sub_formulas):
+            if not first:
+                output = f"{output}, "
+            output = f"{output}{preimage} ⟼ {image}"
+            first = False
+        output = f"{output} }}"
+
+        return output
+
     @property
     def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
         """The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.
@@ -788,32 +882,27 @@ class AbstractFormula(tuple):
             self._sub_formulas = tuple(sub_formulas)
         return self._sub_formulas
 
-    def substitute_sub_formulas(self, m: dict[
-        FlexibleAbstractFormula, FlexibleAbstractFormula]) -> AbstractFormula:
-        """Returns a new :class:`AbstractFormula`
-        similar to the current :class:`AbstractFormula` except that
-        all sub-abstract-formulas present in the map `m` domain,
-        are substituted with corresponding :class:`AbstractFormula` elements in map `m` codomain,
-        following the depth-first, ascending-nodes algorithm.
+    def substitute_sub_formulas(self, m: FlexibleAbstractFormula) -> AbstractFormula:
+        """Returns a new abstract-formula similar to the current abstract-formula,
+         except that its subformulas present in the map `m` preimage,
+         are substituted with their corresponding images,
+         giving priority to the substitution of superformulas over subformulas.
 
-        :param m: A map AbstractFormula --> AbstractFormula.
-        :return:
+        :param m: An abstract-map.
+        :return: A substituted formula.
         """
-        domain: tuple[AbstractFormula, ...] = tuple(
-            AbstractFormula.from_any(x) for x in m.keys())
-        codomain: tuple[AbstractFormula, ...] = tuple(
-            AbstractFormula.from_any(y) for y in m.values())
-        m: dict[AbstractFormula, AbstractFormula] = dict(zip(domain, codomain))
-        immediate_sub_formulas: list[AbstractFormula] = []
-        phi: AbstractFormula
-        for phi in self.iterate_immediate_sub_formulas():
-            if phi in m.keys():
-                phi = m[phi]
-                immediate_sub_formulas.append(phi)
-            else:
-                immediate_sub_formulas.append(phi)
-        psi: AbstractFormula = AbstractFormula()
-        raise NotImplementedError("Complete implementation here")
+        m: AbstractFormula = AbstractFormula.from_any(m)
+        if not m.is_abstract_map:
+            raise util.PunctiliousException("`m` is not an abstract-map.", m=m, this_abstract_formula=self)
+        if self in m.abstract_map_preimage_sequence.immediate_sub_formulas:
+            # This formula must be substituted according to the substitution map.
+            return m.get_abstract_map_value(self)
+        else:
+            # Pursue substitution recursively.
+            phi: AbstractFormula
+            s: tuple[AbstractFormula, ...] = tuple(phi.substitute_sub_formulas(m=m) for phi in
+                                                   self.iterate_immediate_sub_formulas())
+            return AbstractFormula.from_immediate_sub_formulas(n=self.main_element, s=s)
 
     @property
     def t(self) -> rpt.RootedPlaneTree:

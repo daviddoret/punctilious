@@ -372,3 +372,21 @@ class TestAbstractFormula:
         assert pu.afl.AbstractFormula(t3_a_aa_ab, (9, 2, 3,)).is_strictly_increasing
         assert not pu.afl.AbstractFormula(t3_a_aa_ab, (9, 5, 5,)).is_strictly_increasing
         assert not pu.afl.AbstractFormula(t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing
+
+    def test_substitute_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae,
+                                     t7_a_aa_ab_aaa_aaaa_aba_abaa):
+        p = pu.afl.AbstractFormula(t3_a_aa_ab, (17, 38, 59,))
+        i = pu.afl.AbstractFormula(t3_a_aa_ab, (25, 11, 42,))
+        m: pu.afl.AbstractFormula = pu.afl.AbstractFormula.abstract_map_from_preimage_and_image(n=51, p=p, i=i)
+        phi = pu.afl.AbstractFormula(t1_a, (38,))
+        psi = phi.substitute_sub_formulas(m=m)
+        assert psi == pu.afl.AbstractFormula(t1_a, (11,))
+
+        p = pu.afl.AbstractFormula(t7_a_aa_ab_aaa_aaaa_aba_abaa, (1, 2, 3, 4, 5, 6, 7,))
+        i = pu.afl.AbstractFormula(t3_a_aa_ab, (8, 9, 10,))
+        m: pu.afl.AbstractFormula = pu.afl.AbstractFormula.abstract_map_from_preimage_and_image(n=94, p=p, i=i)
+        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (5, 6, 7,))
+        psi = phi.substitute_sub_formulas(m=m)
+        assert psi == pu.afl.AbstractFormula(t1_a, (10,))
+
+        pass

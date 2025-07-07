@@ -1,5 +1,6 @@
 import util as util
 import rooted_plane_tree_library
+import rooted_plane_tree_catalog
 import connective_library
 import connective_catalog
 import sequence_library
@@ -13,6 +14,7 @@ cl = connective_library
 cc = connective_catalog
 fl = formula_library
 rptl = rooted_plane_tree_library
+rptc = rooted_plane_tree_catalog
 sl = sequence_library
 
 __all__ = [
@@ -20,5 +22,6 @@ __all__ = [
     "connective_library", "cl",
     "connective_catalog", "cc",
     "formula_library", "fl",
+    "rooted_plane_tree_catalog", "rptc",
     "rooted_plane_tree_library", "rptl",
     "sequence_library", "sl"]
