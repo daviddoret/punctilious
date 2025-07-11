@@ -4,10 +4,10 @@ import collections
 import collections.abc
 
 # package modules
-import util
-import connective_library as cl
-import abstract_formula_library as afl
-import sequence_library as sl
+import punctilious.util as util
+import punctilious.connective_library as cl
+import punctilious.abstract_formula_library as afl
+import punctilious.sequence_library as sl
 
 
 # Classes
@@ -72,7 +72,7 @@ class Formula(tuple):
 
     @property
     def arity(self) -> int:
-        """Returns the arity of the formula.
+        r"""Returns the arity of the formula.
 
         Definition: arity of a formula
         The arity of a formula :math:`\Phi = (\Psi, S)`
@@ -85,7 +85,7 @@ class Formula(tuple):
 
     @classmethod
     def _compute_hash(cls, o: Formula) -> int:
-        """Exposes the hashing logic as a static method.
+        r"""Exposes the hashing logic as a static method.
 
         :param o: An object that is structurally compatible with an formula.
         :return: The hash of the formula that is structurally equivalent to `o`.
@@ -223,7 +223,7 @@ class Formula(tuple):
 
     @property
     def is_increasing(self) -> bool:
-        """Returns `True` if this formula is increasing, `False` otherwise.
+        r"""Returns `True` if this formula is increasing, `False` otherwise.
 
         Definition - increasing formula:
         An formula is increasing
@@ -242,7 +242,7 @@ class Formula(tuple):
 
     @property
     def is_strictly_increasing(self) -> bool:
-        """Returns `True` if this formula is strictly increasing, `False` otherwise.
+        r"""Returns `True` if this formula is strictly increasing, `False` otherwise.
 
         Definition - strictly increasing formula:
         An formula is strictly increasing
@@ -260,7 +260,7 @@ class Formula(tuple):
             self.immediate_sub_formulas[i + 1] > self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
 
     def is_less_than(self, phi: FlexibleFormula) -> bool:
-        """Under :class:`Formula` canonical ordering,
+        r"""Under :class:`Formula` canonical ordering,
         returns `True` if the current :class:`Formula` is less than `phi`,
         `False` otherwise.
 

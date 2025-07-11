@@ -1,11 +1,12 @@
-import util as util
-import rooted_plane_tree_library
-import rooted_plane_tree_catalog
-import connective_library
-import connective_catalog
-import sequence_library
-import abstract_formula_library
-import formula_library
+import punctilious.util as util
+import punctilious.catalan_number_library as catalan_number_library
+import punctilious.rooted_plane_tree_library as rooted_plane_tree_library
+import punctilious.rooted_plane_tree_catalog as rooted_plane_tree_catalog
+import punctilious.connective_library as connective_library
+import punctilious.connective_catalog as connective_catalog
+import punctilious.sequence_library as sequence_library
+import punctilious.abstract_formula_library as abstract_formula_library
+import punctilious.formula_library as formula_library
 
 # import formula_library
 

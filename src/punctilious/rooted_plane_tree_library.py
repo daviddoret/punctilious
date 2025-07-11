@@ -7,7 +7,7 @@ import collections
 # import weakref
 
 # Punctilious modules
-import util
+import punctilious.util as util
 
 
 class RootedPlaneTree(tuple):
@@ -175,7 +175,7 @@ class RootedPlaneTree(tuple):
 
     @classmethod
     def from_immediate_subtrees(cls, *t: FlexibleRootedPlaneTree) -> RootedPlaneTree:
-        """Declares a rooted-plane-tree from a collection of immediate subtrees.
+        r"""Declares a rooted-plane-tree from a collection of immediate subtrees.
 
         Given an ordered collection of rooted-plate-trees :math:`T_0, T_1, \cdots, T_n`,
         returns a new rooted-plane tree :math:`S`
@@ -262,7 +262,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def is_increasing(self) -> bool:
-        """Returns `True` if this rooted-plane-tree is increasing, `False` otherwise.
+        r"""Returns `True` if this rooted-plane-tree is increasing, `False` otherwise.
 
         Definition - increasing rooted-plane-tree:
         A rooted-plane-tree is increasing
@@ -288,7 +288,7 @@ class RootedPlaneTree(tuple):
         return self.degree == 0
 
     def is_less_than(self, t: FlexibleRootedPlaneTree) -> bool:
-        """Under :class:`RootedPlaneTree` canonical ordering,
+        r"""Under :class:`RootedPlaneTree` canonical ordering,
         returns `True` if the current :class:`RootedPlaneTree` is less than `t`,
         `False` otherwise.
 
@@ -344,7 +344,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def is_strictly_increasing(self) -> bool:
-        """Returns `True` if this rooted-plane-tree is strictly increasing, `False` otherwise.
+        r"""Returns `True` if this rooted-plane-tree is strictly increasing, `False` otherwise.
 
         Definition - strictly increasing rooted-plane-tree:
         A rooted-plane-tree is strictly increasing

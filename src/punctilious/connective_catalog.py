@@ -2,7 +2,7 @@
 
 """
 
-import connective_library as cl
+import punctilious.connective_library as cl
 
 # propositional logic
 is_a_propositional_logic_variable: cl.Connective = cl.Connective("is-a-propositional-variable",

@@ -4,11 +4,11 @@ import collections
 # import itertools
 
 # package modules
-import util
-import rooted_plane_tree_library as rpt
-import sequence_library as sl
-from punctilious.connective_catalog import inference_rule
-from punctilious.sequence_library import NaturalNumberSequence
+import punctilious.util as util
+import punctilious.rooted_plane_tree_library as rpt
+import punctilious.sequence_library as sl
+import punctilious.connective_catalog as cl
+import punctilious.sequence_library as sl
 
 
 # Classes
@@ -534,7 +534,7 @@ class AbstractFormula(tuple):
         v: AbstractFormula = AbstractFormula.from_any(v)
         if not v.is_abstract_map:
             raise util.PunctiliousException("`v` is not an abstract-map", v=v, phi=phi, this_abstract_formula=self)
-        psi: AbstractFormula = self.substitute_sub_formulas(m=v)
+        psi: AbstractFormula = self.substitute_sub_formulas_with_map(m=v)
         return psi.is_abstract_formula_equivalent_to(phi)
 
     @property
@@ -582,7 +582,7 @@ class AbstractFormula(tuple):
         return self.is_abstract_formula_equivalent_to(phi)
 
     def is_less_than(self, phi: FlexibleAbstractFormula) -> bool:
-        """Under :class:`AbstractFormula` canonical ordering,
+        r"""Under :class:`AbstractFormula` canonical ordering,
         returns `True` if the current :class:`AbstractFormula` is less than `phi`,
         `False` otherwise.
 
@@ -629,7 +629,7 @@ class AbstractFormula(tuple):
 
     @property
     def is_increasing(self) -> bool:
-        """Returns `True` if this abstract-formula is increasing, `False` otherwise.
+        r"""Returns `True` if this abstract-formula is increasing, `False` otherwise.
 
         Definition - increasing abstract-formula:
         An abstract-formula is increasing
@@ -648,7 +648,7 @@ class AbstractFormula(tuple):
 
     @property
     def is_strictly_increasing(self) -> bool:
-        """Returns `True` if this abstract-formula is strictly increasing, `False` otherwise.
+        r"""Returns `True` if this abstract-formula is strictly increasing, `False` otherwise.
 
         Definition - strictly increasing abstract-formula:
         An abstract-formula is strictly increasing
@@ -882,7 +882,7 @@ class AbstractFormula(tuple):
             self._sub_formulas = tuple(sub_formulas)
         return self._sub_formulas
 
-    def substitute_sub_formulas(self, m: FlexibleAbstractFormula) -> AbstractFormula:
+    def substitute_sub_formulas_with_map(self, m: FlexibleAbstractFormula) -> AbstractFormula:
         """Returns a new abstract-formula similar to the current abstract-formula,
          except that its subformulas present in the map `m` preimage,
          are substituted with their corresponding images,
@@ -900,7 +900,7 @@ class AbstractFormula(tuple):
         else:
             # Pursue substitution recursively.
             phi: AbstractFormula
-            s: tuple[AbstractFormula, ...] = tuple(phi.substitute_sub_formulas(m=m) for phi in
+            s: tuple[AbstractFormula, ...] = tuple(phi.substitute_sub_formulas_with_map(m=m) for phi in
                                                    self.iterate_immediate_sub_formulas())
             return AbstractFormula.from_immediate_sub_formulas(n=self.main_element, s=s)
 

@@ -251,3 +251,12 @@ class TestRootedPlaneTree:
         assert not t7_a_aa_ab_aaa_aaaa_aba_abaa.is_strictly_increasing
         assert not t12.is_strictly_increasing
         assert not t_big.is_strictly_increasing
+
+    def test_consistency_of_rpt_generation(self):
+        """The number of unique RPTs per size (in vertices) must be equal to the Catalan numbers.
+
+        :return:
+        """
+        for n in range(1, 10):
+            assert len(pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(
+                n)) == pu.catalan_number_library.get_catalan_number(n - 1)

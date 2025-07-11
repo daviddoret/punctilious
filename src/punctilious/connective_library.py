@@ -6,7 +6,7 @@ import collections
 import uuid
 
 # package modules
-import util
+import punctilious.util as util
 
 
 class Connective(tuple):
@@ -159,7 +159,7 @@ class Connective(tuple):
         return self.is_connective_equivalent_to(c)
 
     def is_less_than(self, c: FlexibleConnective) -> bool:
-        """Under connective canonical ordering,
+        r"""Under connective canonical ordering,
         returns `True` if the current connective is less than `c`,
         `False` otherwise.
 

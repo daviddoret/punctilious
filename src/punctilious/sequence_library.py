@@ -2,16 +2,35 @@ from __future__ import annotations
 import itertools
 import typing
 import collections
-import util
 
 # punctilious libraries
-import connective_library as cl
+import punctilious.util as util
+import punctilious.connective_library as cl
 
 
 # Data validation functions
 
 
 # General functions
+
+def get_sequences_of_natural_numbers_whose_sum_equals_n(n):
+    """Returns the all combinations of natural numbers such that their sum equals `n`.
+
+    :param n:
+    :return:
+    """
+    if n < 1:
+        raise util.PunctiliousException("Invalid parameter", n=n)
+    elif n == 1:
+        yield (1,)
+    else:
+        for first_number in range(n, 0, -1):
+            if first_number == n:
+                yield (first_number,)
+            else:
+                for s in get_sequences_of_natural_numbers_whose_sum_equals_n(n - first_number):
+                    yield (first_number,) + s
+
 
 def concatenate_natural_number_sequences(*s: FlexibleNaturalNumberSequence) -> NaturalNumberSequence:
     """Concatenates a collection of :class:`NaturalNumberSequence` elements, preserving order.
@@ -149,7 +168,7 @@ class NaturalNumberSequence(tuple):
             return self._canonical_natural_number_sequence
 
     def concatenate_with(self, *s: FlexibleNaturalNumberSequence) -> NaturalNumberSequence:
-        """Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
+        r"""Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
         or an iterable / generator of multiple :class:`NaturalNumberSequence` elements.
 
         Notation:
@@ -307,7 +326,7 @@ class NaturalNumberSequence(tuple):
 
     @property
     def is_increasing(self) -> bool:
-        """Returns `True` if this sequence is increasing, `False` otherwise.
+        r"""Returns `True` if this sequence is increasing, `False` otherwise.
 
         Definition - Increasing sequence:
         A sequence :math:`S = (n_0, n1, \cdots, n_l)` is increasing
@@ -321,7 +340,7 @@ class NaturalNumberSequence(tuple):
         return all(self.elements[i + 1] >= self.elements[i] for i in range(0, self.length - 1))
 
     def is_less_than(self, s: FlexibleNaturalNumberSequence) -> bool:
-        """Under :class:`NaturalNumberSequence` canonical ordering,
+        r"""Under :class:`NaturalNumberSequence` canonical ordering,
         returns `True` if the current :class:`NaturalNumberSequence` is less than `s`,
         `False` otherwise.
 
@@ -348,7 +367,7 @@ class NaturalNumberSequence(tuple):
 
     @property
     def is_natural_number_sequence(self) -> bool:
-        """
+        r"""
 
         Notation:
         :math:`\mathbb{N}\text{-sequence}(S)
@@ -358,7 +377,7 @@ class NaturalNumberSequence(tuple):
         return True
 
     def is_natural_number_sequence_equivalent_to(self, s: FlexibleNaturalNumberSequence):
-        """
+        r"""
 
         Notation:
         :math:`S ~_{\mathbb{N}\text{-sequence}} T`
@@ -408,7 +427,7 @@ class NaturalNumberSequence(tuple):
 
     @property
     def is_strictly_increasing(self) -> bool:
-        """Returns `True` if this sequence is strictly increasing, `False` otherwise.
+        r"""Returns `True` if this sequence is strictly increasing, `False` otherwise.
 
         Definition - Strictly increasing sequence:
         A sequence :math:`S = (n_0, n1, \cdots, n_l)` is strictly increasing
@@ -442,7 +461,7 @@ class NaturalNumberSequence(tuple):
         return max(self)
 
     def scalar_addition(self, n: int):
-        """Given a :class:`NaturalNumberSequence` :math:`S`,
+        r"""Given a :class:`NaturalNumberSequence` :math:`S`,
         and a natural number :math:`n`,
         return a :class:`NaturalNumberSequence` :math:`T` defined as
         :math:`(t_0 + n, t_1 + n, \cdots, t_i)`.
@@ -614,7 +633,7 @@ class ConnectiveSequence(tuple):
         return self.is_connective_sequence_equivalent_to(c)
 
     def is_less_than(self, c: FlexibleConnectiveSequence) -> bool:
-        """Under :class:`ConnectiveSequence` canonical ordering,
+        r"""Under :class:`ConnectiveSequence` canonical ordering,
         returns `True` if the current :class:`ConnectiveSequence` is less than `c`,
         `False` otherwise.
 

@@ -1,8 +1,7 @@
-import util
-import rooted_plane_tree_library as rptl
-import sequence_library as sl
-import abstract_formula_library as afl
-from punctilious.abstract_formula_library import AbstractFormula
+import punctilious.util as util
+import punctilious.rooted_plane_tree_library as rptl
+import punctilious.sequence_library as sl
+import punctilious.abstract_formula_library as afl
 
 
 class AbstractOrderedSet(afl.AbstractFormula):
