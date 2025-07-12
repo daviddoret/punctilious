@@ -1,4 +1,5 @@
 import punctilious.util as util
+import punctilious.bell_number_library as bell_number_library
 import punctilious.catalan_number_library as catalan_number_library
 import punctilious.rooted_plane_tree_library as rooted_plane_tree_library
 import punctilious.rooted_plane_tree_catalog as rooted_plane_tree_catalog
