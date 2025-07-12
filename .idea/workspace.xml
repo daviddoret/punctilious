@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="rpt database">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1033,14 +1032,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01483" summary="data model simplification">
-      <option name="closed" value="true" />
-      <created>1751024493322</created>
-      <option name="number" value="01483" />
-      <option name="presentableId" value="LOCAL-01483" />
-      <option name="project" value="LOCAL" />
-      <updated>1751024493322</updated>
-    </task>
     <task id="LOCAL-01484" summary="data model simplification">
       <option name="closed" value="true" />
       <created>1751123233317</created>
@@ -1425,7 +1416,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752288062863</updated>
     </task>
-    <option name="localTasksCounter" value="1532" />
+    <task id="LOCAL-01532" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1752288535699</created>
+      <option name="number" value="01532" />
+      <option name="presentableId" value="LOCAL-01532" />
+      <option name="project" value="LOCAL" />
+      <updated>1752288535699</updated>
+    </task>
+    <option name="localTasksCounter" value="1533" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1478,7 +1477,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="doc" />
     <MESSAGE value="AbstractFormula cleanup" />
     <MESSAGE value="RGFSequence inherited from UnrestrictedSequence" />
     <MESSAGE value="UnrestrictedSequence renamed to NaturalNumbersSequence" />
@@ -1503,7 +1501,8 @@
     <MESSAGE value="abstract-inference-rule" />
     <MESSAGE value="substitute_sub_formulas" />
     <MESSAGE value="rpt database" />
-    <option name="LAST_COMMIT_MESSAGE" value="rpt database" />
+    <MESSAGE value="cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleanup" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

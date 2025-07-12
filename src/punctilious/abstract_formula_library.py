@@ -6,8 +6,7 @@ import collections
 # package modules
 import punctilious.util as util
 import punctilious.rooted_plane_tree_library as rpt
-import punctilious.sequence_library as sl
-import punctilious.connective_catalog as cl
+# import punctilious.connective_catalog as cl
 import punctilious.sequence_library as sl
 
 
@@ -700,7 +699,7 @@ class AbstractFormula(tuple):
             yield sub_formula
 
     def iterate_immediate_sub_sequences(self) -> typing.Generator[
-        NaturalNumberSequence, None, None]:
+        sl.NaturalNumberSequence, None, None]:
         """Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this :class:`AbstractFormula`.
 
         Note:
