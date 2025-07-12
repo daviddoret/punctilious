@@ -192,28 +192,40 @@ class AbstractFormula(tuple):
         """Returns `True` if this abstract-formula is an abstract-map, `False` otherwise.
 
         Intuitive definition: abstract-map
+        ______________________________________
+
         Intuitively, an abstract-map is an abstract-formula that is structurally
          equivalent to a finite map.
 
         Formal definition: abstract-map
-        An finite (computable) abstract-map :math:`M` is a tuple :math:`(P, I)` where:
-         - :math:`P` is a finite sequence of unique elements denoted as the preimage,
-         - :math:`I` is a finite sequence of unique elements denoted as the image,
-         - :math:`|P| = |I|`.
+        _________________________________
+
+        A finite (computable) abstract-map :math:`M` is a tuple :math:`(P, I)` where:
+
+        - :math:`P` is a finite sequence of unique elements denoted as the preimage,
+        - :math:`I` is a finite sequence of unique elements denoted as the image,
+        - :math:`|P| = |I|`.
 
         Formal definition: abstract-map
-        An abstract-formula is an abstract-map if and only if:
-         - its arity equals 2,
-         - the arity of its first immediate subformula equals the arity of its second immediate subformula,
-         - the immediate subformulas of its first immediate subformula are unique.
+        ___________________________________
 
-        Note:
+        An abstract-formula is an abstract-map if and only if:
+
+        - its arity equals 2,
+        - the arity of its first immediate subformula equals the arity of its second immediate subformula,
+        - the immediate subformulas of its first immediate subformula are unique.
+
+        Note
+        _____
+
         The following properties and methods are available when an abstract-formula is an abstract-map:
-         - :attr:`AbstractFormula.abstract_map_preimage`
-         - :attr:`AbstractFormula.abstract_map_image`
-         - :meth:`AbstractFormula.get_abstract_map_value`
+
+        - :attr:`AbstractFormula.abstract_map_preimage`
+        - :attr:`AbstractFormula.abstract_map_image`
+        - :meth:`AbstractFormula.get_abstract_map_value`
 
         :return: `True` if this abstract-formula is an abstract-map, `False` otherwise.
+
         """
         if self._is_abstract_map is None:
             self._is_abstract_map = \
@@ -227,27 +239,39 @@ class AbstractFormula(tuple):
         """Returns `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
 
         Intuitive definition: abstract-inference-rule
+        ___________________________________________________
+
         Intuitively, an abstract-inference-rule is an abstract-formula that is structurally
          equivalent to an inference rule.
 
         Formal definition: abstract-inference-rule
+        ______________________________________________
+
         An abstract-inference-rule :math:`I` is a tuple :math:`(V, P, C)` where:
-         - :math:`V` is a finite sequence of unique elements denoted as the variables,
-         - :math:`P` is a finite sequence of unique elements denoted as the premises,
-         - :math:`C` is denoted as the conclusion.
+
+        - :math:`V` is a finite sequence of unique elements denoted as the variables,
+        - :math:`P` is a finite sequence of unique elements denoted as the premises,
+        - :math:`C` is denoted as the conclusion.
 
         Formal definition: abstract-inference-rule
+        _______________________________________________
+
         An abstract-formula is an abstract-inference-rule if and only if:
+
          - its arity equals 3.
 
-        Note:
+        Note
+        _____
+
         The following properties and methods are available when an abstract-formula is an abstract-map:
-         - :attr:`AbstractFormula.abstract_inference_rule_variables`
-         - :attr:`AbstractFormula.abstract_inference_rule_premises`
-         - :attr:`AbstractFormula.abstract_inference_rule_conclusion`
-         - :meth:`AbstractFormula.derive_abstract_inference_rule`
+
+        - :attr:`AbstractFormula.abstract_inference_rule_variables`
+        - :attr:`AbstractFormula.abstract_inference_rule_premises`
+        - :attr:`AbstractFormula.abstract_inference_rule_conclusion`
+        - :meth:`AbstractFormula.derive_abstract_inference_rule`
 
         :return: `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
+
         """
         if self._is_abstract_inference_rule is None:
             self._is_abstract_inference_rule = \
@@ -298,15 +322,16 @@ class AbstractFormula(tuple):
 
     @property
     def canonical_abstract_formula(self) -> AbstractFormula:
-        """
+        """The canonical-abstract-formula of this abstract-formula.
 
         Definition: the canonical-abstract-formula `phi` of an abstract-formula `psi`
         is a formula such that:
-         - their rooted-plane-tree are rooted-plane-tree-equivalent,
-         - the natural-number-sequence of `phi` is the canonical-naturel-number-sequence
+
+        - their rooted-plane-tree are rooted-plane-tree-equivalent,
+        - the natural-number-sequence of `phi` is the canonical-naturel-number-sequence
            of the natural-number-sequence of `psi`
 
-        :return:
+        :return: The canonical-abstract-formula of this abstract-formula.
         """
         if self.is_canonical:
             return self
@@ -380,25 +405,39 @@ class AbstractFormula(tuple):
 
     @classmethod
     def from_tree_of_integer_tuple_pairs(cls, p) -> AbstractFormula:
-        """Declares a :class:`AbstractFormula` object from a tree of integer/tuple pairs.
+        """Declares an abstract-formula object from a tree of integer/tuple pairs.
 
-        Use case:
+        Use case
+        ___________
+
         Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.
 
-        Definition:
-        A tree of integer/tuple pairs `T` defined as:
-         T := (n, T')
-        where:
-         - n is a natural number
-         - T' is (possibly empty) tuple of trees of integer/tuple pairs.
+        Definition
+        ------------
 
-        Sample tree of integer/tuple pairs:
+        A tree of integer/tuple pairs `T` defined as:
+
+        .. math::
+
+            T := (n, T')
+
+        where:
+
+        - n is a natural number
+        - T' is (possibly empty) tuple of trees of integer/tuple pairs.
+
+        Sample
+        --------
+
+        The tree of integer/tuple pairs:
         (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)
-        ...which maps to formula:
+
+        ...maps to the abstract-formula:
         0(1,0(2,1),2)
 
         :param p: A tree of integer/tuple pairs.
-        :return: a :class:`AbstractFormula`.
+        :return: an abstract-formula.
+
         """
 
         t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
@@ -411,8 +450,9 @@ class AbstractFormula(tuple):
         """Returns the 0-based index position of `phi` in this abstract-formula immediate subformulas.
 
         Prerequisites:
-         - the immediate subformulas of this abstract-formula are unique, cf. :attr:`AbstractFormula.immediate_subformulas_are_unique`,
-         - `phi` is an immediate subformula of this abstract-formula.
+
+        - the immediate subformulas of this abstract-formula are unique, cf. :attr:`AbstractFormula.immediate_subformulas_are_unique`,
+        - `phi` is an immediate subformula of this abstract-formula.
 
         :param phi:
         :return:
@@ -467,9 +507,11 @@ class AbstractFormula(tuple):
         The term `immediate sub-formula` is used by (Mancosu 2021, p. 17-18).
 
         See also:
+
         - :attr:`AbstractFormula.sub_formulas`
 
         References:
+
         - Mancosu 2021.
 
         :return:
@@ -508,6 +550,7 @@ class AbstractFormula(tuple):
 
         Formal definition:
         Two abstract-formulas phi and psi are abstract-formula-equivalent if and only if:
+
         - the rooted-plane-tree of phi is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,
         - the natural-numbers-sequence of phi is natural-numbers-sequence-equivalent to the natural-numbers-sequence of psi.
 
@@ -554,6 +597,7 @@ class AbstractFormula(tuple):
 
         Formal definition:
         Two abstract-formulas phi and psi are canonical-abstract-formula-equivalent if and only if:
+
         - the canonical-abstract-formula of phi is abstract-formula-equivalent
           to the canonical-abstract-formula of psi.
 
@@ -703,9 +747,11 @@ class AbstractFormula(tuple):
         """Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this :class:`AbstractFormula`.
 
         Note:
-            A sub-sequence of an abstract-formula is determined by:
-             - 1) the parent rgf sequence,
-             - and 2) the rooted plane tree.
+
+        A sub-sequence of an abstract-formula is determined by:
+
+        - 1) the parent rgf sequence,
+        - and 2) the rooted plane tree.
         """
         i: int = 1  # remove the root
         child_tree: rpt.RootedPlaneTree
@@ -753,7 +799,8 @@ class AbstractFormula(tuple):
          and thus `main connective` is reserved for "concrete" formulas.
 
         References:
-         - Mancosu 2021
+
+        - Mancosu 2021
 
         :return: 1
         """
@@ -773,11 +820,12 @@ class AbstractFormula(tuple):
         """Returns a string representation of the :class:`AbstractFormula` using function notation.
 
         By default, connectives are represented by their respective values
-        in the :attr:`AbstractFormula.natural_numbers_sequence`.
+        in the :attr:`AbstractFormula.natural_numbers_sequence` .
 
-        :param connectives: A tuple of connectives of length equal to the length of
-        the :attr:`AbstractFormula.natural_numbers_sequence`. Default: `None`.
+        :param connectives: A tuple of connectives of length equal to the length of the :attr:`AbstractFormula.natural_numbers_sequence` . Default: `None`.
+
         :return:
+
         """
         if connectives is None:
             connectives = self.natural_number_sequence
@@ -801,9 +849,10 @@ class AbstractFormula(tuple):
         By default, connectives are represented by their respective values
         in the :attr:`AbstractFormula.natural_numbers_sequence`.
 
-        :param connectives: A tuple of connectives of length equal to the length of
-        the :attr:`AbstractFormula.natural_numbers_sequence`. Default: `None`.
-        :return:
+        :param connectives: A tuple of connectives of length equal to the length of the :attr:`AbstractFormula.natural_numbers_sequence`. Default: `None`.
+
+        :return: A string representation of this abstract-formula.
+
         """
         if connectives is None:
             connectives = self.natural_number_sequence
@@ -838,17 +887,23 @@ class AbstractFormula(tuple):
     def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
         """The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.
 
-        Shortcut: self.t."""
+        Shortcut: self.t.
+
+        """
         return super().__getitem__(0)
 
     @property
     def s(self) -> sl.NaturalNumberSequence:
-        """A shortcut for self.natural_numbers_sequence."""
+        """A shortcut for self.natural_numbers_sequence.
+
+        """
         return self.natural_number_sequence
 
     @property
     def sequence_max_value(self) -> int:
-        """The `sequence_max_value` of an :class:`AbstractFormula` is the `max_value` of its `natural_numbers_sequence`."""
+        """The `sequence_max_value` of an :class:`AbstractFormula` is the `max_value` of its `natural_numbers_sequence`.
+
+        """
         return self.natural_number_sequence.max_value
 
     @property
@@ -857,8 +912,9 @@ class AbstractFormula(tuple):
         in the formula tree of `phi`, including `phi` itself.
 
         Formal definition:
-         - If phi is an atomic formula, the sub-formulas of phi is the tuple (phi).
-         - If phi is a non-atomic formula, the sub-formulas of phi is the tuple
+
+        - If phi is an atomic formula, the sub-formulas of phi is the tuple (phi).
+        - If phi is a non-atomic formula, the sub-formulas of phi is the tuple
            composed of phi, and all sub-formulas of the immediate sub-formulas of phi,
            in ascending order.
         - Nothing else is a sub-formula.
@@ -867,6 +923,7 @@ class AbstractFormula(tuple):
         for propositional-logic.
 
         See also:
+
         - :attr:`AbstractFormula.immediate_sub_formulas`
 
         References:
@@ -889,6 +946,7 @@ class AbstractFormula(tuple):
 
         :param m: An abstract-map.
         :return: A substituted formula.
+
         """
         m: AbstractFormula = AbstractFormula.from_any(m)
         if not m.is_abstract_map:
@@ -930,11 +988,14 @@ class AbstractFormula(tuple):
 
 def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
     """Given a tree of integer/tuple pairs, extracts:
+
      - its tree of tuples,
      - and its sequence of integers,
+
     following the depth-first ascending-nodes algorithm.
 
     :param p: the tree of integer/tuple pairs
+
     :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
     """
     if len(p) != 2:

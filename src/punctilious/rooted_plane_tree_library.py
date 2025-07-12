@@ -293,13 +293,16 @@ class RootedPlaneTree(tuple):
         `False` otherwise.
 
         Definition: canonical ordering of rooted-plane-trees, denoted :math:`\prec`
-        is defined as degree-first, sub-trees in ascending order second.
+        ______________________________________________________________________________
+
+        is defined as degree-first, subtrees in ascending order second.
         Or given two rooted-plan-trees :math`S` and :math:`T`,
          :math:`S =_{\prec} T` if and only if :math:`T \sim_{\text{rooted-plane-tree}} S`,
          :math:`|S| < |T| \Rightarrow S \prec T`,
          ...then recursively for children in ascending order.
 
         :param t: A :class:`RootedPlaneTree`.
+
         :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
         """
         t: RootedPlaneTree = RootedPlaneTree.from_any(t)

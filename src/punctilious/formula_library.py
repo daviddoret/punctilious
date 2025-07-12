@@ -14,10 +14,17 @@ import punctilious.sequence_library as sl
 
 
 class Formula(tuple):
-    """A `Formula` is a pair (ϕ, M) where:
-     - ϕ is an abstract formula of tree-size n.
-     - M is a bijective map between the subset of natural-numbers N,
+    """
+
+    Definition
+    _____________
+
+    A `Formula` is a pair (ϕ, M) where:
+
+    - ϕ is an abstract formula of tree-size n.
+    - M is a bijective map between the subset of natural-numbers N,
        and a set of connectives C.
+
     """
 
     def __eq__(self, phi) -> bool:
@@ -370,9 +377,11 @@ class Formula(tuple):
         """The `sub_formulas` of an `Formula` `phi` is the tuple of `Formula` elements that are present
         in the formula tree of `phi`, including `phi` itself.
 
-        Formal definition:
-         - If phi is an atomic formula, the sub-formulas of phi is the tuple (phi).
-         - If phi is a non-atomic formula, the sub-formulas of phi is the tuple
+        Formal definition
+        ____________________
+
+        - If phi is an atomic formula, the sub-formulas of phi is the tuple (phi).
+        - If phi is a non-atomic formula, the sub-formulas of phi is the tuple
            composed of phi, and all sub-formulas of the immediate sub-formulas of phi,
            in ascending order.
         - Nothing else is a sub-formula.
@@ -380,13 +389,18 @@ class Formula(tuple):
         This definition is a generalization of the term `formula` defined by (Mancosu 2021, definition 2.2, p. 14)
         for propositional-logic.
 
-        See also:
+        See also
+        __________
+
         - :attr:`Formula.immediate_sub_formulas`
 
-        References:
+        References
+        ____________
+
         - Mancosu 2021.
 
         :return: A tuple of the sub-formulas.
+
         """
         if self._sub_formulas is None:
             sub_formulas: list[Formula] = list()
