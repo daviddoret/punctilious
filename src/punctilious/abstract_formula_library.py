@@ -713,7 +713,7 @@ class AbstractFormula(tuple):
         for child_tree in self.rooted_plane_tree.iterate_immediate_subtrees():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.natural_number_sequence[i:i + child_tree.size]
-            sub_sequence: NaturalNumberSequence = NaturalNumberSequence(*sub_sequence)
+            sub_sequence: sl.NaturalNumberSequence = sl.NaturalNumberSequence(*sub_sequence)
             # yield this child RGF sequence
             yield sub_sequence
             # truncate the remaining sequence

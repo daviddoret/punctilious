@@ -18,7 +18,7 @@ class TestAbstractFormula:
         with pytest.raises(pu.util.PunctiliousException):
             pu.afl.AbstractFormula(t=(((),), (),), s=(0, 1, 0, 1, 0, 3, 7, 1))
 
-    def test_is_canonical(self, af1, af2a, af2b, af6a, af12a, af_big, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t12):
+    def test_is_canonical(self, af1, af2a, af2b, af6a, af12a, af_big, t1_a, t2_a_aa, t3_a_aa_aaa, t12):
         assert af1.is_canonical
         assert af2a.is_canonical
         assert af2b.is_canonical
@@ -42,11 +42,11 @@ class TestAbstractFormula:
         assert phi.is_canonical
         phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (9, 5, 104,))
         assert not phi.is_canonical
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 0, 0,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (0, 0, 0,))
         assert phi.is_canonical
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 1, 2,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (0, 1, 2,))
         assert phi.is_canonical
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (100, 102, 140,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (100, 102, 140,))
         assert not phi.is_canonical
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
         phi = pu.afl.AbstractFormula(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
@@ -74,7 +74,7 @@ class TestAbstractFormula:
         assert l[2] == (4, 5, 6, 7, 8, 9,)
         assert l[3] == (10, 11,)
 
-    def test_iterate_sub_sequences(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t7_a_aa_ab_aaa_aaaa_aba_abaa):
+    def test_iterate_sub_sequences(self, t1_a, t2_a_aa, t3_a_aa_aaa, t7_a_aa_ab_aaa_aaaa_aba_abaa):
         phi = pu.afl.AbstractFormula(t1_a, (0,))
         l = tuple(t for t in phi.iterate_sub_formulas())
         assert len(l) == 1
@@ -97,21 +97,21 @@ class TestAbstractFormula:
         assert l[0] == phi
         assert l[1] == pu.afl.AbstractFormula(t1_a, (2,))
 
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 0, 0,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (0, 0, 0,))
         l = tuple(t for t in phi.iterate_sub_formulas())
         assert len(l) == 3
         assert l[0] == phi
         assert l[1] == pu.afl.AbstractFormula(t1_a, (0,))
         assert l[1] == pu.afl.AbstractFormula(t1_a, (0,))
 
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 1, 2,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (0, 1, 2,))
         l = tuple(t for t in phi.iterate_sub_formulas())
         assert len(l) == 3
         assert l[0] == phi
         assert l[1] == pu.afl.AbstractFormula(t1_a, (1,))
         assert l[2] == pu.afl.AbstractFormula(t1_a, (2,))
 
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (8, 1, 14,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (8, 1, 14,))
         l = tuple(t for t in phi.iterate_sub_formulas())
         assert len(l) == 3
         assert l[0] == phi
@@ -122,10 +122,10 @@ class TestAbstractFormula:
         l = tuple(t for t in phi.iterate_sub_formulas())
         assert len(l) == 7
         assert l[0] == phi
-        assert l[1] == pu.afl.AbstractFormula(t3_a_aa_ab, (1, 4, 1,))
+        assert l[1] == pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (1, 4, 1,))
         assert l[2] == pu.afl.AbstractFormula(t1_a, (4,))
         assert l[3] == pu.afl.AbstractFormula(t1_a, (1,))
-        assert l[4] == pu.afl.AbstractFormula(t3_a_aa_ab, (7, 9, 2,))
+        assert l[4] == pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (7, 9, 2,))
         assert l[5] == pu.afl.AbstractFormula(t1_a, (9,))
         assert l[6] == pu.afl.AbstractFormula(t1_a, (2,))
 
@@ -261,7 +261,7 @@ class TestAbstractFormula:
         assert af_big.get_sub_formula_by_path((0, 3, 2, 4,)) == pu.afl.AbstractFormula(
             t1_a, (7,))
 
-    def test_represent_as_function(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae, t12):
+    def test_represent_as_function(self, t1_a, t2_a_aa, t3_a_aa_aaa, t6_a_aa_ab_ac_ad_ae, t12):
         phi = pu.afl.AbstractFormula(t1_a, (0,))
         assert phi.represent_as_function() == "0"
         phi = pu.afl.AbstractFormula(t1_a, (17,))
@@ -278,11 +278,11 @@ class TestAbstractFormula:
         assert phi.represent_as_function() == "0(1(2))"
         phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (9, 5, 104,))
         assert phi.represent_as_function() == "9(5(104))"
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 0, 0,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (0, 0, 0,))
         assert phi.represent_as_function() == "0(0, 0)"
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (0, 1, 2,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (0, 1, 2,))
         assert phi.represent_as_function() == "0(1, 2)"
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (100, 102, 140,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (100, 102, 140,))
         assert phi.represent_as_function() == "100(102, 140)"
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
         phi = pu.afl.AbstractFormula(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
@@ -290,7 +290,7 @@ class TestAbstractFormula:
         phi = pu.afl.AbstractFormula(t12, (14, 0, 7, 2, 2, 9, 10, 11, 10, 5, 1, 9,))
         assert phi.represent_as_function() == "14(0, 7(2), 2(9, 10, 11, 10, 5), 1(9))"
 
-    def test_canonical_abstract_formula(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t12):
+    def test_canonical_abstract_formula(self, t1_a, t2_a_aa, t3_a_aa_aaa, t12):
         phi = pu.afl.AbstractFormula(t1_a, (0,))
         assert phi.canonical_abstract_formula == phi
         psi = pu.afl.AbstractFormula(t1_a, (17,))
@@ -336,7 +336,7 @@ class TestAbstractFormula:
         assert not pu.afl.AbstractFormula(t6_a_aa_ab_ac_ad_ae,
                                           (2, 0, 3, 0, 2, 2,)).is_sub_formula_of(af_big)
 
-    def test_declare_abstract_formula_from_immediate_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab):
+    def test_declare_abstract_formula_from_immediate_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa):
         phi1 = pu.afl.AbstractFormula(t2_a_aa, (17, 15,))
         phi2 = pu.afl.AbstractFormula(t1_a, (31,))
         phi3 = pu.afl.AbstractFormula(t2_a_aa, (9, 2,))
@@ -349,7 +349,7 @@ class TestAbstractFormula:
         assert af1.is_less_than(af1b)
         assert af2a.is_less_than(af2b)
 
-    def test_is_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big, t3_a_aa_ab):
+    def test_is_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
         assert af1.is_increasing
         assert af1b.is_increasing
         assert af2a.is_increasing
@@ -357,11 +357,11 @@ class TestAbstractFormula:
         assert af3a.is_increasing
         assert af6a.is_increasing
         assert not af_big.is_increasing
-        assert pu.afl.AbstractFormula(t3_a_aa_ab, (9, 2, 3,)).is_increasing
-        assert pu.afl.AbstractFormula(t3_a_aa_ab, (9, 5, 5,)).is_increasing
-        assert not pu.afl.AbstractFormula(t3_a_aa_ab, (9, 3, 2,)).is_increasing
+        assert pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_increasing
+        assert pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 5, 5,)).is_increasing
+        assert not pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_increasing
 
-    def test_is_strictly_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big, t3_a_aa_ab):
+    def test_is_strictly_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
         assert af1.is_strictly_increasing
         assert af1b.is_strictly_increasing
         assert af2a.is_strictly_increasing
@@ -369,23 +369,23 @@ class TestAbstractFormula:
         assert af3a.is_strictly_increasing
         assert af6a.is_strictly_increasing
         assert not af_big.is_strictly_increasing
-        assert pu.afl.AbstractFormula(t3_a_aa_ab, (9, 2, 3,)).is_strictly_increasing
-        assert not pu.afl.AbstractFormula(t3_a_aa_ab, (9, 5, 5,)).is_strictly_increasing
-        assert not pu.afl.AbstractFormula(t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing
+        assert pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_strictly_increasing
+        assert not pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 5, 5,)).is_strictly_increasing
+        assert not pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing
 
-    def test_substitute_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae,
+    def test_substitute_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa, t6_a_aa_ab_ac_ad_ae,
                                      t7_a_aa_ab_aaa_aaaa_aba_abaa):
-        p = pu.afl.AbstractFormula(t3_a_aa_ab, (17, 38, 59,))
-        i = pu.afl.AbstractFormula(t3_a_aa_ab, (25, 11, 42,))
+        p = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (17, 38, 59,))
+        i = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (25, 11, 42,))
         m: pu.afl.AbstractFormula = pu.afl.AbstractFormula.abstract_map_from_preimage_and_image(n=51, p=p, i=i)
         phi = pu.afl.AbstractFormula(t1_a, (38,))
         psi = phi.substitute_sub_formulas_with_map(m=m)
         assert psi == pu.afl.AbstractFormula(t1_a, (11,))
 
         p = pu.afl.AbstractFormula(t7_a_aa_ab_aaa_aaaa_aba_abaa, (1, 2, 3, 4, 5, 6, 7,))
-        i = pu.afl.AbstractFormula(t3_a_aa_ab, (8, 9, 10,))
+        i = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (8, 9, 10,))
         m: pu.afl.AbstractFormula = pu.afl.AbstractFormula.abstract_map_from_preimage_and_image(n=94, p=p, i=i)
-        phi = pu.afl.AbstractFormula(t3_a_aa_ab, (5, 6, 7,))
+        phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (5, 6, 7,))
         psi = phi.substitute_sub_formulas_with_map(m=m)
         assert psi == pu.afl.AbstractFormula(t1_a, (10,))
 
