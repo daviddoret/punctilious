@@ -8,67 +8,67 @@ import punctilious as pu
 
 @pytest.fixture
 def s0():
-    return (0,)
-
-
-@pytest.fixture
-def s1():
     return (1,)
 
 
 @pytest.fixture
-def s2():
+def s1():
     return (2,)
 
 
 @pytest.fixture
-def s3():
+def s2():
     return (3,)
 
 
 @pytest.fixture
-def s4():
+def s3():
     return (4,)
 
 
 @pytest.fixture
-def s5():
+def s4():
     return (5,)
 
 
 @pytest.fixture
+def s5():
+    return (6,)
+
+
+@pytest.fixture
 def s00():
-    return 0, 0,
+    return 1, 1,
 
 
 @pytest.fixture
 def s01():
-    return 0, 1,
+    return 1, 2,
 
 
 @pytest.fixture
 def s10():
-    return 1, 0,
+    return 2, 1,
 
 
 @pytest.fixture
 def s012():
-    return 0, 1, 2,
+    return 1, 2, 3,
 
 
 @pytest.fixture
 def s021():
-    return 0, 2, 1,
+    return 1, 3, 2,
 
 
 @pytest.fixture
 def s00010203043212():
-    return 0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 3, 2, 1, 2,
+    return 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 4, 3, 2, 3,
 
 
 @pytest.fixture
 def s00010203043262():
-    return 0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 3, 2, 6, 2,
+    return 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 4, 3, 7, 3,
 
 
 # rooted plane trees
@@ -145,22 +145,22 @@ def nns000(s00):
 
 @pytest.fixture
 def nns001(s00):
-    return pu.sl.NaturalNumberSequence(0, 0, 1, )
+    return pu.sl.NaturalNumberSequence(1, 1, 2, )
 
 
 @pytest.fixture
 def nns012345():
-    return pu.sl.NaturalNumberSequence(0, 1, 2, 3, 4, 5, )
+    return pu.sl.NaturalNumberSequence(1, 2, 3, 4, 5, 6, )
 
 
 @pytest.fixture
 def nns746107():
-    return pu.sl.NaturalNumberSequence(7, 4, 6, 1, 0, 7, )
+    return pu.sl.NaturalNumberSequence(8, 5, 7, 2, 1, 8, )
 
 
 @pytest.fixture
 def nns0123456789_10_11():
-    return pu.sl.NaturalNumberSequence(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+    return pu.sl.NaturalNumberSequence(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
 
 
 @pytest.fixture

@@ -47,7 +47,7 @@ def concatenate_natural_number_sequences(*s: FlexibleNaturalNumberSequence) -> N
 
 
 class NaturalNumberSequence(tuple):
-    """A non-empty, finite (computable) sequence of natural numbers (0 based).
+    """A non-empty, finite (computable) sequence of natural numbers (1 based).
 
     Definition:
     An :class:`NaturalNumberSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_j) such that:
@@ -96,7 +96,7 @@ class NaturalNumberSequence(tuple):
         See :attr:`NaturalNumberSequence.is_less_than` for a definition of natural-number-sequence canonical-ordering.
 
         """
-        return self.is_less_than(s)
+        return self.is_less_than_under_o1(s)
 
     def __new__(cls, *s):
         v: bool
@@ -133,7 +133,7 @@ class NaturalNumberSequence(tuple):
 
     @property
     def canonical_natural_number_sequence(self) -> NaturalNumberSequence:
-        """Convert the :class:`NaturalNumberSequence` `s` into a restricted-growth-function-sequence `t`,
+        """Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
         by applying canonical labeling.
 
         Notation:
@@ -141,13 +141,13 @@ class NaturalNumberSequence(tuple):
 
         Definition - Canonical Labeling:
         The canonical-labeling of a natural-numbers-sequence S is an RFG-sequence T such that:
-         - the value of the first element of S is mapped to 0
+         - the value of the first element of S is mapped to 1
          - whenever a new value x appears in S, it is mapped to max(t0, t1, ..., ti) + 1 where i is the index
            position of x in S
 
         Examples:
-        (3,5,2,1) --> (0,1,2,3)
-        (3,5,3,1,5,2) --> (0,1,0,2,1,3)
+        (3,5,2,1) --> (1,2,3,4)
+        (3,5,3,1,5,2) --> (1,2,1,3,2,4)
 
         :return:
         """
@@ -157,7 +157,7 @@ class NaturalNumberSequence(tuple):
             return self._canonical_natural_number_sequence
         else:
             mapping: dict[int, int] = dict()
-            mapped_value: int = 0
+            mapped_value: int = 1
             n: int
             for n in self:
                 if n not in mapping.keys():
@@ -205,14 +205,14 @@ class NaturalNumberSequence(tuple):
             if len(o) == 0:
                 if raise_exception_on_validation_failure:
                     raise util.PunctiliousException(
-                        "`o` is empty.", o=o)
+                        "A natural-number-sequence must be non-empty and `o` is empty.", o=o)
                 else:
                     v = False
             o = tuple(int(n) for n in o)
-            if any(n for n in o if n < 0):
+            if any(n < 1 for n in o):
                 if raise_exception_on_validation_failure:
                     raise util.PunctiliousException(
-                        "Some element of `o` is less than 0.", o=o)
+                        "Natural-number-sequences are 1-based and some element of `o` is less than 1.", o=o)
                 else:
                     v = False
             return v, o if v else None
@@ -339,8 +339,13 @@ class NaturalNumberSequence(tuple):
         """
         return all(self.elements[i + 1] >= self.elements[i] for i in range(0, self.length - 1))
 
-    def is_less_than(self, s: FlexibleNaturalNumberSequence) -> bool:
-        r"""Under :class:`NaturalNumberSequence` canonical ordering,
+    def is_less_than_under_o1(self, s: FlexibleNaturalNumberSequence) -> bool:
+        r"""Returns `True` if this natural-number-sequence is less than `s`
+        under
+
+        TODO: REWRITE DEFINITION
+
+        Under :class:`NaturalNumberSequence` canonical ordering,
         returns `True` if the current :class:`NaturalNumberSequence` is less than `s`,
         `False` otherwise.
 
@@ -362,6 +367,53 @@ class NaturalNumberSequence(tuple):
                 if n < m:
                     return True
                 if n > m:
+                    return False
+        raise util.PunctiliousException("Unreachable condition")
+
+    def is_less_than_under_o2(self, s: FlexibleNaturalNumberSequence) -> bool:
+        r"""Returns `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`.
+
+        Definition: :math:`\mathcal{O}_2`
+        ------------------------------------
+
+        :math:`S \prec T` under :math:`\mathcal{O}_2` if and only if:
+        - :math:`\sum{S} < \sum{T}`
+        - or :math:`\sum{S} = \sum{T} \land `
+        TODO: COMPLETE DEFINITION HERE
+
+        Note
+        -----
+        To be a total order, this ordering requires that natural-numbers in natural-number-sequences
+        be 1-based and not 0-based. This is the reason why by design, natural-numbers in
+        natural-number-sequences are 1-based in Punctilious.
+
+        Note
+        -----
+        The interest of this ordering is that an algorithm can easily generate all
+        natural-number-sequences in order, starting from the first one.
+
+        Note
+        -----
+        Another interest for this ordering is that it is a well-founded order,
+        making it usable in recursion proofs.
+        TODO: Include proof that this is a well-founded order.
+
+        :param s: A :class:`NaturalNumberSequence`.
+        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
+        """
+        s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
+        if self.is_natural_number_sequence_equivalent_to(s):
+            return False
+        elif sum(self) < sum(s):
+            return True
+        elif sum(self) > sum(s):
+            return False
+        else:
+            # sum(self) == sum(s)
+            for n, m in zip(self.elements, s.elements):
+                if n > m:
+                    return True
+                if n < m:
                     return False
         raise util.PunctiliousException("Unreachable condition")
 
@@ -400,7 +452,7 @@ class NaturalNumberSequence(tuple):
         Formal Definition:
         A restricted-growth-function-sequence is a finite (computable) sequence
         of natural numbers (n_0, n_1, ..., n_i) such that:
-            - n_0 = 0
+            - n_0 = 1
             - n_j <= 1 + max(n_0, n_1, ..., n_(j-1)) for 0 < j <= i
 
         Synonyms:
@@ -416,7 +468,7 @@ class NaturalNumberSequence(tuple):
             return self._is_restricted_growth_function_sequence
         else:
             for i, n in enumerate(self):
-                if i == 0 and n > 0:
+                if i == 0 and n > 1:
                     self._is_restricted_growth_function_sequence: bool = False
                     return self._is_restricted_growth_function_sequence
                 if i > 0 and n > max(self.elements[0:i]) + 1:

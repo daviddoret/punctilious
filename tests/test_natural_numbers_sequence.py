@@ -30,11 +30,11 @@ class TestNaturalNumbersSequence:
             *s00010203043212) is not pu.sl.NaturalNumberSequence(*s012)
 
     def test_max_value(self, nns0, nns00, nns01, nns012345, nns0123456789_10_11):
-        assert nns0.max_value == 0
-        assert nns00.max_value == 0
-        assert nns01.max_value == 1
-        assert nns012345.max_value == 5
-        assert nns0123456789_10_11.max_value == 11
+        assert nns0.max_value == 1
+        assert nns00.max_value == 1
+        assert nns01.max_value == 2
+        assert nns012345.max_value == 6
+        assert nns0123456789_10_11.max_value == 12
 
     def test_is_natural_numbers_sequence_equivalent_to(self, nns0, nns00, nns01, nns10, nns012345, nns746107,
                                                        nns0123456789_10_11):
@@ -74,89 +74,89 @@ class TestNaturalNumbersSequence:
             *nns0123456789_10_11, *nns00)
 
     def test_is_restricted_growth_function_sequence(self):
-        s = pu.sl.NaturalNumberSequence(0, 0, 0)
+        s = pu.sl.NaturalNumberSequence(1, 1, 1)
         assert s.is_restricted_growth_function_sequence
-        s = pu.sl.NaturalNumberSequence(0, 1, 0)
+        s = pu.sl.NaturalNumberSequence(1, 2, 1)
         assert s.is_restricted_growth_function_sequence
-        s = pu.sl.NaturalNumberSequence(0, 1, 2)
+        s = pu.sl.NaturalNumberSequence(1, 2, 3)
         assert s.is_restricted_growth_function_sequence
-        s = pu.sl.NaturalNumberSequence(3, 2, 1)
+        s = pu.sl.NaturalNumberSequence(4, 3, 2)
         assert not s.is_restricted_growth_function_sequence
-        s = pu.sl.NaturalNumberSequence(0, 2, 1)
+        s = pu.sl.NaturalNumberSequence(1, 3, 2)
         assert not s.is_restricted_growth_function_sequence
 
     def test_canonical_natural_number_sequence(self):
-        s = pu.sl.NaturalNumberSequence(3, 2, 1)
+        s = pu.sl.NaturalNumberSequence(4, 3, 2)
         t = s.canonical_natural_number_sequence
-        u = pu.sl.NaturalNumberSequence(0, 1, 2)
+        u = pu.sl.NaturalNumberSequence(1, 2, 3)
         assert t == u
 
-        s = pu.sl.NaturalNumberSequence(0, 1, 2)
+        s = pu.sl.NaturalNumberSequence(1, 2, 3)
         t = s.canonical_natural_number_sequence
         assert s == t
 
-        s = pu.sl.NaturalNumberSequence(0, 7, 9, 14, 14, 14, 12, 0, 2, 1, 7, 9)
+        s = pu.sl.NaturalNumberSequence(1, 7, 9, 14, 14, 14, 12, 1, 3, 2, 7, 9)
         t = s.canonical_natural_number_sequence
-        u = pu.sl.NaturalNumberSequence(0, 1, 2, 3, 3, 3, 4, 0, 5, 6, 1, 2)
+        u = pu.sl.NaturalNumberSequence(1, 2, 3, 4, 4, 4, 5, 1, 6, 7, 2, 3)
         assert t == u
 
     def test_image(self):
-        s = pu.sl.NaturalNumberSequence(0, 0, 0)
-        assert s.image == (0,)
-        s = pu.sl.NaturalNumberSequence(0, 1, 0)
-        assert s.image == (0, 1,)
-        s = pu.sl.NaturalNumberSequence(0, 1, 2)
-        assert s.image == (0, 1, 2,)
-        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 2, 1, 2, 0, )
-        assert s.image == (0, 1, 2, 7,)
+        s = pu.sl.NaturalNumberSequence(1, 1, 1)
+        assert s.image == (1,)
+        s = pu.sl.NaturalNumberSequence(1, 2, 1)
+        assert s.image == (1, 2,)
+        s = pu.sl.NaturalNumberSequence(1, 2, 3)
+        assert s.image == (1, 2, 3,)
+        s = pu.sl.NaturalNumberSequence(1, 2, 2, 8, 3, 2, 3, 1, )
+        assert s.image == (1, 2, 3, 8,)
 
     def test_image_cardinality(self):
-        s = pu.sl.NaturalNumberSequence(0, 0, 0)
+        s = pu.sl.NaturalNumberSequence(1, 1, 1)
         assert s.image_cardinality == 1
-        s = pu.sl.NaturalNumberSequence(0, 1, 0)
+        s = pu.sl.NaturalNumberSequence(1, 2, 1)
         assert s.image_cardinality == 2
-        s = pu.sl.NaturalNumberSequence(0, 1, 2)
+        s = pu.sl.NaturalNumberSequence(1, 2, 3)
         assert s.image_cardinality == 3
-        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 2, 1, 2, 0, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 2, 8, 3, 2, 3, 1, )
         assert s.image_cardinality == 4
 
     def test_concatenation(self):
-        s1 = pu.sl.NaturalNumberSequence(0, 0, 0)
-        s2 = pu.sl.NaturalNumberSequence(0, )
-        s3 = pu.sl.NaturalNumberSequence(8, )
-        s4 = pu.sl.NaturalNumberSequence(5, 6, 2, )
-        assert pu.sl.concatenate_natural_number_sequences(s1, s2) == (0, 0, 0, 0,)
-        assert pu.sl.concatenate_natural_number_sequences(s4, s4, s4) == (5, 6, 2, 5, 6, 2, 5, 6, 2,)
-        assert pu.sl.concatenate_natural_number_sequences(s4, s3, s2, s1) == (5, 6, 2, 8, 0, 0, 0, 0,)
+        s1 = pu.sl.NaturalNumberSequence(1, 1, 1)
+        s2 = pu.sl.NaturalNumberSequence(1, )
+        s3 = pu.sl.NaturalNumberSequence(9, )
+        s4 = pu.sl.NaturalNumberSequence(6, 7, 2, )
+        assert pu.sl.concatenate_natural_number_sequences(s1, s2) == (1, 1, 1, 1,)
+        assert pu.sl.concatenate_natural_number_sequences(s4, s4, s4) == (6, 7, 2, 6, 7, 2, 6, 7, 2,)
+        assert pu.sl.concatenate_natural_number_sequences(s4, s3, s2, s1) == (6, 7, 2, 9, 1, 1, 1, 1,)
 
     def test_canonical_ordering(self):
-        assert pu.sl.NaturalNumberSequence(0, 0, 0).is_less_than(pu.sl.NaturalNumberSequence(0, 0, 1))
-        assert pu.sl.NaturalNumberSequence(0, 4, 17).is_less_than(pu.sl.NaturalNumberSequence(0, 4, 19))
+        assert pu.sl.NaturalNumberSequence(1, 1, 1).is_less_than_under_o1(pu.sl.NaturalNumberSequence(1, 1, 2))
+        assert pu.sl.NaturalNumberSequence(1, 4, 17).is_less_than_under_o1(pu.sl.NaturalNumberSequence(1, 5, 19))
 
     def test_is_increasing(self):
-        s = pu.sl.NaturalNumberSequence(0, )
+        s = pu.sl.NaturalNumberSequence(1, )
         assert s.is_increasing
         s = pu.sl.NaturalNumberSequence(17, )
         assert s.is_increasing
-        s = pu.sl.NaturalNumberSequence(0, 1, 2, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 3, )
         assert s.is_increasing
-        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 8, 12, 2000, 2000, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 2, 7, 8, 12, 2000, 2000, )
         assert s.is_increasing
-        s = pu.sl.NaturalNumberSequence(0, 1, 0, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 1, )
         assert not s.is_increasing
-        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 8, 7, 2000, 2000, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 2, 8, 9, 8, 2000, 2000, )
         assert not s.is_increasing
 
     def test_is_strictly_increasing(self):
-        s = pu.sl.NaturalNumberSequence(0, )
+        s = pu.sl.NaturalNumberSequence(1, )
         assert s.is_strictly_increasing
         s = pu.sl.NaturalNumberSequence(17, )
         assert s.is_strictly_increasing
-        s = pu.sl.NaturalNumberSequence(0, 1, 2, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 3, )
         assert s.is_strictly_increasing
-        s = pu.sl.NaturalNumberSequence(0, 1, 1, 7, 8, 12, 2000, 2001, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 2, 7, 8, 12, 2000, 2001, )
         assert not s.is_strictly_increasing
-        s = pu.sl.NaturalNumberSequence(0, 1, 0, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 1, )
         assert not s.is_strictly_increasing
-        s = pu.sl.NaturalNumberSequence(0, 1, 6, 7, 8, 100, 2000, 2000, )
+        s = pu.sl.NaturalNumberSequence(1, 2, 6, 7, 8, 100, 2000, 2000, )
         assert not s.is_strictly_increasing

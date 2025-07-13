@@ -210,23 +210,23 @@ class TestRootedPlaneTree:
         assert t12.is_equal_to(t12)
         assert t_big.is_equal_to(t_big)
 
-        assert t1_a.is_less_than(t2_a_aa)
-        assert not t2_a_aa.is_less_than(t1_a)
+        assert t1_a.is_less_than_under_o1(t2_a_aa)
+        assert not t2_a_aa.is_less_than_under_o1(t1_a)
 
-        assert t2_a_aa.is_less_than(t3_a_aa_aaa)
-        assert not t3_a_aa_aaa.is_less_than(t2_a_aa)
+        assert t2_a_aa.is_less_than_under_o1(t3_a_aa_aaa)
+        assert not t3_a_aa_aaa.is_less_than_under_o1(t2_a_aa)
 
-        assert t2_a_aa.is_less_than(t3_a_aa_ab)
-        assert not t3_a_aa_ab.is_less_than(t2_a_aa)
+        assert t2_a_aa.is_less_than_under_o1(t3_a_aa_ab)
+        assert not t3_a_aa_ab.is_less_than_under_o1(t2_a_aa)
 
-        assert t3_a_aa_aaa.is_less_than(t3_a_aa_ab)
-        assert not t3_a_aa_ab.is_less_than(t3_a_aa_aaa)
+        assert t3_a_aa_aaa.is_less_than_under_o1(t3_a_aa_ab)
+        assert not t3_a_aa_ab.is_less_than_under_o1(t3_a_aa_aaa)
 
-        assert t2_a_aa.is_less_than(t6_a_aa_ab_ac_ad_ae)
-        assert not t6_a_aa_ab_ac_ad_ae.is_less_than(t2_a_aa)
+        assert t2_a_aa.is_less_than_under_o1(t6_a_aa_ab_ac_ad_ae)
+        assert not t6_a_aa_ab_ac_ad_ae.is_less_than_under_o1(t2_a_aa)
 
-        assert t7_a_aa_ab_aaa_aaaa_aba_abaa.is_less_than(t6_a_aa_ab_ac_ad_ae)
-        assert not t6_a_aa_ab_ac_ad_ae.is_less_than(t7_a_aa_ab_aaa_aaaa_aba_abaa)
+        assert t7_a_aa_ab_aaa_aaaa_aba_abaa.is_less_than_under_o1(t6_a_aa_ab_ac_ad_ae)
+        assert not t6_a_aa_ab_ac_ad_ae.is_less_than_under_o1(t7_a_aa_ab_aaa_aaaa_aba_abaa)
 
     def test_is_increasing(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae,
                            t7_a_aa_ab_aaa_aaaa_aba_abaa,
@@ -252,7 +252,7 @@ class TestRootedPlaneTree:
         assert not t12.is_strictly_increasing
         assert not t_big.is_strictly_increasing
 
-    def test_consistency_of_rpt_generation(self):
+    def test_consistency_of_rpt_generation_with_catalan_numbers(self):
         """The number of unique RPTs per size (in vertices) must be equal to the Catalan numbers.
 
         :return:
@@ -260,6 +260,21 @@ class TestRootedPlaneTree:
         for n in range(1, 10):
             assert len(pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(
                 n)) == pu.catalan_number_library.get_catalan_number(n - 1)
+
+    def test_consistency_of_rpt_canonical_order(self):
+        """The number of unique RPTs per size (in vertices) must be equal to the Catalan numbers.
+
+        :return:
+        """
+        s = ()
+        for n in range(1, 10):
+            s = s + pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(
+                n)
+        previous = None
+        for t in s:
+            if previous is not None:
+                assert previous.is_less_than(t)
+            previous = t
 
     def test_consistency_of_well_known_rpts(self):
         s1 = pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(1)

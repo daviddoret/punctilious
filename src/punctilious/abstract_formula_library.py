@@ -642,9 +642,9 @@ class AbstractFormula(tuple):
             return True
         elif phi.rooted_plane_tree.is_less_than(self.rooted_plane_tree):
             return False
-        elif self.natural_number_sequence.is_less_than(phi.natural_number_sequence):
+        elif self.natural_number_sequence.is_less_than_under_o1(phi.natural_number_sequence):
             return True
-        elif phi.natural_number_sequence.is_less_than(self.natural_number_sequence):
+        elif phi.natural_number_sequence.is_less_than_under_o1(self.natural_number_sequence):
             return False
         raise util.PunctiliousException("Unreachable condition")
 

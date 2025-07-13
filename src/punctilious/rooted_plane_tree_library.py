@@ -149,7 +149,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def degree(self) -> int:
-        """The `degree` of a :class:`RootedPlaneTree` is the number of immediate subtrees it has.
+        """The `degree` of a rooted-plane-tree is the number of immediate subtrees it has.
 
         :return:
         """
@@ -288,32 +288,30 @@ class RootedPlaneTree(tuple):
         return self.degree == 0
 
     def is_less_than(self, t: FlexibleRootedPlaneTree) -> bool:
-        r"""Under :class:`RootedPlaneTree` canonical ordering,
-        returns `True` if the current :class:`RootedPlaneTree` is less than `t`,
-        `False` otherwise.
+        r"""Under rooted-plane-tree canonical ordering, returns `True` if this rooted-plane-tree is less than `t`, `False` otherwise.
 
         Definition: canonical ordering of rooted-plane-trees, denoted :math:`\prec`
         ______________________________________________________________________________
 
-        is defined as degree-first, subtrees in ascending order second.
-        Or given two rooted-plan-trees :math`S` and :math:`T`,
-         :math:`S =_{\prec} T` if and only if :math:`T \sim_{\text{rooted-plane-tree}} S`,
-         :math:`|S| < |T| \Rightarrow S \prec T`,
-         ...then recursively for children in ascending order.
+        Given two rooted-plan-trees :math`S` and :math:`T`, :math:`S {\prec} T` if and only if:
 
-        :param t: A :class:`RootedPlaneTree`.
+        - :math:`( |S| < |T| ),
 
-        :return: `True` if the current :class:`RootedPlaneTree` is equal to `t`, `False` otherwise.
+        ...then recursively for immediate subtrees in ascending order.
+
+        :param t: A rooted-plane-tree.
+
+        :return: `True` if the current rooted-plane-tree is equal to `t`, `False` otherwise.
         """
         t: RootedPlaneTree = RootedPlaneTree.from_any(t)
-        if self.is_equal_to(t):
+        if self.is_rooted_plane_tree_equivalent_to(t):
             return False
-        elif self.degree < t.degree:
+        elif self.size < t.size:
             return True
-        elif self.degree > t.degree:
+        elif self.size > t.size:
             return False
         else:
-            # S and T have the same degree.
+            # S and T have the same size.
             for sub_s, sub_t in zip(self.immediate_subtrees, t.immediate_subtrees):
                 if sub_s.is_less_than(sub_t):
                     return True
@@ -322,15 +320,18 @@ class RootedPlaneTree(tuple):
         raise util.PunctiliousException("Unreachable algorithm position.")
 
     def is_rooted_plane_tree_equivalent_to(self, t: FlexibleRootedPlaneTree) -> bool:
-        """Returns `True` if this :class:`RootedPlaneTree` is connective-equivalent to :class:`RootedPlaneTree` `t`.
+        """Returns `True` if this rooted-plane-tree is connective-equivalent to rooted-plane-tree `t`.
 
-        Formal definition 1:
+        Formal definition 1
+        _______________________
+
         A rooted-plane-tree `t` is connective-equivalent to a rooted-plane-tree `u` if and only if
-         - degree(t) = degree(u).
-         - and immediate sub-rooted-plane-tree t_i of t is-rooted-plane-tree-equivalent
-           to immediate sub-rooted-plane-tree u_i of u with 0 <= i < degree(t) - 1.
+        - degree(t) = degree(u).
+        - and immediate sub-rooted-plane-tree t_i of t is-rooted-plane-tree-equivalent to immediate sub-rooted-plane-tree u_i of u with 0 <= i < degree(t) - 1.
 
-        Formal definition 2:
+        Formal definition 2
+        _______________________
+
         A rooted-plane-tree `t` is connective-equivalent to a rooted-plane-tree `u` if and only if
         the unsorted-inverted-integer AHU of `t` = the unsorted-inverted-integer AHU of `u`.
 
@@ -365,7 +366,7 @@ class RootedPlaneTree(tuple):
             self.immediate_subtrees[i + 1] > self.immediate_subtrees[i] for i in range(0, self.degree - 1))
 
     def iterate_immediate_subtrees(self) -> typing.Generator[RootedPlaneTree, None, None]:
-        """Generator function that iterates the immediate subtrees of this :class:`RootedPlaneTree`.
+        """Generator function that iterates the immediate subtrees of this rooted-plane-tree.
         following the canonical vertex ordering.
 
         :yields: RootedPlaneTree - a subtree.
@@ -374,7 +375,7 @@ class RootedPlaneTree(tuple):
         yield from super().__iter__()
 
     def iterate_subtrees(self) -> typing.Generator[RootedPlaneTree, None, None]:
-        """Generator function that iterates recursively the subtrees of this :class:`RootedPlaneTree`.
+        """Generator function that iterates recursively the subtrees of this rooted-plane-tree.
         using the depth-first / canonical vertex ordering algorithm.
 
         :yields: RootedPlaneTree - a subtree.

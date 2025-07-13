@@ -346,8 +346,8 @@ class TestAbstractFormula:
         assert phi4 == phi5
 
     def test_canonical_order(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
-        assert af1.is_less_than(af1b)
-        assert af2a.is_less_than(af2b)
+        assert af1.is_less_than_under_o1(af1b)
+        assert af2a.is_less_than_under_o1(af2b)
 
     def test_is_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
         assert af1.is_increasing
