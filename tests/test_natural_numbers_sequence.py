@@ -129,9 +129,23 @@ class TestNaturalNumbersSequence:
         assert pu.nnsl.concatenate_natural_number_sequences(s4, s4, s4) == (6, 7, 2, 6, 7, 2, 6, 7, 2,)
         assert pu.nnsl.concatenate_natural_number_sequences(s4, s3, s2, s1) == (6, 7, 2, 9, 1, 1, 1, 1,)
 
-    def test_canonical_ordering(self):
-        assert pu.nnsl.NaturalNumberSequence(1, 1, 1).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(1, 1, 2))
-        assert pu.nnsl.NaturalNumberSequence(1, 4, 17).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(1, 5, 19))
+    def test_is_less_than_under_o1(self):
+        assert not pu.nnsl.NaturalNumberSequence(1, ).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(1, ))
+        assert pu.nnsl.NaturalNumberSequence(1, ).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(2, ))
+        assert pu.nnsl.NaturalNumberSequence(1, ).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(1, 1, ))
+        assert pu.nnsl.NaturalNumberSequence(3, ).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(2, 2, ))
+        assert pu.nnsl.NaturalNumberSequence(4, ).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(1, 1, 2))
+        assert not pu.nnsl.NaturalNumberSequence(1, 1, 2, ).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(4, ))
+        assert pu.nnsl.NaturalNumberSequence(1, 4, 19).is_less_than_under_o1(pu.nnsl.NaturalNumberSequence(1, 5, 19))
+
+    def test_is_less_than_under_o2(self):
+        assert not pu.nnsl.NaturalNumberSequence(1, ).is_less_than_under_o2(pu.nnsl.NaturalNumberSequence(1, ))
+        assert pu.nnsl.NaturalNumberSequence(1, ).is_less_than_under_o2(pu.nnsl.NaturalNumberSequence(2, ))
+        assert pu.nnsl.NaturalNumberSequence(1, ).is_less_than_under_o2(pu.nnsl.NaturalNumberSequence(1, 1, ))
+        assert pu.nnsl.NaturalNumberSequence(3, ).is_less_than_under_o2(pu.nnsl.NaturalNumberSequence(2, 2, ))
+        assert not pu.nnsl.NaturalNumberSequence(4, ).is_less_than_under_o2(pu.nnsl.NaturalNumberSequence(1, 1, 2))
+        assert pu.nnsl.NaturalNumberSequence(1, 1, 2, ).is_less_than_under_o2(pu.nnsl.NaturalNumberSequence(4, ))
+        assert pu.nnsl.NaturalNumberSequence(1, 4, 19).is_less_than_under_o2(pu.nnsl.NaturalNumberSequence(1, 5, 19))
 
     def test_is_increasing(self):
         s = pu.nnsl.NaturalNumberSequence(1, )
@@ -160,3 +174,17 @@ class TestNaturalNumbersSequence:
         assert not s.is_strictly_increasing
         s = pu.nnsl.NaturalNumberSequence(1, 2, 6, 7, 8, 100, 2000, 2000, )
         assert not s.is_strictly_increasing
+
+    def test_o1(self):
+        """Test O1
+
+        :return:
+        """
+        t = ()
+        for n in range(1, 5):
+            t += pu.nnsc.NaturalNumberSequenceGeneratorUnderO1.get_ordered_set_of_natural_number_sequences_of_sum_n(n)
+        previous = None
+        for s in t:
+            if previous is not None:
+                assert previous.is_less_than_under_o1(s)
+            previous = s

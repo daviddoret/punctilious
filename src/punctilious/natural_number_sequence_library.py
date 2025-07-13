@@ -56,6 +56,7 @@ class NaturalNumberSequence(tuple):
 
     def __add__(self, s):
         """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
+        Or performs a scalar addition if s is an integer.
 
         Note:
             This enables the usage of the python sum function, e.g.: sum(s1, s2, ...).
@@ -78,7 +79,7 @@ class NaturalNumberSequence(tuple):
         :param s: A natural-number-sequence.
         :return: `True` if this natural-number-sequence is equal to natural-number-sequence `s`, `False` otherwise.
         """
-        return self.is_equal_to(s)
+        return self.is_equal_to_under_o1(s)
 
     def __hash__(self):
         return hash((NaturalNumberSequence, *self.elements,))
@@ -90,9 +91,9 @@ class NaturalNumberSequence(tuple):
         self._canonical_natural_number_sequence: NaturalNumberSequence | None = None
 
     def __lt__(self, s) -> bool:
-        """Returns `True` if this natural-number-sequence is less than formula `s`, `False` otherwise.
+        """Returns `True` if this natural-number-sequence is less than formula `s` under :math:`\mathcal{O}_1`, `False` otherwise.
 
-        See :attr:`NaturalNumberSequence.is_less_than` for a definition of natural-number-sequence canonical-ordering.
+        See :attr:`NaturalNumberSequence.is_less_than_under_o1` for a definition of :math:`\mathcal{O}_1`.
 
         """
         return self.is_less_than_under_o1(s)
@@ -310,15 +311,41 @@ class NaturalNumberSequence(tuple):
         s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
         return self.canonical_natural_number_sequence.is_natural_number_sequence_equivalent_to(s)
 
-    def is_equal_to(self, s: FlexibleNaturalNumberSequence):
-        """Under :class:`NaturalNumberSequence` canonical ordering,
-        returns `True` if the current :class:`NaturalNumberSequence` is equal to `s`,
+    def is_equal_to_under_o1(self, s: FlexibleNaturalNumberSequence):
+        """Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_1`,
         `False` otherwise.
 
-        See :attr:`NaturalNumberSequence.is_less_than` for a definition of natural-number-sequence canonical-ordering.
+        See :attr:`NaturalNumberSequence.is_less_than_under_o1` for a definition of :math:`\mathcal{O}_1`.
 
-        :param s: A :class:`NaturalNumberSequence`.
-        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
+        :param s: A natural-number-sequence.
+        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_1`,
+        `False` otherwise.
+        """
+        s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
+        return self.is_natural_number_sequence_equivalent_to(s)
+
+    def is_equal_to_under_o2(self, s: FlexibleNaturalNumberSequence):
+        """Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_2`,
+        `False` otherwise.
+
+        See :attr:`NaturalNumberSequence.is_less_than_under_o2` for a definition of :math:`\mathcal{O}_2`.
+
+        :param s: A natural-number-sequence.
+        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_2`,
+        `False` otherwise.
+        """
+        s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
+        return self.is_natural_number_sequence_equivalent_to(s)
+
+    def is_equal_to_under_o3(self, s: FlexibleNaturalNumberSequence):
+        """Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_3`,
+        `False` otherwise.
+
+        See :attr:`NaturalNumberSequence.is_less_than_under_o3` for a definition of :math:`\mathcal{O}_3`.
+
+        :param s: A natural-number-sequence.
+        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_3`,
+        `False` otherwise.
         """
         s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
         return self.is_natural_number_sequence_equivalent_to(s)
@@ -339,46 +366,18 @@ class NaturalNumberSequence(tuple):
         return all(self.elements[i + 1] >= self.elements[i] for i in range(0, self.length - 1))
 
     def is_less_than_under_o1(self, s: FlexibleNaturalNumberSequence) -> bool:
-        r"""Returns `True` if this natural-number-sequence is less than `s`
-        under
+        r"""Returns `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_1`.
 
-        TODO: REWRITE DEFINITION
-
-        Under :class:`NaturalNumberSequence` canonical ordering,
-        returns `True` if the current :class:`NaturalNumberSequence` is less than `s`,
-        `False` otherwise.
-
-        Definition: canonical ordering of natural-number-sequence, denoted :math:`\prec`,
-        is defined as length-first, ascending-order second.
-
-        :param s: A :class:`NaturalNumberSequence`.
-        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
-        """
-        s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
-        if self.is_natural_number_sequence_equivalent_to(s):
-            return False
-        elif self.length < s.length:
-            return True
-        elif self.length > s.length:
-            return False
-        else:
-            for n, m in zip(self.elements, s.elements):
-                if n < m:
-                    return True
-                if n > m:
-                    return False
-        raise util.PunctiliousException("Unreachable condition")
-
-    def is_less_than_under_o2(self, s: FlexibleNaturalNumberSequence) -> bool:
-        r"""Returns `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`.
-
-        Definition: :math:`\mathcal{O}_2`
+        Definition: :math:`\mathcal{O}_1`
         ------------------------------------
 
-        :math:`S \prec T` under :math:`\mathcal{O}_2` if and only if:
+        :math:`S \prec T` under :math:`\mathcal{O}_1` if and only if:
+
         - :math:`\sum{S} < \sum{T}`
-        - or :math:`\sum{S} = \sum{T} \land `
-        TODO: COMPLETE DEFINITION HERE
+
+        or:
+
+        - :math:`\sum{S} = \sum{T} \land \exists i, s_i > t_i \land \nexists j < i, s_j < t_j`
 
         Note
         -----
@@ -397,8 +396,14 @@ class NaturalNumberSequence(tuple):
         making it usable in recursion proofs.
         TODO: Include proof that this is a well-founded order.
 
-        :param s: A :class:`NaturalNumberSequence`.
-        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
+        Note
+        -----
+        :math:`\mathcal{O}_1` is similar to :math:`\mathcal{O}_2` except that it gives precedence to
+        few large values over multiple small values, e.g.:
+        :math:`(5) \prec (1, 1, 1, 1, 1)`
+
+        :param s: A natural-number-sequence.
+        :return: `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`, `False` otherwise.
         """
         s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
         if self.is_natural_number_sequence_equivalent_to(s):
@@ -415,6 +420,49 @@ class NaturalNumberSequence(tuple):
                 if n < m:
                     return False
         raise util.PunctiliousException("Unreachable condition")
+
+    def is_less_than_under_o2(self, s: FlexibleNaturalNumberSequence) -> bool:
+        r"""Returns `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`.
+
+        Definition: :math:`\mathcal{O}_2`
+        ------------------------------------
+
+        :math:`S \prec T` under :math:`\mathcal{O}_2` if and only if:
+
+        - :math:`\sum{S} < \sum{T}`
+
+        or:
+
+        - :math:`\sum{S} = \sum{T} \land \exists i, s_i < t_i \land \nexists j < i, s_j > t_j`
+
+        Note
+        -----
+        :math:`\mathcal{O}_2` is similar to :math:`\mathcal{O}_1` except that it gives precedence to
+        multiple small values over few large values, e.g.:
+        :math:`(1, 1, 1, 1, 1) \prec (5)`
+
+        :param s: A natural-number-sequence.
+        :return: `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`, `False` otherwise.
+        """
+        s: NaturalNumberSequence = NaturalNumberSequence.from_any(s)
+        if self.is_natural_number_sequence_equivalent_to(s):
+            return False
+        elif sum(self) < sum(s):
+            return True
+        elif sum(self) > sum(s):
+            return False
+        else:
+            # sum(self) == sum(s)
+            for n, m in zip(self.elements, s.elements):
+                if n < m:
+                    return True
+                if n > m:
+                    return False
+        raise util.PunctiliousException("Unreachable condition")
+
+    def is_less_than_under_o3(self, s: FlexibleNaturalNumberSequence) -> bool:
+        # TODO: Implement a canonical lexicographic order.
+        pass
 
     @property
     def is_natural_number_sequence(self) -> bool:
