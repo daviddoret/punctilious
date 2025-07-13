@@ -115,52 +115,52 @@ def t_big(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
 
 @pytest.fixture
 def nns0(s0):
-    return pu.sl.NaturalNumberSequence(*s0)
+    return pu.nnsl.NaturalNumberSequence(*s0)
 
 
 @pytest.fixture
 def nns1(s1):
-    return pu.sl.NaturalNumberSequence(*s1)
+    return pu.nnsl.NaturalNumberSequence(*s1)
 
 
 @pytest.fixture
 def nns00(s00):
-    return pu.sl.NaturalNumberSequence(*s00)
+    return pu.nnsl.NaturalNumberSequence(*s00)
 
 
 @pytest.fixture
 def nns01(s01):
-    return pu.sl.NaturalNumberSequence(*s01)
+    return pu.nnsl.NaturalNumberSequence(*s01)
 
 
 @pytest.fixture
 def nns10(s10):
-    return pu.sl.NaturalNumberSequence(*s10)
+    return pu.nnsl.NaturalNumberSequence(*s10)
 
 
 @pytest.fixture
 def nns000(s00):
-    return pu.sl.NaturalNumberSequence(*s00)
+    return pu.nnsl.NaturalNumberSequence(*s00)
 
 
 @pytest.fixture
 def nns001(s00):
-    return pu.sl.NaturalNumberSequence(1, 1, 2, )
+    return pu.nnsl.NaturalNumberSequence(1, 1, 2, )
 
 
 @pytest.fixture
 def nns012345():
-    return pu.sl.NaturalNumberSequence(1, 2, 3, 4, 5, 6, )
+    return pu.nnsl.NaturalNumberSequence(1, 2, 3, 4, 5, 6, )
 
 
 @pytest.fixture
 def nns746107():
-    return pu.sl.NaturalNumberSequence(8, 5, 7, 2, 1, 8, )
+    return pu.nnsl.NaturalNumberSequence(8, 5, 7, 2, 1, 8, )
 
 
 @pytest.fixture
 def nns0123456789_10_11():
-    return pu.sl.NaturalNumberSequence(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+    return pu.nnsl.NaturalNumberSequence(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
 
 
 @pytest.fixture

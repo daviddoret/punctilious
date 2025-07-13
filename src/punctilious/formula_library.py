@@ -7,7 +7,8 @@ import collections.abc
 import punctilious.util as util
 import punctilious.connective_library as cl
 import punctilious.abstract_formula_library as afl
-import punctilious.sequence_library as sl
+import punctilious.natural_number_sequence_library as sl
+import punctilious.connective_sequence_library as csl
 
 
 # Classes
@@ -53,9 +54,9 @@ class Formula(tuple):
         """
         return self.is_less_than(phi)
 
-    def __new__(cls, phi: afl.FlexibleAbstractFormula, s: sl.FlexibleConnectiveSequence):
+    def __new__(cls, phi: afl.FlexibleAbstractFormula, s: csl.FlexibleConnectiveSequence):
         phi: afl.AbstractFormula = afl.AbstractFormula.from_any(phi)
-        s: sl.ConnectiveSequence = sl.ConnectiveSequence.from_any(s)
+        s: csl.ConnectiveSequence = csl.ConnectiveSequence.from_any(s)
         phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
         if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
@@ -121,7 +122,7 @@ class Formula(tuple):
         return tuple.__getitem__(self, 0)
 
     @property
-    def connective_sequence(self) -> sl.ConnectiveSequence:
+    def connective_sequence(self) -> csl.ConnectiveSequence:
         """
 
         `connective_sequence` is an immutable property.
@@ -447,4 +448,4 @@ class Formula(tuple):
 
 FlexibleFormula = typing.Union[
     Formula, tuple[
-        sl.FlexibleConnectiveSequence, afl.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]
+        csl.FlexibleConnectiveSequence, afl.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]

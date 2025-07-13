@@ -1,6 +1,6 @@
 import punctilious.util as util
 import punctilious.rooted_plane_tree_library as rptl
-import punctilious.sequence_library as sl
+import punctilious.natural_number_sequence_library as sl
 import punctilious.abstract_formula_library as afl
 
 

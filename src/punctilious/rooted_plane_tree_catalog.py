@@ -1,6 +1,6 @@
 import itertools
 import punctilious.util as util
-import punctilious.sequence_library as sl
+import punctilious.natural_number_sequence_library as sl
 import punctilious.rooted_plane_tree_library as rptl
 
 
