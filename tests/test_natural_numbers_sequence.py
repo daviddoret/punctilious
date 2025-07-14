@@ -176,15 +176,18 @@ class TestNaturalNumbersSequence:
         assert not s.is_strictly_increasing
 
     def test_o1(self):
-        """Test O1
+        """Test all combinations of sequence ordering under O1 up to sum(S) = n.
 
         :return:
         """
+        n = 6
         t = ()
-        for n in range(1, 5):
+        for n in range(1, n):
             t += pu.nnsc.NaturalNumberSequenceGeneratorUnderO1.get_ordered_set_of_natural_number_sequences_of_sum_n(n)
-        previous = None
-        for s in t:
-            if previous is not None:
-                assert previous.is_less_than_under_o1(s)
-            previous = s
+        for i in range(0, len(t)):
+            for j in range(0, i):
+                # print(f"i={i}, j={j}, assert t[j]={t[j]} < t[i]={t[i]}")
+                assert t[j].is_less_than_under_o1(t[i])
+            for j in range(i, len(t)):
+                # print(f"i={i}, j={j}, assert not( t[j]={t[j]} < t[i]={t[i]} )")
+                assert not t[j].is_less_than_under_o1(t[i])
