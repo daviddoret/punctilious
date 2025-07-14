@@ -4,8 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="orderings o1 and o2 for natural-number-sequences">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="test_o1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_sequence_catalog.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sandbox.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_numbers_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1051,14 +1055,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01491" summary="NaturalNumberSequence.image &amp; image_cardinality">
-      <option name="closed" value="true" />
-      <created>1751176325773</created>
-      <option name="number" value="01491" />
-      <option name="presentableId" value="LOCAL-01491" />
-      <option name="project" value="LOCAL" />
-      <updated>1751176325773</updated>
-    </task>
     <task id="LOCAL-01492" summary="NaturalNumberSequence.image &amp; image_cardinality">
       <option name="closed" value="true" />
       <created>1751182665282</created>
@@ -1443,7 +1439,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752443444718</updated>
     </task>
-    <option name="localTasksCounter" value="1540" />
+    <task id="LOCAL-01540" summary="test_o1">
+      <option name="closed" value="true" />
+      <created>1752472298168</created>
+      <option name="number" value="01540" />
+      <option name="presentableId" value="LOCAL-01540" />
+      <option name="project" value="LOCAL" />
+      <updated>1752472298168</updated>
+    </task>
+    <option name="localTasksCounter" value="1541" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1496,7 +1500,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Cleanup" />
     <MESSAGE value="data model simplification" />
     <MESSAGE value="NaturalNumberSequence.image &amp; image_cardinality" />
     <MESSAGE value="Documentation" />
@@ -1521,7 +1524,8 @@
     <MESSAGE value="Bell numbers" />
     <MESSAGE value="natural-numbers in natural-number-sequences are now 1-based and no longer 0-based. this allows the usage of a new well-founded ordering that is more natural." />
     <MESSAGE value="orderings o1 and o2 for natural-number-sequences" />
-    <option name="LAST_COMMIT_MESSAGE" value="orderings o1 and o2 for natural-number-sequences" />
+    <MESSAGE value="test_o1" />
+    <option name="LAST_COMMIT_MESSAGE" value="test_o1" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

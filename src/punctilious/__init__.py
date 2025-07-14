@@ -7,7 +7,6 @@ import punctilious.connective_library as connective_library
 import punctilious.connective_catalog as connective_catalog
 import punctilious.connective_sequence_library as connective_sequence_library
 import punctilious.natural_number_sequence_library as natural_number_sequence_library
-import punctilious.natural_number_sequence_catalog as natural_number_sequence_catalog
 import punctilious.abstract_formula_library as abstract_formula_library
 import punctilious.formula_library as formula_library
 
@@ -19,7 +18,6 @@ cc = connective_catalog
 csl = connective_sequence_library
 fl = formula_library
 nnsl = natural_number_sequence_library
-nnsc = natural_number_sequence_catalog
 rptl = rooted_plane_tree_library
 rptc = rooted_plane_tree_catalog
 
@@ -29,7 +27,6 @@ __all__ = [
     "connective_catalog", "cc",
     "connective_sequence_library", "csl",
     "formula_library", "fl",
-    "natural_number_sequence_catalog", "nnsc",
     "natural_number_sequence_library", "nnsl",
     "rooted_plane_tree_catalog", "rptc",
     "rooted_plane_tree_library", "rptl",
