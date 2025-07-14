@@ -180,11 +180,13 @@ class TestNaturalNumbersSequence:
 
         :return:
         """
-        n = 6
+        n = 10
         t = ()
         for n in range(1, n):
-            t += pu.nnsl.NaturalNumberSequence.get_o1_ordered_set_of_natural_number_sequences_of_sum_n(
+            s = pu.nnsl.NaturalNumberSequence.get_o1_ordered_set_of_natural_number_sequences_of_sum_n(
                 n)
+            assert pu.nnsl.NaturalNumberSequence.get_number_of_natural_number_sequences_of_sum_n(n) == len(s)
+            t += s
         for i in range(0, len(t)):
             for j in range(0, i):
                 # print(f"i={i}, j={j}, assert t[j]={t[j]} < t[i]={t[i]}")

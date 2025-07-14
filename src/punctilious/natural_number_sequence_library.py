@@ -278,6 +278,28 @@ class NaturalNumberSequence(tuple):
         raise util.PunctiliousException('NaturalNumberSequence data validation failure', o=o)
 
     @classmethod
+    def get_number_of_natural_number_sequences_of_sum_n(cls, n: int) -> int:
+        """Returns the number of distinct natural-number-sequences of sum `n`.
+
+        Quotes
+        -------
+
+        "There are 2^(n-1) compositions (ordered partitions) of n (see for example Riordan)." (Ref.: A000079)
+
+        References
+        ____________
+
+        - https://oeis.org/A000079
+
+        :param n:
+        :return:
+        """
+        n = int(n)
+        if n < 1:
+            raise util.PunctiliousException("`n` < 1", n=n)
+        return pow(2, n - 1)
+
+    @classmethod
     def get_o1_ordered_set_of_natural_number_sequences_of_sum_n(cls, n: int) -> tuple[NaturalNumberSequence, ...]:
         if len(cls._ordered_set_of_sequence_grouped_by_sum) < n:
             # the database does not contain the natural-number-sequence of that size,
