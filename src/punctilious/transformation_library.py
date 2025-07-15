@@ -1,6 +1,6 @@
 import punctilious.util as util
 import punctilious.rooted_plane_tree_library as rptl
-import punctilious.natural_number_sequence_library as sl
+import punctilious.natural_number_1_sequence_library as sl
 import punctilious.abstract_formula_library as afl
 
 
@@ -29,8 +29,8 @@ class AbstractOrderedSet(afl.AbstractFormula):
         """
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
             p.rooted_plane_tree, i.rooted_plane_tree)
-        s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
-                                                                              i.natural_number_sequence)
+        s: sl.NaturalNumber1Sequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
+                                                                               i.natural_number_sequence)
         super(AbstractMap, self).__init__(t=t, s=s)
 
     def __new__(cls, phi: afl.FlexibleAbstractFormula | None, n: int | None, p: afl.FlexibleAbstractFormula | None,
@@ -55,8 +55,8 @@ class AbstractOrderedSet(afl.AbstractFormula):
                     p_length=p.length, i_length=i., s=s, phi=phi)
             t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
                 p.rooted_plane_tree, i.rooted_plane_tree)
-            s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
-                                                                                  i.natural_number_sequence)
+            s: sl.NaturalNumber1Sequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
+                                                                                   i.natural_number_sequence)
             psi = super(AbstractMap, cls).__new__(cls, (t, s,))
 
         if not isinstance(phi, AbstractFormula):
@@ -117,8 +117,8 @@ class AbstractMap(afl.AbstractFormula):
         """
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
             p.rooted_plane_tree, i.rooted_plane_tree)
-        s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
-                                                                              i.natural_number_sequence)
+        s: sl.NaturalNumber1Sequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
+                                                                               i.natural_number_sequence)
         super(AbstractMap, self).__init__(t=t, s=s)
 
     def __new__(cls, n: int, p: afl.FlexibleAbstractFormula, i: afl.FlexibleAbstractFormula):
@@ -138,8 +138,8 @@ class AbstractMap(afl.AbstractFormula):
                 p_length=p.length, i_length=i., s=s, phi=phi)
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
             p.rooted_plane_tree, i.rooted_plane_tree)
-        s: sl.NaturalNumberSequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
-                                                                              i.natural_number_sequence)
+        s: sl.NaturalNumber1Sequence = sl.concatenate_natural_number_sequences((n,), p.natural_number_sequence,
+                                                                               i.natural_number_sequence)
         psi = super(AbstractMap, cls).__new__(cls, (t, s,))
         return psi
 

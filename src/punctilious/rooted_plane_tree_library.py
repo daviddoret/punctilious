@@ -28,7 +28,7 @@ class RootedPlaneTree(tuple):
         :param t: A rooted-plane-tree.
         :return: `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
         """
-        return self.is_equal_to(t)
+        return self.is_equal_to_under_o1(t)
 
     def __hash__(self):
         return self._compute_hash(self)
@@ -50,7 +50,7 @@ class RootedPlaneTree(tuple):
         See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
 
         """
-        return self.is_less_than(t)
+        return self.is_less_than_under_o1(t)
 
     def __new__(cls, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         if tuple_tree is not None:
@@ -246,7 +246,7 @@ class RootedPlaneTree(tuple):
         # return tuple(super().__iter__()) # alternative implementation.
         return tuple.__new__(tuple, self)  # this implementation seems more "direct".
 
-    def is_equal_to(self, t: FlexibleRootedPlaneTree):
+    def is_equal_to_under_o1(self, t: FlexibleRootedPlaneTree):
         """Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
 
         Definition - rooted-plane-tree equality:
@@ -287,17 +287,21 @@ class RootedPlaneTree(tuple):
         """
         return self.degree == 0
 
-    def is_less_than(self, t: FlexibleRootedPlaneTree) -> bool:
-        r"""Under rooted-plane-tree canonical ordering, returns `True` if this rooted-plane-tree is less than `t`, `False` otherwise.
+    def is_less_than_under_o1(self, t: FlexibleRootedPlaneTree) -> bool:
+        r"""Returns `True` if this rooted-plane-tree is less than `t` under :math:`\mathcal{O}_1`, `False` otherwise.
 
-        Definition: canonical ordering of rooted-plane-trees, denoted :math:`\prec`
+        Definition: :math:`\mathcal{O}_1`
         ______________________________________________________________________________
 
-        Given two rooted-plan-trees :math`S` and :math:`T`, :math:`S {\prec} T` if and only if:
+        Let :math:`S` and :math:`T` be rooted-plane-trees.
+
+        We say that :math:`S \prec T` under :math:`\mathcal{O}_1` if and only if:
 
         - :math:`( |S| < |T| ),
 
-        ...then recursively for immediate subtrees in ascending order.
+        or:
+
+        - :math:`|S| = |T| \land \exists i, s_i > t_i \land \nexists j < i, s_j < t_j`
 
         :param t: A rooted-plane-tree.
 
@@ -310,12 +314,17 @@ class RootedPlaneTree(tuple):
             return True
         elif self.size > t.size:
             return False
+        # S and T have the same size.
+        elif self.degree < t.degree:
+            return True
+        elif self.degree > t.degree:
+            return False
         else:
-            # S and T have the same size.
+            # S and T have the same degree as well.
             for sub_s, sub_t in zip(self.immediate_subtrees, t.immediate_subtrees):
-                if sub_s.is_less_than(sub_t):
+                if sub_s.is_less_than_under_o1(sub_t):
                     return True
-                elif sub_t.is_less_than(sub_s):
+                elif sub_t.is_less_than_under_o1(sub_s):
                     return False
         raise util.PunctiliousException("Unreachable algorithm position.")
 

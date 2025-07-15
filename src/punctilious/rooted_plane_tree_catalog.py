@@ -1,6 +1,6 @@
 import itertools
 import punctilious.util as util
-import punctilious.natural_number_sequence_library as sl
+import punctilious.natural_number_1_sequence_library as nnsl
 import punctilious.rooted_plane_tree_library as rptl
 
 
@@ -31,7 +31,9 @@ class RootedPlaneTreeGenerator:
             leaf = rptl.RootedPlaneTree()
             RootedPlaneTreeGenerator._ordered_set_of_trees_grouped_by_size = ((leaf,),)
         else:
-            subtree_sizes_combinations = tuple(sl.get_sequences_of_natural_numbers_whose_sum_equals_n(n - 1))
+            # subtree_sizes_combinations = tuple(nnsl.get_sequences_of_natural_numbers_whose_sum_equals_n(n - 1))
+            subtree_sizes_combinations = tuple(
+                nnsl.NaturalNumber1Sequence.get_o1_ordered_set_of_natural_number_sequences_of_sum_n(n - 1))
             ordered_set_of_trees_of_size_n = ()
             for subtree_sizes in subtree_sizes_combinations:
 
@@ -41,7 +43,8 @@ class RootedPlaneTreeGenerator:
 
                 for s in itertools.product(*l):
                     subtree: rptl.RootedPlaneTree = rptl.RootedPlaneTree(*s)
-                    ordered_set_of_trees_of_size_n = ordered_set_of_trees_of_size_n + (subtree,)
+                    if subtree not in ordered_set_of_trees_of_size_n:
+                        ordered_set_of_trees_of_size_n = ordered_set_of_trees_of_size_n + (subtree,)
             RootedPlaneTreeGenerator._ordered_set_of_trees_grouped_by_size = RootedPlaneTreeGenerator._ordered_set_of_trees_grouped_by_size + (
                 ordered_set_of_trees_of_size_n,)
 
