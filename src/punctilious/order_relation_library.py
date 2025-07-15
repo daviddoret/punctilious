@@ -4,7 +4,7 @@ import util
 
 
 class OrderRelation(abc.ABC):
-    """An abstract class of order-relation.
+    r"""An abstract class of order-relation.
 
     Bibliography
     -------------
@@ -12,34 +12,46 @@ class OrderRelation(abc.ABC):
     - https://encyclopediaofmath.org/wiki/Order_(on_a_set)
 
     """
-    _python_type_constraint: type | None = None
 
-    def __init_subclass__(cls, *, t, **kwargs):
-        super().__init_subclass__(**kwargs)
-        cls._python_type_constraint = t  # Store at class level
+    def __init__(self, *, python_type_constraint: type | None,
+                 is_antisymmetric: bool | None = None,
+                 is_asymmetric: bool | None = None,
+                 is_connected: bool | None = None,
+                 is_irreflexive: bool | None = None,
+                 is_reflexive: bool | None = None,
+                 is_strongly_connected: bool | None = None,
+                 is_transitive: bool | None = None, **kwargs):
 
-    @classmethod
-    def get_python_type_constraint(cls) -> type:
-        """Returns the Python type on which this order-relation can be applied. `None` if there is no Python type constraint.
+        self._python_type_constraint = python_type_constraint
+
+        self._is_antisymmetric: bool | None = is_antisymmetric
+        self._is_asymmetric: bool | None = is_asymmetric
+        self._is_connected: bool | None = is_connected
+        self._is_irreflexive: bool | None = is_irreflexive
+        self._is_reflexive: bool | None = is_reflexive
+        self._is_strongly_connected: bool | None = is_strongly_connected
+        self._is_transitive: bool | None = is_transitive
+
+    def get_python_type_constraint(self) -> type:
+        r"""Returns the Python type on which this order-relation can be applied. `None` if there is no Python type constraint.
 
         :return: A Python type.
         """
-        return cls._python_type_constraint
+        return self._python_type_constraint
 
     @abc.abstractmethod
     def is_less_than(self, x: object, y: object) -> bool:
-        """Returns `True` if :math:`x \prec y`, `False` otherwise.
+        r"""Returns `True` if :math:`x \prec y`, `False` otherwise.
 
         :param y:
         :param x:
-        :param o:
         :return:
         """
         raise util.PunctiliousException("Abstract method.")
 
     @abc.abstractmethod
     def is_equal_to(self, x: object, y: object) -> bool:
-        """
+        r"""
 
         :param x: An element of the underlying set of this order-relation.
         :param y: An element of the underlying set of this order-relation.
@@ -49,7 +61,9 @@ class OrderRelation(abc.ABC):
 
     @property
     def is_a_non_strict_total_order(self) -> bool:
-        r"""Returns `True` if this order-relation is a non-strict-total-order, `False` otherwise.
+        r"""Returns `True` if this order-relation is a non-strict-total-order,
+        `False` if not,
+        and `None` if this property is not configured.
 
         Mathematical definition - non-strict-total-order
         -------------------------------------------------
@@ -60,11 +74,11 @@ class OrderRelation(abc.ABC):
 
         - :math:`xRy \land yRz \implies xRz` (transitivity)
 
-        - :math:`xRy \land yRx \implies x = y` (anti-symmetry)
+        - :math:`xRy \land yRx \implies x = y` (antisymmetry)
 
         - :math:`xRy \lor yRx` (strongly connected)
 
-        :return: `True` if this order-relation is a non-strict-total-order, `False` otherwise.
+        :return: `True`, `False`, or `None`.
 
         Bibliography
         ---------------
@@ -72,11 +86,16 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Total_order
 
         """
-        raise util.PunctiliousException("Abstract method.")
+        if self.is_reflexive is None or self.is_transitive is None or self.is_antisymmetric is None or self.is_strongly_connected is None:
+            return None
+        else:
+            return self.is_reflexive and self.is_transitive and self.is_antisymmetric and self.is_strongly_connected
 
     @property
     def is_a_partial_order(self) -> bool:
-        r"""Returns `True` if this order-relation is a partial-order, `False` otherwise.
+        r"""Returns `True` if this order-relation is a partial-order,
+        `False` if not,
+        and `None` if this property is not configured.
 
         Mathematical definition - partial-order
         ----------------------------------------------
@@ -87,9 +106,9 @@ class OrderRelation(abc.ABC):
 
         - :math:`xRy \land yRz \implies xRz` (transitivity)
 
-        - :math:`xRy \land yRx \implies x=y` (anti-symmetry)
+        - :math:`xRy \land yRx \implies x=y` (antisymmetry)
 
-        :return: `True` if this order-relation is a partial-order, `False` otherwise.
+        :return: `True`, `False`, or `None`.
 
         Bibliography
         ---------------
@@ -97,11 +116,16 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Partially_ordered_set
 
         """
-        return self.is_reflexive and self.is_transitive and self.is_anti_symmetric
+        if self.is_reflexive is None or self.is_transitive is None or self.is_antisymmetric is None:
+            return None
+        else:
+            return self.is_reflexive and self.is_transitive and self.is_antisymmetric
 
     @property
-    def is_a_strict_total_order(self) -> bool:
-        r"""Returns `True` if this order-relation is a strict-total-order, `False` otherwise.
+    def is_a_strict_total_order(self) -> bool | None:
+        r"""Returns `True` if this order-relation is a strict-total-order,
+        `False` if not,
+        and `None` if this property is not configured.
 
         Mathematical definition - strict-total-order
         -------------------------------------------------
@@ -116,7 +140,7 @@ class OrderRelation(abc.ABC):
 
         - :math:`( x \neq y ) \implies ( xRy \lor yRx )` (connected)
 
-        :return: `True` if this order-relation is a strict-total-order, `False` otherwise.
+        :return: `True`, `False`, or `None`.
 
         Bibliography
         ---------------
@@ -124,12 +148,39 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Total_order
 
         """
-        return self.is_irreflexive and self.is_asymmetric and self.is_transitive and self.is_connected
+        if self.is_irreflexive is None or self.is_asymmetric is None or self.is_transitive is None or self.is_connected:
+            return None
+        else:
+            return self.is_irreflexive and self.is_asymmetric and self.is_transitive and self.is_connected
 
-    @abc.abstractmethod
+    @property
+    def is_antisymmetric(self) -> bool:
+        r"""Returns `True` if this order-relation is antisymmetric,
+        `False` if not,
+        and `None` if this property is not configured.
+
+        Mathematical definition - antisymmetric
+        -------------------------------------------------
+
+        A binary relation :math:`(S, R)` is antisymmetric if and only if, :math:`\forall x \in S`:
+
+        - :math:`xRy \land yRx \implies x=y` (antisymmetric)
+
+        :return: `True`, `False`, or `None`.
+
+        Bibliography
+        ---------------
+
+        -https://en.wikipedia.org/wiki/Antisymmetric_relation
+
+        """
+        return self._is_antisymmetric
+
     @property
     def is_asymmetric(self) -> bool:
-        r"""Returns `True` if this order-relation is asymmetric, `False` otherwise.
+        r"""Returns `True` if this order-relation is asymmetric,
+        `False` if not,
+        and `None` if this property is not configured.
 
         Mathematical definition - asymmetric
         -------------------------------------------------
@@ -138,7 +189,7 @@ class OrderRelation(abc.ABC):
 
         - :math:`xRy \implies \neg( yRy )` (asymmetry)
 
-        :return: `True` if this order-relation is asymmetric, `False` otherwise.
+        :return: `True`, `False`, or `None`.
 
         Bibliography
         ---------------
@@ -146,12 +197,13 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Asymmetric_relation
 
         """
-        raise util.PunctiliousException("Abstract method.")
+        return self._is_asymmetric
 
-    @abc.abstractmethod
     @property
     def is_connected(self) -> bool:
-        r"""Returns `True` if this order-relation is connected, `False` otherwise.
+        r"""Returns `True` if this order-relation is connected,
+        `False` if not,
+        and `None` if this property is not configured.
 
         Mathematical definition - connected
         -------------------------------------------------
@@ -160,7 +212,7 @@ class OrderRelation(abc.ABC):
 
         - :math:`( x \neq y ) \implies ( xRy \lor yRx )` (connected)
 
-        :return: `True` if this order-relation is connected, `False` otherwise.
+        :return: `True`, `False`, or `None`.
 
         Bibliography
         ---------------
@@ -168,12 +220,13 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Connected_relation
 
         """
-        raise util.PunctiliousException("Abstract method.")
+        return self._is_connected
 
-    @abc.abstractmethod
     @property
     def is_irreflexive(self) -> bool:
-        r"""Returns `True` if this order-relation is irreflexive, `False` otherwise.
+        r"""Returns `True` if this order-relation is irreflexive,
+        `False` if not,
+        and `None` if this property is not configured.
 
         Mathematical definition - irreflexive
         -------------------------------------------------
@@ -182,7 +235,7 @@ class OrderRelation(abc.ABC):
 
         - :math:`\neg( xRx )` (irreflexivity)
 
-        :return: `True` if this order-relation is irreflexive, `False` otherwise.
+        :return: `True`, `False`, or `None`.
 
         Bibliography
         ---------------
@@ -190,12 +243,13 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Reflexive_relation#Irreflexive_relation
 
         """
-        raise util.PunctiliousException("Abstract method.")
+        return self._is_irreflexive
 
-    @abc.abstractmethod
     @property
     def is_reflexive(self) -> bool:
-        r"""Returns `True` if this order-relation is reflexive, `False` otherwise.
+        r"""Returns `True` if this order-relation is reflexive,
+        `False` if not,
+        and `None` if this property is not configured.
 
         Mathematical definition - reflexive
         -------------------------------------------------
@@ -204,7 +258,7 @@ class OrderRelation(abc.ABC):
 
         - :math:`xRx` (reflexivity)
 
-        :return: `True` if this order-relation is reflexive, `False` otherwise.
+        :return: `True`, `False`, or `None`.
 
         Bibliography
         ---------------
@@ -213,12 +267,36 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Reflexive_relation
 
         """
-        raise util.PunctiliousException("Abstract method.")
+        return self._is_reflexive
 
-    @abc.abstractmethod
+    @property
+    def is_strongly_connected(self) -> bool:
+        r"""Returns `True` if this order-relation is strongly-connected,
+        `False` if not,
+        and `None` if this property is not configured.
+
+        Mathematical definition - strongly-connected
+        -------------------------------------------------
+
+        A binary relation :math:`(S, R)` is strongly-connected if and only if, :math:`\forall x, y \in S`:
+
+        - :math:`xRy \lor yRx` (strongly-connected)
+
+        :return: `True`, `False`, or `None`.
+
+        Bibliography
+        ---------------
+
+        - https://en.wikipedia.org/wiki/Connected_relation
+
+        """
+        return self._is_strongly_connected
+
     @property
     def is_transitive(self) -> bool:
-        r"""Returns `True` if this order-relation is transitive, `False` otherwise.
+        r"""Returns `True` if this order-relation is transitive,
+        `False` if not,
+        and `None` if this property is not configured.
 
         Mathematical definition - transitive
         -------------------------------------------------
@@ -227,7 +305,7 @@ class OrderRelation(abc.ABC):
 
         - :math:`( xRy \land yRz ) \implies xRz` (transitivity)
 
-        :return: `True` if this order-relation is transitive, `False` otherwise.
+        :return: `True`, `False`, or `None`.
 
         Bibliography
         ---------------
@@ -236,11 +314,11 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Transitive_relation
 
         """
-        raise util.PunctiliousException("Abstract method.")
+        return self._is_transitive
 
 
 def is_less_than(x: object, y: object, o: OrderRelation | None) -> bool:
-    """Returns `True` if :math:`x \prec y` under `o`, `False` otherwise.
+    r"""Returns `True` if :math:`x \prec y` under `o`, `False` otherwise.
 
     :param x: An element of the underlying set of order-relation `o`.
     :param y: An element of the underlying set of order-relation `o`.
@@ -251,7 +329,7 @@ def is_less_than(x: object, y: object, o: OrderRelation | None) -> bool:
 
 
 class Orderable(abc.ABC):
-    """An abstract Python class that supports relation-orders.
+    r"""An abstract Python class that supports relation-orders.
 
     """
     _default_order_relation: OrderRelation | None = None
