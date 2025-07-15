@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="order-relations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/order_relation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/order_relation_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_1.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -326,6 +331,7 @@
     "Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation.executor": "Run",
     "Python tests.pytest for test_natural_number_0.TestNaturalNumber0.test_constructor.executor": "Run",
     "Python tests.pytest for test_natural_number_0.TestNaturalNumber0.test_order_relation_o1.executor": "Run",
+    "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_canonical_order.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_constructor.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_o1.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_order_relation_o2.executor": "Run",
@@ -459,6 +465,7 @@
     "Python tests.pytest for tests.test_meta_theory_1.TestMT3.test_mt3.executor": "Run",
     "Python tests.pytest for tests.test_meta_theory_1.TestTProvesP.test_t_proves_p.executor": "Run",
     "Python tests.pytest for tests.test_minimal_logic_1.TestPL1.test_pl1.executor": "Run",
+    "Python tests.pytest for tests.test_natural_number_0.TestNaturalNumber0.test_order_relation_o1.executor": "Run",
     "Python tests.pytest for tests.test_natural_numbers_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence.executor": "Run",
     "Python tests.pytest for tests.test_natural_numbers_sequence.executor": "Run",
     "Python tests.pytest for tests.test_pl1.TestPL1.test_declare_binary_formula.executor": "Run",
@@ -560,6 +567,7 @@
     "Python.latin_alphabet_uppercase_serif_italic.executor": "Run",
     "Python.meta_language.executor": "Run",
     "Python.minimal_logic_1.executor": "Debug",
+    "Python.natural_number_0_library.executor": "Run",
     "Python.natural_number_1_library.executor": "Run",
     "Python.natural_number_library.executor": "Run",
     "Python.natural_number_sequence_catalog.executor": "Run",
@@ -675,7 +683,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.order_relation_library">
+  <component name="RunManager" selected="Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_canonical_order">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -722,7 +730,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="order_relation_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="natural_number_0_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -735,7 +743,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/order_relation_library.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -928,7 +936,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_0.TestNaturalNumber0.test_constructor" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_natural_number_0.TestNaturalNumber0.test_order_relation_o1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -941,11 +949,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_0.TestNaturalNumber0.test_constructor&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0.TestNaturalNumber0.test_order_relation_o1&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_1.TestNaturalNumber1.test_constructor" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_natural_number_1.TestNaturalNumber1.test_canonical_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -958,7 +966,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_1.TestNaturalNumber1.test_constructor&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_1.TestNaturalNumber1.test_canonical_order&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -997,7 +1005,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_natural_number_1_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1010,7 +1018,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_natural_number_1_sequence.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -1020,27 +1028,27 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.order_relation_library" />
+      <item itemvalue="Python.natural_number_0_library" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_natural_number_0.TestNaturalNumber0.test_constructor" />
-      <item itemvalue="Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_constructor" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0.TestNaturalNumber0.test_order_relation_o1" />
+      <item itemvalue="Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_canonical_order" />
+      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Python tests.pytest in test_natural_number_0.py" />
-      <item itemvalue="Python tests.pytest in test_natural_number_1_sequence.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.order_relation_library" />
-        <item itemvalue="Python tests.pytest in test_natural_number_1_sequence.py" />
-        <item itemvalue="Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_constructor" />
-        <item itemvalue="Python tests.pytest for test_natural_number_0.TestNaturalNumber0.test_constructor" />
+        <item itemvalue="Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_canonical_order" />
         <item itemvalue="Python tests.pytest in test_natural_number_0.py" />
+        <item itemvalue="Python tests.pytest for test_natural_number_0.TestNaturalNumber0.test_order_relation_o1" />
+        <item itemvalue="Python.natural_number_0_library" />
+        <item itemvalue="Python tests.pytest in tests" />
       </list>
     </recent_temporary>
   </component>
@@ -1062,14 +1070,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01496" summary="Formula">
-      <option name="closed" value="true" />
-      <created>1751224699410</created>
-      <option name="number" value="01496" />
-      <option name="presentableId" value="LOCAL-01496" />
-      <option name="project" value="LOCAL" />
-      <updated>1751224699410</updated>
     </task>
     <task id="LOCAL-01497" summary="Formula">
       <option name="closed" value="true" />
@@ -1455,7 +1455,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752592636506</updated>
     </task>
-    <option name="localTasksCounter" value="1545" />
+    <task id="LOCAL-01545" summary="order-relations">
+      <option name="closed" value="true" />
+      <created>1752592713412</created>
+      <option name="number" value="01545" />
+      <option name="presentableId" value="LOCAL-01545" />
+      <option name="project" value="LOCAL" />
+      <updated>1752592713412</updated>
+    </task>
+    <option name="localTasksCounter" value="1546" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

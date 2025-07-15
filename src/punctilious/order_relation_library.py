@@ -40,21 +40,11 @@ class OrderRelation(abc.ABC):
         return self._python_type_constraint
 
     @abc.abstractmethod
-    def is_less_than(self, x: object, y: object) -> bool:
-        r"""Returns `True` if :math:`x \prec y`, `False` otherwise.
+    def relates(self, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param y:
         :param x:
-        :return:
-        """
-        raise util.PunctiliousException("Abstract method.")
-
-    @abc.abstractmethod
-    def is_equal_to(self, x: object, y: object) -> bool:
-        r"""
-
-        :param x: An element of the underlying set of this order-relation.
-        :param y: An element of the underlying set of this order-relation.
         :return:
         """
         raise util.PunctiliousException("Abstract method.")
@@ -317,45 +307,39 @@ class OrderRelation(abc.ABC):
         return self._is_transitive
 
 
-def is_less_than(x: object, y: object, o: OrderRelation | None) -> bool:
-    r"""Returns `True` if :math:`x \prec y` under `o`, `False` otherwise.
+def relates(x: object, y: object, o: OrderRelation | None) -> bool:
+    r"""Returns `True` if :math:`xRy` under `o`, `False` otherwise.
 
-    :param x: An element of the underlying set of order-relation `o`.
-    :param y: An element of the underlying set of order-relation `o`.
+    :param x: An element of the underlying set of `o`.
+    :param y: An element of the underlying set of `o`.
     :param o: An order-relation.
     :return: `True` if :math:`x \prec y`, `False` otherwise.
     """
-    return o.is_less_than(x=x, y=y)
+    return o.relates(x=x, y=y)
 
 
-class Orderable(abc.ABC):
-    r"""An abstract Python class that supports relation-orders.
+class CanonicalOrderable(abc.ABC):
+    r"""An abstract Python class that supports a canonical relation-order.
 
     """
-    _default_order_relation: OrderRelation | None = None
 
-    def __lt__(self, x):
-        return self.is_less_than(x)
+    _canonical_order: OrderRelation | None = None
 
     @classmethod
-    def get_default_order_relation(cls) -> OrderRelation | None:
-        return cls._default_order_relation
+    def _set_canonical_order(cls, o: OrderRelation):
+        cls._canonical_order = o
 
     @classmethod
-    def set_default_order_relation(cls, o: OrderRelation | None):
-        if o is not None and not isinstance(o, OrderRelation):
-            raise util.PunctiliousException("Invalid parameter `o`.", o=o)
-        o_cls = o.__class__  # type(o)
-        if o is not None and o_cls.get_python_type_constraint() != cls:
-            raise util.PunctiliousException(
-                "Python-type `t1`'s default order-relation cannot be set to `o`, because `o` requires python-type `t2`.",
-                t1=cls,
-                o=o,
-                t2=o_cls.get_python_type_constraint())
-        cls._default_order_relation: OrderRelation | None = o
+    def get_canonical_order(cls) -> OrderRelation | None:
+        return cls._canonical_order
 
-    def is_less_than(self, x):
+    def relates(self, x: object):
+        """Returns `True` if the canonical relation holds between this object and `x`, `False` otherwise.
+
+        :param x:
+        :return:
+        """
         cls = self.__class__
-        if cls.get_default_order_relation() is None:
+        if cls.get_canonical_order() is None:
             util.PunctiliousException("No default order-relation is defined.")
-        return is_less_than(x=self, y=x, o=cls.get_default_order_relation())
+        return relates(x=self, y=x, o=cls.get_canonical_order())

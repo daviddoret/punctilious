@@ -10,20 +10,18 @@ class TestNaturalNumber1:
         with pytest.raises(Exception):
             pu.nn1l.NN1(0)
 
-    def test_order_relation_o1(self):
-        pu.nn1l.NN1.set_default_order_relation(pu.nn1l.o1)
+    def test_canonical_order(self):
         for i in range(1, 33):
             for j in range(1, 33):
                 if i < j:
-                    assert pu.nn1l.NN1(i) < pu.nn1l.NN1(j)
+                    assert pu.nn1l.NN1(i).relates(pu.nn1l.NN1(j))
                 elif i >= j:
-                    assert not (pu.nn1l.NN1(i) < pu.nn1l.NN1(j))
+                    assert not (pu.nn1l.NN1(i).relates(pu.nn1l.NN1(j)))
 
-    def test_order_relation_o2(self):
-        pu.nn1l.NN1.set_default_order_relation(pu.nn1l.o2)
+    def test_strict_greater_than(self):
         for i in range(1, 33):
             for j in range(1, 33):
                 if i > j:
-                    assert pu.nn1l.NN1(i) < pu.nn1l.NN1(j)
+                    assert pu.nn1l.strict_greater_than.relates(pu.nn1l.NN1(i), pu.nn1l.NN1(j))
                 elif i <= j:
-                    assert not (pu.nn1l.NN1(i) < pu.nn1l.NN1(j))
+                    assert not pu.nn1l.strict_greater_than.relates(pu.nn1l.NN1(i), pu.nn1l.NN1(j))

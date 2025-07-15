@@ -46,7 +46,7 @@ def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber1Sequence) -> 
 # Classes
 
 
-class NaturalNumber1Sequence(orl.Orderable, tuple):
+class NaturalNumber1Sequence(orl.CanonicalOrderable, tuple):
     """A non-empty, finite (computable) sequence of natural numbers (1 based).
 
     Definition:
@@ -92,7 +92,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
         self._canonical_natural_number_sequence: NaturalNumber1Sequence | None = None
 
     def __lt__(self, s) -> bool:
-        """Returns `True` if this natural-number-sequence is less than formula `s` under :math:`\mathcal{O}_1`, `False` otherwise.
+        r"""Returns `True` if this natural-number-sequence is less than formula `s` under :math:`\mathcal{O}_1`, `False` otherwise.
 
         See :attr:`NaturalNumberSequence.is_less_than_under_o1` for a definition of :math:`\mathcal{O}_1`.
 
@@ -116,7 +116,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
 
     @classmethod
     def _compute_hash(cls, o: FlexibleNaturalNumber1Sequence) -> int:
-        """Exposes the hashing logic as a static method.
+        r"""Exposes the hashing logic as a static method.
 
         :param o: An object that is structurally compatible with a natural-number-sequence.
         :return: The hash of the natural-number-sequence that is structurally equivalent to `o`.
@@ -125,7 +125,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
 
     @classmethod
     def _from_cache(cls, o: FlexibleNaturalNumber1Sequence):
-        """Cache mechanism used in the constructor."""
+        r"""Cache mechanism used in the constructor."""
         hash_value: int = NaturalNumber1Sequence._compute_hash(o)
         if hash_value in cls._cache.keys():
             return cls._cache[hash_value]
@@ -164,7 +164,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
 
     @property
     def canonical_natural_number_sequence(self) -> NaturalNumber1Sequence:
-        """Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
+        r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
         by applying canonical labeling.
 
         Notation:
@@ -219,7 +219,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
             cls,
             o: FlexibleNaturalNumber1Sequence, raise_exception_on_validation_failure: bool = True) -> \
             tuple[bool, FlexibleNaturalNumber1Sequence | None]:
-        """Validates `o` as a collection of natural number elements,
+        r"""Validates `o` as a collection of natural number elements,
         applying implicit conversion as necessary.
 
         :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
@@ -254,7 +254,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
 
     @property
     def elements(self) -> tuple[int, ...]:
-        """Returns a tuple of the elements that compose this :class:`NaturalNumberSequence`, preserving order.
+        r"""Returns a tuple of the elements that compose this :class:`NaturalNumberSequence`, preserving order.
 
         :return: a tuple of the elements that compose this :class:`NaturalNumberSequence`, preserving order.
         """
@@ -262,7 +262,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
 
     @classmethod
     def from_any(cls, o: object) -> NaturalNumber1Sequence:
-        """Declares a natural-number-sequence from a Python object that can be interpreted as a natural-number-sequence.
+        r"""Declares a natural-number-sequence from a Python object that can be interpreted as a natural-number-sequence.
 
         Note:
             This method is redundant with the default constructor.
@@ -280,7 +280,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
 
     @classmethod
     def get_number_of_natural_number_sequences_of_sum_n(cls, n: int) -> int:
-        """Returns the number of distinct natural-number-sequences of sum `n`.
+        r"""Returns the number of distinct natural-number-sequences of sum `n`.
 
         Quotes
         -------
@@ -315,12 +315,12 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
 
     @property
     def im(self) -> tuple[int, ...]:
-        """A shortcut for :attr:`NaturalNumberSequence.image`."""
+        r"""A shortcut for :attr:`NaturalNumberSequence.image`."""
         return self.image
 
     @property
     def image(self) -> tuple[int, ...]:
-        """The :attr:`NaturalNumberSequence.image` is the set of values contained in the sequence,
+        r"""The :attr:`NaturalNumberSequence.image` is the set of values contained in the sequence,
         returned as a tuple of ascending and unique values.
 
         Notation:
@@ -352,7 +352,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
 
     @property
     def image_cardinality(self) -> int:
-        """The :attr:`NaturalNumberSequence.image_cardinality` is the cardinality
+        r"""The :attr:`NaturalNumberSequence.image_cardinality` is the cardinality
          of the :attr:`NaturalNumberSequence.image`, i.e. the number of distinct values it contains.
 
         Notation:
@@ -363,7 +363,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
         return len(self.image)
 
     def is_canonical_natural_number_sequence_equivalent(self, s) -> bool:
-        """`True` if this natural number sequence canonical-natural-number-sequence-equivalent
+        r"""`True` if this natural number sequence canonical-natural-number-sequence-equivalent
         to the natural-number-sequence `s`, `False` otherwise.
 
         Notation:
@@ -378,7 +378,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
         return self.canonical_natural_number_sequence.is_natural_number_sequence_equivalent_to(s)
 
     def is_equal_to_under_o1(self, s: FlexibleNaturalNumber1Sequence):
-        """Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_1`,
+        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_1`,
         `False` otherwise.
 
         See :attr:`NaturalNumberSequence.is_less_than_under_o1` for a definition of :math:`\mathcal{O}_1`.
@@ -391,7 +391,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
         return self.is_natural_number_sequence_equivalent_to(s)
 
     def is_equal_to_under_o2(self, s: FlexibleNaturalNumber1Sequence):
-        """Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_2`,
+        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_2`,
         `False` otherwise.
 
         See :attr:`NaturalNumberSequence.is_less_than_under_o2` for a definition of :math:`\mathcal{O}_2`.
@@ -404,7 +404,7 @@ class NaturalNumber1Sequence(orl.Orderable, tuple):
         return self.is_natural_number_sequence_equivalent_to(s)
 
     def is_equal_to_under_o3(self, s: FlexibleNaturalNumber1Sequence):
-        """Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_3`,
+        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_3`,
         `False` otherwise.
 
         See :attr:`NaturalNumberSequence.is_less_than_under_o3` for a definition of :math:`\mathcal{O}_3`.
@@ -653,7 +653,7 @@ NN1S = NaturalNumber1Sequence  # An alias for NaturalNumberSequence
 # Relation orders
 
 
-class O1(orl.OrderRelation, t=NaturalNumber1Sequence):
+class LexicographicOrder(orl.OrderRelation):
     r"""The lexicographic order of natural numbers starting at 1.
 
     Note
@@ -693,11 +693,19 @@ class O1(orl.OrderRelation, t=NaturalNumber1Sequence):
 
     """
 
-    @classmethod
-    def python_type(cls) -> type:
-        return NaturalNumber1Sequence
+    def __init__(self):
+        super().__init__(
+            python_type_constraint=NaturalNumber1Sequence,
+            is_antisymmetric=True,
+            is_asymmetric=False,
+            is_connected=True,
+            is_irreflexive=True,
+            is_reflexive=False,
+            is_strongly_connected=False,
+            is_transitive=True
+        )
 
-    def is_less_than(self, x: object, y: object) -> bool:
+    def relates(self, x: object, y: object) -> bool:
         x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
         y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
         minimum_length: int = min(x.length, y.length)
@@ -713,3 +721,6 @@ class O1(orl.OrderRelation, t=NaturalNumber1Sequence):
 
     def is_equal_to(self, x: object, y: object) -> bool:
         raise util.PunctiliousException("Not implemented.")
+
+
+lexicographic_order = LexicographicOrder()
