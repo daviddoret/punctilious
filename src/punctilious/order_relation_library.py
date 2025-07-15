@@ -60,7 +60,7 @@ class OrderRelation(abc.ABC):
         raise util.PunctiliousException("Abstract method.")
 
     @property
-    def is_a_non_strict_total_order(self) -> bool:
+    def is_a_non_strict_total_order(self) -> bool | None:
         r"""Returns `True` if this order-relation is a non-strict-total-order,
         `False` if not,
         and `None` if this property is not configured.
@@ -92,7 +92,7 @@ class OrderRelation(abc.ABC):
             return self.is_reflexive and self.is_transitive and self.is_antisymmetric and self.is_strongly_connected
 
     @property
-    def is_a_partial_order(self) -> bool:
+    def is_a_partial_order(self) -> bool | None:
         r"""Returns `True` if this order-relation is a partial-order,
         `False` if not,
         and `None` if this property is not configured.
