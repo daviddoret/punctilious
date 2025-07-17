@@ -130,13 +130,13 @@ class TestNaturalNumbersSequence:
         assert pu.nnsl.concatenate_natural_number_sequences(s4, s3, s2, s1) == (6, 7, 2, 9, 1, 1, 1, 1,)
 
     def test_is_less_than_under_o1(self):
-        assert not pu.nnsl.NaturalNumber1Sequence(1, ).is_less_than_under_o1(pu.nnsl.NaturalNumber1Sequence(1, ))
-        assert pu.nnsl.NaturalNumber1Sequence(1, ).is_less_than_under_o1(pu.nnsl.NaturalNumber1Sequence(2, ))
-        assert pu.nnsl.NaturalNumber1Sequence(1, ).is_less_than_under_o1(pu.nnsl.NaturalNumber1Sequence(1, 1, ))
-        assert pu.nnsl.NaturalNumber1Sequence(3, ).is_less_than_under_o1(pu.nnsl.NaturalNumber1Sequence(2, 2, ))
-        assert pu.nnsl.NaturalNumber1Sequence(4, ).is_less_than_under_o1(pu.nnsl.NaturalNumber1Sequence(1, 1, 2))
-        assert not pu.nnsl.NaturalNumber1Sequence(1, 1, 2, ).is_less_than_under_o1(pu.nnsl.NaturalNumber1Sequence(4, ))
-        assert pu.nnsl.NaturalNumber1Sequence(1, 4, 19).is_less_than_under_o1(pu.nnsl.NaturalNumber1Sequence(1, 5, 19))
+        assert not pu.nnsl.NaturalNumber1Sequence(1, ).is_strict_less_than(pu.nnsl.NaturalNumber1Sequence(1, ))
+        assert pu.nnsl.NaturalNumber1Sequence(1, ).is_strict_less_than(pu.nnsl.NaturalNumber1Sequence(2, ))
+        assert pu.nnsl.NaturalNumber1Sequence(1, ).is_strict_less_than(pu.nnsl.NaturalNumber1Sequence(1, 1, ))
+        assert pu.nnsl.NaturalNumber1Sequence(3, ).is_strict_less_than(pu.nnsl.NaturalNumber1Sequence(2, 2, ))
+        assert pu.nnsl.NaturalNumber1Sequence(4, ).is_strict_less_than(pu.nnsl.NaturalNumber1Sequence(1, 1, 2))
+        assert not pu.nnsl.NaturalNumber1Sequence(1, 1, 2, ).is_strict_less_than(pu.nnsl.NaturalNumber1Sequence(4, ))
+        assert pu.nnsl.NaturalNumber1Sequence(1, 4, 19).is_strict_less_than(pu.nnsl.NaturalNumber1Sequence(1, 5, 19))
 
     def test_is_less_than_under_o2(self):
         assert not pu.nnsl.NaturalNumber1Sequence(1, ).is_less_than_under_o2(pu.nnsl.NaturalNumber1Sequence(1, ))
@@ -190,9 +190,9 @@ class TestNaturalNumbersSequence:
         for i in range(0, len(t)):
             for j in range(0, i):
                 # print(f"i={i}, j={j}, assert t[j]={t[j]} < t[i]={t[i]}")
-                assert t[j].is_less_than_under_o1(t[i])
+                assert t[j].is_strict_less_than(t[i])
                 assert t[j] < t[i]
             for j in range(i, len(t)):
                 # print(f"i={i}, j={j}, assert not( t[j]={t[j]} < t[i]={t[i]} )")
-                assert not t[j].is_less_than_under_o1(t[i])
+                assert not t[j].is_strict_less_than(t[i])
                 assert not t[j] < t[i]

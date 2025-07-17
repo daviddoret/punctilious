@@ -1,10 +1,72 @@
 from __future__ import annotations
 import typing
-import order_relation_library as orl
+import binary_relation_library as orl
 import util
 
 
-class NaturalNumber1(orl.CanonicalOrderable, int):
+# Relation classes
+
+
+class StrictLessThan(orl.BinaryRelation):
+    r"""The natural order of natural numbers starting at 0.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{N}^{+}, < )`.
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = None
+    _is_asymmetric: bool | None = True
+    _is_connected: bool | None = None
+    _is_irreflexive: bool | None = True
+    _is_reflexive: bool | None = None
+    _is_strongly_connected: bool | None = None
+    _is_transitive: bool | None = True
+
+    def relates(self, x: object, y: object) -> bool:
+        x: NaturalNumber1 = NaturalNumber1.from_any(x)
+        y: NaturalNumber1 = NaturalNumber1.from_any(y)
+        return int(x) < int(y)
+
+
+class StrictGreaterThan(orl.BinaryRelation):
+    r"""The natural order inverse of natural numbers starting at 0.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{N}^{+}, > )`.
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = None
+    _is_connected: bool | None = None
+    _is_irreflexive: bool | None = True
+    _is_reflexive: bool | None = None
+    _is_strongly_connected: bool | None = None
+    _is_transitive: bool | None = True
+
+    def relates(self, x: object, y: object) -> bool:
+        x: NaturalNumber1 = NaturalNumber1.from_any(x)
+        y: NaturalNumber1 = NaturalNumber1.from_any(y)
+        return int(x) > int(y)
+
+
+# Relation orders
+
+
+strictly_less_than = StrictLessThan()
+strictly_greater_than = StrictGreaterThan()
+
+
+# Main class
+
+class NaturalNumber1(orl.RelationalElement, int):
     r"""A natural number starting at 1.
 
     Mathematical definition
@@ -14,6 +76,10 @@ class NaturalNumber1(orl.CanonicalOrderable, int):
 
 
     """
+
+    # Configuration of class properties (cf. Relatable).
+    _canonical_order: orl.BinaryRelation = strictly_less_than
+    _strictly_less_than: orl.BinaryRelation = strictly_less_than
 
     def __new__(cls, x):
         x = int(x)
@@ -46,70 +112,3 @@ FlexibleNaturalNumber1 = typing.Union[
 # Aliases
 
 NN1 = NaturalNumber1  # An alias for NaturalNumber1
-
-
-class StrictLessThan(orl.OrderRelation):
-    r"""The natural order of natural numbers starting at 0.
-
-    Mathematical definition
-    -------------------------
-
-    :math:`( \mathbb{N}^{+}, < )`.
-
-    """
-
-    def __init__(self):
-        super().__init__(
-            python_type_constraint=NaturalNumber1,
-            is_antisymmetric=None,
-            is_asymmetric=True,
-            is_connected=None,
-            is_irreflexive=True,
-            is_reflexive=None,
-            is_strongly_connected=None,
-            is_transitive=True
-        )
-
-    def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber1 = NaturalNumber1.from_any(x)
-        y: NaturalNumber1 = NaturalNumber1.from_any(y)
-        return int(x) < int(y)
-
-
-class StrictGreaterThan(orl.OrderRelation):
-    r"""The natural order inverse of natural numbers starting at 0.
-
-    Mathematical definition
-    -------------------------
-
-    :math:`( \mathbb{N}^{+}, > )`.
-
-    """
-
-    def __init__(self):
-        super().__init__(
-            python_type_constraint=NaturalNumber1,
-            is_antisymmetric=None,
-            is_asymmetric=True,
-            is_connected=None,
-            is_irreflexive=True,
-            is_reflexive=None,
-            is_strongly_connected=None,
-            is_transitive=True,
-        )
-
-    def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber1 = NaturalNumber1.from_any(x)
-        y: NaturalNumber1 = NaturalNumber1.from_any(y)
-        return int(x) > int(y)
-
-
-# Relation orders
-
-
-strict_less_than = StrictLessThan()
-strict_greater_than = StrictGreaterThan()
-
-# Due to cross-references between classes,
-# calling protected methods in the module is not optimal but less messy than alternatives.
-NaturalNumber1._set_canonical_order(o=strict_less_than)

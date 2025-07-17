@@ -22,6 +22,6 @@ class TestNaturalNumber1:
         for i in range(1, 33):
             for j in range(1, 33):
                 if i > j:
-                    assert pu.nn1l.strict_greater_than.relates(pu.nn1l.NN1(i), pu.nn1l.NN1(j))
+                    assert pu.nn1l.strictly_greater_than.relates(pu.nn1l.NN1(i), pu.nn1l.NN1(j))
                 elif i <= j:
-                    assert not pu.nn1l.strict_greater_than.relates(pu.nn1l.NN1(i), pu.nn1l.NN1(j))
+                    assert not pu.nn1l.strictly_greater_than.relates(pu.nn1l.NN1(i), pu.nn1l.NN1(j))

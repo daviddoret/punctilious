@@ -3,8 +3,9 @@ import abc
 import util
 
 
-class OrderRelation(abc.ABC):
-    r"""An abstract class of order-relation.
+class BinaryRelation(abc.ABC):
+    r"""An abstract class of binary-relation.
+
 
     Bibliography
     -------------
@@ -13,31 +14,14 @@ class OrderRelation(abc.ABC):
 
     """
 
-    def __init__(self, *, python_type_constraint: type | None,
-                 is_antisymmetric: bool | None = None,
-                 is_asymmetric: bool | None = None,
-                 is_connected: bool | None = None,
-                 is_irreflexive: bool | None = None,
-                 is_reflexive: bool | None = None,
-                 is_strongly_connected: bool | None = None,
-                 is_transitive: bool | None = None, **kwargs):
-
-        self._python_type_constraint = python_type_constraint
-
-        self._is_antisymmetric: bool | None = is_antisymmetric
-        self._is_asymmetric: bool | None = is_asymmetric
-        self._is_connected: bool | None = is_connected
-        self._is_irreflexive: bool | None = is_irreflexive
-        self._is_reflexive: bool | None = is_reflexive
-        self._is_strongly_connected: bool | None = is_strongly_connected
-        self._is_transitive: bool | None = is_transitive
-
-    def get_python_type_constraint(self) -> type:
-        r"""Returns the Python type on which this order-relation can be applied. `None` if there is no Python type constraint.
-
-        :return: A Python type.
-        """
-        return self._python_type_constraint
+    # mathematical properties
+    _is_antisymmetric: bool | None = None
+    _is_asymmetric: bool | None = None
+    _is_connected: bool | None = None
+    _is_irreflexive: bool | None = None
+    _is_reflexive: bool | None = None
+    _is_strongly_connected: bool | None = None
+    _is_transitive: bool | None = None
 
     @abc.abstractmethod
     def relates(self, x: object, y: object) -> bool:
@@ -51,7 +35,7 @@ class OrderRelation(abc.ABC):
 
     @property
     def is_a_non_strict_total_order(self) -> bool | None:
-        r"""Returns `True` if this order-relation is a non-strict-total-order,
+        r"""Returns `True` if this binary-relation is a non-strict-total-order,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -83,7 +67,7 @@ class OrderRelation(abc.ABC):
 
     @property
     def is_a_partial_order(self) -> bool | None:
-        r"""Returns `True` if this order-relation is a partial-order,
+        r"""Returns `True` if this binary-relation is a partial-order,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -113,7 +97,7 @@ class OrderRelation(abc.ABC):
 
     @property
     def is_a_strict_total_order(self) -> bool | None:
-        r"""Returns `True` if this order-relation is a strict-total-order,
+        r"""Returns `True` if this binary-relation is a strict-total-order,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -145,7 +129,7 @@ class OrderRelation(abc.ABC):
 
     @property
     def is_antisymmetric(self) -> bool:
-        r"""Returns `True` if this order-relation is antisymmetric,
+        r"""Returns `True` if this binary-relation is antisymmetric,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -164,11 +148,11 @@ class OrderRelation(abc.ABC):
         -https://en.wikipedia.org/wiki/Antisymmetric_relation
 
         """
-        return self._is_antisymmetric
+        return self.__class__._is_antisymmetric
 
     @property
     def is_asymmetric(self) -> bool:
-        r"""Returns `True` if this order-relation is asymmetric,
+        r"""Returns `True` if this binary-relation is asymmetric,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -187,11 +171,11 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Asymmetric_relation
 
         """
-        return self._is_asymmetric
+        return self.__class__._is_asymmetric
 
     @property
     def is_connected(self) -> bool:
-        r"""Returns `True` if this order-relation is connected,
+        r"""Returns `True` if this binary-relation is connected,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -210,11 +194,11 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Connected_relation
 
         """
-        return self._is_connected
+        return self.__class__._is_connected
 
     @property
     def is_irreflexive(self) -> bool:
-        r"""Returns `True` if this order-relation is irreflexive,
+        r"""Returns `True` if this binary-relation is irreflexive,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -233,11 +217,11 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Reflexive_relation#Irreflexive_relation
 
         """
-        return self._is_irreflexive
+        return self.__class__._is_irreflexive
 
     @property
     def is_reflexive(self) -> bool:
-        r"""Returns `True` if this order-relation is reflexive,
+        r"""Returns `True` if this binary-relation is reflexive,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -257,11 +241,11 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Reflexive_relation
 
         """
-        return self._is_reflexive
+        return self.__class__._is_reflexive
 
     @property
     def is_strongly_connected(self) -> bool:
-        r"""Returns `True` if this order-relation is strongly-connected,
+        r"""Returns `True` if this binary-relation is strongly-connected,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -280,11 +264,11 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Connected_relation
 
         """
-        return self._is_strongly_connected
+        return self.__class__._is_strongly_connected
 
     @property
     def is_transitive(self) -> bool:
-        r"""Returns `True` if this order-relation is transitive,
+        r"""Returns `True` if this binary-relation is transitive,
         `False` if not,
         and `None` if this property is not configured.
 
@@ -304,42 +288,68 @@ class OrderRelation(abc.ABC):
         - https://en.wikipedia.org/wiki/Transitive_relation
 
         """
-        return self._is_transitive
+        return self.__class__._is_transitive
 
 
-def relates(x: object, y: object, o: OrderRelation | None) -> bool:
+def relates(x: object, y: object, o: BinaryRelation | None) -> bool:
     r"""Returns `True` if :math:`xRy` under `o`, `False` otherwise.
 
     :param x: An element of the underlying set of `o`.
     :param y: An element of the underlying set of `o`.
-    :param o: An order-relation.
+    :param o: A binary-relation.
     :return: `True` if :math:`x \prec y`, `False` otherwise.
     """
     return o.relates(x=x, y=y)
 
 
-class CanonicalOrderable(abc.ABC):
-    r"""An abstract Python class that supports a canonical relation-order.
+class RelationalElement(abc.ABC):
+    r"""An abstract Python class for elements (objects) supporting relations.
 
     """
 
-    _canonical_order: OrderRelation | None = None
+    def __eq__(self, other):
+        return self.is_equal_to(other)
 
-    @classmethod
-    def _set_canonical_order(cls, o: OrderRelation):
-        cls._canonical_order = o
+    def __gt__(self, other):
+        return self.is_strictly_greater_than(other)
 
-    @classmethod
-    def get_canonical_order(cls) -> OrderRelation | None:
-        return cls._canonical_order
+    def __lt__(self, other):
+        return self.is_strictly_less_than(other)
 
-    def relates(self, x: object):
-        """Returns `True` if the canonical relation holds between this object and `x`, `False` otherwise.
+    # Class properties expected to be configured by child classes
+    _is_equal_to: BinaryRelation | None = None
+    _is_strictly_greater_than: BinaryRelation | None = None
+    _is_strictly_less_than: BinaryRelation | None = None
 
-        :param x:
-        :return:
+    def is_equal_to(self, x: object) -> bool | None:
+        """Returns `True` if this element is equal to `x`
+        under the canonical equality relation for elements of this Python class,
+        `False` otherwise.
+
+        :return: `True` or `False`.
         """
-        cls = self.__class__
-        if cls.get_canonical_order() is None:
-            util.PunctiliousException("No default order-relation is defined.")
-        return relates(x=self, y=x, o=cls.get_canonical_order())
+        if self.__class__._is_equal_to is None:
+            raise util.PunctiliousException("The is-equal-to relation is not configured on this Python class.",
+                                            self_type=str(type(self)),
+                                            self_class=self.__class__.__name__,
+                                            self=self)
+        else:
+            return self.__class__._is_equal_to.relates(x=self, y=x)
+
+    def is_strictly_greater_than(self, x: object) -> bool | None:
+        """Returns `True` if this element is strictly greater than `x`
+        under the canonical is-strictly-greater-than relation for elements of this Python class,
+        `False` otherwise.
+
+        :return: `True` or `False`.
+        """
+        return self.__class__._is_strictly_greater_than.relates(x=self, y=x)
+
+    def is_strictly_less_than(self, x: object) -> bool | None:
+        """Returns `True` if this element is strictly less than `x`
+        under the canonical is-strictly-less-than relation for elements of this Python class,
+        `False` otherwise.
+
+        :return: `True` or `False`.
+        """
+        return self.__class__._is_strictly_less_than.relates(x=self, y=x)

@@ -4,7 +4,7 @@ import typing
 import collections
 
 # punctilious libraries
-import punctilious.order_relation_library as orl
+import punctilious.binary_relation_library as orl
 import punctilious.util as util
 
 
@@ -46,7 +46,7 @@ def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber1Sequence) -> 
 # Classes
 
 
-class NaturalNumber1Sequence(orl.CanonicalOrderable, tuple):
+class NaturalNumber1Sequence(orl.RelationalElement, tuple):
     """A non-empty, finite (computable) sequence of natural numbers (1 based).
 
     Definition:
@@ -97,7 +97,7 @@ class NaturalNumber1Sequence(orl.CanonicalOrderable, tuple):
         See :attr:`NaturalNumberSequence.is_less_than_under_o1` for a definition of :math:`\mathcal{O}_1`.
 
         """
-        return self.is_less_than_under_o1(s)
+        return self.is_strict_less_than(s)
 
     def __new__(cls, *s):
         v: bool
@@ -390,31 +390,31 @@ class NaturalNumber1Sequence(orl.CanonicalOrderable, tuple):
         s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
         return self.is_natural_number_sequence_equivalent_to(s)
 
-    def is_equal_to_under_o2(self, s: FlexibleNaturalNumber1Sequence):
-        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_2`,
-        `False` otherwise.
-
-        See :attr:`NaturalNumberSequence.is_less_than_under_o2` for a definition of :math:`\mathcal{O}_2`.
-
-        :param s: A natural-number-sequence.
-        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_2`,
-        `False` otherwise.
-        """
-        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        return self.is_natural_number_sequence_equivalent_to(s)
-
-    def is_equal_to_under_o3(self, s: FlexibleNaturalNumber1Sequence):
-        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_3`,
-        `False` otherwise.
-
-        See :attr:`NaturalNumberSequence.is_less_than_under_o3` for a definition of :math:`\mathcal{O}_3`.
-
-        :param s: A natural-number-sequence.
-        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_3`,
-        `False` otherwise.
-        """
-        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        return self.is_natural_number_sequence_equivalent_to(s)
+    #    def is_equal_to_under_o2(self, s: FlexibleNaturalNumber1Sequence):
+    #        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_2`,
+    #        `False` otherwise.
+    #
+    #        See :attr:`NaturalNumberSequence.is_less_than_under_o2` for a definition of :math:`\mathcal{O}_2`.
+    #
+    #        :param s: A natural-number-sequence.
+    #        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_2`,
+    #        `False` otherwise.
+    #        """
+    #        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
+    #        return self.is_natural_number_sequence_equivalent_to(s)
+    #
+    #    def is_equal_to_under_o3(self, s: FlexibleNaturalNumber1Sequence):
+    #        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_3`,
+    #        `False` otherwise.
+    #
+    #        See :attr:`NaturalNumberSequence.is_less_than_under_o3` for a definition of :math:`\mathcal{O}_3`.
+    #
+    #        :param s: A natural-number-sequence.
+    #        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_3`,
+    #        `False` otherwise.
+    #        """
+    #        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
+    #        return self.is_natural_number_sequence_equivalent_to(s)
 
     @property
     def is_increasing(self) -> bool:
@@ -431,7 +431,7 @@ class NaturalNumber1Sequence(orl.CanonicalOrderable, tuple):
         """
         return all(self.elements[i + 1] >= self.elements[i] for i in range(0, self.length - 1))
 
-    def is_less_than_under_o1(self, s: FlexibleNaturalNumber1Sequence) -> bool:
+    def is_strict_less_than(self, s: FlexibleNaturalNumber1Sequence) -> bool:
         r"""Returns `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_1`, `False` otherwise.
 
         Definition: :math:`\mathcal{O}_1`
@@ -653,7 +653,7 @@ NN1S = NaturalNumber1Sequence  # An alias for NaturalNumberSequence
 # Relation orders
 
 
-class LexicographicOrder(orl.OrderRelation):
+class LexicographicOrder(orl.BinaryRelation):
     r"""The lexicographic order of natural numbers starting at 1.
 
     Note
@@ -693,17 +693,17 @@ class LexicographicOrder(orl.OrderRelation):
 
     """
 
-    def __init__(self):
-        super().__init__(
-            python_type_constraint=NaturalNumber1Sequence,
-            is_antisymmetric=True,
-            is_asymmetric=False,
-            is_connected=True,
-            is_irreflexive=True,
-            is_reflexive=False,
-            is_strongly_connected=False,
-            is_transitive=True
-        )
+    # technical properties
+    _python_type_constraint: type | None = NaturalNumber1Sequence
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = True
+    _is_irreflexive: bool | None = True
+    _is_reflexive: bool | None = False
+    _is_strongly_connected: bool | None = False
+    _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
         x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
@@ -718,9 +718,6 @@ class LexicographicOrder(orl.OrderRelation):
         # All compared elements are equal.
         # Shorter sequence is less
         return len(x) < len(y)
-
-    def is_equal_to(self, x: object, y: object) -> bool:
-        raise util.PunctiliousException("Not implemented.")
 
 
 lexicographic_order = LexicographicOrder()

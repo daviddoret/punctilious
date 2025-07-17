@@ -1,1 +1,1 @@
-import punctilious.order_relation_library as orl
+import punctilious.binary_relation_library as orl
