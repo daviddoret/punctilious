@@ -154,7 +154,7 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder()
 
 
-class GodelNumberEncodingOrder(orl.BinaryRelation):
+class HackedGodelNumberOrder(orl.BinaryRelation):
     r"""The Godel-number-encoding order of (1-based) natural numbers.
 
     Mathematical definition - rank()
@@ -249,7 +249,7 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
             return NaturalNumber0Sequence(*s)
 
 
-godel_number_encoding_order = GodelNumberEncodingOrder()
+hacked_godel_number_order = HackedGodelNumberOrder()
 
 
 class IsEqualTo(orl.BinaryRelation):
@@ -308,7 +308,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
 
     # Configuration of class properties (cf. Relatable).
     _is_equal_to: orl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: orl.BinaryRelation = godel_number_encoding_order
+    _is_strictly_less_than: orl.BinaryRelation = hacked_godel_number_order
 
     def __add__(self, s):
         """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
@@ -668,8 +668,8 @@ FlexibleNaturalNumber0Sequence = typing.Union[
 NN1S = NaturalNumber0Sequence  # An alias for NaturalNumberSequence
 
 for i in range(0, 100):
-    s1 = godel_number_encoding_order.unrank(i)
-    n1 = godel_number_encoding_order.rank(s1)
+    s1 = hacked_godel_number_order.unrank(i)
+    n1 = hacked_godel_number_order.rank(s1)
     print(f"i: {i}, n: {n1}, s: {s1}")
     # s2 = godel_number_encoding_order.successor(s1)
     # n2 = godel_number_encoding_order.rank(s2)
