@@ -5,17 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="godel_number_encoding_order">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/prime_number_library.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_binary_relation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_prime_number.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/punctilious/sandbox_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_1_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_1_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_order_relation.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/prime_number_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/prime_number_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/sandbox.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/sandbox.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_prime_number.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_prime_number.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -383,6 +382,7 @@
     "Python tests.pytest for test_presentation_layer_1.TestMonospace.test_monospace.executor": "Run",
     "Python tests.pytest for test_presentation_layer_1.TestScript.test_script.executor": "Run",
     "Python tests.pytest for test_presentation_layer_1.TestTypesettingConfiguration.test_typesetting_configuration.executor": "Run",
+    "Python tests.pytest for test_prime_number.TestPrimeNumber.test_factorize.executor": "Run",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestAutoDerivation.test_auto_derivation.executor": "Debug",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestAxioms.test_pl1.executor": "Debug",
     "Python tests.pytest for test_propositional_logic_syntax_1.TestHeuristic.test_heuristic.executor": "Run",
@@ -442,7 +442,9 @@
     "Python tests.pytest for test_typesetting.TestIndexSymbol.test_to_string.executor": "Run",
     "Python tests.pytest for test_typesetting.TestProtocolPreference.test_protocol.executor": "Run",
     "Python tests.pytest for test_typesetting.TestSymbols.test_to_string_2.executor": "Run",
+    "Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_decrement_last_element.executor": "Run",
     "Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_deduplicate_integer_sequence.executor": "Run",
+    "Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_increment_last_lement.executor": "Run",
     "Python tests.pytest for test_utils.TestHierarchicalEnum.test_hierarchical_enum.executor": "Run",
     "Python tests.pytest for test_utils.TestTypesettingClass.test_typesetting_class.executor": "Run",
     "Python tests.pytest for test_variable.TestVariable.test_declare_variable.executor": "Run",
@@ -575,6 +577,7 @@
     "Python.meta_language.executor": "Run",
     "Python.minimal_logic_1.executor": "Debug",
     "Python.natural_number_0_library.executor": "Run",
+    "Python.natural_number_0_sequence_library.executor": "Run",
     "Python.natural_number_1_library.executor": "Run",
     "Python.natural_number_1_sequence_library.executor": "Run",
     "Python.natural_number_library.executor": "Run",
@@ -625,7 +628,7 @@
     "Shell Script.build_docs.sh.executor": "Run",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/home/dm3d/PycharmProjects/punctilious/tests",
+    "last_opened_file_path": "/home/dm3d/PycharmProjects/punctilious/src/punctilious",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -678,8 +681,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious" />
+      <recent name="$PROJECT_DIR$/tests" />
       <recent name="$PROJECT_DIR$/src/punctilious/data" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/mappings" />
       <recent name="$PROJECT_DIR$/src/punctilious/data/representations" />
@@ -692,7 +695,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.natural_number_1_sequence_library">
+  <component name="RunManager" selected="Python.natural_number_0_sequence_library">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -739,7 +742,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="natural_number_0_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="natural_number_0_sequence_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -752,29 +755,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="natural_number_1_sequence_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -845,28 +826,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="prime_number_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/prime_number_library.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -989,7 +948,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_prime_number.TestPrimeNumber.test_factorize" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1002,7 +961,58 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order&quot;" />
+      <option name="_new_target" value="&quot;test_prime_number.TestPrimeNumber.test_factorize&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_util.TestDeduplicateIntegerSequence.test_decrement_last_element" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_util.TestDeduplicateIntegerSequence.test_decrement_last_element&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_util.TestDeduplicateIntegerSequence.test_deduplicate_integer_sequence" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_util.TestDeduplicateIntegerSequence.test_deduplicate_integer_sequence&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_util.TestDeduplicateIntegerSequence.test_increment_last_lement" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_util.TestDeduplicateIntegerSequence.test_increment_last_lement&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1024,50 +1034,33 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_prime_number.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_prime_number.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.natural_number_1_sequence_library" />
-      <item itemvalue="Python.prime_number_library" />
-      <item itemvalue="Python.natural_number_0_library" />
+      <item itemvalue="Python.natural_number_0_sequence_library" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order" />
-      <item itemvalue="Python tests.pytest in test_prime_number.py" />
+      <item itemvalue="Python tests.pytest for test_prime_number.TestPrimeNumber.test_factorize" />
+      <item itemvalue="Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_decrement_last_element" />
+      <item itemvalue="Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_deduplicate_integer_sequence" />
+      <item itemvalue="Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_increment_last_lement" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.natural_number_1_sequence_library" />
-        <item itemvalue="Python tests.pytest for test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order" />
-        <item itemvalue="Python.prime_number_library" />
-        <item itemvalue="Python tests.pytest in test_prime_number.py" />
-        <item itemvalue="Python.natural_number_0_library" />
+        <item itemvalue="Python.natural_number_0_sequence_library" />
+        <item itemvalue="Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_deduplicate_integer_sequence" />
+        <item itemvalue="Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_decrement_last_element" />
+        <item itemvalue="Python tests.pytest for test_util.TestDeduplicateIntegerSequence.test_increment_last_lement" />
+        <item itemvalue="Python tests.pytest for test_prime_number.TestPrimeNumber.test_factorize" />
       </list>
     </recent_temporary>
   </component>
@@ -1089,14 +1082,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01499" summary="concatenate_natural_number_sequences">
-      <option name="closed" value="true" />
-      <created>1751283533177</created>
-      <option name="number" value="01499" />
-      <option name="presentableId" value="LOCAL-01499" />
-      <option name="project" value="LOCAL" />
-      <updated>1751283533177</updated>
     </task>
     <task id="LOCAL-01500" summary="concatenate_natural_number_sequences">
       <option name="closed" value="true" />
@@ -1482,7 +1467,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752752754202</updated>
     </task>
-    <option name="localTasksCounter" value="1548" />
+    <task id="LOCAL-01548" summary="godel_number_encoding_order">
+      <option name="closed" value="true" />
+      <created>1752932361674</created>
+      <option name="number" value="01548" />
+      <option name="presentableId" value="LOCAL-01548" />
+      <option name="project" value="LOCAL" />
+      <updated>1752932361674</updated>
+    </task>
+    <option name="localTasksCounter" value="1549" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1670,6 +1663,11 @@
           <url>file://$PROJECT_DIR$/src/punctilious/sandbox_stars_and_bars.py</url>
           <line>128</line>
           <option name="timeStamp" value="424" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/sandbox_2.py</url>
+          <line>78</line>
+          <option name="timeStamp" value="439" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -1,5 +1,21 @@
 # https://oeis.org/A000040
 
+
+def factorize(n: int):
+    """Returns the prime factors (p0, p1, ..., pn) of n."""
+    l = ()
+    p = 1
+    while True:
+        p = get_next_prime(p)
+        f = 0
+        while n % p == 0:
+            f = f + 1
+            n = n / p
+        l = l + (f,)
+        if n == 1:
+            return l
+
+
 def is_prime(n: int):
     r"""Returns `True` if `n` is prime, `False` otherwise."""
 

@@ -4,16 +4,17 @@ import typing
 import collections
 
 # punctilious libraries
-import punctilious.prime_number_library as pnl
-import punctilious.binary_relation_library as orl
 import punctilious.util as util
+import punctilious.binary_relation_library as orl
+import punctilious.natural_number_0_library as nn0l
+import punctilious.prime_number_library as pnl
 
 
 # Relation orders
 
 
 class LexicographicOrder(orl.BinaryRelation):
-    r"""The lexicographic order of natural numbers starting at 1.
+    r"""The lexicographic order of (0-based) natural numbers.
 
     Note
     -----
@@ -23,7 +24,7 @@ class LexicographicOrder(orl.BinaryRelation):
     Mathematical definition
     -------------------------
 
-    Let :math:`S = (s_1, s_2, \ldots, s_m)` and :math:`T = (t_1, t_2, \ldots, t_n)`
+    Let :math:`S = (s_0, s_1, \ldots, s_m)` and :math:`T = (t_0, t_1, \ldots, t_n)`
     be two finite sequences of (1-based) natural numbers with :math:`s_i, t_j \in \mathbb{N}^+`.
 
     We say that :math:`S \prec T` under lexicographic-order if and only if:
@@ -64,8 +65,8 @@ class LexicographicOrder(orl.BinaryRelation):
     _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
-        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
         if x.is_equal_to(y):
             return False
         else:
@@ -88,12 +89,12 @@ lexicographic_order = LexicographicOrder()
 
 
 class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
-    r"""The sum-first-lexicographic-second order of (1-based) natural numbers.
+    r"""The sum-first-lexicographic-second order of (0-based) natural numbers.
 
     Mathematical definition
     -------------------------
 
-    Let :math:`S = (s_1, s_2, \ldots, s_m)` and :math:`T = (t_1, t_2, \ldots, t_n)`
+    Let :math:`S = (s_0, s_1, \ldots, s_m)` and :math:`T = (t_0, t_1, \ldots, t_n)`
     be two finite sequences of (1-based) natural numbers with :math:`s_i, t_j \in \mathbb{N}^+`.
 
     We say that :math:`S \prec T` under sum-lexicographic-order if and only if:
@@ -126,8 +127,8 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
     _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
-        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
         if x.is_equal_to(y):
             return False
         elif x.length < y.length:
@@ -159,12 +160,12 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
     Mathematical definition - rank()
     ----------------------------------
 
-    Let :math:`S = (s_1, s_2, \ldots, s_n)`
+    Let :math:`S = (s_0, s_1, \ldots, s_n)`
     be a finite sequences with :math:`s_i \in \mathbb{N}^+`.
 
-    Let :math:`p_1, p_2, \ldots, p_n` be the first :math:`n` prime numbers in ascending order.
+    Let :math:`p_0, p_1, \ldots, p_n` be the first :math:`n` prime numbers in ascending order.
 
-    :math:`\mathrm{rank}(S) = p_1^{s_1 - 1} \cdot p_2^{s_2 - 1} \ldots p_n^{s_n - 1}
+    :math:`\mathrm{rank}(S) = p_0^{s_0 - 1} \cdot p_1^{s_1 - 1} \ldots p_n^{s_n - 1}
 
     The :math:`- 1` in the ranking formula is necessary to make the function bijective
     when working with 1-based natural numbers.
@@ -172,10 +173,10 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
     Mathematical definition - xRy
     -------------------------------
 
-    Let :math:`S = (s_1, s_2, \ldots, s_n)`
+    Let :math:`S = (s_0, s_1, \ldots, s_n)`
     be a finite sequences with :math:`s_i \in \mathbb{N}^+`.
 
-    Let :math:`T = (t_1, t_2, \ldots, t_n)`
+    Let :math:`T = (t_0, t_1, \ldots, t_n)`
     be a finite sequences with :math:`t_i \in \mathbb{N}^+`.
 
     :math:`S < T` if and only if :math:`\mathrm{rank}(S) < \mathrm{rank}(T)`
@@ -200,36 +201,35 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
     _is_transitive: bool | None = True
 
     def rank(self, x: object) -> int:
-        x = NaturalNumber1Sequence.from_any(x)
-        primes = pnl.get_first_n_primes(len(x))
-        result = 1
-        for i, y in enumerate(x):
-            result *= primes[i] ** (y - 1)
-        return result
+        """
+
+        0 should be mapped to the empty sequence ().
+        1 should be mapped to sequence (0).
+
+        :param x:
+        :return:
+        """
+        x = NaturalNumber0Sequence.from_any(x)
+        if x == NaturalNumber0Sequence():
+            return 0
+        else:
+            n = 1
+            p = 1
+            for i, f in enumerate(x):
+                p = pnl.get_next_prime(p)
+                if i == len(x) - 1:
+                    # this is the last factor
+                    # Increment it to undo the encoding hack for leading zeroes.
+                    f += 1
+                n = n * p ** f
+            return n - 1
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
-        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
-        if x.is_equal_to(y):
-            return False
-        elif x.length < y.length:
-            return True
-        elif y.length < x.length:
-            return False
-        else:
-            minimum_length: int = min(x.length, y.length)
-            i: int
-            for i in range(minimum_length):
-                if x[i] < y[i]:
-                    return True
-                elif x[i] > y[i]:
-                    return False
-            # All compared elements are equal.
-            if len(x) < len(y):
-                # Shorter sequence is less
-                return True
-            else:
-                return False
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        n: int = self.rank(x)
+        m: int = self.rank(y)
+        return n < m
 
     def successor(self, x: object) -> object:
         n = self.rank(x)
@@ -238,20 +238,15 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
         return y
 
     def unrank(self, n: int) -> object:
-        loop = True
-        p = 1
-        s = ()
+        n += 1  # Makes the ranks 0-based.
         if n == 1:
-            return (1,)
+            return NaturalNumber0Sequence()
         else:
-            while n != 1:
-                p = pnl.get_next_prime(p)
-                f = 0
-                while n % p == 0:
-                    f = f + 1
-                    n = n / p
-                s = s + (f + 1,)
-            return s
+            f = pnl.factorize(n)
+            # Decrement the last element by 1.
+            # This hack makes leading zeroes meaningful.
+            s = util.decrement_last_element(f)
+            return NaturalNumber0Sequence(*s)
 
 
 godel_number_encoding_order = GodelNumberEncodingOrder()
@@ -278,9 +273,9 @@ class IsEqualTo(orl.BinaryRelation):
     _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
-        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
-        return x.is_natural_number_1_sequence_equivalent_to(y)
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        return x.is_natural_number_0_sequence_equivalent_to(y)
 
 
 is_equal_to = IsEqualTo()
@@ -288,26 +283,7 @@ is_equal_to = IsEqualTo()
 
 # General functions
 
-def get_sequences_of_natural_numbers_whose_sum_equals_n(n):
-    """Returns the all combinations of natural numbers such that their sum equals `n`.
-
-    :param n:
-    :return:
-    """
-    if n < 1:
-        raise util.PunctiliousException("Invalid parameter", n=n)
-    elif n == 1:
-        yield (1,)
-    else:
-        for first_number in range(n, 0, -1):
-            if first_number == n:
-                yield (first_number,)
-            else:
-                for s in get_sequences_of_natural_numbers_whose_sum_equals_n(n - first_number):
-                    yield (first_number,) + s
-
-
-def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber1Sequence) -> NaturalNumber1Sequence:
+def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
     """Concatenates a collection of :class:`NaturalNumberSequence` elements, preserving order.
 
     :param s:
@@ -315,14 +291,14 @@ def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber1Sequence) -> 
     """
     s: tuple[int] = tuple(itertools.chain.from_iterable(
         t for t in s))
-    return NaturalNumber1Sequence(*s)
+    return NaturalNumber0Sequence(*s)
 
 
 # Classes
 
 
-class NaturalNumber1Sequence(orl.RelationalElement, tuple):
-    """A non-empty, finite (computable) sequence of natural numbers (1 based).
+class NaturalNumber0Sequence(orl.RelationalElement, tuple):
+    """A finite (computable) sequence of (0-based) natural numbers.
 
     Definition:
     An :class:`NaturalNumberSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_j) such that:
@@ -332,14 +308,14 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
 
     # Configuration of class properties (cf. Relatable).
     _is_equal_to: orl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: orl.BinaryRelation = lexicographic_order  # TODO: Replace lexicographic-order with a more powerful order-relation.
+    _is_strictly_less_than: orl.BinaryRelation = godel_number_encoding_order
 
     def __add__(self, s):
         """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
         Or performs a scalar addition if s is an integer.
 
         Note:
-            This enables the usage of the python sum function, e.g.: sum(s1, s2, ...).
+            This enables the usage of the python sum function, e.g.: sum(s0, s1, ...).
 
         :param s:
         :return:
@@ -351,90 +327,50 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         else:
             raise util.PunctiliousException("Unsupported type.")
 
-    def __eq__(self, s) -> bool:
-        """Returns `True` if this natural-number-sequence is equal to natural-number-sequence `s`, `False` otherwise.
-
-        See :attr:`NaturalNumberSequence.is_equal_to` for a definition of natural-number-sequence equality.
-
-        :param s: A natural-number-sequence.
-        :return: `True` if this natural-number-sequence is equal to natural-number-sequence `s`, `False` otherwise.
-        """
-        return self.is_equal_to_under_o1(s)
-
     def __hash__(self):
-        return hash((NaturalNumber1Sequence, *self.elements,))
+        return hash((NaturalNumber0Sequence, NaturalNumber0Sequence._HASH_SEED, *self.elements,))
 
     def __init__(self, *s):
-        super(NaturalNumber1Sequence, self).__init__()
+        super(NaturalNumber0Sequence, self).__init__()
         self._image: tuple[int, ...] | None = None
         self._is_restricted_growth_function_sequence: bool | None = None
-        self._canonical_natural_number_sequence: NaturalNumber1Sequence | None = None
+        self._canonical_natural_number_sequence: NaturalNumber0Sequence | None = None
 
     def __new__(cls, *s):
         v: bool
         s: tuple[int] | None
         r: bool
         v, s = cls.data_validate_elements(s, raise_exception_on_validation_failure=True)
-        s: tuple[int] = super(NaturalNumber1Sequence, cls).__new__(cls, s)
+        s: tuple[int] = super(NaturalNumber0Sequence, cls).__new__(cls, s)
         s: tuple[int] = cls._from_cache(s)
         return s
 
-    _HASH_SEED: int = 7537674779484982803  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
+    _HASH_SEED: int = 6807878777699371138  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
 
     _cache: dict[
-        int, NaturalNumber1Sequence] = dict()  # cache for NaturalNumberSequence.
-    _ordered_set_of_sequence_grouped_by_sum = ()  # A tuple of tuples of RPTs, where _rpt_database[i] gives the list of RPTs of size i + 1
+        int, NaturalNumber0Sequence] = dict()  # cache for NaturalNumberSequence.
 
     @classmethod
-    def _compute_hash(cls, o: FlexibleNaturalNumber1Sequence) -> int:
+    def _compute_hash(cls, o: FlexibleNaturalNumber0Sequence) -> int:
         r"""Exposes the hashing logic as a static method.
 
         :param o: An object that is structurally compatible with a natural-number-sequence.
         :return: The hash of the natural-number-sequence that is structurally equivalent to `o`.
         """
-        return hash((NaturalNumber1Sequence, cls._HASH_SEED, o.elements,))
+        return hash((NaturalNumber0Sequence, cls._HASH_SEED, o.elements,))
 
     @classmethod
-    def _from_cache(cls, o: FlexibleNaturalNumber1Sequence):
+    def _from_cache(cls, o: FlexibleNaturalNumber0Sequence):
         r"""Cache mechanism used in the constructor."""
-        hash_value: int = NaturalNumber1Sequence._compute_hash(o)
+        hash_value: int = NaturalNumber0Sequence._compute_hash(o)
         if hash_value in cls._cache.keys():
             return cls._cache[hash_value]
         else:
             cls._cache[hash_value] = o
             return o
 
-    @classmethod
-    def _generate_o1_ordered_set_of_natural_number_sequences_of_sum_n(cls, n: int):
-        if n < 1:
-            raise util.PunctiliousException("Invalid parameter", n=n)
-        if n == 1:
-            strictly_minimal_element = NaturalNumber1Sequence(1)
-            cls._ordered_set_of_sequence_grouped_by_sum = (
-                (strictly_minimal_element,),)
-        else:
-            sequence_combinations = tuple(get_sequences_of_natural_numbers_whose_sum_equals_n(n - 1))
-            ordered_set_of_natural_number_sequence_of_sum_n = ()
-            for s in sequence_combinations:
-                for i in range(len(s)):
-                    modified = s[:i] + (s[i] + 1,) + s[i + 1:]
-                    modified = NaturalNumber1Sequence(*modified)
-                    if modified not in ordered_set_of_natural_number_sequence_of_sum_n:
-                        # a more optimal algorithm is probably possible,
-                        # avoiding the "not in" check.
-                        ordered_set_of_natural_number_sequence_of_sum_n += (modified,)
-                extended = s + (1,)
-                extended = NaturalNumber1Sequence(*extended)
-                if extended not in ordered_set_of_natural_number_sequence_of_sum_n:
-                    # a more optimal algorithm is probably possible,
-                    # avoiding the "not in" check.
-                    ordered_set_of_natural_number_sequence_of_sum_n += (extended,)
-
-            cls._ordered_set_of_sequence_grouped_by_sum = cls._ordered_set_of_sequence_grouped_by_sum + (
-                ordered_set_of_natural_number_sequence_of_sum_n,)
-
     @property
-    def canonical_natural_number_sequence(self) -> NaturalNumber1Sequence:
+    def canonical_natural_number_sequence(self) -> NaturalNumber0Sequence:
         r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
         by applying canonical labeling.
 
@@ -459,17 +395,17 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
             return self._canonical_natural_number_sequence
         else:
             mapping: dict[int, int] = dict()
-            mapped_value: int = 1
+            mapped_value: int = 0
             n: int
             for n in self:
                 if n not in mapping.keys():
                     mapping[n] = mapped_value
                     mapped_value += 1
             s: tuple[int, ...] = tuple(mapping[n] for n in self)
-            self._canonical_natural_number_sequence = NaturalNumber1Sequence(*s)
+            self._canonical_natural_number_sequence = NaturalNumber0Sequence(*s)
             return self._canonical_natural_number_sequence
 
-    def concatenate_with(self, *s: FlexibleNaturalNumber1Sequence) -> NaturalNumber1Sequence:
+    def concatenate_with(self, *s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
         r"""Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
         or an iterable / generator of multiple :class:`NaturalNumberSequence` elements.
 
@@ -488,9 +424,9 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
     @classmethod
     def data_validate_elements(
             cls,
-            o: FlexibleNaturalNumber1Sequence, raise_exception_on_validation_failure: bool = True) -> \
-            tuple[bool, FlexibleNaturalNumber1Sequence | None]:
-        r"""Validates `o` as a collection of natural number elements,
+            o: FlexibleNaturalNumber0Sequence, raise_exception_on_validation_failure: bool = True) -> \
+            tuple[bool, FlexibleNaturalNumber0Sequence | None]:
+        r"""Validates `o` as a collection of (0-based) natural number elements,
         applying implicit conversion as necessary.
 
         :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
@@ -498,26 +434,12 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         :return: a tuple (v, s) where v is True if data validation was successful, False otherwise,
             and s is the resulting natural-number sequence, or None if data validation failed.
         """
-        if isinstance(o, NaturalNumber1Sequence):
+        if isinstance(o, NaturalNumber0Sequence):
             # data validation is assured by the class logic.
             return True, o
         if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
-            v: bool = True
-            o = tuple(o)
-            if len(o) == 0:
-                if raise_exception_on_validation_failure:
-                    raise util.PunctiliousException(
-                        "A natural-number-sequence must be non-empty and `o` is empty.", o=o)
-                else:
-                    v = False
-            o = tuple(int(n) for n in o)
-            if any(n < 1 for n in o):
-                if raise_exception_on_validation_failure:
-                    raise util.PunctiliousException(
-                        "Natural-number-sequences are 1-based and some element of `o` is less than 1.", o=o)
-                else:
-                    v = False
-            return v, o if v else None
+            o: tuple[nn0l.NaturalNumber0, ...] = tuple(nn0l.NaturalNumber0.from_any(n) for n in o)
+            return True, o
         if raise_exception_on_validation_failure:
             raise util.PunctiliousException("The type of `o` is not supported.", o_type=type(o), o=o)
         else:
@@ -532,7 +454,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         return tuple(super().__iter__())
 
     @classmethod
-    def from_any(cls, o: object) -> NaturalNumber1Sequence:
+    def from_any(cls, o: object) -> NaturalNumber0Sequence:
         r"""Declares a natural-number-sequence from a Python object that can be interpreted as a natural-number-sequence.
 
         Note:
@@ -541,48 +463,13 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         :param o: a Python object that can be interpreted as a natural-number-sequence.
         :return: a natural-number-sequence.
         """
-        if isinstance(o, NaturalNumber1Sequence):
+        if isinstance(o, NaturalNumber0Sequence):
             return o
         if isinstance(o, collections.abc.Iterable):
-            return NaturalNumber1Sequence(*o)
+            return NaturalNumber0Sequence(*o)
         if isinstance(o, collections.abc.Generator):
-            return NaturalNumber1Sequence(*o)
+            return NaturalNumber0Sequence(*o)
         raise util.PunctiliousException('NaturalNumberSequence data validation failure', o=o)
-
-    @classmethod
-    def get_number_of_natural_number_sequences_of_sum_n(cls, n: int) -> int:
-        r"""Returns the number of distinct natural-number-sequences of sum `n`.
-
-        Quotes
-        -------
-
-        "There are 2^(n-1) compositions (ordered partitions) of n (see for example Riordan)." (Ref.: A000079)
-
-        References
-        ____________
-
-        - https://oeis.org/A000079
-
-        :param n:
-        :return:
-        """
-        n = int(n)
-        if n < 1:
-            raise util.PunctiliousException("`n` < 1", n=n)
-        return pow(2, n - 1)
-
-    @classmethod
-    def get_o1_ordered_set_of_natural_number_sequences_of_sum_n(cls, n: int) -> tuple[NaturalNumber1Sequence, ...]:
-        if len(cls._ordered_set_of_sequence_grouped_by_sum) < n:
-            # the database does not contain the natural-number-sequence of that size,
-            # generate them and store them in the database.
-            for missing_tree_size in range(
-                    len(cls._ordered_set_of_sequence_grouped_by_sum) + 1,
-                    n + 1):
-                cls._generate_o1_ordered_set_of_natural_number_sequences_of_sum_n(
-                    missing_tree_size)
-        j = n - 1
-        return cls._ordered_set_of_sequence_grouped_by_sum[j]
 
     @property
     def im(self) -> tuple[int, ...]:
@@ -645,21 +532,8 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         if and only if their canonical-natural-number-sequence are natural-number-sequence-equivalent.
 
         """
-        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        return self.canonical_natural_number_sequence.is_natural_number_1_sequence_equivalent_to(s)
-
-    def is_equal_to_under_o1(self, s: FlexibleNaturalNumber1Sequence):
-        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_1`,
-        `False` otherwise.
-
-        See :attr:`NaturalNumberSequence.is_less_than_under_o1` for a definition of :math:`\mathcal{O}_1`.
-
-        :param s: A natural-number-sequence.
-        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_1`,
-        `False` otherwise.
-        """
-        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        return self.is_natural_number_1_sequence_equivalent_to(s)
+        s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
+        return self.canonical_natural_number_sequence.is_natural_number_0_sequence_equivalent_to(s)
 
     @property
     def is_increasing(self) -> bool:
@@ -676,107 +550,6 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         """
         return all(self.elements[i + 1] >= self.elements[i] for i in range(0, self.length - 1))
 
-    def is_strict_less_than(self, s: FlexibleNaturalNumber1Sequence) -> bool:
-        r"""Returns `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_1`, `False` otherwise.
-
-        Definition: :math:`\mathcal{O}_1`
-        ------------------------------------
-
-        Let :math:`S` and :math:`T` be natural-number-sequences.
-
-        We say that :math:`S \prec T` under :math:`\mathcal{O}_1` if and only if:
-
-        - :math:`\sum{S} < \sum{T}`
-
-        or:
-
-        - :math:`\sum{S} = \sum{T} \land \exists i, s_i > t_i \land \nexists j < i, s_j < t_j`
-
-        Note
-        -----
-        To be a total order, this ordering requires that natural-numbers in natural-number-sequences
-        be 1-based and not 0-based. This is the reason why by design, natural-numbers in
-        natural-number-sequences are 1-based in Punctilious.
-
-        Note
-        -----
-        The interest of this ordering is that an algorithm can easily generate all
-        natural-number-sequences in order, starting from the first one.
-
-        Note
-        -----
-        Another interest for this ordering is that it is a well-founded order,
-        making it usable in recursion proofs.
-        TODO: Include proof that this is a well-founded order.
-
-        Note
-        -----
-        :math:`\mathcal{O}_1` is similar to :math:`\mathcal{O}_2` except that it gives precedence to
-        few large values over multiple small values, e.g.:
-        :math:`(5) \prec (1, 1, 1, 1, 1)`
-
-        :param s: A natural-number-sequence.
-        :return: `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`, `False` otherwise.
-        """
-        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        if self.is_natural_number_1_sequence_equivalent_to(s):
-            return False
-        elif sum(self) < sum(s):
-            return True
-        elif sum(self) > sum(s):
-            return False
-        else:
-            # sum(self) == sum(s)
-            for n, m in zip(self.elements, s.elements):
-                if n > m:
-                    return True
-                if n < m:
-                    return False
-        raise util.PunctiliousException("Unreachable condition")
-
-    def is_less_than_under_o2(self, s: FlexibleNaturalNumber1Sequence) -> bool:
-        r"""Returns `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`, `False` otherwise.
-
-        Definition: :math:`\mathcal{O}_2`
-        ------------------------------------
-
-        :math:`S \prec T` under :math:`\mathcal{O}_2` if and only if:
-
-        - :math:`\sum{S} < \sum{T}`
-
-        or:
-
-        - :math:`\sum{S} = \sum{T} \land \exists i, s_i < t_i \land \nexists j < i, s_j > t_j`
-
-        Note
-        -----
-        :math:`\mathcal{O}_2` is similar to :math:`\mathcal{O}_1` except that it gives precedence to
-        multiple small values over few large values, e.g.:
-        :math:`(1, 1, 1, 1, 1) \prec (5)`
-
-        :param s: A natural-number-sequence.
-        :return: `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`, `False` otherwise.
-        """
-        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        if self.is_natural_number_1_sequence_equivalent_to(s):
-            return False
-        elif sum(self) < sum(s):
-            return True
-        elif sum(self) > sum(s):
-            return False
-        else:
-            # sum(self) == sum(s)
-            for n, m in zip(self.elements, s.elements):
-                if n < m:
-                    return True
-                if n > m:
-                    return False
-        raise util.PunctiliousException("Unreachable condition")
-
-    def is_less_than_under_o3(self, s: FlexibleNaturalNumber1Sequence) -> bool:
-        # TODO: Implement a canonical lexicographic order.
-        pass
-
     @property
     def is_natural_number_sequence(self) -> bool:
         r"""
@@ -788,7 +561,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         """
         return True
 
-    def is_natural_number_1_sequence_equivalent_to(self, s: FlexibleNaturalNumber1Sequence):
+    def is_natural_number_0_sequence_equivalent_to(self, s: FlexibleNaturalNumber0Sequence):
         r"""
 
         Notation:
@@ -802,7 +575,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         :param s:
         :return:
         """
-        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
+        s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
         return self.length == s.length and all(x == y for x, y in zip(self, s))
 
     @property
@@ -882,14 +655,24 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         :return:
         """
         t: tuple[int, ...] = tuple(x + n for x in self.elements)
-        return NaturalNumber1Sequence(*t)
+        return NaturalNumber0Sequence(*t)
 
 
 # Flexible types to facilitate data validation
 
-FlexibleNaturalNumber1Sequence = typing.Union[
-    NaturalNumber1Sequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
+FlexibleNaturalNumber0Sequence = typing.Union[
+    NaturalNumber0Sequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 
-NN1S = NaturalNumber1Sequence  # An alias for NaturalNumberSequence
+NN1S = NaturalNumber0Sequence  # An alias for NaturalNumberSequence
+
+for i in range(0, 100):
+    s1 = godel_number_encoding_order.unrank(i)
+    n1 = godel_number_encoding_order.rank(s1)
+    print(f"i: {i}, n: {n1}, s: {s1}")
+    # s2 = godel_number_encoding_order.successor(s1)
+    # n2 = godel_number_encoding_order.rank(s2)
+    # n3 = n2 - 1
+    # s3 = godel_number_encoding_order.unrank(n3)
+    # print(f"{n1} ({s1}) = {n3} ({s3}). s: {n2} ({s2})")

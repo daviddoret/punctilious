@@ -2,6 +2,15 @@ import typing
 import uuid
 
 
+def decrement_last_element(s):
+    """Receives a sequence of natural numbers (s0, s1, ..., si) and returns (s0, s1, ..., si - 1).
+
+    :param s:
+    :return:
+    """
+    return s[0:-1] + (s[-1] - 1,)
+
+
 def deduplicate_integer_sequence(t: tuple[int, ...]) -> tuple[int, ...]:
     """Given a sequence S of integers, return a sequence T such that:
      - the order and values of elements are preserved with the exception that
@@ -36,6 +45,15 @@ def data_validate_unicity(elements: typing.Iterable, raise_error_on_duplicate: b
         elif raise_error_on_duplicate:
             raise ValueError('Duplicate elements.')
     return tuple(unique_elements)
+
+
+def increment_last_element(s):
+    """Receives a sequence of natural numbers (s0, s1, ..., si) and returns (s0, s1, ..., si + 1).
+
+    :param s:
+    :return:
+    """
+    return s[0:-1] + (s[-1] + 1,)
 
 
 class PunctiliousException(Exception):
