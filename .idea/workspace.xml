@@ -4,18 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="binary-relations">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="godel_number_encoding_order">
+      <change afterPath="$PROJECT_DIR$/src/punctilious/prime_number_library.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_binary_relation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_prime_number.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/order_relation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_number_1_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_1_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_order_relation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_order_relation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_order_relation.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -340,6 +340,7 @@
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_constructor.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_o1.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_order_relation_o2.executor": "Run",
+    "Python tests.pytest for test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order.executor": "Debug",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_natural_number_sequence.executor": "Run",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_canonical_ordering.executor": "Run",
     "Python tests.pytest for test_natural_numbers_sequence.TestNaturalNumbersSequence.test_concatenation.executor": "Run",
@@ -511,6 +512,7 @@
     "Python tests.pytest in test_presentation.py.executor": "Run",
     "Python tests.pytest in test_presentation_1.py.executor": "Debug",
     "Python tests.pytest in test_presentation_layer_1.py.executor": "Run",
+    "Python tests.pytest in test_prime_number.py.executor": "Run",
     "Python tests.pytest in test_propositional_logic_syntax_1.py.executor": "Run",
     "Python tests.pytest in test_pu_03_representation.py.executor": "Run",
     "Python tests.pytest in test_pu_04_formal_language.py.executor": "Run",
@@ -587,6 +589,7 @@
     "Python.pl1.executor": "Run",
     "Python.pl1_presentation.executor": "Run",
     "Python.presentation_layer_1.executor": "Run",
+    "Python.prime_number_library.executor": "Run",
     "Python.propositional_logic_1.executor": "Run",
     "Python.propositional_logic_syntax_1.executor": "Run",
     "Python.pu_05_meta_language.executor": "Run",
@@ -689,7 +692,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_natural_number_0.py">
+  <component name="RunManager" selected="Python.natural_number_1_sequence_library">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -850,6 +853,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="prime_number_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/prime_number_library.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -964,7 +989,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_0.TestNaturalNumber0" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -977,7 +1002,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_0.TestNaturalNumber0&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -999,7 +1024,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_natural_number_0.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in test_prime_number.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1012,24 +1037,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_natural_number_0.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest in test_natural_number_1_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_natural_number_1_sequence.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_prime_number.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -1040,26 +1048,26 @@
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.natural_number_1_sequence_library" />
+      <item itemvalue="Python.prime_number_library" />
       <item itemvalue="Python.natural_number_0_library" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_natural_number_0.TestNaturalNumber0" />
-      <item itemvalue="Python tests.pytest in test_natural_number_0.py" />
-      <item itemvalue="Python tests.pytest in test_natural_number_1_sequence.py" />
+      <item itemvalue="Python tests.pytest for test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order" />
+      <item itemvalue="Python tests.pytest in test_prime_number.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest in test_natural_number_0.py" />
-        <item itemvalue="Python tests.pytest for test_natural_number_0.TestNaturalNumber0" />
-        <item itemvalue="Python.natural_number_0_library" />
-        <item itemvalue="Python tests.pytest in test_natural_number_1_sequence.py" />
         <item itemvalue="Python.natural_number_1_sequence_library" />
+        <item itemvalue="Python tests.pytest for test_natural_number_1_sequence.TestNaturalNumbersSequence.test_godel_number_encoding_order" />
+        <item itemvalue="Python.prime_number_library" />
+        <item itemvalue="Python tests.pytest in test_prime_number.py" />
+        <item itemvalue="Python.natural_number_0_library" />
       </list>
     </recent_temporary>
   </component>
@@ -1081,14 +1089,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01498" summary="Formula">
-      <option name="closed" value="true" />
-      <created>1751261705474</created>
-      <option name="number" value="01498" />
-      <option name="presentableId" value="LOCAL-01498" />
-      <option name="project" value="LOCAL" />
-      <updated>1751261705474</updated>
     </task>
     <task id="LOCAL-01499" summary="concatenate_natural_number_sequences">
       <option name="closed" value="true" />
@@ -1474,7 +1474,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752613842043</updated>
     </task>
-    <option name="localTasksCounter" value="1547" />
+    <task id="LOCAL-01547" summary="binary-relations">
+      <option name="closed" value="true" />
+      <created>1752752754202</created>
+      <option name="number" value="01547" />
+      <option name="presentableId" value="LOCAL-01547" />
+      <option name="project" value="LOCAL" />
+      <updated>1752752754202</updated>
+    </task>
+    <option name="localTasksCounter" value="1548" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1527,7 +1535,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Formula" />
     <MESSAGE value="concatenate_natural_number_sequences" />
     <MESSAGE value="RootedPlaneTree: canonical ordering" />
     <MESSAGE value="NaturalNumberSequence: canonical ordering" />
@@ -1552,7 +1559,8 @@
     <MESSAGE value="relation-orders" />
     <MESSAGE value="order-relations" />
     <MESSAGE value="binary-relations" />
-    <option name="LAST_COMMIT_MESSAGE" value="binary-relations" />
+    <MESSAGE value="godel_number_encoding_order" />
+    <option name="LAST_COMMIT_MESSAGE" value="godel_number_encoding_order" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

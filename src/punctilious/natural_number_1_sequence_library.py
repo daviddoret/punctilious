@@ -4,11 +4,286 @@ import typing
 import collections
 
 # punctilious libraries
+import punctilious.prime_number_library as pnl
 import punctilious.binary_relation_library as orl
 import punctilious.util as util
 
 
-# Data validation functions
+# Relation orders
+
+
+class LexicographicOrder(orl.BinaryRelation):
+    r"""The lexicographic order of natural numbers starting at 1.
+
+    Note
+    -----
+
+    The lexicographic order is not an isomorphism
+
+    Mathematical definition
+    -------------------------
+
+    Let :math:`S = (s_1, s_2, \ldots, s_m)` and :math:`T = (t_1, t_2, \ldots, t_n)`
+    be two finite sequences of (1-based) natural numbers with :math:`s_i, t_j \in \mathbb{N}^+`.
+
+    We say that :math:`S \prec T` under lexicographic-order if and only if:
+
+    :math:`\exists k \leq \min(m,n)` such that :math:`s_i = t_i` for all :math:`i < k` and :math:`s_k < t_k`
+
+    or:
+
+    :math:`m < n` and :math:`s_i = t_i` for all :math:`i = 1, \ldots, m`
+
+    Quotes
+    -------
+
+    "(Lexicographic order.) Let S be well-ordered by ≺, and for n > 0 let Tn
+    be the set of all n-tuples (x1, x2, ..., xn) of elements xj in S.
+    Define (x1, x2, ..., xn) ≺ (y1, y2, ..., yn) if there is some k, 1 ≤ k ≤ n,
+    such that xj = yj for 1 ≤ j < k, but xk ≺ yk in S." [Knuth 1997, p. 20]
+
+    "Here the relation (an, ..., a1) < (bn, ..., b1) denotes lexicographic ordering from left to right;
+    that is, there is an index j such that ak = bk for n ≥ k > j, but aj < bj." [Knuth 1998, p. 6]
+
+    Bibliography
+    --------------
+
+    - Knuth, Donald Ervin. The Art of Computer Programming - Volume 1 - Fundamental Algorithms - Third Edition. 1997.
+    - Knuth, Donald Ervin. The Art of Computer Programming - Volume 3 - Sorting and Searching - Second Edition. 1998.
+
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = True
+    _is_irreflexive: bool | None = True
+    _is_reflexive: bool | None = False
+    _is_strongly_connected: bool | None = False
+    _is_transitive: bool | None = True
+
+    def relates(self, x: object, y: object) -> bool:
+        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
+        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
+        if x.is_equal_to(y):
+            return False
+        else:
+            minimum_length: int = min(x.length, y.length)
+            i: int
+            for i in range(minimum_length):
+                if x[i] < y[i]:
+                    return True
+                elif x[i] > y[i]:
+                    return False
+            # All compared elements are equal.
+            if len(x) < len(y):
+                # Shorter sequence is less
+                return True
+            else:
+                return False
+
+
+lexicographic_order = LexicographicOrder()
+
+
+class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
+    r"""The sum-first-lexicographic-second order of (1-based) natural numbers.
+
+    Mathematical definition
+    -------------------------
+
+    Let :math:`S = (s_1, s_2, \ldots, s_m)` and :math:`T = (t_1, t_2, \ldots, t_n)`
+    be two finite sequences of (1-based) natural numbers with :math:`s_i, t_j \in \mathbb{N}^+`.
+
+    We say that :math:`S \prec T` under sum-lexicographic-order if and only if:
+
+    :math:`\sum{S} < \sum{T}`
+
+    or:
+
+    :math:`\sum{S} = \sum{T} \land \exists k \leq \min(m,n)` such that :math:`s_i = t_i` for all :math:`i < k` and :math:`s_k < t_k`
+
+    or:
+
+    :math:`\sum{S} = \sum{T} \land m < n` and :math:`s_i = t_i` for all :math:`i = 1, \ldots, m`
+
+    See also
+    ----------
+
+    - :class:`LexicographicOrder`
+
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = True
+    _is_irreflexive: bool | None = True
+    _is_reflexive: bool | None = False
+    _is_strongly_connected: bool | None = False
+    _is_transitive: bool | None = True
+
+    def relates(self, x: object, y: object) -> bool:
+        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
+        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
+        if x.is_equal_to(y):
+            return False
+        elif x.length < y.length:
+            return True
+        elif y.length < x.length:
+            return False
+        else:
+            minimum_length: int = min(x.length, y.length)
+            i: int
+            for i in range(minimum_length):
+                if x[i] < y[i]:
+                    return True
+                elif x[i] > y[i]:
+                    return False
+            # All compared elements are equal.
+            if len(x) < len(y):
+                # Shorter sequence is less
+                return True
+            else:
+                return False
+
+
+sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder()
+
+
+class GodelNumberEncodingOrder(orl.BinaryRelation):
+    r"""The Godel-number-encoding order of (1-based) natural numbers.
+
+    Mathematical definition - rank()
+    ----------------------------------
+
+    Let :math:`S = (s_1, s_2, \ldots, s_n)`
+    be a finite sequences with :math:`s_i \in \mathbb{N}^+`.
+
+    Let :math:`p_1, p_2, \ldots, p_n` be the first :math:`n` prime numbers in ascending order.
+
+    :math:`\mathrm{rank}(S) = p_1^{s_1 - 1} \cdot p_2^{s_2 - 1} \ldots p_n^{s_n - 1}
+
+    The :math:`- 1` in the ranking formula is necessary to make the function bijective
+    when working with 1-based natural numbers.
+
+    Mathematical definition - xRy
+    -------------------------------
+
+    Let :math:`S = (s_1, s_2, \ldots, s_n)`
+    be a finite sequences with :math:`s_i \in \mathbb{N}^+`.
+
+    Let :math:`T = (t_1, t_2, \ldots, t_n)`
+    be a finite sequences with :math:`t_i \in \mathbb{N}^+`.
+
+    :math:`S < T` if and only if :math:`\mathrm{rank}(S) < \mathrm{rank}(T)`
+
+    Note
+    ------
+
+    The Gödel-number-encoding order has the following disadvantages:
+
+    - it grows very fast,
+    - unranking requires factorization (but not so hard because primes are taken in sequence).
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = True
+    _is_irreflexive: bool | None = True
+    _is_reflexive: bool | None = False
+    _is_strongly_connected: bool | None = False
+    _is_transitive: bool | None = True
+
+    def rank(self, x: object) -> int:
+        x = NaturalNumber1Sequence.from_any(x)
+        primes = pnl.get_first_n_primes(len(x))
+        result = 1
+        for i, y in enumerate(x):
+            result *= primes[i] ** (y - 1)
+        return result
+
+    def relates(self, x: object, y: object) -> bool:
+        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
+        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
+        if x.is_equal_to(y):
+            return False
+        elif x.length < y.length:
+            return True
+        elif y.length < x.length:
+            return False
+        else:
+            minimum_length: int = min(x.length, y.length)
+            i: int
+            for i in range(minimum_length):
+                if x[i] < y[i]:
+                    return True
+                elif x[i] > y[i]:
+                    return False
+            # All compared elements are equal.
+            if len(x) < len(y):
+                # Shorter sequence is less
+                return True
+            else:
+                return False
+
+    def successor(self, x: object) -> object:
+        n = self.rank(x)
+        n += 1
+        y = self.unrank(n)
+        return y
+
+    def unrank(self, n: int) -> object:
+        loop = True
+        p = 1
+        s = ()
+        if n == 1:
+            return (1,)
+        else:
+            while n != 1:
+                p = pnl.get_next_prime(p)
+                f = 0
+                while n % p == 0:
+                    f = f + 1
+                    n = n / p
+                s = s + (f + 1,)
+            return s
+
+
+godel_number_encoding_order = GodelNumberEncodingOrder()
+
+
+class IsEqualTo(orl.BinaryRelation):
+    r"""The equality binary-relation for 0-based natural numbers.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{N}_0, = )`.
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = False
+    _is_irreflexive: bool | None = False
+    _is_reflexive: bool | None = True
+    _is_strongly_connected: bool | None = False
+    _is_symmetric: bool | None = True
+    _is_transitive: bool | None = True
+
+    def relates(self, x: object, y: object) -> bool:
+        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
+        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
+        return x.is_natural_number_1_sequence_equivalent_to(y)
+
+
+is_equal_to = IsEqualTo()
 
 
 # General functions
@@ -55,6 +330,10 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
 
     """
 
+    # Configuration of class properties (cf. Relatable).
+    _is_equal_to: orl.BinaryRelation = is_equal_to
+    _is_strictly_less_than: orl.BinaryRelation = lexicographic_order  # TODO: Replace lexicographic-order with a more powerful order-relation.
+
     def __add__(self, s):
         """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
         Or performs a scalar addition if s is an integer.
@@ -90,14 +369,6 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         self._image: tuple[int, ...] | None = None
         self._is_restricted_growth_function_sequence: bool | None = None
         self._canonical_natural_number_sequence: NaturalNumber1Sequence | None = None
-
-    def __lt__(self, s) -> bool:
-        r"""Returns `True` if this natural-number-sequence is less than formula `s` under :math:`\mathcal{O}_1`, `False` otherwise.
-
-        See :attr:`NaturalNumberSequence.is_less_than_under_o1` for a definition of :math:`\mathcal{O}_1`.
-
-        """
-        return self.is_strict_less_than(s)
 
     def __new__(cls, *s):
         v: bool
@@ -375,7 +646,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
 
         """
         s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        return self.canonical_natural_number_sequence.is_natural_number_sequence_equivalent_to(s)
+        return self.canonical_natural_number_sequence.is_natural_number_1_sequence_equivalent_to(s)
 
     def is_equal_to_under_o1(self, s: FlexibleNaturalNumber1Sequence):
         r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_1`,
@@ -388,33 +659,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         `False` otherwise.
         """
         s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        return self.is_natural_number_sequence_equivalent_to(s)
-
-    #    def is_equal_to_under_o2(self, s: FlexibleNaturalNumber1Sequence):
-    #        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_2`,
-    #        `False` otherwise.
-    #
-    #        See :attr:`NaturalNumberSequence.is_less_than_under_o2` for a definition of :math:`\mathcal{O}_2`.
-    #
-    #        :param s: A natural-number-sequence.
-    #        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_2`,
-    #        `False` otherwise.
-    #        """
-    #        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-    #        return self.is_natural_number_sequence_equivalent_to(s)
-    #
-    #    def is_equal_to_under_o3(self, s: FlexibleNaturalNumber1Sequence):
-    #        r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_3`,
-    #        `False` otherwise.
-    #
-    #        See :attr:`NaturalNumberSequence.is_less_than_under_o3` for a definition of :math:`\mathcal{O}_3`.
-    #
-    #        :param s: A natural-number-sequence.
-    #        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`  under :math:`\mathcal{O}_3`,
-    #        `False` otherwise.
-    #        """
-    #        s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-    #        return self.is_natural_number_sequence_equivalent_to(s)
+        return self.is_natural_number_1_sequence_equivalent_to(s)
 
     @property
     def is_increasing(self) -> bool:
@@ -474,7 +719,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         :return: `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`, `False` otherwise.
         """
         s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        if self.is_natural_number_sequence_equivalent_to(s):
+        if self.is_natural_number_1_sequence_equivalent_to(s):
             return False
         elif sum(self) < sum(s):
             return True
@@ -513,7 +758,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         :return: `True` if this natural-number-sequence is less than `s` under :math:`\mathcal{O}_2`, `False` otherwise.
         """
         s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        if self.is_natural_number_sequence_equivalent_to(s):
+        if self.is_natural_number_1_sequence_equivalent_to(s):
             return False
         elif sum(self) < sum(s):
             return True
@@ -543,7 +788,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         """
         return True
 
-    def is_natural_number_sequence_equivalent_to(self, s: FlexibleNaturalNumber1Sequence):
+    def is_natural_number_1_sequence_equivalent_to(self, s: FlexibleNaturalNumber1Sequence):
         r"""
 
         Notation:
@@ -649,75 +894,14 @@ FlexibleNaturalNumber1Sequence = typing.Union[
 
 NN1S = NaturalNumber1Sequence  # An alias for NaturalNumberSequence
 
+s = NaturalNumber1Sequence(1, )
+print(s)
 
-# Relation orders
-
-
-class LexicographicOrder(orl.BinaryRelation):
-    r"""The lexicographic order of natural numbers starting at 1.
-
-    Note
-    -----
-    The lexicographic order is not an isomorphism 
-
-    Mathematical definition
-    -------------------------
-
-    Let :math:`S = (s_1, s_2, \ldots, s_m)` and :math:`T = (t_1, t_2, \ldots, t_n)` be two finite sequences of natural numbers with :math:`s_i, t_j \in \mathbb{N}^+`.
-
-    We say that :math:`S \prec T` under lexicographic-order if and only if:
-
-    :math:`\exists k \leq \min(m,n)` such that :math:`s_i = t_i` for all :math:`i < k` and :math:`s_k < t_k`
-
-    or:
-
-    :math:`m < n` and :math:`s_i = t_i` for all :math:`i = 1, \ldots, m`
-
-    Quotes
-    -------
-
-    "(Lexicographic order.) Let S be well-ordered by ≺, and for n > 0 let Tn
-    be the set of all n-tuples (x1, x2, ..., xn) of elements xj in S.
-    Define (x1, x2, ..., xn) ≺ (y1, y2, ..., yn) if there is some k, 1 ≤ k ≤ n,
-    such that xj = yj for 1 ≤ j < k, but xk ≺ yk in S." [Knuth 1997, p. 20]
-
-    "Here the relation (an, ..., a1) < (bn, ..., b1) denotes lexicographic ordering from left to right;
-    that is, there is an index j such that ak = bk for n ≥ k > j, but aj < bj." [Knuth 1998, p. 6]
-
-    Bibliography
-    --------------
-
-    - Knuth, Donald Ervin. The Art of Computer Programming - Volume 1 - Fundamental Algorithms - Third Edition. 1997.
-    - Knuth, Donald Ervin. The Art of Computer Programming - Volume 3 - Sorting and Searching - Second Edition. 1998.
-
-
-    """
-
-    # technical properties
-    _python_type_constraint: type | None = NaturalNumber1Sequence
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
-
-    def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
-        y: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(y)
-        minimum_length: int = min(x.length, y.length)
-        i: int
-        for i in range(minimum_length):
-            if x[i] < y[i]:
-                return True
-            elif x[i] > y[i]:
-                return False
-        # All compared elements are equal.
-        # Shorter sequence is less
-        return len(x) < len(y)
-
-
-lexicographic_order = LexicographicOrder()
+for i in range(1, 100):
+    s1 = godel_number_encoding_order.unrank(i)
+    s2 = godel_number_encoding_order.successor(s1)
+    n1 = godel_number_encoding_order.rank(s1)
+    n2 = godel_number_encoding_order.rank(s2)
+    n3 = n2 - 1
+    s3 = godel_number_encoding_order.unrank(n3)
+    print(f"{n1} ({s1}) = {n3} ({s3}). s: {n2} ({s2})")

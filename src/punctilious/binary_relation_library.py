@@ -4,7 +4,11 @@ import util
 
 
 class BinaryRelation(abc.ABC):
-    r"""An abstract class of binary-relation.
+    r"""An abstract class for binary-relations.
+
+    Note
+    -----
+    This abstract class exposes the :meth:`BinaryRelation.relates`.
 
 
     Bibliography
@@ -22,16 +26,6 @@ class BinaryRelation(abc.ABC):
     _is_reflexive: bool | None = None
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = None
-
-    @abc.abstractmethod
-    def relates(self, x: object, y: object) -> bool:
-        r"""Returns `True` if :math:`xRy`, `False` otherwise.
-
-        :param y:
-        :param x:
-        :return:
-        """
-        raise util.PunctiliousException("Abstract method.")
 
     @property
     def is_a_non_strict_total_order(self) -> bool | None:
@@ -290,6 +284,52 @@ class BinaryRelation(abc.ABC):
         """
         return self.__class__._is_transitive
 
+    def rank(self, x: object) -> int:
+        r"""If the binary-relation is an order-relation that is homomorphic to the natural numbers,
+        and if a ranking algorithm is configured,
+        returns the rank of object `x`.
+
+        :math:`\mathrm{rank}(x) = n`.
+
+        :param x:
+        :return:
+        """
+
+        raise util.PunctiliousException("Abstract method.")
+
+    def relates(self, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param y:
+        :param x:
+        :return:
+        """
+        raise util.PunctiliousException("Abstract method.")
+
+    def unrank(self, n: int) -> object:
+        r"""If the binary-relation is an order-relation that is homomorphic to the natural numbers,
+        and if an unranking algorithm is configured,
+        returns the object :math:`x` such that :math:`\mathrm{rank}(x) = n`.
+
+        :param n:
+        :return:
+        """
+        raise util.PunctiliousException("Abstract method.")
+
+
+def rank(x: object, o: BinaryRelation | None) -> int:
+    r"""If the binary-relation `o` is an order-relation that is homomorphic to the natural numbers,
+    and if a ranking algorithm is configured,
+    returns the rank of object `x`.
+
+    :math:`\mathrm{rank}(x) = n`.
+
+    :param x:
+    :return:
+    """
+
+    return o.rank(x)
+
 
 def relates(x: object, y: object, o: BinaryRelation | None) -> bool:
     r"""Returns `True` if :math:`xRy` under `o`, `False` otherwise.
@@ -299,7 +339,18 @@ def relates(x: object, y: object, o: BinaryRelation | None) -> bool:
     :param o: A binary-relation.
     :return: `True` if :math:`x \prec y`, `False` otherwise.
     """
-    return o.relates(x=x, y=y)
+    return o.unrank(x=x, y=y)
+
+
+def unrank(n: int, o: BinaryRelation | None) -> object:
+    r"""If the binary-relation is an order-relation that is homomorphic to the natural numbers,
+    and if an unranking algorithm is configured,
+    returns the object :math:`x` such that :math:`\mathrm{rank}(x) = n`.
+
+    :param o:
+    :return:
+    """
+    return o.unrank(n)
 
 
 class RelationalElement(abc.ABC):

@@ -38,34 +38,34 @@ class TestNaturalNumbersSequence:
 
     def test_is_natural_numbers_sequence_equivalent_to(self, nns0, nns00, nns01, nns10, nns012345, nns746107,
                                                        nns0123456789_10_11):
-        assert nns0.is_natural_number_sequence_equivalent_to(nns0)
-        assert nns00.is_natural_number_sequence_equivalent_to(nns00)
-        assert nns01.is_natural_number_sequence_equivalent_to(nns01)
-        assert nns10.is_natural_number_sequence_equivalent_to(nns10)
-        assert nns012345.is_natural_number_sequence_equivalent_to(nns012345)
-        assert nns746107.is_natural_number_sequence_equivalent_to(nns746107)
-        assert nns0123456789_10_11.is_natural_number_sequence_equivalent_to(nns0123456789_10_11)
+        assert nns0.is_natural_number_1_sequence_equivalent_to(nns0)
+        assert nns00.is_natural_number_1_sequence_equivalent_to(nns00)
+        assert nns01.is_natural_number_1_sequence_equivalent_to(nns01)
+        assert nns10.is_natural_number_1_sequence_equivalent_to(nns10)
+        assert nns012345.is_natural_number_1_sequence_equivalent_to(nns012345)
+        assert nns746107.is_natural_number_1_sequence_equivalent_to(nns746107)
+        assert nns0123456789_10_11.is_natural_number_1_sequence_equivalent_to(nns0123456789_10_11)
 
-        assert not nns0.is_natural_number_sequence_equivalent_to(nns00)
-        assert not nns0.is_natural_number_sequence_equivalent_to(nns01)
-        assert not nns0.is_natural_number_sequence_equivalent_to(nns10)
-        assert not nns0.is_natural_number_sequence_equivalent_to(nns012345)
-        assert not nns0.is_natural_number_sequence_equivalent_to(nns746107)
-        assert not nns0.is_natural_number_sequence_equivalent_to(nns0123456789_10_11)
+        assert not nns0.is_natural_number_1_sequence_equivalent_to(nns00)
+        assert not nns0.is_natural_number_1_sequence_equivalent_to(nns01)
+        assert not nns0.is_natural_number_1_sequence_equivalent_to(nns10)
+        assert not nns0.is_natural_number_1_sequence_equivalent_to(nns012345)
+        assert not nns0.is_natural_number_1_sequence_equivalent_to(nns746107)
+        assert not nns0.is_natural_number_1_sequence_equivalent_to(nns0123456789_10_11)
 
-        assert not nns00.is_natural_number_sequence_equivalent_to(nns0)
-        assert not nns00.is_natural_number_sequence_equivalent_to(nns01)
-        assert not nns00.is_natural_number_sequence_equivalent_to(nns10)
-        assert not nns00.is_natural_number_sequence_equivalent_to(nns012345)
-        assert not nns00.is_natural_number_sequence_equivalent_to(nns746107)
-        assert not nns00.is_natural_number_sequence_equivalent_to(nns0123456789_10_11)
+        assert not nns00.is_natural_number_1_sequence_equivalent_to(nns0)
+        assert not nns00.is_natural_number_1_sequence_equivalent_to(nns01)
+        assert not nns00.is_natural_number_1_sequence_equivalent_to(nns10)
+        assert not nns00.is_natural_number_1_sequence_equivalent_to(nns012345)
+        assert not nns00.is_natural_number_1_sequence_equivalent_to(nns746107)
+        assert not nns00.is_natural_number_1_sequence_equivalent_to(nns0123456789_10_11)
 
-        assert not nns10.is_natural_number_sequence_equivalent_to(nns0)
-        assert not nns10.is_natural_number_sequence_equivalent_to(nns00)
-        assert not nns10.is_natural_number_sequence_equivalent_to(nns01)
-        assert not nns10.is_natural_number_sequence_equivalent_to(nns012345)
-        assert not nns10.is_natural_number_sequence_equivalent_to(nns746107)
-        assert not nns10.is_natural_number_sequence_equivalent_to(nns0123456789_10_11)
+        assert not nns10.is_natural_number_1_sequence_equivalent_to(nns0)
+        assert not nns10.is_natural_number_1_sequence_equivalent_to(nns00)
+        assert not nns10.is_natural_number_1_sequence_equivalent_to(nns01)
+        assert not nns10.is_natural_number_1_sequence_equivalent_to(nns012345)
+        assert not nns10.is_natural_number_1_sequence_equivalent_to(nns746107)
+        assert not nns10.is_natural_number_1_sequence_equivalent_to(nns0123456789_10_11)
 
     def test_concatenate_single(self, nns0, nns00, nns01, nns012345, nns0123456789_10_11):
         assert nns0.concatenate_with(nns00) == pu.nnsl.NaturalNumber1Sequence(*nns0, *nns00)
@@ -196,3 +196,20 @@ class TestNaturalNumbersSequence:
                 # print(f"i={i}, j={j}, assert not( t[j]={t[j]} < t[i]={t[i]} )")
                 assert not t[j].is_strict_less_than(t[i])
                 assert not t[j] < t[i]
+
+    def test_godel_number_encoding_order(self):
+
+        s = pu.nnsl.NaturalNumber1Sequence(1, )
+        n = pu.nnsl.godel_number_encoding_order.rank(s)
+        t = pu.nnsl.godel_number_encoding_order.unrank(n)
+        assert s == t
+
+        s = pu.nnsl.NaturalNumber1Sequence(1, 2, 3, )
+        n = pu.nnsl.godel_number_encoding_order.rank(s)
+        t = pu.nnsl.godel_number_encoding_order.unrank(n)
+        assert s == t
+
+        s = pu.nnsl.NaturalNumber1Sequence(6, 3, 3, 3, 1, 6, )
+        n = pu.nnsl.godel_number_encoding_order.rank(s)
+        t = pu.nnsl.godel_number_encoding_order.unrank(n)
+        assert s == t

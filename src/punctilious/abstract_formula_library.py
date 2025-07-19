@@ -559,7 +559,7 @@ class AbstractFormula(tuple):
         """
         phi: AbstractFormula = AbstractFormula.from_any(phi)
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
-            phi.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_sequence_equivalent_to(
+            phi.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_1_sequence_equivalent_to(
             phi.natural_number_sequence)
 
     def is_abstract_formula_equivalent_to_with_variables(self, phi: AbstractFormula,

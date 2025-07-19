@@ -8,23 +8,24 @@ import util
 
 
 class IsEqualTo(orl.BinaryRelation):
-    r"""The equality binary-relation.
+    r"""The equality binary-relation for 0-based natural numbers.
 
     Mathematical definition
     -------------------------
 
-    :math:`( \mathbb{N}^{+}, = )`.
+    :math:`( \mathbb{N}_0, = )`.
 
     """
 
     # mathematical properties
-    _is_antisymmetric: bool | None = None
-    _is_asymmetric: bool | None = None
-    _is_connected: bool | None = None
-    _is_irreflexive: bool | None = None
-    _is_reflexive: bool | None = None
-    _is_strongly_connected: bool | None = None
-    _is_transitive: bool | None = None
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = False
+    _is_irreflexive: bool | None = False
+    _is_reflexive: bool | None = True
+    _is_strongly_connected: bool | None = False
+    _is_symmetric: bool | None = True
+    _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
         x: NaturalNumber0 = NaturalNumber0.from_any(x)
