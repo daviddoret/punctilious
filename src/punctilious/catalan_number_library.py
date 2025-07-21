@@ -24,4 +24,22 @@ def get_catalan_number(n: int) -> int:
     return math.comb(2 * n, n) // (n + 1)
 
 
+def get_catalan_triangle_number(n: int, k: int):
+    r"""Compute the Catalan triangle value C(n, k).
+
+    Bibliography
+    --------------
+
+    - https://en.wikipedia.org/wiki/Catalan%27s_triangle
+
+    """
+    if k > n or k < 0:
+        return 0
+    if k == 0 or k == n:
+        return 1
+    return get_catalan_triangle_number(n - 1, k) + get_catalan_triangle_number(n, k - 1)
+
+
 c = get_catalan_number  # Shortcut for get_catalan_number
+
+ct = get_catalan_triangle_number  # Shortcut for get_catalan_triangle_number

@@ -87,7 +87,7 @@ class RecursiveCatalanLukasiewiczOrder(orl.BinaryRelation):
             return RootedPlaneTree(*s)
 
 
-godel_number_order = GodelNumberEncodingOrder()
+godel_number_order = RecursiveCatalanLukasiewiczOrder()
 
 
 class RootedPlaneTree(tuple):
@@ -185,21 +185,26 @@ class RootedPlaneTree(tuple):
             return o
 
     @property
-    def ahu_unsorted_string(self) -> str:
-        """Returns the AHU (Aho, Hopcroft, and Ullman) unsorted encoding of this `RootedPlaneTree`.
+    def dyck_string(self) -> str:
+        r"""The Dyck string of this 0-based natural number sequence.
 
-        It is unsorted because children are not sorted, because this is an ordered tree.
-        In consequence, this AHU encoding is not comparable to the AHU encoding of an unordered tree.
+        Definition - Dyck string:
+        A Dyck string is a string of balanced parentheses.
+
+        References:
+        - https://en.wikipedia.org/wiki/Dyck_language
+        - AHU (Aho, Hopcroft, and Ullman)
 
         :return:
         """
         if self.is_leaf:
             return "()"
-        child_encodings = [child.ahu_unsorted_string for child in self.immediate_subtrees]
-        return "(" + "".join(child_encodings) + ")"
+        else:
+            child_encodings = [child.dyck_string for child in self.immediate_subtrees]
+            return "(" + "".join(child_encodings) + ")"
 
     @property
-    def ahu_unsorted_inverted_binary_string(self) -> str:
+    def dyck_string_inverted_binary_string(self) -> str:
         """Returns the AHU integer of this `RootedPlaneTree`.
 
         It is unsorted because children are not sorted, because this is an ordered tree.
@@ -211,10 +216,10 @@ class RootedPlaneTree(tuple):
 
         """
         translation: dict = str.maketrans({'(': '1', ')': '0'})
-        return self.ahu_unsorted_string.translate(translation)
+        return self.dyck_string.translate(translation)
 
     @property
-    def ahu_unsorted_inverted_integer(self) -> int:
+    def dyck_string_inverted_integer(self) -> int:
         """Returns the AHU integer of this `RootedPlaneTree`.
 
         It is unsorted because children are not sorted, because this is an ordered tree.
@@ -225,7 +230,7 @@ class RootedPlaneTree(tuple):
         thus avoids any conflict in integer values.
 
         """
-        return int(self.ahu_unsorted_inverted_binary_string, base=2)
+        return int(self.dyck_string_inverted_binary_string, base=2)
 
     @property
     def degree(self) -> int:

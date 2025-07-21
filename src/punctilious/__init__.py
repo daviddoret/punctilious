@@ -5,6 +5,7 @@ import punctilious.catalan_number_library as catalan_number_library
 import punctilious.natural_number_0_library as natural_number_0_library
 import punctilious.prime_number_library as prime_number_library
 import punctilious.natural_number_1_library as natural_number_1_library
+import punctilious.dyck_word_library as dyck_word_library
 import punctilious.rooted_plane_tree_library as rooted_plane_tree_library
 import punctilious.rooted_plane_tree_catalog as rooted_plane_tree_catalog
 import punctilious.connective_library as connective_library
@@ -21,6 +22,7 @@ brl = binary_relation_library
 cl = connective_library
 cc = connective_catalog
 csl = connective_sequence_library
+dwl = dyck_word_library
 fl = formula_library
 nn0l = natural_number_0_library
 nn1l = natural_number_1_library
@@ -35,6 +37,7 @@ __all__ = [
     "connective_library", "cl",
     "connective_catalog", "cc",
     "connective_sequence_library", "csl",
+    "dyck_word_library", "dwl",
     "formula_library", "fl",
     "natural_number_0_library", "nn0l",
     "natural_number_1_library", "nn1l",

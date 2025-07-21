@@ -93,7 +93,7 @@ is_strictly_less_than: IsStrictlyLessThan = IsStrictlyLessThan()  # The canonica
 # Main class
 
 class NaturalNumber0(orl.RelationalElement, int):
-    r"""A natural number starting at 0.
+    r"""A 0-based natural number.
 
     Mathematical definition
     -------------------------

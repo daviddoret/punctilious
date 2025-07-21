@@ -44,22 +44,22 @@ class TestRootedPlaneTree:
         assert t12.size == 12
 
     def test_ahu_unsorted_string(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        assert t1_a.ahu_unsorted_string == "()"
-        assert t2_a_aa.ahu_unsorted_string == "(())"
-        assert t6_a_aa_ab_ac_ad_ae.ahu_unsorted_string == "(()()()()())"
-        assert t12.ahu_unsorted_string == "(()(())(()()()()())(()))"
+        assert t1_a.dyck_string == "()"
+        assert t2_a_aa.dyck_string == "(())"
+        assert t6_a_aa_ab_ac_ad_ae.dyck_string == "(()()()()())"
+        assert t12.dyck_string == "(()(())(()()()()())(()))"
 
     def test_ahu_unsorted_inverted_binary_string(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        assert t1_a.ahu_unsorted_inverted_binary_string == "10"
-        assert t2_a_aa.ahu_unsorted_inverted_binary_string == "1100"
-        assert t6_a_aa_ab_ac_ad_ae.ahu_unsorted_inverted_binary_string == "110101010100"
-        assert t12.ahu_unsorted_inverted_binary_string == "110110011010101010011000"
+        assert t1_a.dyck_string_inverted_binary_string == "10"
+        assert t2_a_aa.dyck_string_inverted_binary_string == "1100"
+        assert t6_a_aa_ab_ac_ad_ae.dyck_string_inverted_binary_string == "110101010100"
+        assert t12.dyck_string_inverted_binary_string == "110110011010101010011000"
 
     def test_ahu_unsorted_inverted_integer(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        assert t1_a.ahu_unsorted_inverted_integer == 2
-        assert t2_a_aa.ahu_unsorted_inverted_integer == 12
-        assert t6_a_aa_ab_ac_ad_ae.ahu_unsorted_inverted_integer == 3412
-        assert t12.ahu_unsorted_inverted_integer == 14264984
+        assert t1_a.dyck_string_inverted_integer == 2
+        assert t2_a_aa.dyck_string_inverted_integer == 12
+        assert t6_a_aa_ab_ac_ad_ae.dyck_string_inverted_integer == 3412
+        assert t12.dyck_string_inverted_integer == 14264984
 
     def test_is_rooted_plane_tree_equivalent_to(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
         # equivalence with self
