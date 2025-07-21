@@ -246,6 +246,10 @@ def data_validate_dyck_work(s: str) -> bool:
         bool: True if the string is a Dyck word, False otherwise
     """
     s = str(s)
+
+    if len(s) == 0:
+        raise util.PunctiliousException("The empty string is not recognized as a valid Dyck word.")
+
     balance = 0
 
     for char in s:
@@ -274,6 +278,7 @@ class DyckWord(orl.RelationalElement, str):
     ---------------
 
     - https://en.wikipedia.org/wiki/Dyck_language
+    - https://blogs.ams.org/visualinsight/2015/07/15/dyck-words/
 
     """
 
