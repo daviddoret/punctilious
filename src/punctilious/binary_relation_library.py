@@ -356,7 +356,7 @@ def relates(x: object, y: object, o: BinaryRelation | None) -> bool:
     :param o: A binary-relation.
     :return: `True` if :math:`x \prec y`, `False` otherwise.
     """
-    return o.unrank(x=x, y=y)
+    return o.relates(x=x, y=y)
 
 
 def unrank(n: int, o: BinaryRelation | None) -> object:

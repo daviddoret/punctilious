@@ -1083,14 +1083,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01505" summary="AbstractFormula: canonical ordering">
-      <option name="closed" value="true" />
-      <created>1751434246464</created>
-      <option name="number" value="01505" />
-      <option name="presentableId" value="LOCAL-01505" />
-      <option name="project" value="LOCAL" />
-      <updated>1751434246464</updated>
-    </task>
     <task id="LOCAL-01506" summary="Using more elegant approach MyClass.fromBlablabla">
       <option name="closed" value="true" />
       <created>1751435295346</created>
@@ -1475,7 +1467,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753126576524</updated>
     </task>
-    <option name="localTasksCounter" value="1554" />
+    <task id="LOCAL-01554" summary="dyck-words">
+      <option name="closed" value="true" />
+      <created>1753127211938</created>
+      <option name="number" value="01554" />
+      <option name="presentableId" value="LOCAL-01554" />
+      <option name="project" value="LOCAL" />
+      <updated>1753127211939</updated>
+    </task>
+    <option name="localTasksCounter" value="1555" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

@@ -1,6 +1,5 @@
 from __future__ import annotations
 import typing
-import math
 import punctilious.binary_relation_library as orl
 import punctilious.util as util
 import punctilious.catalan_number_library as cnl
