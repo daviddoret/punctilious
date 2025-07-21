@@ -11,14 +11,14 @@ import collections
 import punctilious.util as util
 import punctilious.catalan_number_library as cnl
 import punctilious.binary_relation_library as orl
+import punctilious.dyck_word_library as dwl
 
 
-class RecursiveCatalanLukasiewiczOrder(orl.BinaryRelation):
-    r"""The recursive Catalan-Lukasiewicz relation order of rooted plane trees.
+class DyckWordLexicographicOder(orl.BinaryRelation):
+    r"""The Dyck word lexicographic relation order of rooted plane trees.
 
     Mathematical definition - xRy
     -------------------------------
-
 
     :math:`xRy` if and only if `
 
@@ -41,6 +41,10 @@ class RecursiveCatalanLukasiewiczOrder(orl.BinaryRelation):
     _is_symmetric: bool | None = False
     _is_transitive: bool | None = True
 
+    @property
+    def least_element(self) -> object:
+        return RootedPlaneTree()
+
     def rank(self, x: object) -> int:
         """
 
@@ -50,17 +54,9 @@ class RecursiveCatalanLukasiewiczOrder(orl.BinaryRelation):
         :param x:
         :return:
         """
-        x = RootedPlaneTree.from_any(x)
-        if x.is_leaf:
-            return 0
-        else:
-            # rank : sum of the Catalan(i) * (rang du sous-arbre i + 1)
-            n: int = 0
-            for i, subtree in enumerate(x.immediate_subtrees):
-                n += cnl.get_catalan_number(
-                    sum(len(c[1]) for c in x.immediate_subtrees[i + 1:])) * (
-                             self.rank(subtree) + 1)
-            return n
+        x: RootedPlaneTree = RootedPlaneTree.from_any(x)
+        d: dwl.DyckWord = x.dyck_word
+        return dwl.lexicographic_order.rank(d)
 
     def relates(self, x: object, y: object) -> bool:
         x: RootedPlaneTree = RootedPlaneTree.from_any(x)
@@ -76,18 +72,13 @@ class RecursiveCatalanLukasiewiczOrder(orl.BinaryRelation):
         return y
 
     def unrank(self, n: int) -> object:
-        n += 1  # Makes the ranks 0-based.
-        if n == 1:
-            return RootedPlaneTree()
-        else:
-            f = pnl.factorize(n)
-            # Decrement the last element by 1.
-            # This hack makes leading zeroes meaningful.
-            s = util.decrement_last_element(f)
-            return RootedPlaneTree(*s)
+        n: int = int(n)
+        d: dwl.DyckWord = dwl.lexicographic_order.unrank(n)
+        t: RootedPlaneTree = RootedPlaneTree.from_dyck_word(d)
+        return t
 
 
-godel_number_order = RecursiveCatalanLukasiewiczOrder()
+dyck_word_lexicographic_order = DyckWordLexicographicOder()
 
 
 class RootedPlaneTree(tuple):
@@ -185,8 +176,8 @@ class RootedPlaneTree(tuple):
             return o
 
     @property
-    def dyck_string(self) -> str:
-        r"""The Dyck string of this 0-based natural number sequence.
+    def dyck_word(self) -> dwl.DyckWord:
+        r"""The Dyck string representation of this rooted plane tree.
 
         Definition - Dyck string:
         A Dyck string is a string of balanced parentheses.
@@ -195,42 +186,14 @@ class RootedPlaneTree(tuple):
         - https://en.wikipedia.org/wiki/Dyck_language
         - AHU (Aho, Hopcroft, and Ullman)
 
-        :return:
+        :return: A Dyck word.
         """
         if self.is_leaf:
-            return "()"
+            return dwl.DyckWord("()")
         else:
-            child_encodings = [child.dyck_string for child in self.immediate_subtrees]
-            return "(" + "".join(child_encodings) + ")"
-
-    @property
-    def dyck_string_inverted_binary_string(self) -> str:
-        """Returns the AHU integer of this `RootedPlaneTree`.
-
-        It is unsorted because children are not sorted, because this is an ordered tree.
-        In consequence, this AHU encoding is not comparable to the AHU encoding of an unordered tree.
-
-        It is inverted because `(` is mapped to `1` and `)` is mapped to `0`.
-        This avoids leading zeroes in the binary representation of the integer,
-        thus avoids any conflict in integer values.
-
-        """
-        translation: dict = str.maketrans({'(': '1', ')': '0'})
-        return self.dyck_string.translate(translation)
-
-    @property
-    def dyck_string_inverted_integer(self) -> int:
-        """Returns the AHU integer of this `RootedPlaneTree`.
-
-        It is unsorted because children are not sorted, because this is an ordered tree.
-        In consequence, this AHU encoding is not comparable to the AHU encoding of an unordered tree.
-
-        It is inverted because `(` is mapped to `1` and `)` is mapped to `0`.
-        This avoids leading zeroes in the binary representation of the integer,
-        thus avoids any conflict in integer values.
-
-        """
-        return int(self.dyck_string_inverted_binary_string, base=2)
+            child_encodings = [child.dyck_word for child in self.immediate_subtrees]
+            raw_string: str = "(" + "".join(child_encodings) + ")"
+            return dwl.DyckWord(raw_string)
 
     @property
     def degree(self) -> int:
@@ -257,6 +220,35 @@ class RootedPlaneTree(tuple):
         if isinstance(o, collections.abc.Generator):
             return RootedPlaneTree(*o)
         raise util.PunctiliousException('FlexibleRootedPlaneTree data validation failure', o=o)
+
+    @classmethod
+    def from_dyck_word(cls, o: dwl.FlexibleDyckWord) -> RootedPlaneTree:
+        """Declares a rooted-plane-tree from a Dyck word.
+
+        :param o: a Dyck word.
+        :return: a rooted-plane-tree.
+        """
+        o: dwl.DyckWord = dwl.DyckWord.from_any(o)
+        stack = []
+        current = None
+        for char in o:
+            if char == '(':
+                new_node = []
+                if stack:
+                    stack[-1].append(new_node)
+                stack.append(new_node)
+            elif char == ')':
+                if len(stack) > 1:
+                    current = stack.pop()
+                    # Convert to tuple when popping
+                    stack[-1][-1] = tuple(current) if current else ()
+                else:
+                    current = stack.pop()
+                    current = tuple(current) if current else ()
+
+        t: tuple = current if current is not None else ()
+        t: RootedPlaneTree = RootedPlaneTree.from_tuple_tree(t)
+        return t
 
     @classmethod
     def from_immediate_subtrees(cls, *t: FlexibleRootedPlaneTree) -> RootedPlaneTree:

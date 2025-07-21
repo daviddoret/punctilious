@@ -43,23 +43,11 @@ class TestRootedPlaneTree:
         assert t6_a_aa_ab_ac_ad_ae.size == 6
         assert t12.size == 12
 
-    def test_ahu_unsorted_string(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        assert t1_a.dyck_string == "()"
-        assert t2_a_aa.dyck_string == "(())"
-        assert t6_a_aa_ab_ac_ad_ae.dyck_string == "(()()()()())"
-        assert t12.dyck_string == "(()(())(()()()()())(()))"
-
-    def test_ahu_unsorted_inverted_binary_string(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        assert t1_a.dyck_string_inverted_binary_string == "10"
-        assert t2_a_aa.dyck_string_inverted_binary_string == "1100"
-        assert t6_a_aa_ab_ac_ad_ae.dyck_string_inverted_binary_string == "110101010100"
-        assert t12.dyck_string_inverted_binary_string == "110110011010101010011000"
-
-    def test_ahu_unsorted_inverted_integer(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        assert t1_a.dyck_string_inverted_integer == 2
-        assert t2_a_aa.dyck_string_inverted_integer == 12
-        assert t6_a_aa_ab_ac_ad_ae.dyck_string_inverted_integer == 3412
-        assert t12.dyck_string_inverted_integer == 14264984
+    def test_dyck_word(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
+        assert t1_a.dyck_word == "()"
+        assert t2_a_aa.dyck_word == "(())"
+        assert t6_a_aa_ab_ac_ad_ae.dyck_word == "(()()()()())"
+        assert t12.dyck_word == "(()(())(()()()()())(()))"
 
     def test_is_rooted_plane_tree_equivalent_to(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
         # equivalence with self
@@ -290,3 +278,15 @@ class TestRootedPlaneTree:
         assert pu.rptc.t4_a_aa_aaa_ab == s4[2]
         assert pu.rptc.t4_a_aa_ab_aba == s4[3]
         assert pu.rptc.t4_a_aa_ab_ac == s4[4]
+
+    def test_dyck_word_lexicographic_order(self):
+        for n in range(0, 100):
+            t1 = pu.rptl.dyck_word_lexicographic_order.unrank(n)
+            d1 = pu.dwl.lexicographic_order.unrank(n)
+            assert t1.dyck_word == d1
+            d2 = t1.dyck_word
+            assert d1 == d2
+            n2 = pu.rptl.dyck_word_lexicographic_order.rank(t1)
+            assert n2 == n
+            n3 = pu.dwl.lexicographic_order.rank(d1)
+            assert n3 == n2
