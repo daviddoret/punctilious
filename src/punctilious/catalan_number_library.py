@@ -1,7 +1,9 @@
 import math
+import functools
 import punctilious.util as util
 
 
+@functools.lru_cache(maxsize=None)
 def get_catalan_number(n: int) -> int:
     """Returns the `n`-th Catalan number with `n` index starting at 0.
 
@@ -18,7 +20,8 @@ def get_catalan_number(n: int) -> int:
     n: int = int(n)
     if n < 0:
         raise util.PunctiliousException("`n` must be greater or equal to 0.")
-    return int(math.factorial(2 * n) / (math.factorial(n) * math.factorial(n + 1)))
+    # return int(math.factorial(2 * n) / (math.factorial(n) * math.factorial(n + 1)))
+    return math.comb(2 * n, n) // (n + 1)
 
 
 c = get_catalan_number  # Shortcut for get_catalan_number

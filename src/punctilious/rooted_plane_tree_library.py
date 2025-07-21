@@ -6,8 +6,88 @@ import typing
 import collections
 # import weakref
 
+
 # Punctilious modules
 import punctilious.util as util
+import punctilious.catalan_number_library as cnl
+import punctilious.binary_relation_library as orl
+
+
+class RecursiveCatalanLukasiewiczOrder(orl.BinaryRelation):
+    r"""The recursive Catalan-Lukasiewicz relation order of rooted plane trees.
+
+    Mathematical definition - xRy
+    -------------------------------
+
+
+    :math:`xRy` if and only if `
+
+    Mathematical definition - rank()
+    ----------------------------------
+
+
+    :math:`\mathrm{rank}(S) = `
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = True
+    _is_connected: bool | None = True
+    _is_irreflexive: bool | None = True
+    _is_order_isomorphic_to_n_strictly_less_than: bool | None = True
+    _is_reflexive: bool | None = False
+    _is_strongly_connected: bool | None = False
+    _is_symmetric: bool | None = False
+    _is_transitive: bool | None = True
+
+    def rank(self, x: object) -> int:
+        """
+
+        0 should be mapped to the empty sequence ().
+        1 should be mapped to sequence (0).
+
+        :param x:
+        :return:
+        """
+        x = RootedPlaneTree.from_any(x)
+        if x.is_leaf:
+            return 0
+        else:
+            # rank : sum of the Catalan(i) * (rang du sous-arbre i + 1)
+            n: int = 0
+            for i, subtree in enumerate(x.immediate_subtrees):
+                n += cnl.get_catalan_number(
+                    sum(len(c[1]) for c in x.immediate_subtrees[i + 1:])) * (
+                             self.rank(subtree) + 1)
+            return n
+
+    def relates(self, x: object, y: object) -> bool:
+        x: RootedPlaneTree = RootedPlaneTree.from_any(x)
+        y: RootedPlaneTree = RootedPlaneTree.from_any(y)
+        n: int = self.rank(x)
+        m: int = self.rank(y)
+        return n < m
+
+    def successor(self, x: object) -> object:
+        n = self.rank(x)
+        n += 1
+        y = self.unrank(n)
+        return y
+
+    def unrank(self, n: int) -> object:
+        n += 1  # Makes the ranks 0-based.
+        if n == 1:
+            return RootedPlaneTree()
+        else:
+            f = pnl.factorize(n)
+            # Decrement the last element by 1.
+            # This hack makes leading zeroes meaningful.
+            s = util.decrement_last_element(f)
+            return RootedPlaneTree(*s)
+
+
+godel_number_order = GodelNumberEncodingOrder()
 
 
 class RootedPlaneTree(tuple):

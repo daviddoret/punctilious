@@ -154,21 +154,121 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder()
 
 
-class HackedGodelNumberOrder(orl.BinaryRelation):
-    r"""The Godel-number-encoding order of (1-based) natural numbers.
+class GodelNumberEncodingOrder(orl.BinaryRelation):
+    r"""The Godel-number-encoding relation order of (0-based) natural number sequences.
+
+    Mathematical definition - xRy
+    -------------------------------
+
+    Let :math:`x = (s_0, s_1, \ldots, s_n)`
+    be a finite sequences with :math:`s_i \in \mathbb{N}^+`.
+
+    Let :math:`y = (t_0, t_1, \ldots, t_n)`
+    be a finite sequences with :math:`t_i \in \mathbb{N}^+`.
+
+    :math:`xRy` if and only if :math:`\mathrm{rank}(S) < \mathrm{rank}(T)`
 
     Mathematical definition - rank()
     ----------------------------------
 
     Let :math:`S = (s_0, s_1, \ldots, s_n)`
-    be a finite sequences with :math:`s_i \in \mathbb{N}^+`.
+    be a finite sequence with :math:`s_i \in \mathbb{N}^+`.
 
     Let :math:`p_0, p_1, \ldots, p_n` be the first :math:`n` prime numbers in ascending order.
 
-    :math:`\mathrm{rank}(S) = p_0^{s_0 - 1} \cdot p_1^{s_1 - 1} \ldots p_n^{s_n - 1}
+    :math:`\mathrm{rank}(S) = p_0^{s_0} \cdot p_1^{s_1} \ldots p_n^{s_n}`
 
-    The :math:`- 1` in the ranking formula is necessary to make the function bijective
-    when working with 1-based natural numbers.
+    Note
+    ------
+
+    The Gödel-number-encoding order has the following disadvantages:
+
+    - it is not bijective with the natural numbers,
+    - it grows very fast,
+    - unranking requires factorization (but easy in practice because primes are taken in sequence).
+
+    Note
+    -----
+
+    :math:`rank((1)) = 2^1 = 2`
+
+    :math:`rank((1,0)) = 2^1 * 3^0 = 2`
+
+    It follows that the Gödel-number-encoding order is not injective.
+
+    It follows that the Gödel-number-encoding order is not bijective.
+
+    It follows that the Gödel-number-encoding order is not isomorphic to (N, <).
+
+    See the :class:`RefinedGodelNumberEncodingOrder` for an improved version of
+    the Gödel-number-encoding order that is isomorphic to (N, <).
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = True
+    _is_irreflexive: bool | None = True
+    _is_order_isomorphic_to_n_strictly_less_than: bool | None = False
+    _is_reflexive: bool | None = False
+    _is_strongly_connected: bool | None = False
+    _is_transitive: bool | None = True
+
+    def rank(self, x: object) -> int:
+        """
+
+        0 should be mapped to the empty sequence ().
+        1 should be mapped to sequence (0).
+
+        :param x:
+        :return:
+        """
+        x = NaturalNumber0Sequence.from_any(x)
+        if x == NaturalNumber0Sequence():
+            return 0
+        else:
+            n = 1
+            p = 1
+            for i, f in enumerate(x):
+                p = pnl.get_next_prime(p)
+                if i == len(x) - 1:
+                    # this is the last factor
+                    # Increment it to undo the encoding hack for leading zeroes.
+                    f += 1
+                n = n * p ** f
+            return n - 1
+
+    def relates(self, x: object, y: object) -> bool:
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        n: int = self.rank(x)
+        m: int = self.rank(y)
+        return n < m
+
+    def successor(self, x: object) -> object:
+        n = self.rank(x)
+        n += 1
+        y = self.unrank(n)
+        return y
+
+    def unrank(self, n: int) -> object:
+        n += 1  # Makes the ranks 0-based.
+        if n == 1:
+            return NaturalNumber0Sequence()
+        else:
+            f = pnl.factorize(n)
+            # Decrement the last element by 1.
+            # This hack makes leading zeroes meaningful.
+            s = util.decrement_last_element(f)
+            return NaturalNumber0Sequence(*s)
+
+
+godel_number_order = GodelNumberEncodingOrder()
+
+
+class RefinedGodelNumberOrder(orl.BinaryRelation):
+    r"""The refined Godel-number-encoding order of (0-based) natural number sequences.
 
     Mathematical definition - xRy
     -------------------------------
@@ -180,6 +280,19 @@ class HackedGodelNumberOrder(orl.BinaryRelation):
     be a finite sequences with :math:`t_i \in \mathbb{N}^+`.
 
     :math:`S < T` if and only if :math:`\mathrm{rank}(S) < \mathrm{rank}(T)`
+
+    Mathematical definition - rank()
+    ----------------------------------
+
+    Let :math:`S = (s_0, s_1, \ldots, s_n)`
+    be a finite sequence with :math:`s_i \in \mathbb{N}^+`.
+
+    Let :math:`p_0, p_1, \ldots, p_n` be the first :math:`n` prime numbers in ascending order.
+
+    :math:`\mathrm{rank}(S) = p_0^{s_0 - 1} \cdot p_1^{s_1 - 1} \ldots p_n^{s_n - 1}
+
+    The :math:`- 1` in the ranking formula is necessary to make the function bijective
+    when working with 1-based natural numbers.
 
     Note
     ------
@@ -249,7 +362,7 @@ class HackedGodelNumberOrder(orl.BinaryRelation):
             return NaturalNumber0Sequence(*s)
 
 
-hacked_godel_number_order = HackedGodelNumberOrder()
+refined_godel_number_order = RefinedGodelNumberOrder()
 
 
 class IsEqualTo(orl.BinaryRelation):
@@ -308,7 +421,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
 
     # Configuration of class properties (cf. Relatable).
     _is_equal_to: orl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: orl.BinaryRelation = hacked_godel_number_order
+    _is_strictly_less_than: orl.BinaryRelation = refined_godel_number_order
 
     def __add__(self, s):
         """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
@@ -668,8 +781,8 @@ FlexibleNaturalNumber0Sequence = typing.Union[
 NN1S = NaturalNumber0Sequence  # An alias for NaturalNumberSequence
 
 for i in range(0, 100):
-    s1 = hacked_godel_number_order.unrank(i)
-    n1 = hacked_godel_number_order.rank(s1)
+    s1 = refined_godel_number_order.unrank(i)
+    n1 = refined_godel_number_order.rank(s1)
     print(f"i: {i}, n: {n1}, s: {s1}")
     # s2 = godel_number_encoding_order.successor(s1)
     # n2 = godel_number_encoding_order.rank(s2)

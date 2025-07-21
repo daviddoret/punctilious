@@ -23,6 +23,7 @@ class BinaryRelation(abc.ABC):
     _is_asymmetric: bool | None = None
     _is_connected: bool | None = None
     _is_irreflexive: bool | None = None
+    _is_order_isomorphic_to_n_strictly_less_than: bool | None = None
     _is_reflexive: bool | None = None
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = None
