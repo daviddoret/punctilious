@@ -49,6 +49,10 @@ class LexicographicOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = True
 
+    @property
+    def least_element(self) -> object:
+        return DyckWord("()")
+
     def rank(self, x: object) -> int:
         """
         Given a primitive Dyck word s (a well‐formed parenthesis string
@@ -132,6 +136,13 @@ class LexicographicOrder(orl.BinaryRelation):
         x: DyckWord = DyckWord.from_any(x)
         y: DyckWord = DyckWord.from_any(y)
         return self.rank(x) < self.rank(y)
+
+    def successor(self, x: object) -> object:
+        x: DyckWord = DyckWord.from_any(x)
+        n: int = self.rank(x)
+        n_prime = n + 1
+        y: DyckWord = self.unrank(n_prime)
+        return y
 
     def unrank(self, n: int) -> object:
         """

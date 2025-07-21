@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="godel_number_encoding_order">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="dyck-words">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/dyck_word_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/dyck_word_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_dyck_word.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_dyck_word.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,7 +246,7 @@
     "Python tests.pytest for test_connective_sequence.TestConnectiveSequence.test_connective_sequence.executor": "Run",
     "Python tests.pytest for test_connector.TestRestrictedGrowthFunctionSequence.test_connector.executor": "Run",
     "Python tests.pytest for test_connector_sequence.TestConnectorSequence.test_connector_sequence.executor": "Run",
-    "Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word.executor": "Debug",
+    "Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word.executor": "Run",
     "Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word_trivial.executor": "Run",
     "Python tests.pytest for test_erratic_dyck_path.TestErraticDyckPath.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
@@ -693,7 +695,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word_trivial">
+  <component name="RunManager" selected="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1054,10 +1056,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word" />
         <item itemvalue="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word_trivial" />
         <item itemvalue="Python tests.pytest in test_dyck_word.py" />
         <item itemvalue="Python.sandbox_2" />
-        <item itemvalue="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word" />
         <item itemvalue="Python tests.pytest for sandbox_2.test_ranking_unranking" />
       </list>
     </recent_temporary>
@@ -1080,14 +1082,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01504" summary="AbstractFormula: canonical ordering">
-      <option name="closed" value="true" />
-      <created>1751396632025</created>
-      <option name="number" value="01504" />
-      <option name="presentableId" value="LOCAL-01504" />
-      <option name="project" value="LOCAL" />
-      <updated>1751396632025</updated>
     </task>
     <task id="LOCAL-01505" summary="AbstractFormula: canonical ordering">
       <option name="closed" value="true" />
@@ -1473,7 +1467,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753126312680</updated>
     </task>
-    <option name="localTasksCounter" value="1553" />
+    <task id="LOCAL-01553" summary="dyck-words">
+      <option name="closed" value="true" />
+      <created>1753126576524</created>
+      <option name="number" value="01553" />
+      <option name="presentableId" value="LOCAL-01553" />
+      <option name="project" value="LOCAL" />
+      <updated>1753126576524</updated>
+    </task>
+    <option name="localTasksCounter" value="1554" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1526,7 +1528,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="concatenate_natural_number_sequences" />
     <MESSAGE value="RootedPlaneTree: canonical ordering" />
     <MESSAGE value="NaturalNumberSequence: canonical ordering" />
     <MESSAGE value="AbstractFormula: canonical ordering" />
@@ -1551,7 +1552,8 @@
     <MESSAGE value="order-relations" />
     <MESSAGE value="binary-relations" />
     <MESSAGE value="godel_number_encoding_order" />
-    <option name="LAST_COMMIT_MESSAGE" value="godel_number_encoding_order" />
+    <MESSAGE value="dyck-words" />
+    <option name="LAST_COMMIT_MESSAGE" value="dyck-words" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

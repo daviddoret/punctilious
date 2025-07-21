@@ -285,6 +285,14 @@ class BinaryRelation(abc.ABC):
         """
         return self.__class__._is_transitive
 
+    @property
+    def least_element(self) -> object:
+        r"""If this is a relation order, and if it has a unique least element, returns that element.
+
+        :return:
+        """
+        raise util.PunctiliousException("Abstract method.")
+
     def rank(self, x: object) -> int:
         r"""If the binary-relation is an order-relation that is homomorphic to the natural numbers,
         and if a ranking algorithm is configured,
@@ -302,6 +310,14 @@ class BinaryRelation(abc.ABC):
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param y:
+        :param x:
+        :return:
+        """
+        raise util.PunctiliousException("Abstract method.")
+
+    def successor(self, x: object) -> object:
+        r"""Returns the successor of `x`.
+
         :param x:
         :return:
         """
