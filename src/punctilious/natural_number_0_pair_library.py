@@ -65,8 +65,8 @@ class LexicographicOrder(orl.BinaryRelation):
     _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
+        y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         if x.is_equal_to(y):
             return False
         else:
@@ -127,8 +127,8 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
     _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
+        y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         if x.is_equal_to(y):
             return False
         elif x.length < y.length:
@@ -224,8 +224,8 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
         :param x:
         :return:
         """
-        x = NaturalNumber0Sequence.from_any(x)
-        if x == NaturalNumber0Sequence():
+        x = NaturalNumber0Pair.from_any(x)
+        if x == NaturalNumber0Pair():
             return 0
         else:
             n = 1
@@ -240,8 +240,8 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
             return n - 1
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
+        y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         n: int = self.rank(x)
         m: int = self.rank(y)
         return n < m
@@ -255,13 +255,13 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
     def unrank(self, n: int) -> object:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
-            return NaturalNumber0Sequence()
+            return NaturalNumber0Pair()
         else:
             f = pnl.factorize(n)
             # Decrement the last element by 1.
             # This hack makes leading zeroes meaningful.
             s = util.decrement_last_element(f)
-            return NaturalNumber0Sequence(*s)
+            return NaturalNumber0Pair(*s)
 
 
 godel_number_order = GodelNumberEncodingOrder()
@@ -322,8 +322,8 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
         :param x:
         :return:
         """
-        x = NaturalNumber0Sequence.from_any(x)
-        if x == NaturalNumber0Sequence():
+        x = NaturalNumber0Pair.from_any(x)
+        if x == NaturalNumber0Pair():
             return 0
         else:
             n = 1
@@ -338,8 +338,8 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
             return n - 1
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
+        y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         n: int = self.rank(x)
         m: int = self.rank(y)
         return n < m
@@ -353,13 +353,13 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
     def unrank(self, n: int) -> object:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
-            return NaturalNumber0Sequence()
+            return NaturalNumber0Pair()
         else:
             f = pnl.factorize(n)
             # Decrement the last element by 1.
             # This hack makes leading zeroes meaningful.
             s = util.decrement_last_element(f)
-            return NaturalNumber0Sequence(*s)
+            return NaturalNumber0Pair(*s)
 
 
 refined_godel_number_order = RefinedGodelNumberOrder()
@@ -386,36 +386,19 @@ class IsEqualTo(orl.BinaryRelation):
     _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
-        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
-        return x.is_natural_number_0_sequence_equivalent_to(y)
+        x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
+        y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
+        return x.is_natural_number_0_pair_equivalent_to(y)
 
 
 is_equal_to = IsEqualTo()
 
 
-# General functions
-
-def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
-    """Concatenates a collection of :class:`NaturalNumberSequence` elements, preserving order.
-
-    :param s:
-    :return:
-    """
-    s: tuple[int] = tuple(itertools.chain.from_iterable(
-        t for t in s))
-    return NaturalNumber0Sequence(*s)
-
-
 # Classes
 
 
-class NaturalNumber0Sequence(orl.RelationalElement, tuple):
-    """A finite (computable) sequence of (0-based) natural numbers.
-
-    Definition:
-    An :class:`NaturalNumberSequence` is a finite sequence of natural numbers (n_0, n_1, ..., n_j) such that:
-        - n_i >= 0 for 0 <= i <= j
+class NaturalNumber0Pair(orl.RelationalElement, tuple):
+    """A pair of (0-based) natural numbers.
 
     """
 
@@ -424,66 +407,62 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
     _is_strictly_less_than: orl.BinaryRelation = refined_godel_number_order
 
     def __add__(self, s):
-        """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
-        Or performs a scalar addition if s is an integer.
-
-        Note:
-            This enables the usage of the python sum function, e.g.: sum(s0, s1, ...).
+        """Performs a scalar addition if s is an integer.
 
         :param s:
         :return:
         """
         if isinstance(s, int):
             return self.scalar_addition(n=s)
-        elif isinstance(s, typing.Iterable):
-            return concatenate_natural_number_sequences(self, s)
         else:
             raise util.PunctiliousException("Unsupported type.")
 
     def __hash__(self):
-        return hash((NaturalNumber0Sequence, NaturalNumber0Sequence._HASH_SEED, *self.elements,))
+        return hash((NaturalNumber0Pair, NaturalNumber0Pair._HASH_SEED, *self.elements,))
 
     def __init__(self, *s):
-        super(NaturalNumber0Sequence, self).__init__()
+        super(NaturalNumber0Pair, self).__init__()
         self._image: tuple[int, ...] | None = None
         self._is_restricted_growth_function_sequence: bool | None = None
-        self._restricted_growth_function_sequence: NaturalNumber0Sequence | None = None
+        self._restricted_growth_function_sequence: NaturalNumber0Pair | None = None
 
     def __new__(cls, *s):
         v: bool
         s: tuple[int] | None
         r: bool
         v, s = cls.data_validate_elements(s, raise_exception_on_validation_failure=True)
-        s: tuple[int] = super(NaturalNumber0Sequence, cls).__new__(cls, s)
+        s: tuple[int] = super(NaturalNumber0Pair, cls).__new__(cls, s)
         s: tuple[int] = cls._from_cache(s)
+        if len(s) != 2:
+            raise util.PunctiliousException("A pair must contain strictly two elements.", s=s)
         return s
 
-    _HASH_SEED: int = 6807878777699371138  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
+    _HASH_SEED: int = 6599904930401148556  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
 
     _cache: dict[
-        int, NaturalNumber0Sequence] = dict()  # cache for NaturalNumberSequence.
+        int, NaturalNumber0Pair] = dict()  # cache for NaturalNumber0Pair.
 
     @classmethod
-    def _compute_hash(cls, o: FlexibleNaturalNumber0Sequence) -> int:
+    def _compute_hash(cls, o: FlexibleNaturalNumber0Pair) -> int:
         r"""Exposes the hashing logic as a static method.
 
-        :param o: An object that is structurally compatible with a natural-number-sequence.
-        :return: The hash of the natural-number-sequence that is structurally equivalent to `o`.
+        :param o: An object that is structurally compatible with a natural-number-0-pair.
+        :return: The hash of the natural-number-0-pair that is structurally equivalent to `o`.
         """
-        return hash((NaturalNumber0Sequence, cls._HASH_SEED, o.elements,))
+        return hash((NaturalNumber0Pair, cls._HASH_SEED, o.elements,))
 
     @classmethod
-    def _from_cache(cls, o: FlexibleNaturalNumber0Sequence):
+    def _from_cache(cls, o: FlexibleNaturalNumber0Pair):
         r"""Cache mechanism used in the constructor."""
-        hash_value: int = NaturalNumber0Sequence._compute_hash(o)
+        hash_value: int = NaturalNumber0Pair._compute_hash(o)
         if hash_value in cls._cache.keys():
             return cls._cache[hash_value]
         else:
             cls._cache[hash_value] = o
             return o
 
-    def to_restricted_growth_function_sequence(self) -> NaturalNumber0Sequence:
-        r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
+    def to_restricted_growth_function_sequence(self) -> NaturalNumber0Pair:
+        r"""Converts the natural-number-0-pair `s` into a restricted-growth-function-sequence `t`,
         by applying canonical labeling.
 
         Notation:
@@ -514,39 +493,23 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
                     mapping[n] = mapped_value
                     mapped_value += 1
             s: tuple[int, ...] = tuple(mapping[n] for n in self)
-            self._restricted_growth_function_sequence = NaturalNumber0Sequence(*s)
+            self._restricted_growth_function_sequence = NaturalNumber0Pair(*s)
             return self._restricted_growth_function_sequence
-
-    def concatenate_with(self, *s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
-        r"""Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
-        or an iterable / generator of multiple :class:`NaturalNumberSequence` elements.
-
-        Notation:
-        :math:`S \mathbin{+\!\!+} T`
-
-        Shortcuts:
-        s1 + s2
-        sum(s1, s2, ..., sn)
-
-        :param s:
-        :return:
-        """
-        return concatenate_natural_number_sequences(self, *s)
 
     @classmethod
     def data_validate_elements(
             cls,
-            o: FlexibleNaturalNumber0Sequence, raise_exception_on_validation_failure: bool = True) -> \
-            tuple[bool, FlexibleNaturalNumber0Sequence | None]:
+            o: FlexibleNaturalNumber0Pair, raise_exception_on_validation_failure: bool = True) -> \
+            tuple[bool, FlexibleNaturalNumber0Pair | None]:
         r"""Validates `o` as a collection of (0-based) natural number elements,
         applying implicit conversion as necessary.
 
-        :param o: An object that may be interpreted as a :class:`NaturalNumberSequence`.
+        :param o: An object that may be interpreted as a :class:`NaturalNumber0Pair`.
         :param raise_exception_on_validation_failure: Raises an exception if data validation fails.
         :return: a tuple (v, s) where v is True if data validation was successful, False otherwise,
             and s is the resulting natural-number sequence, or None if data validation failed.
         """
-        if isinstance(o, NaturalNumber0Sequence):
+        if isinstance(o, NaturalNumber0Pair):
             # data validation is assured by the class logic.
             return True, o
         if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
@@ -559,38 +522,38 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
 
     @property
     def elements(self) -> tuple[int, ...]:
-        r"""Returns a tuple of the elements that compose this :class:`NaturalNumberSequence`, preserving order.
+        r"""Returns a tuple of the elements that compose this :class:`NaturalNumber0Pair`, preserving order.
 
-        :return: a tuple of the elements that compose this :class:`NaturalNumberSequence`, preserving order.
+        :return: a tuple of the elements that compose this :class:`NaturalNumber0Pair`, preserving order.
         """
         return tuple(super().__iter__())
 
     @classmethod
-    def from_any(cls, o: object) -> NaturalNumber0Sequence:
-        r"""Declares a natural-number-sequence from a Python object that can be interpreted as a natural-number-sequence.
+    def from_any(cls, o: object) -> NaturalNumber0Pair:
+        r"""Declares a natural-number-0-pair from a Python object that can be interpreted as a natural-number-0-pair.
 
         Note:
             This method is redundant with the default constructor.
 
-        :param o: a Python object that can be interpreted as a natural-number-sequence.
-        :return: a natural-number-sequence.
+        :param o: a Python object that can be interpreted as a natural-number-0-pair.
+        :return: a natural-number-0-pair.
         """
-        if isinstance(o, NaturalNumber0Sequence):
+        if isinstance(o, NaturalNumber0Pair):
             return o
         if isinstance(o, collections.abc.Iterable):
-            return NaturalNumber0Sequence(*o)
+            return NaturalNumber0Pair(*o)
         if isinstance(o, collections.abc.Generator):
-            return NaturalNumber0Sequence(*o)
-        raise util.PunctiliousException('NaturalNumberSequence data validation failure', o=o)
+            return NaturalNumber0Pair(*o)
+        raise util.PunctiliousException('NaturalNumber0Pair data validation failure', o=o)
 
     @property
     def im(self) -> tuple[int, ...]:
-        r"""A shortcut for :attr:`NaturalNumberSequence.image`."""
+        r"""A shortcut for :attr:`NaturalNumber0Pair.image`."""
         return self.image
 
     @property
     def image(self) -> tuple[int, ...]:
-        r"""The :attr:`NaturalNumberSequence.image` is the set of values contained in the sequence,
+        r"""The :attr:`NaturalNumber0Pair.image` is the set of values contained in the sequence,
         returned as a tuple of ascending and unique values.
 
         Notation:
@@ -601,7 +564,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
 
         Note: the values are returned in ascending order.
 
-        Shortcut: :attr:`NaturalNumberSequence.im`
+        Shortcut: :attr:`NaturalNumber0Pair.im`
 
         Definition:
             S := { s_0, s_1, ..., s_n }
@@ -622,8 +585,8 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
 
     @property
     def image_cardinality(self) -> int:
-        r"""The :attr:`NaturalNumberSequence.image_cardinality` is the cardinality
-         of the :attr:`NaturalNumberSequence.image`, i.e. the number of distinct values it contains.
+        r"""The :attr:`NaturalNumber0Pair.image_cardinality` is the cardinality
+         of the :attr:`NaturalNumber0Pair.image`, i.e. the number of distinct values it contains.
 
         Notation:
         :math:`|Im(S)|`
@@ -632,20 +595,20 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
         """
         return len(self.image)
 
-    def is_restricted_growth_function_equivalent_to(self, s) -> bool:
-        r"""`True` if this natural number sequence canonical-natural-number-sequence-equivalent
-        to the natural-number-sequence `s`, `False` otherwise.
+    def is_restricted_growth_function_sequence_equivalent_to(self, s) -> bool:
+        r"""`True` if this natural number sequence RGF equivalent
+        to the natural-number-0-pair `s`, `False` otherwise.
 
         Notation:
         :math:`S ~_{canonical} T`
 
         Formal Definition:
-        Two natural-number-sequences `s` and `t` are canonical-natural-number-sequence-equivalent
-        if and only if their canonical-natural-number-sequence are natural-number-sequence-equivalent.
+        Two natural-number-0-pairs `s` and `t` are canonical-natural-number-0-pair-equivalent
+        if and only if their canonical-natural-number-0-pair are natural-number-0-pair-equivalent.
 
         """
-        s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
-        return self.to_restricted_growth_function_sequence().is_natural_number_0_sequence_equivalent_to(s)
+        s: NaturalNumber0Pair = NaturalNumber0Pair.from_any(s)
+        return self.to_restricted_growth_function_sequence().is_natural_number_0_pair_equivalent_to(s)
 
     @property
     def is_increasing(self) -> bool:
@@ -673,7 +636,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
         """
         return True
 
-    def is_natural_number_0_sequence_equivalent_to(self, s: FlexibleNaturalNumber0Sequence):
+    def is_natural_number_0_pair_equivalent_to(self, s: FlexibleNaturalNumber0Pair):
         r"""
 
         Notation:
@@ -687,7 +650,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
         :param s:
         :return:
         """
-        s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
+        s: NaturalNumber0Pair = NaturalNumber0Pair.from_any(s)
         return self.length == s.length and all(x == y for x, y in zip(self, s))
 
     @property
@@ -749,7 +712,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
 
     @property
     def max_value(self) -> int:
-        """The `max_value` of a `NaturalNumberSequence` is the maximum value of its elements.
+        """The `max_value` of a `NaturalNumber0Pair` is the maximum value of its elements.
 
         Notation:
         :math:`max(S)`
@@ -758,23 +721,23 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
         return max(self)
 
     def scalar_addition(self, n: int):
-        r"""Given a :class:`NaturalNumberSequence` :math:`S`,
+        r"""Given a :class:`NaturalNumber0Pair` :math:`S`,
         and a natural number :math:`n`,
-        return a :class:`NaturalNumberSequence` :math:`T` defined as
+        return a :class:`NaturalNumber0Pair` :math:`T` defined as
         :math:`(t_0 + n, t_1 + n, \cdots, t_i)`.
 
         :param n:
         :return:
         """
         t: tuple[int, ...] = tuple(x + n for x in self.elements)
-        return NaturalNumber0Sequence(*t)
+        return NaturalNumber0Pair(*t)
 
 
 # Flexible types to facilitate data validation
 
-FlexibleNaturalNumber0Sequence = typing.Union[
-    NaturalNumber0Sequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
+FlexibleNaturalNumber0Pair = typing.Union[
+    NaturalNumber0Pair, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 
-NN0S = NaturalNumber0Sequence  # An alias for NaturalNumberSequence
+NN0S = NaturalNumber0Pair  # An alias for NaturalNumber0Pair

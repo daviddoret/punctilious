@@ -632,7 +632,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         """
         return len(self.image)
 
-    def is_canonical_natural_number_sequence_equivalent(self, s) -> bool:
+    def is_restricted_growth_function_equivalent_to(self, s) -> bool:
         r"""`True` if this natural number sequence canonical-natural-number-sequence-equivalent
         to the natural-number-sequence `s`, `False` otherwise.
 
@@ -645,7 +645,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
 
         """
         s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        return self.to_restricted_growth_function_sequence.is_natural_number_1_sequence_equivalent_to(s)
+        return self.to_restricted_growth_function_sequence().is_natural_number_1_sequence_equivalent_to(s)
 
     def is_equal_to_under_o1(self, s: FlexibleNaturalNumber1Sequence):
         r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_1`,
