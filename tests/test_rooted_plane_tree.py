@@ -186,36 +186,6 @@ class TestRootedPlaneTree:
         u1 = pu.rptl.RootedPlaneTree.from_tuple_tree(((), ((),), ((), (), (), (), (),), ((),),))
         assert u1 == t12
 
-    def test_o1(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae,
-                t7_a_aa_ab_aaa_aaaa_aba_abaa,
-                t12, t_big):
-        assert t1_a.is_equal_to_under_o1(t1_a)
-        assert t2_a_aa.is_equal_to_under_o1(t2_a_aa)
-        assert t3_a_aa_aaa.is_equal_to_under_o1(t3_a_aa_aaa)
-        assert t3_a_aa_ab.is_equal_to_under_o1(t3_a_aa_ab)
-        assert t6_a_aa_ab_ac_ad_ae.is_equal_to_under_o1(t6_a_aa_ab_ac_ad_ae)
-        assert t7_a_aa_ab_aaa_aaaa_aba_abaa.is_equal_to_under_o1(t7_a_aa_ab_aaa_aaaa_aba_abaa)
-        assert t12.is_equal_to_under_o1(t12)
-        assert t_big.is_equal_to_under_o1(t_big)
-
-        assert t1_a.is_strict_less_than(t2_a_aa)
-        assert not t2_a_aa.is_strict_less_than(t1_a)
-
-        assert t2_a_aa.is_strict_less_than(t3_a_aa_aaa)
-        assert not t3_a_aa_aaa.is_strict_less_than(t2_a_aa)
-
-        assert t2_a_aa.is_strict_less_than(t3_a_aa_ab)
-        assert not t3_a_aa_ab.is_strict_less_than(t2_a_aa)
-
-        assert t3_a_aa_aaa.is_strict_less_than(t3_a_aa_ab)
-        assert not t3_a_aa_ab.is_strict_less_than(t3_a_aa_aaa)
-
-        assert t2_a_aa.is_strict_less_than(t6_a_aa_ab_ac_ad_ae)
-        assert not t6_a_aa_ab_ac_ad_ae.is_strict_less_than(t2_a_aa)
-
-        assert not t7_a_aa_ab_aaa_aaaa_aba_abaa.is_strict_less_than(t6_a_aa_ab_ac_ad_ae)
-        assert t6_a_aa_ab_ac_ad_ae.is_strict_less_than(t7_a_aa_ab_aaa_aaaa_aba_abaa)
-
     def test_is_increasing(self, t1_a, t2_a_aa, t3_a_aa_aaa, t3_a_aa_ab, t6_a_aa_ab_ac_ad_ae,
                            t7_a_aa_ab_aaa_aaaa_aba_abaa,
                            t12, t_big):

@@ -1,5 +1,4 @@
 import punctilious as pu
-from punctilious.sandbox_2 import factorize
 
 
 class TestPrimeNumber:
@@ -13,18 +12,18 @@ class TestPrimeNumber:
             assert s[n] == p
 
     def test_factorize(self):
-        assert factorize(1) == (0,)
-        assert factorize(2) == (1,)
-        assert factorize(3) == (0, 1,)
-        assert factorize(4) == (2,)
-        assert factorize(5) == (0, 0, 1,)
-        assert factorize(6) == (1, 1,)
-        assert factorize(7) == (0, 0, 0, 1,)
-        assert factorize(8) == (3,)
-        assert factorize(9) == (0, 2,)
-        assert factorize(10) == (1, 0, 1,)
-        assert factorize(11) == (0, 0, 0, 0, 1,)
-        assert factorize(12) == (2, 1,)
-        assert factorize(13) == (0, 0, 0, 0, 0, 1,)
-        assert factorize(14) == (1, 0, 0, 1,)
-        assert factorize(15) == (0, 1, 1,)
+        assert pu.pnl.factorize(1) == (0,)
+        assert pu.pnl.factorize(2) == (1,)
+        assert pu.pnl.factorize(3) == (0, 1,)
+        assert pu.pnl.factorize(4) == (2,)
+        assert pu.pnl.factorize(5) == (0, 0, 1,)
+        assert pu.pnl.factorize(6) == (1, 1,)
+        assert pu.pnl.factorize(7) == (0, 0, 0, 1,)
+        assert pu.pnl.factorize(8) == (3,)
+        assert pu.pnl.factorize(9) == (0, 2,)
+        assert pu.pnl.factorize(10) == (1, 0, 1,)
+        assert pu.pnl.factorize(11) == (0, 0, 0, 0, 1,)
+        assert pu.pnl.factorize(12) == (2, 1,)
+        assert pu.pnl.factorize(13) == (0, 0, 0, 0, 0, 1,)
+        assert pu.pnl.factorize(14) == (1, 0, 0, 1,)
+        assert pu.pnl.factorize(15) == (0, 1, 1,)

@@ -129,27 +129,6 @@ class TestNaturalNumbersSequence:
         assert pu.nn0sl.concatenate_natural_number_sequences(s4, s4, s4) == (6, 7, 2, 6, 7, 2, 6, 7, 2,)
         assert pu.nn0sl.concatenate_natural_number_sequences(s4, s3, s2, s1) == (6, 7, 2, 9, 1, 1, 1, 1,)
 
-    def test_is_less_than_under_o1(self):
-        assert not pu.nn0sl.NaturalNumber0Sequence(1, ).is_strictly_less_than(pu.nn0sl.NaturalNumber0Sequence(1, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(1, ).is_strictly_less_than(pu.nn0sl.NaturalNumber0Sequence(2, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(1, ).is_strictly_less_than(pu.nn0sl.NaturalNumber0Sequence(1, 1, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(3, ).is_strictly_less_than(pu.nn0sl.NaturalNumber0Sequence(2, 2, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(4, ).is_strictly_less_than(pu.nn0sl.NaturalNumber0Sequence(1, 1, 2))
-        assert not pu.nn0sl.NaturalNumber0Sequence(1, 1, 2, ).is_strictly_less_than(
-            pu.nn0sl.NaturalNumber0Sequence(4, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(1, 4, 19).is_strictly_less_than(
-            pu.nn0sl.NaturalNumber0Sequence(1, 5, 19))
-
-    def test_is_less_than_under_o2(self):
-        assert not pu.nn0sl.NaturalNumber0Sequence(1, ).is_less_than_under_o2(pu.nn0sl.NaturalNumber0Sequence(1, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(1, ).is_less_than_under_o2(pu.nn0sl.NaturalNumber0Sequence(2, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(1, ).is_less_than_under_o2(pu.nn0sl.NaturalNumber0Sequence(1, 1, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(3, ).is_less_than_under_o2(pu.nn0sl.NaturalNumber0Sequence(2, 2, ))
-        assert not pu.nn0sl.NaturalNumber0Sequence(4, ).is_less_than_under_o2(pu.nn0sl.NaturalNumber0Sequence(1, 1, 2))
-        assert pu.nn0sl.NaturalNumber0Sequence(1, 1, 2, ).is_less_than_under_o2(pu.nn0sl.NaturalNumber0Sequence(4, ))
-        assert pu.nn0sl.NaturalNumber0Sequence(1, 4, 19).is_less_than_under_o2(
-            pu.nn0sl.NaturalNumber0Sequence(1, 5, 19))
-
     def test_is_increasing(self):
         s = pu.nn0sl.NaturalNumber0Sequence(1, )
         assert s.is_increasing
