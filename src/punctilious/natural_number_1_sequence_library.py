@@ -368,7 +368,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         super(NaturalNumber1Sequence, self).__init__()
         self._image: tuple[int, ...] | None = None
         self._is_restricted_growth_function_sequence: bool | None = None
-        self._canonical_natural_number_sequence: NaturalNumber1Sequence | None = None
+        self._restricted_growth_function_sequence: NaturalNumber1Sequence | None = None
 
     def __new__(cls, *s):
         v: bool
@@ -433,8 +433,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
             cls._ordered_set_of_sequence_grouped_by_sum = cls._ordered_set_of_sequence_grouped_by_sum + (
                 ordered_set_of_natural_number_sequence_of_sum_n,)
 
-    @property
-    def canonical_natural_number_sequence(self) -> NaturalNumber1Sequence:
+    def to_restricted_growth_function_sequence(self) -> NaturalNumber1Sequence:
         r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
         by applying canonical labeling.
 
@@ -455,8 +454,8 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
         """
         if self.is_restricted_growth_function_sequence:
             return self
-        elif self._canonical_natural_number_sequence is not None:
-            return self._canonical_natural_number_sequence
+        elif self._restricted_growth_function_sequence is not None:
+            return self._restricted_growth_function_sequence
         else:
             mapping: dict[int, int] = dict()
             mapped_value: int = 1
@@ -466,8 +465,8 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
                     mapping[n] = mapped_value
                     mapped_value += 1
             s: tuple[int, ...] = tuple(mapping[n] for n in self)
-            self._canonical_natural_number_sequence = NaturalNumber1Sequence(*s)
-            return self._canonical_natural_number_sequence
+            self._restricted_growth_function_sequence = NaturalNumber1Sequence(*s)
+            return self._restricted_growth_function_sequence
 
     def concatenate_with(self, *s: FlexibleNaturalNumber1Sequence) -> NaturalNumber1Sequence:
         r"""Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
@@ -646,7 +645,7 @@ class NaturalNumber1Sequence(orl.RelationalElement, tuple):
 
         """
         s: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(s)
-        return self.canonical_natural_number_sequence.is_natural_number_1_sequence_equivalent_to(s)
+        return self.to_restricted_growth_function_sequence.is_natural_number_1_sequence_equivalent_to(s)
 
     def is_equal_to_under_o1(self, s: FlexibleNaturalNumber1Sequence):
         r"""Returns `True` if this natural-number-sequence is equal to `s` under :math:`\mathcal{O}_1`,

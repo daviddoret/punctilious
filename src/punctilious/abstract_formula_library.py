@@ -340,7 +340,7 @@ class AbstractFormula(tuple):
         else:
             self._canonical_abstract_formula: AbstractFormula = AbstractFormula(
                 t=self.rooted_plane_tree,
-                s=self.natural_number_sequence.canonical_natural_number_sequence)
+                s=self.natural_number_sequence.to_restricted_growth_function_sequence)
             return self._canonical_abstract_formula
 
     @property

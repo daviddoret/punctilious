@@ -447,7 +447,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
         super(NaturalNumber0Sequence, self).__init__()
         self._image: tuple[int, ...] | None = None
         self._is_restricted_growth_function_sequence: bool | None = None
-        self._canonical_natural_number_sequence: NaturalNumber0Sequence | None = None
+        self._restricted_growth_function_sequence: NaturalNumber0Sequence | None = None
 
     def __new__(cls, *s):
         v: bool
@@ -482,8 +482,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
             cls._cache[hash_value] = o
             return o
 
-    @property
-    def canonical_natural_number_sequence(self) -> NaturalNumber0Sequence:
+    def to_restricted_growth_function_sequence(self) -> NaturalNumber0Sequence:
         r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
         by applying canonical labeling.
 
@@ -504,8 +503,8 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
         """
         if self.is_restricted_growth_function_sequence:
             return self
-        elif self._canonical_natural_number_sequence is not None:
-            return self._canonical_natural_number_sequence
+        elif self._restricted_growth_function_sequence is not None:
+            return self._restricted_growth_function_sequence
         else:
             mapping: dict[int, int] = dict()
             mapped_value: int = 0
@@ -515,8 +514,8 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
                     mapping[n] = mapped_value
                     mapped_value += 1
             s: tuple[int, ...] = tuple(mapping[n] for n in self)
-            self._canonical_natural_number_sequence = NaturalNumber0Sequence(*s)
-            return self._canonical_natural_number_sequence
+            self._restricted_growth_function_sequence = NaturalNumber0Sequence(*s)
+            return self._restricted_growth_function_sequence
 
     def concatenate_with(self, *s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
         r"""Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
@@ -646,7 +645,7 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
 
         """
         s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
-        return self.canonical_natural_number_sequence.is_natural_number_0_sequence_equivalent_to(s)
+        return self.to_restricted_growth_function_sequence.is_natural_number_0_sequence_equivalent_to(s)
 
     @property
     def is_increasing(self) -> bool:
@@ -778,14 +777,4 @@ FlexibleNaturalNumber0Sequence = typing.Union[
 
 # Aliases
 
-NN1S = NaturalNumber0Sequence  # An alias for NaturalNumberSequence
-
-for i in range(0, 100):
-    s1 = refined_godel_number_order.unrank(i)
-    n1 = refined_godel_number_order.rank(s1)
-    print(f"i: {i}, n: {n1}, s: {s1}")
-    # s2 = godel_number_encoding_order.successor(s1)
-    # n2 = godel_number_encoding_order.rank(s2)
-    # n3 = n2 - 1
-    # s3 = godel_number_encoding_order.unrank(n3)
-    # print(f"{n1} ({s1}) = {n3} ({s3}). s: {n2} ({s2})")
+NN0S = NaturalNumber0Sequence  # An alias for NaturalNumberSequence

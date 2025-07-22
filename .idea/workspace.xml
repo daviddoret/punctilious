@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="dyck-words">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="rooted plane tree: dyck word lexicographic order">
+      <change afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_1_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_1_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -331,6 +336,7 @@
     "Python tests.pytest for test_natural_number_0.TestNaturalNumber0.executor": "Run",
     "Python tests.pytest for test_natural_number_0.TestNaturalNumber0.test_constructor.executor": "Run",
     "Python tests.pytest for test_natural_number_0.TestNaturalNumber0.test_order_relation_o1.executor": "Run",
+    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_canonical_order.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_constructor.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_o1.executor": "Run",
@@ -505,6 +511,7 @@
     "Python tests.pytest in test_interpretation.py.executor": "Debug",
     "Python tests.pytest in test_minimal_logic_1.py.executor": "Run",
     "Python tests.pytest in test_natural_number_0.py.executor": "Run",
+    "Python tests.pytest in test_natural_number_0_sequence.py.executor": "Run",
     "Python tests.pytest in test_natural_number_1.py.executor": "Run",
     "Python tests.pytest in test_natural_number_1_sequence.py.executor": "Run",
     "Python tests.pytest in test_natural_numbers_sequence.py.executor": "Run",
@@ -695,7 +702,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_dyck_word_lexicographic_order">
+  <component name="RunManager" selected="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -925,23 +932,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_dyck_word.TestDyckWord.test_dyck_word_trivial" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_dyck_word.TestDyckWord.test_dyck_word_trivial&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -957,6 +947,23 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1012,7 +1019,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_dyck_word.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in test_natural_number_0_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1025,7 +1032,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_dyck_word.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_natural_number_0_sequence.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -1041,21 +1048,21 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word" />
-      <item itemvalue="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word_trivial" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_dyck_word_lexicographic_order" />
-      <item itemvalue="Python tests.pytest in test_dyck_word.py" />
+      <item itemvalue="Python tests.pytest in test_natural_number_0_sequence.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order" />
+        <item itemvalue="Python tests.pytest in test_natural_number_0_sequence.py" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_dyck_word_lexicographic_order" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree" />
         <item itemvalue="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word" />
-        <item itemvalue="Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word_trivial" />
-        <item itemvalue="Python tests.pytest in test_dyck_word.py" />
       </list>
     </recent_temporary>
   </component>
@@ -1077,14 +1084,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01507" summary="Using more elegant approach MyClass.fromBlablabla">
-      <option name="closed" value="true" />
-      <created>1751436317312</created>
-      <option name="number" value="01507" />
-      <option name="presentableId" value="LOCAL-01507" />
-      <option name="project" value="LOCAL" />
-      <updated>1751436317312</updated>
     </task>
     <task id="LOCAL-01508" summary="Using more elegant approach MyClass.fromBlablabla">
       <option name="closed" value="true" />
@@ -1470,7 +1469,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753127327152</updated>
     </task>
-    <option name="localTasksCounter" value="1556" />
+    <task id="LOCAL-01556" summary="rooted plane tree: dyck word lexicographic order">
+      <option name="closed" value="true" />
+      <created>1753131862358</created>
+      <option name="number" value="01556" />
+      <option name="presentableId" value="LOCAL-01556" />
+      <option name="project" value="LOCAL" />
+      <updated>1753131862358</updated>
+    </task>
+    <option name="localTasksCounter" value="1557" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1523,7 +1530,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="RootedPlaneTree: canonical ordering" />
     <MESSAGE value="NaturalNumberSequence: canonical ordering" />
     <MESSAGE value="AbstractFormula: canonical ordering" />
     <MESSAGE value="Using more elegant approach MyClass.fromBlablabla" />
@@ -1548,7 +1554,8 @@
     <MESSAGE value="binary-relations" />
     <MESSAGE value="godel_number_encoding_order" />
     <MESSAGE value="dyck-words" />
-    <option name="LAST_COMMIT_MESSAGE" value="dyck-words" />
+    <MESSAGE value="rooted plane tree: dyck word lexicographic order" />
+    <option name="LAST_COMMIT_MESSAGE" value="rooted plane tree: dyck word lexicographic order" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
