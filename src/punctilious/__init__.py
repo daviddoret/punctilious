@@ -13,6 +13,7 @@ import punctilious.connective_catalog as connective_catalog
 import punctilious.connective_sequence_library as connective_sequence_library
 import punctilious.natural_number_0_sequence_library as natural_number_0_sequence_library
 import punctilious.natural_number_1_sequence_library as natural_number_1_sequence_library
+import punctilious.natural_number_0_pair_library as natural_number_0_pair_library
 import punctilious.abstract_formula_library as abstract_formula_library
 import punctilious.formula_library as formula_library
 
@@ -30,6 +31,7 @@ nn1l = natural_number_1_library
 pnl = prime_number_library
 nn0sl = natural_number_0_sequence_library
 nn1sl = natural_number_1_sequence_library
+nn0pl = natural_number_0_pair_library
 rptl = rooted_plane_tree_library
 rptc = rooted_plane_tree_catalog
 
@@ -45,6 +47,7 @@ __all__ = [
     "natural_number_1_library", "nn1l",
     "natural_number_0_sequence_library", "nn0sl",
     "natural_number_1_sequence_library", "nn1sl",
+    "natural_number_0_pair_library", "nn0pl",
     "prime_number_library", "pnl",
     "rooted_plane_tree_catalog", "rptc",
     "rooted_plane_tree_library", "rptl",
