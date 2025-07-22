@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="nn0 pair">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_dyck_word.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_dyck_word.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -817,28 +817,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="sandbox_2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/sandbox_2.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -1005,6 +983,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_dyck_word.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_dyck_word.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in test_natural_number_0_pair.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1045,7 +1040,6 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.sandbox_2" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
@@ -1053,6 +1047,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_image" />
       <item itemvalue="Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_order" />
+      <item itemvalue="Python tests.pytest in test_dyck_word.py" />
       <item itemvalue="Python tests.pytest in test_natural_number_0_pair.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -1062,10 +1057,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest in test_dyck_word.py" />
         <item itemvalue="Python tests.pytest in test_natural_number_0_pair.py" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_order" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_image" />
-        <item itemvalue="Python.sandbox_2" />
       </list>
     </recent_temporary>
   </component>
@@ -1087,14 +1082,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01512" summary="Using more elegant approach MyClass.fromBlablabla">
-      <option name="closed" value="true" />
-      <created>1751484823019</created>
-      <option name="number" value="01512" />
-      <option name="presentableId" value="LOCAL-01512" />
-      <option name="project" value="LOCAL" />
-      <updated>1751484823020</updated>
     </task>
     <task id="LOCAL-01513" summary="Using more elegant approach MyClass.fromBlablabla">
       <option name="closed" value="true" />
@@ -1480,7 +1467,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753206449701</updated>
     </task>
-    <option name="localTasksCounter" value="1561" />
+    <task id="LOCAL-01561" summary="nn0 pair">
+      <option name="closed" value="true" />
+      <created>1753212654860</created>
+      <option name="number" value="01561" />
+      <option name="presentableId" value="LOCAL-01561" />
+      <option name="project" value="LOCAL" />
+      <updated>1753212654861</updated>
+    </task>
+    <option name="localTasksCounter" value="1562" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

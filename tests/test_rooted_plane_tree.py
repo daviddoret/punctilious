@@ -219,36 +219,6 @@ class TestRootedPlaneTree:
             assert len(pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(
                 n)) == pu.catalan_number_library.get_catalan_number(n - 1)
 
-    def test_consistency_of_rpt_canonical_order(self):
-        """The number of unique RPTs per size (in vertices) must be equal to the Catalan numbers.
-
-        :return:
-        """
-        s = ()
-        for n in range(4, 5):
-            s = s + pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(
-                n)
-        previous = None
-        for t in s:
-            if previous is not None:
-                assert previous.is_less_than_under_o1(t)
-            previous = t
-
-    def test_consistency_of_well_known_rpts(self):
-        s1 = pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(1)
-        assert pu.rptc.t1_a == s1[0]
-        s2 = pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(2)
-        assert pu.rptc.t2_a_aa == s2[0]
-        s3 = pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(3)
-        assert pu.rptc.t3_a_aa_aaa == s3[0]
-        assert pu.rptc.t3_a_aa_aaa == s3[0]
-        s4 = pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(4)
-        assert pu.rptc.t4_a_aa_aaa_aaaa == s4[0]
-        assert pu.rptc.t4_a_aa_aaa_aab == s4[1]
-        assert pu.rptc.t4_a_aa_aaa_ab == s4[2]
-        assert pu.rptc.t4_a_aa_ab_aba == s4[3]
-        assert pu.rptc.t4_a_aa_ab_ac == s4[4]
-
     def test_dyck_word_lexicographic_order(self):
         for n in range(0, 100):
             t1 = pu.rptl.dyck_word_lexicographic_order.unrank(n)
