@@ -1,12 +1,13 @@
+import pytest
+
 import punctilious as pu
 
 
 class TestDyckWord:
 
     def test_dyck_word_trivial(self):
-        d = pu.dwl.DyckWord("")
-        assert d == ""
-        assert pu.dwl.lexicographic_order.rank(d) == 0
+        with pytest.raises(pu.util.PunctiliousException):
+            d = pu.dwl.DyckWord("")
 
     def test_dyck_word(self):
         d2 = None
