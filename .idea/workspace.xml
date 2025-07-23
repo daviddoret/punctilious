@@ -5,97 +5,96 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
-      <change afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/doctrees/index.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/.buildinfo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/015755a22b6219b345c36a9a47b091dc56007486.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/06bc9d5f290f8103f3233840c4d1a973832f9ea2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/1e2b6c980a30d7d3b3c801f618adbb23f75621c7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/29cdbd3fea6190c40779484d12cdc3ffa8df509b.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/3b184fc3a8f0ba9cf168811ebef99823ae50913e.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/438fc68bf5bab6a296025bd746aab6d3a1c2e06b.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/4abba779877abb276b98ccb2b4ba9bf2e41947ab.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/4db5b6e16e06f929ce3f675c5e535d06ffb02ff7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/4e8fe70bc34f2f240c7e14d072ec05aebbb2c13f.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/5a939c5280da7202ca4531f175a7780ad5e1f80a.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/6090bb701742f058e9cd1e5ca035d5ff2bb240b2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/69caa186c48dd93563318f34ee7db27e36c8942d.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/73b369c7f7ae52e3c231f0470297c63d5c97d531.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/813715fec6a03abdb0d2efe74b55df079a441fe6.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/8e478246e66374ab07603d41bc0ff49057cb39b0.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/992106e3605574a6d57be6f0e88727c645a0dd17.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/9ddf3ba3e1f652250b329b1afcbc3087cae61ab7.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/a4f32fa4c33066deff063a6b3e159ee1108db83a.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/b6c245d487949782a89cab9ee83504a62fdc2337.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/b988975be41fd13b4d091c10202ba19374643586.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/bff657fe91e8849f7b03dd8e6dc0f58d9d1ff5da.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/c2aa3dff9bffb099e9dff196fd36aed56ec16baf.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/c99185949b437ae7b90a6e2ae54a0be5d3a56347.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/cade8fbe4cf34b3f34cf62806d6e0c5c0154159e.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/d1d3b29a75b5ec076ebe5d396d933fca06e26b63.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/e39b07691deeaa0063fcca88d275758e7ac1c5a8.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/e4762cec46619bf7781cae62216214f909395368.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/e8dea8254118f111b5fb20895b03528c17566f06.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/eb321e339e944b89a32ca146274efb5112cd5896.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/f93a9fd55da4784b6269b95f8115ff0606f927c3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/faaee2ca7daa3bedfd2a42004fb359262dd4db3e.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/fb4b87da15911efcfb745ffa2835d2b7cce22bc5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_images/math/fffd2357ee88a9c50ba9e831ed64c39c73d54a07.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/abstract_formula_library.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/catalan_number_library.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/connective_library.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/formula_library.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/representation_foundation.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/rooted_plane_tree_catalog.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/rooted_plane_tree_library.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/transformation_library.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/util.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_modules/typing.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_sources/index.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_sources/modules.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_sources/punctilious.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/alabaster.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/basic.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/css/custom.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/custom.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/doctools.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/documentation_options.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/file.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/github-banner.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/language_data.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/minus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/plus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-16x16-transparent.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-16x16-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-180x180-transparent.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-180x180-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-32x32-transparent.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-32x32-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light-200x200-transparent.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light-200x200-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light-600x600-transparent.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light-600x600-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/pygments.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/searchtools.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/sphinx_highlight.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/genindex.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/modules.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/objects.inv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/punctilious.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/py-modindex.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/search.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/index.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/os" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/build/doctrees/punctilious.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/doctrees/punctilious.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/doctrees/index.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/doctrees/modules.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/doctrees/punctilious.doctree" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/.buildinfo" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/015755a22b6219b345c36a9a47b091dc56007486.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/06bc9d5f290f8103f3233840c4d1a973832f9ea2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/1e2b6c980a30d7d3b3c801f618adbb23f75621c7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/29cdbd3fea6190c40779484d12cdc3ffa8df509b.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/3b184fc3a8f0ba9cf168811ebef99823ae50913e.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/438fc68bf5bab6a296025bd746aab6d3a1c2e06b.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/4abba779877abb276b98ccb2b4ba9bf2e41947ab.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/4db5b6e16e06f929ce3f675c5e535d06ffb02ff7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/4e8fe70bc34f2f240c7e14d072ec05aebbb2c13f.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/5a939c5280da7202ca4531f175a7780ad5e1f80a.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/6090bb701742f058e9cd1e5ca035d5ff2bb240b2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/69caa186c48dd93563318f34ee7db27e36c8942d.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/73b369c7f7ae52e3c231f0470297c63d5c97d531.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/813715fec6a03abdb0d2efe74b55df079a441fe6.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/888f7c323ac0341871e867220ae2d76467d74d6e.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/8e478246e66374ab07603d41bc0ff49057cb39b0.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/992106e3605574a6d57be6f0e88727c645a0dd17.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/9ddf3ba3e1f652250b329b1afcbc3087cae61ab7.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/a4f32fa4c33066deff063a6b3e159ee1108db83a.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/b6c245d487949782a89cab9ee83504a62fdc2337.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/b988975be41fd13b4d091c10202ba19374643586.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/bff657fe91e8849f7b03dd8e6dc0f58d9d1ff5da.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/c2aa3dff9bffb099e9dff196fd36aed56ec16baf.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/c99185949b437ae7b90a6e2ae54a0be5d3a56347.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/cade8fbe4cf34b3f34cf62806d6e0c5c0154159e.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/d1d3b29a75b5ec076ebe5d396d933fca06e26b63.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/e39b07691deeaa0063fcca88d275758e7ac1c5a8.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/e4762cec46619bf7781cae62216214f909395368.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/e8dea8254118f111b5fb20895b03528c17566f06.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/eb321e339e944b89a32ca146274efb5112cd5896.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/f93a9fd55da4784b6269b95f8115ff0606f927c3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/faaee2ca7daa3bedfd2a42004fb359262dd4db3e.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/fb4b87da15911efcfb745ffa2835d2b7cce22bc5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_images/math/fffd2357ee88a9c50ba9e831ed64c39c73d54a07.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/abstract_formula_library.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/catalan_number_library.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/connective_library.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/formula_library.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/representation_foundation.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/rooted_plane_tree_catalog.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/rooted_plane_tree_library.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/transformation_library.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/punctilious/util.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_modules/typing.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_sources/index.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_sources/modules.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_sources/punctilious.rst.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/alabaster.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/basic.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/css/custom.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/custom.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/doctools.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/documentation_options.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/file.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/github-banner.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/language_data.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/minus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/plus.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-16x16-transparent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-16x16-white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-180x180-transparent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-180x180-white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-32x32-transparent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light-32x32-white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-compact-light.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light-200x200-transparent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light-200x200-white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light-600x600-transparent.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light-600x600-white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/punctilious-logo-full-light.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/pygments.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/searchtools.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_static/sphinx_highlight.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/genindex.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/modules.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/objects.inv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/punctilious.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/py-modindex.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/search.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/searchindex.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/source/conf.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/transformation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/transformation_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -731,7 +730,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "aDefault",
-    "settings.editor.selected.configurable": "build.tools",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "timeTracker.activityTracker": "null",
     "timeTracker.comment": "",
     "timeTracker.inactivityPeriodInMills": "600000",
@@ -1189,14 +1188,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01518" summary="__lt__">
-      <option name="closed" value="true" />
-      <created>1751494032714</created>
-      <option name="number" value="01518" />
-      <option name="presentableId" value="LOCAL-01518" />
-      <option name="project" value="LOCAL" />
-      <updated>1751494032714</updated>
-    </task>
     <task id="LOCAL-01519" summary="clean-up">
       <option name="closed" value="true" />
       <created>1751576999734</created>
@@ -1581,7 +1572,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753244062193</updated>
     </task>
-    <option name="localTasksCounter" value="1567" />
+    <task id="LOCAL-01567" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1753250840928</created>
+      <option name="number" value="01567" />
+      <option name="presentableId" value="LOCAL-01567" />
+      <option name="project" value="LOCAL" />
+      <updated>1753250840928</updated>
+    </task>
+    <option name="localTasksCounter" value="1568" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
