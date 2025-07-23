@@ -4,19 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup natural-number-0">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/doctrees/punctilious.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/doctrees/punctilious.doctree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious.egg-info/PKG-INFO" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious.egg-info/PKG-INFO" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious.egg-info/SOURCES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious.egg-info/SOURCES.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious.egg-info/top_level.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious.egg-info/top_level.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/catalan_number_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/catalan_number_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1104,14 +1095,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01515" summary="Using more elegant approach MyClass.fromBlablabla">
-      <option name="closed" value="true" />
-      <created>1751485836214</created>
-      <option name="number" value="01515" />
-      <option name="presentableId" value="LOCAL-01515" />
-      <option name="project" value="LOCAL" />
-      <updated>1751485836214</updated>
-    </task>
     <task id="LOCAL-01516" summary="__eq__">
       <option name="closed" value="true" />
       <created>1751493426357</created>
@@ -1496,7 +1479,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753238016489</updated>
     </task>
-    <option name="localTasksCounter" value="1564" />
+    <task id="LOCAL-01564" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1753243147341</created>
+      <option name="number" value="01564" />
+      <option name="presentableId" value="LOCAL-01564" />
+      <option name="project" value="LOCAL" />
+      <updated>1753243147341</updated>
+    </task>
+    <option name="localTasksCounter" value="1565" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1572,9 +1563,9 @@
     <MESSAGE value="rooted plane tree: dyck word lexicographic order" />
     <MESSAGE value="nn0s: refined-godel-number-order" />
     <MESSAGE value="nn0 pair" />
-    <MESSAGE value="cleanup" />
     <MESSAGE value="cleanup natural-number-0" />
-    <option name="LAST_COMMIT_MESSAGE" value="cleanup natural-number-0" />
+    <MESSAGE value="cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleanup" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

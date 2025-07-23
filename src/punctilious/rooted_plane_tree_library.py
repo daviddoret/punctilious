@@ -9,7 +9,6 @@ import collections
 
 # Punctilious modules
 import punctilious.util as util
-import punctilious.catalan_number_library as cnl
 import punctilious.binary_relation_library as orl
 import punctilious.dyck_word_library as dwl
 
@@ -20,13 +19,12 @@ class DyckWordLexicographicOder(orl.BinaryRelation):
     Mathematical definition - xRy
     -------------------------------
 
-    :math:`xRy` if and only if `
+    :math:`xRy` if and only if ...
 
     Mathematical definition - rank()
     ----------------------------------
 
-
-    :math:`\mathrm{rank}(S) = `
+    :math:`\mathrm{rank}(S) = ` ...
 
     """
 
@@ -46,7 +44,7 @@ class DyckWordLexicographicOder(orl.BinaryRelation):
         return RootedPlaneTree()
 
     def rank(self, x: object) -> int:
-        """
+        r"""
 
         0 should be mapped to the empty sequence ().
         1 should be mapped to sequence (0).
@@ -82,7 +80,7 @@ dyck_word_lexicographic_order = DyckWordLexicographicOder()
 
 
 class RootedPlaneTree(tuple):
-    """A `RootedPlaneTree` is an immutable, finite (and computable) rooted plane tree,
+    r"""A `RootedPlaneTree` is an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.
 
     Reminder:
@@ -92,7 +90,7 @@ class RootedPlaneTree(tuple):
     """
 
     def __eq__(self, t) -> bool:
-        """Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
+        r"""Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
 
         See :attr:`RootedPlaneTree.is_equal_to` for a definition of rooted-plane-tree equality.
 
@@ -105,7 +103,7 @@ class RootedPlaneTree(tuple):
         return self._compute_hash(self)
 
     def __init__(self, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
-        """
+        r"""
 
         If all parameters are passed as None or empty tuples, a single node `RootedPlaneTree` is returned.
 
@@ -116,7 +114,7 @@ class RootedPlaneTree(tuple):
         self._subtrees: tuple[RootedPlaneTree, ...] | None = None
 
     def __lt__(self, t) -> bool:
-        """Returns `True` if this rooted-plane-tree is less than rooted-plane-tree `t`, `False` otherwise.
+        r"""Returns `True` if this rooted-plane-tree is less than rooted-plane-tree `t`, `False` otherwise.
 
         See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
 
@@ -158,7 +156,7 @@ class RootedPlaneTree(tuple):
 
     @classmethod
     def _compute_hash(cls, o: FlexibleRootedPlaneTree) -> int:
-        """Exposes the hashing logic as a static method.
+        r"""Exposes the hashing logic as a static method.
 
         :param o: An object that is structurally compatible with a rooted-plane-tree.
         :return: The hash of the rooted-plane-tree that is structurally equivalent to `o`.
@@ -167,7 +165,7 @@ class RootedPlaneTree(tuple):
 
     @classmethod
     def _from_cache(cls, o: FlexibleRootedPlaneTree):
-        """Cache mechanism used in the constructor."""
+        r"""Cache mechanism used in the constructor."""
         hash_value: int = RootedPlaneTree._compute_hash(o)
         if hash_value in cls._cache.keys():
             return cls._cache[hash_value]
@@ -197,7 +195,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def degree(self) -> int:
-        """The `degree` of a rooted-plane-tree is the number of immediate subtrees it has.
+        r"""The `degree` of a rooted-plane-tree is the number of immediate subtrees it has.
 
         :return:
         """
@@ -205,7 +203,7 @@ class RootedPlaneTree(tuple):
 
     @classmethod
     def from_any(cls, o: FlexibleRootedPlaneTree) -> RootedPlaneTree:
-        """Declares a rooted-plane-tree from a Python object that can be interpreted as a rooted-plane-tree.
+        r"""Declares a rooted-plane-tree from a Python object that can be interpreted as a rooted-plane-tree.
 
         Note:
             This method is redundant with the default constructor.
@@ -223,7 +221,7 @@ class RootedPlaneTree(tuple):
 
     @classmethod
     def from_dyck_word(cls, o: dwl.FlexibleDyckWord) -> RootedPlaneTree:
-        """Declares a rooted-plane-tree from a Dyck word.
+        r"""Declares a rooted-plane-tree from a Dyck word.
 
         :param o: a Dyck word.
         :return: a rooted-plane-tree.
@@ -268,7 +266,7 @@ class RootedPlaneTree(tuple):
 
     @classmethod
     def from_tuple_tree(cls, t) -> RootedPlaneTree:
-        """Declares a rooted-plane-tree from a tree of python tuples.
+        r"""Declares a rooted-plane-tree from a tree of python tuples.
 
         :param t: a tree of python tuples.
         :return: a rooted-plane-tree.
@@ -285,7 +283,7 @@ class RootedPlaneTree(tuple):
             return cls(*children)
 
     def get_subtree_by_path(self, p: tuple[int, ...]) -> RootedPlaneTree:
-        """Given a path `p`, returns the corresponding subtree.
+        r"""Given a path `p`, returns the corresponding subtree.
 
         Definition - rooted-plane-tree path:
         A rooted-plane-tree path is a finite sequence of natural numbers >= 0, of length > 0,
@@ -316,7 +314,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def immediate_subtrees(self) -> tuple[RootedPlaneTree, ...]:
-        """The tuple of immediate subtrees.
+        r"""The tuple of immediate subtrees.
 
         :return: the tuple of the immediate subtrees.
         """
@@ -324,7 +322,7 @@ class RootedPlaneTree(tuple):
         return tuple.__new__(tuple, self)  # this implementation seems more "direct".
 
     def is_equal_to_under_o1(self, t: FlexibleRootedPlaneTree):
-        """Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
+        r"""Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
 
         Definition - rooted-plane-tree equality:
         In the context of the rooted-plane-tree canonical ordering,
@@ -358,7 +356,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def is_leaf(self) -> bool:
-        """Returns `True` if the RootedPlaneTree is a leaf, `False` otherwise.
+        r"""Returns `True` if the RootedPlaneTree is a leaf, `False` otherwise.
 
         A `RootedPlaneTree` is a leaf if and only if it contains no children.
         """
@@ -406,7 +404,7 @@ class RootedPlaneTree(tuple):
         raise util.PunctiliousException("Unreachable algorithm position.")
 
     def is_rooted_plane_tree_equivalent_to(self, t: FlexibleRootedPlaneTree) -> bool:
-        """Returns `True` if this rooted-plane-tree is connective-equivalent to rooted-plane-tree `t`.
+        r"""Returns `True` if this rooted-plane-tree is connective-equivalent to rooted-plane-tree `t`.
 
         Formal definition 1
         _______________________
@@ -452,7 +450,7 @@ class RootedPlaneTree(tuple):
             self.immediate_subtrees[i + 1] > self.immediate_subtrees[i] for i in range(0, self.degree - 1))
 
     def iterate_immediate_subtrees(self) -> typing.Generator[RootedPlaneTree, None, None]:
-        """Generator function that iterates the immediate subtrees of this rooted-plane-tree.
+        r"""Generator function that iterates the immediate subtrees of this rooted-plane-tree.
         following the canonical vertex ordering.
 
         :yields: RootedPlaneTree - a subtree.
@@ -461,7 +459,7 @@ class RootedPlaneTree(tuple):
         yield from super().__iter__()
 
     def iterate_subtrees(self) -> typing.Generator[RootedPlaneTree, None, None]:
-        """Generator function that iterates recursively the subtrees of this rooted-plane-tree.
+        r"""Generator function that iterates recursively the subtrees of this rooted-plane-tree.
         using the depth-first / canonical vertex ordering algorithm.
 
         :yields: RootedPlaneTree - a subtree.
@@ -510,7 +508,7 @@ class RootedPlaneTree(tuple):
 
     def represent_as_multiline_string_vertical_tree_representation(self, prefix="", is_root=True, is_first=True,
                                                                    is_last=True) -> str:
-        """Returns a multiline string representation of this `RootedPlaneTree`.
+        r"""Returns a multiline string representation of this `RootedPlaneTree`.
 
         May be useful to get a quick visual understanding of the tree structure.
 
@@ -565,7 +563,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def size(self):
-        """Returns the size of this `RootedPlaneTree`.
+        r"""Returns the size of this `RootedPlaneTree`.
 
         Definition: the size of a rooted plan tree is the total number of vertices in the graph."""
         return 1 + sum(child.size for child in self.immediate_subtrees)
@@ -575,7 +573,7 @@ class RootedPlaneTree(tuple):
 
     @property
     def subtrees(self) -> tuple[RootedPlaneTree, ...]:
-        """The tuple of subtrees ordered by the depth-first / canonical vertex ordering algorithm.
+        r"""The tuple of subtrees ordered by the depth-first / canonical vertex ordering algorithm.
 
         :return: the tuple of the subtrees.
         """
@@ -584,7 +582,7 @@ class RootedPlaneTree(tuple):
         return self._subtrees
 
     def to_list(self) -> list:
-        """Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
+        r"""Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
         lists are mutable."""
         return list(self.immediate_subtrees)
 
@@ -593,7 +591,7 @@ FlexibleRootedPlaneTree = typing.Union[
     RootedPlaneTree, tuple[RootedPlaneTree, ...], collections.abc.Iterator, collections.abc.Generator, None]
 
 TupleTree: typing.TypeAlias = typing.Union[int, tuple["TupleTree", ...]]
-"""A `TupleTree` is a tree of tuples whose leafs are empty empty tuples.
+r"""A `TupleTree` is a tree of tuples whose leafs are empty empty tuples.
 
 It allows to express RootedPlaneTree using python tuple syntax, e.g.: ( (), (), ( (), (), ), )
 
