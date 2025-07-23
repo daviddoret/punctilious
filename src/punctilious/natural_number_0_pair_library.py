@@ -56,13 +56,23 @@ class LexicographicOrder(orl.BinaryRelation):
     """
 
     # mathematical properties
-    _is_antisymmetric: bool | None = True
     _is_asymmetric: bool | None = False
     _is_connected: bool | None = True
     _is_irreflexive: bool | None = True
     _is_reflexive: bool | None = False
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
+
+    def is_antisymmetric(cls) -> util.TernaryBoolean:
+        """
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return util.TernaryBoolean.TRUE
 
     def relates(self, x: object, y: object) -> bool:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)

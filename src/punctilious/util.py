@@ -1,5 +1,34 @@
 import typing
 import uuid
+import enum
+
+
+class TernaryBoolean(enum.Enum):
+    """A ternary Boolean where the 3rd value means "not available".
+
+    """
+    TRUE = True
+    FALSE = False
+    NOT_AVAILABLE = "not available"
+
+
+class ClassPropertyDescriptor:
+    """Descriptor for creating class-level properties."""
+
+    def __init__(self, f):
+        self.func = f
+        self.__doc__ = f.__doc__
+
+    def __get__(self, f, cls):
+        return self.func(cls)
+
+    def __set__(self, f, x):
+        raise PunctiliousException("Property is read-only.", f=f, x=x)
+
+
+def class_property(p):
+    """Decorator to create read-only class properties."""
+    return ClassPropertyDescriptor(p)
 
 
 def decrement_last_element(s):

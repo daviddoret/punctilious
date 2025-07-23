@@ -1,25 +1,22 @@
 from __future__ import annotations
 import abc
-import util
+import docstring_inheritance
+
+import punctilious.util as util
 
 
-class BinaryRelation(abc.ABC):
-    r"""An abstract class for binary-relations.
-
-    Note
-    -----
-    This abstract class exposes the :meth:`BinaryRelation.relates`.
-
+class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMeta):
+    r"""A (pseudo-)abstract class for binary-relations.
 
     Bibliography
     -------------
+
     - http://www.mathmatique.com/naive-set-theory/relations/order-relations
     - https://encyclopediaofmath.org/wiki/Order_(on_a_set)
 
     """
 
     # mathematical properties
-    _is_antisymmetric: bool | None = None
     _is_asymmetric: bool | None = None
     _is_connected: bool | None = None
     _is_irreflexive: bool | None = None
@@ -122,11 +119,11 @@ class BinaryRelation(abc.ABC):
         else:
             return self.is_irreflexive and self.is_asymmetric and self.is_transitive and self.is_connected
 
-    @property
-    def is_antisymmetric(self) -> bool:
-        r"""Returns `True` if this binary-relation is antisymmetric,
-        `False` if not,
-        and `None` if this property is not configured.
+    @util.class_property
+    def is_antisymmetric(cls) -> util.TernaryBoolean:
+        r"""Returns `:attr:`util.TernaryBoolean.TRUE` if this binary-relation is antisymmetric,
+        `:attr:`util.TernaryBoolean.FALSE` if not,
+        and `:attr:`util.TernaryBoolean.NOT_AVAILABLE` if this property is not available.
 
         Mathematical definition - antisymmetric
         -------------------------------------------------
@@ -143,7 +140,7 @@ class BinaryRelation(abc.ABC):
         -https://en.wikipedia.org/wiki/Antisymmetric_relation
 
         """
-        return self.__class__._is_antisymmetric
+        return None
 
     @property
     def is_asymmetric(self) -> bool:

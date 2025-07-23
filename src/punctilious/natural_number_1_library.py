@@ -1,13 +1,13 @@
 from __future__ import annotations
 import typing
-import binary_relation_library as orl
-import util
+import punctilious.util as util
+import punctilious.binary_relation_library as brl
 
 
 # Relation classes
 
 
-class StrictLessThan(orl.BinaryRelation):
+class StrictLessThan(brl.BinaryRelation):
     r"""The natural order of natural numbers starting at 0.
 
     Mathematical definition
@@ -32,7 +32,7 @@ class StrictLessThan(orl.BinaryRelation):
         return int(x) < int(y)
 
 
-class StrictGreaterThan(orl.BinaryRelation):
+class StrictGreaterThan(brl.BinaryRelation):
     r"""The natural order inverse of natural numbers starting at 0.
 
     Mathematical definition
@@ -66,7 +66,7 @@ strictly_greater_than = StrictGreaterThan()
 
 # Main class
 
-class NaturalNumber1(orl.RelationalElement, int):
+class NaturalNumber1(brl.RelationalElement, int):
     r"""A natural number starting at 1.
 
     Mathematical definition
@@ -78,8 +78,8 @@ class NaturalNumber1(orl.RelationalElement, int):
     """
 
     # Configuration of class properties (cf. Relatable).
-    _canonical_order: orl.BinaryRelation = strictly_less_than
-    _strictly_less_than: orl.BinaryRelation = strictly_less_than
+    _canonical_order: brl.BinaryRelation = strictly_less_than
+    _strictly_less_than: brl.BinaryRelation = strictly_less_than
 
     def __new__(cls, x):
         x = int(x)

@@ -4,7 +4,8 @@ import collections
 # import itertools
 
 # package modules
-import punctilious.util as util
+from . import util
+# import punctilious.util as util
 import punctilious.rooted_plane_tree_library as rpt
 # import punctilious.connective_catalog as cl
 import punctilious.natural_number_1_sequence_library as sl
@@ -13,14 +14,14 @@ import punctilious.natural_number_1_sequence_library as sl
 # Classes
 
 class AbstractFormula(tuple):
-    """A :class:`AbstractFormula` is a tuple `(T, S)` such that:
+    r"""A :class:`AbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is a sequence of natural numbers.
 
     """
 
     def __eq__(self, phi) -> bool:
-        """Returns `True` if this abstract-formula is equal to abstract-formula `phi`, `False` otherwise.
+        r"""Returns `True` if this abstract-formula is equal to abstract-formula `phi`, `False` otherwise.
 
         See :attr:`AbstractFormula.is_equal_to` for a definition of abstract-formula equality.
 
@@ -42,7 +43,7 @@ class AbstractFormula(tuple):
         self._sub_formulas: tuple[AbstractFormula, ...] | None = None
 
     def __lt__(self, phi) -> bool:
-        """Returns `True` if this abstract-formula is less than abstract-formula `phi`, `False` otherwise.
+        r"""Returns `True` if this abstract-formula is less than abstract-formula `phi`, `False` otherwise.
 
         See :attr:`AbstractFormula.is_less_than` for a definition of abstract-formula canonical-ordering.
 
@@ -72,7 +73,7 @@ class AbstractFormula(tuple):
 
     @property
     def abstract_inference_rule_conclusion(self) -> AbstractFormula:
-        """If this abstract-formula is an abstract-inference-rule, returns its conclusion.
+        r"""If this abstract-formula is an abstract-inference-rule, returns its conclusion.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -85,7 +86,7 @@ class AbstractFormula(tuple):
 
     @property
     def abstract_inference_rule_premises(self) -> AbstractFormula:
-        """If this abstract-formula is an abstract-inference-rule, returns its premises.
+        r"""If this abstract-formula is an abstract-inference-rule, returns its premises.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -98,7 +99,7 @@ class AbstractFormula(tuple):
 
     @property
     def abstract_inference_rule_variables(self) -> AbstractFormula:
-        """If this abstract-formula is an abstract-inference-rule, returns its variables.
+        r"""If this abstract-formula is an abstract-inference-rule, returns its variables.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -111,7 +112,7 @@ class AbstractFormula(tuple):
 
     @property
     def abstract_map_preimage_sequence(self) -> AbstractFormula:
-        """If this abstract-formula is an abstract-map, returns its preimage sequence.
+        r"""If this abstract-formula is an abstract-map, returns its preimage sequence.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
@@ -124,7 +125,7 @@ class AbstractFormula(tuple):
 
     @property
     def abstract_map_image_sequence(self) -> AbstractFormula:
-        """If this abstract-formula is an abstract-map, returns its image sequence.
+        r"""If this abstract-formula is an abstract-map, returns its image sequence.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
@@ -136,7 +137,7 @@ class AbstractFormula(tuple):
             raise util.PunctiliousException("This abstract-formula is not an abstract-map.")
 
     def derive_abstract_inference_rule(self, p: FlexibleAbstractFormula) -> AbstractFormula:
-        """If this abstract-formula is an abstract-inference-rule, derives a theorem
+        r"""If this abstract-formula is an abstract-inference-rule, derives a theorem
         from the finite (computable) sequence of premises `p`.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
@@ -173,7 +174,7 @@ class AbstractFormula(tuple):
             raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
 
     def get_abstract_map_value(self, phi: FlexibleAbstractFormula) -> AbstractFormula:
-        """If this abstract-formula is an abstract-map, returns the image `phi` under this map.
+        r"""If this abstract-formula is an abstract-map, returns the image `phi` under this map.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
@@ -189,7 +190,7 @@ class AbstractFormula(tuple):
 
     @property
     def is_abstract_map(self) -> bool:
-        """Returns `True` if this abstract-formula is an abstract-map, `False` otherwise.
+        r"""Returns `True` if this abstract-formula is an abstract-map, `False` otherwise.
 
         Intuitive definition: abstract-map
         ______________________________________
@@ -236,7 +237,7 @@ class AbstractFormula(tuple):
 
     @property
     def is_abstract_inference_rule(self) -> bool:
-        """Returns `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
+        r"""Returns `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
 
         Intuitive definition: abstract-inference-rule
         ___________________________________________________
@@ -263,12 +264,12 @@ class AbstractFormula(tuple):
         Note
         _____
 
-        The following properties and methods are available when an abstract-formula is an abstract-map:
+        The following complementary properties and methods are available when an abstract-formula is an abstract-map:
 
-        - :attr:`AbstractFormula.abstract_inference_rule_variables`
-        - :attr:`AbstractFormula.abstract_inference_rule_premises`
-        - :attr:`AbstractFormula.abstract_inference_rule_conclusion`
-        - :meth:`AbstractFormula.derive_abstract_inference_rule`
+        - :attr:`abstract_inference_rule_variables`
+        - :attr:`abstract_inference_rule_premises`
+        - :attr:`abstract_inference_rule_conclusion`
+        - :meth:`derive_abstract_inference_rule`
 
         :return: `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
 
@@ -280,7 +281,7 @@ class AbstractFormula(tuple):
 
     @classmethod
     def _compute_hash(cls, o: AbstractFormula) -> int:
-        """Exposes the hashing logic as a static method.
+        r"""Exposes the hashing logic as a static method.
 
         :param o: An object that is structurally compatible with an abstract-formula.
         :return: The hash of the abstract-formula that is structurally equivalent to `o`.
@@ -289,7 +290,7 @@ class AbstractFormula(tuple):
 
     @classmethod
     def _from_cache(cls, o: FlexibleAbstractFormula):
-        """Cache mechanism used in the constructor."""
+        r"""Cache mechanism used in the constructor."""
         hash_value: int = AbstractFormula._compute_hash(o)
         if hash_value in cls._cache.keys():
             return cls._cache[hash_value]
@@ -303,7 +304,7 @@ class AbstractFormula(tuple):
             n: int,
             p: FlexibleAbstractFormula,
             i: FlexibleAbstractFormula) -> AbstractFormula:
-        """Declares a new abstract-map.
+        r"""Declares a new abstract-map.
 
         :param n: The main-element of the abstract-map.
         :param p: The preimage of the abstract-map.
@@ -314,7 +315,7 @@ class AbstractFormula(tuple):
 
     @property
     def arity(self) -> int:
-        """The :attr:`AbstractFormula.arity` is the number of immediate sub-formulas it contains.
+        r"""The :attr:`AbstractFormula.arity` is the number of immediate sub-formulas it contains.
 
         :return:
         """
@@ -322,7 +323,7 @@ class AbstractFormula(tuple):
 
     @property
     def canonical_abstract_formula(self) -> AbstractFormula:
-        """The canonical-abstract-formula of this abstract-formula.
+        r"""The canonical-abstract-formula of this abstract-formula.
 
         Definition: the canonical-abstract-formula `phi` of an abstract-formula `psi`
         is a formula such that:
@@ -345,7 +346,7 @@ class AbstractFormula(tuple):
 
     @property
     def formula_degree(self) -> int:
-        """The `formula_degree` of an :class:`AbstractFormula` is the number of non-leaf nodes it contains.
+        r"""The `formula_degree` of an :class:`AbstractFormula` is the number of non-leaf nodes it contains.
 
         This definition is derived from (Mancosu et al., 2021, p. 18).
 
@@ -378,7 +379,7 @@ class AbstractFormula(tuple):
             cls,
             n: int | None,
             s: tuple[FlexibleAbstractFormula, ...] | None) -> AbstractFormula:
-        """Given a root natural number n,
+        r"""Given a root natural number n,
         and a tuple of abstract-formulas s,
         declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
 
@@ -405,7 +406,7 @@ class AbstractFormula(tuple):
 
     @classmethod
     def from_tree_of_integer_tuple_pairs(cls, p) -> AbstractFormula:
-        """Declares an abstract-formula object from a tree of integer/tuple pairs.
+        r"""Declares an abstract-formula object from a tree of integer/tuple pairs.
 
         Use case
         ___________
@@ -447,7 +448,7 @@ class AbstractFormula(tuple):
         return phi
 
     def get_immediate_subformula_index(self, phi: FlexibleAbstractFormula):
-        """Returns the 0-based index position of `phi` in this abstract-formula immediate subformulas.
+        r"""Returns the 0-based index position of `phi` in this abstract-formula immediate subformulas.
 
         Prerequisites:
 
@@ -468,7 +469,7 @@ class AbstractFormula(tuple):
         return self.immediate_sub_formulas.index(phi)
 
     def get_sub_formula_by_path(self, p: tuple[int, ...]) -> AbstractFormula:
-        """Given a path `p`, returns the corresponding sub-formula.
+        r"""Given a path `p`, returns the corresponding sub-formula.
 
         Definition - sub-formula path:
         A sub-formula path is a finite sequence of natural numbers >= 0, of length > 0,
@@ -500,7 +501,7 @@ class AbstractFormula(tuple):
 
     @property
     def immediate_sub_formulas(self) -> tuple[AbstractFormula, ...]:
-        """The `immediate_sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements
+        r"""The `immediate_sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements
         that are the immediate children formulas of `phi` in the formula tree, or equivalently the formulas
         of degree 0 in `phi`.
 
@@ -525,7 +526,7 @@ class AbstractFormula(tuple):
 
     @property
     def immediate_subformulas_are_unique(self) -> bool:
-        """Returns `True` if all immediate subformulas contained in this :class:`AbstractFormula`
+        r"""Returns `True` if all immediate subformulas contained in this :class:`AbstractFormula`
         are unique.
 
         Trivial case:
@@ -545,7 +546,7 @@ class AbstractFormula(tuple):
         return self._immediate_subformulas_are_unique
 
     def is_abstract_formula_equivalent_to(self, phi: AbstractFormula):
-        """Returns `True` if this :class:`AbstractFormula` is abstract-formula-equivalent
+        r"""Returns `True` if this :class:`AbstractFormula` is abstract-formula-equivalent
         to :class:`AbstractFormula` `phi`.
 
         Formal definition:
@@ -564,7 +565,7 @@ class AbstractFormula(tuple):
 
     def is_abstract_formula_equivalent_to_with_variables(self, phi: AbstractFormula,
                                                          v: AbstractFormula) -> bool:
-        """Returns `True` if this abstract-formula is abstract-formula-equivalent to abstract-formula `phi`,
+        r"""Returns `True` if this abstract-formula is abstract-formula-equivalent to abstract-formula `phi`,
         after substitution of variables with assigned values in this abstract-formula,
         according to variables and assigned values in abstract-map `v`.
 
@@ -581,7 +582,7 @@ class AbstractFormula(tuple):
 
     @property
     def is_canonical(self) -> bool:
-        """Returns `True` if this abstract-formula is in canonical form.
+        r"""Returns `True` if this abstract-formula is in canonical form.
 
         Definition:
         An abstract-formula `phi` is `canonical` if and only if
@@ -592,7 +593,7 @@ class AbstractFormula(tuple):
         return self.natural_number_sequence.is_restricted_growth_function_sequence
 
     def is_canonical_abstract_formula_equivalent_to(self, phi: AbstractFormula):
-        """Returns `True` if this :class:`AbstractFormula` is canonical-abstract-formula-equivalent
+        r"""Returns `True` if this :class:`AbstractFormula` is canonical-abstract-formula-equivalent
         to :class:`AbstractFormula` `phi`.
 
         Formal definition:
@@ -612,7 +613,7 @@ class AbstractFormula(tuple):
             phi.canonical_abstract_formula)
 
     def is_equal_to(self, phi: FlexibleAbstractFormula):
-        """Under :class:`AbstractFormula` canonical ordering,
+        r"""Under :class:`AbstractFormula` canonical ordering,
         returns `True` if the current :class:`AbstractFormula` is equal to `phi`,
         `False` otherwise.
 
@@ -649,7 +650,7 @@ class AbstractFormula(tuple):
         raise util.PunctiliousException("Unreachable condition")
 
     def is_immediate_sub_formula_of(self, phi: AbstractFormula):
-        """Returns `True` if this :class:`AbstractFormula` is an immediate sub-formula of :class:`AbstractFormula` phi.
+        r"""Returns `True` if this :class:`AbstractFormula` is an immediate sub-formula of :class:`AbstractFormula` phi.
 
         :param phi:
         :return:
@@ -662,7 +663,7 @@ class AbstractFormula(tuple):
         return False
 
     def is_immediate_super_formula_of(self, phi: AbstractFormula):
-        """Returns `True` if :class:`AbstractFormula` phi is an immediate super-formula of this :class:`AbstractFormula`.
+        r"""Returns `True` if :class:`AbstractFormula` phi is an immediate super-formula of this :class:`AbstractFormula`.
 
         :param phi:
         :return:
@@ -709,7 +710,7 @@ class AbstractFormula(tuple):
             self.immediate_sub_formulas[i + 1] > self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
 
     def is_sub_formula_of(self, phi: AbstractFormula):
-        """Returns `True` if this :class:`AbstractFormula` is a sub-formula of :class:`AbstractFormula` phi.
+        r"""Returns `True` if this :class:`AbstractFormula` is a sub-formula of :class:`AbstractFormula` phi.
 
         :param phi:
         :return:
@@ -722,7 +723,7 @@ class AbstractFormula(tuple):
         return False
 
     def is_super_formula_of(self, phi: AbstractFormula):
-        """Returns `True` if :class:`AbstractFormula` phi is a sub-formula of this :class:`AbstractFormula`.
+        r"""Returns `True` if :class:`AbstractFormula` phi is a sub-formula of this :class:`AbstractFormula`.
 
         :param phi:
         :return:
@@ -731,7 +732,7 @@ class AbstractFormula(tuple):
         return phi.is_sub_formula_of(self)
 
     def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
-        """Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
+        r"""Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
 
         See :attr:`AbstractFormula.immediate_sub_formulas` for a definition of the term `immediate sub-formula`.
 
@@ -744,7 +745,7 @@ class AbstractFormula(tuple):
 
     def iterate_immediate_sub_sequences(self) -> typing.Generator[
         sl.NaturalNumber1Sequence, None, None]:
-        """Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this :class:`AbstractFormula`.
+        r"""Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this :class:`AbstractFormula`.
 
         Note:
 
@@ -775,7 +776,7 @@ class AbstractFormula(tuple):
             yield sub_sequence
 
     def iterate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
-        """Iterates the sub-formulas of the :class:`AbstractFormula` using the `depth-first, ascending nodes` algorithm.
+        r"""Iterates the sub-formulas of the :class:`AbstractFormula` using the `depth-first, ascending nodes` algorithm.
 
         See :attr:`AbstractFormula.sub_formulas` for a definition of the term `sub-formula`.
 
@@ -790,7 +791,7 @@ class AbstractFormula(tuple):
 
     @property
     def main_element(self) -> int:
-        """The `main_element` of an :class:`AbstractFormula` is the first element of its
+        r"""The `main_element` of an :class:`AbstractFormula` is the first element of its
         attr:`AbstractFormula.natural_numbers_sequence`, that corresponds to the root
         node of the attr:`AbstractFormula.rooted_plane_tree`.
 
@@ -808,7 +809,7 @@ class AbstractFormula(tuple):
 
     @property
     def natural_number_sequence(self) -> sl.NaturalNumber1Sequence:
-        """Returns the :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.
+        r"""Returns the :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.
 
         Shortcut: self.s.
 
@@ -817,7 +818,7 @@ class AbstractFormula(tuple):
         return super().__getitem__(1)
 
     def represent_as_function(self, connectives: tuple | None = None) -> str:
-        """Returns a string representation of the :class:`AbstractFormula` using function notation.
+        r"""Returns a string representation of the :class:`AbstractFormula` using function notation.
 
         By default, connectives are represented by their respective values
         in the :attr:`AbstractFormula.natural_numbers_sequence` .
@@ -844,7 +845,7 @@ class AbstractFormula(tuple):
             connectives=connectives)
 
     def represent_as_map_extension(self, connectives: tuple | None = None) -> str:
-        """Returns a string representation of the :class:`AbstractFormula` using map notation.
+        r"""Returns a string representation of the :class:`AbstractFormula` using map notation.
 
         By default, connectives are represented by their respective values
         in the :attr:`AbstractFormula.natural_numbers_sequence`.
@@ -885,7 +886,7 @@ class AbstractFormula(tuple):
 
     @property
     def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
-        """The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.
+        r"""The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.
 
         Shortcut: self.t.
 
@@ -894,21 +895,21 @@ class AbstractFormula(tuple):
 
     @property
     def s(self) -> sl.NaturalNumber1Sequence:
-        """A shortcut for self.natural_numbers_sequence.
+        r"""A shortcut for self.natural_numbers_sequence.
 
         """
         return self.natural_number_sequence
 
     @property
     def sequence_max_value(self) -> int:
-        """The `sequence_max_value` of an :class:`AbstractFormula` is the `max_value` of its `natural_numbers_sequence`.
+        r"""The `sequence_max_value` of an :class:`AbstractFormula` is the `max_value` of its `natural_numbers_sequence`.
 
         """
         return self.natural_number_sequence.max_value
 
     @property
     def sub_formulas(self) -> tuple[AbstractFormula, ...]:
-        """The `sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements that are present
+        r"""The `sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements that are present
         in the formula tree of `phi`, including `phi` itself.
 
         Formal definition:
@@ -939,7 +940,7 @@ class AbstractFormula(tuple):
         return self._sub_formulas
 
     def substitute_sub_formulas_with_map(self, m: FlexibleAbstractFormula) -> AbstractFormula:
-        """Returns a new abstract-formula similar to the current abstract-formula,
+        r"""Returns a new abstract-formula similar to the current abstract-formula,
          except that its subformulas present in the map `m` preimage,
          are substituted with their corresponding images,
          giving priority to the substitution of superformulas over subformulas.
@@ -963,12 +964,12 @@ class AbstractFormula(tuple):
 
     @property
     def t(self) -> rpt.RootedPlaneTree:
-        """A shortcut for self.rooted_plane_tree."""
+        r"""A shortcut for self.rooted_plane_tree."""
         return self.rooted_plane_tree
 
     @property
     def tree_degree(self) -> int:
-        """The `tree_degree` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
+        r"""The `tree_degree` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
 
         Attention point: do not confuse `tree_degree` and `formula_degree`.
         """
@@ -976,7 +977,7 @@ class AbstractFormula(tuple):
 
     @property
     def tree_size(self) -> int:
-        """The `tree_size` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
+        r"""The `tree_size` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
 
         Attention point: do not confuse `tree_size` and `formula_degree`.
         """
@@ -987,7 +988,7 @@ class AbstractFormula(tuple):
 
 
 def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
-    """Given a tree of integer/tuple pairs, extracts:
+    r"""Given a tree of integer/tuple pairs, extracts:
 
      - its tree of tuples,
      - and its sequence of integers,
