@@ -16,16 +16,6 @@ import punctilious.dyck_word_library as dwl
 class DyckWordLexicographicOder(orl.BinaryRelation):
     r"""The Dyck word lexicographic relation order of rooted plane trees.
 
-    Mathematical definition - xRy
-    -------------------------------
-
-    :math:`xRy` if and only if ...
-
-    Mathematical definition - rank()
-    ----------------------------------
-
-    :math:`\mathrm{rank}(S) = ` ...
-
     """
 
     # mathematical properties
@@ -46,11 +36,11 @@ class DyckWordLexicographicOder(orl.BinaryRelation):
     def rank(self, x: object) -> int:
         r"""
 
+        Note
+        -----
         0 should be mapped to the empty sequence ().
         1 should be mapped to sequence (0).
 
-        :param x:
-        :return:
         """
         x: RootedPlaneTree = RootedPlaneTree.from_any(x)
         d: dwl.DyckWord = x.dyck_word
@@ -83,7 +73,8 @@ class RootedPlaneTree(tuple):
     r"""A `RootedPlaneTree` is an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.
 
-    Reminder:
+    Reminder
+    ------------
     Theorem 3.11 A graph G is a tree if and only if every two vertices of G are connected by a unique path.
     Chartrand, Lesniak, and Zhang, Graphs & Digraphs: Sixth Edition, p. 65.
 
@@ -92,7 +83,10 @@ class RootedPlaneTree(tuple):
     def __eq__(self, t) -> bool:
         r"""Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
 
-        See :attr:`RootedPlaneTree.is_equal_to` for a definition of rooted-plane-tree equality.
+        See also
+        -------------
+
+        - :attr:`RootedPlaneTree.is_equal_to` for a definition of rooted-plane-tree equality.
 
         :param t: A rooted-plane-tree.
         :return: `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
@@ -372,7 +366,7 @@ class RootedPlaneTree(tuple):
 
         We say that :math:`S \prec T` under :math:`\mathcal{O}_1` if and only if:
 
-        - :math:`( |S| < |T| ),
+        - :math:`( |S| < |T| )`,
 
         or:
 
@@ -512,13 +506,17 @@ class RootedPlaneTree(tuple):
 
         May be useful to get a quick visual understanding of the tree structure.
 
-        Sample:
-        ⬤━┳━⬤
-          ┣━⬤━━━⬤
-          ┣━⬤━┳━⬤
-          ┃   ┣━⬤
-          ┃   ┗━⬤
-          ┗━⬤━━━⬤
+        Sample
+        -------
+
+        .. code-block:: text
+
+            ⬤━┳━⬤
+              ┣━⬤━━━⬤
+              ┣━⬤━┳━⬤
+              ┃   ┣━⬤
+              ┃   ┗━⬤
+              ┗━⬤━━━⬤
 
         """
         output: str = ""

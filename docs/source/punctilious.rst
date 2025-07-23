@@ -76,14 +76,6 @@ punctilious.rooted\_plane\_tree\_library module
    :show-inheritance:
    :undoc-members:
 
-punctilious.sequence\_library module
-------------------------------------
-
-.. automodule:: punctilious.sequence_library
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
 punctilious.transformation\_library module
 ------------------------------------------
 

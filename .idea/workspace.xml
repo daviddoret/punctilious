@@ -7,6 +7,7 @@
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/build/doctrees/punctilious.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/doctrees/punctilious.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/source/punctilious.rst" beforeDir="false" afterPath="$PROJECT_DIR$/docs/source/punctilious.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1095,14 +1096,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01516" summary="__eq__">
-      <option name="closed" value="true" />
-      <created>1751493426357</created>
-      <option name="number" value="01516" />
-      <option name="presentableId" value="LOCAL-01516" />
-      <option name="project" value="LOCAL" />
-      <updated>1751493426357</updated>
-    </task>
     <task id="LOCAL-01517" summary="__lt__">
       <option name="closed" value="true" />
       <created>1751493655198</created>
@@ -1487,7 +1480,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753243147341</updated>
     </task>
-    <option name="localTasksCounter" value="1565" />
+    <task id="LOCAL-01565" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1753243422537</created>
+      <option name="number" value="01565" />
+      <option name="presentableId" value="LOCAL-01565" />
+      <option name="project" value="LOCAL" />
+      <updated>1753243422538</updated>
+    </task>
+    <option name="localTasksCounter" value="1566" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
