@@ -106,7 +106,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
     _is_transitive: bool | None = True
 
     def rank(self, x: object) -> int:
-        r"""Returns the rank of `x` in :math:`( \mathbb{N}, < )`.
+        r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.
 
         :param x: A Python object interpretable as a (0-based) natural number.
         :return: An integer.
@@ -126,7 +126,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         return int(x) < int(y)
 
     def successor(self, x: object) -> object:
-        r"""Returns the successor of `x` in :math:`( \mathbb{N}, < )`.
+        r"""Returns the successor of `x` in :math:`( \mathbb{N}_0, < )`.
 
         :param x: A Python object interpretable as a (0-based) natural number.
         :return: The successor of `x`.
@@ -135,7 +135,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         return NaturalNumber0(x + 1)
 
     def unrank(self, n: int) -> object:
-        r"""Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}, < ) = n`.
+        r"""Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}_0, < ) = n`.
 
         :param n: A positive integer.
         :return: A (0-based) natural number.
@@ -162,7 +162,7 @@ class NaturalNumber0(brl.RelationalElement, int):
     Mathematical definition
     -------------------------
 
-    :math:`\mathbb{N}`.
+    :math:`\mathbb{N}_0`.
 
 
     """
