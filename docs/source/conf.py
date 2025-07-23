@@ -22,7 +22,7 @@ release = '1'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc',
+    'sphinx_autodoc2',
     'sphinx.ext.napoleon',  # if using Google or NumPy-style docstrings
     'sphinx.ext.viewcode',  # optional: link to source code
     'sphinx.ext.mathjax',  # Enables math rendering in HTML
@@ -37,3 +37,16 @@ exclude_patterns = []
 
 html_theme = 'alabaster'
 html_static_path = ['_static']
+
+# Enable autodoc to generate separate pages
+autodoc_default_options = {
+    'members': True,
+    'undoc-members': True,
+    'show-inheritance': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',  # Include __init__ if needed
+}
+
+# Enable separate pages for each function/class
+autodoc_member_order = 'bysource'  # Keep members in source order
+autodoc_typehints = 'description'  # Show type hints

@@ -420,12 +420,12 @@ class AbstractFormula(tuple):
 
         .. math::
 
-            T := (n, T')
+            T := (n, T\prime)
 
         where:
 
-        - n is a natural number
-        - T' is (possibly empty) tuple of trees of integer/tuple pairs.
+        - :math:`n` is a natural number
+        - :math:`\prime` is (possibly empty) tuple of trees of integer/tuple pairs.
 
         Sample
         --------

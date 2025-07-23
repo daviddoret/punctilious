@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>punctilious.abstract_formula_library &#8212; Punctilious 1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2"/>
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9"/>
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d"/>
+    <script src="../../_static/documentation_options.js?v=29a6c3e3"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css"/>
+
+
+</head>
+<body>
+
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+
+
+            <div class="body" role="main">
+
+                <h1>Source code for punctilious.abstract_formula_library</h1>
+                <div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span
+                        class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
+<span class="c1"># import itertools</span>
+
+<span class="c1"># package modules</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span
+                        class="n">util</span>
+<span class="c1"># import punctilious.util as util</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">punctilious.rooted_plane_tree_library</span><span
+                        class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rpt</span>
+<span class="c1"># import punctilious.connective_catalog as cl</span>
+<span class="kn">import</span><span class="w"> </span><span
+                        class="nn">punctilious.natural_number_1_sequence_library</span><span class="w"> </span><span
+                        class="k">as</span><span class="w"> </span><span class="nn">sl</span>
+
+
+<span class="c1"># Classes</span>
+
+<div class="viewcode-block" id="AbstractFormula">
+<a class="viewcode-back" href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AbstractFormula</span><span class="p">(</span><span
+        class="nb">tuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A :class:`AbstractFormula` is a tuple `(T, S)` such that:</span>
+<span class="sd">     - `T` is a rooted-plane-tree,</span>
+<span class="sd">     - `S` is a sequence of natural numbers.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span> <span
+        class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this abstract-formula is equal to abstract-formula `phi`, `False` otherwise.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_equal_to` for a definition of abstract-formula equality.</span>
+
+<span class="sd">        :param phi: An abstract-formula.</span>
+<span class="sd">        :return: `True` if this abstract-formula is equal to abstract-formula `phi`, `False` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">is_equal_to</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">_compute_hash</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AbstractFormula.__init__">
+<a class="viewcode-back" href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">rpt</span><span
+        class="o">.</span><span class="n">FlexibleRootedPlaneTree</span><span class="p">,</span> <span
+        class="n">s</span><span class="p">:</span> <span class="n">sl</span><span class="o">.</span><span class="n">FlexibleNaturalNumber1Sequence</span><span
+        class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AbstractFormula</span><span
+        class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span
+        class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_canonical_abstract_formula</span><span
+        class="p">:</span> <span class="n">AbstractFormula</span> <span class="o">|</span> <span class="kc">None</span> <span
+        class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span
+        class="n">_immediate_subformulas_are_unique</span><span class="p">:</span> <span
+        class="n">AbstractFormula</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span
+        class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_immediate_sub_formulas</span><span
+        class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="n">AbstractFormula</span><span class="p">,</span> <span class="o">...</span><span
+        class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span
+        class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_abstract_map</span><span
+        class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span
+        class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_abstract_inference_rule</span><span
+        class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span
+        class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sub_formulas</span><span class="p">:</span> <span
+        class="nb">tuple</span><span class="p">[</span><span class="n">AbstractFormula</span><span
+        class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span
+        class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__lt__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span> <span
+        class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this abstract-formula is less than abstract-formula `phi`, `False` otherwise.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_less_than` for a definition of abstract-formula canonical-ordering.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">is_less_than</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">rpt</span><span
+        class="o">.</span><span class="n">FlexibleRootedPlaneTree</span><span class="p">,</span> <span
+        class="n">s</span><span class="p">:</span> <span class="n">sl</span><span class="o">.</span><span class="n">FlexibleNaturalNumber1Sequence</span><span
+        class="p">):</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">rpt</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span> <span class="o">=</span> <span class="n">rpt</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">s</span><span class="p">:</span> <span class="n">sl</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span class="n">sl</span><span
+        class="o">.</span><span class="n">NaturalNumber1Sequence</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">size</span> <span
+        class="o">!=</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span><span
+        class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.&quot;</span><span
+        class="p">,</span>
+                <span class="n">t_size</span><span class="o">=</span><span class="n">t</span><span
+        class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">s_length</span><span
+        class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">length</span><span
+        class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span
+        class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span
+        class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span
+        class="n">AbstractFormula</span><span class="p">,</span> <span class="bp">cls</span><span
+        class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span><span
+        class="p">,</span> <span class="n">s</span><span class="p">))</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span
+        class="n">_from_cache</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">phi</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">represent_as_function</span><span
+        class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">represent_as_function</span><span
+        class="p">()</span>
+
+    <span class="n">_cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span
+        class="nb">int</span><span class="p">,</span> <span class="n">AbstractFormula</span><span
+        class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span
+        class="c1"># Cache mechanism.</span>
+
+    <span class="n">_HASH_SEED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span
+        class="mi">11651462149556646224</span>  <span class="c1"># A static random seed to reduce collision risk, originally generated by random.getrandbits(64).</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abstract_inference_rule_conclusion</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;If this abstract-formula is an abstract-inference-rule, returns its conclusion.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.</span>
+
+<span class="sd">        :return: the conclusion of this inference-rule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_abstract_inference_rule</span><span
+        class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span
+        class="s2">&quot;This abstract-formula is not an abstract-inference-rule.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abstract_inference_rule_premises</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;If this abstract-formula is an abstract-inference-rule, returns its premises.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.</span>
+
+<span class="sd">        :return: the premises of this inference-rule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_abstract_inference_rule</span><span
+        class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span
+        class="s2">&quot;This abstract-formula is not an abstract-inference-rule.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abstract_inference_rule_variables</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;If this abstract-formula is an abstract-inference-rule, returns its variables.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.</span>
+
+<span class="sd">        :return: the variables of this inference-rule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_abstract_inference_rule</span><span
+        class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span
+        class="s2">&quot;This abstract-formula is not an abstract-inference-rule.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abstract_map_preimage_sequence</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;If this abstract-formula is an abstract-map, returns its preimage sequence.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.</span>
+
+<span class="sd">        :return: the preimage sequence of this map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">is_abstract_map</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;This abstract-formula is not an abstract-map.&quot;</span><span
+        class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abstract_map_image_sequence</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;If this abstract-formula is an abstract-map, returns its image sequence.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.</span>
+
+<span class="sd">        :return: the image sequence of this map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">is_abstract_map</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;This abstract-formula is not an abstract-map.&quot;</span><span
+        class="p">)</span>
+
+<div class="viewcode-block" id="AbstractFormula.derive_abstract_inference_rule">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.derive_abstract_inference_rule">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">derive_abstract_inference_rule</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span
+        class="p">:</span> <span class="n">FlexibleAbstractFormula</span><span class="p">)</span> <span
+        class="o">-&gt;</span> <span class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;If this abstract-formula is an abstract-inference-rule, derives a theorem</span>
+<span class="sd">        from the finite (computable) sequence of premises `p`.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.</span>
+
+<span class="sd">        :param p: a finite (computable) sequence of premises, in the order expected by the inference-rule.</span>
+<span class="sd">        :return: the theorem derived from this abstract-inference-rule, given premises `p`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span class="o">=</span> <span
+        class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_abstract_inference_rule</span><span
+        class="p">:</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">arity</span> <span
+        class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_inference_rule_premises</span><span
+        class="o">.</span><span class="n">arity</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;The number of input premises is not equal to the number&quot;</span>
+                                                <span class="s2">&quot; of premises expected by the inference-rule.&quot;</span><span
+        class="p">,</span>
+                                                <span class="n">input_premises</span><span class="o">=</span><span
+        class="n">p</span><span class="p">,</span>
+                                                <span class="n">expected_premises</span><span class="o">=</span><span
+        class="bp">self</span><span class="o">.</span><span class="n">abstract_inference_rule_premises</span><span
+        class="p">,</span>
+                                                <span class="n">inference_rule</span><span class="o">=</span><span
+        class="bp">self</span><span class="p">)</span>
+            <span class="n">v</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span
+        class="n">AbstractFormula</span><span class="p">,</span> <span class="n">AbstractFormula</span> <span class="o">|</span> <span
+        class="kc">None</span><span class="p">]</span>  <span class="c1"># A mapping for variable values</span>
+
+            <span class="n">i</span><span class="p">:</span> <span class="n">AbstractFormula</span>  <span class="c1"># An input premise</span>
+            <span class="n">e</span><span class="p">:</span> <span class="n">AbstractFormula</span>  <span class="c1"># An expected premise</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">e</span> <span
+        class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span
+        class="n">iterate_immediate_sub_formulas</span><span class="p">(),</span> <span class="bp">self</span><span
+        class="o">.</span><span class="n">abstract_inference_rule_premises</span><span class="p">):</span>
+                <span class="n">ok</span><span class="p">,</span> <span class="n">v</span> <span
+        class="o">=</span> <span class="n">_compute_abstract_inference_rule_variables</span><span
+        class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">i</span><span
+        class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+
+
+
+
+
+        <span class="c1"># TODO: IMPLEMENT INFERENCE-RULE LOGIC</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span
+        class="s2">&quot;This abstract-formula is not an abstract-inference-rule.&quot;</span><span
+        class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.get_abstract_map_value">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.get_abstract_map_value">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_abstract_map_value</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span
+        class="p">:</span> <span class="n">FlexibleAbstractFormula</span><span class="p">)</span> <span
+        class="o">-&gt;</span> <span class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;If this abstract-formula is an abstract-map, returns the image `phi` under this map.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.</span>
+
+<span class="sd">        :param phi: a preimage element.</span>
+<span class="sd">        :return: the image of `phi` under this map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">is_abstract_map</span><span class="p">:</span>
+            <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span
+        class="bp">self</span><span class="o">.</span><span class="n">abstract_map_preimage_sequence</span><span
+        class="o">.</span><span class="n">get_immediate_subformula_index</span><span class="p">(</span><span class="n">phi</span><span
+        class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_map_image_sequence</span><span
+        class="o">.</span><span class="n">immediate_sub_formulas</span><span class="p">[</span><span
+        class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;This abstract-formula is not an abstract-map.&quot;</span><span
+        class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_abstract_map</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this abstract-formula is an abstract-map, `False` otherwise.</span>
+
+<span class="sd">        Intuitive definition: abstract-map</span>
+<span class="sd">        ______________________________________</span>
+
+<span class="sd">        Intuitively, an abstract-map is an abstract-formula that is structurally</span>
+<span class="sd">         equivalent to a finite map.</span>
+
+<span class="sd">        Formal definition: abstract-map</span>
+<span class="sd">        _________________________________</span>
+
+<span class="sd">        A finite (computable) abstract-map :math:`M` is a tuple :math:`(P, I)` where:</span>
+
+<span class="sd">        - :math:`P` is a finite sequence of unique elements denoted as the preimage,</span>
+<span class="sd">        - :math:`I` is a finite sequence of unique elements denoted as the image,</span>
+<span class="sd">        - :math:`|P| = |I|`.</span>
+
+<span class="sd">        Formal definition: abstract-map</span>
+<span class="sd">        ___________________________________</span>
+
+<span class="sd">        An abstract-formula is an abstract-map if and only if:</span>
+
+<span class="sd">        - its arity equals 2,</span>
+<span class="sd">        - the arity of its first immediate subformula equals the arity of its second immediate subformula,</span>
+<span class="sd">        - the immediate subformulas of its first immediate subformula are unique.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        _____</span>
+
+<span class="sd">        The following properties and methods are available when an abstract-formula is an abstract-map:</span>
+
+<span class="sd">        - :attr:`AbstractFormula.abstract_map_preimage`</span>
+<span class="sd">        - :attr:`AbstractFormula.abstract_map_image`</span>
+<span class="sd">        - :meth:`AbstractFormula.get_abstract_map_value`</span>
+
+<span class="sd">        :return: `True` if this abstract-formula is an abstract-map, `False` otherwise.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">_is_abstract_map</span> <span class="ow">is</span> <span class="kc">None</span><span
+        class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_abstract_map</span> <span class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">arity</span> <span
+        class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span
+        class="n">arity</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">immediate_sub_formulas</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span
+        class="o">.</span><span class="n">arity</span> <span class="ow">and</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">immediate_subformulas_are_unique</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_abstract_map</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_abstract_inference_rule</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.</span>
+
+<span class="sd">        Intuitive definition: abstract-inference-rule</span>
+<span class="sd">        ___________________________________________________</span>
+
+<span class="sd">        Intuitively, an abstract-inference-rule is an abstract-formula that is structurally</span>
+<span class="sd">         equivalent to an inference rule.</span>
+
+<span class="sd">        Formal definition: abstract-inference-rule</span>
+<span class="sd">        ______________________________________________</span>
+
+<span class="sd">        An abstract-inference-rule :math:`I` is a tuple :math:`(V, P, C)` where:</span>
+
+<span class="sd">        - :math:`V` is a finite sequence of unique elements denoted as the variables,</span>
+<span class="sd">        - :math:`P` is a finite sequence of unique elements denoted as the premises,</span>
+<span class="sd">        - :math:`C` is denoted as the conclusion.</span>
+
+<span class="sd">        Formal definition: abstract-inference-rule</span>
+<span class="sd">        _______________________________________________</span>
+
+<span class="sd">        An abstract-formula is an abstract-inference-rule if and only if:</span>
+
+<span class="sd">         - its arity equals 3.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        _____</span>
+
+<span class="sd">        The following complementary properties and methods are available when an abstract-formula is an abstract-map:</span>
+
+<span class="sd">        - :attr:`abstract_inference_rule_variables`</span>
+<span class="sd">        - :attr:`abstract_inference_rule_premises`</span>
+<span class="sd">        - :attr:`abstract_inference_rule_conclusion`</span>
+<span class="sd">        - :meth:`derive_abstract_inference_rule`</span>
+
+<span class="sd">        :return: `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_abstract_inference_rule</span> <span
+        class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_abstract_inference_rule</span> <span
+        class="o">=</span> \
+                <span class="bp">self</span><span class="o">.</span><span class="n">arity</span> <span
+        class="o">==</span> <span class="mi">3</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_abstract_inference_rule</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_hash</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="n">o</span><span class="p">:</span> <span class="n">AbstractFormula</span><span
+        class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Exposes the hashing logic as a static method.</span>
+
+<span class="sd">        :param o: An object that is structurally compatible with an abstract-formula.</span>
+<span class="sd">        :return: The hash of the abstract-formula that is structurally equivalent to `o`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">((</span><span class="n">AbstractFormula</span><span
+        class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_HASH_SEED</span><span
+        class="p">,</span> <span class="n">o</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="p">,</span> <span class="n">o</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="p">,))</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_from_cache</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="n">o</span><span class="p">:</span> <span class="n">FlexibleAbstractFormula</span><span
+        class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Cache mechanism used in the constructor.&quot;&quot;&quot;</span>
+        <span class="n">hash_value</span><span class="p">:</span> <span class="nb">int</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">_compute_hash</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hash_value</span> <span class="ow">in</span> <span
+        class="bp">cls</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span
+        class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span
+        class="n">_cache</span><span class="p">[</span><span class="n">hash_value</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_cache</span><span
+        class="p">[</span><span class="n">hash_value</span><span class="p">]</span> <span class="o">=</span> <span
+        class="n">o</span>
+            <span class="k">return</span> <span class="n">o</span>
+
+<div class="viewcode-block" id="AbstractFormula.abstract_map_from_preimage_and_image">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.abstract_map_from_preimage_and_image">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">abstract_map_from_preimage_and_image</span><span
+        class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span>
+            <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">p</span><span class="p">:</span> <span class="n">FlexibleAbstractFormula</span><span
+        class="p">,</span>
+            <span class="n">i</span><span class="p">:</span> <span class="n">FlexibleAbstractFormula</span><span
+        class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span
+        class="sd">&quot;&quot;&quot;Declares a new abstract-map.</span>
+
+<span class="sd">        :param n: The main-element of the abstract-map.</span>
+<span class="sd">        :param p: The preimage of the abstract-map.</span>
+<span class="sd">        :param i: The image of the abstract-map.</span>
+<span class="sd">        :return: The resulting abstract-map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_immediate_sub_formulas</span><span
+        class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span
+        class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">(</span><span
+        class="n">p</span><span class="p">,</span> <span class="n">i</span><span class="p">,))</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">arity</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The :attr:`AbstractFormula.arity` is the number of immediate sub-formulas it contains.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span
+        class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">canonical_abstract_formula</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The canonical-abstract-formula of this abstract-formula.</span>
+
+<span class="sd">        Definition: the canonical-abstract-formula `phi` of an abstract-formula `psi`</span>
+<span class="sd">        is a formula such that:</span>
+
+<span class="sd">        - their rooted-plane-tree are rooted-plane-tree-equivalent,</span>
+<span class="sd">        - the natural-number-sequence of `phi` is the canonical-naturel-number-sequence</span>
+<span class="sd">           of the natural-number-sequence of `psi`</span>
+
+<span class="sd">        :return: The canonical-abstract-formula of this abstract-formula.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">is_canonical</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canonical_abstract_formula</span> <span
+        class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canonical_abstract_formula</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_canonical_abstract_formula</span><span
+        class="p">:</span> <span class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">AbstractFormula</span><span
+        class="p">(</span>
+                <span class="n">t</span><span class="o">=</span><span class="bp">self</span><span
+        class="o">.</span><span class="n">rooted_plane_tree</span><span class="p">,</span>
+                <span class="n">s</span><span class="o">=</span><span class="bp">self</span><span
+        class="o">.</span><span class="n">natural_number_sequence</span><span class="o">.</span><span class="n">to_restricted_growth_function_sequence</span><span
+        class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_canonical_abstract_formula</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">formula_degree</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The `formula_degree` of an :class:`AbstractFormula` is the number of non-leaf nodes it contains.</span>
+
+<span class="sd">        This definition is derived from (Mancosu et al., 2021, p. 18).</span>
+
+<span class="sd">        Attention point: do not confuse `tree_size` and `formula_degree`.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span
+        class="mi">0</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">rpt</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span
+        class="o">.</span><span class="n">rooted_plane_tree</span><span class="o">.</span><span class="n">iterate_subtrees</span><span
+        class="p">():</span>
+            <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span
+        class="n">degree</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">i</span>
+
+<div class="viewcode-block" id="AbstractFormula.from_any">
+<a class="viewcode-back" href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.from_any">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_any</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span>
+            <span class="n">o</span><span class="p">:</span> <span class="n">FlexibleAbstractFormula</span><span
+        class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractFormula</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
+        class="n">o</span><span class="p">,</span> <span class="n">AbstractFormula</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">o</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
+        class="n">o</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span
+        class="n">abc</span><span class="o">.</span><span class="n">Iterable</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">AbstractFormula</span><span class="p">(</span><span class="o">*</span><span
+        class="n">o</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span
+        class="n">o</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span
+        class="n">abc</span><span class="o">.</span><span class="n">Generator</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">AbstractFormula</span><span class="p">(</span><span class="o">*</span><span
+        class="n">o</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;`AbstractFormula` data validation failure. `o` is of unknown type.&quot;</span><span
+        class="p">,</span>
+                                        <span class="n">type_of_o</span><span class="o">=</span><span
+        class="nb">type</span><span class="p">(</span><span class="n">o</span><span class="p">),</span> <span class="n">o</span><span
+        class="o">=</span><span class="n">o</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.from_immediate_sub_formulas">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.from_immediate_sub_formulas">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_immediate_sub_formulas</span><span
+        class="p">(</span>
+            <span class="bp">cls</span><span class="p">,</span>
+            <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span
+        class="kc">None</span><span class="p">,</span>
+            <span class="n">s</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span class="o">...</span><span
+        class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span
+        class="o">-&gt;</span> <span class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a root natural number n,</span>
+<span class="sd">        and a tuple of abstract-formulas s,</span>
+<span class="sd">        declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.</span>
+
+<span class="sd">        :param n:</span>
+<span class="sd">        :param s:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span
+        class="p">:</span>
+            <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span
+        class="mi">0</span>
+        <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span><span
+        class="p">:</span>
+            <span class="n">s</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="n">AbstractFormula</span><span class="p">,</span> <span class="o">...</span><span
+        class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="n">s</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="n">AbstractFormula</span><span class="p">,</span> <span class="o">...</span><span
+        class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">o</span><span class="o">=</span><span class="n">phi</span><span
+        class="p">)</span> <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span
+        class="n">s</span><span class="p">)</span>
+        <span class="c1"># Retrieves the children trees</span>
+        <span class="n">t</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="n">rpt</span><span class="o">.</span><span class="n">RootedPlaneTree</span><span class="p">,</span> <span
+        class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span
+        class="p">(</span><span class="n">phi</span><span class="o">.</span><span
+        class="n">rooted_plane_tree</span> <span class="k">for</span> <span class="n">phi</span> <span
+        class="ow">in</span> <span class="n">s</span><span class="p">)</span>
+        <span class="c1"># Declare the new parent tree</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">rpt</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span> <span class="o">=</span> <span class="n">rpt</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span><span class="o">.</span><span class="n">from_immediate_subtrees</span><span
+        class="p">(</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+        <span class="c1"># Declare the natural-number-sequence by appending n to the concatenation of the</span>
+        <span class="c1"># children natural-number-sequences.</span>
+        <span class="n">u</span><span class="p">:</span> <span class="n">sl</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span class="n">sl</span><span
+        class="o">.</span><span class="n">NaturalNumber1Sequence</span><span class="p">(</span><span
+        class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">sl</span><span
+        class="o">.</span><span class="n">concatenate_natural_number_sequences</span><span class="p">(</span>
+            <span class="o">*</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span> <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span
+        class="n">s</span><span class="p">))</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="p">(</span><span class="n">t</span><span
+        class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">s</span><span
+        class="o">=</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">phi</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.from_tree_of_integer_tuple_pairs">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.from_tree_of_integer_tuple_pairs">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_tree_of_integer_tuple_pairs</span><span
+        class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">p</span><span
+        class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Declares an abstract-formula object from a tree of integer/tuple pairs.</span>
+
+<span class="sd">        Use case</span>
+<span class="sd">        ___________</span>
+
+<span class="sd">        Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.</span>
+
+<span class="sd">        Definition</span>
+<span class="sd">        ------------</span>
+
+<span class="sd">        A tree of integer/tuple pairs `T` defined as:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            T := (n, T\prime)</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">        - :math:`n` is a natural number</span>
+<span class="sd">        - :math:`\prime` is (possibly empty) tuple of trees of integer/tuple pairs.</span>
+
+<span class="sd">        Sample</span>
+<span class="sd">        --------</span>
+
+<span class="sd">        The tree of integer/tuple pairs:</span>
+<span class="sd">        (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)</span>
+
+<span class="sd">        ...maps to the abstract-formula:</span>
+<span class="sd">        0(1,0(2,1),2)</span>
+
+<span class="sd">        :param p: A tree of integer/tuple pairs.</span>
+<span class="sd">        :return: an abstract-formula.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">t</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span
+        class="n">extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs</span><span
+        class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">p</span><span
+        class="p">)</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">rpt</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span> <span class="o">=</span> <span class="n">rpt</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span><span class="o">.</span><span
+        class="n">from_tuple_tree</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">s</span><span class="p">:</span> <span class="n">sl</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span class="n">sl</span><span
+        class="o">.</span><span class="n">NaturalNumber1Sequence</span><span class="p">(</span><span
+        class="o">*</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="p">(</span><span class="n">t</span><span
+        class="p">,</span> <span class="n">s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">phi</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.get_immediate_subformula_index">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.get_immediate_subformula_index">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_immediate_subformula_index</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span
+        class="p">:</span> <span class="n">FlexibleAbstractFormula</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the 0-based index position of `phi` in this abstract-formula immediate subformulas.</span>
+
+<span class="sd">        Prerequisites:</span>
+
+<span class="sd">        - the immediate subformulas of this abstract-formula are unique, cf. :attr:`AbstractFormula.immediate_subformulas_are_unique`,</span>
+<span class="sd">        - `phi` is an immediate subformula of this abstract-formula.</span>
+
+<span class="sd">        :param phi:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">immediate_subformulas_are_unique</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span
+        class="s1">&#39;The immediate subformulas of this abstract-formula are not unique.&#39;</span><span
+        class="p">,</span>
+                                            <span class="n">this_formula</span><span class="o">=</span><span class="bp">self</span><span
+        class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span
+        class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">phi</span> <span
+        class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">immediate_sub_formulas</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span
+        class="s1">&#39;`phi` is not an immediate subformulas of this abstract-formula.&#39;</span><span
+        class="p">,</span>
+                                            <span class="n">this_formula</span><span class="o">=</span><span class="bp">self</span><span
+        class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span
+        class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.get_sub_formula_by_path">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.get_sub_formula_by_path">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_sub_formula_by_path</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span
+        class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span
+        class="p">,</span> <span class="o">...</span><span class="p">])</span> <span class="o">-&gt;</span> <span
+        class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a path `p`, returns the corresponding sub-formula.</span>
+
+<span class="sd">        Definition - sub-formula path:</span>
+<span class="sd">        A sub-formula path is a finite sequence of natural numbers &gt;= 0, of length &gt; 0,</span>
+<span class="sd">        that gives the index position of the sub-formulas, following the depth-first algorithm,</span>
+<span class="sd">        starting with 0 meaning the original tree.</span>
+
+<span class="sd">        It follows that for any formula `phi`, the path (0) returns the formula itself.</span>
+
+<span class="sd">        :param p:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span
+        class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span
+        class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span
+        class="n">n</span> <span class="ow">in</span> <span class="n">p</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span
+        class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;The first element of the path is not equal to 0.&quot;</span><span
+        class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">p</span><span
+        class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span
+        class="o">=</span><span class="n">p</span><span class="p">,</span>
+                                            <span class="n">phi</span><span class="o">=</span><span
+        class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="p">(</span><span
+        class="mi">0</span><span class="p">,):</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="bp">self</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span
+        class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span
+        class="p">(</span><span class="n">p</span><span class="p">)):</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span
+        class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">j</span> <span
+        class="o">&gt;=</span> <span class="n">phi</span><span class="o">.</span><span class="n">tree_degree</span><span
+        class="p">:</span>
+                    <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                        <span class="s2">&quot;The n-th element of the path is negative or greater than the number of&quot;</span>
+                        <span class="s2">&quot; immediate sub-formulas in phi.&quot;</span><span
+        class="p">,</span> <span class="n">n_index</span><span class="o">=</span><span class="n">i</span><span
+        class="p">,</span> <span class="n">n_value</span><span class="o">=</span><span class="n">j</span><span
+        class="p">,</span>
+                        <span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span
+        class="p">)</span>
+                <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">phi</span><span class="o">.</span><span
+        class="n">immediate_sub_formulas</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">phi</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">immediate_sub_formulas</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="nb">tuple</span><span class="p">[</span><span class="n">AbstractFormula</span><span
+        class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The `immediate_sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements</span>
+<span class="sd">        that are the immediate children formulas of `phi` in the formula tree, or equivalently the formulas</span>
+<span class="sd">        of degree 0 in `phi`.</span>
+
+<span class="sd">        The term `immediate sub-formula` is used by (Mancosu 2021, p. 17-18).</span>
+
+<span class="sd">        See also:</span>
+
+<span class="sd">        - :attr:`AbstractFormula.sub_formulas`</span>
+
+<span class="sd">        References:</span>
+
+<span class="sd">        - Mancosu 2021.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_immediate_sub_formulas</span> <span
+        class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sub_formulas</span> <span class="o">=</span> <span class="nb">list</span><span
+        class="p">()</span>
+            <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span
+        class="bp">self</span><span class="o">.</span><span class="n">iterate_immediate_sub_formulas</span><span
+        class="p">():</span>
+                <span class="n">sub_formulas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+        class="n">phi</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_immediate_sub_formulas</span> <span
+        class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sub_formulas</span><span
+        class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_immediate_sub_formulas</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">immediate_subformulas_are_unique</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if all immediate subformulas contained in this :class:`AbstractFormula`</span>
+<span class="sd">        are unique.</span>
+
+<span class="sd">        Trivial case:</span>
+<span class="sd">        If the :class:`AbstractFormula` is a leaf, i.e. it contains no immediate subformulas,</span>
+<span class="sd">        then all of its immediate subformulas are unique.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_immediate_subformulas_are_unique</span> <span
+        class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">unique_values</span><span class="p">:</span> <span class="nb">set</span><span
+        class="p">[</span><span class="n">AbstractFormula</span><span class="p">]</span> <span class="o">=</span> <span
+        class="nb">set</span><span class="p">()</span>
+            <span class="n">psi</span><span class="p">:</span> <span class="n">AbstractFormula</span>
+            <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span
+        class="bp">self</span><span class="o">.</span><span class="n">iterate_immediate_sub_formulas</span><span
+        class="p">():</span>
+                <span class="k">if</span> <span class="n">psi</span> <span class="ow">in</span> <span class="n">unique_values</span><span
+        class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_immediate_subformulas_are_unique</span> <span
+        class="o">=</span> <span class="kc">False</span>
+                <span class="n">unique_values</span><span class="o">.</span><span class="n">add</span><span
+        class="p">(</span><span class="n">psi</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_immediate_subformulas_are_unique</span> <span
+        class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_immediate_subformulas_are_unique</span>
+
+<div class="viewcode-block" id="AbstractFormula.is_abstract_formula_equivalent_to">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_abstract_formula_equivalent_to">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_abstract_formula_equivalent_to</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span
+        class="p">:</span> <span class="n">AbstractFormula</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this :class:`AbstractFormula` is abstract-formula-equivalent</span>
+<span class="sd">        to :class:`AbstractFormula` `phi`.</span>
+
+<span class="sd">        Formal definition:</span>
+<span class="sd">        Two abstract-formulas phi and psi are abstract-formula-equivalent if and only if:</span>
+
+<span class="sd">        - the rooted-plane-tree of phi is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,</span>
+<span class="sd">        - the natural-numbers-sequence of phi is natural-numbers-sequence-equivalent to the natural-numbers-sequence of psi.</span>
+
+<span class="sd">        :param phi:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="o">.</span><span class="n">is_rooted_plane_tree_equivalent_to</span><span class="p">(</span>
+            <span class="n">phi</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="o">.</span><span class="n">is_natural_number_1_sequence_equivalent_to</span><span
+        class="p">(</span>
+            <span class="n">phi</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.is_abstract_formula_equivalent_to_with_variables">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_abstract_formula_equivalent_to_with_variables">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span
+        class="nf">is_abstract_formula_equivalent_to_with_variables</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span
+        class="n">AbstractFormula</span><span class="p">,</span>
+                                                         <span class="n">v</span><span class="p">:</span> <span
+        class="n">AbstractFormula</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this abstract-formula is abstract-formula-equivalent to abstract-formula `phi`,</span>
+<span class="sd">        after substitution of variables with assigned values in this abstract-formula,</span>
+<span class="sd">        according to variables and assigned values in abstract-map `v`.</span>
+
+<span class="sd">        :param phi: An abstract-formula.</span>
+<span class="sd">        :param v: An abstract-map whose preimage is denoted as the variables, and image as the assigned values.</span>
+<span class="sd">        :return: `True` if formulas are equivalent given above conditions, `False` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">v</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span class="o">=</span> <span
+        class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span
+        class="n">is_abstract_map</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;`v` is not an abstract-map&quot;</span><span class="p">,</span> <span
+        class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span> <span
+        class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">this_abstract_formula</span><span
+        class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">psi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">substitute_sub_formulas_with_map</span><span
+        class="p">(</span><span class="n">m</span><span class="o">=</span><span class="n">v</span><span
+        class="p">)</span>
+        <span class="k">return</span> <span class="n">psi</span><span class="o">.</span><span class="n">is_abstract_formula_equivalent_to</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_canonical</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this abstract-formula is in canonical form.</span>
+
+<span class="sd">        Definition:</span>
+<span class="sd">        An abstract-formula `phi` is `canonical` if and only if</span>
+<span class="sd">        its natural-number-sequence is a restricted-growth-function-sequence.</span>
+
+<span class="sd">        :return: `True` if this abstract-formula is in canonical form, `False` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="o">.</span><span class="n">is_restricted_growth_function_sequence</span>
+
+<div class="viewcode-block" id="AbstractFormula.is_canonical_abstract_formula_equivalent_to">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_canonical_abstract_formula_equivalent_to">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span
+        class="nf">is_canonical_abstract_formula_equivalent_to</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span
+        class="n">AbstractFormula</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this :class:`AbstractFormula` is canonical-abstract-formula-equivalent</span>
+<span class="sd">        to :class:`AbstractFormula` `phi`.</span>
+
+<span class="sd">        Formal definition:</span>
+<span class="sd">        Two abstract-formulas phi and psi are canonical-abstract-formula-equivalent if and only if:</span>
+
+<span class="sd">        - the canonical-abstract-formula of phi is abstract-formula-equivalent</span>
+<span class="sd">          to the canonical-abstract-formula of psi.</span>
+
+<span class="sd">        Intuitive definition:</span>
+<span class="sd">        Two formulas are canonical-abstract-formula-equivalent if they have the same &quot;structure&quot;.</span>
+
+<span class="sd">        :param phi:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">canonical_abstract_formula</span><span
+        class="o">.</span><span class="n">is_abstract_formula_equivalent_to</span><span class="p">(</span>
+            <span class="n">phi</span><span class="o">.</span><span class="n">canonical_abstract_formula</span><span
+        class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.is_equal_to">
+<a class="viewcode-back" href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_equal_to">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_equal_to</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span
+        class="n">FlexibleAbstractFormula</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Under :class:`AbstractFormula` canonical ordering,</span>
+<span class="sd">        returns `True` if the current :class:`AbstractFormula` is equal to `phi`,</span>
+<span class="sd">        `False` otherwise.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.is_less_than` for a definition of abstract-formula canonical-ordering.</span>
+
+<span class="sd">        :param phi: A :class:`AbstractFormula`.</span>
+<span class="sd">        :return: `True` if the current :class:`AbstractFormula` is equal to `s`, `False` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_abstract_formula_equivalent_to</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.is_less_than">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_less_than">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_less_than</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span
+        class="n">FlexibleAbstractFormula</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Under :class:`AbstractFormula` canonical ordering,</span>
+<span class="sd">        returns `True` if the current :class:`AbstractFormula` is less than `phi`,</span>
+<span class="sd">        `False` otherwise.</span>
+
+<span class="sd">        Definition: canonical ordering of abstract-formula, denoted :math:`\prec`,</span>
+<span class="sd">        is defined as rooted-plane-tree-first, natural-number-sequence second.</span>
+
+<span class="sd">        :param phi: A :class:`AbstractFormula`.</span>
+<span class="sd">        :return: `True` if the current :class:`AbstractFormula` is equal to `phi`, `False` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_abstract_formula_equivalent_to</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="o">.</span><span class="n">is_less_than_under_o1</span><span class="p">(</span><span class="n">phi</span><span
+        class="o">.</span><span class="n">rooted_plane_tree</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">phi</span><span class="o">.</span><span
+        class="n">rooted_plane_tree</span><span class="o">.</span><span class="n">is_less_than_under_o1</span><span
+        class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+        class="n">rooted_plane_tree</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="o">.</span><span class="n">is_less_than_under_o2</span><span class="p">(</span><span class="n">phi</span><span
+        class="o">.</span><span class="n">natural_number_sequence</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">phi</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="o">.</span><span class="n">is_less_than_under_o2</span><span class="p">(</span><span
+        class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;Unreachable condition&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.is_immediate_sub_formula_of">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_immediate_sub_formula_of">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_immediate_sub_formula_of</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span
+        class="p">:</span> <span class="n">AbstractFormula</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this :class:`AbstractFormula` is an immediate sub-formula of :class:`AbstractFormula` phi.</span>
+
+<span class="sd">        :param phi:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">psi</span><span class="p">:</span> <span class="n">AbstractFormula</span>
+        <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="n">phi</span><span
+        class="o">.</span><span class="n">iterate_immediate_sub_formulas</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_abstract_formula_equivalent_to</span><span
+        class="p">(</span><span class="n">psi</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.is_immediate_super_formula_of">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_immediate_super_formula_of">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_immediate_super_formula_of</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span
+        class="p">:</span> <span class="n">AbstractFormula</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if :class:`AbstractFormula` phi is an immediate super-formula of this :class:`AbstractFormula`.</span>
+
+<span class="sd">        :param phi:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">phi</span><span class="o">.</span><span class="n">is_immediate_sub_formula_of</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_increasing</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this abstract-formula is increasing, `False` otherwise.</span>
+
+<span class="sd">        Definition - increasing abstract-formula:</span>
+<span class="sd">        An abstract-formula is increasing</span>
+<span class="sd">        or increasing under canonical order,</span>
+<span class="sd">        if its immediate subformulas are ordered.</span>
+
+<span class="sd">        Definition - increasing abstract-formula:</span>
+<span class="sd">        An abstract-formula :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is increasing,</span>
+<span class="sd">        or increasing under canonical order,</span>
+<span class="sd">        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} \ge \psi_i`.</span>
+
+<span class="sd">        :return: `True` if this abstract-formula is increasing, `False` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span
+        class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">immediate_sub_formulas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span
+        class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span
+        class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">arity</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_strictly_increasing</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this abstract-formula is strictly increasing, `False` otherwise.</span>
+
+<span class="sd">        Definition - strictly increasing abstract-formula:</span>
+<span class="sd">        An abstract-formula is strictly increasing</span>
+<span class="sd">        or strictly increasing under canonical order,</span>
+<span class="sd">        if its immediate subformulas are strictly ordered.</span>
+
+<span class="sd">        Definition - strictly increasing abstract-formula:</span>
+<span class="sd">        An abstract-formula :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is strictly increasing,</span>
+<span class="sd">        or strictly increasing under canonical order,</span>
+<span class="sd">        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} &gt; \psi_i`.</span>
+
+<span class="sd">        :return: `True` if this abstract-formula is strictly increasing, `False` otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span
+        class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">immediate_sub_formulas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span
+        class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span
+        class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">arity</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+<div class="viewcode-block" id="AbstractFormula.is_sub_formula_of">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_sub_formula_of">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_sub_formula_of</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span
+        class="p">:</span> <span class="n">AbstractFormula</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if this :class:`AbstractFormula` is a sub-formula of :class:`AbstractFormula` phi.</span>
+
+<span class="sd">        :param phi:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">psi</span><span class="p">:</span> <span class="n">AbstractFormula</span>
+        <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="n">phi</span><span
+        class="o">.</span><span class="n">iterate_sub_formulas</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_abstract_formula_equivalent_to</span><span
+        class="p">(</span><span class="n">psi</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.is_super_formula_of">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.is_super_formula_of">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_super_formula_of</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span
+        class="p">:</span> <span class="n">AbstractFormula</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns `True` if :class:`AbstractFormula` phi is a sub-formula of this :class:`AbstractFormula`.</span>
+
+<span class="sd">        :param phi:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span
+        class="o">=</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">phi</span><span class="o">.</span><span class="n">is_sub_formula_of</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.iterate_immediate_sub_formulas">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.iterate_immediate_sub_formulas">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iterate_immediate_sub_formulas</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span
+        class="n">Generator</span><span class="p">[</span><span class="n">AbstractFormula</span><span class="p">,</span> <span
+        class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Iterates the immediate sub-formulas of the :class:`AbstractFormula`.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.immediate_sub_formulas` for a definition of the term `immediate sub-formula`.</span>
+
+<span class="sd">        :return: A generator of :class:`AbstractFormula`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">child_tree</span><span class="p">,</span> <span class="n">child_sequence</span> <span
+        class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span
+        class="o">.</span><span class="n">rooted_plane_tree</span><span class="o">.</span><span class="n">iterate_immediate_subtrees</span><span
+        class="p">(),</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">iterate_immediate_sub_sequences</span><span
+        class="p">()):</span>
+            <span class="n">sub_formula</span> <span class="o">=</span> <span class="n">AbstractFormula</span><span
+        class="p">(</span><span class="n">child_tree</span><span class="p">,</span> <span
+        class="n">child_sequence</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">sub_formula</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.iterate_immediate_sub_sequences">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.iterate_immediate_sub_sequences">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iterate_immediate_sub_sequences</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">typing</span><span class="o">.</span><span class="n">Generator</span><span class="p">[</span>
+        <span class="n">sl</span><span class="o">.</span><span class="n">NaturalNumber1Sequence</span><span
+        class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span
+        class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this :class:`AbstractFormula`.</span>
+
+<span class="sd">        Note:</span>
+
+<span class="sd">        A sub-sequence of an abstract-formula is determined by:</span>
+
+<span class="sd">        - 1) the parent rgf sequence,</span>
+<span class="sd">        - and 2) the rooted plane tree.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span
+        class="mi">1</span>  <span class="c1"># remove the root</span>
+        <span class="n">child_tree</span><span class="p">:</span> <span class="n">rpt</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span>
+        <span class="k">for</span> <span class="n">child_tree</span> <span class="ow">in</span> <span
+        class="bp">self</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="o">.</span><span class="n">iterate_immediate_subtrees</span><span class="p">():</span>
+            <span class="c1"># retrieve the sub-sequence that is mapped to this child RPT</span>
+            <span class="n">sub_sequence</span><span class="p">:</span> <span class="nb">tuple</span><span
+        class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span
+        class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span
+        class="n">i</span> <span class="o">+</span> <span class="n">child_tree</span><span class="o">.</span><span
+        class="n">size</span><span class="p">]</span>
+            <span class="n">sub_sequence</span><span class="p">:</span> <span class="n">sl</span><span
+        class="o">.</span><span class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span
+        class="n">sl</span><span class="o">.</span><span class="n">NaturalNumber1Sequence</span><span class="p">(</span><span
+        class="o">*</span><span class="n">sub_sequence</span><span class="p">)</span>
+            <span class="c1"># yield this child RGF sequence</span>
+            <span class="k">yield</span> <span class="n">sub_sequence</span>
+            <span class="c1"># truncate the remaining sequence</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="n">child_tree</span><span class="o">.</span><span
+        class="n">size</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.iterate_sub_sequences">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.iterate_sub_sequences">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iterate_sub_sequences</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span
+        class="n">Generator</span><span class="p">[</span><span class="n">sl</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span><span class="p">,</span> <span class="kc">None</span><span
+        class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+        <span class="n">i</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">sub_tree</span><span class="p">:</span> <span class="n">rpt</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span
+        class="n">sub_tree</span> <span class="ow">in</span> <span class="nb">enumerate</span><span
+        class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+        class="n">rooted_plane_tree</span><span class="o">.</span><span class="n">iterate_subtrees</span><span
+        class="p">()):</span>
+            <span class="c1"># retrieves the sub-sequence in the sequence</span>
+            <span class="n">sub_sequence</span><span class="p">:</span> <span class="nb">tuple</span><span
+        class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span
+        class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span
+        class="n">i</span> <span class="o">+</span> <span class="n">sub_tree</span><span class="o">.</span><span
+        class="n">size</span><span class="p">]</span>
+            <span class="n">sub_sequence</span><span class="p">:</span> <span class="n">sl</span><span
+        class="o">.</span><span class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span
+        class="n">sl</span><span class="o">.</span><span class="n">NaturalNumber1Sequence</span><span class="p">(</span><span
+        class="o">*</span><span class="n">sub_sequence</span><span class="p">)</span>
+            <span class="c1"># yield the child RGF sequence</span>
+            <span class="k">yield</span> <span class="n">sub_sequence</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.iterate_sub_formulas">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.iterate_sub_formulas">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">iterate_sub_formulas</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span
+        class="n">Generator</span><span class="p">[</span><span class="n">AbstractFormula</span><span class="p">,</span> <span
+        class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Iterates the sub-formulas of the :class:`AbstractFormula` using the `depth-first, ascending nodes` algorithm.</span>
+
+<span class="sd">        See :attr:`AbstractFormula.sub_formulas` for a definition of the term `sub-formula`.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">child_tree</span><span class="p">:</span> <span class="n">rpt</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span>
+        <span class="n">child_sequence</span><span class="p">:</span> <span class="n">sl</span><span
+        class="o">.</span><span class="n">NaturalNumber1Sequence</span>
+        <span class="k">for</span> <span class="n">child_tree</span><span class="p">,</span> <span class="n">child_sequence</span> <span
+        class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span
+        class="o">.</span><span class="n">rooted_plane_tree</span><span class="o">.</span><span class="n">iterate_subtrees</span><span
+        class="p">(),</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">iterate_sub_sequences</span><span
+        class="p">()):</span>
+            <span class="n">sub_formula</span> <span class="o">=</span> <span class="n">AbstractFormula</span><span
+        class="p">(</span><span class="n">child_tree</span><span class="p">,</span> <span
+        class="n">child_sequence</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">sub_formula</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">main_element</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The `main_element` of an :class:`AbstractFormula` is the first element of its</span>
+<span class="sd">        attr:`AbstractFormula.natural_numbers_sequence`, that corresponds to the root</span>
+<span class="sd">        node of the attr:`AbstractFormula.rooted_plane_tree`.</span>
+
+<span class="sd">        The term `main element` was coined in reference to the term `main connective`</span>
+<span class="sd">         (cf. Mancosu 2021, p. 17), because abstract-formulas are composed of sequences,</span>
+<span class="sd">         and thus `main connective` is reserved for &quot;concrete&quot; formulas.</span>
+
+<span class="sd">        References:</span>
+
+<span class="sd">        - Mancosu 2021</span>
+
+<span class="sd">        :return: 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">natural_number_sequence</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">sl</span><span class="o">.</span><span class="n">NaturalNumber1Sequence</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns the :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.</span>
+
+<span class="sd">        Shortcut: self.s.</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span
+        class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="mi">1</span><span
+        class="p">)</span>
+
+<div class="viewcode-block" id="AbstractFormula.represent_as_function">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.represent_as_function">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">represent_as_function</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connectives</span><span
+        class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="kc">None</span> <span
+        class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns a string representation of the :class:`AbstractFormula` using function notation.</span>
+
+<span class="sd">        By default, connectives are represented by their respective values</span>
+<span class="sd">        in the :attr:`AbstractFormula.natural_numbers_sequence` .</span>
+
+<span class="sd">        :param connectives: A tuple of connectives of length equal to the length of the :attr:`AbstractFormula.natural_numbers_sequence` . Default: `None`.</span>
+
+<span class="sd">        :return:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">connectives</span> <span class="ow">is</span> <span
+        class="kc">None</span><span class="p">:</span>
+            <span class="n">connectives</span> <span class="o">=</span> <span class="bp">self</span><span
+        class="o">.</span><span class="n">natural_number_sequence</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span
+        class="n">connectives</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span
+        class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                    <span class="s2">&quot;The length of the connectives tuple is not equal to the length &quot;</span>
+                    <span class="s2">&quot;of the abstract-formula&#39;s natural-number-sequence.&quot;</span><span
+        class="p">,</span>
+                    <span class="n">connectives_length</span><span class="o">=</span><span class="nb">len</span><span
+        class="p">(</span><span class="n">connectives</span><span class="p">),</span>
+                    <span class="n">natural_number_sequence_length</span><span class="o">=</span><span
+        class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="o">.</span><span class="n">length</span><span class="p">,</span>
+                    <span class="n">connectives</span><span class="o">=</span><span class="n">connectives</span><span
+        class="p">,</span>
+                    <span class="n">natural_number_sequence</span><span class="o">=</span><span
+        class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">,</span>
+                    <span class="n">abstract_formula</span><span class="o">=</span><span class="bp">self</span>
+                <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="o">.</span><span class="n">represent_as_function</span><span class="p">(</span>
+            <span class="n">connectives</span><span class="o">=</span><span class="n">connectives</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AbstractFormula.represent_as_map_extension">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.represent_as_map_extension">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">represent_as_map_extension</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">connectives</span><span class="p">:</span> <span
+        class="nb">tuple</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span
+        class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns a string representation of the :class:`AbstractFormula` using map notation.</span>
+
+<span class="sd">        By default, connectives are represented by their respective values</span>
+<span class="sd">        in the :attr:`AbstractFormula.natural_numbers_sequence`.</span>
+
+<span class="sd">        :param connectives: A tuple of connectives of length equal to the length of the :attr:`AbstractFormula.natural_numbers_sequence`. Default: `None`.</span>
+
+<span class="sd">        :return: A string representation of this abstract-formula.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">connectives</span> <span class="ow">is</span> <span
+        class="kc">None</span><span class="p">:</span>
+            <span class="n">connectives</span> <span class="o">=</span> <span class="bp">self</span><span
+        class="o">.</span><span class="n">natural_number_sequence</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span
+        class="n">connectives</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span
+        class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                    <span class="s2">&quot;The length of the connectives tuple is not equal to the length &quot;</span>
+                    <span class="s2">&quot;of the abstract-formula&#39;s natural-number-sequence.&quot;</span><span
+        class="p">,</span>
+                    <span class="n">connectives_length</span><span class="o">=</span><span class="nb">len</span><span
+        class="p">(</span><span class="n">connectives</span><span class="p">),</span>
+                    <span class="n">natural_number_sequence_length</span><span class="o">=</span><span
+        class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="o">.</span><span class="n">length</span><span class="p">,</span>
+                    <span class="n">connectives</span><span class="o">=</span><span class="n">connectives</span><span
+        class="p">,</span>
+                    <span class="n">natural_number_sequence</span><span class="o">=</span><span
+        class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">,</span>
+                    <span class="n">abstract_formula</span><span class="o">=</span><span class="bp">self</span>
+                <span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="sa">f</span><span
+        class="s2">&quot;</span><span class="se">{{</span><span class="s2"> &quot;</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">preimage</span><span
+        class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">image</span> <span
+        class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span
+        class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span
+        class="o">.</span><span class="n">abstract_map_preimage_sequence</span><span class="o">.</span><span class="n">arity</span><span
+        class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span
+        class="n">abstract_map_preimage_sequence</span><span class="o">.</span><span
+        class="n">immediate_sub_formulas</span><span class="p">,</span>
+                <span class="nb">range</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span
+        class="bp">self</span><span class="o">.</span><span class="n">abstract_map_preimage_sequence</span><span
+        class="o">.</span><span class="n">arity</span><span class="p">,</span>
+                      <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span
+        class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">abstract_map_preimage_sequence</span><span
+        class="o">.</span><span class="n">arity</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span
+        class="n">abstract_map_image_sequence</span><span class="o">.</span><span
+        class="n">immediate_sub_formulas</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">first</span><span class="p">:</span>
+                <span class="n">output</span> <span class="o">=</span> <span class="sa">f</span><span
+        class="s2">&quot;</span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span
+        class="s2">, &quot;</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="sa">f</span><span
+        class="s2">&quot;</span><span class="si">{</span><span class="n">output</span><span class="si">}{</span><span
+        class="n">preimage</span><span class="si">}</span><span class="s2"> ⟼ </span><span class="si">{</span><span
+        class="n">image</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="sa">f</span><span
+        class="s2">&quot;</span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span
+        class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">output</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">rooted_plane_tree</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">rpt</span><span class="o">.</span><span class="n">RootedPlaneTree</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.</span>
+
+<span class="sd">        Shortcut: self.t.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span
+        class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="mi">0</span><span
+        class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">s</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">)</span> <span class="o">-&gt;</span> <span class="n">sl</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A shortcut for self.natural_numbers_sequence.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sequence_max_value</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The `sequence_max_value` of an :class:`AbstractFormula` is the `max_value` of its `natural_numbers_sequence`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="o">.</span><span class="n">max_value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sub_formulas</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span
+        class="p">[</span><span class="n">AbstractFormula</span><span class="p">,</span> <span class="o">...</span><span
+        class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The `sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements that are present</span>
+<span class="sd">        in the formula tree of `phi`, including `phi` itself.</span>
+
+<span class="sd">        Formal definition:</span>
+
+<span class="sd">        - If phi is an atomic formula, the sub-formulas of phi is the tuple (phi).</span>
+<span class="sd">        - If phi is a non-atomic formula, the sub-formulas of phi is the tuple</span>
+<span class="sd">           composed of phi, and all sub-formulas of the immediate sub-formulas of phi,</span>
+<span class="sd">           in ascending order.</span>
+<span class="sd">        - Nothing else is a sub-formula.</span>
+
+<span class="sd">        This definition is a generalization of the term `formula` defined by (Mancosu 2021, definition 2.2, p. 14)</span>
+<span class="sd">        for propositional-logic.</span>
+
+<span class="sd">        See also:</span>
+
+<span class="sd">        - :attr:`AbstractFormula.immediate_sub_formulas`</span>
+
+<span class="sd">        References:</span>
+<span class="sd">        - Mancosu 2021.</span>
+
+<span class="sd">        :return: A tuple of the sub-formulas.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">_sub_formulas</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sub_formulas</span><span class="p">:</span> <span class="nb">list</span><span
+        class="p">[</span><span class="n">AbstractFormula</span><span class="p">]</span> <span class="o">=</span> <span
+        class="nb">list</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">sub_formula</span> <span class="ow">in</span> <span class="bp">self</span><span
+        class="o">.</span><span class="n">iterate_sub_formulas</span><span class="p">():</span>
+                <span class="n">sub_formulas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+        class="n">sub_formula</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_sub_formulas</span> <span
+        class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sub_formulas</span><span
+        class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+        class="n">_sub_formulas</span>
+
+<div class="viewcode-block" id="AbstractFormula.substitute_sub_formulas_with_map">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.AbstractFormula.substitute_sub_formulas_with_map">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">substitute_sub_formulas_with_map</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span
+        class="p">:</span> <span class="n">FlexibleAbstractFormula</span><span class="p">)</span> <span
+        class="o">-&gt;</span> <span class="n">AbstractFormula</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Returns a new abstract-formula similar to the current abstract-formula,</span>
+<span class="sd">         except that its subformulas present in the map `m` preimage,</span>
+<span class="sd">         are substituted with their corresponding images,</span>
+<span class="sd">         giving priority to the substitution of superformulas over subformulas.</span>
+
+<span class="sd">        :param m: An abstract-map.</span>
+<span class="sd">        :return: A substituted formula.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">m</span><span class="p">:</span> <span class="n">AbstractFormula</span> <span class="o">=</span> <span
+        class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_any</span><span
+        class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span
+        class="n">is_abstract_map</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s2">&quot;`m` is not an abstract-map.&quot;</span><span class="p">,</span> <span
+        class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">this_abstract_formula</span><span
+        class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">in</span> <span class="n">m</span><span
+        class="o">.</span><span class="n">abstract_map_preimage_sequence</span><span class="o">.</span><span class="n">immediate_sub_formulas</span><span
+        class="p">:</span>
+            <span class="c1"># This formula must be substituted according to the substitution map.</span>
+            <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">get_abstract_map_value</span><span
+        class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Pursue substitution recursively.</span>
+            <span class="n">phi</span><span class="p">:</span> <span class="n">AbstractFormula</span>
+            <span class="n">s</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="n">AbstractFormula</span><span class="p">,</span> <span class="o">...</span><span
+        class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span
+        class="n">phi</span><span class="o">.</span><span class="n">substitute_sub_formulas_with_map</span><span
+        class="p">(</span><span class="n">m</span><span class="o">=</span><span class="n">m</span><span
+        class="p">)</span> <span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">iterate_immediate_sub_formulas</span><span
+        class="p">())</span>
+            <span class="k">return</span> <span class="n">AbstractFormula</span><span class="o">.</span><span class="n">from_immediate_sub_formulas</span><span
+        class="p">(</span><span class="n">n</span><span class="o">=</span><span class="bp">self</span><span
+        class="o">.</span><span class="n">main_element</span><span class="p">,</span> <span class="n">s</span><span
+        class="o">=</span><span class="n">s</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">t</span><span class="p">(</span><span class="bp">self</span><span
+        class="p">)</span> <span class="o">-&gt;</span> <span class="n">rpt</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;A shortcut for self.rooted_plane_tree.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooted_plane_tree</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tree_degree</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The `tree_degree` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.</span>
+
+<span class="sd">        Attention point: do not confuse `tree_degree` and `formula_degree`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="o">.</span><span class="n">degree</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tree_size</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span
+        class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;The `tree_size` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.</span>
+
+<span class="sd">        Attention point: do not confuse `tree_size` and `formula_degree`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="o">.</span><span class="n">size</span></div>
+
+
+
+<span class="c1"># Transformation functions</span>
+
+
+<div class="viewcode-block" id="extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.abstract_formula_library.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs</span><span
+        class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Given a tree of integer/tuple pairs, extracts:</span>
+
+<span class="sd">     - its tree of tuples,</span>
+<span class="sd">     - and its sequence of integers,</span>
+
+<span class="sd">    following the depth-first ascending-nodes algorithm.</span>
+
+<span class="sd">    :param p: the tree of integer/tuple pairs</span>
+
+<span class="sd">    :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span
+        class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span><span class="s1">&#39;The length of the pair is not equal to 2.&#39;</span><span
+        class="p">,</span> <span class="n">len_t</span><span class="o">=</span><span class="nb">len</span><span
+        class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">t</span><span
+        class="o">=</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">i</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span
+        class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">children</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span
+        class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span
+        class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># this is a leaf</span>
+        <span class="k">return</span> <span class="p">(),</span> <span class="p">(</span><span class="n">i</span><span
+        class="p">,)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">t</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span
+        class="p">[]</span>
+        <span class="n">s</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span
+        class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">,)</span>
+        <span class="k">for</span> <span class="n">sub_p</span> <span class="ow">in</span> <span
+        class="n">children</span><span class="p">:</span>
+            <span class="n">sub_t</span><span class="p">,</span> <span class="n">sub_s</span> <span
+        class="o">=</span> <span
+        class="n">extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs</span><span
+        class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">sub_p</span><span
+        class="p">)</span>
+            <span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+        class="n">sub_t</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">sub_s</span>
+        <span class="n">t</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span
+        class="nb">tuple</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span
+        class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">s</span></div>
+
+
+
+<span class="c1"># Flexible types to facilitate data validation</span>
+
+<span class="n">FlexibleAbstractFormula</span> <span class="o">=</span> <span class="n">typing</span><span
+                        class="o">.</span><span class="n">Union</span><span class="p">[</span>
+    <span class="n">AbstractFormula</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span>
+        <span class="n">rpt</span><span class="o">.</span><span class="n">FlexibleRootedPlaneTree</span><span class="p">,</span> <span
+                        class="n">sl</span><span class="o">.</span><span class="n">FlexibleNaturalNumber1Sequence</span><span
+                        class="p">],</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span
+                        class="o">.</span><span class="n">Iterator</span><span class="p">,</span> <span class="n">collections</span><span
+                        class="o">.</span><span class="n">abc</span><span class="o">.</span><span
+                        class="n">Generator</span><span class="p">,</span> <span class="kc">None</span><span
+                        class="p">]</span>
+
+<span class="c1"># Aliases</span>
+
+<span class="n">AF</span> <span class="o">=</span> <span class="n">AbstractFormula</span>  <span class="c1"># An alias for AbstractFormula</span>
+</pre>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <h1 class="logo"><a href="../../index.html">Punctilious</a></h1>
+
+
+            <search id="searchbox" style="display: none" role="search">
+                <div class="searchformwrapper">
+                    <form class="search" action="../../search.html" method="get">
+                        <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off"
+                               autocapitalize="off" spellcheck="false" placeholder="Search"/>
+                        <input type="submit" value="Go"/>
+                    </form>
+                </div>
+            </search>
+            <script>document.getElementById('searchbox').style.display = "block"</script>
+            <h3>Navigation</h3>
+            <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+            <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../modules.html">punctilious</a></li>
+            </ul>
+
+            <div class="relations">
+                <h3>Related Topics</h3>
+                <ul>
+                    <li><a href="../../index.html">Documentation overview</a>
+                        <ul>
+                            <li><a href="../index.html">Module code</a>
+                                <ul>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="footer">
+    &#169;2025, David Doret.
+
+    |
+    Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.3.0</a>
+    &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+
+</div>
+
+
+</body>
+</html>

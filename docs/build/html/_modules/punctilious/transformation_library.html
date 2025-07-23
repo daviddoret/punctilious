@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>punctilious.transformation_library &#8212; Punctilious 1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5ecbeea2"/>
+    <link rel="stylesheet" type="text/css" href="../../_static/basic.css?v=b08954a9"/>
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=27fed22d"/>
+    <script src="../../_static/documentation_options.js?v=29a6c3e3"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html"/>
+    <link rel="search" title="Search" href="../../search.html"/>
+
+    <link rel="stylesheet" href="../../_static/custom.css" type="text/css"/>
+
+
+</head>
+<body>
+
+
+<div class="document">
+    <div class="documentwrapper">
+        <div class="bodywrapper">
+
+
+            <div class="body" role="main">
+
+                <h1>Source code for punctilious.transformation_library</h1>
+                <div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span
+                        class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">punctilious.util</span><span
+                        class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">util</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">punctilious.rooted_plane_tree_library</span><span
+                        class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rptl</span>
+<span class="kn">import</span><span class="w"> </span><span
+                        class="nn">punctilious.natural_number_1_sequence_library</span><span class="w"> </span><span
+                        class="k">as</span><span class="w"> </span><span class="nn">nn1s</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">punctilious.abstract_formula_library</span><span
+                        class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">afl</span>
+
+
+<div class="viewcode-block" id="AbstractOrderedSet">
+<a class="viewcode-back" href="../../punctilious.html#punctilious.transformation_library.AbstractOrderedSet">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AbstractOrderedSet</span><span
+        class="p">(</span><span class="n">afl</span><span class="o">.</span><span class="n">AbstractFormula</span><span
+        class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;An abstract ordered set is an abstract-formula that has the structure of a finite (computable) ordered-set.</span>
+
+<span class="sd">    Definition</span>
+<span class="sd">    --------------</span>
+
+<span class="sd">    An abstract-formula :math:`\phi` is an abstract-ordered-set if and only if:</span>
+
+<span class="sd">    - its immediate sub-formulas are unique.</span>
+
+<span class="sd">    N.B.: abstract-classes being structurally composed of a rooted-tree-plane,</span>
+<span class="sd">      the immediate sub-formulas of an abstract-formula are necessarily ordered.</span>
+
+<span class="sd">    Use case</span>
+<span class="sd">    ------------</span>
+
+<span class="sd">    The abstract-ordered-set is the preimage component of the abstract-map.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AbstractOrderedSet.__init__">
+<a class="viewcode-back" href="../../punctilious.html#punctilious.transformation_library.AbstractOrderedSet.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span
+        class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span
+        class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span>
+                 <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">t</span><span class="p">:</span> <span class="n">rptl</span><span class="o">.</span><span class="n">FlexibleRootedPlaneTree</span><span
+        class="p">,</span>
+                 <span class="n">s</span><span class="p">:</span> <span class="n">nn1s</span><span
+        class="o">.</span><span class="n">FlexibleNaturalNumber1Sequence</span><span class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param n: The natural number of the map&#39;s root element.</span>
+<span class="sd">        :param i: The image of the map.</span>
+<span class="sd">        :param p: The preimage of the map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">rptl</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span> <span class="o">=</span> <span class="n">rptl</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span><span class="o">.</span><span class="n">from_immediate_subtrees</span><span
+        class="p">(</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="p">)</span>
+        <span class="n">s</span><span class="p">:</span> <span class="n">nn1s</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span class="n">nn1s</span><span
+        class="o">.</span><span class="n">concatenate_natural_number_sequences</span><span class="p">((</span><span
+        class="n">n</span><span class="p">,),</span> <span class="n">p</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">,</span>
+                                                                                   <span class="n">i</span><span
+        class="o">.</span><span class="n">natural_number_sequence</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AbstractFormula</span><span
+        class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span
+        class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span
+        class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span
+        class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span
+        class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span
+        class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span>
+                <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span class="n">t</span><span
+        class="p">:</span> <span class="n">rptl</span><span class="o">.</span><span
+        class="n">FlexibleRootedPlaneTree</span><span class="p">,</span>
+                <span class="n">s</span><span class="p">:</span> <span class="n">nn1s</span><span
+        class="o">.</span><span class="n">FlexibleNaturalNumber1Sequence</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">phi</span> <span class="ow">is</span> <span
+        class="kc">None</span><span class="p">:</span>
+
+            <span class="c1"># Alternative constructor based on the structural components of an abstract-ordered.set.</span>
+            <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span
+        class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="n">p</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">arity</span> <span
+        class="o">!=</span> <span class="n">i</span><span class="o">.</span><span class="n">arity</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;`Formula` data validation error. The length of the preimage `p`&quot;</span>
+                    <span class="sa">f</span><span
+        class="s2">&quot; is not equal to the length of image `i`.&quot;</span><span class="p">,</span>
+                    <span class="n">p_length</span><span class="o">=</span><span class="nb">len</span><span
+        class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">i_length</span><span
+        class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span
+        class="p">),</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span
+        class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span
+        class="p">)</span>
+            <span class="n">t</span><span class="p">:</span> <span class="n">rptl</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span> <span class="o">=</span> <span class="n">rptl</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span><span class="o">.</span><span class="n">from_immediate_subtrees</span><span
+        class="p">(</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span class="p">,</span> <span
+        class="n">i</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span class="p">)</span>
+            <span class="n">s</span><span class="p">:</span> <span class="n">nn1s</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span class="n">nn1s</span><span
+        class="o">.</span><span class="n">concatenate_natural_number_sequences</span><span class="p">((</span><span
+        class="n">n</span><span class="p">,),</span> <span class="n">p</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">,</span>
+                                                                                       <span class="n">i</span><span
+        class="o">.</span><span class="n">natural_number_sequence</span><span class="p">)</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="nb">super</span><span
+        class="p">(</span><span class="n">AbstractMap</span><span class="p">,</span> <span class="bp">cls</span><span
+        class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span><span
+        class="p">,</span> <span class="n">s</span><span class="p">,))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span
+        class="n">phi</span><span class="p">,</span> <span class="n">AbstractFormula</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected a Bar instance&quot;</span><span
+        class="p">)</span>
+        <span class="n">phi</span><span class="o">.</span><span class="vm">__class__</span> <span
+        class="o">=</span> <span class="bp">cls</span>  <span class="c1"># Retype the object to Foo</span>
+        <span class="k">return</span> <span class="n">phi</span>
+
+<div class="viewcode-block" id="AbstractOrderedSet.from_abstract_formula">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.transformation_library.AbstractOrderedSet.from_abstract_formula">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_abstract_formula</span><span
+        class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">phi</span><span class="p">:</span> <span
+        class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Takes an abstract-formula structurally compatible with an abstract-ordered-set,</span>
+<span class="sd">        and returns the same object typed as :class:`AbstractOrderedSet`.</span>
+
+<span class="sd">        :param phi:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+        <span class="n">unique_values</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span
+        class="n">afl</span><span class="o">.</span><span class="n">AbstractFormula</span><span class="p">]</span> <span
+        class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">psi</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span>
+        <span class="k">for</span> <span class="n">psi</span> <span class="ow">in</span> <span class="n">phi</span><span
+        class="p">:</span>
+            <span class="k">if</span> <span class="n">psi</span> <span class="ow">in</span> <span class="n">unique_values</span><span
+        class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="n">unique_values</span><span class="o">.</span><span class="n">add</span><span
+        class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">d</span><span
+        class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">d</span><span
+        class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AbstractMap">
+<a class="viewcode-back" href="../../punctilious.html#punctilious.transformation_library.AbstractMap">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AbstractMap</span><span class="p">(</span><span
+        class="n">afl</span><span class="o">.</span><span class="n">AbstractFormula</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;An :class:`AbstractFormula` that has the structure of a finite (computable) map.</span>
+
+<span class="sd">    Definition</span>
+<span class="sd">    --------------</span>
+
+<span class="sd">    An abstract-formula :math:`\phi` is an abstract-map if and only if:</span>
+
+<span class="sd">    - its arity equals 2,</span>
+<span class="sd">    - the arities of its immediate sub-formulas are equal.</span>
+
+<span class="sd">    Properties</span>
+<span class="sd">    ------------</span>
+
+<span class="sd">    - pre-image: noted :math:`f^{-1}(\phi)`, the first immediate sub-formula of :math:`\phi`. Note that the pre-image is not a set, it is a sub-formula.</span>
+<span class="sd">    - image: noted :math:`\operatorname{Im}(\phi)`, the second immediate sub-formula of :math:`\phi`. Note that the pre-image is not a set, it is a sub-formula.</span>
+
+<span class="sd">    Definition</span>
+<span class="sd">    -----------</span>
+
+<span class="sd">    An abstract-map :math:`\phi` is canonical if and only if:</span>
+
+<span class="sd">     - its pre-image is canonically ordered.</span>
+
+<span class="sd">    Use case</span>
+<span class="sd">    ------------</span>
+
+<span class="sd">    If an abstract-formula :math:`\phi` is an abstract-map,</span>
+<span class="sd">    then there is an algorithm that receives an abstract-formula :math:`\psi` as input,</span>
+<span class="sd">    that if :math:`\psi` is an element of :math:`f^{-1}(\phi)`</span>
+<span class="sd">    returns the element of :math:`\operatorname{Im}(\phi)` that is at the same index position.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AbstractMap.__init__">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.transformation_library.AbstractMap.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span
+        class="nb">int</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">i</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param n: The natural number of the root element of the map.</span>
+<span class="sd">        :param i: The image of the map.</span>
+<span class="sd">        :param p: The preimage of the map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">rptl</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span> <span class="o">=</span> <span class="n">rptl</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span><span class="o">.</span><span class="n">from_immediate_subtrees</span><span
+        class="p">(</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="p">)</span>
+        <span class="n">s</span><span class="p">:</span> <span class="n">nn1s</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span class="n">nn1s</span><span
+        class="o">.</span><span class="n">concatenate_natural_number_sequences</span><span class="p">((</span><span
+        class="n">n</span><span class="p">,),</span> <span class="n">p</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">,</span>
+                                                                                   <span class="n">i</span><span
+        class="o">.</span><span class="n">natural_number_sequence</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AbstractMap</span><span class="p">,</span> <span
+        class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span
+        class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t</span><span
+        class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span
+        class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span
+        class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">i</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">):</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param n: The natural number of the root element of the map.</span>
+<span class="sd">        :param i: The image of the map.</span>
+<span class="sd">        :param p: The preimage of the map.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span
+        class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">arity</span> <span
+        class="o">!=</span> <span class="n">i</span><span class="o">.</span><span class="n">arity</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;`Formula` data validation error. The length of the preimage `p`&quot;</span>
+                <span class="sa">f</span><span
+        class="s2">&quot; is not equal to the length of image `i`.&quot;</span><span class="p">,</span>
+                <span class="n">p_length</span><span class="o">=</span><span class="nb">len</span><span
+        class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">i_length</span><span
+        class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">i</span><span
+        class="p">),</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span
+        class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span
+        class="p">)</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">rptl</span><span class="o">.</span><span
+        class="n">RootedPlaneTree</span> <span class="o">=</span> <span class="n">rptl</span><span
+        class="o">.</span><span class="n">RootedPlaneTree</span><span class="o">.</span><span class="n">from_immediate_subtrees</span><span
+        class="p">(</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">rooted_plane_tree</span><span
+        class="p">)</span>
+        <span class="n">s</span><span class="p">:</span> <span class="n">nn1s</span><span class="o">.</span><span
+        class="n">NaturalNumber1Sequence</span> <span class="o">=</span> <span class="n">nn1s</span><span
+        class="o">.</span><span class="n">concatenate_natural_number_sequences</span><span class="p">((</span><span
+        class="n">n</span><span class="p">,),</span> <span class="n">p</span><span class="o">.</span><span class="n">natural_number_sequence</span><span
+        class="p">,</span>
+                                                                                   <span class="n">i</span><span
+        class="o">.</span><span class="n">natural_number_sequence</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span
+        class="n">AbstractMap</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span
+        class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span
+        class="p">,</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span
+        class="n">s</span><span class="p">,))</span>
+        <span class="k">return</span> <span class="n">psi</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">canonical_abstract_formula</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span
+        class="n">AbstractMap</span><span class="p">:</span>
+        <span class="n">paired</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span
+        class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+        class="n">pre</span><span class="p">,</span> <span class="n">Bar</span><span class="p">))</span>
+        <span class="n">paired_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span
+        class="p">(</span><span class="n">paired</span><span class="p">)</span>  <span class="c1"># Sort by Foo (alphabetical)</span>
+        <span class="n">Foo_sorted</span><span class="p">,</span> <span class="n">Bar_aligned</span> <span
+        class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">paired_sorted</span><span
+        class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pre_image</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span
+        class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="mi">1</span><span
+        class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="AbstractTransformation">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.transformation_library.AbstractTransformation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AbstractTransformation</span><span
+        class="p">(</span><span class="n">afl</span><span class="o">.</span><span class="n">AbstractFormula</span><span
+        class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span
+        class="sd">&quot;&quot;&quot;An abstract transformation.</span>
+
+<span class="sd">    An abstract-formula 0(phi, psi)</span>
+<span class="sd">    where phi is denoted as the input, and psi is denoted as the output.</span>
+
+<span class="sd">    A tuple (input, output).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AbstractTransformation.__init__">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.transformation_library.AbstractTransformation.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">o</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AbstractTransformation</span><span
+        class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span
+        class="p">(</span><span class="n">t</span><span class="o">=</span><span class="kc">None</span><span
+        class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">None</span><span
+        class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">o</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">):</span>
+        <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">o</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">phi</span><span
+        class="o">.</span><span class="n">canonical_abstract_formula</span>  <span class="c1"># Canonize the abstract-formula</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span> <span
+        class="o">!=</span> <span class="n">phi</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="o">.</span><span class="n">image_cardinality</span><span
+        class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;`Formula` data validation error. The length of the `ConnectiveSequence` `s`&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; is not equal to the `image_cardinality` of the `natural_number_sequence` of its&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; `abstract_formula`.&quot;</span><span
+        class="p">,</span>
+                <span class="n">s_length</span><span class="o">=</span><span class="n">s</span><span
+        class="o">.</span><span class="n">length</span><span class="p">,</span> <span
+        class="n">phi_tree_size</span><span class="o">=</span><span class="n">phi</span><span class="o">.</span><span
+        class="n">tree_size</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span
+        class="n">s</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span
+        class="n">phi</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span
+        class="n">Formula</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span
+        class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span
+        class="p">,</span> <span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span
+        class="n">s</span><span class="p">,))</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">retrieve_formula_from_cache</span><span
+        class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psi</span></div>
+
+
+
+<div class="viewcode-block" id="AbstractTransformationBySubstitution">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.transformation_library.AbstractTransformationBySubstitution">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AbstractTransformationBySubstitution</span><span
+        class="p">(</span><span class="n">AbstractTransformation</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    A tuple (input, output) where the input is composed of a tuple: (input, variables, substitution_values) to which correspond a unique output</span>
+
+<span class="sd">    input: the formula that must be transformed</span>
+
+<span class="sd">    variables: the unique placeholders of the formulas to be replaced, of length n, by convention, we will use atomic (leaf) formulas, in ascending order</span>
+
+<span class="sd">    substitution: the unique substitution_values for the variables, of length n</span>
+
+<span class="sd">    output: the transformed</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AbstractTransformationBySubstitution.__init__">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.transformation_library.AbstractTransformationBySubstitution.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">o</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AbstractTransformation</span><span
+        class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span
+        class="p">(</span><span class="n">t</span><span class="o">=</span><span class="kc">None</span><span
+        class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">None</span><span
+        class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">v</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span>
+                <span class="n">o</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">FlexibleAbstractFormula</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">o</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">phi</span><span
+        class="o">.</span><span class="n">canonical_abstract_formula</span>  <span class="c1"># Canonize the abstract-formula</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span> <span
+        class="o">!=</span> <span class="n">phi</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="o">.</span><span class="n">image_cardinality</span><span
+        class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;`Formula` data validation error. The length of the `ConnectiveSequence` `s`&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; is not equal to the `image_cardinality` of the `natural_number_sequence` of its&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; `abstract_formula`.&quot;</span><span
+        class="p">,</span>
+                <span class="n">s_length</span><span class="o">=</span><span class="n">s</span><span
+        class="o">.</span><span class="n">length</span><span class="p">,</span> <span
+        class="n">phi_tree_size</span><span class="o">=</span><span class="n">phi</span><span class="o">.</span><span
+        class="n">tree_size</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span
+        class="n">s</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span
+        class="n">phi</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span
+        class="n">Formula</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span
+        class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span
+        class="p">,</span> <span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span
+        class="n">s</span><span class="p">,))</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">retrieve_formula_from_cache</span><span
+        class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psi</span></div>
+
+
+
+<div class="viewcode-block" id="TransformationBySubstitution">
+<a class="viewcode-back" href="../../punctilious.html#punctilious.transformation_library.TransformationBySubstitution">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TransformationBySubstitution</span><span class="p">:</span>
+<div class="viewcode-block" id="TransformationBySubstitution.__init__">
+<a class="viewcode-back"
+   href="../../punctilious.html#punctilious.transformation_library.TransformationBySubstitution.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span
+        class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">v</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span>
+                 <span class="n">o</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Transformation</span><span
+        class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span
+        class="p">(</span><span class="n">t</span><span class="o">=</span><span class="kc">None</span><span
+        class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">None</span><span
+        class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span
+        class="bp">cls</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span> <span
+        class="n">v</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span class="n">FlexibleAbstractFormula</span><span
+        class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">FlexibleAbstractFormula</span><span class="p">,</span>
+                <span class="n">o</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">FlexibleAbstractFormula</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">o</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">afl</span><span
+        class="o">.</span><span class="n">AbstractFormula</span><span class="o">.</span><span
+        class="n">from_any</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="n">phi</span><span class="p">:</span> <span class="n">afl</span><span class="o">.</span><span
+        class="n">AbstractFormula</span> <span class="o">=</span> <span class="n">phi</span><span
+        class="o">.</span><span class="n">canonical_abstract_formula</span>  <span class="c1"># Canonize the abstract-formula</span>
+        <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">length</span> <span
+        class="o">!=</span> <span class="n">phi</span><span class="o">.</span><span
+        class="n">natural_number_sequence</span><span class="o">.</span><span class="n">image_cardinality</span><span
+        class="p">:</span>
+            <span class="k">raise</span> <span class="n">util</span><span class="o">.</span><span class="n">PunctiliousException</span><span
+        class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;`Formula` data validation error. The length of the `ConnectiveSequence` `s`&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; is not equal to the `image_cardinality` of the `natural_number_sequence` of its&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; `abstract_formula`.&quot;</span><span
+        class="p">,</span>
+                <span class="n">s_length</span><span class="o">=</span><span class="n">s</span><span
+        class="o">.</span><span class="n">length</span><span class="p">,</span> <span
+        class="n">phi_tree_size</span><span class="o">=</span><span class="n">phi</span><span class="o">.</span><span
+        class="n">tree_size</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span
+        class="n">s</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span
+        class="n">phi</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span
+        class="n">Formula</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span
+        class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span
+        class="p">,</span> <span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span
+        class="n">s</span><span class="p">,))</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">retrieve_formula_from_cache</span><span
+        class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psi</span></div>
+
+</pre>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+            <h1 class="logo"><a href="../../index.html">Punctilious</a></h1>
+
+
+            <search id="searchbox" style="display: none" role="search">
+                <div class="searchformwrapper">
+                    <form class="search" action="../../search.html" method="get">
+                        <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off"
+                               autocapitalize="off" spellcheck="false" placeholder="Search"/>
+                        <input type="submit" value="Go"/>
+                    </form>
+                </div>
+            </search>
+            <script>document.getElementById('searchbox').style.display = "block"</script>
+            <h3>Navigation</h3>
+            <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+            <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../modules.html">punctilious</a></li>
+            </ul>
+
+            <div class="relations">
+                <h3>Related Topics</h3>
+                <ul>
+                    <li><a href="../../index.html">Documentation overview</a>
+                        <ul>
+                            <li><a href="../index.html">Module code</a>
+                                <ul>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="footer">
+    &#169;2025, David Doret.
+
+    |
+    Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.3.0</a>
+    &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+
+</div>
+
+
+</body>
+</html>
