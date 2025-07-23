@@ -1,3 +1,6 @@
+r"""A library for (0-based) natural numbers.
+
+"""
 from __future__ import annotations
 import typing
 import binary_relation_library as orl
@@ -8,7 +11,7 @@ import util
 
 
 class IsEqualTo(orl.BinaryRelation):
-    r"""The equality binary-relation for 0-based natural numbers.
+    r"""The (0-based) natural numbers equipped with the standard equality order relation.
 
     Mathematical definition
     -------------------------
@@ -22,49 +25,63 @@ class IsEqualTo(orl.BinaryRelation):
     _is_asymmetric: bool | None = False
     _is_connected: bool | None = False
     _is_irreflexive: bool | None = False
+    _is_order_isomorphic_to_n_strictly_less_than: bool | None = False
     _is_reflexive: bool | None = True
     _is_strongly_connected: bool | None = False
     _is_symmetric: bool | None = True
     _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
+        """Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object.
+        :param y: A Python object.
+        :return: `True` or `False`.
+        """
         x: NaturalNumber0 = NaturalNumber0.from_any(x)
         y: NaturalNumber0 = NaturalNumber0.from_any(y)
         return int(x) == int(y)
 
 
 class IsStrictlyGreaterThan(orl.BinaryRelation):
-    r"""The natural order inverse of natural numbers starting at 0.
+    r"""The (0-based) natural numbers equipped with the standard strictly greater-than order relation.
 
     Mathematical definition
     -------------------------
 
-    :math:`( \mathbb{N}^{+}, > )`.
+    :math:`( \mathbb{N}_0, > )`.
 
     """
 
     # mathematical properties
     _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = None
-    _is_connected: bool | None = None
+    _is_asymmetric: bool | None = True
+    _is_connected: bool | None = True
     _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = None
-    _is_strongly_connected: bool | None = None
+    _is_order_isomorphic_to_n_strictly_less_than: bool | None = False
+    _is_reflexive: bool | None = False
+    _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
     def relates(self, x: object, y: object) -> bool:
+        """Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object.
+        :param y: A Python object.
+        :return: `True` or `False`.
+        """
         x: NaturalNumber0 = NaturalNumber0.from_any(x)
         y: NaturalNumber0 = NaturalNumber0.from_any(y)
         return int(x) > int(y)
 
 
 class IsStrictlyLessThan(orl.BinaryRelation):
-    r"""The natural order of natural numbers starting at 0.
+    r"""The (0-based) natural numbers equipped with the standard strictly less-than order relation.
 
     Mathematical definition
     -------------------------
 
-    :math:`( \mathbb{N}^{+}, < )`.
+    :math:`( \mathbb{N}_0, < )`.
 
     """
 
@@ -73,14 +90,51 @@ class IsStrictlyLessThan(orl.BinaryRelation):
     _is_asymmetric: bool | None = True
     _is_connected: bool | None = None
     _is_irreflexive: bool | None = True
+    _is_order_isomorphic_to_n_strictly_less_than: bool | None = None
     _is_reflexive: bool | None = None
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = True
 
+    def rank(self, x: object) -> int:
+        """Returns the rank of `x` in :math:`( \mathbb{N}, < )`.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :return: An integer.
+        """
+        x: NaturalNumber0 = NaturalNumber0.from_any(x)
+        return int(x)
+
     def relates(self, x: object, y: object) -> bool:
+        """Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :param y: A Python object interpretable as a (0-based) natural number.
+        :return: `True` or `False`.
+        """
         x: NaturalNumber0 = NaturalNumber0.from_any(x)
         y: NaturalNumber0 = NaturalNumber0.from_any(y)
         return int(x) < int(y)
+
+    def successor(self, x: object) -> object:
+        """Returns the successor of `x` in :math:`( \mathbb{N}, < )`.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :return: The successor of `x`.
+        """
+        x: NaturalNumber0 = NaturalNumber0.from_any(x)
+        return NaturalNumber0(x + 1)
+
+    def unrank(self, n: int) -> object:
+        """Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}, < ) = n`.
+
+        :param n: A positive integer.
+        :return: A (0-based) natural number.
+        """
+        n = int(n)
+        if n < 0:
+            raise util.PunctiliousException("`n` must be a positive integer.", n=n)
+        x: NaturalNumber0 = NaturalNumber0(n)
+        return x
 
 
 # Relations
@@ -93,12 +147,12 @@ is_strictly_less_than: IsStrictlyLessThan = IsStrictlyLessThan()  # The canonica
 # Main class
 
 class NaturalNumber0(orl.RelationalElement, int):
-    r"""A 0-based natural number.
+    r"""A (0-based) natural number.
 
     Mathematical definition
     -------------------------
 
-    :math:`\mathbb{N}^{+}`.
+    :math:`\mathbb{N}`.
 
 
     """
@@ -124,10 +178,10 @@ class NaturalNumber0(orl.RelationalElement, int):
 
     @classmethod
     def from_any(cls, o: object) -> NaturalNumber0:
-        r"""Declares a natural-number-0 from a Python object that can be interpreted as a natural-number-sequence.
+        r"""Declares a (0-based) natural number from a Python object, using implicit conversion if necessary.
 
-        :param o: A Python object that can be interpreted as a natural-number-sequence.
-        :return: A natural-number-sequence.
+        :param o: A Python object interpretable as a (0-based) natural number).
+        :return: A (0-based) natural number.
         """
         if isinstance(o, NaturalNumber0):
             return o
