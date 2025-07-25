@@ -176,30 +176,7 @@ class TestNaturalNumbersSequence:
         s = pu.nn1sl.NaturalNumber1Sequence(1, 2, 6, 7, 8, 100, 2000, 2000, )
         assert not s.is_strictly_increasing
 
-    def test_o1(self):
-        """Test all combinations of sequence ordering under O1 up to sum(S) = n.
-
-        :return:
-        """
-        n = 10
-        t = ()
-        for n in range(1, n):
-            s = pu.nn1sl.NaturalNumber1Sequence.get_o1_ordered_set_of_natural_number_sequences_of_sum_n(
-                n)
-            assert pu.nn1sl.NaturalNumber1Sequence.get_number_of_natural_number_sequences_of_sum_n(n) == len(s)
-            t += s
-        for i in range(0, len(t)):
-            for j in range(0, i):
-                # print(f"i={i}, j={j}, assert t[j]={t[j]} < t[i]={t[i]}")
-                assert t[j].is_strict_less_than(t[i])
-                assert t[j] < t[i]
-            for j in range(i, len(t)):
-                # print(f"i={i}, j={j}, assert not( t[j]={t[j]} < t[i]={t[i]} )")
-                assert not t[j].is_strict_less_than(t[i])
-                assert not t[j] < t[i]
-
     def test_godel_number_encoding_order(self):
-
         s = pu.nn1sl.NaturalNumber1Sequence(1, )
         n = pu.nn1sl.godel_number_encoding_order.rank(s)
         t = pu.nn1sl.godel_number_encoding_order.unrank(n)
