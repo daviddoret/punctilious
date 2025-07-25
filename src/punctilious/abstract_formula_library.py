@@ -5,15 +5,134 @@ import collections
 
 # package modules
 from . import util
-# import punctilious.util as util
 import punctilious.rooted_plane_tree_library as rpt
-# import punctilious.connective_catalog as cl
-import punctilious.natural_number_0_sequence_library as sl
+import punctilious.natural_number_0_sequence_library as nn0sl
+import punctilious.binary_relation_library as brl
+import punctilious.natural_number_0_pair_library as nn0pl
+
+
+class IsEqualTo(brl.BinaryRelation):
+    r"""The abstract formulas equipped with the standard equality order relation.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{F}, = )`.
+
+    """
+
+    # mathematical properties
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = False
+    _is_irreflexive: bool | None = False
+    _is_order_isomorphic_to_n_strictly_less_than: bool | None = False
+    _is_reflexive: bool | None = True
+    _is_strongly_connected: bool | None = False
+    _is_symmetric: bool | None = True
+    _is_transitive: bool | None = True
+
+    def is_antisymmetric(cls) -> util.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return util.TernaryBoolean.TRUE
+
+    def relates(self, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object.
+        :param y: A Python object.
+        :return: `True` or `False`.
+        """
+        x: AbstractFormula = AbstractFormula.from_any(x)
+        y: AbstractFormula = AbstractFormula.from_any(y)
+        return x.is_canonical_abstract_formula_equivalent_to(y)
+
+
+class IsStrictlyLessThan(brl.BinaryRelation):
+    r"""The abstract formulas equipped with the standard strictly less-than order relation.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{F}_0, < )`.
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = None
+    _is_asymmetric: bool | None = True
+    _is_connected: bool | None = None
+    _is_irreflexive: bool | None = True
+    _is_order_isomorphic_to_n_strictly_less_than: bool | None = None
+    _is_reflexive: bool | None = None
+    _is_strongly_connected: bool | None = None
+    _is_transitive: bool | None = True
+
+    def rank(self, x: object) -> int:
+        r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :return: An integer.
+        """
+        x: AbstractFormula = AbstractFormula.from_any(x)
+        n1: int = x.rooted_plane_tree.rank()
+        n2: int = x.natural_number_sequence.rank()
+        p: nn0pl.NaturalNumber0Pair = nn0pl.NaturalNumber0Pair(n1, n2)
+        n3: int = p.rank()
+        return n3
+
+    def relates(self, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :param y: A Python object interpretable as a (0-based) natural number.
+        :return: `True` or `False`.
+        """
+        x: AbstractFormula = AbstractFormula.from_any(x)
+        y: AbstractFormula = AbstractFormula.from_any(y)
+        n1: int = x.rank()
+        n2: int = x.rank()
+        return n1 < n2
+
+    def successor(self, x: object) -> object:
+        r"""Returns the successor of `x` in :math:`( \mathbb{N}_0, < )`.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :return: The successor of `x`.
+        """
+        x: AbstractFormula = AbstractFormula.from_any(x)
+        n: int = x.rank()
+        n += 1
+        y: AbstractFormula = x.canonical_order.unrank(n)
+        return y
+
+    def unrank(self, n: int) -> object:
+        r"""Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}_0, < ) = n`.
+
+        :param n: A positive integer.
+        :return: A (0-based) natural number.
+        """
+        n = int(n)
+        if n < 0:
+            raise util.PunctiliousException("`n` must be a positive integer.", n=n)
+        p = nn0pl.cantor_pairing_order.unrank(n)
+        n1 = p.x
+        n2 = p.y
+        t = rpt.RootedPlaneTree.from_rank(n1)
+        s = nn0sl.NaturalNumber0Sequence.from_rank(n2)
+        f = AbstractFormula(t=t, s=s)
+        return f
 
 
 # Classes
 
-class AbstractFormula(tuple):
+class AbstractFormula(brl.RelationalElement, tuple):
     r"""A :class:`AbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is a sequence of (0-based) natural numbers.
@@ -33,7 +152,7 @@ class AbstractFormula(tuple):
     def __hash__(self):
         return self._compute_hash(self)
 
-    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumber0Sequence):
+    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
         super(AbstractFormula, self).__init__()
         self._canonical_abstract_formula: AbstractFormula | None = None
         self._immediate_subformulas_are_unique: AbstractFormula | None = None
@@ -42,17 +161,9 @@ class AbstractFormula(tuple):
         self._is_abstract_inference_rule: bool | None = None
         self._sub_formulas: tuple[AbstractFormula, ...] | None = None
 
-    def __lt__(self, phi) -> bool:
-        r"""Returns `True` if this abstract-formula is less than abstract-formula `phi`, `False` otherwise.
-
-        See :attr:`AbstractFormula.is_less_than` for a definition of abstract-formula canonical-ordering.
-
-        """
-        return self.is_less_than(phi)
-
-    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: sl.FlexibleNaturalNumber0Sequence):
+    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
         t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_any(t)
-        s: sl.NaturalNumber0Sequence = sl.NaturalNumber0Sequence.from_any(s)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.from_any(s)
         if t.size != s.length:
             raise util.PunctiliousException(
                 f"`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.",
@@ -399,7 +510,7 @@ class AbstractFormula(tuple):
         t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_immediate_subtrees(*t)
         # Declare the natural-number-sequence by appending n to the concatenation of the
         # children natural-number-sequences.
-        u: sl.NaturalNumber0Sequence = sl.NaturalNumber0Sequence(n) + sl.concatenate_natural_number_sequences(
+        u: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(n) + nn0sl.concatenate_natural_number_sequences(
             *(phi.natural_number_sequence for phi in s))
         phi: AbstractFormula = AbstractFormula(t=t, s=u)
         return phi
@@ -443,7 +554,7 @@ class AbstractFormula(tuple):
 
         t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
         t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_tuple_tree(t)
-        s: sl.NaturalNumber0Sequence = sl.NaturalNumber0Sequence(*s)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
         phi: AbstractFormula = AbstractFormula(t, s)
         return phi
 
@@ -744,7 +855,7 @@ class AbstractFormula(tuple):
             yield sub_formula
 
     def iterate_immediate_sub_sequences(self) -> typing.Generator[
-        sl.NaturalNumber0Sequence, None, None]:
+        nn0sl.NaturalNumber0Sequence, None, None]:
         r"""Iterates the immediate (children) sub-:class:`UnrestrictedSequence` of this :class:`AbstractFormula`.
 
         Note:
@@ -759,19 +870,19 @@ class AbstractFormula(tuple):
         for child_tree in self.rooted_plane_tree.iterate_immediate_subtrees():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.natural_number_sequence[i:i + child_tree.size]
-            sub_sequence: sl.NaturalNumber0Sequence = sl.NaturalNumber0Sequence(*sub_sequence)
+            sub_sequence: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*sub_sequence)
             # yield this child RGF sequence
             yield sub_sequence
             # truncate the remaining sequence
             i += child_tree.size
 
-    def iterate_sub_sequences(self) -> collections.abc.Generator[sl.NaturalNumber0Sequence, None, None]:
+    def iterate_sub_sequences(self) -> collections.abc.Generator[nn0sl.NaturalNumber0Sequence, None, None]:
         i: int
         sub_tree: rpt.RootedPlaneTree
         for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_subtrees()):
             # retrieves the sub-sequence in the sequence
             sub_sequence: tuple[int, ...] = self.natural_number_sequence[i:i + sub_tree.size]
-            sub_sequence: sl.NaturalNumber0Sequence = sl.NaturalNumber0Sequence(*sub_sequence)
+            sub_sequence: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*sub_sequence)
             # yield the child RGF sequence
             yield sub_sequence
 
@@ -783,7 +894,7 @@ class AbstractFormula(tuple):
         :return:
         """
         child_tree: rpt.RootedPlaneTree
-        child_sequence: sl.NaturalNumber0Sequence
+        child_sequence: nn0sl.NaturalNumber0Sequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_subtrees(),
                                               self.iterate_sub_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
@@ -808,7 +919,7 @@ class AbstractFormula(tuple):
         return self.natural_number_sequence[0]
 
     @property
-    def natural_number_sequence(self) -> sl.NaturalNumber0Sequence:
+    def natural_number_sequence(self) -> nn0sl.NaturalNumber0Sequence:
         r"""Returns the :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.
 
         Shortcut: self.s.
@@ -894,7 +1005,7 @@ class AbstractFormula(tuple):
         return super().__getitem__(0)
 
     @property
-    def s(self) -> sl.NaturalNumber0Sequence:
+    def s(self) -> nn0sl.NaturalNumber0Sequence:
         r"""A shortcut for self.natural_numbers_sequence.
 
         """
@@ -1021,7 +1132,7 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
 
 FlexibleAbstractFormula = typing.Union[
     AbstractFormula, tuple[
-        rpt.FlexibleRootedPlaneTree, sl.FlexibleNaturalNumber0Sequence], collections.abc.Iterator, collections.abc.Generator, None]
+        rpt.FlexibleRootedPlaneTree, nn0sl.FlexibleNaturalNumber0Sequence], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 

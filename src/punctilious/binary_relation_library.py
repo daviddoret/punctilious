@@ -372,19 +372,23 @@ class RelationalElement(abc.ABC):
 
     """
 
-    def __eq__(self, other):
-        return self.is_equal_to(other)
+    def __eq__(self, x):
+        return self.is_equal_to(x)
 
-    def __gt__(self, other):
-        return self.is_strictly_greater_than(other)
+    def __gt__(self, x):
+        return self.is_strictly_greater_than(x)
 
-    def __lt__(self, other):
-        return self.is_strictly_less_than(other)
+    def __lt__(self, x):
+        return self.is_strictly_less_than(x)
 
     # Class properties expected to be configured by child classes
     _is_equal_to: BinaryRelation | None = None
     _is_strictly_greater_than: BinaryRelation | None = None
     _is_strictly_less_than: BinaryRelation | None = None
+
+    @property
+    def canonical_order(self) -> BinaryRelation:
+        return self.__class__._is_strictly_less_than
 
     def is_equal_to(self, x: object) -> bool | None:
         """Returns `True` if this element is equal to `x`
@@ -408,7 +412,11 @@ class RelationalElement(abc.ABC):
 
         :return: `True` or `False`.
         """
-        return self.__class__._is_strictly_greater_than.relates(x=self, y=x)
+        if hasattr(self.__class__, "_is_strictly_greater_than") and hasattr(
+                self.__class__._is_strictly_greater_than, "relates"):
+            return self.__class__._is_strictly_greater_than.relates(x=self, y=x)
+        else:
+            return self.__class__._is_strictly_less_than.relates(x=y, y=self)
 
     def is_strictly_less_than(self, x: object) -> bool | None:
         """Returns `True` if this element is strictly less than `x`
@@ -418,3 +426,10 @@ class RelationalElement(abc.ABC):
         :return: `True` or `False`.
         """
         return self.__class__._is_strictly_less_than.relates(x=self, y=x)
+
+    def rank(self) -> int:
+        return self.__class__._is_strictly_less_than.rank(x=self)
+
+    @classmethod
+    def from_rank(cls, n: int) -> object:
+        return cls._is_strictly_less_than.unrank(n)

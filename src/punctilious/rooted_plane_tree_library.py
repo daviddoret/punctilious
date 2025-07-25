@@ -13,7 +13,7 @@ import punctilious.binary_relation_library as orl
 import punctilious.dyck_word_library as dwl
 
 
-class DyckWordLexicographicOder(orl.BinaryRelation):
+class DyckWordLexicographicOrder(orl.BinaryRelation):
     r"""The Dyck word lexicographic relation order of rooted plane trees.
 
     """
@@ -66,10 +66,39 @@ class DyckWordLexicographicOder(orl.BinaryRelation):
         return t
 
 
-dyck_word_lexicographic_order = DyckWordLexicographicOder()
+dyck_word_lexicographic_order = DyckWordLexicographicOrder()
 
 
-class RootedPlaneTree(tuple):
+class IsEqualTo(orl.BinaryRelation):
+    r"""The equality binary-relation for rooted plane trees.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{T}, = )`.
+
+    """
+
+    # mathematical properties
+    _is_antisymmetric: bool | None = True
+    _is_asymmetric: bool | None = False
+    _is_connected: bool | None = False
+    _is_irreflexive: bool | None = False
+    _is_reflexive: bool | None = True
+    _is_strongly_connected: bool | None = False
+    _is_symmetric: bool | None = True
+    _is_transitive: bool | None = True
+
+    def relates(self, x: object, y: object) -> bool:
+        x: RootedPlaneTree = RootedPlaneTree.from_any(x)
+        y: RootedPlaneTree = RootedPlaneTree.from_any(y)
+        return x.is_rooted_plane_tree_equivalent_to(y)
+
+
+is_equal_to = IsEqualTo()
+
+
+class RootedPlaneTree(orl.RelationalElement, tuple):
     r"""A `RootedPlaneTree` is an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.
 
@@ -79,19 +108,6 @@ class RootedPlaneTree(tuple):
     Chartrand, Lesniak, and Zhang, Graphs & Digraphs: Sixth Edition, p. 65.
 
     """
-
-    def __eq__(self, t) -> bool:
-        r"""Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
-
-        See also
-        -------------
-
-        - :attr:`RootedPlaneTree.is_equal_to` for a definition of rooted-plane-tree equality.
-
-        :param t: A rooted-plane-tree.
-        :return: `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
-        """
-        return self.is_equal_to_under_o1(t)
 
     def __hash__(self):
         return self._compute_hash(self)
@@ -106,14 +122,6 @@ class RootedPlaneTree(tuple):
         """
         super(RootedPlaneTree, self).__init__()
         self._subtrees: tuple[RootedPlaneTree, ...] | None = None
-
-    def __lt__(self, t) -> bool:
-        r"""Returns `True` if this rooted-plane-tree is less than rooted-plane-tree `t`, `False` otherwise.
-
-        See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
-
-        """
-        return self.is_less_than_under_o1(t)
 
     def __new__(cls, *children: FlexibleRootedPlaneTree, tuple_tree: TupleTree = None):
         if tuple_tree is not None:
@@ -139,6 +147,10 @@ class RootedPlaneTree(tuple):
 
     def __str__(self):
         return self.represent_as_anonymous_function()
+
+    # Configuration of class properties (cf. Relatable).
+    _is_equal_to: orl.BinaryRelation = is_equal_to
+    _is_strictly_less_than: orl.BinaryRelation = dyck_word_lexicographic_order
 
     _cache: dict[int, RootedPlaneTree] = dict()  # Cache mechanism.
 
@@ -315,20 +327,6 @@ class RootedPlaneTree(tuple):
         # return tuple(super().__iter__()) # alternative implementation.
         return tuple.__new__(tuple, self)  # this implementation seems more "direct".
 
-    def is_equal_to_under_o1(self, t: FlexibleRootedPlaneTree):
-        r"""Returns `True` if this rooted-plane-tree is equal to rooted-plane-tree `t`, `False` otherwise.
-
-        Definition - rooted-plane-tree equality:
-        In the context of the rooted-plane-tree canonical ordering,
-        equality is defined as rooted-plane-tree equivalence.
-
-        See :attr:`RootedPlaneTree.is_less_than` for a definition of rooted-plane-tree canonical-ordering.
-
-        :param t: A rooted-plane-tree.
-        :return: `True` if the current rooted-plane-tree is equal to `t`, `False` otherwise.
-        """
-        return self.is_rooted_plane_tree_equivalent_to(t)
-
     @property
     def is_increasing(self) -> bool:
         r"""Returns `True` if this rooted-plane-tree is increasing, `False` otherwise.
@@ -355,47 +353,6 @@ class RootedPlaneTree(tuple):
         A `RootedPlaneTree` is a leaf if and only if it contains no children.
         """
         return self.degree == 0
-
-    def is_less_than_under_o1(self, t: FlexibleRootedPlaneTree) -> bool:
-        r"""Returns `True` if this rooted-plane-tree is less than `t` under :math:`\mathcal{O}_1`, `False` otherwise.
-
-        Definition: :math:`\mathcal{O}_1`
-        ______________________________________________________________________________
-
-        Let :math:`S` and :math:`T` be rooted-plane-trees.
-
-        We say that :math:`S \prec T` under :math:`\mathcal{O}_1` if and only if:
-
-        - :math:`( |S| < |T| )`,
-
-        or:
-
-        - :math:`|S| = |T| \land \exists i, s_i > t_i \land \nexists j < i, s_j < t_j`
-
-        :param t: A rooted-plane-tree.
-
-        :return: `True` if the current rooted-plane-tree is equal to `t`, `False` otherwise.
-        """
-        t: RootedPlaneTree = RootedPlaneTree.from_any(t)
-        if self.is_rooted_plane_tree_equivalent_to(t):
-            return False
-        elif self.size < t.size:
-            return True
-        elif self.size > t.size:
-            return False
-        # S and T have the same size.
-        elif self.degree < t.degree:
-            return True
-        elif self.degree > t.degree:
-            return False
-        else:
-            # S and T have the same degree as well.
-            for sub_s, sub_t in zip(self.immediate_subtrees, t.immediate_subtrees):
-                if sub_s.is_less_than_under_o1(sub_t):
-                    return True
-                elif sub_t.is_less_than_under_o1(sub_s):
-                    return False
-        raise util.PunctiliousException("Unreachable algorithm position.")
 
     def is_rooted_plane_tree_equivalent_to(self, t: FlexibleRootedPlaneTree) -> bool:
         r"""Returns `True` if this rooted-plane-tree is connective-equivalent to rooted-plane-tree `t`.
@@ -436,12 +393,12 @@ class RootedPlaneTree(tuple):
         Definition - strictly increasing rooted-plane-tree:
         A rooted-plane-tree :math:`T = (S_0, S1, \cdots, S_l)` is strictly increasing,
         or strictly increasing under canonical order,
-        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, S_{i + 1} > S_i`.
+        if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, S_{i} < S_{i+1}`.
 
         :return: `True` if this rooted-plane-tree is strictly increasing, `False` otherwise.
         """
         return all(
-            self.immediate_subtrees[i + 1] > self.immediate_subtrees[i] for i in range(0, self.degree - 1))
+            self.immediate_subtrees[i] < self.immediate_subtrees[i + 1] for i in range(0, self.degree - 1))
 
     def iterate_immediate_subtrees(self) -> typing.Generator[RootedPlaneTree, None, None]:
         r"""Generator function that iterates the immediate subtrees of this rooted-plane-tree.
