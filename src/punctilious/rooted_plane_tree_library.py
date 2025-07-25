@@ -395,6 +395,12 @@ class RootedPlaneTree(orl.RelationalElement, tuple):
         or strictly increasing under canonical order,
         if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, S_{i} < S_{i+1}`.
 
+        Use case
+        --------
+
+        This property is important to create a model of finite sets and ordered sets using abstract formulas,
+        which further makes it possible to create a model finite maps, etc.
+
         :return: `True` if this rooted-plane-tree is strictly increasing, `False` otherwise.
         """
         return all(
