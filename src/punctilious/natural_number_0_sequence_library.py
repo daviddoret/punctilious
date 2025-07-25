@@ -289,10 +289,7 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
 
     Let :math:`p_0, p_1, \ldots, p_n` be the first :math:`n` prime numbers in ascending order.
 
-    :math:`\mathrm{rank}(S) = p_0^{s_0 - 1} \cdot p_1^{s_1 - 1} \ldots p_n^{s_n - 1}
-
-    The :math:`- 1` in the ranking formula is necessary to make the function bijective
-    when working with 1-based natural numbers.
+    :math:`\mathrm{rank}(S) = p_0^{s_0} \cdot p_1^{s_1} \ldots p_n^{s_n}
 
     Note
     ------

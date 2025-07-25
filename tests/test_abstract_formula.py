@@ -279,9 +279,9 @@ class TestAbstractFormula:
         phi = pu.afl.AbstractFormula(t3_a_aa_aaa, (9, 5, 104,))
         assert phi.represent_as_function() == "9(5(104))"
         phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (1, 1, 1,))
-        assert phi.represent_as_function() == "0(0, 0)"
+        assert phi.represent_as_function() == "1(1, 1)"
         phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (1, 2, 3,))
-        assert phi.represent_as_function() == "0(1, 2)"
+        assert phi.represent_as_function() == "1(2, 3)"
         phi = pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (100, 102, 140,))
         assert phi.represent_as_function() == "100(102, 140)"
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
