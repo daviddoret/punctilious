@@ -119,10 +119,10 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         else:
             return self.is_irreflexive and self.is_asymmetric and self.is_transitive and self.is_connected
 
-    @util.class_property
+    @util.readonly_class_property
     def is_antisymmetric(cls) -> util.TernaryBoolean:
         r"""Returns `:attr:`util.TernaryBoolean.TRUE` if this binary-relation is antisymmetric,
-        `:attr:`util.TernaryBoolean.FALSE` if not,
+        `:attr:`util.TernaryBoolean.FALSE` if it is not antisymmetric,
         and `:attr:`util.TernaryBoolean.NOT_AVAILABLE` if this property is not available.
 
         Mathematical definition - antisymmetric
@@ -140,10 +140,10 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         -https://en.wikipedia.org/wiki/Antisymmetric_relation
 
         """
-        return None
+        return util.TernaryBoolean.NOT_AVAILABLE
 
-    @property
-    def is_asymmetric(self) -> bool:
+    @util.readonly_class_property
+    def is_asymmetric(cls) -> util.TernaryBoolean:
         r"""Returns `True` if this binary-relation is asymmetric,
         `False` if not,
         and `None` if this property is not configured.
@@ -163,10 +163,10 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         - https://en.wikipedia.org/wiki/Asymmetric_relation
 
         """
-        return self.__class__._is_asymmetric
+        return util.TernaryBoolean.NOT_AVAILABLE
 
-    @property
-    def is_connected(self) -> bool:
+    @util.readonly_class_property
+    def is_connected(cls) -> util.TernaryBoolean:
         r"""Returns `True` if this binary-relation is connected,
         `False` if not,
         and `None` if this property is not configured.
@@ -186,10 +186,10 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         - https://en.wikipedia.org/wiki/Connected_relation
 
         """
-        return self.__class__._is_connected
+        return util.TernaryBoolean.NOT_AVAILABLE
 
-    @property
-    def is_irreflexive(self) -> bool:
+    @util.readonly_class_property
+    def is_irreflexive(cls) -> util.TernaryBoolean:
         r"""Returns `True` if this binary-relation is irreflexive,
         `False` if not,
         and `None` if this property is not configured.
@@ -209,10 +209,37 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         - https://en.wikipedia.org/wiki/Reflexive_relation#Irreflexive_relation
 
         """
-        return self.__class__._is_irreflexive
+        return util.TernaryBoolean.NOT_AVAILABLE
 
-    @property
-    def is_reflexive(self) -> bool:
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> util.TernaryBoolean:
+        r"""Returns `:attr:`util.TernaryBoolean.TRUE` if this binary-relation is order isomorphic to :math:`( \mathbb{N}, < )`,
+        `:attr:`util.TernaryBoolean.FALSE` if it is not,
+        and `:attr:`util.TernaryBoolean.NOT_AVAILABLE` if this property is not available.
+
+        Mathematical definition - order isomorphism with :math:`( \mathbb{N}, < )`
+        ----------------------------------------------------------------------------
+
+        The binary relation :math:`(S, R)` and :math:`( \mathbb{N}, < )` are order isomorphic
+        if there is a bijective function :math:`f` from :math:`S \to \mathbb{N}` such that,
+        for every :math:`x` and :math:`y` in :math:`S`,
+        :math:`xRy` if and only if :math:`f(x) < f(y)`.
+        (Reference: Ciesielski 1997, p. 38-39)
+
+        :return: `:attr:`util.TernaryBoolean.TRUE`, `:attr:`util.TernaryBoolean.FALSE`, or `:attr:`util.TernaryBoolean.NOT_AVAILABLE`.
+
+        Bibliography
+        ---------------
+
+        - https://en.wikipedia.org/wiki/Isomorphism
+        - https://en.wikipedia.org/wiki/Order_isomorphism
+        - Ciesielski, Krzysztof. Set Theory for the Working Mathematician. London Mathematical Society Student Texts 39. 1997.
+
+        """
+        return util.TernaryBoolean.NOT_AVAILABLE
+
+    @util.readonly_class_property
+    def is_reflexive(cls) -> util.TernaryBoolean:
         r"""Returns `True` if this binary-relation is reflexive,
         `False` if not,
         and `None` if this property is not configured.
@@ -233,10 +260,10 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         - https://en.wikipedia.org/wiki/Reflexive_relation
 
         """
-        return self.__class__._is_reflexive
+        return util.TernaryBoolean.NOT_AVAILABLE
 
-    @property
-    def is_strongly_connected(self) -> bool:
+    @util.readonly_class_property
+    def is_strongly_connected(cls) -> util.TernaryBoolean:
         r"""Returns `True` if this binary-relation is strongly-connected,
         `False` if not,
         and `None` if this property is not configured.
@@ -256,10 +283,10 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         - https://en.wikipedia.org/wiki/Connected_relation
 
         """
-        return self.__class__._is_strongly_connected
+        return util.TernaryBoolean.NOT_AVAILABLE
 
-    @property
-    def is_transitive(self) -> bool:
+    @util.readonly_class_property
+    def is_transitive(cls) -> util.TernaryBoolean:
         r"""Returns `True` if this binary-relation is transitive,
         `False` if not,
         and `None` if this property is not configured.
@@ -280,7 +307,7 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         - https://en.wikipedia.org/wiki/Transitive_relation
 
         """
-        return self.__class__._is_transitive
+        return util.TernaryBoolean.NOT_AVAILABLE
 
     @property
     def least_element(self) -> object:

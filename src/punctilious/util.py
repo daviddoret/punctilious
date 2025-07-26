@@ -12,7 +12,7 @@ class TernaryBoolean(enum.Enum):
     NOT_AVAILABLE = "not available"
 
 
-class ClassPropertyDescriptor:
+class ReadOnlyClassPropertyDescriptor:
     """Descriptor for creating class-level properties."""
 
     def __init__(self, f):
@@ -23,12 +23,12 @@ class ClassPropertyDescriptor:
         return self.func(cls)
 
     def __set__(self, f, x):
-        raise PunctiliousException("Property is read-only.", f=f, x=x)
+        raise PunctiliousException("This class property is read-only.", f=f, x=x)
 
 
-def class_property(p):
+def readonly_class_property(p):
     """Decorator to create read-only class properties."""
-    return ClassPropertyDescriptor(p)
+    return ReadOnlyClassPropertyDescriptor(p)
 
 
 def decrement_last_element(s):

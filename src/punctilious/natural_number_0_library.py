@@ -24,12 +24,12 @@ class IsEqualTo(brl.BinaryRelation):
     _is_asymmetric: bool | None = False
     _is_connected: bool | None = False
     _is_irreflexive: bool | None = False
-    _is_order_isomorphic_to_n_strictly_less_than: bool | None = False
     _is_reflexive: bool | None = True
     _is_strongly_connected: bool | None = False
     _is_symmetric: bool | None = True
     _is_transitive: bool | None = True
 
+    @util.readonly_class_property
     def is_antisymmetric(cls) -> util.TernaryBoolean:
         r"""
 
@@ -40,6 +40,18 @@ class IsEqualTo(brl.BinaryRelation):
 
         """
         return util.TernaryBoolean.TRUE
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> util.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return util.TernaryBoolean.FALSE
 
     def relates(self, x: object, y: object) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
@@ -100,10 +112,25 @@ class IsStrictlyLessThan(brl.BinaryRelation):
     _is_asymmetric: bool | None = True
     _is_connected: bool | None = None
     _is_irreflexive: bool | None = True
-    _is_order_isomorphic_to_n_strictly_less_than: bool | None = None
     _is_reflexive: bool | None = None
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = True
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> util.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        This order is :math:`( \mathbb{N}, < )`.
+        The identity function :math:`f(x) = x` is a bijective function
+        from :math:`\mathbb{N} \to \mathbb{N}` such that,
+        for every :math:`x` and :math:`y` in :math:`\mathbb{N}`,
+        :math:`xRy` if and only if :math:`f(x) < f(y)`.
+
+        """
+        return util.TernaryBoolean.TRUE
 
     def rank(self, x: object) -> int:
         r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.

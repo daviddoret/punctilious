@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/binary_relation_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1091,14 +1093,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01526" summary="clean up">
-      <option name="closed" value="true" />
-      <created>1751727633374</created>
-      <option name="number" value="01526" />
-      <option name="presentableId" value="LOCAL-01526" />
-      <option name="project" value="LOCAL" />
-      <updated>1751727633374</updated>
-    </task>
     <task id="LOCAL-01527" summary="abstract-map">
       <option name="closed" value="true" />
       <created>1751785865400</created>
@@ -1483,7 +1477,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753431867374</updated>
     </task>
-    <option name="localTasksCounter" value="1575" />
+    <task id="LOCAL-01575" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1753432027794</created>
+      <option name="number" value="01575" />
+      <option name="presentableId" value="LOCAL-01575" />
+      <option name="project" value="LOCAL" />
+      <updated>1753432027794</updated>
+    </task>
+    <option name="localTasksCounter" value="1576" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1666,11 +1668,6 @@
           <url>file://$PROJECT_DIR$/tests/test_rooted_plane_tree.py</url>
           <line>206</line>
           <option name="timeStamp" value="427" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/binary_relation_library.py</url>
-          <line>416</line>
-          <option name="timeStamp" value="429" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
