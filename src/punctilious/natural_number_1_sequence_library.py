@@ -84,7 +84,7 @@ class LexicographicOrder(orl.BinaryRelation):
                 return False
 
 
-lexicographic_order = LexicographicOrder()
+lexicographic_order = LexicographicOrder
 
 
 class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
@@ -150,7 +150,7 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
                 return False
 
 
-sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder()
+sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 
 
 class GodelNumberEncodingOrder(orl.BinaryRelation):
@@ -254,7 +254,7 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
             return s
 
 
-godel_number_encoding_order = GodelNumberEncodingOrder()
+godel_number_encoding_order = GodelNumberEncodingOrder
 
 
 class IsEqualTo(orl.BinaryRelation):
@@ -283,7 +283,7 @@ class IsEqualTo(orl.BinaryRelation):
         return x.is_natural_number_1_sequence_equivalent_to(y)
 
 
-is_equal_to = IsEqualTo()
+is_equal_to = IsEqualTo
 
 
 # General functions

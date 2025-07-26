@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import enum
 
+import punctilious.util as util
+import punctilious.special_values_library as spl
+
 
 class TernaryBoolean(enum.Enum):
     """A ternary Boolean where the 3rd value means "not available".
@@ -9,7 +12,7 @@ class TernaryBoolean(enum.Enum):
     """
     TRUE = True
     FALSE = False
-    NOT_AVAILABLE = "not available"
+    NOT_AVAILABLE = spl.SpecialValues.NOT_AVAILABLE
 
     def __and__(self, x):
         return self.land(x)
@@ -22,7 +25,7 @@ class TernaryBoolean(enum.Enum):
 
     def __bool__(self):
         if self is TernaryBoolean.NOT_AVAILABLE:
-            raise PunctiliousException("Cannot convert NOT_AVAILABLE to bool.")
+            raise util.PunctiliousException("Cannot convert NOT_AVAILABLE to bool.")
         return self.value
 
     def land(self, x: TernaryBoolean) -> TernaryBoolean:

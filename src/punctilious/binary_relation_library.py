@@ -1,8 +1,10 @@
 from __future__ import annotations
 import abc
 import docstring_inheritance
+import typing
 
 import punctilious.util as util
+import punctilious.special_values_library as spl
 import punctilious.ternary_boolean_library as tbl
 
 
@@ -74,7 +76,7 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         return cls.is_reflexive.land(cls.is_transitive.land(cls.is_antisymmetric))
 
     @util.readonly_class_property
-    def is_a_strict_total_order(self) -> tbl.TernaryBoolean:
+    def is_a_strict_total_order(cls) -> tbl.TernaryBoolean:
         r"""Returns `True` if this binary-relation is a strict-total-order,
         `False` if not,
         and `None` if this property is not configured.
@@ -100,7 +102,7 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         - https://en.wikipedia.org/wiki/Total_order
 
         """
-        return self.is_irreflexive.land(self.is_asymmetric.land(self.is_transitive.land(self.is_connected)))
+        return cls.is_irreflexive.land(cls.is_asymmetric.land(cls.is_transitive.land(cls.is_connected)))
 
     @util.readonly_class_property
     def is_antisymmetric(cls) -> tbl.TernaryBoolean:
@@ -292,53 +294,56 @@ class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMe
         """
         return tbl.TernaryBoolean.NOT_AVAILABLE
 
-    @property
-    def least_element(self) -> object:
-        r"""If this is a relation order, and if it has a unique least element, returns that element.
+    @util.readonly_class_property
+    def least_element(cls) -> object | typing.Literal[spl.SpecialValues.NOT_AVAILABLE]:
+        r"""Returns the least element if 1) this is a relation order, 2) it has a least element,
+        and 3) it is configured. Returns :py:attr:`spl.SpecialValues.NOT_AVAILABLE` otherwise.
 
+        :return: the least element.
+        """
+        return spl.SpecialValues.NOT_AVAILABLE
+
+    @classmethod
+    def rank(cls, x: object) -> int | typing.Literal[spl.SpecialValues.NOT_AVAILABLE]:
+        r"""Returns the rank of `x`.
+        Returns :py:attr:`spl.SpecialValues.NOT_AVAILABLE` if rank is undefined or if a ranking algorithm is not configured.
+
+        :param x: an element of the relation set.
+        :return: the rank of `x`.
+        """
+        return spl.SpecialValues.NOT_AVAILABLE
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> tbl.TernaryBoolean:
+        r"""Returns `True` if :math:`xRy` and `False` if :math:`\neg(xRy)`.
+        Returns :py:attr:`spl.SpecialValues.NOT_AVAILABLE` if a relates algorithm is not configured.
+
+        :param x: an element of the relation set.
+        :param y: an element of the relation set.
         :return:
         """
-        raise util.PunctiliousException("Abstract method.")
+        return tbl.TernaryBoolean.NOT_AVAILABLE
 
-    def rank(self, x: object) -> int:
-        r"""If the binary-relation is an order-relation that is homomorphic to the natural numbers,
-        and if a ranking algorithm is configured,
-        returns the rank of object `x`.
-
-        :math:`\mathrm{rank}(x) = n`.
-
-        :param x:
-        :return:
-        """
-
-        raise util.PunctiliousException("Abstract method.")
-
-    def relates(self, x: object, y: object) -> bool:
-        r"""Returns `True` if :math:`xRy`, `False` otherwise.
-
-        :param y:
-        :param x:
-        :return:
-        """
-        raise util.PunctiliousException("Abstract method.")
-
-    def successor(self, x: object) -> object:
+    @classmethod
+    def successor(cls, x: object) -> object | typing.Literal[spl.SpecialValues.NOT_AVAILABLE]:
         r"""Returns the successor of `x`.
+        Returns :py:attr:`spl.SpecialValues.NOT_AVAILABLE` if successor is not defined,
+        or if a successor algorithm is not configured.
 
         :param x:
         :return:
         """
-        raise util.PunctiliousException("Abstract method.")
+        return spl.SpecialValues.NOT_AVAILABLE
 
-    def unrank(self, n: int) -> object:
-        r"""If the binary-relation is an order-relation that is homomorphic to the natural numbers,
-        and if an unranking algorithm is configured,
-        returns the object :math:`x` such that :math:`\mathrm{rank}(x) = n`.
+    @classmethod
+    def unrank(cls, n: int) -> object:
+        r"""Returns the element of the relation set such that :math:`\mathrm{rank}(x) = n`.
+        Returns :py:attr:`spl.SpecialValues.NOT_AVAILABLE` if unrank is undefined or if an unranking algorithm is not configured.
 
-        :param n:
-        :return:
+        :param n: a rank.
+        :return: an element of the relation set.
         """
-        raise util.PunctiliousException("Abstract method.")
+        return spl.SpecialValues.NOT_AVAILABLE
 
 
 def rank(x: object, o: BinaryRelation | None) -> int:

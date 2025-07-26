@@ -428,7 +428,7 @@ class CantorPairingOrder(orl.BinaryRelation):
         return NaturalNumber0Pair(x, y)
 
 
-cantor_pairing_order = CantorPairingOrder()
+cantor_pairing_order = CantorPairingOrder
 
 
 # TODO: Implement the Szudzik "more elegant" order

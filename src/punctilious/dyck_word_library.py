@@ -48,11 +48,11 @@ class LexicographicOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = True
 
-    @property
-    def least_element(self) -> object:
+    @util.readonly_class_property
+    def least_element(cls) -> object:
         return DyckWord("()")
 
-    def rank(self, x: object) -> int:
+    def rank(cls, x: object) -> int:
         """
         Given a primitive Dyck word s (a well‐formed parenthesis string
         that only returns to balance 0 at the very end), return its 0-based
@@ -234,8 +234,8 @@ class LexicographicOrder(orl.BinaryRelation):
 
 # Relations
 
-is_equal_to: IsEqualTo = IsEqualTo()  # The canonical equality relation for natural-number-0 elements.
-lexicographic_order: LexicographicOrder = LexicographicOrder()  # The canonical is-strictly-less-than relation for natural-number-0 elements.
+is_equal_to = IsEqualTo  # The canonical equality relation for natural-number-0 elements.
+lexicographic_order = LexicographicOrder  # The canonical is-strictly-less-than relation for natural-number-0 elements.
 
 
 # Functions

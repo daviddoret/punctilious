@@ -149,9 +149,9 @@ class IsStrictlyLessThan(brl.BinaryRelation):
 
 # Relations
 
-is_equal_to: IsEqualTo = IsEqualTo()  # The canonical equality relation for natural-number-1 elements.
-is_strictly_greater_than: IsStrictlyGreaterThan = IsStrictlyGreaterThan()  # The canonical is-strictly-greater-than relation for natural-number-1 elements.
-is_strictly_less_than: IsStrictlyLessThan = IsStrictlyLessThan()  # The canonical is-strictly-less-than relation for natural-number-1 elements.
+is_equal_to: IsEqualTo = IsEqualTo  # The canonical equality relation for natural-number-1 elements.
+is_strictly_greater_than: IsStrictlyGreaterThan = IsStrictlyGreaterThan  # The canonical is-strictly-greater-than relation for natural-number-1 elements.
+is_strictly_less_than: IsStrictlyLessThan = IsStrictlyLessThan  # The canonical is-strictly-less-than relation for natural-number-1 elements.
 
 
 # Main class
