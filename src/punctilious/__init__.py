@@ -1,4 +1,5 @@
 import punctilious.util as util
+import punctilious.ternary_boolean_library as ternary_boolean_library
 import punctilious.binary_relation_library as binary_relation_library
 import punctilious.bell_number_library as bell_number_library
 import punctilious.catalan_number_library as catalan_number_library
@@ -34,6 +35,7 @@ nn1sl = natural_number_1_sequence_library
 nn0pl = natural_number_0_pair_library
 rptl = rooted_plane_tree_library
 rptc = rooted_plane_tree_catalog
+tbl = ternary_boolean_library
 
 __all__ = [
     "abstract_formula_library", "afl",
@@ -51,4 +53,5 @@ __all__ = [
     "prime_number_library", "pnl",
     "rooted_plane_tree_catalog", "rptc",
     "rooted_plane_tree_library", "rptl",
+    "ternary_boolean_library", "tbl",
 ]

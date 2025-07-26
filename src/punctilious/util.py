@@ -1,15 +1,7 @@
+from __future__ import annotations
+
 import typing
 import uuid
-import enum
-
-
-class TernaryBoolean(enum.Enum):
-    """A ternary Boolean where the 3rd value means "not available".
-
-    """
-    TRUE = True
-    FALSE = False
-    NOT_AVAILABLE = "not available"
 
 
 class ReadOnlyClassPropertyDescriptor:
