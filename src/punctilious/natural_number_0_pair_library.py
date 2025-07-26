@@ -8,6 +8,7 @@ import punctilious.util as util
 import punctilious.binary_relation_library as orl
 import punctilious.natural_number_0_library as nn0l
 import punctilious.prime_number_library as pnl
+import punctilious.ternary_boolean_library as tbl
 
 
 # Relation orders
@@ -63,7 +64,8 @@ class LexicographicOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def is_antisymmetric(cls) -> util.TernaryBoolean:
+    @util.readonly_class_property
+    def is_antisymmetric(cls) -> tbl.TernaryBoolean:
         """
 
         Proof
@@ -72,9 +74,10 @@ class LexicographicOrder(orl.BinaryRelation):
         TODO: Provide proof here.
 
         """
-        return util.TernaryBoolean.TRUE
+        return tbl.TernaryBoolean.TRUE
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         if x.is_equal_to(y):
@@ -95,7 +98,7 @@ class LexicographicOrder(orl.BinaryRelation):
                 return False
 
 
-lexicographic_order = LexicographicOrder()
+lexicographic_order = LexicographicOrder
 
 
 class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
@@ -136,7 +139,8 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         if x.is_equal_to(y):
@@ -161,7 +165,7 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
                 return False
 
 
-sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder()
+sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 
 
 class GodelNumberEncodingOrder(orl.BinaryRelation):
@@ -225,7 +229,8 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def rank(self, x: object) -> int:
+    @classmethod
+    def rank(cls, x: object) -> int:
         """
 
         0 should be mapped to the empty sequence ().
@@ -249,20 +254,23 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
                 n = n * p ** f
             return n - 1
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
-        n: int = self.rank(x)
-        m: int = self.rank(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
         return n < m
 
-    def successor(self, x: object) -> object:
-        n = self.rank(x)
+    @classmethod
+    def successor(cls, x: object) -> object:
+        n = cls.rank(x)
         n += 1
-        y = self.unrank(n)
+        y = cls.unrank(n)
         return y
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
             return NaturalNumber0Pair()
@@ -274,7 +282,7 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
             return NaturalNumber0Pair(*s)
 
 
-godel_number_order = GodelNumberEncodingOrder()
+godel_number_order = GodelNumberEncodingOrder
 
 
 class RefinedGodelNumberOrder(orl.BinaryRelation):
@@ -323,7 +331,8 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def rank(self, x: object) -> int:
+    @classmethod
+    def rank(cls, x: object) -> int:
         """
 
         0 should be mapped to the empty sequence ().
@@ -347,20 +356,23 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
                 n = n * p ** f
             return n - 1
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
-        n: int = self.rank(x)
-        m: int = self.rank(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
         return n < m
 
-    def successor(self, x: object) -> object:
-        n = self.rank(x)
+    @classmethod
+    def successor(cls, x: object) -> object:
+        n = cls.rank(x)
         n += 1
-        y = self.unrank(n)
+        y = cls.unrank(n)
         return y
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
             return NaturalNumber0Pair()
@@ -372,7 +384,7 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
             return NaturalNumber0Pair(*s)
 
 
-refined_godel_number_order = RefinedGodelNumberOrder()
+refined_godel_number_order = RefinedGodelNumberOrder
 
 
 class CantorPairingOrder(orl.BinaryRelation):
@@ -395,7 +407,8 @@ class CantorPairingOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = None
 
-    def rank(self, x: object) -> int:
+    @classmethod
+    def rank(cls, x: object) -> int:
         """
             Cantor pairing function: maps two natural numbers to a unique natural number.
             π(x,y) = (x + y)(x + y + 1)/2 + y
@@ -403,20 +416,23 @@ class CantorPairingOrder(orl.BinaryRelation):
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         return ((x.x + x.y) * (x.x + x.y + 1)) // 2 + x.y
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
-        n: int = self.rank(x)
-        m: int = self.rank(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
         return n < m
 
-    def successor(self, x: object) -> object:
-        n = self.rank(x)
+    @classmethod
+    def successor(cls, x: object) -> object:
+        n = cls.rank(x)
         n += 1
-        y = self.unrank(n)
+        y = cls.unrank(n)
         return y
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         """
         Inverse of Cantor pairing function: maps a natural number back to a pair.
         """
@@ -455,13 +471,14 @@ class IsEqualTo(orl.BinaryRelation):
     _is_symmetric: bool | None = True
     _is_transitive: bool | None = True
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         return x.is_natural_number_0_pair_equivalent_to(y)
 
 
-is_equal_to = IsEqualTo()
+is_equal_to = IsEqualTo
 
 
 # Classes
