@@ -5,6 +5,7 @@ from __future__ import annotations
 import typing
 import punctilious.util as util
 import punctilious.binary_relation_library as brl
+import punctilious.ternary_boolean_library as tbl
 
 
 # Relation classes
@@ -30,7 +31,8 @@ class IsEqualTo(brl.BinaryRelation):
     _is_symmetric: bool | None = True
     _is_transitive: bool | None = True
 
-    def is_antisymmetric(cls) -> util.TernaryBoolean:
+    @classmethod
+    def is_antisymmetric(cls) -> tbl.TernaryBoolean:
         r"""
 
         Proof
@@ -39,9 +41,10 @@ class IsEqualTo(brl.BinaryRelation):
         TODO: Provide proof here.
 
         """
-        return util.TernaryBoolean.TRUE
+        return tbl.TernaryBoolean.TRUE
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param x: A Python object.
@@ -73,7 +76,8 @@ class IsStrictlyGreaterThan(brl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param x: A Python object.
@@ -105,7 +109,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = True
 
-    def rank(self, x: object) -> int:
+    @classmethod
+    def rank(cls, x: object) -> int:
         r"""Returns the rank of `x` in :math:`( \mathbb{N}_1, < )`.
 
         :param x: A Python object interpretable as a (1-based) natural number.
@@ -114,7 +119,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         x: NaturalNumber1 = NaturalNumber1.from_any(x)
         return int(x)
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param x: A Python object interpretable as a (1-based) natural number.
@@ -125,7 +131,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         y: NaturalNumber1 = NaturalNumber1.from_any(y)
         return int(x) < int(y)
 
-    def successor(self, x: object) -> object:
+    @classmethod
+    def successor(cls, x: object) -> object:
         r"""Returns the successor of `x` in :math:`( \mathbb{N}_1, < )`.
 
         :param x: A Python object interpretable as a (1-based) natural number.
@@ -134,7 +141,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         x: NaturalNumber1 = NaturalNumber1.from_any(x)
         return NaturalNumber1(x + 1)
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         r"""Returns the (1-based) natural number of `x` such that its rank in :math:`( \mathbb{N}_1, < ) = n`.
 
         :param n: A positive integer.
@@ -149,9 +157,9 @@ class IsStrictlyLessThan(brl.BinaryRelation):
 
 # Relations
 
-is_equal_to: IsEqualTo = IsEqualTo  # The canonical equality relation for natural-number-1 elements.
-is_strictly_greater_than: IsStrictlyGreaterThan = IsStrictlyGreaterThan  # The canonical is-strictly-greater-than relation for natural-number-1 elements.
-is_strictly_less_than: IsStrictlyLessThan = IsStrictlyLessThan  # The canonical is-strictly-less-than relation for natural-number-1 elements.
+is_equal_to = IsEqualTo  # The canonical equality relation for natural-number-1 elements.
+is_strictly_greater_than = IsStrictlyGreaterThan  # The canonical is-strictly-greater-than relation for natural-number-1 elements.
+is_strictly_less_than = IsStrictlyLessThan  # The canonical is-strictly-less-than relation for natural-number-1 elements.
 
 
 # Main class

@@ -29,11 +29,12 @@ class DyckWordLexicographicOrder(orl.BinaryRelation):
     _is_symmetric: bool | None = False
     _is_transitive: bool | None = True
 
-    @property
-    def least_element(self) -> object:
+    @util.readonly_class_property
+    def least_element(cls) -> object:
         return RootedPlaneTree()
 
-    def rank(self, x: object) -> int:
+    @classmethod
+    def rank(cls, x: object) -> int:
         r"""
 
         Note
@@ -46,22 +47,25 @@ class DyckWordLexicographicOrder(orl.BinaryRelation):
         d: dwl.DyckWord = x.dyck_word
         return dwl.lexicographic_order.rank(d)
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: RootedPlaneTree = RootedPlaneTree.from_any(x)
         y: RootedPlaneTree = RootedPlaneTree.from_any(y)
-        n: int = self.rank(x)
-        m: int = self.rank(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
         return n < m
 
-    def successor(self, x: object) -> object:
-        n = self.rank(x)
+    @classmethod
+    def successor(cls, x: object) -> object:
+        n = cls.rank(x)
         n += 1
-        y = self.unrank(n)
+        y = cls.unrank(n)
         return y
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         n: int = int(n)
-        d: dwl.DyckWord = dwl.lexicographic_order.unrank(n)
+        d: dwl.DyckWord = dwl.LexicographicOrder.unrank(n)
         t: RootedPlaneTree = RootedPlaneTree.from_dyck_word(d)
         return t
 
@@ -89,7 +93,8 @@ class IsEqualTo(orl.BinaryRelation):
     _is_symmetric: bool | None = True
     _is_transitive: bool | None = True
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: RootedPlaneTree = RootedPlaneTree.from_any(x)
         y: RootedPlaneTree = RootedPlaneTree.from_any(y)
         return x.is_rooted_plane_tree_equivalent_to(y)
