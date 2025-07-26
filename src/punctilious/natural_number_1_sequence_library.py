@@ -54,15 +54,6 @@ class LexicographicOrder(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
-
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber1Sequence = NaturalNumber1Sequence.from_any(x)
@@ -116,15 +107,6 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
 
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
@@ -191,15 +173,6 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
     - unranking requires factorization (but not so hard because primes are taken in sequence).
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
 
     @classmethod
     def rank(cls, x: object) -> int:
@@ -272,16 +245,6 @@ class IsEqualTo(orl.BinaryRelation):
     :math:`( \mathbb{N}_0, = )`.
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = False
-    _is_irreflexive: bool | None = False
-    _is_reflexive: bool | None = True
-    _is_strongly_connected: bool | None = False
-    _is_symmetric: bool | None = True
-    _is_transitive: bool | None = True
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:

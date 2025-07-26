@@ -77,16 +77,6 @@ class IsStrictlyGreaterThan(brl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = True
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_order_isomorphic_to_n_strictly_less_than: bool | None = False
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
-
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
@@ -109,15 +99,6 @@ class IsStrictlyLessThan(brl.BinaryRelation):
     :math:`( \mathbb{N}_0, < )`.
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = None
-    _is_asymmetric: bool | None = True
-    _is_connected: bool | None = None
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = None
-    _is_strongly_connected: bool | None = None
-    _is_transitive: bool | None = True
 
     @util.readonly_class_property
     def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:

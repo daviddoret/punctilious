@@ -18,16 +18,6 @@ class IsEqualTo(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = False
-    _is_irreflexive: bool | None = False
-    _is_reflexive: bool | None = True
-    _is_strongly_connected: bool | None = False
-    _is_symmetric: bool | None = True
-    _is_transitive: bool | None = True
-
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
         x: DyckWord = DyckWord.from_any(x)
@@ -39,15 +29,6 @@ class LexicographicOrder(orl.BinaryRelation):
     r"""The lexicographic relation order for Dyck words.
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = None
-    _is_asymmetric: bool | None = True
-    _is_connected: bool | None = None
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = None
-    _is_strongly_connected: bool | None = None
-    _is_transitive: bool | None = True
 
     @util.readonly_class_property
     def least_element(cls) -> object:

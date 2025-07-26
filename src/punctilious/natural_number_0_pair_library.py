@@ -20,8 +20,6 @@ class LexicographicOrder(orl.BinaryRelation):
     Note
     -----
 
-    The lexicographic order is not an isomorphism
-
     Mathematical definition
     -------------------------
 
@@ -76,6 +74,18 @@ class LexicographicOrder(orl.BinaryRelation):
         """
         return tbl.TernaryBoolean.TRUE
 
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.FALSE
+
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
@@ -129,15 +139,6 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
 
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
@@ -218,16 +219,6 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
     the Gödel-number-encoding order that is isomorphic to (N, <).
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_order_isomorphic_to_n_strictly_less_than: bool | None = False
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
 
     @classmethod
     def rank(cls, x: object) -> int:
@@ -322,15 +313,6 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
-
     @classmethod
     def rank(cls, x: object) -> int:
         """
@@ -398,15 +380,6 @@ class CantorPairingOrder(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = None
-    _is_asymmetric: bool | None = None
-    _is_connected: bool | None = None
-    _is_irreflexive: bool | None = None
-    _is_reflexive: bool | None = None
-    _is_strongly_connected: bool | None = None
-    _is_transitive: bool | None = None
-
     @classmethod
     def rank(cls, x: object) -> int:
         """
@@ -460,16 +433,6 @@ class IsEqualTo(orl.BinaryRelation):
     :math:`( \mathbb{N}_0, = )`.
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = False
-    _is_irreflexive: bool | None = False
-    _is_reflexive: bool | None = True
-    _is_strongly_connected: bool | None = False
-    _is_symmetric: bool | None = True
-    _is_transitive: bool | None = True
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:

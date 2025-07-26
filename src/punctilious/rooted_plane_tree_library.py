@@ -18,17 +18,6 @@ class DyckWordLexicographicOrder(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = True
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_order_isomorphic_to_n_strictly_less_than: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_symmetric: bool | None = False
-    _is_transitive: bool | None = True
-
     @util.readonly_class_property
     def least_element(cls) -> object:
         return RootedPlaneTree()
@@ -82,16 +71,6 @@ class IsEqualTo(orl.BinaryRelation):
     :math:`( \mathbb{T}, = )`.
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = False
-    _is_irreflexive: bool | None = False
-    _is_reflexive: bool | None = True
-    _is_strongly_connected: bool | None = False
-    _is_symmetric: bool | None = True
-    _is_transitive: bool | None = True
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:

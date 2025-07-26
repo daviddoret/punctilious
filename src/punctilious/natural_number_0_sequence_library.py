@@ -8,6 +8,7 @@ import punctilious.util as util
 import punctilious.binary_relation_library as orl
 import punctilious.natural_number_0_library as nn0l
 import punctilious.prime_number_library as pnl
+import punctilious.ternary_boolean_library as tbl
 
 
 # Relation orders
@@ -55,14 +56,17 @@ class LexicographicOrder(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.FALSE
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
@@ -118,14 +122,17 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
@@ -207,15 +214,17 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_order_isomorphic_to_n_strictly_less_than: bool | None = False
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.FALSE
 
     @classmethod
     def rank(cls, x: object) -> int:
@@ -307,14 +316,17 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
 
     @classmethod
     def rank(cls, x: object) -> int:
@@ -381,16 +393,6 @@ class IsEqualTo(orl.BinaryRelation):
     :math:`( \mathbb{N}_0, = )`.
 
     """
-
-    # mathematical properties
-    _is_antisymmetric: bool | None = True
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = False
-    _is_irreflexive: bool | None = False
-    _is_reflexive: bool | None = True
-    _is_strongly_connected: bool | None = False
-    _is_symmetric: bool | None = True
-    _is_transitive: bool | None = True
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:

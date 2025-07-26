@@ -67,16 +67,6 @@ class IsStrictlyLessThan(brl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_antisymmetric: bool | None = None
-    _is_asymmetric: bool | None = True
-    _is_connected: bool | None = None
-    _is_irreflexive: bool | None = True
-    _is_order_isomorphic_to_n_strictly_less_than: bool | None = None
-    _is_reflexive: bool | None = None
-    _is_strongly_connected: bool | None = None
-    _is_transitive: bool | None = True
-
     @classmethod
     def rank(cls, x: object) -> int:
         r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.
