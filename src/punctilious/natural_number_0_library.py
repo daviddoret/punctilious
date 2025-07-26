@@ -55,7 +55,7 @@ class IsEqualTo(brl.BinaryRelation):
         return tbl.TernaryBoolean.FALSE
 
     @classmethod
-    def relates(cls, x: object, y: object) -> bool:
+    def relates(cls, x: FlexibleNaturalNumber0, y: FlexibleNaturalNumber0) -> tbl.TernaryBoolean:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param x: A Python object.
@@ -64,7 +64,7 @@ class IsEqualTo(brl.BinaryRelation):
         """
         x: NaturalNumber0 = NaturalNumber0.from_any(x)
         y: NaturalNumber0 = NaturalNumber0.from_any(y)
-        return int(x) == int(y)
+        return tbl.TernaryBoolean(int(x) == int(y))
 
 
 class IsStrictlyGreaterThan(brl.BinaryRelation):
@@ -78,7 +78,7 @@ class IsStrictlyGreaterThan(brl.BinaryRelation):
     """
 
     @classmethod
-    def relates(cls, x: object, y: object) -> bool:
+    def relates(cls, x: FlexibleNaturalNumber0, y: FlexibleNaturalNumber0) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param x: A Python object.
@@ -117,7 +117,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         return tbl.TernaryBoolean.TRUE
 
     @classmethod
-    def rank(cls, x: object) -> int:
+    def rank(cls, x: FlexibleNaturalNumber0) -> int:
         r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.
 
         :param x: A Python object interpretable as a (0-based) natural number.
@@ -127,7 +127,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         return int(x)
 
     @classmethod
-    def relates(cls, x: object, y: object) -> bool:
+    def relates(cls, x: FlexibleNaturalNumber0, y: FlexibleNaturalNumber0) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param x: A Python object interpretable as a (0-based) natural number.
@@ -139,7 +139,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         return int(x) < int(y)
 
     @classmethod
-    def successor(cls, x: object) -> object:
+    def successor(cls, x: FlexibleNaturalNumber0) -> NaturalNumber0:
         r"""Returns the successor of `x` in :math:`( \mathbb{N}_0, < )`.
 
         :param x: A Python object interpretable as a (0-based) natural number.
@@ -149,7 +149,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         return NaturalNumber0(x + 1)
 
     @classmethod
-    def unrank(cls, n: int) -> object:
+    def unrank(cls, n: int) -> NaturalNumber0:
         r"""Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}_0, < ) = n`.
 
         :param n: A positive integer.

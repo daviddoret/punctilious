@@ -103,13 +103,13 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         :return: The successor of `x`.
         """
         x: AbstractFormula = AbstractFormula.from_any(x)
-        n: int = x.rank()
+        n: int = cls.rank(x)
         n += 1
-        y: AbstractFormula = x.canonical_order.unrank(n)
+        y: AbstractFormula = cls.unrank(n)
         return y
 
     @classmethod
-    def unrank(cls, n: int) -> object:
+    def unrank(cls, n: int) -> AbstractFormula:
         r"""Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}_0, < ) = n`.
 
         :param n: A positive integer.

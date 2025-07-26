@@ -6,6 +6,7 @@ import typing
 import punctilious.util as util
 import punctilious.special_values_library as spl
 import punctilious.ternary_boolean_library as tbl
+import punctilious.special_values_library as svl
 
 
 class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMeta):
@@ -401,9 +402,14 @@ class RelationalElement(abc.ABC):
     _is_strictly_greater_than: BinaryRelation | None = None
     _is_strictly_less_than: BinaryRelation | None = None
 
-    @property
-    def canonical_order(self) -> BinaryRelation:
-        return self.__class__._is_strictly_less_than
+    @util.readonly_class_property
+    def canonical_order(cls) -> BinaryRelation | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
+        r"""Returns the canonical (default) order for this Python class.
+        Returns :py:attr:`svl.SpecialValues.NOT_AVAILABLE` if a canonical order is not defined.
+
+        :return: the canonical order.
+        """
+        return svl.SpecialValues.NOT_AVAILABLE
 
     def is_equal_to(self, x: object) -> bool | None:
         """Returns `True` if this element is equal to `x`
@@ -442,9 +448,22 @@ class RelationalElement(abc.ABC):
         """
         return self.__class__._is_strictly_less_than.relates(x=self, y=x)
 
-    def rank(self) -> int:
-        return self.__class__._is_strictly_less_than.rank(x=self)
+    def rank(self) -> int | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
+        """Returns the rank of this element in its canonical order.
+        Returns :p<:attr:`svl.SpecialValues.NOT_AVAILABLE`
+        if a canonical order is not configured,
+        or if rank is not available on the canonical order.
+
+        :return: The rank of this element.
+        """
+        if self.__class__.canonical_order is svl.SpecialValues.NOT_AVAILABLE:
+            return svl.SpecialValues.NOT_AVAILABLE
+        else:
+            return self.__class__.canonical_order.rank(self)
 
     @classmethod
     def from_rank(cls, n: int) -> object:
-        return cls._is_strictly_less_than.unrank(n)
+        if cls.canonical_order is svl.SpecialValues.NOT_AVAILABLE:
+            raise util.PunctiliousException("A canonical order is not defined, from_rank cannot be called.")
+        else:
+            return cls.canonical_order.unrank(n)
