@@ -64,7 +64,8 @@ class LexicographicOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
         y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
         if x.is_equal_to(y):
@@ -126,7 +127,8 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
         y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
         if x.is_equal_to(y):
@@ -215,7 +217,8 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def rank(self, x: object) -> int:
+    @classmethod
+    def rank(cls, x: object) -> int:
         """
 
         0 should be mapped to the empty sequence ().
@@ -239,20 +242,23 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
                 n = n * p ** f
             return n - 1
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
         y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
-        n: int = self.rank(x)
-        m: int = self.rank(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
         return n < m
 
-    def successor(self, x: object) -> object:
-        n = self.rank(x)
+    @classmethod
+    def successor(cls, x: object) -> object:
+        n = cls.rank(x)
         n += 1
-        y = self.unrank(n)
+        y = cls.unrank(n)
         return y
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
             return NaturalNumber0Sequence()
@@ -310,7 +316,8 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
     _is_strongly_connected: bool | None = False
     _is_transitive: bool | None = True
 
-    def rank(self, x: object) -> int:
+    @classmethod
+    def rank(cls, x: object) -> int:
         """
 
         0 should be mapped to the empty sequence ().
@@ -334,20 +341,23 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
                 n = n * p ** f
             return n - 1
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
         y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
-        n: int = self.rank(x)
-        m: int = self.rank(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
         return n < m
 
-    def successor(self, x: object) -> object:
-        n = self.rank(x)
+    @classmethod
+    def successor(cls, x: object) -> object:
+        n = cls.rank(x)
         n += 1
-        y = self.unrank(n)
+        y = cls.unrank(n)
         return y
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
             return NaturalNumber0Sequence()
@@ -382,7 +392,8 @@ class IsEqualTo(orl.BinaryRelation):
     _is_symmetric: bool | None = True
     _is_transitive: bool | None = True
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
         y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
         return x.is_natural_number_0_sequence_equivalent_to(y)
