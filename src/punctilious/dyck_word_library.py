@@ -28,7 +28,8 @@ class IsEqualTo(orl.BinaryRelation):
     _is_symmetric: bool | None = True
     _is_transitive: bool | None = True
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: DyckWord = DyckWord.from_any(x)
         y: DyckWord = DyckWord.from_any(y)
         return str(x) == str(y)
@@ -52,6 +53,7 @@ class LexicographicOrder(orl.BinaryRelation):
     def least_element(cls) -> object:
         return DyckWord("()")
 
+    @classmethod
     def rank(cls, x: object) -> int:
         """
         Given a primitive Dyck word s (a well‐formed parenthesis string
@@ -131,19 +133,22 @@ class LexicographicOrder(orl.BinaryRelation):
 
         return prev_count + r
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         x: DyckWord = DyckWord.from_any(x)
         y: DyckWord = DyckWord.from_any(y)
-        return self.rank(x) < self.rank(y)
+        return cls.rank(x) < cls.rank(y)
 
-    def successor(self, x: object) -> object:
+    @classmethod
+    def successor(cls, x: object) -> object:
         x: DyckWord = DyckWord.from_any(x)
-        n: int = self.rank(x)
+        n: int = cls.rank(x)
         n_prime = n + 1
-        y: DyckWord = self.unrank(n_prime)
+        y: DyckWord = cls.unrank(n_prime)
         return y
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         """
         Return the n-th primitive Dyck word (0-based) in the ordering:
           semilength = 1,2,3,...

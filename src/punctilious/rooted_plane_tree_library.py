@@ -66,7 +66,7 @@ class DyckWordLexicographicOrder(orl.BinaryRelation):
         return t
 
 
-dyck_word_lexicographic_order = DyckWordLexicographicOrder()
+dyck_word_lexicographic_order = DyckWordLexicographicOrder
 
 
 class IsEqualTo(orl.BinaryRelation):
@@ -95,7 +95,7 @@ class IsEqualTo(orl.BinaryRelation):
         return x.is_rooted_plane_tree_equivalent_to(y)
 
 
-is_equal_to = IsEqualTo()
+is_equal_to = IsEqualTo
 
 
 class RootedPlaneTree(orl.RelationalElement, tuple):
