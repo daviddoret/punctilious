@@ -4,11 +4,12 @@ import collections
 # import itertools
 
 # package modules
-from . import util
+import punctilious.util as util
 import punctilious.rooted_plane_tree_library as rpt
 import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_pair_library as nn0pl
+import punctilious.ternary_boolean_library as tbl
 
 
 class IsEqualTo(brl.BinaryRelation):
@@ -31,7 +32,8 @@ class IsEqualTo(brl.BinaryRelation):
     _is_symmetric: bool | None = True
     _is_transitive: bool | None = True
 
-    def is_antisymmetric(cls) -> util.TernaryBoolean:
+    @util.readonly_class_property
+    def is_antisymmetric(cls) -> tbl.TernaryBoolean:
         r"""
 
         Proof
@@ -40,9 +42,10 @@ class IsEqualTo(brl.BinaryRelation):
         TODO: Provide proof here.
 
         """
-        return util.TernaryBoolean.TRUE
+        return tbl.TernaryBoolean.TRUE
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param x: A Python object.
@@ -74,7 +77,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
     _is_strongly_connected: bool | None = None
     _is_transitive: bool | None = True
 
-    def rank(self, x: object) -> int:
+    @classmethod
+    def rank(cls, x: object) -> int:
         r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.
 
         :param x: A Python object interpretable as a (0-based) natural number.
@@ -87,7 +91,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         n3: int = p.rank()
         return n3
 
-    def relates(self, x: object, y: object) -> bool:
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
         r"""Returns `True` if :math:`xRy`, `False` otherwise.
 
         :param x: A Python object interpretable as a (0-based) natural number.
@@ -100,7 +105,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         n2: int = x.rank()
         return n1 < n2
 
-    def successor(self, x: object) -> object:
+    @classmethod
+    def successor(cls, x: object) -> object:
         r"""Returns the successor of `x` in :math:`( \mathbb{N}_0, < )`.
 
         :param x: A Python object interpretable as a (0-based) natural number.
@@ -112,7 +118,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         y: AbstractFormula = x.canonical_order.unrank(n)
         return y
 
-    def unrank(self, n: int) -> object:
+    @classmethod
+    def unrank(cls, n: int) -> object:
         r"""Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}_0, < ) = n`.
 
         :param n: A positive integer.
