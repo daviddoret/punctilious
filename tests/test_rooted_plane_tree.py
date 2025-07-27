@@ -215,9 +215,36 @@ class TestRootedPlaneTree:
 
         :return:
         """
-        for n in range(1, 10):
-            assert len(pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(
-                n)) == pu.catalan_number_library.get_catalan_number(n - 1)
+        tree_statistics = []
+        size_statistics = []
+
+        current_tree = pu.rptl.RootedPlaneTree()
+        current_tree_size = 0
+
+        current_size_counter = 1
+        expected_catalan_number = 0
+        previous_tree_size = 1
+        tree_statistics.append(f"0: {current_tree.size}: {current_tree.dyck_word}")
+        for i in range(1, 1024):
+            current_tree: pu.rptl.RootedPlaneTree = current_tree.successor()
+            # Size cannot decrease
+            assert current_tree.size >= current_tree_size
+            if current_tree.size > current_tree_size:
+                # Everytime we move to a new size, the number of trees in the precedent size group
+                # must be equal to the corresponding Catalan number.
+                assert current_size_counter == pu.catalan_number_library.get_catalan_number(expected_catalan_number)
+                size_statistics.append(f"INCREASE: size={current_tree_size}, counter={current_size_counter}")
+                # size increase
+                expected_catalan_number += 1
+                current_tree_size = current_tree.size
+                current_size_counter = 1
+            else:
+                current_size_counter += 1
+        pass
+
+        # for n in range(1, 10):
+        #    assert len(pu.rptc.RootedPlaneTreeGenerator.get_ordered_set_of_rooted_plane_trees_of_size_n(
+        #        n)) == pu.catalan_number_library.get_catalan_number(n - 1)
 
     def test_dyck_word_lexicographic_order(self):
         for n in range(0, 100):

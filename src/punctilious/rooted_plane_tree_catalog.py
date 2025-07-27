@@ -97,5 +97,4 @@ t4_a_aa_ab_ac = rptl.RootedPlaneTree(leaf, leaf, leaf)
 t5_a_aa_aaa_aaaa_aaaaa = rptl.RootedPlaneTree(t4_a_aa_aaa_aaaa)
 # there must be 14 trees in this section
 
-
 pass
