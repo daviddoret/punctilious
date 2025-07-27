@@ -187,6 +187,14 @@ class NaturalNumber1(brl.RelationalElement, int):
             return NaturalNumber1(o)
         raise util.PunctiliousException('Failure to interpret `o` as a natural-number-1.', o_type=type(o), o=o)
 
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
+
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsStrictlyLessThan
+
 
 # Flexible types to facilitate data validation
 

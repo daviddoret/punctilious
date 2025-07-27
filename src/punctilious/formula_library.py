@@ -7,7 +7,7 @@ import collections.abc
 import punctilious.util as util
 import punctilious.connective_library as cl
 import punctilious.abstract_formula_library as afl
-import punctilious.natural_number_1_sequence_library as sl
+import punctilious.natural_number_0_sequence_library as sl
 import punctilious.connective_sequence_library as csl
 
 

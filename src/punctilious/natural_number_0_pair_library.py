@@ -5,7 +5,7 @@ import collections
 
 # punctilious libraries
 import punctilious.util as util
-import punctilious.binary_relation_library as orl
+import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_library as nn0l
 import punctilious.prime_number_library as pnl
 import punctilious.ternary_boolean_library as tbl
@@ -14,7 +14,7 @@ import punctilious.ternary_boolean_library as tbl
 # Relation orders
 
 
-class LexicographicOrder(orl.BinaryRelation):
+class LexicographicOrder(brl.BinaryRelation):
     r"""The lexicographic order of (0-based) natural numbers.
 
     Note
@@ -111,7 +111,7 @@ class LexicographicOrder(orl.BinaryRelation):
 lexicographic_order = LexicographicOrder
 
 
-class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
+class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
     r"""The sum-first-lexicographic-second order of (0-based) natural numbers.
 
     Mathematical definition
@@ -169,7 +169,7 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 
 
-class GodelNumberEncodingOrder(orl.BinaryRelation):
+class GodelNumberEncodingOrder(brl.BinaryRelation):
     r"""The Godel-number-encoding relation order of (0-based) natural number sequences.
 
     Mathematical definition - xRy
@@ -276,7 +276,7 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
 godel_number_order = GodelNumberEncodingOrder
 
 
-class RefinedGodelNumberOrder(orl.BinaryRelation):
+class RefinedGodelNumberOrder(brl.BinaryRelation):
     r"""The refined Godel-number-encoding order of (0-based) natural number sequences.
 
     Mathematical definition - xRy
@@ -369,7 +369,7 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
 refined_godel_number_order = RefinedGodelNumberOrder
 
 
-class CantorPairingOrder(orl.BinaryRelation):
+class CantorPairingOrder(brl.BinaryRelation):
     r"""The Cantor pairing order of (0-based) natural numbers.
 
     Bibliography
@@ -424,7 +424,7 @@ cantor_pairing_order = CantorPairingOrder
 # http://szudzik.com/ElegantPairing.pdf
 
 
-class IsEqualTo(orl.BinaryRelation):
+class IsEqualTo(brl.BinaryRelation):
     r"""The equality binary-relation for 0-based natural numbers.
 
     Mathematical definition
@@ -447,14 +447,14 @@ is_equal_to = IsEqualTo
 # Classes
 
 
-class NaturalNumber0Pair(orl.RelationalElement, tuple):
+class NaturalNumber0Pair(brl.RelationalElement, tuple):
     """A pair of (0-based) natural numbers.
 
     """
 
     # Configuration of class properties (cf. Relatable).
-    _is_equal_to: orl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: orl.BinaryRelation = cantor_pairing_order
+    _is_equal_to: brl.BinaryRelation = is_equal_to
+    _is_strictly_less_than: brl.BinaryRelation = cantor_pairing_order
 
     def __add__(self, s):
         """Performs a scalar addition if s is an integer.
@@ -510,6 +510,14 @@ class NaturalNumber0Pair(orl.RelationalElement, tuple):
         else:
             cls._cache[hash_value] = o
             return o
+
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
+
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return CantorPairingOrder
 
     def to_restricted_growth_function_sequence(self) -> NaturalNumber0Pair:
         r"""Converts the natural-number-0-pair `s` into a restricted-growth-function-sequence `t`,

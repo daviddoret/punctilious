@@ -391,23 +391,22 @@ class RelationalElement(abc.ABC):
     def __eq__(self, x):
         return self.is_equal_to(x)
 
-    def __gt__(self, x):
-        return self.is_strictly_greater_than(x)
-
     def __lt__(self, x):
         return self.is_strictly_less_than(x)
 
-    # Class properties expected to be configured by child classes
-    _is_equal_to: BinaryRelation | None = None
-    _is_strictly_greater_than: BinaryRelation | None = None
-    _is_strictly_less_than: BinaryRelation | None = None
+    @classmethod
+    def from_rank(cls, n: int) -> object:
+        if cls.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
+            raise util.PunctiliousException(
+                "A canonical is strictly less than order is not defined, from_rank cannot be called.")
+        else:
+            return cls.is_strictly_less_than_relation.unrank(n)
 
     @util.readonly_class_property
-    def canonical_order(cls) -> BinaryRelation | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
-        r"""Returns the canonical (default) order for this Python class.
-        Returns :py:attr:`svl.SpecialValues.NOT_AVAILABLE` if a canonical order is not defined.
+    def is_equal_to_relation(self) -> typing.Type[BinaryRelation] | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
+        """The canonical equality relation for this Python class.
 
-        :return: the canonical order.
+        See :meth:`RelationalElement.is_equal_to`.
         """
         return svl.SpecialValues.NOT_AVAILABLE
 
@@ -416,37 +415,44 @@ class RelationalElement(abc.ABC):
         under the canonical equality relation for elements of this Python class,
         `False` otherwise.
 
+        See :meth:`RelationalElement.is_equal_to_relation`.
+
         :return: `True` or `False`.
         """
-        if self.__class__._is_equal_to is None:
+        if self.__class__.is_equal_to_relation is svl.SpecialValues.NOT_AVAILABLE:
             raise util.PunctiliousException("The is-equal-to relation is not configured on this Python class.",
                                             self_type=str(type(self)),
                                             self_class=self.__class__.__name__,
                                             self=self)
         else:
-            return self.__class__._is_equal_to.relates(x=self, y=x)
+            return self.__class__.is_equal_to_relation.relates(x=self, y=x)
 
-    def is_strictly_greater_than(self, x: object) -> bool | None:
-        """Returns `True` if this element is strictly greater than `x`
-        under the canonical is-strictly-greater-than relation for elements of this Python class,
-        `False` otherwise.
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[BinaryRelation] | typing.Literal[
+        svl.SpecialValues.NOT_AVAILABLE]:
+        """The canonical is strictly less than relation for this Python class.
 
-        :return: `True` or `False`.
+        See :meth:`RelationalElement.is_strictly_less_than`.
         """
-        if hasattr(self.__class__, "_is_strictly_greater_than") and hasattr(
-                self.__class__._is_strictly_greater_than, "relates"):
-            return self.__class__._is_strictly_greater_than.relates(x=self, y=x)
-        else:
-            return self.__class__._is_strictly_less_than.relates(x=y, y=self)
+        return svl.SpecialValues.NOT_AVAILABLE
 
     def is_strictly_less_than(self, x: object) -> bool | None:
         """Returns `True` if this element is strictly less than `x`
         under the canonical is-strictly-less-than relation for elements of this Python class,
         `False` otherwise.
 
+        See :meth:`RelationalElement.is_strictly_less_than_relation`.
+
         :return: `True` or `False`.
         """
-        return self.__class__._is_strictly_less_than.relates(x=self, y=x)
+        if self.__class__.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
+            raise util.PunctiliousException(
+                "The is-strictly-less-than relation is not configured on this Python class.",
+                self_type=str(type(self)),
+                self_class=self.__class__.__name__,
+                self=self)
+        else:
+            return self.__class__.is_strictly_less_than_relation.relates(x=self, y=x)
 
     def rank(self) -> int | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
         """Returns the rank of this element in its canonical order.
@@ -456,14 +462,20 @@ class RelationalElement(abc.ABC):
 
         :return: The rank of this element.
         """
-        if self.__class__.canonical_order is svl.SpecialValues.NOT_AVAILABLE:
+        if self.__class__.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
             return svl.SpecialValues.NOT_AVAILABLE
         else:
-            return self.__class__.canonical_order.rank(self)
+            return self.__class__.is_strictly_less_than_relation.rank(self)
+
+    def successor(self) -> RelationalElement | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
+        if self.__class__.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
+            return svl.SpecialValues.NOT_AVAILABLE
+        else:
+            return self.__class__.is_strictly_less_than_relation.successor(self)
 
     @classmethod
-    def from_rank(cls, n: int) -> object:
-        if cls.canonical_order is svl.SpecialValues.NOT_AVAILABLE:
-            raise util.PunctiliousException("A canonical order is not defined, from_rank cannot be called.")
+    def unrank(self) -> RelationalElement | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
+        if self.__class__.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
+            return svl.SpecialValues.NOT_AVAILABLE
         else:
-            return cls.canonical_order.unrank(n)
+            return self.__class__.is_strictly_less_than_relation.unrank(self)

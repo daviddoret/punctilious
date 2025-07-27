@@ -5,7 +5,7 @@ import collections
 
 # punctilious libraries
 import punctilious.util as util
-import punctilious.binary_relation_library as orl
+import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_library as nn0l
 import punctilious.prime_number_library as pnl
 import punctilious.ternary_boolean_library as tbl
@@ -14,7 +14,7 @@ import punctilious.ternary_boolean_library as tbl
 # Relation orders
 
 
-class LexicographicOrder(orl.BinaryRelation):
+class LexicographicOrder(brl.BinaryRelation):
     r"""The lexicographic order of (0-based) natural numbers.
 
     Note
@@ -93,7 +93,7 @@ class LexicographicOrder(orl.BinaryRelation):
 lexicographic_order = LexicographicOrder
 
 
-class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
+class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
     r"""The sum-first-lexicographic-second order of (0-based) natural numbers.
 
     Mathematical definition
@@ -163,7 +163,7 @@ class SumFirstLexicographicSecondOrder(orl.BinaryRelation):
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 
 
-class GodelNumberEncodingOrder(orl.BinaryRelation):
+class GodelNumberEncodingOrder(brl.BinaryRelation):
     r"""The Godel-number-encoding relation order of (0-based) natural number sequences.
 
     Mathematical definition - xRy
@@ -282,7 +282,7 @@ class GodelNumberEncodingOrder(orl.BinaryRelation):
 godel_number_order = GodelNumberEncodingOrder
 
 
-class RefinedGodelNumberOrder(orl.BinaryRelation):
+class RefinedGodelNumberOrder(brl.BinaryRelation):
     r"""The refined Godel-number-encoding order of (0-based) natural number sequences.
 
     Mathematical definition - xRy
@@ -384,7 +384,7 @@ class RefinedGodelNumberOrder(orl.BinaryRelation):
 refined_godel_number_order = RefinedGodelNumberOrder
 
 
-class IsEqualTo(orl.BinaryRelation):
+class IsEqualTo(brl.BinaryRelation):
     r"""The equality binary-relation for 0-based natural numbers.
 
     Mathematical definition
@@ -420,7 +420,7 @@ def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber0Sequence) -> 
 # Classes
 
 
-class NaturalNumber0Sequence(orl.RelationalElement, tuple):
+class NaturalNumber0Sequence(brl.RelationalElement, tuple):
     """A finite (computable) sequence of (0-based) natural numbers.
 
     Definition:
@@ -430,8 +430,8 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
     """
 
     # Configuration of class properties (cf. Relatable).
-    _is_equal_to: orl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: orl.BinaryRelation = refined_godel_number_order
+    _is_equal_to: brl.BinaryRelation = is_equal_to
+    _is_strictly_less_than: brl.BinaryRelation = refined_godel_number_order
 
     def __add__(self, s):
         """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
@@ -491,6 +491,14 @@ class NaturalNumber0Sequence(orl.RelationalElement, tuple):
         else:
             cls._cache[hash_value] = o
             return o
+
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
+
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return RefinedGodelNumberOrder
 
     def to_restricted_growth_function_sequence(self) -> NaturalNumber0Sequence:
         r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
