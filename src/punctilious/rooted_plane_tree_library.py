@@ -9,11 +9,11 @@ import collections
 
 # Punctilious modules
 import punctilious.util as util
-import punctilious.binary_relation_library as orl
+import punctilious.binary_relation_library as brl
 import punctilious.dyck_word_library as dwl
 
 
-class DyckWordLexicographicOrder(orl.BinaryRelation):
+class DyckWordLexicographicOrder(brl.BinaryRelation):
     r"""The Dyck word lexicographic relation order of rooted plane trees.
 
     """
@@ -62,7 +62,7 @@ class DyckWordLexicographicOrder(orl.BinaryRelation):
 dyck_word_lexicographic_order = DyckWordLexicographicOrder
 
 
-class IsEqualTo(orl.BinaryRelation):
+class IsEqualTo(brl.BinaryRelation):
     r"""The equality binary-relation for rooted plane trees.
 
     Mathematical definition
@@ -82,7 +82,7 @@ class IsEqualTo(orl.BinaryRelation):
 is_equal_to = IsEqualTo
 
 
-class RootedPlaneTree(orl.RelationalElement, tuple):
+class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThan, tuple):
     r"""A `RootedPlaneTree` is an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.
 
@@ -133,8 +133,8 @@ class RootedPlaneTree(orl.RelationalElement, tuple):
         return self.represent_as_anonymous_function()
 
     # Configuration of class properties (cf. Relatable).
-    _is_equal_to: orl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: orl.BinaryRelation = dyck_word_lexicographic_order
+    _is_equal_to: brl.BinaryRelation = is_equal_to
+    _is_strictly_less_than: brl.BinaryRelation = dyck_word_lexicographic_order
 
     _cache: dict[int, RootedPlaneTree] = dict()  # Cache mechanism.
 
@@ -311,6 +311,10 @@ class RootedPlaneTree(orl.RelationalElement, tuple):
         # return tuple(super().__iter__()) # alternative implementation.
         return tuple.__new__(tuple, self)  # this implementation seems more "direct".
 
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
+
     @property
     def is_increasing(self) -> bool:
         r"""Returns `True` if this rooted-plane-tree is increasing, `False` otherwise.
@@ -329,6 +333,10 @@ class RootedPlaneTree(orl.RelationalElement, tuple):
         """
         return all(
             self.immediate_subtrees[i + 1] >= self.immediate_subtrees[i] for i in range(0, self.degree - 1))
+
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return DyckWordLexicographicOrder
 
     @property
     def is_leaf(self) -> bool:

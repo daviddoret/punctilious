@@ -383,10 +383,7 @@ def unrank(n: int, o: BinaryRelation | None) -> object:
     return o.unrank(n)
 
 
-class RelationalElement(abc.ABC):
-    r"""An abstract Python class for elements (objects) supporting relations.
-
-    """
+class OrderIsomorphicToNaturalNumber0AndStrictlyLessThan(abc.ABC):
 
     def __eq__(self, x):
         return self.is_equal_to(x)
@@ -422,13 +419,7 @@ class RelationalElement(abc.ABC):
 
         :return: `True` or `False`.
         """
-        if self.__class__.is_equal_to_relation is svl.SpecialValues.NOT_AVAILABLE:
-            raise util.PunctiliousException("The is-equal-to relation is not configured on this Python class.",
-                                            self_type=str(type(self)),
-                                            self_class=self.__class__.__name__,
-                                            self=self)
-        else:
-            return self.__class__.is_equal_to_relation.relates(x=self, y=x)
+        return self.__class__.is_equal_to_relation.relates(x=self, y=x)
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[BinaryRelation] | typing.Literal[
@@ -457,14 +448,7 @@ class RelationalElement(abc.ABC):
 
         :return: `True` or `False`.
         """
-        if self.__class__.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
-            raise util.PunctiliousException(
-                "The is-strictly-less-than relation is not configured on this Python class.",
-                self_type=str(type(self)),
-                self_class=self.__class__.__name__,
-                self=self)
-        else:
-            return self.__class__.is_strictly_less_than_relation.relates(x=self, y=x)
+        return self.__class__.is_strictly_less_than_relation.relates(x=self, y=x)
 
     def rank(self) -> int | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
         """Returns the rank of this element in its canonical order.
@@ -474,20 +458,13 @@ class RelationalElement(abc.ABC):
 
         :return: The rank of this element.
         """
-        if self.__class__.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
-            return svl.SpecialValues.NOT_AVAILABLE
-        else:
-            return self.__class__.is_strictly_less_than_relation.rank(self)
+        return self.__class__.is_strictly_less_than_relation.rank(self)
 
-    def successor(self) -> RelationalElement | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
-        if self.__class__.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
-            return svl.SpecialValues.NOT_AVAILABLE
-        else:
-            return self.__class__.is_strictly_less_than_relation.successor(self)
+    def successor(self) -> OrderIsomorphicToNaturalNumber0AndStrictlyLessThan | typing.Literal[
+        svl.SpecialValues.NOT_AVAILABLE]:
+        return self.__class__.is_strictly_less_than_relation.successor(self)
 
     @classmethod
-    def unrank(self) -> RelationalElement | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
-        if self.__class__.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
-            return svl.SpecialValues.NOT_AVAILABLE
-        else:
-            return self.__class__.is_strictly_less_than_relation.unrank(self)
+    def unrank(self) -> OrderIsomorphicToNaturalNumber0AndStrictlyLessThan | typing.Literal[
+        svl.SpecialValues.NOT_AVAILABLE]:
+        return self.__class__.is_strictly_less_than_relation.unrank(self)

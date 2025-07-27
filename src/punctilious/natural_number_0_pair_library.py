@@ -54,26 +54,6 @@ class LexicographicOrder(brl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = True
-    _is_irreflexive: bool | None = True
-    _is_reflexive: bool | None = False
-    _is_strongly_connected: bool | None = False
-    _is_transitive: bool | None = True
-
-    @util.readonly_class_property
-    def is_antisymmetric(cls) -> tbl.TernaryBoolean:
-        """
-
-        Proof
-        ------
-
-        TODO: Provide proof here.
-
-        """
-        return tbl.TernaryBoolean.TRUE
-
     @util.readonly_class_property
     def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
         r"""
@@ -87,25 +67,25 @@ class LexicographicOrder(brl.BinaryRelation):
         return tbl.TernaryBoolean.FALSE
 
     @classmethod
-    def relates(cls, x: object, y: object) -> bool:
+    def relates(cls, x: FlexibleNaturalNumber0Pair, y: FlexibleNaturalNumber0Pair) -> tbl.TernaryBoolean:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         if x.is_equal_to(y):
-            return False
+            return tbl.TernaryBoolean.FALSE
         else:
             minimum_length: int = min(x.length, y.length)
             i: int
             for i in range(minimum_length):
                 if x[i] < y[i]:
-                    return True
+                    return tbl.TernaryBoolean.TRUE
                 elif x[i] > y[i]:
-                    return False
+                    return tbl.TernaryBoolean.FALSE
             # All compared elements are equal.
             if len(x) < len(y):
                 # Shorter sequence is less
-                return True
+                return tbl.TernaryBoolean.TRUE
             else:
-                return False
+                return tbl.TernaryBoolean.FALSE
 
 
 lexicographic_order = LexicographicOrder
@@ -141,29 +121,29 @@ class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
     """
 
     @classmethod
-    def relates(cls, x: object, y: object) -> bool:
+    def relates(cls, x: FlexibleNaturalNumber0Pair, y: FlexibleNaturalNumber0Pair) -> tbl.TernaryBoolean:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         if x.is_equal_to(y):
-            return False
+            return tbl.TernaryBoolean.FALSE
         elif x.length < y.length:
-            return True
+            return tbl.TernaryBoolean.TRUE
         elif y.length < x.length:
-            return False
+            return tbl.TernaryBoolean.FALSE
         else:
             minimum_length: int = min(x.length, y.length)
             i: int
             for i in range(minimum_length):
                 if x[i] < y[i]:
-                    return True
+                    return tbl.TernaryBoolean.TRUE
                 elif x[i] > y[i]:
-                    return False
+                    return tbl.TernaryBoolean.FALSE
             # All compared elements are equal.
             if len(x) < len(y):
                 # Shorter sequence is less
-                return True
+                return tbl.TernaryBoolean.TRUE
             else:
-                return False
+                return tbl.TernaryBoolean.FALSE
 
 
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
@@ -221,7 +201,7 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
     """
 
     @classmethod
-    def rank(cls, x: object) -> int:
+    def rank(cls, x: FlexibleNaturalNumber0Pair) -> int:
         """
 
         0 should be mapped to the empty sequence ().
@@ -230,7 +210,7 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
         :param x:
         :return:
         """
-        x = NaturalNumber0Pair.from_any(x)
+        x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         if x == NaturalNumber0Pair():
             return 0
         else:
@@ -246,22 +226,22 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
             return n - 1
 
     @classmethod
-    def relates(cls, x: object, y: object) -> bool:
+    def relates(cls, x: FlexibleNaturalNumber0Pair, y: FlexibleNaturalNumber0Pair) -> tbl.TernaryBoolean:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
         y: NaturalNumber0Pair = NaturalNumber0Pair.from_any(y)
         n: int = cls.rank(x)
         m: int = cls.rank(y)
-        return n < m
+        return tbl.TernaryBoolean(n < m)
 
     @classmethod
-    def successor(cls, x: object) -> object:
+    def successor(cls, x: FlexibleNaturalNumber0Pair) -> NaturalNumber0Pair:
         n = cls.rank(x)
         n += 1
-        y = cls.unrank(n)
+        y: NaturalNumber0Pair = cls.unrank(n)
         return y
 
     @classmethod
-    def unrank(cls, n: int) -> object:
+    def unrank(cls, n: int) -> NaturalNumber0Pair:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
             return NaturalNumber0Pair()
@@ -447,7 +427,7 @@ is_equal_to = IsEqualTo
 # Classes
 
 
-class NaturalNumber0Pair(brl.RelationalElement, tuple):
+class NaturalNumber0Pair(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThan, tuple):
     """A pair of (0-based) natural numbers.
 
     """
