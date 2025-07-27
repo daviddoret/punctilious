@@ -268,7 +268,7 @@ def data_validate_dyck_work(s: str) -> bool:
 
 # Main class
 
-class DyckWord(orl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThan, str):
+class DyckWord(orl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, str):
     r"""A Dyck word.
 
     Bibliography

@@ -6,7 +6,6 @@ import typing
 import punctilious.util as util
 import punctilious.special_values_library as spl
 import punctilious.ternary_boolean_library as tbl
-import punctilious.special_values_library as svl
 
 
 class BinaryRelation(metaclass=docstring_inheritance.NumpyDocstringInheritanceMeta):
@@ -383,7 +382,13 @@ def unrank(n: int, o: BinaryRelation | None) -> object:
     return o.unrank(n)
 
 
-class OrderIsomorphicToNaturalNumber0AndStrictlyLessThan(abc.ABC):
+class OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure(abc.ABC):
+    r"""A model of structures that are order isomorphic to :math:`( \mathbb{N}, < )`,
+    and for which ranking and unranking algorithms are available.
+
+    See :attr:`BinaryRelation.is_order_isomorphic_with_n_strictly_less_than` for definitions.
+
+    """
 
     def __eq__(self, x):
         return self.is_equal_to(x)
@@ -396,21 +401,20 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThan(abc.ABC):
 
     @classmethod
     def from_rank(cls, n: int) -> object:
-        if cls.is_strictly_less_than_relation is svl.SpecialValues.NOT_AVAILABLE:
-            raise util.PunctiliousException(
-                "A canonical is strictly less than order is not defined, from_rank cannot be called.")
-        else:
-            return cls.is_strictly_less_than_relation.unrank(n)
+        return cls.is_strictly_less_than_relation.unrank(n)
 
     @util.readonly_class_property
-    def is_equal_to_relation(self) -> typing.Type[BinaryRelation] | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
+    def is_equal_to_relation(self) -> typing.Type[BinaryRelation]:
         """The canonical equality relation for this Python class.
 
-        See :meth:`RelationalElement.is_equal_to`.
-        """
-        return svl.SpecialValues.NOT_AVAILABLE
+        This property must be overridden by the child class.
 
-    def is_equal_to(self, x: object) -> tbl.TernaryBoolean:
+        See :meth:`RelationalElement.is_equal_to`.
+
+        """
+        raise util.PunctiliousException("Property `is_equal_to_relation` is not implemented in the child class.")
+
+    def is_equal_to(self, x: object) -> bool:
         """Returns `True` if this element is equal to `x`
         under the canonical equality relation for elements of this Python class,
         `False` otherwise.
@@ -422,24 +426,24 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThan(abc.ABC):
         return self.__class__.is_equal_to_relation.relates(x=self, y=x)
 
     @util.readonly_class_property
-    def is_strictly_less_than_relation(self) -> typing.Type[BinaryRelation] | typing.Literal[
-        svl.SpecialValues.NOT_AVAILABLE]:
+    def is_strictly_less_than_relation(self) -> typing.Type[BinaryRelation]:
         r"""The canonical is strictly less than relation for this Python class.
+
+        This property must be overridden by the child class.
 
         See :meth:`RelationalElement.is_strictly_less_than`.
         """
-        return svl.SpecialValues.NOT_AVAILABLE
+        raise util.PunctiliousException(
+            "Property `is_strictly_less_than_relation` is not implemented in the child class.")
 
-    def is_strictly_greater_than(self, x: object) -> tbl.TernaryBoolean:
+    def is_strictly_greater_than(self, x: object) -> bool:
         r"""Returns `True` if this element is strictly greater than `x`.
 
         :math:`y > x` if and only if :math:`\neg (x > y) \land \neg (x = y)`.
         """
-        p: tbl.TernaryBoolean = self.is_strictly_less_than(x).lnot()
-        q: tbl.TernaryBoolean = self.is_equal_to(x).lnot()
-        return p.land(q)
+        return not (self.is_strictly_less_than(x)) and (not (self.is_equal_to(x)))
 
-    def is_strictly_less_than(self, x: object) -> tbl.TernaryBoolean:
+    def is_strictly_less_than(self, x: object) -> bool:
         """Returns `True` if this element is strictly less than `x`
         under the canonical is-strictly-less-than relation for elements of this Python class,
         `False` otherwise.
@@ -450,7 +454,7 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThan(abc.ABC):
         """
         return self.__class__.is_strictly_less_than_relation.relates(x=self, y=x)
 
-    def rank(self) -> int | typing.Literal[svl.SpecialValues.NOT_AVAILABLE]:
+    def rank(self) -> int:
         """Returns the rank of this element in its canonical order.
         Returns :p<:attr:`svl.SpecialValues.NOT_AVAILABLE`
         if a canonical order is not configured,
@@ -460,11 +464,9 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThan(abc.ABC):
         """
         return self.__class__.is_strictly_less_than_relation.rank(self)
 
-    def successor(self) -> OrderIsomorphicToNaturalNumber0AndStrictlyLessThan | typing.Literal[
-        svl.SpecialValues.NOT_AVAILABLE]:
+    def successor(self) -> object:
         return self.__class__.is_strictly_less_than_relation.successor(self)
 
     @classmethod
-    def unrank(self) -> OrderIsomorphicToNaturalNumber0AndStrictlyLessThan | typing.Literal[
-        svl.SpecialValues.NOT_AVAILABLE]:
-        return self.__class__.is_strictly_less_than_relation.unrank(self)
+    def unrank(cls, n: int) -> object:
+        return cls.is_strictly_less_than_relation.unrank(n)

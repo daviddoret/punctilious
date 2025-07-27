@@ -716,7 +716,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for tests.test_natural_number_0_pair">
+  <component name="RunManager" selected="Python.natural_number_0_library">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -755,6 +755,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="natural_number_0_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1016,23 +1038,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_natural_number_0_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_natural_number_0_sequence.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1056,6 +1061,7 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
+      <item itemvalue="Python.natural_number_0_library" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
@@ -1064,7 +1070,6 @@
       <item itemvalue="Python tests.pytest for tests.test_natural_number_0_pair" />
       <item itemvalue="Python tests.pytest for tests.test_rooted_plane_tree.TestRootedPlaneTree" />
       <item itemvalue="Python tests.pytest for tests.test_rooted_plane_tree.TestRootedPlaneTree.test_tuple_tree_constructor" />
-      <item itemvalue="Python tests.pytest in test_natural_number_0_sequence.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -1072,11 +1077,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for tests.test_natural_number_0_pair" />
+        <item itemvalue="Python.natural_number_0_library" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for tests.test_natural_number_0_pair" />
         <item itemvalue="Python tests.pytest for tests.test_rooted_plane_tree.TestRootedPlaneTree.test_tuple_tree_constructor" />
         <item itemvalue="Python tests.pytest for tests.test_rooted_plane_tree.TestRootedPlaneTree" />
-        <item itemvalue="Python tests.pytest in test_natural_number_0_sequence.py" />
       </list>
     </recent_temporary>
   </component>
@@ -1098,14 +1103,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01539" summary="orderings o1 and o2 for natural-number-sequences">
-      <option name="closed" value="true" />
-      <created>1752443444718</created>
-      <option name="number" value="01539" />
-      <option name="presentableId" value="LOCAL-01539" />
-      <option name="project" value="LOCAL" />
-      <updated>1752443444718</updated>
     </task>
     <task id="LOCAL-01540" summary="test_o1">
       <option name="closed" value="true" />
@@ -1491,7 +1488,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753607346545</updated>
     </task>
-    <option name="localTasksCounter" value="1588" />
+    <task id="LOCAL-01588" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1753608562395</created>
+      <option name="number" value="01588" />
+      <option name="presentableId" value="LOCAL-01588" />
+      <option name="project" value="LOCAL" />
+      <updated>1753608562395</updated>
+    </task>
+    <option name="localTasksCounter" value="1589" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

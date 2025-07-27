@@ -427,7 +427,7 @@ is_equal_to = IsEqualTo
 # Classes
 
 
-class NaturalNumber0Pair(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThan, tuple):
+class NaturalNumber0Pair(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
     """A pair of (0-based) natural numbers.
 
     """

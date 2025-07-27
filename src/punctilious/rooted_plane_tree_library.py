@@ -82,7 +82,7 @@ class IsEqualTo(brl.BinaryRelation):
 is_equal_to = IsEqualTo
 
 
-class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThan, tuple):
+class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
     r"""A `RootedPlaneTree` is an immutable, finite (and computable) rooted plane tree,
     aka rooted ordered tree.
 

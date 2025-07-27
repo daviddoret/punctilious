@@ -129,7 +129,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
 
 # Classes
 
-class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThan, tuple):
+class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
     r"""A :class:`AbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is a sequence of (0-based) natural numbers.

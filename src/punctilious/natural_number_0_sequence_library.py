@@ -420,7 +420,7 @@ def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber0Sequence) -> 
 # Classes
 
 
-class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThan, tuple):
+class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
     """A finite (computable) sequence of (0-based) natural numbers.
 
     Definition:

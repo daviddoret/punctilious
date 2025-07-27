@@ -6,8 +6,6 @@ import typing
 import punctilious.util as util
 import punctilious.binary_relation_library as brl
 import punctilious.ternary_boolean_library as tbl
-from punctilious import special_values_library as svl
-from punctilious.binary_relation_library import BinaryRelation
 
 
 # Relation classes
@@ -149,7 +147,7 @@ is_strictly_less_than = IsStrictlyLessThan  # The canonical is-strictly-less-tha
 
 # Main class
 
-class NaturalNumber0(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThan, int):
+class NaturalNumber0(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, int):
     r"""A (0-based) natural number.
 
     Mathematical definition
