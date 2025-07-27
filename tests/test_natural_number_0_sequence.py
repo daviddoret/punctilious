@@ -2,32 +2,32 @@ import punctilious as pu
 
 
 class TestNaturalNumbersSequence:
-    def test_data_validation(self, s10, s012, s021, s00010203043212, s00010203043262):
-        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(s10)[1] == s10
-        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(s012)[1] == s012
-        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(s00010203043212)[1] == s00010203043212
-        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(s021)[1] == s021
-        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(s00010203043262)[1] == s00010203043262
+    def test_data_validation(self, raw_2_1, raw_1_2_3, raw_1_3_2, raw_00010203043212, raw_00010203043262):
+        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(raw_2_1)[1] == raw_2_1
+        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(raw_1_2_3)[1] == raw_1_2_3
+        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(raw_00010203043212)[1] == raw_00010203043212
+        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(raw_1_3_2)[1] == raw_1_3_2
+        assert pu.nn0sl.NaturalNumber0Sequence.data_validate_elements(raw_00010203043262)[1] == raw_00010203043262
 
-    def test_equality(self, s012, s021, s00010203043212, s00010203043262):
-        assert pu.nn0sl.NaturalNumber0Sequence(*s012) == pu.nn0sl.NaturalNumber0Sequence(*s012)
-        assert pu.nn0sl.NaturalNumber0Sequence(*s00010203043212) == pu.nn0sl.NaturalNumber0Sequence(
-            *s00010203043212)
+    def test_equality(self, raw_1_2_3, raw_1_3_2, raw_00010203043212, raw_00010203043262):
+        assert pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3) == pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3)
+        assert pu.nn0sl.NaturalNumber0Sequence(*raw_00010203043212) == pu.nn0sl.NaturalNumber0Sequence(
+            *raw_00010203043212)
 
-    def test_inequality(self, s012, s021, s00010203043212, s00010203043262):
-        assert pu.nn0sl.NaturalNumber0Sequence(*s012) != pu.nn0sl.NaturalNumber0Sequence(
-            *s00010203043212)
-        assert pu.nn0sl.NaturalNumber0Sequence(*s00010203043212) != pu.nn0sl.NaturalNumber0Sequence(
-            *s012)
+    def test_inequality(self, raw_1_2_3, raw_1_3_2, raw_00010203043212, raw_00010203043262):
+        assert pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3) != pu.nn0sl.NaturalNumber0Sequence(
+            *raw_00010203043212)
+        assert pu.nn0sl.NaturalNumber0Sequence(*raw_00010203043212) != pu.nn0sl.NaturalNumber0Sequence(
+            *raw_1_2_3)
 
-    def test_cache(self, s012, s021, s00010203043212, s00010203043262):
-        assert pu.nn0sl.NaturalNumber0Sequence(*s012) is pu.nn0sl.NaturalNumber0Sequence(*s012)
-        assert pu.nn0sl.NaturalNumber0Sequence(*s00010203043212) is pu.nn0sl.NaturalNumber0Sequence(
-            *s00010203043212)
-        assert pu.nn0sl.NaturalNumber0Sequence(*s012) is not pu.nn0sl.NaturalNumber0Sequence(
-            *s00010203043212)
+    def test_cache(self, raw_1_2_3, raw_1_3_2, raw_00010203043212, raw_00010203043262):
+        assert pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3) is pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3)
+        assert pu.nn0sl.NaturalNumber0Sequence(*raw_00010203043212) is pu.nn0sl.NaturalNumber0Sequence(
+            *raw_00010203043212)
+        assert pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3) is not pu.nn0sl.NaturalNumber0Sequence(
+            *raw_00010203043212)
         assert pu.nn0sl.NaturalNumber0Sequence(
-            *s00010203043212) is not pu.nn0sl.NaturalNumber0Sequence(*s012)
+            *raw_00010203043212) is not pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3)
 
     def test_max_value(self, nns0, nns00, nns01, nns012345, nns0123456789_10_11):
         assert nns0.max_value == 1

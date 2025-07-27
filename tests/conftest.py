@@ -7,67 +7,67 @@ import punctilious as pu
 
 
 @pytest.fixture
-def s0():
+def raw_1():
     return (1,)
 
 
 @pytest.fixture
-def s1():
+def raw_2():
     return (2,)
 
 
 @pytest.fixture
-def s2():
+def raw_3():
     return (3,)
 
 
 @pytest.fixture
-def s3():
+def raw_4():
     return (4,)
 
 
 @pytest.fixture
-def s4():
+def raw_5():
     return (5,)
 
 
 @pytest.fixture
-def s5():
+def raw_6():
     return (6,)
 
 
 @pytest.fixture
-def s00():
+def raw_1_1():
     return 1, 1,
 
 
 @pytest.fixture
-def s01():
+def raw_1_2():
     return 1, 2,
 
 
 @pytest.fixture
-def s10():
+def raw_2_1():
     return 2, 1,
 
 
 @pytest.fixture
-def s012():
+def raw_1_2_3():
     return 1, 2, 3,
 
 
 @pytest.fixture
-def s021():
+def raw_1_3_2():
     return 1, 3, 2,
 
 
 @pytest.fixture
-def s00010203043212():
+def raw_00010203043212():
     return 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 4, 3, 2, 3,
 
 
 @pytest.fixture
-def s00010203043262():
+def raw_00010203043262():
     return 1, 1, 1, 2, 1, 3, 1, 4, 1, 5, 4, 3, 7, 3,
 
 
@@ -114,37 +114,37 @@ def t_big(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
 
 
 @pytest.fixture
-def nns0(s0):
-    return pu.nn0sl.NaturalNumber0Sequence(*s0)
+def nns0(raw_1):
+    return pu.nn0sl.NaturalNumber0Sequence(*raw_1)
 
 
 @pytest.fixture
-def nns1(s1):
-    return pu.nn0sl.NaturalNumber0Sequence(*s1)
+def nns1(raw_2):
+    return pu.nn0sl.NaturalNumber0Sequence(*raw_2)
 
 
 @pytest.fixture
-def nns00(s00):
-    return pu.nn0sl.NaturalNumber0Sequence(*s00)
+def nns00(raw_1_1):
+    return pu.nn0sl.NaturalNumber0Sequence(*raw_1_1)
 
 
 @pytest.fixture
-def nns01(s01):
-    return pu.nn0sl.NaturalNumber0Sequence(*s01)
+def nns01(raw_1_2):
+    return pu.nn0sl.NaturalNumber0Sequence(*raw_1_2)
 
 
 @pytest.fixture
-def nns10(s10):
-    return pu.nn0sl.NaturalNumber0Sequence(*s10)
+def nns10(raw_2_1):
+    return pu.nn0sl.NaturalNumber0Sequence(*raw_2_1)
 
 
 @pytest.fixture
-def nns000(s00):
-    return pu.nn0sl.NaturalNumber0Sequence(*s00)
+def nns000(raw_1_1):
+    return pu.nn0sl.NaturalNumber0Sequence(*raw_1_1)
 
 
 @pytest.fixture
-def nns001(s00):
+def nns001(raw_1_1):
     return pu.nn0sl.NaturalNumber0Sequence(1, 1, 2, )
 
 

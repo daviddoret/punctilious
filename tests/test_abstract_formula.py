@@ -54,22 +54,23 @@ class TestAbstractFormula:
         phi = pu.afl.AbstractFormula(t12, (15, 1, 8, 3, 3, 10, 11, 12, 11, 6, 2, 10,))
         assert not phi.is_canonical
 
-    def test_iterate_immediate_sub_sequences(self, s0, s1, s2, s3, s4, s5, s00, s01, af1, nns0, af2a, nns01,
+    def test_iterate_immediate_sub_sequences(self, raw_1, raw_2, raw_3, raw_4, raw_5, raw_6, raw_1_1, raw_1_2, af1,
+                                             nns0, af2a, nns01,
                                              af6a,
                                              nns012345,
                                              af12a, nns0123456789_10_11):
         l = tuple(t for t in af1.iterate_immediate_sub_sequences())
         assert len(l) == 0
         l = tuple(t for t in af2a.iterate_immediate_sub_sequences())
-        assert l[0] == s0
+        assert l[0] == raw_1
         l = tuple(t for t in af6a.iterate_immediate_sub_sequences())
-        assert l[0] == s1
-        assert l[1] == s2
-        assert l[2] == s3
-        assert l[3] == s4
-        assert l[4] == s5
+        assert l[0] == raw_2
+        assert l[1] == raw_3
+        assert l[2] == raw_4
+        assert l[3] == raw_5
+        assert l[4] == raw_6
         l = tuple(t for t in af12a.iterate_immediate_sub_sequences())
-        assert l[0] == s1
+        assert l[0] == raw_2
         assert l[1] == (3, 4,)
         assert l[2] == (5, 6, 7, 8, 9, 10,)
         assert l[3] == (11, 12,)

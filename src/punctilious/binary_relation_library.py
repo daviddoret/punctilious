@@ -391,6 +391,9 @@ class RelationalElement(abc.ABC):
     def __eq__(self, x):
         return self.is_equal_to(x)
 
+    def __gt__(self, x):
+        return self.is_strictly_greater_than(x)
+
     def __lt__(self, x):
         return self.is_strictly_less_than(x)
 
@@ -410,7 +413,7 @@ class RelationalElement(abc.ABC):
         """
         return svl.SpecialValues.NOT_AVAILABLE
 
-    def is_equal_to(self, x: object) -> bool | None:
+    def is_equal_to(self, x: object) -> tbl.TernaryBoolean:
         """Returns `True` if this element is equal to `x`
         under the canonical equality relation for elements of this Python class,
         `False` otherwise.
@@ -430,13 +433,22 @@ class RelationalElement(abc.ABC):
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[BinaryRelation] | typing.Literal[
         svl.SpecialValues.NOT_AVAILABLE]:
-        """The canonical is strictly less than relation for this Python class.
+        r"""The canonical is strictly less than relation for this Python class.
 
         See :meth:`RelationalElement.is_strictly_less_than`.
         """
         return svl.SpecialValues.NOT_AVAILABLE
 
-    def is_strictly_less_than(self, x: object) -> bool | None:
+    def is_strictly_greater_than(self, x: object) -> tbl.TernaryBoolean:
+        r"""Returns `True` if this element is strictly greater than `x`.
+
+        :math:`y > x` if and only if :math:`\neg (x > y) \land \neg (x = y)`.
+        """
+        p: tbl.TernaryBoolean = self.is_strictly_less_than(x).lnot()
+        q: tbl.TernaryBoolean = self.is_equal_to(x).lnot()
+        return p.land(q)
+
+    def is_strictly_less_than(self, x: object) -> tbl.TernaryBoolean:
         """Returns `True` if this element is strictly less than `x`
         under the canonical is-strictly-less-than relation for elements of this Python class,
         `False` otherwise.
