@@ -5,7 +5,7 @@ import collections
 
 # package modules
 import punctilious.util as util
-import punctilious.rooted_plane_tree_library as rpt
+import punctilious.rooted_plane_tree_library as rptl
 import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_pair_library as nn0pl
@@ -56,6 +56,25 @@ class IsStrictlyLessThan(brl.BinaryRelation):
     :math:`( \mathbb{F}_0, < )`.
 
     """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @util.readonly_class_property
+    def least_element(cls) -> AbstractFormula:
+        return AbstractFormula(
+            t=rptl.RootedPlaneTree.least_element,
+            s=nn0sl.NaturalNumber0Sequence.least_element
+        )
 
     @classmethod
     def rank(cls, x: object) -> int:
@@ -111,7 +130,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         p = nn0pl.cantor_pairing_order.unrank(n)
         n1 = p.x
         n2 = p.y
-        t = rpt.RootedPlaneTree.from_rank(n1)
+        t = rptl.RootedPlaneTree.from_rank(n1)
         s = nn0sl.NaturalNumber0Sequence.from_rank(n2)
         f = AbstractFormula(t=t, s=s)
         return f
@@ -129,7 +148,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def __hash__(self):
         return self._compute_hash(self)
 
-    def __init__(self, t: rpt.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
+    def __init__(self, t: rptl.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
         super(AbstractFormula, self).__init__()
         self._canonical_abstract_formula: AbstractFormula | None = None
         self._immediate_subformulas_are_unique: AbstractFormula | None = None
@@ -138,8 +157,8 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         self._is_abstract_inference_rule: bool | None = None
         self._sub_formulas: tuple[AbstractFormula, ...] | None = None
 
-    def __new__(cls, t: rpt.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
-        t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_any(t)
+    def __new__(cls, t: rptl.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
+        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_any(t)
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.from_any(s)
         if t.size != s.length:
             raise util.PunctiliousException(
@@ -451,7 +470,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         :return:
         """
         i: int = 0
-        t: rpt.RootedPlaneTree
+        t: rptl.RootedPlaneTree
         for t in self.rooted_plane_tree.iterate_subtrees():
             if t.degree > 0:
                 i += 1
@@ -490,9 +509,9 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         s: tuple[AbstractFormula, ...] = tuple(
             AbstractFormula.from_any(o=phi) for phi in s)
         # Retrieves the children trees
-        t: tuple[rpt.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
+        t: tuple[rptl.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
         # Declare the new parent tree
-        t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_immediate_subtrees(*t)
+        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(*t)
         # Declare the natural-number-sequence by appending n to the concatenation of the
         # children natural-number-sequences.
         u: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(n) + nn0sl.concatenate_natural_number_sequences(
@@ -538,7 +557,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         """
 
         t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
-        t: rpt.RootedPlaneTree = rpt.RootedPlaneTree.from_tuple_tree(t)
+        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_tuple_tree(t)
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
         phi: AbstractFormula = AbstractFormula(t, s)
         return phi
@@ -851,7 +870,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         - and 2) the rooted plane tree.
         """
         i: int = 1  # remove the root
-        child_tree: rpt.RootedPlaneTree
+        child_tree: rptl.RootedPlaneTree
         for child_tree in self.rooted_plane_tree.iterate_immediate_subtrees():
             # retrieve the sub-sequence that is mapped to this child RPT
             sub_sequence: tuple[int, ...] = self.natural_number_sequence[i:i + child_tree.size]
@@ -863,7 +882,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
     def iterate_sub_sequences(self) -> collections.abc.Generator[nn0sl.NaturalNumber0Sequence, None, None]:
         i: int
-        sub_tree: rpt.RootedPlaneTree
+        sub_tree: rptl.RootedPlaneTree
         for i, sub_tree in enumerate(self.rooted_plane_tree.iterate_subtrees()):
             # retrieves the sub-sequence in the sequence
             sub_sequence: tuple[int, ...] = self.natural_number_sequence[i:i + sub_tree.size]
@@ -878,7 +897,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
         :return:
         """
-        child_tree: rpt.RootedPlaneTree
+        child_tree: rptl.RootedPlaneTree
         child_sequence: nn0sl.NaturalNumber0Sequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_subtrees(),
                                               self.iterate_sub_sequences()):
@@ -981,7 +1000,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         return output
 
     @property
-    def rooted_plane_tree(self) -> rpt.RootedPlaneTree:
+    def rooted_plane_tree(self) -> rptl.RootedPlaneTree:
         r"""The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.
 
         Shortcut: self.t.
@@ -1059,7 +1078,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             return AbstractFormula.from_immediate_sub_formulas(n=self.main_element, s=s)
 
     @property
-    def t(self) -> rpt.RootedPlaneTree:
+    def t(self) -> rptl.RootedPlaneTree:
         r"""A shortcut for self.rooted_plane_tree."""
         return self.rooted_plane_tree
 
@@ -1117,7 +1136,7 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
 
 FlexibleAbstractFormula = typing.Union[
     AbstractFormula, tuple[
-        rpt.FlexibleRootedPlaneTree, nn0sl.FlexibleNaturalNumber0Sequence], collections.abc.Iterator, collections.abc.Generator, None]
+        rptl.FlexibleRootedPlaneTree, nn0sl.FlexibleNaturalNumber0Sequence], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 
