@@ -518,7 +518,8 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(*t)
         # Declare the natural-number-sequence by appending n to the concatenation of the
         # children natural-number-sequences.
-        u: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(n) + nn0sl.concatenate_natural_number_sequences(
+        u: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(
+            n) + nn0sl.concatenate_natural_number_0_sequences(
             *(phi.natural_number_sequence for phi in s))
         phi: AbstractFormula = AbstractFormula(t=t, s=u)
         return phi

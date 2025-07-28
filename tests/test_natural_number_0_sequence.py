@@ -69,8 +69,8 @@ class TestNaturalNumbersSequence:
 
     def test_concatenate_single(self, nns0, nns00, nns01, nns012345, nns0123456789_10_11):
         assert nns0.concatenate_with(nns00) == pu.nn0sl.NaturalNumber0Sequence(*nns0, *nns00)
-        assert pu.nn0sl.concatenate_natural_number_sequences(nns0123456789_10_11,
-                                                             nns00) == pu.nn0sl.NaturalNumber0Sequence(
+        assert pu.nn0sl.concatenate_natural_number_0_sequences(nns0123456789_10_11,
+                                                               nns00) == pu.nn0sl.NaturalNumber0Sequence(
             *nns0123456789_10_11, *nns00)
 
     def test_is_restricted_growth_function_sequence(self):
@@ -125,9 +125,9 @@ class TestNaturalNumbersSequence:
         s2 = pu.nn0sl.NaturalNumber0Sequence(1, )
         s3 = pu.nn0sl.NaturalNumber0Sequence(9, )
         s4 = pu.nn0sl.NaturalNumber0Sequence(6, 7, 2, )
-        assert pu.nn0sl.concatenate_natural_number_sequences(s1, s2) == (1, 1, 1, 1,)
-        assert pu.nn0sl.concatenate_natural_number_sequences(s4, s4, s4) == (6, 7, 2, 6, 7, 2, 6, 7, 2,)
-        assert pu.nn0sl.concatenate_natural_number_sequences(s4, s3, s2, s1) == (6, 7, 2, 9, 1, 1, 1, 1,)
+        assert pu.nn0sl.concatenate_natural_number_0_sequences(s1, s2) == (1, 1, 1, 1,)
+        assert pu.nn0sl.concatenate_natural_number_0_sequences(s4, s4, s4) == (6, 7, 2, 6, 7, 2, 6, 7, 2,)
+        assert pu.nn0sl.concatenate_natural_number_0_sequences(s4, s3, s2, s1) == (6, 7, 2, 9, 1, 1, 1, 1,)
 
     def test_is_increasing(self):
         s = pu.nn0sl.NaturalNumber0Sequence(1, )
@@ -182,3 +182,5 @@ class TestNaturalNumbersSequence:
     def test_least_element(self):
         assert pu.nn0sl.RefinedGodelNumberOrder.least_element == pu.nn0sl.NN0S()
         assert pu.nn0sl.NaturalNumber0Sequence.least_element == pu.nn0sl.NN0S()
+        assert pu.nn0sl.empty_sequence == pu.nn0sl.NN0S()
+        assert pu.nn0sl.trivial_sequence == pu.nn0sl.NN0S()

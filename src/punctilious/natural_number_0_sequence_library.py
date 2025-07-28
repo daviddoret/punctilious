@@ -13,7 +13,6 @@ import punctilious.ternary_boolean_library as tbl
 
 # Relation orders
 
-
 class LexicographicOrder(brl.BinaryRelation):
     r"""The lexicographic order of (0-based) natural numbers.
 
@@ -90,9 +89,6 @@ class LexicographicOrder(brl.BinaryRelation):
                 return False
 
 
-lexicographic_order = LexicographicOrder
-
-
 class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
     r"""The sum-first-lexicographic-second order of (0-based) natural numbers.
 
@@ -158,9 +154,6 @@ class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
                 return True
             else:
                 return False
-
-
-sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 
 
 class GodelNumberEncodingOrder(brl.BinaryRelation):
@@ -289,9 +282,6 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
             return NaturalNumber0Sequence(*s)
 
 
-godel_number_order = GodelNumberEncodingOrder
-
-
 class RefinedGodelNumberOrder(brl.BinaryRelation):
     r"""The refined Godel-number-encoding order of (0-based) natural number sequences.
 
@@ -401,9 +391,6 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
             return NaturalNumber0Sequence(*s)
 
 
-refined_godel_number_order = RefinedGodelNumberOrder
-
-
 class IsEqualTo(brl.BinaryRelation):
     r"""The equality binary-relation for 0-based natural numbers.
 
@@ -421,12 +408,9 @@ class IsEqualTo(brl.BinaryRelation):
         return x.is_natural_number_0_sequence_equivalent_to(y)
 
 
-is_equal_to = IsEqualTo
-
-
 # General functions
 
-def concatenate_natural_number_sequences(*s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
+def concatenate_natural_number_0_sequences(*s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
     """Concatenates a collection of :class:`NaturalNumberSequence` elements, preserving order.
 
     :param s:
@@ -449,10 +433,6 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
     """
 
-    # Configuration of class properties (cf. Relatable).
-    _is_equal_to: brl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: brl.BinaryRelation = refined_godel_number_order
-
     def __add__(self, s):
         """Concatenates this :class:`NaturalNumberSequence` with another :class:`NaturalNumberSequence` `s`.
         Or performs a scalar addition if s is an integer.
@@ -466,7 +446,7 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         if isinstance(s, int):
             return self.scalar_addition(n=s)
         elif isinstance(s, typing.Iterable):
-            return concatenate_natural_number_sequences(self, s)
+            return concatenate_natural_number_0_sequences(self, s)
         else:
             raise util.PunctiliousException("Unsupported type.")
 
@@ -573,7 +553,7 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         :param s:
         :return:
         """
-        return concatenate_natural_number_sequences(self, *s)
+        return concatenate_natural_number_0_sequences(self, *s)
 
     @classmethod
     def data_validate_elements(
@@ -817,6 +797,13 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 FlexibleNaturalNumber0Sequence = typing.Union[
     NaturalNumber0Sequence, tuple[int, ...], collections.abc.Iterator, collections.abc.Generator, None]
 
-# Aliases
+# Aliases and well-known objects
 
 NN0S = NaturalNumber0Sequence  # An alias for NaturalNumberSequence
+trivial_sequence = NaturalNumber0Sequence()  # An alias for the empty sequence ().
+empty_sequence = NaturalNumber0Sequence()  # The empty sequence ().
+is_equal_to = IsEqualTo  # The is-equal-to binary relation.
+refined_godel_number_order = RefinedGodelNumberOrder
+lexicographic_order = LexicographicOrder
+sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
+godel_number_order = GodelNumberEncodingOrder

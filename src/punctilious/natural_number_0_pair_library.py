@@ -456,10 +456,6 @@ class NaturalNumber0Pair(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanS
 
     """
 
-    # Configuration of class properties (cf. Relatable).
-    _is_equal_to: brl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: brl.BinaryRelation = cantor_pairing_order
-
     def __add__(self, s):
         """Performs a scalar addition if s is an integer.
 

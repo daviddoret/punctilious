@@ -261,3 +261,5 @@ class TestRootedPlaneTree:
     def test_least_element(self):
         assert pu.rptl.DyckWordLexicographicOrder.least_element == pu.rptl.RPT()
         assert pu.rptl.RPT.least_element == pu.rptl.RPT()
+        assert pu.rptl.empty_rooted_plane_tree == pu.rptl.RPT()
+        assert pu.rptl.trivial_rooted_plane_tree == pu.rptl.RPT()

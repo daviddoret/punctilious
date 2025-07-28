@@ -72,9 +72,6 @@ class DyckWordLexicographicOrder(brl.BinaryRelation):
         return t
 
 
-dyck_word_lexicographic_order = DyckWordLexicographicOrder
-
-
 class IsEqualTo(brl.BinaryRelation):
     r"""The equality binary-relation for rooted plane trees.
 
@@ -90,9 +87,6 @@ class IsEqualTo(brl.BinaryRelation):
         x: RootedPlaneTree = RootedPlaneTree.from_any(x)
         y: RootedPlaneTree = RootedPlaneTree.from_any(y)
         return x.is_rooted_plane_tree_equivalent_to(y)
-
-
-is_equal_to = IsEqualTo
 
 
 class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
@@ -144,10 +138,6 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
     def __str__(self):
         return self.represent_as_anonymous_function()
-
-    # Configuration of class properties (cf. Relatable).
-    _is_equal_to: brl.BinaryRelation = is_equal_to
-    _is_strictly_less_than: brl.BinaryRelation = dyck_word_lexicographic_order
 
     _cache: dict[int, RootedPlaneTree] = dict()  # Cache mechanism.
 
@@ -568,3 +558,7 @@ It allows to express RootedPlaneTree using python tuple syntax, e.g.: ( (), (), 
 """
 
 RPT = RootedPlaneTree  # An alias for RootedPlaneTree.
+dyck_word_lexicographic_order = DyckWordLexicographicOrder
+is_equal_to = IsEqualTo
+trivial_rooted_plane_tree = RootedPlaneTree()
+empty_rooted_plane_tree = RootedPlaneTree()
