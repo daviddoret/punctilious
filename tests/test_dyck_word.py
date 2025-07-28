@@ -22,5 +22,9 @@ class TestDyckWord:
             assert d == d2
             # print(f"{n}=={n2}: {d}=={d2}")
 
+    def test_least_element(self):
+        assert pu.dwl.LexicographicOrder.least_element == pu.dwl.DW("()")
+        assert pu.dwl.DyckWord.least_element == pu.dwl.DW("()")
+
 
 pass

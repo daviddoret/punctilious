@@ -226,6 +226,16 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
         """
         return tbl.TernaryBoolean.FALSE
 
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Sequence:
+        """
+
+        The least element is the empty sequence.
+
+        :return:
+        """
+        return NaturalNumber0Sequence()
+
     @classmethod
     def rank(cls, x: object) -> int:
         """
@@ -237,7 +247,7 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
         :return:
         """
         x = NaturalNumber0Sequence.from_any(x)
-        if x == NaturalNumber0Sequence():
+        if x == cls.least_element:
             return 0
         else:
             n = 1
@@ -270,7 +280,7 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
     def unrank(cls, n: int) -> object:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
-            return NaturalNumber0Sequence()
+            return cls.least_element
         else:
             f = pnl.factorize(n)
             # Decrement the last element by 1.
@@ -349,7 +359,7 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
         :return:
         """
         x = NaturalNumber0Sequence.from_any(x)
-        if x == NaturalNumber0Sequence():
+        if x == cls.least_element:
             return 0
         else:
             n = 1
@@ -382,9 +392,9 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
     def unrank(cls, n: int) -> object:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
-            return NaturalNumber0Sequence()
+            return cls.least_element
         else:
-            f = pnl.factorize(n)
+            f: tuple[int, ...] = pnl.factorize(n)
             # Decrement the last element by 1.
             # This hack makes leading zeroes meaningful.
             s = util.decrement_last_element(f)

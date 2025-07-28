@@ -1,15 +1,14 @@
 from __future__ import annotations
 import typing
-import punctilious.binary_relation_library as orl
 import punctilious.util as util
-import punctilious.catalan_number_library as cnl
 import punctilious.binary_relation_library as brl
+import punctilious.ternary_boolean_library as tbl
 
 
 # Relation classes
 
 
-class IsEqualTo(orl.BinaryRelation):
+class IsEqualTo(brl.BinaryRelation):
     r"""The equality binary-relation for 0-based natural numbers.
 
     Mathematical definition
@@ -26,10 +25,22 @@ class IsEqualTo(orl.BinaryRelation):
         return str(x) == str(y)
 
 
-class LexicographicOrder(orl.BinaryRelation):
+class LexicographicOrder(brl.BinaryRelation):
     r"""The lexicographic relation order for Dyck words.
 
     """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
 
     @util.readonly_class_property
     def least_element(cls) -> object:
@@ -268,7 +279,7 @@ def data_validate_dyck_work(s: str) -> bool:
 
 # Main class
 
-class DyckWord(orl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, str):
+class DyckWord(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, str):
     r"""A Dyck word.
 
     Bibliography
@@ -317,6 +328,10 @@ class DyckWord(orl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return LexicographicOrder
+
+    @util.readonly_class_property
+    def least_element(cls) -> DyckWord:
+        return cls.is_strictly_less_than_relation.least_element
 
 
 # Flexible types to facilitate data validation

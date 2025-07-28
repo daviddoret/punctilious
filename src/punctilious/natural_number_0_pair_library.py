@@ -378,7 +378,7 @@ class CantorPairingOrder(brl.BinaryRelation):
         TODO: Provide proof here.
 
         """
-        return tbl.TernaryBoolean.FALSE
+        return tbl.TernaryBoolean.TRUE
 
     @util.readonly_class_property
     def least_element(cls) -> NaturalNumber0Pair:
