@@ -178,3 +178,7 @@ class TestNaturalNumbersSequence:
                 if i == j:
                     assert n1.is_equal_to(n2)
                     assert n1 == n2
+
+    def test_least_element(self):
+        assert pu.nn0sl.RefinedGodelNumberOrder.least_element == pu.nn0sl.NN0S()
+        assert pu.nn0sl.NaturalNumber0Sequence.least_element == pu.nn0sl.NN0S()

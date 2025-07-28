@@ -328,6 +328,16 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
         """
         return tbl.TernaryBoolean.TRUE
 
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Sequence:
+        """
+
+        The least element is the empty sequence.
+
+        :return:
+        """
+        return NaturalNumber0Sequence()
+
     @classmethod
     def rank(cls, x: object) -> int:
         """
@@ -499,6 +509,10 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return RefinedGodelNumberOrder
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Sequence:
+        return cls.is_strictly_less_than_relation.least_element
 
     def to_restricted_growth_function_sequence(self) -> NaturalNumber0Sequence:
         r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
