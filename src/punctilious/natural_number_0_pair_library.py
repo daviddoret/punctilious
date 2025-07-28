@@ -54,18 +54,6 @@ class LexicographicOrder(brl.BinaryRelation):
 
     """
 
-    @util.readonly_class_property
-    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
-        r"""
-
-        Proof
-        ------
-
-        TODO: Provide proof here.
-
-        """
-        return tbl.TernaryBoolean.FALSE
-
     @classmethod
     def relates(cls, x: FlexibleNaturalNumber0Pair, y: FlexibleNaturalNumber0Pair) -> tbl.TernaryBoolean:
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
@@ -200,6 +188,22 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
 
     """
 
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Include proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Pair:
+        return NaturalNumber0Pair(0, 0)
+
     @classmethod
     def rank(cls, x: FlexibleNaturalNumber0Pair) -> int:
         """
@@ -211,7 +215,7 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
         :return:
         """
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
-        if x == NaturalNumber0Pair():
+        if x == cls.least_element:
             return 0
         else:
             n = 1
@@ -244,7 +248,7 @@ class GodelNumberEncodingOrder(brl.BinaryRelation):
     def unrank(cls, n: int) -> NaturalNumber0Pair:
         n += 1  # Makes the ranks 0-based.
         if n == 1:
-            return NaturalNumber0Pair()
+            return cls.least_element
         else:
             f = pnl.factorize(n)
             # Decrement the last element by 1.
@@ -292,6 +296,10 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
     - unranking requires factorization (but not so hard because primes are taken in sequence).
 
     """
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Pair:
+        return NaturalNumber0Pair(0, 0)
 
     @classmethod
     def rank(cls, x: object) -> int:
@@ -359,6 +367,22 @@ class CantorPairingOrder(brl.BinaryRelation):
     - https://www.cantorsparadise.org/cantor-pairing-function-e213a8a89c2b/
 
     """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.FALSE
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Pair:
+        return NaturalNumber0Pair(0, 0)
 
     @classmethod
     def rank(cls, x: object) -> int:
@@ -498,6 +522,10 @@ class NaturalNumber0Pair(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanS
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return CantorPairingOrder
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Pair:
+        return cls.is_strictly_less_than_relation.least_element
 
     def to_restricted_growth_function_sequence(self) -> NaturalNumber0Pair:
         r"""Converts the natural-number-0-pair `s` into a restricted-growth-function-sequence `t`,
@@ -794,4 +822,4 @@ FlexibleNaturalNumber0Pair = typing.Union[
 
 # Aliases
 
-NN0S = NaturalNumber0Pair  # An alias for NaturalNumber0Pair
+NN0P = NaturalNumber0Pair  # An alias for NaturalNumber0Pair

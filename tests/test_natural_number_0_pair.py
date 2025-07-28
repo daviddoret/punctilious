@@ -74,3 +74,7 @@ class TestNaturalNumbersPair:
                 if i == j:
                     assert n1.is_equal_to(n2)
                     assert n1 == n2
+
+    def test_least_element(self):
+        assert pu.nn0pl.CantorPairingOrder.least_element == pu.nn0pl.NN0P(0, 0)
+        assert pu.nn0pl.NaturalNumber0Pair.least_element == pu.nn0pl.NN0P(0, 0)

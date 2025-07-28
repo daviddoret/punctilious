@@ -94,7 +94,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         return tbl.TernaryBoolean.TRUE
 
     @util.readonly_class_property
-    def least_element(self) -> NaturalNumber0:
+    def least_element(cls) -> NaturalNumber0:
         return NaturalNumber0(x=0)
 
     @classmethod
@@ -198,8 +198,8 @@ class NaturalNumber0(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStruc
         return IsStrictlyLessThan
 
     @util.readonly_class_property
-    def least_element(self) -> NaturalNumber0:
-        return IsStrictlyLessThan.least_element
+    def least_element(cls) -> NaturalNumber0:
+        return cls.is_strictly_less_than_relation.least_element
 
 
 # Flexible types to facilitate data validation
