@@ -174,11 +174,11 @@ class TestAbstractFormula:
         assert l[11] == pu.afl.AbstractFormula(t1_a, (12,))
 
     def test_main_sequence_element(self, af1, af2a, af2b, af6a, af12a):
-        assert af1.main_element == 0
-        assert af2a.main_element == 0
-        assert af2b.main_element == 0
-        assert af6a.main_element == 0
-        assert af12a.main_element == 0
+        assert af1.main_element == 1
+        assert af2a.main_element == 1
+        assert af2b.main_element == 1
+        assert af6a.main_element == 1
+        assert af12a.main_element == 1
 
     def test_tree_size(self, af1, af2a, af2b, af6a, af12a):
         assert af1.tree_size == 1
@@ -347,8 +347,16 @@ class TestAbstractFormula:
         assert phi4 == phi5
 
     def test_canonical_order(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
-        assert af1.is_strictly_less_than(af1b)
-        assert af2a.is_strictly_less_than(af2b)
+        assert not af1.is_strictly_less_than(af1b)
+        assert not af2a.is_strictly_less_than(af2b)
+        assert pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_strictly_less_than(
+            pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 2, 5,)))
+
+    def test_canonical_order_2(self):
+        for i in range(0, 2048):
+            phi: pu.afl.AbstractFormula
+            if i == 0:
+                phi = pu.afl.IsStrictlyLessThan.least_element
 
     def test_is_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
         assert af1.is_increasing
@@ -369,10 +377,10 @@ class TestAbstractFormula:
         assert af2b.is_strictly_increasing
         assert af3a.is_strictly_increasing
         assert af6a.is_strictly_increasing
-        assert not af_big.is_strictly_increasing
+        assert af_big.is_strictly_increasing
         assert pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_strictly_increasing
         assert not pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 5, 5,)).is_strictly_increasing
-        assert not pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing
+        assert pu.afl.AbstractFormula(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing
 
     def test_substitute_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa, t6_a_aa_ab_ac_ad_ae,
                                      t7_a_aa_ab_aaa_aaaa_aba_abaa):

@@ -16,3 +16,7 @@ class TestNaturalNumber0:
                     assert pu.nn0l.NN0(i).is_strictly_less_than(pu.nn0l.NN0(j))
                 elif i >= j:
                     assert not pu.nn0l.NN0(i).is_strictly_less_than(pu.nn0l.NN0(j))
+
+    def test_least_element(self):
+        assert pu.nn0l.IsStrictlyLessThan.least_element == pu.nn0l.NN0(0)
+        assert pu.nn0l.NaturalNumber0.least_element == pu.nn0l.NN0(0)

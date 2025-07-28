@@ -93,6 +93,10 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         """
         return tbl.TernaryBoolean.TRUE
 
+    @util.readonly_class_property
+    def least_element(self) -> NaturalNumber0:
+        return NaturalNumber0(x=0)
+
     @classmethod
     def rank(cls, x: FlexibleNaturalNumber0) -> int:
         r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.
@@ -186,12 +190,16 @@ class NaturalNumber0(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStruc
         raise util.PunctiliousException('Failure to interpret `o` as a natural-number-0.', o_type=type(o), o=o)
 
     @util.readonly_class_property
-    def is_equal_to_relation(self) -> typing.Type[BinaryRelation]:
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
         return IsEqualTo
 
     @util.readonly_class_property
-    def is_strictly_less_than_relation(self) -> typing.Type[BinaryRelation]:
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return IsStrictlyLessThan
+
+    @util.readonly_class_property
+    def least_element(self) -> NaturalNumber0:
+        return IsStrictlyLessThan.least_element
 
 
 # Flexible types to facilitate data validation
