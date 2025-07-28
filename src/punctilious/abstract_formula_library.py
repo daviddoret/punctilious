@@ -413,6 +413,10 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return IsStrictlyLessThan
 
+    @util.readonly_class_property
+    def least_element(cls) -> AbstractFormula:
+        return cls.is_strictly_less_than_relation.least_element
+
     @classmethod
     def abstract_map_from_preimage_and_image(
             cls,
