@@ -9,6 +9,7 @@ import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_library as nn0l
 import punctilious.prime_number_library as pnl
 import punctilious.ternary_boolean_library as tbl
+from punctilious import special_values_library as spl
 
 
 # Relation orders
@@ -89,6 +90,104 @@ class LexicographicOrder(brl.BinaryRelation):
                 return False
 
 
+class LengthFirstLexicographicSecondOrder(brl.BinaryRelation):
+    r"""The length-first-lexicographic-second order of (0-based) natural numbers.
+
+    Mathematical definition
+    -------------------------
+
+    Let :math:`S = (s_0, s_1, \ldots, s_m)` and :math:`T = (t_0, t_1, \ldots, t_n)`
+    be two finite sequences of (1-based) natural numbers with :math:`s_i, t_j \in \mathbb{N}^+`.
+
+    We say that :math:`S \prec T` under sum-lexicographic-order if and only if:
+
+    :math:`|{S}| < |{T}|`
+
+    or:
+
+    :math:`|{S}| = |{T}| \land \exists k \leq \min(m,n)` such that :math:`s_i = t_i` for all :math:`i < k` and :math:`s_k < t_k`
+
+    or:
+
+    :math:`|{S}| = |{T}| \land m < n` and :math:`s_i = t_i` for all :math:`i = 1, \ldots, m`
+
+    Note
+    ------
+
+    In the context of abstract formulas,
+    "length-first" orders may look better suited to design orders of abstract formulas,
+    because abstract formulas require the linkage of two orders:
+
+    - rooted plane trees,
+    - sequences of (0-based) natural numbers.
+
+    In effect, for an abstract formula to be well-formed,
+    the size of the rooted plane trees must be equal
+    to the length of the (0-based) natural number sequence.
+
+    But the problem with length-first orders is that they are not well-founded,
+    as by definition they have infinite chains, such as:
+    (0),(1),(2),(3),...
+
+    In effect, as there are countably infinite sequences of size n,
+    length-first orders cannot be well-founded.
+
+    See also
+    ----------
+
+    - :class:`LexicographicOrder`
+
+
+    """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @classmethod
+    def rank(cls, x: object) -> int | typing.Literal[spl.SpecialValues.NOT_AVAILABLE]:
+        # TODO: IMPLEMENT THIS
+        pass
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        if x.is_equal_to(y):
+            return False
+        elif x.length < y.length:
+            return True
+        elif y.length < x.length:
+            return False
+        else:
+            minimum_length: int = min(x.length, y.length)
+            i: int
+            for i in range(minimum_length):
+                if x[i] < y[i]:
+                    return True
+                elif x[i] > y[i]:
+                    return False
+            # All compared elements are equal.
+            if len(x) < len(y):
+                # Shorter sequence is less
+                return True
+            else:
+                return False
+
+    @classmethod
+    def unrank(cls, n: int) -> object:
+        pass
+    # TODO: IMPLEMENT THIS
+
+
 class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
     r"""The sum-first-lexicographic-second order of (0-based) natural numbers.
 
@@ -136,9 +235,9 @@ class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
         y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
         if x.is_equal_to(y):
             return False
-        elif x.length < y.length:
+        elif sum(x) < sum(y):
             return True
-        elif y.length < x.length:
+        elif sum(y) < sum(x):
             return False
         else:
             minimum_length: int = min(x.length, y.length)
@@ -805,5 +904,6 @@ empty_sequence = NaturalNumber0Sequence()  # The empty sequence ().
 is_equal_to = IsEqualTo  # The is-equal-to binary relation.
 refined_godel_number_order = RefinedGodelNumberOrder
 lexicographic_order = LexicographicOrder
+length_first_lexicographic_second_order = LengthFirstLexicographicSecondOrder
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 godel_number_order = GodelNumberEncodingOrder

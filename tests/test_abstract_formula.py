@@ -399,3 +399,10 @@ class TestAbstractFormula:
         assert psi == pu.afl.AbstractFormula(t1_a, (10,))
 
         pass
+
+    def test_least_element(self):
+        trivial_formula = pu.afl.AF(t=pu.rptl.trivial_rooted_plane_tree, s=pu.nn0sl.NaturalNumber0Sequence(0))
+        assert pu.afl.IsStrictlyLessThan.least_element == trivial_formula
+        assert pu.afl.AbstractFormula.least_element == trivial_formula
+        assert pu.afl.empty_formula == trivial_formula
+        assert pu.afl.trivial_formula == trivial_formula

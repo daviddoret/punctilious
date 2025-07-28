@@ -73,7 +73,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
     def least_element(cls) -> AbstractFormula:
         return AbstractFormula(
             t=rptl.RootedPlaneTree.least_element,
-            s=nn0sl.NaturalNumber0Sequence.least_element
+            s=nn0sl.NaturalNumber0Sequence(0)
         )
 
     @classmethod
@@ -85,7 +85,8 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         """
         x: AbstractFormula = AbstractFormula.from_any(x)
         n1: int = x.rooted_plane_tree.rank()
-        n2: int = x.natural_number_sequence.rank()
+        n2: int = nn0sl.LengthFirstLexicographicSecondOrder.rank(x.natural_number_sequence)
+        n2 -= 1  # "-1" because of the exclusion of the empty sequence.
         p: nn0pl.NaturalNumber0Pair = nn0pl.NaturalNumber0Pair(n1, n2)
         n3: int = p.rank()
         return n3
@@ -130,6 +131,7 @@ class IsStrictlyLessThan(brl.BinaryRelation):
         p = nn0pl.cantor_pairing_order.unrank(n)
         n1 = p.x
         n2 = p.y
+        n2 += 1  # "+ 1" because of the exclusion of the empty sequence.
         t = rptl.RootedPlaneTree.from_rank(n1)
         s = nn0sl.NaturalNumber0Sequence.from_rank(n2)
         f = AbstractFormula(t=t, s=s)
@@ -1146,3 +1148,5 @@ FlexibleAbstractFormula = typing.Union[
 # Aliases
 
 AF = AbstractFormula  # An alias for AbstractFormula
+empty_formula: AbstractFormula = AbstractFormula.least_element
+trivial_formula: AbstractFormula = AbstractFormula.least_element
