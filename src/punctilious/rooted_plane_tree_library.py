@@ -11,12 +11,25 @@ import collections
 import punctilious.util as util
 import punctilious.binary_relation_library as brl
 import punctilious.dyck_word_library as dwl
+import punctilious.ternary_boolean_library as tbl
 
 
 class DyckWordLexicographicOrder(brl.BinaryRelation):
     r"""The Dyck word lexicographic relation order of rooted plane trees.
 
     """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        See the proof under :meth:`dwl.LexicographicOrder.is_order_isomorphic_with_n_strictly_less_than`.
+
+        """
+        return tbl.TernaryBoolean.TRUE
 
     @util.readonly_class_property
     def least_element(cls) -> object:
@@ -418,6 +431,10 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         for child in self.immediate_subtrees:  # Recursively yield subtrees from the immediate subtrees.
             yield from child.iterate_subtrees()
 
+    @util.readonly_class_property
+    def least_element(cls) -> RootedPlaneTree:
+        return cls.is_strictly_less_than_relation.least_element
+
     def represent_as_anonymous_function(self) -> str:
         output: str = "★"
         if not self.is_leaf:
@@ -549,3 +566,5 @@ r"""A `TupleTree` is a tree of tuples whose leafs are empty empty tuples.
 It allows to express RootedPlaneTree using python tuple syntax, e.g.: ( (), (), ( (), (), ), )
 
 """
+
+RPT = RootedPlaneTree  # An alias for RootedPlaneTree.

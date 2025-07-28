@@ -257,3 +257,7 @@ class TestRootedPlaneTree:
             assert n2 == n
             n3 = pu.dwl.lexicographic_order.rank(d1)
             assert n3 == n2
+
+    def test_least_element(self):
+        assert pu.rptl.DyckWordLexicographicOrder.least_element == pu.rptl.RPT()
+        assert pu.rptl.RPT.least_element == pu.rptl.RPT()

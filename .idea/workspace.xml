@@ -6,10 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="least_element">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/dyck_word_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/dyck_word_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_dyck_word.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_dyck_word.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,6 +249,7 @@
     "Python tests.pytest for test_connector_sequence.TestConnectorSequence.test_connector_sequence.executor": "Run",
     "Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word.executor": "Run",
     "Python tests.pytest for test_dyck_word.TestDyckWord.test_dyck_word_trivial.executor": "Run",
+    "Python tests.pytest for test_dyck_word.TestDyckWord.test_least_element.executor": "Run",
     "Python tests.pytest for test_erratic_dyck_path.TestErraticDyckPath.executor": "Run",
     "Python tests.pytest for test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for test_formal_language.TestConnector.test_connector.executor": "Run",
@@ -1100,14 +1101,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01545" summary="order-relations">
-      <option name="closed" value="true" />
-      <created>1752592713412</created>
-      <option name="number" value="01545" />
-      <option name="presentableId" value="LOCAL-01545" />
-      <option name="project" value="LOCAL" />
-      <updated>1752592713412</updated>
-    </task>
     <task id="LOCAL-01546" summary="order-relations">
       <option name="closed" value="true" />
       <created>1752613842042</created>
@@ -1492,7 +1485,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753684458216</updated>
     </task>
-    <option name="localTasksCounter" value="1594" />
+    <task id="LOCAL-01594" summary="least_element">
+      <option name="closed" value="true" />
+      <created>1753687260163</created>
+      <option name="number" value="01594" />
+      <option name="presentableId" value="LOCAL-01594" />
+      <option name="project" value="LOCAL" />
+      <updated>1753687260163</updated>
+    </task>
+    <option name="localTasksCounter" value="1595" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1680,6 +1681,11 @@
           <url>file://$PROJECT_DIR$/tests/test_rooted_plane_tree.py</url>
           <line>117</line>
           <option name="timeStamp" value="432" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="436" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

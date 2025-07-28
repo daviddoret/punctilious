@@ -21,15 +21,6 @@ class IsEqualTo(brl.BinaryRelation):
 
     """
 
-    # mathematical properties
-    _is_asymmetric: bool | None = False
-    _is_connected: bool | None = False
-    _is_irreflexive: bool | None = False
-    _is_reflexive: bool | None = True
-    _is_strongly_connected: bool | None = False
-    _is_symmetric: bool | None = True
-    _is_transitive: bool | None = True
-
     @util.readonly_class_property
     def is_antisymmetric(cls) -> tbl.TernaryBoolean:
         r"""
