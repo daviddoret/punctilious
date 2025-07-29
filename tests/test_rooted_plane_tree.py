@@ -232,7 +232,7 @@ class TestRootedPlaneTree:
             if current_tree.size > current_tree_size:
                 # Everytime we move to a new size, the number of trees in the precedent size group
                 # must be equal to the corresponding Catalan number.
-                assert current_size_counter == pu.catalan_number_library.get_catalan_number(expected_catalan_number)
+                assert current_size_counter == pu.rptl.count_rooted_plane_trees_of_size_x(expected_catalan_number)
                 size_statistics.append(f"INCREASE: size={current_tree_size}, counter={current_size_counter}")
                 # size increase
                 expected_catalan_number += 1

@@ -12,7 +12,24 @@ import punctilious.util as util
 import punctilious.binary_relation_library as brl
 import punctilious.dyck_word_library as dwl
 import punctilious.ternary_boolean_library as tbl
+import punctilious.catalan_number_library as cnl
 
+
+# General functions
+
+def count_rooted_plane_trees_of_size_x(n: int) -> int:
+    """Returns the number of distinct rooted plane trees whose size (aka number of nodes) equals `x`.
+
+    :param n: The size (aka number of nodes) of the trees.
+    :return: The number of distinct trees.
+    """
+    n = int(n)
+    if n < 0:
+        raise util.PunctiliousException("")
+    return cnl.get_catalan_number(n=n)
+
+
+# Binary relation classes
 
 class DyckWordLexicographicOrder(brl.BinaryRelation):
     r"""The Dyck word lexicographic relation order of rooted plane trees.

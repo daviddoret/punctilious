@@ -33,7 +33,7 @@ def count_labeled_trees_of_size_exactly_x_and_label_max_value_y(tree_size: int, 
     if label_max_value < 0:
         raise util.PunctiliousException("`label_max_value` < 0", tree_size=tree_size,
                                         label_max_value=label_max_value)
-    number_of_trees_of_size_n: int = cnl.get_catalan_number(tree_size)
+    number_of_trees_of_size_n: int = rptl.count_rooted_plane_trees_of_size_x(tree_size)
     number_of_labelled_trees: int = number_of_trees_of_size_n ** (label_max_value + 1)
     return number_of_labelled_trees
 

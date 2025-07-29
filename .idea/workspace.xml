@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="least_element">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="labeled rooted plane trees">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/catalan_number_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/catalan_number_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1123,14 +1123,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01552" summary="godel_number_encoding_order">
-      <option name="closed" value="true" />
-      <created>1753126312680</created>
-      <option name="number" value="01552" />
-      <option name="presentableId" value="LOCAL-01552" />
-      <option name="project" value="LOCAL" />
-      <updated>1753126312680</updated>
-    </task>
     <task id="LOCAL-01553" summary="dyck-words">
       <option name="closed" value="true" />
       <created>1753126576524</created>
@@ -1515,7 +1507,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753725182757</updated>
     </task>
-    <option name="localTasksCounter" value="1601" />
+    <task id="LOCAL-01601" summary="labeled rooted plane trees">
+      <option name="closed" value="true" />
+      <created>1753771119246</created>
+      <option name="number" value="01601" />
+      <option name="presentableId" value="LOCAL-01601" />
+      <option name="project" value="LOCAL" />
+      <updated>1753771119247</updated>
+    </task>
+    <option name="localTasksCounter" value="1602" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1568,7 +1568,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="__lt__" />
     <MESSAGE value="clean-up" />
     <MESSAGE value="NaturalNumberSequence.is_increasing etc." />
     <MESSAGE value="is_strictly_increasing" />
@@ -1593,7 +1592,8 @@
     <MESSAGE value="cleanup natural-number-0" />
     <MESSAGE value="cleanup" />
     <MESSAGE value="least_element" />
-    <option name="LAST_COMMIT_MESSAGE" value="least_element" />
+    <MESSAGE value="labeled rooted plane trees" />
+    <option name="LAST_COMMIT_MESSAGE" value="labeled rooted plane trees" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
