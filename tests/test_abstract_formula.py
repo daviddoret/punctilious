@@ -356,7 +356,7 @@ class TestAbstractFormula:
         for i in range(0, 2048):
             phi: pu.afl.AbstractFormula
             if i == 0:
-                phi = pu.afl.IsStrictlyLessThan.least_element
+                phi = pu.afl.SuperRecursiveOrder.least_element
 
     def test_is_increasing(self, af1, af1b, af2a, af2b, af3a, af6a, af12a, af_big):
         assert af1.is_increasing
@@ -402,7 +402,14 @@ class TestAbstractFormula:
 
     def test_least_element(self):
         trivial_formula = pu.afl.AF(t=pu.rptl.trivial_rooted_plane_tree, s=pu.nn0sl.NaturalNumber0Sequence(0))
-        assert pu.afl.IsStrictlyLessThan.least_element == trivial_formula
+        assert pu.afl.SuperRecursiveOrder.least_element == trivial_formula
         assert pu.afl.AbstractFormula.least_element == trivial_formula
         assert pu.afl.empty_formula == trivial_formula
         assert pu.afl.trivial_formula == trivial_formula
+
+    def test_super_recursive_order(self):
+        l = []
+        for i in range(0, 32):
+            x = pu.afl.SuperRecursiveOrder.get_group_size(i)
+            l.append(x)
+        pass

@@ -3,7 +3,7 @@ import functools
 import punctilious.util as util
 
 
-@functools.lru_cache(maxsize=None)
+@functools.lru_cache(maxsize=2048)
 def get_catalan_number(n: int) -> int:
     r"""Returns the `n`-th Catalan number with `n` index starting at 0.
 

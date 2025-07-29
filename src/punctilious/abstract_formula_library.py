@@ -2,6 +2,7 @@ from __future__ import annotations
 import typing
 import collections
 # import itertools
+import math
 
 # package modules
 import punctilious.util as util
@@ -10,7 +11,51 @@ import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_pair_library as nn0pl
 import punctilious.ternary_boolean_library as tbl
+import punctilious.catalan_number_library as cnl
 
+
+# General functions
+
+
+def count_labeled_trees_of_size_exactly_x_and_label_max_value_y(tree_size: int, label_max_value: int) -> int:
+    """Returns the number of labeled rooted plane trees
+    whose size (number of nodes) is exactly equal to `x`,
+    and whose labels are (0-based) natural numbers with maximal value equal to `y`.
+
+    :param tree_size: The size of the tree (aka number of nodes).
+    :param label_max_value: The maximal value of labels.
+    :return: The number of labeled rooted plane trees.
+    """
+    tree_size: int = int(tree_size)
+    label_max_value: int = int(label_max_value)
+    if tree_size < 1:
+        raise util.PunctiliousException("`tree_size` < 1", tree_size=tree_size, label_max_value=label_max_value)
+    if label_max_value < 0:
+        raise util.PunctiliousException("`label_max_value` < 0", tree_size=tree_size,
+                                        label_max_value=label_max_value)
+    number_of_trees_of_size_n: int = cnl.get_catalan_number(tree_size)
+    number_of_labelled_trees: int = number_of_trees_of_size_n ** (label_max_value + 1)
+    return number_of_labelled_trees
+
+
+def count_labeled_trees_of_size_up_to_x_and_label_max_value_y(tree_size: int,
+                                                              label_max_value: int) -> int:
+    tree_size: int = int(tree_size)
+    label_max_value: int = int(label_max_value)
+    if tree_size < 1:
+        raise util.PunctiliousException("`tree_size` < 1", tree_size=tree_size, label_max_value=label_max_value)
+    if label_max_value < 0:
+        raise util.PunctiliousException("`label_max_value` < 0", tree_size=tree_size,
+                                        label_max_value=label_max_value)
+    number_of_labelled_trees: int = 0
+    for tree_size_iteration in range(1, tree_size + 1):
+        number_of_labelled_trees += count_labeled_trees_of_size_exactly_x_and_label_max_value_y(
+            tree_size_iteration, label_max_value
+        )
+    return number_of_labelled_trees
+
+
+# Binary relation classes
 
 class IsEqualTo(brl.BinaryRelation):
     r"""The abstract formulas equipped with the standard equality order relation.
@@ -47,7 +92,7 @@ class IsEqualTo(brl.BinaryRelation):
         return x.is_canonical_abstract_formula_equivalent_to(y)
 
 
-class IsStrictlyLessThan(brl.BinaryRelation):
+class SuperRecursiveOrder(brl.BinaryRelation):
     r"""The abstract formulas equipped with the standard strictly less-than order relation.
 
     Mathematical definition
@@ -56,6 +101,20 @@ class IsStrictlyLessThan(brl.BinaryRelation):
     :math:`( \mathbb{F}_0, < )`.
 
     """
+
+    @classmethod
+    def get_group_size(cls, n: int) -> int:
+        """
+
+        A group is the set of subtrees of up to size n + 1,
+        whose labels have max value n.
+
+        :param n:
+        :return:
+        """
+        tree_size = n + 1
+        label_max_value = n
+        return count_labeled_trees_of_size_up_to_x_and_label_max_value_y(tree_size, label_max_value)
 
     @util.readonly_class_property
     def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
@@ -413,7 +472,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return IsStrictlyLessThan
+        return SuperRecursiveOrder
 
     @util.readonly_class_property
     def least_element(cls) -> AbstractFormula:
@@ -1150,3 +1209,4 @@ FlexibleAbstractFormula = typing.Union[
 AF = AbstractFormula  # An alias for AbstractFormula
 empty_formula: AbstractFormula = AbstractFormula.least_element
 trivial_formula: AbstractFormula = AbstractFormula.least_element
+super_recursive_order = SuperRecursiveOrder
