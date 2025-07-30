@@ -2,7 +2,6 @@ from __future__ import annotations
 import typing
 import collections
 # import itertools
-import math
 
 # package modules
 import punctilious.util as util
@@ -11,20 +10,19 @@ import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_pair_library as nn0pl
 import punctilious.ternary_boolean_library as tbl
-import punctilious.catalan_number_library as cnl
 
 
 # General functions
 
 
 def count_labeled_trees_of_size_exactly_x_and_label_max_value_y(tree_size: int, label_max_value: int) -> int:
-    """Returns the number of labeled rooted plane trees
+    r"""Returns the number of distinct labeled rooted plane trees
     whose size (number of nodes) is exactly equal to `x`,
     and whose labels are (0-based) natural numbers with maximal value equal to `y`.
 
     :param tree_size: The size of the tree (aka number of nodes).
     :param label_max_value: The maximal value of labels.
-    :return: The number of labeled rooted plane trees.
+    :return: The number of distinct labeled rooted plane trees.
     """
     tree_size: int = int(tree_size)
     label_max_value: int = int(label_max_value)
@@ -40,6 +38,14 @@ def count_labeled_trees_of_size_exactly_x_and_label_max_value_y(tree_size: int, 
 
 def count_labeled_trees_of_size_up_to_x_and_label_max_value_y(tree_size: int,
                                                               label_max_value: int) -> int:
+    r"""Returns the number of distinct labeled rooted plane trees
+    whose size (number of nodes) is less than or equal to `x`,
+    and whose labels are (0-based) natural numbers with maximal value equal to `y`.
+
+    :param tree_size: The size of the tree (aka number of nodes).
+    :param label_max_value: The maximal value of labels.
+    :return: The number of distinct labeled rooted plane trees.
+    """
     tree_size: int = int(tree_size)
     label_max_value: int = int(label_max_value)
     if tree_size < 1:
