@@ -98,7 +98,7 @@ class IsEqualTo(brl.BinaryRelation):
         return x.is_canonical_abstract_formula_equivalent_to(y)
 
 
-class SuperRecursiveOrder(brl.BinaryRelation):
+class RecursiveSequenceOrder(brl.BinaryRelation):
     r"""The abstract formulas equipped with the standard strictly less-than order relation.
 
     Mathematical definition
@@ -107,20 +107,6 @@ class SuperRecursiveOrder(brl.BinaryRelation):
     :math:`( \mathbb{F}_0, < )`.
 
     """
-
-    @classmethod
-    def get_group_size(cls, n: int) -> int:
-        """
-
-        A group is the set of subtrees of up to size n + 1,
-        whose labels have max value n.
-
-        :param n:
-        :return:
-        """
-        tree_size = n + 1
-        label_max_value = n
-        return count_labeled_trees_of_size_up_to_x_and_label_max_value_y(tree_size, label_max_value)
 
     @util.readonly_class_property
     def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
@@ -136,6 +122,10 @@ class SuperRecursiveOrder(brl.BinaryRelation):
 
     @util.readonly_class_property
     def least_element(cls) -> AbstractFormula:
+        """By design, we choose 0() as the least element.
+
+        :return:
+        """
         return AbstractFormula(
             t=rptl.RootedPlaneTree.least_element,
             s=nn0sl.NaturalNumber0Sequence(0)
@@ -149,12 +139,13 @@ class SuperRecursiveOrder(brl.BinaryRelation):
         :return: An integer.
         """
         x: AbstractFormula = AbstractFormula.from_any(x)
-        n1: int = x.rooted_plane_tree.rank()
-        n2: int = nn0sl.LengthFirstLexicographicSecondOrder.rank(x.natural_number_sequence)
-        n2 -= 1  # "-1" because of the exclusion of the empty sequence.
-        p: nn0pl.NaturalNumber0Pair = nn0pl.NaturalNumber0Pair(n1, n2)
-        n3: int = p.rank()
-        return n3
+        # build a finite sequence of (0-based) natural numbers S = s0, s1, ..., sn,
+        # such that s0 is the root label,
+        # and s1, ..., sn are the recursive ranks of its sub-formulas.
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.main_element)
+        for subtree in x.iterate_immediate_sub_formulas():
+            s = s.concatenate_with(cls.rank(subtree))
+        return s.rank()
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
@@ -193,14 +184,19 @@ class SuperRecursiveOrder(brl.BinaryRelation):
         n = int(n)
         if n < 0:
             raise util.PunctiliousException("`n` must be a positive integer.", n=n)
-        p = nn0pl.cantor_pairing_order.unrank(n)
-        n1 = p.x
-        n2 = p.y
-        n2 += 1  # "+ 1" because of the exclusion of the empty sequence.
-        t = rptl.RootedPlaneTree.from_rank(n1)
-        s = nn0sl.NaturalNumber0Sequence.from_rank(n2)
-        f = AbstractFormula(t=t, s=s)
-        return f
+        # unrank the (0-based) natural sequence that is encoded in the rank.
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.unrank(n)
+        if s == nn0sl.NaturalNumber0Sequence():
+            return cls.least_element
+        else:
+            main_element: int = s[0]
+            subtrees = []
+            for i, m in enumerate(s, 1):
+                subtree = cls.unrank(m)
+                subtrees.append(subtree)
+            t: AbstractFormula = AbstractFormula.from_immediate_sub_formulas(n=main_element,
+                                                                             s=subtrees)
+        return t
 
 
 # Classes
@@ -478,7 +474,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return SuperRecursiveOrder
+        return RecursiveSequenceOrder
 
     @util.readonly_class_property
     def least_element(cls) -> AbstractFormula:
@@ -1215,4 +1211,4 @@ FlexibleAbstractFormula = typing.Union[
 AF = AbstractFormula  # An alias for AbstractFormula
 empty_formula: AbstractFormula = AbstractFormula.least_element
 trivial_formula: AbstractFormula = AbstractFormula.least_element
-super_recursive_order = SuperRecursiveOrder
+super_recursive_order = RecursiveSequenceOrder

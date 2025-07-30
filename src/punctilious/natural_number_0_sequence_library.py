@@ -591,6 +591,10 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
             cls._cache[hash_value] = o
             return o
 
+    def concatenate_with(self, x) -> NaturalNumber0Sequence:
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        return concatenate_natural_number_0_sequences(self, x, )
+
     @util.readonly_class_property
     def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
         return IsEqualTo

@@ -184,3 +184,7 @@ class TestNaturalNumbersSequence:
         assert pu.nn0sl.NaturalNumber0Sequence.least_element == pu.nn0sl.NN0S()
         assert pu.nn0sl.empty_sequence == pu.nn0sl.NN0S()
         assert pu.nn0sl.trivial_sequence == pu.nn0sl.NN0S()
+
+    def test_concatenate_with(self):
+        assert pu.nn0sl.NaturalNumber0Sequence(0, 1, 2).concatenate_with(
+            pu.nn0sl.NaturalNumber0Sequence(3, 4, 5)) == pu.nn0sl.NaturalNumber0Sequence(0, 1, 2, 3, 4, 5)
