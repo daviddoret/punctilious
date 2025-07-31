@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="clean up in prime_number_library. bug correction caused by implicit conversion to float.">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="troubleshooting successor of labelled trees">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/prime_number_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/prime_number_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -344,6 +344,8 @@
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_2.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_3.executor": "Run",
+    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor.executor": "Run",
+    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_canonical_order.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_constructor.executor": "Run",
     "Python tests.pytest for test_natural_number_1.TestNaturalNumber1.test_is_strictly_greater_than.executor": "Run",
@@ -729,7 +731,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_super_recursive_order">
+  <component name="RunManager" selected="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1016,7 +1018,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_3" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1029,7 +1031,24 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_3&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1051,23 +1070,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_prime_number.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_prime_number.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -1082,19 +1084,19 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_super_recursive_order" />
       <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_2" />
-      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_3" />
-      <item itemvalue="Python tests.pytest in test_prime_number.py" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency" />
+        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_super_recursive_order" />
         <item itemvalue="Python.generate_abstract_formula_list" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_2" />
-        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_3" />
-        <item itemvalue="Python tests.pytest in test_prime_number.py" />
       </list>
     </recent_temporary>
   </component>
@@ -1116,14 +1118,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01557" summary="nn0s: refined-godel-number-order">
-      <option name="closed" value="true" />
-      <created>1753158581656</created>
-      <option name="number" value="01557" />
-      <option name="presentableId" value="LOCAL-01557" />
-      <option name="project" value="LOCAL" />
-      <updated>1753158581656</updated>
     </task>
     <task id="LOCAL-01558" summary="nn0s: refined-godel-number-order">
       <option name="closed" value="true" />
@@ -1509,7 +1503,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753952522886</updated>
     </task>
-    <option name="localTasksCounter" value="1606" />
+    <task id="LOCAL-01606" summary="troubleshooting successor of labelled trees">
+      <option name="closed" value="true" />
+      <created>1753954631548</created>
+      <option name="number" value="01606" />
+      <option name="presentableId" value="LOCAL-01606" />
+      <option name="project" value="LOCAL" />
+      <updated>1753954631582</updated>
+    </task>
+    <option name="localTasksCounter" value="1607" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1562,7 +1564,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="NaturalNumberSequence.is_increasing etc." />
     <MESSAGE value="is_strictly_increasing" />
     <MESSAGE value="clean up" />
     <MESSAGE value="abstract-map" />
@@ -1587,7 +1588,8 @@
     <MESSAGE value="least_element" />
     <MESSAGE value="labeled rooted plane trees" />
     <MESSAGE value="clean up in prime_number_library. bug correction caused by implicit conversion to float." />
-    <option name="LAST_COMMIT_MESSAGE" value="clean up in prime_number_library. bug correction caused by implicit conversion to float." />
+    <MESSAGE value="troubleshooting successor of labelled trees" />
+    <option name="LAST_COMMIT_MESSAGE" value="troubleshooting successor of labelled trees" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1705,8 +1707,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>430</line>
+          <line>435</line>
           <option name="timeStamp" value="462" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
+          <line>429</line>
+          <option name="timeStamp" value="464" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
+          <line>428</line>
+          <option name="timeStamp" value="465" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
+          <line>427</line>
+          <option name="timeStamp" value="466" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

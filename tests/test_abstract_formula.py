@@ -422,10 +422,15 @@ class TestAbstractFormula:
         # for i in range(0, 1024):
         #    t = pu.afl.AbstractFormula.unrank(i)
         #    l.append(t)
-        phi0 = pu.afl.AbstractFormula.unrank(0)
-        phi1 = pu.afl.AbstractFormula.unrank(1)
-        phi1b = phi0.successor()
-        assert phi1 == phi1b
-        phi2 = pu.afl.AbstractFormula.unrank(2)
-        phi3 = pu.afl.AbstractFormula.unrank(3)
+        t0a = pu.afl.AbstractFormula.least_element
+        t0b = pu.afl.AbstractFormula.unrank(0)
+        assert t0a == t0b
+        r = t0a.rank()
+        assert t0a.rank() == 0
+        t1a = t0a.successor()
+        t1b = pu.afl.AbstractFormula.unrank(1)
+        assert t1a == t1b
+        t2a = t1a.successor()
+        t2b = pu.afl.AbstractFormula.unrank(2)
+        assert t2a == t2b
         pass

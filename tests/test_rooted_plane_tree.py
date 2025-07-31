@@ -263,3 +263,13 @@ class TestRootedPlaneTree:
         assert pu.rptl.RPT.least_element == pu.rptl.RPT()
         assert pu.rptl.empty_rooted_plane_tree == pu.rptl.RPT()
         assert pu.rptl.trivial_rooted_plane_tree == pu.rptl.RPT()
+
+    def test_successor_unrank_consistency(self):
+        for i in range(1024):
+            t: pu.rptl.RootedPlaneTree
+            if i == 0:
+                t = pu.rptl.RootedPlaneTree.least_element
+            else:
+                t = t.successor()
+            t2 = pu.rptl.RootedPlaneTree.unrank(i)
+            assert t == t2
