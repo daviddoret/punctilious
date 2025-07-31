@@ -733,7 +733,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking">
+  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1089,8 +1089,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency" />
+        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_successor_unrank_consistency" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with" />
