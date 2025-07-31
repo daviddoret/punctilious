@@ -222,3 +222,9 @@ class TestNaturalNumbersSequence:
     def test_concatenate_with(self):
         assert pu.nn0sl.NaturalNumber0Sequence(0, 1, 2).concatenate_with(
             pu.nn0sl.NaturalNumber0Sequence(3, 4, 5)) == pu.nn0sl.NaturalNumber0Sequence(0, 1, 2, 3, 4, 5)
+        assert pu.nn0sl.NaturalNumber0Sequence(7, 8, 15).concatenate_with(
+            pu.nn0sl.NaturalNumber0Sequence(5)) == pu.nn0sl.NaturalNumber0Sequence(7, 8, 15, 5)
+        assert pu.nn0sl.NaturalNumber0Sequence(7, 8, 15).concatenate_with(
+            pu.nn0sl.NaturalNumber0Sequence()) == pu.nn0sl.NaturalNumber0Sequence(7, 8, 15)
+        assert pu.nn0sl.NaturalNumber0Sequence().concatenate_with(
+            pu.nn0sl.NaturalNumber0Sequence(7, 8, 15)) == pu.nn0sl.NaturalNumber0Sequence(7, 8, 15)

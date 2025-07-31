@@ -407,6 +407,16 @@ class TestAbstractFormula:
         assert pu.afl.empty_formula == trivial_formula
         assert pu.afl.trivial_formula == trivial_formula
 
+    def test_successor_unrank_consistency(self):
+        for i in range(1024):
+            t: pu.afl.AbstractFormula
+            if i == 0:
+                t = pu.afl.AbstractFormula.least_element
+            else:
+                t = t.successor()
+            t2 = pu.afl.AbstractFormula.unrank(i)
+            assert t == t2
+
     def test_super_recursive_order(self):
         # s = (2, 2436, 2322, 4370)
         # s = pu.nn0sl.NaturalNumber0Sequence(*s)
