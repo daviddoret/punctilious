@@ -218,6 +218,7 @@ class TestNaturalNumbersSequence:
                 s = s.successor()
             s2 = pu.nn0sl.NaturalNumber0Sequence.unrank(i)
             assert s == s2
+            assert s.rank() == i
 
     def test_concatenate_with(self):
         assert pu.nn0sl.NaturalNumber0Sequence(0, 1, 2).concatenate_with(

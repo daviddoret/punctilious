@@ -273,3 +273,4 @@ class TestRootedPlaneTree:
                 t = t.successor()
             t2 = pu.rptl.RootedPlaneTree.unrank(i)
             assert t == t2
+            assert t.rank() == i

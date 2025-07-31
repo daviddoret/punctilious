@@ -140,12 +140,16 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         """
         x: AbstractFormula = AbstractFormula.from_any(x)
         # build a finite sequence of (0-based) natural numbers S = s0, s1, ..., sn,
-        # such that s0 is the root label,
+        # such that s0 is `x`'s main element,
         # and s1, ..., sn are the recursive ranks of its sub-formulas.
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.main_element)
         for subtree in x.iterate_immediate_sub_formulas():
-            s = s.concatenate_with(cls.rank(subtree))
-        return s.rank()
+            subtree_rank: int = cls.rank(subtree)
+            t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)
+            s: nn0sl.NaturalNumber0Sequence = s.concatenate_with(t)
+        raw_rank: int = s.rank()  # Retrieve the canonical rank of the sequence.
+        r: int = raw_rank - 1  # "- 1" because the empty sequence is not encoded.
+        return r
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:

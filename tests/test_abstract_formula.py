@@ -407,6 +407,12 @@ class TestAbstractFormula:
         assert pu.afl.empty_formula == trivial_formula
         assert pu.afl.trivial_formula == trivial_formula
 
+    def test_ranking(self):
+        t0 = pu.afl.AbstractFormula.least_element
+        assert t0.rank() == 0
+        t1 = pu.afl.AbstractFormula.from_immediate_sub_formulas(n=0, s=(t0,))
+        assert t1.rank() == 1
+
     def test_successor_unrank_consistency(self):
         for i in range(1024):
             t: pu.afl.AbstractFormula
@@ -416,6 +422,7 @@ class TestAbstractFormula:
                 t = t.successor()
             t2 = pu.afl.AbstractFormula.unrank(i)
             assert t == t2
+            assert t.rank() == i
 
     def test_super_recursive_order(self):
         # s = (2, 2436, 2322, 4370)
