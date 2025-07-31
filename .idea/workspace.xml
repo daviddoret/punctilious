@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="troubleshooting successor of labelled trees">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +135,7 @@
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_represent_as_function.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_substitute_sub_formulas.executor": "Debug",
-    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency.executor": "Run",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency.executor": "Debug",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_super_recursive_order.executor": "Debug",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_tree_size.executor": "Run",
     "Python tests.pytest for test_abstract_structures.TestAbstractStructures.test_abstract_map.executor": "Run",
@@ -735,7 +731,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking">
+  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1091,8 +1087,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency" />
+        <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_successor_unrank_consistency" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with" />
@@ -1117,14 +1113,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01560" summary="nn0 pair">
-      <option name="closed" value="true" />
-      <created>1753206449701</created>
-      <option name="number" value="01560" />
-      <option name="presentableId" value="LOCAL-01560" />
-      <option name="project" value="LOCAL" />
-      <updated>1753206449701</updated>
     </task>
     <task id="LOCAL-01561" summary="nn0 pair">
       <option name="closed" value="true" />
@@ -1510,7 +1498,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753956005008</updated>
     </task>
-    <option name="localTasksCounter" value="1609" />
+    <task id="LOCAL-01609" summary="troubleshooting successor of labelled trees">
+      <option name="closed" value="true" />
+      <created>1753957080963</created>
+      <option name="number" value="01609" />
+      <option name="presentableId" value="LOCAL-01609" />
+      <option name="project" value="LOCAL" />
+      <updated>1753957080963</updated>
+    </task>
+    <option name="localTasksCounter" value="1610" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1706,22 +1702,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>452</line>
+          <line>453</line>
           <option name="timeStamp" value="462" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>446</line>
+          <line>447</line>
           <option name="timeStamp" value="464" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>445</line>
+          <line>446</line>
           <option name="timeStamp" value="465" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>444</line>
+          <line>445</line>
           <option name="timeStamp" value="466" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1731,8 +1727,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>412</line>
-          <option name="timeStamp" value="468" />
+          <line>416</line>
+          <option name="timeStamp" value="469" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

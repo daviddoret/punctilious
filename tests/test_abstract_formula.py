@@ -422,7 +422,8 @@ class TestAbstractFormula:
                 t = t.successor()
             t2 = pu.afl.AbstractFormula.unrank(i)
             assert t == t2
-            assert t.rank() == i
+            r = t.rank()
+            assert r == i
 
     def test_super_recursive_order(self):
         # s = (2, 2436, 2322, 4370)
