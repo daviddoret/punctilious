@@ -1,7 +1,9 @@
 # https://oeis.org/A000040
+from functools import lru_cache
 import punctilious.util as util
 
 
+@lru_cache(maxsize=None, typed=False)  # Unlimited cache size
 def factorize(n: int) -> tuple[int, ...]:
     r"""Returns the prime factors :math:`(p_0, p_1, p_2, \ldots, p_m)` of n, such that :math:`2^{p_0} \cdot 3^{p_1} \cdot 5^{p_2} \cdot \ldots = n`.
 
@@ -28,6 +30,7 @@ def factorize(n: int) -> tuple[int, ...]:
             return l
 
 
+@lru_cache(maxsize=None, typed=False)  # Unlimited cache size
 def is_prime(n: int):
     r"""Returns `True` if `n` is prime, `False` otherwise.
 
@@ -53,6 +56,7 @@ def is_prime(n: int):
         return True
 
 
+@lru_cache(maxsize=None, typed=False)  # Unlimited cache size
 def get_next_prime(n: int) -> int:
     r"""Returns the first prime number p such that p > n.
 

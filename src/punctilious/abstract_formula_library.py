@@ -185,7 +185,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         if n < 0:
             raise util.PunctiliousException("`n` must be a positive integer.", n=n)
         # unrank the (0-based) natural sequence that is encoded in the rank.
-        s: nn0sl.NaturalNumber0Sequence = nn0sl.SumFirstLexicographicSecondOrder.unrank(n)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.RefinedGodelNumberOrder.unrank(n)
         if s == nn0sl.NaturalNumber0Sequence():
             # the empty sequence is mapped to the least element.
             return cls.least_element
@@ -300,6 +300,21 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         else:
             raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
 
+    @classmethod
+    def abstract_map_from_preimage_and_image(
+            cls,
+            n: int,
+            p: FlexibleAbstractFormula,
+            i: FlexibleAbstractFormula) -> AbstractFormula:
+        r"""Declares a new abstract-map.
+
+        :param n: The main-element of the abstract-map.
+        :param p: The preimage of the abstract-map.
+        :param i: The image of the abstract-map.
+        :return: The resulting abstract-map.
+        """
+        return AbstractFormula.from_immediate_sub_formulas(n=n, s=(p, i,))
+
     @property
     def abstract_map_preimage_sequence(self) -> AbstractFormula:
         r"""If this abstract-formula is an abstract-map, returns its preimage sequence.
@@ -325,176 +340,6 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             return self.immediate_sub_formulas[1]
         else:
             raise util.PunctiliousException("This abstract-formula is not an abstract-map.")
-
-    def derive_abstract_inference_rule(self, p: FlexibleAbstractFormula) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-inference-rule, derives a theorem
-        from the finite (computable) sequence of premises `p`.
-
-        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
-
-        :param p: a finite (computable) sequence of premises, in the order expected by the inference-rule.
-        :return: the theorem derived from this abstract-inference-rule, given premises `p`.
-        """
-        p: AbstractFormula = AbstractFormula.from_any(p)
-        if self.is_abstract_inference_rule:
-            if p.arity != self.abstract_inference_rule_premises.arity:
-                raise util.PunctiliousException("The number of input premises is not equal to the number"
-                                                " of premises expected by the inference-rule.",
-                                                input_premises=p,
-                                                expected_premises=self.abstract_inference_rule_premises,
-                                                inference_rule=self)
-            v: dict[AbstractFormula, AbstractFormula | None]  # A mapping for variable values
-
-            i: AbstractFormula  # An input premise
-            e: AbstractFormula  # An expected premise
-            for i, e in zip(p.iterate_immediate_sub_formulas(), self.abstract_inference_rule_premises):
-                ok, v = _compute_abstract_inference_rule_variables(v, i, e)
-                if not ok:
-                    pass
-                else:
-                    pass
-
-
-
-
-
-
-        # TODO: IMPLEMENT INFERENCE-RULE LOGIC
-        else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
-
-    def get_abstract_map_value(self, phi: FlexibleAbstractFormula) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-map, returns the image `phi` under this map.
-
-        See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
-
-        :param phi: a preimage element.
-        :return: the image of `phi` under this map.
-        """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
-        if self.is_abstract_map:
-            i: int = self.abstract_map_preimage_sequence.get_immediate_subformula_index(phi)
-            return self.abstract_map_image_sequence.immediate_sub_formulas[i]
-        else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-map.")
-
-    @property
-    def is_abstract_map(self) -> bool:
-        r"""Returns `True` if this abstract-formula is an abstract-map, `False` otherwise.
-
-        Intuitive definition: abstract-map
-        ______________________________________
-
-        Intuitively, an abstract-map is an abstract-formula that is structurally
-         equivalent to a finite map.
-
-        Formal definition: abstract-map
-        _________________________________
-
-        A finite (computable) abstract-map :math:`M` is a tuple :math:`(P, I)` where:
-
-        - :math:`P` is a finite sequence of unique elements denoted as the preimage,
-        - :math:`I` is a finite sequence of unique elements denoted as the image,
-        - :math:`|P| = |I|`.
-
-        Formal definition: abstract-map
-        ___________________________________
-
-        An abstract-formula is an abstract-map if and only if:
-
-        - its arity equals 2,
-        - the arity of its first immediate subformula equals the arity of its second immediate subformula,
-        - the immediate subformulas of its first immediate subformula are unique.
-
-        Note
-        _____
-
-        The following properties and methods are available when an abstract-formula is an abstract-map:
-
-        - :attr:`AbstractFormula.abstract_map_preimage`
-        - :attr:`AbstractFormula.abstract_map_image`
-        - :meth:`AbstractFormula.get_abstract_map_value`
-
-        :return: `True` if this abstract-formula is an abstract-map, `False` otherwise.
-
-        """
-        if self._is_abstract_map is None:
-            self._is_abstract_map = \
-                self.arity == 2 and \
-                self.immediate_sub_formulas[0].arity == self.immediate_sub_formulas[1].arity and \
-                self.immediate_sub_formulas[0].immediate_subformulas_are_unique
-        return self._is_abstract_map
-
-    @property
-    def is_abstract_inference_rule(self) -> bool:
-        r"""Returns `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
-
-        Intuitive definition: abstract-inference-rule
-        ___________________________________________________
-
-        Intuitively, an abstract-inference-rule is an abstract-formula that is structurally
-         equivalent to an inference rule.
-
-        Formal definition: abstract-inference-rule
-        ______________________________________________
-
-        An abstract-inference-rule :math:`I` is a tuple :math:`(V, P, C)` where:
-
-        - :math:`V` is a finite sequence of unique elements denoted as the variables,
-        - :math:`P` is a finite sequence of unique elements denoted as the premises,
-        - :math:`C` is denoted as the conclusion.
-
-        Formal definition: abstract-inference-rule
-        _______________________________________________
-
-        An abstract-formula is an abstract-inference-rule if and only if:
-
-         - its arity equals 3.
-
-        Note
-        _____
-
-        The following complementary properties and methods are available when an abstract-formula is an abstract-map:
-
-        - :attr:`abstract_inference_rule_variables`
-        - :attr:`abstract_inference_rule_premises`
-        - :attr:`abstract_inference_rule_conclusion`
-        - :meth:`derive_abstract_inference_rule`
-
-        :return: `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
-
-        """
-        if self._is_abstract_inference_rule is None:
-            self._is_abstract_inference_rule = \
-                self.arity == 3
-        return self._is_abstract_inference_rule
-
-    @util.readonly_class_property
-    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return IsEqualTo
-
-    @util.readonly_class_property
-    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return RecursiveSequenceOrder
-
-    @util.readonly_class_property
-    def least_element(cls) -> AbstractFormula:
-        return cls.is_strictly_less_than_relation.least_element
-
-    @classmethod
-    def abstract_map_from_preimage_and_image(
-            cls,
-            n: int,
-            p: FlexibleAbstractFormula,
-            i: FlexibleAbstractFormula) -> AbstractFormula:
-        r"""Declares a new abstract-map.
-
-        :param n: The main-element of the abstract-map.
-        :param p: The preimage of the abstract-map.
-        :param i: The image of the abstract-map.
-        :return: The resulting abstract-map.
-        """
-        return AbstractFormula.from_immediate_sub_formulas(n=n, s=(p, i,))
 
     @property
     def arity(self) -> int:
@@ -526,6 +371,37 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
                 t=self.rooted_plane_tree,
                 s=self.natural_number_sequence.to_restricted_growth_function_sequence)
             return self._canonical_abstract_formula
+
+    def derive_abstract_inference_rule(self, p: FlexibleAbstractFormula) -> AbstractFormula:
+        r"""If this abstract-formula is an abstract-inference-rule, derives a theorem
+        from the finite (computable) sequence of premises `p`.
+
+        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
+
+        :param p: a finite (computable) sequence of premises, in the order expected by the inference-rule.
+        :return: the theorem derived from this abstract-inference-rule, given premises `p`.
+        """
+        p: AbstractFormula = AbstractFormula.from_any(p)
+        if self.is_abstract_inference_rule:
+            if p.arity != self.abstract_inference_rule_premises.arity:
+                raise util.PunctiliousException("The number of input premises is not equal to the number"
+                                                " of premises expected by the inference-rule.",
+                                                input_premises=p,
+                                                expected_premises=self.abstract_inference_rule_premises,
+                                                inference_rule=self)
+            v: dict[AbstractFormula, AbstractFormula | None]  # A mapping for variable values
+
+            i: AbstractFormula  # An input premise
+            e: AbstractFormula  # An expected premise
+            for i, e in zip(p.iterate_immediate_sub_formulas(), self.abstract_inference_rule_premises):
+                ok, v = _compute_abstract_inference_rule_variables(v, i, e)
+                if not ok:
+                    pass
+                else:
+                    pass
+        # TODO: IMPLEMENT INFERENCE-RULE LOGIC
+        else:
+            raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
 
     @property
     def formula_degree(self) -> int:
@@ -631,6 +507,21 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         phi: AbstractFormula = AbstractFormula(t, s)
         return phi
 
+    def get_abstract_map_value(self, phi: FlexibleAbstractFormula) -> AbstractFormula:
+        r"""If this abstract-formula is an abstract-map, returns the image `phi` under this map.
+
+        See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
+
+        :param phi: a preimage element.
+        :return: the image of `phi` under this map.
+        """
+        phi: AbstractFormula = AbstractFormula.from_any(phi)
+        if self.is_abstract_map:
+            i: int = self.abstract_map_preimage_sequence.get_immediate_subformula_index(phi)
+            return self.abstract_map_image_sequence.immediate_sub_formulas[i]
+        else:
+            raise util.PunctiliousException("This abstract-formula is not an abstract-map.")
+
     def get_immediate_subformula_index(self, phi: FlexibleAbstractFormula):
         r"""Returns the 0-based index position of `phi` in this abstract-formula immediate subformulas.
 
@@ -728,6 +619,105 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
                 unique_values.add(psi)
             self._immediate_subformulas_are_unique = True
         return self._immediate_subformulas_are_unique
+
+    @property
+    def is_abstract_map(self) -> bool:
+        r"""Returns `True` if this abstract-formula is an abstract-map, `False` otherwise.
+
+        Intuitive definition: abstract-map
+        ______________________________________
+
+        Intuitively, an abstract-map is an abstract-formula that is structurally
+         equivalent to a finite map.
+
+        Formal definition: abstract-map
+        _________________________________
+
+        A finite (computable) abstract-map :math:`M` is a tuple :math:`(P, I)` where:
+
+        - :math:`P` is a finite sequence of unique elements denoted as the preimage,
+        - :math:`I` is a finite sequence of unique elements denoted as the image,
+        - :math:`|P| = |I|`.
+
+        Formal definition: abstract-map
+        ___________________________________
+
+        An abstract-formula is an abstract-map if and only if:
+
+        - its arity equals 2,
+        - the arity of its first immediate subformula equals the arity of its second immediate subformula,
+        - the immediate subformulas of its first immediate subformula are unique.
+
+        Note
+        _____
+
+        The following properties and methods are available when an abstract-formula is an abstract-map:
+
+        - :attr:`AbstractFormula.abstract_map_preimage`
+        - :attr:`AbstractFormula.abstract_map_image`
+        - :meth:`AbstractFormula.get_abstract_map_value`
+
+        :return: `True` if this abstract-formula is an abstract-map, `False` otherwise.
+
+        """
+        if self._is_abstract_map is None:
+            self._is_abstract_map = \
+                self.arity == 2 and \
+                self.immediate_sub_formulas[0].arity == self.immediate_sub_formulas[1].arity and \
+                self.immediate_sub_formulas[0].immediate_subformulas_are_unique
+        return self._is_abstract_map
+
+    @property
+    def is_abstract_inference_rule(self) -> bool:
+        r"""Returns `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
+
+        Intuitive definition: abstract-inference-rule
+        ___________________________________________________
+
+        Intuitively, an abstract-inference-rule is an abstract-formula that is structurally
+         equivalent to an inference rule.
+
+        Formal definition: abstract-inference-rule
+        ______________________________________________
+
+        An abstract-inference-rule :math:`I` is a tuple :math:`(V, P, C)` where:
+
+        - :math:`V` is a finite sequence of unique elements denoted as the variables,
+        - :math:`P` is a finite sequence of unique elements denoted as the premises,
+        - :math:`C` is denoted as the conclusion.
+
+        Formal definition: abstract-inference-rule
+        _______________________________________________
+
+        An abstract-formula is an abstract-inference-rule if and only if:
+
+         - its arity equals 3.
+
+        Note
+        _____
+
+        The following complementary properties and methods are available when an abstract-formula is an abstract-map:
+
+        - :attr:`abstract_inference_rule_variables`
+        - :attr:`abstract_inference_rule_premises`
+        - :attr:`abstract_inference_rule_conclusion`
+        - :meth:`derive_abstract_inference_rule`
+
+        :return: `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
+
+        """
+        if self._is_abstract_inference_rule is None:
+            self._is_abstract_inference_rule = \
+                self.arity == 3
+        return self._is_abstract_inference_rule
+
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
+
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return RecursiveSequenceOrder
 
     def is_abstract_formula_equivalent_to(self, phi: AbstractFormula):
         r"""Returns `True` if this :class:`AbstractFormula` is abstract-formula-equivalent
@@ -972,6 +962,10 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
                                               self.iterate_sub_sequences()):
             sub_formula = AbstractFormula(child_tree, child_sequence)
             yield sub_formula
+
+    @util.readonly_class_property
+    def least_element(cls) -> AbstractFormula:
+        return cls.is_strictly_less_than_relation.least_element
 
     @property
     def main_element(self) -> int:
