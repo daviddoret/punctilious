@@ -1,3 +1,7 @@
+"""
+
+"""
+
 from __future__ import annotations
 import typing
 import collections
@@ -8,7 +12,6 @@ import punctilious.util as util
 import punctilious.rooted_plane_tree_library as rptl
 import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.binary_relation_library as brl
-import punctilious.natural_number_0_pair_library as nn0pl
 import punctilious.ternary_boolean_library as tbl
 
 
@@ -64,7 +67,7 @@ def count_labeled_trees_of_size_up_to_x_and_label_max_value_y(tree_size: int,
 # Binary relation classes
 
 class IsEqualTo(brl.BinaryRelation):
-    r"""The abstract formulas equipped with the standard equality order relation.
+    r"""The labeled rooted plane trees equipped with the standard equality order relation.
 
     Mathematical definition
     -------------------------
@@ -93,13 +96,13 @@ class IsEqualTo(brl.BinaryRelation):
         :param y: A Python object.
         :return: `True` or `False`.
         """
-        x: AbstractFormula = AbstractFormula.from_any(x)
-        y: AbstractFormula = AbstractFormula.from_any(y)
-        return x.is_canonical_abstract_formula_equivalent_to(y)
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
+        return x.is_canonical_labeled_rooted_plane_tree_equivalent_to(y)
 
 
 class RecursiveSequenceOrder(brl.BinaryRelation):
-    r"""The abstract formulas equipped with the standard strictly less-than order relation.
+    r"""The labeled rooted plane trees equipped with the standard strictly less-than order relation.
 
     Mathematical definition
     -------------------------
@@ -121,12 +124,12 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         return tbl.TernaryBoolean.TRUE
 
     @util.readonly_class_property
-    def least_element(cls) -> AbstractFormula:
+    def least_element(cls) -> LabeledRootedPlaneTree:
         """By design, we choose 0() as the least element.
 
         :return:
         """
-        return AbstractFormula(
+        return LabeledRootedPlaneTree(
             t=rptl.RootedPlaneTree.least_element,
             s=nn0sl.NaturalNumber0Sequence(0)
         )
@@ -138,7 +141,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         :param x: A Python object interpretable as a (0-based) natural number.
         :return: An integer.
         """
-        x: AbstractFormula = AbstractFormula.from_any(x)
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
         # build a finite sequence of (0-based) natural numbers S = s0, s1, ..., sn,
         # such that s0 is `x`'s main element,
         # and s1, ..., sn are the recursive ranks of its sub-formulas.
@@ -159,8 +162,8 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         :param y: A Python object interpretable as a (0-based) natural number.
         :return: `True` or `False`.
         """
-        x: AbstractFormula = AbstractFormula.from_any(x)
-        y: AbstractFormula = AbstractFormula.from_any(y)
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
         n1: int = x.rank()
         n2: int = x.rank()
         return n1 < n2
@@ -172,14 +175,14 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         :param x: A Python object interpretable as a (0-based) natural number.
         :return: The successor of `x`.
         """
-        x: AbstractFormula = AbstractFormula.from_any(x)
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
         n: int = cls.rank(x)
         n += 1
-        y: AbstractFormula = cls.unrank(n)
+        y: LabeledRootedPlaneTree = cls.unrank(n)
         return y
 
     @classmethod
-    def unrank(cls, n: int) -> AbstractFormula:
+    def unrank(cls, n: int) -> LabeledRootedPlaneTree:
         r"""Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}_0, < ) = n`.
 
         :param n: A positive integer.
@@ -196,14 +199,14 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         for i, m in enumerate(s[1:], 1):
             subtree = cls.unrank(m)
             subtrees.append(subtree)
-        t: AbstractFormula = AbstractFormula.from_immediate_sub_formulas(n=main_element,
-                                                                         s=subtrees)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_sub_formulas(n=main_element,
+                                                                                       s=subtrees)
         return t
 
 
 # Classes
 
-class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
+class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
     r"""A :class:`AbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is a sequence of (0-based) natural numbers.
@@ -214,13 +217,13 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         return self._compute_hash(self)
 
     def __init__(self, t: rptl.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
-        super(AbstractFormula, self).__init__()
-        self._canonical_abstract_formula: AbstractFormula | None = None
-        self._immediate_subformulas_are_unique: AbstractFormula | None = None
-        self._immediate_sub_formulas: tuple[AbstractFormula, ...] | None = None
+        super(LabeledRootedPlaneTree, self).__init__()
+        self._canonical_labeled_rooted_plane_tree: LabeledRootedPlaneTree | None = None
+        self._immediate_subformulas_are_unique: LabeledRootedPlaneTree | None = None
+        self._immediate_sub_formulas: tuple[LabeledRootedPlaneTree, ...] | None = None
         self._is_abstract_map: bool | None = None
         self._is_abstract_inference_rule: bool | None = None
-        self._sub_formulas: tuple[AbstractFormula, ...] | None = None
+        self._sub_formulas: tuple[LabeledRootedPlaneTree, ...] | None = None
 
     def __new__(cls, t: rptl.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_any(t)
@@ -229,7 +232,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             raise util.PunctiliousException(
                 f"`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.",
                 t_size=t.size, s_length=s.length, t=t, s=s)
-        phi = super(AbstractFormula, cls).__new__(cls, (t, s))
+        phi = super(LabeledRootedPlaneTree, cls).__new__(cls, (t, s))
         phi = cls._from_cache(phi)
         return phi
 
@@ -239,23 +242,23 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def __str__(self):
         return self.represent_as_function()
 
-    _cache: dict[int, AbstractFormula] = dict()  # Cache mechanism.
+    _cache: dict[int, LabeledRootedPlaneTree] = dict()  # Cache mechanism.
 
     _HASH_SEED: int = 11651462149556646224  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
 
     @classmethod
-    def _compute_hash(cls, o: AbstractFormula) -> int:
+    def _compute_hash(cls, o: LabeledRootedPlaneTree) -> int:
         r"""Exposes the hashing logic as a static method.
 
-        :param o: An object that is structurally compatible with an abstract-formula.
-        :return: The hash of the abstract-formula that is structurally equivalent to `o`.
+        :param o: An object that is structurally compatible with a labeled rooted plane tree.
+        :return: The hash of the labeled rooted plane tree that is structurally equivalent to `o`.
         """
-        return hash((AbstractFormula, cls._HASH_SEED, o.rooted_plane_tree, o.natural_number_sequence,))
+        return hash((LabeledRootedPlaneTree, cls._HASH_SEED, o.rooted_plane_tree, o.natural_number_sequence,))
 
     @classmethod
-    def _from_cache(cls, o: FlexibleAbstractFormula):
+    def _from_cache(cls, o: FlexibleLabeledRootedPlaneTree):
         r"""Cache mechanism used in the constructor."""
-        hash_value: int = AbstractFormula._compute_hash(o)
+        hash_value: int = LabeledRootedPlaneTree._compute_hash(o)
         if hash_value in cls._cache.keys():
             return cls._cache[hash_value]
         else:
@@ -263,8 +266,8 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             return o
 
     @property
-    def abstract_inference_rule_conclusion(self) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-inference-rule, returns its conclusion.
+    def abstract_inference_rule_conclusion(self) -> LabeledRootedPlaneTree:
+        r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its conclusion.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -273,11 +276,11 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         if self.is_abstract_inference_rule:
             return self.immediate_sub_formulas[2]
         else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
+            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
     @property
-    def abstract_inference_rule_premises(self) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-inference-rule, returns its premises.
+    def abstract_inference_rule_premises(self) -> LabeledRootedPlaneTree:
+        r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its premises.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -286,11 +289,11 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         if self.is_abstract_inference_rule:
             return self.immediate_sub_formulas[1]
         else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
+            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
     @property
-    def abstract_inference_rule_variables(self) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-inference-rule, returns its variables.
+    def abstract_inference_rule_variables(self) -> LabeledRootedPlaneTree:
+        r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its variables.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -299,14 +302,14 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         if self.is_abstract_inference_rule:
             return self.immediate_sub_formulas[0]
         else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
+            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
     @classmethod
     def abstract_map_from_preimage_and_image(
             cls,
             n: int,
-            p: FlexibleAbstractFormula,
-            i: FlexibleAbstractFormula) -> AbstractFormula:
+            p: FlexibleLabeledRootedPlaneTree,
+            i: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
         r"""Declares a new abstract-map.
 
         :param n: The main-element of the abstract-map.
@@ -314,11 +317,11 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         :param i: The image of the abstract-map.
         :return: The resulting abstract-map.
         """
-        return AbstractFormula.from_immediate_sub_formulas(n=n, s=(p, i,))
+        return LabeledRootedPlaneTree.from_immediate_sub_formulas(n=n, s=(p, i,))
 
     @property
-    def abstract_map_preimage_sequence(self) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-map, returns its preimage sequence.
+    def abstract_map_preimage_sequence(self) -> LabeledRootedPlaneTree:
+        r"""If this labeled rooted plane tree is an abstract-map, returns its preimage sequence.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
@@ -327,11 +330,11 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         if self.is_abstract_map:
             return self.immediate_sub_formulas[0]
         else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-map.")
+            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
 
     @property
-    def abstract_map_image_sequence(self) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-map, returns its image sequence.
+    def abstract_map_image_sequence(self) -> LabeledRootedPlaneTree:
+        r"""If this labeled rooted plane tree is an abstract-map, returns its image sequence.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
@@ -340,7 +343,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         if self.is_abstract_map:
             return self.immediate_sub_formulas[1]
         else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-map.")
+            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
 
     @property
     def arity(self) -> int:
@@ -351,30 +354,30 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         return len(self.immediate_sub_formulas)
 
     @property
-    def canonical_abstract_formula(self) -> AbstractFormula:
-        r"""The canonical-abstract-formula of this abstract-formula.
+    def canonical_labeled_rooted_plane_tree(self) -> LabeledRootedPlaneTree:
+        r"""The canonical-labeled rooted plane tree of this labeled rooted plane tree.
 
-        Definition: the canonical-abstract-formula `phi` of an abstract-formula `psi`
+        Definition: the canonical-labeled rooted plane tree `phi` of a labeled rooted plane tree `psi`
         is a formula such that:
 
         - their rooted-plane-tree are rooted-plane-tree-equivalent,
         - the natural-number-sequence of `phi` is the canonical-naturel-number-sequence
            of the natural-number-sequence of `psi`
 
-        :return: The canonical-abstract-formula of this abstract-formula.
+        :return: The canonical-labeled rooted plane tree of this labeled rooted plane tree.
         """
         if self.is_canonical:
             return self
-        elif self._canonical_abstract_formula is not None:
-            return self._canonical_abstract_formula
+        elif self._canonical_labeled_rooted_plane_tree is not None:
+            return self._canonical_labeled_rooted_plane_tree
         else:
-            self._canonical_abstract_formula: AbstractFormula = AbstractFormula(
+            self._canonical_labeled_rooted_plane_tree: LabeledRootedPlaneTree = LabeledRootedPlaneTree(
                 t=self.rooted_plane_tree,
                 s=self.natural_number_sequence.to_restricted_growth_function_sequence)
-            return self._canonical_abstract_formula
+            return self._canonical_labeled_rooted_plane_tree
 
-    def derive_abstract_inference_rule(self, p: FlexibleAbstractFormula) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-inference-rule, derives a theorem
+    def derive_abstract_inference_rule(self, p: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
+        r"""If this labeled rooted plane tree is an abstract-inference-rule, derives a theorem
         from the finite (computable) sequence of premises `p`.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
@@ -382,7 +385,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         :param p: a finite (computable) sequence of premises, in the order expected by the inference-rule.
         :return: the theorem derived from this abstract-inference-rule, given premises `p`.
         """
-        p: AbstractFormula = AbstractFormula.from_any(p)
+        p: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(p)
         if self.is_abstract_inference_rule:
             if p.arity != self.abstract_inference_rule_premises.arity:
                 raise util.PunctiliousException("The number of input premises is not equal to the number"
@@ -390,10 +393,10 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
                                                 input_premises=p,
                                                 expected_premises=self.abstract_inference_rule_premises,
                                                 inference_rule=self)
-            v: dict[AbstractFormula, AbstractFormula | None]  # A mapping for variable values
+            v: dict[LabeledRootedPlaneTree, LabeledRootedPlaneTree | None]  # A mapping for variable values
 
-            i: AbstractFormula  # An input premise
-            e: AbstractFormula  # An expected premise
+            i: LabeledRootedPlaneTree  # An input premise
+            e: LabeledRootedPlaneTree  # An expected premise
             for i, e in zip(p.iterate_immediate_sub_formulas(), self.abstract_inference_rule_premises):
                 ok, v = _compute_abstract_inference_rule_variables(v, i, e)
                 if not ok:
@@ -402,7 +405,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
                     pass
         # TODO: IMPLEMENT INFERENCE-RULE LOGIC
         else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-inference-rule.")
+            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
     @property
     def formula_degree(self) -> int:
@@ -424,13 +427,13 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     @classmethod
     def from_any(
             cls,
-            o: FlexibleAbstractFormula) -> AbstractFormula:
-        if isinstance(o, AbstractFormula):
+            o: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
+        if isinstance(o, LabeledRootedPlaneTree):
             return o
         if isinstance(o, collections.abc.Iterable):
-            return AbstractFormula(*o)
+            return LabeledRootedPlaneTree(*o)
         if isinstance(o, collections.abc.Generator):
-            return AbstractFormula(*o)
+            return LabeledRootedPlaneTree(*o)
         raise util.PunctiliousException("`AbstractFormula` data validation failure. `o` is of unknown type.",
                                         type_of_o=type(o), o=o)
 
@@ -438,9 +441,9 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def from_immediate_sub_formulas(
             cls,
             n: int | None,
-            s: tuple[FlexibleAbstractFormula, ...] | None = None) -> AbstractFormula:
+            s: tuple[FlexibleLabeledRootedPlaneTree, ...] | None = None) -> LabeledRootedPlaneTree:
         r"""Given a root natural number n,
-        and a tuple of abstract-formulas s,
+        and a tuple of labeled rooted plane trees s,
         declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
 
         :param n:
@@ -453,9 +456,9 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         # if n is None:
         #    n: int = 0
         if s is None:
-            s: tuple[AbstractFormula, ...] = ()
-        s: tuple[AbstractFormula, ...] = tuple(
-            AbstractFormula.from_any(o=phi) for phi in s)
+            s: tuple[LabeledRootedPlaneTree, ...] = ()
+        s: tuple[LabeledRootedPlaneTree, ...] = tuple(
+            LabeledRootedPlaneTree.from_any(o=phi) for phi in s)
         # Retrieves the children trees
         t: tuple[rptl.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
         # Declare the new parent tree
@@ -465,17 +468,17 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         u: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(
             n) + nn0sl.concatenate_natural_number_0_sequences(
             *(phi.natural_number_sequence for phi in s))
-        phi: AbstractFormula = AbstractFormula(t=t, s=u)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t=t, s=u)
         return phi
 
     @classmethod
-    def from_tree_of_integer_tuple_pairs(cls, p) -> AbstractFormula:
-        r"""Declares an abstract-formula object from a tree of integer/tuple pairs.
+    def from_tree_of_integer_tuple_pairs(cls, p) -> LabeledRootedPlaneTree:
+        r"""Declares a labeled rooted plane tree object from a tree of integer/tuple pairs.
 
         Use case
         ___________
 
-        Tree of integer/tuple pairs is a natural pythonic data structure to express abstract formulas.
+        Tree of integer/tuple pairs is a natural pythonic data structure to express labeled rooted plane trees.
 
         Definition
         ------------
@@ -497,57 +500,58 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         The tree of integer/tuple pairs:
         (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)
 
-        ...maps to the abstract-formula:
+        ...maps to the labeled rooted plane tree:
         0(1,0(2,1),2)
 
         :param p: A tree of integer/tuple pairs.
-        :return: an abstract-formula.
+        :return: a labeled rooted plane tree.
 
         """
 
         t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_tuple_tree(t)
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
-        phi: AbstractFormula = AbstractFormula(t, s)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t, s)
         return phi
 
-    def get_abstract_map_value(self, phi: FlexibleAbstractFormula) -> AbstractFormula:
-        r"""If this abstract-formula is an abstract-map, returns the image `phi` under this map.
+    def get_abstract_map_value(self, phi: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
+        r"""If this labeled rooted plane tree is an abstract-map, returns the image `phi` under this map.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
         :param phi: a preimage element.
         :return: the image of `phi` under this map.
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         if self.is_abstract_map:
             i: int = self.abstract_map_preimage_sequence.get_immediate_subformula_index(phi)
             return self.abstract_map_image_sequence.immediate_sub_formulas[i]
         else:
-            raise util.PunctiliousException("This abstract-formula is not an abstract-map.")
+            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
 
-    def get_immediate_subformula_index(self, phi: FlexibleAbstractFormula):
-        r"""Returns the 0-based index position of `phi` in this abstract-formula immediate subformulas.
+    def get_immediate_subformula_index(self, phi: FlexibleLabeledRootedPlaneTree):
+        r"""Returns the 0-based index position of `phi` in this labeled rooted plane tree immediate subformulas.
 
         Prerequisites:
 
-        - the immediate subformulas of this abstract-formula are unique, cf. :attr:`AbstractFormula.immediate_subformulas_are_unique`,
-        - `phi` is an immediate subformula of this abstract-formula.
+        - the immediate subformulas of this labeled rooted plane tree are unique, cf. :attr:`AbstractFormula.immediate_subformulas_are_unique`,
+        - `phi` is an immediate subformula of this labeled rooted plane tree.
 
         :param phi:
         :return:
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         if not self.immediate_subformulas_are_unique:
-            raise util.PunctiliousException('The immediate subformulas of this abstract-formula are not unique.',
-                                            this_formula=self, phi=phi)
+            raise util.PunctiliousException(
+                'The immediate subformulas of this labeled rooted plane tree are not unique.',
+                this_formula=self, phi=phi)
         if not phi in self.immediate_sub_formulas:
-            raise util.PunctiliousException('`phi` is not an immediate subformulas of this abstract-formula.',
+            raise util.PunctiliousException('`phi` is not an immediate subformulas of this labeled rooted plane tree.',
                                             this_formula=self, phi=phi)
 
         return self.immediate_sub_formulas.index(phi)
 
-    def get_sub_formula_by_path(self, p: tuple[int, ...]) -> AbstractFormula:
+    def get_sub_formula_by_path(self, p: tuple[int, ...]) -> LabeledRootedPlaneTree:
         r"""Given a path `p`, returns the corresponding sub-formula.
 
         Definition - sub-formula path:
@@ -567,7 +571,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         if p == (0,):
             return self
         else:
-            phi: AbstractFormula = self
+            phi: LabeledRootedPlaneTree = self
             for i in range(1, len(p)):
                 j = p[i]
                 if 0 < j >= phi.tree_degree:
@@ -575,11 +579,11 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
                         "The n-th element of the path is negative or greater than the number of"
                         " immediate sub-formulas in phi.", n_index=i, n_value=j,
                         phi=phi)
-                phi: AbstractFormula = phi.immediate_sub_formulas[j]
+                phi: LabeledRootedPlaneTree = phi.immediate_sub_formulas[j]
             return phi
 
     @property
-    def immediate_sub_formulas(self) -> tuple[AbstractFormula, ...]:
+    def immediate_sub_formulas(self) -> tuple[LabeledRootedPlaneTree, ...]:
         r"""The `immediate_sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements
         that are the immediate children formulas of `phi` in the formula tree, or equivalently the formulas
         of degree 0 in `phi`.
@@ -615,8 +619,8 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         :return:
         """
         if self._immediate_subformulas_are_unique is None:
-            unique_values: set[AbstractFormula] = set()
-            psi: AbstractFormula
+            unique_values: set[LabeledRootedPlaneTree] = set()
+            psi: LabeledRootedPlaneTree
             for psi in self.iterate_immediate_sub_formulas():
                 if psi in unique_values:
                     self._immediate_subformulas_are_unique = False
@@ -626,12 +630,12 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
     @property
     def is_abstract_map(self) -> bool:
-        r"""Returns `True` if this abstract-formula is an abstract-map, `False` otherwise.
+        r"""Returns `True` if this labeled rooted plane tree is an abstract-map, `False` otherwise.
 
         Intuitive definition: abstract-map
         ______________________________________
 
-        Intuitively, an abstract-map is an abstract-formula that is structurally
+        Intuitively, an abstract-map is a labeled rooted plane tree that is structurally
          equivalent to a finite map.
 
         Formal definition: abstract-map
@@ -646,7 +650,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         Formal definition: abstract-map
         ___________________________________
 
-        An abstract-formula is an abstract-map if and only if:
+        A labeled rooted plane tree is an abstract-map if and only if:
 
         - its arity equals 2,
         - the arity of its first immediate subformula equals the arity of its second immediate subformula,
@@ -655,13 +659,13 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         Note
         _____
 
-        The following properties and methods are available when an abstract-formula is an abstract-map:
+        The following properties and methods are available when a labeled rooted plane tree is an abstract-map:
 
         - :attr:`AbstractFormula.abstract_map_preimage`
         - :attr:`AbstractFormula.abstract_map_image`
         - :meth:`AbstractFormula.get_abstract_map_value`
 
-        :return: `True` if this abstract-formula is an abstract-map, `False` otherwise.
+        :return: `True` if this labeled rooted plane tree is an abstract-map, `False` otherwise.
 
         """
         if self._is_abstract_map is None:
@@ -673,12 +677,12 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
     @property
     def is_abstract_inference_rule(self) -> bool:
-        r"""Returns `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
+        r"""Returns `True` if this labeled rooted plane tree is an abstract-inference-rule, `False` otherwise.
 
         Intuitive definition: abstract-inference-rule
         ___________________________________________________
 
-        Intuitively, an abstract-inference-rule is an abstract-formula that is structurally
+        Intuitively, an abstract-inference-rule is a labeled rooted plane tree that is structurally
          equivalent to an inference rule.
 
         Formal definition: abstract-inference-rule
@@ -693,21 +697,21 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         Formal definition: abstract-inference-rule
         _______________________________________________
 
-        An abstract-formula is an abstract-inference-rule if and only if:
+        A labeled rooted plane tree is an abstract-inference-rule if and only if:
 
          - its arity equals 3.
 
         Note
         _____
 
-        The following complementary properties and methods are available when an abstract-formula is an abstract-map:
+        The following complementary properties and methods are available when a labeled rooted plane tree is an abstract-map:
 
         - :attr:`abstract_inference_rule_variables`
         - :attr:`abstract_inference_rule_premises`
         - :attr:`abstract_inference_rule_conclusion`
         - :meth:`derive_abstract_inference_rule`
 
-        :return: `True` if this abstract-formula is an abstract-inference-rule, `False` otherwise.
+        :return: `True` if this labeled rooted plane tree is an abstract-inference-rule, `False` otherwise.
 
         """
         if self._is_abstract_inference_rule is None:
@@ -723,12 +727,12 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return RecursiveSequenceOrder
 
-    def is_abstract_formula_equivalent_to(self, phi: AbstractFormula):
-        r"""Returns `True` if this :class:`AbstractFormula` is abstract-formula-equivalent
+    def is_labeled_rooted_plane_tree_equivalent_to(self, phi: LabeledRootedPlaneTree):
+        r"""Returns `True` if this :class:`AbstractFormula` is labeled rooted plane tree-equivalent
         to :class:`AbstractFormula` `phi`.
 
         Formal definition:
-        Two abstract-formulas phi and psi are abstract-formula-equivalent if and only if:
+        Two labeled rooted plane trees phi and psi are labeled rooted plane tree-equivalent if and only if:
 
         - the rooted-plane-tree of phi is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,
         - the natural-numbers-sequence of phi is natural-numbers-sequence-equivalent to the natural-numbers-sequence of psi.
@@ -736,86 +740,87 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         :param phi:
         :return:
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
             phi.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_0_sequence_equivalent_to(
             phi.natural_number_sequence)
 
-    def is_abstract_formula_equivalent_to_with_variables(self, phi: AbstractFormula,
-                                                         v: AbstractFormula) -> bool:
-        r"""Returns `True` if this abstract-formula is abstract-formula-equivalent to abstract-formula `phi`,
-        after substitution of variables with assigned values in this abstract-formula,
+    def is_labeled_rooted_plane_tree_equivalent_to_with_variables(self, phi: LabeledRootedPlaneTree,
+                                                                  v: LabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if this labeled rooted plane tree is labeled rooted plane tree-equivalent to labeled rooted plane tree `phi`,
+        after substitution of variables with assigned values in this labeled rooted plane tree,
         according to variables and assigned values in abstract-map `v`.
 
-        :param phi: An abstract-formula.
+        :param phi: A labeled rooted plane tree.
         :param v: An abstract-map whose preimage is denoted as the variables, and image as the assigned values.
         :return: `True` if formulas are equivalent given above conditions, `False` otherwise.
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
-        v: AbstractFormula = AbstractFormula.from_any(v)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        v: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(v)
         if not v.is_abstract_map:
-            raise util.PunctiliousException("`v` is not an abstract-map", v=v, phi=phi, this_abstract_formula=self)
-        psi: AbstractFormula = self.substitute_sub_formulas_with_map(m=v)
-        return psi.is_abstract_formula_equivalent_to(phi)
+            raise util.PunctiliousException("`v` is not an abstract-map", v=v, phi=phi,
+                                            this_labeled_rooted_plane_tree=self)
+        psi: LabeledRootedPlaneTree = self.substitute_sub_formulas_with_map(m=v)
+        return psi.is_labeled_rooted_plane_tree_equivalent_to(phi)
 
     @property
     def is_canonical(self) -> bool:
-        r"""Returns `True` if this abstract-formula is in canonical form.
+        r"""Returns `True` if this labeled rooted plane tree is in canonical form.
 
         Definition:
-        An abstract-formula `phi` is `canonical` if and only if
+        A labeled rooted plane tree `phi` is `canonical` if and only if
         its natural-number-sequence is a restricted-growth-function-sequence.
 
-        :return: `True` if this abstract-formula is in canonical form, `False` otherwise.
+        :return: `True` if this labeled rooted plane tree is in canonical form, `False` otherwise.
         """
         return self.natural_number_sequence.is_restricted_growth_function_sequence
 
-    def is_canonical_abstract_formula_equivalent_to(self, phi: AbstractFormula):
-        r"""Returns `True` if this :class:`AbstractFormula` is canonical-abstract-formula-equivalent
+    def is_canonical_labeled_rooted_plane_tree_equivalent_to(self, phi: LabeledRootedPlaneTree):
+        r"""Returns `True` if this :class:`AbstractFormula` is canonical-labeled rooted plane tree-equivalent
         to :class:`AbstractFormula` `phi`.
 
         Formal definition:
-        Two abstract-formulas phi and psi are canonical-abstract-formula-equivalent if and only if:
+        Two labeled rooted plane trees phi and psi are canonical-labeled rooted plane tree-equivalent if and only if:
 
-        - the canonical-abstract-formula of phi is abstract-formula-equivalent
-          to the canonical-abstract-formula of psi.
+        - the canonical-labeled rooted plane tree of phi is labeled rooted plane tree-equivalent
+          to the canonical-labeled rooted plane tree of psi.
 
         Intuitive definition:
-        Two formulas are canonical-abstract-formula-equivalent if they have the same "structure".
+        Two formulas are canonical-labeled rooted plane tree-equivalent if they have the same "structure".
 
         :param phi:
         :return:
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
-        return self.canonical_abstract_formula.is_abstract_formula_equivalent_to(
-            phi.canonical_abstract_formula)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        return self.canonical_labeled_rooted_plane_tree.is_labeled_rooted_plane_tree_equivalent_to(
+            phi.canonical_labeled_rooted_plane_tree)
 
-    def is_equal_to(self, phi: FlexibleAbstractFormula):
+    def is_equal_to(self, phi: FlexibleLabeledRootedPlaneTree):
         r"""Under :class:`AbstractFormula` canonical ordering,
         returns `True` if the current :class:`AbstractFormula` is equal to `phi`,
         `False` otherwise.
 
-        See :attr:`AbstractFormula.is_less_than` for a definition of abstract-formula canonical-ordering.
+        See :attr:`AbstractFormula.is_less_than` for a definition of labeled rooted plane tree canonical-ordering.
 
         :param phi: A :class:`AbstractFormula`.
         :return: `True` if the current :class:`AbstractFormula` is equal to `s`, `False` otherwise.
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
-        return self.is_abstract_formula_equivalent_to(phi)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        return self.is_labeled_rooted_plane_tree_equivalent_to(phi)
 
-    def is_less_than(self, phi: FlexibleAbstractFormula) -> bool:
+    def is_less_than(self, phi: FlexibleLabeledRootedPlaneTree) -> bool:
         r"""Under :class:`AbstractFormula` canonical ordering,
         returns `True` if the current :class:`AbstractFormula` is less than `phi`,
         `False` otherwise.
 
-        Definition: canonical ordering of abstract-formula, denoted :math:`\prec`,
+        Definition: canonical ordering of labeled rooted plane tree, denoted :math:`\prec`,
         is defined as rooted-plane-tree-first, natural-number-sequence second.
 
         :param phi: A :class:`AbstractFormula`.
         :return: `True` if the current :class:`AbstractFormula` is equal to `phi`, `False` otherwise.
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
-        if self.is_abstract_formula_equivalent_to(phi):
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        if self.is_labeled_rooted_plane_tree_equivalent_to(phi):
             return False
         elif self.rooted_plane_tree.is_less_than_under_o1(phi.rooted_plane_tree):
             return True
@@ -827,89 +832,89 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             return False
         raise util.PunctiliousException("Unreachable condition")
 
-    def is_immediate_sub_formula_of(self, phi: AbstractFormula):
+    def is_immediate_sub_formula_of(self, phi: LabeledRootedPlaneTree):
         r"""Returns `True` if this :class:`AbstractFormula` is an immediate sub-formula of :class:`AbstractFormula` phi.
 
         :param phi:
         :return:
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
-        psi: AbstractFormula
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        psi: LabeledRootedPlaneTree
         for psi in phi.iterate_immediate_sub_formulas():
-            if self.is_abstract_formula_equivalent_to(psi):
+            if self.is_labeled_rooted_plane_tree_equivalent_to(psi):
                 return True
         return False
 
-    def is_immediate_super_formula_of(self, phi: AbstractFormula):
+    def is_immediate_super_formula_of(self, phi: LabeledRootedPlaneTree):
         r"""Returns `True` if :class:`AbstractFormula` phi is an immediate super-formula of this :class:`AbstractFormula`.
 
         :param phi:
         :return:
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         return phi.is_immediate_sub_formula_of(self)
 
     @property
     def is_increasing(self) -> bool:
-        r"""Returns `True` if this abstract-formula is increasing, `False` otherwise.
+        r"""Returns `True` if this labeled rooted plane tree is increasing, `False` otherwise.
 
-        Definition - increasing abstract-formula:
-        An abstract-formula is increasing
+        Definition - increasing labeled rooted plane tree:
+        A labeled rooted plane tree is increasing
         or increasing under canonical order,
         if its immediate subformulas are ordered.
 
-        Definition - increasing abstract-formula:
-        An abstract-formula :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is increasing,
+        Definition - increasing labeled rooted plane tree:
+        A labeled rooted plane tree :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is increasing,
         or increasing under canonical order,
         if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} \ge \psi_i`.
 
-        :return: `True` if this abstract-formula is increasing, `False` otherwise.
+        :return: `True` if this labeled rooted plane tree is increasing, `False` otherwise.
         """
         return all(
             self.immediate_sub_formulas[i + 1] >= self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
 
     @property
     def is_strictly_increasing(self) -> bool:
-        r"""Returns `True` if this abstract-formula is strictly increasing, `False` otherwise.
+        r"""Returns `True` if this labeled rooted plane tree is strictly increasing, `False` otherwise.
 
-        Definition - strictly increasing abstract-formula:
-        An abstract-formula is strictly increasing
+        Definition - strictly increasing labeled rooted plane tree:
+        A labeled rooted plane tree is strictly increasing
         or strictly increasing under canonical order,
         if its immediate subformulas are strictly ordered.
 
-        Definition - strictly increasing abstract-formula:
-        An abstract-formula :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is strictly increasing,
+        Definition - strictly increasing labeled rooted plane tree:
+        A labeled rooted plane tree :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is strictly increasing,
         or strictly increasing under canonical order,
         if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} > \psi_i`.
 
-        :return: `True` if this abstract-formula is strictly increasing, `False` otherwise.
+        :return: `True` if this labeled rooted plane tree is strictly increasing, `False` otherwise.
         """
         return all(
             self.immediate_sub_formulas[i + 1] > self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
 
-    def is_sub_formula_of(self, phi: AbstractFormula):
+    def is_sub_formula_of(self, phi: LabeledRootedPlaneTree):
         r"""Returns `True` if this :class:`AbstractFormula` is a sub-formula of :class:`AbstractFormula` phi.
 
         :param phi:
         :return:
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
-        psi: AbstractFormula
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        psi: LabeledRootedPlaneTree
         for psi in phi.iterate_sub_formulas():
-            if self.is_abstract_formula_equivalent_to(psi):
+            if self.is_labeled_rooted_plane_tree_equivalent_to(psi):
                 return True
         return False
 
-    def is_super_formula_of(self, phi: AbstractFormula):
+    def is_super_formula_of(self, phi: LabeledRootedPlaneTree):
         r"""Returns `True` if :class:`AbstractFormula` phi is a sub-formula of this :class:`AbstractFormula`.
 
         :param phi:
         :return:
         """
-        phi: AbstractFormula = AbstractFormula.from_any(phi)
+        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         return phi.is_sub_formula_of(self)
 
-    def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
+    def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
         r"""Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
 
         See :attr:`AbstractFormula.immediate_sub_formulas` for a definition of the term `immediate sub-formula`.
@@ -918,7 +923,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         """
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_immediate_subtrees(),
                                               self.iterate_immediate_sub_sequences()):
-            sub_formula = AbstractFormula(child_tree, child_sequence)
+            sub_formula = LabeledRootedPlaneTree(child_tree, child_sequence)
             yield sub_formula
 
     def iterate_immediate_sub_sequences(self) -> typing.Generator[
@@ -927,7 +932,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
         Note:
 
-        A sub-sequence of an abstract-formula is determined by:
+        A sub-sequence of a labeled rooted plane tree is determined by:
 
         - 1) the parent rgf sequence,
         - and 2) the rooted plane tree.
@@ -953,7 +958,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             # yield the child RGF sequence
             yield sub_sequence
 
-    def iterate_sub_formulas(self) -> collections.abc.Generator[AbstractFormula, None, None]:
+    def iterate_sub_formulas(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
         r"""Iterates the sub-formulas of the :class:`AbstractFormula` using the `depth-first, ascending nodes` algorithm.
 
         See :attr:`AbstractFormula.sub_formulas` for a definition of the term `sub-formula`.
@@ -964,11 +969,11 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         child_sequence: nn0sl.NaturalNumber0Sequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_subtrees(),
                                               self.iterate_sub_sequences()):
-            sub_formula = AbstractFormula(child_tree, child_sequence)
+            sub_formula = LabeledRootedPlaneTree(child_tree, child_sequence)
             yield sub_formula
 
     @util.readonly_class_property
-    def least_element(cls) -> AbstractFormula:
+    def least_element(cls) -> LabeledRootedPlaneTree:
         return cls.is_strictly_less_than_relation.least_element
 
     @property
@@ -978,7 +983,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         node of the attr:`AbstractFormula.rooted_plane_tree`.
 
         The term `main element` was coined in reference to the term `main connective`
-         (cf. Mancosu 2021, p. 17), because abstract-formulas are composed of sequences,
+         (cf. Mancosu 2021, p. 17), because labeled rooted plane trees are composed of sequences,
          and thus `main connective` is reserved for "concrete" formulas.
 
         References:
@@ -1016,12 +1021,12 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             if len(connectives) != len(self.natural_number_sequence):
                 raise util.PunctiliousException(
                     "The length of the connectives tuple is not equal to the length "
-                    "of the abstract-formula's natural-number-sequence.",
+                    "of the labeled rooted plane tree's natural-number-sequence.",
                     connectives_length=len(connectives),
                     natural_number_sequence_length=self.natural_number_sequence.length,
                     connectives=connectives,
                     natural_number_sequence=self.natural_number_sequence,
-                    abstract_formula=self
+                    labeled_tree=self
                 )
         return self.rooted_plane_tree.represent_as_function(
             connectives=connectives)
@@ -1034,7 +1039,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
 
         :param connectives: A tuple of connectives of length equal to the length of the :attr:`AbstractFormula.natural_numbers_sequence`. Default: `None`.
 
-        :return: A string representation of this abstract-formula.
+        :return: A string representation of this labeled rooted plane tree.
 
         """
         if connectives is None:
@@ -1043,12 +1048,12 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             if len(connectives) != len(self.natural_number_sequence):
                 raise util.PunctiliousException(
                     "The length of the connectives tuple is not equal to the length "
-                    "of the abstract-formula's natural-number-sequence.",
+                    "of the labeled rooted plane tree's natural-number-sequence.",
                     connectives_length=len(connectives),
                     natural_number_sequence_length=self.natural_number_sequence.length,
                     connectives=connectives,
                     natural_number_sequence=self.natural_number_sequence,
-                    abstract_formula=self
+                    labeled_rooted_plane_tree=self
                 )
         output = f"{{ "
         first = True
@@ -1090,7 +1095,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         return self.natural_number_sequence.max_value
 
     @property
-    def sub_formulas(self) -> tuple[AbstractFormula, ...]:
+    def sub_formulas(self) -> tuple[LabeledRootedPlaneTree, ...]:
         r"""The `sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements that are present
         in the formula tree of `phi`, including `phi` itself.
 
@@ -1115,14 +1120,14 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         :return: A tuple of the sub-formulas.
         """
         if self._sub_formulas is None:
-            sub_formulas: list[AbstractFormula] = list()
+            sub_formulas: list[LabeledRootedPlaneTree] = list()
             for sub_formula in self.iterate_sub_formulas():
                 sub_formulas.append(sub_formula)
             self._sub_formulas = tuple(sub_formulas)
         return self._sub_formulas
 
-    def substitute_sub_formulas_with_map(self, m: FlexibleAbstractFormula) -> AbstractFormula:
-        r"""Returns a new abstract-formula similar to the current abstract-formula,
+    def substitute_sub_formulas_with_map(self, m: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
+        r"""Returns a new labeled rooted plane tree similar to the current labeled rooted plane tree,
          except that its subformulas present in the map `m` preimage,
          are substituted with their corresponding images,
          giving priority to the substitution of superformulas over subformulas.
@@ -1131,7 +1136,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         :return: A substituted formula.
 
         """
-        m: AbstractFormula = AbstractFormula.from_any(m)
+        m: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(m)
         if not m.is_abstract_map:
             raise util.PunctiliousException("`m` is not an abstract-map.", m=m, this_abstract_formula=self)
         if self in m.abstract_map_preimage_sequence.immediate_sub_formulas:
@@ -1139,10 +1144,10 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             return m.get_abstract_map_value(self)
         else:
             # Pursue substitution recursively.
-            phi: AbstractFormula
-            s: tuple[AbstractFormula, ...] = tuple(phi.substitute_sub_formulas_with_map(m=m) for phi in
-                                                   self.iterate_immediate_sub_formulas())
-            return AbstractFormula.from_immediate_sub_formulas(n=self.main_element, s=s)
+            phi: LabeledRootedPlaneTree
+            s: tuple[LabeledRootedPlaneTree, ...] = tuple(phi.substitute_sub_formulas_with_map(m=m) for phi in
+                                                          self.iterate_immediate_sub_formulas())
+            return LabeledRootedPlaneTree.from_immediate_sub_formulas(n=self.main_element, s=s)
 
     @property
     def t(self) -> rptl.RootedPlaneTree:
@@ -1201,13 +1206,13 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
 
 # Flexible types to facilitate data validation
 
-FlexibleAbstractFormula = typing.Union[
-    AbstractFormula, tuple[
+FlexibleLabeledRootedPlaneTree = typing.Union[
+    LabeledRootedPlaneTree, tuple[
         rptl.FlexibleRootedPlaneTree, nn0sl.FlexibleNaturalNumber0Sequence], collections.abc.Iterator, collections.abc.Generator, None]
 
 # Aliases
 
-AF = AbstractFormula  # An alias for AbstractFormula
-empty_formula: AbstractFormula = AbstractFormula.least_element
-trivial_formula: AbstractFormula = AbstractFormula.least_element
+LRPT = LabeledRootedPlaneTree  # An alias for AbstractFormula
+empty_tree: LabeledRootedPlaneTree = LabeledRootedPlaneTree.least_element
+trivial_tree: LabeledRootedPlaneTree = LabeledRootedPlaneTree.least_element
 super_recursive_order = RecursiveSequenceOrder

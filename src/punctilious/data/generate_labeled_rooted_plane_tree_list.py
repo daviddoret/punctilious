@@ -2,7 +2,7 @@ import csv
 import punctilious as pu
 
 # Define the CSV file name
-filename = "abstract_formula_list.csv"
+filename = "labeled_rooted_plane_tree_list.csv"
 list_size = 2048
 
 # Define the header and some sample data
@@ -16,9 +16,9 @@ with open(filename, "w", newline="") as csvfile:
     csvwriter.writerow(header)
     for rank in range(list_size):
         if rank == 0:
-            phi: pu.afl.AbstractFormula = pu.afl.AbstractFormula.least_element
+            phi: pu.lrptl.LabeledRootedPlaneTree = pu.lrptl.LabeledRootedPlaneTree.least_element
         else:
-            phi: pu.afl.AbstractFormula = phi.successor()
+            phi: pu.lrptl.LabeledRootedPlaneTree = phi.successor()
         record = [rank, phi,
                   phi.main_element,
                   phi.arity,

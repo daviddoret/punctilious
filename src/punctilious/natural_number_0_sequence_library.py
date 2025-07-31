@@ -114,14 +114,14 @@ class LengthFirstLexicographicSecondOrder(brl.BinaryRelation):
     Note
     ------
 
-    In the context of abstract formulas,
-    "length-first" orders may look better suited to design orders of abstract formulas,
-    because abstract formulas require the linkage of two orders:
+    In the context of labeled rooted plane trees,
+    "length-first" orders may look better suited to design orders of labeled rooted plane trees,
+    because labeled rooted plane trees require the linkage of two orders:
 
     - rooted plane trees,
     - sequences of (0-based) natural numbers.
 
-    In effect, for an abstract formula to be well-formed,
+    In effect, for a labeled rooted plane tree to be well-formed,
     the size of the rooted plane trees must be equal
     to the length of the (0-based) natural number sequence.
 

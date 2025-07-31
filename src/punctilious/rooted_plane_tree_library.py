@@ -410,7 +410,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         Use case
         --------
 
-        This property is important to create a model of finite sets and ordered sets using abstract formulas,
+        This property is important to create a model of finite sets and ordered sets using labeled rooted plane trees,
         which further makes it possible to create a model finite maps, etc.
 
         :return: `True` if this rooted-plane-tree is strictly increasing, `False` otherwise.

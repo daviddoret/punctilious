@@ -6,7 +6,7 @@ import collections.abc
 # package modules
 import punctilious.util as util
 import punctilious.connective_library as cl
-import punctilious.abstract_formula_library as afl
+import punctilious.labeled_rooted_plane_tree_library as afl
 import punctilious.natural_number_0_sequence_library as sl
 import punctilious.connective_sequence_library as csl
 
@@ -22,7 +22,7 @@ class Formula(tuple):
 
     A `Formula` is a pair (ϕ, M) where:
 
-    - ϕ is an abstract formula of tree-size n.
+    - ϕ is a labeled rooted plane tree of tree-size n.
     - M is a bijective map between the subset of natural-numbers N,
        and a set of connectives C.
 
@@ -41,7 +41,7 @@ class Formula(tuple):
     def __hash__(self):
         return self._compute_hash(self)
 
-    def __init__(self, phi: afl.FlexibleAbstractFormula, s: sl.FlexibleConnectiveSequence):
+    def __init__(self, t: afl.FlexibleLabeledRootedPlaneTree, s: sl.FlexibleConnectiveSequence):
         super(Formula, self).__init__()
         self._immediate_sub_formulas = None
         self._sub_formulas = None
@@ -54,17 +54,17 @@ class Formula(tuple):
         """
         return self.is_less_than(phi)
 
-    def __new__(cls, phi: afl.FlexibleAbstractFormula, s: csl.FlexibleConnectiveSequence):
-        phi: afl.AbstractFormula = afl.AbstractFormula.from_any(phi)
+    def __new__(cls, t: afl.FlexibleLabeledRootedPlaneTree, s: csl.FlexibleConnectiveSequence):
+        t: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(t)
         s: csl.ConnectiveSequence = csl.ConnectiveSequence.from_any(s)
-        phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
-        if s.length != phi.natural_number_sequence.image_cardinality:
+        t: afl.LabeledRootedPlaneTree = t.canonical_labeled_rooted_plane_tree  # Canonize the labeled rooted plane tree
+        if s.length != t.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the `ConnectiveSequence` `s`"
                 f" is not equal to the `image_cardinality` of the `natural_number_sequence` of its"
-                f" `abstract_formula`.",
-                s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
-        psi = super(Formula, cls).__new__(cls, (phi, s,))
+                f" labeled tree.",
+                s_length=s.length, phi_tree_size=t.tree_size, s=s, phi=t)
+        psi = super(Formula, cls).__new__(cls, (t, s,))
         psi = cls._from_cache(psi)
         return psi
 
@@ -84,12 +84,12 @@ class Formula(tuple):
 
         Definition: arity of a formula
         The arity of a formula :math:`\Phi = (\Psi, S)`
-        where math:`Psi` is an abstract-formula, and :math:`S` is a connective-sequence,
-        is the arity of its abstract-formula :math:`Psi`.
+        where math:`Psi` is a labeled rooted plane tree, and :math:`S` is a connective-sequence,
+        is the arity of its labeled rooted plane tree :math:`Psi`.
 
         :return: the arity of the formula.
         """
-        return self.abstract_formula.arity
+        return self.labeled_rooted_plane_tree.arity
 
     @classmethod
     def _compute_hash(cls, o: Formula) -> int:
@@ -98,7 +98,7 @@ class Formula(tuple):
         :param o: An object that is structurally compatible with an formula.
         :return: The hash of the formula that is structurally equivalent to `o`.
         """
-        return hash((Formula, cls._HASH_SEED, o.abstract_formula, o.connective_sequence,))
+        return hash((Formula, cls._HASH_SEED, o.labeled_rooted_plane_tree, o.connective_sequence,))
 
     @classmethod
     def _from_cache(cls, o: FlexibleFormula):
@@ -111,10 +111,10 @@ class Formula(tuple):
             return o
 
     @property
-    def abstract_formula(self) -> afl.AbstractFormula:
+    def labeled_rooted_plane_tree(self) -> afl.LabeledRootedPlaneTree:
         """
 
-        `abstract_formula` is an immutable property.
+        `labeled_rooted_plane_tree` is an immutable property.
 
 
         :return:
@@ -142,7 +142,7 @@ class Formula(tuple):
 
         :return:
         """
-        return self.abstract_formula.formula_degree
+        return self.labeled_rooted_plane_tree.formula_degree
 
     @classmethod
     def from_any(cls,
@@ -200,15 +200,15 @@ class Formula(tuple):
 
         Formal definition:
         Two formulas phi and psi are formula-equivalent if and only if:
-        - the abstract-formula of phi is abstract-formula-equivalent to the abstract-formula of psi,
+        - the labeled rooted plane tree of phi is labeled rooted plane tree-equivalent to the labeled rooted plane tree of psi,
         - the connective-sequence of phi is connective-sequence-equivalent to the connective-sequence of psi.
 
         :param phi:
         :return:
         """
         phi: Formula = Formula.from_any(phi)
-        return self.abstract_formula.is_abstract_formula_equivalent_to(
-            phi.abstract_formula) and self.connective_sequence.is_connective_sequence_equivalent_to(
+        return self.labeled_rooted_plane_tree.is_labeled_rooted_plane_tree_equivalent_to(
+            phi.labeled_rooted_plane_tree) and self.connective_sequence.is_connective_sequence_equivalent_to(
             phi.connective_sequence)
 
     def is_immediate_sub_formula_of(self, phi: Formula) -> bool:
@@ -273,7 +273,7 @@ class Formula(tuple):
         `False` otherwise.
 
         Definition: canonical ordering of formula, denoted :math:`\prec`,
-        is defined as abstract-formula first, connective-sequence second.
+        is defined as labeled rooted plane tree first, connective-sequence second.
 
         Note:
         The canonical ordering of connective-sequence being dependent on the connectives UUIDs,
@@ -285,9 +285,9 @@ class Formula(tuple):
         phi: Formula = Formula.from_any(phi)
         if self.is_formula_equivalent_to(phi):
             return False
-        elif self.abstract_formula.is_less_than(phi.abstract_formula):
+        elif self.labeled_rooted_plane_tree.is_less_than(phi.labeled_rooted_plane_tree):
             return True
-        elif phi.abstract_formula.is_less_than(self.abstract_formula):
+        elif phi.labeled_rooted_plane_tree.is_less_than(self.labeled_rooted_plane_tree):
             return False
         elif self.connective_sequence.is_less_than(phi.connective_sequence):
             return True
@@ -320,7 +320,7 @@ class Formula(tuple):
         """
         i: int
         c: cl.Connective
-        for i in self.abstract_formula.natural_number_sequence:
+        for i in self.labeled_rooted_plane_tree.natural_number_sequence:
             yield self.get_connective_by_sequence_element(i)
 
     def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[Formula, None, None]:
@@ -330,16 +330,16 @@ class Formula(tuple):
 
         :return: A generator of :class:`Formula`.
         """
-        for phi, s in zip(self.abstract_formula.iterate_immediate_sub_formulas(),
-                          self.abstract_formula.iterate_immediate_sub_sequences()):
+        for phi, s in zip(self.labeled_rooted_plane_tree.iterate_immediate_sub_formulas(),
+                          self.labeled_rooted_plane_tree.iterate_immediate_sub_sequences()):
             s: tuple[int, ...] = util.deduplicate_integer_sequence(s)
             t: tuple[cl.Connective, ...] = tuple(
                 self.get_connective_by_sequence_element(i) for i in s)
             yield Formula(phi, t)
 
     def iterate_sub_formulas(self) -> collections.abc.Generator[Formula, None, None]:
-        for phi, s in zip(self.abstract_formula.iterate_sub_formulas(),
-                          self.abstract_formula.iterate_sub_sequences()):
+        for phi, s in zip(self.labeled_rooted_plane_tree.iterate_sub_formulas(),
+                          self.labeled_rooted_plane_tree.iterate_sub_sequences()):
             s: tuple[int, ...] = util.deduplicate_integer_sequence(s)
             t: tuple[cl.Connective, ...] = tuple(
                 self.get_connective_by_sequence_element(i) for i in s)
@@ -366,12 +366,12 @@ class Formula(tuple):
         """Returns a string representation of the `Formula` using function notation.
         """
         # TODO: TEST THIS
-        return self.abstract_formula.represent_as_function(connectives=self.connective_sequence)
+        return self.labeled_rooted_plane_tree.represent_as_function(connectives=self.connective_sequence)
 
     @property
     def sequence_max_value(self) -> int:
         """The `sequence_max_value` of a `Formula` is the `sequence_max_value` of its `abstract_formula`."""
-        return self.abstract_formula.sequence_max_value
+        return self.labeled_rooted_plane_tree.sequence_max_value
 
     @property
     def sub_formulas(self) -> tuple[Formula, ...]:
@@ -423,16 +423,16 @@ class Formula(tuple):
         codomain: tuple[Formula, ...] = tuple(Formula.from_any(y) for y in m.values())
         m: dict[Formula, Formula] = dict(zip(domain, codomain))
         sub_formulas: list[Formula] = []
-        immediate_abstract_formulas: list[afl.AbstractFormula] = []
+        immediate_abstract_formulas: list[afl.LabeledRootedPlaneTree] = []
         for phi in self.iterate_immediate_sub_formulas():
             if phi in m.keys():
                 psi = m[phi]
                 sub_formulas.append(psi)
-                immediate_abstract_formulas.append(psi.abstract_formula)
+                immediate_abstract_formulas.append(psi.labeled_rooted_plane_tree)
             else:
                 sub_formulas.append(phi)
-                immediate_abstract_formulas.append(phi.abstract_formula)
-        abstract_formula: afl.AbstractFormula = afl.AbstractFormula()
+                immediate_abstract_formulas.append(phi.labeled_rooted_plane_tree)
+        abstract_formula: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree()
         raise NotImplementedError("Complete implementation")
 
     @property
@@ -441,11 +441,11 @@ class Formula(tuple):
 
         Attention point: do not confuse `tree_size` and `formula_degree`.
         """
-        return self.abstract_formula.tree_size
+        return self.labeled_rooted_plane_tree.tree_size
 
 
 # Data types
 
 FlexibleFormula = typing.Union[
     Formula, tuple[
-        csl.FlexibleConnectiveSequence, afl.FlexibleAbstractFormula], collections.abc.Iterator, collections.abc.Generator, None]
+        csl.FlexibleConnectiveSequence, afl.FlexibleLabeledRootedPlaneTree], collections.abc.Iterator, collections.abc.Generator, None]

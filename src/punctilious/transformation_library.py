@@ -3,21 +3,21 @@ from __future__ import annotations
 import punctilious.util as util
 import punctilious.rooted_plane_tree_library as rptl
 import punctilious.natural_number_0_sequence_library as nn0s
-import punctilious.abstract_formula_library as afl
+import punctilious.labeled_rooted_plane_tree_library as afl
 
 
-class AbstractOrderedSet(afl.AbstractFormula):
-    r"""An abstract ordered set is an abstract-formula that has the structure of a finite (computable) ordered-set.
+class AbstractOrderedSet(afl.LabeledRootedPlaneTree):
+    r"""An abstract ordered set is a labeled rooted plane tree that has the structure of a finite (computable) ordered-set.
 
     Definition
     --------------
 
-    An abstract-formula :math:`\phi` is an abstract-ordered-set if and only if:
+    A labeled rooted plane tree :math:`\phi` is an abstract-ordered-set if and only if:
 
     - its immediate sub-formulas are unique.
 
     N.B.: abstract-classes being structurally composed of a rooted-tree-plane,
-      the immediate sub-formulas of an abstract-formula are necessarily ordered.
+      the immediate sub-formulas of a labeled rooted plane tree are necessarily ordered.
 
     Use case
     ------------
@@ -26,8 +26,8 @@ class AbstractOrderedSet(afl.AbstractFormula):
 
     """
 
-    def __init__(self, phi: afl.FlexibleAbstractFormula, n: int, p: afl.FlexibleAbstractFormula,
-                 i: afl.FlexibleAbstractFormula, t: rptl.FlexibleRootedPlaneTree,
+    def __init__(self, phi: afl.FlexibleLabeledRootedPlaneTree, n: int, p: afl.FlexibleLabeledRootedPlaneTree,
+                 i: afl.FlexibleLabeledRootedPlaneTree, t: rptl.FlexibleRootedPlaneTree,
                  s: nn0s.FlexibleNaturalNumber1Sequence):
         r"""
 
@@ -41,15 +41,15 @@ class AbstractOrderedSet(afl.AbstractFormula):
                                                                                      i.natural_number_sequence)
         super(AbstractFormula, self).__init__(t=t, s=s)
 
-    def __new__(cls, phi: afl.FlexibleAbstractFormula, n: int, p: afl.FlexibleAbstractFormula,
-                i: afl.FlexibleAbstractFormula, t: rptl.FlexibleRootedPlaneTree,
+    def __new__(cls, phi: afl.FlexibleLabeledRootedPlaneTree, n: int, p: afl.FlexibleLabeledRootedPlaneTree,
+                i: afl.FlexibleLabeledRootedPlaneTree, t: rptl.FlexibleRootedPlaneTree,
                 s: nn0s.FlexibleNaturalNumber1Sequence):
         if phi is None:
 
             # Alternative constructor based on the structural components of an abstract-ordered.set.
             n: int = int(n)
-            p: afl.AbstractFormula = afl.AbstractFormula.from_any(p)
-            i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
+            p: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(p)
+            i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
             if p.arity != i.arity:
                 raise util.PunctiliousException(
                     f"`Formula` data validation error. The length of the preimage `p`"
@@ -68,31 +68,31 @@ class AbstractOrderedSet(afl.AbstractFormula):
         return phi
 
     @classmethod
-    def from_abstract_formula(cls, phi: afl.FlexibleAbstractFormula):
-        r"""Takes an abstract-formula structurally compatible with an abstract-ordered-set,
+    def from_labeled_rooted_plane_tree(cls, t: afl.FlexibleLabeledRootedPlaneTree):
+        r"""Takes a labeled rooted plane tree structurally compatible with an abstract-ordered-set,
         and returns the same object typed as :class:`AbstractOrderedSet`.
 
-        :param phi:
+        :param t:
         :return:
         """
-        phi: afl.AbstractFormula = afl.AbstractFormula.from_any(phi)
-        unique_values: set[afl.AbstractFormula] = set()
-        psi: afl.AbstractFormula
-        for psi in phi:
-            if psi in unique_values:
+        t: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(t)
+        unique_values: set[afl.LabeledRootedPlaneTree] = set()
+        u: afl.LabeledRootedPlaneTree
+        for u in t:
+            if u in unique_values:
                 return False
-            unique_values.add(item)
+            unique_values.add(u)
         return True
-        return cls(d['x'], d['y'])
+        # return cls(d['x'], d['y'])
 
 
-class AbstractMap(afl.AbstractFormula):
+class AbstractMap(afl.LabeledRootedPlaneTree):
     r"""An :class:`AbstractFormula` that has the structure of a finite (computable) map.
 
     Definition
     --------------
 
-    An abstract-formula :math:`\phi` is an abstract-map if and only if:
+    A labeled rooted plane tree :math:`\phi` is an abstract-map if and only if:
 
     - its arity equals 2,
     - the arities of its immediate sub-formulas are equal.
@@ -113,14 +113,14 @@ class AbstractMap(afl.AbstractFormula):
     Use case
     ------------
 
-    If an abstract-formula :math:`\phi` is an abstract-map,
-    then there is an algorithm that receives an abstract-formula :math:`\psi` as input,
+    If a labeled rooted plane tree :math:`\phi` is an abstract-map,
+    then there is an algorithm that receives a labeled rooted plane tree :math:`\psi` as input,
     that if :math:`\psi` is an element of :math:`f^{-1}(\phi)`
     returns the element of :math:`\operatorname{Im}(\phi)` that is at the same index position.
 
     """
 
-    def __init__(self, n: int, p: afl.FlexibleAbstractFormula, i: afl.FlexibleAbstractFormula):
+    def __init__(self, n: int, p: afl.FlexibleLabeledRootedPlaneTree, i: afl.FlexibleLabeledRootedPlaneTree):
         r"""
 
         :param n: The natural number of the root element of the map.
@@ -133,7 +133,7 @@ class AbstractMap(afl.AbstractFormula):
                                                                                      i.natural_number_sequence)
         super(AbstractMap, self).__init__(t=t, s=s)
 
-    def __new__(cls, n: int, p: afl.FlexibleAbstractFormula, i: afl.FlexibleAbstractFormula):
+    def __new__(cls, n: int, p: afl.FlexibleLabeledRootedPlaneTree, i: afl.FlexibleLabeledRootedPlaneTree):
         r"""
 
         :param n: The natural number of the root element of the map.
@@ -141,8 +141,8 @@ class AbstractMap(afl.AbstractFormula):
         :param p: The preimage of the map.
         """
         n: int = int(n)
-        p: afl.AbstractFormula = afl.AbstractFormula.from_any(p)
-        i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
+        p: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(p)
+        i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
         if p.arity != i.arity:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the preimage `p`"
@@ -156,42 +156,42 @@ class AbstractMap(afl.AbstractFormula):
         return psi
 
     @property
-    def canonical_abstract_formula(self) -> AbstractMap:
+    def canonical_labeled_rooted_plane_tree(self) -> AbstractMap:
         paired = list(zip(self.pre, Bar))
         paired_sorted = sorted(paired)  # Sort by Foo (alphabetical)
         Foo_sorted, Bar_aligned = zip(*paired_sorted)
 
     @property
-    def pre_image(self) -> afl.AbstractFormula:
+    def pre_image(self) -> afl.LabeledRootedPlaneTree:
         return self[0]
 
     @property
-    def image(self) -> afl.AbstractFormula:
+    def image(self) -> afl.LabeledRootedPlaneTree:
         return self[1]
 
 
-class AbstractTransformation(afl.AbstractFormula):
+class AbstractTransformation(afl.LabeledRootedPlaneTree):
     r"""An abstract transformation.
 
-    An abstract-formula 0(phi, psi)
+    A labeled rooted plane tree 0(phi, psi)
     where phi is denoted as the input, and psi is denoted as the output.
 
     A tuple (input, output).
 
     """
 
-    def __init__(self, i: afl.FlexibleAbstractFormula, o: afl.FlexibleAbstractFormula):
+    def __init__(self, i: afl.FlexibleLabeledRootedPlaneTree, o: afl.FlexibleLabeledRootedPlaneTree):
         super(AbstractTransformation, self).__init__(t=None, s=None)
 
-    def __new__(cls, i: afl.FlexibleAbstractFormula, o: afl.FlexibleAbstractFormula):
-        i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
-        o: afl.AbstractFormula = afl.AbstractFormula.from_any(o)
-        phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
+    def __new__(cls, i: afl.FlexibleLabeledRootedPlaneTree, o: afl.FlexibleLabeledRootedPlaneTree):
+        i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
+        o: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(o)
+        phi: afl.LabeledRootedPlaneTree = phi.canonical_labeled_rooted_plane_tree  # Canonize the labeled rooted plane tree
         if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the `ConnectiveSequence` `s`"
                 f" is not equal to the `image_cardinality` of the `natural_number_sequence` of its"
-                f" `abstract_formula`.",
+                f" labeled tree.",
                 s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
         psi = super(Formula, cls).__new__(cls, (phi, s,))
         psi = retrieve_formula_from_cache(psi)
@@ -213,19 +213,20 @@ class AbstractTransformationBySubstitution(AbstractTransformation):
 
     """
 
-    def __init__(self, i: afl.FlexibleAbstractFormula, o: afl.FlexibleAbstractFormula):
+    def __init__(self, i: afl.FlexibleLabeledRootedPlaneTree, o: afl.FlexibleLabeledRootedPlaneTree):
         super(AbstractTransformation, self).__init__(t=None, s=None)
 
-    def __new__(cls, i: afl.FlexibleAbstractFormula, v: afl.FlexibleAbstractFormula, s: afl.FlexibleAbstractFormula,
-                o: afl.FlexibleAbstractFormula):
-        i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
-        o: afl.AbstractFormula = afl.AbstractFormula.from_any(o)
-        phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
+    def __new__(cls, i: afl.FlexibleLabeledRootedPlaneTree, v: afl.FlexibleLabeledRootedPlaneTree,
+                s: afl.FlexibleLabeledRootedPlaneTree,
+                o: afl.FlexibleLabeledRootedPlaneTree):
+        i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
+        o: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(o)
+        phi: afl.LabeledRootedPlaneTree = phi.canonical_labeled_rooted_plane_tree  # Canonize the labeled rooted plane tree
         if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the `ConnectiveSequence` `s`"
                 f" is not equal to the `image_cardinality` of the `natural_number_sequence` of its"
-                f" `abstract_formula`.",
+                f" labeled tree.",
                 s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
         psi = super(Formula, cls).__new__(cls, (phi, s,))
         psi = retrieve_formula_from_cache(psi)
@@ -233,20 +234,22 @@ class AbstractTransformationBySubstitution(AbstractTransformation):
 
 
 class TransformationBySubstitution:
-    def __init__(self, i: afl.FlexibleAbstractFormula, v: afl.FlexibleAbstractFormula, s: afl.FlexibleAbstractFormula,
-                 o: afl.FlexibleAbstractFormula):
+    def __init__(self, i: afl.FlexibleLabeledRootedPlaneTree, v: afl.FlexibleLabeledRootedPlaneTree,
+                 s: afl.FlexibleLabeledRootedPlaneTree,
+                 o: afl.FlexibleLabeledRootedPlaneTree):
         super(Transformation, self).__init__(t=None, s=None)
 
-    def __new__(cls, i: afl.FlexibleAbstractFormula, v: afl.FlexibleAbstractFormula, s: afl.FlexibleAbstractFormula,
-                o: afl.FlexibleAbstractFormula):
-        i: afl.AbstractFormula = afl.AbstractFormula.from_any(i)
-        o: afl.AbstractFormula = afl.AbstractFormula.from_any(o)
-        phi: afl.AbstractFormula = phi.canonical_abstract_formula  # Canonize the abstract-formula
+    def __new__(cls, i: afl.FlexibleLabeledRootedPlaneTree, v: afl.FlexibleLabeledRootedPlaneTree,
+                s: afl.FlexibleLabeledRootedPlaneTree,
+                o: afl.FlexibleLabeledRootedPlaneTree):
+        i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
+        o: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(o)
+        phi: afl.LabeledRootedPlaneTree = phi.canonical_labeled_rooted_plane_tree  # Canonize the labeled rooted plane tree
         if s.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the `ConnectiveSequence` `s`"
                 f" is not equal to the `image_cardinality` of the `natural_number_sequence` of its"
-                f" `abstract_formula`.",
+                f" labeled tree.",
                 s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
         psi = super(Formula, cls).__new__(cls, (phi, s,))
         psi = retrieve_formula_from_cache(psi)
