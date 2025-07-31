@@ -1,3 +1,5 @@
+import random
+
 import punctilious as pu
 
 
@@ -178,6 +180,28 @@ class TestNaturalNumbersSequence:
                 if i == j:
                     assert n1.is_equal_to(n2)
                     assert n1 == n2
+
+    def test_refined_godel_order_2(self):
+        for i in range(8):
+            # generate a random sequence
+            n = random.randint(1, 8)
+            m = tuple(random.randint(0, 32) for x in range(n))
+            s1: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.NaturalNumber0Sequence(*m)
+            r1 = s1.rank()
+            s2 = pu.nn0sl.NaturalNumber0Sequence.unrank(r1)
+            r2 = s2.rank()
+            assert s1 == s2
+            assert r1 == r2
+        pass
+
+    def test_refined_godel_order_3(self):
+        s = pu.nn0sl.NaturalNumber0Sequence(2, 7, 4, 8, 5, 6, 2)
+        r = s.rank()
+        s2 = pu.nn0sl.NaturalNumber0Sequence.unrank(r)
+        r2 = s2.rank()
+        assert s == s2
+        assert r == r2
+        pass
 
     def test_least_element(self):
         assert pu.nn0sl.RefinedGodelNumberOrder.least_element == pu.nn0sl.NN0S()

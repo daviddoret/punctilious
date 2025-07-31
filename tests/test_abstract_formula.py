@@ -408,8 +408,17 @@ class TestAbstractFormula:
         assert pu.afl.trivial_formula == trivial_formula
 
     def test_super_recursive_order(self):
+        s = (2, 127, 65, 37)
+        s = pu.nn0sl.NaturalNumber0Sequence(*s)
+        n_bad = s.rank()
+        n = pu.nn0sl.RefinedGodelNumberOrder.rank(s)
+        # s1 = pu.nn0sl.SumFirstLexicographicSecondOrder.unrank(n)
+        s2 = pu.nn0sl.RefinedGodelNumberOrder.unrank(n)
+        t = pu.afl.AbstractFormula.unrank(n)
+        pass
+
         l = []
-        for i in range(0, 32):
+        for i in range(0, 1024):
             t = pu.afl.AbstractFormula.unrank(i)
             l.append(t)
         pass

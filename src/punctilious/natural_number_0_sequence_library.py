@@ -447,19 +447,22 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
         :param x:
         :return:
         """
-        x = NaturalNumber0Sequence.from_any(x)
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
         if x == cls.least_element:
             return 0
         else:
-            n = 1
-            p = 1
-            for i, f in enumerate(x):
+            n: int = 1
+            p: int = 1
+            i: int
+            exponent: int
+            for i, exponent in enumerate(x):
                 p = pnl.get_next_prime(p)
                 if i == len(x) - 1:
                     # this is the last factor
                     # Increment it to undo the encoding hack for leading zeroes.
-                    f += 1
-                n = n * p ** f
+                    exponent += 1
+                factor: int = p ** exponent
+                n = n * factor
             return n - 1
 
     @classmethod
@@ -479,6 +482,7 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
 
     @classmethod
     def unrank(cls, n: int) -> object:
+        n = int(n)
         n += 1  # Makes the ranks 0-based.
         if n == 1:
             return cls.least_element

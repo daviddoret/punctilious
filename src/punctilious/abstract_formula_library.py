@@ -185,8 +185,9 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         if n < 0:
             raise util.PunctiliousException("`n` must be a positive integer.", n=n)
         # unrank the (0-based) natural sequence that is encoded in the rank.
-        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.unrank(n)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.SumFirstLexicographicSecondOrder.unrank(n)
         if s == nn0sl.NaturalNumber0Sequence():
+            # the empty sequence is mapped to the least element.
             return cls.least_element
         else:
             main_element: int = s[0]
