@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="troubleshooting successor of labelled trees">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/abstract_formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_formula.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +135,7 @@
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_represent_as_function.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_substitute_sub_formulas.executor": "Debug",
-    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency.executor": "Debug",
+    "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency.executor": "Run",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_super_recursive_order.executor": "Debug",
     "Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_tree_size.executor": "Run",
     "Python tests.pytest for test_abstract_structures.TestAbstractStructures.test_abstract_map.executor": "Run",
@@ -595,7 +593,7 @@
     "Python.formula_library.executor": "Run",
     "Python.formula_notations.executor": "Run",
     "Python.foundations.executor": "Run",
-    "Python.generate_abstract_formula_list.executor": "Debug",
+    "Python.generate_abstract_formula_list.executor": "Run",
     "Python.generate_dyck_word_list.executor": "Run",
     "Python.generate_natural_number_0_pair_list.executor": "Run",
     "Python.generate_natural_number_0_sequence_list.executor": "Run",
@@ -733,7 +731,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency">
+  <component name="RunManager" selected="Python.generate_abstract_formula_list">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -772,6 +770,28 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="generate_abstract_formula_list" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious/data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/data/generate_abstract_formula_list.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -998,23 +1018,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1073,6 +1076,7 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
+      <item itemvalue="Python.generate_abstract_formula_list" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
@@ -1080,7 +1084,6 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking" />
       <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency" />
-      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with" />
       <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_successor_unrank_consistency" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -1089,11 +1092,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.generate_abstract_formula_list" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_successor_unrank_consistency" />
         <item itemvalue="Python tests.pytest for test_abstract_formula.TestAbstractFormula.test_ranking" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_successor_unrank_consistency" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_successor_unrank_consistency" />
-        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with" />
       </list>
     </recent_temporary>
   </component>
@@ -1115,22 +1118,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01562" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1753212760303</created>
-      <option name="number" value="01562" />
-      <option name="presentableId" value="LOCAL-01562" />
-      <option name="project" value="LOCAL" />
-      <updated>1753212760303</updated>
-    </task>
-    <task id="LOCAL-01563" summary="cleanup natural-number-0">
-      <option name="closed" value="true" />
-      <created>1753238016489</created>
-      <option name="number" value="01563" />
-      <option name="presentableId" value="LOCAL-01563" />
-      <option name="project" value="LOCAL" />
-      <updated>1753238016489</updated>
     </task>
     <task id="LOCAL-01564" summary="cleanup">
       <option name="closed" value="true" />
@@ -1508,7 +1495,23 @@
       <option name="project" value="LOCAL" />
       <updated>1753957259506</updated>
     </task>
-    <option name="localTasksCounter" value="1611" />
+    <task id="LOCAL-01611" summary="troubleshooting successor of labelled trees">
+      <option name="closed" value="true" />
+      <created>1753962860136</created>
+      <option name="number" value="01611" />
+      <option name="presentableId" value="LOCAL-01611" />
+      <option name="project" value="LOCAL" />
+      <updated>1753962860136</updated>
+    </task>
+    <task id="LOCAL-01612" summary="troubleshooting successor of labelled trees">
+      <option name="closed" value="true" />
+      <created>1753963103963</created>
+      <option name="number" value="01612" />
+      <option name="presentableId" value="LOCAL-01612" />
+      <option name="project" value="LOCAL" />
+      <updated>1753963103963</updated>
+    </task>
+    <option name="localTasksCounter" value="1613" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1721,21 +1724,6 @@
           <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
           <line>455</line>
           <option name="timeStamp" value="466" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>418</line>
-          <option name="timeStamp" value="475" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>410</line>
-          <option name="timeStamp" value="476" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_abstract_formula.py</url>
-          <line>412</line>
-          <option name="timeStamp" value="477" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
