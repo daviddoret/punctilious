@@ -147,7 +147,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
             subtree_rank: int = cls.rank(subtree)
             t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)
             s: nn0sl.NaturalNumber0Sequence = s.concatenate_with(t)
-        raw_rank: int = s.rank()  # Retrieve the canonical rank of the sequence.
+        raw_rank: int = nn0sl.RefinedGodelNumberOrder.rank(s)  # Retrieve the canonical rank of the sequence.
         r: int = raw_rank - 1  # "- 1" because the empty sequence is not encoded.
         return r
 
@@ -188,19 +188,16 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         n = int(n)
         if n < 0:
             raise util.PunctiliousException("`n` must be a positive integer.", n=n)
+        n += 1  # Corrects the absence of the empty sequence in the encoding.
         # unrank the (0-based) natural sequence that is encoded in the rank.
         s: nn0sl.NaturalNumber0Sequence = nn0sl.RefinedGodelNumberOrder.unrank(n)
-        if s == nn0sl.NaturalNumber0Sequence():
-            # the empty sequence is mapped to the least element.
-            return cls.least_element
-        else:
-            main_element: int = s[0]
-            subtrees = []
-            for i, m in enumerate(s, 1):
-                subtree = cls.unrank(m)
-                subtrees.append(subtree)
-            t: AbstractFormula = AbstractFormula.from_immediate_sub_formulas(n=main_element,
-                                                                             s=subtrees)
+        main_element: int = s[0]
+        subtrees = []
+        for i, m in enumerate(s[1:], 1):
+            subtree = cls.unrank(m)
+            subtrees.append(subtree)
+        t: AbstractFormula = AbstractFormula.from_immediate_sub_formulas(n=main_element,
+                                                                         s=subtrees)
         return t
 
 
@@ -441,7 +438,7 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def from_immediate_sub_formulas(
             cls,
             n: int | None,
-            s: tuple[FlexibleAbstractFormula, ...] | None) -> AbstractFormula:
+            s: tuple[FlexibleAbstractFormula, ...] | None = None) -> AbstractFormula:
         r"""Given a root natural number n,
         and a tuple of abstract-formulas s,
         declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
@@ -450,8 +447,11 @@ class AbstractFormula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         :param s:
         :return:
         """
-        if n is None:
-            n: int = 0
+        n: int = int(n)
+        if n < 0:
+            raise util.PunctiliousException("`n` is not a (0-based) natural number.", n=n)
+        # if n is None:
+        #    n: int = 0
         if s is None:
             s: tuple[AbstractFormula, ...] = ()
         s: tuple[AbstractFormula, ...] = tuple(

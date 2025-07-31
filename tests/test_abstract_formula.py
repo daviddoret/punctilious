@@ -410,8 +410,18 @@ class TestAbstractFormula:
     def test_ranking(self):
         t0 = pu.afl.AbstractFormula.least_element
         assert t0.rank() == 0
+        assert pu.afl.AbstractFormula.unrank(0) == t0
         t1 = pu.afl.AbstractFormula.from_immediate_sub_formulas(n=0, s=(t0,))
         assert t1.rank() == 1
+        assert pu.afl.AbstractFormula.unrank(1) == t1
+        t2 = pu.afl.AbstractFormula.from_immediate_sub_formulas(n=1)
+        assert t2.rank() == 2
+        t2b = pu.afl.AbstractFormula.unrank(2)
+        assert t2b == t2
+        t3 = pu.afl.AbstractFormula.from_immediate_sub_formulas(n=0, s=(t0, t0,))
+        assert t3.rank() == 3
+        assert pu.afl.AbstractFormula.unrank(3) == t3
+        pass
 
     def test_successor_unrank_consistency(self):
         for i in range(1024):
