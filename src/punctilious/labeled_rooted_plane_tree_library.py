@@ -99,7 +99,7 @@ class IsEqualTo(brl.BinaryRelation):
         """
         x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
         y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
-        return x.is_canonical_labeled_rooted_plane_tree_equivalent_to(y)
+        return x.is_labeled_rooted_plane_tree_equivalent_to(y)
 
 
 class RecursiveSequenceOrder(brl.BinaryRelation):
