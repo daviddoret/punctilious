@@ -6,7 +6,7 @@ filename = "labeled_rooted_plane_tree_list.csv"
 list_size = 2048
 
 # Define the header and some sample data
-header = ["Rank", "Abstract Formula", "Main Element", "Arity", "Is Canonical",
+header = ["Rank", "LRPT", "Main Element", "Arity", "Is Canonical",
           "Is Strictly Increasing", "RPT Rank", "Sequence Rank", "Sequence Max Value"]
 data = []
 

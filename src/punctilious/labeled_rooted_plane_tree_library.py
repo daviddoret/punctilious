@@ -5,6 +5,7 @@
 from __future__ import annotations
 import typing
 import collections
+import functools
 # import itertools
 
 # package modules

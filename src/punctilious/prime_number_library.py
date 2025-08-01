@@ -56,7 +56,7 @@ def is_prime(n: int):
         return True
 
 
-@lru_cache(maxsize=None, typed=False)  # Unlimited cache size
+@lru_cache(maxsize=1024, typed=False)  # Unlimited cache size
 def get_next_prime(n: int) -> int:
     r"""Returns the first prime number p such that p > n.
 

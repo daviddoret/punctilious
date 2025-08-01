@@ -1,4 +1,4 @@
-Rank|Abstract Formula|Main Element|Arity|Is Canonical|Is Strictly Increasing|RPT Rank|Sequence Rank|Sequence Max Value
+Rank|LRPT|Main Element|Arity|Is Canonical|Is Strictly Increasing|RPT Rank|Sequence Rank|Sequence Max Value
 0|0|0|0|True|True|0|1|0
 1|0(0)|0|1|True|True|1|2|0
 2|1|1|0|True|True|0|3|1
