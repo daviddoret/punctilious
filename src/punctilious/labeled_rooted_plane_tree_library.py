@@ -166,7 +166,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
         y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
         n1: int = x.rank()
-        n2: int = x.rank()
+        n2: int = y.rank()
         return n1 < n2
 
     @classmethod
@@ -233,9 +233,9 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
             raise util.PunctiliousException(
                 f"`AbstractFormula` data validation error. The size of the `RootedPlaneGraph` is not equal to the length of the `UnrestrictedSequence`.",
                 t_size=t.size, s_length=s.length, t=t, s=s)
-        phi = super(LabeledRootedPlaneTree, cls).__new__(cls, (t, s))
-        phi = cls._from_cache(phi)
-        return phi
+        lrpt = super(LabeledRootedPlaneTree, cls).__new__(cls, (t, s))
+        lrpt = cls._from_cache(lrpt)
+        return lrpt
 
     def __repr__(self):
         return self.represent_as_function()
@@ -459,9 +459,9 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         if s is None:
             s: tuple[LabeledRootedPlaneTree, ...] = ()
         s: tuple[LabeledRootedPlaneTree, ...] = tuple(
-            LabeledRootedPlaneTree.from_any(o=phi) for phi in s)
+            LabeledRootedPlaneTree.from_any(o=sub_lrpt) for sub_lrpt in s)
         # Retrieves the children trees
-        t: tuple[rptl.RootedPlaneTree, ...] = tuple(phi.rooted_plane_tree for phi in s)
+        t: tuple[rptl.RootedPlaneTree, ...] = tuple(sub_lrpt.rooted_plane_tree for sub_lrpt in s)
         # Declare the new parent tree
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(*t)
         # Declare the natural-number-sequence by appending n to the concatenation of the
@@ -515,22 +515,22 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t, s)
         return phi
 
-    def get_abstract_map_value(self, phi: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
+    def get_abstract_map_value(self, t: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
         r"""If this labeled rooted plane tree is an abstract-map, returns the image `phi` under this map.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
-        :param phi: a preimage element.
+        :param t: a preimage element.
         :return: the image of `phi` under this map.
         """
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         if self.is_abstract_map:
-            i: int = self.abstract_map_preimage_sequence.get_immediate_subformula_index(phi)
+            i: int = self.abstract_map_preimage_sequence.get_immediate_subformula_index(t)
             return self.abstract_map_image_sequence.immediate_sub_formulas[i]
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
 
-    def get_immediate_subformula_index(self, phi: FlexibleLabeledRootedPlaneTree):
+    def get_immediate_subformula_index(self, t: FlexibleLabeledRootedPlaneTree):
         r"""Returns the 0-based index position of `phi` in this labeled rooted plane tree immediate subformulas.
 
         Prerequisites:
@@ -538,19 +538,19 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         - the immediate subformulas of this labeled rooted plane tree are unique, cf. :attr:`AbstractFormula.immediate_subformulas_are_unique`,
         - `phi` is an immediate subformula of this labeled rooted plane tree.
 
-        :param phi:
+        :param t:
         :return:
         """
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         if not self.immediate_subformulas_are_unique:
             raise util.PunctiliousException(
                 'The immediate subformulas of this labeled rooted plane tree are not unique.',
-                this_formula=self, phi=phi)
-        if not phi in self.immediate_sub_formulas:
+                this_formula=self, phi=t)
+        if not t in self.immediate_sub_formulas:
             raise util.PunctiliousException('`phi` is not an immediate subformulas of this labeled rooted plane tree.',
-                                            this_formula=self, phi=phi)
+                                            this_formula=self, phi=t)
 
-        return self.immediate_sub_formulas.index(phi)
+        return self.immediate_sub_formulas.index(t)
 
     def get_sub_formula_by_path(self, p: tuple[int, ...]) -> LabeledRootedPlaneTree:
         r"""Given a path `p`, returns the corresponding sub-formula.
@@ -796,42 +796,13 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         return self.canonical_labeled_rooted_plane_tree.is_labeled_rooted_plane_tree_equivalent_to(
             phi.canonical_labeled_rooted_plane_tree)
 
-    def is_equal_to(self, phi: FlexibleLabeledRootedPlaneTree):
-        r"""Under :class:`AbstractFormula` canonical ordering,
-        returns `True` if the current :class:`AbstractFormula` is equal to `phi`,
-        `False` otherwise.
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
 
-        See :attr:`AbstractFormula.is_less_than` for a definition of labeled rooted plane tree canonical-ordering.
-
-        :param phi: A :class:`AbstractFormula`.
-        :return: `True` if the current :class:`AbstractFormula` is equal to `s`, `False` otherwise.
-        """
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
-        return self.is_labeled_rooted_plane_tree_equivalent_to(phi)
-
-    def is_less_than(self, phi: FlexibleLabeledRootedPlaneTree) -> bool:
-        r"""Under :class:`AbstractFormula` canonical ordering,
-        returns `True` if the current :class:`AbstractFormula` is less than `phi`,
-        `False` otherwise.
-
-        Definition: canonical ordering of labeled rooted plane tree, denoted :math:`\prec`,
-        is defined as rooted-plane-tree-first, natural-number-sequence second.
-
-        :param phi: A :class:`AbstractFormula`.
-        :return: `True` if the current :class:`AbstractFormula` is equal to `phi`, `False` otherwise.
-        """
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
-        if self.is_labeled_rooted_plane_tree_equivalent_to(phi):
-            return False
-        elif self.rooted_plane_tree.is_less_than_under_o1(phi.rooted_plane_tree):
-            return True
-        elif phi.rooted_plane_tree.is_less_than_under_o1(self.rooted_plane_tree):
-            return False
-        elif self.natural_number_sequence.is_strictly_less_than(phi.natural_number_sequence):
-            return True
-        elif phi.natural_number_sequence.is_strictly_less_than(self.natural_number_sequence):
-            return False
-        raise util.PunctiliousException("Unreachable condition")
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return RecursiveSequenceOrder
 
     def is_immediate_sub_formula_of(self, phi: LabeledRootedPlaneTree):
         r"""Returns `True` if this :class:`AbstractFormula` is an immediate sub-formula of :class:`AbstractFormula` phi.

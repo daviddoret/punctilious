@@ -164,42 +164,42 @@ def nns0123456789_10_11():
 
 
 @pytest.fixture
-def af1(t1_a, nns0):
+def lrpt1(t1_a, nns0):
     return pu.lrptl.LabeledRootedPlaneTree(t1_a, nns0)
 
 
 @pytest.fixture
-def af1b(t1_a, nns1):
+def lrpt2(t1_a, nns1):
     return pu.lrptl.LabeledRootedPlaneTree(t1_a, nns1)
 
 
 @pytest.fixture
-def af2a(t2_a_aa, nns00):
+def lrpt3(t2_a_aa, nns00):
     return pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, nns00)
 
 
 @pytest.fixture
-def af2b(t2_a_aa, nns01):
+def lrpt4(t2_a_aa, nns01):
     return pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, nns01)
 
 
 @pytest.fixture
-def af3a(t3_a_aa_aaa, nns001):
+def lrpt5(t3_a_aa_aaa, nns001):
     return pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, nns001)
 
 
 @pytest.fixture
-def af6a(t6_a_aa_ab_ac_ad_ae, nns012345):
+def lrpt6(t6_a_aa_ab_ac_ad_ae, nns012345):
     return pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae, nns012345)
 
 
 @pytest.fixture
-def af12a(t12, nns0123456789_10_11):
+def lrpt7(t12, nns0123456789_10_11):
     return pu.lrptl.LabeledRootedPlaneTree(t12, nns0123456789_10_11)
 
 
 @pytest.fixture
-def af_big(t_big):
+def lrpt8(t_big):
     return pu.lrptl.LabeledRootedPlaneTree(t_big,
                                            (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1,
                                             4,
@@ -208,43 +208,43 @@ def af_big(t_big):
 
 
 @pytest.fixture
-def phi1a(af1):
+def phi1a(lrpt1):
     """The formula 1.
 
     :param af1:
     :return:
     """
-    return pu.fl.Formula(af1, (pu.cc.one,), )
+    return pu.fl.Formula(lrpt1, (pu.cc.one,), )
 
 
 @pytest.fixture
-def phi2a(af2a):
+def phi2a(lrpt3):
     """The formula: 1(1).
 
     :param af2a:
     :return:
     """
-    return pu.fl.Formula(af2a, (pu.cc.one,), )
+    return pu.fl.Formula(lrpt3, (pu.cc.one,), )
 
 
 @pytest.fixture
-def phi2b(af2b):
+def phi2b(lrpt4):
     """The formula: -1.
 
     :param af2b:
     :return:
     """
-    return pu.fl.Formula(af2b, (pu.cc.minus, pu.cc.one,), )
+    return pu.fl.Formula(lrpt4, (pu.cc.minus, pu.cc.one,), )
 
 
 @pytest.fixture
-def phi6a(af6a):
+def phi6a(lrpt6):
     """set(1, 2, 3, 4, 5)
 
     :param af6a:
     :return:
     """
-    return pu.fl.Formula(af6a,
+    return pu.fl.Formula(lrpt6,
                          (pu.cc.set_by_extension, pu.cc.one,
                           pu.cc.two,
                           pu.cc.three,
