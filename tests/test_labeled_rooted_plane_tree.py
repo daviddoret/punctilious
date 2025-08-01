@@ -288,7 +288,7 @@ class TestLabeledRootedPlaneTree:
         assert phi.represent_as_function() == "100(102, 140)"
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
         phi = pu.lrptl.LabeledRootedPlaneTree(t12, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,))
-        assert phi.represent_as_function() == "1(2, 3(4), 5(6, 7, 8, 9,10), 11(12))"
+        assert phi.represent_as_function() == "1(2, 3(4), 5(6, 7, 8, 9, 10), 11(12))"
         phi = pu.lrptl.LabeledRootedPlaneTree(t12, (15, 1, 8, 3, 3, 10, 11, 12, 11, 6, 2, 10,))
         assert phi.represent_as_function() == "15(1, 8(3), 3(10, 11, 12, 11, 6), 2(10))"
 
