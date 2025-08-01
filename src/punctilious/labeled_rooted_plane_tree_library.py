@@ -219,12 +219,8 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
     def __init__(self, t: rptl.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
         super(LabeledRootedPlaneTree, self).__init__()
-        self._canonical_labeled_rooted_plane_tree: LabeledRootedPlaneTree | None = None
-        self._immediate_subformulas_are_unique: LabeledRootedPlaneTree | None = None
-        self._immediate_sub_formulas: tuple[LabeledRootedPlaneTree, ...] | None = None
         self._is_abstract_map: bool | None = None
         self._is_abstract_inference_rule: bool | None = None
-        self._sub_formulas: tuple[LabeledRootedPlaneTree, ...] | None = None
 
     def __new__(cls, t: rptl.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_any(t)
@@ -346,7 +342,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
 
-    @property
+    @functools.cached_property
     def arity(self) -> int:
         r"""The :attr:`AbstractFormula.arity` is the number of immediate sub-formulas it contains.
 
@@ -354,7 +350,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         return len(self.immediate_sub_formulas)
 
-    @property
+    @functools.cached_property
     def canonical_labeled_rooted_plane_tree(self) -> LabeledRootedPlaneTree:
         r"""The canonical-labeled rooted plane tree of this labeled rooted plane tree.
 
@@ -369,13 +365,10 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         if self.is_canonical:
             return self
-        elif self._canonical_labeled_rooted_plane_tree is not None:
-            return self._canonical_labeled_rooted_plane_tree
         else:
-            self._canonical_labeled_rooted_plane_tree: LabeledRootedPlaneTree = LabeledRootedPlaneTree(
+            return LabeledRootedPlaneTree(
                 t=self.rooted_plane_tree,
                 s=self.natural_number_sequence.to_restricted_growth_function_sequence)
-            return self._canonical_labeled_rooted_plane_tree
 
     def derive_abstract_inference_rule(self, p: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
         r"""If this labeled rooted plane tree is an abstract-inference-rule, derives a theorem
@@ -408,7 +401,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
-    @property
+    @functools.cached_property
     def formula_degree(self) -> int:
         r"""The `formula_degree` of an :class:`AbstractFormula` is the number of non-leaf nodes it contains.
 
@@ -583,7 +576,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
                 phi: LabeledRootedPlaneTree = phi.immediate_sub_formulas[j]
             return phi
 
-    @property
+    @functools.cached_property
     def immediate_sub_formulas(self) -> tuple[LabeledRootedPlaneTree, ...]:
         r"""The `immediate_sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements
         that are the immediate children formulas of `phi` in the formula tree, or equivalently the formulas
@@ -601,14 +594,12 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
         :return:
         """
-        if self._immediate_sub_formulas is None:
-            sub_formulas = list()
-            for phi in self.iterate_immediate_sub_formulas():
-                sub_formulas.append(phi)
-            self._immediate_sub_formulas = tuple(sub_formulas)
-        return self._immediate_sub_formulas
+        sub_formulas = list()
+        for phi in self.iterate_immediate_sub_formulas():
+            sub_formulas.append(phi)
+        return tuple(sub_formulas)
 
-    @property
+    @functools.cached_property
     def immediate_subformulas_are_unique(self) -> bool:
         r"""Returns `True` if all immediate subformulas contained in this :class:`AbstractFormula`
         are unique.
@@ -619,15 +610,13 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
         :return:
         """
-        if self._immediate_subformulas_are_unique is None:
-            unique_values: set[LabeledRootedPlaneTree] = set()
-            psi: LabeledRootedPlaneTree
-            for psi in self.iterate_immediate_sub_formulas():
-                if psi in unique_values:
-                    self._immediate_subformulas_are_unique = False
-                unique_values.add(psi)
-            self._immediate_subformulas_are_unique = True
-        return self._immediate_subformulas_are_unique
+        unique_values: set[LabeledRootedPlaneTree] = set()
+        psi: LabeledRootedPlaneTree
+        for psi in self.iterate_immediate_sub_formulas():
+            if psi in unique_values:
+                return False
+            unique_values.add(psi)
+        return True
 
     @property
     def is_abstract_map(self) -> bool:
@@ -764,7 +753,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         psi: LabeledRootedPlaneTree = self.substitute_sub_formulas_with_map(m=v)
         return psi.is_labeled_rooted_plane_tree_equivalent_to(phi)
 
-    @property
+    @functools.cached_property
     def is_canonical(self) -> bool:
         r"""Returns `True` if this labeled rooted plane tree is in canonical form.
 
@@ -826,7 +815,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         return phi.is_immediate_sub_formula_of(self)
 
-    @property
+    @functools.cached_property
     def is_increasing(self) -> bool:
         r"""Returns `True` if this labeled rooted plane tree is increasing, `False` otherwise.
 
@@ -845,7 +834,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         return all(
             self.immediate_sub_formulas[i + 1] >= self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
 
-    @property
+    @functools.cached_property
     def is_strictly_increasing(self) -> bool:
         r"""Returns `True` if this labeled rooted plane tree is strictly increasing, `False` otherwise.
 
@@ -948,7 +937,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
     def least_element(cls) -> LabeledRootedPlaneTree:
         return cls.is_strictly_less_than_relation.least_element
 
-    @property
+    @functools.cached_property
     def main_element(self) -> int:
         r"""The `main_element` of an :class:`AbstractFormula` is the first element of its
         attr:`AbstractFormula.natural_numbers_sequence`, that corresponds to the root
@@ -966,7 +955,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         return self.natural_number_sequence[0]
 
-    @property
+    @functools.cached_property
     def natural_number_sequence(self) -> nn0sl.NaturalNumber0Sequence:
         r"""Returns the :class:`NaturalNumberSequence` component of this :class:`AbstractFormula`.
 
@@ -1043,7 +1032,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
         return output
 
-    @property
+    @functools.cached_property
     def rooted_plane_tree(self) -> rptl.RootedPlaneTree:
         r"""The :class:`RootedPlaneTree` component of this :class:`AbstractFormula`.
 
@@ -1052,21 +1041,21 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         return super().__getitem__(0)
 
-    @property
+    @functools.cached_property
     def s(self) -> nn0sl.NaturalNumber0Sequence:
         r"""A shortcut for self.natural_numbers_sequence.
 
         """
         return self.natural_number_sequence
 
-    @property
+    @functools.cached_property
     def sequence_max_value(self) -> int:
         r"""The `sequence_max_value` of an :class:`AbstractFormula` is the `max_value` of its `natural_numbers_sequence`.
 
         """
         return self.natural_number_sequence.max_value
 
-    @property
+    @functools.cached_property
     def sub_formulas(self) -> tuple[LabeledRootedPlaneTree, ...]:
         r"""The `sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements that are present
         in the formula tree of `phi`, including `phi` itself.
@@ -1091,12 +1080,10 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
         :return: A tuple of the sub-formulas.
         """
-        if self._sub_formulas is None:
-            sub_formulas: list[LabeledRootedPlaneTree] = list()
-            for sub_formula in self.iterate_sub_formulas():
-                sub_formulas.append(sub_formula)
-            self._sub_formulas = tuple(sub_formulas)
-        return self._sub_formulas
+        sub_formulas: list[LabeledRootedPlaneTree] = list()
+        for sub_formula in self.iterate_sub_formulas():
+            sub_formulas.append(sub_formula)
+        return tuple(sub_formulas)
 
     def substitute_sub_formulas_with_map(self, m: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
         r"""Returns a new labeled rooted plane tree similar to the current labeled rooted plane tree,
@@ -1121,12 +1108,12 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
                                                           self.iterate_immediate_sub_formulas())
             return LabeledRootedPlaneTree.from_immediate_sub_formulas(n=self.main_element, s=s)
 
-    @property
+    @functools.cached_property
     def t(self) -> rptl.RootedPlaneTree:
         r"""A shortcut for self.rooted_plane_tree."""
         return self.rooted_plane_tree
 
-    @property
+    @functools.cached_property
     def tree_degree(self) -> int:
         r"""The `tree_degree` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
 
@@ -1134,7 +1121,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         return self.rooted_plane_tree.degree
 
-    @property
+    @functools.cached_property
     def tree_size(self) -> int:
         r"""The `tree_size` of an :class:`AbstractFormula` is the number of vertices in its `RootedPlaneTree`.
 

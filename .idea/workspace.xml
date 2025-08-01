@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
-      <change beforePath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -301,6 +302,7 @@
     "Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_1.executor": "Run",
     "Python tests.pytest for test_interpretation.TestInterpretation.test_interpretation_2.executor": "Run",
     "Python tests.pytest for test_interpretation.TestRepresentation.test_representation.executor": "Run",
+    "Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree.executor": "Debug",
     "Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_order.executor": "Run",
     "Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_strictly_increasing.executor": "Run",
     "Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_successor_unrank_consistency.executor": "Run",
@@ -489,6 +491,7 @@
     "Python tests.pytest for tests.test_axiomatic_system_1.top_level_collect.executor": "Run",
     "Python tests.pytest for tests.test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for tests.test_fl1.executor": "Run",
+    "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree.executor": "Run",
     "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_order.executor": "Run",
     "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_strictly_increasing.executor": "Run",
     "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_represent_as_function.executor": "Run",
@@ -739,7 +742,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_represent_as_function">
+  <component name="RunManager" selected="Python tests.pytest in test_labeled_rooted_plane_tree.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -952,7 +955,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_successor_unrank_consistency" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -965,7 +968,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_successor_unrank_consistency&quot;" />
+      <option name="_new_target" value="&quot;test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -987,7 +990,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1000,7 +1003,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_order&quot;" />
+      <option name="_new_target" value="&quot;tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1084,8 +1087,8 @@
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_successor_unrank_consistency" />
-      <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_order" />
+      <item itemvalue="Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree" />
+      <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree" />
       <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_strictly_increasing" />
       <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_represent_as_function" />
       <item itemvalue="Python tests.pytest in test_labeled_rooted_plane_tree.py" />
@@ -1095,11 +1098,11 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_represent_as_function" />
         <item itemvalue="Python tests.pytest in test_labeled_rooted_plane_tree.py" />
+        <item itemvalue="Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree" />
+        <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree" />
+        <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_represent_as_function" />
         <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_strictly_increasing" />
-        <item itemvalue="Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_successor_unrank_consistency" />
-        <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_order" />
       </list>
     </recent_temporary>
   </component>
@@ -1121,14 +1124,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01571" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1753422135622</created>
-      <option name="number" value="01571" />
-      <option name="presentableId" value="LOCAL-01571" />
-      <option name="project" value="LOCAL" />
-      <updated>1753422135622</updated>
     </task>
     <task id="LOCAL-01572" summary="cleanup">
       <option name="closed" value="true" />
@@ -1514,7 +1509,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754085005071</updated>
     </task>
-    <option name="localTasksCounter" value="1620" />
+    <task id="LOCAL-01620" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1754085066262</created>
+      <option name="number" value="01620" />
+      <option name="presentableId" value="LOCAL-01620" />
+      <option name="project" value="LOCAL" />
+      <updated>1754085066262</updated>
+    </task>
+    <option name="localTasksCounter" value="1621" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1729,14 +1732,14 @@
           <option name="timeStamp" value="466" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py</url>
-          <line>169</line>
-          <option name="timeStamp" value="470" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py</url>
           <line>438</line>
           <option name="timeStamp" value="471" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py</url>
+          <line>298</line>
+          <option name="timeStamp" value="472" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
