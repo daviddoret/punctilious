@@ -381,7 +381,7 @@ class TestLabeledRootedPlaneTree:
         # assert af_big.is_strictly_increasing
         assert pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_strictly_increasing
         assert not pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 5, 5,)).is_strictly_increasing
-        assert pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing
+        assert not pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing
 
     def test_substitute_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa, t6_a_aa_ab_ac_ad_ae,
                                      t7_a_aa_ab_aaa_aaaa_aba_abaa):
