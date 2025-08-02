@@ -2,6 +2,7 @@ from __future__ import annotations
 import typing
 import collections
 import collections.abc
+import functools
 
 # package modules
 import punctilious.util as util

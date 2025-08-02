@@ -1,4 +1,5 @@
 from __future__ import annotations
+import functools
 import typing
 import punctilious.util as util
 import punctilious.binary_relation_library as brl

@@ -559,9 +559,6 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
     def __init__(self, *s):
         super(NaturalNumber0Sequence, self).__init__()
-        self._image: tuple[int, ...] | None = None
-        self._is_restricted_growth_function_sequence: bool | None = None
-        self._restricted_growth_function_sequence: NaturalNumber0Sequence | None = None
 
     def __new__(cls, *s):
         v: bool
@@ -612,7 +609,8 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
     def least_element(cls) -> NaturalNumber0Sequence:
         return cls.is_strictly_less_than_relation.least_element
 
-    def to_restricted_growth_function_sequence(self) -> NaturalNumber0Sequence:
+    @functools.cached_property
+    def restricted_growth_function_sequence(self) -> NaturalNumber0Sequence:
         r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
         by applying canonical labeling.
 
@@ -633,8 +631,6 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         if self.is_restricted_growth_function_sequence:
             return self
-        elif self._restricted_growth_function_sequence is not None:
-            return self._restricted_growth_function_sequence
         else:
             mapping: dict[int, int] = dict()
             mapped_value: int = 0
@@ -644,8 +640,7 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
                     mapping[n] = mapped_value
                     mapped_value += 1
             s: tuple[int, ...] = tuple(mapping[n] for n in self)
-            self._restricted_growth_function_sequence = NaturalNumber0Sequence(*s)
-            return self._restricted_growth_function_sequence
+            return NaturalNumber0Sequence(*s)
 
     def concatenate_with(self, *s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
         r"""Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
@@ -718,7 +713,7 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         r"""A shortcut for :attr:`NaturalNumberSequence.image`."""
         return self.image
 
-    @property
+    @functools.cached_property
     def image(self) -> tuple[int, ...]:
         r"""The :attr:`NaturalNumberSequence.image` is the set of values contained in the sequence,
         returned as a tuple of ascending and unique values.
@@ -739,18 +734,14 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
         :return: an ordered tuple of integers.
         """
-        if self._image is not None:
-            return self._image
-        else:
-            s: set[int] = set()
-            for n in self.elements:
-                s.add(n)
-            s: tuple[int, ...] = tuple(s)
-            s: tuple[int, ...] = tuple(sorted(s))
-            self._image = s
-            return s
+        s: set[int] = set()
+        for n in self.elements:
+            s.add(n)
+        s: tuple[int, ...] = tuple(s)
+        s: tuple[int, ...] = tuple(sorted(s))
+        return s
 
-    @property
+    @functools.cached_property
     def image_cardinality(self) -> int:
         r"""The :attr:`NaturalNumberSequence.image_cardinality` is the cardinality
          of the :attr:`NaturalNumberSequence.image`, i.e. the number of distinct values it contains.
@@ -775,9 +766,9 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
 
         """
         s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
-        return self.to_restricted_growth_function_sequence().is_natural_number_0_sequence_equivalent_to(s)
+        return self.restricted_growth_function_sequence.is_natural_number_0_sequence_equivalent_to(s)
 
-    @property
+    @functools.cached_property
     def is_increasing(self) -> bool:
         r"""Returns `True` if this sequence is increasing, `False` otherwise.
 
@@ -792,7 +783,7 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         return all(self.elements[i + 1] >= self.elements[i] for i in range(0, self.length - 1))
 
-    @property
+    @functools.cached_property
     def is_natural_number_sequence(self) -> bool:
         r"""
 
@@ -820,7 +811,7 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
         return self.length == s.length and all(x == y for x, y in zip(self, s))
 
-    @property
+    @functools.cached_property
     def is_restricted_growth_function_sequence(self) -> bool:
         """`True` if this natural numbers sequence is also an RGF sequence, `False` otherwise.
 
@@ -839,20 +830,14 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         with the design choice of using 0-based indexes as the default indexing method in Python.
 
         """
-        if self._is_restricted_growth_function_sequence is not None:
-            return self._is_restricted_growth_function_sequence
-        else:
-            for i, n in enumerate(self):
-                if i == 0 and n > 1:
-                    self._is_restricted_growth_function_sequence: bool = False
-                    return self._is_restricted_growth_function_sequence
-                if i > 0 and n > max(self.elements[0:i]) + 1:
-                    self._is_restricted_growth_function_sequence: bool = False
-                    return self._is_restricted_growth_function_sequence
-            self._is_restricted_growth_function_sequence: bool = True
-            return self._is_restricted_growth_function_sequence
+        for i, n in enumerate(self):
+            if i == 0 and n >= 1:
+                return False
+            if i > 0 and n > max(self.elements[0:i]) + 1:
+                return False
+        return True
 
-    @property
+    @functools.cached_property
     def is_strictly_increasing(self) -> bool:
         r"""Returns `True` if this sequence is strictly increasing, `False` otherwise.
 
@@ -867,7 +852,7 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         return all(self.elements[i + 1] > self.elements[i] for i in range(0, self.length - 1))
 
-    @property
+    @functools.cached_property
     def length(self) -> int:
         """The `length` of a finite sequence is the number of elements in the sequence.
 
@@ -877,7 +862,7 @@ class NaturalNumber0Sequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         return len(self)
 
-    @property
+    @functools.cached_property
     def max_value(self) -> int:
         """The `max_value` of a `NaturalNumberSequence` is the maximum value of its elements.
 

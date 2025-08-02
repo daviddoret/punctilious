@@ -5,7 +5,7 @@ from __future__ import annotations
 import typing
 import collections
 # import weakref
-
+import functools
 
 # Punctilious modules
 import punctilious.util as util

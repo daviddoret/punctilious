@@ -1,6 +1,7 @@
 from __future__ import annotations
 import typing
 import collections
+import functools
 
 # third party packages
 import uuid

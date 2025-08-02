@@ -368,7 +368,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         else:
             return LabeledRootedPlaneTree(
                 t=self.rooted_plane_tree,
-                s=self.natural_number_sequence.to_restricted_growth_function_sequence)
+                s=self.natural_number_sequence.restricted_growth_function_sequence)
 
     def derive_abstract_inference_rule(self, p: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
         r"""If this labeled rooted plane tree is an abstract-inference-rule, derives a theorem

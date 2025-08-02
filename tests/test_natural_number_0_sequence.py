@@ -89,16 +89,16 @@ class TestNaturalNumbersSequence:
 
     def test_canonical_natural_number_sequence(self):
         s = pu.nn0sl.NaturalNumber0Sequence(4, 3, 2)
-        t = s.to_restricted_growth_function_sequence()
+        t = s.restricted_growth_function_sequence
         u = pu.nn0sl.NaturalNumber0Sequence(0, 1, 2)
         assert t == u
 
         s = pu.nn0sl.NaturalNumber0Sequence(0, 1, 2, 3)
-        t = s.to_restricted_growth_function_sequence()
+        t = s.restricted_growth_function_sequence
         assert s == t
 
         s = pu.nn0sl.NaturalNumber0Sequence(1, 7, 9, 14, 14, 14, 12, 1, 3, 2, 7, 9)
-        t = s.to_restricted_growth_function_sequence()
+        t = s.restricted_growth_function_sequence
         u = pu.nn0sl.NaturalNumber0Sequence(0, 1, 2, 3, 3, 3, 4, 0, 5, 6, 1, 2)
         assert t == u
 

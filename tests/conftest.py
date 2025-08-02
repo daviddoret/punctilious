@@ -5,6 +5,10 @@ import punctilious as pu
 
 # raw sequences
 
+@pytest.fixture
+def raw_0():
+    return (0,)
+
 
 @pytest.fixture
 def raw_1():

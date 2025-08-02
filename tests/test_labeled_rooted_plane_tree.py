@@ -19,37 +19,37 @@ class TestLabeledRootedPlaneTree:
             pu.lrptl.LabeledRootedPlaneTree(t=(((),), (),), s=(1, 2, 1, 2, 1, 4, 8, 2))
 
     def test_is_canonical(self, lrpt1, lrpt3, lrpt4, lrpt6, lrpt7, lrpt8, t1_a, t2_a_aa, t3_a_aa_aaa, t12):
-        assert lrpt1.is_canonical
-        assert lrpt3.is_canonical
-        assert lrpt4.is_canonical
-        assert lrpt6.is_canonical
-        assert lrpt7.is_canonical
+        assert not lrpt1.is_canonical
+        assert not lrpt3.is_canonical
+        assert not lrpt4.is_canonical
+        assert not lrpt6.is_canonical
+        assert not lrpt7.is_canonical
         assert lrpt8.is_canonical
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (0,))
         assert phi.is_canonical
         phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (17,))
         assert not phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (0, 0,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 2,))
+        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (0, 1,))
         assert phi.is_canonical
         phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (94, 12,))
         assert not phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (1, 1, 1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (0, 0, 0,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (1, 2, 3,))
+        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (0, 1, 2,))
         assert phi.is_canonical
         phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (9, 5, 104,))
         assert not phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (1, 1, 1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (0, 0, 0,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (1, 2, 3,))
+        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (0, 1, 2,))
         assert phi.is_canonical
         phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (100, 102, 140,))
         assert not phi.is_canonical
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t12, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,))
+        phi = pu.lrptl.LabeledRootedPlaneTree(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
         assert phi.is_canonical
         phi = pu.lrptl.LabeledRootedPlaneTree(t12, (15, 1, 8, 3, 3, 10, 11, 12, 11, 6, 2, 10,))
         assert not phi.is_canonical
@@ -293,32 +293,37 @@ class TestLabeledRootedPlaneTree:
         assert phi.represent_as_function() == "15(1, 8(3), 3(10, 11, 12, 11, 6), 2(10))"
 
     def test_canonical_labeled_rooted_plane_tree(self, t1_a, t2_a_aa, t3_a_aa_aaa, t12):
+        t0 = pu.lrptl.LabeledRootedPlaneTree(t1_a, (0,))
         phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
-        assert phi.canonical_labeled_rooted_plane_tree == phi
+        assert phi.canonical_labeled_rooted_plane_tree == t0
         psi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (17,))
-        assert psi.canonical_labeled_rooted_plane_tree == phi
+        assert psi.canonical_labeled_rooted_plane_tree == t0
 
+        t00 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (0, 0,))
         phi1 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 1,))
-        assert phi1.canonical_labeled_rooted_plane_tree == phi1
+        assert phi1.canonical_labeled_rooted_plane_tree == t00
         psi1 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (13, 13,))
-        assert psi1.canonical_labeled_rooted_plane_tree == phi1
+        assert psi1.canonical_labeled_rooted_plane_tree == t00
 
+        t01 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (0, 1,))
         phi2 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 2,))
-        assert phi2.canonical_labeled_rooted_plane_tree == phi2
+        assert phi2.canonical_labeled_rooted_plane_tree == t01
         psi2 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (102, 1,))
-        assert psi2.canonical_labeled_rooted_plane_tree == phi2
+        assert psi2.canonical_labeled_rooted_plane_tree == t01
 
         assert phi1.canonical_labeled_rooted_plane_tree != phi2.canonical_labeled_rooted_plane_tree
 
+        t000 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (0, 0, 0,))
         phi1 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (1, 1, 1,))
-        assert phi1.canonical_labeled_rooted_plane_tree == phi1
+        assert phi1.canonical_labeled_rooted_plane_tree == t000
         psi1 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (5, 5, 5,))
-        assert psi1.canonical_labeled_rooted_plane_tree == phi1
+        assert psi1.canonical_labeled_rooted_plane_tree == t000
 
+        t012 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (0, 1, 2,))
         phi2 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (1, 2, 3,))
-        assert phi2.canonical_labeled_rooted_plane_tree == phi2
+        assert phi2.canonical_labeled_rooted_plane_tree == t012
         psi2 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (9, 5, 104,))
-        assert psi2.canonical_labeled_rooted_plane_tree == phi2
+        assert psi2.canonical_labeled_rooted_plane_tree == t012
 
         assert phi1.canonical_labeled_rooted_plane_tree != phi2.canonical_labeled_rooted_plane_tree
 

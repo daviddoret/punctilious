@@ -2,7 +2,7 @@ from __future__ import annotations
 import itertools
 import typing
 import collections
-
+import functools
 # punctilious libraries
 import punctilious.util as util
 import punctilious.binary_relation_library as brl
