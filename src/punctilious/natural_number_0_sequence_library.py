@@ -10,7 +10,7 @@ import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_library as nn0l
 import punctilious.prime_number_library as pnl
 import punctilious.ternary_boolean_library as tbl
-from punctilious import special_values_library as spl
+import punctilious.special_values_library as spl
 
 
 # Relation orders

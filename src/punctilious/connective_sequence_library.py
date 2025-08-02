@@ -3,8 +3,11 @@ import itertools
 import typing
 import collections
 import functools
+
 # punctilious libraries
 import punctilious.util as util
+import punctilious.ternary_boolean_library as tbl
+import punctilious.binary_relation_library as brl
 import punctilious.connective_library as cl
 
 

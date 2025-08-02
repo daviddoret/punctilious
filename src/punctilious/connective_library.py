@@ -8,10 +8,10 @@ import uuid
 
 # package modules
 import punctilious.util as util
+import punctilious.ternary_boolean_library as tbl
+import punctilious.binary_relation_library as brl
 import punctilious.rooted_plane_tree_library as rptl
 import punctilious.natural_number_0_sequence_library as nn0sl
-import punctilious.binary_relation_library as brl
-import punctilious.ternary_boolean_library as tbl
 
 
 # Binary relation classes
@@ -195,7 +195,7 @@ class Connective(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure
             cls._cache[hash_value] = o
             return o
 
-    @property
+    @functools.cached_property
     def fallback_string_representation(self) -> str:
         """The `fallback_string_representation` of a `Connective` is a string representation
         that is always available, and will be used as a fallback value when no solution
@@ -268,7 +268,7 @@ class Connective(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return GuidOrder
 
-    @property
+    @functools.cached_property
     def uid(self) -> uuid.UUID:
         """
 
