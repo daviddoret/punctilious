@@ -8,9 +8,133 @@ import uuid
 
 # package modules
 import punctilious.util as util
+import punctilious.rooted_plane_tree_library as rptl
+import punctilious.natural_number_0_sequence_library as nn0sl
+import punctilious.binary_relation_library as brl
+import punctilious.ternary_boolean_library as tbl
 
 
-class Connective(tuple):
+# Binary relation classes
+
+class IsEqualTo(brl.BinaryRelation):
+    r"""The connective class equipped with the standard equality order relation.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{F}, = )`.
+
+    """
+
+    @util.readonly_class_property
+    def is_antisymmetric(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object.
+        :param y: A Python object.
+        :return: `True` or `False`.
+        """
+        x: Connective = Connective.from_any(x)
+        y: Connective = Connective.from_any(y)
+        return x.is_connective_equivalent_to(y)
+
+
+class GuidOrder(brl.BinaryRelation):
+    r"""The connective class equipped with the standard strictly less-than order relation.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{F}_0, < )`.
+
+    """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @util.readonly_class_property
+    def least_element(cls) -> Connective:
+        """By design, we declare the least connective with GUID `00000000-0000-0000-0000-000000000000`.
+
+        :return: The least connective.
+        """
+        return Connective(
+            fallback_string_representation="Least connective element",
+            uid=uuid.UUID("00000000-0000-0000-0000-000000000000")
+        )
+
+    @classmethod
+    def rank(cls, x: object) -> int:
+        r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.
+
+        :param x: A connective `x`.
+        :return: The rank of `x`.
+        """
+        x: Connective = Connective.from_any(x)
+        return x.uid.int
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A connective.
+        :param y: A connective.
+        :return: `True` or `False`.
+        """
+        x: Connective = Connective.from_any(x)
+        y: Connective = Connective.from_any(y)
+        n1: int = x.rank
+        n2: int = y.rank
+        return n1 < n2
+
+    @classmethod
+    def successor(cls, x: object) -> object:
+        r"""Returns the successor of `x` in :math:`( \mathbb{N}_0, < )`.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :return: The successor of `x`.
+        """
+        x: Connective = Connective.from_any(x)
+        n: int = cls.rank(x)
+        n += 1
+        y: Connective = cls.unrank(n)
+        return y
+
+    @classmethod
+    def unrank(cls, n: int) -> Connective:
+        r"""Returns the connective `x` such that :math:`rank(x) = n`.
+
+        :param n: A (0-based) natural number.
+        :return: A connective.
+        """
+        n = int(n)
+        if n < 0:
+            raise util.PunctiliousException("`n` must be a positive integer.", n=n)
+        return Connective(fallback_string_representation="# Anonymous connector", uid=uuid.UUID(int=n))
+
+
+class Connective(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
     """A `Connective` is an abstract symbol that may be assigned various (human-readable) representations,
     and that is recognized as a distinctive semantic unit.
 
@@ -208,3 +332,5 @@ class Connective(tuple):
 
 FlexibleConnective = typing.Union[
     Connective, tuple[uuid.UUID, str],]
+
+connective_least_element: Connective = GuidOrder.least_element

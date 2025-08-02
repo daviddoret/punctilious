@@ -4,6 +4,8 @@
 
 import punctilious.connective_library as cl
 
+connective_least_element: cl.Connective = cl.connective_least_element
+
 # propositional logic
 is_a_propositional_logic_variable: cl.Connective = cl.Connective("is-a-propositional-variable",
                                                                  uid="1dde6cdb-8268-4586-bfdb-5531baee5b6f")

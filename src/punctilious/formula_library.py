@@ -1,3 +1,9 @@
+r"""
+
+TODO: IMPLEMENT EQUAL AND STRICTLY LESS THAN ORDERS
+
+"""
+
 from __future__ import annotations
 import typing
 import collections
@@ -10,12 +16,156 @@ import punctilious.connective_library as cl
 import punctilious.labeled_rooted_plane_tree_library as afl
 import punctilious.natural_number_0_sequence_library as sl
 import punctilious.connective_sequence_library as csl
+import punctilious.binary_relation_library as brl
+import punctilious.ternary_boolean_library as tbl
+
+
+# Binary relation classes
+
+class IsEqualTo(brl.BinaryRelation):
+    r"""The formulas equipped with the standard equality order relation.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{F}, = )`.
+
+    """
+
+    @util.readonly_class_property
+    def is_antisymmetric(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object.
+        :param y: A Python object.
+        :return: `True` or `False`.
+        """
+        x: Formula = Formula.from_any(x)
+        y: Formula = Formula.from_any(y)
+        return x.is_formula_equivalent_to(y)
+
+
+class RecursiveSequenceOrder(brl.BinaryRelation):
+    r"""The labeled rooted plane trees equipped with the standard strictly less-than order relation.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{F}_0, < )`.
+
+    """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @util.readonly_class_property
+    def least_element(cls) -> Formula:
+        """By design, we choose 0() as the least element.
+
+        Connectives do not have an obvious least element.
+
+        :return:
+        """
+        return Formula(
+            t=rptl.RootedPlaneTree.least_element,
+            s=nn0sl.NaturalNumber0Sequence(0)
+        )
+
+    @classmethod
+    def rank(cls, x: object) -> int:
+        r"""Returns the rank of `x` in :math:`( \mathbb{N}_0, < )`.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :return: An integer.
+        """
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        # build a finite sequence of (0-based) natural numbers S = s0, s1, ..., sn,
+        # such that s0 is `x`'s main element,
+        # and s1, ..., sn are the recursive ranks of its sub-formulas.
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.main_element)
+        for subtree in x.iterate_immediate_sub_formulas():
+            subtree_rank: int = cls.rank(subtree)
+            t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)
+            s: nn0sl.NaturalNumber0Sequence = s.concatenate_with(t)
+        raw_rank: int = nn0sl.RefinedGodelNumberOrder.rank(s)  # Retrieve the canonical rank of the sequence.
+        r: int = raw_rank - 1  # "- 1" because the empty sequence is not encoded.
+        return r
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :param y: A Python object interpretable as a (0-based) natural number.
+        :return: `True` or `False`.
+        """
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
+        n1: int = x.rank
+        n2: int = y.rank
+        return n1 < n2
+
+    @classmethod
+    def successor(cls, x: object) -> object:
+        r"""Returns the successor of `x` in :math:`( \mathbb{N}_0, < )`.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :return: The successor of `x`.
+        """
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        n: int = cls.rank(x)
+        n += 1
+        y: LabeledRootedPlaneTree = cls.unrank(n)
+        return y
+
+    @classmethod
+    def unrank(cls, n: int) -> LabeledRootedPlaneTree:
+        r"""Returns the (0-based) natural number of `x` such that its rank in :math:`( \mathbb{N}_0, < ) = n`.
+
+        :param n: A positive integer.
+        :return: A (0-based) natural number.
+        """
+        n = int(n)
+        if n < 0:
+            raise util.PunctiliousException("`n` must be a positive integer.", n=n)
+        n += 1  # Corrects the absence of the empty sequence in the encoding.
+        # unrank the (0-based) natural sequence that is encoded in the rank.
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.RefinedGodelNumberOrder.unrank(n)
+        main_element: int = s[0]
+        subtrees = []
+        for i, m in enumerate(s[1:], 1):
+            subtree = cls.unrank(m)
+            subtrees.append(subtree)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_sub_formulas(n=main_element,
+                                                                                       s=subtrees)
+        return t
 
 
 # Classes
 
 
-class Formula(tuple):
+class Formula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
     """
 
     Definition
@@ -47,14 +197,6 @@ class Formula(tuple):
         self._immediate_sub_formulas = None
         self._sub_formulas = None
 
-    def __lt__(self, phi) -> bool:
-        """Returns `True` if this formula is less than formula `phi`, `False` otherwise.
-
-        See :attr:`Formula.is_less_than` for a definition of formula canonical-ordering.
-
-        """
-        return self.is_less_than(phi)
-
     def __new__(cls, t: afl.FlexibleLabeledRootedPlaneTree, s: csl.FlexibleConnectiveSequence):
         t: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(t)
         s: csl.ConnectiveSequence = csl.ConnectiveSequence.from_any(s)
@@ -79,7 +221,7 @@ class Formula(tuple):
 
     _HASH_SEED: int = 11701184968249671969  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
 
-    @property
+    @functools.cached_property
     def arity(self) -> int:
         r"""Returns the arity of the formula.
 
@@ -111,7 +253,7 @@ class Formula(tuple):
             cls._cache[hash_value] = o
             return o
 
-    @property
+    @functools.cached_property
     def labeled_rooted_plane_tree(self) -> afl.LabeledRootedPlaneTree:
         """
 
@@ -122,7 +264,7 @@ class Formula(tuple):
         """
         return tuple.__getitem__(self, 0)
 
-    @property
+    @functools.cached_property
     def connective_sequence(self) -> csl.ConnectiveSequence:
         """
 
@@ -133,7 +275,7 @@ class Formula(tuple):
         """
         return tuple.__getitem__(self, 1)
 
-    @property
+    @functools.cached_property
     def formula_degree(self) -> int:
         """The `formula_degree` of a `Formula` is the number of non-leaf nodes it contains.
 
@@ -159,7 +301,7 @@ class Formula(tuple):
     def get_connective_by_sequence_element(self, i: int) -> cl.Connective:
         return self.connective_sequence[i]
 
-    @property
+    @functools.cached_property
     def immediate_sub_formulas(self) -> tuple[Formula, ...]:
         """The `immediate_sub_formulas` of a `Formula` `phi` is the tuple of `Formula` elements that are the
         immediate children formulas of `phi` in the formula tree, or equivalently the formulas of degree 0 in `phi`.
@@ -174,12 +316,10 @@ class Formula(tuple):
 
         :return:
         """
-        if self._sub_formulas is None:
-            sub_formulas: list[Formula] = list()
-            for sub_formula in self.iterate_immediate_sub_formulas():
-                sub_formulas.append(sub_formula)
-            self._sub_formulas = tuple(sub_formulas)
-        return self._sub_formulas
+        sub_formulas: list[Formula] = list()
+        for sub_formula in self.iterate_immediate_sub_formulas():
+            sub_formulas.append(sub_formula)
+        return tuple(sub_formulas)
 
     def is_equal_to(self, t: FlexibleFormula):
         """Returns `True` if this formula is equal to formula `t`, `False` otherwise.
@@ -230,7 +370,7 @@ class Formula(tuple):
         phi: Formula = Formula.from_any(phi)
         return phi.is_immediate_sub_formula_of(self)
 
-    @property
+    @functools.cached_property
     def is_increasing(self) -> bool:
         r"""Returns `True` if this formula is increasing, `False` otherwise.
 
@@ -249,7 +389,7 @@ class Formula(tuple):
         return all(
             self.immediate_sub_formulas[i + 1] >= self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
 
-    @property
+    @functools.cached_property
     def is_strictly_increasing(self) -> bool:
         r"""Returns `True` if this formula is strictly increasing, `False` otherwise.
 
@@ -346,7 +486,7 @@ class Formula(tuple):
                 self.get_connective_by_sequence_element(i) for i in s)
             yield Formula(phi, t)
 
-    @property
+    @functools.cached_property
     def main_connective(self) -> cl.Connective:
         """The `main_connective` of a :class:`Formula` `phi` is the :class:`Connective` that corresponds
         to the root node of the formula tree.
@@ -369,12 +509,12 @@ class Formula(tuple):
         # TODO: TEST THIS
         return self.labeled_rooted_plane_tree.represent_as_function(connectives=self.connective_sequence)
 
-    @property
+    @functools.cached_property
     def sequence_max_value(self) -> int:
         """The `sequence_max_value` of a `Formula` is the `sequence_max_value` of its `abstract_formula`."""
         return self.labeled_rooted_plane_tree.sequence_max_value
 
-    @property
+    @functools.cached_property
     def sub_formulas(self) -> tuple[Formula, ...]:
         """The `sub_formulas` of an `Formula` `phi` is the tuple of `Formula` elements that are present
         in the formula tree of `phi`, including `phi` itself.
@@ -404,12 +544,10 @@ class Formula(tuple):
         :return: A tuple of the sub-formulas.
 
         """
-        if self._sub_formulas is None:
-            sub_formulas: list[Formula] = list()
-            for sub_formula in self.iterate_sub_formulas():
-                sub_formulas.append(sub_formula)
-            self._sub_formulas = tuple(sub_formulas)
-        return self._sub_formulas
+        sub_formulas: list[Formula] = list()
+        for sub_formula in self.iterate_sub_formulas():
+            sub_formulas.append(sub_formula)
+        return tuple(sub_formulas)
 
     def substitute_sub_formulas(self, m: dict[FlexibleFormula, FlexibleFormula]) -> Formula:
         """Returns a new :class:`Formula` similar to the current :class:`Formula` except that
@@ -436,7 +574,7 @@ class Formula(tuple):
         abstract_formula: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree()
         raise NotImplementedError("Complete implementation")
 
-    @property
+    @functools.cached_property
     def tree_size(self) -> int:
         """The `tree_size` of a `Formula` is the number of vertices in the `RootedPlaneTree` of its `abstract_formula`.
 
