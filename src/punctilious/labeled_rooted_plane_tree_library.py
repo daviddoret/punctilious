@@ -262,7 +262,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
             cls._cache[hash_value] = o
             return o
 
-    @property
+    @functools.cached_property
     def abstract_inference_rule_conclusion(self) -> LabeledRootedPlaneTree:
         r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its conclusion.
 
@@ -275,7 +275,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
-    @property
+    @functools.cached_property
     def abstract_inference_rule_premises(self) -> LabeledRootedPlaneTree:
         r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its premises.
 
@@ -288,7 +288,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
-    @property
+    @functools.cached_property
     def abstract_inference_rule_variables(self) -> LabeledRootedPlaneTree:
         r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its variables.
 
@@ -316,7 +316,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         """
         return LabeledRootedPlaneTree.from_immediate_sub_formulas(n=n, s=(p, i,))
 
-    @property
+    @functools.cached_property
     def abstract_map_preimage_sequence(self) -> LabeledRootedPlaneTree:
         r"""If this labeled rooted plane tree is an abstract-map, returns its preimage sequence.
 
@@ -329,7 +329,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
 
-    @property
+    @functools.cached_property
     def abstract_map_image_sequence(self) -> LabeledRootedPlaneTree:
         r"""If this labeled rooted plane tree is an abstract-map, returns its image sequence.
 
@@ -618,7 +618,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
             unique_values.add(psi)
         return True
 
-    @property
+    @functools.cached_property
     def is_abstract_map(self) -> bool:
         r"""Returns `True` if this labeled rooted plane tree is an abstract-map, `False` otherwise.
 
@@ -665,7 +665,7 @@ class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessT
                 self.immediate_sub_formulas[0].immediate_subformulas_are_unique
         return self._is_abstract_map
 
-    @property
+    @functools.cached_property
     def is_abstract_inference_rule(self) -> bool:
         r"""Returns `True` if this labeled rooted plane tree is an abstract-inference-rule, `False` otherwise.
 

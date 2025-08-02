@@ -249,19 +249,19 @@ class TestLabeledRootedPlaneTree:
         assert phi == psi
 
     def test_get_sub_formula_by_path(self, lrpt1, lrpt3, lrpt6, lrpt7, lrpt8, t1_a, t6_a_aa_ab_ac_ad_ae, t12):
-        assert lrpt1.get_sub_formula_by_path((1,)) == lrpt1
-        assert lrpt3.get_sub_formula_by_path((1,)) == lrpt3
-        assert lrpt3.get_sub_formula_by_path((1, 1,)) == lrpt1
+        assert lrpt1.get_sub_formula_by_path((0,)) == lrpt1
+        assert lrpt3.get_sub_formula_by_path((0,)) == lrpt3
+        assert lrpt3.get_sub_formula_by_path((0, 0,)) == lrpt1
 
-        assert lrpt8.get_sub_formula_by_path((1, 4,)) == pu.lrptl.LabeledRootedPlaneTree(
+        assert lrpt8.get_sub_formula_by_path((0, 3,)) == pu.lrptl.LabeledRootedPlaneTree(
             t=t12,
-            s=(5, 4, 3, 2, 5, 10, 11, 8, 8, 8, 10, 1))
+            s=(4, 3, 2, 1, 4, 9, 10, 7, 7, 7, 9, 0))
 
-        assert lrpt8.get_sub_formula_by_path((1, 4, 3,)) == pu.lrptl.LabeledRootedPlaneTree(
-            t6_a_aa_ab_ac_ad_ae, (5, 10, 11, 8, 8, 8,)
+        assert lrpt8.get_sub_formula_by_path((0, 3, 2,)) == pu.lrptl.LabeledRootedPlaneTree(
+            t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,)
         )
-        assert lrpt8.get_sub_formula_by_path((1, 4, 3, 5,)) == pu.lrptl.LabeledRootedPlaneTree(
-            t1_a, (8,))
+        assert lrpt8.get_sub_formula_by_path((0, 3, 2, 4,)) == pu.lrptl.LabeledRootedPlaneTree(
+            t1_a, (7,))
 
     def test_represent_as_function(self, t1_a, t2_a_aa, t3_a_aa_aaa, t6_a_aa_ab_ac_ad_ae, t12):
         phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))

@@ -183,7 +183,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             cls._cache[hash_value] = o
             return o
 
-    @property
+    @functools.cached_property
     def dyck_word(self) -> dwl.DyckWord:
         r"""The Dyck string representation of this rooted plane tree.
 
@@ -203,7 +203,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
             raw_string: str = "(" + "".join(child_encodings) + ")"
             return dwl.DyckWord(raw_string)
 
-    @property
+    @functools.cached_property
     def degree(self) -> int:
         r"""The `degree` of a rooted-plane-tree is the number of immediate subtrees it has.
 
@@ -322,7 +322,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
                 t: RootedPlaneTree = t.immediate_subtrees[j]
             return t
 
-    @property
+    @functools.cached_property
     def immediate_subtrees(self) -> tuple[RootedPlaneTree, ...]:
         r"""The tuple of immediate subtrees.
 
@@ -335,7 +335,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
         return IsEqualTo
 
-    @property
+    @functools.cached_property
     def is_increasing(self) -> bool:
         r"""Returns `True` if this rooted-plane-tree is increasing, `False` otherwise.
 
@@ -358,7 +358,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return DyckWordLexicographicOrder
 
-    @property
+    @functools.cached_property
     def is_leaf(self) -> bool:
         r"""Returns `True` if the RootedPlaneTree is a leaf, `False` otherwise.
 
@@ -393,7 +393,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
         # Equivalent implementation:
         # return t.ahu_unsorted_inverted_integer == self.ahu_unsorted_inverted_integer
 
-    @property
+    @functools.cached_property
     def is_strictly_increasing(self) -> bool:
         r"""Returns `True` if this rooted-plane-tree is strictly increasing, `False` otherwise.
 
@@ -538,7 +538,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
                 current_rooted_plane_tree = current_rooted_plane_tree.immediate_subtrees[n - 1]
         return current_rooted_plane_tree
 
-    @property
+    @functools.cached_property
     def size(self):
         r"""Returns the size of this `RootedPlaneTree`.
 
@@ -548,7 +548,7 @@ class RootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStru
     def substitute_subtree(self, m: dict[FlexibleRootedPlaneTree, FlexibleRootedPlaneTree]) -> RootedPlaneTree:
         raise NotImplementedError('TO BE IMPLEMENTED')
 
-    @property
+    @functools.cached_property
     def subtrees(self) -> tuple[RootedPlaneTree, ...]:
         r"""The tuple of subtrees ordered by the depth-first / canonical vertex ordering algorithm.
 

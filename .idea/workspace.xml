@@ -6,18 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/dyck_word_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/dyck_word_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_1_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -504,7 +495,7 @@
     "Python tests.pytest for tests.test_fl1.executor": "Run",
     "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree.executor": "Run",
     "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_order.executor": "Run",
-    "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_canonical.executor": "Run",
+    "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_canonical.executor": "Debug",
     "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_strictly_increasing.executor": "Run",
     "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_represent_as_function.executor": "Run",
     "Python tests.pytest for tests.test_meta_theory_1.TestInconsistency1.test_inconsistency_1.executor": "Run",
@@ -550,7 +541,7 @@
     "Python tests.pytest in test_identifiers.py.executor": "Run",
     "Python tests.pytest in test_inference_rules_1.py.executor": "Run",
     "Python tests.pytest in test_interpretation.py.executor": "Debug",
-    "Python tests.pytest in test_labeled_rooted_plane_tree.py.executor": "Run",
+    "Python tests.pytest in test_labeled_rooted_plane_tree.py.executor": "Debug",
     "Python tests.pytest in test_minimal_logic_1.py.executor": "Run",
     "Python tests.pytest in test_natural_number_0.py.executor": "Run",
     "Python tests.pytest in test_natural_number_0_pair.py.executor": "Run",
@@ -754,7 +745,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_canonical">
+  <component name="RunManager" selected="Python tests.pytest in test_labeled_rooted_plane_tree.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1110,8 +1101,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_canonical" />
         <item itemvalue="Python tests.pytest in test_labeled_rooted_plane_tree.py" />
+        <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_is_canonical" />
         <item itemvalue="Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree" />
         <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree" />
         <item itemvalue="Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_represent_as_function" />
@@ -1136,14 +1127,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01573" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1753422802354</created>
-      <option name="number" value="01573" />
-      <option name="presentableId" value="LOCAL-01573" />
-      <option name="project" value="LOCAL" />
-      <updated>1753422802354</updated>
     </task>
     <task id="LOCAL-01574" summary="cleanup">
       <option name="closed" value="true" />
@@ -1529,7 +1512,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754085976857</updated>
     </task>
-    <option name="localTasksCounter" value="1622" />
+    <task id="LOCAL-01622" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1754114512450</created>
+      <option name="number" value="01622" />
+      <option name="presentableId" value="LOCAL-01622" />
+      <option name="project" value="LOCAL" />
+      <updated>1754114512450</updated>
+    </task>
+    <option name="localTasksCounter" value="1623" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1750,8 +1741,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py</url>
-          <line>21</line>
-          <option name="timeStamp" value="474" />
+          <line>251</line>
+          <option name="timeStamp" value="475" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
