@@ -54,10 +54,18 @@ class IsEqualTo(brl.BinaryRelation):
 class GuidOrder(brl.BinaryRelation):
     r"""The connective class equipped with the standard strictly less-than order relation.
 
-    Mathematical definition
-    -------------------------
+    Definition
+    ------------
 
-    :math:`( \mathbb{F}_0, < )`.
+    Canonical ordering of connective elements, denoted :math:`\prec`,
+    is based on the 128-bit integer value of their respective UUID component,
+    which is the default implementation of __lt__ in the uuid package.
+
+    Note
+    ------
+
+    The canonical ordering of connective-sequence being dependent on the connectives UUIDs,
+    the resulting ordering may appear random to the human reader.
 
     """
 
@@ -142,29 +150,11 @@ class Connective(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure
      - Mancosu 2021, definition 2.1, p. 14, p. 15.
     """
 
-    def __eq__(self, c) -> bool:
-        """Returns `True` if this connective is equal to connective `c`, `False` otherwise.
-
-        See :attr:`Connective.is_equal_to` for a definition of connective equality.
-
-        :param c: A connective.
-        :return: `True` if this connective is equal to connective `c`, `False` otherwise.
-        """
-        return self.is_equal_to(c)
-
     def __hash__(self):
         return self._compute_hash(self)
 
     def __init__(self, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         pass
-
-    def __lt__(self, c) -> bool:
-        """Returns `True` if this connective is less than connective `c`, `False` otherwise.
-
-        See :attr:`Connective.is_less_than` for a definition of connective canonical-ordering.
-
-        """
-        return self.is_less_than(c)
 
     def __new__(cls, fallback_string_representation: str, uid: uuid.UUID | str | None = None):
         if uid is None:
@@ -270,45 +260,13 @@ class Connective(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure
         c: Connective = Connective.from_any(c)
         return c.uid == self.uid
 
-    def is_equal_to(self, c: FlexibleConnective):
-        """Under connective canonical ordering,
-        returns `True` if the current connective is equal to `c`,
-        `False` otherwise.
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
 
-        See :attr:`Connective.is_less_than` for a definition of connection canonical-ordering.
-
-        :param c: A connective.
-        :return: `True` if the current connective is equal to `c`, `False` otherwise.
-        """
-        c: Connective = Connective.from_any(c)
-        return self.is_connective_equivalent_to(c)
-
-    def is_less_than(self, c: FlexibleConnective) -> bool:
-        r"""Under connective canonical ordering,
-        returns `True` if the current connective is less than `c`,
-        `False` otherwise.
-
-        Definition: canonical ordering of connective elements, denoted :math:`\prec`,
-        is based on the 128-bit integer value of their respective UUID component,
-        which is the default implementation of __lt__ in the uuid package.
-
-        Note:
-        The canonical ordering of connective-sequence being dependent on the connectives UUIDs,
-        the resulting ordering may appear random to the human reader.
-
-        :param c: A connective`.
-        :return: `True` if the current :class:`NaturalNumberSequence` is equal to `s`, `False` otherwise.
-        """
-        c: Connective = Connective.from_any(c)
-        if self.is_connective_equivalent_to(c):
-            return False
-        elif self.uid < c.uid:
-            # Native UUID ordering.
-            return True
-        elif self.uid > c.uid:
-            # Native UUID ordering.
-            return False
-        raise util.PunctiliousException("Unreachable condition")
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return GuidOrder
 
     @property
     def uid(self) -> uuid.UUID:
