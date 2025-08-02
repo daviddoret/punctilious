@@ -24,8 +24,8 @@ with open(filename, "w", newline="") as csvfile:
                   phi.arity,
                   phi.is_canonical,
                   phi.is_strictly_increasing,
-                  phi.rooted_plane_tree.rank(),
-                  phi.natural_number_sequence.rank(),
+                  phi.rooted_plane_tree.rank,
+                  phi.natural_number_sequence.rank,
                   phi.sequence_max_value,
                   ]
         csvwriter.writerow(record)

@@ -165,8 +165,8 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         """
         x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
         y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
-        n1: int = x.rank()
-        n2: int = y.rank()
+        n1: int = x.rank
+        n2: int = y.rank
         return n1 < n2
 
     @classmethod

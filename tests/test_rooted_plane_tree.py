@@ -226,7 +226,7 @@ class TestRootedPlaneTree:
         previous_tree_size = 1
         tree_statistics.append(f"0: {current_tree.size}: {current_tree.dyck_word}")
         for i in range(1, 1024):
-            current_tree: pu.rptl.RootedPlaneTree = current_tree.successor()
+            current_tree: pu.rptl.RootedPlaneTree = current_tree.successor
             # Size cannot decrease
             assert current_tree.size >= current_tree_size
             if current_tree.size > current_tree_size:
@@ -270,7 +270,7 @@ class TestRootedPlaneTree:
             if i == 0:
                 t = pu.rptl.RootedPlaneTree.least_element
             else:
-                t = t.successor()
+                t = t.successor
             t2 = pu.rptl.RootedPlaneTree.unrank(i)
             assert t == t2
-            assert t.rank() == i
+            assert t.rank == i

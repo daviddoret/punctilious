@@ -1,9 +1,11 @@
 import math
+import functools
 import punctilious.util as util
 
 _bell_numbers: tuple[int, ...] = ()  # A private database of bell numbers to cache recursions.
 
 
+@functools.lru_cache(maxsize=128, typed=False)
 def get_bell_number(n: int) -> int:
     """Returns the `n`-th Bell number with `n` index starting at 0.
 

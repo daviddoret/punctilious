@@ -2,7 +2,7 @@ from __future__ import annotations
 import abc
 import docstring_inheritance
 import typing
-
+import functools
 import punctilious.util as util
 import punctilious.special_values_library as spl
 import punctilious.ternary_boolean_library as tbl
@@ -414,6 +414,7 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure(abc.ABC):
         """
         raise util.PunctiliousException("Property `is_equal_to_relation` is not implemented in the child class.")
 
+    # @functools.lru_cache(maxsize=1024, typed=False)
     def is_equal_to(self, x: object) -> bool:
         """Returns `True` if this element is equal to `x`
         under the canonical equality relation for elements of this Python class,
@@ -436,6 +437,7 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure(abc.ABC):
         raise util.PunctiliousException(
             "Property `is_strictly_less_than_relation` is not implemented in the child class.")
 
+    # @functools.lru_cache(maxsize=1024, typed=False)
     def is_strictly_greater_than(self, x: object) -> bool:
         r"""Returns `True` if this element is strictly greater than `x`.
 
@@ -443,6 +445,7 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure(abc.ABC):
         """
         return not (self.is_strictly_less_than(x)) and (not (self.is_equal_to(x)))
 
+    # @functools.lru_cache(maxsize=1024, typed=False)
     def is_strictly_less_than(self, x: object) -> bool:
         """Returns `True` if this element is strictly less than `x`
         under the canonical is-strictly-less-than relation for elements of this Python class,
@@ -454,6 +457,7 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure(abc.ABC):
         """
         return self.__class__.is_strictly_less_than_relation.relates(x=self, y=x)
 
+    @functools.cached_property
     def rank(self) -> int:
         """Returns the rank of this element in its canonical order.
         Returns :p<:attr:`svl.SpecialValues.NOT_AVAILABLE`
@@ -464,6 +468,7 @@ class OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure(abc.ABC):
         """
         return self.__class__.is_strictly_less_than_relation.rank(self)
 
+    @functools.cached_property
     def successor(self) -> object:
         return self.__class__.is_strictly_less_than_relation.successor(self)
 

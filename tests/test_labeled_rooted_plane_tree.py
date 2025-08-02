@@ -419,17 +419,17 @@ class TestLabeledRootedPlaneTree:
 
     def test_ranking(self):
         t0 = pu.lrptl.LabeledRootedPlaneTree.least_element
-        assert t0.rank() == 0
+        assert t0.rank == 0
         assert pu.lrptl.LabeledRootedPlaneTree.unrank(0) == t0
         t1 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_sub_formulas(n=0, s=(t0,))
-        assert t1.rank() == 1
+        assert t1.rank == 1
         assert pu.lrptl.LabeledRootedPlaneTree.unrank(1) == t1
         t2 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_sub_formulas(n=1)
-        assert t2.rank() == 2
+        assert t2.rank == 2
         t2b = pu.lrptl.LabeledRootedPlaneTree.unrank(2)
         assert t2b == t2
         t3 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_sub_formulas(n=0, s=(t0, t0,))
-        assert t3.rank() == 3
+        assert t3.rank == 3
         assert pu.lrptl.LabeledRootedPlaneTree.unrank(3) == t3
         pass
 
@@ -439,10 +439,10 @@ class TestLabeledRootedPlaneTree:
             if i == 0:
                 t = pu.lrptl.LabeledRootedPlaneTree.least_element
             else:
-                t = t.successor()
+                t = t.successor
             t2 = pu.lrptl.LabeledRootedPlaneTree.unrank(i)
             assert t == t2
-            r = t.rank()
+            r = t.rank
             assert r == i
 
     def test_super_recursive_order(self):
@@ -460,12 +460,12 @@ class TestLabeledRootedPlaneTree:
         t0a = pu.lrptl.LabeledRootedPlaneTree.least_element
         t0b = pu.lrptl.LabeledRootedPlaneTree.unrank(0)
         assert t0a == t0b
-        r = t0a.rank()
-        assert t0a.rank() == 0
-        t1a = t0a.successor()
+        r = t0a.rank
+        assert t0a.rank == 0
+        t1a = t0a.successor
         t1b = pu.lrptl.LabeledRootedPlaneTree.unrank(1)
         assert t1a == t1b
-        t2a = t1a.successor()
+        t2a = t1a.successor
         t2b = pu.lrptl.LabeledRootedPlaneTree.unrank(2)
         assert t2a == t2b
         pass

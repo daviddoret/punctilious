@@ -76,15 +76,15 @@ class TestNaturalNumbersSequence:
             *nns0123456789_10_11, *nns00)
 
     def test_is_restricted_growth_function_sequence(self):
-        s = pu.nn0sl.NaturalNumber0Sequence(1, 1, 1)
+        s = pu.nn0sl.NaturalNumber0Sequence(0, 0, 0)
         assert s.is_restricted_growth_function_sequence
-        s = pu.nn0sl.NaturalNumber0Sequence(1, 2, 1)
+        s = pu.nn0sl.NaturalNumber0Sequence(0, 1, 0)
         assert s.is_restricted_growth_function_sequence
-        s = pu.nn0sl.NaturalNumber0Sequence(1, 2, 3)
+        s = pu.nn0sl.NaturalNumber0Sequence(0, 1, 2)
         assert s.is_restricted_growth_function_sequence
         s = pu.nn0sl.NaturalNumber0Sequence(4, 3, 2)
         assert not s.is_restricted_growth_function_sequence
-        s = pu.nn0sl.NaturalNumber0Sequence(1, 3, 2)
+        s = pu.nn0sl.NaturalNumber0Sequence(0, 2, 1)
         assert not s.is_restricted_growth_function_sequence
 
     def test_canonical_natural_number_sequence(self):
@@ -187,18 +187,18 @@ class TestNaturalNumbersSequence:
             n = random.randint(1, 8)
             m = tuple(random.randint(0, 32) for x in range(n))
             s1: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.NaturalNumber0Sequence(*m)
-            r1 = s1.rank()
+            r1 = s1.rank
             s2 = pu.nn0sl.NaturalNumber0Sequence.unrank(r1)
-            r2 = s2.rank()
+            r2 = s2.rank
             assert s1 == s2
             assert r1 == r2
         pass
 
     def test_refined_godel_order_3(self):
         s = pu.nn0sl.NaturalNumber0Sequence(2, 7, 4, 8, 5, 6, 2)
-        r = s.rank()
+        r = s.rank
         s2 = pu.nn0sl.NaturalNumber0Sequence.unrank(r)
-        r2 = s2.rank()
+        r2 = s2.rank
         assert s == s2
         assert r == r2
         pass
@@ -215,10 +215,10 @@ class TestNaturalNumbersSequence:
             if i == 0:
                 s = pu.nn0sl.NaturalNumber0Sequence.least_element
             else:
-                s = s.successor()
+                s = s.successor
             s2 = pu.nn0sl.NaturalNumber0Sequence.unrank(i)
             assert s == s2
-            assert s.rank() == i
+            assert s.rank == i
 
     def test_concatenate_with(self):
         assert pu.nn0sl.NaturalNumber0Sequence(0, 1, 2).concatenate_with(

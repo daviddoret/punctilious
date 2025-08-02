@@ -318,7 +318,7 @@ class DyckWord(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, 
             o: str = str(o)
             return DyckWord(o)
 
-    @property
+    @functools.cached_property
     def characters_number(self) -> int:
         return len(self)
 
