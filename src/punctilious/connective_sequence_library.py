@@ -4,14 +4,113 @@ import typing
 import collections
 import functools
 
-# punctilious libraries
+# package modules
 import punctilious.util as util
+import punctilious.ternary_boolean_library as tbl
+import punctilious.binary_relation_library as brl
+import punctilious.rooted_plane_tree_library as rptl
+import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.ternary_boolean_library as tbl
 import punctilious.binary_relation_library as brl
 import punctilious.connective_library as cl
 
 
-# Data validation functions
+# Binary Relations
+
+
+class IsEqualTo(brl.BinaryRelation):
+    r"""The connective sequence class equipped with the standard equality order relation.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{F}, = )`.
+
+    """
+
+    @util.readonly_class_property
+    def is_antisymmetric(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object.
+        :param y: A Python object.
+        :return: `True` or `False`.
+        """
+        x: ConnectiveSequence = ConnectiveSequence.from_any(x)
+        y: ConnectiveSequence = ConnectiveSequence.from_any(y)
+        return x.is_connective_sequence_equivalent_to(y)
+
+
+class LengthFirstGuidSecondOrder(brl.BinaryRelation):
+    r"""The length-first-uuid-second order of connective sequences.
+
+    Note
+    ------
+
+    In the context of connective sequences,
+    because connective uids have maximal values,
+    a bijection with the (0-based) natural numbers is possible.
+
+    This is distinct from sequences of (0-based) natural numbers,
+    because they have no maximal values.
+
+
+    """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @classmethod
+    def rank(cls, x: object) -> int | typing.Literal[spl.SpecialValues.NOT_AVAILABLE]:
+        # TODO: IMPLEMENT THIS
+        pass
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        x: ConnectiveSequence = ConnectiveSequence.from_any(x)
+        y: ConnectiveSequence = ConnectiveSequence.from_any(y)
+        if x.is_equal_to(y):
+            return False
+        elif x.length < y.length:
+            return True
+        elif y.length < x.length:
+            return False
+        else:
+            minimum_length: int = min(x.length, y.length)
+            i: int
+            for i in range(minimum_length):
+                if x[i] < y[i]:
+                    return True
+                elif x[i] > y[i]:
+                    return False
+            # All compared elements are equal.
+            return False
+
+    @classmethod
+    def unrank(cls, n: int) -> object:
+        pass
+    # TODO: IMPLEMENT THIS
 
 
 # General functions
@@ -20,34 +119,16 @@ import punctilious.connective_library as cl
 # Classes
 
 
-class ConnectiveSequence(tuple):
+class ConnectiveSequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
     """A finite (computable) sequence of at least 1 connectives.
 
     """
-
-    def __eq__(self, s) -> bool:
-        """Returns `True` if this connective-sequence is equal to connective-sequence `s`, `False` otherwise.
-
-        See :attr:`ConnectiveSequence.is_equal_to` for a definition of connective-sequence equality.
-
-        :param s: A connective-sequence.
-        :return: `True` if this connective-sequence is equal to connective-sequence `s`, `False` otherwise.
-        """
-        return self.is_equal_to(s)
 
     def __hash__(self):
         return self._compute_hash(self)
 
     def __init__(self, *s):
         super(ConnectiveSequence, self).__init__()
-
-    def __lt__(self, s) -> bool:
-        """Returns `True` if this connective-sequence is less than formula `s`, `False` otherwise.
-
-        See :attr:`ConnectiveSequence.is_less_than` for a definition of connective-sequence canonical-ordering.
-
-        """
-        return self.is_less_than(s)
 
     def __new__(cls, *s):
         v: bool
@@ -125,13 +206,17 @@ class ConnectiveSequence(tuple):
         else:
             return False, None
 
-    @property
+    @functools.cached_property
     def elements(self) -> tuple[int, ...]:
         """The elements that compose this `ConnectiveSequence`, in order.
 
         :return:
         """
         return tuple(super().__iter__())
+
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
 
     @classmethod
     def from_any(cls, o: FlexibleConnectiveSequence) -> ConnectiveSequence:
@@ -209,7 +294,15 @@ class ConnectiveSequence(tuple):
                     return False
         raise util.PunctiliousException("Unreachable condition")
 
-    @property
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return RefinedGodelNumberOrder
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Sequence:
+        return cls.is_strictly_less_than_relation.least_element
+
+    @functools.cached_property
     def length(self) -> int:
         """The `length` of a finite sequence is the number of elements in the sequence."""
         return len(self)

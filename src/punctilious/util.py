@@ -104,3 +104,138 @@ def data_validate_uid(o: uuid.UUID) -> uuid.UUID:
                                        o=o)
     else:
         raise PunctiliousException('`uuid.UUID` ensurance failure. `o` is not of a supported type.', o=o)
+
+
+def int_to_bits(n: int, bit_positional_significance: str = "msb", fixed_length: None | int = None):
+    """Converts integer `n`to tuple of bits using bit operations.
+
+    :param n: An integer.
+    :param bit_positional_significance: "msb" (most significant bit first) or "lsb" (least significant bit first).
+    :param fixed_length: Fixed length for the bit tuple (pads with zeros if needed).
+    :return: A tuple of bits.
+    """
+    if n < 0:
+        raise PunctiliousException("Negative numbers not supported")
+
+    if bit_positional_significance not in ["msb", "lsb"]:
+        raise PunctiliousException("bit_positional_significance must be 'msb' or 'lsb'")
+
+    if n == 0:
+        bits = [0]
+    else:
+        bits = []
+        temp_n = n
+        while temp_n > 0:
+            bits.append(temp_n & 1)  # Get least significant bit
+            temp_n >>= 1  # Right shift by 1
+        # bits now contains LSB first
+
+    # Handle fixed_length
+    if fixed_length:
+        if len(bits) > fixed_length:
+            raise PunctiliousException(f"Number requires {len(bits)} bits, but fixed_length is {fixed_length}")
+        bits.extend([0] * (fixed_length - len(bits)))  # Pad with zeros
+
+    # Adjust order based on bit_positional_significance
+    if bit_positional_significance == "msb":
+        bits.reverse()  # Most significant bit first
+    # If "lsb", bits are already in LSB first order
+
+    return tuple(bits)
+
+
+def bits_to_int(bits: tuple[int, ...], bit_positional_significance: str = "msb"):
+    """Convert tuple of bits back to integer using bit operations
+
+    :param bits: A tuple of bits.
+    :param bit_positional_significance: "msb" (most significant bit first) or "lsb" (least significant bit first).
+    :return: An integer.
+    """
+
+    result = 0
+
+    if bit_positional_significance == "msb":
+        # Process from left to right (MSB first)
+        for bit in bits:
+            result = (result << 1) | bit
+    else:  # "lsb"
+        # Process from right to left (LSB first)
+        for i, bit in enumerate(bits):
+            result |= bit << i
+
+    return result
+
+
+def combine_fixed_length_ints_with_sentinel(ints: tuple[int, ...], fixed_length: int = 32) -> int:
+    """Combine a tuple of n-bit integers into a single integer,
+    with a sentinel bit to preserve leading zeroes.
+
+    Note
+    -----
+
+    Least significant bit (lsb) is used.
+
+    :param ints: A tuple of integers.
+    :param fixed_length: The number of bits per integer (default: 32).
+    :return: An integer.
+    """
+    if not ints:
+        raise PunctiliousException("`ints` cannot be empty")
+    if fixed_length <= 0:
+        raise PunctiliousException("`fixed_length` must be positive")
+
+    bits: tuple[int, ...] = ()
+    for n in ints:
+        bits = bits + int_to_bits(n=n, bit_positional_significance="lsb", fixed_length=fixed_length)
+
+    # append the sentinel value
+    bits = bits + (1,)
+
+    # convert bits to int
+    n: int = bits_to_int(bits=bits, bit_positional_significance="lsb")
+
+    return n
+
+
+def split_fixed_length_ints_with_sentinel(n: int, fixed_length: int = 32) -> tuple[int, ...]:
+    """Split a combined integer back to original values using sentinel bit.
+
+    Note
+    -----
+
+    Least significant bit (lsb) is used.
+
+
+    :param n: A combined integer with sentinel bit.
+    :param fixed_length: Number of bits per integer (default: 32).
+    :return: A tuple of integers.
+    """
+    if n <= 0:
+        raise PunctiliousException("n must be positive")
+    if n <= 0:
+        raise PunctiliousException("combined must be positive")
+    if fixed_length <= 0:
+        raise PunctiliousException("`fixed_length` must be positive")
+
+    bits: tuple[int, ...] = int_to_bits(n=n, bit_positional_significance="lsb", fixed_length=None)
+
+    # Extract and check the sentinel value
+    sentinel_bits: tuple[int, ...] = bits[-1:]
+    sentinel_value: int = bits_to_int(bits=sentinel_bits, bit_positional_significance="lsb")
+    if sentinel_value != 1:
+        raise PunctiliousException("The sentinel value is not equal to 1.", sentinel_bits=sentinel_bits,
+                                   sentinel_value=sentinel_value, n=n, bits=bits, fixed_length=fixed_length)
+
+    # Remove the sentinel bit to retrieve the meaningful value
+    bits: tuple[int, ...] = bits[:-1]
+
+    ints: tuple[int, ...] = ()
+    # Convert the fixed-length bits to integers
+    for i in range(len(bits) // fixed_length):
+        start_index: int = fixed_length * i
+        end_index: int = fixed_length * (i + 1)
+        int_bits: tuple[int, ...] = bits[start_index: end_index]
+        m: int = bits_to_int(bits=int_bits, bit_positional_significance="lsb")
+        ints = ints + (m,)
+
+    return ints

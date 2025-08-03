@@ -495,6 +495,86 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
             return NaturalNumber0Sequence(*s)
 
 
+class CombinedIntegerWithSentinelOrder(brl.BinaryRelation):
+    r"""The combined integer with sentinel order of (0-based) natural number sequence.
+
+    See also
+    ---------
+
+    - :func:`util.combine_nbit_ints_with_sentinel`.
+    - :func:`util.split_nbit_ints_with_sentinel`.
+
+    Note
+    ------
+
+    The problem with the Gödel number approach is that it grows extremely fast.
+    If we accept as a constraint that sequence elements have maximum = 2^n,
+    such as 2^32, or 2^64 as is usual on many computer systems,
+    then we can combine integer values using fixed-length bit representations.
+    And to solve the problem of leading zeroes, we append a sentinel value of 1.
+
+    """
+
+    _max_bits_constraints: int = 32
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Sequence:
+        """
+
+        The least element is the empty sequence.
+
+        :return:
+        """
+        return NaturalNumber0Sequence()
+
+    @classmethod
+    def rank(cls, x: object) -> int:
+        """
+
+        0 is mapped to the empty sequence ().
+        1 is mapped to sequence (0).
+
+        :param x:
+        :return:
+        """
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        return util.combine_fixed_length_ints_with_sentinel(i=x, b=cls._max_bits_constraints)
+
+    @classmethod
+    def relates(cls, x: FlexibleNaturalNumber0Sequence, y: FlexibleNaturalNumber0Sequence) -> bool:
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
+        return n < m
+
+    @classmethod
+    def successor(cls, x: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
+        n = cls.rank(x)
+        n += 1
+        y = cls.unrank(n)
+        return y
+
+    @classmethod
+    def unrank(cls, n: int) -> NaturalNumber0Sequence:
+        n = int(n)
+        s: tuple[int, ...] = util.split_fixed_length_ints_with_sentinel(i=n, b=cls._max_bits_constraints)
+        s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
+        return s
+
+
 class IsEqualTo(brl.BinaryRelation):
     r"""The equality binary-relation for 0-based natural numbers.
 
@@ -901,3 +981,4 @@ lexicographic_order = LexicographicOrder
 length_first_lexicographic_second_order = LengthFirstLexicographicSecondOrder
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 godel_number_order = GodelNumberEncodingOrder
+combined_integer_with_sentinel_order = CombinedIntegerWithSentinelOrder

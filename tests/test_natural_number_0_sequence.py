@@ -181,6 +181,34 @@ class TestNaturalNumbersSequence:
                     assert n1.is_equal_to(n2)
                     assert n1 == n2
 
+    def test_combined_integer_with_sentinel_order(self):
+
+        x = pu.nn0sl.NaturalNumber0Sequence()
+        n = pu.nn0sl.combined_integer_with_sentinel_order.rank(x)
+        assert n == 0
+        x2 = pu.nn0sl.combined_integer_with_sentinel_order.unrank(n)
+        assert x == x2
+
+        x = pu.nn0sl.NaturalNumber0Sequence(0)
+        n = pu.nn0sl.combined_integer_with_sentinel_order.rank(x)
+        assert n == 1
+        x2 = pu.nn0sl.combined_integer_with_sentinel_order.unrank(n)
+        assert x == x2
+
+        t = ()
+        for i in range(0, 100):
+            n1: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.combined_integer_with_sentinel_order.unrank(i)
+            i2 = pu.nn0sl.combined_integer_with_sentinel_order.rank(n1)
+            assert i2 == i
+            for j in range(0, 100):
+                n2: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.combined_integer_with_sentinel_order.unrank(j)
+                if i < j:
+                    assert pu.nn0sl.combined_integer_with_sentinel_order.relates(n1, n2)
+                if j < i:
+                    assert pu.nn0sl.combined_integer_with_sentinel_order.relates(n2, n1)
+                if i == j:
+                    assert n1.is_equal_to(n2)
+
     def test_refined_godel_order_2(self):
         for i in range(8):
             # generate a random sequence
