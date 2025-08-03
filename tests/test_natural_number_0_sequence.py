@@ -184,30 +184,35 @@ class TestNaturalNumbersSequence:
     def test_combined_integer_with_sentinel_order(self):
 
         x = pu.nn0sl.NaturalNumber0Sequence()
-        n = pu.nn0sl.combined_integer_with_sentinel_order.rank(x)
+        n = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.rank(x)
         assert n == 0
-        x2 = pu.nn0sl.combined_integer_with_sentinel_order.unrank(n)
+        x2 = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.unrank(n)
         assert x == x2
 
         x = pu.nn0sl.NaturalNumber0Sequence(0)
-        n = pu.nn0sl.combined_integer_with_sentinel_order.rank(x)
-        assert n == 1
-        x2 = pu.nn0sl.combined_integer_with_sentinel_order.unrank(n)
+        n = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.rank(x)
+        assert n == 4294967296
+        x2 = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.unrank(n)
         assert x == x2
 
-        t = ()
-        for i in range(0, 100):
-            n1: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.combined_integer_with_sentinel_order.unrank(i)
-            i2 = pu.nn0sl.combined_integer_with_sentinel_order.rank(n1)
-            assert i2 == i
-            for j in range(0, 100):
-                n2: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.combined_integer_with_sentinel_order.unrank(j)
-                if i < j:
-                    assert pu.nn0sl.combined_integer_with_sentinel_order.relates(n1, n2)
-                if j < i:
-                    assert pu.nn0sl.combined_integer_with_sentinel_order.relates(n2, n1)
-                if i == j:
-                    assert n1.is_equal_to(n2)
+        for i in range(0, 128):
+            sequence_length: int = random.randint(1, 256)
+            fixed_length: int = random.randint(1, 16)
+            l1: tuple[int, ...] = tuple(random.randint(0, 2 ** (fixed_length - 1)) for x in range(0, sequence_length))
+            s1 = pu.nn0sl.NaturalNumber0Sequence(*l1)
+            n1 = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.rank(s1)
+            s2 = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.unrank(n1)
+            assert s1 == s2
+
+        s = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.least_element
+        previous_s = None
+        for i in range(0, 128):
+            previous_s = s
+            s = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.successor(s)
+            n1 = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.rank(s)
+            s2 = pu.nn0sl.combined_fixed_length_integers_with_sentinel_order.unrank(n1)
+            assert s == s2
+            assert previous_s < s
 
     def test_refined_godel_order_2(self):
         for i in range(8):

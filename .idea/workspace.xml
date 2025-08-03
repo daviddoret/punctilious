@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="split_fixed_length_ints_with_sentinel">
-      <change afterPath="$PROJECT_DIR$/sandbox/bit_operations.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sandbox/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/punctilious/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -351,7 +345,7 @@
     "Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_image.executor": "Run",
     "Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_least_element.executor": "Run",
     "Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_order.executor": "Run",
-    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order.executor": "Debug",
+    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_least_element.executor": "Run",
@@ -759,7 +753,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_util.TestIntegerCombinationWithSentinel.test_integer_combination_with_sentinel">
+  <component name="RunManager" selected="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order">
     <configuration name="bit_operations" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1012,6 +1006,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest for test.test_comprehensive" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1081,23 +1092,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sandbox" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/sandbox/test.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -1111,20 +1105,20 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test.test_comprehensive" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order" />
       <item itemvalue="Python tests.pytest for test_util.TestIntToBitsAndBitsToInt.test_int_to_bits_and_bits_to_int" />
       <item itemvalue="Python tests.pytest for test_util.TestIntegerCombinationWithSentinel.test_integer_combination_with_sentinel" />
-      <item itemvalue="Python tests.pytest in test.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order" />
         <item itemvalue="Python tests.pytest for test_util.TestIntegerCombinationWithSentinel.test_integer_combination_with_sentinel" />
         <item itemvalue="Python tests.pytest for test_util.TestIntToBitsAndBitsToInt.test_int_to_bits_and_bits_to_int" />
         <item itemvalue="Python.bit_operations" />
         <item itemvalue="Python tests.pytest for test.test_comprehensive" />
-        <item itemvalue="Python tests.pytest in test.py" />
       </list>
     </recent_temporary>
   </component>
@@ -1146,14 +1140,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01579" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1753557091410</created>
-      <option name="number" value="01579" />
-      <option name="presentableId" value="LOCAL-01579" />
-      <option name="project" value="LOCAL" />
-      <updated>1753557091413</updated>
     </task>
     <task id="LOCAL-01580" summary="cleanup">
       <option name="closed" value="true" />
@@ -1539,7 +1525,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754129975320</updated>
     </task>
-    <option name="localTasksCounter" value="1628" />
+    <task id="LOCAL-01628" summary="split_fixed_length_ints_with_sentinel">
+      <option name="closed" value="true" />
+      <created>1754246108644</created>
+      <option name="number" value="01628" />
+      <option name="presentableId" value="LOCAL-01628" />
+      <option name="project" value="LOCAL" />
+      <updated>1754246108645</updated>
+    </task>
+    <option name="localTasksCounter" value="1629" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1757,26 +1751,6 @@
           <url>file://$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py</url>
           <line>251</line>
           <option name="timeStamp" value="475" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_natural_number_0_sequence.py</url>
-          <line>205</line>
-          <option name="timeStamp" value="478" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_natural_number_0_sequence.py</url>
-          <line>197</line>
-          <option name="timeStamp" value="479" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py</url>
-          <line>571</line>
-          <option name="timeStamp" value="480" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_util.py</url>
-          <line>37</line>
-          <option name="timeStamp" value="486" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

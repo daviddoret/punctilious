@@ -495,8 +495,8 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
             return NaturalNumber0Sequence(*s)
 
 
-class CombinedIntegerWithSentinelOrder(brl.BinaryRelation):
-    r"""The combined integer with sentinel order of (0-based) natural number sequence.
+class CombinedFixedLengthIntegersWithSentinelOrder(brl.BinaryRelation):
+    r"""The combined fixed-length integers with sentinel order of (0-based) natural number sequence.
 
     See also
     ---------
@@ -508,14 +508,22 @@ class CombinedIntegerWithSentinelOrder(brl.BinaryRelation):
     ------
 
     The problem with the Gödel number approach is that it grows extremely fast.
-    If we accept as a constraint that sequence elements have maximum = 2^n,
+    If we accept as a constraint that (0-based) natural number elements
+    in the sequence have a maximal value of 2^n,
     such as 2^32, or 2^64 as is usual on many computer systems,
     then we can combine integer values using fixed-length bit representations.
-    And to solve the problem of leading zeroes, we append a sentinel value of 1.
+
+    To solve the problem of leading zeroes, we can simply append a sentinel value of 1.
+
+    Finally, we define rank(()) = 0.
+
+    Then, this combined fixed-length integers order yields much smaller ranks
+    as compared with orders based on the Gödel number approach,
+    making them much easier to manipulate by a computer system.
 
     """
 
-    _max_bits_constraints: int = 32
+    _max_bits_constraints: int = 32  # The maximal number of bits allowed to represent elements in a (0-based) natural number sequence.
 
     @util.readonly_class_property
     def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
@@ -524,10 +532,21 @@ class CombinedIntegerWithSentinelOrder(brl.BinaryRelation):
         Proof
         ------
 
-        TODO: Provide proof here.
+        A bijection with (N, <) is impossible because many (0-based) natural numbers
+        are missing from the ranks. To build on such missing value:
+        - take any integer `x` whose lsb binary representation does not have a length of
+          (fixed length) * n + 1.
+        - note that by construction, all effective ranks have an lsb binary representation
+          of length (fixed length) * n + 1 (the + 1 comes from the sentinel value).
+        - conclude that `x` is a (0-based) natural number that cannot be mapped
+          to a sequence of (0-based) natural numbers.
+
+        For a practical example, take fixed length = 32 and tbe sequence (0).
+        Its rank is 4,294,967,296.
+        it follows that for all 0 < x < 4294967296, no unranking is possible.
 
         """
-        return tbl.TernaryBoolean.TRUE
+        return tbl.TernaryBoolean.FALSE
 
     @util.readonly_class_property
     def least_element(cls) -> NaturalNumber0Sequence:
@@ -550,7 +569,10 @@ class CombinedIntegerWithSentinelOrder(brl.BinaryRelation):
         :return:
         """
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        return util.combine_fixed_length_ints_with_sentinel(i=x, b=cls._max_bits_constraints)
+        if x == cls.least_element:
+            return 0  # by definition
+        else:
+            return util.combine_fixed_length_ints_with_sentinel(ints=x, fixed_length=cls._max_bits_constraints)
 
     @classmethod
     def relates(cls, x: FlexibleNaturalNumber0Sequence, y: FlexibleNaturalNumber0Sequence) -> bool:
@@ -562,16 +584,48 @@ class CombinedIntegerWithSentinelOrder(brl.BinaryRelation):
 
     @classmethod
     def successor(cls, x: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
-        n = cls.rank(x)
-        n += 1
-        y = cls.unrank(n)
-        return y
+        """
+
+        Note
+        -----
+
+        To get the successor, we cannot use unrank(rank(x) + 1).
+        This is because this order is not a bijection with N.
+        Instead, we must increment the last element of the sequence,
+        or if the last element has maximum value,
+        set the last element to 0 and append a new element with value 0
+        (leading zeroes are of course accepted).
+
+        :param x:
+        :return:
+        """
+        if x == cls.least_element:
+            # this is the empty sequence
+            return NaturalNumber0Sequence(0)  # the first non-empty sequence
+        else:
+            # the sequence is non-empty
+            last_element: int = x[-1]
+            if last_element == 2 ** cls._max_bits_constraints - 1:
+                l = list(x)
+                l[-1] = 0
+                l.append(0)
+                s: NaturalNumber0Sequence = NaturalNumber0Sequence(*l)
+                return s
+            else:
+                l = list(x)
+                last_element = last_element + 1
+                l[-1] = last_element
+                s: NaturalNumber0Sequence = NaturalNumber0Sequence(*l)
+                return s
 
     @classmethod
     def unrank(cls, n: int) -> NaturalNumber0Sequence:
         n = int(n)
-        s: tuple[int, ...] = util.split_fixed_length_ints_with_sentinel(i=n, b=cls._max_bits_constraints)
-        s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
+        if n == 0:
+            return cls.least_element
+        else:
+            s: tuple[int, ...] = util.split_fixed_length_ints_with_sentinel(n=n, fixed_length=cls._max_bits_constraints)
+            s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
         return s
 
 
@@ -981,4 +1035,4 @@ lexicographic_order = LexicographicOrder
 length_first_lexicographic_second_order = LengthFirstLexicographicSecondOrder
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 godel_number_order = GodelNumberEncodingOrder
-combined_integer_with_sentinel_order = CombinedIntegerWithSentinelOrder
+combined_fixed_length_integers_with_sentinel_order = CombinedFixedLengthIntegersWithSentinelOrder
