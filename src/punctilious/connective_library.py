@@ -142,7 +142,7 @@ class GuidOrder(brl.BinaryRelation):
         return Connective(fallback_string_representation="# Anonymous connector", uid=uuid.UUID(int=n))
 
 
-class Connective(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
+class Connective(brl.ClassWithOrder, tuple):
     """A `Connective` is an abstract symbol that may be assigned various (human-readable) representations,
     and that is recognized as a distinctive semantic unit.
 

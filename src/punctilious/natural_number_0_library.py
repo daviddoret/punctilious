@@ -143,7 +143,7 @@ is_strictly_less_than = IsStrictlyLessThan  # The canonical is-strictly-less-tha
 
 # Main class
 
-class NaturalNumber0(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, int):
+class NaturalNumber0(brl.ClassWithOrder, int):
     r"""A (0-based) natural number.
 
     Mathematical definition

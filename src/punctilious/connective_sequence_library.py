@@ -3,6 +3,7 @@ import itertools
 import typing
 import collections
 import functools
+import uuid
 
 # package modules
 import punctilious.util as util
@@ -10,9 +11,8 @@ import punctilious.ternary_boolean_library as tbl
 import punctilious.binary_relation_library as brl
 import punctilious.rooted_plane_tree_library as rptl
 import punctilious.natural_number_0_sequence_library as nn0sl
-import punctilious.ternary_boolean_library as tbl
-import punctilious.binary_relation_library as brl
 import punctilious.connective_library as cl
+from punctilious import special_values_library as spl
 
 
 # Binary Relations
@@ -53,19 +53,16 @@ class IsEqualTo(brl.BinaryRelation):
         return x.is_connective_sequence_equivalent_to(y)
 
 
-class LengthFirstGuidSecondOrder(brl.BinaryRelation):
-    r"""The length-first-uuid-second order of connective sequences.
+class CombinedFixedLengthIntegersWithSentinelOrder(brl.BinaryRelation):
+    r"""The combined fixed-length integers with sentinel order of connective sequences.
 
     Note
     ------
 
-    In the context of connective sequences,
-    because connective uids have maximal values,
-    a bijection with the (0-based) natural numbers is possible.
+    Connective uids have maximal value: :math:`n^128`.
 
-    This is distinct from sequences of (0-based) natural numbers,
-    because they have no maximal values.
-
+    In this context, reusing the combined fixed-length integers with sentinel order
+    is a natural option.
 
     """
 
@@ -79,38 +76,51 @@ class LengthFirstGuidSecondOrder(brl.BinaryRelation):
         TODO: Provide proof here.
 
         """
-        return tbl.TernaryBoolean.TRUE
+        return tbl.TernaryBoolean.FALSE
+
+    @util.readonly_class_property
+    def least_element(cls) -> ConnectiveSequence:
+        return ConnectiveSequence()
 
     @classmethod
-    def rank(cls, x: object) -> int | typing.Literal[spl.SpecialValues.NOT_AVAILABLE]:
-        # TODO: IMPLEMENT THIS
-        pass
+    def rank(cls, x: FlexibleConnectiveSequence) -> int:
+        x: ConnectiveSequence = ConnectiveSequence.from_any(x)
+        # builds a (0-based) natural number sequence
+        # from the integer values of the connective uuids.
+        c: cl.Connective
+        s: tuple[int, ...] = tuple(c.uid.int for c in x.elements)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
+        return nn0sl.combined_fixed_length_integers_with_sentinel_order.rank(s)
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
         x: ConnectiveSequence = ConnectiveSequence.from_any(x)
         y: ConnectiveSequence = ConnectiveSequence.from_any(y)
-        if x.is_equal_to(y):
-            return False
-        elif x.length < y.length:
-            return True
-        elif y.length < x.length:
-            return False
-        else:
-            minimum_length: int = min(x.length, y.length)
-            i: int
-            for i in range(minimum_length):
-                if x[i] < y[i]:
-                    return True
-                elif x[i] > y[i]:
-                    return False
-            # All compared elements are equal.
-            return False
+        r1: int = cls.rank(x)
+        r2: int = cls.rank(y)
+        return r1 < r2
+
+    @classmethod
+    def successor(cls, x: object) -> object | typing.Literal[spl.SpecialValues.NOT_AVAILABLE]:
+        x: ConnectiveSequence = ConnectiveSequence.from_any(x)
+        # builds a (0-based) natural number sequence
+        # from the integer values of the connective uuids.
+        c: cl.Connective
+        s: tuple[int, ...] = tuple(c.uid.int for c in x.elements)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
+        # get the success of the (0-based) natural number sequence
+        s2: nn0sl.NaturalNumber0Sequence = nn0sl.combined_fixed_length_integers_with_sentinel_order.successor(s)
+        # rank it and unrank it ;-)
+        r: int = nn0sl.combined_fixed_length_integers_with_sentinel_order.rank(s2)
+        x2: ConnectiveSequence = cls.unrank(r)
+        return x2
 
     @classmethod
     def unrank(cls, n: int) -> object:
-        pass
-    # TODO: IMPLEMENT THIS
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.combined_fixed_length_integers_with_sentinel_order.unrank(n)
+        uids: tuple[uuid.UUID, ...] = tuple(uuid.UUID(int=int(i)) for i in s.elements)
+        c: tuple[cl.Connective, ...] = tuple(cl.Connective("Anonymous connective", uid=uid) for uid in uids)
+        return ConnectiveSequence(*c)
 
 
 # General functions
@@ -119,7 +129,7 @@ class LengthFirstGuidSecondOrder(brl.BinaryRelation):
 # Classes
 
 
-class ConnectiveSequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
+class ConnectiveSequence(brl.ClassWithOrder, tuple):
     """A finite (computable) sequence of at least 1 connectives.
 
     """
@@ -134,8 +144,6 @@ class ConnectiveSequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanS
         v: bool
         s: tuple[cl.Connective, ...]
         v, s = cls.data_validate_elements(s)
-        if len(s) < 1:
-            raise util.PunctiliousException('The length of a ConnectiveSequence must be strictly greater than ')
         s: tuple[cl.Connective] = super(ConnectiveSequence, cls).__new__(cls, s)
         s: tuple[cl.Connective] = cls._from_cache(s)
         return s
@@ -183,12 +191,6 @@ class ConnectiveSequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanS
         if isinstance(o, collections.abc.Iterable) or isinstance(o, collections.abc.Generator):
             v: bool = True
             o = tuple(o)
-            if len(o) == 0:
-                if raise_exception_on_validation_failure:
-                    raise util.PunctiliousException(
-                        "`o` is empty.", o=o)
-                else:
-                    v = False
             c: cl.FlexibleConnective
             l: list[cl.Connective] = list()
             for c in o:
@@ -215,7 +217,7 @@ class ConnectiveSequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanS
         return tuple(super().__iter__())
 
     @util.readonly_class_property
-    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+    def is_equal_to_relation(cls) -> typing.Type[brl.BinaryRelation]:
         return IsEqualTo
 
     @classmethod
@@ -251,55 +253,12 @@ class ConnectiveSequence(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanS
         s: ConnectiveSequence = ConnectiveSequence.from_any(s)
         return all(i == j for i, j in zip(self, s))
 
-    def is_equal_to(self, c: FlexibleConnectiveSequence):
-        """Under :class:`ConnectiveSequence` canonical ordering,
-        returns `True` if the current :class:`ConnectiveSequence` is equal to `c`,
-        `False` otherwise.
-
-        See :attr:`ConnectiveSequence.is_less_than` for a definition of connective-sequence canonical-ordering.
-
-        :param c: A :class:`ConnectiveSequence`.
-        :return: `True` if the current :class:`ConnectiveSequence` is equal to `c`, `False` otherwise.
-        """
-        c: ConnectiveSequence = ConnectiveSequence.from_any(c)
-        return self.is_connective_sequence_equivalent_to(c)
-
-    def is_less_than(self, c: FlexibleConnectiveSequence) -> bool:
-        r"""Under :class:`ConnectiveSequence` canonical ordering,
-        returns `True` if the current :class:`ConnectiveSequence` is less than `c`,
-        `False` otherwise.
-
-        Definition: canonical ordering of natural-number-sequence, denoted :math:`\prec`,
-        is defined as length-first, ascending-order second.
-
-        Note:
-        The canonical ordering of connective-sequence being dependent on the connectives UUIDs,
-        the resulting ordering may appear random to the human reader.
-
-        :param c: A :class:`ConnectiveSequence`.
-        :return: `True` if the current :class:`ConnectiveSequence` is equal to `c`, `False` otherwise.
-        """
-        c: ConnectiveSequence = ConnectiveSequence.from_any(c)
-        if self.is_connective_sequence_equivalent_to(c):
-            return False
-        elif self.length < c.length:
-            return True
-        elif self.length > c.length:
-            return False
-        else:
-            for n, m in zip(self.elements, c.elements):
-                if n < m:
-                    return True
-                if n > m:
-                    return False
-        raise util.PunctiliousException("Unreachable condition")
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(cls) -> typing.Type[brl.BinaryRelation]:
+        return CombinedFixedLengthIntegersWithSentinelOrder
 
     @util.readonly_class_property
-    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return RefinedGodelNumberOrder
-
-    @util.readonly_class_property
-    def least_element(cls) -> NaturalNumber0Sequence:
+    def least_element(cls) -> ConnectiveSequence:
         return cls.is_strictly_less_than_relation.least_element
 
     @functools.cached_property
@@ -316,3 +275,4 @@ FlexibleConnectiveSequence = typing.Union[
 # Aliases
 
 CS = ConnectiveSequence  # An alias for ConnectiveSequence.
+combined_fixed_length_integers_with_sentinel_order = CombinedFixedLengthIntegersWithSentinelOrder

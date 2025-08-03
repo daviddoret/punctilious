@@ -207,7 +207,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
 
 # Classes
 
-class LabeledRootedPlaneTree(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
+class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     r"""A :class:`AbstractFormula` is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is a sequence of (0-based) natural numbers.

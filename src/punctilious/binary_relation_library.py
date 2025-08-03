@@ -382,11 +382,17 @@ def unrank(n: int, o: BinaryRelation | None) -> object:
     return o.unrank(n)
 
 
-class OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure(abc.ABC):
-    r"""A model of structures that are order isomorphic to :math:`( \mathbb{N}, < )`,
+class ClassWithOrder(abc.ABC):
+    r"""A class equipped with an order relation.
+
+    Note
+    -----
+
+    Ideally, a class should be equipped with an order
+    that is isomorphic to :math:`( \mathbb{N}, < )`,
     and for which ranking and unranking algorithms are available.
 
-    See :attr:`BinaryRelation.is_order_isomorphic_with_n_strictly_less_than` for definitions.
+    But this is not always possible.
 
     """
 

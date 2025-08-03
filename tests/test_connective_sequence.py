@@ -19,3 +19,12 @@ class TestConnectiveSequence:
         assert s1 is s3
         with pytest.raises(pu.util.PunctiliousException):
             pu.csl.ConnectiveSequence()
+
+    def test_combined_fixed_length_integers_with_sentinel_order(self):
+        s = pu.csl.ConnectiveSequence.least_element
+        for n in range(0, 128):
+            r = s.rank
+            s2 = pu.csl.combined_fixed_length_integers_with_sentinel_order.unrank(r)
+            assert s == s2
+            s_successor = s.successor
+            assert s < s_successor

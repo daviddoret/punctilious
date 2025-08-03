@@ -165,7 +165,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
 # Classes
 
 
-class Formula(brl.OrderIsomorphicToNaturalNumber0AndStrictlyLessThanStructure, tuple):
+class Formula(brl.ClassWithOrder, tuple):
     """
 
     Definition
