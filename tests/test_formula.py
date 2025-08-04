@@ -35,13 +35,13 @@ class TestFormula:
         assert phi6a.main_connective == pu.cc.set_by_extension
 
     def test_iterate_immediate_sub_formulas(self, lrpt1, phi1a, phi2a, phi2b, phi6a):
-        l = tuple(t for t in phi1a.iterate_immediate_sub_formulas())
+        l = tuple(t for t in phi1a.iterate_immediate_subtrees())
         assert len(l) == 0
-        l = tuple(t for t in phi2a.iterate_immediate_sub_formulas())
+        l = tuple(t for t in phi2a.iterate_immediate_subtrees())
         assert l[0] == phi1a
-        l = tuple(t for t in phi2b.iterate_immediate_sub_formulas())
+        l = tuple(t for t in phi2b.iterate_immediate_subtrees())
         assert l[0] == phi1a
-        l = tuple(t for t in phi6a.iterate_immediate_sub_formulas())
+        l = tuple(t for t in phi6a.iterate_immediate_subtrees())
         assert l[0] == pu.fl.Formula(t=lrpt1, s=(pu.cc.one,))
         assert l[1] == pu.fl.Formula(t=lrpt1, s=(pu.cc.two,))
         assert l[2] == pu.fl.Formula(t=lrpt1, s=(pu.cc.three,))
@@ -67,15 +67,15 @@ class TestFormula:
         assert pu.fl.Formula(t=lrpt1, s=(pu.cc.five,)).is_sub_formula_of(phi6a)
 
     def test_iterate_sub_formulas(self, lrpt1, phi1a, phi2a, phi2b, phi6a):
-        l = tuple(t for t in phi1a.iterate_sub_formulas())
+        l = tuple(t for t in phi1a.iterate_subtrees())
         assert l[0] == phi1a
-        l = tuple(t for t in phi2a.iterate_sub_formulas())
+        l = tuple(t for t in phi2a.iterate_subtrees())
         assert l[0] == phi2a
         assert l[1] == phi1a
-        l = tuple(t for t in phi2b.iterate_sub_formulas())
+        l = tuple(t for t in phi2b.iterate_subtrees())
         assert l[0] == phi2b
         assert l[1] == phi1a
-        l = tuple(t for t in phi6a.iterate_sub_formulas())
+        l = tuple(t for t in phi6a.iterate_subtrees())
         assert l[0] == phi6a
         assert l[1] == pu.fl.Formula(t=lrpt1, s=(pu.cc.one,))
         assert l[2] == pu.fl.Formula(t=lrpt1, s=(pu.cc.two,))

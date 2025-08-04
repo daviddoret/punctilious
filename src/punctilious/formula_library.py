@@ -104,7 +104,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         # such that s0 is `x`'s main element,
         # and s1, ..., sn are the recursive ranks of its sub-formulas.
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.main_element)
-        for subtree in x.iterate_immediate_sub_formulas():
+        for subtree in x.iterate_immediate_subtrees():
             subtree_rank: int = cls.rank(subtree)
             t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)
             s: nn0sl.NaturalNumber0Sequence = s.concatenate_with(t)
@@ -157,8 +157,8 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         for i, m in enumerate(s[1:], 1):
             subtree = cls.unrank(m)
             subtrees.append(subtree)
-        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_sub_formulas(n=main_element,
-                                                                                       s=subtrees)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(n=main_element,
+                                                                                   s=subtrees)
         return t
 
 
@@ -471,7 +471,7 @@ class Formula(brl.ClassWithOrder, tuple):
 
         :return: A generator of :class:`Formula`.
         """
-        for phi, s in zip(self.labeled_rooted_plane_tree.iterate_immediate_sub_formulas(),
+        for phi, s in zip(self.labeled_rooted_plane_tree.iterate_immediate_subtrees(),
                           self.labeled_rooted_plane_tree.iterate_immediate_sub_sequences()):
             s: tuple[int, ...] = util.deduplicate_integer_sequence(s)
             t: tuple[cl.Connective, ...] = tuple(
@@ -479,7 +479,7 @@ class Formula(brl.ClassWithOrder, tuple):
             yield Formula(phi, t)
 
     def iterate_sub_formulas(self) -> collections.abc.Generator[Formula, None, None]:
-        for phi, s in zip(self.labeled_rooted_plane_tree.iterate_sub_formulas(),
+        for phi, s in zip(self.labeled_rooted_plane_tree.iterate_subtrees(),
                           self.labeled_rooted_plane_tree.iterate_sub_sequences()):
             s: tuple[int, ...] = util.deduplicate_integer_sequence(s)
             t: tuple[cl.Connective, ...] = tuple(

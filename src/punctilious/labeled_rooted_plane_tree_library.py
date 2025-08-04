@@ -147,7 +147,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         # such that s0 is `x`'s main element,
         # and s1, ..., sn are the recursive ranks of its sub-formulas.
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.main_element)
-        for subtree in x.iterate_immediate_sub_formulas():
+        for subtree in x.iterate_immediate_subtrees():
             subtree_rank: int = cls.rank(subtree)
             t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)
             s: nn0sl.NaturalNumber0Sequence = s.concatenate_with(t)
@@ -200,8 +200,8 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         for i, m in enumerate(s[1:], 1):
             subtree = cls.unrank(m)
             subtrees.append(subtree)
-        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_sub_formulas(n=main_element,
-                                                                                       s=subtrees)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(n=main_element,
+                                                                                   s=subtrees)
         return t
 
 
@@ -271,7 +271,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: the conclusion of this inference-rule.
         """
         if self.is_abstract_inference_rule:
-            return self.immediate_sub_formulas[2]
+            return self.immediate_subtrees[2]
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
@@ -284,7 +284,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: the premises of this inference-rule.
         """
         if self.is_abstract_inference_rule:
-            return self.immediate_sub_formulas[1]
+            return self.immediate_subtrees[1]
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
@@ -297,7 +297,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: the variables of this inference-rule.
         """
         if self.is_abstract_inference_rule:
-            return self.immediate_sub_formulas[0]
+            return self.immediate_subtrees[0]
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
 
@@ -314,7 +314,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :param i: The image of the abstract-map.
         :return: The resulting abstract-map.
         """
-        return LabeledRootedPlaneTree.from_immediate_sub_formulas(n=n, s=(p, i,))
+        return LabeledRootedPlaneTree.from_immediate_subtrees(n=n, s=(p, i,))
 
     @functools.cached_property
     def abstract_map_preimage_sequence(self) -> LabeledRootedPlaneTree:
@@ -325,7 +325,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: the preimage sequence of this map.
         """
         if self.is_abstract_map:
-            return self.immediate_sub_formulas[0]
+            return self.immediate_subtrees[0]
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
 
@@ -338,9 +338,27 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: the image sequence of this map.
         """
         if self.is_abstract_map:
-            return self.immediate_sub_formulas[1]
+            return self.immediate_subtrees[1]
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
+
+    @functools.cached_property
+    def abstract_set_elements(self) -> tuple[LabeledRootedPlaneTree, ...]:
+        r"""Returns the elements of this abstract-set.
+
+        Note
+        ______
+
+        This is equivalent to the immediate subtrees of the LRPT.
+
+        See also
+        _________
+
+        Cf.: :prop:`LabeledRootedPlaneTree.is_abstract_set`.
+
+        :return: A tuple of LRPTs.
+        """
+        return self.immediate_subtrees
 
     @functools.cached_property
     def arity(self) -> int:
@@ -348,7 +366,34 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         :return:
         """
-        return len(self.immediate_sub_formulas)
+        return len(self.immediate_subtrees)
+
+    @functools.cached_property
+    def canonical_abstract_set(self) -> LabeledRootedPlaneTree:
+        r"""Returns the canonical abstract-set of this abstract-set.
+
+        In short:
+
+        - Remove duplicate elements.
+        - Canonically order elements.
+
+        See also
+        _________
+
+        Cf.: :prop:`LabeledRootedPlaneTree`.
+
+        :return: A canonical abstract-set.
+        """
+        s: tuple[LabeledRootedPlaneTree, ...] = ()
+        t: LabeledRootedPlaneTree
+        for t in self.abstract_set_elements:
+            if t not in s:
+                s = s + (t,)
+        s = tuple(sorted(s))
+        abstract_set: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(
+            n=self.main_element,
+            s=s)
+        return abstract_set
 
     @functools.cached_property
     def canonical_labeled_rooted_plane_tree(self) -> LabeledRootedPlaneTree:
@@ -391,7 +436,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
             i: LabeledRootedPlaneTree  # An input premise
             e: LabeledRootedPlaneTree  # An expected premise
-            for i, e in zip(p.iterate_immediate_sub_formulas(), self.abstract_inference_rule_premises):
+            for i, e in zip(p.iterate_immediate_subtrees(), self.abstract_inference_rule_premises):
                 ok, v = _compute_abstract_inference_rule_variables(v, i, e)
                 if not ok:
                     pass
@@ -432,7 +477,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
                                         type_of_o=type(o), o=o)
 
     @classmethod
-    def from_immediate_sub_formulas(
+    def from_immediate_subtrees(
             cls,
             n: int | None,
             s: tuple[FlexibleLabeledRootedPlaneTree, ...] | None = None) -> LabeledRootedPlaneTree:
@@ -519,7 +564,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         if self.is_abstract_map:
             i: int = self.abstract_map_preimage_sequence.get_immediate_subformula_index(t)
-            return self.abstract_map_image_sequence.immediate_sub_formulas[i]
+            return self.abstract_map_image_sequence.immediate_subtrees[i]
         else:
             raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
 
@@ -539,11 +584,11 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             raise util.PunctiliousException(
                 'The immediate subformulas of this labeled rooted plane tree are not unique.',
                 this_formula=self, phi=t)
-        if not t in self.immediate_sub_formulas:
+        if not t in self.immediate_subtrees:
             raise util.PunctiliousException('`phi` is not an immediate subformulas of this labeled rooted plane tree.',
                                             this_formula=self, phi=t)
 
-        return self.immediate_sub_formulas.index(t)
+        return self.immediate_subtrees.index(t)
 
     def get_sub_formula_by_path(self, p: tuple[int, ...]) -> LabeledRootedPlaneTree:
         r"""Given a path `p`, returns the corresponding sub-formula.
@@ -573,12 +618,31 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
                         "The n-th element of the path is negative or greater than the number of"
                         " immediate sub-formulas in phi.", n_index=i, n_value=j,
                         phi=phi)
-                phi: LabeledRootedPlaneTree = phi.immediate_sub_formulas[j]
+                phi: LabeledRootedPlaneTree = phi.immediate_subtrees[j]
             return phi
 
+    def has_abstract_set_element(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if `t` is an element of this abstract-set, `False` otherwise.
+
+        Cf. :prop:`LabeledRootedPlaneTree.is_abstract_set`.
+
+        :param t: An abstract-set.
+        :return: `True` or `False`
+        """
+        return self.has_immediate_subtree(t)
+
+    def has_immediate_subtree(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if `t` is a subtree of this LRPT, `False` otherwise.
+
+        :param t: An LRPT.
+        :return: `True` or `False`
+        """
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
+        return t in self.immediate_subtrees
+
     @functools.cached_property
-    def immediate_sub_formulas(self) -> tuple[LabeledRootedPlaneTree, ...]:
-        r"""The `immediate_sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements
+    def immediate_subtrees(self) -> tuple[LabeledRootedPlaneTree, ...]:
+        r"""The `immediate_subtrees` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements
         that are the immediate children formulas of `phi` in the formula tree, or equivalently the formulas
         of degree 0 in `phi`.
 
@@ -586,7 +650,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         See also:
 
-        - :attr:`AbstractFormula.sub_formulas`
+        - :attr:`AbstractFormula.subtrees`
 
         References:
 
@@ -594,10 +658,11 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         :return:
         """
-        sub_formulas = list()
-        for phi in self.iterate_immediate_sub_formulas():
-            sub_formulas.append(phi)
-        return tuple(sub_formulas)
+        subtrees: tuple[LabeledRootedPlaneTree, ...] = ()
+        subtree: LabeledRootedPlaneTree
+        for subtree in self.iterate_immediate_subtrees():
+            subtrees = subtrees + (subtree,)
+        return subtrees
 
     @functools.cached_property
     def immediate_subformulas_are_unique(self) -> bool:
@@ -612,7 +677,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         unique_values: set[LabeledRootedPlaneTree] = set()
         psi: LabeledRootedPlaneTree
-        for psi in self.iterate_immediate_sub_formulas():
+        for psi in self.iterate_immediate_subtrees():
             if psi in unique_values:
                 return False
             unique_values.add(psi)
@@ -661,8 +726,8 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if self._is_abstract_map is None:
             self._is_abstract_map = \
                 self.arity == 2 and \
-                self.immediate_sub_formulas[0].arity == self.immediate_sub_formulas[1].arity and \
-                self.immediate_sub_formulas[0].immediate_subformulas_are_unique
+                self.immediate_subtrees[0].arity == self.immediate_subtrees[1].arity and \
+                self.immediate_subtrees[0].immediate_subformulas_are_unique
         return self._is_abstract_map
 
     @functools.cached_property
@@ -709,9 +774,65 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
                 self.arity == 3
         return self._is_abstract_inference_rule
 
+    @functools.cached_property
+    def is_abstract_set(self) -> bool:
+        r"""Returns `True` if this LRPT is an abstract-set, `False` otherwise.
+
+        Intuitive definition: abstract-set
+        ______________________________________
+
+        Intuitively, an abstract-set is an LRPT that is structurally
+         equivalent to a finite (computable) mathematical set.
+
+        Syntactic definition: abstract-set
+        ___________________________________
+
+        A finite (computable) abstract-set :math:`S` if and only if it is an LRPT.
+
+        Syntactic definition: canonical abstract-set
+        ______________________________________________
+
+        An abstract-set is canonical if and only if:
+
+        - its immediate subtrees are unique,
+        - its immediate subtrees are canonically ordered.
+
+        Note
+        _____
+
+        The following properties and methods are available when a labeled rooted plane tree is an abstract-map:
+
+        - :attr:`AbstractFormula.canonical_abstract_set`
+        - :attr:`AbstractFormula.has_abstract_set_element`
+        - :attr:`AbstractFormula.is_abstract_set_element_of`
+
+        :return: `True` or `False`.
+
+        """
+        return True
+
+    def is_abstract_set_element_of(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if this LRPT is an element of abstract-set `t`, `False` otherwise.
+
+        Cf. :prop:`LabeledRootedPlaneTree.is_abstract_set`.
+
+        :param t: An abstract-set.
+        :return: `True` or `False`
+        """
+        return self.is_immediate_subtree_of(t)
+
     @util.readonly_class_property
     def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
         return IsEqualTo
+
+    def is_immediate_subtree_of(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if this LRPT is an immediate subtree of `t`, `False` otherwise.
+
+        :param t: An LRPT.
+        :return: `True` or `False`
+        """
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
+        return self in t.immediate_subtrees
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
@@ -750,7 +871,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if not v.is_abstract_map:
             raise util.PunctiliousException("`v` is not an abstract-map", v=v, phi=phi,
                                             this_labeled_rooted_plane_tree=self)
-        psi: LabeledRootedPlaneTree = self.substitute_sub_formulas_with_map(m=v)
+        psi: LabeledRootedPlaneTree = self.substitute_subtrees_with_map(m=v)
         return psi.is_labeled_rooted_plane_tree_equivalent_to(phi)
 
     @functools.cached_property
@@ -801,7 +922,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         psi: LabeledRootedPlaneTree
-        for psi in phi.iterate_immediate_sub_formulas():
+        for psi in phi.iterate_immediate_subtrees():
             if self.is_labeled_rooted_plane_tree_equivalent_to(psi):
                 return True
         return False
@@ -832,7 +953,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: `True` if this labeled rooted plane tree is increasing, `False` otherwise.
         """
         return all(
-            self.immediate_sub_formulas[i + 1] >= self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
+            self.immediate_subtrees[i + 1] >= self.immediate_subtrees[i] for i in range(0, self.arity - 1))
 
     @functools.cached_property
     def is_strictly_increasing(self) -> bool:
@@ -851,7 +972,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: `True` if this labeled rooted plane tree is strictly increasing, `False` otherwise.
         """
         return all(
-            self.immediate_sub_formulas[i + 1] > self.immediate_sub_formulas[i] for i in range(0, self.arity - 1))
+            self.immediate_subtrees[i + 1] > self.immediate_subtrees[i] for i in range(0, self.arity - 1))
 
     def is_sub_formula_of(self, phi: LabeledRootedPlaneTree):
         r"""Returns `True` if this :class:`AbstractFormula` is a sub-formula of :class:`AbstractFormula` phi.
@@ -861,7 +982,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         psi: LabeledRootedPlaneTree
-        for psi in phi.iterate_sub_formulas():
+        for psi in phi.iterate_subtrees():
             if self.is_labeled_rooted_plane_tree_equivalent_to(psi):
                 return True
         return False
@@ -875,10 +996,10 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
         return phi.is_sub_formula_of(self)
 
-    def iterate_immediate_sub_formulas(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
+    def iterate_immediate_subtrees(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
         r"""Iterates the immediate sub-formulas of the :class:`AbstractFormula`.
 
-        See :attr:`AbstractFormula.immediate_sub_formulas` for a definition of the term `immediate sub-formula`.
+        See :attr:`AbstractFormula.immediate_subtrees` for a definition of the term `immediate sub-formula`.
 
         :return: A generator of :class:`AbstractFormula`.
         """
@@ -919,10 +1040,10 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             # yield the child RGF sequence
             yield sub_sequence
 
-    def iterate_sub_formulas(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
+    def iterate_subtrees(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
         r"""Iterates the sub-formulas of the :class:`AbstractFormula` using the `depth-first, ascending nodes` algorithm.
 
-        See :attr:`AbstractFormula.sub_formulas` for a definition of the term `sub-formula`.
+        See :attr:`AbstractFormula.subtrees` for a definition of the term `sub-formula`.
 
         :return:
         """
@@ -1020,10 +1141,10 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         first = True
         for i, preimage, j, image in zip(
                 range(1, 1 + self.abstract_map_preimage_sequence.arity),
-                self.abstract_map_preimage_sequence.immediate_sub_formulas,
+                self.abstract_map_preimage_sequence.immediate_subtrees,
                 range(1 + self.abstract_map_preimage_sequence.arity,
                       1 + 2 * self.abstract_map_preimage_sequence.arity),
-                self.abstract_map_image_sequence.immediate_sub_formulas):
+                self.abstract_map_image_sequence.immediate_subtrees):
             if not first:
                 output = f"{output}, "
             output = f"{output}{preimage} ⟼ {image}"
@@ -1056,8 +1177,8 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return self.natural_number_sequence.max_value
 
     @functools.cached_property
-    def sub_formulas(self) -> tuple[LabeledRootedPlaneTree, ...]:
-        r"""The `sub_formulas` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements that are present
+    def subtrees(self) -> tuple[LabeledRootedPlaneTree, ...]:
+        r"""The `subtrees` of an :class:`AbstractFormula` `phi` is the tuple of :class:`AbstractFormula` elements that are present
         in the formula tree of `phi`, including `phi` itself.
 
         Formal definition:
@@ -1073,40 +1194,41 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         See also:
 
-        - :attr:`AbstractFormula.immediate_sub_formulas`
+        - :attr:`AbstractFormula.immediate_subtrees`
 
         References:
         - Mancosu 2021.
 
         :return: A tuple of the sub-formulas.
         """
-        sub_formulas: list[LabeledRootedPlaneTree] = list()
-        for sub_formula in self.iterate_sub_formulas():
-            sub_formulas.append(sub_formula)
-        return tuple(sub_formulas)
+        subtrees: tuple[LabeledRootedPlaneTree, ...] = ()
+        subtree: LabeledRootedPlaneTree
+        for subtree in self.iterate_subtrees():
+            subtrees = subtrees + (subtree,)
+        return subtrees
 
-    def substitute_sub_formulas_with_map(self, m: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
+    def substitute_subtrees_with_map(self, m: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
         r"""Returns a new labeled rooted plane tree similar to the current labeled rooted plane tree,
-         except that its subformulas present in the map `m` preimage,
+         except that its subtrees present in the map `m` preimage,
          are substituted with their corresponding images,
-         giving priority to the substitution of superformulas over subformulas.
+         giving priority to the substitution of supertrees over subtrees.
 
         :param m: An abstract-map.
-        :return: A substituted formula.
+        :return: A substituted tree.
 
         """
         m: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(m)
         if not m.is_abstract_map:
             raise util.PunctiliousException("`m` is not an abstract-map.", m=m, this_abstract_formula=self)
-        if self in m.abstract_map_preimage_sequence.immediate_sub_formulas:
+        if self in m.abstract_map_preimage_sequence.immediate_subtrees:
             # This formula must be substituted according to the substitution map.
             return m.get_abstract_map_value(self)
         else:
             # Pursue substitution recursively.
             phi: LabeledRootedPlaneTree
-            s: tuple[LabeledRootedPlaneTree, ...] = tuple(phi.substitute_sub_formulas_with_map(m=m) for phi in
-                                                          self.iterate_immediate_sub_formulas())
-            return LabeledRootedPlaneTree.from_immediate_sub_formulas(n=self.main_element, s=s)
+            s: tuple[LabeledRootedPlaneTree, ...] = tuple(phi.substitute_subtrees_with_map(m=m) for phi in
+                                                          self.iterate_immediate_subtrees())
+            return LabeledRootedPlaneTree.from_immediate_subtrees(n=self.main_element, s=s)
 
     @functools.cached_property
     def t(self) -> rptl.RootedPlaneTree:

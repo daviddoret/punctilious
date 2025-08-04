@@ -77,50 +77,50 @@ class TestLabeledRootedPlaneTree:
 
     def test_iterate_sub_sequences(self, t1_a, t2_a_aa, t3_a_aa_aaa, t7_a_aa_ab_aaa_aaaa_aba_abaa):
         phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
-        l = tuple(t for t in phi.iterate_sub_formulas())
+        l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 1
         assert l[0] == phi
 
         phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (17,))
-        l = tuple(t for t in phi.iterate_sub_formulas())
+        l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 1
         assert l[0] == phi
 
         phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 2,))
-        l = tuple(t for t in phi.iterate_sub_formulas())
+        l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 2
         assert l[0] == phi
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
 
         phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (4, 3,))
-        l = tuple(t for t in phi.iterate_sub_formulas())
+        l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 2
         assert l[0] == phi
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (3,))
 
         phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (1, 1, 1,))
-        l = tuple(t for t in phi.iterate_sub_formulas())
+        l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 3
         assert l[0] == phi
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
 
         phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (1, 2, 3,))
-        l = tuple(t for t in phi.iterate_sub_formulas())
+        l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 3
         assert l[0] == phi
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
         assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (3,))
 
         phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 2, 15,))
-        l = tuple(t for t in phi.iterate_sub_formulas())
+        l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 3
         assert l[0] == phi
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
         assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (15,))
 
         phi = pu.lrptl.LabeledRootedPlaneTree(t7_a_aa_ab_aaa_aaaa_aba_abaa, (4, 2, 5, 2, 8, 10, 3,))
-        l = tuple(t for t in phi.iterate_sub_formulas())
+        l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 7
         assert l[0] == phi
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (2, 5, 2,))
@@ -132,35 +132,35 @@ class TestLabeledRootedPlaneTree:
 
     def test_iterate_immediate_sub_formulas(self, lrpt1, lrpt2, lrpt3, t2_a_aa, lrpt4, lrpt7, lrpt6,
                                             t6_a_aa_ab_ac_ad_ae):
-        l = tuple(af for af in lrpt1.iterate_immediate_sub_formulas())
+        l = tuple(af for af in lrpt1.iterate_immediate_subtrees())
         assert len(l) == 0
-        l = tuple(af for af in lrpt3.iterate_immediate_sub_formulas())
+        l = tuple(af for af in lrpt3.iterate_immediate_subtrees())
         assert l[0] == lrpt1
-        l = tuple(af for af in lrpt4.iterate_immediate_sub_formulas())
+        l = tuple(af for af in lrpt4.iterate_immediate_subtrees())
         assert l[0] == lrpt2
-        l = tuple(af for af in lrpt7.iterate_immediate_sub_formulas())
+        l = tuple(af for af in lrpt7.iterate_immediate_subtrees())
         assert l[0] == lrpt2
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (3, 4,))
         assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae, (5, 6, 7, 8, 9, 10,))
         assert l[3] == pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (11, 12,))
 
     def test_iterate_sub_formulas(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, lrpt1, lrpt3, lrpt4, lrpt6, lrpt7):
-        l = tuple(t for t in lrpt1.iterate_sub_formulas())
+        l = tuple(t for t in lrpt1.iterate_subtrees())
         assert l[0] == lrpt1
-        l = tuple(t for t in lrpt3.iterate_sub_formulas())
+        l = tuple(t for t in lrpt3.iterate_subtrees())
         assert l[0] == lrpt3
         assert l[1] == lrpt1
-        l = tuple(t for t in lrpt4.iterate_sub_formulas())
+        l = tuple(t for t in lrpt4.iterate_subtrees())
         assert l[0] == lrpt4
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
-        l = tuple(t for t in lrpt6.iterate_sub_formulas())
+        l = tuple(t for t in lrpt6.iterate_subtrees())
         assert l[0] == lrpt6
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
         assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (3,))
         assert l[3] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (4,))
         assert l[4] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (5,))
         assert l[5] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (6,))
-        l = tuple(t for t in lrpt7.iterate_sub_formulas())
+        l = tuple(t for t in lrpt7.iterate_subtrees())
         assert l[0] == lrpt7
         assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
         assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (3, 4,))
@@ -347,7 +347,7 @@ class TestLabeledRootedPlaneTree:
         phi1 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (17, 15,))
         phi2 = pu.lrptl.LabeledRootedPlaneTree(t1_a, (31,))
         phi3 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (9, 2,))
-        phi4 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_sub_formulas(n=4, s=(phi1, phi2, phi3,))
+        phi4 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(n=4, s=(phi1, phi2, phi3,))
         t = pu.rptl.RootedPlaneTree(t2_a_aa, t1_a, t2_a_aa)
         phi5 = pu.lrptl.LabeledRootedPlaneTree(t, (4, 17, 15, 31, 9, 2,))
         assert phi4 == phi5
@@ -396,7 +396,7 @@ class TestLabeledRootedPlaneTree:
                                                                                                                   p=p,
                                                                                                                   i=i)
         phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (38,))
-        psi = phi.substitute_sub_formulas_with_map(m=m)
+        psi = phi.substitute_subtrees_with_map(m=m)
         assert psi == pu.lrptl.LabeledRootedPlaneTree(t1_a, (11,))
 
         p = pu.lrptl.LabeledRootedPlaneTree(t7_a_aa_ab_aaa_aaaa_aba_abaa, (1, 2, 3, 4, 5, 6, 7,))
@@ -405,7 +405,7 @@ class TestLabeledRootedPlaneTree:
                                                                                                                   p=p,
                                                                                                                   i=i)
         phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (5, 6, 7,))
-        psi = phi.substitute_sub_formulas_with_map(m=m)
+        psi = phi.substitute_subtrees_with_map(m=m)
         assert psi == pu.lrptl.LabeledRootedPlaneTree(t1_a, (10,))
 
         pass
@@ -421,14 +421,14 @@ class TestLabeledRootedPlaneTree:
         t0 = pu.lrptl.LabeledRootedPlaneTree.least_element
         assert t0.rank == 0
         assert pu.lrptl.LabeledRootedPlaneTree.unrank(0) == t0
-        t1 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_sub_formulas(n=0, s=(t0,))
+        t1 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(n=0, s=(t0,))
         assert t1.rank == 1
         assert pu.lrptl.LabeledRootedPlaneTree.unrank(1) == t1
-        t2 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_sub_formulas(n=1)
+        t2 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(n=1)
         assert t2.rank == 2
         t2b = pu.lrptl.LabeledRootedPlaneTree.unrank(2)
         assert t2b == t2
-        t3 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_sub_formulas(n=0, s=(t0, t0,))
+        t3 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(n=0, s=(t0, t0,))
         assert t3.rank == 3
         assert pu.lrptl.LabeledRootedPlaneTree.unrank(3) == t3
         pass
