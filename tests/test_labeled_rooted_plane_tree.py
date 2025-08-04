@@ -249,18 +249,18 @@ class TestLabeledRootedPlaneTree:
         assert phi == psi
 
     def test_get_sub_formula_by_path(self, lrpt1, lrpt3, lrpt6, lrpt7, lrpt8, t1_a, t6_a_aa_ab_ac_ad_ae, t12):
-        assert lrpt1.get_sub_formula_by_path((0,)) == lrpt1
-        assert lrpt3.get_sub_formula_by_path((0,)) == lrpt3
-        assert lrpt3.get_sub_formula_by_path((0, 0,)) == lrpt1
+        assert lrpt1.get_subtree_by_path((0,)) == lrpt1
+        assert lrpt3.get_subtree_by_path((0,)) == lrpt3
+        assert lrpt3.get_subtree_by_path((0, 0,)) == lrpt1
 
-        assert lrpt8.get_sub_formula_by_path((0, 3,)) == pu.lrptl.LabeledRootedPlaneTree(
+        assert lrpt8.get_subtree_by_path((0, 3,)) == pu.lrptl.LabeledRootedPlaneTree(
             t=t12,
             s=(4, 3, 2, 1, 4, 9, 10, 7, 7, 7, 9, 0))
 
-        assert lrpt8.get_sub_formula_by_path((0, 3, 2,)) == pu.lrptl.LabeledRootedPlaneTree(
+        assert lrpt8.get_subtree_by_path((0, 3, 2,)) == pu.lrptl.LabeledRootedPlaneTree(
             t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,)
         )
-        assert lrpt8.get_sub_formula_by_path((0, 3, 2, 4,)) == pu.lrptl.LabeledRootedPlaneTree(
+        assert lrpt8.get_subtree_by_path((0, 3, 2, 4,)) == pu.lrptl.LabeledRootedPlaneTree(
             t1_a, (7,))
 
     def test_represent_as_function(self, t1_a, t2_a_aa, t3_a_aa_aaa, t6_a_aa_ab_ac_ad_ae, t12):
@@ -335,13 +335,13 @@ class TestLabeledRootedPlaneTree:
 
     def test_is_subformula_of(self, t1_a, t6_a_aa_ab_ac_ad_ae, lrpt8):
         phi = pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,))
-        assert phi.is_sub_formula_of(lrpt8)
+        assert phi.is_subtree_of(lrpt8)
 
         phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (12,))
-        assert phi.is_sub_formula_of(lrpt8)
+        assert phi.is_subtree_of(lrpt8)
 
         assert not pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae,
-                                                   (2, 0, 3, 0, 2, 2,)).is_sub_formula_of(lrpt8)
+                                                   (2, 0, 3, 0, 2, 2,)).is_subtree_of(lrpt8)
 
     def test_declare_labeled_rooted_plane_tree_from_immediate_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa):
         phi1 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (17, 15,))

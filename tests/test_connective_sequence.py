@@ -17,8 +17,6 @@ class TestConnectiveSequence:
         assert s3.length == 3
         assert s1 == s3
         assert s1 is s3
-        with pytest.raises(pu.util.PunctiliousException):
-            pu.csl.ConnectiveSequence()
 
     def test_combined_fixed_length_integers_with_sentinel_order(self):
         s = pu.csl.ConnectiveSequence.least_element

@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="CombinedFixedLengthIntegersWithSentinelOrder">
-      <change afterPath="$PROJECT_DIR$/tests/test_abstract_set.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="abstract-set">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_map.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_map.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_connective_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_connective_sequence.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_formula.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_formula.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" afterDir="false" />
     </list>
@@ -501,6 +499,7 @@
     "Python tests.pytest for tests.test_axiomatic_system_1.TestTransformation.test_is_well_formed_transformation.executor": "Run",
     "Python tests.pytest for tests.test_axiomatic_system_1.executor": "Run",
     "Python tests.pytest for tests.test_axiomatic_system_1.top_level_collect.executor": "Run",
+    "Python tests.pytest for tests.test_connective_sequence.executor": "Run",
     "Python tests.pytest for tests.test_fl1.TestFormalObject.test_formal_object.executor": "Run",
     "Python tests.pytest for tests.test_fl1.executor": "Run",
     "Python tests.pytest for tests.test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_canonical_labeled_rooted_plane_tree.executor": "Run",
@@ -760,7 +759,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_abstract_set.TestAbstractSet.test_abstract_set">
+  <component name="RunManager" selected="Python tests.pytest for tests.test_connective_sequence">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1025,7 +1024,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for tests.test_connective_sequence" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1038,7 +1037,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order&quot;" />
+      <option name="_new_target" value="&quot;tests.test_connective_sequence&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1077,7 +1076,7 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest in test_connective_sequence.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1090,7 +1089,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_connective_sequence.py&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -1107,20 +1106,20 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_abstract_set.TestAbstractSet.test_abstract_set" />
       <item itemvalue="Python tests.pytest for test_connective_sequence.TestConnectiveSequence.test_combined_fixed_length_integers_with_sentinel_order" />
-      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order" />
+      <item itemvalue="Python tests.pytest for tests.test_connective_sequence" />
       <item itemvalue="Python tests.pytest in test_abstract_set.py" />
-      <item itemvalue="Python tests.pytest in test_connective_sequence.py" />
+      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for tests.test_connective_sequence" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_abstract_set.TestAbstractSet.test_abstract_set" />
         <item itemvalue="Python tests.pytest in test_abstract_set.py" />
         <item itemvalue="Python tests.pytest for test_connective_sequence.TestConnectiveSequence.test_combined_fixed_length_integers_with_sentinel_order" />
-        <item itemvalue="Python tests.pytest in test_connective_sequence.py" />
-        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order" />
       </list>
     </recent_temporary>
   </component>
@@ -1142,14 +1141,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01582" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1753557756990</created>
-      <option name="number" value="01582" />
-      <option name="presentableId" value="LOCAL-01582" />
-      <option name="project" value="LOCAL" />
-      <updated>1753557756990</updated>
     </task>
     <task id="LOCAL-01583" summary="cleanup">
       <option name="closed" value="true" />
@@ -1535,7 +1526,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754252222662</updated>
     </task>
-    <option name="localTasksCounter" value="1631" />
+    <task id="LOCAL-01631" summary="abstract-set">
+      <option name="closed" value="true" />
+      <created>1754307962427</created>
+      <option name="number" value="01631" />
+      <option name="presentableId" value="LOCAL-01631" />
+      <option name="project" value="LOCAL" />
+      <updated>1754307962427</updated>
+    </task>
+    <option name="localTasksCounter" value="1632" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1588,7 +1587,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="abstract-inference-rule" />
     <MESSAGE value="substitute_sub_formulas" />
     <MESSAGE value="rpt database" />
     <MESSAGE value="docs" />
@@ -1613,7 +1611,8 @@
     <MESSAGE value="cleanup" />
     <MESSAGE value="split_fixed_length_ints_with_sentinel" />
     <MESSAGE value="CombinedFixedLengthIntegersWithSentinelOrder" />
-    <option name="LAST_COMMIT_MESSAGE" value="CombinedFixedLengthIntegersWithSentinelOrder" />
+    <MESSAGE value="abstract-set" />
+    <option name="LAST_COMMIT_MESSAGE" value="abstract-set" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1733,16 +1732,6 @@
           <url>file://$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py</url>
           <line>251</line>
           <option name="timeStamp" value="475" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_connective_sequence.py</url>
-          <line>29</line>
-          <option name="timeStamp" value="494" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_connective_sequence.py</url>
-          <line>28</line>
-          <option name="timeStamp" value="495" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

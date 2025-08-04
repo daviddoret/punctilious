@@ -56,10 +56,10 @@ class TestFormula:
         assert pu.fl.Formula(t=lrpt1, s=(pu.cc.five,)).is_immediate_sub_formula_of(phi6a)
 
     def test_is_sub_formula_of(self, lrpt1, phi1a, phi2a, phi2b, phi6a):
-        assert phi1a.is_sub_formula_of(phi1a)
-        assert phi2a.is_sub_formula_of(phi2a)
-        assert phi2b.is_sub_formula_of(phi2b)
-        assert phi6a.is_sub_formula_of(phi6a)
+        assert phi1a.is_subtree_of(phi1a)
+        assert phi2a.is_subtree_of(phi2a)
+        assert phi2b.is_subtree_of(phi2b)
+        assert phi6a.is_subtree_of(phi6a)
         assert pu.fl.Formula(t=lrpt1, s=(pu.cc.one,)).is_sub_formula_of(phi6a)
         assert pu.fl.Formula(t=lrpt1, s=(pu.cc.two,)).is_sub_formula_of(phi6a)
         assert pu.fl.Formula(t=lrpt1, s=(pu.cc.three,)).is_sub_formula_of(phi6a)
