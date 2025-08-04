@@ -19,14 +19,14 @@ import punctilious.ternary_boolean_library as tbl
 # General functions
 
 
-def count_labeled_trees_of_size_exactly_x_and_label_max_value_y(tree_size: int, label_max_value: int) -> int:
-    r"""Returns the number of distinct labeled rooted plane trees
+def count_lrpt_of_size_exactly_x_and_label_max_value_y(tree_size: int, label_max_value: int) -> int:
+    r"""Returns the number of distinct LRPTs
     whose size (number of nodes) is exactly equal to `x`,
     and whose labels are (0-based) natural numbers with maximal value equal to `y`.
 
     :param tree_size: The size of the tree (aka number of nodes).
     :param label_max_value: The maximal value of labels.
-    :return: The number of distinct labeled rooted plane trees.
+    :return: The number of distinct LRPTs.
     """
     tree_size: int = int(tree_size)
     label_max_value: int = int(label_max_value)
@@ -40,15 +40,15 @@ def count_labeled_trees_of_size_exactly_x_and_label_max_value_y(tree_size: int, 
     return number_of_labelled_trees
 
 
-def count_labeled_trees_of_size_up_to_x_and_label_max_value_y(tree_size: int,
-                                                              label_max_value: int) -> int:
-    r"""Returns the number of distinct labeled rooted plane trees
+def count_lrpt_of_size_up_to_x_and_label_max_value_y(tree_size: int,
+                                                     label_max_value: int) -> int:
+    r"""Returns the number of distinct LRPTs
     whose size (number of nodes) is less than or equal to `x`,
     and whose labels are (0-based) natural numbers with maximal value equal to `y`.
 
     :param tree_size: The size of the tree (aka number of nodes).
     :param label_max_value: The maximal value of labels.
-    :return: The number of distinct labeled rooted plane trees.
+    :return: The number of distinct LRPTs.
     """
     tree_size: int = int(tree_size)
     label_max_value: int = int(label_max_value)
@@ -59,7 +59,7 @@ def count_labeled_trees_of_size_up_to_x_and_label_max_value_y(tree_size: int,
                                         label_max_value=label_max_value)
     number_of_labelled_trees: int = 0
     for tree_size_iteration in range(1, tree_size + 1):
-        number_of_labelled_trees += count_labeled_trees_of_size_exactly_x_and_label_max_value_y(
+        number_of_labelled_trees += count_lrpt_of_size_exactly_x_and_label_max_value_y(
             tree_size_iteration, label_max_value
         )
     return number_of_labelled_trees
@@ -68,7 +68,7 @@ def count_labeled_trees_of_size_up_to_x_and_label_max_value_y(tree_size: int,
 # Binary relation classes
 
 class IsEqualTo(brl.BinaryRelation):
-    r"""The labeled rooted plane trees equipped with the standard equality order relation.
+    r"""The LRPTs equipped with the standard equality order relation.
 
     Mathematical definition
     -------------------------
@@ -103,7 +103,7 @@ class IsEqualTo(brl.BinaryRelation):
 
 
 class RecursiveSequenceOrder(brl.BinaryRelation):
-    r"""The labeled rooted plane trees equipped with the standard strictly less-than order relation.
+    r"""The LRPTs equipped with the standard strictly less-than order relation.
 
     Mathematical definition
     -------------------------
@@ -208,7 +208,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
 # Classes
 
 class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
-    r"""A LRPT is a tuple `(T, S)` such that:
+    r"""A labeled rooted plane tree (LRPT) is a tuple `(T, S)` such that:
      - `T` is a rooted-plane-tree,
      - `S` is a sequence of (0-based) natural numbers.
 
@@ -247,8 +247,8 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def _compute_hash(cls, o: LabeledRootedPlaneTree) -> int:
         r"""Exposes the hashing logic as a static method.
 
-        :param o: An object that is structurally compatible with a labeled rooted plane tree.
-        :return: The hash of the labeled rooted plane tree that is structurally equivalent to `o`.
+        :param o: An object that is structurally compatible with a LRPT.
+        :return: The hash of the LRPT that is structurally equivalent to `o`.
         """
         return hash((LabeledRootedPlaneTree, cls._HASH_SEED, o.rooted_plane_tree, o.natural_number_sequence,))
 
@@ -264,7 +264,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @functools.cached_property
     def abstract_inference_rule_conclusion(self) -> LabeledRootedPlaneTree:
-        r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its conclusion.
+        r"""If this LRPT is an abstract-inference-rule, returns its conclusion.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -273,11 +273,11 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if self.is_abstract_inference_rule:
             return self.immediate_subtrees[2]
         else:
-            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
+            raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
 
     @functools.cached_property
     def abstract_inference_rule_premises(self) -> LabeledRootedPlaneTree:
-        r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its premises.
+        r"""If this LRPT is an abstract-inference-rule, returns its premises.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -286,11 +286,11 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if self.is_abstract_inference_rule:
             return self.immediate_subtrees[1]
         else:
-            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
+            raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
 
     @functools.cached_property
     def abstract_inference_rule_variables(self) -> LabeledRootedPlaneTree:
-        r"""If this labeled rooted plane tree is an abstract-inference-rule, returns its variables.
+        r"""If this LRPT is an abstract-inference-rule, returns its variables.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
@@ -299,7 +299,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if self.is_abstract_inference_rule:
             return self.immediate_subtrees[0]
         else:
-            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
+            raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
 
     @classmethod
     def abstract_map_from_preimage_and_image(
@@ -318,7 +318,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @functools.cached_property
     def abstract_map_preimage_sequence(self) -> LabeledRootedPlaneTree:
-        r"""If this labeled rooted plane tree is an abstract-map, returns its preimage sequence.
+        r"""If this LRPT is an abstract-map, returns its preimage sequence.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
@@ -327,11 +327,11 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if self.is_abstract_map:
             return self.immediate_subtrees[0]
         else:
-            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
+            raise util.PunctiliousException("This LRPT is not an abstract-map.")
 
     @functools.cached_property
     def abstract_map_image_sequence(self) -> LabeledRootedPlaneTree:
-        r"""If this labeled rooted plane tree is an abstract-map, returns its image sequence.
+        r"""If this LRPT is an abstract-map, returns its image sequence.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
@@ -340,7 +340,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if self.is_abstract_map:
             return self.immediate_subtrees[1]
         else:
-            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
+            raise util.PunctiliousException("This LRPT is not an abstract-map.")
 
     @functools.cached_property
     def abstract_set_elements(self) -> tuple[LabeledRootedPlaneTree, ...]:
@@ -397,16 +397,16 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @functools.cached_property
     def canonical_labeled_rooted_plane_tree(self) -> LabeledRootedPlaneTree:
-        r"""The canonical-labeled rooted plane tree of this labeled rooted plane tree.
+        r"""The canonical LRPT of this LRPT.
 
-        Definition: the canonical-labeled rooted plane tree `phi` of a labeled rooted plane tree `psi`
+        Definition: the canonical-LRPT `t` of a LRPT `psi`
         is a formula such that:
 
         - their rooted-plane-tree are rooted-plane-tree-equivalent,
-        - the natural-number-sequence of `phi` is the canonical-naturel-number-sequence
+        - the natural-number-sequence of `t` is the canonical-naturel-number-sequence
            of the natural-number-sequence of `psi`
 
-        :return: The canonical-labeled rooted plane tree of this labeled rooted plane tree.
+        :return: The canonical-LRPT of this LRPT.
         """
         if self.is_canonical:
             return self
@@ -416,7 +416,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
                 s=self.natural_number_sequence.restricted_growth_function_sequence)
 
     def derive_abstract_inference_rule(self, p: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
-        r"""If this labeled rooted plane tree is an abstract-inference-rule, derives a theorem
+        r"""If this LRPT is an abstract-inference-rule, derives a theorem
         from the finite (computable) sequence of premises `p`.
 
         See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
@@ -444,7 +444,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
                     pass
         # TODO: IMPLEMENT INFERENCE-RULE LOGIC
         else:
-            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-inference-rule.")
+            raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
 
     @functools.cached_property
     def formula_degree(self) -> int:
@@ -482,7 +482,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             n: int | None,
             s: tuple[FlexibleLabeledRootedPlaneTree, ...] | None = None) -> LabeledRootedPlaneTree:
         r"""Given a root natural number n,
-        and a tuple of labeled rooted plane trees s,
+        and a tuple of LRPTs s,
         declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
 
         :param n:
@@ -492,32 +492,30 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         n: int = int(n)
         if n < 0:
             raise util.PunctiliousException("`n` is not a (0-based) natural number.", n=n)
-        # if n is None:
-        #    n: int = 0
         if s is None:
             s: tuple[LabeledRootedPlaneTree, ...] = ()
         s: tuple[LabeledRootedPlaneTree, ...] = tuple(
             LabeledRootedPlaneTree.from_any(o=sub_lrpt) for sub_lrpt in s)
         # Retrieves the children trees
-        t: tuple[rptl.RootedPlaneTree, ...] = tuple(sub_lrpt.rooted_plane_tree for sub_lrpt in s)
+        sub_rpts: tuple[rptl.RootedPlaneTree, ...] = tuple(sub_lrpt.rooted_plane_tree for sub_lrpt in s)
         # Declare the new parent tree
-        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(*t)
+        rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(*sub_rpts)
         # Declare the natural-number-sequence by appending n to the concatenation of the
         # children natural-number-sequences.
         u: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(
             n) + nn0sl.concatenate_natural_number_0_sequences(
-            *(phi.natural_number_sequence for phi in s))
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t=t, s=u)
-        return phi
+            *(subtree.natural_number_sequence for subtree in s))
+        lrpt: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t=rpt, s=u)
+        return lrpt
 
     @classmethod
     def from_tree_of_integer_tuple_pairs(cls, p) -> LabeledRootedPlaneTree:
-        r"""Declares a labeled rooted plane tree object from a tree of integer/tuple pairs.
+        r"""Declares a LRPT object from a tree of integer/tuple pairs.
 
         Use case
         ___________
 
-        Tree of integer/tuple pairs is a natural pythonic data structure to express labeled rooted plane trees.
+        Tree of integer/tuple pairs is a natural pythonic data structure to express LRPTs.
 
         Definition
         ------------
@@ -539,42 +537,42 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         The tree of integer/tuple pairs:
         (0, ((1,(),),(0,((2,(),),(1,(),),),),(2,(),),),)
 
-        ...maps to the labeled rooted plane tree:
+        ...maps to the LRPT:
         0(1,0(2,1),2)
 
         :param p: A tree of integer/tuple pairs.
-        :return: a labeled rooted plane tree.
+        :return: a LRPT.
 
         """
 
         t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_tuple_tree(t)
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t, s)
-        return phi
+        lrpt: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t, s)
+        return lrpt
 
     def get_abstract_map_value(self, t: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
-        r"""If this labeled rooted plane tree is an abstract-map, returns the image `phi` under this map.
+        r"""If this LRPT is an abstract-map, returns the image `t` under this map.
 
         See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
 
         :param t: a preimage element.
-        :return: the image of `phi` under this map.
+        :return: the image of `t` under this map.
         """
         t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         if self.is_abstract_map:
             i: int = self.abstract_map_preimage_sequence.get_immediate_subtree_index(t)
             return self.abstract_map_image_sequence.immediate_subtrees[i]
         else:
-            raise util.PunctiliousException("This labeled rooted plane tree is not an abstract-map.")
+            raise util.PunctiliousException("This LRPT is not an abstract-map.")
 
     def get_immediate_subtree_index(self, t: FlexibleLabeledRootedPlaneTree):
-        r"""Returns the 0-based index position of `phi` in this labeled rooted plane tree immediate subtrees.
+        r"""Returns the 0-based index position of `t` in this LRPT immediate subtrees.
 
         Prerequisites:
 
-        - the immediate subtrees of this labeled rooted plane tree are unique, cf. :attr:`AbstractFormula.immediate_subtrees_are_unique`,
-        - `phi` is an immediate subtree of this labeled rooted plane tree.
+        - the immediate subtrees of this LRPT are unique, cf. :attr:`AbstractFormula.immediate_subtrees_are_unique`,
+        - `t` is an immediate subtree of this LRPT.
 
         :param t:
         :return:
@@ -582,11 +580,11 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         if not self.immediate_subtrees_are_unique:
             raise util.PunctiliousException(
-                'The immediate subtrees of this labeled rooted plane tree are not unique.',
+                'The immediate subtrees of this LRPT are not unique.',
                 this_tree=self, t=t)
         if not t in self.immediate_subtrees:
-            raise util.PunctiliousException('`phi` is not an immediate subtrees of this labeled rooted plane tree.',
-                                            this_tree=self, phi=t)
+            raise util.PunctiliousException('`t` is not an immediate subtrees of this LRPT.',
+                                            this_tree=self, t=t)
 
         return self.immediate_subtrees.index(t)
 
@@ -598,7 +596,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         that gives the index position of the subtrees, following the depth-first algorithm,
         starting with 0 meaning the original tree.
 
-        It follows that for any tree `phi`, the path (0) returns the tree itself.
+        It follows that for any tree `t`, the path (0) returns the tree itself.
 
         :param p:
         :return:
@@ -606,20 +604,20 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         p: tuple[int, ...] = tuple(int(n) for n in p)
         if p[0] != 0:
             raise util.PunctiliousException("The first element of the path is not equal to 0.", p0=p[0], p=p,
-                                            phi=self)
+                                            this_lrpt=self)
         if p == (0,):
             return self
         else:
-            phi: LabeledRootedPlaneTree = self
+            lrpt: LabeledRootedPlaneTree = self
             for i in range(1, len(p)):
                 j = p[i]
-                if 0 < j >= phi.tree_degree:
+                if 0 < j >= lrpt.tree_degree:
                     raise util.PunctiliousException(
                         "The n-th element of the path is negative or greater than the number of"
-                        " immediate subtrees in phi.", n_index=i, n_value=j,
-                        phi=phi)
-                phi: LabeledRootedPlaneTree = phi.immediate_subtrees[j]
-            return phi
+                        " immediate subtrees in t.", n_index=i, n_value=j,
+                        lrpt=lrpt)
+                lrpt: LabeledRootedPlaneTree = lrpt.immediate_subtrees[j]
+            return lrpt
 
     def has_abstract_set_element(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
         r"""Returns `True` if `t` is an element of this abstract-set, `False` otherwise.
@@ -642,9 +640,9 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @functools.cached_property
     def immediate_subtrees(self) -> tuple[LabeledRootedPlaneTree, ...]:
-        r"""The `immediate_subtrees` of an LRPT `phi` is the tuple of LRPT elements
-        that are the immediate children trees of `phi` in the formula tree, or equivalently the formulas
-        of degree 0 in `phi`.
+        r"""The `immediate_subtrees` of an LRPT `t` is the tuple of LRPT elements
+        that are the immediate children trees of `t` in the formula tree, or equivalently the formulas
+        of degree 0 in `t`.
 
         The term `immediate subtree` is used by (Mancosu 2021, p. 17-18).
 
@@ -685,12 +683,12 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @functools.cached_property
     def is_abstract_map(self) -> bool:
-        r"""Returns `True` if this labeled rooted plane tree is an abstract-map, `False` otherwise.
+        r"""Returns `True` if this LRPT is an abstract-map, `False` otherwise.
 
         Intuitive definition: abstract-map
         ______________________________________
 
-        Intuitively, an abstract-map is a labeled rooted plane tree that is structurally
+        Intuitively, an abstract-map is a LRPT that is structurally
          equivalent to a finite map.
 
         Formal definition: abstract-map
@@ -705,7 +703,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         Formal definition: abstract-map
         ___________________________________
 
-        A labeled rooted plane tree is an abstract-map if and only if:
+        A LRPT is an abstract-map if and only if:
 
         - its arity equals 2,
         - the arity of its first immediate subtree equals the arity of its second immediate subtree,
@@ -714,13 +712,13 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         Note
         _____
 
-        The following properties and methods are available when a labeled rooted plane tree is an abstract-map:
+        The following properties and methods are available when a LRPT is an abstract-map:
 
         - :attr:`AbstractFormula.abstract_map_preimage`
         - :attr:`AbstractFormula.abstract_map_image`
         - :meth:`AbstractFormula.get_abstract_map_value`
 
-        :return: `True` if this labeled rooted plane tree is an abstract-map, `False` otherwise.
+        :return: `True` if this LRPT is an abstract-map, `False` otherwise.
 
         """
         if self._is_abstract_map is None:
@@ -732,12 +730,12 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @functools.cached_property
     def is_abstract_inference_rule(self) -> bool:
-        r"""Returns `True` if this labeled rooted plane tree is an abstract-inference-rule, `False` otherwise.
+        r"""Returns `True` if this LRPT is an abstract-inference-rule, `False` otherwise.
 
         Intuitive definition: abstract-inference-rule
         ___________________________________________________
 
-        Intuitively, an abstract-inference-rule is a labeled rooted plane tree that is structurally
+        Intuitively, an abstract-inference-rule is a LRPT that is structurally
          equivalent to an inference rule.
 
         Formal definition: abstract-inference-rule
@@ -752,21 +750,21 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         Formal definition: abstract-inference-rule
         _______________________________________________
 
-        A labeled rooted plane tree is an abstract-inference-rule if and only if:
+        A LRPT is an abstract-inference-rule if and only if:
 
          - its arity equals 3.
 
         Note
         _____
 
-        The following complementary properties and methods are available when a labeled rooted plane tree is an abstract-map:
+        The following complementary properties and methods are available when a LRPT is an abstract-map:
 
         - :attr:`abstract_inference_rule_variables`
         - :attr:`abstract_inference_rule_premises`
         - :attr:`abstract_inference_rule_conclusion`
         - :meth:`derive_abstract_inference_rule`
 
-        :return: `True` if this labeled rooted plane tree is an abstract-inference-rule, `False` otherwise.
+        :return: `True` if this LRPT is an abstract-inference-rule, `False` otherwise.
 
         """
         if self._is_abstract_inference_rule is None:
@@ -800,7 +798,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         Note
         _____
 
-        The following properties and methods are available when a labeled rooted plane tree is an abstract-map:
+        The following properties and methods are available when a LRPT is an abstract-map:
 
         - :attr:`AbstractFormula.canonical_abstract_set`
         - :attr:`AbstractFormula.has_abstract_set_element`
@@ -838,73 +836,73 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         return RecursiveSequenceOrder
 
-    def is_labeled_rooted_plane_tree_equivalent_to(self, phi: LabeledRootedPlaneTree):
-        r"""Returns `True` if this LRPT is labeled rooted plane tree-equivalent
-        to LRPT `phi`.
+    def is_labeled_rooted_plane_tree_equivalent_to(self, t: LabeledRootedPlaneTree):
+        r"""Returns `True` if this LRPT is LRPT-equivalent
+        to LRPT `t`.
 
         Formal definition:
-        Two labeled rooted plane trees phi and psi are labeled rooted plane tree-equivalent if and only if:
+        Two LRPTs t and psi are LRPT-equivalent if and only if:
 
-        - the rooted-plane-tree of phi is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,
-        - the natural-numbers-sequence of phi is natural-numbers-sequence-equivalent to the natural-numbers-sequence of psi.
+        - the rooted-plane-tree of t is rooted-plane-tree-equivalent to the rooted-plane-tree of psi,
+        - the natural-numbers-sequence of t is natural-numbers-sequence-equivalent to the natural-numbers-sequence of psi.
 
-        :param phi:
+        :param t:
         :return:
         """
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
-            phi.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_0_sequence_equivalent_to(
-            phi.natural_number_sequence)
+            t.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_0_sequence_equivalent_to(
+            t.natural_number_sequence)
 
-    def is_labeled_rooted_plane_tree_equivalent_to_with_variables(self, phi: LabeledRootedPlaneTree,
+    def is_labeled_rooted_plane_tree_equivalent_to_with_variables(self, t: LabeledRootedPlaneTree,
                                                                   v: LabeledRootedPlaneTree) -> bool:
-        r"""Returns `True` if this labeled rooted plane tree is labeled rooted plane tree-equivalent to labeled rooted plane tree `phi`,
-        after substitution of variables with assigned values in this labeled rooted plane tree,
+        r"""Returns `True` if this LRPT is LRPT-equivalent to LRPT `t`,
+        after substitution of variables with assigned values in this LRPT,
         according to variables and assigned values in abstract-map `v`.
 
-        :param phi: A labeled rooted plane tree.
+        :param t: A LRPT.
         :param v: An abstract-map whose preimage is denoted as the variables, and image as the assigned values.
         :return: `True` if trees are equivalent given above conditions, `False` otherwise.
         """
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         v: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(v)
         if not v.is_abstract_map:
-            raise util.PunctiliousException("`v` is not an abstract-map", v=v, phi=phi,
+            raise util.PunctiliousException("`v` is not an abstract-map", v=v, t=t,
                                             this_labeled_rooted_plane_tree=self)
         psi: LabeledRootedPlaneTree = self.substitute_subtrees_with_map(m=v)
-        return psi.is_labeled_rooted_plane_tree_equivalent_to(phi)
+        return psi.is_labeled_rooted_plane_tree_equivalent_to(t)
 
     @functools.cached_property
     def is_canonical(self) -> bool:
-        r"""Returns `True` if this labeled rooted plane tree is in canonical form.
+        r"""Returns `True` if this LRPT is in canonical form.
 
         Definition:
-        A labeled rooted plane tree `phi` is `canonical` if and only if
+        A LRPT `t` is `canonical` if and only if
         its natural-number-sequence is a restricted-growth-function-sequence.
 
-        :return: `True` if this labeled rooted plane tree is in canonical form, `False` otherwise.
+        :return: `True` if this LRPT is in canonical form, `False` otherwise.
         """
         return self.natural_number_sequence.is_restricted_growth_function_sequence
 
-    def is_canonical_labeled_rooted_plane_tree_equivalent_to(self, phi: LabeledRootedPlaneTree):
-        r"""Returns `True` if this LRPT is canonical-labeled rooted plane tree-equivalent
-        to LRPT `phi`.
+    def is_canonical_labeled_rooted_plane_tree_equivalent_to(self, t: LabeledRootedPlaneTree):
+        r"""Returns `True` if this LRPT is canonical-LRPT-equivalent
+        to LRPT `t`.
 
         Formal definition:
-        Two labeled rooted plane trees phi and psi are canonical-labeled rooted plane tree-equivalent if and only if:
+        Two LRPTs t and psi are canonical-LRPT-equivalent if and only if:
 
-        - the canonical-labeled rooted plane tree of phi is labeled rooted plane tree-equivalent
-          to the canonical-labeled rooted plane tree of psi.
+        - the canonical-LRPT of t is LRPT-equivalent
+          to the canonical-LRPT of psi.
 
         Intuitive definition:
-        Two trees are canonical-labeled rooted plane tree-equivalent if they have the same "structure".
+        Two trees are canonical-LRPT-equivalent if they have the same "structure".
 
-        :param phi:
+        :param t:
         :return:
         """
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         return self.canonical_labeled_rooted_plane_tree.is_labeled_rooted_plane_tree_equivalent_to(
-            phi.canonical_labeled_rooted_plane_tree)
+            t.canonical_labeled_rooted_plane_tree)
 
     @util.readonly_class_property
     def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
@@ -916,57 +914,57 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @functools.cached_property
     def is_increasing(self) -> bool:
-        r"""Returns `True` if this labeled rooted plane tree is increasing, `False` otherwise.
+        r"""Returns `True` if this LRPT is increasing, `False` otherwise.
 
-        Definition - increasing labeled rooted plane tree:
-        A labeled rooted plane tree is increasing
+        Definition - increasing LRPT:
+        A LRPT is increasing
         or increasing under canonical order,
         if its immediate subtrees are ordered.
 
-        Definition - increasing labeled rooted plane tree:
-        A labeled rooted plane tree :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is increasing,
+        Definition - increasing LRPT:
+        A LRPT :math:`\t = c(\psi_0, \psi1, \cdots, \psi_l)` is increasing,
         or increasing under canonical order,
         if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} \ge \psi_i`.
 
-        :return: `True` if this labeled rooted plane tree is increasing, `False` otherwise.
+        :return: `True` if this LRPT is increasing, `False` otherwise.
         """
         return all(
             self.immediate_subtrees[i + 1] >= self.immediate_subtrees[i] for i in range(0, self.arity - 1))
 
     @functools.cached_property
     def is_strictly_increasing(self) -> bool:
-        r"""Returns `True` if this labeled rooted plane tree is strictly increasing, `False` otherwise.
+        r"""Returns `True` if this LRPT is strictly increasing, `False` otherwise.
 
-        Definition - strictly increasing labeled rooted plane tree:
-        A labeled rooted plane tree is strictly increasing
+        Definition - strictly increasing LRPT:
+        A LRPT is strictly increasing
         or strictly increasing under canonical order,
         if its immediate subtrees are strictly ordered.
 
-        Definition - strictly increasing labeled rooted plane tree:
-        A labeled rooted plane tree :math:`\phi = c(\psi_0, \psi1, \cdots, \psi_l)` is strictly increasing,
+        Definition - strictly increasing LRPT:
+        A LRPT :math:`\t = c(\psi_0, \psi1, \cdots, \psi_l)` is strictly increasing,
         or strictly increasing under canonical order,
         if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} > \psi_i`.
 
-        :return: `True` if this labeled rooted plane tree is strictly increasing, `False` otherwise.
+        :return: `True` if this LRPT is strictly increasing, `False` otherwise.
         """
         return all(
             self.immediate_subtrees[i + 1] > self.immediate_subtrees[i] for i in range(0, self.arity - 1))
 
-    def is_subtree_of(self, phi: LabeledRootedPlaneTree):
-        r"""Returns `True` if this LRPT is a subtree of LRPT phi.
+    def is_subtree_of(self, t: LabeledRootedPlaneTree):
+        r"""Returns `True` if this LRPT is a subtree of LRPT t.
 
-        :param phi:
+        :param t:
         :return:
         """
-        phi: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(phi)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         psi: LabeledRootedPlaneTree
-        for psi in phi.iterate_subtrees():
+        for psi in t.iterate_subtrees():
             if self.is_labeled_rooted_plane_tree_equivalent_to(psi):
                 return True
         return False
 
     def has_subtree(self, t: LabeledRootedPlaneTree):
-        r"""Returns `True` if LRPT phi is a subtree of this LRPT.
+        r"""Returns `True` if LRPT t is a subtree of this LRPT.
 
         :param t:
         :return:
@@ -992,7 +990,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         Note:
 
-        A sub-sequence of a labeled rooted plane tree is determined by:
+        A sub-sequence of a LRPT is determined by:
 
         - 1) the parent rgf sequence,
         - and 2) the rooted plane tree.
@@ -1043,7 +1041,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         node of the attr:`AbstractFormula.rooted_plane_tree`.
 
         The term `main element` was coined in reference to the term `main connective`
-         (cf. Mancosu 2021, p. 17), because labeled rooted plane trees are composed of sequences,
+         (cf. Mancosu 2021, p. 17), because LRPTs are composed of sequences,
          and thus `main connective` is reserved for "concrete" formulas.
 
         References:
@@ -1081,7 +1079,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             if len(connectives) != len(self.natural_number_sequence):
                 raise util.PunctiliousException(
                     "The length of the connectives tuple is not equal to the length "
-                    "of the labeled rooted plane tree's natural-number-sequence.",
+                    "of the LRPT's natural-number-sequence.",
                     connectives_length=len(connectives),
                     natural_number_sequence_length=self.natural_number_sequence.length,
                     connectives=connectives,
@@ -1099,7 +1097,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         :param connectives: A tuple of connectives of length equal to the length of the :attr:`AbstractFormula.natural_numbers_sequence`. Default: `None`.
 
-        :return: A string representation of this labeled rooted plane tree.
+        :return: A string representation of this LRPT.
 
         """
         if connectives is None:
@@ -1108,7 +1106,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             if len(connectives) != len(self.natural_number_sequence):
                 raise util.PunctiliousException(
                     "The length of the connectives tuple is not equal to the length "
-                    "of the labeled rooted plane tree's natural-number-sequence.",
+                    "of the LRPT's natural-number-sequence.",
                     connectives_length=len(connectives),
                     natural_number_sequence_length=self.natural_number_sequence.length,
                     connectives=connectives,
@@ -1156,14 +1154,14 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @functools.cached_property
     def subtrees(self) -> tuple[LabeledRootedPlaneTree, ...]:
-        r"""The `subtrees` of an LRPT `phi` is the tuple of LRPT elements that are present
-        in the formula tree of `phi`, including `phi` itself.
+        r"""The `subtrees` of an LRPT `t` is the tuple of LRPT elements that are present
+        in the formula tree of `t`, including `t` itself.
 
         Formal definition:
 
-        - If phi is an atomic formula, the subtrees of phi is the tuple (phi).
-        - If phi is a non-atomic formula, the subtrees of phi is the tuple
-           composed of phi, and all subtrees of the immediate subtrees of phi,
+        - If t is an atomic formula, the subtrees of t is the tuple (t).
+        - If t is a non-atomic formula, the subtrees of t is the tuple
+           composed of t, and all subtrees of the immediate subtrees of t,
            in ascending order.
         - Nothing else is a subtree.
 
@@ -1186,7 +1184,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return subtrees
 
     def substitute_subtrees_with_map(self, m: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
-        r"""Returns a new labeled rooted plane tree similar to the current labeled rooted plane tree,
+        r"""Returns a new LRPT similar to the current LRPT,
          except that its subtrees present in the map `m` preimage,
          are substituted with their corresponding images,
          giving priority to the substitution of supertrees over subtrees.
@@ -1203,8 +1201,8 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return m.get_abstract_map_value(self)
         else:
             # Pursue substitution recursively.
-            phi: LabeledRootedPlaneTree
-            s: tuple[LabeledRootedPlaneTree, ...] = tuple(phi.substitute_subtrees_with_map(m=m) for phi in
+            t: LabeledRootedPlaneTree
+            s: tuple[LabeledRootedPlaneTree, ...] = tuple(t.substitute_subtrees_with_map(m=m) for t in
                                                           self.iterate_immediate_subtrees())
             return LabeledRootedPlaneTree.from_immediate_subtrees(n=self.main_element, s=s)
 
