@@ -21,7 +21,7 @@ with open(filename, "w", newline="") as csvfile:
             phi: pu.lrptl.LabeledRootedPlaneTree = phi.successor()
         record = [rank, phi,
                   phi.main_element,
-                  phi.arity,
+                  phi.degree,
                   phi.is_canonical,
                   phi.is_strictly_increasing,
                   phi.rooted_plane_tree.rank,

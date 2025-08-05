@@ -50,7 +50,7 @@ class AbstractOrderedSet(afl.LabeledRootedPlaneTree):
             n: int = int(n)
             p: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(p)
             i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
-            if p.arity != i.arity:
+            if p.degree != i.degree:
                 raise util.PunctiliousException(
                     f"`Formula` data validation error. The length of the preimage `p`"
                     f" is not equal to the length of image `i`.",
@@ -143,7 +143,7 @@ class AbstractMap(afl.LabeledRootedPlaneTree):
         n: int = int(n)
         p: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(p)
         i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
-        if p.arity != i.arity:
+        if p.degree != i.degree:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the preimage `p`"
                 f" is not equal to the length of image `i`.",

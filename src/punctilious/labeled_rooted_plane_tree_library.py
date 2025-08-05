@@ -266,7 +266,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def abstract_inference_rule_conclusion(self) -> LabeledRootedPlaneTree:
         r"""If this LRPT is an abstract-inference-rule, returns its conclusion.
 
-        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
+        See :attr:`LabeledRootedPlaneTree.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
         :return: the conclusion of this inference-rule.
         """
@@ -279,7 +279,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def abstract_inference_rule_premises(self) -> LabeledRootedPlaneTree:
         r"""If this LRPT is an abstract-inference-rule, returns its premises.
 
-        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
+        See :attr:`LabeledRootedPlaneTree.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
         :return: the premises of this inference-rule.
         """
@@ -292,7 +292,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def abstract_inference_rule_variables(self) -> LabeledRootedPlaneTree:
         r"""If this LRPT is an abstract-inference-rule, returns its variables.
 
-        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
+        See :attr:`LabeledRootedPlaneTree.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
 
         :return: the variables of this inference-rule.
         """
@@ -320,7 +320,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def abstract_map_preimage_sequence(self) -> LabeledRootedPlaneTree:
         r"""If this LRPT is an abstract-map, returns its preimage sequence.
 
-        See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
+        See :attr:`LabeledRootedPlaneTree.is_abstract_map` for a detailed description of abstract-maps.
 
         :return: the preimage sequence of this map.
         """
@@ -333,7 +333,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def abstract_map_image_sequence(self) -> LabeledRootedPlaneTree:
         r"""If this LRPT is an abstract-map, returns its image sequence.
 
-        See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
+        See :attr:`LabeledRootedPlaneTree.is_abstract_map` for a detailed description of abstract-maps.
 
         :return: the image sequence of this map.
         """
@@ -341,6 +341,24 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return self.immediate_subtrees[1]
         else:
             raise util.PunctiliousException("This LRPT is not an abstract-map.")
+
+    @functools.cached_property
+    def abstract_set_arity(self) -> int:
+        r"""Returns the arity of this abstract-set.
+
+        Note
+        ______
+
+        This is equivalent to the degree of the LRPT.
+
+        See also
+        _________
+
+        Cf.: :prop:`LabeledRootedPlaneTree.is_abstract_set`.
+
+        :return: `True` or `False`.
+        """
+        return self.degree
 
     @functools.cached_property
     def abstract_set_elements(self) -> tuple[LabeledRootedPlaneTree, ...]:
@@ -361,8 +379,13 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return self.immediate_subtrees
 
     @functools.cached_property
-    def arity(self) -> int:
-        r"""The :attr:`AbstractFormula.arity` is the number of immediate subtrees it contains.
+    def degree(self) -> int:
+        r"""Returns the degree of this LRPT.
+
+        Definition
+        ----------------
+
+        The degree of an LRPT is the number of immediate subtrees under the root.
 
         :return:
         """
@@ -419,14 +442,14 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         r"""If this LRPT is an abstract-inference-rule, derives a theorem
         from the finite (computable) sequence of premises `p`.
 
-        See :attr:`AbstractFormula.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
+        See :attr:`LabeledRootedPlaneTree.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
 
         :param p: a finite (computable) sequence of premises, in the order expected by the inference-rule.
         :return: the theorem derived from this abstract-inference-rule, given premises `p`.
         """
         p: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(p)
         if self.is_abstract_inference_rule:
-            if p.arity != self.abstract_inference_rule_premises.arity:
+            if p.degree != self.abstract_inference_rule_premises.degree:
                 raise util.PunctiliousException("The number of input premises is not equal to the number"
                                                 " of premises expected by the inference-rule.",
                                                 input_premises=p,
@@ -554,7 +577,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def get_abstract_map_value(self, t: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
         r"""If this LRPT is an abstract-map, returns the image `t` under this map.
 
-        See :attr:`AbstractFormula.is_abstract_map` for a detailed description of abstract-maps.
+        See :attr:`LabeledRootedPlaneTree.is_abstract_map` for a detailed description of abstract-maps.
 
         :param t: a preimage element.
         :return: the image of `t` under this map.
@@ -571,7 +594,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         Prerequisites:
 
-        - the immediate subtrees of this LRPT are unique, cf. :attr:`AbstractFormula.immediate_subtrees_are_unique`,
+        - the immediate subtrees of this LRPT are unique, cf. :attr:`LabeledRootedPlaneTree.immediate_subtrees_are_unique`,
         - `t` is an immediate subtree of this LRPT.
 
         :param t:
@@ -648,7 +671,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         See also:
 
-        - :attr:`AbstractFormula.subtrees`
+        - :attr:`LabeledRootedPlaneTree.subtrees`
 
         References:
 
@@ -689,44 +712,31 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         ______________________________________
 
         Intuitively, an abstract-map is a LRPT that is structurally
-         equivalent to a finite map.
+         equivalent to a finite (computable) map.
 
-        Formal definition: abstract-map
+        Syntactical definition
         _________________________________
 
-        A finite (computable) abstract-map :math:`M` is a tuple :math:`(P, I)` where:
-
-        - :math:`P` is a finite sequence of unique elements denoted as the preimage,
-        - :math:`I` is a finite sequence of unique elements denoted as the image,
-        - :math:`|P| = |I|`.
-
-        Formal definition: abstract-map
-        ___________________________________
-
-        A LRPT is an abstract-map if and only if:
-
-        - its arity equals 2,
-        - the arity of its first immediate subtree equals the arity of its second immediate subtree,
-        - the immediate subtrees of its first immediate subtree are unique.
+        An abstract map :math:`M` is an LRPT such that:
+        - its degree equal 2,
+        - its first subtree, denoted as the preimage, is a canonical abstract set,
+        - its second subtree, denoted as the image, has equal degree with its first subtree.
 
         Note
         _____
 
         The following properties and methods are available when a LRPT is an abstract-map:
 
-        - :attr:`AbstractFormula.abstract_map_preimage`
-        - :attr:`AbstractFormula.abstract_map_image`
-        - :meth:`AbstractFormula.get_abstract_map_value`
+        - :attr:`LabeledRootedPlaneTree.abstract_map_preimage`
+        - :attr:`LabeledRootedPlaneTree.abstract_map_image`
+        - :meth:`LabeledRootedPlaneTree.get_abstract_map_value`
 
-        :return: `True` if this LRPT is an abstract-map, `False` otherwise.
+        :return: `True` or `False`.
 
         """
-        if self._is_abstract_map is None:
-            self._is_abstract_map = \
-                self.arity == 2 and \
-                self.immediate_subtrees[0].arity == self.immediate_subtrees[1].arity and \
-                self.immediate_subtrees[0].immediate_subtrees_are_unique
-        return self._is_abstract_map
+        return self.degree == 2 and \
+            self.immediate_subtrees[0].degree == self.immediate_subtrees[1].degree and \
+            self.immediate_subtrees[0].is_canonical_abstract_set
 
     @functools.cached_property
     def is_abstract_inference_rule(self) -> bool:
@@ -769,7 +779,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         if self._is_abstract_inference_rule is None:
             self._is_abstract_inference_rule = \
-                self.arity == 3
+                self.degree == 3
         return self._is_abstract_inference_rule
 
     @functools.cached_property
@@ -800,9 +810,9 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         The following properties and methods are available when a LRPT is an abstract-map:
 
-        - :attr:`AbstractFormula.canonical_abstract_set`
-        - :attr:`AbstractFormula.has_abstract_set_element`
-        - :attr:`AbstractFormula.is_abstract_set_element_of`
+        - :attr:`LabeledRootedPlaneTree.canonical_abstract_set`
+        - :attr:`LabeledRootedPlaneTree.has_abstract_set_element`
+        - :attr:`LabeledRootedPlaneTree.is_abstract_set_element_of`
 
         :return: `True` or `False`.
 
@@ -818,6 +828,28 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: `True` or `False`
         """
         return self.is_immediate_subtree_of(t)
+
+    @functools.cached_property
+    def is_canonical_abstract_set(self) -> bool:
+        r"""Returns `True` if this LRPT is a canonical abstract set, `False` otherwise.
+
+        Syntactic definition: canonical abstract-set
+        ______________________________________________
+
+        An abstract-set is canonical if and only if:
+
+        - its immediate subtrees are unique,
+        - its immediate subtrees are canonically ordered.
+
+        See also
+        __________
+
+        - :attr:`LabeledRootedPlaneTree.is_abstract_set`
+
+        :return: `True` or `False`.
+
+        """
+        return self == self.canonical_abstract_set
 
     @util.readonly_class_property
     def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
@@ -929,7 +961,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: `True` if this LRPT is increasing, `False` otherwise.
         """
         return all(
-            self.immediate_subtrees[i + 1] >= self.immediate_subtrees[i] for i in range(0, self.arity - 1))
+            self.immediate_subtrees[i + 1] >= self.immediate_subtrees[i] for i in range(0, self.degree - 1))
 
     @functools.cached_property
     def is_strictly_increasing(self) -> bool:
@@ -948,7 +980,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: `True` if this LRPT is strictly increasing, `False` otherwise.
         """
         return all(
-            self.immediate_subtrees[i + 1] > self.immediate_subtrees[i] for i in range(0, self.arity - 1))
+            self.immediate_subtrees[i + 1] > self.immediate_subtrees[i] for i in range(0, self.degree - 1))
 
     def is_subtree_of(self, t: LabeledRootedPlaneTree):
         r"""Returns `True` if this LRPT is a subtree of LRPT t.
@@ -975,7 +1007,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def iterate_immediate_subtrees(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
         r"""Iterates the immediate subtrees of the LRPT.
 
-        See :attr:`AbstractFormula.immediate_subtrees` for a definition of the term `immediate subtree`.
+        See :attr:`LabeledRootedPlaneTree.immediate_subtrees` for a definition of the term `immediate subtree`.
 
         :return: A generator of LRPT.
         """
@@ -1019,7 +1051,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def iterate_subtrees(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
         r"""Iterates the subtrees of the LRPT using the `depth-first, ascending nodes` algorithm.
 
-        See :attr:`AbstractFormula.subtrees` for a definition of the term `subtree`.
+        See :attr:`LabeledRootedPlaneTree.subtrees` for a definition of the term `subtree`.
 
         :return:
         """
@@ -1037,8 +1069,8 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     @functools.cached_property
     def main_element(self) -> int:
         r"""The `main_element` of an LRPT is the first element of its
-        attr:`AbstractFormula.natural_numbers_sequence`, that corresponds to the root
-        node of the attr:`AbstractFormula.rooted_plane_tree`.
+        attr:`LabeledRootedPlaneTree.natural_numbers_sequence`, that corresponds to the root
+        node of the attr:`LabeledRootedPlaneTree.rooted_plane_tree`.
 
         The term `main element` was coined in reference to the term `main connective`
          (cf. Mancosu 2021, p. 17), because LRPTs are composed of sequences,
@@ -1066,9 +1098,9 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         r"""Returns a string representation of the LRPT using function notation.
 
         By default, connectives are represented by their respective values
-        in the :attr:`AbstractFormula.natural_numbers_sequence` .
+        in the :attr:`LabeledRootedPlaneTree.natural_numbers_sequence` .
 
-        :param connectives: A tuple of connectives of length equal to the length of the :attr:`AbstractFormula.natural_numbers_sequence` . Default: `None`.
+        :param connectives: A tuple of connectives of length equal to the length of the :attr:`LabeledRootedPlaneTree.natural_numbers_sequence` . Default: `None`.
 
         :return:
 
@@ -1093,9 +1125,9 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         r"""Returns a string representation of the LRPT using map notation.
 
         By default, connectives are represented by their respective values
-        in the :attr:`AbstractFormula.natural_numbers_sequence`.
+        in the :attr:`LabeledRootedPlaneTree.natural_numbers_sequence`.
 
-        :param connectives: A tuple of connectives of length equal to the length of the :attr:`AbstractFormula.natural_numbers_sequence`. Default: `None`.
+        :param connectives: A tuple of connectives of length equal to the length of the :attr:`LabeledRootedPlaneTree.natural_numbers_sequence`. Default: `None`.
 
         :return: A string representation of this LRPT.
 
@@ -1116,10 +1148,10 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         output = f"{{ "
         first = True
         for i, preimage, j, image in zip(
-                range(1, 1 + self.abstract_map_preimage_sequence.arity),
+                range(1, 1 + self.abstract_map_preimage_sequence.degree),
                 self.abstract_map_preimage_sequence.immediate_subtrees,
-                range(1 + self.abstract_map_preimage_sequence.arity,
-                      1 + 2 * self.abstract_map_preimage_sequence.arity),
+                range(1 + self.abstract_map_preimage_sequence.degree,
+                      1 + 2 * self.abstract_map_preimage_sequence.degree),
                 self.abstract_map_image_sequence.immediate_subtrees):
             if not first:
                 output = f"{output}, "
@@ -1170,7 +1202,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
         See also:
 
-        - :attr:`AbstractFormula.immediate_subtrees`
+        - :attr:`LabeledRootedPlaneTree.immediate_subtrees`
 
         References:
         - Mancosu 2021.

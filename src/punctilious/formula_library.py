@@ -232,7 +232,7 @@ class Formula(brl.ClassWithOrder, tuple):
 
         :return: the arity of the formula.
         """
-        return self.labeled_rooted_plane_tree.arity
+        return self.labeled_rooted_plane_tree.degree
 
     @classmethod
     def _compute_hash(cls, o: Formula) -> int:

@@ -6,10 +6,10 @@ import conftest
 
 class TestAbstractMap:
     def test_abstract_map(self, t1_a, t3_a_aa_ab):
-        phi1 = pu.lrptl.LabeledRootedPlaneTree(t=((), (),), s=(0, 1, 2,))
-        phi2 = pu.lrptl.LabeledRootedPlaneTree(t=((), (),), s=(0, 3, 4,))
-        m: pu.lrptl.LabeledRootedPlaneTree = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(0,
-                                                                                                     (phi1, phi2,))
+        subtree1 = pu.lrptl.LabeledRootedPlaneTree(t=((), (),), s=(0, 1, 2,))
+        subtree2 = pu.lrptl.LabeledRootedPlaneTree(t=((), (),), s=(0, 3, 4,))
+        m: pu.lrptl.LabeledRootedPlaneTree = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(
+            0, (subtree1, subtree2,))
         i1 = pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
         i2 = pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
         i3 = pu.lrptl.LabeledRootedPlaneTree(t1_a, (3,))
