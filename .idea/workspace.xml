@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="abstract-map">
+      <change afterPath="$PROJECT_DIR$/sphinx-autodoc2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/generate_labeled_rooted_plane_tree_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/generate_labeled_rooted_plane_tree_list.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/transformation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/transformation_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_map.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_map.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1144,14 +1140,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01586" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1753606466701</created>
-      <option name="number" value="01586" />
-      <option name="presentableId" value="LOCAL-01586" />
-      <option name="project" value="LOCAL" />
-      <updated>1753606466702</updated>
-    </task>
     <task id="LOCAL-01587" summary="cleanup">
       <option name="closed" value="true" />
       <created>1753607346545</created>
@@ -1536,7 +1524,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754339248708</updated>
     </task>
-    <option name="localTasksCounter" value="1635" />
+    <task id="LOCAL-01635" summary="abstract-map">
+      <option name="closed" value="true" />
+      <created>1754425831988</created>
+      <option name="number" value="01635" />
+      <option name="presentableId" value="LOCAL-01635" />
+      <option name="project" value="LOCAL" />
+      <updated>1754425831989</updated>
+    </task>
+    <option name="localTasksCounter" value="1636" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
