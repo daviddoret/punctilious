@@ -1,0 +1,14 @@
+site_name: Punctilious
+
+theme:
+  name: 'material'
+
+plugins:
+  - search
+  - sphinx-autodoc2:
+      src_dir: './src/punctilious'
+      output_dir: 'reference'
+
+nav:
+  - Home: index.md
+  - API Reference: reference/index.md
