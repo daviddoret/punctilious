@@ -333,7 +333,7 @@ class RootedPlaneTree(brl.ClassWithOrder, tuple):
 
         Notation
         ---------
-        If :math:`T` is an RPT, :math:`h(T) denotes its size.`
+        If :math:`T` is an RPT, :math:`h(T) denotes its height.`
 
         Bibliography
         -------------

@@ -668,6 +668,26 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return t in self.immediate_subtrees
 
     @functools.cached_property
+    def height(self):
+        r"""Returns the height (aka level) of the LRPT.
+
+        Definition
+        ------------
+        The height (aka level) of an LRPT is the height of its RPT..
+
+        Notation
+        ---------
+        If :math:`T` is an LRPT, :math:`h(T) denotes its height.`
+
+        Bibliography
+        -------------
+        - Gross, Jonathan L., and Jay Yellen, eds. Handbook of Graph Theory. Discrete Mathematics and Its Applications. CRC Press, 2004.
+
+
+        """
+        return self.rooted_plane_tree.height
+
+    @functools.cached_property
     def immediate_subtrees(self) -> tuple[LabeledRootedPlaneTree, ...]:
         r"""The `immediate_subtrees` of an LRPT `t` is the tuple of LRPT elements
         that are the immediate children trees of `t` in the formula tree, or equivalently the formulas
