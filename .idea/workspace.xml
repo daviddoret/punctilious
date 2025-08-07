@@ -5,38 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="doc">
-      <change afterPath="$PROJECT_DIR$/docs/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/doctrees/index.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/.buildinfo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_sources/index.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/alabaster.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/basic.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/custom.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/doctools.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/documentation_options.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/file.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/github-banner.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/language_data.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/minus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/plus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/pygments.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/searchtools.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/_static/sphinx_highlight.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/genindex.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/objects.inv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/search.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/index.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/make.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/conf.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/source/index.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mkdocs.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_05_02_PyCharmProject_Maths.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/modules.rst" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/punctilious.rst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/doctrees/environment.pickle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/doctrees/index.doctree" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/doctrees/index.doctree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/_sources/index.rst.txt" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/html/_sources/index.rst.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/genindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/html/genindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/html/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/html/search.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/build/html/searchindex.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/build/html/searchindex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1170,14 +1152,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01588" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1753608562395</created>
-      <option name="number" value="01588" />
-      <option name="presentableId" value="LOCAL-01588" />
-      <option name="project" value="LOCAL" />
-      <updated>1753608562395</updated>
-    </task>
     <task id="LOCAL-01589" summary="cleanup">
       <option name="closed" value="true" />
       <created>1753624400075</created>
@@ -1562,7 +1536,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754479169576</updated>
     </task>
-    <option name="localTasksCounter" value="1637" />
+    <task id="LOCAL-01637" summary="doc">
+      <option name="closed" value="true" />
+      <created>1754512909661</created>
+      <option name="number" value="01637" />
+      <option name="presentableId" value="LOCAL-01637" />
+      <option name="project" value="LOCAL" />
+      <updated>1754512909662</updated>
+    </task>
+    <option name="localTasksCounter" value="1638" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

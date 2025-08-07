@@ -1,3 +1,4 @@
+import punctilious.config as config
 import punctilious.util as util
 import punctilious.ternary_boolean_library as ternary_boolean_library
 import punctilious.binary_relation_library as binary_relation_library
@@ -36,6 +37,7 @@ rptc = rooted_plane_tree_catalog
 tbl = ternary_boolean_library
 
 __all__ = [
+    "config",
     "labeled_rooted_plane_tree_library", "lrptl",
     "binary_relation_library", "brl",
     "connective_library", "cl",

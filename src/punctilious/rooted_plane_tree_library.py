@@ -323,6 +323,30 @@ class RootedPlaneTree(brl.ClassWithOrder, tuple):
             return t
 
     @functools.cached_property
+    def height(self):
+        r"""Returns the height (aka level) of the RPT.
+
+        Definition
+        ------------
+        The height (aka level) of an RPT is the length (number of edges)
+        of the longest path from the root to a leaf.
+
+        Notation
+        ---------
+        If :math:`T` is an RPT, :math:`h(T) denotes its size.`
+
+        Bibliography
+        -------------
+        - Gross, Jonathan L., and Jay Yellen, eds. Handbook of Graph Theory. Discrete Mathematics and Its Applications. CRC Press, 2004.
+
+
+        """
+        if self.is_leaf:
+            return 0
+        else:
+            return 1 + max(t.height for t in self.immediate_subtrees)
+
+    @functools.cached_property
     def immediate_subtrees(self) -> tuple[RootedPlaneTree, ...]:
         r"""The tuple of immediate subtrees.
 
@@ -542,7 +566,15 @@ class RootedPlaneTree(brl.ClassWithOrder, tuple):
     def size(self):
         r"""Returns the size of this `RootedPlaneTree`.
 
-        Definition: the size of a rooted plan tree is the total number of vertices in the graph."""
+        Definition
+        ------------
+        The size of an RPT is the total number of vertices (aka nodes) contained in the graph.
+
+        Notation
+        ---------
+        If :math:`T` is an RPT, :math:`|T| denotes its size.`
+
+        """
         return 1 + sum(child.size for child in self.immediate_subtrees)
 
     def substitute_subtree(self, m: dict[FlexibleRootedPlaneTree, FlexibleRootedPlaneTree]) -> RootedPlaneTree:

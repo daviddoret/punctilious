@@ -274,3 +274,17 @@ class TestRootedPlaneTree:
             t2 = pu.rptl.RootedPlaneTree.unrank(i)
             assert t == t2
             assert t.rank == i
+
+    def test_height(self):
+        t = pu.rptl.RootedPlaneTree()
+        assert t.height == 0
+        ta = pu.rptl.RootedPlaneTree.from_immediate_subtrees(t)
+        assert ta.height == 1
+        tb = pu.rptl.RootedPlaneTree.from_immediate_subtrees(t, t)
+        assert tb.height == 1
+        tc = pu.rptl.RootedPlaneTree.from_immediate_subtrees(t, t, t)
+        assert tc.height == 1
+        td = pu.rptl.RootedPlaneTree.from_immediate_subtrees(t, ta, tb, tc)
+        assert td.height == 2
+        te = pu.rptl.RootedPlaneTree.from_immediate_subtrees(td, t, tb, tb)
+        assert te.height == 3

@@ -208,9 +208,15 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
 # Classes
 
 class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
-    r"""A labeled rooted plane tree (LRPT) is a tuple `(T, S)` such that:
-     - `T` is a rooted-plane-tree,
-     - `S` is a sequence of (0-based) natural numbers.
+    r"""A labeled rooted plane tree (LRPT).
+
+     Definition
+     ----------------------------------
+     An LRPT is a tuple :math:`(T, S)` such that:
+
+     - :math:`T` is a finite rooted plane tree (RPT),
+     - :math:`S` is a finite sequence of (0-based) natural numbers,
+     - :math:`|T| = |S|`.
 
     """
 
