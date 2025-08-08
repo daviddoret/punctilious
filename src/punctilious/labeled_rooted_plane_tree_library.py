@@ -14,6 +14,7 @@ import punctilious.rooted_plane_tree_library as rptl
 import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.binary_relation_library as brl
 import punctilious.ternary_boolean_library as tbl
+import punctilious.cantor_pairing_library as cpl
 
 
 # General functions
@@ -203,6 +204,86 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(n=main_element,
                                                                                    s=subtrees)
         return t
+
+
+class CantorPairingOrder(brl.BinaryRelation):
+    r"""The Cantor pairing order of LRPTs.
+
+    Note
+    -----
+
+    An LRPT can be defined as a tuple (T, S) where T is an LRP and S a (0-based) natural number sequence.
+    Assuming there exists ranking functions for LRPs and (0-based) natural number sequences,
+    then the Cantor pairing solution may be applied.
+
+    Bibliography
+    --------------
+
+    - https://en.wikipedia.org/wiki/Pairing_function
+    - https://www.cantorsparadise.org/cantor-pairing-function-e213a8a89c2b/
+
+    """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Note
+        ------
+
+        The properties of this order is dependent on the properties
+        of the chosen underlying orders for LRPs and (0-based) natural number sequences.
+
+        """
+        return tbl.TernaryBoolean.NOT_AVAILABLE
+
+    @util.readonly_class_property
+    def least_element(cls) -> LabeledRootedPlaneTree:
+        """By design, we choose 0() as the least element.
+
+        :return:
+        """
+        return LabeledRootedPlaneTree(
+            t=rptl.RootedPlaneTree.least_element,
+            s=nn0sl.NaturalNumber0Sequence(0)
+        )
+
+    @classmethod
+    def rank(cls, x: object) -> int:
+        r"""Applies the Cantor pairing function to the LRP and NN0 sequence."""
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        rpt_rank: int = x.rooted_plane_tree.rank
+        s: int = x.natural_number_sequence.rank
+        return cpl.cantor_pairing(rpt_rank, s)
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
+        return n < m
+
+    @classmethod
+    def successor(cls, x: object) -> object:
+        n = cls.rank(x)
+        n += 1
+        y = cls.unrank(n)
+        return y
+
+    @classmethod
+    def unrank(cls, n: int) -> object:
+        r"""Applies the inverse Cantor pairing function.
+        """
+        x: int
+        y: int
+        x, y = cpl.cantor_pairing_inverse(n)
+        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.unrank(x)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.unrank(y)
+        return LabeledRootedPlaneTree(t, s)
+
+
+cantor_pairing_order = CantorPairingOrder
 
 
 # Classes

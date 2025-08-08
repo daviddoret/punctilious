@@ -7,6 +7,7 @@ import punctilious.catalan_number_library as catalan_number_library
 import punctilious.natural_number_0_library as natural_number_0_library
 import punctilious.prime_number_library as prime_number_library
 import punctilious.natural_number_1_library as natural_number_1_library
+import punctilious.cantor_pairing_library as cantor_pairing_library
 import punctilious.dyck_word_library as dyck_word_library
 import punctilious.rooted_plane_tree_library as rooted_plane_tree_library
 import punctilious.rooted_plane_tree_catalog as rooted_plane_tree_catalog
@@ -24,6 +25,7 @@ lrptl = labeled_rooted_plane_tree_library
 brl = binary_relation_library
 cl = connective_library
 cc = connective_catalog
+cpl = cantor_pairing_library
 csl = connective_sequence_library
 dwl = dyck_word_library
 fl = formula_library
@@ -40,6 +42,7 @@ __all__ = [
     "config",
     "labeled_rooted_plane_tree_library", "lrptl",
     "binary_relation_library", "brl",
+    "cantor_pairing_library", "cpl",
     "connective_library", "cl",
     "connective_catalog", "cc",
     "connective_sequence_library", "csl",
