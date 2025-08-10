@@ -11,6 +11,7 @@ import punctilious.natural_number_0_library as nn0l
 import punctilious.prime_number_library as pnl
 import punctilious.ternary_boolean_library as tbl
 import punctilious.special_values_library as spl
+import punctilious.cantor_pairing_library as cpl
 
 
 # Relation orders
@@ -627,6 +628,58 @@ class CombinedFixedLengthIntegersWithSentinelOrder(brl.BinaryRelation):
             s: tuple[int, ...] = util.split_fixed_length_ints_with_sentinel(n=n, fixed_length=cls._max_bits_constraints)
             s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
         return s
+
+
+class CantorTuplingWithSentinelValue(brl.BinaryRelation):
+    r"""The Cantor "tupling" with sentinel value order of (0-based) natural number sequence.
+
+    """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        Every pair (n, 0) is mapped to the empty sequence ().
+
+        """
+        return tbl.TernaryBoolean.FALSE
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Sequence:
+        """
+
+        The least element is the empty sequence.
+
+        :return:
+        """
+        return NaturalNumber0Sequence()
+
+    @classmethod
+    def rank(cls, x: FlexibleNaturalNumber0Sequence) -> int:
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        n: int = cpl.cantor_tupling_with_sentinel_value(*x)
+        return n
+
+    @classmethod
+    def relates(cls, x: FlexibleNaturalNumber0Sequence, y: FlexibleNaturalNumber0Sequence) -> bool:
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+        n: int = cls.rank(x)
+        m: int = cls.rank(y)
+        return n < m
+
+    @classmethod
+    def successor(cls, x: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
+        raise util.PunctiliousException("TO BE DEVELOPED")
+
+    @classmethod
+    def unrank(cls, n: int) -> NaturalNumber0Sequence:
+        n = int(n)
+        s: tuple[int, ...] = cpl.cantor_tupling_with_sentinel_value_inverse(n)
+        return NaturalNumber0Sequence(*s)
 
 
 class IsEqualTo(brl.BinaryRelation):

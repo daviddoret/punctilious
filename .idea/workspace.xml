@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="LRPT.height">
-      <change afterPath="$PROJECT_DIR$/src/punctilious/cantor_pairing_library.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/test_cantor_pairing.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cantor_pairing_library">
+      <change afterPath="$PROJECT_DIR$/TODO/TODO.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sandbox/test2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sandbox/test3.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -357,6 +359,7 @@
     "Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_image.executor": "Run",
     "Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_least_element.executor": "Run",
     "Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_order.executor": "Run",
+    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_cantor_tupling_with_sentinel_value_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence.executor": "Run",
@@ -685,7 +688,7 @@
     "Python.symbols (1).executor": "Run",
     "Python.symbols.executor": "Run",
     "Python.test.executor": "Run",
-    "Python.test2.executor": "Debug",
+    "Python.test2.executor": "Run",
     "Python.test3.executor": "Run",
     "Python.test4.executor": "Run",
     "Python.test_fl1.executor": "Run",
@@ -769,7 +772,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_special_cases">
+  <component name="RunManager" selected="Python.test3">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -886,6 +889,50 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sandbox" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sandbox/test2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sandbox" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sandbox/test3.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -982,91 +1029,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_cantor_pairing.TestCantorPairing.test_cantor_pairing_and_unpairing" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_cantor_pairing.TestCantorPairing.test_cantor_pairing_and_unpairing&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_cantor_pairing.TestCantorPairing.test_cantor_pairing_limit_cases" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_cantor_pairing.TestCantorPairing.test_cantor_pairing_limit_cases&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_random_cases" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_random_cases&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_special_cases" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_special_cases&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1082,6 +1044,40 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0_pair.TestNaturalNumbersPair.test_order&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_cantor_tupling_with_sentinel_value_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_cantor_tupling_with_sentinel_value_order&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1103,33 +1099,50 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_natural_number_0_pair.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_natural_number_0_pair.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
+      <item itemvalue="Python.test2" />
+      <item itemvalue="Python.test3" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_pairing_and_unpairing" />
-      <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_pairing_limit_cases" />
-      <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling" />
-      <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_random_cases" />
-      <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_special_cases" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_order" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_cantor_tupling_with_sentinel_value_order" />
+      <item itemvalue="Python tests.pytest in test_natural_number_0_pair.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_special_cases" />
-        <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling_random_cases" />
-        <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_pairing_and_unpairing" />
-        <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_pairing_limit_cases" />
-        <item itemvalue="Python tests.pytest for test_cantor_pairing.TestCantorPairing.test_cantor_tupling_and_untupling" />
+        <item itemvalue="Python.test3" />
+        <item itemvalue="Python.test2" />
+        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_cantor_tupling_with_sentinel_value_order" />
+        <item itemvalue="Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_order" />
+        <item itemvalue="Python tests.pytest in test_natural_number_0_pair.py" />
       </list>
     </recent_temporary>
   </component>
@@ -1151,14 +1164,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01591" summary="least_element">
-      <option name="closed" value="true" />
-      <created>1753683201331</created>
-      <option name="number" value="01591" />
-      <option name="presentableId" value="LOCAL-01591" />
-      <option name="project" value="LOCAL" />
-      <updated>1753683201331</updated>
     </task>
     <task id="LOCAL-01592" summary="least_element">
       <option name="closed" value="true" />
@@ -1544,7 +1549,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754598863937</updated>
     </task>
-    <option name="localTasksCounter" value="1640" />
+    <task id="LOCAL-01640" summary="cantor_pairing_library">
+      <option name="closed" value="true" />
+      <created>1754689612600</created>
+      <option name="number" value="01640" />
+      <option name="presentableId" value="LOCAL-01640" />
+      <option name="project" value="LOCAL" />
+      <updated>1754689612601</updated>
+    </task>
+    <option name="localTasksCounter" value="1641" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1597,7 +1610,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="natural-numbers in natural-number-sequences are now 1-based and no longer 0-based. this allows the usage of a new well-founded ordering that is more natural." />
     <MESSAGE value="orderings o1 and o2 for natural-number-sequences" />
     <MESSAGE value="test_o1" />
     <MESSAGE value="relation-orders" />
@@ -1622,7 +1634,8 @@
     <MESSAGE value="doc" />
     <MESSAGE value="RPT.height" />
     <MESSAGE value="LRPT.height" />
-    <option name="LAST_COMMIT_MESSAGE" value="LRPT.height" />
+    <MESSAGE value="cantor_pairing_library" />
+    <option name="LAST_COMMIT_MESSAGE" value="cantor_pairing_library" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

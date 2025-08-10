@@ -9,6 +9,7 @@ import punctilious.binary_relation_library as brl
 import punctilious.natural_number_0_library as nn0l
 import punctilious.prime_number_library as pnl
 import punctilious.ternary_boolean_library as tbl
+import punctilious.cantor_pairing_library as cpl
 
 
 # Relation orders
@@ -391,7 +392,8 @@ class CantorPairingOrder(brl.BinaryRelation):
             π(x,y) = (x + y)(x + y + 1)/2 + y
             """
         x: NaturalNumber0Pair = NaturalNumber0Pair.from_any(x)
-        return ((x.x + x.y) * (x.x + x.y + 1)) // 2 + x.y
+        return cpl.cantor_pairing(x=x.x, y=x.y)
+        # return ((x.x + x.y) * (x.x + x.y + 1)) // 2 + x.y
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
@@ -413,11 +415,13 @@ class CantorPairingOrder(brl.BinaryRelation):
         """
         Inverse of Cantor pairing function: maps a natural number back to a pair.
         """
-        # Find the triangular root
-        w = int(((8 * n + 1) ** 0.5 - 1) / 2)
-        t = (w * (w + 1)) // 2
-        y = n - t
-        x = w - y
+        # w = int(((8 * n + 1) ** 0.5 - 1) / 2)
+        # t = (w * (w + 1)) // 2
+        # y = n - t
+        # x = w - y
+        x: int
+        y: int
+        x, y = cpl.cantor_pairing_inverse(n)
         return NaturalNumber0Pair(x, y)
 
 

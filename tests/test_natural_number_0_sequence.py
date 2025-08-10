@@ -262,3 +262,12 @@ class TestNaturalNumbersSequence:
             pu.nn0sl.NaturalNumber0Sequence()) == pu.nn0sl.NaturalNumber0Sequence(7, 8, 15)
         assert pu.nn0sl.NaturalNumber0Sequence().concatenate_with(
             pu.nn0sl.NaturalNumber0Sequence(7, 8, 15)) == pu.nn0sl.NaturalNumber0Sequence(7, 8, 15)
+
+    def test_cantor_tupling_with_sentinel_value_order(self):
+        for i in range(32):
+            l = random.randint(0, 8)
+            s = tuple(random.randint(0, 256) for x in range(l))
+            s = pu.nn0sl.NaturalNumber0Sequence(*s)
+            n = pu.nn0sl.CantorTuplingWithSentinelValue.rank(s)
+            s2 = pu.nn0sl.CantorTuplingWithSentinelValue.unrank(n)
+            assert s == s2
