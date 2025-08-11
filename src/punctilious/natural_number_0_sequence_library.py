@@ -351,23 +351,29 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
     @classmethod
     def rank(cls, x: FlexibleNaturalNumber0Sequence) -> int:
         r"""Returns the rank of sequence `s` under adjusted-sum-first-length-second-lexicographic-last order.
+
+
+        Sample
+        -------
+
+        Let x = (2,4,3,1).
+
+        We need to count the following combinations:
+
+        - (0, *)
+        - (1, *)
+        - (2, 0, *)
+        - (2, 1, *)
+        - (2, 2, *)
+        - (2, 3, *)
+        - (2, 4, 0, *)
+        - (2, 4, 1, *)
+        - (2, 4, 2, *)
+        - (2, 4, 3, 0)
+
         """
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        adjusted_sum: int = cls._get_adjusted_sum(x)
-        l: int = x.length
-
-        # ex: x= (2,4,3,1)
-        # we need to count:
-        # (0, *)
-        # (1, *)
-        # (2, 0, *)
-        # (2, 1, *)
-        # (2, 2, *)
-        # (2, 3, *)
-        # (2, 4, 0, *)
-        # (2, 4, 1, *)
-        # (2, 4, 2, *)
-        # (2, 4, 3, 0)
+        adjusted_sum: int = cls.get_adjusted_sum(x)
 
         # special case: the empty sequence
         if x == cls.least_element:
@@ -388,7 +394,7 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
                             sum_of_elements_on_the_left -
                             n_index - 1  # to get the adjusted sum
                     )
-                    class_size: int = cls._get_adjusted_sum_and_length_class_rank_cardinality(
+                    class_size: int = cls.get_adjusted_sum_and_length_class_rank_cardinality(
                         s=remaining_sum_of_sequence_on_the_right,
                         l=length_of_sequence_on_the_right
                     )
@@ -400,6 +406,12 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
 
     @classmethod
     def successor(cls, x: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
+        r"""Returns the successor of sequence `x`
+        given the "adjusted sum first, length second, lexigraphic last" order relation.
+
+        :param x: A (0-based) natural number sequence.
+        :return: A (0-based) natural number sequence.
+        """
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
 
         if x == cls.least_element:
@@ -432,7 +444,7 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         if last_value > 0:
             # The sequence is of the form (0, 0, 0, ..., s_n > 0).
             first_value = last_value - 1  # Decrement the last element of the sequence and position it at the beginning.
-            suffix: tuple[int, ...] = (0,) * (x.length)
+            suffix: tuple[int, ...] = (0,) * x.length
             s: tuple[int, ...] = (first_value,) + suffix
             s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
             return s
@@ -441,7 +453,7 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         # I.e.: the sequence is of the form: (0, 0, 0, ..., 0).
 
         # Find the successor in the next adjusted sum class
-        new_adjusted_sum: int = cls._get_adjusted_sum(x) + 1
+        new_adjusted_sum: int = cls.get_adjusted_sum(x) + 1
         s: tuple[int, ...] = (new_adjusted_sum - 1,)
         s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
         return s
@@ -451,7 +463,7 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         pass
 
     @classmethod
-    def _get_adjusted_sum(cls, x: FlexibleNaturalNumber0Sequence) -> int:
+    def get_adjusted_sum(cls, x: FlexibleNaturalNumber0Sequence) -> int:
         r"""Returns the adjusted sum of sequence `x`.
 
         The adjusted sum is the sum of the sequence `x\prime` such that
@@ -470,7 +482,7 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
 
     @classmethod
     @lru_cache(maxsize=256)
-    def _get_adjusted_sum_class_rank_cardinality(cls, s: int) -> int:
+    def get_adjusted_sum_class_rank_cardinality(cls, s: int) -> int:
         r"""Returns the cardinality of the "adjusted sum" class.
 
         This is the number of combinations of sequences of 0-based natural numbers
@@ -488,8 +500,8 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
             return 2 ** (s - 1)
 
     @classmethod
-    @lru_cache(maxsize=2048)
-    def _get_adjusted_sum_and_length_class_rank_cardinality(cls, s: int, l: int) -> int:
+    @lru_cache(maxsize=256)
+    def get_adjusted_sum_and_length_class_rank_cardinality(cls, s: int, l: int) -> int:
         r"""
 
         From the second stars and bars theorem,

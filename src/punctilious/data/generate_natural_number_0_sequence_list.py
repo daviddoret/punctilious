@@ -22,7 +22,7 @@ with open(filename, "w", newline="") as csvfile:
             s: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.successor(
                 s)
         record = [rank, s,
-                  pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder._get_adjusted_sum(s),
+                  pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum(s),
                   s.length, s.sum, s.image_cardinality, s.image, s.is_strictly_increasing,
                   s.is_restricted_growth_function_sequence]
         csvwriter.writerow(record)

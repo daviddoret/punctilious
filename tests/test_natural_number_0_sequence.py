@@ -294,11 +294,11 @@ class TestNaturalNumbersSequence:
         MAX_SIZE = 128
 
         for s in range(MAX_SIZE):
-            sum_class_size = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder._get_adjusted_sum_class_rank_cardinality(
+            sum_class_size = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
                 s)
             cumulative_sum_length_class_size = 0
             for j in range(s + 1):
-                cumulative_sum_length_class_size += pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder._get_adjusted_sum_and_length_class_rank_cardinality(
+                cumulative_sum_length_class_size += pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_and_length_class_rank_cardinality(
                     s, j)
             assert sum_class_size == cumulative_sum_length_class_size
 

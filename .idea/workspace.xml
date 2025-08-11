@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cantor_pairing_library">
-      <change afterPath="$PROJECT_DIR$/sandbox/test4.py" afterDir="false" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="adjusted_sum_first_length_second_lexicographic_last: successor">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/data/generate_natural_number_0_sequence_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/generate_natural_number_0_sequence_list.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/natural_number_0_sequence_list.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/natural_number_0_sequence_list.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/util.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1165,14 +1162,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01593" summary="least_element">
-      <option name="closed" value="true" />
-      <created>1753684458216</created>
-      <option name="number" value="01593" />
-      <option name="presentableId" value="LOCAL-01593" />
-      <option name="project" value="LOCAL" />
-      <updated>1753684458216</updated>
-    </task>
     <task id="LOCAL-01594" summary="least_element">
       <option name="closed" value="true" />
       <created>1753687260163</created>
@@ -1557,7 +1546,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754808230615</updated>
     </task>
-    <option name="localTasksCounter" value="1642" />
+    <task id="LOCAL-01642" summary="adjusted_sum_first_length_second_lexicographic_last: successor">
+      <option name="closed" value="true" />
+      <created>1754941402762</created>
+      <option name="number" value="01642" />
+      <option name="presentableId" value="LOCAL-01642" />
+      <option name="project" value="LOCAL" />
+      <updated>1754941402763</updated>
+    </task>
+    <option name="localTasksCounter" value="1643" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1610,7 +1607,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="orderings o1 and o2 for natural-number-sequences" />
     <MESSAGE value="test_o1" />
     <MESSAGE value="relation-orders" />
     <MESSAGE value="order-relations" />
@@ -1635,7 +1631,8 @@
     <MESSAGE value="RPT.height" />
     <MESSAGE value="LRPT.height" />
     <MESSAGE value="cantor_pairing_library" />
-    <option name="LAST_COMMIT_MESSAGE" value="cantor_pairing_library" />
+    <MESSAGE value="adjusted_sum_first_length_second_lexicographic_last: successor" />
+    <option name="LAST_COMMIT_MESSAGE" value="adjusted_sum_first_length_second_lexicographic_last: successor" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
