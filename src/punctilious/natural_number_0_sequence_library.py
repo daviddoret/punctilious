@@ -3,6 +3,8 @@ import itertools
 import typing
 import collections
 import functools
+import math
+from functools import lru_cache
 
 # punctilious libraries
 import punctilious.util as util
@@ -18,11 +20,6 @@ import punctilious.cantor_pairing_library as cpl
 
 class LexicographicOrder(brl.BinaryRelation):
     r"""The lexicographic order of (0-based) natural numbers.
-
-    Note
-    -----
-
-    The lexicographic order is not an isomorphism
 
     Mathematical definition
     -------------------------
@@ -62,10 +59,15 @@ class LexicographicOrder(brl.BinaryRelation):
     def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
         r"""
 
-        Proof
-        ------
+        There is no bijection between the lexicographic order of sequences and the natural numbers.
 
-        TODO: Provide proof here.
+        The sequence of sequences (0),(1),(2),... is infinite.
+        The sequence of sequences (0,0),(0,1),(0,2),... is infinite.
+        The sequence of sequences (1,0),(1,1),(1,2),... is infinite.
+
+        More generally, take any sequence S. There exists an infinite ascending sequence
+        which consists in incrementing its last element infinitely.
+
 
         """
         return tbl.TernaryBoolean.FALSE
@@ -223,13 +225,12 @@ class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
     def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
         r"""
 
-        Proof
-        ------
+        Observe that (1), (0,1), (0,0,1), (0,0,0,1), ... is an infinite sequence of sequences of sum 1.
 
-        TODO: Provide proof here.
+        More generally, take any non empty sequence S. There are infinite sequences of sum |S| created by inserting 0 elements between its elements.
 
         """
-        return tbl.TernaryBoolean.TRUE
+        return tbl.TernaryBoolean.FALSE
 
     @classmethod
     def relates(cls, x: object, y: object) -> bool:
@@ -255,6 +256,268 @@ class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
                 return True
             else:
                 return False
+
+
+class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
+    r"""The adjusted sum-first, length-second, lexicographic-third order of (0-based) natural numbers.
+
+    Mathematical definition
+    -------------------------
+
+    TODO: REWRITE COMPLETELY
+
+    Let :math:`S = (s_0, s_1, \ldots, s_m)` and :math:`T = (t_0, t_1, \ldots, t_n)`
+    be two finite sequences of (0-based) natural numbers with :math:`s_i, t_j \in \mathbb{N}^+`.
+
+    First we adjust S and T by incrementing all their elements by 1.
+    This adjustment solves the problem of having infinitely many sequences with the same sum,
+    such as (1),(0,1),(0,0,1),(0,0,0,1),...
+
+    So we pose:
+    :math:`S\prime = S + 1 = (s_0 + 1, s_1 + 1, ..., s_n + 1)`
+    :math:`T\prime = T + 1 = (t_0 + 1, t_1 + 1, ..., t_n + 1)`
+
+    We say that :math:`S \prec T` under adjusted-sum-lexicographic-order if and only if:
+
+    :math:`\sum{S\prime} < \sum{T\prime}`
+
+    or:
+
+    :math:`\sum{S\prime} = \sum{T\prime} \land \exists k \leq \min(m,n)` such that :math:`s_i = t_i` for all :math:`i < k` and :math:`s_k < t_k`
+
+    or:
+
+    :math:`\sum{S\prime} = \sum{T\prime} \land m < n` and :math:`s_i = t_i` for all :math:`i = 1, \ldots, m`
+
+    See also
+    ----------
+
+    - :class:`SumFirstLexicographicSecondOrder`
+    - :class:`LexicographicOrder`
+
+    """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        TODO: Provide proof here
+
+        """
+        return tbl.TernaryBoolean.TRUE
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Sequence:
+        r"""Returns the least element of this order.
+
+        The least element of the adjusted-sum-first, length-second, lexicographic-last order
+        is the empty sequence: :math:`()`.
+
+        :return:
+        """
+        return NaturalNumber0Sequence()
+
+    @classmethod
+    def relates(cls, x: object, y: object) -> bool:
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
+
+        # first criteria: sum
+        if sum(x) < sum(y):
+            return True
+        elif sum(y) < sum(x):
+            return False
+        else:
+
+            # second criteria: length
+            if x.length < y.length:
+                return True
+            elif y.length < x.length:
+                return False
+            else:
+
+                # third and final criteria: lexicographic order
+                # both the sums and lengths of x and y are equal.
+                i: int
+                for i in range(x.length):
+                    if x[i] < y[i]:
+                        return True
+                    elif x[i] > y[i]:
+                        return False
+
+                # x and y are necessarily equal
+                return False
+
+    @classmethod
+    def rank(cls, x: FlexibleNaturalNumber0Sequence) -> int:
+        r"""Returns the rank of sequence `s` under adjusted-sum-first-length-second-lexicographic-last order.
+        """
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        adjusted_sum: int = cls._get_adjusted_sum(x)
+        l: int = x.length
+
+        # ex: x= (2,4,3,1)
+        # we need to count:
+        # (0, *)
+        # (1, *)
+        # (2, 0, *)
+        # (2, 1, *)
+        # (2, 2, *)
+        # (2, 3, *)
+        # (2, 4, 0, *)
+        # (2, 4, 1, *)
+        # (2, 4, 2, *)
+        # (2, 4, 3, 0)
+
+        # special case: the empty sequence
+        if x == cls.least_element:
+            return 0
+
+        cumulative_rank: int = 0
+
+        n_index: int
+        for n_index in range(0, x.length):
+            n: int = x[n_index]
+            for preceding_n_value in range(0, n):
+                sum_of_elements_on_the_left: int = sum(n_value for n_value in x.elements[:n_index])
+                sum_of_elements_on_the_left += preceding_n_value
+                length_of_sequence_on_the_right: int = x.length - n_index - 1
+                if length_of_sequence_on_the_right > 0:
+                    remaining_sum_of_sequence_on_the_right: int = (
+                            adjusted_sum -
+                            sum_of_elements_on_the_left -
+                            n_index - 1  # to get the adjusted sum
+                    )
+                    class_size: int = cls._get_adjusted_sum_and_length_class_rank_cardinality(
+                        s=remaining_sum_of_sequence_on_the_right,
+                        l=length_of_sequence_on_the_right
+                    )
+                    cumulative_rank += class_size
+                else:
+                    cumulative_rank += 1  # this exact sequence
+
+        return cumulative_rank
+
+    @classmethod
+    def successor(cls, x: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+
+        if x == cls.least_element:
+            # the successor of the empty sequence is (0).
+            return NaturalNumber0Sequence(0, )
+
+        # Try to find a successor within the adjusted sum and length class.
+        # Loop from the before-last element to the first.
+        if x.length > 1:  # A minimum of two elements are needed to push values to the right withing equal length class.
+            index: int
+            for index in range(x.length - 2, -1, -1):
+                value: int = x[index]
+                if value > 0:
+                    # This is a good solution.
+                    # The sequence is of the form (..., s_i > 0, 0, 0, ..., s_n).
+                    value -= 1  # decrement the current value s_i.
+                    next_value: int = x[index + 1] + 1  # increment the next value s_{i + 1}.
+                    prefix: tuple[int, ...] = x[:index] if index > 0 else ()
+                    suffix: tuple[int, ...] = x[index + 2:] if index < x.length - 2 else ()
+                    s: tuple[int, ...] = prefix + (value, next_value,) + suffix
+                    s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
+                    return s
+
+        # A solution could not be found within this adjusted sum and length class.
+        # I.e.: the sequence is of the form: (0, 0, 0, ..., s_n >= 0).
+
+        # Try to find a successor within the adjusted sum class.
+        # Loop from the last element to the first.
+        last_value: int = x[-1]
+        if last_value > 0:
+            # The sequence is of the form (0, 0, 0, ..., s_n > 0).
+            first_value = last_value - 1  # Decrement the last element of the sequence and position it at the beginning.
+            suffix: tuple[int, ...] = (0,) * (x.length)
+            s: tuple[int, ...] = (first_value,) + suffix
+            s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
+            return s
+
+        # A solution could not be found within this adjusted sum class.
+        # I.e.: the sequence is of the form: (0, 0, 0, ..., 0).
+
+        # Find the successor in the next adjusted sum class
+        new_adjusted_sum: int = cls._get_adjusted_sum(x) + 1
+        s: tuple[int, ...] = (new_adjusted_sum - 1,)
+        s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
+        return s
+
+    @classmethod
+    def unrank(cls, n: int) -> NaturalNumber0Sequence:
+        pass
+
+    @classmethod
+    def _get_adjusted_sum(cls, x: FlexibleNaturalNumber0Sequence) -> int:
+        r"""Returns the adjusted sum of sequence `x`.
+
+        The adjusted sum is the sum of the sequence `x\prime` such that
+        every element in `x\prime` is equal to the corresponding element
+        in `x`, + 1.
+
+        Equivalently, this is the sum of `x` + the length of `x`.
+
+        :param x:
+        :return:
+        """
+        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+        # Equivalent form:
+        # return sum(x.scalar_addition(1))
+        return sum(x) + x.length
+
+    @classmethod
+    @lru_cache(maxsize=256)
+    def _get_adjusted_sum_class_rank_cardinality(cls, s: int) -> int:
+        r"""Returns the cardinality of the "adjusted sum" class.
+
+        This is the number of combinations of sequences of 0-based natural numbers
+        such that their adjusted sum = `s`.
+
+        :param s: the adjusted sum of the sequence.
+        :return: the cardinality of the class.
+        """
+        s: int = int(s)
+        if s < 0:
+            raise util.PunctiliousException("`s` is less than 0.")
+        if s == 0:
+            return 1  # the empty sequence
+        else:
+            return 2 ** (s - 1)
+
+    @classmethod
+    @lru_cache(maxsize=2048)
+    def _get_adjusted_sum_and_length_class_rank_cardinality(cls, s: int, l: int) -> int:
+        r"""
+
+        From the second stars and bars theorem,
+        we know that for any pair of positive integers n and k,
+        the number of k-tuples of non-negative integers whose sum is n
+        is equal to the number of multisets of size k − 1 taken from a set of size n + 1,
+        or equivalently, the number of multisets of size n taken from a set of size k,
+        and is given by :math:`()`.
+
+        Bibliography
+        ---------------
+
+        - https://en.wikipedia.org/wiki/Stars_and_bars_(combinatorics)
+
+        :param s:
+        :param l:
+        :return:
+        """
+        s: int = int(s)
+        l: int = int(l)
+        if s == 0 and l == 0:
+            return 1  # the empty sequence
+        else:
+            return util.combination(s - 1, l - 1)
+
+    @classmethod
+    def _get_within_adjusted_sum_and_length_class_rank(cls, sequence: typing.List[int]) -> int:
+        return 0
 
 
 class GodelNumberEncodingOrder(brl.BinaryRelation):
@@ -1060,16 +1323,23 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
         return max(self)
 
     def scalar_addition(self, n: int):
-        r"""Given a :class:`NaturalNumberSequence` :math:`S`,
+        r"""Returns the scalar addition of this sequence :math:`S` with `n`.
+
+        Given a sequence` :math:`S`,
         and a natural number :math:`n`,
-        return a :class:`NaturalNumberSequence` :math:`T` defined as
-        :math:`(t_0 + n, t_1 + n, \cdots, t_i)`.
+        returns a new sequence :math:`T` defined as
+        :math:`(t_0 + n, t_1 + n, \cdots, t_i + n)`.
 
         :param n:
         :return:
         """
+        n: int = int(n)
         t: tuple[int, ...] = tuple(x + n for x in self.elements)
         return NaturalNumber0Sequence(*t)
+
+    @functools.cached_property
+    def sum(self) -> int:
+        return sum(x for x in self.elements)
 
 
 # Flexible types to facilitate data validation

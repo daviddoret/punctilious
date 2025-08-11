@@ -239,3 +239,23 @@ def split_fixed_length_ints_with_sentinel(n: int, fixed_length: int = 32) -> tup
         ints = ints + (m,)
 
     return ints
+
+
+def combination(n: int, r: int):
+    """Calculate nCr (combinations) using integer arithmetic."""
+    n: int = int(n)
+    r: int = int(r)
+    if r > n or r < 0:
+        return 0
+    if r == 0 or r == n:
+        return 1
+
+    # Use the property C(n,r) = C(n, n-r) and choose smaller r
+    r = min(r, n - r)
+
+    result: int = 1
+    i: int
+    for i in range(r):
+        result = result * (n - i) // (i + 1)
+
+    return result

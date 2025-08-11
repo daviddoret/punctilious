@@ -75,6 +75,20 @@ class TestNaturalNumbersSequence:
                                                                nns00) == pu.nn0sl.NaturalNumber0Sequence(
             *nns0123456789_10_11, *nns00)
 
+    def test_scalare_addition(self):
+
+        s = pu.nn0sl.NaturalNumber0Sequence()
+        s = s + 1
+        assert s == pu.nn0sl.NaturalNumber0Sequence()
+
+        s = pu.nn0sl.NaturalNumber0Sequence(0, 0, 0)
+        s = s + 1
+        assert s == pu.nn0sl.NaturalNumber0Sequence(1, 1, 1)
+
+        s = pu.nn0sl.NaturalNumber0Sequence(0, 1, 2)
+        s = s + 1
+        assert s == pu.nn0sl.NaturalNumber0Sequence(1, 2, 3)
+
     def test_is_restricted_growth_function_sequence(self):
         s = pu.nn0sl.NaturalNumber0Sequence(0, 0, 0)
         assert s.is_restricted_growth_function_sequence
@@ -271,3 +285,55 @@ class TestNaturalNumbersSequence:
             n = pu.nn0sl.CantorTuplingWithSentinelValue.rank(s)
             s2 = pu.nn0sl.CantorTuplingWithSentinelValue.unrank(n)
             assert s == s2
+
+    def test_adjusted_sum_first_lexicographic_second_order_1(self):
+        r"""The consistency between the size of the "adjusted sum" classes
+        and the sum of the sizes of the "adjusted sum and length" classes for the same sum.
+        """
+
+        MAX_SIZE = 128
+
+        for s in range(MAX_SIZE):
+            sum_class_size = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder._get_adjusted_sum_class_rank_cardinality(
+                s)
+            cumulative_sum_length_class_size = 0
+            for j in range(s + 1):
+                cumulative_sum_length_class_size += pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder._get_adjusted_sum_and_length_class_rank_cardinality(
+                    s, j)
+            assert sum_class_size == cumulative_sum_length_class_size
+
+    def test_adjusted_sum_first_lexicographic_second_order_2(self):
+        assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(pu.nn0sl.NaturalNumber0Sequence()) == 0
+
+        for i in range(32):
+            l = random.randint(0, 8)
+            s = tuple(random.randint(0, 256) for x in range(l))
+            s = pu.nn0sl.NaturalNumber0Sequence(*s)
+            n = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
+            s2 = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.unrank(n)
+            assert s == s2
+
+        l = []
+        for n in range(5000):
+            l.append(pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.unrank(n))
+
+        for i in range(5000):
+            assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(l[i]) == i
+            if i < 5000:
+                assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.relates(l[i], l[i + 1])
+
+    def test_adjusted_sum_first_lexicographic_second_order_3(self):
+
+        s = pu.nn0sl.NaturalNumber0Sequence(2, 3, 1, )
+        r = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
+        pass
+
+    def test_adjusted_sum_first_lexicographic_second_order_4(self):
+
+        MAX_ITERATIONS = 2048
+
+        s = pu.nn0sl.NaturalNumber0Sequence()
+        for i in range(MAX_ITERATIONS):
+            s = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.successor(s)
+            previous_s = s
+            pass
