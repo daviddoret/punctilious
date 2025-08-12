@@ -358,18 +358,21 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
 
         Let x = (2,4,3,1).
 
-        We need to count the following combinations:
+        We need to compute the cumulative sum of the following combinations:
 
-        - (0, *)
-        - (1, *)
-        - (2, 0, *)
-        - (2, 1, *)
-        - (2, 2, *)
-        - (2, 3, *)
-        - (2, 4, 0, *)
-        - (2, 4, 1, *)
-        - (2, 4, 2, *)
-        - (2, 4, 3, 0)
+        - all sequences of adjusted sum < 14
+        - all sequences of adjusted sum = 14 and prefix:
+          - (0, *)
+          - (1, *)
+          - (2, 0, *)
+          - (2, 1, *)
+          - (2, 2, *)
+          - (2, 3, *)
+          - (2, 4, 0, *)
+          - (2, 4, 1, *)
+          - (2, 4, 2, *)
+          - (2, 4, 3, 0)
+        - + 1 (the current sequence)
 
         """
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
@@ -381,27 +384,44 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
 
         cumulative_rank: int = 0
 
-        n_index: int
-        for n_index in range(0, x.length):
-            n: int = x[n_index]
-            for preceding_n_value in range(0, n):
-                sum_of_elements_on_the_left: int = sum(n_value for n_value in x.elements[:n_index])
-                sum_of_elements_on_the_left += preceding_n_value
-                length_of_sequence_on_the_right: int = x.length - n_index - 1
-                if length_of_sequence_on_the_right > 0:
-                    remaining_sum_of_sequence_on_the_right: int = (
-                            adjusted_sum -
-                            sum_of_elements_on_the_left -
-                            n_index - 1  # to get the adjusted sum
-                    )
-                    class_size: int = cls.get_adjusted_sum_and_length_class_rank_cardinality(
-                        s=remaining_sum_of_sequence_on_the_right,
-                        l=length_of_sequence_on_the_right
-                    )
-                    cumulative_rank += class_size
-                else:
-                    cumulative_rank += 1  # this exact sequence
+        # sum the cardinalities of all adjusted sum classes
+        # that have strictly smaller adjusted sum than x.
+        # note that:
+        # 1) the intersection of these classes is the empty set,
+        # 2) by the definition of this order, all sequences in these classes are less than x.
+        for s in range(0, adjusted_sum):
+            cumulative_rank += cls.get_adjusted_sum_class_rank_cardinality(s)
 
+        # sum the cardinalities of all adjusted sum classes and length
+        # that have equal adjusted sum to x,
+        # and smaller length than x.
+        # note that:
+        # 1) the intersection of these classes is the empty set,
+        # 2) all classes processed in the precedent step are less than all sequences in these classes,
+        # 3) by the definition of this order, all sequences in these classes are less than x.
+        for l in range(1, x.length):
+            cumulative_rank += cls.get_adjusted_sum_and_length_class_rank_cardinality(adjusted_sum, l)
+
+        # we are now left with the "adjusted sum and length" class of which x is an element.
+        # we need to count the number of sequences that are less than x within this class.
+        # the only transformation that is allowed to stay within this is class is to
+        # keep the length of the sequence equal,
+        # and change the values of the sequence elements in such a way as to keep the adjusted sum equal.
+        # the first sequence of the class is:
+        # (s0 => 0, 0, 0, 0, ..., 0) with adjusted sum = |S| + s0 - 1
+        # the last sequence of the class is:
+        # (0, 0, 0, 0, ..., sn) with adjusted sum = |S| + sn - 1
+        #
+        # a naive an inefficient implementation is to loop through sequences
+        # from the first of the class to x.
+        # of course, this is very inefficient for large sequences.
+        current_sequence: tuple[int, ...] = (adjusted_sum - x.length,) + (0,) * (x.length - 1)
+        while not current_sequence == x:
+            current_sequence = cls.successor(current_sequence)
+            cumulative_rank += 1
+
+        # the number of sequences between the first sequence of the class and x may be very large.
+        # so
         return cumulative_rank
 
     @classmethod
@@ -425,15 +445,16 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
             for index in range(x.length - 2, -1, -1):
                 value: int = x[index]
                 if value > 0:
-                    # This is a good solution.
-                    # The sequence is of the form (..., s_i > 0, 0, 0, ..., s_n).
-                    value -= 1  # decrement the current value s_i.
-                    next_value: int = x[index + 1] + 1  # increment the next value s_{i + 1}.
-                    prefix: tuple[int, ...] = x[:index] if index > 0 else ()
-                    suffix: tuple[int, ...] = x[index + 2:] if index < x.length - 2 else ()
-                    s: tuple[int, ...] = prefix + (value, next_value,) + suffix
-                    s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
-                    return s
+                    # Move one unit from position i to position i+1,
+                    # and pack the entire tail sum to i+1 to keep the result as large
+                    # as possible under the new prefix (i.e., immediate next in reverse-lex order).
+                    tail_sum = 1 + sum(x[index + 1:])  # the 1 we moved plus existing tail
+                    out = list(x)
+                    out[index] -= 1
+                    out[index + 1] = tail_sum
+                    for j in range(index + 2, x.length):
+                        out[j] = 0
+                    return NaturalNumber0Sequence(*out)
 
         # A solution could not be found within this adjusted sum and length class.
         # I.e.: the sequence is of the form: (0, 0, 0, ..., s_n >= 0).

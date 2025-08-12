@@ -324,16 +324,33 @@ class TestNaturalNumbersSequence:
 
     def test_adjusted_sum_first_lexicographic_second_order_3(self):
 
-        s = pu.nn0sl.NaturalNumber0Sequence(2, 3, 1, )
-        r = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
+        assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+            0) == 1
+        assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+            1) == 1
+        assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+            2) == 2
+        assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+            3) == 4
+        assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+            4) == 8
+        assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+            5) == 16
         pass
 
     def test_adjusted_sum_first_lexicographic_second_order_4(self):
 
-        MAX_ITERATIONS = 2048
+        RANK_MAX = 1024
 
-        s = pu.nn0sl.NaturalNumber0Sequence()
-        for i in range(MAX_ITERATIONS):
-            s = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.successor(s)
-            previous_s = s
+        s: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.NaturalNumber0Sequence()
+        rank: int
+        for rank in range(RANK_MAX):
+            print(rank)
+            print(s)
+            rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
+            assert rank == rank_of_s
+
+            previous_s: pu.nn0sl.NaturalNumber0Sequence = s
+            s: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.successor(
+                s)
             pass

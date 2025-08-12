@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="adjusted_sum_first_length_second_lexicographic_last: successor">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="adjusted_sum_first_length_second_lexicographic_last">
+      <change afterPath="$PROJECT_DIR$/sandbox/test5.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/data/generate_natural_number_0_sequence_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/generate_natural_number_0_sequence_list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/natural_number_0_sequence_list.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/natural_number_0_sequence_list.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
     </list>
@@ -358,8 +359,8 @@
     "Python tests.pytest for test_natural_number_0_pair.TestNaturalNumbersPair.test_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_1.executor": "Run",
-    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_3.executor": "Debug",
-    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_4.executor": "Debug",
+    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_3.executor": "Run",
+    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_4.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_cantor_tupling_with_sentinel_value_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_combined_integer_with_sentinel_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with.executor": "Run",
@@ -693,6 +694,7 @@
     "Python.test2.executor": "Run",
     "Python.test3.executor": "Run",
     "Python.test4.executor": "Run",
+    "Python.test5.executor": "Run",
     "Python.test_fl1.executor": "Run",
     "Python.transformation_library.executor": "Run",
     "Python.typesetting.executor": "Run",
@@ -913,6 +915,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test5" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sandbox" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sandbox/test5.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest tests" type="ShConfigurationType">
       <option name="SCRIPT_TEXT" value="pytest tests" />
       <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
@@ -1027,23 +1051,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_1" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1120,6 +1127,7 @@
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.generate_natural_number_0_sequence_list" />
+      <item itemvalue="Python.test5" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
@@ -1128,7 +1136,6 @@
       <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_1" />
       <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_3" />
       <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_4" />
-      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
@@ -1138,8 +1145,8 @@
         <item itemvalue="Python.generate_natural_number_0_sequence_list" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_4" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_3" />
+        <item itemvalue="Python.test5" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_1" />
-        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order" />
       </list>
     </recent_temporary>
   </component>
@@ -1161,14 +1168,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01594" summary="least_element">
-      <option name="closed" value="true" />
-      <created>1753687260163</created>
-      <option name="number" value="01594" />
-      <option name="presentableId" value="LOCAL-01594" />
-      <option name="project" value="LOCAL" />
-      <updated>1753687260163</updated>
     </task>
     <task id="LOCAL-01595" summary="least_element">
       <option name="closed" value="true" />
@@ -1554,7 +1553,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754941402763</updated>
     </task>
-    <option name="localTasksCounter" value="1643" />
+    <task id="LOCAL-01643" summary="adjusted_sum_first_length_second_lexicographic_last">
+      <option name="closed" value="true" />
+      <created>1754941892905</created>
+      <option name="number" value="01643" />
+      <option name="presentableId" value="LOCAL-01643" />
+      <option name="project" value="LOCAL" />
+      <updated>1754941892921</updated>
+    </task>
+    <option name="localTasksCounter" value="1644" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1607,7 +1614,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="test_o1" />
     <MESSAGE value="relation-orders" />
     <MESSAGE value="order-relations" />
     <MESSAGE value="binary-relations" />
@@ -1632,7 +1638,8 @@
     <MESSAGE value="LRPT.height" />
     <MESSAGE value="cantor_pairing_library" />
     <MESSAGE value="adjusted_sum_first_length_second_lexicographic_last: successor" />
-    <option name="LAST_COMMIT_MESSAGE" value="adjusted_sum_first_length_second_lexicographic_last: successor" />
+    <MESSAGE value="adjusted_sum_first_length_second_lexicographic_last" />
+    <option name="LAST_COMMIT_MESSAGE" value="adjusted_sum_first_length_second_lexicographic_last" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
