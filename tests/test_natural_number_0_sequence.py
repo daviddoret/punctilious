@@ -353,6 +353,21 @@ class TestNaturalNumbersSequence:
             rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
             assert rank_of_s == i
             print(f"i:s - {i}:{s}")
+
+    def test_adjusted_sum_first_lexicographic_second_order_5(self):
+
+        RANK_MAX = 16
+
+        l = []
+        s = pu.nn0sl.NaturalNumber0Sequence()
+        l.append(s)
+        for rank in range(RANK_MAX):
+            s = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.successor(s)
+            l.append(s)
+
+        for i, s in enumerate(l):
+            rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
+            print(f"i:s - {i}:{s}")
             for j, t in enumerate(l):
                 print(f"j:t - {j}:{t}")
                 if i < j:
