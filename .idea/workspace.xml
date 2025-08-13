@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="adjusted_sum_first_length_second_lexicographic_last">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -1167,14 +1168,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01597" summary="least_element">
-      <option name="closed" value="true" />
-      <created>1753698743173</created>
-      <option name="number" value="01597" />
-      <option name="presentableId" value="LOCAL-01597" />
-      <option name="project" value="LOCAL" />
-      <updated>1753698743173</updated>
-    </task>
     <task id="LOCAL-01598" summary="least_element">
       <option name="closed" value="true" />
       <created>1753711020311</created>
@@ -1559,7 +1552,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755043398500</updated>
     </task>
-    <option name="localTasksCounter" value="1646" />
+    <task id="LOCAL-01646" summary="adjusted_sum_first_length_second_lexicographic_last">
+      <option name="closed" value="true" />
+      <created>1755043631162</created>
+      <option name="number" value="01646" />
+      <option name="presentableId" value="LOCAL-01646" />
+      <option name="project" value="LOCAL" />
+      <updated>1755043631162</updated>
+    </task>
+    <option name="localTasksCounter" value="1647" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

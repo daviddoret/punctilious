@@ -352,11 +352,10 @@ class TestNaturalNumbersSequence:
         for i, s in enumerate(l):
             rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
             assert rank_of_s == i
-            print(f"i:s - {i}:{s}")
 
     def test_adjusted_sum_first_lexicographic_second_order_5(self):
 
-        RANK_MAX = 16
+        RANK_MAX = 32
 
         l = []
         s = pu.nn0sl.NaturalNumber0Sequence()
@@ -367,12 +366,14 @@ class TestNaturalNumbersSequence:
 
         for i, s in enumerate(l):
             rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
-            print(f"i:s - {i}:{s}")
             for j, t in enumerate(l):
-                print(f"j:t - {j}:{t}")
+                rank_of_t: int = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(t)
                 if i < j:
                     assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.relates(s, t)
+                    assert rank_of_s < rank_of_t
                 if i == j:
                     assert not pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.relates(s, t)
+                    assert not rank_of_s < rank_of_t
                 if i > j:
                     assert not pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.relates(s, t)
+                    assert not rank_of_s < rank_of_t

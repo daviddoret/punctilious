@@ -323,12 +323,12 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
 
         # first criteria: sum
-        if sum(x) < sum(y):
+        if cls.get_adjusted_sum(x) < cls.get_adjusted_sum(y):
             return True
-        elif sum(y) < sum(x):
+        elif cls.get_adjusted_sum(y) < cls.get_adjusted_sum(x):
             return False
         else:
-
+            # adjusted sums are equal.
             # second criteria: length
             if x.length < y.length:
                 return True
@@ -340,9 +340,9 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
                 # both the sums and lengths of x and y are equal.
                 i: int
                 for i in range(x.length):
-                    if x[i] < y[i]:
+                    if x[i] > y[i]:
                         return True
-                    elif x[i] > y[i]:
+                    elif x[i] < y[i]:
                         return False
 
                 # x and y are necessarily equal
