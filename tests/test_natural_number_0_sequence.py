@@ -186,14 +186,11 @@ class TestNaturalNumbersSequence:
             for j in range(0, 100):
                 n2: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.refined_godel_number_order.unrank(j)
                 if i < j:
-                    assert n1.is_strictly_less_than(n2)
-                    assert n1 < n2
+                    assert pu.nn0sl.refined_godel_number_order.relates(n1, n2)
                 if j < i:
-                    assert n2.is_strictly_less_than(n1)
-                    assert n2 < n1
+                    assert not pu.nn0sl.refined_godel_number_order.relates(n1, n2)
                 if i == j:
-                    assert n1.is_equal_to(n2)
-                    assert n1 == n2
+                    assert not pu.nn0sl.refined_godel_number_order.relates(n1, n2)
 
     def test_combined_integer_with_sentinel_order(self):
 

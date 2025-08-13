@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="adjusted_sum_first_length_second_lexicographic_last">
-      <change afterPath="$PROJECT_DIR$/sandbox/test6.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1169,14 +1169,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01599" summary="least_element">
-      <option name="closed" value="true" />
-      <created>1753711409753</created>
-      <option name="number" value="01599" />
-      <option name="presentableId" value="LOCAL-01599" />
-      <option name="project" value="LOCAL" />
-      <updated>1753711409753</updated>
-    </task>
     <task id="LOCAL-01600" summary="least_element">
       <option name="closed" value="true" />
       <created>1753725182757</created>
@@ -1561,7 +1553,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755043961746</updated>
     </task>
-    <option name="localTasksCounter" value="1648" />
+    <task id="LOCAL-01648" summary="adjusted_sum_first_length_second_lexicographic_last">
+      <option name="closed" value="true" />
+      <created>1755113640595</created>
+      <option name="number" value="01648" />
+      <option name="presentableId" value="LOCAL-01648" />
+      <option name="project" value="LOCAL" />
+      <updated>1755113640596</updated>
+    </task>
+    <option name="localTasksCounter" value="1649" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

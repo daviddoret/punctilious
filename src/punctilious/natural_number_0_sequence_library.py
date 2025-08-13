@@ -522,6 +522,8 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
                 length_class += 1
 
         # declare the first sequence in this adjusted sum and length class
+        # find the sequence by looping through all sequence within the class
+        # TODO: THIS IS INEFFICIENT. DEVELOP A MORE EFFICIENT ALGO.
         s: tuple[int, ...] = (adjusted_sum_class - length_class + 1,) + (0,) * (length_class - 1)
         s: NaturalNumber0Sequence(*s)
         loop: bool = True
