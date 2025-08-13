@@ -492,6 +492,9 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
 
     @classmethod
     def unrank(cls, n: int) -> NaturalNumber0Sequence:
+
+        # CORRECT BUG HERE !!!!!!!!!!!!!!!!!!!
+
         n: int = int(n)
 
         # special case
@@ -500,23 +503,44 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
             return cls.least_element
 
         # find the adjusted sum class
+        cumulative_cardinality: int = 0
         adjusted_sum_class: int = 0
         loop: bool = True
+        # TODO: REMOVE LOOP AND USE 2^n TO GET THE RIGHT RESULT IMMEDIATELY
         while loop:
-            cumulative_cardinality: int = cls.get_cumulative_adjusted_sum_class_rank_cardinality(adjusted_sum_class)
-            if cumulative_cardinality > n:
+            sum_adjusted_class_cardinality: int = cls.get_adjusted_sum_class_rank_cardinality(adjusted_sum_class)
+            cumulative_cardinality += sum_adjusted_class_cardinality
+            if cumulative_cardinality == n:
+                # this is the first sequence of the sum adjusted class
+                s: NaturalNumber0Sequence = NaturalNumber0Sequence(adjusted_sum_class)
+                return s
+            elif cumulative_cardinality > n:
+                # step back to the precedent class
+                cumulative_cardinality -= sum_adjusted_class_cardinality
+                # restore the precedent adjusted sum
+                adjusted_sum_class -= 1
                 loop = False
             else:
                 adjusted_sum_class += 1
 
         # find the adjusted sum and length class
-        length_class: int = 0
+        length_class: int = 1
         loop: bool = True
-        cumulative_cardinality: int = 0
         while loop:
-            cumulative_cardinality += cls.get_adjusted_sum_and_length_class_rank_cardinality(adjusted_sum_class,
-                                                                                             length_class)
-            if cumulative_cardinality > n:
+            sum_adjusted_and_length_class_cardinality: int = cls.get_adjusted_sum_and_length_class_rank_cardinality(
+                adjusted_sum_class,
+                length_class)
+            cumulative_cardinality += sum_adjusted_and_length_class_cardinality
+            if cumulative_cardinality == n:
+                # this is the first sequence of the sum adjusted and length class
+                s: tuple[int, ...] = (adjusted_sum_class - length_class + 1,) + (0,) * (length_class - 1)
+                s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
+                return s
+            elif cumulative_cardinality > n:
+                # step back to the precedent class
+                cumulative_cardinality -= sum_adjusted_and_length_class_cardinality
+                # restore the precedent length
+                length_class -= 1
                 loop = False
             else:
                 length_class += 1
@@ -525,7 +549,7 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         # find the sequence by looping through all sequence within the class
         # TODO: THIS IS INEFFICIENT. DEVELOP A MORE EFFICIENT ALGO.
         s: tuple[int, ...] = (adjusted_sum_class - length_class + 1,) + (0,) * (length_class - 1)
-        s: NaturalNumber0Sequence(*s)
+        s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
         loop: bool = True
         while loop:
             if cls.rank(s) == n:

@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="adjusted_sum_first_length_second_lexicographic_last" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="adjusted_sum_first_length_second_lexicographic_last">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -361,6 +365,7 @@
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_concatenate_with.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_is_restricted_growth_function_sequence.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_least_element.executor": "Run",
+    "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_order.executor": "Debug",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_2.executor": "Run",
     "Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order_3.executor": "Run",
@@ -772,7 +777,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in tests">
+  <component name="RunManager" selected="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_order">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -811,28 +816,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/build_samples.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="generate_natural_number_0_sequence_list" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious/data" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/data/generate_natural_number_0_sequence_list.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1047,23 +1030,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_4" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_4&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_5" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1078,6 +1044,40 @@
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_5&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_order&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1123,13 +1123,13 @@
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
       <item itemvalue="Python.test6" />
-      <item itemvalue="Python.generate_natural_number_0_sequence_list" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
-      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_4" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_order" />
+      <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order" />
       <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_5" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -1138,11 +1138,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_order" />
         <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_refined_godel_order" />
         <item itemvalue="Python.test6" />
         <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_5" />
-        <item itemvalue="Python tests.pytest for test_natural_number_0_sequence.TestNaturalNumbersSequence.test_adjusted_sum_first_lexicographic_second_order_4" />
-        <item itemvalue="Python.generate_natural_number_0_sequence_list" />
       </list>
     </recent_temporary>
   </component>
@@ -1164,14 +1164,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01601" summary="labeled rooted plane trees">
-      <option name="closed" value="true" />
-      <created>1753771119246</created>
-      <option name="number" value="01601" />
-      <option name="presentableId" value="LOCAL-01601" />
-      <option name="project" value="LOCAL" />
-      <updated>1753771119247</updated>
     </task>
     <task id="LOCAL-01602" summary="labeled rooted plane trees">
       <option name="closed" value="true" />
@@ -1557,7 +1549,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755115065717</updated>
     </task>
-    <option name="localTasksCounter" value="1650" />
+    <task id="LOCAL-01650" summary="adjusted_sum_first_length_second_lexicographic_last">
+      <option name="closed" value="true" />
+      <created>1755116509796</created>
+      <option name="number" value="01650" />
+      <option name="presentableId" value="LOCAL-01650" />
+      <option name="project" value="LOCAL" />
+      <updated>1755116509796</updated>
+    </task>
+    <option name="localTasksCounter" value="1651" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1755,6 +1755,26 @@
           <url>file://$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py</url>
           <line>251</line>
           <option name="timeStamp" value="475" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py</url>
+          <line>497</line>
+          <option name="timeStamp" value="480" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py</url>
+          <line>526</line>
+          <option name="timeStamp" value="481" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py</url>
+          <line>529</line>
+          <option name="timeStamp" value="482" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py</url>
+          <line>509</line>
+          <option name="timeStamp" value="483" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
