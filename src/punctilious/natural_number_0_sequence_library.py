@@ -289,6 +289,17 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
 
     :math:`\sum{S\prime} = \sum{T\prime} \land m < n` and :math:`s_i = t_i` for all :math:`i = 1, \ldots, m`
 
+    Note
+    -------
+
+    This order has immense advantages:
+
+    - it grows slowly (given the Punctilious use case),
+    - it allows very length sequences with small numbers of natural numbers,
+    - both its ranking, unranking, and successor algorithms are efficient.
+
+    For these reasons, it is elected as the canonical (i.e. default) order.
+
     See also
     ----------
 
@@ -481,7 +492,44 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
 
     @classmethod
     def unrank(cls, n: int) -> NaturalNumber0Sequence:
-        pass
+        n: int = int(n)
+
+        # special case
+        if n == 0:
+            # the empty sequence
+            return cls.least_element
+
+        # find the adjusted sum class
+        adjusted_sum_class: int = 0
+        loop: bool = True
+        while loop:
+            cumulative_cardinality: int = cls.get_cumulative_adjusted_sum_class_rank_cardinality(adjusted_sum_class)
+            if cumulative_cardinality > n:
+                loop = False
+            else:
+                adjusted_sum_class += 1
+
+        # find the adjusted sum and length class
+        length_class: int = 0
+        loop: bool = True
+        cumulative_cardinality: int = 0
+        while loop:
+            cumulative_cardinality += cls.get_adjusted_sum_and_length_class_rank_cardinality(adjusted_sum_class,
+                                                                                             length_class)
+            if cumulative_cardinality > n:
+                loop = False
+            else:
+                length_class += 1
+
+        # declare the first sequence in this adjusted sum and length class
+        s: tuple[int, ...] = (adjusted_sum_class - length_class + 1,) + (0,) * (length_class - 1)
+        s: NaturalNumber0Sequence(*s)
+        loop: bool = True
+        while loop:
+            if cls.rank(s) == n:
+                return s
+            else:
+                s: NaturalNumber0Sequence = cls.successor(s)
 
     @classmethod
     def get_adjusted_sum(cls, x: FlexibleNaturalNumber0Sequence) -> int:
@@ -549,8 +597,22 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
             return util.combination(s - 1, l - 1)
 
     @classmethod
-    def _get_within_adjusted_sum_and_length_class_rank(cls, sequence: typing.List[int]) -> int:
-        return 0
+    @lru_cache(maxsize=256)
+    def get_cumulative_adjusted_sum_class_rank_cardinality(cls, s: int) -> int:
+        r"""Returns the cumulative cardinality of the "adjusted sum" class,
+        union all the precedent classes.
+
+        :param s: the adjusted sum of the sequence.
+        :return: the cumulative cardinality of the class.
+        """
+        s: int = int(s)
+        if s < 0:
+            raise util.PunctiliousException("s < 0")
+        c: int = cls.get_adjusted_sum_class_rank_cardinality(s)
+        if s == 0:
+            return c
+        else:
+            return cls.get_cumulative_adjusted_sum_class_rank_cardinality(s - 1) + c
 
 
 class GodelNumberEncodingOrder(brl.BinaryRelation):
@@ -708,7 +770,10 @@ class RefinedGodelNumberOrder(brl.BinaryRelation):
 
     The Gödel-number-encoding order has the following disadvantages:
 
-    - it grows very fast,
+    - it grows much faster than lexicographic order given the use case of
+      potentially long sequences with small distinct natural numbers.
+    - intuitively, this is because its "space" is full of factors of
+      prime numbers that are not effectively used (given the punctilious use case).
     - unranking requires factorization (but not so hard because primes are taken in sequence).
 
     """
@@ -1086,7 +1151,8 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return RefinedGodelNumberOrder
+        # return RefinedGodelNumberOrder
+        return AdjustedSumFirstLengthSecondLexicographicThirdOrder
 
     @util.readonly_class_property
     def least_element(cls) -> NaturalNumber0Sequence:
