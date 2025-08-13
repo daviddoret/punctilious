@@ -340,17 +340,24 @@ class TestNaturalNumbersSequence:
 
     def test_adjusted_sum_first_lexicographic_second_order_4(self):
 
-        RANK_MAX = 1024
+        RANK_MAX = 32
 
-        s: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.NaturalNumber0Sequence()
-        rank: int
+        l = []
+        s = pu.nn0sl.NaturalNumber0Sequence()
+        l.append(s)
         for rank in range(RANK_MAX):
-            print(rank)
-            print(s)
-            rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
-            assert rank == rank_of_s
+            s = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.successor(s)
+            l.append(s)
 
-            previous_s: pu.nn0sl.NaturalNumber0Sequence = s
-            s: pu.nn0sl.NaturalNumber0Sequence = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.successor(
-                s)
-            pass
+        for i, s in enumerate(l):
+            rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
+            assert rank_of_s == i
+            print(f"i:s - {i}:{s}")
+            for j, t in enumerate(l):
+                print(f"j:t - {j}:{t}")
+                if i < j:
+                    assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.relates(s, t)
+                if i == j:
+                    assert not pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.relates(s, t)
+                if i > j:
+                    assert not pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.relates(s, t)
