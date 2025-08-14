@@ -493,62 +493,23 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
     @classmethod
     def unrank(cls, n: int) -> NaturalNumber0Sequence:
 
-        # CORRECT BUG HERE !!!!!!!!!!!!!!!!!!!
-
         n: int = int(n)
+        if n < 0:
+            raise util.PunctiliousException("`n` < 0", n=n)
 
         # special case
         if n == 0:
             # the empty sequence
             return cls.least_element
 
-        # find the adjusted sum class
         cumulative_cardinality: int = 0
-        adjusted_sum_class: int = 0
-        loop: bool = True
-        # TODO: REMOVE LOOP AND USE 2^n TO GET THE RIGHT RESULT IMMEDIATELY
-        while loop:
-            sum_adjusted_class_cardinality: int = cls.get_adjusted_sum_class_rank_cardinality(adjusted_sum_class)
-            cumulative_cardinality += sum_adjusted_class_cardinality
-            if cumulative_cardinality == n:
-                # this is the first sequence of the sum adjusted class
-                s: NaturalNumber0Sequence = NaturalNumber0Sequence(adjusted_sum_class)
-                return s
-            elif cumulative_cardinality > n:
-                # step back to the precedent class
-                cumulative_cardinality -= sum_adjusted_class_cardinality
-                # restore the precedent adjusted sum
-                adjusted_sum_class -= 1
-                loop = False
-            else:
-                adjusted_sum_class += 1
+        adjusted_sum: int = cls.get_adjusted_sum_from_rank(n)
+        length: int = cls.get_length_from_rank(n)
 
-        # find the adjusted sum and length class
-        length_class: int = 1
-        loop: bool = True
-        while loop:
-            sum_adjusted_and_length_class_cardinality: int = cls.get_adjusted_sum_and_length_class_rank_cardinality(
-                adjusted_sum_class,
-                length_class)
-            cumulative_cardinality += sum_adjusted_and_length_class_cardinality
-            if cumulative_cardinality == n:
-                # this is the first sequence of the sum adjusted and length class
-                s: tuple[int, ...] = (adjusted_sum_class - length_class + 1,) + (0,) * (length_class - 1)
-                s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
-                return s
-            elif cumulative_cardinality > n:
-                # step back to the precedent class
-                cumulative_cardinality -= sum_adjusted_and_length_class_cardinality
-                # restore the precedent length
-                length_class -= 1
-                loop = False
-            else:
-                length_class += 1
-
+        # TODO: THIS CODE SECTION IS PROBABLY INEFFICIENT. cDEVELOP A MORE EFFICIENT ALGO.
         # declare the first sequence in this adjusted sum and length class
         # find the sequence by looping through all sequence within the class
-        # TODO: THIS IS INEFFICIENT. DEVELOP A MORE EFFICIENT ALGO.
-        s: tuple[int, ...] = (adjusted_sum_class - length_class + 1,) + (0,) * (length_class - 1)
+        s: tuple[int, ...] = (adjusted_sum - length,) + (0,) * (length - 1)
         s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
         loop: bool = True
         while loop:
@@ -574,6 +535,76 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         # Equivalent form:
         # return sum(x.scalar_addition(1))
         return sum(x) + x.length
+
+    @classmethod
+    def get_adjusted_sum_from_rank(cls, r: int) -> int:
+        r"""Returns the adjusted sum of the sequence whose rank equals `r`.
+
+        Definition
+        -----------
+
+        :math:`\lfloor \log_2 x \rfloor`
+
+        Definition
+        ----------------
+
+        Equivalently, this is equal to 0 if :math:`r = 0`,
+        and otherwise the number of bits in the binary representation of `r`.
+
+        :param r: A rank.
+        :return: The adjusted sum.
+        """
+        r: int = int(r)
+        if r < 0:
+            raise util.PunctiliousException("`n` < 0", n=r)
+        if r == 0:
+            return 0  # ()
+        else:
+            # version with float (leads to errors with large integers):
+            # math.floor(math.log2(8)) + 1
+            # pure bit implementation:
+            return r.bit_length()
+
+    @classmethod
+    def get_length_from_rank(cls, r: int) -> int:
+        r"""Returns the length of the sequence whose rank equals `r`.
+
+        :param r: The rank.
+        :return: The length of the sequence.
+        """
+        r: int = int(r)
+        if r < 0:
+            raise util.PunctiliousException("`r` < 0.", r=r)
+
+        if r == 0:
+            return 0
+
+        # TODO: Cleanup code and comments.
+
+        # 1) Determine the weight layer this index falls into.
+        # For n >= 1, indices [2^(weight-1), 2^weight - 1] all share the same weight.
+        weight = r.bit_length()  # weight = floor(log2(index)) + 1
+        choose_param = weight - 1  # We'll use m = weight - 1 in binomial coefficients C(m, k)
+
+        # 2) Position inside the weight layer (0-based)
+        start_of_layer = 1 << (weight - 1)  # 2^(weight-1)
+        offset_in_layer = r - start_of_layer
+
+        # 3) Within a fixed weight layer, lengths appear in runs:
+        #    length = 1 repeated C(m,0) times, length = 2 repeated C(m,1) times, ..., up to length = weight repeated C(m,m) times.
+        #    We walk these runs until the cumulative count exceeds offset_in_layer.
+        cumulative_count = 0
+        combinations_in_run = 1  # C(m, 0) = 1
+
+        for length in range(1, weight + 1):
+            cumulative_count += combinations_in_run
+            if offset_in_layer < cumulative_count:
+                return length
+            # Update C(m, k) -> C(m, k+1) without recomputing from scratch
+            combinations_in_run = combinations_in_run * (choose_param - (length - 1)) // length
+
+        # Should never happen
+        raise util.PunctiliousException("Index could not be placed in any length run")
 
     @classmethod
     @lru_cache(maxsize=256)

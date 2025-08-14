@@ -1,3 +1,4 @@
+import math
 import random
 
 import punctilious as pu
@@ -225,7 +226,48 @@ class TestNaturalNumbersSequence:
             assert s == s2
             assert previous_s < s
 
+    def test_asflslto_adjusted_sum(self):
+
+        for r in range(4):
+            adjusted_sum_from_rank = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_from_rank(
+                r)
+            s = pu.nn0sl.NaturalNumber0Sequence.from_rank(r)
+            adjusted_sum_from_sequence = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum(
+                s)
+            assert adjusted_sum_from_rank == adjusted_sum_from_sequence
+            pass
+
     def test_order(self):
+
+        s = pu.nn0sl.NaturalNumber0Sequence(1, 0)
+        r = s.rank
+        t = pu.nn0sl.NaturalNumber0Sequence.unrank(r)
+        assert s == t
+
+        # OK
+        s = pu.nn0sl.NaturalNumber0Sequence(1, 2, 3)
+        r = s.rank
+        t = pu.nn0sl.NaturalNumber0Sequence.unrank(r)
+        assert s == t
+
+        # ??
+        s = pu.nn0sl.NaturalNumber0Sequence(3, 2, 1)
+        r = s.rank
+        t = pu.nn0sl.NaturalNumber0Sequence.unrank(r)
+        assert s == t
+
+        s = pu.nn0sl.NaturalNumber0Sequence(0, )
+        r = s.rank
+        t = pu.nn0sl.NaturalNumber0Sequence.unrank(r)
+        assert s == t
+
+        s = pu.nn0sl.NaturalNumber0Sequence()
+        r = s.rank
+        t = pu.nn0sl.NaturalNumber0Sequence.unrank(r)
+        assert s == t
+
+        pass
+
         for i in range(8):
             # generate a random sequence
             n = random.randint(1, 3)
