@@ -281,7 +281,7 @@ class TestNaturalNumbersSequence:
         pass
 
     def test_order_2(self):
-        s = pu.nn0sl.NaturalNumber0Sequence(2, 7, 4, 8, 5, 6, 2)
+        s = pu.nn0sl.NaturalNumber0Sequence(2, 7, 4, 8, )
         r = s.rank
         s2 = pu.nn0sl.NaturalNumber0Sequence.unrank(r)
         r2 = s2.rank

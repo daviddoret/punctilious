@@ -426,6 +426,9 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         # a naive an inefficient implementation is to loop through sequences
         # from the first of the class to x.
         # of course, this is very inefficient for large sequences.
+        # TODO: THIS CODE SECTION IS VERY INEFFICIENT, FIND AN EFFICIENT ALGO AND REWRITE IT.
+        # THE NUMBER OF ELEMENTS IN THE SEARCHED SET IS C(a, l - 1) where a is the adjusted sum and l the length.
+        # FOR EXAMPLE, FOR A SEQUENCE OF 7 elements with adjusted sum = 34, this is already 1'344'904.
         current_sequence: tuple[int, ...] = (adjusted_sum - x.length,) + (0,) * (x.length - 1)
         while not current_sequence == x:
             current_sequence = cls.successor(current_sequence)
