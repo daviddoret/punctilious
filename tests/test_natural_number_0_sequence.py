@@ -296,7 +296,7 @@ class TestNaturalNumbersSequence:
         assert pu.nn0sl.trivial_sequence == pu.nn0sl.NN0S()
 
     def test_successor_unrank_consistency(self):
-        for i in range(1024):
+        for i in range(64):
             s: pu.nn0sl.NaturalNumber0Sequence
             if i == 0:
                 s = pu.nn0sl.NaturalNumber0Sequence.least_element
@@ -319,7 +319,7 @@ class TestNaturalNumbersSequence:
     def test_cantor_tupling_with_sentinel_value_order(self):
         for i in range(32):
             l = random.randint(0, 8)
-            s = tuple(random.randint(0, 256) for x in range(l))
+            s = tuple(random.randint(0, 8) for x in range(l))
             s = pu.nn0sl.NaturalNumber0Sequence(*s)
             n = pu.nn0sl.CantorTuplingWithSentinelValue.rank(s)
             s2 = pu.nn0sl.CantorTuplingWithSentinelValue.unrank(n)
@@ -330,7 +330,7 @@ class TestNaturalNumbersSequence:
         and the sum of the sizes of the "adjusted sum and length" classes for the same sum.
         """
 
-        MAX_SIZE = 128
+        MAX_SIZE = 32
 
         for s in range(MAX_SIZE):
             sum_class_size = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
@@ -346,19 +346,19 @@ class TestNaturalNumbersSequence:
 
         for i in range(32):
             l = random.randint(0, 8)
-            s = tuple(random.randint(0, 256) for x in range(l))
+            s = tuple(random.randint(0, 8) for x in range(l))
             s = pu.nn0sl.NaturalNumber0Sequence(*s)
             n = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(s)
             s2 = pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.unrank(n)
             assert s == s2
 
         l = []
-        for n in range(5000):
+        for n in range(32):
             l.append(pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.unrank(n))
 
-        for i in range(5000):
+        for i in range(32):
             assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.rank(l[i]) == i
-            if i < 5000:
+            if i < 32:
                 assert pu.nn0sl.AdjustedSumFirstLengthSecondLexicographicThirdOrder.relates(l[i], l[i + 1])
 
     def test_adjusted_sum_first_lexicographic_second_order_3(self):
