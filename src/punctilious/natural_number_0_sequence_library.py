@@ -494,28 +494,14 @@ class AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder(brl.BinaryRelat
         adjusted_sum: int = cls.get_adjusted_sum_from_rank(n)
         length: int = cls.get_length_from_rank(n)
 
-        # TODO: THIS CODE SECTION IS PROBABLY INEFFICIENT. cDEVELOP A MORE EFFICIENT ALGO.
-        # declare the first sequence in this adjusted sum and length class
-        # find the sequence by looping through all sequence within the class
-        s: tuple[int, ...] = (adjusted_sum - length,) + (0,) * (length - 1)
-        s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
-        loop: bool = True
-        while loop:
-            if cls.rank(s) == n:
-                return s
-            else:
-                s: NaturalNumber0Sequence = cls.successor(s)
-
-        elements: tuple[int, ...] = ()
-        # loop through sequence elements
-        for i in range(length):
-            # we use reverse lexicographic order
-            max_value: int = adjusted_sum - length - sum(elements)
-            for value in range(max_value):
-                s: tuple[int, ...] = elements + (value,) + (0,) * (length - i)
-                s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
-                # if s < ...
-                # this is circular reasoning, we need the rank first.
+        # take the last element in the set
+        last = (0,) * (length - 1) + (adjusted_sum - length,)
+        r = AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.rank(last)
+        # get the rank of the sequence in its adjusted sum and length class
+        j = r - n  # trick: this is reverse lexicographic order
+        z = unrank_sequence_within_adjusted_sum_and_length_class(j, length, adjusted_sum)
+        z = NaturalNumber0Sequence(*z)
+        return z
 
     @classmethod
     def get_adjusted_sum_from_rank(cls, r: int) -> int:
@@ -1548,6 +1534,71 @@ def get_reverse_lexicographic_rank_within_adjusted_sum_and_length_class(x):
         return 0
     total: int = binom(s - 1, l - 1)
     return total - get_lexicographic_rank_within_adjusted_sum_and_length_class(x) - 1
+
+
+def unrank_sequence_within_adjusted_sum_and_length_class(r: int, l: int, s: int):
+    """
+    Return the 0-based lexicographic r-th sequence T of length l consisting of natural numbers
+    such that sum(T) + l = s, i.e., sum(T) = n = s - l.
+
+    Assumptions:
+      - r is 0-based (i.e., the first sequence has r = 0).
+      - Lexicographic order compares tuples left-to-right, with smaller numbers first.
+
+    Raises:
+      - ValueError if inputs are invalid or r is out of range.
+
+    Complexity:
+      - Time: O(l log n), Space: O(1) besides the output, using math.comb for exact big integers.
+    """
+    if l <= 0:
+        raise ValueError("l must be a positive integer")
+    if s < l:
+        raise ValueError("s must be at least l (since entries are nonnegative)")
+
+    n = s - l  # total sum to distribute among l slots
+    total = math.comb(n + l - 1, l - 1)
+    if r < 0 or r >= total:
+        raise ValueError(f"rank r out of range: 0 <= r < {total}")
+
+    T = [0] * l
+    m = n  # remaining sum
+
+    for i in range(l):
+        # k is the number of remaining slots AFTER this position
+        k = l - i - 1
+
+        if k == 0:
+            # Last slot is forced
+            T[i] = m
+            # r should now be 0
+            # (Optional) assert r == 0
+            break
+
+        # We need to find smallest x in [0, m] with S(x+1) > r,
+        # where S(x) = C(m + k, k) - C(m - x + k, k).
+        # Equivalently, find the largest x with C(m - x + k, k) >= C(m + k, k) - r.
+        target = math.comb(m + k, k) - r
+
+        lo, hi = 0, m  # search over x
+        # We want the largest x such that comb(m - x + k, k) >= target
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            val = math.comb(m - mid + k, k)
+            if val >= target:
+                lo = mid + 1
+            else:
+                hi = mid - 1
+        x = hi  # largest x meeting the inequality
+
+        # Update r: subtract the number of sequences with first entry < x
+        # S(x) = C(m + k, k) - C(m - x + k, k)
+        r -= math.comb(m + k, k) - math.comb(m - x + k, k)
+
+        T[i] = x
+        m -= x
+
+    return T
 
 
 # Flexible types to facilitate data validation

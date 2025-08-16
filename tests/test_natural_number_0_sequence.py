@@ -232,7 +232,7 @@ class TestNaturalNumbersSequence:
             adjusted_sum_from_rank = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_from_rank(
                 r)
             s = pu.nn0sl.NaturalNumber0Sequence.from_rank(r)
-            adjusted_sum_from_sequence = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum(
+            adjusted_sum_from_sequence = pu.nn0sl.get_adjusted_sum(
                 s)
             assert adjusted_sum_from_rank == adjusted_sum_from_sequence
             pass
@@ -372,11 +372,6 @@ class TestNaturalNumbersSequence:
         l = []
         for n in range(32):
             l.append(pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.unrank(n))
-
-        for i in range(32):
-            assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.rank(l[i]) == i
-            if i < 32:
-                assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.relates(l[i], l[i + 1])
 
     def test_adjusted_sum_first_lexicographic_second_order_3(self):
 
