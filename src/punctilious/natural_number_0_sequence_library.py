@@ -258,8 +258,13 @@ class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
                 return False
 
 
-class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
-    r"""The adjusted sum-first, length-second, lexicographic-third order of (0-based) natural numbers.
+class AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder(brl.BinaryRelation):
+    r"""The adjusted sum-first, length-second, reverse lexicographic-third order of (0-based) natural numbers.
+
+    Acronym
+    ---------
+
+    ASFLSRLTO
 
     Mathematical definition
     -------------------------
@@ -334,9 +339,9 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         y: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(y)
 
         # first criteria: sum
-        if cls.get_adjusted_sum(x) < cls.get_adjusted_sum(y):
+        if get_adjusted_sum(x) < get_adjusted_sum(y):
             return True
-        elif cls.get_adjusted_sum(y) < cls.get_adjusted_sum(x):
+        elif get_adjusted_sum(y) < get_adjusted_sum(x):
             return False
         else:
             # adjusted sums are equal.
@@ -387,7 +392,7 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
 
         """
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        adjusted_sum: int = cls.get_adjusted_sum(x)
+        adjusted_sum: int = get_adjusted_sum(x)
 
         # special case: the empty sequence
         if x == cls.least_element:
@@ -414,28 +419,8 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
             cumulative_rank += cls.get_adjusted_sum_and_length_class_rank_cardinality(adjusted_sum, l)
 
         # we are now left with the "adjusted sum and length" class of which x is an element.
-        # we need to count the number of sequences that are less than x within this class.
-        # the only transformation that is allowed to stay within this is class is to
-        # keep the length of the sequence equal,
-        # and change the values of the sequence elements in such a way as to keep the adjusted sum equal.
-        # the first sequence of the class is:
-        # (s0 => 0, 0, 0, 0, ..., 0) with adjusted sum = |S| + s0 - 1
-        # the last sequence of the class is:
-        # (0, 0, 0, 0, ..., sn) with adjusted sum = |S| + sn - 1
-        #
-        # a naive an inefficient implementation is to loop through sequences
-        # from the first of the class to x.
-        # of course, this is very inefficient for large sequences.
-        # TODO: THIS CODE SECTION IS VERY INEFFICIENT, FIND AN EFFICIENT ALGO AND REWRITE IT.
-        # THE NUMBER OF ELEMENTS IN THE SEARCHED SET IS C(a, l - 1) where a is the adjusted sum and l the length.
-        # FOR EXAMPLE, FOR A SEQUENCE OF 7 elements with adjusted sum = 34, this is already 1'344'904.
-        current_sequence: tuple[int, ...] = (adjusted_sum - x.length,) + (0,) * (x.length - 1)
-        while not current_sequence == x:
-            current_sequence = cls.successor(current_sequence)
-            cumulative_rank += 1
+        cumulative_rank += get_reverse_lexicographic_rank_within_adjusted_sum_and_length_class(x=x)
 
-        # the number of sequences between the first sequence of the class and x may be very large.
-        # so
         return cumulative_rank
 
     @classmethod
@@ -488,7 +473,7 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
         # I.e.: the sequence is of the form: (0, 0, 0, ..., 0).
 
         # Find the successor in the next adjusted sum class
-        new_adjusted_sum: int = cls.get_adjusted_sum(x) + 1
+        new_adjusted_sum: int = get_adjusted_sum(x) + 1
         s: tuple[int, ...] = (new_adjusted_sum - 1,)
         s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
         return s
@@ -521,23 +506,16 @@ class AdjustedSumFirstLengthSecondLexicographicThirdOrder(brl.BinaryRelation):
             else:
                 s: NaturalNumber0Sequence = cls.successor(s)
 
-    @classmethod
-    def get_adjusted_sum(cls, x: FlexibleNaturalNumber0Sequence) -> int:
-        r"""Returns the adjusted sum of sequence `x`.
-
-        The adjusted sum is the sum of the sequence `x\prime` such that
-        every element in `x\prime` is equal to the corresponding element
-        in `x`, + 1.
-
-        Equivalently, this is the sum of `x` + the length of `x`.
-
-        :param x:
-        :return:
-        """
-        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        # Equivalent form:
-        # return sum(x.scalar_addition(1))
-        return sum(x) + x.length
+        elements: tuple[int, ...] = ()
+        # loop through sequence elements
+        for i in range(length):
+            # we use reverse lexicographic order
+            max_value: int = adjusted_sum - length - sum(elements)
+            for value in range(max_value):
+                s: tuple[int, ...] = elements + (value,) + (0,) * (length - i)
+                s: NaturalNumber0Sequence = NaturalNumber0Sequence(*s)
+                # if s < ...
+                # this is circular reasoning, we need the rank first.
 
     @classmethod
     def get_adjusted_sum_from_rank(cls, r: int) -> int:
@@ -1212,7 +1190,7 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
         # return RefinedGodelNumberOrder
-        return AdjustedSumFirstLengthSecondLexicographicThirdOrder
+        return AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder
 
     @util.readonly_class_property
     def least_element(cls) -> NaturalNumber0Sequence:
@@ -1501,6 +1479,77 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
         return sum(x for x in self.elements)
 
 
+# Functions
+
+
+def binom(n, k):
+    if k < 0 or n < 0 or k > n:
+        return 0
+    return math.comb(n, k)
+
+
+def get_adjusted_sum(x: FlexibleNaturalNumber0Sequence) -> int:
+    r"""Returns the adjusted sum of the (0-based) natural number sequence :math:`x`.
+
+    Definition
+    -------------
+
+    The adjusted sum of a (0-based) natural number sequence :math:`x`
+    is the sum of the sequence :math:`x\prime`
+    such that every element in :math:`x\prime` is equal to the corresponding element in :math:`x`, :math:`+ 1`.
+
+    Equivalently, this is the sum of :math:`x` + the length of :math:`x`.
+
+    :param x: a (0-based) natural number sequence.
+    :return: the adjusted sum.
+    """
+    x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+    # Equivalent form: sum(x.scalar_addition(1))
+    return x.sum + x.length
+
+
+def get_lexicographic_rank_within_adjusted_sum_and_length_class(x):
+    r"""Returns the lexicographic rank of `x` within its adjusted sum and length class.
+
+    :param x: A (0-based) natural number sequence.
+    :return: The rank.
+    """
+    x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+    l: int = x.length
+    s: int = x.sum + x.length
+
+    # This function algorithm is designed for 1-based natural numbers,
+    # adjust the sequence accordingly:
+    adjusted_x: NaturalNumber0Sequence = x.scalar_addition(1)
+    rank: int = 0  # 1-based rank
+    r: int = s
+    for i in range(l - 1):  # positions 0..l-2
+        k: int = l - (i + 1)
+        rank += binom(r - 1, k) - binom(r - adjusted_x[i], k)
+        r -= adjusted_x[i]
+    return rank
+
+
+def get_reverse_lexicographic_rank_within_adjusted_sum_and_length_class(x):
+    r"""Returns the rank
+
+    :param x:
+    :param s:
+    :param l:
+    :return:
+    """
+    x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+    l: int = x.length
+    s: int = x.sum + x.length
+
+    if x == ():
+        return 0
+    if x == (1,):
+        return 0
+    total: int = binom(s - 1, l - 1)
+    return total - get_lexicographic_rank_within_adjusted_sum_and_length_class(x) - 1
+
+
 # Flexible types to facilitate data validation
 
 FlexibleNaturalNumber0Sequence = typing.Union[
@@ -1518,3 +1567,4 @@ length_first_lexicographic_second_order = LengthFirstLexicographicSecondOrder
 sum_first_lexicographic_second_order = SumFirstLexicographicSecondOrder
 godel_number_order = GodelNumberEncodingOrder
 combined_fixed_length_integers_with_sentinel_order = CombinedFixedLengthIntegersWithSentinelOrder
+AS1L2RL3O = AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder  # An alias

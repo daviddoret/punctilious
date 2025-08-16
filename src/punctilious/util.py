@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import typing
 import uuid
+import math
 
 
 class ReadOnlyClassPropertyDescriptor:
@@ -241,8 +242,35 @@ def split_fixed_length_ints_with_sentinel(n: int, fixed_length: int = 32) -> tup
     return ints
 
 
+def binomial_coefficient(k: int, n: int):
+    r"""Returns the binomial coefficient :math:`C(n, k)`, aka ":math:`n` choose :math:`k`".
+
+    Note
+    -----
+
+    Python's math.comb function should be safe for very large integers,
+    i.e. it should not yield float errors.
+
+    TODO: CLEAN THIS UP. Redundant with combination()
+
+
+    :param k: A (0-based) natural number.
+    :param n: A (0-based) natural number.
+    :return: The binomial coefficient.
+    """
+    k: int = int(k)
+    n: int = int(n)
+
+    if k < 0 or n < 0 or k > n:
+        return 0
+    return math.comb(n, k)
+
+
 def combination(n: int, r: int):
-    """Calculate nCr (combinations) using integer arithmetic."""
+    r"""Calculate nCr (combinations) using integer arithmetic.
+
+    TODO: CLEAN THIS UP. Redundant with binomial_coefficient()
+    """
     n: int = int(n)
     r: int = int(r)
     if r > n or r < 0:

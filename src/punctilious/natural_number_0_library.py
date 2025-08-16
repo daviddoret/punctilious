@@ -2,11 +2,11 @@ r"""A library for (0-based) natural numbers.
 
 """
 from __future__ import annotations
-import functools
 import typing
 import punctilious.util as util
 import punctilious.binary_relation_library as brl
 import punctilious.ternary_boolean_library as tbl
+import math
 
 
 # Relation classes
