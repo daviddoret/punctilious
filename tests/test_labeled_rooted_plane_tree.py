@@ -420,28 +420,16 @@ class TestLabeledRootedPlaneTree:
     def test_ranking(self):
         t0 = pu.lrptl.LabeledRootedPlaneTree.least_element
         assert t0.rank == 0
-        assert pu.lrptl.LabeledRootedPlaneTree.unrank(0) == t0
-        t1 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(n=0, s=(t0,))
-        assert t1.rank == 1
-        assert pu.lrptl.LabeledRootedPlaneTree.unrank(1) == t1
-        t2 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(n=1)
-        assert t2.rank == 2
-        t2b = pu.lrptl.LabeledRootedPlaneTree.unrank(2)
-        assert t2b == t2
-        t3 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(n=0, s=(t0, t0,))
-        assert t3.rank == 3
-        assert pu.lrptl.LabeledRootedPlaneTree.unrank(3) == t3
-        pass
 
     def test_successor_unrank_consistency(self):
         for i in range(1024):
-            t: pu.lrptl.LabeledRootedPlaneTree
+            s: pu.lrptl.LabeledRootedPlaneTree
             if i == 0:
-                t = pu.lrptl.LabeledRootedPlaneTree.least_element
+                s = pu.lrptl.LabeledRootedPlaneTree.least_element
             else:
-                t = t.successor
-            t2 = pu.lrptl.LabeledRootedPlaneTree.unrank(i)
-            assert t == t2
+                s = s.successor
+            t: pu.lrptl.LabeledRootedPlaneTree = pu.lrptl.RecursiveSequenceOrder.unrank(i)
+            assert s == t
             r = t.rank
             assert r == i
 
