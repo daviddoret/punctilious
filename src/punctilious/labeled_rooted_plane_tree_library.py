@@ -591,7 +591,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return LabeledRootedPlaneTree(*o)
         if isinstance(o, collections.abc.Generator):
             return LabeledRootedPlaneTree(*o)
-        raise util.PunctiliousException("`AbstractFormula` data validation failure. `o` is of unknown type.",
+        raise util.PunctiliousException("`LabeledRootedPlaneTree` data validation failure. `o` is of unknown type.",
                                         type_of_o=type(o), o=o)
 
     @classmethod
@@ -1390,6 +1390,13 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
 
     :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
     """
+
+    if isinstance(p, int):
+        return LabeledRootedPlaneTree(t=(()), s=(p,))
+
+    if len(p) == 1:
+        return LabeledRootedPlaneTree(t=(()), s=(p[0],))
+
     if len(p) != 2:
         raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
     i: int = p[0]

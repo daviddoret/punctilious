@@ -17,6 +17,7 @@ import punctilious.connective_sequence_library as connective_sequence_library
 import punctilious.natural_number_0_sequence_library as natural_number_0_sequence_library
 import punctilious.natural_number_0_pair_library as natural_number_0_pair_library
 import punctilious.labeled_rooted_plane_tree_library as labeled_rooted_plane_tree_library
+import punctilious.syntactic_structure_library as syntactic_structure_library
 import punctilious.formula_library as formula_library
 
 # import formula_library
@@ -36,6 +37,7 @@ nn0sl = natural_number_0_sequence_library
 nn0pl = natural_number_0_pair_library
 rptl = rooted_plane_tree_library
 rptc = rooted_plane_tree_catalog
+ssl = syntactic_structure_library
 tbl = ternary_boolean_library
 
 __all__ = [
@@ -55,5 +57,6 @@ __all__ = [
     "prime_number_library", "pnl",
     "rooted_plane_tree_catalog", "rptc",
     "rooted_plane_tree_library", "rptl",
+    "syntactic_structure_library", "ssl",
     "ternary_boolean_library", "tbl",
 ]
