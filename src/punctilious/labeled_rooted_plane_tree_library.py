@@ -103,7 +103,7 @@ class IsEqualTo(brl.BinaryRelation):
         return x.is_labeled_rooted_plane_tree_equivalent_to(y)
 
 
-class RecursiveReverseSequenceOrder(brl.BinaryRelation):
+class RecursiveSequenceOrder(brl.BinaryRelation):
     r"""The LRPTs equipped with the standard strictly less-than order relation.
 
     Mathematical definition
@@ -152,10 +152,10 @@ class RecursiveReverseSequenceOrder(brl.BinaryRelation):
             subtree_rank: int = cls.rank(subtree)
             t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)
             s: nn0sl.NaturalNumber0Sequence = s.concatenate_with(t)
-        # then take the reverse sequence.
-        # the rational is that the punctilious use case is focused on formula manipulation,
-        # and high element values are first expected to occur to the right than to the left.
-        s = s.reverse
+        ## then take the reverse sequence.
+        ## the rational is that the punctilious use case is focused on formula manipulation,
+        ## and high element values are first expected to occur to the right than to the left.
+        # s = s.reverse
         raw_rank: int = nn0sl.AS1L2RL3O.rank(s)  # Retrieve the canonical rank of the sequence.
         r: int = raw_rank - 1  # "- 1" because the empty sequence is not encoded.
         return r
@@ -200,10 +200,10 @@ class RecursiveReverseSequenceOrder(brl.BinaryRelation):
         n += 1  # Corrects the absence of the empty sequence in the encoding.
         # unrank the (0-based) natural sequence that is encoded in the rank.
         s: nn0sl.NaturalNumber0Sequence = nn0sl.AS1L2RL3O.unrank(n)
-        # then take the reverse sequence.
-        # the rational is that the punctilious use case is focused on formula manipulation,
-        # and high element values are first expected to occur to the right than to the left.
-        s = s.reverse
+        ## then take the reverse sequence.
+        ## the rational is that the punctilious use case is focused on formula manipulation,
+        ## and high element values are first expected to occur to the right than to the left.
+        # s = s.reverse
         main_element: int = s[0]
         subtrees = []
         for i, m in enumerate(s[1:], 1):
@@ -756,6 +756,15 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         return t in self.immediate_subtrees
 
+    def has_subtree(self, t: LabeledRootedPlaneTree):
+        r"""Returns `True` if LRPT t is a subtree of this LRPT.
+
+        :param t:
+        :return:
+        """
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
+        return t.is_subtree_of(self)
+
     @functools.cached_property
     def height(self):
         r"""Returns the height (aka level) of the LRPT.
@@ -981,7 +990,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return RecursiveReverseSequenceOrder
+        return RecursiveSequenceOrder
 
     def is_labeled_rooted_plane_tree_equivalent_to(self, t: LabeledRootedPlaneTree):
         r"""Returns `True` if this LRPT is LRPT-equivalent
@@ -1057,7 +1066,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return RecursiveReverseSequenceOrder
+        return RecursiveSequenceOrder
 
     @functools.cached_property
     def is_increasing(self) -> bool:
@@ -1109,15 +1118,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             if self.is_labeled_rooted_plane_tree_equivalent_to(psi):
                 return True
         return False
-
-    def has_subtree(self, t: LabeledRootedPlaneTree):
-        r"""Returns `True` if LRPT t is a subtree of this LRPT.
-
-        :param t:
-        :return:
-        """
-        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
-        return t.is_subtree_of(self)
 
     def iterate_immediate_subtrees(self) -> collections.abc.Generator[LabeledRootedPlaneTree, None, None]:
         r"""Iterates the immediate subtrees of the LRPT.
@@ -1419,5 +1419,5 @@ FlexibleLabeledRootedPlaneTree = typing.Union[
 LRPT = LabeledRootedPlaneTree  # An alias for AbstractFormula
 empty_tree: LabeledRootedPlaneTree = LabeledRootedPlaneTree.least_element
 trivial_tree: LabeledRootedPlaneTree = LabeledRootedPlaneTree.least_element
-recursive_reverse_sequence_order = RecursiveReverseSequenceOrder
-RRSO = RecursiveReverseSequenceOrder
+recursive_reverse_sequence_order = RecursiveSequenceOrder
+RSO = RecursiveSequenceOrder

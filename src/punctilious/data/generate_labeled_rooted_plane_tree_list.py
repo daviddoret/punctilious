@@ -3,10 +3,10 @@ import punctilious as pu
 
 # Define the CSV file name
 filename = "labeled_rooted_plane_tree_list.csv"
-list_size = 2048
+list_size = 4096
 
 # Define the header and some sample data
-header = ["Rank", "LRPT", "Main Element", "Arity", "Is Canonical",
+header = ["Rank", "LRPT", "RPT", "NN0S", "Im(NN0S)", "Main Element", "Arity", "Is Canonical",
           "Is Strictly Increasing", "RPT Rank", "Sequence Rank", "Sequence Max Value"]
 data = []
 
@@ -19,7 +19,11 @@ with open(filename, "w", newline="") as csvfile:
             phi: pu.lrptl.LabeledRootedPlaneTree = pu.lrptl.LabeledRootedPlaneTree.least_element
         else:
             phi: pu.lrptl.LabeledRootedPlaneTree = phi.successor
-        record = [rank, phi,
+        record = [rank,
+                  phi,
+                  phi.rooted_plane_tree,
+                  phi.natural_number_sequence,
+                  phi.natural_number_sequence.image,
                   phi.main_element,
                   phi.degree,
                   phi.is_canonical,
