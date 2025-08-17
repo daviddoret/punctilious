@@ -259,7 +259,7 @@ class SumFirstLexicographicSecondOrder(brl.BinaryRelation):
 
 
 class AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder(brl.BinaryRelation):
-    r"""The adjusted sum-first, length-second, reverse lexicographic-third order of (0-based) natural numbers.
+    r"""The adjusted sum-first, length-second, reverse lexicographic-third order of (0-based) natural number sequences.
 
     Acronym
     ---------

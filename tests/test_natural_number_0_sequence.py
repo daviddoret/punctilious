@@ -325,7 +325,10 @@ class TestNaturalNumbersSequence:
             s2 = pu.nn0sl.CantorTuplingWithSentinelValue.unrank(n)
             assert s == s2
 
-    def test_adjusted_sum_first_lexicographic_second_order_1(self):
+
+class TestAS1L2RL3O:
+
+    def test_as1l2rl3o_class_consistency(self):
         r"""The consistency between the size of the "adjusted sum" classes
         and the sum of the sizes of the "adjusted sum and length" classes for the same sum.
         """
@@ -333,15 +336,15 @@ class TestNaturalNumbersSequence:
         MAX_SIZE = 32
 
         for s in range(MAX_SIZE):
-            sum_class_size = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+            sum_class_size = pu.nn0sl.AS1L2RL3O.get_adjusted_sum_class_rank_cardinality(
                 s)
             cumulative_sum_length_class_size = 0
             for j in range(s + 1):
-                cumulative_sum_length_class_size += pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_and_length_class_rank_cardinality(
+                cumulative_sum_length_class_size += pu.nn0sl.AS1L2RL3O.get_adjusted_sum_and_length_class_rank_cardinality(
                     s, j)
             assert sum_class_size == cumulative_sum_length_class_size
 
-    def test_rank_within_adjusted_sum_and_length_class(self):
+    def test_as1l2rl3o_class_and_rank(self):
 
         s = pu.nn0sl.NaturalNumber0Sequence()
         previous_r = 0
@@ -357,74 +360,63 @@ class TestNaturalNumbersSequence:
             previous_r2 = r2
             s = s.successor
 
-    def test_adjusted_sum_first_lexicographic_second_order_2(self):
-        assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.rank(
-            pu.nn0sl.NaturalNumber0Sequence()) == 0
+    def test_as1l2rl3o_order_long_random_sequences(self):
 
-        for i in range(32):
-            l = random.randint(0, 8)
-            s = tuple(random.randint(0, 8) for x in range(l))
+        MAX_TESTS = 32
+        MAX_SEQUENCE_LENGTH = 128
+        MAX_ELEMENT_VALUE = 32
+
+        for i in range(MAX_TESTS):
+            l = random.randint(0, MAX_SEQUENCE_LENGTH)
+            s = tuple(random.randint(0, MAX_ELEMENT_VALUE) for x in range(l))
             s = pu.nn0sl.NaturalNumber0Sequence(*s)
-            n = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.rank(s)
-            s2 = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.unrank(n)
+            n = pu.nn0sl.AS1L2RL3O.rank(s)
+            s2 = pu.nn0sl.AS1L2RL3O.unrank(n)
             assert s == s2
 
-        l = []
-        for n in range(32):
-            l.append(pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.unrank(n))
+    def test_as1l2rl3o_class_cardinalities(self):
 
-    def test_adjusted_sum_first_lexicographic_second_order_3(self):
-
-        assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+        assert pu.nn0sl.AS1L2RL3O.get_adjusted_sum_class_rank_cardinality(
             0) == 1
-        assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+        assert pu.nn0sl.AS1L2RL3O.get_adjusted_sum_class_rank_cardinality(
             1) == 1
-        assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+        assert pu.nn0sl.AS1L2RL3O.get_adjusted_sum_class_rank_cardinality(
             2) == 2
-        assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+        assert pu.nn0sl.AS1L2RL3O.get_adjusted_sum_class_rank_cardinality(
             3) == 4
-        assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+        assert pu.nn0sl.AS1L2RL3O.get_adjusted_sum_class_rank_cardinality(
             4) == 8
-        assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.get_adjusted_sum_class_rank_cardinality(
+        assert pu.nn0sl.AS1L2RL3O.get_adjusted_sum_class_rank_cardinality(
             5) == 16
         pass
 
-    def test_adjusted_sum_first_lexicographic_second_order_4(self):
+    def test_as1l2rl3o_order(self):
 
-        RANK_MAX = 32
+        RANK_MAX = 256
 
+        # fill in a list of RANK_MAX sequences using the successor function
         l = []
         s = pu.nn0sl.NaturalNumber0Sequence()
         l.append(s)
         for rank in range(RANK_MAX):
-            s = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.successor(s)
+            s = pu.nn0sl.AS1L2RL3O.successor(s)
             l.append(s)
 
         for i, s in enumerate(l):
-            rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.rank(s)
-            assert rank_of_s == i
-
-    def test_adjusted_sum_first_lexicographic_second_order_5(self):
-
-        RANK_MAX = 32
-
-        l = []
-        s = pu.nn0sl.NaturalNumber0Sequence()
-        l.append(s)
-        for rank in range(RANK_MAX):
-            s = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.successor(s)
-            l.append(s)
-
-        for i, s in enumerate(l):
-            rank_of_s: int = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.rank(s)
+            rank_of_s: int = pu.nn0sl.AS1L2RL3O.rank(s)
+            unrank_s = pu.nn0sl.AS1L2RL3O.unrank(rank_of_s)
+            assert s == unrank_s
             for j, t in enumerate(l):
-                rank_of_t: int = pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.rank(t)
+                rank_of_t: int = pu.nn0sl.AS1L2RL3O.rank(t)
                 if i < j:
-                    assert pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.relates(s, t)
+                    assert pu.nn0sl.AS1L2RL3O.relates(s, t)
+                    assert s < t
                     assert rank_of_s < rank_of_t
                 if i == j:
-                    assert not pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.relates(s, t)
+                    assert not pu.nn0sl.AS1L2RL3O.relates(s, t)
+                    assert not s < t
                     assert not rank_of_s < rank_of_t
                 if i > j:
-                    assert not pu.nn0sl.AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder.relates(s, t)
+                    assert not pu.nn0sl.AS1L2RL3O.relates(s, t)
+                    assert not s < t
                     assert not rank_of_s < rank_of_t
