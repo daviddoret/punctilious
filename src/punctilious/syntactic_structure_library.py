@@ -59,12 +59,31 @@ class SyntacticStructure:
 
 
 class AbstractSet(SyntacticStructure):
-    r"""An abstract-set.
+    r"""An abstract set.
 
     Definition
     ------------
 
-    A syntactic structure that models a finite (computable) set defined by comprehension.
+    An `abstract set` is a syntactic structure that models a finite (computable) set defined by extension.
+
+    Given any LRPT :math:`T`,
+    its `abstract set` is the set :math:`{t_0, t_1, \cdots, t_n}`
+    where :math:`t_i` denotes the immediate sub-LRPTs of :math:`T`.
+
+    Note
+    ------
+
+    The main element of the LRPT is not an information of the abstract set, i.e.: it is dropped.
+
+    Note
+    -----------
+
+    Every LRPT is an abstract set.
+
+    Note
+    ----------
+
+    Every LRPT of degree 0 is the empty set.
 
     """
 
