@@ -362,7 +362,7 @@ class TestLabeledRootedPlaneTree:
         for i in range(0, 2048):
             phi: pu.lrptl.LabeledRootedPlaneTree
             if i == 0:
-                phi = pu.lrptl.RecursiveSequenceOrder.least_element
+                phi = pu.lrptl.RecursiveReverseSequenceOrder.least_element
 
     def test_is_increasing(self, lrpt1, lrpt2, lrpt3, lrpt4, lrpt5, lrpt6, lrpt7, lrpt8):
         assert lrpt1.is_increasing
@@ -412,7 +412,7 @@ class TestLabeledRootedPlaneTree:
 
     def test_least_element(self):
         trivial_formula = pu.lrptl.LRPT(t=pu.rptl.trivial_rooted_plane_tree, s=pu.nn0sl.NaturalNumber0Sequence(0))
-        assert pu.lrptl.RecursiveSequenceOrder.least_element == trivial_formula
+        assert pu.lrptl.RecursiveReverseSequenceOrder.least_element == trivial_formula
         assert pu.lrptl.LabeledRootedPlaneTree.least_element == trivial_formula
         assert pu.lrptl.empty_tree == trivial_formula
         assert pu.lrptl.trivial_tree == trivial_formula

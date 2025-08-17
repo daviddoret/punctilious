@@ -103,7 +103,7 @@ class IsEqualTo(brl.BinaryRelation):
         return x.is_labeled_rooted_plane_tree_equivalent_to(y)
 
 
-class RecursiveSequenceOrder(brl.BinaryRelation):
+class RecursiveReverseSequenceOrder(brl.BinaryRelation):
     r"""The LRPTs equipped with the standard strictly less-than order relation.
 
     Mathematical definition
@@ -152,7 +152,11 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
             subtree_rank: int = cls.rank(subtree)
             t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)
             s: nn0sl.NaturalNumber0Sequence = s.concatenate_with(t)
-        raw_rank: int = nn0sl.RefinedGodelNumberOrder.rank(s)  # Retrieve the canonical rank of the sequence.
+        # then take the reverse sequence.
+        # the rational is that the punctilious use case is focused on formula manipulation,
+        # and high element values are first expected to occur to the right than to the left.
+        s = s.reverse
+        raw_rank: int = nn0sl.AS1L2RL3O.rank(s)  # Retrieve the canonical rank of the sequence.
         r: int = raw_rank - 1  # "- 1" because the empty sequence is not encoded.
         return r
 
@@ -195,7 +199,11 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
             raise util.PunctiliousException("`n` must be a positive integer.", n=n)
         n += 1  # Corrects the absence of the empty sequence in the encoding.
         # unrank the (0-based) natural sequence that is encoded in the rank.
-        s: nn0sl.NaturalNumber0Sequence = nn0sl.RefinedGodelNumberOrder.unrank(n)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.AS1L2RL3O.unrank(n)
+        # then take the reverse sequence.
+        # the rational is that the punctilious use case is focused on formula manipulation,
+        # and high element values are first expected to occur to the right than to the left.
+        s = s.reverse
         main_element: int = s[0]
         subtrees = []
         for i, m in enumerate(s[1:], 1):
@@ -973,7 +981,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return RecursiveSequenceOrder
+        return RecursiveReverseSequenceOrder
 
     def is_labeled_rooted_plane_tree_equivalent_to(self, t: LabeledRootedPlaneTree):
         r"""Returns `True` if this LRPT is LRPT-equivalent
@@ -1049,7 +1057,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     @util.readonly_class_property
     def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return RecursiveSequenceOrder
+        return RecursiveReverseSequenceOrder
 
     @functools.cached_property
     def is_increasing(self) -> bool:
@@ -1411,4 +1419,5 @@ FlexibleLabeledRootedPlaneTree = typing.Union[
 LRPT = LabeledRootedPlaneTree  # An alias for AbstractFormula
 empty_tree: LabeledRootedPlaneTree = LabeledRootedPlaneTree.least_element
 trivial_tree: LabeledRootedPlaneTree = LabeledRootedPlaneTree.least_element
-super_recursive_order = RecursiveSequenceOrder
+recursive_reverse_sequence_order = RecursiveReverseSequenceOrder
+RRSO = RecursiveReverseSequenceOrder

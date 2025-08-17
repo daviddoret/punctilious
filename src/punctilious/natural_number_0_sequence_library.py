@@ -1169,52 +1169,6 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
         x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
         return concatenate_natural_number_0_sequences(self, x, )
 
-    @util.readonly_class_property
-    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return IsEqualTo
-
-    @util.readonly_class_property
-    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        # return RefinedGodelNumberOrder
-        return AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder
-
-    @util.readonly_class_property
-    def least_element(cls) -> NaturalNumber0Sequence:
-        return cls.is_strictly_less_than_relation.least_element
-
-    @functools.cached_property
-    def restricted_growth_function_sequence(self) -> NaturalNumber0Sequence:
-        r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
-        by applying canonical labeling.
-
-        Notation:
-        :math:`canonical(S)`
-
-        Definition - Canonical Labeling:
-        The canonical-labeling of a natural-numbers-sequence S is an RFG-sequence T such that:
-         - the value of the first element of S is mapped to 1
-         - whenever a new value x appears in S, it is mapped to max(t0, t1, ..., ti) + 1 where i is the index
-           position of x in S
-
-        Examples:
-        (3,5,2,1) --> (1,2,3,4)
-        (3,5,3,1,5,2) --> (1,2,1,3,2,4)
-
-        :return:
-        """
-        if self.is_restricted_growth_function_sequence:
-            return self
-        else:
-            mapping: dict[int, int] = dict()
-            mapped_value: int = 0
-            n: int
-            for n in self:
-                if n not in mapping.keys():
-                    mapping[n] = mapped_value
-                    mapped_value += 1
-            s: tuple[int, ...] = tuple(mapping[n] for n in self)
-            return NaturalNumber0Sequence(*s)
-
     def concatenate_with(self, *s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
         r"""Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,
         or an iterable / generator of multiple :class:`NaturalNumberSequence` elements.
@@ -1326,20 +1280,9 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
         """
         return len(self.image)
 
-    def is_restricted_growth_function_equivalent_to(self, s) -> bool:
-        r"""`True` if this natural number sequence canonical-natural-number-sequence-equivalent
-        to the natural-number-sequence `s`, `False` otherwise.
-
-        Notation:
-        :math:`S ~_{canonical} T`
-
-        Formal Definition:
-        Two natural-number-sequences `s` and `t` are canonical-natural-number-sequence-equivalent
-        if and only if their canonical-natural-number-sequence are natural-number-sequence-equivalent.
-
-        """
-        s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
-        return self.restricted_growth_function_sequence.is_natural_number_0_sequence_equivalent_to(s)
+    @util.readonly_class_property
+    def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        return IsEqualTo
 
     @functools.cached_property
     def is_increasing(self) -> bool:
@@ -1383,6 +1326,30 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
         """
         s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
         return self.length == s.length and all(x == y for x, y in zip(self, s))
+
+    def is_restricted_growth_function_equivalent_to(self, s) -> bool:
+        r"""`True` if this natural number sequence canonical-natural-number-sequence-equivalent
+        to the natural-number-sequence `s`, `False` otherwise.
+
+        Notation:
+        :math:`S ~_{canonical} T`
+
+        Formal Definition:
+        Two natural-number-sequences `s` and `t` are canonical-natural-number-sequence-equivalent
+        if and only if their canonical-natural-number-sequence are natural-number-sequence-equivalent.
+
+        """
+        s: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(s)
+        return self.restricted_growth_function_sequence.is_natural_number_0_sequence_equivalent_to(s)
+
+    @util.readonly_class_property
+    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
+        # return RefinedGodelNumberOrder
+        return AdjustedSumFirstLengthSecondReverseLexicographicThirdOrder
+
+    @util.readonly_class_property
+    def least_element(cls) -> NaturalNumber0Sequence:
+        return cls.is_strictly_less_than_relation.least_element
 
     @functools.cached_property
     def is_restricted_growth_function_sequence(self) -> bool:
@@ -1444,6 +1411,54 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
 
         """
         return max(self)
+
+    @functools.cached_property
+    def restricted_growth_function_sequence(self) -> NaturalNumber0Sequence:
+        r"""Converts the natural-number-sequence `s` into a restricted-growth-function-sequence `t`,
+        by applying canonical labeling.
+
+        Notation:
+        :math:`canonical(S)`
+
+        Definition - Canonical Labeling:
+        The canonical-labeling of a natural-numbers-sequence S is an RFG-sequence T such that:
+         - the value of the first element of S is mapped to 1
+         - whenever a new value x appears in S, it is mapped to max(t0, t1, ..., ti) + 1 where i is the index
+           position of x in S
+
+        Examples:
+        (3,5,2,1) --> (1,2,3,4)
+        (3,5,3,1,5,2) --> (1,2,1,3,2,4)
+
+        :return:
+        """
+        if self.is_restricted_growth_function_sequence:
+            return self
+        else:
+            mapping: dict[int, int] = dict()
+            mapped_value: int = 0
+            n: int
+            for n in self:
+                if n not in mapping.keys():
+                    mapping[n] = mapped_value
+                    mapped_value += 1
+            s: tuple[int, ...] = tuple(mapping[n] for n in self)
+            return NaturalNumber0Sequence(*s)
+
+    @functools.cached_property
+    def reverse(self) -> NaturalNumber0Sequence:
+        r"""Returns the reverse sequence.
+
+        Definition
+        --------------
+
+        If this sequence :math:`S = (s_0, s_1, \cdots, s_{n-1}, s_n)`,
+        the reverse sequence is :math:`\mathrm{rev}(S) = (s_n, s_{n-1}, \cdots, s_1, s_0)`.
+
+        :return: A (0-based) natural number sequence.
+        """
+        s: tuple[int, ...] = self[::-1]
+        return NaturalNumber0Sequence(*s)
 
     def scalar_addition(self, n: int):
         r"""Returns the scalar addition of this sequence :math:`S` with `n`.

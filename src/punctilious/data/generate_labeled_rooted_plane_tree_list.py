@@ -18,7 +18,7 @@ with open(filename, "w", newline="") as csvfile:
         if rank == 0:
             phi: pu.lrptl.LabeledRootedPlaneTree = pu.lrptl.LabeledRootedPlaneTree.least_element
         else:
-            phi: pu.lrptl.LabeledRootedPlaneTree = phi.successor()
+            phi: pu.lrptl.LabeledRootedPlaneTree = phi.successor
         record = [rank, phi,
                   phi.main_element,
                   phi.degree,

@@ -70,6 +70,12 @@ class TestNaturalNumbersSequence:
         assert not nns10.is_natural_number_0_sequence_equivalent_to(nns746107)
         assert not nns10.is_natural_number_0_sequence_equivalent_to(nns0123456789_10_11)
 
+    def test_reverse(self):
+        assert pu.nn0sl.NaturalNumber0Sequence().reverse == pu.nn0sl.NaturalNumber0Sequence()
+        assert pu.nn0sl.NaturalNumber0Sequence(0).reverse == pu.nn0sl.NaturalNumber0Sequence(0)
+        assert pu.nn0sl.NaturalNumber0Sequence(0, 1, 2, 3).reverse == pu.nn0sl.NaturalNumber0Sequence(3, 2, 1, 0)
+        assert pu.nn0sl.NaturalNumber0Sequence(3, 2, 1, 0).reverse == pu.nn0sl.NaturalNumber0Sequence(0, 1, 2, 3)
+
     def test_concatenate_single(self, nns0, nns00, nns01, nns012345, nns0123456789_10_11):
         assert nns0.concatenate_with(nns00) == pu.nn0sl.NaturalNumber0Sequence(*nns0, *nns00)
         assert pu.nn0sl.concatenate_natural_number_0_sequences(nns0123456789_10_11,
