@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="abstract set">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
-    </list>
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="abstract set" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -1184,14 +1181,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01613" summary="troubleshooting successor of labelled trees">
-      <option name="closed" value="true" />
-      <created>1753976077730</created>
-      <option name="number" value="01613" />
-      <option name="presentableId" value="LOCAL-01613" />
-      <option name="project" value="LOCAL" />
-      <updated>1753976077730</updated>
-    </task>
     <task id="LOCAL-01614" summary="renaming &quot;abstract formula&quot; to &quot;labeled rooted plane tree&quot;">
       <option name="closed" value="true" />
       <created>1753977645194</created>
@@ -1576,7 +1565,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755465840274</updated>
     </task>
-    <option name="localTasksCounter" value="1662" />
+    <task id="LOCAL-01662" summary="abstract set">
+      <option name="closed" value="true" />
+      <created>1755466520818</created>
+      <option name="number" value="01662" />
+      <option name="presentableId" value="LOCAL-01662" />
+      <option name="project" value="LOCAL" />
+      <updated>1755466520819</updated>
+    </task>
+    <option name="localTasksCounter" value="1663" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
