@@ -1,6 +1,16 @@
 import punctilious as pu
 
 
+class TestSyntacticStructure:
+    def test_syntactic_structure(self):
+        lrpt1 = pu.lrptl.LRPT.from_tree_of_integer_tuple_pairs((0, (1, 2, 3,)))
+        ss1 = pu.ssl.SyntacticStructure.from_lrpt(lrpt1)
+        ss2 = pu.ssl.SyntacticStructure(rpt=ss1.rooted_plane_tree, sequence=ss1.natural_number_sequence)
+        assert ss1 == ss2
+
+        pass
+
+
 class TestAbstractOrderedSet:
 
     def test_abstract_ordered_set(self):
@@ -11,9 +21,9 @@ class TestAbstractOrderedSet:
         t2 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(2)
         t3 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(3)
         t4 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(4)
-        s123 = pu.ssl.AbstractOrderedSet(t0_123)
+        s123 = pu.ssl.AbstractOrderedSet.from_elements(t1, t2, t3, )
         assert s123.cardinality == 3
-        assert not s123.has_element(t0_123)
+        assert not s123.has_element(s123)
         assert not s123.has_element(t0)
         assert s123.has_element(t1)
         assert s123.has_element(t2)
@@ -23,9 +33,9 @@ class TestAbstractOrderedSet:
 
         # confirm order matters
         t0_321 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (3, 2, 1,)))
-        s321 = pu.ssl.AbstractOrderedSet(t0_321)
+        s321 = pu.ssl.AbstractOrderedSet.from_elements(t3, t2, t1)
         assert s321.cardinality == 3
-        assert not s321.has_element(t0_123)
+        assert not s321.has_element(s321)
         assert not s321.has_element(t0)
         assert s321.has_element(t1)
         assert s321.has_element(t2)
@@ -38,7 +48,7 @@ class TestAbstractOrderedSet:
         # confirm duplicates do not matter
         t0_333221212 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(
             (0, (3, 3, 3, 2, 2, 1, 2, 1, 2,)))
-        s333221212 = pu.ssl.AbstractOrderedSet(t0_333221212)
+        s333221212 = pu.ssl.AbstractOrderedSet.from_lrpt(t0_333221212)
         assert s333221212.cardinality == 3
         assert not s333221212.has_element(t0_123)
         assert not s333221212.has_element(t0)
@@ -52,11 +62,11 @@ class TestAbstractOrderedSet:
         assert s321.is_abstract_ordered_set_equivalent_to(s333221212)
 
         t0_12 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
-        s12 = pu.ssl.AbstractOrderedSet(t0_12)
+        s12 = pu.ssl.AbstractOrderedSet.from_lrpt(t0_12)
         assert not s123.is_abstract_ordered_set_equivalent_to(s12)
         assert s12.cardinality == 2
 
-        s_empty = pu.ssl.AbstractOrderedSet(t0)
+        s_empty = pu.ssl.AbstractOrderedSet.from_lrpt(t0)
         assert not s123.is_abstract_ordered_set_equivalent_to(s_empty)
         assert s_empty.cardinality == 0
 

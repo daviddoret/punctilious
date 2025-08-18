@@ -6,17 +6,17 @@ from conftest import t6_a_aa_ab_ac_ad_ae, t2_a_aa
 
 class TestLabeledRootedPlaneTree:
     def test_construction_success(self):
-        phi1 = pu.lrptl.LabeledRootedPlaneTree(t=(((),), (),), s=(1, 2, 3, 4,))
-        phi2 = pu.lrptl.LabeledRootedPlaneTree(t=(((),), (),), s=(1, 2, 1, 1,))
+        phi1 = pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 2, 3, 4,))
+        phi2 = pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 2, 1, 1,))
         pass
 
     def test_construction_failure(self):
         with pytest.raises(pu.util.PunctiliousException):
-            pu.lrptl.LabeledRootedPlaneTree(t=(((),), (),), s=(1, 3,))  # invalid
+            pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 3,))  # invalid
         with pytest.raises(pu.util.PunctiliousException):
-            pu.lrptl.LabeledRootedPlaneTree(t=(((),), (),), s=(1, 2, 1, 3, 1,))
+            pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 2, 1, 3, 1,))
         with pytest.raises(pu.util.PunctiliousException):
-            pu.lrptl.LabeledRootedPlaneTree(t=(((),), (),), s=(1, 2, 1, 2, 1, 4, 8, 2))
+            pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 2, 1, 2, 1, 4, 8, 2))
 
     def test_is_canonical(self, lrpt1, lrpt3, lrpt4, lrpt6, lrpt7, lrpt8, t1_a, t2_a_aa, t3_a_aa_aaa, t12):
         assert not lrpt1.is_canonical
@@ -254,8 +254,8 @@ class TestLabeledRootedPlaneTree:
         assert lrpt3.get_subtree_by_path((0, 0,)) == lrpt1
 
         assert lrpt8.get_subtree_by_path((0, 3,)) == pu.lrptl.LabeledRootedPlaneTree(
-            t=t12,
-            s=(4, 3, 2, 1, 4, 9, 10, 7, 7, 7, 9, 0))
+            rpt=t12,
+            sequence=(4, 3, 2, 1, 4, 9, 10, 7, 7, 7, 9, 0))
 
         assert lrpt8.get_subtree_by_path((0, 3, 2,)) == pu.lrptl.LabeledRootedPlaneTree(
             t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,)
@@ -411,7 +411,8 @@ class TestLabeledRootedPlaneTree:
         pass
 
     def test_least_element(self):
-        trivial_formula = pu.lrptl.LRPT(t=pu.rptl.trivial_rooted_plane_tree, s=pu.nn0sl.NaturalNumber0Sequence(0))
+        trivial_formula = pu.lrptl.LRPT(rpt=pu.rptl.trivial_rooted_plane_tree,
+                                        sequence=pu.nn0sl.NaturalNumber0Sequence(0))
         assert pu.lrptl.RecursiveSequenceOrder.least_element == trivial_formula
         assert pu.lrptl.LabeledRootedPlaneTree.least_element == trivial_formula
         assert pu.lrptl.empty_tree == trivial_formula

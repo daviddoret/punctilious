@@ -27,23 +27,24 @@ class AbstractOrderedSet(afl.LabeledRootedPlaneTree):
     """
 
     def __init__(self, phi: afl.FlexibleLabeledRootedPlaneTree, n: int, p: afl.FlexibleLabeledRootedPlaneTree,
-                 i: afl.FlexibleLabeledRootedPlaneTree, t: rptl.FlexibleRootedPlaneTree,
-                 s: nn0s.FlexibleNaturalNumber1Sequence):
+                 i: afl.FlexibleLabeledRootedPlaneTree, rpt: rptl.FlexibleRootedPlaneTree,
+                 sequence: nn0s.FlexibleNaturalNumber1Sequence):
         r"""
 
         :param n: The natural number of the map's root element.
         :param i: The image of the map.
         :param p: The preimage of the map.
         """
-        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
+        rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
             p.rooted_plane_tree, i.rooted_plane_tree)
-        s: nn0s.NaturalNumber1Sequence = nn0s.concatenate_natural_number_0_sequences((n,), p.natural_number_sequence,
-                                                                                     i.natural_number_sequence)
-        super(AbstractFormula, self).__init__(t=t, s=s)
+        sequence: nn0s.NaturalNumber1Sequence = nn0s.concatenate_natural_number_0_sequences((n,),
+                                                                                            p.natural_number_sequence,
+                                                                                            i.natural_number_sequence)
+        super(AbstractFormula, self).__init__(t=rpt, s=sequence)
 
     def __new__(cls, phi: afl.FlexibleLabeledRootedPlaneTree, n: int, p: afl.FlexibleLabeledRootedPlaneTree,
-                i: afl.FlexibleLabeledRootedPlaneTree, t: rptl.FlexibleRootedPlaneTree,
-                s: nn0s.FlexibleNaturalNumber1Sequence):
+                i: afl.FlexibleLabeledRootedPlaneTree, rpt: rptl.FlexibleRootedPlaneTree,
+                sequence: nn0s.FlexibleNaturalNumber1Sequence):
         if phi is None:
 
             # Alternative constructor based on the structural components of an abstract-ordered.set.
@@ -54,13 +55,13 @@ class AbstractOrderedSet(afl.LabeledRootedPlaneTree):
                 raise util.PunctiliousException(
                     f"`Formula` data validation error. The length of the preimage `p`"
                     f" is not equal to the length of image `i`.",
-                    p_length=len(p), i_length=len(i), s=s, phi=phi)
-            t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
+                    p_length=len(p), i_length=len(i), s=sequence, phi=phi)
+            rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(
                 p.rooted_plane_tree, i.rooted_plane_tree)
-            s: nn0s.NaturalNumber1Sequence = nn0s.concatenate_natural_number_0_sequences((n,),
-                                                                                         p.natural_number_sequence,
-                                                                                         i.natural_number_sequence)
-            psi = super(AbstractMap, cls).__new__(cls, (t, s,))
+            sequence: nn0s.NaturalNumber1Sequence = nn0s.concatenate_natural_number_0_sequences((n,),
+                                                                                                p.natural_number_sequence,
+                                                                                                i.natural_number_sequence)
+            psi = super(AbstractMap, cls).__new__(cls, (rpt, sequence,))
 
         if not isinstance(phi, AbstractFormula):
             raise TypeError("Expected a Bar instance")
@@ -131,7 +132,7 @@ class AbstractMap(afl.LabeledRootedPlaneTree):
             p.rooted_plane_tree, i.rooted_plane_tree)
         s: nn0s.NaturalNumber1Sequence = nn0s.concatenate_natural_number_0_sequences((n,), p.natural_number_sequence,
                                                                                      i.natural_number_sequence)
-        super(AbstractMap, self).__init__(t=t, s=s)
+        super(AbstractMap, self).__init__(rpt=t, sequence=s)
 
     def __new__(cls, n: int, p: afl.FlexibleLabeledRootedPlaneTree, i: afl.FlexibleLabeledRootedPlaneTree):
         r"""
@@ -181,7 +182,7 @@ class AbstractTransformation(afl.LabeledRootedPlaneTree):
     """
 
     def __init__(self, i: afl.FlexibleLabeledRootedPlaneTree, o: afl.FlexibleLabeledRootedPlaneTree):
-        super(AbstractTransformation, self).__init__(t=None, s=None)
+        super(AbstractTransformation, self).__init__(rpt=None, sequence=None)
 
     def __new__(cls, i: afl.FlexibleLabeledRootedPlaneTree, o: afl.FlexibleLabeledRootedPlaneTree):
         i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
@@ -214,21 +215,21 @@ class AbstractTransformationBySubstitution(AbstractTransformation):
     """
 
     def __init__(self, i: afl.FlexibleLabeledRootedPlaneTree, o: afl.FlexibleLabeledRootedPlaneTree):
-        super(AbstractTransformation, self).__init__(t=None, s=None)
+        super(AbstractTransformation, self).__init__(rpt=None, sequence=None)
 
     def __new__(cls, i: afl.FlexibleLabeledRootedPlaneTree, v: afl.FlexibleLabeledRootedPlaneTree,
-                s: afl.FlexibleLabeledRootedPlaneTree,
+                sequence: afl.FlexibleLabeledRootedPlaneTree,
                 o: afl.FlexibleLabeledRootedPlaneTree):
         i: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(i)
         o: afl.LabeledRootedPlaneTree = afl.LabeledRootedPlaneTree.from_any(o)
         phi: afl.LabeledRootedPlaneTree = phi.canonical_labeled_rooted_plane_tree  # Canonize the labeled rooted plane tree
-        if s.length != phi.natural_number_sequence.image_cardinality:
+        if sequence.length != phi.natural_number_sequence.image_cardinality:
             raise util.PunctiliousException(
                 f"`Formula` data validation error. The length of the `ConnectiveSequence` `s`"
                 f" is not equal to the `image_cardinality` of the `natural_number_sequence` of its"
                 f" labeled tree.",
-                s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
-        psi = super(Formula, cls).__new__(cls, (phi, s,))
+                s_length=sequence.length, phi_tree_size=phi.tree_size, s=sequence, phi=phi)
+        psi = super(Formula, cls).__new__(cls, (phi, sequence,))
         psi = retrieve_formula_from_cache(psi)
         return psi
 

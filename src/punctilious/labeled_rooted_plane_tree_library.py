@@ -132,8 +132,8 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         :return:
         """
         return LabeledRootedPlaneTree(
-            t=rptl.RootedPlaneTree.least_element,
-            s=nn0sl.NaturalNumber0Sequence(0)
+            rpt=rptl.RootedPlaneTree.least_element,
+            sequence=nn0sl.NaturalNumber0Sequence(0)
         )
 
     @classmethod
@@ -252,8 +252,8 @@ class CantorPairingOrder(brl.BinaryRelation):
         :return:
         """
         return LabeledRootedPlaneTree(
-            t=rptl.RootedPlaneTree.least_element,
-            s=nn0sl.NaturalNumber0Sequence(0)
+            rpt=rptl.RootedPlaneTree.least_element,
+            sequence=nn0sl.NaturalNumber0Sequence(0)
         )
 
     @classmethod
@@ -309,19 +309,19 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def __hash__(self):
         return self._compute_hash(self)
 
-    def __init__(self, t: rptl.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
+    def __init__(self, rpt: rptl.FlexibleRootedPlaneTree, sequence: nn0sl.FlexibleNaturalNumber0Sequence):
         super(LabeledRootedPlaneTree, self).__init__()
         self._is_abstract_map: bool | None = None
         self._is_abstract_inference_rule: bool | None = None
 
-    def __new__(cls, t: rptl.FlexibleRootedPlaneTree, s: nn0sl.FlexibleNaturalNumber0Sequence):
-        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_any(t)
-        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.from_any(s)
-        if t.size != s.length:
+    def __new__(cls, rpt: rptl.FlexibleRootedPlaneTree, sequence: nn0sl.FlexibleNaturalNumber0Sequence):
+        rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_any(rpt)
+        sequence: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.from_any(sequence)
+        if rpt.size != sequence.length:
             raise util.PunctiliousException(
                 f"`LabeledRootedPlaneTree` data validation error. The size of the tree `t` is not equal to the length of the sequence `s`.",
-                t_size=t.size, s_length=s.length, t=t, s=s)
-        lrpt = super(LabeledRootedPlaneTree, cls).__new__(cls, (t, s))
+                t_size=rpt.size, s_length=sequence.length, t=rpt, s=sequence)
+        lrpt = super(LabeledRootedPlaneTree, cls).__new__(cls, (rpt, sequence))
         # lrpt = cls._from_cache(lrpt)
         return lrpt
 
@@ -527,8 +527,8 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return self
         else:
             return LabeledRootedPlaneTree(
-                t=self.rooted_plane_tree,
-                s=self.natural_number_sequence.restricted_growth_function_sequence)
+                rpt=self.rooted_plane_tree,
+                sequence=self.natural_number_sequence.restricted_growth_function_sequence)
 
     def derive_abstract_inference_rule(self, p: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
         r"""If this LRPT is an abstract-inference-rule, derives a theorem
@@ -582,19 +582,19 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def from_any(
             cls,
             o: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
-        if isinstance(o, LabeledRootedPlaneTree):
+        if isinstance(o, cls):
             return o
         if isinstance(o, collections.abc.Iterable):
-            return LabeledRootedPlaneTree(*o)
+            return cls(*o)
         if isinstance(o, collections.abc.Generator):
-            return LabeledRootedPlaneTree(*o)
+            return cls(*o)
         raise util.PunctiliousException("`LabeledRootedPlaneTree` data validation failure. `o` is of unknown type.",
                                         type_of_o=type(o), o=o)
 
     @classmethod
     def from_immediate_subtrees(
             cls,
-            n: int | None,
+            n: int,
             s: tuple[FlexibleLabeledRootedPlaneTree, ...] | None = None) -> LabeledRootedPlaneTree:
         r"""Given a root natural number n,
         and a tuple of LRPTs s,
@@ -620,7 +620,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         u: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(
             n) + nn0sl.concatenate_natural_number_0_sequences(
             *(subtree.natural_number_sequence for subtree in s))
-        lrpt: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t=rpt, s=u)
+        lrpt: LabeledRootedPlaneTree = cls(rpt=rpt, sequence=u)
         return lrpt
 
     @classmethod
@@ -663,7 +663,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_tuple_tree(t)
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
-        lrpt: LabeledRootedPlaneTree = LabeledRootedPlaneTree(t, s)
+        lrpt: LabeledRootedPlaneTree = cls(rpt=t, sequence=s)
         return lrpt
 
     def get_abstract_map_value(self, t: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
@@ -1389,10 +1389,10 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
     """
 
     if isinstance(p, int):
-        return LabeledRootedPlaneTree(t=(()), s=(p,))
+        return LabeledRootedPlaneTree(rpt=(()), sequence=(p,))
 
     if len(p) == 1:
-        return LabeledRootedPlaneTree(t=(()), s=(p[0],))
+        return LabeledRootedPlaneTree(rpt=(()), sequence=(p[0],))
 
     if len(p) != 2:
         raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
