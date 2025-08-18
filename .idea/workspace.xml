@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="AbstractOrderedSet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -493,6 +493,7 @@
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_trivial_tree.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set.executor": "Run",
+    "Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
     "Python tests.pytest for test_ternary_boolean.TestTernaryBoolead.test_ternary_boolean.executor": "Run",
     "Python tests.pytest for test_ternary_boolean.TestTernaryBoolean.test_ternary_boolean.executor": "Run",
@@ -798,7 +799,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set">
+  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -907,28 +908,6 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/scripts/prebuild_generate_theory_reports.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="syntactic_structure_library" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/punctilious" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -1085,6 +1064,23 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_syntactic_structure.TestAbstractTuple.test_abstract_tuple&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in punctilious" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1143,7 +1139,6 @@
       <item itemvalue="Python.prebuild_generate_sample_outputs" />
       <item itemvalue="Python.prebuild_generate_theory_interactive_graphs" />
       <item itemvalue="Python.prebuild_generate_theory_reports" />
-      <item itemvalue="Python.syntactic_structure_library" />
       <item itemvalue="Python docs.Sphinx HTML" />
       <item itemvalue="Python tests.Python tests in tests" />
       <item itemvalue="Python tests.pytest for test_axiomatic_system_1.TestAreValidStatementsInTheoryWithVariables.test_are_valid_statements_in_theory_with_variables" />
@@ -1151,6 +1146,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set" />
+      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" />
       <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
       <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -1159,11 +1155,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set" />
         <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set" />
         <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
-        <item itemvalue="Python.syntactic_structure_library" />
       </list>
     </recent_temporary>
   </component>
@@ -1185,14 +1181,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01617" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1754084677118</created>
-      <option name="number" value="01617" />
-      <option name="presentableId" value="LOCAL-01617" />
-      <option name="project" value="LOCAL" />
-      <updated>1754084677118</updated>
     </task>
     <task id="LOCAL-01618" summary="cleanup">
       <option name="closed" value="true" />
@@ -1578,7 +1566,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755502340249</updated>
     </task>
-    <option name="localTasksCounter" value="1666" />
+    <task id="LOCAL-01666" summary="AbstractOrderedSet">
+      <option name="closed" value="true" />
+      <created>1755503303869</created>
+      <option name="number" value="01666" />
+      <option name="presentableId" value="LOCAL-01666" />
+      <option name="project" value="LOCAL" />
+      <updated>1755503303869</updated>
+    </task>
+    <option name="localTasksCounter" value="1667" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>

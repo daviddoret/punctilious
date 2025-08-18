@@ -138,7 +138,16 @@ class AbstractOrderedSet(SyntacticStructure):
     def is_abstract_ordered_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
         r"""Check if this syntactic structure is abstract ordered set equivalent to `x`.
 
-        Definition:
+        Definition
+        ---------------
+
+        Let :math:`x`, :math:`y` be LRPTs.
+        :math:`x` is abstract set equivalent to `y` if and only if:
+
+        - every immediate sub-LRPT of :math:`x` is an immediate sub-LRPT of :math:`y`,
+        - every immediate sub-LRPT of :math:`y` is an immediate sub-LRPT of :math:`x`,
+        - the order of the first occurrence of every sub-LRPT in :math:`x`
+          is equal to the order of its first occurrence in :math:`y`.
 
         :param x: A syntactic structure.
         :return: `True` or `False`.
@@ -151,16 +160,19 @@ class AbstractOrderedSet(SyntacticStructure):
         return self.elements == x.elements
 
 
-class AbstractSet(SyntacticStructure):
-    r"""An abstract set.
+class AbstractMap(SyntacticStructure):
+    r"""An abstract map.
 
     Definition
     ------------
 
-    An `abstract set` is a syntactic structure that models a finite (computable) set defined by extension.
+    An `abstract map` is a syntactic structure that models a finite (computable) map defined by extension.
 
-    Given any LRPT :math:`T`,
-    its `abstract set` is the set :math:`{t_0, t_1, \cdots, t_n}`
+    Given any LRPT :math:`T` with the following constraints:
+     - its degree is at least 2,
+     - its first sub-LRPT is an abstract ordered set of cardinality :math:`n`,
+     - its second sub-LRPT is an abstract tuple of cardinality :math:`n`,
+    its `abstract map` is the map :math:`
     where :math:`t_i` denotes the immediate sub-LRPTs of :math:`T`.
 
     Note
@@ -236,9 +248,212 @@ class AbstractSet(SyntacticStructure):
         return self._labeled_rooted_plane_tree.has_immediate_subtree(x)
 
     def is_abstract_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
-        r"""Check if this syntactic structure is abstract set equivalent `x`.
+        r"""Check if this syntactic structure is abstract set equivalent to `x`.
 
-        Definition:
+        Definition
+        ---------------
+
+        Let :math:`x`, :math:`y` be LRPTs.
+        :math:`x` is abstract set equivalent to `y` if and only if:
+
+        - every immediate sub-LRPT of :math:`x` is an immediate sub-LRPT of :math:`y`,
+        - every immediate sub-LRPT of :math:`y` is an immediate sub-LRPT of :math:`z`.
+
+        :param x: A syntactic structure.
+        :return: `True` or `False`.
+        """
+
+        # direct conversion to abstract set is possible because abstract sets have no constraints.
+        x: AbstractSet = AbstractSet.from_any(x)
+
+        # direct comparison of elements is possible because they are canonically ordered by convention.
+        return self.elements == x.elements
+
+
+class AbstractSet(SyntacticStructure):
+    r"""An abstract set.
+
+    Definition
+    ------------
+
+    An `abstract set` is a syntactic structure that models a finite (computable) set defined by extension.
+
+    Given any LRPT :math:`T`,
+    its `abstract set` is the set :math:`{t_0, t_1, \cdots, t_n}`
+    where :math:`t_i` denotes the immediate and unique sub-LRPTs of :math:`T`.
+
+    Note
+    ------
+
+    The main element of the LRPT is not an information of the abstract set, i.e.: it is dropped.
+
+    The order of immediate sub-LRPTs in the LRPT is not an information of the abstract set, i.e.: it is dropped.
+
+    Note
+    -----------
+
+    Every LRPT is an abstract set.
+
+    Note
+    ----------
+
+    Every LRPT of degree 0 is the empty set.
+
+    """
+
+    def __init__(self, lrpt: lrptl.FlexibleLabeledRootedPlaneTree):
+        super().__init__(lrpt)
+
+    @functools.cached_property
+    def cardinality(self) -> int:
+        r"""Returns the cardinality of this abstract set.
+
+        Note
+        ______
+
+        This is equal to the number of unique immediate sub-LRPTs
+        in the LRPT of this syntactic structure.
+
+        This is equivalent to the degree of the LRPT
+        if its immediate sub-LRPTs are unique.
+
+        :return: an integer.
+        """
+        return len(self.elements)
+
+    @functools.cached_property
+    def elements(self) -> tuple[lrptl.LabeledRootedPlaneTree, ...]:
+        r"""Returns the elements of this abstract set.
+
+        Note
+        ______
+
+        This is equivalent to the unique and immediate subtrees of the LRPT.
+
+        Note
+        ------
+
+        Even though sets are not ordered, by convention the elements of an abstract set
+        are ordered by LRPT canonical order, facilitating equivalence checking.
+
+        :return: The elements of the set.
+        """
+        unique_elements: tuple[lrptl.LabeledRootedPlaneTree, ...] = ()
+        for sub_lrpt in self.labeled_rooted_plane_tree.iterate_immediate_subtrees():
+            if sub_lrpt not in unique_elements:
+                unique_elements = unique_elements + (sub_lrpt,)
+        # by convention, returns the elements in canonical lrpt order
+        unique_elements = tuple(sorted(unique_elements))
+        return unique_elements
+
+    def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if `x` is an element of this set, `False` otherwise.
+
+        :param x: An object.
+        :return: `True` or `False`
+        """
+        return self._labeled_rooted_plane_tree.has_immediate_subtree(x)
+
+    def is_abstract_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is abstract set equivalent to `x`.
+
+        Definition
+        ---------------
+
+        Let :math:`x`, :math:`y` be LRPTs.
+        :math:`x` is abstract set equivalent to `y` if and only if:
+
+        - every immediate sub-LRPT of :math:`x` is an immediate sub-LRPT of :math:`y`,
+        - every immediate sub-LRPT of :math:`y` is an immediate sub-LRPT of :math:`z`.
+
+        :param x: A syntactic structure.
+        :return: `True` or `False`.
+        """
+
+        # direct conversion to abstract set is possible because abstract sets have no constraints.
+        x: AbstractSet = AbstractSet.from_any(x)
+
+        # direct comparison of elements is possible because they are canonically ordered by convention.
+        return self.elements == x.elements
+
+
+class AbstractTuple(SyntacticStructure):
+    r"""An abstract tuple.
+
+    Definition
+    ------------
+
+    An `abstract tuple` is a syntactic structure that models a finite (computable) tuple defined by extension.
+
+    Given any LRPT :math:`T`,
+    its `abstract tuple` is the tuple :math:`{t_0, t_1, \cdots, t_n}`
+    where :math:`t_i` denotes the immediate sub-LRPTs of :math:`T`.
+
+    Note
+    ------
+
+    The main element of the LRPT is not an information of the abstract set, i.e.: it is dropped.
+
+    Note
+    -----------
+
+    Every LRPT is an abstract tuple.
+
+    Note
+    ----------
+
+    Every LRPT of degree 0 is the empty tuple.
+
+    """
+
+    def __init__(self, lrpt: lrptl.FlexibleLabeledRootedPlaneTree):
+        super().__init__(lrpt)
+
+    @functools.cached_property
+    def cardinality(self) -> int:
+        r"""Returns the cardinality of this abstract tuple.
+
+        Note
+        ______
+
+        This is equivalent to the degree of the LRPT.
+
+        :return: an integer.
+        """
+        return len(self.elements)
+
+    @functools.cached_property
+    def elements(self) -> tuple[lrptl.LabeledRootedPlaneTree, ...]:
+        r"""Returns the elements of this abstract tuple, preserving order.
+
+        Note
+        ______
+
+        This is equivalent to the immediate subtrees of the LRPT.
+
+        :return: The elements of the tuple.
+        """
+        return self._labeled_rooted_plane_tree.immediate_subtrees
+
+    def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if `x` is an element of this tuple, `False` otherwise.
+
+        :param x: An object.
+        :return: `True` or `False`
+        """
+        return self._labeled_rooted_plane_tree.has_immediate_subtree(x)
+
+    def is_abstract_tuple_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is abstract tuple equivalent to `x`.
+
+        Definition
+        ---------------
+
+        Let :math:`x`, :math:`y` be LRPTs.
+        :math:`x` is abstract tuple equivalent to `y` if and only if:
+
+        - the degree of :math:`x` is equal to the degree of :math:`y`,
+        - :math:`x_i` is LRPT equivalent to :math:`x_i` for :math:`0 <= i < \mathrm{deg}(x)`.
 
         :param x: A syntactic structure.
         :return: `True` or `False`.
@@ -258,6 +473,8 @@ FlexibleSyntacticStructure = typing.Union[
 
 # Aliases
 
+AM = AbstractMap  # An alias for :class:`AbstractMap`.
 AOS = AbstractOrderedSet  # An alias for :class:`AbstractOrderedSet`.
 AS = AbstractSet  # An alias for :class:`AbstractSet`.
+AT = AbstractTuple  # An alias for :class:`AbstractTuple`.
 SR = SyntacticStructure  # An alias for :class:`SyntacticStructure`.
