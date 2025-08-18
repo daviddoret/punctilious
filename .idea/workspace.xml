@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="abstract set" />
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="abstract set">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -793,7 +796,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1154,10 +1157,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set" />
         <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
         <item itemvalue="Python.syntactic_structure_library" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_labeled_rooted_plane_tree.TestLabeledRootedPlaneTree.test_successor_unrank_consistency" />
       </list>
     </recent_temporary>
@@ -1180,14 +1183,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01614" summary="renaming &quot;abstract formula&quot; to &quot;labeled rooted plane tree&quot;">
-      <option name="closed" value="true" />
-      <created>1753977645194</created>
-      <option name="number" value="01614" />
-      <option name="presentableId" value="LOCAL-01614" />
-      <option name="project" value="LOCAL" />
-      <updated>1753977645194</updated>
     </task>
     <task id="LOCAL-01615" summary="renaming &quot;abstract formula&quot; to &quot;labeled rooted plane tree&quot;">
       <option name="closed" value="true" />
@@ -1573,7 +1568,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755466520819</updated>
     </task>
-    <option name="localTasksCounter" value="1663" />
+    <task id="LOCAL-01663" summary="abstract set">
+      <option name="closed" value="true" />
+      <created>1755466532270</created>
+      <option name="number" value="01663" />
+      <option name="presentableId" value="LOCAL-01663" />
+      <option name="project" value="LOCAL" />
+      <updated>1755466532270</updated>
+    </task>
+    <option name="localTasksCounter" value="1664" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
