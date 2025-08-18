@@ -175,3 +175,9 @@ class TestAbstractTuple:
         s_empty = pu.ssl.AbstractTuple(t0)
         assert not s123.is_abstract_tuple_equivalent_to(s_empty)
         assert s_empty.cardinality == 0
+
+
+class TestAbstractMap:
+
+    def test_abstract_map(self):
+        pass

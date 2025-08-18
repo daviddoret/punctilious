@@ -7,7 +7,8 @@ import typing
 
 import functools
 
-import labeled_rooted_plane_tree_library as lrptl
+import punctilious.util as util
+import punctilious.labeled_rooted_plane_tree_library as lrptl
 
 
 class SyntacticStructure:
@@ -24,6 +25,7 @@ class SyntacticStructure:
     """
 
     def __init__(self, lrpt: lrptl.FlexibleLabeledRootedPlaneTree):
+        SyntacticStructure.is_well_formed(lrpt, raise_exception_if_false=True)
         self._labeled_rooted_plane_tree = lrpt
 
     @classmethod
@@ -41,15 +43,30 @@ class SyntacticStructure:
     @classmethod
     def is_well_formed(
             cls,
-            o: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
-        r"""Check if the given LRPT object `o` is well-formed according to this syntactic structure.
+            o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
+        r"""Check if the given `o` is well-formed.
+
+        Definition
+        ------------
+        A syntactic structure or LRPT is well-formed
+        if it complies with all constraints applicable to that syntactic structure.
+
+        Note
+        -----
+        This method must be overridden in every python subclass
+        that imposes a set of constraints.
 
         If `True`, :meth:`SyntacticStructure.from_any` can be safely called on `o`.
 
-        :param o: An LRPT.
-        :return:
+        :param o: A syntactic structure or an LRPT.
+        :param raise_exception_if_false:
+        :return: `True` or `False`.
         """
-        o: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+
+        # this syntactic structure has no constraint,
+        # check only python type compatibility with SyntacticStructure.
+        if not isinstance(o, SyntacticStructure):
+            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
         return True
 
     @property
@@ -91,6 +108,7 @@ class AbstractOrderedSet(SyntacticStructure):
     """
 
     def __init__(self, lrpt: lrptl.FlexibleLabeledRootedPlaneTree):
+        AbstractOrderedSet.is_well_formed(lrpt, raise_exception_if_false=True)
         super().__init__(lrpt)
 
     @functools.cached_property
@@ -127,6 +145,16 @@ class AbstractOrderedSet(SyntacticStructure):
                 unique_elements = unique_elements + (sub_lrpt,)
         return unique_elements
 
+    def get_element_by_index(self, i: int) -> lrptl.LabeledRootedPlaneTree:
+        if not 0 < i < self.cardinality:
+            raise util.PunctiliousException("Index `i` is out of range of this abstract ordered set.")
+        return self.elements[i]
+
+    def get_element_index(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> int:
+        if not self.has_element(x):
+            raise util.PunctiliousException("`x` is not an element of this abstract ordered set.", x=x, poset=self)
+        return self.labeled_rooted_plane_tree.index(x)
+
     def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
         r"""Returns `True` if `x` is an element of this set, `False` otherwise.
 
@@ -159,6 +187,27 @@ class AbstractOrderedSet(SyntacticStructure):
         # direct comparison of elements is possible because order is considered.
         return self.elements == x.elements
 
+    @classmethod
+    def is_well_formed(
+            cls,
+            o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
+        r"""Check if the given `o` is a well-formed abstract ordered set.
+
+        But because every LRPT is an abstract ordered set, this method always returns `True`.
+
+        If `True`, :meth:`AbstractOrderedSet.from_any` can be safely called on `o`.
+
+        :param o: A syntactic structure or an LRPT.
+        :param raise_exception_if_false:
+        :return: `True` or `False`.
+        """
+
+        # this syntactic structure has no constraint,
+        # check only python type compatibility with SyntacticStructure.
+        if not isinstance(o, SyntacticStructure):
+            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+        return True
+
 
 class AbstractMap(SyntacticStructure):
     r"""An abstract map.
@@ -170,104 +219,141 @@ class AbstractMap(SyntacticStructure):
 
     Given any LRPT :math:`T` with the following constraints:
      - its degree is at least 2,
-     - its first sub-LRPT is an abstract ordered set of cardinality :math:`n`,
-     - its second sub-LRPT is an abstract tuple of cardinality :math:`n`,
-    its `abstract map` is the map :math:`
-    where :math:`t_i` denotes the immediate sub-LRPTs of :math:`T`.
+     - its first sub-LRPT is an abstract ordered set of cardinality :math:`n`, denoted as the domain,
+     - its second sub-LRPT is an abstract tuple of cardinality :math:`n`, denoted as the codomain,
+     - the cardinality of the domain is equal to the cardinality of the codomain,
+    its `abstract map` is the map that to the :math:`i`-th element of the domain,
+    maps the :math:`i`-th element of the codomain,
+    and that is otherwise undefined.
 
     Note
     ------
 
-    The main element of the LRPT is not an information of the abstract set, i.e.: it is dropped.
-
-    The order of immediate sub-LRPTs in the LRPT is not an information of the abstract set, i.e.: it is dropped.
+    The main element of the LRPT and the main element of the first two immediate sub-LRPTs are not an information of the abstract map, i.e.: it is dropped.
+    Any immediate sub-LRPT of the LRPT beyond 2 is not an information of the abstract map, i.e. it is dropped.
 
     Note
     -----------
 
-    Every LRPT is an abstract set.
+    Every LRPT of degree > 1 is an abstract map.
 
     Note
     ----------
 
-    Every LRPT of degree 0 is the empty set.
+    If the domain is the empty ordered set, it is the empty map.
 
     """
 
     def __init__(self, lrpt: lrptl.FlexibleLabeledRootedPlaneTree):
+        lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree(lrpt)
+        AbstractMap.is_well_formed(lrpt, raise_exception_if_false=True)
         super().__init__(lrpt)
 
     @functools.cached_property
-    def cardinality(self) -> int:
-        r"""Returns the cardinality of this abstract set.
-
-        Note
-        ______
-
-        This is equal to the number of unique immediate sub-LRPTs
-        in the LRPT of this syntactic structure.
-
-        This is equivalent to the degree of the LRPT
-        if its immediate sub-LRPTs are unique.
-
-        :return: an integer.
-        """
-        return len(self.elements)
+    def codomain(self) -> AbstractTuple:
+        return AbstractTuple(self._labeled_rooted_plane_tree.immediate_subtrees[1])
 
     @functools.cached_property
-    def elements(self) -> tuple[lrptl.LabeledRootedPlaneTree, ...]:
-        r"""Returns the elements of this abstract set.
+    def domain(self) -> AbstractOrderedSet:
+        return AbstractOrderedSet(self._labeled_rooted_plane_tree.immediate_subtrees[0])
 
-        Note
-        ______
+    def get_value(self, x: FlexibleSyntacticStructure) -> SyntacticStructure:
+        r"""If this LRPT is an abstract-map, returns the image `x` under this map.
 
-        This is equivalent to the unique and immediate subtrees of the LRPT.
-
-        Note
-        ------
-
-        Even though sets are not ordered, by convention the elements of an abstract set
-        are ordered by LRPT canonical order, facilitating equivalence checking.
-
-        :return: The elements of the set.
+        :param x: a preimage element.
+        :return: the image of `t` under this map.
         """
-        unique_elements: tuple[lrptl.LabeledRootedPlaneTree, ...] = ()
-        for sub_lrpt in self.labeled_rooted_plane_tree.iterate_immediate_subtrees():
-            if sub_lrpt not in unique_elements:
-                unique_elements = unique_elements + (sub_lrpt,)
-        # by convention, returns the elements in canonical lrpt order
-        unique_elements = tuple(sorted(unique_elements))
-        return unique_elements
+        x: SyntacticStructure = SyntacticStructure.from_any(x)
+        if not self.domain.has_element(x):
+            raise util.PunctiliousException("`x` is not an element of the domain.", x=x, domain=domain)
+        else:
+            i: int = self.domain.get_element_index(x)
+            return self.codomain.get_element_by_index[i]
 
-    def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
-        r"""Returns `True` if `x` is an element of this set, `False` otherwise.
+    def has_domain_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if `x` is an element of this abstract map domain, `False` otherwise.
 
         :param x: An object.
         :return: `True` or `False`
         """
-        return self._labeled_rooted_plane_tree.has_immediate_subtree(x)
+        return self.domain.has_element(x)
 
-    def is_abstract_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
-        r"""Check if this syntactic structure is abstract set equivalent to `x`.
+    def is_abstract_map_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is abstract map equivalent to `x`.
 
         Definition
         ---------------
 
         Let :math:`x`, :math:`y` be LRPTs.
-        :math:`x` is abstract set equivalent to `y` if and only if:
+        :math:`x` is abstract map equivalent to `y` if and only if:
 
-        - every immediate sub-LRPT of :math:`x` is an immediate sub-LRPT of :math:`y`,
-        - every immediate sub-LRPT of :math:`y` is an immediate sub-LRPT of :math:`z`.
+        - :math:`x` and :math:`y` are abstract maps,
+        - the domain of :math:`x` is abstract ordered set equivalent to the domain of :math:`y`,
+        - the codomain of :math:`x` is abstract tuple equivalent to the codomain of :math:`y`.
 
         :param x: A syntactic structure.
         :return: `True` or `False`.
         """
 
         # direct conversion to abstract set is possible because abstract sets have no constraints.
+        x = 1 / 0
         x: AbstractSet = AbstractSet.from_any(x)
 
         # direct comparison of elements is possible because they are canonically ordered by convention.
         return self.elements == x.elements
+
+    @classmethod
+    def is_well_formed(
+            cls,
+            o: FlexibleSyntacticStructure,
+            raise_exception_if_false: bool = False) -> bool:
+        r"""Check if the given `o` is well-formed,
+        that if it complies with all constraints applicable to this syntactic structure.
+
+        If `True`, :meth:`SyntacticStructure.from_any` can be safely called on `o`.
+
+        :param o: A syntactic structure or an LRPT.
+        :param raise_exception_if_false:
+        :return: `True` or `False`.
+        """
+
+        # this syntactic structure has no constraint,
+        # check only python type compatibility with SyntacticStructure.
+        if isinstance(o, AbstractMap):
+            return True
+        if isinstance(o, SyntacticStructure):
+            lrpt: lrptl.LabeledRootedPlaneTree = o.labeled_rooted_plane_tree
+        else:
+            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+        if lrpt.degree < 2:
+            if raise_exception_if_false:
+                raise util.PunctiliousException("deg(T) < 2.", deg_t=lrpt.degree,
+                                                t=lrpt)
+            else:
+                return False
+        if not AbstractOrderedSet.is_well_formed(lrpt.immediate_subtrees[0]):
+            if raise_exception_if_false:
+                raise util.PunctiliousException("First subtree is not a well-formed abstract ordered set.",
+                                                first_subtree=lrpt.immediate_subtrees[0])
+            else:
+                return False
+        if not AbstractTuple.is_well_formed(lrpt.immediate_subtrees[1]):
+            if raise_exception_if_false:
+                raise util.PunctiliousException("Second subtree is not a well-formed abstract ordered set.",
+                                                second_subtree=lrpt.immediate_subtrees[1])
+            else:
+                return False
+        domain: AbstractOrderedSet = AbstractOrderedSet(lrpt.immediate_subtrees[0])
+        codomain: AbstractTuple = AbstractTuple(lrpt.immediate_subtrees[1])
+        if domain.cardinality != codomain.cardinality:
+            if raise_exception_if_false:
+                raise util.PunctiliousException(
+                    "The cardinality of the domain is not equal to the cardinality of the codomain.",
+                    domain=domain, codomain=codomain)
+            else:
+                return False
+        # The syntactic structure satisfies all constraints.
+        return True
 
 
 class AbstractSet(SyntacticStructure):
@@ -302,6 +388,7 @@ class AbstractSet(SyntacticStructure):
     """
 
     def __init__(self, lrpt: lrptl.FlexibleLabeledRootedPlaneTree):
+        AbstractSet.is_well_formed(lrpt, raise_exception_if_false=True)
         super().__init__(lrpt)
 
     @functools.cached_property
@@ -376,6 +463,25 @@ class AbstractSet(SyntacticStructure):
         # direct comparison of elements is possible because they are canonically ordered by convention.
         return self.elements == x.elements
 
+    @classmethod
+    def is_well_formed(
+            cls, o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
+        r"""Check if the given `o` is a well-formed abstract set.
+
+        But because every LRPT is an abstract set, this method always returns `True`.
+
+        If `True`, :meth:`AbstractSet.from_any` can be safely called on `o`.
+
+        :param o: A syntactic structure or an LRPT.
+        :return: `True` or `False`.
+        """
+
+        # this syntactic structure has no constraint,
+        # check only python type compatibility with SyntacticStructure.
+        if not isinstance(o, SyntacticStructure):
+            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+        return True
+
 
 class AbstractTuple(SyntacticStructure):
     r"""An abstract tuple.
@@ -407,6 +513,7 @@ class AbstractTuple(SyntacticStructure):
     """
 
     def __init__(self, lrpt: lrptl.FlexibleLabeledRootedPlaneTree):
+        AbstractTuple.is_well_formed(lrpt, raise_exception_if_false=True)
         super().__init__(lrpt)
 
     @functools.cached_property
@@ -434,6 +541,11 @@ class AbstractTuple(SyntacticStructure):
         :return: The elements of the tuple.
         """
         return self._labeled_rooted_plane_tree.immediate_subtrees
+
+    def get_element_by_index(self, i: int) -> lrptl.LabeledRootedPlaneTree:
+        if not 0 < i < self.cardinality:
+            raise util.PunctiliousException("Index `i` is out of range of this abstract tuple.")
+        return self.elements[i]
 
     def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
         r"""Returns `True` if `x` is an element of this tuple, `False` otherwise.
@@ -464,6 +576,26 @@ class AbstractTuple(SyntacticStructure):
 
         # direct comparison of elements is possible because they are canonically ordered by convention.
         return self.elements == x.elements
+
+    @classmethod
+    def is_well_formed(
+            cls,
+            o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
+        r"""Check if the given `o` is a well-formed abstract tuple.
+
+        But because every LRPT is an abstract tuple, this method always returns `True`.
+
+        If `True`, :meth:`AbstractTuple.from_any` can be safely called on `o`.
+
+        :param o: A syntactic structure or an LRPT.
+        :return: `True` or `False`.
+        """
+
+        # this syntactic structure has no constraint,
+        # check only python type compatibility with SyntacticStructure.
+        if not isinstance(o, SyntacticStructure):
+            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+        return True
 
 
 # Flexible types to facilitate data validation
