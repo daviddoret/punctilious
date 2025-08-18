@@ -1165,9 +1165,9 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
             cls._cache[hash_value] = o
             return o
 
-    def concatenate_with(self, x) -> NaturalNumber0Sequence:
-        x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
-        return concatenate_natural_number_0_sequences(self, x, )
+    # def concatenate_with(self, x) -> NaturalNumber0Sequence:
+    #    x: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(x)
+    #    return concatenate_natural_number_0_sequences(self, x, )
 
     def concatenate_with(self, *s: FlexibleNaturalNumber0Sequence) -> NaturalNumber0Sequence:
         r"""Concatenates this :class:`NaturalNumberSequence` with :class:`NaturalNumberSequence` `s`,

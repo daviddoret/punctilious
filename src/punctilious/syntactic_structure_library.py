@@ -8,8 +8,6 @@ import typing
 import functools
 
 import labeled_rooted_plane_tree_library as lrptl
-from punctilious.labeled_rooted_plane_tree_library import LabeledRootedPlaneTree
-from punctilious.transformation_library import AbstractOrderedSet
 
 
 class SyntacticStructure:

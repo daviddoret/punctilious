@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="remove LRPT cache">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="AbstractOrderedSet">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -491,6 +491,7 @@
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_select_sub_rooted_plane_tree_from_path_sequence.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_successor_unrank_consistency.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_trivial_tree.executor": "Run",
+    "Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
     "Python tests.pytest for test_ternary_boolean.TestTernaryBoolead.test_ternary_boolean.executor": "Run",
@@ -1185,14 +1186,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01616" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1754083629975</created>
-      <option name="number" value="01616" />
-      <option name="presentableId" value="LOCAL-01616" />
-      <option name="project" value="LOCAL" />
-      <updated>1754083629975</updated>
-    </task>
     <task id="LOCAL-01617" summary="cleanup">
       <option name="closed" value="true" />
       <created>1754084677118</created>
@@ -1577,7 +1570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755501162501</updated>
     </task>
-    <option name="localTasksCounter" value="1665" />
+    <task id="LOCAL-01665" summary="AbstractOrderedSet">
+      <option name="closed" value="true" />
+      <created>1755502340249</created>
+      <option name="number" value="01665" />
+      <option name="presentableId" value="LOCAL-01665" />
+      <option name="project" value="LOCAL" />
+      <updated>1755502340249</updated>
+    </task>
+    <option name="localTasksCounter" value="1666" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1630,7 +1631,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="nn0s: refined-godel-number-order" />
     <MESSAGE value="nn0 pair" />
     <MESSAGE value="cleanup natural-number-0" />
     <MESSAGE value="least_element" />
@@ -1655,7 +1655,8 @@
     <MESSAGE value="RSO" />
     <MESSAGE value="abstract set" />
     <MESSAGE value="remove LRPT cache" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove LRPT cache" />
+    <MESSAGE value="AbstractOrderedSet" />
+    <option name="LAST_COMMIT_MESSAGE" value="AbstractOrderedSet" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
