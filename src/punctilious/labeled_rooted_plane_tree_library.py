@@ -311,8 +311,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     def __init__(self, rpt: rptl.FlexibleRootedPlaneTree, sequence: nn0sl.FlexibleNaturalNumber0Sequence):
         super(LabeledRootedPlaneTree, self).__init__()
-        self._is_abstract_map: bool | None = None
-        self._is_abstract_inference_rule: bool | None = None
 
     def __new__(cls, rpt: rptl.FlexibleRootedPlaneTree, sequence: nn0sl.FlexibleNaturalNumber0Sequence):
         rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_any(rpt)
@@ -392,47 +390,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return self.immediate_subtrees[0]
         else:
             raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
-
-    @classmethod
-    def abstract_map_from_preimage_and_image(
-            cls,
-            n: int,
-            p: FlexibleLabeledRootedPlaneTree,
-            i: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
-        r"""Declares a new abstract-map.
-
-        :param n: The main-element of the abstract-map.
-        :param p: The preimage of the abstract-map.
-        :param i: The image of the abstract-map.
-        :return: The resulting abstract-map.
-        """
-        return LabeledRootedPlaneTree.from_immediate_subtrees(n=n, s=(p, i,))
-
-    @functools.cached_property
-    def abstract_map_preimage_sequence(self) -> LabeledRootedPlaneTree:
-        r"""If this LRPT is an abstract-map, returns its preimage sequence.
-
-        See :attr:`LabeledRootedPlaneTree.is_abstract_map` for a detailed description of abstract-maps.
-
-        :return: the preimage sequence of this map.
-        """
-        if self.is_abstract_map:
-            return self.immediate_subtrees[0]
-        else:
-            raise util.PunctiliousException("This LRPT is not an abstract-map.")
-
-    @functools.cached_property
-    def abstract_map_image_sequence(self) -> LabeledRootedPlaneTree:
-        r"""If this LRPT is an abstract-map, returns its image sequence.
-
-        See :attr:`LabeledRootedPlaneTree.is_abstract_map` for a detailed description of abstract-maps.
-
-        :return: the image sequence of this map.
-        """
-        if self.is_abstract_map:
-            return self.immediate_subtrees[1]
-        else:
-            raise util.PunctiliousException("This LRPT is not an abstract-map.")
 
     @functools.cached_property
     def degree(self) -> int:
@@ -877,10 +834,8 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         v: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(v)
-        if not v.is_abstract_map:
-            raise util.PunctiliousException("`v` is not an abstract-map", v=v, t=t,
-                                            this_labeled_rooted_plane_tree=self)
         psi: LabeledRootedPlaneTree = self.substitute_subtrees_with_map(m=v)
+        print(1 / 0)
         return psi.is_labeled_rooted_plane_tree_equivalent_to(t)
 
     @functools.cached_property
@@ -1091,46 +1046,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return self.rooted_plane_tree.represent_as_function(
             connectives=connectives)
 
-    def represent_as_map_extension(self, connectives: tuple | None = None) -> str:
-        r"""Returns a string representation of the LRPT using map notation.
-
-        By default, connectives are represented by their respective values
-        in the :attr:`LabeledRootedPlaneTree.natural_numbers_sequence`.
-
-        :param connectives: A tuple of connectives of length equal to the length of the :attr:`LabeledRootedPlaneTree.natural_numbers_sequence`. Default: `None`.
-
-        :return: A string representation of this LRPT.
-
-        """
-        if connectives is None:
-            connectives = self.natural_number_sequence
-        else:
-            if len(connectives) != len(self.natural_number_sequence):
-                raise util.PunctiliousException(
-                    "The length of the connectives tuple is not equal to the length "
-                    "of the LRPT's natural-number-sequence.",
-                    connectives_length=len(connectives),
-                    natural_number_sequence_length=self.natural_number_sequence.length,
-                    connectives=connectives,
-                    natural_number_sequence=self.natural_number_sequence,
-                    labeled_rooted_plane_tree=self
-                )
-        output = f"{{ "
-        first = True
-        for i, preimage, j, image in zip(
-                range(1, 1 + self.abstract_map_preimage_sequence.degree),
-                self.abstract_map_preimage_sequence.immediate_subtrees,
-                range(1 + self.abstract_map_preimage_sequence.degree,
-                      1 + 2 * self.abstract_map_preimage_sequence.degree),
-                self.abstract_map_image_sequence.immediate_subtrees):
-            if not first:
-                output = f"{output}, "
-            output = f"{output}{preimage} ⟼ {image}"
-            first = False
-        output = f"{output} }}"
-
-        return output
-
     @functools.cached_property
     def rooted_plane_tree(self) -> rptl.RootedPlaneTree:
         r"""The :class:`RootedPlaneTree` component of this LRPT.
@@ -1273,8 +1188,11 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
 # Flexible types to facilitate data validation
 
 FlexibleLabeledRootedPlaneTree = typing.Union[
-    LabeledRootedPlaneTree, tuple[
-        rptl.FlexibleRootedPlaneTree, nn0sl.FlexibleNaturalNumber0Sequence], collections.abc.Iterator, collections.abc.Generator, None]
+    LabeledRootedPlaneTree,  # already typed as LRPT.
+    tuple[rptl.FlexibleRootedPlaneTree, nn0sl.FlexibleNaturalNumber0Sequence],  # the base components of an LRPT.
+    collections.abc.Iterator,
+    collections.abc.Generator,
+    None]
 
 # Aliases
 

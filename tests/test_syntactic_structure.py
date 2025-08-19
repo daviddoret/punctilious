@@ -74,6 +74,8 @@ class TestAbstractOrderedSet:
         assert not s123.is_abstract_ordered_set_equivalent_to(s_empty)
         assert s_empty.cardinality == 0
 
+        pass
+
 
 class TestAbstractSet:
 
@@ -135,6 +137,8 @@ class TestAbstractSet:
         s_empty = pu.ssl.AbstractSet.from_lrpt(t0)
         assert not s123.is_abstract_set_equivalent_to(s_empty)
         assert s_empty.cardinality == 0
+
+        pass
 
 
 class TestAbstractTuple:
@@ -198,6 +202,8 @@ class TestAbstractTuple:
         assert not s123.is_abstract_tuple_equivalent_to(s_empty)
         assert s_empty.cardinality == 0
 
+        pass
+
 
 class TestAbstractMap:
 
@@ -215,3 +221,4 @@ class TestAbstractMap:
         assert m1.get_value(t1) == t5
         assert m1.get_value(t4) == t1
         assert not m1.has_domain_element(t2)
+        pass

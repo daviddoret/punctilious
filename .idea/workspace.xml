@@ -492,10 +492,10 @@
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_select_sub_rooted_plane_tree_from_path_sequence.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_successor_unrank_consistency.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_trivial_tree.executor": "Run",
-    "Python tests.pytest for test_syntactic_structure.TestAbstractMap.test_abstract_map.executor": "Run",
+    "Python tests.pytest for test_syntactic_structure.TestAbstractMap.test_abstract_map.executor": "Debug",
     "Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.executor": "Run",
-    "Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set.executor": "Run",
-    "Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set.executor": "Run",
+    "Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set.executor": "Debug",
+    "Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set.executor": "Debug",
     "Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
@@ -803,7 +803,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestAbstractMap.test_abstract_map">
+  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1051,23 +1051,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_syntactic_structure.TestAbstractOrderedSet" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_syntactic_structure.TestAbstractOrderedSet&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1085,7 +1068,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1098,7 +1081,24 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure&quot;" />
+      <option name="_new_target" value="&quot;test_syntactic_structure.TestAbstractSet.test_abstract_set&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_syntactic_structure.TestAbstractTuple.test_abstract_tuple&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1149,9 +1149,9 @@
       <item itemvalue="Python tests.pytest for test_minimal_logic_1.TestPL5.test_pl5_with_auto_derivation" />
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractMap.test_abstract_map" />
-      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set" />
-      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" />
+      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set" />
+      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" />
       <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
@@ -1159,11 +1159,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" />
+        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set" />
+        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractMap.test_abstract_map" />
         <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
-        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set" />
-        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet" />
-        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" />
       </list>
     </recent_temporary>
   </component>
@@ -1185,14 +1185,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01622" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1754114512450</created>
-      <option name="number" value="01622" />
-      <option name="presentableId" value="LOCAL-01622" />
-      <option name="project" value="LOCAL" />
-      <updated>1754114512450</updated>
     </task>
     <task id="LOCAL-01623" summary="cleanup">
       <option name="closed" value="true" />
@@ -1578,7 +1570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755585643525</updated>
     </task>
-    <option name="localTasksCounter" value="1671" />
+    <task id="LOCAL-01671" summary="SyntacticStructure inherits from LRPT">
+      <option name="closed" value="true" />
+      <created>1755596822542</created>
+      <option name="number" value="01671" />
+      <option name="presentableId" value="LOCAL-01671" />
+      <option name="project" value="LOCAL" />
+      <updated>1755596822543</updated>
+    </task>
+    <option name="localTasksCounter" value="1672" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1771,6 +1771,21 @@
           <url>file://$PROJECT_DIR$/sandbox/test1.py</url>
           <line>79</line>
           <option name="timeStamp" value="504" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
+          <line>222</line>
+          <option name="timeStamp" value="513" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
+          <line>76</line>
+          <option name="timeStamp" value="514" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
+          <line>140</line>
+          <option name="timeStamp" value="515" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
