@@ -435,42 +435,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             raise util.PunctiliousException("This LRPT is not an abstract-map.")
 
     @functools.cached_property
-    def abstract_set_arity(self) -> int:
-        r"""Returns the arity of this abstract-set.
-
-        Note
-        ______
-
-        This is equivalent to the degree of the LRPT.
-
-        See also
-        _________
-
-        Cf.: :prop:`LabeledRootedPlaneTree.is_abstract_set`.
-
-        :return: `True` or `False`.
-        """
-        return self.degree
-
-    @functools.cached_property
-    def abstract_set_elements(self) -> tuple[LabeledRootedPlaneTree, ...]:
-        r"""Returns the elements of this abstract-set.
-
-        Note
-        ______
-
-        This is equivalent to the immediate subtrees of the LRPT.
-
-        See also
-        _________
-
-        Cf.: :prop:`LabeledRootedPlaneTree.is_abstract_set`.
-
-        :return: A tuple of LRPTs.
-        """
-        return self.immediate_subtrees
-
-    @functools.cached_property
     def degree(self) -> int:
         r"""Returns the degree of this LRPT.
 
@@ -666,21 +630,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         lrpt: LabeledRootedPlaneTree = cls(rpt=t, sequence=s)
         return lrpt
 
-    def get_abstract_map_value(self, t: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
-        r"""If this LRPT is an abstract-map, returns the image `t` under this map.
-
-        See :attr:`LabeledRootedPlaneTree.is_abstract_map` for a detailed description of abstract-maps.
-
-        :param t: a preimage element.
-        :return: the image of `t` under this map.
-        """
-        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
-        if self.is_abstract_map:
-            i: int = self.abstract_map_preimage_sequence.get_immediate_subtree_index(t)
-            return self.abstract_map_image_sequence.immediate_subtrees[i]
-        else:
-            raise util.PunctiliousException("This LRPT is not an abstract-map.")
-
     def get_immediate_subtree_index(self, t: FlexibleLabeledRootedPlaneTree):
         r"""Returns the 0-based index position of `t` in this LRPT immediate subtrees.
 
@@ -733,16 +682,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
                         lrpt=lrpt)
                 lrpt: LabeledRootedPlaneTree = lrpt.immediate_subtrees[j]
             return lrpt
-
-    def has_abstract_set_element(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
-        r"""Returns `True` if `t` is an element of this abstract-set, `False` otherwise.
-
-        Cf. :prop:`LabeledRootedPlaneTree.is_abstract_set`.
-
-        :param t: An abstract-set.
-        :return: `True` or `False`
-        """
-        return self.has_immediate_subtree(t)
 
     def has_immediate_subtree(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
         r"""Returns `True` if `t` is a subtree of this LRPT, `False` otherwise.
@@ -826,40 +765,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return True
 
     @functools.cached_property
-    def is_abstract_map(self) -> bool:
-        r"""Returns `True` if this LRPT is an abstract-map, `False` otherwise.
-
-        Intuitive definition: abstract-map
-        ______________________________________
-
-        Intuitively, an abstract-map is a LRPT that is structurally
-         equivalent to a finite (computable) map.
-
-        Syntactical definition
-        _________________________________
-
-        An abstract map :math:`M` is an LRPT such that:
-        - its degree equal 2,
-        - its first subtree, denoted as the preimage, is a canonical abstract set,
-        - its second subtree, denoted as the image, has equal degree with its first subtree.
-
-        Note
-        _____
-
-        The following properties and methods are available when a LRPT is an abstract-map:
-
-        - :attr:`LabeledRootedPlaneTree.abstract_map_preimage`
-        - :attr:`LabeledRootedPlaneTree.abstract_map_image`
-        - :meth:`LabeledRootedPlaneTree.get_abstract_map_value`
-
-        :return: `True` or `False`.
-
-        """
-        return self.degree == 2 and \
-            self.immediate_subtrees[0].degree == self.immediate_subtrees[1].degree and \
-            self.immediate_subtrees[0].is_canonical_abstract_set
-
-    @functools.cached_property
     def is_abstract_inference_rule(self) -> bool:
         r"""Returns `True` if this LRPT is an abstract-inference-rule, `False` otherwise.
 
@@ -902,53 +807,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             self._is_abstract_inference_rule = \
                 self.degree == 3
         return self._is_abstract_inference_rule
-
-    @functools.cached_property
-    def is_abstract_set(self) -> bool:
-        r"""Returns `True` if this LRPT is an abstract-set, `False` otherwise.
-
-        Intuitive definition: abstract-set
-        ______________________________________
-
-        Intuitively, an abstract-set is an LRPT that is structurally
-         equivalent to a finite (computable) mathematical set.
-
-        Syntactic definition: abstract-set
-        ___________________________________
-
-        A finite (computable) abstract-set :math:`S` if and only if it is an LRPT.
-
-        Syntactic definition: canonical abstract-set
-        ______________________________________________
-
-        An abstract-set is canonical if and only if:
-
-        - its immediate subtrees are unique,
-        - its immediate subtrees are canonically ordered.
-
-        Note
-        _____
-
-        The following properties and methods are available when a LRPT is an abstract-map:
-
-        - :attr:`LabeledRootedPlaneTree.canonical_abstract_set`
-        - :attr:`LabeledRootedPlaneTree.has_abstract_set_element`
-        - :attr:`LabeledRootedPlaneTree.is_abstract_set_element_of`
-
-        :return: `True` or `False`.
-
-        """
-        return True
-
-    def is_abstract_set_element_of(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
-        r"""Returns `True` if this LRPT is an element of abstract-set `t`, `False` otherwise.
-
-        Cf. :prop:`LabeledRootedPlaneTree.is_abstract_set`.
-
-        :param t: An abstract-set.
-        :return: `True` or `False`
-        """
-        return self.is_immediate_subtree_of(t)
 
     @functools.cached_property
     def is_canonical_abstract_set(self) -> bool:

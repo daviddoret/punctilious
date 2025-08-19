@@ -202,4 +202,16 @@ class TestAbstractTuple:
 class TestAbstractMap:
 
     def test_abstract_map(self):
-        pass
+        # generate some basic elements to play with
+        t1 = pu.lrptl.LRPT.from_tree_of_integer_tuple_pairs(1)
+        t2 = pu.lrptl.LRPT.from_tree_of_integer_tuple_pairs(2)
+        t3 = pu.lrptl.LRPT.from_tree_of_integer_tuple_pairs(3)
+        t4 = pu.lrptl.LRPT.from_tree_of_integer_tuple_pairs(4)
+        t5 = pu.lrptl.LRPT.from_tree_of_integer_tuple_pairs(5)
+        domain = pu.ssl.AbstractOrderedSet.from_elements(t3, t1, t4)
+        codomain = pu.ssl.AbstractTuple.from_elements(t5, t5, t1)
+        m1 = pu.ssl.AbstractMap.from_domain_and_codomain(domain, codomain)
+        assert m1.get_value(t3) == t5
+        assert m1.get_value(t1) == t5
+        assert m1.get_value(t4) == t1
+        assert not m1.has_domain_element(t2)

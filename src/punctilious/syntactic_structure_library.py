@@ -25,6 +25,16 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
     that represents a mathematical object,
     but that is independent of the actual symbols used to represent it.
 
+    Implementation
+    ---------------
+
+    Syntactic structure python classes inherit from LRPT.
+    Given an LRPT `x` that satisfies the required constraints,
+    the corresponding syntactic structure can be re-instantiated
+    as a syntactic structure using SomeSyntacticStructure.from_lrpt(x).
+    This will create a new object typed as SomeSyntacticStructure,
+    giving access to the properties and methods of SomeSyntacticStructure.
+
     """
 
     def __init__(self,
@@ -293,11 +303,35 @@ class AbstractMap(SyntacticStructure):
 
     @functools.cached_property
     def codomain(self) -> AbstractTuple:
-        return AbstractTuple(self._labeled_rooted_plane_tree.immediate_subtrees[1])
+        if isinstance(self.immediate_subtrees[1], AbstractTuple):
+            # the codomain is already of type AbstractTuple, no need to re-instantiate it.
+            codomain: AbstractTuple = self.immediate_subtrees[1]
+            return codomain
+        else:
+            # the codomain is not of type AbstractTuple, it must be re-instantiated.
+            return AbstractTuple.from_lrpt(self.immediate_subtrees[1])
 
     @functools.cached_property
     def domain(self) -> AbstractOrderedSet:
-        return AbstractOrderedSet(self._labeled_rooted_plane_tree.immediate_subtrees[0])
+        if isinstance(self.immediate_subtrees[1], AbstractOrderedSet):
+            # the codomain is already of type AbstractOrderedSet, no need to re-instantiate it.
+            domain: AbstractOrderedSet = self.immediate_subtrees[0]
+            return domain
+        else:
+            # the codomain is not of type AbstractTuple, it must be re-instantiated.
+            return AbstractOrderedSet.from_lrpt(self.immediate_subtrees[0])
+
+    @classmethod
+    def from_domain_and_codomain(cls,
+                                 domain: lrptl.FlexibleLabeledRootedPlaneTree,
+                                 codomain: lrptl.FlexibleLabeledRootedPlaneTree,
+                                 n: int = 0
+                                 ) -> AbstractMap:
+        if n is None:
+            n: int = 0  # by convention, 0 is the default main element.
+        else:
+            n: int = int(n)
+        return cls.from_immediate_subtrees(n=n, s=(domain, codomain,))
 
     def get_value(self, x: FlexibleSyntacticStructure) -> SyntacticStructure:
         r"""If this LRPT is an abstract-map, returns the image `x` under this map.
@@ -310,7 +344,7 @@ class AbstractMap(SyntacticStructure):
             raise util.PunctiliousException("`x` is not an element of the domain.", x=x, domain=domain)
         else:
             i: int = self.domain.get_element_index(x)
-            return self.codomain.get_element_by_index[i]
+            return self.codomain.get_element_by_index(i)
 
     def has_domain_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
         r"""Returns `True` if `x` is an element of this abstract map domain, `False` otherwise.
@@ -337,12 +371,16 @@ class AbstractMap(SyntacticStructure):
         :return: `True` or `False`.
         """
 
-        # direct conversion to abstract set is possible because abstract sets have no constraints.
-        x = 1 / 0
-        x: AbstractSet = AbstractSet.from_any(x)
-
-        # direct comparison of elements is possible because they are canonically ordered by convention.
-        return self.elements == x.elements
+        x: lrptl.LRPT = lrptl.LRPT.from_any(x)
+        if not AbstractMap.is_well_formed(x, raise_exception_if_false=False):
+            return False
+        else:
+            x: AbstractMap = AbstractMap.from_any(x)
+            if not self.domain.is_abstract_ordered_set_equivalent_to(x.domain):
+                return False
+            if not self.codomain.is_abstract_tuple_equivalent_to(x.codomain):
+                return False
+            return True
 
     @classmethod
     def is_well_formed(
@@ -363,10 +401,7 @@ class AbstractMap(SyntacticStructure):
         # check only python type compatibility with SyntacticStructure.
         if isinstance(o, AbstractMap):
             return True
-        if isinstance(o, SyntacticStructure):
-            lrpt: lrptl.LabeledRootedPlaneTree = o.labeled_rooted_plane_tree
-        else:
-            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+        lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
         if lrpt.degree < 2:
             if raise_exception_if_false:
                 raise util.PunctiliousException("deg(T) < 2.", deg_t=lrpt.degree,
@@ -628,8 +663,9 @@ class AbstractTuple(SyntacticStructure):
         return cls.from_immediate_subtrees(n=n, s=elements)
 
     def get_element_by_index(self, i: int) -> lrptl.LabeledRootedPlaneTree:
-        if not 0 < i < self.cardinality:
-            raise util.PunctiliousException("Index `i` is out of range of this abstract tuple.")
+        if i < 0 or i >= self.cardinality:
+            raise util.PunctiliousException("Index `i` is out of range of this abstract tuple `t`.", i=i,
+                                            degree_of_t=self.degree, t=self)
         return self.elements[i]
 
     def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
