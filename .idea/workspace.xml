@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="AbstractMap">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="SyntacticStructure inherits from LRPT">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO/TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/TODO/TODO.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/transformation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/transformation_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_map.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_map.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_abstract_set.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_abstract_set.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -807,7 +801,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set">
+  <component name="RunManager" selected="Python tests.pytest in test_syntactic_structure.py">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1072,23 +1066,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_syntactic_structure.TestAbstractTuple.test_abstract_tuple&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1141,6 +1118,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_syntactic_structure.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_syntactic_structure.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -1154,20 +1148,20 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set" />
-      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" />
       <item itemvalue="Python tests.pytest in test_labeled_rooted_plane_tree.py" />
+      <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet.test_abstract_ordered_set" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedSet" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" />
         <item itemvalue="Python tests.pytest in test_labeled_rooted_plane_tree.py" />
-        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" />
       </list>
     </recent_temporary>
   </component>
@@ -1189,14 +1183,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01620" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1754085066262</created>
-      <option name="number" value="01620" />
-      <option name="presentableId" value="LOCAL-01620" />
-      <option name="project" value="LOCAL" />
-      <updated>1754085066262</updated>
     </task>
     <task id="LOCAL-01621" summary="cleanup">
       <option name="closed" value="true" />
@@ -1582,7 +1568,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755542349418</updated>
     </task>
-    <option name="localTasksCounter" value="1669" />
+    <task id="LOCAL-01669" summary="SyntacticStructure inherits from LRPT">
+      <option name="closed" value="true" />
+      <created>1755547917922</created>
+      <option name="number" value="01669" />
+      <option name="presentableId" value="LOCAL-01669" />
+      <option name="project" value="LOCAL" />
+      <updated>1755547917922</updated>
+    </task>
+    <option name="localTasksCounter" value="1670" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1635,7 +1629,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="least_element" />
     <MESSAGE value="labeled rooted plane trees" />
     <MESSAGE value="clean up in prime_number_library. bug correction caused by implicit conversion to float." />
     <MESSAGE value="troubleshooting successor of labelled trees" />
@@ -1660,7 +1653,8 @@
     <MESSAGE value="AbstractOrderedSet" />
     <MESSAGE value="AbstractTuple" />
     <MESSAGE value="AbstractMap" />
-    <option name="LAST_COMMIT_MESSAGE" value="AbstractMap" />
+    <MESSAGE value="SyntacticStructure inherits from LRPT" />
+    <option name="LAST_COMMIT_MESSAGE" value="SyntacticStructure inherits from LRPT" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
