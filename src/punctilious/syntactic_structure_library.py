@@ -15,7 +15,7 @@ which then enables the creation of arbitrary formal languages.
 """
 from __future__ import annotations
 
-import collections
+# import collections
 import typing
 
 import functools
@@ -365,9 +365,7 @@ class AbstractMap(SyntacticStructure):
                  sequence: nn0sl.FlexibleNaturalNumber0Sequence):
         super(AbstractMap, self).__init__(rpt, sequence)
 
-    def __new__(cls,
-                rpt: rptl.FlexibleRootedPlaneTree,
-                sequence: nn0sl.FlexibleNaturalNumber0Sequence):
+    def __new__(cls, rpt: rptl.FlexibleRootedPlaneTree, sequence: nn0sl.FlexibleNaturalNumber0Sequence):
         ss = super(AbstractMap, cls).__new__(cls, rpt, sequence)
         cls.is_well_formed(ss, raise_exception_if_false=True)
         return ss
@@ -384,7 +382,8 @@ class AbstractMap(SyntacticStructure):
     def codomain(self) -> AbstractTuple:
         if isinstance(self.immediate_subtrees[1], AbstractTuple):
             # the codomain is already of type AbstractTuple, no need to re-instantiate it.
-            codomain: AbstractTuple = self.immediate_subtrees[1]
+            codomain: SyntacticStructure = self.immediate_sub_syntactic_structures[1]
+            codomain: AbstractTuple = AbstractTuple.from_lrpt(codomain)
             return codomain
         else:
             # the codomain is not of type AbstractTuple, it must be re-instantiated.
@@ -394,7 +393,8 @@ class AbstractMap(SyntacticStructure):
     def domain(self) -> AbstractOrderedSet:
         if isinstance(self.immediate_subtrees[1], AbstractOrderedSet):
             # the codomain is already of type AbstractOrderedSet, no need to re-instantiate it.
-            domain: AbstractOrderedSet = self.immediate_subtrees[0]
+            domain: SyntacticStructure = self.immediate_sub_syntactic_structures[0]
+            domain: AbstractOrderedSet = AbstractOrderedSet.from_lrpt(domain)
             return domain
         else:
             # the codomain is not of type AbstractTuple, it must be re-instantiated.
@@ -420,7 +420,7 @@ class AbstractMap(SyntacticStructure):
         """
         x: SyntacticStructure = SyntacticStructure.from_any(x)
         if not self.domain.has_element(x):
-            raise util.PunctiliousException("`x` is not an element of the domain.", x=x, domain=domain)
+            raise util.PunctiliousException("`x` is not an element of the domain.", x=x, domain=self.domain)
         else:
             i: int = self.domain.get_element_index(x)
             return self.codomain.get_element_by_index(i)
@@ -852,13 +852,13 @@ class AbstractTuple(SyntacticStructure):
         elements = tuple(SyntacticStructure.from_any(x) for x in elements)
         return cls.from_immediate_subtrees(n=n, s=elements)
 
-    def get_element_by_index(self, i: int) -> lrptl.LabeledRootedPlaneTree:
+    def get_element_by_index(self, i: int) -> SyntacticStructure:
         if i < 0 or i >= self.cardinality:
             raise util.PunctiliousException("Index `i` is out of range of this abstract tuple `t`.", i=i,
                                             degree_of_t=self.degree, t=self)
         return self.elements[i]
 
-    def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
+    def has_element(self, x: FlexibleSyntacticStructure) -> bool:
         r"""Returns `True` if `x` is an element of this tuple, `False` otherwise.
 
         Definition
@@ -875,6 +875,7 @@ class AbstractTuple(SyntacticStructure):
         :param x: An object.
         :return: `True` or `False`
         """
+        x: SyntacticStructure = SyntacticStructure.from_any(x)
         return self.has_immediate_subtree(x)
 
     def is_abstract_tuple_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:

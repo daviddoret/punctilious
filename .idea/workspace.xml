@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="AbstractOrderedPair">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +78,7 @@
     </order>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -1189,14 +1186,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01627" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1754129975320</created>
-      <option name="number" value="01627" />
-      <option name="presentableId" value="LOCAL-01627" />
-      <option name="project" value="LOCAL" />
-      <updated>1754129975320</updated>
-    </task>
     <task id="LOCAL-01628" summary="split_fixed_length_ints_with_sentinel">
       <option name="closed" value="true" />
       <created>1754246108644</created>
@@ -1581,7 +1570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755678026850</updated>
     </task>
-    <option name="localTasksCounter" value="1676" />
+    <task id="LOCAL-01676" summary="AbstractOrderedPair">
+      <option name="closed" value="true" />
+      <created>1755703352338</created>
+      <option name="number" value="01676" />
+      <option name="presentableId" value="LOCAL-01676" />
+      <option name="project" value="LOCAL" />
+      <updated>1755703352339</updated>
+    </task>
+    <option name="localTasksCounter" value="1677" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
