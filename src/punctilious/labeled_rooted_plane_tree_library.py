@@ -509,6 +509,10 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return cls(*o)
         if isinstance(o, collections.abc.Generator):
             return cls(*o)
+        if isinstance(o, int):
+            # If the input is an integer,
+            # it is interpreted as the LRPT n(), where n is the integer.
+            return cls(rptl.RootedPlaneTree(), (o,))
         raise util.PunctiliousException("`LabeledRootedPlaneTree` data validation failure. `o` is of unknown type.",
                                         type_of_o=type(o), o=o)
 
@@ -1099,29 +1103,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         for subtree in self.iterate_subtrees():
             subtrees = subtrees + (subtree,)
         return subtrees
-
-    def substitute_subtrees_with_map(self, m: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
-        r"""Returns a new LRPT similar to the current LRPT,
-         except that its subtrees present in the map `m` preimage,
-         are substituted with their corresponding images,
-         giving priority to the substitution of supertrees over subtrees.
-
-        :param m: An abstract-map.
-        :return: A substituted tree.
-
-        """
-        m: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(m)
-        if not m.is_abstract_map:
-            raise util.PunctiliousException("`m` is not an abstract-map.", m=m, this_abstract_formula=self)
-        if self in m.abstract_map_preimage_sequence.immediate_subtrees:
-            # This formula must be substituted according to the substitution map.
-            return m.get_abstract_map_value(self)
-        else:
-            # Pursue substitution recursively.
-            t: LabeledRootedPlaneTree
-            s: tuple[LabeledRootedPlaneTree, ...] = tuple(t.substitute_subtrees_with_map(m=m) for t in
-                                                          self.iterate_immediate_subtrees())
-            return LabeledRootedPlaneTree.from_immediate_subtrees(n=self.main_element, s=s)
 
     @functools.cached_property
     def t(self) -> rptl.RootedPlaneTree:

@@ -3,6 +3,7 @@ r"""
 """
 from __future__ import annotations
 
+import collections
 import typing
 
 import functools
@@ -66,6 +67,10 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
     def from_lrpt(cls, x: lrptl.FlexibleLabeledRootedPlaneTree):
         return cls(rpt=x.t, sequence=x.s)
 
+    @functools.cached_property
+    def immediate_sub_syntactic_structures(self) -> tuple[SyntacticStructure, ...]:
+        return tuple(SyntacticStructure.from_lrpt(lrpt) for lrpt in self.immediate_subtrees)
+
     @classmethod
     def is_well_formed(
             cls,
@@ -94,6 +99,32 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
         if not isinstance(o, SyntacticStructure):
             lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
         return True
+
+    def substitute_subtrees_with_map(self, m: FlexibleSyntacticStructure) -> SyntacticStructure:
+        r"""Returns a new Syntactic Structure similar to the current Syntactic Structure,
+         except that its subtrees present in the map `m` preimage,
+         are substituted with their corresponding images,
+         giving priority to the substitution of supertrees over subtrees.
+
+        :param m: An abstract-map.
+        :return: A substituted tree.
+
+        """
+        m: SyntacticStructure = SyntacticStructure.from_any(m)
+        if not AbstractMap.is_well_formed(m):
+            raise util.PunctiliousException("`m` is not a well-formed abstract map.", m=m,
+                                            this_syntactic_structure=self)
+        else:
+            m: AbstractMap = AbstractMap.from_lrpt(m)
+            if m.has_domain_element(self):
+                # This formula must be substituted according to the substitution map.
+                return m.get_value(self)
+            else:
+                # Pursue substitution recursively.
+                t: SyntacticStructure
+                s: tuple[SyntacticStructure, ...] = tuple(
+                    t.substitute_subtrees_with_map(m=m) for t in self.immediate_sub_syntactic_structures)
+                return SyntacticStructure.from_immediate_subtrees(n=self.main_element, s=s)
 
 
 class AbstractOrderedSet(SyntacticStructure):
@@ -167,19 +198,22 @@ class AbstractOrderedSet(SyntacticStructure):
         return len(self.elements)
 
     @functools.cached_property
-    def elements(self) -> tuple[lrptl.LabeledRootedPlaneTree, ...]:
+    def elements(self) -> tuple[SyntacticStructure, ...]:
         r"""Returns the elements of this abstract ordered set.
 
         Note
         ______
 
-        This is equivalent to the unique and immediate subtrees of the LRPT, preserving order.
+        This is equivalent to the unique and immediate subtrees of the LRPT,
+        preserving order,
+        and typed as syntactic structures.
 
         :return: The elements of the ordered set, in order.
         """
-        unique_elements: tuple[lrptl.LabeledRootedPlaneTree, ...] = ()
+        unique_elements: tuple[SyntacticStructure, ...] = ()
         for sub_lrpt in self.iterate_immediate_subtrees():
             if sub_lrpt not in unique_elements:
+                sub_lrpt: SyntacticStructure = SyntacticStructure.from_lrpt(sub_lrpt)
                 unique_elements = unique_elements + (sub_lrpt,)
         return unique_elements
 
@@ -205,6 +239,7 @@ class AbstractOrderedSet(SyntacticStructure):
             n: int = 0  # by convention, 0 is the default main element.
         else:
             n: int = int(n)
+        elements = tuple(SyntacticStructure.from_any(x) for x in elements)
         return cls.from_immediate_subtrees(n=n, s=elements)
 
     def get_element_by_index(self, i: int) -> lrptl.LabeledRootedPlaneTree:
@@ -321,6 +356,23 @@ class AbstractMap(SyntacticStructure):
 
     If the domain is the empty ordered set, it is the empty map.
 
+    Note
+    -----------
+
+    There are two distinctive implementations of an abstract map:
+
+    As a set of ordered pairs:
+    { (p_0, i_0), (p_1, i_1), ..., (p_n, i_n) }.
+
+    As an ordered pair whose first element is an ordered set and second element is a tuple :
+    ( (p0, p_1, ..., p_n), (i_0, i_1, ..., i_n) }.
+
+    The former is more "accurate" as the equivalence of maps can be directly determined.
+    But it requires more object lookups when looking for map values.
+
+    The latter is less "accurate" in the sense that two distinct maps can be equivalent,
+    e.g.: ( (1, 2, 3), (4, 5, 6) ) ~ ( (3, 2, 1), (6, 5, 4) ).
+
     """
 
     def __init__(self,
@@ -406,8 +458,8 @@ class AbstractMap(SyntacticStructure):
         :math:`x` is abstract map equivalent to `y` if and only if:
 
         - :math:`x` and :math:`y` are abstract maps,
-        - the domain of :math:`x` is abstract ordered set equivalent to the domain of :math:`y`,
-        - the codomain of :math:`x` is abstract tuple equivalent to the codomain of :math:`y`.
+        - the cardinality of the domain of :math:`x` equals the cardinality of the domain of :math:`y`,
+        - TODO: COMPLETE HERE
 
         :param x: A syntactic structure.
         :return: `True` or `False`.
@@ -473,6 +525,17 @@ class AbstractMap(SyntacticStructure):
                 return False
         # The syntactic structure satisfies all constraints.
         return True
+
+    @functools.cached_property
+    def ordered_pairs(self) -> AbstractSet:
+        r"""Returns the set of ordered pairs that constitute this abstract map.
+
+        :return:
+        """
+        op = ()
+        for p, i in zip(self.domain, self.codomain):
+            pass
+            # TODO: COMPLETE HERE
 
     def represent_as_inline_map(self) -> str:
         r"""Returns a string representation of the LRPT using map notation.
@@ -563,7 +626,7 @@ class AbstractSet(SyntacticStructure):
         return len(self.elements)
 
     @functools.cached_property
-    def elements(self) -> tuple[lrptl.LabeledRootedPlaneTree, ...]:
+    def elements(self) -> tuple[SyntacticStructure, ...]:
         r"""Returns the elements of this abstract set.
 
         Note
@@ -579,11 +642,13 @@ class AbstractSet(SyntacticStructure):
 
         :return: The elements of the set.
         """
-        unique_elements: tuple[lrptl.LabeledRootedPlaneTree, ...] = ()
+        unique_elements: tuple[SyntacticStructure, ...] = ()
         for sub_lrpt in self.iterate_immediate_subtrees():
             if sub_lrpt not in unique_elements:
+                sub_lrpt: SyntacticStructure = SyntacticStructure.from_lrpt(sub_lrpt)
                 unique_elements = unique_elements + (sub_lrpt,)
-        # by convention, returns the elements in canonical lrpt order
+        # by convention, returns the elements in canonical LRPT order,
+        # this facilitates equivalence checking.
         unique_elements = tuple(sorted(unique_elements))
         return unique_elements
 
@@ -609,6 +674,7 @@ class AbstractSet(SyntacticStructure):
             n: int = 0  # by convention, 0 is the default main element.
         else:
             n: int = int(n)
+        elements = tuple(SyntacticStructure.from_any(x) for x in elements)
         return cls.from_immediate_subtrees(n=n, s=elements)
 
     def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
@@ -742,17 +808,18 @@ class AbstractTuple(SyntacticStructure):
         return len(self.elements)
 
     @functools.cached_property
-    def elements(self) -> tuple[lrptl.LabeledRootedPlaneTree, ...]:
+    def elements(self) -> tuple[SyntacticStructure, ...]:
         r"""Returns the elements of this abstract tuple, preserving order.
 
         Note
         ______
 
-        This is equivalent to the immediate subtrees of the LRPT.
+        This is equivalent to the immediate subtrees of the LRPT,
+        typed as syntactic structures.
 
         :return: The elements of the tuple.
         """
-        return self.immediate_subtrees
+        return tuple(SyntacticStructure.from_any(x) for x in self.immediate_subtrees)
 
     @classmethod
     def from_any(cls, x: FlexibleAbstractTuple) -> AbstractTuple:
@@ -776,6 +843,7 @@ class AbstractTuple(SyntacticStructure):
             n: int = 0  # by convention, 0 is the default main element.
         else:
             n: int = int(n)
+        elements = tuple(SyntacticStructure.from_any(x) for x in elements)
         return cls.from_immediate_subtrees(n=n, s=elements)
 
     def get_element_by_index(self, i: int) -> lrptl.LabeledRootedPlaneTree:
@@ -861,6 +929,122 @@ class AbstractTuple(SyntacticStructure):
         output = f"{output} )"
 
         return output
+
+
+class AbstractOrderedPair(AbstractTuple):
+    r"""An abstract ordered pair.
+
+    Definition
+    ------------
+
+    An `abstract ordered pair` is a syntactic structure that models an ordered pair.
+
+    Given any LRPT :math:`T` of degree >= 2,
+    its `abstract ordered pair` is the tuple :math:`(t_0, t_1)`
+    where :math:`t_i` denotes the :math:`i`-th immediate sub-LRPT of :math:`T`.
+
+    Note
+    ------
+
+    The main element of the LRPT is not an information of the abstract ordered pair, i.e.: it is dropped.
+
+    Note
+    -----------
+
+    Every LRPT of degree >= 2 is an abstract ordered pair.
+
+    """
+
+    def __init__(self,
+                 rpt: rptl.FlexibleRootedPlaneTree,
+                 sequence: nn0sl.FlexibleNaturalNumber0Sequence):
+        super(AbstractOrderedPair, self).__init__(rpt, sequence)
+
+    def __new__(cls,
+                rpt: rptl.FlexibleRootedPlaneTree,
+                sequence: nn0sl.FlexibleNaturalNumber0Sequence):
+        ss = super(AbstractOrderedPair, cls).__new__(cls, rpt, sequence)
+        cls.is_well_formed(ss, raise_exception_if_false=True)
+        return ss
+
+    _HASH_SEED: int = 12810223144789917182  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
+
+    @functools.cached_property
+    def first_element(self) -> SyntacticStructure:
+        return self.elements[0]
+
+    @classmethod
+    def from_first_and_second_elements(cls,
+                                       first_element: FlexibleSyntacticStructure,
+                                       second_element: FlexibleSyntacticStructure,
+                                       n: int | None = None,
+                                       ) -> AbstractOrderedPair:
+        r"""Returns the abstract ordered pair :math:`(x, y)`
+        where :math:`x` is the first element,
+        and :math:`y` is the second element.
+
+        :param first_element: A syntactic structure.
+        :param second_element: A syntactic structure.
+        :param n: (conditional) The main element of the LRPT.
+        :return: An abstract ordered pair.
+        """
+        if n is None:
+            n: int = 0  # by convention, 0 is the default main element.
+        else:
+            n: int = int(n)
+        first_element: SyntacticStructure = SyntacticStructure.from_any(first_element)
+        second_element: SyntacticStructure = SyntacticStructure.from_any(second_element)
+        return cls.from_immediate_subtrees(n=n, s=(first_element, second_element,))
+
+    def is_abstract_ordered_pair_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is abstract ordered pair equivalent to `x`.
+
+        Definition
+        ---------------
+
+        Let :math:`x`, :math:`y` be abstract ordered pairs.
+        :math:`x` is abstract ordered pair equivalent to `y` if and only if:
+
+        - The first element of :math:`x` is LRPT equivalent to the first element of :math:`y`.
+        - The second element of :math:`x` is LRPT equivalent to the second element of :math:`y`.
+
+        :param x: A syntactic structure.
+        :return: `True` or `False`.
+        """
+
+        x: SyntacticStructure = SyntacticStructure.from_any(x)
+        if not AbstractOrderedPair.is_well_formed(x):
+            return False
+        else:
+            x: AbstractOrderedPair = AbstractOrderedPair.from_any(x)
+            if not x.first_element.is_labeled_rooted_plane_tree_equivalent_to(self.first_element):
+                return False
+            if not x.second_element.is_labeled_rooted_plane_tree_equivalent_to(self.second_element):
+                return False
+            return True
+
+    @classmethod
+    def is_well_formed(
+            cls,
+            o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
+        r"""Check if the given `o` is a well-formed abstract ordered pair.
+
+        If `True`, :meth:`AbstractOrderedPair.from_any` can be safely called on `o`.
+
+        :param o: A syntactic structure.
+        :param raise_exception_if_false:
+        :return: `True` or `False`.
+        """
+
+        o: SyntacticStructure = SyntacticStructure.from_any(o)
+        if o.degree >= 2:
+            return True
+        else:
+            return False
+
+    @functools.cached_property
+    def second_element(self) -> SyntacticStructure:
+        return self.elements[1]
 
 
 class AbstractInferenceRule(SyntacticStructure):

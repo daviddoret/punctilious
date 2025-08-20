@@ -7,7 +7,12 @@ class TestSyntacticStructure:
         ss1 = pu.ssl.SyntacticStructure.from_lrpt(lrpt1)
         ss2 = pu.ssl.SyntacticStructure(rpt=ss1.rooted_plane_tree, sequence=ss1.natural_number_sequence)
         assert ss1 == ss2
+        pass
 
+    def test_substitute(self):
+        domain = pu.ssl.AbstractOrderedSet.from_elements(1, 2, 3)
+        codomain = pu.ssl.AbstractTuple.from_elements(4, 5, 6)
+        m = pu.ssl.AbstractMap.from_domain_and_codomain(domain, codomain)
         pass
 
 
@@ -201,6 +206,47 @@ class TestAbstractTuple:
         s_empty = pu.ssl.AbstractTuple.from_lrpt(t0)
         assert not s123.is_abstract_tuple_equivalent_to(s_empty)
         assert s_empty.cardinality == 0
+
+        pass
+
+
+class TestAbstractOrderedPair:
+
+    def test_abstract_ordered_pair(self):
+        # declare set {1, 2, 3}
+        t0_12 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
+        t0 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(0)
+        t1 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(1)
+        t2 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(2)
+        t3 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(3)
+        t4 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(4)
+        s12 = pu.ssl.AbstractOrderedPair.from_elements(t1, t2, )
+        assert s12.is_labeled_rooted_plane_tree_equivalent_to(t0_12)
+        assert s12.first_element == t1
+        assert s12.second_element == t2
+        assert s12.cardinality == 2
+        assert not s12.has_element(t0_12)
+        assert not s12.has_element(t0)
+        assert s12.has_element(t1)
+        assert s12.has_element(t2)
+        assert not s12.has_element(t4)
+        assert s12.is_abstract_tuple_equivalent_to(s12)
+
+        # confirm order does matter
+        t0_21 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (2, 1,)))
+        s21 = pu.ssl.AbstractOrderedPair.from_elements(t2, t1)
+        assert s21.is_labeled_rooted_plane_tree_equivalent_to(t0_21)
+        assert s21.first_element == t2
+        assert s21.second_element == t1
+        assert s21.cardinality == 2
+        assert not s21.has_element(t0_12)
+        assert not s21.has_element(t0)
+        assert s21.has_element(t1)
+        assert s21.has_element(t2)
+        assert not s21.has_element(t4)
+        assert s21.is_abstract_tuple_equivalent_to(s21)
+
+        assert not s12.is_abstract_tuple_equivalent_to(s21)
 
         pass
 
