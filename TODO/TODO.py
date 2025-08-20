@@ -9,7 +9,7 @@ that is considered in tuples equivalence.
 
 in syntactic structures: consider transforming the underlying LRPT by effectively
 dropping useless information. For example in ordered pairs, subtrees > 2 are dropped,
-same for maps, etc.
+same for maps, etc. but put some more thinking into this first.
 
 
 

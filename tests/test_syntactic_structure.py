@@ -267,4 +267,5 @@ class TestAbstractMap:
         assert m1.get_value(t1) == t5
         assert m1.get_value(t4) == t1
         assert not m1.has_domain_element(t2)
-        pass
+        pairs = m1.ordered_pairs
+        assert pairs.degree == 3

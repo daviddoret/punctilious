@@ -211,10 +211,9 @@ class AbstractOrderedSet(SyntacticStructure):
         :return: The elements of the ordered set, in order.
         """
         unique_elements: tuple[SyntacticStructure, ...] = ()
-        for sub_lrpt in self.iterate_immediate_subtrees():
-            if sub_lrpt not in unique_elements:
-                sub_lrpt: SyntacticStructure = SyntacticStructure.from_lrpt(sub_lrpt)
-                unique_elements = unique_elements + (sub_lrpt,)
+        for sub_ss in self.immediate_sub_syntactic_structures:
+            if sub_ss not in unique_elements:
+                unique_elements = unique_elements + (sub_ss,)
         return unique_elements
 
     @classmethod
@@ -533,8 +532,9 @@ class AbstractMap(SyntacticStructure):
         :return: A set of ordered pairs.
         """
         pairs: tuple[AbstractOrderedPair, ...] = ()
-        for preimage, image in zip(self.domain, self.codomain):
-            pairs = pairs + AbstractOrderedPair.from_first_and_second_elements(preimage, image)
+        for preimage, image in zip(self.domain.elements, self.codomain.elements):
+            pair: AbstractOrderedPair = AbstractOrderedPair.from_first_and_second_elements(preimage, image)
+            pairs = pairs + (pair,)
         return AbstractSet.from_elements(*pairs)
 
     def represent_as_inline_map(self) -> str:
@@ -643,10 +643,9 @@ class AbstractSet(SyntacticStructure):
         :return: The elements of the set.
         """
         unique_elements: tuple[SyntacticStructure, ...] = ()
-        for sub_lrpt in self.iterate_immediate_subtrees():
-            if sub_lrpt not in unique_elements:
-                sub_lrpt: SyntacticStructure = SyntacticStructure.from_lrpt(sub_lrpt)
-                unique_elements = unique_elements + (sub_lrpt,)
+        for sub_ss in self.immediate_sub_syntactic_structures:
+            if sub_ss not in unique_elements:
+                unique_elements = unique_elements + (sub_ss,)
         # by convention, returns the elements in canonical LRPT order,
         # this facilitates equivalence checking.
         unique_elements = tuple(sorted(unique_elements))
@@ -819,7 +818,7 @@ class AbstractTuple(SyntacticStructure):
 
         :return: The elements of the tuple.
         """
-        return tuple(SyntacticStructure.from_any(x) for x in self.immediate_subtrees)
+        return self.immediate_sub_syntactic_structures
 
     @classmethod
     def from_any(cls, x: FlexibleAbstractTuple) -> AbstractTuple:
