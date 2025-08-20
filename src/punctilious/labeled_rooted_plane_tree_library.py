@@ -6,7 +6,7 @@ from __future__ import annotations
 import typing
 import collections
 import functools
-# import itertools
+import itertools
 
 # package modules
 import punctilious.util as util
@@ -584,7 +584,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return: a LRPT.
 
         """
-
         t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_tuple_tree(t)
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
@@ -1141,13 +1140,16 @@ def extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p):
 
     :return: a pair (T, S) where T is a tree of tuples, and S is a sequence of integers.
     """
-
+    # if isinstance(p, tuple) and all(isinstance(x, LabeledRootedPlaneTree) for x in p):
+    #    tree_of_tuples = tuple(x.rooted_plane_tree for x in p)
+    #    sequence = tuple(itertools.chain.from_iterable(x.natural_number_sequence for x in p))
+    #    return tree_of_tuples, sequence
+    # if isinstance(p, LabeledRootedPlaneTree):
+    #    return p.rooted_plane_tree, p.natural_number_sequence
     if isinstance(p, int):
-        return LabeledRootedPlaneTree(rpt=(()), sequence=(p,))
-
+        return (()), (p,)
     if len(p) == 1:
-        return LabeledRootedPlaneTree(rpt=(()), sequence=(p[0],))
-
+        return (()), (p[0],)
     if len(p) != 2:
         raise util.PunctiliousException('The length of the pair is not equal to 2.', len_t=len(p), t=p)
     i: int = p[0]

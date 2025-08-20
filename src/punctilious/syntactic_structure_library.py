@@ -1,4 +1,16 @@
-r"""
+r"""The syntactic structure layer enriches the LRPT layer by promoting LRPTs to syntactic structures.
+By imposing constraints on LRPTs, syntactic structures enable the modeling of
+finite proto- or foundational mathematical objects, including:
+
+- abstract inference rules,
+- abstract maps,
+- abstract ordered pairs,
+- abstract ordered sets,
+- abstract sets,
+- abstract tuples.
+
+These foundational objects enable the construction of a proto- or foundational formal language,
+which then enables the creation of arbitrary formal languages.
 
 """
 from __future__ import annotations
@@ -100,32 +112,6 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
             lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
         return True
 
-    def substitute_subtrees_with_map(self, m: FlexibleSyntacticStructure) -> SyntacticStructure:
-        r"""Returns a new Syntactic Structure similar to the current Syntactic Structure,
-         except that its subtrees present in the map `m` preimage,
-         are substituted with their corresponding images,
-         giving priority to the substitution of supertrees over subtrees.
-
-        :param m: An abstract-map.
-        :return: A substituted tree.
-
-        """
-        m: SyntacticStructure = SyntacticStructure.from_any(m)
-        if not AbstractMap.is_well_formed(m):
-            raise util.PunctiliousException("`m` is not a well-formed abstract map.", m=m,
-                                            this_syntactic_structure=self)
-        else:
-            m: AbstractMap = AbstractMap.from_lrpt(m)
-            if m.has_domain_element(self):
-                # This formula must be substituted according to the substitution map.
-                return m.get_value(self)
-            else:
-                # Pursue substitution recursively.
-                t: SyntacticStructure
-                s: tuple[SyntacticStructure, ...] = tuple(
-                    t.substitute_subtrees_with_map(m=m) for t in self.immediate_sub_syntactic_structures)
-                return SyntacticStructure.from_immediate_subtrees(n=self.main_element, s=s)
-
 
 class AbstractOrderedSet(SyntacticStructure):
     r"""An abstract ordered set.
@@ -199,7 +185,7 @@ class AbstractOrderedSet(SyntacticStructure):
 
     @functools.cached_property
     def elements(self) -> tuple[SyntacticStructure, ...]:
-        r"""Returns the elements of this abstract ordered set.
+        r"""Returns the elements of this abstract ordered set, in order.
 
         Note
         ______
@@ -555,6 +541,27 @@ class AbstractMap(SyntacticStructure):
         output = f"{output} }}"
 
         return output
+
+    def substitute(self, x: FlexibleSyntacticStructure) -> SyntacticStructure:
+        r"""Returns a new Syntactic Structure similar to :math:`x`,
+         except that any subtree present in the domain of this abstract map,
+         is substituted with its corresponding images,
+         giving priority to the substitution of supertrees over subtrees.
+
+        :param x: A syntactic structure.
+        :return: A substituted tree.
+
+        """
+        x: SyntacticStructure = SyntacticStructure.from_any(x)
+        if self.has_domain_element(x):
+            # This formula must be substituted according to the substitution map.
+            return self.get_value(x)
+        else:
+            # Pursue substitution recursively.
+            t: SyntacticStructure
+            s: tuple[SyntacticStructure, ...] = tuple(
+                self.substitute(y) for y in x.immediate_sub_syntactic_structures)
+            return SyntacticStructure.from_immediate_subtrees(n=x.main_element, s=s)
 
 
 class AbstractSet(SyntacticStructure):

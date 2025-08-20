@@ -12,7 +12,30 @@ class TestSyntacticStructure:
     def test_substitute(self):
         domain = pu.ssl.AbstractOrderedSet.from_elements(1, 2, 3)
         codomain = pu.ssl.AbstractTuple.from_elements(4, 5, 6)
-        m = pu.ssl.AbstractMap.from_domain_and_codomain(domain, codomain)
+        m1 = pu.ssl.AbstractMap.from_domain_and_codomain(domain, codomain)
+        input_1 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs(2)
+        output_1 = m1.substitute(input_1)
+        assert output_1 == pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs(5)
+        output_2 = m1.substitute(output_1)
+        assert output_2 == output_1
+        input_3 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (3, 9, 1)))
+        output_3 = m1.substitute(input_3)
+        assert output_3 == pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (6, 9, 4)))
+
+        ss1 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2)))
+        ss2a = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((1, (2,)))
+        ss2 = pu.ssl.SyntacticStructure.from_immediate_subtrees(0, (ss2a,))
+        ss3 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((4, (5,)))
+        ss4 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((7, (8, 8, 8,)))
+        domain2 = pu.ssl.AbstractOrderedSet.from_elements(ss1, ss2)
+        codomain2 = pu.ssl.AbstractTuple.from_elements(ss3, ss4)
+        m2 = pu.ssl.AbstractMap.from_domain_and_codomain(domain2, codomain2)
+        input_4 = pu.ssl.SyntacticStructure.from_immediate_subtrees(5, (ss1,))
+        output_4 = m2.substitute(input_4)
+        assert output_4 == pu.ssl.SyntacticStructure.from_immediate_subtrees(5, (ss3,))
+        input_5 = pu.ssl.SyntacticStructure.from_immediate_subtrees(9, (ss3, ss1, ss2, ss3))
+        output_5 = m2.substitute(input_5)
+        assert output_5 == pu.ssl.SyntacticStructure.from_immediate_subtrees(9, (ss3, ss3, ss4, ss3))
         pass
 
 
