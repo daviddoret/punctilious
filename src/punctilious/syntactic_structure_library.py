@@ -735,6 +735,18 @@ class AbstractSet(SyntacticStructure):
 
         return output
 
+    def intersection(self, x: FlexibleAbstractSet) -> AbstractSet:
+        x: AbstractSet = AbstractSet.from_any(x)
+        y: AbstractSet = AbstractSet()
+        for z in self.elements:
+            if z in y.elements:
+                y = y.append(z)
+        return y
+
+    def union(self, x: FlexibleAbstractSet) -> AbstractSet:
+        x: AbstractSet = AbstractSet.from_any(x)
+        return AbstractSet.from_elements(*self.elements, *x.elements)
+
 
 class AbstractTuple(SyntacticStructure):
     r"""An abstract tuple.
@@ -1076,24 +1088,60 @@ class AbstractInferenceRule(SyntacticStructure):
                         n: int = 0
                         ) -> AbstractInferenceRule:
         variables = AbstractSet.from_elements(*variables)
-        premises = AbstractSet.from_elements(*premises)
+        premises = AbstractOrderedSet.from_elements(*premises)
         conclusion = SyntacticStructure.from_any(conclusion)
         n: int = int(n)
         return cls.from_immediate_subtrees(n=n, s=(variables, premises, conclusion,))
 
-    def apply(self, premises: FlexibleAbstractSet) -> SyntacticStructure:
-        pass
+    def apply(self, premises: FlexibleAbstractOrderedSet) -> SyntacticStructure:
+        premises: AbstractOrderedSet = AbstractOrderedSet.from_any(premises)
+        status, assigned_variables = self.check_premises(premises)
+        if not status:
+            raise util.PunctiliousException("premises are invalid for this inference rule.", premises=premises,
+                                            inference_rule=self)
+        else:
+            conclusion: SyntacticStructure = assigned_variables.substitute(self.conclusion)
+            return conclusion
+
+    def check_premises(self, premises: FlexibleAbstractSet) -> tuple[bool, AbstractMap]:
+        premises: AbstractSet = AbstractSet.from_any(premises)
+        assigned_variables: AbstractMap = AbstractMap()
+        for premise, premise_with_variables in zip(premises.elements, self.premises.elements):
+            status, assigned_variables = self.check_premise(premise, premise_with_variables,
+                                                            assigned_variables)
+            if not status:
+                return False, assigned_variables
+        return True, assigned_variables
+
+    def check_premise(self,
+                      premise: FlexibleSyntacticStructure,
+                      premise_with_variables: FlexibleSyntacticStructure,
+                      assigned_variables: FlexibleAbstractMap) -> tuple[bool, AbstractMap]:
+        premises: SyntacticStructure = SyntacticStructure.from_any(premise)
+        premise_with_variables: SyntacticStructure = SyntacticStructure.from_any(premise_with_variables)
+        assigned_variables: AbstractMap = AbstractMap.from_any(assigned_variables)
+        # substitute already assigned variables
+        premise_with_variables: SyntacticStructure = assigned_variables.substitute(assigned_variables)
+        free_variables: AbstractSet = self.variables.elements.difference(assigned_variables.domain.elements)
+        COMPARE_HERE
 
     @functools.cached_property
-    def premises(self) -> AbstractSet:
-        return AbstractSet.from_lrpt(self.immediate_sub_syntactic_structures[1])
+    def conclusion(self) -> SyntacticStructure:
+        return self.immediate_sub_syntactic_structures[2]
+
+    @functools.cached_property
+    def premises(self) -> AbstractOrderedSet:
+        return AbstractOrderedSet.from_lrpt(self.immediate_sub_syntactic_structures[1])
+
+    @functools.cached_property
+    def variables(self) -> AbstractSet:
+        return AbstractSet.from_lrpt(self.immediate_sub_syntactic_structures[0])
 
 
 # Flexible types to facilitate data validation
 
-FlexibleSyntacticStructure = lrptl.FlexibleLabeledRootedPlaneTree
-FlexibleAbstractSet = typing.Union[
-    AbstractSet,
+FlexibleAbstractMap = typing.Union[
+    AbstractMap,
     lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
     tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
     None  # the empty abstract set.
@@ -1104,12 +1152,19 @@ FlexibleAbstractOrderedSet = typing.Union[
     tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
     None  # the empty abstract set.
 ]
+FlexibleAbstractSet = typing.Union[
+    AbstractSet,
+    lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
+    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
+    None  # the empty abstract set.
+]
 FlexibleAbstractTuple = typing.Union[
     AbstractTuple,
     lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
     tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
     None  # the empty abstract set.
 ]
+FlexibleSyntacticStructure = lrptl.FlexibleLabeledRootedPlaneTree
 
 # Aliases
 
