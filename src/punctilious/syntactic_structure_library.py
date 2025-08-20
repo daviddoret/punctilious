@@ -458,8 +458,8 @@ class AbstractMap(SyntacticStructure):
         :math:`x` is abstract map equivalent to `y` if and only if:
 
         - :math:`x` and :math:`y` are abstract maps,
-        - the cardinality of the domain of :math:`x` equals the cardinality of the domain of :math:`y`,
-        - TODO: COMPLETE HERE
+        - the set of ordered pairs of :math:`x` is abstract set equivalent
+          to the set of ordered pairs of :math:`y`.
 
         :param x: A syntactic structure.
         :return: `True` or `False`.
@@ -528,14 +528,14 @@ class AbstractMap(SyntacticStructure):
 
     @functools.cached_property
     def ordered_pairs(self) -> AbstractSet:
-        r"""Returns the set of ordered pairs that constitute this abstract map.
+        r"""Returns the set of ordered pairs that constitutes this abstract map.
 
-        :return:
+        :return: A set of ordered pairs.
         """
-        op = ()
-        for p, i in zip(self.domain, self.codomain):
-            pass
-            # TODO: COMPLETE HERE
+        pairs: tuple[AbstractOrderedPair, ...] = ()
+        for preimage, image in zip(self.domain, self.codomain):
+            pairs = pairs + AbstractOrderedPair.from_first_and_second_elements(preimage, image)
+        return AbstractSet.from_elements(*pairs)
 
     def represent_as_inline_map(self) -> str:
         r"""Returns a string representation of the LRPT using map notation.

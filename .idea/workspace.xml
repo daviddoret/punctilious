@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="SyntacticStructure default representations">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="AbstractOrderedPair">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO/TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/TODO/TODO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -805,7 +804,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedPair.test_abstract_ordered_pair">
+  <component name="RunManager" selected="Python tests.pytest in tests">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1161,9 +1160,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractOrderedPair.test_abstract_ordered_pair" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute" />
-        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_abstract_set" />
       </list>
@@ -1187,14 +1186,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01624" summary="cleanup">
-      <option name="closed" value="true" />
-      <created>1754117080845</created>
-      <option name="number" value="01624" />
-      <option name="presentableId" value="LOCAL-01624" />
-      <option name="project" value="LOCAL" />
-      <updated>1754117080845</updated>
     </task>
     <task id="LOCAL-01625" summary="cleanup">
       <option name="closed" value="true" />
@@ -1580,7 +1571,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755637411363</updated>
     </task>
-    <option name="localTasksCounter" value="1673" />
+    <task id="LOCAL-01673" summary="AbstractOrderedPair">
+      <option name="closed" value="true" />
+      <created>1755676524029</created>
+      <option name="number" value="01673" />
+      <option name="presentableId" value="LOCAL-01673" />
+      <option name="project" value="LOCAL" />
+      <updated>1755676524030</updated>
+    </task>
+    <option name="localTasksCounter" value="1674" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1633,7 +1632,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="clean up in prime_number_library. bug correction caused by implicit conversion to float." />
     <MESSAGE value="troubleshooting successor of labelled trees" />
     <MESSAGE value="renaming &quot;abstract formula&quot; to &quot;labeled rooted plane tree&quot;" />
     <MESSAGE value="cleanup" />
@@ -1658,7 +1656,8 @@
     <MESSAGE value="AbstractMap" />
     <MESSAGE value="SyntacticStructure inherits from LRPT" />
     <MESSAGE value="SyntacticStructure default representations" />
-    <option name="LAST_COMMIT_MESSAGE" value="SyntacticStructure default representations" />
+    <MESSAGE value="AbstractOrderedPair" />
+    <option name="LAST_COMMIT_MESSAGE" value="AbstractOrderedPair" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
