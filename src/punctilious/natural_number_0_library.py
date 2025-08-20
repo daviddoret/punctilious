@@ -6,7 +6,9 @@ import typing
 import punctilious.util as util
 import punctilious.binary_relation_library as brl
 import punctilious.ternary_boolean_library as tbl
-import math
+
+
+# import math
 
 
 # Relation classes

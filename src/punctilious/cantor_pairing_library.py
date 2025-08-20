@@ -147,7 +147,7 @@ def cantor_tupling_with_sentinel_value_inverse(n: int) -> tuple[int, ...]:
         # case #2: sequence with 1 element
         # note that the element was already retrieved during the first cantor pairing inverse function.
         s0: int = n
-        return n,
+        return s0,
     elif l == 2:
         # case #2: sequence with 2 elements
         s0: int

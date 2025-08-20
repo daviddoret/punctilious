@@ -3,7 +3,7 @@ r"""A library for (1-based) natural numbers.
 """
 from __future__ import annotations
 import typing
-import functools
+# import functools
 import punctilious.util as util
 import punctilious.binary_relation_library as brl
 import punctilious.ternary_boolean_library as tbl

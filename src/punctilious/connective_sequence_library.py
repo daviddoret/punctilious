@@ -1,5 +1,5 @@
 from __future__ import annotations
-import itertools
+# import itertools
 import typing
 import collections
 import functools
@@ -9,10 +9,10 @@ import uuid
 import punctilious.util as util
 import punctilious.ternary_boolean_library as tbl
 import punctilious.binary_relation_library as brl
-import punctilious.rooted_plane_tree_library as rptl
+# import punctilious.rooted_plane_tree_library as rptl
 import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.connective_library as cl
-from punctilious import special_values_library as spl
+import punctilious.special_values_library as spl
 
 
 # Binary Relations
