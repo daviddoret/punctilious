@@ -9,6 +9,8 @@ finite proto- or foundational mathematical objects, including:
 - abstract sets,
 - abstract tuples.
 
+... and specialized algorithms.
+
 These foundational objects enable the construction of a proto- or foundational formal language,
 which then enables the creation of arbitrary formal languages.
 
@@ -24,7 +26,6 @@ import punctilious.util as util
 import punctilious.natural_number_0_sequence_library as nn0sl
 import punctilious.rooted_plane_tree_library as rptl
 import punctilious.labeled_rooted_plane_tree_library as lrptl
-from punctilious.labeled_rooted_plane_tree_library import LabeledRootedPlaneTree
 
 
 class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
@@ -108,8 +109,7 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
 
         # this syntactic structure has no constraint,
         # check only python type compatibility with SyntacticStructure.
-        if not isinstance(o, SyntacticStructure):
-            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+        cls.from_any(o)
         return True
 
 
@@ -243,7 +243,7 @@ class AbstractOrderedSet(SyntacticStructure):
         :param x: An object.
         :return: `True` or `False`
         """
-        x: lrptl.LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        x: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(x)
         return self.has_immediate_subtree(x)
 
     def is_abstract_ordered_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
@@ -287,7 +287,7 @@ class AbstractOrderedSet(SyntacticStructure):
 
         # this syntactic structure has no constraint,
         # check only python type compatibility with SyntacticStructure.
-        ss: SyntacticStructure = cls.from_any(o)
+        cls.from_any(o)
         return True
 
     def represent_as_ordered_set(self) -> str:
@@ -380,25 +380,11 @@ class AbstractMap(SyntacticStructure):
 
     @functools.cached_property
     def codomain(self) -> AbstractTuple:
-        if isinstance(self.immediate_subtrees[1], AbstractTuple):
-            # the codomain is already of type AbstractTuple, no need to re-instantiate it.
-            codomain: SyntacticStructure = self.immediate_sub_syntactic_structures[1]
-            codomain: AbstractTuple = AbstractTuple.from_lrpt(codomain)
-            return codomain
-        else:
-            # the codomain is not of type AbstractTuple, it must be re-instantiated.
-            return AbstractTuple.from_lrpt(self.immediate_subtrees[1])
+        return AbstractTuple.from_lrpt(self.immediate_sub_syntactic_structures[1])
 
     @functools.cached_property
     def domain(self) -> AbstractOrderedSet:
-        if isinstance(self.immediate_subtrees[1], AbstractOrderedSet):
-            # the codomain is already of type AbstractOrderedSet, no need to re-instantiate it.
-            domain: SyntacticStructure = self.immediate_sub_syntactic_structures[0]
-            domain: AbstractOrderedSet = AbstractOrderedSet.from_lrpt(domain)
-            return domain
-        else:
-            # the codomain is not of type AbstractTuple, it must be re-instantiated.
-            return AbstractOrderedSet.from_lrpt(self.immediate_subtrees[0])
+        return AbstractOrderedSet.from_lrpt(self.immediate_sub_syntactic_structures[0])
 
     @classmethod
     def from_domain_and_codomain(cls,
@@ -480,27 +466,27 @@ class AbstractMap(SyntacticStructure):
         # check only python type compatibility with SyntacticStructure.
         if isinstance(o, AbstractMap):
             return True
-        lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
-        if lrpt.degree < 2:
+        ss: SyntacticStructure = cls.from_any(o)
+        if ss.degree < 2:
             if raise_exception_if_false:
-                raise util.PunctiliousException("deg(T) < 2.", deg_t=lrpt.degree,
-                                                t=lrpt)
+                raise util.PunctiliousException("deg(T) < 2.", deg_t=ss.degree,
+                                                t=ss)
             else:
                 return False
-        if not AbstractOrderedSet.is_well_formed(lrpt.immediate_subtrees[0]):
+        if not AbstractOrderedSet.is_well_formed(ss.immediate_subtrees[0]):
             if raise_exception_if_false:
                 raise util.PunctiliousException("First subtree is not a well-formed abstract ordered set.",
-                                                first_subtree=lrpt.immediate_subtrees[0])
+                                                first_subtree=ss.immediate_subtrees[0])
             else:
                 return False
-        if not AbstractTuple.is_well_formed(lrpt.immediate_subtrees[1]):
+        if not AbstractTuple.is_well_formed(ss.immediate_subtrees[1]):
             if raise_exception_if_false:
                 raise util.PunctiliousException("Second subtree is not a well-formed abstract ordered set.",
-                                                second_subtree=lrpt.immediate_subtrees[1])
+                                                second_subtree=ss.immediate_subtrees[1])
             else:
                 return False
-        domain: AbstractOrderedSet = AbstractOrderedSet(lrpt.immediate_subtrees[0])
-        codomain: AbstractTuple = AbstractTuple(lrpt.immediate_subtrees[1])
+        domain: AbstractOrderedSet = AbstractOrderedSet.from_lrpt(ss.immediate_sub_syntactic_structures[0])
+        codomain: AbstractTuple = AbstractTuple.from_lrpt(ss.immediate_sub_syntactic_structures[1])
         if domain.cardinality != codomain.cardinality:
             if raise_exception_if_false:
                 raise util.PunctiliousException(
@@ -544,8 +530,8 @@ class AbstractMap(SyntacticStructure):
 
     def substitute(self, x: FlexibleSyntacticStructure) -> SyntacticStructure:
         r"""Returns a new Syntactic Structure similar to :math:`x`,
-         except that any subtree present in the domain of this abstract map,
-         is substituted with its corresponding images,
+         with the difference that any preimage subtree present in the domain of this abstract map,
+         is substituted with its corresponding image in the map codomain,
          giving priority to the substitution of supertrees over subtrees.
 
         :param x: A syntactic structure.
@@ -729,8 +715,7 @@ class AbstractSet(SyntacticStructure):
 
         # this syntactic structure has no constraint,
         # check only python type compatibility with SyntacticStructure.
-        if not isinstance(o, SyntacticStructure):
-            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+        cls.from_any(o)
         return True
 
     def represent_as_set(self) -> str:
@@ -916,8 +901,7 @@ class AbstractTuple(SyntacticStructure):
 
         # this syntactic structure has no constraint,
         # check only python type compatibility with SyntacticStructure.
-        if not isinstance(o, SyntacticStructure):
-            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(o)
+        cls.from_any(o)
         return True
 
     def represent_as_tuple(self) -> str:
@@ -1043,7 +1027,7 @@ class AbstractOrderedPair(AbstractTuple):
         :return: `True` or `False`.
         """
 
-        o: SyntacticStructure = SyntacticStructure.from_any(o)
+        o: SyntacticStructure = cls.from_any(o)
         if o.degree >= 2:
             return True
         else:
@@ -1093,9 +1077,16 @@ class AbstractInferenceRule(SyntacticStructure):
                         ) -> AbstractInferenceRule:
         variables = AbstractSet.from_elements(*variables)
         premises = AbstractSet.from_elements(*premises)
-        conclusion = lrptl.LRPT.from_any(conclusion)
+        conclusion = SyntacticStructure.from_any(conclusion)
         n: int = int(n)
         return cls.from_immediate_subtrees(n=n, s=(variables, premises, conclusion,))
+
+    def apply(self, premises: FlexibleAbstractSet) -> SyntacticStructure:
+        pass
+
+    @functools.cached_property
+    def premises(self) -> AbstractSet:
+        return AbstractSet.from_lrpt(self.immediate_sub_syntactic_structures[1])
 
 
 # Flexible types to facilitate data validation
@@ -1103,19 +1094,19 @@ class AbstractInferenceRule(SyntacticStructure):
 FlexibleSyntacticStructure = lrptl.FlexibleLabeledRootedPlaneTree
 FlexibleAbstractSet = typing.Union[
     AbstractSet,
-    LabeledRootedPlaneTree,  # already typed as LRPT.
+    lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
     tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
     None  # the empty abstract set.
 ]
 FlexibleAbstractOrderedSet = typing.Union[
     AbstractOrderedSet,
-    LabeledRootedPlaneTree,  # already typed as LRPT.
+    lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
     tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
     None  # the empty abstract set.
 ]
 FlexibleAbstractTuple = typing.Union[
     AbstractTuple,
-    LabeledRootedPlaneTree,  # already typed as LRPT.
+    lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
     tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
     None  # the empty abstract set.
 ]
