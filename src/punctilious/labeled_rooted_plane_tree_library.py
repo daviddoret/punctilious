@@ -131,7 +131,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
 
         :return:
         """
-        return LabeledRootedPlaneTree(
+        return LabeledRootedPlaneTree.from_rpt_and_sequence(
             rpt=rptl.RootedPlaneTree.least_element,
             sequence=nn0sl.NaturalNumber0Sequence(0)
         )
@@ -209,8 +209,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         for i, m in enumerate(s[1:], 1):
             subtree = cls.unrank(m)
             subtrees.append(subtree)
-        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(n=main_element,
-                                                                                   s=subtrees)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(*subtrees, n=main_element)
         return t
 
 
@@ -251,7 +250,7 @@ class CantorPairingOrder(brl.BinaryRelation):
 
         :return:
         """
-        return LabeledRootedPlaneTree(
+        return LabeledRootedPlaneTree.from_rpt_and_sequence(
             rpt=rptl.RootedPlaneTree.least_element,
             sequence=nn0sl.NaturalNumber0Sequence(0)
         )
@@ -288,7 +287,7 @@ class CantorPairingOrder(brl.BinaryRelation):
         x, y = cpl.cantor_pairing_inverse(n)
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.unrank(x)
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.unrank(y)
-        return LabeledRootedPlaneTree(t, s)
+        return LabeledRootedPlaneTree.from_rpt_and_sequence(t, s)
 
 
 # Classes
@@ -309,19 +308,57 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     def __hash__(self):
         return self._compute_hash(self)
 
-    def __init__(self, rpt: rptl.FlexibleRootedPlaneTree, sequence: nn0sl.FlexibleNaturalNumber0Sequence):
+    def __init__(
+            self,
+            # signature #2
+            *args: FlexibleLabeledRootedPlaneTree,
+            n: int | None = None,
+            # signature #1
+            rpt: rptl.FlexibleRootedPlaneTree | None = None,
+            sequence: nn0sl.FlexibleNaturalNumber0Sequence | None = None
+    ):
         super(LabeledRootedPlaneTree, self).__init__()
 
-    def __new__(cls, rpt: rptl.FlexibleRootedPlaneTree, sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_any(rpt)
-        sequence: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.from_any(sequence)
-        if rpt.size != sequence.length:
-            raise util.PunctiliousException(
-                f"`LabeledRootedPlaneTree` data validation error. The size of the tree `t` is not equal to the length of the sequence `s`.",
-                t_size=rpt.size, s_length=sequence.length, t=rpt, s=sequence)
-        lrpt = super(LabeledRootedPlaneTree, cls).__new__(cls, (rpt, sequence))
-        # lrpt = cls._from_cache(lrpt)
-        return lrpt
+    def __new__(cls,
+                # signature #2
+                *args: FlexibleLabeledRootedPlaneTree,
+                n: int | None = None,
+                # signature #1
+                rpt: rptl.FlexibleRootedPlaneTree | None = None,
+                sequence: nn0sl.FlexibleNaturalNumber0Sequence | None = None
+                ):
+        if rpt is not None and sequence is not None:
+            # signature #1
+            rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_any(rpt)
+            sequence: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence.from_any(sequence)
+            if rpt.size != sequence.length:
+                raise util.PunctiliousException(
+                    f"`LabeledRootedPlaneTree` data validation error. The size of the tree `t` is not equal to the length of the sequence `s`.",
+                    t_size=rpt.size, s_length=sequence.length, t=rpt, s=sequence)
+            lrpt = super(LabeledRootedPlaneTree, cls).__new__(cls, (rpt, sequence))
+            return lrpt
+        elif n is not None or len(args) > 0:
+            # signature #2
+            n: int = int(n)
+            if n < 0:
+                raise util.PunctiliousException("`n` is not a (0-based) natural number.", n=n)
+            if args is None:
+                args: tuple[LabeledRootedPlaneTree, ...] = ()
+            args: tuple[LabeledRootedPlaneTree, ...] = tuple(
+                LabeledRootedPlaneTree.from_any(o=sub_lrpt) for sub_lrpt in args)
+            # Retrieves the children trees
+            sub_rpts: tuple[rptl.RootedPlaneTree, ...] = tuple(sub_lrpt.rooted_plane_tree for sub_lrpt in args)
+            # Declare the new parent tree
+            rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(*sub_rpts)
+            # Declare the natural-number-sequence by appending n to the concatenation of the
+            # children natural-number-sequences.
+            sequence: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(
+                n) + nn0sl.concatenate_natural_number_0_sequences(
+                *(subtree.natural_number_sequence for subtree in args))
+            lrpt = super(LabeledRootedPlaneTree, cls).__new__(cls, (rpt, sequence))
+            return lrpt
+        else:
+            raise util.PunctiliousException("Unsupported signature.")
 
     def __repr__(self):
         return self.represent_as_function()
@@ -426,9 +463,8 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             if t not in s:
                 s = s + (t,)
         s = tuple(sorted(s))
-        abstract_set: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(
-            n=self.main_element,
-            s=s)
+        abstract_set: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(*s,
+                                                                                              n=self.main_element)
         return abstract_set
 
     @functools.cached_property
@@ -447,7 +483,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if self.is_canonical:
             return self
         else:
-            return LabeledRootedPlaneTree(
+            return LabeledRootedPlaneTree.from_rpt_and_sequence(
                 rpt=self.rooted_plane_tree,
                 sequence=self.natural_number_sequence.restricted_growth_function_sequence)
 
@@ -512,15 +548,15 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         if isinstance(o, int):
             # If the input is an integer,
             # it is interpreted as the LRPT n(), where n is the integer.
-            return cls(rptl.RootedPlaneTree(), (o,))
+            return cls(n=None, rpt=rptl.RootedPlaneTree(), sequence=(o,))
         raise util.PunctiliousException("`LabeledRootedPlaneTree` data validation failure. `o` is of unknown type.",
                                         type_of_o=type(o), o=o)
 
     @classmethod
     def from_immediate_subtrees(
             cls,
-            n: int,
-            s: tuple[FlexibleLabeledRootedPlaneTree, ...] | None = None) -> LabeledRootedPlaneTree:
+            *s: FlexibleLabeledRootedPlaneTree,
+            n: int) -> LabeledRootedPlaneTree:
         r"""Given a root natural number n,
         and a tuple of LRPTs s,
         declares a new formula 𝜓 := n(s_0, s_1, ..., s_n) where s_i is an element of s.
@@ -529,24 +565,18 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :param s:
         :return:
         """
-        n: int = int(n)
-        if n < 0:
-            raise util.PunctiliousException("`n` is not a (0-based) natural number.", n=n)
-        if s is None:
-            s: tuple[LabeledRootedPlaneTree, ...] = ()
-        s: tuple[LabeledRootedPlaneTree, ...] = tuple(
-            LabeledRootedPlaneTree.from_any(o=sub_lrpt) for sub_lrpt in s)
-        # Retrieves the children trees
-        sub_rpts: tuple[rptl.RootedPlaneTree, ...] = tuple(sub_lrpt.rooted_plane_tree for sub_lrpt in s)
-        # Declare the new parent tree
-        rpt: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_immediate_subtrees(*sub_rpts)
-        # Declare the natural-number-sequence by appending n to the concatenation of the
-        # children natural-number-sequences.
-        u: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(
-            n) + nn0sl.concatenate_natural_number_0_sequences(
-            *(subtree.natural_number_sequence for subtree in s))
-        lrpt: LabeledRootedPlaneTree = cls(rpt=rpt, sequence=u)
-        return lrpt
+        return cls(*s, n=n, rpt=None, sequence=None)
+
+    @classmethod
+    def from_rpt_and_sequence(cls, rpt: rptl.FlexibleRootedPlaneTree,
+                              sequence: nn0sl.FlexibleNaturalNumber0Sequence) -> LabeledRootedPlaneTree:
+        r"""Returns a new LRPT based on a rooted plane tree and a (0-based) natural number sequence.
+
+        :param rpt: A rooted plane tree.
+        :param sequence: A (0-based) natural number sequence.
+        :return: An LRPT.
+        """
+        return cls(n=None, rpt=rpt, sequence=sequence)
 
     @classmethod
     def from_tree_of_integer_tuple_pairs(cls, p) -> LabeledRootedPlaneTree:
@@ -587,7 +617,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         t, s = extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(p=p)
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree.from_tuple_tree(t)
         s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(*s)
-        lrpt: LabeledRootedPlaneTree = cls(rpt=t, sequence=s)
+        lrpt: LabeledRootedPlaneTree = cls(n=None, rpt=t, sequence=s)
         return lrpt
 
     def get_immediate_subtree_index(self, t: FlexibleLabeledRootedPlaneTree):
@@ -886,8 +916,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         r"""Returns `True` if this LRPT is increasing, `False` otherwise.
 
         Definition - increasing LRPT:
-        A LRPT is increasing
-        or increasing under canonical order,
+        A LRPT is increasing or increasing under canonical order,
         if its immediate subtrees are ordered.
 
         Definition - increasing LRPT:
@@ -895,10 +924,22 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         or increasing under canonical order,
         if and only if :math:`\forall i \in \{ 0, 1, \cdots, l - 1 \}, \psi_{i + 1} \ge \psi_i`.
 
+        Note
+        -----
+        The empty LRPT is trivially increasing.
+
+        Every LRPT of degree 0 is trivially increasing.
+
+        Every LRPT of degree 1 is trivially increasing.
+
         :return: `True` if this LRPT is increasing, `False` otherwise.
         """
-        return all(
-            self.immediate_subtrees[i + 1] >= self.immediate_subtrees[i] for i in range(0, self.degree - 1))
+        if self.degree < 2:
+            # trivial cases.
+            return True
+        else:
+            return all(
+                self.immediate_subtrees[i + 1] >= self.immediate_subtrees[i] for i in range(0, self.degree - 1))
 
     @functools.cached_property
     def is_strictly_increasing(self) -> bool:
@@ -941,7 +982,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_immediate_subtrees(),
                                               self.iterate_immediate_sub_sequences()):
-            subtree: LabeledRootedPlaneTree = LabeledRootedPlaneTree(child_tree, child_sequence)
+            subtree: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_rpt_and_sequence(child_tree, child_sequence)
             yield subtree
 
     def iterate_immediate_sub_sequences(self) -> typing.Generator[
@@ -987,7 +1028,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         child_sequence: nn0sl.NaturalNumber0Sequence
         for child_tree, child_sequence in zip(self.rooted_plane_tree.iterate_subtrees(),
                                               self.iterate_sub_sequences()):
-            subtree = LabeledRootedPlaneTree(child_tree, child_sequence)
+            subtree = LabeledRootedPlaneTree.from_rpt_and_sequence(child_tree, child_sequence)
             yield subtree
 
     @util.readonly_class_property

@@ -157,8 +157,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         for i, m in enumerate(s[1:], 1):
             subtree = cls.unrank(m)
             subtrees.append(subtree)
-        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(n=main_element,
-                                                                                   s=subtrees)
+        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(*subtrees, n=main_element)
         return t
 
 

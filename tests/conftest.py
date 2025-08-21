@@ -1,4 +1,5 @@
 import pytest
+from astroid.protocols import sequence_assigned_stmts
 
 import punctilious as pu
 
@@ -169,46 +170,46 @@ def nns0123456789_10_11():
 
 @pytest.fixture
 def lrpt1(t1_a, nns0):
-    return pu.lrptl.LabeledRootedPlaneTree(t1_a, nns0)
+    return pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t1_a, sequence=nns0)
 
 
 @pytest.fixture
 def lrpt2(t1_a, nns1):
-    return pu.lrptl.LabeledRootedPlaneTree(t1_a, nns1)
+    return pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t1_a, sequence=nns1)
 
 
 @pytest.fixture
 def lrpt3(t2_a_aa, nns00):
-    return pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, nns00)
+    return pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t2_a_aa, sequence=nns00)
 
 
 @pytest.fixture
 def lrpt4(t2_a_aa, nns01):
-    return pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, nns01)
+    return pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t2_a_aa, sequence=nns01)
 
 
 @pytest.fixture
 def lrpt5(t3_a_aa_aaa, nns001):
-    return pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, nns001)
+    return pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t3_a_aa_aaa, sequence=nns001)
 
 
 @pytest.fixture
 def lrpt6(t6_a_aa_ab_ac_ad_ae, nns012345):
-    return pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae, nns012345)
+    return pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t6_a_aa_ab_ac_ad_ae, sequence=nns012345)
 
 
 @pytest.fixture
 def lrpt7(t12, nns0123456789_10_11):
-    return pu.lrptl.LabeledRootedPlaneTree(t12, nns0123456789_10_11)
+    return pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t12, sequence=nns0123456789_10_11)
 
 
 @pytest.fixture
 def lrpt8(t_big):
-    return pu.lrptl.LabeledRootedPlaneTree(t_big,
-                                           (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1,
-                                            4,
-                                            9, 10,
-                                            7, 7, 7, 9, 0, 11, 12,))
+    return pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t_big, sequence=
+    (0, 1, 2, 0, 2, 0, 3, 0, 1, 2, 4, 5, 2, 4, 3, 6, 0, 7, 0, 8, 5, 4, 3, 2, 1,
+     4,
+     9, 10,
+     7, 7, 7, 9, 0, 11, 12,))
 
 
 @pytest.fixture

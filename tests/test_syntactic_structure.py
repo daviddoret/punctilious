@@ -24,18 +24,18 @@ class TestSyntacticStructure:
 
         ss1 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2)))
         ss2a = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((1, (2,)))
-        ss2 = pu.ssl.SyntacticStructure.from_immediate_subtrees(0, (ss2a,))
+        ss2 = pu.ssl.SyntacticStructure.from_immediate_subtrees(ss2a, n=0)
         ss3 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((4, (5,)))
         ss4 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((7, (8, 8, 8,)))
         domain2 = pu.ssl.AbstractOrderedSet.from_elements(ss1, ss2)
         codomain2 = pu.ssl.AbstractTuple.from_elements(ss3, ss4)
         m2 = pu.ssl.AbstractMap.from_domain_and_codomain(domain2, codomain2)
-        input_4 = pu.ssl.SyntacticStructure.from_immediate_subtrees(5, (ss1,))
+        input_4 = pu.ssl.SyntacticStructure.from_immediate_subtrees(ss1, n=5)
         output_4 = m2.substitute(input_4)
-        assert output_4 == pu.ssl.SyntacticStructure.from_immediate_subtrees(5, (ss3,))
-        input_5 = pu.ssl.SyntacticStructure.from_immediate_subtrees(9, (ss3, ss1, ss2, ss3))
+        assert output_4 == pu.ssl.SyntacticStructure.from_immediate_subtrees(ss3, n=5)
+        input_5 = pu.ssl.SyntacticStructure.from_immediate_subtrees(ss3, ss1, ss2, ss3, n=9)
         output_5 = m2.substitute(input_5)
-        assert output_5 == pu.ssl.SyntacticStructure.from_immediate_subtrees(9, (ss3, ss3, ss4, ss3))
+        assert output_5 == pu.ssl.SyntacticStructure.from_immediate_subtrees(ss3, ss3, ss4, ss3, n=9)
         pass
 
 
@@ -167,6 +167,29 @@ class TestAbstractSet:
         assert s_empty.cardinality == 0
 
         pass
+
+    def test_empty_set(self):
+        s0 = pu.ssl.AbstractSet.from_empty_set()
+        assert s0 == pu.ssl.AbstractSet.from_empty_set()
+        assert s0.cardinality == 0
+
+    def test_append(self):
+        t0 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(0)
+        t1 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(1)
+        t2 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(2)
+        s0 = pu.ssl.AbstractSet.from_empty_set()
+        s0 = s0.append(t0)
+        assert s0 == pu.ssl.AbstractSet.from_elements(t0)
+        assert s0.cardinality == 1
+        s0 = s0.append(t1)
+        assert s0 == pu.ssl.AbstractSet.from_elements(t1, t0)
+        assert s0.cardinality == 2
+        s0 = s0.append(t1)
+        assert s0 == pu.ssl.AbstractSet.from_elements(t0, t1)
+        assert s0.cardinality == 2
+        s0 = s0.append(t2)
+        assert s0 == pu.ssl.AbstractSet.from_elements(t1, t2, t0)
+        assert s0.cardinality == 3
 
 
 class TestAbstractTuple:

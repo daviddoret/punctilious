@@ -6,17 +6,17 @@ from conftest import t6_a_aa_ab_ac_ad_ae, t2_a_aa
 
 class TestLabeledRootedPlaneTree:
     def test_construction_success(self):
-        phi1 = pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 2, 3, 4,))
-        phi2 = pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 2, 1, 1,))
+        phi1 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=(((),), (),), sequence=(1, 2, 3, 4,))
+        phi2 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=(((),), (),), sequence=(1, 2, 1, 1,))
         pass
 
     def test_construction_failure(self):
         with pytest.raises(pu.util.PunctiliousException):
-            pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 3,))  # invalid
+            pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=(((),), (),), sequence=(1, 3,))  # invalid
         with pytest.raises(pu.util.PunctiliousException):
-            pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 2, 1, 3, 1,))
+            pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=(((),), (),), sequence=(1, 2, 1, 3, 1,))
         with pytest.raises(pu.util.PunctiliousException):
-            pu.lrptl.LabeledRootedPlaneTree(rpt=(((),), (),), sequence=(1, 2, 1, 2, 1, 4, 8, 2))
+            pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=(((),), (),), sequence=(1, 2, 1, 2, 1, 4, 8, 2))
 
     def test_is_canonical(self, lrpt1, lrpt3, lrpt4, lrpt6, lrpt7, lrpt8, t1_a, t2_a_aa, t3_a_aa_aaa, t12):
         assert not lrpt1.is_canonical
@@ -26,32 +26,32 @@ class TestLabeledRootedPlaneTree:
         assert not lrpt7.is_canonical
         assert lrpt8.is_canonical
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (0,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (0,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (17,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (17,))
         assert not phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (0, 0,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (0, 0,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (0, 1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (0, 1,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (94, 12,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (94, 12,))
         assert not phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (0, 0, 0,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (0, 0, 0,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (0, 1, 2,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (0, 1, 2,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (9, 5, 104,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (9, 5, 104,))
         assert not phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (0, 0, 0,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (0, 0, 0,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (0, 1, 2,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (0, 1, 2,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (100, 102, 140,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (100, 102, 140,))
         assert not phi.is_canonical
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t12, (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,))
         assert phi.is_canonical
-        phi = pu.lrptl.LabeledRootedPlaneTree(t12, (15, 1, 8, 3, 3, 10, 11, 12, 11, 6, 2, 10,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t12, (15, 1, 8, 3, 3, 10, 11, 12, 11, 6, 2, 10,))
         assert not phi.is_canonical
 
     def test_iterate_immediate_sub_sequences(self, raw_1, raw_2, raw_3, raw_4, raw_5, raw_6, raw_1_1, raw_1_2, lrpt1,
@@ -76,59 +76,60 @@ class TestLabeledRootedPlaneTree:
         assert l[3] == (11, 12,)
 
     def test_iterate_sub_sequences(self, t1_a, t2_a_aa, t3_a_aa_aaa, t7_a_aa_ab_aaa_aaaa_aba_abaa):
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (1,))
         l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 1
         assert l[0] == phi
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (17,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (17,))
         l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 1
         assert l[0] == phi
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 2,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (1, 2,))
         l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 2
         assert l[0] == phi
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (2,))
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (4, 3,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (4, 3,))
         l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 2
         assert l[0] == phi
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (3,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (3,))
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (1, 1, 1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (1, 1, 1,))
         l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 3
         assert l[0] == phi
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (1,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (1,))
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (1, 2, 3,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (1, 2, 3,))
         l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 3
         assert l[0] == phi
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
-        assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (3,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (2,))
+        assert l[2] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (3,))
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 2, 15,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (9, 2, 15,))
         l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 3
         assert l[0] == phi
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
-        assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (15,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (2,))
+        assert l[2] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (15,))
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(t7_a_aa_ab_aaa_aaaa_aba_abaa, (4, 2, 5, 2, 8, 10, 3,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t7_a_aa_ab_aaa_aaaa_aba_abaa,
+                                                                    (4, 2, 5, 2, 8, 10, 3,))
         l = tuple(t for t in phi.iterate_subtrees())
         assert len(l) == 7
         assert l[0] == phi
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (2, 5, 2,))
-        assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (5,))
-        assert l[3] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
-        assert l[4] == pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (8, 10, 3,))
-        assert l[5] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (10,))
-        assert l[6] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (3,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (2, 5, 2,))
+        assert l[2] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (5,))
+        assert l[3] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (2,))
+        assert l[4] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (8, 10, 3,))
+        assert l[5] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (10,))
+        assert l[6] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (3,))
 
     def test_iterate_immediate_sub_formulas(self, lrpt1, lrpt2, lrpt3, t2_a_aa, lrpt4, lrpt7, lrpt6,
                                             t6_a_aa_ab_ac_ad_ae):
@@ -140,9 +141,9 @@ class TestLabeledRootedPlaneTree:
         assert l[0] == lrpt2
         l = tuple(af for af in lrpt7.iterate_immediate_subtrees())
         assert l[0] == lrpt2
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (3, 4,))
-        assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae, (5, 6, 7, 8, 9, 10,))
-        assert l[3] == pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (11, 12,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (3, 4,))
+        assert l[2] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t6_a_aa_ab_ac_ad_ae, (5, 6, 7, 8, 9, 10,))
+        assert l[3] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (11, 12,))
 
     def test_iterate_sub_formulas(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, lrpt1, lrpt3, lrpt4, lrpt6, lrpt7):
         l = tuple(t for t in lrpt1.iterate_subtrees())
@@ -152,27 +153,27 @@ class TestLabeledRootedPlaneTree:
         assert l[1] == lrpt1
         l = tuple(t for t in lrpt4.iterate_subtrees())
         assert l[0] == lrpt4
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (2,))
         l = tuple(t for t in lrpt6.iterate_subtrees())
         assert l[0] == lrpt6
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
-        assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (3,))
-        assert l[3] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (4,))
-        assert l[4] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (5,))
-        assert l[5] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (6,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (2,))
+        assert l[2] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (3,))
+        assert l[3] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (4,))
+        assert l[4] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (5,))
+        assert l[5] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (6,))
         l = tuple(t for t in lrpt7.iterate_subtrees())
         assert l[0] == lrpt7
-        assert l[1] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (2,))
-        assert l[2] == pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (3, 4,))
-        assert l[3] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (4,))
-        assert l[4] == pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae, (5, 6, 7, 8, 9, 10,))
-        assert l[5] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (6,))
-        assert l[6] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (7,))
-        assert l[7] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (8,))
-        assert l[8] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (9,))
-        assert l[9] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (10,))
-        assert l[10] == pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (11, 12,))
-        assert l[11] == pu.lrptl.LabeledRootedPlaneTree(t1_a, (12,))
+        assert l[1] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (2,))
+        assert l[2] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (3, 4,))
+        assert l[3] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (4,))
+        assert l[4] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t6_a_aa_ab_ac_ad_ae, (5, 6, 7, 8, 9, 10,))
+        assert l[5] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (6,))
+        assert l[6] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (7,))
+        assert l[7] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (8,))
+        assert l[8] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (9,))
+        assert l[9] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (10,))
+        assert l[10] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (11, 12,))
+        assert l[11] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (12,))
 
     def test_main_sequence_element(self, lrpt1, lrpt3, lrpt4, lrpt6, lrpt7):
         assert lrpt1.main_element == 1
@@ -224,27 +225,27 @@ class TestLabeledRootedPlaneTree:
     def test_build_formula_from_tree_of_integer_tuple_pairs(self, lrpt1):
         tree_of_pairs = (1, (),)
         t, s = pu.lrptl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t, s)
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t, s)
         psi = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (1, ((1, (),),),)
         t, s = pu.lrptl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t, s)
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t, s)
         psi = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (1, ((2, (),),),)
         t, s = pu.lrptl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t, s)
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t, s)
         psi = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (1, ((2, (),), (3, (),), (4, (),),),)
         t, s = pu.lrptl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t, s)
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t, s)
         psi = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
         tree_of_pairs = (1, ((2, (),), (1, ((2, ((3, ((4, ((2, (),),),),),),),),),), (5, ((2, (),),),),),)
         t, s = pu.lrptl.extract_tree_of_tuples_and_sequence_from_tree_of_integer_tuple_pairs(tree_of_pairs)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t, s)
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t, s)
         psi = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(tree_of_pairs)
         assert phi == psi
 
@@ -253,110 +254,111 @@ class TestLabeledRootedPlaneTree:
         assert lrpt3.get_subtree_by_path((0,)) == lrpt3
         assert lrpt3.get_subtree_by_path((0, 0,)) == lrpt1
 
-        assert lrpt8.get_subtree_by_path((0, 3,)) == pu.lrptl.LabeledRootedPlaneTree(
+        assert lrpt8.get_subtree_by_path((0, 3,)) == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(
             rpt=t12,
             sequence=(4, 3, 2, 1, 4, 9, 10, 7, 7, 7, 9, 0))
 
-        assert lrpt8.get_subtree_by_path((0, 3, 2,)) == pu.lrptl.LabeledRootedPlaneTree(
+        assert lrpt8.get_subtree_by_path((0, 3, 2,)) == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(
             t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,)
         )
-        assert lrpt8.get_subtree_by_path((0, 3, 2, 4,)) == pu.lrptl.LabeledRootedPlaneTree(
+        assert lrpt8.get_subtree_by_path((0, 3, 2, 4,)) == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(
             t1_a, (7,))
 
     def test_represent_as_function(self, t1_a, t2_a_aa, t3_a_aa_aaa, t6_a_aa_ab_ac_ad_ae, t12):
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (1,))
         assert phi.represent_as_function() == "1"
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (18,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (18,))
         assert phi.represent_as_function() == "18"
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (1, 1,))
         assert phi.represent_as_function() == "1(1)"
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 2,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (1, 2,))
         assert phi.represent_as_function() == "1(2)"
-        phi = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (94, 12,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (94, 12,))
         assert phi.represent_as_function() == "94(12)"
-        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (1, 1, 1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (1, 1, 1,))
         assert phi.represent_as_function() == "1(1(1))"
-        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (1, 2, 3,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (1, 2, 3,))
         assert phi.represent_as_function() == "1(2(3))"
-        phi = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (9, 5, 104,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (9, 5, 104,))
         assert phi.represent_as_function() == "9(5(104))"
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (1, 1, 1,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (1, 1, 1,))
         assert phi.represent_as_function() == "1(1, 1)"
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (1, 2, 3,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (1, 2, 3,))
         assert phi.represent_as_function() == "1(2, 3)"
-        phi = pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (100, 102, 140,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (100, 102, 140,))
         assert phi.represent_as_function() == "100(102, 140)"
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t12, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t12, (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,))
         assert phi.represent_as_function() == "1(2, 3(4), 5(6, 7, 8, 9, 10), 11(12))"
-        phi = pu.lrptl.LabeledRootedPlaneTree(t12, (15, 1, 8, 3, 3, 10, 11, 12, 11, 6, 2, 10,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t12, (15, 1, 8, 3, 3, 10, 11, 12, 11, 6, 2, 10,))
         assert phi.represent_as_function() == "15(1, 8(3), 3(10, 11, 12, 11, 6), 2(10))"
 
     def test_canonical_labeled_rooted_plane_tree(self, t1_a, t2_a_aa, t3_a_aa_aaa, t12):
-        t0 = pu.lrptl.LabeledRootedPlaneTree(t1_a, (0,))
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (1,))
+        t0 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (0,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (1,))
         assert phi.canonical_labeled_rooted_plane_tree == t0
-        psi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (17,))
+        psi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (17,))
         assert psi.canonical_labeled_rooted_plane_tree == t0
 
-        t00 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (0, 0,))
-        phi1 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 1,))
+        t00 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (0, 0,))
+        phi1 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (1, 1,))
         assert phi1.canonical_labeled_rooted_plane_tree == t00
-        psi1 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (13, 13,))
+        psi1 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (13, 13,))
         assert psi1.canonical_labeled_rooted_plane_tree == t00
 
-        t01 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (0, 1,))
-        phi2 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (1, 2,))
+        t01 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (0, 1,))
+        phi2 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (1, 2,))
         assert phi2.canonical_labeled_rooted_plane_tree == t01
-        psi2 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (102, 1,))
+        psi2 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t2_a_aa, (102, 1,))
         assert psi2.canonical_labeled_rooted_plane_tree == t01
 
         assert phi1.canonical_labeled_rooted_plane_tree != phi2.canonical_labeled_rooted_plane_tree
 
-        t000 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (0, 0, 0,))
-        phi1 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (1, 1, 1,))
+        t000 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (0, 0, 0,))
+        phi1 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (1, 1, 1,))
         assert phi1.canonical_labeled_rooted_plane_tree == t000
-        psi1 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (5, 5, 5,))
+        psi1 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (5, 5, 5,))
         assert psi1.canonical_labeled_rooted_plane_tree == t000
 
-        t012 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (0, 1, 2,))
-        phi2 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (1, 2, 3,))
+        t012 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (0, 1, 2,))
+        phi2 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (1, 2, 3,))
         assert phi2.canonical_labeled_rooted_plane_tree == t012
-        psi2 = pu.lrptl.LabeledRootedPlaneTree(t3_a_aa_aaa, (9, 5, 104,))
+        psi2 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t3_a_aa_aaa, (9, 5, 104,))
         assert psi2.canonical_labeled_rooted_plane_tree == t012
 
         assert phi1.canonical_labeled_rooted_plane_tree != phi2.canonical_labeled_rooted_plane_tree
 
         # (t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa)
-        phi = pu.lrptl.LabeledRootedPlaneTree(t12, (0, 1, 2, 3, 3, 4, 5, 6, 5, 7, 8, 4,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t12, (0, 1, 2, 3, 3, 4, 5, 6, 5, 7, 8, 4,))
         assert phi.canonical_labeled_rooted_plane_tree == phi
-        psi = pu.lrptl.LabeledRootedPlaneTree(t12, (14, 0, 7, 2, 2, 9, 10, 11, 10, 5, 1, 9,))
+        psi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t12, (14, 0, 7, 2, 2, 9, 10, 11, 10, 5, 1, 9,))
         assert psi.canonical_labeled_rooted_plane_tree == phi
 
     def test_is_subformula_of(self, t1_a, t6_a_aa_ab_ac_ad_ae, lrpt8):
-        phi = pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t6_a_aa_ab_ac_ad_ae, (4, 9, 10, 7, 7, 7,))
         assert phi.is_subtree_of(lrpt8)
 
-        phi = pu.lrptl.LabeledRootedPlaneTree(t1_a, (12,))
+        phi = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (12,))
         assert phi.is_subtree_of(lrpt8)
 
-        assert not pu.lrptl.LabeledRootedPlaneTree(t6_a_aa_ab_ac_ad_ae,
-                                                   (2, 0, 3, 0, 2, 2,)).is_subtree_of(lrpt8)
+        assert not pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t6_a_aa_ab_ac_ad_ae,
+                                                                         (2, 0, 3, 0, 2, 2,)).is_subtree_of(lrpt8)
 
     def test_declare_labeled_rooted_plane_tree_from_immediate_sub_formulas(self, t1_a, t2_a_aa, t3_a_aa_aaa):
-        phi1 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (17, 15,))
-        phi2 = pu.lrptl.LabeledRootedPlaneTree(t1_a, (31,))
-        phi3 = pu.lrptl.LabeledRootedPlaneTree(t2_a_aa, (9, 2,))
-        phi4 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(n=4, s=(phi1, phi2, phi3,))
+        phi1 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t2_a_aa, sequence=(17, 15,))
+        phi2 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t1_a, sequence=(31,))
+        phi3 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t2_a_aa, sequence=(9, 2,))
+        phi4 = pu.lrptl.LabeledRootedPlaneTree.from_immediate_subtrees(phi1, phi2, phi3, n=4)
         t = pu.rptl.RootedPlaneTree(t2_a_aa, t1_a, t2_a_aa)
-        phi5 = pu.lrptl.LabeledRootedPlaneTree(t, (4, 17, 15, 31, 9, 2,))
+        phi5 = pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=t, sequence=(4, 17, 15, 31, 9, 2,))
         assert phi4 == phi5
 
     def test_canonical_order(self, lrpt1, lrpt2, lrpt3, lrpt4, lrpt5, lrpt6, lrpt7, lrpt8):
         assert lrpt1.is_strictly_less_than(lrpt2)
         assert lrpt3.is_strictly_less_than(lrpt4)
-        assert pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_strictly_less_than(
-            pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 2, 5,)))
+        assert pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=pu.rptc.t3_a_aa_ab,
+                                                                     sequence=(9, 2, 3,)).is_strictly_less_than(
+            pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt=pu.rptc.t3_a_aa_ab, sequence=(9, 2, 5,)))
 
     def test_canonical_order_2(self):
         for i in range(0, 2048):
@@ -372,9 +374,9 @@ class TestLabeledRootedPlaneTree:
         assert lrpt5.is_increasing
         assert lrpt6.is_increasing
         assert not lrpt8.is_increasing
-        assert pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_increasing
-        assert pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 5, 5,)).is_increasing
-        assert not pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_increasing
+        assert pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_increasing
+        assert pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (9, 5, 5,)).is_increasing
+        assert not pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_increasing
 
     def test_is_strictly_increasing(self, lrpt1, lrpt2, lrpt3, lrpt4, lrpt5, lrpt6, lrpt7, lrpt8):
         assert lrpt1.is_strictly_increasing
@@ -384,9 +386,12 @@ class TestLabeledRootedPlaneTree:
         assert lrpt5.is_strictly_increasing
         assert lrpt6.is_strictly_increasing
         # assert af_big.is_strictly_increasing
-        assert pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 2, 3,)).is_strictly_increasing
-        assert not pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 5, 5,)).is_strictly_increasing
-        assert not pu.lrptl.LabeledRootedPlaneTree(pu.rptc.t3_a_aa_ab, (9, 3, 2,)).is_strictly_increasing
+        assert pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab,
+                                                                     (9, 2, 3,)).is_strictly_increasing
+        assert not pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab,
+                                                                         (9, 5, 5,)).is_strictly_increasing
+        assert not pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(pu.rptc.t3_a_aa_ab,
+                                                                         (9, 3, 2,)).is_strictly_increasing
 
     def test_least_element(self):
         trivial_formula = pu.lrptl.LRPT(rpt=pu.rptl.trivial_rooted_plane_tree,
@@ -413,17 +418,6 @@ class TestLabeledRootedPlaneTree:
             assert r == i
 
     def test_super_recursive_order(self):
-        # s = (2, 2436, 2322, 4370)
-        # s = pu.nn0sl.NaturalNumber0Sequence(*s)
-        # n_bad = s.rank()
-        # n = pu.nn0sl.RefinedGodelNumberOrder.rank(s)
-        # assert n_bad == n
-        # s1 = pu.nn0sl.SumFirstLexicographicSecondOrder.unrank(n)
-        # s2 = pu.nn0sl.RefinedGodelNumberOrder.unrank(n)
-
-        # l = []
-        # for i in range(0, 1024):
-        #    l.append(t)
         t0a = pu.lrptl.LabeledRootedPlaneTree.least_element
         t0b = pu.lrptl.LabeledRootedPlaneTree.unrank(0)
         assert t0a == t0b
