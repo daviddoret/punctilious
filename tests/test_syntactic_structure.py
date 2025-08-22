@@ -173,21 +173,21 @@ class TestSyntacticSet:
         assert s0 == pu.ssl.SyntacticSet.from_empty_set()
         assert s0.cardinality == 0
 
-    def test_append(self):
+    def test_adjoin(self):
         t0 = pu.ssl.SyntacticStructure.from_integer(0)
         t1 = pu.ssl.SyntacticStructure.from_integer(1)
         t2 = pu.ssl.SyntacticStructure.from_integer(2)
         s0 = pu.ssl.SyntacticSet.from_empty_set()
-        s0 = s0.append(t0)
+        s0 = s0.adjoin(t0)
         assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t0))
         assert s0.cardinality == 1
-        s0 = s0.append(t1)
+        s0 = s0.adjoin(t1)
         assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t1, t0))
         assert s0.cardinality == 2
-        s0 = s0.append(t1)
+        s0 = s0.adjoin(t1)
         assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t0, t1))
         assert s0.cardinality == 2
-        s0 = s0.append(t2)
+        s0 = s0.adjoin(t2)
         assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t1, t2, t0))
         assert s0.cardinality == 3
 

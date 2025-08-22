@@ -243,7 +243,7 @@ class RootedPlaneTree(brl.ClassWithOrder, tuple):
             if char == '(':
                 new_node = []
                 if stack:
-                    stack[-1].append(new_node)
+                    stack[-1].adjoin(new_node)
                 stack.append(new_node)
             elif char == ')':
                 if len(stack) > 1:
@@ -589,6 +589,11 @@ class RootedPlaneTree(brl.ClassWithOrder, tuple):
         if self._subtrees is None:
             self._subtrees = tuple(self.iterate_subtrees())
         return self._subtrees
+
+    @functools.cached_property
+    def successor(self) -> RootedPlaneTree:
+        r"""Returns the successor of this RPT following canonical order."""
+        return self.is_strictly_less_than_relation.successor(self)
 
     def to_list(self) -> list:
         r"""Returns a Python `list` of equivalent structure. This is useful to manipulate formulas because
