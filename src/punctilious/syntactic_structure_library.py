@@ -720,10 +720,12 @@ class SyntacticSet(SyntacticStructure):
         return self.has_immediate_subtree(x)
 
     def intersection(self, x: FlexibleSyntacticSet) -> SyntacticSet:
+        r"""Returns the intersection of this set and `x`.
+        """
         x: SyntacticSet = SyntacticSet.from_any(x)
         y: SyntacticSet = SyntacticSet.from_empty_set()
         for z in self.elements:
-            if z in y.elements:
+            if x.has_element(z):
                 y = y.append(z)
         return y
 
@@ -786,6 +788,11 @@ class SyntacticSet(SyntacticStructure):
         return output
 
     def union(self, x: FlexibleSyntacticSet) -> SyntacticSet:
+        r"""Returns the union of this set and `x`.
+
+        :param x:
+        :return:
+        """
         x: SyntacticSet = SyntacticSet.from_any(x)
         return SyntacticSet.from_elements(*self.elements, *x.elements)
 
