@@ -645,6 +645,23 @@ class SyntacticSet(SyntacticStructure):
         """
         return len(self.elements)
 
+    def difference(self, x: FlexibleSyntacticSet) -> SyntacticSet:
+        r"""Returns the difference of this set and `x`.
+
+        Definition
+        ------------
+        :math:`A \setminus B = \{ x \in A, x \notin B \}`
+
+        :param x: A syntactic set.
+        :return: A syntactic set.
+        """
+        x: SyntacticSet = SyntacticSet.from_any(x)
+        y: SyntacticSet = SyntacticSet.from_empty_set()
+        for z in self.elements:
+            if not x.has_element(z):
+                y = y.append(z)
+        return y
+
     @functools.cached_property
     def elements(self) -> tuple[SyntacticStructure, ...]:
         r"""Returns the elements of this syntactic set.
@@ -721,6 +738,9 @@ class SyntacticSet(SyntacticStructure):
 
     def intersection(self, x: FlexibleSyntacticSet) -> SyntacticSet:
         r"""Returns the intersection of this set and `x`.
+
+        :param x: A syntactic set.
+        :return: A syntactic set.
         """
         x: SyntacticSet = SyntacticSet.from_any(x)
         y: SyntacticSet = SyntacticSet.from_empty_set()

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="SyntacticSet.union">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="SyntacticSet.intersection">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
@@ -1196,14 +1196,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01635" summary="abstract-map">
-      <option name="closed" value="true" />
-      <created>1754425831988</created>
-      <option name="number" value="01635" />
-      <option name="presentableId" value="LOCAL-01635" />
-      <option name="project" value="LOCAL" />
-      <updated>1754425831989</updated>
-    </task>
     <task id="LOCAL-01636" summary="doc">
       <option name="closed" value="true" />
       <created>1754479169576</created>
@@ -1588,7 +1580,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755851418246</updated>
     </task>
-    <option name="localTasksCounter" value="1684" />
+    <task id="LOCAL-01684" summary="SyntacticSet.intersection">
+      <option name="closed" value="true" />
+      <created>1755856279403</created>
+      <option name="number" value="01684" />
+      <option name="presentableId" value="LOCAL-01684" />
+      <option name="project" value="LOCAL" />
+      <updated>1755856279404</updated>
+    </task>
+    <option name="localTasksCounter" value="1685" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1641,7 +1641,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="CombinedFixedLengthIntegersWithSentinelOrder" />
     <MESSAGE value="abstract-set" />
     <MESSAGE value="abstract-map" />
     <MESSAGE value="doc" />
@@ -1666,7 +1665,8 @@
     <MESSAGE value="support for *args in __new__ in LRPT and syntactic structures" />
     <MESSAGE value="cleanup" />
     <MESSAGE value="SyntacticSet.union" />
-    <option name="LAST_COMMIT_MESSAGE" value="SyntacticSet.union" />
+    <MESSAGE value="SyntacticSet.intersection" />
+    <option name="LAST_COMMIT_MESSAGE" value="SyntacticSet.intersection" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

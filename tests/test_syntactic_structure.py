@@ -227,6 +227,22 @@ class TestSyntacticSet:
         assert s3.intersection(s3).is_syntactic_set_equivalent_to(s3)
         assert s4.intersection(s4).is_syntactic_set_equivalent_to(s4)
 
+    def test_difference(self):
+        t0 = pu.ssl.SyntacticStructure.from_integer(0)
+        t1 = pu.ssl.SyntacticStructure.from_integer(1)
+        t2 = pu.ssl.SyntacticStructure.from_integer(2)
+        t3 = pu.ssl.SyntacticStructure.from_integer(3)
+        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        s0 = pu.ssl.SyntacticSet.from_empty_set()
+        s1 = pu.ssl.SyntacticSet.from_elements(t0, t1, t2)
+        s2 = pu.ssl.SyntacticSet.from_elements(t4, t2, t3)
+        s3 = s1.difference(s2)
+        assert s3.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t0, t1))
+        s4 = s1.difference(s0)
+        assert s4.is_syntactic_set_equivalent_to(s1)
+        assert s3.difference(s3).is_syntactic_set_equivalent_to(s0)
+        assert s4.difference(s4).is_syntactic_set_equivalent_to(s0)
+
 
 class TestSyntacticTuple:
 
