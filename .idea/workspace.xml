@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="SyntacticSet.symmetric_difference">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="SyntacticSet.cartesian_product">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
@@ -504,6 +504,7 @@
     "Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_append.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_empty_set.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestAbstractTuple.test_abstract_tuple.executor": "Debug",
+    "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_cartesian_produc.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_difference.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_intersection.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_symmetric_difference.executor": "Run",
@@ -1198,14 +1199,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01638" summary="RPT.height">
-      <option name="closed" value="true" />
-      <created>1754566441820</created>
-      <option name="number" value="01638" />
-      <option name="presentableId" value="LOCAL-01638" />
-      <option name="project" value="LOCAL" />
-      <updated>1754566441820</updated>
-    </task>
     <task id="LOCAL-01639" summary="LRPT.height">
       <option name="closed" value="true" />
       <created>1754598863937</created>
@@ -1590,7 +1583,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755857203525</updated>
     </task>
-    <option name="localTasksCounter" value="1687" />
+    <task id="LOCAL-01687" summary="SyntacticSet.cartesian_product">
+      <option name="closed" value="true" />
+      <created>1755857582588</created>
+      <option name="number" value="01687" />
+      <option name="presentableId" value="LOCAL-01687" />
+      <option name="project" value="LOCAL" />
+      <updated>1755857582588</updated>
+    </task>
+    <option name="localTasksCounter" value="1688" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1643,7 +1644,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="doc" />
     <MESSAGE value="RPT.height" />
     <MESSAGE value="LRPT.height" />
     <MESSAGE value="cantor_pairing_library" />
@@ -1668,7 +1668,8 @@
     <MESSAGE value="SyntacticSet.intersection" />
     <MESSAGE value="SyntacticSet.difference" />
     <MESSAGE value="SyntacticSet.symmetric_difference" />
-    <option name="LAST_COMMIT_MESSAGE" value="SyntacticSet.symmetric_difference" />
+    <MESSAGE value="SyntacticSet.cartesian_product" />
+    <option name="LAST_COMMIT_MESSAGE" value="SyntacticSet.cartesian_product" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

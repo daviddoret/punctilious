@@ -259,7 +259,7 @@ class TestSyntacticSet:
         assert s3.symmetric_difference(s3).is_syntactic_set_equivalent_to(s0)
         assert s4.symmetric_difference(s4).is_syntactic_set_equivalent_to(s0)
 
-    def test_cartesian_produc(self):
+    def test_cartesian_product(self):
         t0 = pu.ssl.SyntacticStructure.from_integer(0)
         t1 = pu.ssl.SyntacticStructure.from_integer(1)
         t2 = pu.ssl.SyntacticStructure.from_integer(2)

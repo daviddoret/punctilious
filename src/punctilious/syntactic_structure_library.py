@@ -118,12 +118,12 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
 
 
 class SyntacticOrderedSet(SyntacticStructure):
-    r"""An syntactic ordered set.
+    r"""A syntactic ordered set.
 
     Definition
     ------------
 
-    An `syntactic ordered set` is a syntactic structure that models a finite (computable) ordered set defined by extension.
+    A `syntactic ordered set` is a syntactic structure that models a finite (computable) ordered set defined by extension.
 
     Given LRPT :math:`T` with sub-LRPTs :math:`t_0, t_1, \cdots, t_n`,
     its `syntactic ordered set` is the ordered set :math:`(s_0, s_1, \cdots, s_m)`
@@ -317,12 +317,12 @@ class SyntacticOrderedSet(SyntacticStructure):
 
 
 class SyntacticMap(SyntacticStructure):
-    r"""An syntactic map.
+    r"""A syntactic map.
 
     Definition
     ------------
 
-    An `syntactic map` is a syntactic structure that models a finite (computable) map defined by extension.
+    A `syntactic map` is a syntactic structure that models a finite (computable) map defined by extension.
 
     Given any LRPT :math:`T` with the following constraints:
      - its degree is at least 2,
@@ -565,12 +565,12 @@ class SyntacticMap(SyntacticStructure):
 
 
 class SyntacticSet(SyntacticStructure):
-    r"""An syntactic set.
+    r"""A syntactic set.
 
     Definition
     ------------
 
-    An `syntactic set` is a syntactic structure that models a finite (computable) set defined by extension.
+    A `syntactic set` is a syntactic structure that models a finite (computable) set defined by extension.
 
     Given any LRPT :math:`T`,
     its `syntactic set` is the set :math:`{t_0, t_1, \cdots, t_n}`
@@ -848,12 +848,12 @@ class SyntacticSet(SyntacticStructure):
 
 
 class SyntacticTuple(SyntacticStructure):
-    r"""An syntactic tuple.
+    r"""A syntactic tuple.
 
     Definition
     ------------
 
-    An `syntactic tuple` is a syntactic structure that models a finite (computable) tuple defined by extension.
+    A `syntactic tuple` is a syntactic structure that models a finite (computable) tuple defined by extension.
 
     Given any LRPT :math:`T`,
     its `syntactic tuple` is the tuple :math:`{t_0, t_1, \cdots, t_n}`
@@ -1038,12 +1038,12 @@ class SyntacticTuple(SyntacticStructure):
 
 
 class SyntacticOrderedPair(SyntacticTuple):
-    r"""An syntactic ordered pair.
+    r"""A syntactic ordered pair.
 
     Definition
     ------------
 
-    An `syntactic ordered pair` is a syntactic structure that models an ordered pair.
+    A `syntactic ordered pair` is a syntactic structure that models an ordered pair.
 
     Given any LRPT :math:`T` of degree >= 2,
     its `syntactic ordered pair` is the tuple :math:`(t_0, t_1)`
@@ -1096,7 +1096,7 @@ class SyntacticOrderedPair(SyntacticTuple):
         :param first_element: A syntactic structure.
         :param second_element: A syntactic structure.
         :param n: (conditional) The main element of the LRPT.
-        :return: An syntactic ordered pair.
+        :return: A syntactic ordered pair.
         """
         if n is None:
             n: int = 0  # by convention, 0 is the default main element.
@@ -1158,12 +1158,12 @@ class SyntacticOrderedPair(SyntacticTuple):
 
 
 class SyntacticInferenceRule(SyntacticStructure):
-    r"""An syntactic inference rule.
+    r"""A syntactic inference rule.
 
     Definition
     ------------
 
-    An `syntactic inference rule` is a syntactic structure that models an inference rule of the form:
+    A `syntactic inference rule` is a syntactic structure that models an inference rule of the form:
 
     Given :math:`x_1, x_2, \cdots, x_n` denoted as the variables.
 
