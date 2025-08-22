@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="support for *args in __new__ in LRPT and syntactic structures">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -812,7 +810,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_syntactic_structure.py">
+  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_union">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1077,7 +1075,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_syntactic_structure.TestSyntacticSet.test_union" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -1090,7 +1088,7 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure&quot;" />
+      <option name="_new_target" value="&quot;test_syntactic_structure.TestSyntacticSet.test_union&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -1159,7 +1157,7 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_leaf" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_append" />
-      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" />
+      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_union" />
       <item itemvalue="Python tests.pytest in test_labeled_rooted_plane_tree.py" />
       <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
       <item itemvalue="Shell Script.pytest tests" />
@@ -1168,11 +1166,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_union" />
         <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestAbstractSet.test_append" />
         <item itemvalue="Python tests.pytest in test_labeled_rooted_plane_tree.py" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_is_leaf" />
-        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure" />
       </list>
     </recent_temporary>
   </component>
@@ -1194,14 +1192,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01633" summary="abstract-set">
-      <option name="closed" value="true" />
-      <created>1754339235284</created>
-      <option name="number" value="01633" />
-      <option name="presentableId" value="LOCAL-01633" />
-      <option name="project" value="LOCAL" />
-      <updated>1754339235284</updated>
     </task>
     <task id="LOCAL-01634" summary="abstract-set">
       <option name="closed" value="true" />
@@ -1587,7 +1577,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755812026769</updated>
     </task>
-    <option name="localTasksCounter" value="1682" />
+    <task id="LOCAL-01682" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1755851050120</created>
+      <option name="number" value="01682" />
+      <option name="presentableId" value="LOCAL-01682" />
+      <option name="project" value="LOCAL" />
+      <updated>1755851050120</updated>
+    </task>
+    <option name="localTasksCounter" value="1683" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1662,10 +1660,10 @@
     <MESSAGE value="SyntacticStructure inherits from LRPT" />
     <MESSAGE value="SyntacticStructure default representations" />
     <MESSAGE value="AbstractOrderedPair" />
-    <MESSAGE value="cleanup" />
     <MESSAGE value="InferenceRule" />
     <MESSAGE value="support for *args in __new__ in LRPT and syntactic structures" />
-    <option name="LAST_COMMIT_MESSAGE" value="support for *args in __new__ in LRPT and syntactic structures" />
+    <MESSAGE value="cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleanup" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1812,19 +1810,9 @@
           <option name="timeStamp" value="539" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
-          <line>178</line>
-          <option name="timeStamp" value="542" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_rooted_plane_tree.py</url>
           <line>28</line>
           <option name="timeStamp" value="543" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
-          <line>176</line>
-          <option name="timeStamp" value="544" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

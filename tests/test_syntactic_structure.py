@@ -191,6 +191,26 @@ class TestSyntacticSet:
         assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t1, t2, t0))
         assert s0.cardinality == 3
 
+    def test_union(self):
+        t0 = pu.ssl.SyntacticStructure.from_integer(0)
+        t1 = pu.ssl.SyntacticStructure.from_integer(1)
+        t2 = pu.ssl.SyntacticStructure.from_integer(2)
+        t3 = pu.ssl.SyntacticStructure.from_integer(3)
+        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        s0 = pu.ssl.SyntacticSet.from_empty_set()
+        s1 = s0.union(s0)
+        assert s1.is_syntactic_set_equivalent_to(s0)
+        s2 = pu.ssl.SyntacticSet.from_elements(t0)
+        s3 = s1.union(s2)
+        assert s3.is_syntactic_set_equivalent_to(s2)
+        s4 = pu.ssl.SyntacticSet.from_elements(t0, t3, t2)
+        s5 = s3.union(s4)
+        assert s5.is_syntactic_set_equivalent_to(s4)
+        s6 = pu.ssl.SyntacticSet.from_elements(t4, t4, t2, t3)
+        s6 = s6.union(s5)
+        s7 = pu.ssl.SyntacticSet.from_elements(t4, t2, t3, t0)
+        assert s6.is_syntactic_set_equivalent_to(s7)
+
 
 class TestSyntacticTuple:
 
