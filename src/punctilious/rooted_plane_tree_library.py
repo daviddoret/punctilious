@@ -243,7 +243,7 @@ class RootedPlaneTree(brl.ClassWithOrder, tuple):
             if char == '(':
                 new_node = []
                 if stack:
-                    stack[-1].adjoin(new_node)
+                    stack[-1].append(new_node)
                 stack.append(new_node)
             elif char == ')':
                 if len(stack) > 1:
