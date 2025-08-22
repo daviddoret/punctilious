@@ -645,6 +645,23 @@ class SyntacticSet(SyntacticStructure):
         """
         return len(self.elements)
 
+    def cartesian_product(self, x: FlexibleSyntacticSet) -> SyntacticSet:
+        r"""Returns the cartesian product of this set and `x`.
+
+        Definition
+        ------------
+        :math:`A \times B = \{ (a, b) \mid a \in A, b \in B \}` \}`
+
+        :param x: A syntactic set.
+        :return: A syntactic set.
+        """
+        x: SyntacticSet = SyntacticSet.from_any(x)
+        y: SyntacticSet = SyntacticSet.from_empty_set()
+        for a in self.elements:
+            for b in x.elements:
+                y = y.append(SyntacticOrderedPair.from_first_and_second_elements(a, b))
+        return y
+
     def difference(self, x: FlexibleSyntacticSet) -> SyntacticSet:
         r"""Returns the difference of this set and `x`.
 

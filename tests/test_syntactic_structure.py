@@ -259,6 +259,25 @@ class TestSyntacticSet:
         assert s3.symmetric_difference(s3).is_syntactic_set_equivalent_to(s0)
         assert s4.symmetric_difference(s4).is_syntactic_set_equivalent_to(s0)
 
+    def test_cartesian_produc(self):
+        t0 = pu.ssl.SyntacticStructure.from_integer(0)
+        t1 = pu.ssl.SyntacticStructure.from_integer(1)
+        t2 = pu.ssl.SyntacticStructure.from_integer(2)
+        t3 = pu.ssl.SyntacticStructure.from_integer(3)
+        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        s0 = pu.ssl.SyntacticSet.from_empty_set()
+        s1 = pu.ssl.SyntacticSet.from_elements(t0, t1, t2)
+        s2 = pu.ssl.SyntacticSet.from_elements(t3, t4)
+        s3 = s1.cartesian_product(s2)
+        assert s3.has_element(pu.ssl.SyntacticOrderedPair.from_first_and_second_elements(t0, t3))
+        assert s3.has_element(pu.ssl.SyntacticOrderedPair.from_first_and_second_elements(t0, 4))
+        assert s3.has_element(pu.ssl.SyntacticOrderedPair.from_first_and_second_elements(t1, t3))
+        assert s3.has_element(pu.ssl.SyntacticOrderedPair.from_first_and_second_elements(t1, t4))
+        assert s3.has_element(pu.ssl.SyntacticOrderedPair.from_first_and_second_elements(t2, t3))
+        assert s3.has_element(pu.ssl.SyntacticOrderedPair.from_first_and_second_elements(t2, t4))
+        s4 = s1.cartesian_product(s0)
+        assert s4.is_syntactic_set_equivalent_to(s0)
+
 
 class TestSyntacticTuple:
 
