@@ -390,45 +390,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     #        return o
 
     @functools.cached_property
-    def abstract_inference_rule_conclusion(self) -> LabeledRootedPlaneTree:
-        r"""If this LRPT is an abstract-inference-rule, returns its conclusion.
-
-        See :attr:`LabeledRootedPlaneTree.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
-
-        :return: the conclusion of this inference-rule.
-        """
-        if self.is_abstract_inference_rule:
-            return self.immediate_subtrees[2]
-        else:
-            raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
-
-    @functools.cached_property
-    def abstract_inference_rule_premises(self) -> LabeledRootedPlaneTree:
-        r"""If this LRPT is an abstract-inference-rule, returns its premises.
-
-        See :attr:`LabeledRootedPlaneTree.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
-
-        :return: the premises of this inference-rule.
-        """
-        if self.is_abstract_inference_rule:
-            return self.immediate_subtrees[1]
-        else:
-            raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
-
-    @functools.cached_property
-    def abstract_inference_rule_variables(self) -> LabeledRootedPlaneTree:
-        r"""If this LRPT is an abstract-inference-rule, returns its variables.
-
-        See :attr:`LabeledRootedPlaneTree.is_abstract_inference_rule` for a detailed description of abstract-inference-rules.
-
-        :return: the variables of this inference-rule.
-        """
-        if self.is_abstract_inference_rule:
-            return self.immediate_subtrees[0]
-        else:
-            raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
-
-    @functools.cached_property
     def degree(self) -> int:
         r"""Returns the degree of this LRPT.
 
@@ -440,32 +401,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         :return:
         """
         return len(self.immediate_subtrees)
-
-    @functools.cached_property
-    def canonical_abstract_set(self) -> LabeledRootedPlaneTree:
-        r"""Returns the canonical abstract-set of this abstract-set.
-
-        In short:
-
-        - Remove duplicate elements.
-        - Canonically order elements.
-
-        See also
-        _________
-
-        Cf.: :prop:`LabeledRootedPlaneTree`.
-
-        :return: A canonical abstract-set.
-        """
-        s: tuple[LabeledRootedPlaneTree, ...] = ()
-        t: LabeledRootedPlaneTree
-        for t in self.abstract_set_elements:
-            if t not in s:
-                s = s + (t,)
-        s = tuple(sorted(s))
-        abstract_set: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_immediate_subtrees(*s,
-                                                                                              n=self.main_element)
-        return abstract_set
 
     @functools.cached_property
     def canonical_labeled_rooted_plane_tree(self) -> LabeledRootedPlaneTree:
@@ -486,37 +421,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return LabeledRootedPlaneTree.from_rpt_and_sequence(
                 rpt=self.rooted_plane_tree,
                 sequence=self.natural_number_sequence.restricted_growth_function_sequence)
-
-    def derive_abstract_inference_rule(self, p: FlexibleLabeledRootedPlaneTree) -> LabeledRootedPlaneTree:
-        r"""If this LRPT is an abstract-inference-rule, derives a theorem
-        from the finite (computable) sequence of premises `p`.
-
-        See :attr:`LabeledRootedPlaneTree.is_abstract_inference_rule` for a detailed description of abstract-inference-rule.
-
-        :param p: a finite (computable) sequence of premises, in the order expected by the inference-rule.
-        :return: the theorem derived from this abstract-inference-rule, given premises `p`.
-        """
-        p: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(p)
-        if self.is_abstract_inference_rule:
-            if p.degree != self.abstract_inference_rule_premises.degree:
-                raise util.PunctiliousException("The number of input premises is not equal to the number"
-                                                " of premises expected by the inference-rule.",
-                                                input_premises=p,
-                                                expected_premises=self.abstract_inference_rule_premises,
-                                                inference_rule=self)
-            v: dict[LabeledRootedPlaneTree, LabeledRootedPlaneTree | None]  # A mapping for variable values
-
-            i: LabeledRootedPlaneTree  # An input premise
-            e: LabeledRootedPlaneTree  # An expected premise
-            for i, e in zip(p.iterate_immediate_subtrees(), self.abstract_inference_rule_premises):
-                ok, v = _compute_abstract_inference_rule_variables(v, i, e)
-                if not ok:
-                    pass
-                else:
-                    pass
-        # TODO: IMPLEMENT INFERENCE-RULE LOGIC
-        else:
-            raise util.PunctiliousException("This LRPT is not an abstract-inference-rule.")
 
     @functools.cached_property
     def formula_degree(self) -> int:
@@ -767,74 +671,12 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             unique_values.add(psi)
         return True
 
-    @functools.cached_property
-    def is_abstract_inference_rule(self) -> bool:
-        r"""Returns `True` if this LRPT is an abstract-inference-rule, `False` otherwise.
-
-        Intuitive definition: abstract-inference-rule
-        ___________________________________________________
-
-        Intuitively, an abstract-inference-rule is a LRPT that is structurally
-         equivalent to an inference rule.
-
-        Formal definition: abstract-inference-rule
-        ______________________________________________
-
-        An abstract-inference-rule :math:`I` is a tuple :math:`(V, P, C)` where:
-
-        - :math:`V` is a finite sequence of unique elements denoted as the variables,
-        - :math:`P` is a finite sequence of unique elements denoted as the premises,
-        - :math:`C` is denoted as the conclusion.
-
-        Formal definition: abstract-inference-rule
-        _______________________________________________
-
-        A LRPT is an abstract-inference-rule if and only if:
-
-         - its arity equals 3.
-
-        Note
-        _____
-
-        The following complementary properties and methods are available when a LRPT is an abstract-map:
-
-        - :attr:`abstract_inference_rule_variables`
-        - :attr:`abstract_inference_rule_premises`
-        - :attr:`abstract_inference_rule_conclusion`
-        - :meth:`derive_abstract_inference_rule`
-
-        :return: `True` if this LRPT is an abstract-inference-rule, `False` otherwise.
-
-        """
-        if self._is_abstract_inference_rule is None:
-            self._is_abstract_inference_rule = \
-                self.degree == 3
-        return self._is_abstract_inference_rule
-
-    @functools.cached_property
-    def is_canonical_abstract_set(self) -> bool:
-        r"""Returns `True` if this LRPT is a canonical abstract set, `False` otherwise.
-
-        Syntactic definition: canonical abstract-set
-        ______________________________________________
-
-        An abstract-set is canonical if and only if:
-
-        - its immediate subtrees are unique,
-        - its immediate subtrees are canonically ordered.
-
-        See also
-        __________
-
-        - :attr:`LabeledRootedPlaneTree.is_abstract_set`
-
-        :return: `True` or `False`.
-
-        """
-        return self == self.canonical_abstract_set
-
     @util.readonly_class_property
     def is_equal_to_relation(self) -> typing.Type[brl.BinaryRelation]:
+        r"""Returns the canonical equality binary relation.
+
+        :return: A binary relation.
+        """
         return IsEqualTo
 
     def is_immediate_subtree_of(self, t: FlexibleLabeledRootedPlaneTree) -> bool:
@@ -867,22 +709,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return self.rooted_plane_tree.is_rooted_plane_tree_equivalent_to(
             t.rooted_plane_tree) and self.natural_number_sequence.is_natural_number_0_sequence_equivalent_to(
             t.natural_number_sequence)
-
-    def is_labeled_rooted_plane_tree_equivalent_to_with_variables(self, t: LabeledRootedPlaneTree,
-                                                                  v: LabeledRootedPlaneTree) -> bool:
-        r"""Returns `True` if this LRPT is LRPT-equivalent to LRPT `t`,
-        after substitution of variables with assigned values in this LRPT,
-        according to variables and assigned values in abstract-map `v`.
-
-        :param t: A LRPT.
-        :param v: An abstract-map whose preimage is denoted as the variables, and image as the assigned values.
-        :return: `True` if trees are equivalent given above conditions, `False` otherwise.
-        """
-        t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
-        v: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(v)
-        psi: LabeledRootedPlaneTree = self.substitute_subtrees_with_map(m=v)
-        print(1 / 0)
-        return psi.is_labeled_rooted_plane_tree_equivalent_to(t)
 
     @functools.cached_property
     def is_canonical(self) -> bool:
