@@ -568,6 +568,19 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return cls(*s, n=n, rpt=None, sequence=None)
 
     @classmethod
+    def from_integer(cls, i: int) -> LabeledRootedPlaneTree:
+        r"""Declares a leaf LRPT object i() where i is a natural number.
+
+        :param i: A natural number.
+        :return: a leaf LRPT.
+
+        """
+        t: rptl.RootedPlaneTree = rptl.RootedPlaneTree()
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(i)
+        lrpt: LabeledRootedPlaneTree = cls(rpt=t, sequence=s)
+        return lrpt
+
+    @classmethod
     def from_rpt_and_sequence(cls, rpt: rptl.FlexibleRootedPlaneTree,
                               sequence: nn0sl.FlexibleNaturalNumber0Sequence) -> LabeledRootedPlaneTree:
         r"""Returns a new LRPT based on a rooted plane tree and a (0-based) natural number sequence.

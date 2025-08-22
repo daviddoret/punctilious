@@ -2,12 +2,12 @@ r"""The syntactic structure layer enriches the LRPT layer by promoting LRPTs to 
 By imposing constraints on LRPTs, syntactic structures enable the modeling of
 finite proto- or foundational mathematical objects, including:
 
-- abstract inference rules,
-- abstract maps,
-- abstract ordered pairs,
-- abstract ordered sets,
-- abstract sets,
-- abstract tuples.
+- syntactic inference rules,
+- syntactic maps,
+- syntactic ordered pairs,
+- syntactic ordered sets,
+- syntactic sets,
+- syntactic tuples.
 
 ... and specialized algorithms.
 
@@ -117,31 +117,31 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
         return True
 
 
-class AbstractOrderedSet(SyntacticStructure):
-    r"""An abstract ordered set.
+class SyntacticOrderedSet(SyntacticStructure):
+    r"""An syntactic ordered set.
 
     Definition
     ------------
 
-    An `abstract ordered set` is a syntactic structure that models a finite (computable) ordered set defined by extension.
+    An `syntactic ordered set` is a syntactic structure that models a finite (computable) ordered set defined by extension.
 
     Given LRPT :math:`T` with sub-LRPTs :math:`t_0, t_1, \cdots, t_n`,
-    its `abstract ordered set` is the ordered set :math:`(s_0, s_1, \cdots, s_m)`
+    its `syntactic ordered set` is the ordered set :math:`(s_0, s_1, \cdots, s_m)`
     where :math:`s_i` denotes the :math:`i`-th *unique* immediate sub-LRPTs of :math:`T`, preserving order.
 
     Sample
     --------
-    Given :math:`T = 0(3, 1, 1, 1, 2)`, the corresponding abstract ordered set is :math:`(3, 1, 2)`.
+    Given :math:`T = 0(3, 1, 1, 1, 2)`, the corresponding syntactic ordered set is :math:`(3, 1, 2)`.
 
     Note
     ------
 
-    The main element of the LRPT is not an information of the abstract ordered set, i.e.: it is dropped.
+    The main element of the LRPT is not an information of the syntactic ordered set, i.e.: it is dropped.
 
     Note
     -----------
 
-    Every LRPT is an abstract ordered set.
+    Every LRPT is a syntactic ordered set.
 
     Note
     ----------
@@ -155,14 +155,14 @@ class AbstractOrderedSet(SyntacticStructure):
                  n: int | None = None,
                  rpt: rptl.FlexibleRootedPlaneTree,
                  sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        super(AbstractOrderedSet, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
+        super(SyntacticOrderedSet, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
 
     def __new__(cls,
                 *args: SyntacticStructure,
                 n: int | None = None,
                 rpt: rptl.FlexibleRootedPlaneTree,
                 sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        ss = super(AbstractOrderedSet, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
+        ss = super(SyntacticOrderedSet, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
         cls.is_well_formed(ss, raise_exception_if_false=True)
         return ss
 
@@ -176,7 +176,7 @@ class AbstractOrderedSet(SyntacticStructure):
 
     @functools.cached_property
     def cardinality(self) -> int:
-        r"""Returns the cardinality of this abstract ordered set.
+        r"""Returns the cardinality of this syntactic ordered set.
 
         Note
         ______
@@ -193,7 +193,7 @@ class AbstractOrderedSet(SyntacticStructure):
 
     @functools.cached_property
     def elements(self) -> tuple[SyntacticStructure, ...]:
-        r"""Returns the elements of this abstract ordered set, in order.
+        r"""Returns the elements of this syntactic ordered set, in order.
 
         Note
         ______
@@ -211,13 +211,13 @@ class AbstractOrderedSet(SyntacticStructure):
         return unique_elements
 
     @classmethod
-    def from_any(cls, x: FlexibleAbstractOrderedSet) -> AbstractOrderedSet:
-        if isinstance(x, AbstractOrderedSet):
+    def from_any(cls, x: FlexibleSyntacticOrderedSet) -> SyntacticOrderedSet:
+        if isinstance(x, SyntacticOrderedSet):
             return x
         elif isinstance(x, tuple) and not isinstance(x, lrptl.LRPT):
             # This is a "pure" python tuple,
             # i.e. it is not an LRPT that inherits from python tuple.
-            # This signature is interpreted the elements of the abstract ordered set.
+            # This signature is interpreted the elements of the syntactic ordered set.
             return cls.from_elements(*x)
         else:
             # Fallback to the original LRPT from_any() method.
@@ -227,7 +227,7 @@ class AbstractOrderedSet(SyntacticStructure):
     def from_elements(cls,
                       *elements: lrptl.FlexibleLabeledRootedPlaneTree,
                       n: int | None = None,
-                      ) -> AbstractOrderedSet:
+                      ) -> SyntacticOrderedSet:
         if n is None:
             n: int = 0  # by convention, 0 is the default main element.
         else:
@@ -237,12 +237,12 @@ class AbstractOrderedSet(SyntacticStructure):
 
     def get_element_by_index(self, i: int) -> lrptl.LabeledRootedPlaneTree:
         if not 0 < i < self.cardinality:
-            raise util.PunctiliousException("Index `i` is out of range of this abstract ordered set.")
+            raise util.PunctiliousException("Index `i` is out of range of this syntactic ordered set.")
         return self.elements[i]
 
     def get_element_index(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> int:
         if not self.has_element(x):
-            raise util.PunctiliousException("`x` is not an element of this abstract ordered set.", x=x, poset=self)
+            raise util.PunctiliousException("`x` is not an element of this syntactic ordered set.", x=x, poset=self)
         return self.elements.index(x)
 
     def has_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
@@ -254,14 +254,14 @@ class AbstractOrderedSet(SyntacticStructure):
         x: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_any(x)
         return self.has_immediate_subtree(x)
 
-    def is_abstract_ordered_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
-        r"""Check if this syntactic structure is abstract ordered set equivalent to `x`.
+    def is_syntactic_ordered_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is syntactic ordered set equivalent to `x`.
 
         Definition
         ---------------
 
         Let :math:`x`, :math:`y` be LRPTs.
-        :math:`x` is abstract set equivalent to `y` if and only if:
+        :math:`x` is syntactic set equivalent to `y` if and only if:
 
         - every immediate sub-LRPT of :math:`x` is an immediate sub-LRPT of :math:`y`,
         - every immediate sub-LRPT of :math:`y` is an immediate sub-LRPT of :math:`x`,
@@ -272,8 +272,8 @@ class AbstractOrderedSet(SyntacticStructure):
         :return: `True` or `False`.
         """
 
-        # direct conversion to abstract set is possible because abstract ordered sets have no constraints.
-        x: AbstractOrderedSet = AbstractOrderedSet.from_any(x)
+        # direct conversion to syntactic set is possible because syntactic ordered sets have no constraints.
+        x: SyntacticOrderedSet = SyntacticOrderedSet.from_any(x)
 
         # direct comparison of elements is possible because order is considered.
         return self.elements == x.elements
@@ -282,11 +282,11 @@ class AbstractOrderedSet(SyntacticStructure):
     def is_well_formed(
             cls,
             o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
-        r"""Check if the given `o` is a well-formed abstract ordered set.
+        r"""Check if the given `o` is a well-formed syntactic ordered set.
 
-        But because every LRPT is an abstract ordered set, this method always returns `True`.
+        But because every LRPT is a syntactic ordered set, this method always returns `True`.
 
-        If `True`, :meth:`AbstractOrderedSet.from_any` can be safely called on `o`.
+        If `True`, :meth:`SyntacticOrderedSet.from_any` can be safely called on `o`.
 
         :param o: A syntactic structure or an LRPT.
         :param raise_exception_if_false:
@@ -316,33 +316,33 @@ class AbstractOrderedSet(SyntacticStructure):
         return output
 
 
-class AbstractMap(SyntacticStructure):
-    r"""An abstract map.
+class SyntacticMap(SyntacticStructure):
+    r"""An syntactic map.
 
     Definition
     ------------
 
-    An `abstract map` is a syntactic structure that models a finite (computable) map defined by extension.
+    An `syntactic map` is a syntactic structure that models a finite (computable) map defined by extension.
 
     Given any LRPT :math:`T` with the following constraints:
      - its degree is at least 2,
-     - its first sub-LRPT is an abstract ordered set of cardinality :math:`n`, denoted as the domain,
-     - its second sub-LRPT is an abstract tuple of cardinality :math:`n`, denoted as the codomain,
+     - its first sub-LRPT is a syntactic ordered set of cardinality :math:`n`, denoted as the domain,
+     - its second sub-LRPT is a syntactic tuple of cardinality :math:`n`, denoted as the codomain,
      - the cardinality of the domain is equal to the cardinality of the codomain,
-    its `abstract map` is the map that to the :math:`i`-th element of the domain,
+    its `syntactic map` is the map that to the :math:`i`-th element of the domain,
     maps the :math:`i`-th element of the codomain,
     and that is otherwise undefined.
 
     Note
     ------
 
-    The main element of the LRPT and the main element of the first two immediate sub-LRPTs are not an information of the abstract map, i.e.: it is dropped.
-    Any immediate sub-LRPT of the LRPT beyond 2 is not an information of the abstract map, i.e. it is dropped.
+    The main element of the LRPT and the main element of the first two immediate sub-LRPTs are not an information of the syntactic map, i.e.: it is dropped.
+    Any immediate sub-LRPT of the LRPT beyond 2 is not an information of the syntactic map, i.e. it is dropped.
 
     Note
     -----------
 
-    Every LRPT of degree > 1 is an abstract map.
+    Every LRPT of degree > 1 is a syntactic map.
 
     Note
     ----------
@@ -352,7 +352,7 @@ class AbstractMap(SyntacticStructure):
     Note
     -----------
 
-    There are two distinctive implementations of an abstract map:
+    There are two distinctive implementations of a syntactic map:
 
     As a set of ordered pairs:
     { (p_0, i_0), (p_1, i_1), ..., (p_n, i_n) }.
@@ -373,14 +373,14 @@ class AbstractMap(SyntacticStructure):
                  n: int | None = None,
                  rpt: rptl.FlexibleRootedPlaneTree,
                  sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        super(AbstractMap, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
+        super(SyntacticMap, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
 
     def __new__(cls,
                 *args: SyntacticStructure,
                 n: int | None = None,
                 rpt: rptl.FlexibleRootedPlaneTree,
                 sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        ss = super(AbstractMap, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
+        ss = super(SyntacticMap, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
         cls.is_well_formed(ss, raise_exception_if_false=True)
         return ss
 
@@ -393,19 +393,19 @@ class AbstractMap(SyntacticStructure):
     _HASH_SEED: int = 15749856293511400051  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
 
     @functools.cached_property
-    def codomain(self) -> AbstractTuple:
-        return AbstractTuple.from_lrpt(self.immediate_sub_syntactic_structures[1])
+    def codomain(self) -> SyntacticTuple:
+        return SyntacticTuple.from_lrpt(self.immediate_sub_syntactic_structures[1])
 
     @functools.cached_property
-    def domain(self) -> AbstractOrderedSet:
-        return AbstractOrderedSet.from_lrpt(self.immediate_sub_syntactic_structures[0])
+    def domain(self) -> SyntacticOrderedSet:
+        return SyntacticOrderedSet.from_lrpt(self.immediate_sub_syntactic_structures[0])
 
     @classmethod
     def from_domain_and_codomain(cls,
                                  domain: lrptl.FlexibleLabeledRootedPlaneTree,
                                  codomain: lrptl.FlexibleLabeledRootedPlaneTree,
                                  n: int = 0
-                                 ) -> AbstractMap:
+                                 ) -> SyntacticMap:
         if n is None:
             n: int = 0  # by convention, 0 is the default main element.
         else:
@@ -413,7 +413,7 @@ class AbstractMap(SyntacticStructure):
         return cls.from_immediate_subtrees(domain, codomain, n=n)
 
     def get_value(self, x: FlexibleSyntacticStructure) -> SyntacticStructure:
-        r"""If this LRPT is an abstract-map, returns the image `x` under this map.
+        r"""If this LRPT is a syntactic-map, returns the image `x` under this map.
 
         :param x: a preimage element.
         :return: the image of `t` under this map.
@@ -426,24 +426,24 @@ class AbstractMap(SyntacticStructure):
             return self.codomain.get_element_by_index(i)
 
     def has_domain_element(self, x: lrptl.FlexibleLabeledRootedPlaneTree) -> bool:
-        r"""Returns `True` if `x` is an element of this abstract map domain, `False` otherwise.
+        r"""Returns `True` if `x` is an element of this syntactic map domain, `False` otherwise.
 
         :param x: An object.
         :return: `True` or `False`
         """
         return self.domain.has_element(x)
 
-    def is_abstract_map_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
-        r"""Check if this syntactic structure is abstract map equivalent to `x`.
+    def is_syntactic_map_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is syntactic map equivalent to `x`.
 
         Definition
         ---------------
 
         Let :math:`x`, :math:`y` be LRPTs.
-        :math:`x` is abstract map equivalent to `y` if and only if:
+        :math:`x` is syntactic map equivalent to `y` if and only if:
 
-        - :math:`x` and :math:`y` are abstract maps,
-        - the set of ordered pairs of :math:`x` is abstract set equivalent
+        - :math:`x` and :math:`y` are syntactic maps,
+        - the set of ordered pairs of :math:`x` is syntactic set equivalent
           to the set of ordered pairs of :math:`y`.
 
         :param x: A syntactic structure.
@@ -451,13 +451,13 @@ class AbstractMap(SyntacticStructure):
         """
 
         x: lrptl.LRPT = lrptl.LRPT.from_any(x)
-        if not AbstractMap.is_well_formed(x, raise_exception_if_false=False):
+        if not SyntacticMap.is_well_formed(x, raise_exception_if_false=False):
             return False
         else:
-            x: AbstractMap = AbstractMap.from_any(x)
-            if not self.domain.is_abstract_ordered_set_equivalent_to(x.domain):
+            x: SyntacticMap = SyntacticMap.from_any(x)
+            if not self.domain.is_syntactic_ordered_set_equivalent_to(x.domain):
                 return False
-            if not self.codomain.is_abstract_tuple_equivalent_to(x.codomain):
+            if not self.codomain.is_syntactic_tuple_equivalent_to(x.codomain):
                 return False
             return True
 
@@ -478,7 +478,7 @@ class AbstractMap(SyntacticStructure):
 
         # this syntactic structure has no constraint,
         # check only python type compatibility with SyntacticStructure.
-        if isinstance(o, AbstractMap):
+        if isinstance(o, SyntacticMap):
             return True
         ss: SyntacticStructure = cls.from_any(o)
         if ss.degree < 2:
@@ -487,20 +487,20 @@ class AbstractMap(SyntacticStructure):
                                                 t=ss)
             else:
                 return False
-        if not AbstractOrderedSet.is_well_formed(ss.immediate_subtrees[0]):
+        if not SyntacticOrderedSet.is_well_formed(ss.immediate_subtrees[0]):
             if raise_exception_if_false:
-                raise util.PunctiliousException("First subtree is not a well-formed abstract ordered set.",
+                raise util.PunctiliousException("First subtree is not a well-formed syntactic ordered set.",
                                                 first_subtree=ss.immediate_subtrees[0])
             else:
                 return False
-        if not AbstractTuple.is_well_formed(ss.immediate_subtrees[1]):
+        if not SyntacticTuple.is_well_formed(ss.immediate_subtrees[1]):
             if raise_exception_if_false:
-                raise util.PunctiliousException("Second subtree is not a well-formed abstract ordered set.",
+                raise util.PunctiliousException("Second subtree is not a well-formed syntactic ordered set.",
                                                 second_subtree=ss.immediate_subtrees[1])
             else:
                 return False
-        domain: AbstractOrderedSet = AbstractOrderedSet.from_lrpt(ss.immediate_sub_syntactic_structures[0])
-        codomain: AbstractTuple = AbstractTuple.from_lrpt(ss.immediate_sub_syntactic_structures[1])
+        domain: SyntacticOrderedSet = SyntacticOrderedSet.from_lrpt(ss.immediate_sub_syntactic_structures[0])
+        codomain: SyntacticTuple = SyntacticTuple.from_lrpt(ss.immediate_sub_syntactic_structures[1])
         if domain.cardinality != codomain.cardinality:
             if raise_exception_if_false:
                 raise util.PunctiliousException(
@@ -512,16 +512,16 @@ class AbstractMap(SyntacticStructure):
         return True
 
     @functools.cached_property
-    def ordered_pairs(self) -> AbstractSet:
-        r"""Returns the set of ordered pairs that constitutes this abstract map.
+    def ordered_pairs(self) -> SyntacticSet:
+        r"""Returns the set of ordered pairs that constitutes this syntactic map.
 
         :return: A set of ordered pairs.
         """
-        pairs: tuple[AbstractOrderedPair, ...] = ()
+        pairs: tuple[SyntacticOrderedPair, ...] = ()
         for preimage, image in zip(self.domain.elements, self.codomain.elements):
-            pair: AbstractOrderedPair = AbstractOrderedPair.from_first_and_second_elements(preimage, image)
+            pair: SyntacticOrderedPair = SyntacticOrderedPair.from_first_and_second_elements(preimage, image)
             pairs = pairs + (pair,)
-        return AbstractSet.from_elements(*pairs)
+        return SyntacticSet.from_elements(*pairs)
 
     def represent_as_inline_map(self) -> str:
         r"""Returns a string representation of the LRPT using map notation.
@@ -544,7 +544,7 @@ class AbstractMap(SyntacticStructure):
 
     def substitute(self, x: FlexibleSyntacticStructure) -> SyntacticStructure:
         r"""Returns a new Syntactic Structure similar to :math:`x`,
-         with the difference that any preimage subtree present in the domain of this abstract map,
+         with the difference that any preimage subtree present in the domain of this syntactic map,
          is substituted with its corresponding image in the map codomain,
          giving priority to the substitution of supertrees over subtrees.
 
@@ -564,29 +564,29 @@ class AbstractMap(SyntacticStructure):
             return SyntacticStructure.from_immediate_subtrees(*s, n=x.main_element)
 
 
-class AbstractSet(SyntacticStructure):
-    r"""An abstract set.
+class SyntacticSet(SyntacticStructure):
+    r"""An syntactic set.
 
     Definition
     ------------
 
-    An `abstract set` is a syntactic structure that models a finite (computable) set defined by extension.
+    An `syntactic set` is a syntactic structure that models a finite (computable) set defined by extension.
 
     Given any LRPT :math:`T`,
-    its `abstract set` is the set :math:`{t_0, t_1, \cdots, t_n}`
+    its `syntactic set` is the set :math:`{t_0, t_1, \cdots, t_n}`
     where :math:`t_i` denotes the immediate and unique sub-LRPTs of :math:`T`.
 
     Note
     ------
 
-    The main element of the LRPT is not an information of the abstract set, i.e.: it is dropped.
+    The main element of the LRPT is not an information of the syntactic set, i.e.: it is dropped.
 
-    The order of immediate sub-LRPTs in the LRPT is not an information of the abstract set, i.e.: it is dropped.
+    The order of immediate sub-LRPTs in the LRPT is not an information of the syntactic set, i.e.: it is dropped.
 
     Note
     -----------
 
-    Every LRPT is an abstract set.
+    Every LRPT is a syntactic set.
 
     Note
     ----------
@@ -600,14 +600,14 @@ class AbstractSet(SyntacticStructure):
                  n: int | None = None,
                  rpt: rptl.FlexibleRootedPlaneTree,
                  sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        super(AbstractSet, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
+        super(SyntacticSet, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
 
     def __new__(cls,
                 *args: SyntacticStructure,
                 n: int | None = None,
                 rpt: rptl.FlexibleRootedPlaneTree,
                 sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        ss = super(AbstractSet, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
+        ss = super(SyntacticSet, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
         cls.is_well_formed(ss, raise_exception_if_false=True)
         return ss
 
@@ -619,18 +619,18 @@ class AbstractSet(SyntacticStructure):
 
     _HASH_SEED: int = 687807374550534646  # A static random seed to reduce collision risk, originally generated by random.getrandbits(64).
 
-    def append(self, x: FlexibleSyntacticStructure) -> AbstractSet:
-        r"""Return a new abstract set that contains all the elements of this abstract set and `x`.
+    def append(self, x: FlexibleSyntacticStructure) -> SyntacticSet:
+        r"""Return a new syntactic set that contains all the elements of this syntactic set and `x`.
 
         :param x:
         :return:
         """
         x: SyntacticStructure = SyntacticStructure.from_any(x)
-        return AbstractSet.from_elements(*self.elements, x)
+        return SyntacticSet.from_elements(*self.elements, x)
 
     @functools.cached_property
     def cardinality(self) -> int:
-        r"""Returns the cardinality of this abstract set.
+        r"""Returns the cardinality of this syntactic set.
 
         Note
         ______
@@ -647,7 +647,7 @@ class AbstractSet(SyntacticStructure):
 
     @functools.cached_property
     def elements(self) -> tuple[SyntacticStructure, ...]:
-        r"""Returns the elements of this abstract set.
+        r"""Returns the elements of this syntactic set.
 
         Note
         ______
@@ -657,7 +657,7 @@ class AbstractSet(SyntacticStructure):
         Note
         ------
 
-        Even though sets are not ordered, by convention the elements of an abstract set
+        Even though sets are not ordered, by convention the elements of a syntactic set
         are ordered by LRPT canonical order, facilitating equivalence checking.
 
         :return: The elements of the set.
@@ -672,13 +672,13 @@ class AbstractSet(SyntacticStructure):
         return unique_elements
 
     @classmethod
-    def from_any(cls, x: FlexibleAbstractSet) -> AbstractSet:
-        if isinstance(x, AbstractSet):
+    def from_any(cls, x: FlexibleSyntacticSet) -> SyntacticSet:
+        if isinstance(x, SyntacticSet):
             return x
         elif isinstance(x, tuple) and not isinstance(x, lrptl.LRPT):
             # This is a "pure" python tuple,
             # i.e. it is not an LRPT that inherits from python tuple.
-            # This signature is interpreted the elements of the abstract set.
+            # This signature is interpreted the elements of the syntactic set.
             return cls.from_elements(*x)
         else:
             # Fallback to the original LRPT from_any() method.
@@ -688,7 +688,7 @@ class AbstractSet(SyntacticStructure):
     def from_elements(cls,
                       *elements: lrptl.FlexibleLabeledRootedPlaneTree,
                       n: int | None = None,
-                      ) -> AbstractSet:
+                      ) -> SyntacticSet:
         if n is None:
             n: int = 0  # by convention, 0 is the default main element.
         else:
@@ -699,7 +699,7 @@ class AbstractSet(SyntacticStructure):
     @classmethod
     def from_empty_set(cls,
                        n: int | None = None,
-                       ) -> AbstractSet:
+                       ) -> SyntacticSet:
         r"""
 
         :param n:
@@ -719,22 +719,22 @@ class AbstractSet(SyntacticStructure):
         """
         return self.has_immediate_subtree(x)
 
-    def intersection(self, x: FlexibleAbstractSet) -> AbstractSet:
-        x: AbstractSet = AbstractSet.from_any(x)
-        y: AbstractSet = AbstractSet.from_empty_set()
+    def intersection(self, x: FlexibleSyntacticSet) -> SyntacticSet:
+        x: SyntacticSet = SyntacticSet.from_any(x)
+        y: SyntacticSet = SyntacticSet.from_empty_set()
         for z in self.elements:
             if z in y.elements:
                 y = y.append(z)
         return y
 
-    def is_abstract_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
-        r"""Check if this syntactic structure is abstract set equivalent to `x`.
+    def is_syntactic_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is syntactic set equivalent to `x`.
 
         Definition
         ---------------
 
         Let :math:`x`, :math:`y` be LRPTs.
-        :math:`x` is abstract set equivalent to `y` if and only if:
+        :math:`x` is syntactic set equivalent to `y` if and only if:
 
         - every immediate sub-LRPT of :math:`x` is an immediate sub-LRPT of :math:`y`,
         - every immediate sub-LRPT of :math:`y` is an immediate sub-LRPT of :math:`z`.
@@ -743,8 +743,8 @@ class AbstractSet(SyntacticStructure):
         :return: `True` or `False`.
         """
 
-        # direct conversion to abstract set is possible because abstract sets have no constraints.
-        x: AbstractSet = AbstractSet.from_any(x)
+        # direct conversion to syntactic set is possible because syntactic sets have no constraints.
+        x: SyntacticSet = SyntacticSet.from_any(x)
 
         # direct comparison of elements is possible because they are canonically ordered by convention.
         return self.elements == x.elements
@@ -752,11 +752,11 @@ class AbstractSet(SyntacticStructure):
     @classmethod
     def is_well_formed(
             cls, o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
-        r"""Check if the given `o` is a well-formed abstract set.
+        r"""Check if the given `o` is a well-formed syntactic set.
 
-        But because every LRPT is an abstract set, this method always returns `True`.
+        But because every LRPT is a syntactic set, this method always returns `True`.
 
-        If `True`, :meth:`AbstractSet.from_any` can be safely called on `o`.
+        If `True`, :meth:`SyntacticSet.from_any` can be safely called on `o`.
 
         :param o: A syntactic structure or an LRPT.
         :param raise_exception_if_false:
@@ -785,32 +785,32 @@ class AbstractSet(SyntacticStructure):
 
         return output
 
-    def union(self, x: FlexibleAbstractSet) -> AbstractSet:
-        x: AbstractSet = AbstractSet.from_any(x)
-        return AbstractSet.from_elements(*self.elements, *x.elements)
+    def union(self, x: FlexibleSyntacticSet) -> SyntacticSet:
+        x: SyntacticSet = SyntacticSet.from_any(x)
+        return SyntacticSet.from_elements(*self.elements, *x.elements)
 
 
-class AbstractTuple(SyntacticStructure):
-    r"""An abstract tuple.
+class SyntacticTuple(SyntacticStructure):
+    r"""An syntactic tuple.
 
     Definition
     ------------
 
-    An `abstract tuple` is a syntactic structure that models a finite (computable) tuple defined by extension.
+    An `syntactic tuple` is a syntactic structure that models a finite (computable) tuple defined by extension.
 
     Given any LRPT :math:`T`,
-    its `abstract tuple` is the tuple :math:`{t_0, t_1, \cdots, t_n}`
+    its `syntactic tuple` is the tuple :math:`{t_0, t_1, \cdots, t_n}`
     where :math:`t_i` denotes the immediate sub-LRPTs of :math:`T`.
 
     Note
     ------
 
-    The main element of the LRPT is not an information of the abstract set, i.e.: it is dropped.
+    The main element of the LRPT is not an information of the syntactic set, i.e.: it is dropped.
 
     Note
     -----------
 
-    Every LRPT is an abstract tuple.
+    Every LRPT is a syntactic tuple.
 
     Note
     ----------
@@ -824,14 +824,14 @@ class AbstractTuple(SyntacticStructure):
                  n: int | None = None,
                  rpt: rptl.FlexibleRootedPlaneTree,
                  sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        super(AbstractTuple, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
+        super(SyntacticTuple, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
 
     def __new__(cls,
                 *args: SyntacticStructure,
                 n: int | None = None,
                 rpt: rptl.FlexibleRootedPlaneTree,
                 sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        ss = super(AbstractTuple, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
+        ss = super(SyntacticTuple, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
         cls.is_well_formed(ss, raise_exception_if_false=True)
         return ss
 
@@ -845,7 +845,7 @@ class AbstractTuple(SyntacticStructure):
 
     @functools.cached_property
     def cardinality(self) -> int:
-        r"""Returns the cardinality of this abstract tuple.
+        r"""Returns the cardinality of this syntactic tuple.
 
         Note
         ______
@@ -858,7 +858,7 @@ class AbstractTuple(SyntacticStructure):
 
     @functools.cached_property
     def elements(self) -> tuple[SyntacticStructure, ...]:
-        r"""Returns the elements of this abstract tuple, preserving order.
+        r"""Returns the elements of this syntactic tuple, preserving order.
 
         Note
         ______
@@ -871,13 +871,13 @@ class AbstractTuple(SyntacticStructure):
         return self.immediate_sub_syntactic_structures
 
     @classmethod
-    def from_any(cls, x: FlexibleAbstractTuple) -> AbstractTuple:
-        if isinstance(x, AbstractTuple):
+    def from_any(cls, x: FlexibleSyntacticTuple) -> SyntacticTuple:
+        if isinstance(x, SyntacticTuple):
             return x
         elif isinstance(x, tuple) and not isinstance(x, lrptl.LRPT):
             # This is a "pure" python tuple,
             # i.e. it is not an LRPT that inherits from python tuple.
-            # This signature is interpreted the elements of the abstract tuple.
+            # This signature is interpreted the elements of the syntactic tuple.
             return cls.from_elements(*x)
         else:
             # Fallback to the original LRPT from_any() method.
@@ -887,7 +887,7 @@ class AbstractTuple(SyntacticStructure):
     def from_elements(cls,
                       *elements: lrptl.FlexibleLabeledRootedPlaneTree,
                       n: int | None = None,
-                      ) -> AbstractTuple:
+                      ) -> SyntacticTuple:
         if n is None:
             n: int = 0  # by convention, 0 is the default main element.
         else:
@@ -897,7 +897,7 @@ class AbstractTuple(SyntacticStructure):
 
     def get_element_by_index(self, i: int) -> SyntacticStructure:
         if i < 0 or i >= self.cardinality:
-            raise util.PunctiliousException("Index `i` is out of range of this abstract tuple `t`.", i=i,
+            raise util.PunctiliousException("Index `i` is out of range of this syntactic tuple `t`.", i=i,
                                             degree_of_t=self.degree, t=self)
         return self.elements[i]
 
@@ -907,13 +907,13 @@ class AbstractTuple(SyntacticStructure):
         Definition
         ------------
 
-        :math:`x` is an element of abstract tuple :math:`S` if and only if there exists
+        :math:`x` is an element of syntactic tuple :math:`S` if and only if there exists
         an immediate sub-LRPT :math:`y` of :math:`S` such that :math:`x \quad \sim_{LRPT} \quad y`.
 
         Note
         ------
 
-        An element `x` may appear multiple times in an abstract tuple.
+        An element `x` may appear multiple times in a syntactic tuple.
 
         :param x: An object.
         :return: `True` or `False`
@@ -921,14 +921,14 @@ class AbstractTuple(SyntacticStructure):
         x: SyntacticStructure = SyntacticStructure.from_any(x)
         return self.has_immediate_subtree(x)
 
-    def is_abstract_tuple_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
-        r"""Check if this syntactic structure is abstract tuple equivalent to `x`.
+    def is_syntactic_tuple_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is syntactic tuple equivalent to `x`.
 
         Definition
         ---------------
 
         Let :math:`x`, :math:`y` be LRPTs.
-        :math:`x` is abstract tuple equivalent to `y` if and only if:
+        :math:`x` is syntactic tuple equivalent to `y` if and only if:
 
         - the degree of :math:`x` is equal to the degree of :math:`y`,
         - :math:`x_i` is LRPT equivalent to :math:`x_i` for :math:`0 <= i < \mathrm{deg}(x)`.
@@ -937,8 +937,8 @@ class AbstractTuple(SyntacticStructure):
         :return: `True` or `False`.
         """
 
-        # direct conversion to abstract tuple is possible because abstract tuples have no constraints.
-        x: AbstractTuple = AbstractTuple.from_any(x)
+        # direct conversion to syntactic tuple is possible because syntactic tuples have no constraints.
+        x: SyntacticTuple = SyntacticTuple.from_any(x)
 
         # direct comparison of elements is possible because they are canonically ordered by convention.
         return self.elements == x.elements
@@ -947,11 +947,11 @@ class AbstractTuple(SyntacticStructure):
     def is_well_formed(
             cls,
             o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
-        r"""Check if the given `o` is a well-formed abstract tuple.
+        r"""Check if the given `o` is a well-formed syntactic tuple.
 
-        But because every LRPT is an abstract tuple, this method always returns `True`.
+        But because every LRPT is a syntactic tuple, this method always returns `True`.
 
-        If `True`, :meth:`AbstractTuple.from_any` can be safely called on `o`.
+        If `True`, :meth:`SyntacticTuple.from_any` can be safely called on `o`.
 
         :param o: A syntactic structure or an LRPT.
         :return: `True` or `False`.
@@ -980,27 +980,27 @@ class AbstractTuple(SyntacticStructure):
         return output
 
 
-class AbstractOrderedPair(AbstractTuple):
-    r"""An abstract ordered pair.
+class SyntacticOrderedPair(SyntacticTuple):
+    r"""An syntactic ordered pair.
 
     Definition
     ------------
 
-    An `abstract ordered pair` is a syntactic structure that models an ordered pair.
+    An `syntactic ordered pair` is a syntactic structure that models an ordered pair.
 
     Given any LRPT :math:`T` of degree >= 2,
-    its `abstract ordered pair` is the tuple :math:`(t_0, t_1)`
+    its `syntactic ordered pair` is the tuple :math:`(t_0, t_1)`
     where :math:`t_i` denotes the :math:`i`-th immediate sub-LRPT of :math:`T`.
 
     Note
     ------
 
-    The main element of the LRPT is not an information of the abstract ordered pair, i.e.: it is dropped.
+    The main element of the LRPT is not an information of the syntactic ordered pair, i.e.: it is dropped.
 
     Note
     -----------
 
-    Every LRPT of degree >= 2 is an abstract ordered pair.
+    Every LRPT of degree >= 2 is a syntactic ordered pair.
 
     """
 
@@ -1009,14 +1009,14 @@ class AbstractOrderedPair(AbstractTuple):
                  n: int | None = None,
                  rpt: rptl.FlexibleRootedPlaneTree,
                  sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        super(AbstractOrderedPair, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
+        super(SyntacticOrderedPair, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
 
     def __new__(cls,
                 *args: SyntacticStructure,
                 n: int | None = None,
                 rpt: rptl.FlexibleRootedPlaneTree,
                 sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        ss = super(AbstractOrderedPair, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
+        ss = super(SyntacticOrderedPair, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
         cls.is_well_formed(ss, raise_exception_if_false=True)
         return ss
 
@@ -1031,15 +1031,15 @@ class AbstractOrderedPair(AbstractTuple):
                                        first_element: FlexibleSyntacticStructure,
                                        second_element: FlexibleSyntacticStructure,
                                        n: int | None = None,
-                                       ) -> AbstractOrderedPair:
-        r"""Returns the abstract ordered pair :math:`(x, y)`
+                                       ) -> SyntacticOrderedPair:
+        r"""Returns the syntactic ordered pair :math:`(x, y)`
         where :math:`x` is the first element,
         and :math:`y` is the second element.
 
         :param first_element: A syntactic structure.
         :param second_element: A syntactic structure.
         :param n: (conditional) The main element of the LRPT.
-        :return: An abstract ordered pair.
+        :return: An syntactic ordered pair.
         """
         if n is None:
             n: int = 0  # by convention, 0 is the default main element.
@@ -1049,14 +1049,14 @@ class AbstractOrderedPair(AbstractTuple):
         second_element: SyntacticStructure = SyntacticStructure.from_any(second_element)
         return cls.from_immediate_subtrees(first_element, second_element, n=n)
 
-    def is_abstract_ordered_pair_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
-        r"""Check if this syntactic structure is abstract ordered pair equivalent to `x`.
+    def is_syntactic_ordered_pair_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
+        r"""Check if this syntactic structure is syntactic ordered pair equivalent to `x`.
 
         Definition
         ---------------
 
-        Let :math:`x`, :math:`y` be abstract ordered pairs.
-        :math:`x` is abstract ordered pair equivalent to `y` if and only if:
+        Let :math:`x`, :math:`y` be syntactic ordered pairs.
+        :math:`x` is syntactic ordered pair equivalent to `y` if and only if:
 
         - The first element of :math:`x` is LRPT equivalent to the first element of :math:`y`.
         - The second element of :math:`x` is LRPT equivalent to the second element of :math:`y`.
@@ -1066,10 +1066,10 @@ class AbstractOrderedPair(AbstractTuple):
         """
 
         x: SyntacticStructure = SyntacticStructure.from_any(x)
-        if not AbstractOrderedPair.is_well_formed(x):
+        if not SyntacticOrderedPair.is_well_formed(x):
             return False
         else:
-            x: AbstractOrderedPair = AbstractOrderedPair.from_any(x)
+            x: SyntacticOrderedPair = SyntacticOrderedPair.from_any(x)
             if not x.first_element.is_labeled_rooted_plane_tree_equivalent_to(self.first_element):
                 return False
             if not x.second_element.is_labeled_rooted_plane_tree_equivalent_to(self.second_element):
@@ -1080,9 +1080,9 @@ class AbstractOrderedPair(AbstractTuple):
     def is_well_formed(
             cls,
             o: FlexibleSyntacticStructure, raise_exception_if_false: bool = False) -> bool:
-        r"""Check if the given `o` is a well-formed abstract ordered pair.
+        r"""Check if the given `o` is a well-formed syntactic ordered pair.
 
-        If `True`, :meth:`AbstractOrderedPair.from_any` can be safely called on `o`.
+        If `True`, :meth:`SyntacticOrderedPair.from_any` can be safely called on `o`.
 
         :param o: A syntactic structure.
         :param raise_exception_if_false:
@@ -1100,13 +1100,13 @@ class AbstractOrderedPair(AbstractTuple):
         return self.elements[1]
 
 
-class AbstractInferenceRule(SyntacticStructure):
-    r"""An abstract inference rule.
+class SyntacticInferenceRule(SyntacticStructure):
+    r"""An syntactic inference rule.
 
     Definition
     ------------
 
-    An `abstract inference rule` is a syntactic structure that models an inference rule of the form:
+    An `syntactic inference rule` is a syntactic structure that models an inference rule of the form:
 
     Given :math:`x_1, x_2, \cdots, x_n` denoted as the variables.
 
@@ -1121,14 +1121,14 @@ class AbstractInferenceRule(SyntacticStructure):
                  n: int | None = None,
                  rpt: rptl.FlexibleRootedPlaneTree,
                  sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        super(AbstractInferenceRule, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
+        super(SyntacticInferenceRule, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
 
     def __new__(cls,
                 *args: SyntacticStructure,
                 n: int | None = None,
                 rpt: rptl.FlexibleRootedPlaneTree,
                 sequence: nn0sl.FlexibleNaturalNumber0Sequence):
-        ss = super(AbstractInferenceRule, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
+        ss = super(SyntacticInferenceRule, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
         cls.is_well_formed(ss, raise_exception_if_false=True)
         return ss
 
@@ -1136,19 +1136,19 @@ class AbstractInferenceRule(SyntacticStructure):
 
     @classmethod
     def from_components(cls,
-                        variables: FlexibleAbstractSet,
-                        premises: FlexibleAbstractSet,
+                        variables: FlexibleSyntacticSet,
+                        premises: FlexibleSyntacticSet,
                         conclusion: lrptl.FlexibleLabeledRootedPlaneTree,
                         n: int = 0
-                        ) -> AbstractInferenceRule:
-        variables = AbstractSet.from_elements(*variables)
-        premises = AbstractOrderedSet.from_elements(*premises)
+                        ) -> SyntacticInferenceRule:
+        variables = SyntacticSet.from_elements(*variables)
+        premises = SyntacticOrderedSet.from_elements(*premises)
         conclusion = SyntacticStructure.from_any(conclusion)
         n: int = int(n)
         return cls.from_immediate_subtrees(variables, premises, conclusion, n=n)
 
-    def apply(self, premises: FlexibleAbstractOrderedSet) -> SyntacticStructure:
-        premises: AbstractOrderedSet = AbstractOrderedSet.from_any(premises)
+    def apply(self, premises: FlexibleSyntacticOrderedSet) -> SyntacticStructure:
+        premises: SyntacticOrderedSet = SyntacticOrderedSet.from_any(premises)
         status, assigned_variables = self.check_premises(premises)
         if not status:
             raise util.PunctiliousException("premises are invalid for this inference rule.", premises=premises,
@@ -1157,9 +1157,9 @@ class AbstractInferenceRule(SyntacticStructure):
             conclusion: SyntacticStructure = assigned_variables.substitute(self.conclusion)
             return conclusion
 
-    def check_premises(self, premises: FlexibleAbstractSet) -> tuple[bool, AbstractMap]:
-        premises: AbstractSet = AbstractSet.from_any(premises)
-        assigned_variables: AbstractMap = AbstractMap()
+    def check_premises(self, premises: FlexibleSyntacticSet) -> tuple[bool, SyntacticMap]:
+        premises: SyntacticSet = SyntacticSet.from_any(premises)
+        assigned_variables: SyntacticMap = SyntacticMap()
         for premise, premise_with_variables in zip(premises.elements, self.premises.elements):
             status, assigned_variables = self.check_premise(premise, premise_with_variables,
                                                             assigned_variables)
@@ -1170,13 +1170,13 @@ class AbstractInferenceRule(SyntacticStructure):
     def check_premise(self,
                       premise: FlexibleSyntacticStructure,
                       premise_with_variables: FlexibleSyntacticStructure,
-                      assigned_variables: FlexibleAbstractMap) -> tuple[bool, AbstractMap]:
+                      assigned_variables: FlexibleSyntacticMap) -> tuple[bool, SyntacticMap]:
         premises: SyntacticStructure = SyntacticStructure.from_any(premise)
         premise_with_variables: SyntacticStructure = SyntacticStructure.from_any(premise_with_variables)
-        assigned_variables: AbstractMap = AbstractMap.from_any(assigned_variables)
+        assigned_variables: SyntacticMap = SyntacticMap.from_any(assigned_variables)
         # substitute already assigned variables
         premise_with_variables: SyntacticStructure = assigned_variables.substitute(assigned_variables)
-        free_variables: AbstractSet = self.variables.elements.difference(assigned_variables.domain.elements)
+        free_variables: SyntacticSet = self.variables.elements.difference(assigned_variables.domain.elements)
         COMPARE_HERE
 
     @functools.cached_property
@@ -1184,47 +1184,47 @@ class AbstractInferenceRule(SyntacticStructure):
         return self.immediate_sub_syntactic_structures[2]
 
     @functools.cached_property
-    def premises(self) -> AbstractOrderedSet:
-        return AbstractOrderedSet.from_lrpt(self.immediate_sub_syntactic_structures[1])
+    def premises(self) -> SyntacticOrderedSet:
+        return SyntacticOrderedSet.from_lrpt(self.immediate_sub_syntactic_structures[1])
 
     @functools.cached_property
-    def variables(self) -> AbstractSet:
-        return AbstractSet.from_lrpt(self.immediate_sub_syntactic_structures[0])
+    def variables(self) -> SyntacticSet:
+        return SyntacticSet.from_lrpt(self.immediate_sub_syntactic_structures[0])
 
 
 # Flexible types to facilitate data validation
 
-FlexibleAbstractMap = typing.Union[
-    AbstractMap,
+FlexibleSyntacticMap = typing.Union[
+    SyntacticMap,
     lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
-    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
-    None  # the empty abstract set.
+    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the syntactic set.
+    None  # the empty syntactic set.
 ]
-FlexibleAbstractOrderedSet = typing.Union[
-    AbstractOrderedSet,
+FlexibleSyntacticOrderedSet = typing.Union[
+    SyntacticOrderedSet,
     lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
-    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
-    None  # the empty abstract set.
+    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the syntactic set.
+    None  # the empty syntactic set.
 ]
-FlexibleAbstractSet = typing.Union[
-    AbstractSet,
+FlexibleSyntacticSet = typing.Union[
+    SyntacticSet,
     lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
-    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
-    None  # the empty abstract set.
+    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the syntactic set.
+    None  # the empty syntactic set.
 ]
-FlexibleAbstractTuple = typing.Union[
-    AbstractTuple,
+FlexibleSyntacticTuple = typing.Union[
+    SyntacticTuple,
     lrptl.LabeledRootedPlaneTree,  # already typed as LRPT.
-    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the abstract set.
-    None  # the empty abstract set.
+    tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the syntactic set.
+    None  # the empty syntactic set.
 ]
 FlexibleSyntacticStructure = lrptl.FlexibleLabeledRootedPlaneTree
 
 # Aliases
 
-AIR = AbstractInferenceRule  # An alias for :class:`AbstractInferenceRule`.
-AM = AbstractMap  # An alias for :class:`AbstractMap`.
-AOS = AbstractOrderedSet  # An alias for :class:`AbstractOrderedSet`.
-AS = AbstractSet  # An alias for :class:`AbstractSet`.
-AT = AbstractTuple  # An alias for :class:`AbstractTuple`.
+AIR = SyntacticInferenceRule  # An alias for :class:`SyntacticInferenceRule`.
+AM = SyntacticMap  # An alias for :class:`SyntacticMap`.
+AOS = SyntacticOrderedSet  # An alias for :class:`SyntacticOrderedSet`.
+AS = SyntacticSet  # An alias for :class:`SyntacticSet`.
+AT = SyntacticTuple  # An alias for :class:`SyntacticTuple`.
 SR = SyntacticStructure  # An alias for :class:`SyntacticStructure`.
