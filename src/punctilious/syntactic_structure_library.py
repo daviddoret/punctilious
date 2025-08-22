@@ -807,6 +807,19 @@ class SyntacticSet(SyntacticStructure):
 
         return output
 
+    def symmetric_difference(self, x: FlexibleSyntacticSet) -> SyntacticSet:
+        r"""Returns the symmetric difference of this set and `x`.
+
+        Definition
+        ------------
+        :math:`A \triangle B = \{ ( x \in A \land x \notin B ) \lor ( x \notin A \land x \in B ) \}`
+
+        :param x: A syntactic set.
+        :return: A syntactic set.
+        """
+        x: SyntacticSet = SyntacticSet.from_any(x)
+        return self.difference(x).union(x.difference(self))
+
     def union(self, x: FlexibleSyntacticSet) -> SyntacticSet:
         r"""Returns the union of this set and `x`.
 
