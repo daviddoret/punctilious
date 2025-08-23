@@ -14,4 +14,7 @@ review from_XXX methods to assure we include n=self.root_label in it when applic
 
 review methods is_well_formed to factor in the root_label. probably by passing it as a parameter.
 
+is there a way to design SyntacticSet (and other similar structures) in such a way
+as to preserve the python types of its elements? For example to support a set of ordered pairs?
+
 """

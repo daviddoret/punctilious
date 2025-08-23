@@ -681,10 +681,13 @@ class SyntacticMap(SyntacticSet):
     A `syntactic map` is a syntactic structure that models a finite (computable) map defined by extension.
 
     Given any LRPT :math:`T` with the following constraints:
-     - its degree is at least 2,
-     - its first sub-LRPT is a syntactic ordered set of cardinality :math:`n`, denoted as the domain,
-     - its second sub-LRPT is a syntactic tuple of cardinality :math:`n`, denoted as the codomain,
-     - the cardinality of the domain is equal to the cardinality of the codomain,
+    - it contains n sub-LRPTs
+    - every sub-LRPT is a syntactic ordered pair
+
+    The domain of the map is the ordered set of the first elements of every pair.
+
+    The codomain of the map is the tuple of the second elements of every pair.
+
     its `syntactic map` is the map that to the :math:`i`-th element of the domain,
     maps the :math:`i`-th element of the codomain,
     and that is otherwise undefined.
@@ -803,7 +806,7 @@ class SyntacticMap(SyntacticSet):
             pair: SyntacticOrderedPair = SyntacticOrderedPair.from_first_and_second_elements(preimage, image)
             ordered_pairs = ordered_pairs.adjoin(pair)
 
-        return cls.from_ordered_pairs(*ordered_pairs, n=n)
+        return cls.from_ordered_pairs(*ordered_pairs.elements, n=n)
 
     @classmethod
     def from_empty_map(cls, n: int | None = None) -> SyntacticMap:
@@ -926,12 +929,12 @@ class SyntacticMap(SyntacticSet):
         return True
 
     @functools.cached_property
-    def ordered_pairs(self) -> SyntacticSet:
-        r"""Returns the set of ordered pairs that constitutes this syntactic map.
+    def ordered_pairs(self) -> tuple[SyntacticOrderedPair, ...]:
+        r"""Returns the ordered pairs that constitutes this syntactic map.
 
-        :return: A set.
+        :return: A python tuple of pairs.
         """
-        return SyntacticSet.from_elements(*self.elements)
+        return tuple(SyntacticOrderedPair.from_any(x) for x in self.elements)
 
     def represent_as_inline_map(self) -> str:
         r"""Returns a string representation of the LRPT using map notation.

@@ -401,4 +401,4 @@ class TestSyntacticMap:
         assert m1.get_value(t4) == t1
         assert not m1.has_domain_element(t2)
         pairs = m1.ordered_pairs
-        assert pairs.degree == 3
+        assert len(pairs) == 3
