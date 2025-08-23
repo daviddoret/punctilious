@@ -174,9 +174,9 @@ class TestSyntacticSet:
         assert s0.cardinality == 0
 
     def test_adjoin(self):
-        t0 = pu.ssl.SyntacticStructure.from_integer(0)
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
         s0 = pu.ssl.SyntacticSet.from_empty_set()
         s0 = s0.adjoin(t0)
         assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t0))
@@ -192,11 +192,11 @@ class TestSyntacticSet:
         assert s0.cardinality == 3
 
     def test_union(self):
-        t0 = pu.ssl.SyntacticStructure.from_integer(0)
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
-        t3 = pu.ssl.SyntacticStructure.from_integer(3)
-        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s0 = pu.ssl.SyntacticSet.from_empty_set()
         s1 = s0.union(s0)
         assert s1.is_syntactic_set_equivalent_to(s0)
@@ -212,11 +212,11 @@ class TestSyntacticSet:
         assert s6.is_syntactic_set_equivalent_to(s7)
 
     def test_intersection(self):
-        t0 = pu.ssl.SyntacticStructure.from_integer(0)
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
-        t3 = pu.ssl.SyntacticStructure.from_integer(3)
-        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s0 = pu.ssl.SyntacticSet.from_empty_set()
         s1 = pu.ssl.SyntacticSet.from_elements(t0, t1, t2)
         s2 = pu.ssl.SyntacticSet.from_elements(t4, t2, t3)
@@ -228,11 +228,11 @@ class TestSyntacticSet:
         assert s4.intersection(s4).is_syntactic_set_equivalent_to(s4)
 
     def test_difference(self):
-        t0 = pu.ssl.SyntacticStructure.from_integer(0)
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
-        t3 = pu.ssl.SyntacticStructure.from_integer(3)
-        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s0 = pu.ssl.SyntacticSet.from_empty_set()
         s1 = pu.ssl.SyntacticSet.from_elements(t0, t1, t2)
         s2 = pu.ssl.SyntacticSet.from_elements(t4, t2, t3)
@@ -244,11 +244,11 @@ class TestSyntacticSet:
         assert s4.difference(s4).is_syntactic_set_equivalent_to(s0)
 
     def test_symmetric_difference(self):
-        t0 = pu.ssl.SyntacticStructure.from_integer(0)
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
-        t3 = pu.ssl.SyntacticStructure.from_integer(3)
-        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s0 = pu.ssl.SyntacticSet.from_empty_set()
         s1 = pu.ssl.SyntacticSet.from_elements(t0, t1, t2)
         s2 = pu.ssl.SyntacticSet.from_elements(t4, t2, t3)
@@ -260,11 +260,11 @@ class TestSyntacticSet:
         assert s4.symmetric_difference(s4).is_syntactic_set_equivalent_to(s0)
 
     def test_cartesian_product(self):
-        t0 = pu.ssl.SyntacticStructure.from_integer(0)
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
-        t3 = pu.ssl.SyntacticStructure.from_integer(3)
-        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s0 = pu.ssl.SyntacticSet.from_empty_set()
         s1 = pu.ssl.SyntacticSet.from_elements(t0, t1, t2)
         s2 = pu.ssl.SyntacticSet.from_elements(t3, t4)
@@ -284,11 +284,11 @@ class TestSyntacticTuple:
     def test_syntactic_tuple(self):
         # declare set {1, 2, 3}
         t0_123 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2, 3,)))
-        t0 = pu.ssl.SyntacticStructure.from_integer(0)
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
-        t3 = pu.ssl.SyntacticStructure.from_integer(3)
-        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s123 = pu.ssl.SyntacticTuple.from_elements(t1, t2, t3)
         assert s123.is_labeled_rooted_plane_tree_equivalent_to(t0_123)
         assert s123.cardinality == 3
@@ -348,11 +348,11 @@ class TestSyntacticOrderedPair:
     def test_syntactic_ordered_pair(self):
         # declare set {1, 2, 3}
         t0_12 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
-        t0 = pu.ssl.SyntacticStructure.from_integer(0)
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
-        t3 = pu.ssl.SyntacticStructure.from_integer(3)
-        t4 = pu.ssl.SyntacticStructure.from_integer(4)
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s12 = pu.ssl.SyntacticOrderedPair.from_elements(t1, t2, )
         assert s12.is_labeled_rooted_plane_tree_equivalent_to(t0_12)
         assert s12.first_element == t1
@@ -388,11 +388,11 @@ class TestSyntacticMap:
 
     def test_syntactic_map(self):
         # generate some basic elements to play with
-        t1 = pu.ssl.SyntacticStructure.from_integer(1)
-        t2 = pu.ssl.SyntacticStructure.from_integer(2)
-        t3 = pu.ssl.SyntacticStructure.from_integer(3)
-        t4 = pu.ssl.SyntacticStructure.from_integer(4)
-        t5 = pu.ssl.SyntacticStructure.from_integer(5)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
+        t5 = pu.ssl.SyntacticStructure.from_root_label(5)
         domain = pu.ssl.SyntacticOrderedSet.from_elements(t3, t1, t4)
         codomain = pu.ssl.SyntacticTuple.from_elements(t5, t5, t1)
         m1 = pu.ssl.SyntacticMap.from_domain_and_codomain(domain, codomain)

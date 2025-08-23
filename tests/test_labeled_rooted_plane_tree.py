@@ -176,11 +176,11 @@ class TestLabeledRootedPlaneTree:
         assert l[11] == pu.lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(t1_a, (12,))
 
     def test_main_sequence_element(self, lrpt1, lrpt3, lrpt4, lrpt6, lrpt7):
-        assert lrpt1.main_element == 1
-        assert lrpt3.main_element == 1
-        assert lrpt4.main_element == 1
-        assert lrpt6.main_element == 1
-        assert lrpt7.main_element == 1
+        assert lrpt1.root_label == 1
+        assert lrpt3.root_label == 1
+        assert lrpt4.root_label == 1
+        assert lrpt6.root_label == 1
+        assert lrpt7.root_label == 1
 
     def test_tree_size(self, lrpt1, lrpt3, lrpt4, lrpt6, lrpt7):
         assert lrpt1.tree_size == 1

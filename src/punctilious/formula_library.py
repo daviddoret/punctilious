@@ -103,7 +103,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         # build a finite sequence of (0-based) natural numbers S = s0, s1, ..., sn,
         # such that s0 is `x`'s main element,
         # and s1, ..., sn are the recursive ranks of its sub-formulas.
-        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.main_element)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.root_label)
         for subtree in x.iterate_immediate_subtrees():
             subtree_rank: int = cls.rank(subtree)
             t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)

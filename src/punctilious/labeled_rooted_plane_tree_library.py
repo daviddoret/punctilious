@@ -147,7 +147,7 @@ class RecursiveSequenceOrder(brl.BinaryRelation):
         # build a finite sequence of (0-based) natural numbers S = s0, s1, ..., sn,
         # such that s0 is `x`'s main element,
         # and s1, ..., sn are the recursive ranks of its subtrees.
-        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.main_element)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(x.root_label)
         for subtree in x.iterate_immediate_subtrees():
             subtree_rank: int = cls.rank(subtree)
             t: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(subtree_rank)
@@ -490,15 +490,20 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return cls(*s, n=n, rpt=None, sequence=None)
 
     @classmethod
-    def from_integer(cls, i: int) -> LabeledRootedPlaneTree:
-        r"""Declares a leaf LRPT object i() where i is a natural number.
+    def from_root_label(cls, n: int) -> LabeledRootedPlaneTree:
+        r"""Declares a leaf LRPT from its root label.
 
-        :param i: A natural number.
+        Note
+        ------
+
+        Returns a leaf LRPT of the form :math:`i()` where :math:`i` is the root label.
+
+        :param n: A natural number.
         :return: a leaf LRPT.
 
         """
         t: rptl.RootedPlaneTree = rptl.RootedPlaneTree()
-        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(i)
+        s: nn0sl.NaturalNumber0Sequence = nn0sl.NaturalNumber0Sequence(n)
         lrpt: LabeledRootedPlaneTree = cls(rpt=t, sequence=s)
         return lrpt
 
@@ -893,20 +898,30 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return cls.is_strictly_less_than_relation.least_element
 
     @functools.cached_property
-    def main_element(self) -> int:
-        r"""The `main_element` of an LRPT is the first element of its
-        attr:`LabeledRootedPlaneTree.natural_numbers_sequence`, that corresponds to the root
-        node of the attr:`LabeledRootedPlaneTree.rooted_plane_tree`.
+    def root_label(self) -> int:
+        r"""Returns the root label of the LRPT.
 
-        The term `main element` was coined in reference to the term `main connective`
-         (cf. Mancosu 2021, p. 17), because LRPTs are composed of sequences,
-         and thus `main connective` is reserved for "concrete" formulas.
+        Definition
+        -----------
 
-        References:
+        The root label of an LRPT is the label of its root node.
+
+        Note
+        ------
+
+        The root label of an LRPT is also the first element of its natural numbers sequence.
+
+        Note
+        -------
+
+        In (cf. Mancosu 2021, p. 17), `main connective` is used for formulas.
+
+        References
+        --------------
 
         - Mancosu 2021
 
-        :return: 1
+        :return: A natural number.
         """
         return self.natural_number_sequence[0]
 

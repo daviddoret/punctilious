@@ -24,7 +24,7 @@ with open(filename, "w", newline="") as csvfile:
                   phi.rooted_plane_tree,
                   phi.natural_number_sequence,
                   phi.natural_number_sequence.image,
-                  phi.main_element,
+                  phi.root_label,
                   phi.degree,
                   phi.is_canonical,
                   phi.is_strictly_increasing,

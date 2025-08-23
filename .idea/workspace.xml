@@ -4,15 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="implementation of __eq__ for key classes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/continuous_integration/scripts_windows/generate_sample_outputs.py" beforeDir="false" afterPath="$PROJECT_DIR$/continuous_integration/scripts_windows/generate_sample_outputs.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TODO/TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/TODO/TODO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/data/generate_labeled_rooted_plane_tree_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/data/generate_labeled_rooted_plane_tree_list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/restricted_growth_function_analysis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/conftest.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/conftest.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_labeled_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +84,7 @@
     </order>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -1204,14 +1204,6 @@
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
     </task>
-    <task id="LOCAL-01643" summary="adjusted_sum_first_length_second_lexicographic_last">
-      <option name="closed" value="true" />
-      <created>1754941892905</created>
-      <option name="number" value="01643" />
-      <option name="presentableId" value="LOCAL-01643" />
-      <option name="project" value="LOCAL" />
-      <updated>1754941892921</updated>
-    </task>
     <task id="LOCAL-01644" summary="adjusted_sum_first_length_second_lexicographic_last">
       <option name="closed" value="true" />
       <created>1755042815194</created>
@@ -1596,7 +1588,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755870959192</updated>
     </task>
-    <option name="localTasksCounter" value="1692" />
+    <task id="LOCAL-01692" summary="implementation of __eq__ for key classes">
+      <option name="closed" value="true" />
+      <created>1755922920489</created>
+      <option name="number" value="01692" />
+      <option name="presentableId" value="LOCAL-01692" />
+      <option name="project" value="LOCAL" />
+      <updated>1755922920489</updated>
+    </task>
+    <option name="localTasksCounter" value="1693" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1649,7 +1649,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="RPT.height" />
     <MESSAGE value="LRPT.height" />
     <MESSAGE value="cantor_pairing_library" />
     <MESSAGE value="adjusted_sum_first_length_second_lexicographic_last: successor" />
@@ -1674,7 +1673,8 @@
     <MESSAGE value="SyntacticSet.symmetric_difference" />
     <MESSAGE value="SyntacticSet.cartesian_product" />
     <MESSAGE value="cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="cleanup" />
+    <MESSAGE value="implementation of __eq__ for key classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="implementation of __eq__ for key classes" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
