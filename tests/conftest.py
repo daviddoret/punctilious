@@ -1,5 +1,5 @@
 import pytest
-from astroid.protocols import sequence_assigned_stmts
+# from astroid.protocols import sequence_assigned_stmts
 
 import punctilious as pu
 

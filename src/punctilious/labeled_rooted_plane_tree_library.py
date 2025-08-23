@@ -305,6 +305,24 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
 
     """
 
+    def __eq__(self, other):
+        r"""Returns `True` if `self` is `labeled rooted plane equivalent` to `other`, `False` otherwise.
+
+        Note
+        -----
+        Python equality is less restrictive than labeled rooted plane equivalence.
+        In effect, if `other` is not implicitly convertible to type `LabeledRootedPlaneTree`,
+        the result will be `False` instead of raising an exception.
+
+        :param other: Anything
+        :return: `True` or `False`.
+        """
+        try:
+            other: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(other)
+            return self.is_labeled_rooted_plane_tree_equivalent_to(other)
+        except util.PunctiliousException:
+            return False
+
     def __hash__(self):
         return self._compute_hash(self)
 

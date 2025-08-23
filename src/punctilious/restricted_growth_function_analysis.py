@@ -1,5 +1,6 @@
 # import math
-import sympy.functions.combinatorial.numbers
+# import sympy.functions.combinatorial.numbers
+import sympy
 
 
 def generate_erratic_dyck_path_sequence(max_steps, max_value, retrieve_sequence=True, retrieve_combinations=False):

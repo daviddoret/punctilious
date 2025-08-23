@@ -5,7 +5,7 @@ Like this, the output of sample *punctilious_obsolete_20240114* python script fi
 
 from pathlib import Path
 import contextlib
-import punctilious_20250223 as pu
+import punctilious as pu
 
 """For every inference-rule in the punctilious_obsolete_20240114 package,
 generate the restructured text documentation page.

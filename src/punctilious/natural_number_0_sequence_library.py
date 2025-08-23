@@ -1126,6 +1126,24 @@ class NaturalNumber0Sequence(brl.ClassWithOrder, tuple):
         else:
             raise util.PunctiliousException("Unsupported type.")
 
+    def __eq__(self, other):
+        r"""Returns `True` if `self` is `(0-based) natural number sequence equivalent` to `other`, `False` otherwise.
+
+        Note
+        -----
+        Python equality is less restrictive than (0-based) natural number sequence equivalence.
+        In effect, if `other` is not implicitly convertible to type `NaturalNumber0Sequence`,
+        the result will be `False` instead of raising an exception.
+
+        :param other: Anything
+        :return: `True` or `False`.
+        """
+        try:
+            other: NaturalNumber0Sequence = NaturalNumber0Sequence.from_any(other)
+            return self.is_natural_number_0_sequence_equivalent_to(other)
+        except util.PunctiliousException:
+            return False
+
     def __hash__(self):
         return hash((NaturalNumber0Sequence, NaturalNumber0Sequence._HASH_SEED, *self.elements,))
 
