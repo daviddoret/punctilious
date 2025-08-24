@@ -23,15 +23,6 @@ class TestNaturalNumbersSequence:
         assert pu.nn0sl.NaturalNumber0Sequence(*raw_00010203043212) != pu.nn0sl.NaturalNumber0Sequence(
             *raw_1_2_3)
 
-    def test_cache(self, raw_1_2_3, raw_1_3_2, raw_00010203043212, raw_00010203043262):
-        assert pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3) is pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3)
-        assert pu.nn0sl.NaturalNumber0Sequence(*raw_00010203043212) is pu.nn0sl.NaturalNumber0Sequence(
-            *raw_00010203043212)
-        assert pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3) is not pu.nn0sl.NaturalNumber0Sequence(
-            *raw_00010203043212)
-        assert pu.nn0sl.NaturalNumber0Sequence(
-            *raw_00010203043212) is not pu.nn0sl.NaturalNumber0Sequence(*raw_1_2_3)
-
     def test_max_value(self, nns0, nns00, nns01, nns012345, nns0123456789_10_11):
         assert nns0.max_value == 1
         assert nns00.max_value == 1

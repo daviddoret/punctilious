@@ -195,7 +195,6 @@ class AbstractTransformation(afl.LabeledRootedPlaneTree):
                 f" labeled tree.",
                 s_length=s.length, phi_tree_size=phi.tree_size, s=s, phi=phi)
         psi = super(Formula, cls).__new__(cls, (phi, s,))
-        psi = retrieve_formula_from_cache(psi)
         return psi
 
 

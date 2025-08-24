@@ -4,16 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RPT sort() and drop_duplicates()">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/connective_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/transformation_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/transformation_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_natural_number_0_sequence.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_syntactic_structure.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_syntactic_structure.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -521,7 +522,7 @@
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_intersection.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_symmetric_difference.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_union.executor": "Run",
-    "Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute.executor": "Run",
+    "Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute.executor": "Debug",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
     "Python tests.pytest for test_ternary_boolean.TestTernaryBoolead.test_ternary_boolean.executor": "Run",
@@ -1095,23 +1096,6 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_syntactic_structure.TestSyntacticSet.test_empty_set" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="2023_05_02_PyCharmProject_Maths" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_syntactic_structure.TestSyntacticSet.test_empty_set&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1164,6 +1148,23 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="2023_05_02_PyCharmProject_Maths" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.build" />
       <item itemvalue="Python.build_samples" />
@@ -1177,9 +1178,9 @@
       <item itemvalue="Python tests.pytest in punctilious" />
       <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_sort" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_adjoin" />
-      <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_empty_set" />
       <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute" />
       <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
+      <item itemvalue="Python tests.pytest in tests" />
       <item itemvalue="Shell Script.pytest tests" />
       <item itemvalue="Shell Script.pytest" />
       <item itemvalue="Shell Script.python -m build" />
@@ -1187,10 +1188,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute" />
+        <item itemvalue="Python tests.pytest in tests" />
         <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_sort" />
         <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_adjoin" />
-        <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_empty_set" />
       </list>
     </recent_temporary>
   </component>
@@ -1212,14 +1213,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01650" summary="adjusted_sum_first_length_second_lexicographic_last">
-      <option name="closed" value="true" />
-      <created>1755116509796</created>
-      <option name="number" value="01650" />
-      <option name="presentableId" value="LOCAL-01650" />
-      <option name="project" value="LOCAL" />
-      <updated>1755116509796</updated>
     </task>
     <task id="LOCAL-01651" summary="adjusted_sum_first_length_second_lexicographic_last">
       <option name="closed" value="true" />
@@ -1605,7 +1598,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756064915840</updated>
     </task>
-    <option name="localTasksCounter" value="1699" />
+    <task id="LOCAL-01699" summary="cleanup">
+      <option name="closed" value="true" />
+      <created>1756066337255</created>
+      <option name="number" value="01699" />
+      <option name="presentableId" value="LOCAL-01699" />
+      <option name="project" value="LOCAL" />
+      <updated>1756066337255</updated>
+    </task>
+    <option name="localTasksCounter" value="1700" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1676,14 +1677,14 @@
     <MESSAGE value="SyntacticSet.difference" />
     <MESSAGE value="SyntacticSet.symmetric_difference" />
     <MESSAGE value="SyntacticSet.cartesian_product" />
-    <MESSAGE value="cleanup" />
     <MESSAGE value="implementation of __eq__ for key classes" />
     <MESSAGE value="syntactic structures" />
     <MESSAGE value="LRPT sort and drop_duplicates" />
     <MESSAGE value="syntactic structure: sort and drop_duplicates" />
     <MESSAGE value="syntactic structure" />
     <MESSAGE value="RPT sort() and drop_duplicates()" />
-    <option name="LAST_COMMIT_MESSAGE" value="RPT sort() and drop_duplicates()" />
+    <MESSAGE value="cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleanup" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1791,7 +1792,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_rooted_plane_tree.py</url>
-          <line>117</line>
+          <line>102</line>
           <option name="timeStamp" value="432" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -1811,13 +1812,33 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/test_rooted_plane_tree.py</url>
-          <line>267</line>
+          <line>252</line>
           <option name="timeStamp" value="546" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py</url>
           <line>87</line>
           <option name="timeStamp" value="547" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
+          <line>34</line>
+          <option name="timeStamp" value="559" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="560" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
+          <line>32</line>
+          <option name="timeStamp" value="561" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py</url>
+          <line>1009</line>
+          <option name="timeStamp" value="562" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

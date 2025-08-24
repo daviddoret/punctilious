@@ -599,14 +599,7 @@ class SyntacticSet(SyntacticStructure):
 
         :return: The elements of the set.
         """
-        unique_elements: tuple[SyntacticStructure, ...] = ()
-        for sub_ss in self.immediate_sub_syntactic_structures:
-            if sub_ss not in unique_elements:
-                unique_elements = unique_elements + (sub_ss,)
-        # by convention, returns the elements in canonical LRPT order,
-        # this facilitates equivalence checking.
-        unique_elements = tuple(sorted(unique_elements))
-        return unique_elements
+        return self.immediate_sub_syntactic_structures
 
     @classmethod
     def from_any(cls, x: FlexibleSyntacticSet) -> SyntacticSet:
@@ -881,12 +874,12 @@ class SyntacticMap(SyntacticSet):
                 codomain=codomain)
 
         # populate the ordered pairs.
-        ordered_pairs: SyntacticSet = SyntacticSet.from_empty_set(n=n)
+        ordered_pairs: tuple[SyntacticOrderedPair, ...] = ()
         for preimage, image in zip(domain.elements, codomain.elements):
             pair: SyntacticOrderedPair = SyntacticOrderedPair.from_first_and_second_elements(preimage, image)
-            ordered_pairs = ordered_pairs.adjoin(pair)
+            ordered_pairs += (pair,)
 
-        return cls.from_ordered_pairs(*ordered_pairs.elements, n=n)
+        return cls.from_ordered_pairs(*ordered_pairs, n=n)
 
     @classmethod
     def from_empty_map(cls, n: int | None = None) -> SyntacticMap:

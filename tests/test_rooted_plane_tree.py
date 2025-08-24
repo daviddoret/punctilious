@@ -76,21 +76,6 @@ class TestRootedPlaneTree:
         assert t12.is_rooted_plane_tree_equivalent_to(
             pu.rptl.RootedPlaneTree(t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t2_a_aa))
 
-    def test_cache(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
-        t1_clone = pu.rptl.RootedPlaneTree()
-        assert t1_a == t1_clone
-        assert t1_a is t1_clone
-        t2_clone = pu.rptl.RootedPlaneTree(t1_clone)
-        assert t2_a_aa == t2_clone
-        assert t2_a_aa is t2_clone
-        t3_clone = pu.rptl.RootedPlaneTree(t1_clone, t1_clone, t1_clone, t1_clone, t1_clone)
-        assert t6_a_aa_ab_ac_ad_ae == t3_clone
-        assert t6_a_aa_ab_ac_ad_ae is t3_clone
-        t4_clone = pu.rptl.RootedPlaneTree(t1_clone, t2_clone, t3_clone, t2_clone)
-        assert t12 == t4_clone
-        assert t12 is t4_clone
-        pass
-
     def test_select_sub_rooted_plane_tree_from_path_sequence(self, t1_a, t2_a_aa, t6_a_aa_ab_ac_ad_ae, t12):
         assert t1_a.select_sub_tree_from_path_sequence((1,)) == t1_a
         assert t2_a_aa.select_sub_tree_from_path_sequence((1,)) == t2_a_aa

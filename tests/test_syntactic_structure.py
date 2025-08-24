@@ -30,6 +30,7 @@ class TestSyntacticStructure:
         domain2 = pu.ssl.SyntacticOrderedSet.from_elements(ss1, ss2)
         codomain2 = pu.ssl.SyntacticTuple.from_elements(ss3, ss4)
         m2 = pu.ssl.SyntacticMap.from_domain_and_codomain(domain=domain2, codomain=codomain2)
+        # m2 = pu.ssl.SyntacticMap.from_ordered_pairs((ss1, ss3,), (ss2, ss4,), n=1)
         input_4 = pu.ssl.SyntacticStructure.from_immediate_subtrees(ss1, n=5)
         output_4 = m2.substitute(input_4)
         assert output_4 == pu.ssl.SyntacticStructure.from_immediate_subtrees(ss3, n=5)
