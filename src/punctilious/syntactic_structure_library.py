@@ -116,6 +116,12 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
             return 1
         else:
             return 0
+        #         if x.is_strictly_less_than(y):
+        #             return -1
+        #         elif y.is_strictly_less_than(x):
+        #             return 1
+        #         else:
+        #             return 0
 
     @classmethod
     def drop_duplicates(cls, *args) -> tuple[SyntacticStructure, ...]:

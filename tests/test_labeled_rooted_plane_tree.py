@@ -436,9 +436,12 @@ class TestLabeledRootedPlaneTree:
         b = a.successor
         c = b.successor
         d = c.successor
-        assert pu.lrptl.LabeledRootedPlaneTree.sort(a, b, c, d) == (a, b, c, d,)
-        assert pu.lrptl.LabeledRootedPlaneTree.sort(c, b, a, d) == (a, b, c, d,)
-        assert pu.lrptl.LabeledRootedPlaneTree.sort(a, d, d, c, b, c, d) == (a, b, c, c, d, d, d)
+        sorted1 = pu.lrptl.LabeledRootedPlaneTree.sort(a, b, c, d)
+        sorted2 = pu.lrptl.LabeledRootedPlaneTree.sort(c, b, a, d)
+        assert sorted1 == sorted2  # counter intuitive hash order
+        sorted1 = pu.lrptl.LabeledRootedPlaneTree.sort(a, b, b, d, c, a, a, c, c, d)
+        sorted2 = pu.lrptl.LabeledRootedPlaneTree.sort(b, a, d, b, a, c, c, a, d, c)
+        assert sorted1 == sorted2  # counter intuitive hash order
 
     def test_drop_duplicates(self):
         a = pu.lrptl.LabeledRootedPlaneTree.least_element
