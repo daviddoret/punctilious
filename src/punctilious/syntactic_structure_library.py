@@ -91,7 +91,16 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
         r"""Returns -1 if :math:`x < y`, 0 if :math:`x = y`, 1 if :math:`x > y` following canonical order.
 
         Note
-        ----
+        -----
+        The default sorting of syntactic structures is based on their python hash value.
+        This design decision is only motivated by the need to have a very efficient
+        sorting algorithm, especially for syntactic set elements.
+        In the future, if a new order sequence is found that can both
+        provide efficient sorting, and provide an efficient unranking function,
+        and is a bijection with the natural numbers, then this method can be replaced.
+
+        Note
+        -----
         This method is used in conjunction with `functools.cmp_to_key`
         to implement the :meth:`FlexibleSyntacticStructure.sort` method.
 
@@ -101,9 +110,9 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
         """
         x: SyntacticStructure = SyntacticStructure.from_any(x)
         y: SyntacticStructure = SyntacticStructure.from_any(y)
-        if cls.is_strictly_less_than(x, y):
+        if lrptl.PythonHashOrder.relates(x, y):
             return -1
-        elif cls.is_strictly_less_than(y, x):
+        elif lrptl.PythonHashOrder.relates(y, x):
             return 1
         else:
             return 0

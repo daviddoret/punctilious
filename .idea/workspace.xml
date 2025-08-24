@@ -4,12 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="syntactic structure">
+    <list default="true" id="48b609c4-0198-44a9-8f40-0a1e1f4ae31e" name="Changes" comment="RPT sort() and drop_duplicates()">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TODO/TODO.py" beforeDir="false" afterPath="$PROJECT_DIR$/TODO/TODO.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/connective_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/connective_sequence_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/formula_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/formula_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/labeled_rooted_plane_tree_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_pair_library.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/natural_number_0_sequence_library.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_rooted_plane_tree.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/punctilious/syntactic_structure_library.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -498,6 +502,7 @@
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_least_element.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_o1.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_select_sub_rooted_plane_tree_from_path_sequence.executor": "Run",
+    "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_sort.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_successor_unrank_consistency.executor": "Run",
     "Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_trivial_tree.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestAbstractMap.test_abstract_map.executor": "Run",
@@ -516,7 +521,7 @@
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_intersection.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_symmetric_difference.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_union.executor": "Run",
-    "Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute.executor": "Debug",
+    "Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute.executor": "Run",
     "Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_syntactic_structure.executor": "Run",
     "Python tests.pytest for test_tao_analysis_1_2006.TestTaoAnalysis12006.test_tao_analysis_1_2006.executor": "Debug",
     "Python tests.pytest for test_ternary_boolean.TestTernaryBoolead.test_ternary_boolean.executor": "Run",
@@ -825,7 +830,7 @@
       <recent name="$PROJECT_DIR$/trashcan" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_sort">
+  <component name="RunManager" selected="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute">
     <configuration name="build" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="2023_05_02_PyCharmProject_Maths" />
       <option name="ENV_FILES" value="" />
@@ -1181,8 +1186,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_sort" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticStructure.test_substitute" />
+        <item itemvalue="Python tests.pytest for test_rooted_plane_tree.TestRootedPlaneTree.test_sort" />
         <item itemvalue="Python tests.pytest in test_syntactic_structure.py" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_adjoin" />
         <item itemvalue="Python tests.pytest for test_syntactic_structure.TestSyntacticSet.test_empty_set" />
@@ -1207,14 +1212,6 @@
       <workItem from="1745231164817" duration="43984000" />
       <workItem from="1745955236370" duration="7298000" />
       <workItem from="1746361284065" duration="6000" />
-    </task>
-    <task id="LOCAL-01649" summary="adjusted_sum_first_length_second_lexicographic_last">
-      <option name="closed" value="true" />
-      <created>1755115065717</created>
-      <option name="number" value="01649" />
-      <option name="presentableId" value="LOCAL-01649" />
-      <option name="project" value="LOCAL" />
-      <updated>1755115065717</updated>
     </task>
     <task id="LOCAL-01650" summary="adjusted_sum_first_length_second_lexicographic_last">
       <option name="closed" value="true" />
@@ -1600,7 +1597,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756043774591</updated>
     </task>
-    <option name="localTasksCounter" value="1698" />
+    <task id="LOCAL-01698" summary="RPT sort() and drop_duplicates()">
+      <option name="closed" value="true" />
+      <created>1756064915840</created>
+      <option name="number" value="01698" />
+      <option name="presentableId" value="LOCAL-01698" />
+      <option name="project" value="LOCAL" />
+      <updated>1756064915840</updated>
+    </task>
+    <option name="localTasksCounter" value="1699" />
     <servers>
       <YouTrack url="https://punctilious.youtrack.cloud">
         <username>random</username>
@@ -1653,7 +1658,6 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="adjusted_sum_first_length_second_lexicographic_last: unranking" />
     <MESSAGE value="adjusted_sum_first_length_second_reverse_lexicographic_last" />
     <MESSAGE value="AS1L2RL3O" />
     <MESSAGE value="RSO" />
@@ -1678,7 +1682,8 @@
     <MESSAGE value="LRPT sort and drop_duplicates" />
     <MESSAGE value="syntactic structure: sort and drop_duplicates" />
     <MESSAGE value="syntactic structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="syntactic structure" />
+    <MESSAGE value="RPT sort() and drop_duplicates()" />
+    <option name="LAST_COMMIT_MESSAGE" value="RPT sort() and drop_duplicates()" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -1813,11 +1818,6 @@
           <url>file://$PROJECT_DIR$/src/punctilious/rooted_plane_tree_library.py</url>
           <line>87</line>
           <option name="timeStamp" value="547" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_syntactic_structure.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="554" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
