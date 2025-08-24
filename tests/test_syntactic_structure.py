@@ -402,3 +402,21 @@ class TestSyntacticMap:
         assert not m1.has_domain_element(t2)
         pairs = m1.ordered_pairs
         assert len(pairs) == 3
+
+    def test_sort(self):
+        a = pu.ssl.SyntacticStructure.least_element
+        b = a.successor
+        c = b.successor
+        d = c.successor
+        assert pu.ssl.SyntacticStructure.sort(a, b, c, d) == (a, b, c, d,)
+        assert pu.ssl.SyntacticStructure.sort(c, b, a, d) == (a, b, c, d,)
+        assert pu.ssl.SyntacticStructure.sort(a, d, d, c, b, c, d) == (a, b, c, c, d, d, d)
+
+    def test_drop_duplicates(self):
+        a = pu.ssl.SyntacticStructure.least_element
+        b = a.successor
+        c = b.successor
+        d = c.successor
+        assert pu.ssl.SyntacticStructure.drop_duplicates(a, b, c, d) == (a, b, c, d,)
+        assert pu.ssl.SyntacticStructure.drop_duplicates(c, b, a, d) == (c, b, a, d,)
+        assert pu.ssl.SyntacticStructure.drop_duplicates(a, d, d, c, b, c, d) == (a, d, c, b,)

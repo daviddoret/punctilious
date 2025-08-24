@@ -408,33 +408,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
     #        return o
 
     @functools.cached_property
-    def degree(self) -> int:
-        r"""Returns the degree of this LRPT.
-
-        Definition
-        ----------------
-
-        The degree of an LRPT is the number of immediate subtrees under the root.
-
-        :return:
-        """
-        return len(self.immediate_subtrees)
-
-    @classmethod
-    def drop_duplicates(cls, *args) -> tuple[LabeledRootedPlaneTree, ...]:
-        r"""Returns unique `args` elements, preserving order.
-
-        :param args: A tuple of LRPTs.
-        :return: A tuple of unique LRPTs.
-        """
-        args: tuple[LabeledRootedPlaneTree, ...] = tuple(LabeledRootedPlaneTree.from_any(x) for x in args)
-        t: tuple[LabeledRootedPlaneTree, ...] = tuple()
-        for x in args:
-            if x not in t:
-                t += (x,)
-        return t
-
-    @functools.cached_property
     def canonical_labeled_rooted_plane_tree(self) -> LabeledRootedPlaneTree:
         r"""The canonical LRPT of this LRPT.
 
@@ -475,6 +448,33 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return 1
         else:
             return 0
+
+    @functools.cached_property
+    def degree(self) -> int:
+        r"""Returns the degree of this LRPT.
+
+        Definition
+        ----------------
+
+        The degree of an LRPT is the number of immediate subtrees under the root.
+
+        :return:
+        """
+        return len(self.immediate_subtrees)
+
+    @classmethod
+    def drop_duplicates(cls, *args) -> tuple[LabeledRootedPlaneTree, ...]:
+        r"""Returns unique elements, dropping duplicates and preserving order.
+
+        :param args: A python tuple of LRPTs.
+        :return: A python tuple of unique LRPTs.
+        """
+        args: tuple[LabeledRootedPlaneTree, ...] = tuple(LabeledRootedPlaneTree.from_any(x) for x in args)
+        t: tuple[LabeledRootedPlaneTree, ...] = tuple()
+        for x in args:
+            if x not in t:
+                t += (x,)
+        return t
 
     @functools.cached_property
     def formula_degree(self) -> int:
