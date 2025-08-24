@@ -430,3 +430,21 @@ class TestLabeledRootedPlaneTree:
         t2b = pu.lrptl.LabeledRootedPlaneTree.unrank(2)
         assert t2a == t2b
         pass
+
+    def test_sort(self):
+        a = pu.lrptl.LabeledRootedPlaneTree.least_element
+        b = a.successor
+        c = b.successor
+        d = c.successor
+        assert pu.lrptl.LabeledRootedPlaneTree.sort(a, b, c, d) == (a, b, c, d,)
+        assert pu.lrptl.LabeledRootedPlaneTree.sort(c, b, a, d) == (a, b, c, d,)
+        assert pu.lrptl.LabeledRootedPlaneTree.sort(a, d, d, c, b, c, d) == (a, b, c, c, d, d, d)
+
+    def test_drop_duplicates(self):
+        a = pu.lrptl.LabeledRootedPlaneTree.least_element
+        b = a.successor
+        c = b.successor
+        d = c.successor
+        assert pu.lrptl.LabeledRootedPlaneTree.drop_duplicates(a, b, c, d) == (a, b, c, d,)
+        assert pu.lrptl.LabeledRootedPlaneTree.drop_duplicates(c, b, a, d) == (c, b, a, d,)
+        assert pu.lrptl.LabeledRootedPlaneTree.drop_duplicates(a, d, d, c, b, c, d) == (a, d, c, b,)

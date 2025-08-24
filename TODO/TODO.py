@@ -17,4 +17,9 @@ review methods is_well_formed to factor in the root_label. probably by passing i
 is there a way to design SyntacticSet (and other similar structures) in such a way
 as to preserve the python types of its elements? For example to support a set of ordered pairs?
 
+check that __init__ does nothing on input arguments. because immutable objects are
+not modified by __new__. consider removing __init__ and creating properties in __new__ instead.
+
+implement cls.sort() following the same approach as in RPTL in all foundational classes.
+
 """

@@ -395,46 +395,46 @@ class SyntacticOrderedSet(SyntacticStructure):
 class SyntacticSet(SyntacticStructure):
     r"""A syntactic set.
 
-    Definition
-    ------------
+    Intuitive definition
+    ----------------------
 
     A `syntactic set` is a syntactic structure that models a finite (computable) set defined by extension.
 
-    Given any LRPT :math:`T`,
-    its `syntactic set` is the set :math:`{t_0, t_1, \cdots, t_n}`
-    where :math:`t_i` denotes the immediate and unique sub-LRPTs of :math:`T`.
+    Syntactic definition
+    -----------------------
 
-    Note
-    ------
+    A `syntactic structure` :math:`A` is a `syntactic set` if and only if:
 
-    The main element of the LRPT is not an information of the syntactic set, i.e.: it is dropped.
-
-    The order of immediate sub-LRPTs in the LRPT is not an information of the syntactic set, i.e.: it is dropped.
-
-    Note
-    -----------
-
-    Every LRPT is a syntactic set.
+    - Its root label is the conventional label for syntactic sets.
+    - Its immediate sub-syntactic structures are ordered in canonical order.
 
     Note
     ----------
 
-    Every LRPT of degree 0 is the empty set.
+    The empty set is the syntactic structure :math:`n()` where :math:`n` is the conventional label
+    for syntactic sets.
 
     """
 
     def __init__(self,
                  *args: SyntacticStructure,
                  n: int | None = None,
-                 rpt: rptl.FlexibleRootedPlaneTree,
-                 sequence: nn0sl.FlexibleNaturalNumber0Sequence):
+                 rpt: rptl.FlexibleRootedPlaneTree | None,
+                 sequence: nn0sl.FlexibleNaturalNumber0Sequence | None):
         super(SyntacticSet, self).__init__(*args, n=n, rpt=rpt, sequence=sequence)
 
     def __new__(cls,
                 *args: SyntacticStructure,
                 n: int | None = None,
-                rpt: rptl.FlexibleRootedPlaneTree,
-                sequence: nn0sl.FlexibleNaturalNumber0Sequence):
+                rpt: rptl.FlexibleRootedPlaneTree | None,
+                sequence: nn0sl.FlexibleNaturalNumber0Sequence | None):
+        if rpt is not None:
+            ss: SyntacticStructure = cls.from_rpt_and_sequence(rpt, sequence)
+            args = ss.immediate_sub_syntactic_structures
+            rpt = None
+            sequence = None
+        args = SyntacticStructure.sort(*args)
+        args = SyntacticStructure.drop_duplicates(*args)
         ss = super(SyntacticSet, cls).__new__(cls, *args, n=n, rpt=rpt, sequence=sequence)
         cls.is_well_formed(ss, raise_exception_if_false=True)
         return ss
@@ -592,16 +592,25 @@ class SyntacticSet(SyntacticStructure):
         return y
 
     def is_syntactic_set_equivalent_to(self, x: FlexibleSyntacticStructure) -> bool:
-        r"""Check if this syntactic structure is syntactic set equivalent to `x`.
+        r"""Check if this set is `syntactic set equivalent` to `x`.
 
-        Definition
-        ---------------
+        Mathematical definition
+        -------------------------
 
-        Let :math:`x`, :math:`y` be LRPTs.
-        :math:`x` is syntactic set equivalent to `y` if and only if:
+        Let :math:`A`, :math:`B` be sets and :math:`x` be an element of the universe.
+        :math:`A` = :math:`Y` if and only if:
 
-        - every immediate sub-LRPT of :math:`x` is an immediate sub-LRPT of :math:`y`,
-        - every immediate sub-LRPT of :math:`y` is an immediate sub-LRPT of :math:`z`.
+        - :math:`\forall x (x \in A \Longleftrightarrow x \in B)`.
+
+        Syntactic definition
+        -------------------------
+
+        Let :math:`A`, :math:`B`, and :math:`x` be syntactic structures.
+        :math:`A` is syntactic set equivalent to :math:`Y` if and only if:
+
+        - :math:`A` and :math:`B` are syntactic sets.
+        - :math:`\forall x (x \in A \Longleftrightarrow x \in B)`.
+
 
         :param x: A syntactic structure.
         :return: `True` or `False`.

@@ -420,6 +420,20 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         return len(self.immediate_subtrees)
 
+    @classmethod
+    def drop_duplicates(cls, *args) -> tuple[LabeledRootedPlaneTree, ...]:
+        r"""Returns unique `args` elements, preserving order.
+
+        :param args: A tuple of LRPTs.
+        :return: A tuple of unique LRPTs.
+        """
+        args: tuple[LabeledRootedPlaneTree, ...] = tuple(LabeledRootedPlaneTree.from_any(x) for x in args)
+        t: tuple[LabeledRootedPlaneTree, ...] = tuple()
+        for x in args:
+            if x not in t:
+                t += (x,)
+        return t
+
     @functools.cached_property
     def canonical_labeled_rooted_plane_tree(self) -> LabeledRootedPlaneTree:
         r"""The canonical LRPT of this LRPT.
@@ -439,6 +453,28 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
             return LabeledRootedPlaneTree.from_rpt_and_sequence(
                 rpt=self.rooted_plane_tree,
                 sequence=self.natural_number_sequence.restricted_growth_function_sequence)
+
+    @classmethod
+    def compare(cls, x: FlexibleLabeledRootedPlaneTree, y: FlexibleLabeledRootedPlaneTree) -> int:
+        r"""Returns -1 if :math:`x < y`, 0 if :math:`x = y`, 1 if :math:`x > y` following canonical order.
+
+        Note
+        ----
+        This method is used in conjunction with `functools.cmp_to_key`
+        to implement the :meth:`LabeledRootedPlaneTree.sort` method.
+
+        :param x: An LRPT.
+        :param y: An LRPT.
+        :return: -1, 0, or 1.
+        """
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
+        if cls.is_strictly_less_than(x, y):
+            return -1
+        elif cls.is_strictly_less_than(y, x):
+            return 1
+        else:
+            return 0
 
     @functools.cached_property
     def formula_degree(self) -> int:
@@ -985,6 +1021,21 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         return self.natural_number_sequence.max_value
 
+    @classmethod
+    def sort(cls, *args) -> tuple[LabeledRootedPlaneTree, ...]:
+        r"""Returns `args` sorted in canonical order.
+
+        :param args: An unsorted tuple of LRPTs.
+        :return: A canonically sorted tuple of LRPTs.
+        """
+
+        def compare(x, y):
+            return cls.compare(x, y)
+
+        l: tuple[typing.Any, ...] = tuple(sorted(args, key=functools.cmp_to_key(compare)))
+        l: tuple[LabeledRootedPlaneTree, ...] = tuple(LabeledRootedPlaneTree.from_any(x) for x in l)
+        return l
+
     @functools.cached_property
     def subtrees(self) -> tuple[LabeledRootedPlaneTree, ...]:
         r"""The `subtrees` of an LRPT `t` is the tuple of LRPT elements that are present
@@ -1015,6 +1066,19 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         for subtree in self.iterate_subtrees():
             subtrees = subtrees + (subtree,)
         return subtrees
+
+    @functools.cached_property
+    def successor(self) -> LabeledRootedPlaneTree:
+        r"""Returns the successor of this LRPT following canonical order.
+
+        Note
+        ----
+
+        This method is overridden to force the python type of its output.
+
+        :return: An LRPT.
+        """
+        return self.__class__.is_strictly_less_than_relation.successor(self)
 
     @functools.cached_property
     def t(self) -> rptl.RootedPlaneTree:
