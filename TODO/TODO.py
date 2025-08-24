@@ -30,4 +30,7 @@ implement cls.drop_duplicates following the same approach as in RPTL in all foun
 - RPT
 - NN0
 
+consider changing the default __init__ and __new__ signature to root_label:int, *args for LRPT and
+children classes.
+
 """

@@ -49,7 +49,7 @@ class DyckWordLexicographicOrder(brl.BinaryRelation):
         return tbl.TernaryBoolean.TRUE
 
     @util.readonly_class_property
-    def least_element(cls) -> object:
+    def least_element(cls) -> RootedPlaneTree:
         return RootedPlaneTree()
 
     @classmethod
@@ -200,6 +200,42 @@ class RootedPlaneTree(brl.ClassWithOrder, tuple):
         else:
             cls._cache[hash_value] = o
             return o
+
+    @classmethod
+    def compare(cls, x: FlexibleRootedPlaneTree, y: FlexibleRootedPlaneTree) -> int:
+        r"""Returns -1 if :math:`x < y`, 0 if :math:`x = y`, 1 if :math:`x > y` following canonical order.
+
+        Note
+        ----
+        This method is used in conjunction with `functools.cmp_to_key`
+        to implement the :meth:`RootedPlaneTree.sort` method.
+
+        :param x: An RPT.
+        :param y: An RPT.
+        :return: -1, 0, or 1.
+        """
+        x: RootedPlaneTree = RootedPlaneTree.from_any(x)
+        y: RootedPlaneTree = RootedPlaneTree.from_any(y)
+        if cls.is_strictly_less_than(x, y):
+            return -1
+        elif cls.is_strictly_less_than(y, x):
+            return 1
+        else:
+            return 0
+
+    @classmethod
+    def drop_duplicates(cls, *args: FlexibleRootedPlaneTree) -> tuple[RootedPlaneTree, ...]:
+        r"""Returns unique elements, dropping duplicates and preserving order.
+
+        :param args: A python tuple of LRPTs.
+        :return: A python tuple of unique LRPTs.
+        """
+        args: tuple[RootedPlaneTree, ...] = tuple(RootedPlaneTree.from_any(x) for x in args)
+        t: tuple[RootedPlaneTree, ...] = tuple()
+        for x in args:
+            if x not in t:
+                t += (x,)
+        return t
 
     @functools.cached_property
     def dyck_word(self) -> dwl.DyckWord:
@@ -594,6 +630,21 @@ class RootedPlaneTree(brl.ClassWithOrder, tuple):
 
         """
         return 1 + sum(child.size for child in self.immediate_subtrees)
+
+    @classmethod
+    def sort(cls, *args) -> tuple[RootedPlaneTree, ...]:
+        r"""Returns `args` sorted in canonical order.
+
+        :param args: An unsorted tuple of RPTs.
+        :return: A canonically sorted tuple of RPTs.
+        """
+
+        def compare(x, y):
+            return cls.compare(x, y)
+
+        l: tuple[typing.Any, ...] = tuple(sorted(args, key=functools.cmp_to_key(compare)))
+        l: tuple[RootedPlaneTree, ...] = tuple(RootedPlaneTree.from_any(x) for x in l)
+        return l
 
     def substitute_subtree(self, m: dict[FlexibleRootedPlaneTree, FlexibleRootedPlaneTree]) -> RootedPlaneTree:
         raise NotImplementedError('TO BE IMPLEMENTED')

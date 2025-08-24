@@ -288,3 +288,21 @@ class TestRootedPlaneTree:
         assert td.height == 2
         te = pu.rptl.RootedPlaneTree.from_immediate_subtrees(td, t, tb, tb)
         assert te.height == 3
+
+    def test_sort(self):
+        a = pu.rptl.RootedPlaneTree.least_element
+        b = a.successor
+        c = b.successor
+        d = c.successor
+        assert pu.rptl.RootedPlaneTree.sort(a, b, c, d) == (a, b, c, d,)
+        assert pu.rptl.RootedPlaneTree.sort(c, b, a, d) == (a, b, c, d,)
+        assert pu.rptl.RootedPlaneTree.sort(a, d, d, c, b, c, d) == (a, b, c, c, d, d, d)
+
+    def test_drop_duplicates(self):
+        a = pu.rptl.RootedPlaneTree.least_element
+        b = a.successor
+        c = b.successor
+        d = c.successor
+        assert pu.rptl.RootedPlaneTree.drop_duplicates(a, b, c, d) == (a, b, c, d,)
+        assert pu.rptl.RootedPlaneTree.drop_duplicates(c, b, a, d) == (c, b, a, d,)
+        assert pu.rptl.RootedPlaneTree.drop_duplicates(a, d, d, c, b, c, d) == (a, d, c, b,)

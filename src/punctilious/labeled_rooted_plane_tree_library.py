@@ -103,6 +103,86 @@ class IsEqualTo(brl.BinaryRelation):
         return x.is_labeled_rooted_plane_tree_equivalent_to(y)
 
 
+class NN0SFirstRPTSecond(brl.BinaryRelation):
+    r"""The LRPTs equipped with the standard strictly less-than order relation.
+
+    Mathematical definition
+    -------------------------
+
+    :math:`( \mathbb{F}_0, < )`.
+
+    """
+
+    @util.readonly_class_property
+    def is_order_isomorphic_with_n_strictly_less_than(cls) -> tbl.TernaryBoolean:
+        r"""
+
+        Proof
+        ------
+
+        TODO: Provide proof here.
+
+        """
+        return tbl.TernaryBoolean.NOT_AVAILABLE
+
+    @util.readonly_class_property
+    def least_element(cls) -> LabeledRootedPlaneTree:
+        """By design, we choose 0() as the least element.
+
+        :return:
+        """
+        return LabeledRootedPlaneTree.from_rpt_and_sequence(
+            rpt=rptl.RootedPlaneTree.least_element,
+            sequence=nn0sl.NaturalNumber0Sequence(0)
+        )
+
+    @classmethod
+    def rank(cls, x: object) -> int:
+        raise NotImplementedError("oops")
+
+    @classmethod
+    def relates(cls, x: FlexibleLabeledRootedPlaneTree, y: FlexibleLabeledRootedPlaneTree) -> bool:
+        r"""Returns `True` if :math:`xRy`, `False` otherwise.
+
+        :param x: A Python object interpretable as a (0-based) natural number.
+        :param y: A Python object interpretable as a (0-based) natural number.
+        :return: `True` or `False`.
+        """
+
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+        y: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(y)
+        if x.sequence.is_strictly_less_than(y.sequence):
+            return True
+        elif y.sequence.is_strictly_less_than(x.sequence):
+            return False
+        elif x.rpt.is_strictly_less_than(y.sequence):
+            return True
+        elif y.rpt.is_strictly_less_than(x.sequence):
+            return False
+        else:
+            # the two LRPTs are necessarily equal.
+            return False
+
+    @classmethod
+    def successor(cls, x: FlexibleLabeledRootedPlaneTree) -> FlexibleLabeledRootedPlaneTree:
+        r"""Returns the successor of `x` following canonical order..
+
+        :param x: An LRPT.
+        :return: An LRPT.
+        """
+        x: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(x)
+
+        # retrieve the successor of x's RPT.
+        rpt_successor: rptl.RootedPlaneTree = x.rooted_plane_tree.successor
+
+        # check if the rpt successor is within the same NN0S class.
+        raise NotImplementedError("oops")
+
+    @classmethod
+    def unrank(cls, n: int) -> LabeledRootedPlaneTree:
+        raise NotImplementedError("oops")
+
+
 class RecursiveSequenceOrder(brl.BinaryRelation):
     r"""The LRPTs equipped with the standard strictly less-than order relation.
 
@@ -463,7 +543,7 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         return len(self.immediate_subtrees)
 
     @classmethod
-    def drop_duplicates(cls, *args) -> tuple[LabeledRootedPlaneTree, ...]:
+    def drop_duplicates(cls, *args: FlexibleLabeledRootedPlaneTree) -> tuple[LabeledRootedPlaneTree, ...]:
         r"""Returns unique elements, dropping duplicates and preserving order.
 
         :param args: A python tuple of LRPTs.
@@ -746,10 +826,6 @@ class LabeledRootedPlaneTree(brl.ClassWithOrder, tuple):
         """
         t: LabeledRootedPlaneTree = LabeledRootedPlaneTree.from_any(t)
         return self in t.immediate_subtrees
-
-    @util.readonly_class_property
-    def is_strictly_less_than_relation(self) -> typing.Type[brl.BinaryRelation]:
-        return RecursiveSequenceOrder
 
     def is_labeled_rooted_plane_tree_equivalent_to(self, t: LabeledRootedPlaneTree):
         r"""Returns `True` if this LRPT is LRPT-equivalent
