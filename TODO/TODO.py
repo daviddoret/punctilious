@@ -20,6 +20,14 @@ as to preserve the python types of its elements? For example to support a set of
 check that __init__ does nothing on input arguments. because immutable objects are
 not modified by __new__. consider removing __init__ and creating properties in __new__ instead.
 
-implement cls.sort() following the same approach as in RPTL in all foundational classes.
+implement cls.compare() and cls.sort() following the same approach as in RPTL in all foundational classes:
+- NN0S
+- RPT
+- NN0
+
+implement cls.drop_duplicates following the same approach as in RPTL in all foundational classes:
+- NN0S
+- RPT
+- NN0
 
 """

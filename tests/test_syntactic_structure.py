@@ -13,9 +13,9 @@ class TestSyntacticStructure:
         domain = pu.ssl.SyntacticOrderedSet.from_elements(1, 2, 3)
         codomain = pu.ssl.SyntacticTuple.from_elements(4, 5, 6)
         m1 = pu.ssl.SyntacticMap.from_domain_and_codomain(domain, codomain)
-        input_1 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs(2)
+        input_1 = pu.ssl.SyntacticStructure.from_root_label(2)
         output_1 = m1.substitute(input_1)
-        assert output_1 == pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs(5)
+        assert output_1 == pu.ssl.SyntacticStructure.from_root_label(5)
         output_2 = m1.substitute(output_1)
         assert output_2 == output_1
         input_3 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (3, 9, 1)))
@@ -29,7 +29,7 @@ class TestSyntacticStructure:
         ss4 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((7, (8, 8, 8,)))
         domain2 = pu.ssl.SyntacticOrderedSet.from_elements(ss1, ss2)
         codomain2 = pu.ssl.SyntacticTuple.from_elements(ss3, ss4)
-        m2 = pu.ssl.SyntacticMap.from_domain_and_codomain(domain2, codomain2)
+        m2 = pu.ssl.SyntacticMap.from_domain_and_codomain(domain=domain2, codomain=codomain2)
         input_4 = pu.ssl.SyntacticStructure.from_immediate_subtrees(ss1, n=5)
         output_4 = m2.substitute(input_4)
         assert output_4 == pu.ssl.SyntacticStructure.from_immediate_subtrees(ss3, n=5)
@@ -43,12 +43,12 @@ class TestSyntacticOrderedSet:
 
     def test_syntactic_ordered_set(self):
         # declare ordered set {1, 2, 3}
-        t0_123 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2, 3,)))
-        t0 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(0)
-        t1 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(1)
-        t2 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(2)
-        t3 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(3)
-        t4 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(4)
+        t0_123 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2, 3,)))
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s123 = pu.ssl.SyntacticOrderedSet.from_elements(t1, t2, t3, )
         assert s123.is_labeled_rooted_plane_tree_equivalent_to(s123)
         assert s123.cardinality == 3
@@ -61,7 +61,7 @@ class TestSyntacticOrderedSet:
         assert s123.is_syntactic_ordered_set_equivalent_to(s123)
 
         # confirm order matters
-        t0_321 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (3, 2, 1,)))
+        t0_321 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (3, 2, 1,)))
         s321 = pu.ssl.SyntacticOrderedSet.from_elements(t3, t2, t1)
         assert s321.is_labeled_rooted_plane_tree_equivalent_to(t0_321)
         assert s321.cardinality == 3
@@ -76,7 +76,7 @@ class TestSyntacticOrderedSet:
         assert not s123.is_syntactic_ordered_set_equivalent_to(s321)
 
         # confirm duplicates do not matter
-        t0_333221212 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(
+        t0_333221212 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs(
             (0, (3, 3, 3, 2, 2, 1, 2, 1, 2,)))
         s333221212 = pu.ssl.SyntacticOrderedSet.from_elements(t3, t3, t3, t2, t2, t1, t2, t1, t2)
         assert s333221212.is_labeled_rooted_plane_tree_equivalent_to(t0_333221212)
@@ -92,7 +92,7 @@ class TestSyntacticOrderedSet:
         assert not s123.is_syntactic_ordered_set_equivalent_to(s333221212)
         assert s321.is_syntactic_ordered_set_equivalent_to(s333221212)
 
-        t0_12 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
+        t0_12 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
         s12 = pu.ssl.SyntacticOrderedSet.from_lrpt(t0_12)
         assert s12.is_labeled_rooted_plane_tree_equivalent_to(t0_12)
         assert not s123.is_syntactic_ordered_set_equivalent_to(s12)
@@ -109,12 +109,12 @@ class TestSyntacticSet:
 
     def test_syntactic_set(self):
         # declare set {1, 2, 3}
-        t0_123 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2, 3,)))
-        t0 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(0)
-        t1 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(1)
-        t2 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(2)
-        t3 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(3)
-        t4 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs(4)
+        t0_123 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2, 3,)))
+        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
+        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
+        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        t3 = pu.ssl.SyntacticStructure.from_root_label(3)
+        t4 = pu.ssl.SyntacticStructure.from_root_label(4)
         s123 = pu.ssl.SyntacticSet.from_elements(t1, t2, t3)
         assert s123.is_labeled_rooted_plane_tree_equivalent_to(t0_123)
         assert s123.cardinality == 3
@@ -127,7 +127,7 @@ class TestSyntacticSet:
         assert s123.is_syntactic_set_equivalent_to(s123)
 
         # confirm order does not matter
-        t0_321 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (3, 2, 1,)))
+        t0_321 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (3, 2, 1,)))
         s321 = pu.ssl.SyntacticSet.from_elements(t3, t2, t1)
         assert s321.is_labeled_rooted_plane_tree_equivalent_to(t0_321)
         assert s321.cardinality == 3
@@ -142,7 +142,7 @@ class TestSyntacticSet:
         assert s123.is_syntactic_set_equivalent_to(s321)
 
         # confirm duplicates do not matter
-        t0_3331212 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (3, 3, 3, 1, 2, 1, 2,)))
+        t0_3331212 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (3, 3, 3, 1, 2, 1, 2,)))
         s3331212 = pu.ssl.SyntacticSet.from_elements(t3, t3, t3, t1, t2, t1, t2)
         assert s3331212.is_labeled_rooted_plane_tree_equivalent_to(t0_3331212)
         assert s3331212.cardinality == 3
@@ -156,7 +156,7 @@ class TestSyntacticSet:
 
         assert s123.is_syntactic_set_equivalent_to(s3331212)
 
-        t0_12 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
+        t0_12 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
         s12 = pu.ssl.SyntacticSet.from_elements(t1, t2)
         assert s12.is_labeled_rooted_plane_tree_equivalent_to(t0_12)
         assert not s123.is_syntactic_set_equivalent_to(s12)
@@ -174,22 +174,36 @@ class TestSyntacticSet:
         assert s0.cardinality == 0
 
     def test_adjoin(self):
-        t0 = pu.ssl.SyntacticStructure.from_root_label(0)
-        t1 = pu.ssl.SyntacticStructure.from_root_label(1)
-        t2 = pu.ssl.SyntacticStructure.from_root_label(2)
+        a = pu.ssl.SyntacticStructure.least_element
+        b = a.successor
+        c = b.successor
+        d = c.successor
         s0 = pu.ssl.SyntacticSet.from_empty_set()
-        s0 = s0.adjoin(t0)
-        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t0))
+        s0 = s0.adjoin(a)
+        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(a))
         assert s0.cardinality == 1
-        s0 = s0.adjoin(t1)
-        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t1, t0))
+        s0 = s0.adjoin(b)
+        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(b, a))
         assert s0.cardinality == 2
-        s0 = s0.adjoin(t1)
-        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t0, t1))
+        s0 = s0.adjoin(b)
+        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(a, b))
         assert s0.cardinality == 2
-        s0 = s0.adjoin(t2)
-        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(t1, t2, t0))
+        s0 = s0.adjoin(c)
+        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(b, c, a))
         assert s0.cardinality == 3
+        p = pu.ssl.SyntacticOrderedPair.from_first_and_second_elements(a, b)
+        s0 = s0.adjoin(p)
+        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(b, c, a, p))
+        assert s0.cardinality == 4
+        s0 = s0.adjoin(d)
+        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(b, c, d, a, p))
+        assert s0.cardinality == 5
+        s0 = s0.adjoin(d)
+        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(b, c, a, d, p))
+        assert s0.cardinality == 5
+        s2 = pu.ssl.SyntacticSet.from_elements(a, b, c, d)
+        s0 = s0.adjoin(s2)
+        assert s0.is_syntactic_set_equivalent_to(pu.ssl.SyntacticSet.from_elements(a, b, c, d, p, s2))
 
     def test_union(self):
         t0 = pu.ssl.SyntacticStructure.from_root_label(0)
@@ -283,7 +297,7 @@ class TestSyntacticTuple:
 
     def test_syntactic_tuple(self):
         # declare set {1, 2, 3}
-        t0_123 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2, 3,)))
+        t0_123 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2, 3,)))
         t0 = pu.ssl.SyntacticStructure.from_root_label(0)
         t1 = pu.ssl.SyntacticStructure.from_root_label(1)
         t2 = pu.ssl.SyntacticStructure.from_root_label(2)
@@ -301,7 +315,7 @@ class TestSyntacticTuple:
         assert s123.is_syntactic_tuple_equivalent_to(s123)
 
         # confirm order does matter
-        t0_321 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (3, 2, 1,)))
+        t0_321 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (3, 2, 1,)))
         s321 = pu.ssl.SyntacticTuple.from_elements(t3, t2, t1)
         assert s321.is_labeled_rooted_plane_tree_equivalent_to(t0_321)
         assert s321.cardinality == 3
@@ -316,7 +330,7 @@ class TestSyntacticTuple:
         assert not s123.is_syntactic_tuple_equivalent_to(s321)
 
         # confirm duplicates matter
-        t0_3331212 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (3, 3, 3, 1, 2, 1, 2,)))
+        t0_3331212 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (3, 3, 3, 1, 2, 1, 2,)))
         s3331212 = pu.ssl.SyntacticTuple.from_elements(t3, t3, t3, t1, t2, t1, t2)
         assert s3331212.is_labeled_rooted_plane_tree_equivalent_to(t0_3331212)
         assert s3331212.cardinality == 7
@@ -330,7 +344,7 @@ class TestSyntacticTuple:
 
         assert not s321.is_syntactic_tuple_equivalent_to(s3331212)
 
-        t0_12 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
+        t0_12 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
         s12 = pu.ssl.SyntacticTuple.from_elements(t1, t2)
         assert s12.is_labeled_rooted_plane_tree_equivalent_to(t0_12)
         assert not s123.is_syntactic_tuple_equivalent_to(s12)
@@ -347,7 +361,7 @@ class TestSyntacticOrderedPair:
 
     def test_syntactic_ordered_pair(self):
         # declare set {1, 2, 3}
-        t0_12 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
+        t0_12 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (1, 2,)))
         t0 = pu.ssl.SyntacticStructure.from_root_label(0)
         t1 = pu.ssl.SyntacticStructure.from_root_label(1)
         t2 = pu.ssl.SyntacticStructure.from_root_label(2)
@@ -366,7 +380,7 @@ class TestSyntacticOrderedPair:
         assert s12.is_syntactic_tuple_equivalent_to(s12)
 
         # confirm order does matter
-        t0_21 = pu.lrptl.LabeledRootedPlaneTree.from_tree_of_integer_tuple_pairs((0, (2, 1,)))
+        t0_21 = pu.ssl.SyntacticStructure.from_tree_of_integer_tuple_pairs((0, (2, 1,)))
         s21 = pu.ssl.SyntacticOrderedPair.from_elements(t2, t1)
         assert s21.is_labeled_rooted_plane_tree_equivalent_to(t0_21)
         assert s21.first_element == t2

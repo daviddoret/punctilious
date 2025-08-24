@@ -186,6 +186,10 @@ class SyntacticStructure(lrptl.LabeledRootedPlaneTree):
         cls.from_any(o)
         return True
 
+    @util.readonly_class_property
+    def least_element(cls) -> SyntacticStructure:
+        return SyntacticStructure.from_any(cls.is_strictly_less_than_relation.least_element)
+
     @classmethod
     def sort(cls, *args) -> tuple[SyntacticStructure, ...]:
         r"""Returns `args` sorted in canonical order.
@@ -480,10 +484,14 @@ class SyntacticSet(SyntacticStructure):
                 rpt: rptl.FlexibleRootedPlaneTree | None,
                 sequence: nn0sl.FlexibleNaturalNumber0Sequence | None):
         if rpt is not None:
-            ss: SyntacticStructure = cls.from_rpt_and_sequence(rpt, sequence)
-            args = ss.immediate_sub_syntactic_structures
+            lrpt: lrptl.LabeledRootedPlaneTree = lrptl.LabeledRootedPlaneTree.from_rpt_and_sequence(rpt, sequence)
+            args = lrpt.immediate_subtrees
             rpt = None
             sequence = None
+        if n is None:
+            n: int = 0  # by convention, 0 is the default main element.
+        else:
+            n: int = int(n)
         # sort the elements
         args = SyntacticStructure.sort(*args)
         # drop the duplicate elements
@@ -511,7 +519,8 @@ class SyntacticSet(SyntacticStructure):
         :return: A syntactic set.
         """
         x: SyntacticStructure = SyntacticStructure.from_any(x)
-        return SyntacticSet.from_elements(*self.elements, x, n=self.root_label)
+        elements: tuple[SyntacticStructure, ...] = *self.elements, x,
+        return SyntacticSet.from_elements(*elements, n=self.root_label)
 
     @functools.cached_property
     def cardinality(self) -> int:
@@ -1701,7 +1710,9 @@ FlexibleSyntacticTuple = typing.Union[
     tuple[rptl.FlexibleRootedPlaneTree, ...],  # the elements of the syntactic set.
     None  # the empty syntactic set.
 ]
-FlexibleSyntacticStructure = lrptl.FlexibleLabeledRootedPlaneTree
+FlexibleSyntacticStructure = typing.Union[
+    SyntacticStructure,
+    lrptl.FlexibleLabeledRootedPlaneTree]
 
 # Aliases
 
